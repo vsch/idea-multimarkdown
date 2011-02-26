@@ -1,0 +1,7 @@
+# Intellij IDEA build directory
+out/
+idea-markdown.jar
+idea-markdown.zip
+
+# Host specific config files
+*.iws
