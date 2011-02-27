@@ -218,7 +218,7 @@
     </dictionary>
   </component>
   <component name="ProjectKey">
-    <option name="state" value="project://default" />
+    <option name="state" value="git@github.com:nicoulaj/idea-markdown.git" />
   </component>
   <component name="ProjectModuleManager">
     <modules>
