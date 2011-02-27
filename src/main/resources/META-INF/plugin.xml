@@ -25,7 +25,7 @@
   <name>Markdown</name>
   <category>Custom Languages</category>
   <vendor url="http://github.com/nicoulaj" email="julien.nicoulaud@gmail.com">Julien Nicoulaud</vendor>
-  <version>0.1</version>
+  <version>0.2</version>
   <idea-version since-build="9918"/>
   <depends>com.intellij.modules.lang</depends>
   <description>
