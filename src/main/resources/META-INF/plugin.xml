@@ -27,6 +27,7 @@
   <vendor url="http://github.com/nicoulaj" email="julien.nicoulaud@gmail.com">Julien Nicoulaud</vendor>
   <version>0.1</version>
   <idea-version since-build="9918"/>
+  <depends>com.intellij.modules.lang</depends>
   <description>
     <![CDATA[
       <p><b><a href="http://daringfireball.net/projects/markdown">Markdown</a> language support for IntelliJ IDEA.</b></p>
