@@ -20,9 +20,10 @@
  */
 
 /**
- * TODO Javadoc
+ * API for Markdown PSI parsing.
  *
  * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
  * @since 0.1
+ * @see net.nicoulaj.idea.markdown.lang.psi.impl
  */
 package net.nicoulaj.idea.markdown.lang.psi.api;

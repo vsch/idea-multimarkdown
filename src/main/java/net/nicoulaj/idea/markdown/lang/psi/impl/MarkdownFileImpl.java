@@ -23,46 +23,34 @@ package net.nicoulaj.idea.markdown.lang.psi.impl;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.tree.IElementType;
 import net.nicoulaj.idea.markdown.file.MarkdownFileType;
-import net.nicoulaj.idea.markdown.lang.psi.MarkdownFile;
-import net.nicoulaj.idea.markdown.lang.psi.api.MarkdownPsiElement;
-import net.nicoulaj.idea.markdown.lang.psi.visitors.MarkdownElementVisitor;
+import net.nicoulaj.idea.markdown.lang.psi.api.MarkdownFile;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * TODO Add Asdoc comment.
+ * Implementation of {@link MarkdownFile}.
  *
  * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
  * @since 0.1
  */
 public class MarkdownFileImpl extends PsiFileBase implements MarkdownFile {
 
+    /**
+     * Build a new instance of {@link MarkdownFileImpl}.
+     *
+     * @param viewProvider the {@link FileViewProvider} associated with this file.
+     */
     public MarkdownFileImpl(FileViewProvider viewProvider) {
         super(viewProvider, MarkdownFileType.LANGUAGE);
     }
 
-    public IElementType getTokenType() {
-        return null;
-    }
-
-    public void accept(MarkdownElementVisitor visitor) {
-        visitor.visitElement(this);
-    }
-
-    public void acceptChildren(MarkdownElementVisitor visitor) {
-        PsiElement child = getFirstChild();
-        while (child != null) {
-            if (child instanceof MarkdownPsiElement) {
-                ((MarkdownPsiElement) child).accept(visitor);
-            }
-            child = child.getNextSibling();
-        }
-    }
-
+    /**
+     * Get the file type for the file.
+     *
+     * @return {@link MarkdownFileType#INSTANCE}
+     */
     @NotNull
     public FileType getFileType() {
-        return MarkdownFileType.MARKDOWN_FILE_TYPE;
+        return MarkdownFileType.INSTANCE;
     }
 }

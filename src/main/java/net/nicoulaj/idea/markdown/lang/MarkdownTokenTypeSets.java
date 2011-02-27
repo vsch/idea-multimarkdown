@@ -23,7 +23,7 @@ package net.nicoulaj.idea.markdown.lang;
 import com.intellij.psi.tree.TokenSet;
 
 /**
- * TODO Add Javadoc comment.
+ * Token type sets for the Markdown language.
  *
  * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
  * @since 0.1
@@ -31,37 +31,27 @@ import com.intellij.psi.tree.TokenSet;
 public interface MarkdownTokenTypeSets extends MarkdownTokenTypes {
 
     /**
-     * TODO Add Javadoc comment.
+     * Plain text token type set.
      */
-    public static final TokenSet PLAIN_TEXT_SET = TokenSet.create(
-            PLAIN_TEXT
-    );
+    public static final TokenSet PLAIN_TEXT_SET = TokenSet.create(PLAIN_TEXT);
 
     /**
-     * TODO Add Javadoc comment.
+     * Bold text token type set.
      */
-    public static final TokenSet BOLD_TEXT_SET = TokenSet.create(
-            BOLD_TEXT
-    );
+    public static final TokenSet BOLD_TEXT_SET = TokenSet.create(BOLD_TEXT);
 
     /**
-     * TODO Add Javadoc comment.
+     * Italic text token type set.
      */
-    public static final TokenSet ITALIC_TEXT_SET = TokenSet.create(
-            ITALIC_TEXT
-    );
+    public static final TokenSet ITALIC_TEXT_SET = TokenSet.create(ITALIC_TEXT);
 
     /**
-     * TODO Add Javadoc comment.
+     * Link token type set.
      */
-    public static final TokenSet LINK_SET = TokenSet.create(
-            LINK
-    );
+    public static final TokenSet LINK_SET = TokenSet.create(LINK);
 
     /**
-     * TODO Add Javadoc comment.
+     * Bad character token type set.
      */
-    public static final TokenSet BAD_CHARACTER_SET = TokenSet.create(
-            BAD_CHARACTER
-    );
+    public static final TokenSet BAD_CHARACTER_SET = TokenSet.create(BAD_CHARACTER);
 }

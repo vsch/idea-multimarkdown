@@ -22,14 +22,16 @@ package net.nicoulaj.idea.markdown.file;
 
 import com.intellij.lang.Language;
 import com.intellij.openapi.fileTypes.LanguageFileType;
-import net.nicoulaj.idea.markdown.*;
+import net.nicoulaj.idea.markdown.MarkdownBundle;
+import net.nicoulaj.idea.markdown.MarkdownIcons;
+import net.nicoulaj.idea.markdown.MarkdownLanguage;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
 /**
- * TODO Add Javadoc comment.
+ * The {@link LanguageFileType} for Markdown files.
  *
  * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
  * @since 0.1
@@ -37,32 +39,32 @@ import javax.swing.*;
 public class MarkdownFileType extends LanguageFileType {
 
     /**
-     * TODO Add Javadoc comment.
+     * The {@link MarkdownFileType} instance.
      */
-    public static final MarkdownFileType MARKDOWN_FILE_TYPE = new MarkdownFileType();
+    public static final MarkdownFileType INSTANCE = new MarkdownFileType();
 
     /**
-     * TODO Add Javadoc comment.
+     * The {@link Language} instance for this {@link com.intellij.openapi.fileTypes.FileType}.
      */
-    public static final Language LANGUAGE = MARKDOWN_FILE_TYPE.getLanguage();
+    public static final Language LANGUAGE = INSTANCE.getLanguage();
 
     /**
-     * TODO Add Javadoc comment.
+     * The extensions associated by default with this {@link com.intellij.openapi.fileTypes.FileType}.
      */
     @NonNls
     public static final String[] DEFAULT_ASSOCIATED_EXTENSIONS = {"markdown", "mkd", "md"};
 
     /**
-     * TODO Add Javadoc comment.
+     * Build a new instance of {@link MarkdownFileType}.
      */
     public MarkdownFileType() {
         super(new MarkdownLanguage());
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Get the name associated with this {@link com.intellij.openapi.fileTypes.FileType}.
      *
-     * @return TODO Add Javadoc comment.
+     * @return the name as defined by {@link MarkdownBundle}.
      */
     @NotNull
     public String getName() {
@@ -70,9 +72,9 @@ public class MarkdownFileType extends LanguageFileType {
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Get the description associated with this {@link com.intellij.openapi.fileTypes.FileType}.
      *
-     * @return TODO Add Javadoc comment.
+     * @return the description as defined by {@link MarkdownBundle}.
      */
     @NotNull
     public String getDescription() {
@@ -80,9 +82,9 @@ public class MarkdownFileType extends LanguageFileType {
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Get the default extension for this {@link com.intellij.openapi.fileTypes.FileType}.
      *
-     * @return TODO Add Javadoc comment.
+     * @return the first entry of {@link #DEFAULT_ASSOCIATED_EXTENSIONS}.
      */
     @NotNull
     public String getDefaultExtension() {
@@ -90,9 +92,9 @@ public class MarkdownFileType extends LanguageFileType {
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Get the icon associated with this {@link com.intellij.openapi.fileTypes.FileType}.
      *
-     * @return TODO Add Javadoc comment.
+     * @return {@link MarkdownIcons#MARKDOWN_ICON}.
      */
     public Icon getIcon() {
         return MarkdownIcons.MARKDOWN_ICON;

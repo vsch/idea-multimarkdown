@@ -18,13 +18,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package net.nicoulaj.idea.markdown.lang.psi;
+package net.nicoulaj.idea.markdown.lang.psi.api;
 
 import com.intellij.psi.PsiFile;
-import net.nicoulaj.idea.markdown.lang.psi.api.MarkdownPsiElement;
 
 /**
- * TODO Add Asdoc comment.
+ * Markdown file PSI representation.
  *
  * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
  * @since 0.1

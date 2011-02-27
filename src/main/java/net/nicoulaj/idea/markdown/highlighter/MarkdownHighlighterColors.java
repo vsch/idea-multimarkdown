@@ -26,7 +26,7 @@ import com.intellij.openapi.editor.markup.TextAttributes;
 import java.awt.*;
 
 /**
- * TODO Add Javadoc comment.
+ * The default styles for each of token defined for Markdown.
  *
  * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
  * @since 0.1
@@ -41,28 +41,28 @@ public class MarkdownHighlighterColors {
     );
 
     /**
-     * TODO Add Javadoc comment.
+     * Default style for bold text.
      */
     public static TextAttributesKey BOLD_TEXT_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
             "MARKDOWN.BOLD_TEXT", new TextAttributes(new Color(0, 0, 0), null, null, null, Font.BOLD)
     );
 
     /**
-     * TODO Add Javadoc comment.
+     * Default style for italic text.
      */
     public static TextAttributesKey ITALIC_TEXT_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
             "MARKDOWN.ITALIC_TEXT", new TextAttributes(new Color(0, 0, 0), null, null, null, Font.ITALIC)
     );
 
     /**
-     * TODO Add Javadoc comment.
+     * Default style for links.
      */
     public static TextAttributesKey LINK_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
             "MARKDOWN.LINK", new TextAttributes(new Color(0, 0, 255), null, null, null, Font.PLAIN)
     );
 
     /**
-     * TODO Add Javadoc comment.
+     * Default style for bad characters.
      */
     public static TextAttributesKey BAD_CHARACTER_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
             "MARKDOWN.BAD_CHARACTER", new TextAttributes(new Color(255, 0, 0), null, null, null, Font.PLAIN)

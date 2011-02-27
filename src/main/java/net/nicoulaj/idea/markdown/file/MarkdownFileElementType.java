@@ -23,12 +23,17 @@ package net.nicoulaj.idea.markdown.file;
 import com.intellij.psi.tree.IFileElementType;
 
 /**
- * TODO Add Javadoc comment.
+ * {@link IFileElementType} for Markdown files.
  *
  * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
+ * @see net.nicoulaj.idea.markdown.lang.parser.MarkdownParserDefinition#FILE_ELEMENT_TYPE
  * @since 0.1
  */
 public class MarkdownFileElementType extends IFileElementType {
+
+    /**
+     * Build a new instance of {@link MarkdownFileElementType}.
+     */
     public MarkdownFileElementType() {
         super(MarkdownFileType.LANGUAGE);
     }

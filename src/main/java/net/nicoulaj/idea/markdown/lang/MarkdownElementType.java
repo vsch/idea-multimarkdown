@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import java.text.MessageFormat;
 
 /**
- * TODO Add Javadoc comment.
+ * {@link IElementType} implementation for Markdown.
  *
  * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
  * @since 0.1
@@ -36,18 +36,18 @@ import java.text.MessageFormat;
 public class MarkdownElementType extends IElementType {
 
     /**
-     * TODO Add Javadoc comment.
+     * Build a new instance of {@link MarkdownElementType}.
      *
-     * @param debugName TODO Add Javadoc comment.
+     * @param debugName the name of the element type, used for debugging purposes.
      */
     public MarkdownElementType(@NotNull @NonNls String debugName) {
         super(debugName, MarkdownFileType.LANGUAGE);
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Build in {@link String} representation of this {@link MarkdownElementType}.
      *
-     * @return TODO Add Javadoc comment.
+     * @return the String representation based on {@link com.intellij.psi.tree.IElementType#toString()}.
      */
     @Override
     @SuppressWarnings({"HardCodedStringLiteral"})

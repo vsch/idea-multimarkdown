@@ -32,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
  * {@link FileEditorProvider} implementation to provide {@link MarkdownPreviewEditor}.
  *
  * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
+ * @see MarkdownPreviewEditor
  * @since 0.1
  */
 public class MarkdownPreviewEditorProvider implements FileEditorProvider {

@@ -24,17 +24,30 @@ import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
 
 /**
- * TODO Add Javadoc comment.
+ * Lexer tokens for the Markdown language.
  *
  * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
  * @since 0.1
  */
 public interface MarkdownTokenTypes extends TokenType {
 
-    IElementType HEADING = new MarkdownElementType("HEADING");
+    /**
+     * Plain text token type.
+     */
     IElementType PLAIN_TEXT = new MarkdownElementType("PLAIN_TEXT");
-    IElementType BOLD_TEXT = new MarkdownElementType("BOLD_TEXT");
-    IElementType ITALIC_TEXT = new MarkdownElementType("ITALIC_TEXT");
-    IElementType LINK = new MarkdownElementType("LINK");
 
+    /**
+     * Bold text token type.
+     */
+    IElementType BOLD_TEXT = new MarkdownElementType("BOLD_TEXT");
+
+    /**
+     * Italic text token type.
+     */
+    IElementType ITALIC_TEXT = new MarkdownElementType("ITALIC_TEXT");
+
+    /**
+     * Link token type.
+     */
+    IElementType LINK = new MarkdownElementType("LINK");
 }

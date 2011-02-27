@@ -32,12 +32,12 @@ import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import net.nicoulaj.idea.markdown.file.MarkdownFileElementType;
 import net.nicoulaj.idea.markdown.lang.lexer.MarkdownLexer;
-import net.nicoulaj.idea.markdown.lang.psi.MarkdownPsiCreator;
 import net.nicoulaj.idea.markdown.lang.psi.impl.MarkdownFileImpl;
+import net.nicoulaj.idea.markdown.lang.psi.impl.MarkdownPsiElementImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * TODO Add Javadoc comment.
+ * The parser implementation for Markdown.
  *
  * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
  * @since 0.1
@@ -45,15 +45,17 @@ import org.jetbrains.annotations.NotNull;
 public class MarkdownParserDefinition implements ParserDefinition {
 
     /**
-     * TODO Add Javadoc comment.
+     * The {@link MarkdownFileElementType} instance.
+     *
+     * @see #getFileNodeType()
      */
     protected static final MarkdownFileElementType FILE_ELEMENT_TYPE = new MarkdownFileElementType();
 
     /**
-     * TODO Add Javadoc comment.
+     * Get the lexer for lexing files in the specified project.
      *
-     * @param project TODO Add Javadoc comment.
-     * @return TODO Add Javadoc comment.
+     * @param project the project to which the lexer is connected.
+     * @return a {@link MarkdownLexer} instance.
      */
     @NotNull
     public Lexer createLexer(Project project) {
@@ -61,28 +63,28 @@ public class MarkdownParserDefinition implements ParserDefinition {
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Get the parser for parsing files in the specified project.
      *
-     * @param project TODO Add Javadoc comment.
-     * @return TODO Add Javadoc comment.
+     * @param project the project to which the parser is connected.
+     * @return a {@link MarkdownParser} instance.
      */
     public PsiParser createParser(Project project) {
         return new MarkdownParser();
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Get the element type of the node describing a Markdown file.
      *
-     * @return TODO Add Javadoc comment.
+     * @return {@link #FILE_ELEMENT_TYPE}
      */
     public IFileElementType getFileNodeType() {
         return FILE_ELEMENT_TYPE;
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Get the set of token types which are treated as whitespace by the PSI builder.
      *
-     * @return TODO Add Javadoc comment.
+     * @return {@link TokenSet#EMPTY}
      */
     @NotNull
     public TokenSet getWhitespaceTokens() {
@@ -90,9 +92,9 @@ public class MarkdownParserDefinition implements ParserDefinition {
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Get the set of token types which are treated as comments by the PSI builder.
      *
-     * @return TODO Add Javadoc comment.
+     * @return {@link TokenSet#EMPTY}
      */
     @NotNull
     public TokenSet getCommentTokens() {
@@ -100,9 +102,9 @@ public class MarkdownParserDefinition implements ParserDefinition {
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Get the set of element types which are treated as string literals.
      *
-     * @return TODO Add Javadoc comment.
+     * @return {@link TokenSet#EMPTY}
      */
     @NotNull
     public TokenSet getStringLiteralElements() {
@@ -110,32 +112,32 @@ public class MarkdownParserDefinition implements ParserDefinition {
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Create a PSI element for the specified AST node.
      *
-     * @param node TODO Add Javadoc comment.
-     * @return TODO Add Javadoc comment.
+     * @param node the AST node.
+     * @return the PSI element matching the element type of the AST node.
      */
     @NotNull
     public PsiElement createElement(ASTNode node) {
-        return MarkdownPsiCreator.createElement(node);
+        return new MarkdownPsiElementImpl(node);
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Create a PSI element for the specified virtual file.
      *
-     * @param viewProvider TODO Add Javadoc comment.
-     * @return TODO Add Javadoc comment.
+     * @param viewProvider virtual file.
+     * @return the PSI file element.
      */
     public PsiFile createFile(FileViewProvider viewProvider) {
         return new MarkdownFileImpl(viewProvider);
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Check if the specified two token types need to be separated by a space according to the language grammar.
      *
-     * @param left  TODO Add Javadoc comment.
-     * @param right TODO Add Javadoc comment.
-     * @return TODO Add Javadoc comment.
+     * @param left  the first token to check.
+     * @param right the second token to check.
+     * @return {@link SpaceRequirements#MAY}
      */
     public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left, ASTNode right) {
         return SpaceRequirements.MAY;

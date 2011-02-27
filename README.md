@@ -13,5 +13,4 @@ See the [official plugin page](http://plugins.intellij.net/plugin/?idea&id=5970)
  * Syntax highlighting: **TODO**
  * Brace matching: **TODO**
  * Structure view: **TODO**
- * "HTML source" source tab in the file editor: **TODO**
- 
+ * "HTML source" tab in the file editor: **TODO**

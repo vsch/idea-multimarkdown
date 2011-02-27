@@ -25,7 +25,7 @@ import com.intellij.openapi.fileTypes.FileTypeFactory;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * TODO Add Javadoc comment.
+ * The {@link FileTypeFactory} responsible for registering {@link MarkdownFileType} with the system.
  *
  * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
  * @since 0.1
@@ -33,13 +33,15 @@ import org.jetbrains.annotations.NotNull;
 public class MarkdownFileTypeFactory extends FileTypeFactory {
 
     /**
-     * TODO Add Javadoc comment.
-     * @param fileTypeConsumer TODO Add Javadoc comment.
+     * Register extensions with the file type declared for Markdown.
+     *
+     * @param fileTypeConsumer the {@link FileTypeConsumer} to register extensions with.
+     * @see MarkdownFileType#DEFAULT_ASSOCIATED_EXTENSIONS
      */
     @Override
     public void createFileTypes(@NotNull FileTypeConsumer fileTypeConsumer) {
         for (int i = 0; i < MarkdownFileType.DEFAULT_ASSOCIATED_EXTENSIONS.length; i++) {
-            fileTypeConsumer.consume(MarkdownFileType.MARKDOWN_FILE_TYPE, MarkdownFileType.DEFAULT_ASSOCIATED_EXTENSIONS[i]);
+            fileTypeConsumer.consume(MarkdownFileType.INSTANCE, MarkdownFileType.DEFAULT_ASSOCIATED_EXTENSIONS[i]);
         }
     }
 }

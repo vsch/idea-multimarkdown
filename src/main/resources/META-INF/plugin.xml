@@ -30,40 +30,19 @@
   <depends>com.intellij.modules.lang</depends>
   <description>
     <![CDATA[
-      <p><b><a href="http://daringfireball.net/projects/markdown">Markdown</a> language support for IntelliJ IDEA.</b></p>
-      <p>&nbsp;</p>
-      <p>
-        <b>Features</b>
-        <ul>
-          <li>Markdown file type support</li>
-          <li>"Preview" tab in the file editor</li>
-        </ul>
-      </p>
-      <p>
-        <b>Roadmap</b>
-        <ul>
-          <li>Syntax highlighting</li>
-          <li>Brace matching</li>
-          <li>Structure view</li>
-          <li>"HTML source" source tab in the file editor</li>
-        </ul>
-      </p>
-      <p>
-        <b>Issues</b><br/>
-        Please report issues <a href="http://github.com/nicoulaj/idea-markdown/issues">here</a>.
-      </p>
-      <p>
-        <b>License</b><br/>
-        Released under the terms of <a href="http://www.apache.org/licenses/LICENSE-2.0">The Apache License, Version 2.0</a>.
-      </p>
+      <b><a href="http://daringfireball.net/projects/markdown">Markdown</a> language support for IntelliJ IDEA.</b>
     ]]>
   </description>
   <change-notes>
     <![CDATA[
       <p>
+        <b>0.2</b><br/>
+        <ul>
+          <li>Compatibility with PyCharm/RubyMine/WebStorm/PHPStorm/etc.</li>
+        </ul>
         <b>0.1</b><br/>
         <ul>
-          <li>Initial release.</li>
+          <li>Initial release: Markdown file type support and "Preview" tab in the file editor.</li>
         </ul>
       </p>
     ]]>

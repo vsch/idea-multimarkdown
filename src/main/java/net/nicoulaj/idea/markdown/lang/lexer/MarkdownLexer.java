@@ -22,10 +22,10 @@ package net.nicoulaj.idea.markdown.lang.lexer;
 
 import com.intellij.lexer.FlexAdapter;
 
-import java.io.Reader;
-
 /**
- * TODO Add Javadoc comment.
+ * The {@link com.intellij.lexer.Lexer} implementation for Markdown.
+ * <p/>
+ * Uses {@link _MarkdownLexer}, the JFlex lexer generated from {@code Markdown.flex}.
  *
  * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
  * @since 0.1

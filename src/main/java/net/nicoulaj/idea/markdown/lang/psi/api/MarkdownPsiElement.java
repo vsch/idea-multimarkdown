@@ -21,20 +21,12 @@
 package net.nicoulaj.idea.markdown.lang.psi.api;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.tree.IElementType;
-import net.nicoulaj.idea.markdown.lang.psi.visitors.MarkdownElementVisitor;
 
 /**
- * TODO Add Javadoc comment.
+ * Implementation of {@link PsiElement} for Markdown.
  *
  * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
  * @since 0.1
  */
 public interface MarkdownPsiElement extends PsiElement {
-
-    IElementType getTokenType();
-
-    void accept(MarkdownElementVisitor visitor);
-
-    void acceptChildren(MarkdownElementVisitor visitor);
 }

@@ -40,12 +40,12 @@ import java.util.Map;
 public class MarkdownSyntaxHighlighter extends SyntaxHighlighterBase {
 
     /**
-     * TODO Add Javadoc comment.
+     * The {@link MarkdownLexer} instance.
      */
     protected final MarkdownLexer markdownLexer = new MarkdownLexer();
 
     /**
-     * TODO Add Javadoc comment.
+     * The map of text attribute keys for each token type.
      */
     protected static final Map<IElementType, TextAttributesKey> ATTRIBUTES = new HashMap<IElementType, TextAttributesKey>();
 
@@ -61,6 +61,7 @@ public class MarkdownSyntaxHighlighter extends SyntaxHighlighterBase {
      * Get the lexer used for highlighting a Markdown file.
      *
      * @return a {@link MarkdownLexer}.
+     * @see #markdownLexer
      */
     @NotNull
     public Lexer getHighlightingLexer() {
@@ -68,10 +69,10 @@ public class MarkdownSyntaxHighlighter extends SyntaxHighlighterBase {
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Get the list of text attribute keys used for highlighting the specified token type.
      *
-     * @param tokenType TODO Add Javadoc comment.
-     * @return TODO Add Javadoc comment.
+     * @param tokenType the token type
+     * @return an array of {@link TextAttributesKey}
      */
     @NotNull
     public TextAttributesKey[] getTokenHighlights(IElementType tokenType) {

@@ -22,39 +22,23 @@ package net.nicoulaj.idea.markdown.lang.psi.impl;
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.tree.IElementType;
 import net.nicoulaj.idea.markdown.lang.psi.api.MarkdownPsiElement;
-import net.nicoulaj.idea.markdown.lang.psi.visitors.MarkdownElementVisitor;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * TODO Add Javadoc comment.
+ * Base implementation of {@link MarkdownPsiElement}.
  *
  * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
  * @since 0.1
  */
 public class MarkdownPsiElementImpl extends ASTWrapperPsiElement implements MarkdownPsiElement {
 
+    /**
+     * Build a new instance of {@link MarkdownPsiElementImpl}.
+     *
+     * @param node the AST node.
+     */
     public MarkdownPsiElementImpl(@NotNull ASTNode node) {
         super(node);
-    }
-
-    public IElementType getTokenType() {
-        return getNode().getElementType();
-    }
-
-    public void accept(MarkdownElementVisitor visitor) {
-        visitor.visitElement(this);
-    }
-
-    public void acceptChildren(MarkdownElementVisitor visitor) {
-        PsiElement child = getFirstChild();
-        while (child != null) {
-            if (child instanceof MarkdownPsiElement) {
-                ((MarkdownPsiElement) child).accept(visitor);
-            }
-            child = child.getNextSibling();
-        }
     }
 }

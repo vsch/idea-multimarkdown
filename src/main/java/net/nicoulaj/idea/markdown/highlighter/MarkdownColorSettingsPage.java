@@ -53,23 +53,29 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
     private final static Logger LOGGER = Logger.getInstance(MarkdownColorSettingsPage.class.getName());
 
     /**
-     * TODO Add Javadoc comment.
+     * An empty {@link ColorDescriptor} array.
+     *
+     * @see #getColorDescriptors()
      */
     protected static final ColorDescriptor[] EMPTY_COLOR_DESCRIPTOR_ARRAY = new ColorDescriptor[]{};
 
     /**
-     * TODO Add Javadoc comment.
+     * The path to the sample Markdown document shown in the colors settings dialog.
      */
     @NonNls
     protected static final String SAMPLE_MARKDOWN_DOCUMENT_PATH = "/net/nicoulaj/idea/markdown/sample-document.md";
 
     /**
-     * TODO Add Javadoc comment.
+     * The sample Markdown document shown in the colors settings dialog.
+     *
+     * @see #loadSampleMarkdownDocument()
      */
     protected static final String SAMPLE_MARKDOWN_DOCUMENT = loadSampleMarkdownDocument();
 
     /**
-     * TODO Add Javadoc comment.
+     * The set of {@link AttributesDescriptor} defining the configurable options in the dialog.
+     *
+     * @see #MarkdownColorSettingsPage()
      */
     protected final Set<AttributesDescriptor> attributeDescriptors = new HashSet<AttributesDescriptor>();
 
@@ -98,9 +104,10 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Get the mapping from special tag names surrounding the regions to be highlighted in the preview text to text
+     * attribute keys used to highlight the regions.
      *
-     * @return TODO Add Javadoc comment.
+     * @return {@code null} as the demo text does not contain any additional highlighting tags.
      */
     @Nullable
     public Map<String, TextAttributesKey> getAdditionalHighlightingTagToDescriptorMap() {
@@ -108,9 +115,9 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Get the set of {@link AttributesDescriptor} defining the configurable options in the dialog.
      *
-     * @return TODO Add Javadoc comment.
+     * @return {@link #attributeDescriptors} as an array.
      */
     @NotNull
     public AttributesDescriptor[] getAttributeDescriptors() {
@@ -118,9 +125,10 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Get the list of descriptors specifying the {@link com.intellij.openapi.editor.colors.ColorKey} instances for which
+     * colors are specified in the settings page.
      *
-     * @return TODO Add Javadoc comment.
+     * @return {@link #EMPTY_COLOR_DESCRIPTOR_ARRAY}
      */
     @NotNull
     public ColorDescriptor[] getColorDescriptors() {
@@ -128,9 +136,11 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Get the text shown in the preview pane.
      *
-     * @return TODO Add Javadoc comment.
+     * @return {@link #SAMPLE_MARKDOWN_DOCUMENT}
+     * @see #SAMPLE_MARKDOWN_DOCUMENT_PATH
+     * @see #loadSampleMarkdownDocument()
      */
     @NonNls
     @NotNull
@@ -139,9 +149,43 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Get the title of the page, shown as text in the dialog tab.
      *
-     * @return TODO Add Javadoc comment.
+     * @return the name as defined by {@link MarkdownBundle}
+     */
+    @NotNull
+    public String getDisplayName() {
+        return MarkdownBundle.message("markdown.filetype.name");
+    }
+
+    /**
+     * Get the syntax highlighter which is used to highlight the text shown in the preview
+     * pane of the page.
+     *
+     * @return an instance of {@link MarkdownSyntaxHighlighter}
+     */
+    @NotNull
+    public SyntaxHighlighter getHighlighter() {
+        return new MarkdownSyntaxHighlighter();
+    }
+
+    /**
+     * Get the icon for the page, shown in the dialog tab.
+     *
+     * @return {@link MarkdownIcons#MARKDOWN_ICON}
+     */
+    @Nullable
+    public Icon getIcon() {
+        return MarkdownIcons.MARKDOWN_ICON;
+    }
+
+    /**
+     * Load the sample text to be displayed in the preview pane.
+     *
+     * @return the text loaded from {@link #SAMPLE_MARKDOWN_DOCUMENT_PATH}
+     * @see #getDemoText()
+     * @see #SAMPLE_MARKDOWN_DOCUMENT_PATH
+     * @see #SAMPLE_MARKDOWN_DOCUMENT
      */
     protected static String loadSampleMarkdownDocument() {
         try {
@@ -150,35 +194,5 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
             LOGGER.error("Failed loading sample Markdown document", e);
         }
         return MarkdownBundle.message("markdown.editor.colorsettingspage.sample-loading-error");
-    }
-
-    /**
-     * TODO Add Javadoc comment.
-     *
-     * @return TODO Add Javadoc comment.
-     */
-    @NotNull
-    public String getDisplayName() {
-        return MarkdownBundle.message("markdown.filetype.name");
-    }
-
-    /**
-     * TODO Add Javadoc comment.
-     *
-     * @return TODO Add Javadoc comment.
-     */
-    @NotNull
-    public SyntaxHighlighter getHighlighter() {
-        return new MarkdownSyntaxHighlighter();
-    }
-
-    /**
-     * TODO Add Javadoc comment.
-     *
-     * @return TODO Add Javadoc comment.
-     */
-    @Nullable
-    public Icon getIcon() {
-        return MarkdownIcons.MARKDOWN_ICON;
     }
 }

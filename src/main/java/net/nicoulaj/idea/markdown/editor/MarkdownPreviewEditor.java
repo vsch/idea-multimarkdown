@@ -50,6 +50,7 @@ import java.beans.PropertyChangeListener;
  *
  * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
  * @see <a href="http://code.google.com/p/markdownj">MarkdownJ library</a>
+ * @see MarkdownPreviewEditorProvider
  * @since 0.1
  */
 public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEditor {
@@ -76,7 +77,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
     protected JEditorPane jEditorPane = new JEditorPane();
 
     /**
-     * Indicates whether the HTML preview is obsolete and should regenerated from the Markdown source.
+     * Indicates whether the HTML preview is obsolete and should regenerated from the Markdown {@link #document}.
      */
     protected boolean previewIsObsolete = true;
 
@@ -127,9 +128,9 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Get the editor displayable name.
      *
-     * @return TODO Add Javadoc comment.
+     * @return {@link #EDITOR_NAME}
      */
     @NotNull
     @NonNls
@@ -138,10 +139,13 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Get the state of the editor.
+     * <p/>
+     * Just returns {@link FileEditorState#INSTANCE} as {@link MarkdownPreviewEditor} is stateless.
      *
-     * @param level TODO Add Javadoc comment.
-     * @return TODO Add Javadoc comment.
+     * @param level the level.
+     * @return {@link FileEditorState#INSTANCE}
+     * @see #setState(com.intellij.openapi.fileEditor.FileEditorState)
      */
     @NotNull
     public FileEditorState getState(@NotNull FileEditorStateLevel level) {
@@ -149,33 +153,38 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Set the state of the editor.
+     * <p/>
+     * Does not do anything as {@link MarkdownPreviewEditor} is stateless.
      *
-     * @param state TODO Add Javadoc comment.
+     * @param state the new state.
+     * @see #getState(com.intellij.openapi.fileEditor.FileEditorStateLevel)
      */
     public void setState(@NotNull FileEditorState state) {
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Indicates whether the document content is modified compared to its file.
      *
-     * @return TODO Add Javadoc comment.
+     * @return {@code false} as {@link MarkdownPreviewEditor} is read-only.
      */
     public boolean isModified() {
         return false;
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Indicates whether the editor is valid.
      *
-     * @return TODO Add Javadoc comment.
+     * @return {@code true} if {@link #document} content is readable.
      */
     public boolean isValid() {
-        return true;
+        return document != null && document.getText() != null;
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Invoked when the editor is selected.
+     * <p/>
+     * Update the HTML content if obsolete.
      */
     public void selectNotify() {
         if (previewIsObsolete) {
@@ -185,31 +194,37 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Invoked when the editor is deselected.
+     * <p/>
+     * Does nothing.
      */
     public void deselectNotify() {
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Add specified listener.
+     * <p/>
+     * Does nothing.
      *
-     * @param listener TODO Add Javadoc comment.
+     * @param listener the listener.
      */
     public void addPropertyChangeListener(@NotNull PropertyChangeListener listener) {
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Remove specified listener.
+     * <p/>
+     * Does nothing.
      *
-     * @param listener TODO Add Javadoc comment.
+     * @param listener the listener.
      */
     public void removePropertyChangeListener(@NotNull PropertyChangeListener listener) {
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Get the background editor highlighter.
      *
-     * @return TODO Add Javadoc comment.
+     * @return {@code null} as {@link MarkdownPreviewEditor} does not require highlighting.
      */
     @Nullable
     public BackgroundEditorHighlighter getBackgroundHighlighter() {
@@ -217,9 +232,9 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Get the current location.
      *
-     * @return TODO Add Javadoc comment.
+     * @return {@code null} as {@link MarkdownPreviewEditor} is not navigable.
      */
     @Nullable
     public FileEditorLocation getCurrentLocation() {
@@ -227,9 +242,9 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Get the structure view builder.
      *
-     * @return TODO Add Javadoc comment.
+     * @return TODO {@code null} as parsing/PSI is not implemented.
      */
     @Nullable
     public StructureViewBuilder getStructureViewBuilder() {
@@ -237,14 +252,14 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * Dispose the editor.
      */
     public void dispose() {
         Disposer.dispose(this);
     }
 
     /**
-     * TODO Add Javadoc comment.
+     * {@link com.intellij.openapi.editor.event.DocumentListener} responsible for marking the HTML preview as obsolete when needed.
      *
      * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
      * @since 0.1
@@ -252,9 +267,11 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
     protected class DocumentPreviewUpdateListener extends DocumentAdapter {
 
         /**
-         * TODO Add Javadoc comment.
+         * Invoked after the document text has changed.
+         * <p/>
+         * Systematically marks the HTML preview as obsolete, whatever changed.
          *
-         * @param event TODO Add Javadoc comment.
+         * @param event the event
          */
         public void documentChanged(DocumentEvent event) {
             previewIsObsolete = true;

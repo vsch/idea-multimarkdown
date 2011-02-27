@@ -27,7 +27,7 @@ import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * TODO Add Javadoc comment.
+ * Parser implementation for Markdown.
  *
  * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
  * @since 0.1
@@ -35,18 +35,19 @@ import org.jetbrains.annotations.NotNull;
 public class MarkdownParser implements PsiParser {
 
     /**
-     * TODO Add Javadoc comment.
+     * Parse the contents of the specified PSI builder and returns an AST tree with the
+     * specified type of root element.
      *
-     * @param root    TODO Add Javadoc comment.
-     * @param builder TODO Add Javadoc comment.
-     * @return TODO Add Javadoc comment.
+     * @param root    the type of the root element in the AST tree.
+     * @param builder the builder which is used to retrieve the original file tokens and build the AST tree.
+     * @return the root of the resulting AST tree.
      */
     @NotNull
     public ASTNode parse(IElementType root, PsiBuilder builder) {
 
         PsiBuilder.Marker rootMarker = builder.mark();
 
-        // TODO Parsing not implemented
+        // TODO Actual parsing not implemented
 
         while (!builder.eof()) {
             builder.advanceLexer();
