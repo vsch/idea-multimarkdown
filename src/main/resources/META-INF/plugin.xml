@@ -25,7 +25,7 @@
   <name>Markdown</name>
   <category>Custom Languages</category>
   <vendor url="http://github.com/nicoulaj" email="julien.nicoulaud@gmail.com">Julien Nicoulaud</vendor>
-  <version>0.2</version>
+  <version>0.3</version>
   <idea-version since-build="9918"/>
   <depends>com.intellij.modules.lang</depends>
   <description>
@@ -36,6 +36,10 @@
   <change-notes>
     <![CDATA[
       <p>
+        <b>0.3</b><br/>
+        <ul>
+          <li>Syntax highlighting.</li>
+        </ul>
         <b>0.2</b><br/>
         <ul>
           <li>Compatibility with PyCharm/RubyMine/WebStorm/PHPStorm/etc.</li>
