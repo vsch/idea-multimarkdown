@@ -40,6 +40,7 @@ import net.nicoulaj.idea.markdown.lang.MarkdownTokenTypes;
 %type IElementType
 %eof{  return;
 %eof}
+%state IN_ITALIC, IN_BOLD
 
 %{
    public _MarkdownLexer() {
@@ -47,16 +48,26 @@ import net.nicoulaj.idea.markdown.lang.MarkdownTokenTypes;
    }
 %}
 
-// TODO Lexer not implemented
-
 EOL = \n|\r|\r\n
 INPUT_CHAR = [^\r\n]
 WHITE_SPACE_CHAR = [\ \n\r\t\f]
-PLAIN_TEXT = ({INPUT_CHAR}|{EOL})*
 
 %%
 
 <YYINITIAL> {
-  {PLAIN_TEXT}     { yybegin(YYINITIAL); return MarkdownTokenTypes.PLAIN_TEXT; }
-  .                { yybegin(YYINITIAL); return MarkdownTokenTypes.BAD_CHARACTER; }
+  "*"[^"*"]                  { yybegin(IN_ITALIC); return MarkdownTokenTypes.ITALIC_TEXT; }
+  "**"[^"*"]                 { yybegin(IN_BOLD); return MarkdownTokenTypes.BOLD_TEXT; }
+  "!["[^"]"]*"]("[^")"]*")"  { return MarkdownTokenTypes.IMAGE; }
+  "["[^"]"]*"]("[^")"]*")"   { return MarkdownTokenTypes.LINK; }
+  [^]                        { return MarkdownTokenTypes.PLAIN_TEXT; }
+}
+
+<IN_ITALIC> {
+  "*"                        { yybegin(YYINITIAL); return MarkdownTokenTypes.ITALIC_TEXT; }
+  [^]                        { return MarkdownTokenTypes.ITALIC_TEXT; }
+}
+
+<IN_BOLD> {
+  "**"                       { yybegin(YYINITIAL); return MarkdownTokenTypes.BOLD_TEXT; }
+  [^]                        { return MarkdownTokenTypes.BOLD_TEXT; }
 }

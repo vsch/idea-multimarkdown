@@ -51,7 +51,7 @@ public interface MarkdownTokenTypeSets extends MarkdownTokenTypes {
     public static final TokenSet LINK_SET = TokenSet.create(LINK);
 
     /**
-     * Bad character token type set.
+     * Image token type set.
      */
-    public static final TokenSet BAD_CHARACTER_SET = TokenSet.create(BAD_CHARACTER);
+    public static final TokenSet IMAGE_SET = TokenSet.create(IMAGE);
 }

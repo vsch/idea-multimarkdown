@@ -50,4 +50,9 @@ public interface MarkdownTokenTypes extends TokenType {
      * Link token type.
      */
     IElementType LINK = new MarkdownElementType("LINK");
+
+    /**
+     * Image token type.
+     */
+    IElementType IMAGE = new MarkdownElementType("Image");
 }

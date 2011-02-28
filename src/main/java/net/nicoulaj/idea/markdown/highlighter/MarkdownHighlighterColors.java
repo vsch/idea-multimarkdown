@@ -62,9 +62,9 @@ public class MarkdownHighlighterColors {
     );
 
     /**
-     * Default style for bad characters.
+     * Default style for images.
      */
-    public static TextAttributesKey BAD_CHARACTER_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
-            "MARKDOWN.BAD_CHARACTER", new TextAttributes(new Color(255, 0, 0), null, null, null, Font.PLAIN)
+    public static TextAttributesKey IMAGE_CHARACTER_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.IMAGE", new TextAttributes(new Color(70, 110, 0), null, null, null, Font.PLAIN)
     );
 }

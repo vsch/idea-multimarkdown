@@ -35,9 +35,9 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.io.InputStreamReader;
-import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Color settings page for the Markdown editor.
@@ -77,7 +77,7 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
      *
      * @see #MarkdownColorSettingsPage()
      */
-    protected final Set<AttributesDescriptor> attributeDescriptors = new HashSet<AttributesDescriptor>();
+    protected final List<AttributesDescriptor> attributeDescriptors = new LinkedList<AttributesDescriptor>();
 
     /**
      * Build a new instance of {@link MarkdownColorSettingsPage}.
@@ -100,6 +100,10 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
         attributeDescriptors.add(new AttributesDescriptor(
                 MarkdownBundle.message("markdown.editor.colorsettingspage.link"),
                 MarkdownHighlighterColors.LINK_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.image"),
+                MarkdownHighlighterColors.IMAGE_CHARACTER_ATTR_KEY)
         );
     }
 
