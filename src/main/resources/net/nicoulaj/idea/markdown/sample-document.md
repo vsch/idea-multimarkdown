@@ -6,19 +6,20 @@ Some text.
 A second level title
 --------------------
 
+# First level title
+
 Here is some **bold text**, and some *italic text*.
 
+## Second level title
+
 Here is a link to [Markdown](http://daringfireball.net/projects/markdown).
+
+### Third level title
 
 Here is an image:
 ![My image](http://www.foo.bar/image.png)
 
-# First level title
-## Second level title
-### Third level title
 #### Forth level title
-##### Fifth level title
-###### Sixth level title
 
 A code block:
 
@@ -32,3 +33,12 @@ A code block:
     public static String message(@PropertyKey(resourceBundle = BUNDLE_NAME) String key, Object... params) {
         return CommonBundle.message(BUNDLE, key, params);
     }
+
+
+##### Fifth level title
+
+Some text.
+
+###### Sixth level title
+
+Some text.
