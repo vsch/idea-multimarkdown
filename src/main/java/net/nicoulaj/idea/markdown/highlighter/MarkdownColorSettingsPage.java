@@ -129,6 +129,10 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
                 MarkdownBundle.message("markdown.editor.colorsettingspage.header-level-6"),
                 MarkdownHighlighterColors.HEADER_LEVEL_6_ATTR_KEY)
         );
+        attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.code-block"),
+                MarkdownHighlighterColors.CODE_BLOCK_ATTR_KEY)
+        );
     }
 
     /**

@@ -57,42 +57,47 @@ public interface MarkdownTokenTypes extends TokenType {
     IElementType IMAGE = new MarkdownElementType("IMAGE");
 
     /**
-     * Atx-style header of level 1.
+     * Atx style header of level 1 token type.
      */
     IElementType ATX_HEADER_LEVEL_1 = new MarkdownElementType("ATX_HEADER_LEVEL_1");
 
     /**
-     * Atx-style header of level 2.
+     * Atx style header of level 2 token type.
      */
     IElementType ATX_HEADER_LEVEL_2 = new MarkdownElementType("ATX_HEADER_LEVEL_2");
 
     /**
-     * Atx-style header of level 3.
+     * Atx style header of level 3 token type.
      */
     IElementType ATX_HEADER_LEVEL_3 = new MarkdownElementType("ATX_HEADER_LEVEL_3");
 
     /**
-     * Atx-style header of level 4.
+     * Atx style header of level 4 token type.
      */
     IElementType ATX_HEADER_LEVEL_4 = new MarkdownElementType("ATX_HEADER_LEVEL_4");
 
     /**
-     * Atx-style header of level 5.
+     * Atx style header of level 5 token type.
      */
     IElementType ATX_HEADER_LEVEL_5 = new MarkdownElementType("ATX_HEADER_LEVEL_5");
 
     /**
-     * Atx-style header of level 6.
+     * Atx style header of level 6 token type.
      */
     IElementType ATX_HEADER_LEVEL_6 = new MarkdownElementType("ATX_HEADER_LEVEL_6");
 
     /**
-     * Setext-style header of level 1.
+     * Setext style header of level 1 token type.
      */
     IElementType SETEXT_HEADER_LEVEL_1 = new MarkdownElementType("SETEXT_HEADER_LEVEL_1");
 
     /**
-     * Setext-style header of level 2.
+     * Setext style header of level 2 token type.
      */
     IElementType SETEXT_HEADER_LEVEL_2 = new MarkdownElementType("SETEXT_HEADER_LEVEL_2");
+
+    /**
+     * Code block token type.
+     */
+    IElementType CODE_BLOCK = new MarkdownElementType("CODE_BLOCK");
 }

@@ -109,4 +109,11 @@ public class MarkdownHighlighterColors {
     public static TextAttributesKey HEADER_LEVEL_6_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
             "MARKDOWN.HEADER_LEVEL_6", new TextAttributes(new Color(0, 0, 0), new Color(230, 230, 230), null, null, Font.PLAIN)
     );
+
+    /**
+     * Default style for code blocks.
+     */
+    public static TextAttributesKey CODE_BLOCK_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.CODE_BLOCK", new TextAttributes(new Color(80, 40, 0), null, null, null, Font.PLAIN)
+    );
 }

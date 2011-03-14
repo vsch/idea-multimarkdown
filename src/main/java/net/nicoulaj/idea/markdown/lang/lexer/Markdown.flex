@@ -40,7 +40,7 @@ import net.nicoulaj.idea.markdown.lang.MarkdownTokenTypes;
 %type IElementType
 %eof{  return;
 %eof}
-%state IN_ITALIC, IN_BOLD
+%state IN_ITALIC, IN_BOLD, IN_CODE_BLOCK
 
 %{
    public _MarkdownLexer() {
@@ -55,27 +55,33 @@ WHITE_SPACE_CHAR = [\ \n\r\t\f]
 %%
 
 <YYINITIAL> {
-  "*"[^"*"]                  { yybegin(IN_ITALIC); return MarkdownTokenTypes.ITALIC_TEXT; }
-  "**"[^"*"]                 { yybegin(IN_BOLD); return MarkdownTokenTypes.BOLD_TEXT; }
-  "!["[^"]"]*"]("[^")"]*")"  { return MarkdownTokenTypes.IMAGE; }
-  "["[^"]"]*"]("[^")"]*")"   { return MarkdownTokenTypes.LINK; }
-  ^"#"[^"#"].*{EOL}          { return MarkdownTokenTypes.ATX_HEADER_LEVEL_1; }
-  ^"##"[^"#"].*{EOL}         { return MarkdownTokenTypes.ATX_HEADER_LEVEL_2; }
-  ^"###"[^"#"].*{EOL}        { return MarkdownTokenTypes.ATX_HEADER_LEVEL_3; }
-  ^"####"[^"#"].*{EOL}       { return MarkdownTokenTypes.ATX_HEADER_LEVEL_4; }
-  ^"#####"[^"#"].*{EOL}      { return MarkdownTokenTypes.ATX_HEADER_LEVEL_5; }
-  ^"######"[^"#"].*{EOL}     { return MarkdownTokenTypes.ATX_HEADER_LEVEL_6; }
-  ^.*{EOL}"="+{EOL}          { return MarkdownTokenTypes.SETEXT_HEADER_LEVEL_1; }
-  ^.*{EOL}"-"+{EOL}          { return MarkdownTokenTypes.SETEXT_HEADER_LEVEL_2; }
-  [^]                        { return MarkdownTokenTypes.PLAIN_TEXT; }
+  "*"[^"*"]                   { yybegin(IN_ITALIC); return MarkdownTokenTypes.ITALIC_TEXT; }
+  "**"[^"*"]                  { yybegin(IN_BOLD); return MarkdownTokenTypes.BOLD_TEXT; }
+  "!["[^"]"]*"]("[^")"]*")"   { return MarkdownTokenTypes.IMAGE; }
+  "["[^"]"]*"]("[^")"]*")"    { return MarkdownTokenTypes.LINK; }
+  ^"#"[^"#"].*{EOL}           { return MarkdownTokenTypes.ATX_HEADER_LEVEL_1; }
+  ^"##"[^"#"].*{EOL}          { return MarkdownTokenTypes.ATX_HEADER_LEVEL_2; }
+  ^"###"[^"#"].*{EOL}         { return MarkdownTokenTypes.ATX_HEADER_LEVEL_3; }
+  ^"####"[^"#"].*{EOL}        { return MarkdownTokenTypes.ATX_HEADER_LEVEL_4; }
+  ^"#####"[^"#"].*{EOL}       { return MarkdownTokenTypes.ATX_HEADER_LEVEL_5; }
+  ^"######"[^"#"].*{EOL}      { return MarkdownTokenTypes.ATX_HEADER_LEVEL_6; }
+  ^.*{EOL}"="+{EOL}           { return MarkdownTokenTypes.SETEXT_HEADER_LEVEL_1; }
+  ^.*{EOL}"-"+{EOL}           { return MarkdownTokenTypes.SETEXT_HEADER_LEVEL_2; }
+  ^{EOL}(\ \ \ \ |\t)         { yybegin(IN_CODE_BLOCK); return MarkdownTokenTypes.PLAIN_TEXT; }
+  [^]                         { return MarkdownTokenTypes.PLAIN_TEXT; }
 }
 
 <IN_ITALIC> {
-  "*"                        { yybegin(YYINITIAL); return MarkdownTokenTypes.ITALIC_TEXT; }
-  [^]                        { return MarkdownTokenTypes.ITALIC_TEXT; }
+  "*"                         { yybegin(YYINITIAL); return MarkdownTokenTypes.ITALIC_TEXT; }
+  [^]                         { return MarkdownTokenTypes.ITALIC_TEXT; }
 }
 
 <IN_BOLD> {
-  "**"                       { yybegin(YYINITIAL); return MarkdownTokenTypes.BOLD_TEXT; }
-  [^]                        { return MarkdownTokenTypes.BOLD_TEXT; }
+  "**"                        { yybegin(YYINITIAL); return MarkdownTokenTypes.BOLD_TEXT; }
+  [^]                         { return MarkdownTokenTypes.BOLD_TEXT; }
+}
+
+<IN_CODE_BLOCK> {
+  {EOL}(\ {0,3}[^\ ]|[^\ \t]) { yybegin(YYINITIAL); return MarkdownTokenTypes.PLAIN_TEXT; }
+  [^]                         { return MarkdownTokenTypes.CODE_BLOCK; }
 }
