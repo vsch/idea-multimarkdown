@@ -59,6 +59,12 @@ WHITE_SPACE_CHAR = [\ \n\r\t\f]
   "**"[^"*"]                 { yybegin(IN_BOLD); return MarkdownTokenTypes.BOLD_TEXT; }
   "!["[^"]"]*"]("[^")"]*")"  { return MarkdownTokenTypes.IMAGE; }
   "["[^"]"]*"]("[^")"]*")"   { return MarkdownTokenTypes.LINK; }
+  "#"[^"#"].*{EOL}           { return MarkdownTokenTypes.ATX_HEADER_LEVEL_1; }
+  "##"[^"#"].*{EOL}          { return MarkdownTokenTypes.ATX_HEADER_LEVEL_2; }
+  "###"[^"#"].*{EOL}         { return MarkdownTokenTypes.ATX_HEADER_LEVEL_3; }
+  "####"[^"#"].*{EOL}        { return MarkdownTokenTypes.ATX_HEADER_LEVEL_4; }
+  "#####"[^"#"].*{EOL}       { return MarkdownTokenTypes.ATX_HEADER_LEVEL_5; }
+  "#######"[^"#"].*{EOL}     { return MarkdownTokenTypes.ATX_HEADER_LEVEL_6; }
   [^]                        { return MarkdownTokenTypes.PLAIN_TEXT; }
 }
 

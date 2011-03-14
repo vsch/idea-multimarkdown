@@ -67,4 +67,46 @@ public class MarkdownHighlighterColors {
     public static TextAttributesKey IMAGE_CHARACTER_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
             "MARKDOWN.IMAGE", new TextAttributes(new Color(70, 110, 0), null, null, null, Font.PLAIN)
     );
+
+    /**
+     * Default style for headers of level 1.
+     */
+    public static TextAttributesKey HEADER_LEVEL_1_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.HEADER_LEVEL_1", new TextAttributes(new Color(0, 0, 0), new Color(210, 210, 210), null, null, Font.BOLD)
+    );
+
+    /**
+     * Default style for headers of level 2.
+     */
+    public static TextAttributesKey HEADER_LEVEL_2_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.HEADER_LEVEL_2", new TextAttributes(new Color(0, 0, 0), new Color(220, 220, 220), null, null, Font.BOLD)
+    );
+
+    /**
+     * Default style for headers of level 3.
+     */
+    public static TextAttributesKey HEADER_LEVEL_3_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.HEADER_LEVEL_3", new TextAttributes(new Color(0, 0, 0), new Color(230, 230, 230), null, null, Font.BOLD)
+    );
+
+    /**
+     * Default style for headers of level 4.
+     */
+    public static TextAttributesKey HEADER_LEVEL_4_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.HEADER_LEVEL_4", new TextAttributes(new Color(0, 0, 0), new Color(230, 230, 230), null, null, Font.PLAIN)
+    );
+
+    /**
+     * Default style for headers of level 5.
+     */
+    public static TextAttributesKey HEADER_LEVEL_5_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.HEADER_LEVEL_5", new TextAttributes(new Color(0, 0, 0), new Color(230, 230, 230), null, null, Font.PLAIN)
+    );
+
+    /**
+     * Default style for headers of level 6.
+     */
+    public static TextAttributesKey HEADER_LEVEL_6_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.HEADER_LEVEL_6", new TextAttributes(new Color(0, 0, 0), new Color(230, 230, 230), null, null, Font.PLAIN)
+    );
 }

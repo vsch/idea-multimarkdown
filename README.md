@@ -10,7 +10,7 @@ See the [official plugin page](http://plugins.intellij.net/plugin/?idea&id=5970)
 
  * Markdown file type support: **OK**
  * "Preview" tab in the file editor: **OK**
- * Syntax highlighting: **TODO**
+ * Syntax highlighting: **Started**
  * Brace matching: **TODO**
  * Structure view: **TODO**
  * "HTML source" tab in the file editor: **TODO**

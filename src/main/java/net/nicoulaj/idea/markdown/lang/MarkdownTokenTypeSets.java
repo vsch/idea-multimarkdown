@@ -54,4 +54,34 @@ public interface MarkdownTokenTypeSets extends MarkdownTokenTypes {
      * Image token type set.
      */
     public static final TokenSet IMAGE_SET = TokenSet.create(IMAGE);
+
+    /**
+     * Header of level 1.
+     */
+    public static final TokenSet HEADER_LEVEL_1 = TokenSet.create(ATX_HEADER_LEVEL_1);
+
+    /**
+     * Header of level 2.
+     */
+    public static final TokenSet HEADER_LEVEL_2 = TokenSet.create(ATX_HEADER_LEVEL_2);
+
+    /**
+     * Header of level 3.
+     */
+    public static final TokenSet HEADER_LEVEL_3 = TokenSet.create(ATX_HEADER_LEVEL_3);
+
+    /**
+     * Header of level 4.
+     */
+    public static final TokenSet HEADER_LEVEL_4 = TokenSet.create(ATX_HEADER_LEVEL_4);
+
+    /**
+     * Header of level 5.
+     */
+    public static final TokenSet HEADER_LEVEL_5 = TokenSet.create(ATX_HEADER_LEVEL_5);
+
+    /**
+     * Header of level 6.
+     */
+    public static final TokenSet HEADER_LEVEL_6 = TokenSet.create(ATX_HEADER_LEVEL_6);
 }

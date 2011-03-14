@@ -55,6 +55,12 @@ public class MarkdownSyntaxHighlighter extends SyntaxHighlighterBase {
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.ITALIC_TEXT_SET, MarkdownHighlighterColors.ITALIC_TEXT_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.LINK_SET, MarkdownHighlighterColors.LINK_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.IMAGE_SET, MarkdownHighlighterColors.IMAGE_CHARACTER_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.HEADER_LEVEL_1, MarkdownHighlighterColors.HEADER_LEVEL_1_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.HEADER_LEVEL_2, MarkdownHighlighterColors.HEADER_LEVEL_2_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.HEADER_LEVEL_3, MarkdownHighlighterColors.HEADER_LEVEL_3_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.HEADER_LEVEL_4, MarkdownHighlighterColors.HEADER_LEVEL_4_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.HEADER_LEVEL_5, MarkdownHighlighterColors.HEADER_LEVEL_5_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.HEADER_LEVEL_6, MarkdownHighlighterColors.HEADER_LEVEL_6_ATTR_KEY);
     }
 
     /**
