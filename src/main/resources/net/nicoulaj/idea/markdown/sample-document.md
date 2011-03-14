@@ -1,6 +1,11 @@
 A first level title
 ===================
 
+Some text.
+
+A second level title
+--------------------
+
 Here is some **bold text**, and some *italic text*.
 
 Here is a link to [Markdown](http://daringfireball.net/projects/markdown).

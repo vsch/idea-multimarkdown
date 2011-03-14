@@ -85,4 +85,14 @@ public interface MarkdownTokenTypes extends TokenType {
      * Atx-style header of level 6.
      */
     IElementType ATX_HEADER_LEVEL_6 = new MarkdownElementType("ATX_HEADER_LEVEL_6");
+
+    /**
+     * Setext-style header of level 1.
+     */
+    IElementType SETEXT_HEADER_LEVEL_1 = new MarkdownElementType("SETEXT_HEADER_LEVEL_1");
+
+    /**
+     * Setext-style header of level 2.
+     */
+    IElementType SETEXT_HEADER_LEVEL_2 = new MarkdownElementType("SETEXT_HEADER_LEVEL_2");
 }

@@ -58,12 +58,14 @@ public interface MarkdownTokenTypeSets extends MarkdownTokenTypes {
     /**
      * Header of level 1.
      */
-    public static final TokenSet HEADER_LEVEL_1 = TokenSet.create(ATX_HEADER_LEVEL_1);
+    public static final TokenSet HEADER_LEVEL_1 = TokenSet.create(ATX_HEADER_LEVEL_1,
+                                                                  SETEXT_HEADER_LEVEL_1);
 
     /**
      * Header of level 2.
      */
-    public static final TokenSet HEADER_LEVEL_2 = TokenSet.create(ATX_HEADER_LEVEL_2);
+    public static final TokenSet HEADER_LEVEL_2 = TokenSet.create(ATX_HEADER_LEVEL_2,
+                                                                  SETEXT_HEADER_LEVEL_2);
 
     /**
      * Header of level 3.

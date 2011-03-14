@@ -65,6 +65,8 @@ WHITE_SPACE_CHAR = [\ \n\r\t\f]
   ^"####"[^"#"].*{EOL}       { return MarkdownTokenTypes.ATX_HEADER_LEVEL_4; }
   ^"#####"[^"#"].*{EOL}      { return MarkdownTokenTypes.ATX_HEADER_LEVEL_5; }
   ^"######"[^"#"].*{EOL}     { return MarkdownTokenTypes.ATX_HEADER_LEVEL_6; }
+  ^.*{EOL}"="+{EOL}          { return MarkdownTokenTypes.SETEXT_HEADER_LEVEL_1; }
+  ^.*{EOL}"-"+{EOL}          { return MarkdownTokenTypes.SETEXT_HEADER_LEVEL_2; }
   [^]                        { return MarkdownTokenTypes.PLAIN_TEXT; }
 }
 
