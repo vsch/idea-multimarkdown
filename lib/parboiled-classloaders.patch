@@ -1,0 +1,71 @@
+From 2ed7a5ef68975f00083d8eb3942bc28c3244670e Mon Sep 17 00:00:00 2001
+From: Julien Nicoulaud <julien.nicoulaud@gmail.com>
+Date: Sat, 19 Mar 2011 17:18:06 +0100
+Subject: [PATCH] Do not use Thread.currentThread().getContextClassLoader()
+
+---
+ .../main/java/org/parboiled/common/FileUtils.java  |   10 +++++-----
+ .../java/org/parboiled/transform/AsmUtils.java     |    2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/core/src/main/java/org/parboiled/common/FileUtils.java b/core/src/main/java/org/parboiled/common/FileUtils.java
+index fdcadba..0d328a1 100644
+--- a/core/src/main/java/org/parboiled/common/FileUtils.java
++++ b/core/src/main/java/org/parboiled/common/FileUtils.java
+@@ -26,13 +26,13 @@ public final class FileUtils {
+ 
+     public static String readAllTextFromResource(String resource) {
+         checkArgNotNull(resource, "resource");
+-        return readAllText(Thread.currentThread().getContextClassLoader().getResourceAsStream(resource));
++        return readAllText(FileUtils.class.getClassLoader().getResourceAsStream(resource));
+     }
+ 
+     public static String readAllTextFromResource(String resource, Charset charset) {
+         checkArgNotNull(resource, "resource");
+         checkArgNotNull(charset, "charset");
+-        return readAllText(Thread.currentThread().getContextClassLoader().getResourceAsStream(resource), charset);
++        return readAllText(FileUtils.class.getClassLoader().getResourceAsStream(resource), charset);
+     }
+ 
+     public static String readAllText(String filename) {
+@@ -77,13 +77,13 @@ public final class FileUtils {
+     
+     public static char[] readAllCharsFromResource(String resource) {
+         checkArgNotNull(resource, "resource");
+-        return readAllChars(Thread.currentThread().getContextClassLoader().getResourceAsStream(resource));
++        return readAllChars(FileUtils.class.getClassLoader().getResourceAsStream(resource));
+     }
+ 
+     public static char[] readAllCharsFromResource(String resource, Charset charset) {
+         checkArgNotNull(resource, "resource");
+         checkArgNotNull(charset, "charset");
+-        return readAllChars(Thread.currentThread().getContextClassLoader().getResourceAsStream(resource), charset);
++        return readAllChars(FileUtils.class.getClassLoader().getResourceAsStream(resource), charset);
+     }
+ 
+     public static char[] readAllChars(String filename) {
+@@ -128,7 +128,7 @@ public final class FileUtils {
+ 
+     public static byte[] readAllBytesFromResource(String resource) {
+         checkArgNotNull(resource, "resource");
+-        return readAllBytes(Thread.currentThread().getContextClassLoader().getResourceAsStream(resource));
++        return readAllBytes(FileUtils.class.getClassLoader().getResourceAsStream(resource));
+     }
+ 
+     public static byte[] readAllBytes(String filename) {
+diff --git a/java/src/main/java/org/parboiled/transform/AsmUtils.java b/java/src/main/java/org/parboiled/transform/AsmUtils.java
+index ea30b21..962ebc3 100644
+--- a/java/src/main/java/org/parboiled/transform/AsmUtils.java
++++ b/java/src/main/java/org/parboiled/transform/AsmUtils.java
+@@ -70,7 +70,7 @@ class AsmUtils {
+             } else {
+                 String className = classDesc.replace('/', '.');
+                 try {
+-                    clazz = Thread.currentThread().getContextClassLoader().loadClass(className);
++                    clazz = AsmUtils.class.getClassLoader().loadClass(className);
+                 } catch (ClassNotFoundException e) {
+                     throw new RuntimeException("Error loading class '" + className + "' for rule method analysis", e);
+                 }
+-- 
+1.7.1
+
