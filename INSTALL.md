@@ -1,4 +1,0 @@
-Building from sources
-=====================
-
-TODO
