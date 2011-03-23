@@ -37,6 +37,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -90,6 +91,7 @@ public class MarkdownLexerTestCase extends UsefulTestCase {
     @Parameterized.Parameters
     public static Collection<Object[]> getTestFiles() {
         final List<File> dataFiles = FileUtil.findFilesByMask(TEST_FILES_PATTERN, new File(LEXER_TEST_RESOURCES_DIR));
+        Collections.sort(dataFiles);
         final Collection<Object[]> res = new ArrayList<Object[]>(dataFiles.size());
         for (File file : dataFiles) {
             res.add(new Object[]{file});
@@ -106,7 +108,7 @@ public class MarkdownLexerTestCase extends UsefulTestCase {
         // Load the test file data.
         String text;
         try {
-            text = new String(FileUtil.loadFileText(testFile)).trim();
+            text = new String(FileUtil.loadFileText(testFile));
         } catch (IOException e) {
             throw new AssertionFailedError("Failed loading test file '" + testFile + "': " + e.getMessage());
         }
