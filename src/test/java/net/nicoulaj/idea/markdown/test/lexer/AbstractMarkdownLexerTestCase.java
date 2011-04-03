@@ -61,7 +61,7 @@ public abstract class AbstractMarkdownLexerTestCase extends UsefulTestCase {
     private File testFile;
 
     /**
-     * Build a new instance of {@link net.nicoulaj.idea.markdown.test.lexer.MarkdownLexerCoverageTestCase}.
+     * Build a new instance of {@link AbstractMarkdownLexerTestCase}.
      *
      * @param testFile the file to test
      */

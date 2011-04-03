@@ -38,14 +38,14 @@ import java.io.IOException;
  * @since 0.4
  */
 @RunWith(value = Parameterized.class)
-public class MarkdownLexerCoverageTestCase extends AbstractMarkdownLexerTestCase {
+public class MarkdownLexerCoverageTest extends AbstractMarkdownLexerTestCase {
 
     /**
-     * Build a new instance of {@link MarkdownLexerCoverageTestCase}.
+     * Build a new instance of {@link MarkdownLexerCoverageTest}.
      *
      * @param testFile the file to test
      */
-    public MarkdownLexerCoverageTestCase(File testFile) {
+    public MarkdownLexerCoverageTest(File testFile) {
         super(testFile);
     }
 

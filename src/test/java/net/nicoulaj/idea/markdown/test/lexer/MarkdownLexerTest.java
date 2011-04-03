@@ -38,7 +38,7 @@ import java.io.IOException;
  * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
  * @since 0.4
  */
-public class MarkdownLexerTestCase extends AbstractMarkdownLexerTestCase {
+public class MarkdownLexerTest extends AbstractMarkdownLexerTestCase {
 
     /**
      * The files containing the expected lexer results are named after the test file file name + this suffix.
@@ -47,11 +47,11 @@ public class MarkdownLexerTestCase extends AbstractMarkdownLexerTestCase {
     public static final String TEST_FILES_TOKENS_FILE_EXT = ".tokens.csv";
 
     /**
-     * Build a new instance of {@link MarkdownLexerCoverageTestCase}.
+     * Build a new instance of {@link MarkdownLexerTest}.
      *
      * @param testFile the file to test
      */
-    public MarkdownLexerTestCase(File testFile) {
+    public MarkdownLexerTest(File testFile) {
         super(testFile);
     }
 
