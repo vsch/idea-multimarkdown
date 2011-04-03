@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2011 Julien Nicoulaud <julien.nicoulaud@gmail.com>
+  ~
+  ~ Licensed to the Apache Software Foundation (ASF) under one
+  ~ or more contributor license agreements.  See the NOTICE file
+  ~ distributed with this work for additional information
+  ~ regarding copyright ownership.  The ASF licenses this file
+  ~ to you under the Apache License, Version 2.0 (the
+  ~ "License"); you may not use this file except in compliance
+  ~ with the License.  You may obtain a copy of the License at
+  ~
+  ~   http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied.  See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  -->
+<project name="idea-markdown" default="all">
+
+  <!-- IDEA_HOME environment variable check -->
+  <property environment="env"/>
+  <fail unless="env.IDEA_HOME" message="IDEA_HOME must be set."/>
+  <available file="${env.IDEA_HOME}/lib/idea.jar" property="idea.home.valid"/>
+  <fail unless="${idea.home.valid}" message="IDEA_HOME is not pointing to a valid IntelliJ installation."/>
+
+  <!-- JUnit task definition -->
+  <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
+    <classpath>
+      <pathelement location="${env.IDEA_HOME}/lib/junit-*.jar"/>
+      <pathelement location="${env.IDEA_HOME}/lib/ant/lib/ant-junit.jar"/>
+    </classpath>
+  </taskdef>
+
+  <!-- Paths definition -->
+  <dirname property="project.basedir" file="${ant.file}"/>
+  <property name="project.build.directory" value="${project.basedir}/out"/>
+  <property name="project.build.sourceDirectory" value="${project.basedir}/src/main/java"/>
+  <property name="project.build.resourcesDirectory" value="${project.basedir}/src/main/resources"/>
+  <property name="project.build.outputDirectory" value="${project.build.directory}/production/idea-markdown"/>
+  <property name="project.build.testSourceDirectory" value="${project.basedir}/src/test/java"/>
+  <property name="project.build.testResourcesDirectory" value="${project.basedir}/src/test/resources"/>
+  <property name="project.build.testOutputDirectory" value="${project.build.directory}/test/idea-markdown"/>
+  <property name="project.build.finalName" value="${project.basedir}/idea-markdown.zip"/>
+
+  <!-- Targets classpath definition -->
+  <path id="project.classpath">
+    <fileset dir="${basedir}/lib" includes="*.jar"/>
+    <fileset dir="${env.IDEA_HOME}/lib" includes="*.jar"/>
+    <pathelement location="${project.build.outputDirectory}"/>
+    <pathelement location="${project.build.testOutputDirectory}"/>
+  </path>
+
+  <!-- Targets -->
+
+  <target name="clean" description="Delete all build output files">
+    <delete dir="${project.build.directory}"/>
+    <delete file="${project.build.finalName}"/>
+  </target>
+
+  <target name="compile" description="Compile project source classes">
+    <mkdir dir="${project.build.outputDirectory}"/>
+    <javac destdir="${project.build.outputDirectory}" includeantruntime="false" fork="true">
+      <classpath refid="project.classpath"/>
+      <src location="${project.build.sourceDirectory}"/>
+    </javac>
+    <copy todir="${project.build.outputDirectory}">
+      <fileset dir="${project.basedir}/src/main/resources" includes="**"/>
+    </copy>
+  </target>
+
+  <target name="testCompile" depends="compile" description="Compile project test classes" unless="skipTests">
+    <mkdir dir="${project.build.testOutputDirectory}"/>
+    <javac destdir="${project.build.testOutputDirectory}" includeantruntime="false" fork="true">
+      <classpath refid="project.classpath"/>
+      <src location="${project.build.testSourceDirectory}"/>
+    </javac>
+  </target>
+
+  <target name="test" depends="testCompile" description="Run project tests" unless="skipTests">
+    <junit printsummary="withOutAndErr" haltonfailure="yes" logfailedtests="true" showoutput="yes">
+      <classpath refid="project.classpath"/>
+      <batchtest todir="${project.build.testOutputDirectory}">
+        <formatter type="plain"/>
+        <fileset dir="${project.basedir}/src/test/java" includes="**/*Test.java"/>
+      </batchtest>
+    </junit>
+  </target>
+
+  <target name="package" depends="compile" description="Build plugin archive for idea-markdown">
+    <jar destfile="${project.build.directory}/idea-markdown.jar" duplicate="preserve">
+      <zipfileset dir="${project.build.outputDirectory}"/>
+      <manifest>
+        <attribute name="Created-By" value="IntelliJ IDEA"/>
+        <attribute name="Manifest-Version" value="1.0"/>
+      </manifest>
+    </jar>
+    <zip destfile="${project.build.finalName}">
+      <zipfileset dir="lib" includes="*.jar" prefix="lib"/>
+      <zipfileset file="${project.build.directory}/idea-markdown.jar" prefix="lib"/>
+    </zip>
+  </target>
+
+  <target name="all" depends="clean,test,package" description="Build project, run tests and generate release archive"/>
+
+</project>
