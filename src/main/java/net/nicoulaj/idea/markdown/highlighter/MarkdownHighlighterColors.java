@@ -27,6 +27,8 @@ import java.awt.*;
 
 /**
  * The default styles for each of token defined for Markdown.
+ * <p/>
+ * Anyone who has better taste than me, feel free to contribute :)
  *
  * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
  * @since 0.1
@@ -37,21 +39,21 @@ public class MarkdownHighlighterColors {
      * Default style for plain text.
      */
     public static TextAttributesKey PLAIN_TEXT_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
-            "MARKDOWN.PLAIN_TEXT", new TextAttributes(new Color(0, 0, 0), null, null, null, Font.PLAIN)
+            "MARKDOWN.PLAIN_TEXT", new TextAttributes(null, null, null, null, Font.PLAIN)
     );
 
     /**
      * Default style for bold text.
      */
     public static TextAttributesKey BOLD_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
-            "MARKDOWN.BOLD", new TextAttributes(new Color(0, 0, 0), null, null, null, Font.BOLD)
+            "MARKDOWN.BOLD", new TextAttributes(null, null, null, null, Font.BOLD)
     );
 
     /**
      * Default style for italic text.
      */
     public static TextAttributesKey ITALIC_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
-            "MARKDOWN.ITALIC", new TextAttributes(new Color(0, 0, 0), null, null, null, Font.ITALIC)
+            "MARKDOWN.ITALIC", new TextAttributes(null, null, null, null, Font.ITALIC)
     );
 
     /**
@@ -65,76 +67,76 @@ public class MarkdownHighlighterColors {
      * Default style for images.
      */
     public static TextAttributesKey IMAGE_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
-            "MARKDOWN.IMAGE", new TextAttributes(new Color(70, 110, 0), null, null, null, Font.PLAIN)
+            "MARKDOWN.IMAGE", new TextAttributes(new Color(30, 100, 0), null, null, null, Font.PLAIN)
     );
 
     /**
      * Default style for headers of level 1.
      */
     public static TextAttributesKey HEADER_LEVEL_1_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
-            "MARKDOWN.HEADER_LEVEL_1", new TextAttributes(new Color(0, 0, 0), new Color(210, 210, 210), null, null, Font.BOLD)
+            "MARKDOWN.HEADER_LEVEL_1", new TextAttributes(null, new Color(210, 210, 210), null, null, Font.BOLD)
     );
 
     /**
      * Default style for headers of level 2.
      */
     public static TextAttributesKey HEADER_LEVEL_2_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
-            "MARKDOWN.HEADER_LEVEL_2", new TextAttributes(new Color(0, 0, 0), new Color(220, 220, 220), null, null, Font.BOLD)
+            "MARKDOWN.HEADER_LEVEL_2", new TextAttributes(null, new Color(220, 220, 220), null, null, Font.BOLD)
     );
 
     /**
      * Default style for headers of level 3.
      */
     public static TextAttributesKey HEADER_LEVEL_3_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
-            "MARKDOWN.HEADER_LEVEL_3", new TextAttributes(new Color(0, 0, 0), new Color(230, 230, 230), null, null, Font.BOLD)
+            "MARKDOWN.HEADER_LEVEL_3", new TextAttributes(null, new Color(230, 230, 230), null, null, Font.BOLD)
     );
 
     /**
      * Default style for headers of level 4.
      */
     public static TextAttributesKey HEADER_LEVEL_4_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
-            "MARKDOWN.HEADER_LEVEL_4", new TextAttributes(new Color(0, 0, 0), new Color(230, 230, 230), null, null, Font.PLAIN)
+            "MARKDOWN.HEADER_LEVEL_4", new TextAttributes(null, new Color(230, 230, 230), null, null, Font.PLAIN)
     );
 
     /**
      * Default style for headers of level 5.
      */
     public static TextAttributesKey HEADER_LEVEL_5_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
-            "MARKDOWN.HEADER_LEVEL_5", new TextAttributes(new Color(0, 0, 0), new Color(230, 230, 230), null, null, Font.PLAIN)
+            "MARKDOWN.HEADER_LEVEL_5", new TextAttributes(null, new Color(230, 230, 230), null, null, Font.PLAIN)
     );
 
     /**
      * Default style for headers of level 6.
      */
     public static TextAttributesKey HEADER_LEVEL_6_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
-            "MARKDOWN.HEADER_LEVEL_6", new TextAttributes(new Color(0, 0, 0), new Color(230, 230, 230), null, null, Font.PLAIN)
+            "MARKDOWN.HEADER_LEVEL_6", new TextAttributes(null, new Color(230, 230, 230), null, null, Font.PLAIN)
     );
 
     /**
      * Default style for code.
      */
     public static TextAttributesKey CODE_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
-            "MARKDOWN.CODE", new TextAttributes(new Color(255, 0, 0), null, null, null, Font.PLAIN)
+            "MARKDOWN.CODE", new TextAttributes(null, new Color(220, 240, 255), null, null, Font.PLAIN)
     );
 
     /**
      * Default style for quotes.
      */
     public static TextAttributesKey QUOTE_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
-            "MARKDOWN.QUOTE", new TextAttributes(new Color(255, 0, 0), null, null, null, Font.PLAIN)
+            "MARKDOWN.QUOTE", new TextAttributes(null, new Color(220, 240, 255), null, null, Font.PLAIN)
     );
 
     /**
      * Default style for tables.
      */
     public static TextAttributesKey TABLE_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
-            "MARKDOWN.TABLE", new TextAttributes(new Color(255, 0, 0), null, null, null, Font.PLAIN)
+            "MARKDOWN.TABLE", new TextAttributes(null, new Color(220, 240, 255), null, null, Font.PLAIN)
     );
 
     /**
      * Default style for HRules.
      */
     public static TextAttributesKey HRULE_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
-            "MARKDOWN.HRULE", new TextAttributes(new Color(255, 0, 0), null, null, null, Font.PLAIN)
+            "MARKDOWN.HRULE", new TextAttributes(null, new Color(230, 230, 230), null, null, Font.PLAIN)
     );
 }
