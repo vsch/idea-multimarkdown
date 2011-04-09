@@ -130,4 +130,11 @@ public class MarkdownHighlighterColors {
     public static TextAttributesKey TABLE_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
             "MARKDOWN.TABLE", new TextAttributes(new Color(255, 0, 0), null, null, null, Font.PLAIN)
     );
+
+    /**
+     * Default style for HRules.
+     */
+    public static TextAttributesKey HRULE_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.HRULE", new TextAttributes(new Color(255, 0, 0), null, null, null, Font.PLAIN)
+    );
 }

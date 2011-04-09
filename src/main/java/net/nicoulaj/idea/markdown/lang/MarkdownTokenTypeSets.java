@@ -99,4 +99,9 @@ public interface MarkdownTokenTypeSets extends MarkdownTokenTypes {
      * Table token type set.
      */
     public static final TokenSet TABLE_SET = TokenSet.create(TABLE);
+
+    /**
+     * HRule token type set.
+     */
+    public static final TokenSet HRULE_SET = TokenSet.create(HRULE);
 }

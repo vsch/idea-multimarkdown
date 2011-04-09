@@ -100,4 +100,9 @@ public interface MarkdownTokenTypes extends TokenType {
      * Table token type.
      */
     IElementType TABLE = new MarkdownElementType("TABLE");
+
+    /**
+     * HRule token type.
+     */
+    IElementType HRULE = new MarkdownElementType("HRULE");
 }

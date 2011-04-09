@@ -141,6 +141,10 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
                 MarkdownBundle.message("markdown.editor.colorsettingspage.table"),
                 MarkdownHighlighterColors.TABLE_ATTR_KEY)
         );
+        attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.hrule"),
+                MarkdownHighlighterColors.HRULE_ATTR_KEY)
+        );
     }
 
     /**

@@ -104,11 +104,16 @@ public class MarkdownAnnotator implements ExternalAnnotator {
         /**
          * Visit the {@link org.pegdown.ast.SimpleNode}.
          * <p/>
-         * Does nothing.
+         * Highlight horizontal rules.
          *
          * @param node the {@link org.pegdown.ast.SimpleNode} to visit
          */
         public void visit(SimpleNode node) {
+            switch (node.getType()) {
+                case HRule:
+                    highlight(node, MarkdownTokenTypes.HRULE);
+                    break;
+            }
         }
 
         /**
