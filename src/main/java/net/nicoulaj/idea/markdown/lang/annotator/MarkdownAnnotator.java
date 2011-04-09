@@ -92,11 +92,12 @@ public class MarkdownAnnotator implements ExternalAnnotator {
          * <p/>
          * Visits children nodes.
          * <p/>
-         * TODO Abbreviation and Reference nodes are not visited.
          *
          * @param node the {@link org.pegdown.ast.RootNode} to visit
          */
         public void visit(RootNode node) {
+            for (AbbreviationNode abbreviationNode : node.getAbbreviations()) abbreviationNode.accept(this);
+            for (ReferenceNode referenceNode : node.getReferences()) referenceNode.accept(this);
             visitChildren(node);
         }
 
