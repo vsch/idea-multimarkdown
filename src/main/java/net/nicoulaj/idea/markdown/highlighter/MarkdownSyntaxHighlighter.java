@@ -20,12 +20,12 @@
  */
 package net.nicoulaj.idea.markdown.highlighter;
 
+import com.intellij.lexer.EmptyLexer;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.tree.IElementType;
 import net.nicoulaj.idea.markdown.lang.MarkdownTokenTypeSets;
-import net.nicoulaj.idea.markdown.lang.lexer.MarkdownLexer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -40,9 +40,9 @@ import java.util.Map;
 public class MarkdownSyntaxHighlighter extends SyntaxHighlighterBase {
 
     /**
-     * The {@link MarkdownLexer} instance.
+     * The {@link Lexer} instance.
      */
-    protected final MarkdownLexer markdownLexer = new MarkdownLexer();
+    protected final Lexer lexer = new EmptyLexer();
 
     /**
      * The map of text attribute keys for each token type.
@@ -51,28 +51,30 @@ public class MarkdownSyntaxHighlighter extends SyntaxHighlighterBase {
 
     static {
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.PLAIN_TEXT_SET, MarkdownHighlighterColors.PLAIN_TEXT_ATTR_KEY);
-        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.BOLD_TEXT_SET, MarkdownHighlighterColors.BOLD_TEXT_ATTR_KEY);
-        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.ITALIC_TEXT_SET, MarkdownHighlighterColors.ITALIC_TEXT_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.BOLD_SET, MarkdownHighlighterColors.BOLD_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.ITALIC_SET, MarkdownHighlighterColors.ITALIC_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.LINK_SET, MarkdownHighlighterColors.LINK_ATTR_KEY);
-        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.IMAGE_SET, MarkdownHighlighterColors.IMAGE_CHARACTER_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.IMAGE_SET, MarkdownHighlighterColors.IMAGE_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.HEADER_LEVEL_1_SET, MarkdownHighlighterColors.HEADER_LEVEL_1_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.HEADER_LEVEL_2_SET, MarkdownHighlighterColors.HEADER_LEVEL_2_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.HEADER_LEVEL_3_SET, MarkdownHighlighterColors.HEADER_LEVEL_3_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.HEADER_LEVEL_4_SET, MarkdownHighlighterColors.HEADER_LEVEL_4_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.HEADER_LEVEL_5_SET, MarkdownHighlighterColors.HEADER_LEVEL_5_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.HEADER_LEVEL_6_SET, MarkdownHighlighterColors.HEADER_LEVEL_6_ATTR_KEY);
-        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.CODE_BLOCK_SET, MarkdownHighlighterColors.CODE_BLOCK_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.CODE_SET, MarkdownHighlighterColors.CODE_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.QUOTE_SET, MarkdownHighlighterColors.QUOTE_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.TABLE_SET, MarkdownHighlighterColors.TABLE_ATTR_KEY);
     }
 
     /**
      * Get the lexer used for highlighting a Markdown file.
      *
-     * @return a {@link MarkdownLexer}.
-     * @see #markdownLexer
+     * @return an {@link EmptyLexer}.
+     * @see #lexer
      */
     @NotNull
     public Lexer getHighlightingLexer() {
-        return markdownLexer;
+        return lexer;
     }
 
     /**

@@ -34,17 +34,17 @@ public interface MarkdownTokenTypes extends TokenType {
     /**
      * Plain text token type.
      */
-    IElementType PLAIN_TEXT = new MarkdownElementType("PLAIN_TEXT");
+    IElementType TEXT = new MarkdownElementType("TEXT");
 
     /**
      * Bold text token type.
      */
-    IElementType BOLD_TEXT = new MarkdownElementType("BOLD_TEXT");
+    IElementType BOLD = new MarkdownElementType("BOLD");
 
     /**
-     * Italic text token type.
+     * Italic token type.
      */
-    IElementType ITALIC_TEXT = new MarkdownElementType("ITALIC_TEXT");
+    IElementType ITALIC = new MarkdownElementType("ITALIC");
 
     /**
      * Link token type.
@@ -57,47 +57,47 @@ public interface MarkdownTokenTypes extends TokenType {
     IElementType IMAGE = new MarkdownElementType("IMAGE");
 
     /**
-     * Atx style header of level 1 token type.
+     * Header of level 1 token type.
      */
-    IElementType ATX_HEADER_LEVEL_1 = new MarkdownElementType("ATX_HEADER_LEVEL_1");
+    IElementType HEADER_LEVEL_1 = new MarkdownElementType("HEADER_LEVEL_1");
 
     /**
-     * Atx style header of level 2 token type.
+     * Header of level 2 token type.
      */
-    IElementType ATX_HEADER_LEVEL_2 = new MarkdownElementType("ATX_HEADER_LEVEL_2");
+    IElementType HEADER_LEVEL_2 = new MarkdownElementType("HEADER_LEVEL_2");
 
     /**
-     * Atx style header of level 3 token type.
+     * Header of level 3 token type.
      */
-    IElementType ATX_HEADER_LEVEL_3 = new MarkdownElementType("ATX_HEADER_LEVEL_3");
+    IElementType HEADER_LEVEL_3 = new MarkdownElementType("HEADER_LEVEL_3");
 
     /**
-     * Atx style header of level 4 token type.
+     * Header of level 4 token type.
      */
-    IElementType ATX_HEADER_LEVEL_4 = new MarkdownElementType("ATX_HEADER_LEVEL_4");
+    IElementType HEADER_LEVEL_4 = new MarkdownElementType("HEADER_LEVEL_4");
 
     /**
-     * Atx style header of level 5 token type.
+     * Header of level 5 token type.
      */
-    IElementType ATX_HEADER_LEVEL_5 = new MarkdownElementType("ATX_HEADER_LEVEL_5");
+    IElementType HEADER_LEVEL_5 = new MarkdownElementType("HEADER_LEVEL_5");
 
     /**
-     * Atx style header of level 6 token type.
+     * Header of level 6 token type.
      */
-    IElementType ATX_HEADER_LEVEL_6 = new MarkdownElementType("ATX_HEADER_LEVEL_6");
+    IElementType HEADER_LEVEL_6 = new MarkdownElementType("HEADER_LEVEL_6");
 
     /**
-     * Setext style header of level 1 token type.
+     * Code token type.
      */
-    IElementType SETEXT_HEADER_LEVEL_1 = new MarkdownElementType("SETEXT_HEADER_LEVEL_1");
+    IElementType CODE = new MarkdownElementType("CODE");
 
     /**
-     * Setext style header of level 2 token type.
+     * Quote token type.
      */
-    IElementType SETEXT_HEADER_LEVEL_2 = new MarkdownElementType("SETEXT_HEADER_LEVEL_2");
+    IElementType QUOTE = new MarkdownElementType("QUOTE");
 
     /**
-     * Code block token type.
+     * Table token type.
      */
-    IElementType CODE_BLOCK = new MarkdownElementType("CODE_BLOCK");
+    IElementType TABLE = new MarkdownElementType("TABLE");
 }

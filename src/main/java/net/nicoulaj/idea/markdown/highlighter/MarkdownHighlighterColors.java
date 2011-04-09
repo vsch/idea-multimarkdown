@@ -43,15 +43,15 @@ public class MarkdownHighlighterColors {
     /**
      * Default style for bold text.
      */
-    public static TextAttributesKey BOLD_TEXT_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
-            "MARKDOWN.BOLD_TEXT", new TextAttributes(new Color(0, 0, 0), null, null, null, Font.BOLD)
+    public static TextAttributesKey BOLD_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.BOLD", new TextAttributes(new Color(0, 0, 0), null, null, null, Font.BOLD)
     );
 
     /**
      * Default style for italic text.
      */
-    public static TextAttributesKey ITALIC_TEXT_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
-            "MARKDOWN.ITALIC_TEXT", new TextAttributes(new Color(0, 0, 0), null, null, null, Font.ITALIC)
+    public static TextAttributesKey ITALIC_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.ITALIC", new TextAttributes(new Color(0, 0, 0), null, null, null, Font.ITALIC)
     );
 
     /**
@@ -64,7 +64,7 @@ public class MarkdownHighlighterColors {
     /**
      * Default style for images.
      */
-    public static TextAttributesKey IMAGE_CHARACTER_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+    public static TextAttributesKey IMAGE_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
             "MARKDOWN.IMAGE", new TextAttributes(new Color(70, 110, 0), null, null, null, Font.PLAIN)
     );
 
@@ -111,9 +111,23 @@ public class MarkdownHighlighterColors {
     );
 
     /**
-     * Default style for code blocks.
+     * Default style for code.
      */
-    public static TextAttributesKey CODE_BLOCK_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
-            "MARKDOWN.CODE_BLOCK", new TextAttributes(new Color(80, 40, 0), null, null, null, Font.PLAIN)
+    public static TextAttributesKey CODE_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.CODE", new TextAttributes(new Color(255, 0, 0), null, null, null, Font.PLAIN)
+    );
+
+    /**
+     * Default style for quotes.
+     */
+    public static TextAttributesKey QUOTE_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.QUOTE", new TextAttributes(new Color(255, 0, 0), null, null, null, Font.PLAIN)
+    );
+
+    /**
+     * Default style for tables.
+     */
+    public static TextAttributesKey TABLE_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.TABLE", new TextAttributes(new Color(255, 0, 0), null, null, null, Font.PLAIN)
     );
 }

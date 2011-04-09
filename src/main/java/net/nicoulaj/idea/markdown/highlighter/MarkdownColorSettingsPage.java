@@ -90,12 +90,12 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
                 MarkdownHighlighterColors.PLAIN_TEXT_ATTR_KEY)
         );
         attributeDescriptors.add(new AttributesDescriptor(
-                MarkdownBundle.message("markdown.editor.colorsettingspage.bold-text"),
-                MarkdownHighlighterColors.BOLD_TEXT_ATTR_KEY)
+                MarkdownBundle.message("markdown.editor.colorsettingspage.bold"),
+                MarkdownHighlighterColors.BOLD_ATTR_KEY)
         );
         attributeDescriptors.add(new AttributesDescriptor(
-                MarkdownBundle.message("markdown.editor.colorsettingspage.italic-text"),
-                MarkdownHighlighterColors.ITALIC_TEXT_ATTR_KEY)
+                MarkdownBundle.message("markdown.editor.colorsettingspage.italic"),
+                MarkdownHighlighterColors.ITALIC_ATTR_KEY)
         );
         attributeDescriptors.add(new AttributesDescriptor(
                 MarkdownBundle.message("markdown.editor.colorsettingspage.link"),
@@ -103,7 +103,7 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
         );
         attributeDescriptors.add(new AttributesDescriptor(
                 MarkdownBundle.message("markdown.editor.colorsettingspage.image"),
-                MarkdownHighlighterColors.IMAGE_CHARACTER_ATTR_KEY)
+                MarkdownHighlighterColors.IMAGE_ATTR_KEY)
         );
         attributeDescriptors.add(new AttributesDescriptor(
                 MarkdownBundle.message("markdown.editor.colorsettingspage.header-level-1"),
@@ -130,8 +130,16 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
                 MarkdownHighlighterColors.HEADER_LEVEL_6_ATTR_KEY)
         );
         attributeDescriptors.add(new AttributesDescriptor(
-                MarkdownBundle.message("markdown.editor.colorsettingspage.code-block"),
-                MarkdownHighlighterColors.CODE_BLOCK_ATTR_KEY)
+                MarkdownBundle.message("markdown.editor.colorsettingspage.code"),
+                MarkdownHighlighterColors.CODE_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.quote"),
+                MarkdownHighlighterColors.QUOTE_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.table"),
+                MarkdownHighlighterColors.TABLE_ATTR_KEY)
         );
     }
 
@@ -177,7 +185,10 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
     @NonNls
     @NotNull
     public String getDemoText() {
-        return SAMPLE_MARKDOWN_DOCUMENT;
+        // FIXME Demo text is not highlighted because highlighting is done with an
+        // ExternalAnnotator, which is not triggered in color settings pages.
+        // return SAMPLE_MARKDOWN_DOCUMENT;
+        return " ";
     }
 
     /**

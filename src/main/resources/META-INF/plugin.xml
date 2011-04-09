@@ -61,5 +61,6 @@
     <colorSettingsPage implementation="net.nicoulaj.idea.markdown.highlighter.MarkdownColorSettingsPage"/>
     <fileEditorProvider implementation="net.nicoulaj.idea.markdown.editor.MarkdownPreviewEditorProvider"/>
     <lang.parserDefinition language="Markdown" implementationClass="net.nicoulaj.idea.markdown.lang.parser.MarkdownParserDefinition"/>
+    <externalAnnotator language="Markdown" implementationClass="net.nicoulaj.idea.markdown.lang.annotator.MarkdownAnnotator"/>
   </extensions>
 </idea-plugin>

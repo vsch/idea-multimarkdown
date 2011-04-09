@@ -23,6 +23,7 @@ package net.nicoulaj.idea.markdown.lang.parser;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.ParserDefinition;
 import com.intellij.lang.PsiParser;
+import com.intellij.lexer.EmptyLexer;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.FileViewProvider;
@@ -31,7 +32,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import net.nicoulaj.idea.markdown.file.MarkdownFileElementType;
-import net.nicoulaj.idea.markdown.lang.lexer.MarkdownLexer;
 import net.nicoulaj.idea.markdown.lang.psi.impl.MarkdownFileImpl;
 import net.nicoulaj.idea.markdown.lang.psi.impl.MarkdownPsiElementImpl;
 import org.jetbrains.annotations.NotNull;
@@ -55,11 +55,11 @@ public class MarkdownParserDefinition implements ParserDefinition {
      * Get the lexer for lexing files in the specified project.
      *
      * @param project the project to which the lexer is connected.
-     * @return a {@link MarkdownLexer} instance.
+     * @return an {@link EmptyLexer} instance.
      */
     @NotNull
     public Lexer createLexer(Project project) {
-        return new MarkdownLexer();
+        return new EmptyLexer();
     }
 
     /**

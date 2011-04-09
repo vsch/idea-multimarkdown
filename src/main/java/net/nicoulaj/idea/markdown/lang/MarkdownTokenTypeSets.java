@@ -33,17 +33,17 @@ public interface MarkdownTokenTypeSets extends MarkdownTokenTypes {
     /**
      * Plain text token type set.
      */
-    public static final TokenSet PLAIN_TEXT_SET = TokenSet.create(PLAIN_TEXT);
+    public static final TokenSet PLAIN_TEXT_SET = TokenSet.create(TEXT);
 
     /**
      * Bold text token type set.
      */
-    public static final TokenSet BOLD_TEXT_SET = TokenSet.create(BOLD_TEXT);
+    public static final TokenSet BOLD_SET = TokenSet.create(BOLD);
 
     /**
      * Italic text token type set.
      */
-    public static final TokenSet ITALIC_TEXT_SET = TokenSet.create(ITALIC_TEXT);
+    public static final TokenSet ITALIC_SET = TokenSet.create(ITALIC);
 
     /**
      * Link token type set.
@@ -58,37 +58,45 @@ public interface MarkdownTokenTypeSets extends MarkdownTokenTypes {
     /**
      * Header of level 1 token type set.
      */
-    public static final TokenSet HEADER_LEVEL_1_SET = TokenSet.create(ATX_HEADER_LEVEL_1,
-                                                                      SETEXT_HEADER_LEVEL_1);
+    public static final TokenSet HEADER_LEVEL_1_SET = TokenSet.create(HEADER_LEVEL_1);
 
     /**
      * Header of level 2 token type set.
      */
-    public static final TokenSet HEADER_LEVEL_2_SET = TokenSet.create(ATX_HEADER_LEVEL_2,
-                                                                      SETEXT_HEADER_LEVEL_2);
+    public static final TokenSet HEADER_LEVEL_2_SET = TokenSet.create(HEADER_LEVEL_2);
 
     /**
      * Header of level 3 token type set.
      */
-    public static final TokenSet HEADER_LEVEL_3_SET = TokenSet.create(ATX_HEADER_LEVEL_3);
+    public static final TokenSet HEADER_LEVEL_3_SET = TokenSet.create(HEADER_LEVEL_3);
 
     /**
      * Header of level 4 token type set.
      */
-    public static final TokenSet HEADER_LEVEL_4_SET = TokenSet.create(ATX_HEADER_LEVEL_4);
+    public static final TokenSet HEADER_LEVEL_4_SET = TokenSet.create(HEADER_LEVEL_4);
 
     /**
      * Header of level 5 token type set.
      */
-    public static final TokenSet HEADER_LEVEL_5_SET = TokenSet.create(ATX_HEADER_LEVEL_5);
+    public static final TokenSet HEADER_LEVEL_5_SET = TokenSet.create(HEADER_LEVEL_5);
 
     /**
      * Header of level 6 token type set.
      */
-    public static final TokenSet HEADER_LEVEL_6_SET = TokenSet.create(ATX_HEADER_LEVEL_6);
+    public static final TokenSet HEADER_LEVEL_6_SET = TokenSet.create(HEADER_LEVEL_6);
 
     /**
-     * Code block token type set.
+     * Code token type set.
      */
-    public static final TokenSet CODE_BLOCK_SET = TokenSet.create(CODE_BLOCK);
+    public static final TokenSet CODE_SET = TokenSet.create(CODE);
+
+    /**
+     * Quote token type set.
+     */
+    public static final TokenSet QUOTE_SET = TokenSet.create(QUOTE);
+
+    /**
+     * Table token type set.
+     */
+    public static final TokenSet TABLE_SET = TokenSet.create(TABLE);
 }
