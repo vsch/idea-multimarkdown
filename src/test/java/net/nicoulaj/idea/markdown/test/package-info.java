@@ -20,9 +20,9 @@
  */
 
 /**
- * Lexer implementation for Markdown.
+ * Tests for the Markdown language support plugin.
  *
  * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
  * @since 0.1
  */
-package net.nicoulaj.idea.markdown.lang.lexer;
+package net.nicoulaj.idea.markdown.test;
