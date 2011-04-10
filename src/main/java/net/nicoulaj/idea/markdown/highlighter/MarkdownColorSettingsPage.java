@@ -189,7 +189,7 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
     @NonNls
     @NotNull
     public String getDemoText() {
-        // FIXME Demo text is not highlighted because highlighting is done with an
+        // FIXME Issue #14: Demo text is not highlighted because highlighting is done with an
         // ExternalAnnotator, which is not triggered in color settings pages.
         // return SAMPLE_MARKDOWN_DOCUMENT;
         return " ";
