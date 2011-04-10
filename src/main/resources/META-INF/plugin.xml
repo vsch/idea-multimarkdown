@@ -38,7 +38,7 @@
       <p>
         <b>0.4</b><br/>
         <ul>
-          <li>Fully correct syntax highlighting.</li>
+          <li>Full syntax highlighting.</li>
         </ul>
         <b>0.3</b><br/>
         <ul>
@@ -55,6 +55,11 @@
       </p>
     ]]>
   </change-notes>
+  <application-components>
+    <component>
+      <implementation-class>net.nicoulaj.idea.markdown.MarkdownLoader</implementation-class>
+    </component>
+  </application-components>
   <extensions defaultExtensionNs="com.intellij">
     <fileTypeFactory implementation="net.nicoulaj.idea.markdown.file.MarkdownFileTypeFactory"/>
     <syntaxHighlighter key="Markdown" implementationClass="net.nicoulaj.idea.markdown.highlighter.MarkdownSyntaxHighlighter"/>
