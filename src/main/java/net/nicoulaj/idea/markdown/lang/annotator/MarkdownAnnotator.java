@@ -484,7 +484,9 @@ public class MarkdownAnnotator implements ExternalAnnotator {
          * @param tokenType the {IElementType} to use for highlighting
          */
         protected void highlight(Node node, IElementType tokenType) {
-            annotationHolder.createInfoAnnotation(new TextRange(node.getStartIndex(), node.getEndIndex()), null).setTextAttributes(SYNTAX_HIGHLIGHTER.getTokenHighlights(tokenType)[0]);
+            if (node.getStartIndex() < node.getEndIndex())
+                annotationHolder.createInfoAnnotation(new TextRange(node.getStartIndex(), node.getEndIndex()), null)
+                                .setTextAttributes(SYNTAX_HIGHLIGHTER.getTokenHighlights(tokenType)[0]);
         }
     }
 }
