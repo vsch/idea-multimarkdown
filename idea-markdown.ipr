@@ -16,6 +16,42 @@
     <option name="scrTextFileName" value="" />
     <option name="historyRevisionsNumber" value="4" />
   </component>
+  <component name="CodeStyleSettingsManager">
+    <option name="PER_PROJECT_SETTINGS">
+      <value>
+        <ADDITIONAL_INDENT_OPTIONS fileType="java">
+          <option name="INDENT_SIZE" value="4" />
+          <option name="CONTINUATION_INDENT_SIZE" value="8" />
+          <option name="TAB_SIZE" value="4" />
+          <option name="USE_TAB_CHARACTER" value="false" />
+          <option name="SMART_TABS" value="false" />
+          <option name="LABEL_INDENT_SIZE" value="0" />
+          <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+          <option name="USE_RELATIVE_INDENTS" value="false" />
+        </ADDITIONAL_INDENT_OPTIONS>
+        <ADDITIONAL_INDENT_OPTIONS fileType="jsp">
+          <option name="INDENT_SIZE" value="4" />
+          <option name="CONTINUATION_INDENT_SIZE" value="8" />
+          <option name="TAB_SIZE" value="4" />
+          <option name="USE_TAB_CHARACTER" value="false" />
+          <option name="SMART_TABS" value="false" />
+          <option name="LABEL_INDENT_SIZE" value="0" />
+          <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+          <option name="USE_RELATIVE_INDENTS" value="false" />
+        </ADDITIONAL_INDENT_OPTIONS>
+        <ADDITIONAL_INDENT_OPTIONS fileType="xml">
+          <option name="INDENT_SIZE" value="4" />
+          <option name="CONTINUATION_INDENT_SIZE" value="8" />
+          <option name="TAB_SIZE" value="4" />
+          <option name="USE_TAB_CHARACTER" value="false" />
+          <option name="SMART_TABS" value="false" />
+          <option name="LABEL_INDENT_SIZE" value="0" />
+          <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+          <option name="USE_RELATIVE_INDENTS" value="false" />
+        </ADDITIONAL_INDENT_OPTIONS>
+      </value>
+    </option>
+  </component>
   <component name="CompilerConfiguration">
     <option name="DEFAULT_COMPILER" value="Javac" />
     <resourceExtensions />
@@ -65,7 +101,22 @@
       <profile version="1.0" is_locked="false">
         <option name="myName" value="Project Default" />
         <option name="myLocal" value="false" />
+        <inspection_tool class="CssUnknownProperty" enabled="true" level="WARNING" enabled_by_default="true">
+          <option name="myCustomPropertiesEnabled" value="true" />
+          <option name="myIgnoreVendorSpecificProperties" value="false" />
+          <option name="myCustomPropertiesList">
+            <value>
+              <list size="2">
+                <item index="0" class="java.lang.String" itemvalue="margin-left-ltr" />
+                <item index="1" class="java.lang.String" itemvalue="margin-right-rtl" />
+              </list>
+            </value>
+          </option>
+        </inspection_tool>
         <inspection_tool class="Fix shebang" enabled="true" level="WARNING" enabled_by_default="true">/bin/sh#/bin/bash</inspection_tool>
+        <inspection_tool class="W3CssValidation" enabled="false" level="WARNING" enabled_by_default="false">
+          <option name="myCssVersion" value="css3" />
+        </inspection_tool>
       </profile>
     </profiles>
     <option name="PROJECT_PROFILE" value="Project Default" />
