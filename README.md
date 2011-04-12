@@ -1,5 +1,5 @@
-idea-markdown ![Project status](http://stillmaintained.com/nicoulaj/idea-markdown.png)
-======================================================================================
+idea-markdown
+=============
 
 **[Markdown](http://daringfireball.net/projects/markdown) language support for [IntelliJ IDEA](http://www.jetbrains.com/idea).**
 
