@@ -336,23 +336,48 @@ public class MarkdownAnnotator implements ExternalAnnotator {
         }
 
         /**
-         * Visit the {@link TightListItemNode}.
+         * Visit the {@link ListItemNode}.
          * <p/>
-         * FIXME: Does nothing as there is no way to get the absolute start and end index of a token.
+         * Visits children nodes.
          *
-         * @param node the {@link TightListItemNode} to visit
+         * @param node the {@link ListItemNode} to visit
          */
-        public void visit(TightListItemNode node) {
+        public void visit(ListItemNode node) {
+//            FIXME Disabled because nodes indexes inside list items are wrong, waiting on pegdown fix.
+//            visitChildren(node);
         }
 
         /**
-         * Visit the {@link LooseListItemNode}.
+         * Visit the {@link DefinitionListNode}.
          * <p/>
-         * FIXME: Does nothing as there is no way to get the absolute start and end index of a token.
+         * Visits children nodes.
          *
-         * @param node the {@link LooseListItemNode} to visit
+         * @param node the {@link DefinitionListNode} to visit
          */
-        public void visit(LooseListItemNode node) {
+        public void visit(DefinitionListNode node) {
+            visitChildren(node);
+        }
+
+        /**
+         * Visit the {@link DefinitionNode}.
+         * <p/>
+         * Visits children nodes.
+         *
+         * @param node the {@link DefinitionNode} to visit
+         */
+        public void visit(DefinitionNode node) {
+            visitChildren(node);
+        }
+
+        /**
+         * Visit the {@link DefinitionTermNode}.
+         * <p/>
+         * Visits children nodes.
+         *
+         * @param node the {@link DefinitionTermNode} to visit
+         */
+        public void visit(DefinitionTermNode node) {
+            visitChildren(node);
         }
 
         /**
