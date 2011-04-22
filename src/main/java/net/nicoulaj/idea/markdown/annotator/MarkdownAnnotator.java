@@ -343,8 +343,7 @@ public class MarkdownAnnotator implements ExternalAnnotator {
          * @param node the {@link ListItemNode} to visit
          */
         public void visit(ListItemNode node) {
-//            FIXME Disabled because nodes indexes inside list items are wrong, waiting on pegdown fix.
-//            visitChildren(node);
+            visitChildren(node);
         }
 
         /**
