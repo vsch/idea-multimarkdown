@@ -1,25 +1,54 @@
-A first level title
-===================
+Test Markdown document
+======================
 
-Some text.
+Text
+----
 
-A second level title
---------------------
+Here is a paragraph with bold text. Here is a paragraph with bold text. Here is a paragraph with
+bold text. **Here is a paragraph with bold text.** Here is a paragraph with bold text. Here is a
+paragraph with bold text. Here is a paragraph with bold text. Here is a paragraph with bold text.
+
+Here is another one with italic text. Here is another one with italic text. Here is another one
+with italic text. *Here is another one with italic text.* Here is another one with italic text.
+Here is another one with italic text. Here is another one with italic text. Here is another one
+with italic text. *Here is another one with* italic text. Here is another one with italic text.
+
+Links
+-----
+
+Autolink: <http://example.com>
+
+Link: [Example](http://example.com)
+
+Reference style [link][1].
+
+[1]: http://example.com  "Example"
+
+
+Images
+------
+
+Image: ![My image](http://www.foo.bar/image.png)
+
+
+
+Headers
+-------
 
 # First level title
-
-Here is some **bold text**, and some *italic text*.
-
 ## Second level title
-
-Here is a link to [Markdown](http://daringfireball.net/projects/markdown).
-
 ### Third level title
-
-Here is an image:
-![My image](http://www.foo.bar/image.png)
-
 #### Forth level title
+##### Fifth level title
+###### Sixth level title
+
+### Title with [link](http://localhost)
+### Title with ![image](http://localhost)
+
+Code
+----
+
+Inline `code in a` paragraph.
 
 A code block:
 
@@ -34,11 +63,80 @@ A code block:
         return CommonBundle.message(BUNDLE, key, params);
     }
 
+Quotes
+------
 
-##### Fifth level title
 
-Some text.
+> This is the first level of quoting.
+>
+> > This is nested blockquote.
+>
+> Back to the first level.
 
-###### Sixth level title
 
-Some text.
+> A list within a blockquote:
+>
+> *	asterisk 1
+> *	asterisk 2
+> *	asterisk 3
+
+
+> Formatting within a blockquote:
+>
+> ### header
+> Link: [Example](http://example.com)
+
+
+
+Tables
+-------
+
+<table>
+  <tr>
+    <th>Column 1</th>
+    <th>Column 2</th>
+  </tr>
+  <tr>
+    <td>Row 1 Cell 1</td>
+    <td>Row 1 Cell 2</td>
+  </tr>
+  <tr>
+    <td>Row 2 Cell 1</td>
+    <td>Row 2 Cell 2</td>
+  </tr>
+</table>
+
+Horizontal rules
+----------------
+
+---
+
+___
+
+
+***
+
+
+Lists
+-----
+
+Unordered list:
+
+*	asterisk 1
+*	asterisk 2
+*	asterisk 3
+
+Ordered list:
+
+1.	First
+2.	Second
+3.	Third
+
+Mixed:
+
+1. First
+2. Second:
+	* Fee
+	* Fie
+	* Foe
+3. Third
