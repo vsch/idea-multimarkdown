@@ -38,6 +38,9 @@
       <p>
         <b>0.5</b><br/>
         <ul>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/10">Issue #10</a>: Enable all supported Markdown extensions.</li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/15">Issue #15</a>: Syntax highlighting inside list items.</li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/21">Issue #21</a>: Improve style of the "Preview" tab.</li>
           <li><a href="https://github.com/nicoulaj/idea-markdown/issues/22">Issue #22</a>: Minimal IDEA build version does not work.</li>
         </ul>
         <b>0.4</b><br/>
