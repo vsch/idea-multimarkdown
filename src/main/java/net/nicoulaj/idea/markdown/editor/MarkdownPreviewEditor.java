@@ -41,6 +41,7 @@ import org.pegdown.PegDownProcessor;
 
 import javax.swing.*;
 import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.StyleSheet;
 import java.beans.PropertyChangeListener;
 
 /**
@@ -99,12 +100,12 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
 
         // Setup the editor pane for rendering HTML.
         final HTMLEditorKit kit = new HTMLEditorKit();
+        final StyleSheet style = new StyleSheet();
+        style.importStyleSheet(MarkdownPreviewEditor.class.getResource(PREVIEW_STYLESHEET_PATH));
+        kit.setStyleSheet(style);
         jEditorPane.setEditorKit(kit);
         jEditorPane.setEditable(false);
         jEditorPane.addHyperlinkListener(new BrowserHyperlinkListener());
-
-        // Load the stylesheet.
-        kit.getStyleSheet().importStyleSheet(MarkdownPreviewEditor.class.getResource(PREVIEW_STYLESHEET_PATH)); // FIXME Does not work
     }
 
     /**

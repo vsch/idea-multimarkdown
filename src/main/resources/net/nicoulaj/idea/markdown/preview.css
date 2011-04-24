@@ -19,6 +19,282 @@
  * under the License.
  */
 
+/* Base elements */
+
+samp {
+    font-size: small;
+    font-family: Monospaced, monospace;
+}
+
+kbd {
+    font-size: small;
+    font-family: Monospaced, monospace;
+}
+
+strike {
+    text-decoration: line-through;
+}
+
+cite {
+    font-style: italic;
+}
+
+sub {
+    vertical-align: sub;
+}
+
+em {
+    font-style: italic;
+}
+
+sup {
+    vertical-align: sup;
+}
+
+u {
+    text-decoration: underline;
+}
+
+s {
+    text-decoration: line-through;
+}
+
+address {
+    color: blue;
+    font-style: italic;
+}
+
+b {
+    font-weight: bold;
+}
+
+i {
+    font-style: italic;
+}
+
+var {
+    font-weight: bold;
+    font-style: italic;
+}
+
+dfn {
+    font-style: italic;
+}
+
+dt {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+dl {
+    margin-left: 0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+tt {
+    font-family: Monospaced, monospace;
+}
+
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    margin-left: 10px;
+    margin-right: 10px;
+    color: black;
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: normal;
+}
+
+small {
+    font-size: x-small;
+}
+
+big {
+    font-size: x-large;
+}
+
+a {
+    color: blue;
+    text-decoration: underline;
+}
+
+p {
+    margin-top: 15px;
+}
+
+strong {
+    font-weight: bold;
+}
+
+center {
+    text-align: center;
+}
+
+dd {
+    margin-right-rtl: 40px;
+    margin-top: 0;
+    margin-left-ltr: 40px;
+    margin-bottom: 0;
+}
+
+dd p {
+    margin-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* Headers */
+
+h1 {
+    font-size: x-large;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+h2 {
+    font-size: large;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+h3 {
+    font-size: medium;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+h4 {
+    font-size: small;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+h5 {
+    font-size: small;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+h6 {
+    font-size: small;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* Code/quotes */
+
+pre {
+    font-family: Monospaced, monospace;
+    margin: 5px 10px;
+    padding: 5px;
+    background-color: #dcdcdc;
+}
+
+pre p {
+    margin-top: 0;
+}
+
+code {
+    font-size: small;
+    font-family: Monospaced, monospace;
+    background-color: #dcdcdc;
+}
+
+blockquote {
+    margin: 5px 10px;
+    padding: 5px;
+    background-color: #dcdcdc;
+}
+
+/* Lists */
+
+ul {
+    margin-right-rtl: 20px;
+    margin-left-ltr: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    list-style-type: disc;
+}
+
+ul li {
+    margin: 0;
+}
+
+ul li ul {
+    margin-right-rtl: 25px;
+    margin-left-ltr: 25px;
+    list-style-type: circle;
+}
+
+ul li ul li {
+    margin: 0;
+}
+
+ul li ul li ul {
+    margin-right-rtl: 25px;
+    margin-left-ltr: 25px;
+    list-style-type: square;
+}
+
+ul li ul li ul li {
+    margin: 0;
+}
+
+ol {
+    margin-right-rtl: 20px;
+    margin-left-ltr: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    list-style-type: decimal;
+}
+
+ol li {
+    margin: 0;
+}
+
+li p {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* Tables */
+
+table {
+    border-style: solid;
+    border-width: 2px;
+    border-color: gray;
+}
+
+td {
+    border-style: solid;
+    border-width: 1px;
+    border-color: gray;
+    padding: 3px;
+}
+
+tr {
+    text-align: left;
+}
+
+td p {
+    margin-top: 0;
+}
+
+th {
+    border-style: solid;
+    border-width: 1px;
+    border-color: gray;
+    padding: 3px;
+    text-align: center;
+    font-weight: bold;
+}
+
+caption {
+    caption-side: top;
+    text-align: center;
 }
