@@ -28,6 +28,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
 import net.nicoulaj.idea.markdown.highlighter.MarkdownSyntaxHighlighter;
 import net.nicoulaj.idea.markdown.lang.MarkdownTokenTypes;
+import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
 import org.pegdown.ast.*;
 
@@ -45,7 +46,7 @@ public class MarkdownAnnotator implements ExternalAnnotator {
     /**
      * The {@link PegDownProcessor} used for building the document AST.
      */
-    protected final PegDownProcessor processor = new PegDownProcessor();
+    protected final PegDownProcessor processor = new PegDownProcessor(Extensions.ALL);
 
     /**
      * Annotates the specified file.
