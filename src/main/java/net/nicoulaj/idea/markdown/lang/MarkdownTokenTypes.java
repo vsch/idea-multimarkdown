@@ -47,16 +47,6 @@ public interface MarkdownTokenTypes extends TokenType {
     IElementType ITALIC = new MarkdownElementType("ITALIC");
 
     /**
-     * Link token type.
-     */
-    IElementType LINK = new MarkdownElementType("LINK");
-
-    /**
-     * Image token type.
-     */
-    IElementType IMAGE = new MarkdownElementType("IMAGE");
-
-    /**
      * Header of level 1 token type.
      */
     IElementType HEADER_LEVEL_1 = new MarkdownElementType("HEADER_LEVEL_1");
@@ -105,4 +95,119 @@ public interface MarkdownTokenTypes extends TokenType {
      * HRule token type.
      */
     IElementType HRULE = new MarkdownElementType("HRULE");
+
+    /**
+     * Special text token type.
+     */
+    IElementType SPECIAL_TEXT = new MarkdownElementType("SPECIAL_TEXT");
+
+    /**
+     * Link token type.
+     */
+    IElementType EXPLICIT_LINK = new MarkdownElementType("EXPLICIT_LINK");
+
+    /**
+     * Image token type.
+     */
+    IElementType IMAGE = new MarkdownElementType("IMAGE");
+
+    /**
+     * Reference link token type.
+     */
+    IElementType REFERENCE_LINK = new MarkdownElementType("REFERENCE_LINK");
+
+    /**
+     * Auto link token type.
+     */
+    IElementType AUTO_LINK = new MarkdownElementType("AUTO_LINK");
+
+    /**
+     * Mail link token type.
+     */
+    IElementType MAIL_LINK = new MarkdownElementType("MAIL_LINK");
+
+    /**
+     * Verbatim token type.
+     */
+    IElementType VERBATIM = new MarkdownElementType("VERBATIM");
+
+    /**
+     * Block quote token type.
+     */
+    IElementType BLOCK_QUOTE = new MarkdownElementType("BLOCK_QUOTE");
+
+    /**
+     * Bullet list token type.
+     */
+    IElementType BULLET_LIST = new MarkdownElementType("BULLET_LIST");
+
+    /**
+     * Ordered list token type.
+     */
+    IElementType ORDERED_LIST = new MarkdownElementType("ORDERED_LIST");
+
+    /**
+     * List item token type.
+     */
+    IElementType LIST_ITEM = new MarkdownElementType("LIST_ITEM");
+
+    /**
+     * Definition list token type.
+     */
+    IElementType DEFINITION_LIST = new MarkdownElementType("DEFINITION_LIST");
+
+    /**
+     * Definition token type.
+     */
+    IElementType DEFINITION = new MarkdownElementType("DEFINITION");
+
+    /**
+     * Definition term token type.
+     */
+    IElementType DEFINITION_TERM = new MarkdownElementType("DEFINITION_TERM");
+
+    /**
+     * Table body token type.
+     */
+    IElementType TABLE_BODY = new MarkdownElementType("TABLE_BODY");
+
+    /**
+     * Table cell token type.
+     */
+    IElementType TABLE_CELL = new MarkdownElementType("TABLE_CELL");
+
+    /**
+     * Table column token type.
+     */
+    IElementType TABLE_COLUMN = new MarkdownElementType("TABLE_COLUMN");
+
+    /**
+     * Table header token type.
+     */
+    IElementType TABLE_HEADER = new MarkdownElementType("TABLE_HEADER");
+
+    /**
+     * Table row token type.
+     */
+    IElementType TABLE_ROW = new MarkdownElementType("TABLE_ROW");
+
+    /**
+     * HTML block token type.
+     */
+    IElementType HTML_BLOCK = new MarkdownElementType("HTML_BLOCK");
+
+    /**
+     * Inline HTML token type.
+     */
+    IElementType INLINE_HTML = new MarkdownElementType("INLINE_HTML");
+
+    /**
+     * Reference token type.
+     */
+    IElementType REFERENCE = new MarkdownElementType("REFERENCE");
+
+    /**
+     * Abbreviation token type.
+     */
+    IElementType ABBREVIATION = new MarkdownElementType("ABBREVIATION");
 }

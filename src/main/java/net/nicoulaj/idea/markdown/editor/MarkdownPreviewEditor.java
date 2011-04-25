@@ -71,7 +71,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
     /**
      * The MarkdownJ {@link PegDownProcessor} used to generate HTML from Markdown.
      */
-    protected static final PegDownProcessor markdownProcessor = new PegDownProcessor(Extensions.ALL);
+    protected static final PegDownProcessor markdownProcessor = new PegDownProcessor(Extensions.ALL & ~Extensions.HARDWRAPS);
 
     /**
      * The {@link java.awt.Component} used to render the HTML preview.

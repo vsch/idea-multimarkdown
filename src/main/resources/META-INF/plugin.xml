@@ -36,6 +36,10 @@
   <change-notes>
     <![CDATA[
       <p>
+        <b>0.6</b><br/>
+        <ul>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/25">Issue #25</a>: Add highlighting options for remaining element types.</li>
+        </ul>
         <b>0.5</b><br/>
         <ul>
           <li><a href="https://github.com/nicoulaj/idea-markdown/issues/10">Issue #10</a>: Enable all supported Markdown extensions.</li>

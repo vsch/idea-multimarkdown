@@ -86,8 +86,8 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
 
         // Populate attribute descriptors.
         attributeDescriptors.add(new AttributesDescriptor(
-                MarkdownBundle.message("markdown.editor.colorsettingspage.plain-text"),
-                MarkdownHighlighterColors.PLAIN_TEXT_ATTR_KEY)
+                MarkdownBundle.message("markdown.editor.colorsettingspage.text"),
+                MarkdownHighlighterColors.TEXT_ATTR_KEY)
         );
         attributeDescriptors.add(new AttributesDescriptor(
                 MarkdownBundle.message("markdown.editor.colorsettingspage.bold"),
@@ -98,8 +98,8 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
                 MarkdownHighlighterColors.ITALIC_ATTR_KEY)
         );
         attributeDescriptors.add(new AttributesDescriptor(
-                MarkdownBundle.message("markdown.editor.colorsettingspage.link"),
-                MarkdownHighlighterColors.LINK_ATTR_KEY)
+                MarkdownBundle.message("markdown.editor.colorsettingspage.explicit-link"),
+                MarkdownHighlighterColors.EXPLICIT_LINK_ATTR_KEY)
         );
         attributeDescriptors.add(new AttributesDescriptor(
                 MarkdownBundle.message("markdown.editor.colorsettingspage.image"),
@@ -144,6 +144,90 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
         attributeDescriptors.add(new AttributesDescriptor(
                 MarkdownBundle.message("markdown.editor.colorsettingspage.hrule"),
                 MarkdownHighlighterColors.HRULE_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.special-text"),
+                MarkdownHighlighterColors.SPECIAL_TEXT_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.reference-link"),
+                MarkdownHighlighterColors.REFERENCE_LINK_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.auto-link"),
+                MarkdownHighlighterColors.AUTO_LINK_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.mail-link"),
+                MarkdownHighlighterColors.MAIL_LINK_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.verbatim"),
+                MarkdownHighlighterColors.VERBATIM_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.blockquote"),
+                MarkdownHighlighterColors.BLOCK_QUOTE_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.bullet-list"),
+                MarkdownHighlighterColors.BULLET_LIST_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.ordered-list"),
+                MarkdownHighlighterColors.ORDERED_LIST_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.list-item"),
+                MarkdownHighlighterColors.LIST_ITEM_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.definition-list"),
+                MarkdownHighlighterColors.DEFINITION_LIST_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.definition"),
+                MarkdownHighlighterColors.DEFINITION_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.definition-term"),
+                MarkdownHighlighterColors.DEFINITION_TERM_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.table-body"),
+                MarkdownHighlighterColors.TABLE_BODY_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.table-cell"),
+                MarkdownHighlighterColors.TABLE_CELL_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.table-column"),
+                MarkdownHighlighterColors.TABLE_COLUMN_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.table-row"),
+                MarkdownHighlighterColors.TABLE_ROW_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.table-header"),
+                MarkdownHighlighterColors.TABLE_HEADER_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.html-block"),
+                MarkdownHighlighterColors.HTML_BLOCK_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.inline-html"),
+                MarkdownHighlighterColors.INLINE_HTML_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.reference"),
+                MarkdownHighlighterColors.REFERENCE_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.abbreviation"),
+                MarkdownHighlighterColors.ABBREVIATION_ATTR_KEY)
         );
     }
 

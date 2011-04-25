@@ -46,7 +46,7 @@ public class MarkdownAnnotator implements ExternalAnnotator {
     /**
      * The {@link PegDownProcessor} used for building the document AST.
      */
-    protected final PegDownProcessor processor = new PegDownProcessor(Extensions.ALL);
+    protected final PegDownProcessor processor = new PegDownProcessor(Extensions.ALL & ~Extensions.HARDWRAPS);
 
     /**
      * Annotates the specified file.
@@ -90,9 +90,6 @@ public class MarkdownAnnotator implements ExternalAnnotator {
 
         /**
          * Visit the {@link org.pegdown.ast.RootNode}.
-         * <p/>
-         * Visits children nodes.
-         * <p/>
          *
          * @param node the {@link org.pegdown.ast.RootNode} to visit
          */
@@ -104,8 +101,6 @@ public class MarkdownAnnotator implements ExternalAnnotator {
 
         /**
          * Visit the {@link org.pegdown.ast.SimpleNode}.
-         * <p/>
-         * Highlight horizontal rules.
          *
          * @param node the {@link org.pegdown.ast.SimpleNode} to visit
          */
@@ -114,13 +109,18 @@ public class MarkdownAnnotator implements ExternalAnnotator {
                 case HRule:
                     highlight(node, MarkdownTokenTypes.HRULE);
                     break;
+                case Apostrophe:
+                case Ellipsis:
+                case Emdash:
+                case Endash:
+                case Linebreak:
+                case Nbsp:
+                    break;
             }
         }
 
         /**
          * Visit the {@link org.pegdown.ast.SuperNode}.
-         * <p/>
-         * Visits children nodes.
          *
          * @param node the {@link org.pegdown.ast.SuperNode} to visit
          */
@@ -130,8 +130,6 @@ public class MarkdownAnnotator implements ExternalAnnotator {
 
         /**
          * Visit the {@link org.pegdown.ast.ParaNode}.
-         * <p/>
-         * Visits children nodes.
          *
          * @param node the {@link org.pegdown.ast.ParaNode} to visit
          */
@@ -152,8 +150,6 @@ public class MarkdownAnnotator implements ExternalAnnotator {
 
         /**
          * Visit the {@link TextNode}.
-         * <p/>
-         * Highlights node as text.
          *
          * @param node the {@link TextNode} to visit
          */
@@ -163,86 +159,74 @@ public class MarkdownAnnotator implements ExternalAnnotator {
 
         /**
          * Visit the {@link SpecialTextNode}.
-         * <p/>
-         * Highlights node as text.
          *
          * @param node the {@link SpecialTextNode} to visit
          */
         public void visit(SpecialTextNode node) {
-            highlight(node, MarkdownTokenTypes.TEXT);
+            highlight(node, MarkdownTokenTypes.SPECIAL_TEXT);
         }
 
         /**
          * Visit the {@link EmphNode}.
-         * <p/>
-         * Highlights the node as link.
          *
          * @param node the {@link EmphNode} to visit
          */
         public void visit(EmphNode node) {
             highlight(node, MarkdownTokenTypes.ITALIC);
+            visitChildren(node);
         }
 
         /**
          * Visit the {@link StrongNode}.
-         * <p/>
-         * Highlights the node as link.
          *
          * @param node the {@link StrongNode} to visit
          */
         public void visit(StrongNode node) {
             highlight(node, MarkdownTokenTypes.BOLD);
+            visitChildren(node);
         }
 
         /**
          * Visit the {@link ExpLinkNode}.
-         * <p/>
-         * Highlights the node as link or image..
          *
          * @param node the {@link ExpLinkNode} to visit
          */
         public void visit(ExpLinkNode node) {
             if (node.getImage()) highlight(node, MarkdownTokenTypes.IMAGE);
-            else highlight(node, MarkdownTokenTypes.LINK);
+            else highlight(node, MarkdownTokenTypes.EXPLICIT_LINK);
+            visitChildren(node);
         }
 
         /**
          * Visit the {@link RefLinkNode}.
-         * <p/>
-         * Highlights the node as link.
          *
          * @param node the {@link RefLinkNode} to visit
          */
         public void visit(final RefLinkNode node) {
-            highlight(node, MarkdownTokenTypes.LINK);
+            highlight(node, MarkdownTokenTypes.REFERENCE_LINK);
+            visitChildren(node);
         }
 
         /**
          * Visit the {@link AutoLinkNode}.
-         * <p/>
-         * Highlights the node as link.
          *
          * @param node the {@link AutoLinkNode} to visit
          */
         public void visit(AutoLinkNode node) {
-            highlight(node, MarkdownTokenTypes.LINK);
+            highlight(node, MarkdownTokenTypes.AUTO_LINK);
         }
 
         /**
-         * Visit the {@link AutoLinkNode}.
-         * <p/>
-         * Highlights the node as link.
+         * Visit the {@link MailLinkNode}.
          *
-         * @param node the {@link AutoLinkNode} to visit
+         * @param node the {@link MailLinkNode} to visit
          */
         public void visit(MailLinkNode node) {
-            highlight(node, MarkdownTokenTypes.LINK);
+            highlight(node, MarkdownTokenTypes.MAIL_LINK);
         }
 
         /**
          * Visit the {@link HeaderNode}.
-         * <p/>
-         * Highlights the node as header with given level.
          *
          * @param node the {@link HeaderNode} to visit
          */
@@ -272,8 +256,6 @@ public class MarkdownAnnotator implements ExternalAnnotator {
 
         /**
          * Visit the {@link CodeNode}.
-         * <p/>
-         * Highlights the node as code.
          *
          * @param node the {@link CodeNode} to visit
          */
@@ -283,19 +265,15 @@ public class MarkdownAnnotator implements ExternalAnnotator {
 
         /**
          * Visit the {@link VerbatimNode}.
-         * <p/>
-         * Highlights the node as code.
          *
          * @param node the {@link VerbatimNode} to visit
          */
         public void visit(VerbatimNode node) {
-            highlight(node, MarkdownTokenTypes.CODE);
+            highlight(node, MarkdownTokenTypes.VERBATIM);
         }
 
         /**
          * Visit the {@link QuotedNode}.
-         * <p/>
-         * Highlights the node as quote.
          *
          * @param node the {@link QuotedNode} to visit
          */
@@ -304,193 +282,175 @@ public class MarkdownAnnotator implements ExternalAnnotator {
         }
 
         /**
-         * Visit the {@link QuotedNode}.
-         * <p/>
-         * Highlights the node as quote.
+         * Visit the {@link BlockQuoteNode}.
          *
-         * @param node the {@link QuotedNode} to visit
+         * @param node the {@link BlockQuoteNode} to visit
          */
         public void visit(BlockQuoteNode node) {
-            highlight(node, MarkdownTokenTypes.QUOTE);
+            highlight(node, MarkdownTokenTypes.BLOCK_QUOTE);
+            visitChildren(node);
         }
 
         /**
          * Visit the {@link BulletListNode}.
-         * <p/>
-         * Visits children nodes.
          *
          * @param node the {@link BulletListNode} to visit
          */
         public void visit(BulletListNode node) {
+            highlight(node, MarkdownTokenTypes.BULLET_LIST);
             visitChildren(node);
         }
 
         /**
          * Visit the {@link OrderedListNode}.
-         * <p/>
-         * Visits children nodes.
          *
          * @param node the {@link OrderedListNode} to visit
          */
         public void visit(OrderedListNode node) {
+            highlight(node, MarkdownTokenTypes.ORDERED_LIST);
             visitChildren(node);
         }
 
         /**
          * Visit the {@link ListItemNode}.
-         * <p/>
-         * Visits children nodes.
          *
          * @param node the {@link ListItemNode} to visit
          */
         public void visit(ListItemNode node) {
+            highlight(node, MarkdownTokenTypes.LIST_ITEM);
             visitChildren(node);
         }
 
         /**
          * Visit the {@link DefinitionListNode}.
-         * <p/>
-         * Visits children nodes.
          *
          * @param node the {@link DefinitionListNode} to visit
          */
         public void visit(DefinitionListNode node) {
+            highlight(node, MarkdownTokenTypes.DEFINITION_LIST);
             visitChildren(node);
         }
 
         /**
          * Visit the {@link DefinitionNode}.
-         * <p/>
-         * Visits children nodes.
          *
          * @param node the {@link DefinitionNode} to visit
          */
         public void visit(DefinitionNode node) {
+            highlight(node, MarkdownTokenTypes.DEFINITION);
             visitChildren(node);
         }
 
         /**
          * Visit the {@link DefinitionTermNode}.
-         * <p/>
-         * Visits children nodes.
          *
          * @param node the {@link DefinitionTermNode} to visit
          */
         public void visit(DefinitionTermNode node) {
+            highlight(node, MarkdownTokenTypes.DEFINITION_TERM);
             visitChildren(node);
         }
 
         /**
          * Visit the {@link TableNode}.
-         * <p/>
-         * Highlights the node as a table.
-         * TODO: Should we highlight into tables ?
          *
          * @param node the {@link TableNode} to visit
          */
         public void visit(TableNode node) {
             highlight(node, MarkdownTokenTypes.TABLE);
+            visitChildren(node);
         }
 
         /**
-         * Visit the {@link TableNode}.
-         * <p/>
-         * Highlights the node as a table.
-         * TODO: Should we highlight into tables ?
+         * Visit the {@link TableBodyNode}.
          *
-         * @param node the {@link TableNode} to visit
+         * @param node the {@link TableBodyNode} to visit
          */
         public void visit(TableBodyNode node) {
+            highlight(node, MarkdownTokenTypes.TABLE_BODY);
+            visitChildren(node);
         }
 
         /**
          * Visit the {@link TableCellNode}.
-         * <p/>
-         * Does not do anything, tables highlighting is taken care of by {@link #visit(org.pegdown.ast.TableNode)}.
-         * TODO: Should we highlight into tables ?
          *
          * @param node the {@link TableCellNode} to visit
          */
         public void visit(TableCellNode node) {
+            highlight(node, MarkdownTokenTypes.TABLE_CELL);
+            visitChildren(node);
         }
 
         /**
          * Visit the {@link TableColumnNode}.
-         * <p/>
-         * Does not do anything, tables highlighting is taken care of by {@link #visit(org.pegdown.ast.TableNode)}.
-         * TODO: Should we highlight into tables ?
          *
          * @param node the {@link TableColumnNode} to visit
          */
         public void visit(TableColumnNode node) {
+            highlight(node, MarkdownTokenTypes.TABLE_COLUMN);
+            visitChildren(node);
         }
 
         /**
          * Visit the {@link TableHeaderNode}.
-         * <p/>
-         * Does not do anything, tables highlighting is taken care of by {@link #visit(org.pegdown.ast.TableNode)}.
-         * TODO: Should we highlight into tables ?
          *
          * @param node the {@link TableHeaderNode} to visit
          */
         public void visit(TableHeaderNode node) {
+            highlight(node, MarkdownTokenTypes.TABLE_HEADER);
+            visitChildren(node);
         }
 
         /**
          * Visit the {@link TableRowNode}.
-         * <p/>
-         * Does not do anything, tables highlighting is taken care of by {@link #visit(org.pegdown.ast.TableNode)}.
-         * TODO: Should we highlight into tables ?
          *
          * @param node the {@link TableRowNode} to visit
          */
         public void visit(TableRowNode node) {
+            highlight(node, MarkdownTokenTypes.TABLE_ROW);
+            visitChildren(node);
         }
 
         /**
          * Visit the {@link HtmlBlockNode}.
          * <p/>
-         * Highlights the node as code.
          * TODO: Real HTML support not implemented.
          *
          * @param node the {@link HtmlBlockNode} to visit
          */
         public void visit(HtmlBlockNode node) {
-            highlight(node, MarkdownTokenTypes.CODE);
+            highlight(node, MarkdownTokenTypes.HTML_BLOCK);
         }
 
         /**
          * Visit the {@link InlineHtmlNode}.
          * <p/>
-         * Highlights the node as code.
          * TODO: Real HTML support not implemented.
          *
          * @param node the {@link InlineHtmlNode} to visit
          */
         public void visit(InlineHtmlNode node) {
-            highlight(node, MarkdownTokenTypes.CODE);
+            highlight(node, MarkdownTokenTypes.INLINE_HTML);
         }
 
         /**
-         * Visit the {@link InlineHtmlNode}.
-         * <p/>
-         * Highlights the node as reference.
-         * TODO: Not implemented.
+         * Visit the {@link ReferenceNode}.
          *
-         * @param node the {@link InlineHtmlNode} to visit
+         * @param node the {@link ReferenceNode} to visit
          */
         public void visit(ReferenceNode node) {
+            highlight(node, MarkdownTokenTypes.REFERENCE);
+            visitChildren(node);
         }
 
         /**
-         * Visit the {@link InlineHtmlNode}.
-         * <p/>
-         * Highlights the node as reference.
-         * TODO: Not implemented.
+         * Visit the {@link AbbreviationNode}.
          *
-         * @param node the {@link InlineHtmlNode} to visit
+         * @param node the {@link AbbreviationNode} to visit
          */
         public void visit(AbbreviationNode node) {
+            highlight(node, MarkdownTokenTypes.ABBREVIATION);
+            visitChildren(node);
         }
 
         /**

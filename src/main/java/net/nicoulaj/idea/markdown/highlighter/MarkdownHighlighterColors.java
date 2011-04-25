@@ -36,10 +36,10 @@ import java.awt.*;
 public class MarkdownHighlighterColors {
 
     /**
-     * Default style for plain text.
+     * Default style for text.
      */
-    public static TextAttributesKey PLAIN_TEXT_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
-            "MARKDOWN.PLAIN_TEXT", new TextAttributes(null, null, null, null, Font.PLAIN)
+    public static TextAttributesKey TEXT_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.TEXT", new TextAttributes(null, null, null, null, Font.PLAIN)
     );
 
     /**
@@ -54,13 +54,6 @@ public class MarkdownHighlighterColors {
      */
     public static TextAttributesKey ITALIC_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
             "MARKDOWN.ITALIC", new TextAttributes(null, null, null, null, Font.ITALIC)
-    );
-
-    /**
-     * Default style for links.
-     */
-    public static TextAttributesKey LINK_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
-            "MARKDOWN.LINK", new TextAttributes(Color.BLUE, null, null, null, Font.PLAIN)
     );
 
     /**
@@ -113,6 +106,55 @@ public class MarkdownHighlighterColors {
     );
 
     /**
+     * Default style for quotes.
+     */
+    public static TextAttributesKey QUOTE_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.QUOTE", new TextAttributes(Color.BLACK, new Color(230, 230, 230), null, null, Font.PLAIN)
+    );
+
+    /**
+     * Default style for HRules.
+     */
+    public static TextAttributesKey HRULE_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.HRULE", new TextAttributes(Color.BLACK, new Color(230, 230, 230), null, null, Font.BOLD)
+    );
+
+    /**
+     * Default style for special text.
+     */
+    public static final TextAttributesKey SPECIAL_TEXT_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.SPECIAL_TEXT", new TextAttributes(null, null, null, null, Font.PLAIN)
+    );
+
+    /**
+     * Default style for explicit links.
+     */
+    public static TextAttributesKey EXPLICIT_LINK_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.EXPLICIT_LINK", new TextAttributes(Color.BLUE, null, null, null, Font.PLAIN)
+    );
+
+    /**
+     * Default style for reference links.
+     */
+    public static final TextAttributesKey REFERENCE_LINK_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.REFERENCE_LINK", new TextAttributes(Color.BLUE, null, null, null, Font.PLAIN)
+    );
+
+    /**
+     * Default style for auto links.
+     */
+    public static final TextAttributesKey AUTO_LINK_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.AUTO_LINK", new TextAttributes(Color.BLUE, null, null, null, Font.PLAIN)
+    );
+
+    /**
+     * Default style for mail links.
+     */
+    public static final TextAttributesKey MAIL_LINK_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.MAIL_LINK", new TextAttributes(Color.BLUE, null, null, null, Font.PLAIN)
+    );
+
+    /**
      * Default style for code.
      */
     public static TextAttributesKey CODE_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
@@ -120,10 +162,59 @@ public class MarkdownHighlighterColors {
     );
 
     /**
-     * Default style for quotes.
+     * Default style for verbatim.
      */
-    public static TextAttributesKey QUOTE_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
-            "MARKDOWN.QUOTE", new TextAttributes(Color.BLACK, new Color(230, 230, 230), null, null, Font.PLAIN)
+    public static final TextAttributesKey VERBATIM_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.VERBATIM", new TextAttributes(Color.BLACK, new Color(230, 230, 230), null, null, Font.PLAIN)
+    );
+
+    /**
+     * Default style for blockquotes.
+     */
+    public static final TextAttributesKey BLOCK_QUOTE_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.BLOCK_QUOTE", new TextAttributes(Color.BLACK, new Color(230, 230, 230), null, null, Font.PLAIN)
+    );
+
+    /**
+     * Default style for bullet lists.
+     */
+    public static final TextAttributesKey BULLET_LIST_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.BULLET_LIST", new TextAttributes(null, null, null, null, Font.PLAIN)
+    );
+
+    /**
+     * Default style for ordered lists.
+     */
+    public static final TextAttributesKey ORDERED_LIST_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.ORDERED_LIST", new TextAttributes(null, null, null, null, Font.PLAIN)
+    );
+
+    /**
+     * Default style for list items.
+     */
+    public static final TextAttributesKey LIST_ITEM_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.LIST_ITEM", new TextAttributes(null, null, null, null, Font.PLAIN)
+    );
+
+    /**
+     * Default style for definition lists.
+     */
+    public static final TextAttributesKey DEFINITION_LIST_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.DEFINITION_LIST", new TextAttributes(null, null, null, null, Font.PLAIN)
+    );
+
+    /**
+     * Default style for definitions.
+     */
+    public static final TextAttributesKey DEFINITION_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.DEFINITION", new TextAttributes(null, null, null, null, Font.PLAIN)
+    );
+
+    /**
+     * Default style for definition terms.
+     */
+    public static final TextAttributesKey DEFINITION_TERM_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.DEFINITION_TERM", new TextAttributes(null, null, null, null, Font.PLAIN)
     );
 
     /**
@@ -134,9 +225,65 @@ public class MarkdownHighlighterColors {
     );
 
     /**
-     * Default style for HRules.
+     * Default style for tables body.
      */
-    public static TextAttributesKey HRULE_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
-            "MARKDOWN.HRULE", new TextAttributes(Color.BLACK, new Color(230, 230, 230), null, null, Font.BOLD)
+    public static final TextAttributesKey TABLE_BODY_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.TABLE_BODY", new TextAttributes(null, null, null, null, Font.PLAIN)
+    );
+
+    /**
+     * Default style for table cells.
+     */
+    public static final TextAttributesKey TABLE_CELL_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.TABLE_CELL", new TextAttributes(null, null, null, null, Font.PLAIN)
+    );
+
+    /**
+     * Default style for table columns.
+     */
+    public static final TextAttributesKey TABLE_COLUMN_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.TABLE_COLUMN", new TextAttributes(null, null, null, null, Font.PLAIN)
+    );
+
+    /**
+     * Default style for table headers.
+     */
+    public static final TextAttributesKey TABLE_HEADER_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.TABLE_HEADER", new TextAttributes(null, null, null, null, Font.PLAIN)
+    );
+
+    /**
+     * Default style for table rows.
+     */
+    public static final TextAttributesKey TABLE_ROW_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.TABLE_ROW", new TextAttributes(null, null, null, null, Font.PLAIN)
+    );
+
+    /**
+     * Default style for HTML blocks.
+     */
+    public static final TextAttributesKey HTML_BLOCK_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.HTML_BLOCK", new TextAttributes(null, null, null, null, Font.PLAIN)
+    );
+
+    /**
+     * Default style for .
+     */
+    public static final TextAttributesKey INLINE_HTML_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.INLINE_HTML", new TextAttributes(null, null, null, null, Font.PLAIN)
+    );
+
+    /**
+     * Default style for references.
+     */
+    public static final TextAttributesKey REFERENCE_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.REFERENCE", new TextAttributes(null, null, null, null, Font.PLAIN)
+    );
+
+    /**
+     * Default style for abbreviations.
+     */
+    public static final TextAttributesKey ABBREVIATION_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.ABBREVIATION", new TextAttributes(null, null, null, null, Font.PLAIN)
     );
 }

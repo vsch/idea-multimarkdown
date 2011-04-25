@@ -50,11 +50,9 @@ public class MarkdownSyntaxHighlighter extends SyntaxHighlighterBase {
     protected static final Map<IElementType, TextAttributesKey> ATTRIBUTES = new HashMap<IElementType, TextAttributesKey>();
 
     static {
-        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.PLAIN_TEXT_SET, MarkdownHighlighterColors.PLAIN_TEXT_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.TEXT_SET, MarkdownHighlighterColors.TEXT_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.BOLD_SET, MarkdownHighlighterColors.BOLD_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.ITALIC_SET, MarkdownHighlighterColors.ITALIC_ATTR_KEY);
-        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.LINK_SET, MarkdownHighlighterColors.LINK_ATTR_KEY);
-        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.IMAGE_SET, MarkdownHighlighterColors.IMAGE_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.HEADER_LEVEL_1_SET, MarkdownHighlighterColors.HEADER_LEVEL_1_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.HEADER_LEVEL_2_SET, MarkdownHighlighterColors.HEADER_LEVEL_2_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.HEADER_LEVEL_3_SET, MarkdownHighlighterColors.HEADER_LEVEL_3_ATTR_KEY);
@@ -65,6 +63,29 @@ public class MarkdownSyntaxHighlighter extends SyntaxHighlighterBase {
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.QUOTE_SET, MarkdownHighlighterColors.QUOTE_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.TABLE_SET, MarkdownHighlighterColors.TABLE_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.HRULE_SET, MarkdownHighlighterColors.HRULE_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.SPECIAL_TEXT_SET, MarkdownHighlighterColors.SPECIAL_TEXT_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.EXPLICIT_LINK_SET, MarkdownHighlighterColors.EXPLICIT_LINK_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.IMAGE_SET, MarkdownHighlighterColors.IMAGE_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.REFERENCE_LINK_SET, MarkdownHighlighterColors.REFERENCE_LINK_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.AUTO_LINK_SET, MarkdownHighlighterColors.AUTO_LINK_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.MAIL_LINK_SET, MarkdownHighlighterColors.MAIL_LINK_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.VERBATIM_SET, MarkdownHighlighterColors.VERBATIM_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.BLOCK_QUOTE_SET, MarkdownHighlighterColors.BLOCK_QUOTE_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.BULLET_LIST_SET, MarkdownHighlighterColors.BULLET_LIST_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.ORDERED_LIST_SET, MarkdownHighlighterColors.ORDERED_LIST_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.LIST_ITEM_SET, MarkdownHighlighterColors.LIST_ITEM_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.DEFINITION_LIST_SET, MarkdownHighlighterColors.DEFINITION_LIST_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.DEFINITION_SET, MarkdownHighlighterColors.DEFINITION_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.DEFINITION_TERM_SET, MarkdownHighlighterColors.DEFINITION_TERM_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.TABLE_BODY_SET, MarkdownHighlighterColors.TABLE_BODY_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.TABLE_CELL_SET, MarkdownHighlighterColors.TABLE_CELL_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.TABLE_COLUMN_SET, MarkdownHighlighterColors.TABLE_COLUMN_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.TABLE_HEADER_SET, MarkdownHighlighterColors.TABLE_HEADER_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.TABLE_ROW_SET, MarkdownHighlighterColors.TABLE_ROW_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.HTML_BLOCK_SET, MarkdownHighlighterColors.HTML_BLOCK_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.INLINE_HTML_SET, MarkdownHighlighterColors.INLINE_HTML_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.REFERENCE_SET, MarkdownHighlighterColors.REFERENCE_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.ABBREVIATION_SET, MarkdownHighlighterColors.ABBREVIATION_ATTR_KEY);
     }
 
     /**
