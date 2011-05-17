@@ -76,17 +76,22 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
     /**
      * The {@link java.awt.Component} used to render the HTML preview.
      */
-    protected JEditorPane jEditorPane = new JEditorPane();
+    protected final JEditorPane jEditorPane = new JEditorPane();
+
+    /**
+     * The {@link JBScrollPane} allowing to browse {@link #jEditorPane}.
+     */
+    protected final JBScrollPane scrollPane = new JBScrollPane(jEditorPane);
+
+    /**
+     * The {@link Document} previewed in this editor.
+     */
+    protected final Document document;
 
     /**
      * Indicates whether the HTML preview is obsolete and should regenerated from the Markdown {@link #document}.
      */
     protected boolean previewIsObsolete = true;
-
-    /**
-     * The {@link Document} previewed in this editor.
-     */
-    protected Document document;
 
     /**
      * Build a new instance of {@link MarkdownPreviewEditor}.
@@ -116,17 +121,17 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
      */
     @NotNull
     public JComponent getComponent() {
-        return new JBScrollPane(jEditorPane);
+        return scrollPane;
     }
 
     /**
      * Get the component to be focused when the editor is opened.
      *
-     * @return {@link #jEditorPane}
+     * @return {@link #scrollPane}
      */
     @Nullable
     public JComponent getPreferredFocusedComponent() {
-        return jEditorPane;
+        return scrollPane;
     }
 
     /**
