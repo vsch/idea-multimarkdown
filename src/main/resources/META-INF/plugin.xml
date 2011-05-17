@@ -25,7 +25,7 @@
   <name>Markdown</name>
   <category>Custom Languages</category>
   <vendor url="http://github.com/nicoulaj" email="julien.nicoulaud@gmail.com">Julien Nicoulaud</vendor>
-  <version>0.5</version>
+  <version>0.5.1</version>
   <idea-version since-build="99.18"/>
   <depends>com.intellij.modules.lang</depends>
   <description>
@@ -36,8 +36,10 @@
   <change-notes>
     <![CDATA[
       <p>
-        <b>0.6</b><br/>
+        <b>0.5.1</b><br/>
         <ul>
+          <li>Various syntax highlighting fixes.</li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/3">Issue #3</a>: Preview tab remains blank.</li>
           <li><a href="https://github.com/nicoulaj/idea-markdown/issues/25">Issue #25</a>: Add highlighting options for remaining element types.</li>
         </ul>
         <b>0.5</b><br/>
