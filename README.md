@@ -6,3 +6,7 @@ idea-markdown
 See the [official plugin page](http://plugins.intellij.net/plugin?id=5970).
 
 [![idea-markdown](http://plugins.intellij.net/img/screenshots/net.nicoulaj.idea.markdown_8956.png)](http://plugins.intellij.net/plugin?id=5970)
+
+---
+
+*This plugin is based on the excellent [PegDown](http://pegdown.org) library by [sirthias](https://github.com/sirthias). Greetings also to [JetBrains](http://www.jetbrains.com/) for giving away free licenses for IntelliJ IDEA for this project contributors.*
