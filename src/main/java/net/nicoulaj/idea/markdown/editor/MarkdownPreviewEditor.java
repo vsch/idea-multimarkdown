@@ -34,10 +34,10 @@ import com.intellij.openapi.util.UserDataHolderBase;
 import com.intellij.ui.BrowserHyperlinkListener;
 import com.intellij.ui.components.JBScrollPane;
 import net.nicoulaj.idea.markdown.MarkdownBundle;
+import net.nicoulaj.idea.markdown.settings.MarkdownGlobalSettings;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
 
 import javax.swing.*;
@@ -71,7 +71,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
     /**
      * The MarkdownJ {@link PegDownProcessor} used to generate HTML from Markdown.
      */
-    protected static final PegDownProcessor markdownProcessor = new PegDownProcessor(Extensions.ALL & ~Extensions.HARDWRAPS);
+    protected static final PegDownProcessor markdownProcessor = new PegDownProcessor(MarkdownGlobalSettings.getInstance().getExtensionsValue());
 
     /**
      * The {@link java.awt.Component} used to render the HTML preview.
