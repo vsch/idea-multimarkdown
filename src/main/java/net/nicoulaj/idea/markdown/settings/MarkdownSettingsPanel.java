@@ -73,6 +73,11 @@ public class MarkdownSettingsPanel {
     public JCheckBox autoLinksCheckBox;
 
     /**
+     * Form element for {@link MarkdownGlobalSettings#wikiLinks}.
+     */
+    public JCheckBox wikiLinksCheckBox;
+
+    /**
      * Form element for {@link MarkdownGlobalSettings#tables}.
      */
     public JCheckBox tablesCheckBox;
@@ -126,6 +131,11 @@ public class MarkdownSettingsPanel {
      * Description label for {@link #autoLinksCheckBox}.
      */
     private JLabel autoLinksDescriptionLabel;
+
+    /**
+     * Description label for {@link #wikiLinksCheckBox}.
+     */
+    private JLabel wikiLinksDescriptionLabel;
 
     /**
      * Description label for {@link #hardWrapsCheckBox}.

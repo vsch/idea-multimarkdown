@@ -76,6 +76,11 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
     public boolean autoLinks = false;
 
     /**
+     * Whether the "Wiki-style links" extension should be enabled.
+     */
+    public boolean wikiLinks = false;
+
+    /**
      * Whether the "MultiMarkdown style tables support" extension should be enabled.
      */
     public boolean tables = false;
@@ -112,6 +117,7 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
         element.setAttribute("abbreviations", Boolean.toString(abbreviations));
         element.setAttribute("hardWraps", Boolean.toString(hardWraps));
         element.setAttribute("autoLinks", Boolean.toString(autoLinks));
+        element.setAttribute("wikiLinks", Boolean.toString(wikiLinks));
         element.setAttribute("tables", Boolean.toString(tables));
         element.setAttribute("definitions", Boolean.toString(definitions));
         element.setAttribute("fencedCodeBlocks", Boolean.toString(fencedCodeBlocks));
@@ -132,6 +138,7 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
         abbreviations = Boolean.parseBoolean(element.getAttributeValue("abbreviations"));
         hardWraps = Boolean.parseBoolean(element.getAttributeValue("hardWraps"));
         autoLinks = Boolean.parseBoolean(element.getAttributeValue("autoLinks"));
+        wikiLinks = Boolean.parseBoolean(element.getAttributeValue("wikiLinks"));
         tables = Boolean.parseBoolean(element.getAttributeValue("tables"));
         definitions = Boolean.parseBoolean(element.getAttributeValue("definitions"));
         fencedCodeBlocks = Boolean.parseBoolean(element.getAttributeValue("fencedCodeBlocks"));
@@ -151,6 +158,7 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
         (abbreviations ? Extensions.ABBREVIATIONS : 0) +
         (hardWraps ? Extensions.HARDWRAPS : 0) +
         (autoLinks ? Extensions.AUTOLINKS : 0) +
+        (wikiLinks ? Extensions.WIKILINKS : 0) +
         (tables ? Extensions.TABLES : 0) +
         (definitions ? Extensions.DEFINITIONS : 0) +
         (fencedCodeBlocks ? Extensions.FENCED_CODE_BLOCKS : 0) +

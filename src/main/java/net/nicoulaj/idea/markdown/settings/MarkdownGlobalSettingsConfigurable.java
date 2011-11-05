@@ -123,6 +123,7 @@ public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurabl
         return settingsPanel == null
         || globalSettings.abbreviations != settingsPanel.abbreviationsCheckBox.isSelected()
         || globalSettings.autoLinks != settingsPanel.autoLinksCheckBox.isSelected()
+        || globalSettings.wikiLinks != settingsPanel.wikiLinksCheckBox.isSelected()
         || globalSettings.definitions != settingsPanel.definitionsCheckBox.isSelected()
         || globalSettings.fencedCodeBlocks != settingsPanel.fencedCodeBlocksCheckBox.isSelected()
         || globalSettings.hardWraps != settingsPanel.hardWrapsCheckBox.isSelected()
@@ -140,6 +141,7 @@ public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurabl
         if (settingsPanel != null) {
             globalSettings.abbreviations = settingsPanel.abbreviationsCheckBox.isSelected();
             globalSettings.autoLinks = settingsPanel.autoLinksCheckBox.isSelected();
+            globalSettings.wikiLinks = settingsPanel.wikiLinksCheckBox.isSelected();
             globalSettings.definitions = settingsPanel.definitionsCheckBox.isSelected();
             globalSettings.fencedCodeBlocks = settingsPanel.fencedCodeBlocksCheckBox.isSelected();
             globalSettings.hardWraps = settingsPanel.hardWrapsCheckBox.isSelected();
@@ -158,6 +160,7 @@ public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurabl
         if (settingsPanel != null) {
             settingsPanel.abbreviationsCheckBox.setSelected(globalSettings.abbreviations);
             settingsPanel.autoLinksCheckBox.setSelected(globalSettings.autoLinks);
+            settingsPanel.wikiLinksCheckBox.setSelected(globalSettings.wikiLinks);
             settingsPanel.definitionsCheckBox.setSelected(globalSettings.definitions);
             settingsPanel.fencedCodeBlocksCheckBox.setSelected(globalSettings.fencedCodeBlocks);
             settingsPanel.hardWrapsCheckBox.setSelected(globalSettings.hardWraps);
