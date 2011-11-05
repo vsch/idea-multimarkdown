@@ -26,7 +26,7 @@
   <category>Custom Languages</category>
   <vendor url="http://github.com/nicoulaj" email="julien.nicoulaud@gmail.com">Julien Nicoulaud</vendor>
   <version>0.6.1</version>
-  <idea-version since-build="99.000" until-build="108.000"/>
+  <idea-version since-build="108.000"/>
   <depends>com.intellij.modules.lang</depends>
   <description>
     <![CDATA[
