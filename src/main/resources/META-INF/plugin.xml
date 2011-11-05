@@ -36,6 +36,10 @@
   <change-notes>
     <![CDATA[
       <p>
+        <b>0.6.1</b><br/>
+        <ul>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/36">Issue #36</a>: Upgrade to Pegdown 1.1.0.</li>
+        </ul>
         <b>0.6</b><br/>
         <ul>
           <li><a href="https://github.com/nicoulaj/idea-markdown/issues/26">Issue #26</a>: Allow to configure enabled Markdown extensions (globally).</li>

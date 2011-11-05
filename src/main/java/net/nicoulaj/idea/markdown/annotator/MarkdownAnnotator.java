@@ -177,6 +177,16 @@ public class MarkdownAnnotator implements ExternalAnnotator {
         }
 
         /**
+         * Visit the {@link ExpImageNode}.
+         *
+         * @param node the {@link ExpImageNode} to visit
+         */
+        public void visit(ExpImageNode node) {
+            highlight(node, MarkdownTokenTypes.IMAGE);
+            visitChildren(node);
+        }
+
+        /**
          * Visit the {@link StrongNode}.
          *
          * @param node the {@link StrongNode} to visit
@@ -192,8 +202,7 @@ public class MarkdownAnnotator implements ExternalAnnotator {
          * @param node the {@link ExpLinkNode} to visit
          */
         public void visit(ExpLinkNode node) {
-            if (node.getImage()) highlight(node, MarkdownTokenTypes.IMAGE);
-            else highlight(node, MarkdownTokenTypes.EXPLICIT_LINK);
+            highlight(node, MarkdownTokenTypes.EXPLICIT_LINK);
             visitChildren(node);
         }
 
@@ -270,6 +279,15 @@ public class MarkdownAnnotator implements ExternalAnnotator {
          */
         public void visit(VerbatimNode node) {
             highlight(node, MarkdownTokenTypes.VERBATIM);
+        }
+
+        /**
+         * Visit the {@link WikiLinkNode}.
+         *
+         * @param node the {@link WikiLinkNode} to visit
+         */
+        public void visit(WikiLinkNode node) {
+            highlight(node, MarkdownTokenTypes.REFERENCE_LINK); // TODO Add a dedicated token type
         }
 
         /**
@@ -440,6 +458,16 @@ public class MarkdownAnnotator implements ExternalAnnotator {
          */
         public void visit(ReferenceNode node) {
             highlight(node, MarkdownTokenTypes.REFERENCE);
+            visitChildren(node);
+        }
+
+        /**
+         * Visit the {@link RefImageNode}.
+         *
+         * @param node the {@link RefImageNode} to visit
+         */
+        public void visit(RefImageNode node) {
+            highlight(node, MarkdownTokenTypes.IMAGE); // TODO Add a dedicated token type
             visitChildren(node);
         }
 

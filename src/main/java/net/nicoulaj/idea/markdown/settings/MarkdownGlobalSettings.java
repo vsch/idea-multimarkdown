@@ -81,11 +81,6 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
     public boolean tables = false;
 
     /**
-     * Whether the "No follow links" extension should be enabled.
-     */
-    public boolean noFollowLinks = false;
-
-    /**
      * Whether the "Suppress HTML blocks" extension should be enabled.
      */
     public boolean suppressHTMLBlocks = false;
@@ -122,7 +117,6 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
         element.setAttribute("fencedCodeBlocks", Boolean.toString(fencedCodeBlocks));
         element.setAttribute("suppressHTMLBlocks", Boolean.toString(suppressHTMLBlocks));
         element.setAttribute("suppressInlineHTML", Boolean.toString(suppressInlineHTML));
-        element.setAttribute("noFollowLinks", Boolean.toString(noFollowLinks));
         return element;
     }
 
@@ -143,7 +137,6 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
         fencedCodeBlocks = Boolean.parseBoolean(element.getAttributeValue("fencedCodeBlocks"));
         suppressHTMLBlocks = Boolean.parseBoolean(element.getAttributeValue("suppressHTMLBlocks"));
         suppressInlineHTML = Boolean.parseBoolean(element.getAttributeValue("suppressInlineHTML"));
-        noFollowLinks = Boolean.parseBoolean(element.getAttributeValue("noFollowLinks"));
     }
 
     /**
@@ -162,7 +155,6 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
         (definitions ? Extensions.DEFINITIONS : 0) +
         (fencedCodeBlocks ? Extensions.FENCED_CODE_BLOCKS : 0) +
         (suppressHTMLBlocks ? Extensions.SUPPRESS_HTML_BLOCKS : 0) +
-        (suppressInlineHTML ? Extensions.SUPPRESS_INLINE_HTML : 0) +
-        (noFollowLinks ? Extensions.NO_FOLLOW_LINKS : 0);
+        (suppressInlineHTML ? Extensions.SUPPRESS_INLINE_HTML : 0);
     }
 }

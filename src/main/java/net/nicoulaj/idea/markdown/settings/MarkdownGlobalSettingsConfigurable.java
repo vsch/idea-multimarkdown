@@ -126,7 +126,6 @@ public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurabl
         || globalSettings.definitions != settingsPanel.definitionsCheckBox.isSelected()
         || globalSettings.fencedCodeBlocks != settingsPanel.fencedCodeBlocksCheckBox.isSelected()
         || globalSettings.hardWraps != settingsPanel.hardWrapsCheckBox.isSelected()
-        || globalSettings.noFollowLinks != settingsPanel.noFollowLinksCheckBox.isSelected()
         || globalSettings.quotes != settingsPanel.quotesCheckBox.isSelected()
         || globalSettings.smarts != settingsPanel.smartsCheckBox.isSelected()
         || globalSettings.suppressHTMLBlocks != settingsPanel.suppressHTMLBlocksCheckBox.isSelected()
@@ -144,7 +143,6 @@ public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurabl
             globalSettings.definitions = settingsPanel.definitionsCheckBox.isSelected();
             globalSettings.fencedCodeBlocks = settingsPanel.fencedCodeBlocksCheckBox.isSelected();
             globalSettings.hardWraps = settingsPanel.hardWrapsCheckBox.isSelected();
-            globalSettings.noFollowLinks = settingsPanel.noFollowLinksCheckBox.isSelected();
             globalSettings.quotes = settingsPanel.quotesCheckBox.isSelected();
             globalSettings.smarts = settingsPanel.smartsCheckBox.isSelected();
             globalSettings.suppressHTMLBlocks = settingsPanel.suppressHTMLBlocksCheckBox.isSelected();
@@ -163,7 +161,6 @@ public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurabl
             settingsPanel.definitionsCheckBox.setSelected(globalSettings.definitions);
             settingsPanel.fencedCodeBlocksCheckBox.setSelected(globalSettings.fencedCodeBlocks);
             settingsPanel.hardWrapsCheckBox.setSelected(globalSettings.hardWraps);
-            settingsPanel.noFollowLinksCheckBox.setSelected(globalSettings.noFollowLinks);
             settingsPanel.quotesCheckBox.setSelected(globalSettings.quotes);
             settingsPanel.smartsCheckBox.setSelected(globalSettings.smarts);
             settingsPanel.suppressHTMLBlocksCheckBox.setSelected(globalSettings.suppressHTMLBlocks);

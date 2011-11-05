@@ -98,19 +98,9 @@ public class MarkdownSettingsPanel {
     public JCheckBox suppressInlineHTMLCheckBox;
 
     /**
-     * Form element for {@link MarkdownGlobalSettings#noFollowLinks}.
-     */
-    public JCheckBox noFollowLinksCheckBox;
-
-    /**
      * Description label for {@link #suppressInlineHTMLCheckBox}.
      */
     private JLabel suppressInlineHTMLDescriptionLabel;
-
-    /**
-     * Description label for {@link #noFollowLinksCheckBox}.
-     */
-    private JLabel noFollowLinksDescriptionLabel;
 
     /**
      * Description label for {@link #suppressHTMLBlocksCheckBox}.
