@@ -56,6 +56,7 @@ public class MarkdownLoader implements ApplicationComponent {
      * Registers Markdown file types.
      */
     public void initComponent() {
+        // FIXME Deprecated API usage
         FileTypeManager.getInstance().registerFileType(MarkdownFileType.INSTANCE, MarkdownFileType.DEFAULT_ASSOCIATED_EXTENSIONS);
     }
 

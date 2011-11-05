@@ -41,7 +41,7 @@ import org.pegdown.ast.*;
  * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
  * @since 0.4
  */
-public class MarkdownAnnotator implements ExternalAnnotator {
+public class MarkdownAnnotator extends ExternalAnnotator {
 
     /**
      * The {@link PegDownProcessor} used for building the document AST.
@@ -52,6 +52,8 @@ public class MarkdownAnnotator implements ExternalAnnotator {
      * Annotates the specified file.
      * <p/>
      * Builds the AST and visit it with a {@link MarkdownASTVisitor}.
+     * <p/>
+     * FIXME Do not use deprectaed API. See {@link ExternalAnnotator}.
      *
      * @param file   the file to annotate.
      * @param holder the container which receives annotations created by the plugin.
@@ -499,7 +501,7 @@ public class MarkdownAnnotator implements ExternalAnnotator {
         protected void highlight(Node node, IElementType tokenType) {
             if (node.getStartIndex() < node.getEndIndex())
                 annotationHolder.createInfoAnnotation(new TextRange(node.getStartIndex(), node.getEndIndex()), null)
-                                .setTextAttributes(SYNTAX_HIGHLIGHTER.getTokenHighlights(tokenType)[0]);
+                        .setTextAttributes(SYNTAX_HIGHLIGHTER.getTokenHighlights(tokenType)[0]);
         }
     }
 }
