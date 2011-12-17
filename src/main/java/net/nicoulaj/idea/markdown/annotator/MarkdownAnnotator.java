@@ -53,7 +53,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
      * <p/>
      * Builds the AST and visit it with a {@link MarkdownASTVisitor}.
      * <p/>
-     * FIXME Do not use deprectaed API. See {@link ExternalAnnotator}.
+     * FIXME Do not use deprecated API. See {@link ExternalAnnotator}.
      *
      * @param file   the file to annotate.
      * @param holder the container which receives annotations created by the plugin.
