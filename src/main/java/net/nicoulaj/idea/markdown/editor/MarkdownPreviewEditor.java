@@ -31,7 +31,6 @@ import com.intellij.openapi.fileEditor.FileEditorState;
 import com.intellij.openapi.fileEditor.FileEditorStateLevel;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.UserDataHolderBase;
-import com.intellij.ui.BrowserHyperlinkListener;
 import com.intellij.ui.components.JBScrollPane;
 import net.nicoulaj.idea.markdown.MarkdownBundle;
 import net.nicoulaj.idea.markdown.settings.MarkdownGlobalSettings;
@@ -105,13 +104,14 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
         this.document.addDocumentListener(new DocumentPreviewUpdateListener());
 
         // Setup the editor pane for rendering HTML.
-        final HTMLEditorKit kit = new HTMLEditorKit();
+        final HTMLEditorKit kit = new MarkdownEditorKit();
         final StyleSheet style = new StyleSheet();
         style.importStyleSheet(MarkdownPreviewEditor.class.getResource(PREVIEW_STYLESHEET_PATH));
         kit.setStyleSheet(style);
         jEditorPane.setEditorKit(kit);
         jEditorPane.setEditable(false);
-        jEditorPane.addHyperlinkListener(new BrowserHyperlinkListener());
+		// add a link listener which can resolve local link references
+        jEditorPane.addHyperlinkListener(new MarkdownLinkListener());
     }
 
     /**
