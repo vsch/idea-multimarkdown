@@ -5,7 +5,7 @@ idea-markdown
 
 See the [official plugin page](http://plugins.intellij.net/plugin?id=5970).
 
-[![idea-markdown](http://plugins.intellij.net/img/screenshots/net.nicoulaj.idea.markdown_8956.png)](http://plugins.intellij.net/plugin?id=5970)
+[![idea-markdown](https://github.com/nicoulaj/idea-markdown/raw/assets/screenshots/preview.png)](http://plugins.intellij.net/plugin?id=5970)
 
 ---
 
