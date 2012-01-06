@@ -20,33 +20,18 @@
  */
 package net.nicoulaj.idea.markdown.editor;
 
-import com.intellij.ide.DataManager;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.DataKeys;
-import com.intellij.openapi.actionSystem.DataProvider;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectManager;
-import com.intellij.openapi.util.AsyncResult;
 import com.intellij.openapi.vfs.VirtualFile;
 
-import javax.swing.*;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.Element;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.View;
-import javax.swing.text.ViewFactory;
+import javax.swing.text.*;
 import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.ImageView;
-
 import java.awt.*;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import static net.nicoulaj.idea.markdown.editor.MarkdownPathResolver.*;
+import static net.nicoulaj.idea.markdown.editor.MarkdownPathResolver.resolveRelativePath;
 
 /**
  * <p>MarkdownViewFactory</p>
@@ -55,65 +40,60 @@ import static net.nicoulaj.idea.markdown.editor.MarkdownPathResolver.*;
  */
 public class MarkdownEditorKit extends HTMLEditorKit {
 
-	@Override
-	public Object clone() {
-		super.clone();
-		return new MarkdownEditorKit();
-	}
+    @Override
+    public Object clone() {
+        super.clone();
+        return new MarkdownEditorKit();
+    }
 
+    @Override
+    public ViewFactory getViewFactory() {
+        return new MarkdownViewFactory();
+    }
 
-	@Override
-	public ViewFactory getViewFactory() {
-		return new MarkdownViewFactory();
-	}
+    private static class MarkdownViewFactory extends HTMLFactory {
+        @Override
+        public View create(Element elem) {
+            final Object tag = elem.getAttributes().getAttribute(StyleConstants.NameAttribute);
+            if (HTML.Tag.IMG.equals(tag)) {
+                final AttributeSet atts = elem.getAttributes();
+                final Object src = atts.getAttribute(HTML.Attribute.SRC);
+                //final VirtualFile imageTarget = resolveRelativePath(src.toString());
+                //final String imagePath = imageTarget.getPath();
+                return new MarkdownImageView(elem);
+            } else {
+                return super.create(elem);
+            }
+        }
+    }
 
+    private static class MarkdownImageView extends ImageView {
 
-	private static class MarkdownViewFactory extends HTMLFactory {
-		@Override
-		public View create(Element elem) {
-			final Object tag = elem.getAttributes().getAttribute(StyleConstants.NameAttribute);
-			if (HTML.Tag.IMG.equals(tag)){
-				final AttributeSet atts = elem.getAttributes();
-				final Object src = atts.getAttribute(HTML.Attribute.SRC);
-				//final VirtualFile imageTarget = resolveRelativePath(src.toString());
-				//final String imagePath = imageTarget.getPath();
-				return new MarkdownImageView(elem);
-			} else {
-				return super.create(elem);
-			}
-		}
-	}
+        private MarkdownImageView(Element elem) {
+            super(elem);
+            this.setLoadsSynchronously(true);
+        }
 
-	private static class MarkdownImageView extends ImageView {
+        @Override
+        public Image getImage() {
+            return super.getImage();
+        }
 
-		private MarkdownImageView(Element elem) {
-			super(elem);
-			this.setLoadsSynchronously(true);
-		}
-
-
-
-		@Override
-		public Image getImage() {
-			return super.getImage();
-		}
-
-		@Override
-		public URL getImageURL() {
-			URL imageURL = super.getImageURL();
-			if (imageURL == null){
-				final String src = (String)getElement().getAttributes().getAttribute(HTML.Attribute.SRC);
-				VirtualFile localImage = resolveRelativePath(src);
-				try {
-					if (localImage != null && localImage.exists()){
-						imageURL = new File(localImage.getPath()).toURI().toURL();
-					}
-				} catch (MalformedURLException e) {
-					imageURL = null;
-				}
-			}
-			return imageURL;
-		}
-
-	}
+        @Override
+        public URL getImageURL() {
+            URL imageURL = super.getImageURL();
+            if (imageURL == null) {
+                final String src = (String) getElement().getAttributes().getAttribute(HTML.Attribute.SRC);
+                VirtualFile localImage = resolveRelativePath(src);
+                try {
+                    if (localImage != null && localImage.exists()) {
+                        imageURL = new File(localImage.getPath()).toURI().toURL();
+                    }
+                } catch (MalformedURLException e) {
+                    imageURL = null;
+                }
+            }
+            return imageURL;
+        }
+    }
 }
