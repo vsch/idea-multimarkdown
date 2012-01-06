@@ -25,7 +25,7 @@
   <name>Markdown</name>
   <category>Custom Languages</category>
   <vendor url="http://github.com/nicoulaj" email="julien.nicoulaud@gmail.com">Julien Nicoulaud</vendor>
-  <version>0.7</version>
+  <version>0.8</version>
   <idea-version since-build="110.000"/>
   <depends>com.intellij.modules.lang</depends>
   <description>
@@ -36,49 +36,53 @@
   <change-notes>
     <![CDATA[
       <p>
+        <b>0.8</b><br/>
+        <ul>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/40">#40</a>: Add support for local links/images in preview (<a href="https://github.com/grantham">Roger Grantham</a>)</li>
+        </ul>
         <b>0.7</b><br/>
         <ul>
-          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/35">Issue #35</a>: IntelliJ 11 compatibility.</li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/35">#35</a>: IntelliJ 11 compatibility.</li>
         </ul>
         <b>0.6.1</b><br/>
         <ul>
-          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/37">Issue #37</a>: Add support for wiki links.</li>
-          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/36">Issue #36</a>: Upgrade to Pegdown 1.1.0.</li>
-          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/31">Issue #31</a>: Highlighting problem with certain Definition Lists Terms.</li>
-          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/30">Issue #30</a>: Links not correctly rendered in preview.</li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/37">#37</a>: Add support for wiki links.</li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/36">#36</a>: Upgrade to Pegdown 1.1.0.</li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/31">#31</a>: Highlighting problem with certain Definition Lists Terms.</li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/30">#30</a>: Links not correctly rendered in preview.</li>
         </ul>
         <b>0.6</b><br/>
         <ul>
-          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/26">Issue #26</a>: Allow to configure enabled Markdown extensions (globally).</li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/26">#26</a>: Allow to configure enabled Markdown extensions (globally).</li>
         </ul>
         <b>0.5.1</b><br/>
         <ul>
-          <li>Various syntax highlighting fixes.</li>
-          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/3">Issue #3</a>: Preview tab remains blank.</li>
-          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/25">Issue #25</a>: Add highlighting options for remaining element types.</li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/19">#19</a>: Various syntax highlighting fixes.</li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/3">#3</a>: Preview tab remains blank.</li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/25">#25</a>: Add highlighting options for remaining element types.</li>
         </ul>
         <b>0.5</b><br/>
         <ul>
-          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/10">Issue #10</a>: Enable all supported Markdown extensions.</li>
-          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/15">Issue #15</a>: Syntax highlighting inside list items.</li>
-          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/21">Issue #21</a>: Improve style of the "Preview" tab.</li>
-          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/22">Issue #22</a>: Minimal IDEA build version does not work.</li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/10">#10</a>: Enable all supported Markdown extensions.</li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/15">#15</a>: Syntax highlighting inside list items.</li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/21">#21</a>: Improve style of the "Preview" tab.</li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/22">#22</a>: Minimal IDEA build version does not work.</li>
         </ul>
         <b>0.4</b><br/>
         <ul>
-          <li>Improved syntax highlighting.</li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/19">#19</a>: Improved syntax highlighting.</li>
         </ul>
         <b>0.3</b><br/>
         <ul>
-          <li>Very basic syntax highlighting.</li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/19">#19</a>: Very basic syntax highlighting.</li>
         </ul>
         <b>0.2</b><br/>
         <ul>
-          <li>Compatibility with PyCharm/RubyMine/WebStorm/PHPStorm/etc.</li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/20">#20</a>: Compatibility with PyCharm/RubyMine/WebStorm/PHPStorm/etc.</li>
         </ul>
         <b>0.1</b><br/>
         <ul>
-          <li>Initial release: Markdown file type support and "Preview" tab in the file editor.</li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/18">#18</a>: Initial release: Markdown file type support and "Preview" tab in the file editor.</li>
         </ul>
       </p>
     ]]>
