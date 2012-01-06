@@ -28,7 +28,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.AsyncResult;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.openapi.vfs.VirtualFileSystem;
 import com.intellij.openapi.vfs.ex.http.HttpFileSystem;
 import com.intellij.ui.BrowserHyperlinkListener;
 
@@ -41,24 +40,35 @@ import java.net.URL;
 import static net.nicoulaj.idea.markdown.editor.MarkdownPathResolver.*;
 
 /**
- * <p>MarkdownLinkListener is able to resolve the following types of links and open them in a new editor window:</p>
+ * {@link MarkdownLinkListener} is able to resolve the following types of links and open them in a new editor window:
  * <ul>
- * <li>Local absolute paths e.g. <code>/absolute/path/to/file</code>
+ * <li>local absolute paths e.g. <code>/absolute/path/to/file</code>
  * <li>local relative paths, e.g. <code>./some/relative/file</code>, <code>../../some/other/file</code>
  * <li>references to classes within the project, e.g. <code>net.nicoulaj.idea.markdown.editor.MarkdownLinkListener</code>
  * </ul>
  * <p/>
- * <p>MarkdownLinkListener will attempt to open non-local resources in a web browser.</p>
+ * MarkdownLinkListener will attempt to open non-local resources in a web browser.
  *
  * @author Roger Grantham (https://github.com/grantham)
+ * @since 0.8
  */
 public class MarkdownLinkListener implements HyperlinkListener {
 
+    /**
+     * The {@link BrowserHyperlinkListener} used for non-local resources.
+     */
     final BrowserHyperlinkListener browserLinkListener = new BrowserHyperlinkListener();
 
+    /**
+     * Handle hypertext link update.
+     * <p/>
+     * Tries to resolve the target as a local resource, else delegate to {@link #browserLinkListener}.
+     *
+     * @param e the event responsible for the update
+     */
     public void hyperlinkUpdate(HyperlinkEvent e) {
         if (HyperlinkEvent.EventType.ACTIVATED == e.getEventType()) {
-            // try to get a URL from the event
+            // Try to get a URL from the event.
             URL target = e.getURL();
             if (target == null) {
                 try {
@@ -68,8 +78,7 @@ public class MarkdownLinkListener implements HyperlinkListener {
                     return;
                 }
             }
-            VirtualFileSystem vfs = VirtualFileManager.getInstance().getFileSystem(target.getProtocol());
-            if (vfs instanceof HttpFileSystem) {
+            if (VirtualFileManager.getInstance().getFileSystem(target.getProtocol()) instanceof HttpFileSystem) {
                 browserLinkListener.hyperlinkUpdate(e);
             } else {
                 final AsyncResult<DataContext> dataContext = DataManager.getInstance().getDataContextFromFocus();

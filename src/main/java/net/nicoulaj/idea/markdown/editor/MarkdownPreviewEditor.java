@@ -111,7 +111,8 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
         kit.setStyleSheet(style);
         jEditorPane.setEditorKit(kit);
         jEditorPane.setEditable(false);
-		// add a link listener which can resolve local link references
+
+		// Add a custom link listener which can resolve local link references.
         jEditorPane.addHyperlinkListener(new MarkdownLinkListener());
     }
 

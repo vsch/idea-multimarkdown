@@ -22,11 +22,13 @@ package net.nicoulaj.idea.markdown.editor;
 
 import com.intellij.openapi.vfs.VirtualFile;
 
-import javax.swing.text.*;
+import javax.swing.text.Element;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.View;
+import javax.swing.text.ViewFactory;
 import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.ImageView;
-import java.awt.*;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -34,57 +36,79 @@ import java.net.URL;
 import static net.nicoulaj.idea.markdown.editor.MarkdownPathResolver.resolveRelativePath;
 
 /**
- * <p>MarkdownViewFactory</p>
+ * {@link HTMLEditorKit} that can display images with paths relative to the document.
  *
  * @author Roger Grantham (https://github.com/grantham)
+ * @since 0.8
  */
 public class MarkdownEditorKit extends HTMLEditorKit {
 
+    /**
+     * Creates a copy of the editor kit.
+     *
+     * @return a new {@link MarkdownEditorKit} instance
+     */
     @Override
     public Object clone() {
         super.clone();
         return new MarkdownEditorKit();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ViewFactory getViewFactory() {
         return new MarkdownViewFactory();
     }
 
+    /**
+     * An {@link HTMLFactory} that uses {@link MarkdownImageView} for images.
+     *
+     * @author Roger Grantham (https://github.com/grantham)
+     * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
+     * @since 0.8
+     */
     private static class MarkdownViewFactory extends HTMLFactory {
         @Override
         public View create(Element elem) {
-            final Object tag = elem.getAttributes().getAttribute(StyleConstants.NameAttribute);
-            if (HTML.Tag.IMG.equals(tag)) {
-                final AttributeSet atts = elem.getAttributes();
-                final Object src = atts.getAttribute(HTML.Attribute.SRC);
-                //final VirtualFile imageTarget = resolveRelativePath(src.toString());
-                //final String imagePath = imageTarget.getPath();
+            if (HTML.Tag.IMG.equals(elem.getAttributes().getAttribute(StyleConstants.NameAttribute)))
                 return new MarkdownImageView(elem);
-            } else {
-                return super.create(elem);
-            }
+            return super.create(elem);
         }
     }
 
+    /**
+     * An {@link ImageView} that can resolve the image URL relative to the document.
+     *
+     * @author Roger Grantham (https://github.com/grantham)
+     * @since 0.8
+     */
     private static class MarkdownImageView extends ImageView {
 
+        /**
+         * Build a new instance of {@link MarkdownImageView}.
+         *
+         * @param elem the element to create a view for
+         */
         private MarkdownImageView(Element elem) {
             super(elem);
-            this.setLoadsSynchronously(true);
+            setLoadsSynchronously(true);
         }
 
-        @Override
-        public Image getImage() {
-            return super.getImage();
-        }
-
+        /**
+         * Return a URL for the image source, or null if it could not be determined.
+         * <p/>
+         * Calls {@link javax.swing.text.html.ImageView#getImageURL()}, tries to resolve the relative if needed.
+         *
+         * @return a URL for the image source, or null if it could not be determined.
+         */
         @Override
         public URL getImageURL() {
             URL imageURL = super.getImageURL();
             if (imageURL == null) {
                 final String src = (String) getElement().getAttributes().getAttribute(HTML.Attribute.SRC);
-                VirtualFile localImage = resolveRelativePath(src);
+                final VirtualFile localImage = resolveRelativePath(src);
                 try {
                     if (localImage != null && localImage.exists()) {
                         imageURL = new File(localImage.getPath()).toURI().toURL();

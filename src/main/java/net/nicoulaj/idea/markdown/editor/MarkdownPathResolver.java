@@ -37,21 +37,22 @@ import com.intellij.psi.search.GlobalSearchScope;
 import java.net.URL;
 
 /**
- * <p>MarkdownPathResolver</p>
+ * Static utilities for resolving resources paths.
  *
  * @author Roger Grantham (https://github.com/grantham)
+ * @since 0.8
  */
 public class MarkdownPathResolver {
 
     /**
-     * Not to be instantiated
+     * Not to be instantiated.
      */
     private MarkdownPathResolver() {
         // no op
     }
 
     /**
-     * Makes a simple attempt to convert the URL into a VirtualFile
+     * Makes a simple attempt to convert the URL into a VirtualFile.
      *
      * @param target url from which a VirtualFile is sought
      * @return VirtualFile or null
@@ -64,7 +65,7 @@ public class MarkdownPathResolver {
     }
 
     /**
-     * Interprets <var>target</var> as a path relative to the currently active editor
+     * Interprets <var>target</var> as a path relative to the currently active editor.
      *
      * @param target relative path from which a VirtualFile is sought
      * @return VirtualFile or null
@@ -97,7 +98,7 @@ public class MarkdownPathResolver {
     }
 
     /**
-     * Interprets <var>target</var> as a class reference
+     * Interprets <var>target</var> as a class reference.
      *
      * @param target from which a VirtualFile is sought
      * @return VirtualFile or null
