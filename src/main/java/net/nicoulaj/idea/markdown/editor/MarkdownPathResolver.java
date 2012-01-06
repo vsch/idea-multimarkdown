@@ -39,7 +39,7 @@ import java.net.URL;
 /**
  * <p>MarkdownPathResolver</p>
  *
- * @author Roger Grantham
+ * @author Roger Grantham (https://github.com/grantham)
  */
 public class MarkdownPathResolver {
 

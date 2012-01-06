@@ -23,6 +23,7 @@
  * Specific editors for Markdown documents.
  *
  * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
+ * @author Roger Grantham (https://github.com/grantham)
  * @since 0.1
  */
 package net.nicoulaj.idea.markdown.editor;

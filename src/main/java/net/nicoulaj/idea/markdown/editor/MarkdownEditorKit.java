@@ -36,7 +36,7 @@ import static net.nicoulaj.idea.markdown.editor.MarkdownPathResolver.resolveRela
 /**
  * <p>MarkdownViewFactory</p>
  *
- * @author Roger Grantham
+ * @author Roger Grantham (https://github.com/grantham)
  */
 public class MarkdownEditorKit extends HTMLEditorKit {
 
