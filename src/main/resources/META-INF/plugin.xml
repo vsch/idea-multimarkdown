@@ -39,6 +39,7 @@
         <b>0.8</b><br/>
         <ul>
           <li><a href="https://github.com/nicoulaj/idea-markdown/issues/40">#40</a>: Add support for local links/images in preview (<a href="https://github.com/grantham">Roger Grantham</a>)</li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/45">#45</a>: Deprecated API usage in MarkdownAnnotator.</li>
           <li><a href="https://github.com/nicoulaj/idea-markdown/issues/46">#46</a>: Deprecated API usage in MarkdownLoader.</li>
         </ul>
         <b>0.7</b><br/>
