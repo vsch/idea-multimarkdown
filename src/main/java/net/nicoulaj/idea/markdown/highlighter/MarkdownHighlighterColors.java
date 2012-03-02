@@ -64,6 +64,13 @@ public class MarkdownHighlighterColors {
     );
 
     /**
+     * Default style for reference images.
+     */
+    public static TextAttributesKey REFERENCE_IMAGE_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.REFERENCE_IMAGE", new TextAttributes(new Color(30, 100, 0), null, null, null, Font.PLAIN)
+    );
+
+    /**
      * Default style for headers of level 1.
      */
     public static TextAttributesKey HEADER_LEVEL_1_ATTR_KEY = TextAttributesKey.createTextAttributesKey(

@@ -547,7 +547,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link RefImageNode} to visit
          */
         public void visit(RefImageNode node) {
-            addToken(node, MarkdownTokenTypes.IMAGE); // TODO Add a dedicated token type
+            addToken(node, MarkdownTokenTypes.REFERENCE_IMAGE);
             visitChildren(node);
         }
 

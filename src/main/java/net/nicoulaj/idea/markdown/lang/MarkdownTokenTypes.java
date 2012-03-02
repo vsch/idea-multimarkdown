@@ -112,6 +112,11 @@ public interface MarkdownTokenTypes extends TokenType {
     IElementType IMAGE = new MarkdownElementType("IMAGE");
 
     /**
+     * Reference image token type.
+     */
+    IElementType REFERENCE_IMAGE = new MarkdownElementType("REFERENCE_IMAGE");
+
+    /**
      * Reference link token type.
      */
     IElementType REFERENCE_LINK = new MarkdownElementType("REFERENCE_LINK");

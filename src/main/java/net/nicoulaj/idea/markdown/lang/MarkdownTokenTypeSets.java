@@ -111,6 +111,11 @@ public interface MarkdownTokenTypeSets extends MarkdownTokenTypes {
     TokenSet IMAGE_SET = TokenSet.create(IMAGE);
 
     /**
+     * Reference image token type set.
+     */
+    TokenSet REFERENCE_IMAGE_SET = TokenSet.create(REFERENCE_IMAGE);
+
+    /**
      * Reference link token type set.
      */
     TokenSet REFERENCE_LINK_SET = TokenSet.create(REFERENCE_LINK);

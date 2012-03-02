@@ -106,6 +106,10 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
                 MarkdownHighlighterColors.IMAGE_ATTR_KEY)
         );
         attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.reference-image"),
+                MarkdownHighlighterColors.REFERENCE_IMAGE_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
                 MarkdownBundle.message("markdown.editor.colorsettingspage.header-level-1"),
                 MarkdownHighlighterColors.HEADER_LEVEL_1_ATTR_KEY)
         );
