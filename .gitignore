@@ -1,5 +1,5 @@
 # Intellij IDEA build directory
-out/
+/out/
 *.zip
 
 # Generated sources
@@ -10,4 +10,4 @@ _*.java
 *.ipr
 
 # Annoying auto-created META-INF dir
-META-INF/
+/META-INF/
