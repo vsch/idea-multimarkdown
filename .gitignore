@@ -8,3 +8,6 @@ _*.java
 # Host specific config files
 *.iws
 *.ipr
+
+# Annoying auto-created META-INF dir
+META-INF/
