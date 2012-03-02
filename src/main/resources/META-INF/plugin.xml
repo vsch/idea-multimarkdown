@@ -39,11 +39,13 @@
         <b>0.8</b><br/>
         <ul>
           <li><a href="https://github.com/nicoulaj/idea-markdown/issues/40">#40</a>: Add support for local links/images in preview (<a href="https://github.com/grantham">Roger Grantham</a>)</li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/43">#43</a>: Table formatting not shown in preview.</li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/44">#44</a>: Enabling SmartyPants extensions has no apparent effect.</li>
           <li><a href="https://github.com/nicoulaj/idea-markdown/issues/45">#45</a>: Deprecated API usage in MarkdownAnnotator.</li>
           <li><a href="https://github.com/nicoulaj/idea-markdown/issues/46">#46</a>: Deprecated API usage in MarkdownLoader.</li>
           <li><a href="https://github.com/nicoulaj/idea-markdown/issues/47">#47</a>: Improve preview CSS (headers).</li>
           <li><a href="https://github.com/nicoulaj/idea-markdown/issues/48">#48</a>: Add specific token type for Wiki links.</li>
-          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/48">#49</a>: Add specific token type for reference images.</li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/49">#49</a>: Add specific token type for reference images.</li>
         </ul>
         <b>0.7</b><br/>
         <ul>

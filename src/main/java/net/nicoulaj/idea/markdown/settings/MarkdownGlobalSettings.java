@@ -28,6 +28,10 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.pegdown.Extensions;
 
+import java.lang.ref.WeakReference;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Persistent global settings object for the Markdown plugin.
  *
@@ -35,65 +39,301 @@ import org.pegdown.Extensions;
  * @since 0.6
  */
 @State(
-name = "MarkdownSettings",
-storages = @Storage(id = "other", file = "$APP_CONFIG$/markdown.xml")
+        name = "MarkdownSettings",
+        storages = @Storage(id = "other", file = "$APP_CONFIG$/markdown.xml")
 )
 public class MarkdownGlobalSettings implements PersistentStateComponent<Element> {
 
     /**
+     * A set of listeners to this object state changes.
+     */
+    protected Set<WeakReference<MarkdownGlobalSettingsListener>> listeners;
+
+    /**
      * Whether the "SmartyPants style pretty ellipsises, dashes and apostrophes" extension should be enabled.
      */
-    public boolean smarts = false;
+    private boolean smarts = false;
 
     /**
      * Whether the "SmartyPants style pretty single and double quotes" extension should be enabled.
      */
-    public boolean quotes = false;
+    private boolean quotes = false;
 
     /**
      * Whether the "PHP Markdown Extra style abbreviations" extension should be enabled.
      */
-    public boolean abbreviations = false;
+    private boolean abbreviations = false;
 
     /**
      * Whether the "PHP Markdown Extra style definition lists" extension should be enabled.
      */
-    public boolean definitions = false;
+    private boolean definitions = false;
 
     /**
      * Whether the "PHP Markdown Extra style fenced code blocks" extension should be enabled.
      */
-    public boolean fencedCodeBlocks = false;
+    private boolean fencedCodeBlocks = false;
 
     /**
      * Whether the "Github style hard wraps parsing as HTML linebreaks" extension should be enabled.
      */
-    public boolean hardWraps = false;
+    private boolean hardWraps = false;
 
     /**
      * Whether the "Github style plain auto-links" extension should be enabled.
      */
-    public boolean autoLinks = false;
+    private boolean autoLinks = false;
 
     /**
      * Whether the "Wiki-style links" extension should be enabled.
      */
-    public boolean wikiLinks = false;
+    private boolean wikiLinks = false;
 
     /**
      * Whether the "MultiMarkdown style tables support" extension should be enabled.
      */
-    public boolean tables = false;
+    private boolean tables = false;
 
     /**
      * Whether the "Suppress HTML blocks" extension should be enabled.
      */
-    public boolean suppressHTMLBlocks = false;
+    private boolean suppressHTMLBlocks = false;
 
     /**
      * Whether the "Suppress inline HTML tags" extension should be enabled.
      */
-    public boolean suppressInlineHTML = false;
+    private boolean suppressInlineHTML = false;
+
+    /**
+     * Whether the "Suppress inline HTML tags" extension should be enabled.
+     *
+     * @return {@link #suppressInlineHTML}
+     */
+    public boolean isSuppressInlineHTML() {
+        return suppressInlineHTML;
+    }
+
+    /**
+     * Whether the "Suppress inline HTML tags" extension should be enabled.
+     *
+     * @param suppressInlineHTML whether the "Suppress inline HTML tags" extension should be enabled.
+     */
+    public void setSuppressInlineHTML(boolean suppressInlineHTML) {
+        if (this.suppressInlineHTML != suppressInlineHTML) {
+            this.suppressInlineHTML = suppressInlineHTML;
+            notifyListeners();
+        }
+    }
+
+    /**
+     * Whether the "Suppress HTML blocks" extension should be enabled.
+     *
+     * @return {@link #suppressHTMLBlocks}
+     */
+    public boolean isSuppressHTMLBlocks() {
+        return suppressHTMLBlocks;
+    }
+
+    /**
+     * Whether the "Suppress HTML blocks" extension should be enabled.
+     *
+     * @param suppressHTMLBlocks whether the "Suppress HTML blocks" extension should be enabled.
+     */
+    public void setSuppressHTMLBlocks(boolean suppressHTMLBlocks) {
+        if (this.suppressHTMLBlocks != suppressHTMLBlocks) {
+            this.suppressHTMLBlocks = suppressHTMLBlocks;
+            notifyListeners();
+        }
+    }
+
+    /**
+     * Whether the "MultiMarkdown style tables support" extension should be enabled.
+     *
+     * @return {@link #tables}
+     */
+    public boolean isTables() {
+        return tables;
+    }
+
+    /**
+     * Whether the "MultiMarkdown style tables support" extension should be enabled.
+     *
+     * @param tables whether the "MultiMarkdown style tables support" extension should be enabled.
+     */
+    public void setTables(boolean tables) {
+        if (this.tables != tables) {
+            this.tables = tables;
+            notifyListeners();
+        }
+    }
+
+    /**
+     * Whether the "Wiki-style links" extension should be enabled.
+     *
+     * @return {@link #wikiLinks}
+     */
+    public boolean isWikiLinks() {
+        return wikiLinks;
+    }
+
+    /**
+     * Whether the "Wiki-style links" extension should be enabled.
+     *
+     * @param wikiLinks whether the "Wiki-style links" extension should be enabled.
+     */
+    public void setWikiLinks(boolean wikiLinks) {
+        if (this.wikiLinks != wikiLinks) {
+            this.wikiLinks = wikiLinks;
+            notifyListeners();
+        }
+    }
+
+    /**
+     * Whether the "Github style plain auto-links" extension should be enabled.
+     *
+     * @return {@link #autoLinks}
+     */
+    public boolean isAutoLinks() {
+        return autoLinks;
+    }
+
+    /**
+     * Whether the "Github style plain auto-links" extension should be enabled.
+     *
+     * @param autoLinks whether the "Github style plain auto-links" extension should be enabled.
+     */
+    public void setAutoLinks(boolean autoLinks) {
+        if (this.autoLinks != autoLinks) {
+            this.autoLinks = autoLinks;
+            notifyListeners();
+        }
+    }
+
+    /**
+     * Whether the "Github style hard wraps parsing as HTML linebreaks" extension should be enabled.
+     *
+     * @return {@link #hardWraps}
+     */
+    public boolean isHardWraps() {
+        return hardWraps;
+    }
+
+    /**
+     * Whether the "Github style hard wraps parsing as HTML linebreaks" extension should be enabled.
+     *
+     * @param hardWraps whether the "Github style hard wraps parsing as HTML linebreaks" extension should be enabled.
+     */
+    public void setHardWraps(boolean hardWraps) {
+        if (this.hardWraps != hardWraps) {
+            this.hardWraps = hardWraps;
+            notifyListeners();
+        }
+    }
+
+    /**
+     * Whether the "PHP Markdown Extra style fenced code blocks" extension should be enabled.
+     *
+     * @return {@link #fencedCodeBlocks}
+     */
+    public boolean isFencedCodeBlocks() {
+        return fencedCodeBlocks;
+    }
+
+    /**
+     * Whether the "PHP Markdown Extra style fenced code blocks" extension should be enabled.
+     *
+     * @param fencedCodeBlocks whether the "PHP Markdown Extra style fenced code blocks" extension should be enabled.
+     */
+    public void setFencedCodeBlocks(boolean fencedCodeBlocks) {
+        if (this.fencedCodeBlocks != fencedCodeBlocks) {
+            this.fencedCodeBlocks = fencedCodeBlocks;
+            notifyListeners();
+        }
+    }
+
+    /**
+     * Whether the "PHP Markdown Extra style definition lists" extension should be enabled.
+     *
+     * @return {@link #definitions}
+     */
+    public boolean isDefinitions() {
+        return definitions;
+    }
+
+    /**
+     * Whether the "PHP Markdown Extra style definition lists" extension should be enabled.
+     *
+     * @param definitions whether the "PHP Markdown Extra style definition lists" extension should be enabled.
+     */
+    public void setDefinitions(boolean definitions) {
+        if (this.definitions != definitions) {
+            this.definitions = definitions;
+            notifyListeners();
+        }
+    }
+
+    /**
+     * Whether the "PHP Markdown Extra style abbreviations" extension should be enabled.
+     *
+     * @return {@link #abbreviations}
+     */
+    public boolean isAbbreviations() {
+        return abbreviations;
+    }
+
+    /**
+     * Whether the "PHP Markdown Extra style abbreviations" extension should be enabled.
+     *
+     * @param abbreviations whether the "PHP Markdown Extra style abbreviations" extension should be enabled.
+     */
+    public void setAbbreviations(boolean abbreviations) {
+        if (this.abbreviations != abbreviations) {
+            this.abbreviations = abbreviations;
+            notifyListeners();
+        }
+    }
+
+    /**
+     * Whether the "SmartyPants style pretty single and double quotes" extension should be enabled.
+     *
+     * @return {@link #quotes}
+     */
+    public boolean isQuotes() {
+        return quotes;
+    }
+
+    /**
+     * Whether the "SmartyPants style pretty single and double quotes" extension should be enabled.
+     *
+     * @param quotes whether the "SmartyPants style pretty single and double quotes" extension should be enabled.
+     */
+    public void setQuotes(boolean quotes) {
+        if (this.quotes != quotes) {
+            this.quotes = quotes;
+            notifyListeners();
+        }
+    }
+
+    /**
+     * Whether the "SmartyPants style pretty ellipsises, dashes and apostrophes" extension should be enabled.
+     *
+     * @return {@link #smarts}
+     */
+    public boolean isSmarts() {
+        return smarts;
+    }
+
+    /**
+     * Whether the "SmartyPants style pretty ellipsises, dashes and apostrophes" extension should be enabled.
+     *
+     * @param smarts whether the "SmartyPants style pretty ellipsises, dashes and apostrophes" extension should be enabled.
+     */
+    public void setSmarts(boolean smarts) {
+        if (this.smarts != smarts) {
+            this.smarts = smarts;
+            notifyListeners();
+        }
+    }
 
     /**
      * Get the instance of this service.
@@ -144,6 +384,7 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
         fencedCodeBlocks = Boolean.parseBoolean(element.getAttributeValue("fencedCodeBlocks"));
         suppressHTMLBlocks = Boolean.parseBoolean(element.getAttributeValue("suppressHTMLBlocks"));
         suppressInlineHTML = Boolean.parseBoolean(element.getAttributeValue("suppressInlineHTML"));
+        notifyListeners();
     }
 
     /**
@@ -153,16 +394,35 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
      */
     public int getExtensionsValue() {
         return
-        (smarts ? Extensions.SMARTS : 0) +
-        (quotes ? Extensions.QUOTES : 0) +
-        (abbreviations ? Extensions.ABBREVIATIONS : 0) +
-        (hardWraps ? Extensions.HARDWRAPS : 0) +
-        (autoLinks ? Extensions.AUTOLINKS : 0) +
-        (wikiLinks ? Extensions.WIKILINKS : 0) +
-        (tables ? Extensions.TABLES : 0) +
-        (definitions ? Extensions.DEFINITIONS : 0) +
-        (fencedCodeBlocks ? Extensions.FENCED_CODE_BLOCKS : 0) +
-        (suppressHTMLBlocks ? Extensions.SUPPRESS_HTML_BLOCKS : 0) +
-        (suppressInlineHTML ? Extensions.SUPPRESS_INLINE_HTML : 0);
+                (smarts ? Extensions.SMARTS : 0) +
+                        (quotes ? Extensions.QUOTES : 0) +
+                        (abbreviations ? Extensions.ABBREVIATIONS : 0) +
+                        (hardWraps ? Extensions.HARDWRAPS : 0) +
+                        (autoLinks ? Extensions.AUTOLINKS : 0) +
+                        (wikiLinks ? Extensions.WIKILINKS : 0) +
+                        (tables ? Extensions.TABLES : 0) +
+                        (definitions ? Extensions.DEFINITIONS : 0) +
+                        (fencedCodeBlocks ? Extensions.FENCED_CODE_BLOCKS : 0) +
+                        (suppressHTMLBlocks ? Extensions.SUPPRESS_HTML_BLOCKS : 0) +
+                        (suppressInlineHTML ? Extensions.SUPPRESS_INLINE_HTML : 0);
+    }
+
+    /**
+     * Add a listener to this settings object changes.
+     *
+     * @param listener the {@link MarkdownGlobalSettingsListener}.
+     */
+    public void addListener(@NotNull final MarkdownGlobalSettingsListener listener) {
+        if (listeners == null) listeners = new HashSet<WeakReference<MarkdownGlobalSettingsListener>>();
+        listeners.add(new WeakReference<MarkdownGlobalSettingsListener>(listener));
+    }
+
+    /**
+     * Notify event listeners of changes.
+     */
+    protected void notifyListeners() {
+        if (listeners != null)
+            for (final WeakReference<MarkdownGlobalSettingsListener> listenerRef : listeners)
+                if (listenerRef.get() != null) listenerRef.get().handleSettingsChanged(this);
     }
 }

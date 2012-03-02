@@ -29,6 +29,7 @@ import com.intellij.psi.tree.IElementType;
 import net.nicoulaj.idea.markdown.highlighter.MarkdownSyntaxHighlighter;
 import net.nicoulaj.idea.markdown.lang.MarkdownTokenTypes;
 import net.nicoulaj.idea.markdown.settings.MarkdownGlobalSettings;
+import net.nicoulaj.idea.markdown.settings.MarkdownGlobalSettingsListener;
 import org.jetbrains.annotations.NotNull;
 import org.pegdown.PegDownProcessor;
 import org.pegdown.ast.*;
@@ -57,6 +58,18 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
      * The {@link PegDownProcessor} used for building the document AST.
      */
     protected PegDownProcessor processor = new PegDownProcessor(MarkdownGlobalSettings.getInstance().getExtensionsValue());
+
+    /**
+     * Build a new instance of {@link MarkdownAnnotator}.
+     */
+    public MarkdownAnnotator() {
+        // Listen to global settings changes.
+        MarkdownGlobalSettings.getInstance().addListener(new MarkdownGlobalSettingsListener() {
+            public void handleSettingsChanged(@NotNull final MarkdownGlobalSettings newSettings) {
+                processor = new PegDownProcessor(newSettings.getExtensionsValue());
+            }
+        });
+    }
 
     /**
      * Get the text source of the given file.

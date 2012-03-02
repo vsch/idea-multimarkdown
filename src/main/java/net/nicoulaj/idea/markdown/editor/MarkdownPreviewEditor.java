@@ -34,6 +34,7 @@ import com.intellij.openapi.util.UserDataHolderBase;
 import com.intellij.ui.components.JBScrollPane;
 import net.nicoulaj.idea.markdown.MarkdownBundle;
 import net.nicoulaj.idea.markdown.settings.MarkdownGlobalSettings;
+import net.nicoulaj.idea.markdown.settings.MarkdownGlobalSettingsListener;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -71,7 +72,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
     /**
      * The MarkdownJ {@link PegDownProcessor} used to generate HTML from Markdown.
      */
-    protected static final PegDownProcessor markdownProcessor = new PegDownProcessor(MarkdownGlobalSettings.getInstance().getExtensionsValue());
+    protected PegDownProcessor markdownProcessor = new PegDownProcessor(MarkdownGlobalSettings.getInstance().getExtensionsValue());
 
     /**
      * The {@link java.awt.Component} used to render the HTML preview.
@@ -102,7 +103,20 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
         this.document = document;
 
         // Listen to the document modifications.
-        this.document.addDocumentListener(new DocumentPreviewUpdateListener());
+        this.document.addDocumentListener(new DocumentAdapter() {
+            @Override
+            public void documentChanged(DocumentEvent e) {
+                previewIsObsolete = true;
+            }
+        });
+
+        // Listen to settings changes
+        MarkdownGlobalSettings.getInstance().addListener(new MarkdownGlobalSettingsListener() {
+            public void handleSettingsChanged(@NotNull final MarkdownGlobalSettings newSettings) {
+                markdownProcessor = new PegDownProcessor(newSettings.getExtensionsValue());
+                previewIsObsolete = true;
+            }
+        });
 
         // Setup the editor pane for rendering HTML.
         final HTMLEditorKit kit = new MarkdownEditorKit();
@@ -112,7 +126,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
         jEditorPane.setEditorKit(kit);
         jEditorPane.setEditable(false);
 
-		// Add a custom link listener which can resolve local link references.
+        // Add a custom link listener which can resolve local link references.
         jEditorPane.addHyperlinkListener(new MarkdownLinkListener());
     }
 
@@ -265,25 +279,5 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
      */
     public void dispose() {
         Disposer.dispose(this);
-    }
-
-    /**
-     * {@link com.intellij.openapi.editor.event.DocumentListener} responsible for marking the HTML preview as obsolete when needed.
-     *
-     * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
-     * @since 0.1
-     */
-    protected class DocumentPreviewUpdateListener extends DocumentAdapter {
-
-        /**
-         * Invoked after the document text has changed.
-         * <p/>
-         * Systematically marks the HTML preview as obsolete, whatever changed.
-         *
-         * @param event the event
-         */
-        public void documentChanged(DocumentEvent event) {
-            previewIsObsolete = true;
-        }
     }
 }

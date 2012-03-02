@@ -27,6 +27,8 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Configuration interface for {@link MarkdownGlobalSettings}.
@@ -121,17 +123,17 @@ public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurabl
      */
     public boolean isModified() {
         return settingsPanel == null
-        || globalSettings.abbreviations != settingsPanel.abbreviationsCheckBox.isSelected()
-        || globalSettings.autoLinks != settingsPanel.autoLinksCheckBox.isSelected()
-        || globalSettings.wikiLinks != settingsPanel.wikiLinksCheckBox.isSelected()
-        || globalSettings.definitions != settingsPanel.definitionsCheckBox.isSelected()
-        || globalSettings.fencedCodeBlocks != settingsPanel.fencedCodeBlocksCheckBox.isSelected()
-        || globalSettings.hardWraps != settingsPanel.hardWrapsCheckBox.isSelected()
-        || globalSettings.quotes != settingsPanel.quotesCheckBox.isSelected()
-        || globalSettings.smarts != settingsPanel.smartsCheckBox.isSelected()
-        || globalSettings.suppressHTMLBlocks != settingsPanel.suppressHTMLBlocksCheckBox.isSelected()
-        || globalSettings.suppressInlineHTML != settingsPanel.suppressInlineHTMLCheckBox.isSelected()
-        || globalSettings.tables != settingsPanel.tablesCheckBox.isSelected();
+                || globalSettings.isAbbreviations() != settingsPanel.abbreviationsCheckBox.isSelected()
+                || globalSettings.isAutoLinks() != settingsPanel.autoLinksCheckBox.isSelected()
+                || globalSettings.isWikiLinks() != settingsPanel.wikiLinksCheckBox.isSelected()
+                || globalSettings.isDefinitions() != settingsPanel.definitionsCheckBox.isSelected()
+                || globalSettings.isFencedCodeBlocks() != settingsPanel.fencedCodeBlocksCheckBox.isSelected()
+                || globalSettings.isHardWraps() != settingsPanel.hardWrapsCheckBox.isSelected()
+                || globalSettings.isQuotes() != settingsPanel.quotesCheckBox.isSelected()
+                || globalSettings.isSmarts() != settingsPanel.smartsCheckBox.isSelected()
+                || globalSettings.isSuppressHTMLBlocks() != settingsPanel.suppressHTMLBlocksCheckBox.isSelected()
+                || globalSettings.isSuppressInlineHTML() != settingsPanel.suppressInlineHTMLCheckBox.isSelected()
+                || globalSettings.isTables() != settingsPanel.tablesCheckBox.isSelected();
     }
 
     /**
@@ -139,17 +141,17 @@ public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurabl
      */
     public void apply() {
         if (settingsPanel != null) {
-            globalSettings.abbreviations = settingsPanel.abbreviationsCheckBox.isSelected();
-            globalSettings.autoLinks = settingsPanel.autoLinksCheckBox.isSelected();
-            globalSettings.wikiLinks = settingsPanel.wikiLinksCheckBox.isSelected();
-            globalSettings.definitions = settingsPanel.definitionsCheckBox.isSelected();
-            globalSettings.fencedCodeBlocks = settingsPanel.fencedCodeBlocksCheckBox.isSelected();
-            globalSettings.hardWraps = settingsPanel.hardWrapsCheckBox.isSelected();
-            globalSettings.quotes = settingsPanel.quotesCheckBox.isSelected();
-            globalSettings.smarts = settingsPanel.smartsCheckBox.isSelected();
-            globalSettings.suppressHTMLBlocks = settingsPanel.suppressHTMLBlocksCheckBox.isSelected();
-            globalSettings.suppressInlineHTML = settingsPanel.suppressInlineHTMLCheckBox.isSelected();
-            globalSettings.tables = settingsPanel.tablesCheckBox.isSelected();
+            globalSettings.setAbbreviations(settingsPanel.abbreviationsCheckBox.isSelected());
+            globalSettings.setAutoLinks(settingsPanel.autoLinksCheckBox.isSelected());
+            globalSettings.setWikiLinks(settingsPanel.wikiLinksCheckBox.isSelected());
+            globalSettings.setDefinitions(settingsPanel.definitionsCheckBox.isSelected());
+            globalSettings.setFencedCodeBlocks(settingsPanel.fencedCodeBlocksCheckBox.isSelected());
+            globalSettings.setHardWraps(settingsPanel.hardWrapsCheckBox.isSelected());
+            globalSettings.setQuotes(settingsPanel.quotesCheckBox.isSelected());
+            globalSettings.setSmarts(settingsPanel.smartsCheckBox.isSelected());
+            globalSettings.setSuppressHTMLBlocks(settingsPanel.suppressHTMLBlocksCheckBox.isSelected());
+            globalSettings.setSuppressInlineHTML(settingsPanel.suppressInlineHTMLCheckBox.isSelected());
+            globalSettings.setTables(settingsPanel.tablesCheckBox.isSelected());
         }
     }
 
@@ -158,17 +160,17 @@ public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurabl
      */
     public void reset() {
         if (settingsPanel != null) {
-            settingsPanel.abbreviationsCheckBox.setSelected(globalSettings.abbreviations);
-            settingsPanel.autoLinksCheckBox.setSelected(globalSettings.autoLinks);
-            settingsPanel.wikiLinksCheckBox.setSelected(globalSettings.wikiLinks);
-            settingsPanel.definitionsCheckBox.setSelected(globalSettings.definitions);
-            settingsPanel.fencedCodeBlocksCheckBox.setSelected(globalSettings.fencedCodeBlocks);
-            settingsPanel.hardWrapsCheckBox.setSelected(globalSettings.hardWraps);
-            settingsPanel.quotesCheckBox.setSelected(globalSettings.quotes);
-            settingsPanel.smartsCheckBox.setSelected(globalSettings.smarts);
-            settingsPanel.suppressHTMLBlocksCheckBox.setSelected(globalSettings.suppressHTMLBlocks);
-            settingsPanel.suppressInlineHTMLCheckBox.setSelected(globalSettings.suppressInlineHTML);
-            settingsPanel.tablesCheckBox.setSelected(globalSettings.tables);
+            settingsPanel.abbreviationsCheckBox.setSelected(globalSettings.isAbbreviations());
+            settingsPanel.autoLinksCheckBox.setSelected(globalSettings.isAutoLinks());
+            settingsPanel.wikiLinksCheckBox.setSelected(globalSettings.isWikiLinks());
+            settingsPanel.definitionsCheckBox.setSelected(globalSettings.isDefinitions());
+            settingsPanel.fencedCodeBlocksCheckBox.setSelected(globalSettings.isFencedCodeBlocks());
+            settingsPanel.hardWrapsCheckBox.setSelected(globalSettings.isHardWraps());
+            settingsPanel.quotesCheckBox.setSelected(globalSettings.isQuotes());
+            settingsPanel.smartsCheckBox.setSelected(globalSettings.isSmarts());
+            settingsPanel.suppressHTMLBlocksCheckBox.setSelected(globalSettings.isSuppressHTMLBlocks());
+            settingsPanel.suppressInlineHTMLCheckBox.setSelected(globalSettings.isSuppressInlineHTML());
+            settingsPanel.tablesCheckBox.setSelected(globalSettings.isTables());
         }
     }
 
