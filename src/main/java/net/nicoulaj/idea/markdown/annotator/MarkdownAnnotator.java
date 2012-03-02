@@ -367,7 +367,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link WikiLinkNode} to visit
          */
         public void visit(WikiLinkNode node) {
-            addToken(node, MarkdownTokenTypes.REFERENCE_LINK); // TODO Add a dedicated token type
+            addToken(node, MarkdownTokenTypes.WIKI_LINK);
         }
 
         /**

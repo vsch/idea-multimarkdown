@@ -154,6 +154,10 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
                 MarkdownHighlighterColors.REFERENCE_LINK_ATTR_KEY)
         );
         attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.wiki-link"),
+                MarkdownHighlighterColors.WIKI_LINK_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
                 MarkdownBundle.message("markdown.editor.colorsettingspage.auto-link"),
                 MarkdownHighlighterColors.AUTO_LINK_ATTR_KEY)
         );

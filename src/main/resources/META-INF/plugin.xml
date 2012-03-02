@@ -42,6 +42,7 @@
           <li><a href="https://github.com/nicoulaj/idea-markdown/issues/45">#45</a>: Deprecated API usage in MarkdownAnnotator.</li>
           <li><a href="https://github.com/nicoulaj/idea-markdown/issues/46">#46</a>: Deprecated API usage in MarkdownLoader.</li>
           <li><a href="https://github.com/nicoulaj/idea-markdown/issues/47">#47</a>: Improve preview CSS (headers).</li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/48">#48</a>: Add specific token type for Wiki links.</li>
         </ul>
         <b>0.7</b><br/>
         <ul>

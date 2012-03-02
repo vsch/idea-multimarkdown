@@ -116,6 +116,11 @@ public interface MarkdownTokenTypeSets extends MarkdownTokenTypes {
     TokenSet REFERENCE_LINK_SET = TokenSet.create(REFERENCE_LINK);
 
     /**
+     * Wiki link token type set.
+     */
+    TokenSet WIKI_LINK_SET = TokenSet.create(WIKI_LINK);
+
+    /**
      * Auto link token type set.
      */
     TokenSet AUTO_LINK_SET = TokenSet.create(AUTO_LINK);

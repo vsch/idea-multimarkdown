@@ -141,6 +141,13 @@ public class MarkdownHighlighterColors {
     );
 
     /**
+     * Default style for Wiki links.
+     */
+    public static final TextAttributesKey WIKI_LINK_ATTR_KEY = TextAttributesKey.createTextAttributesKey(
+            "MARKDOWN.WIKI_LINK", new TextAttributes(Color.BLUE, null, null, null, Font.PLAIN)
+    );
+
+    /**
      * Default style for auto links.
      */
     public static final TextAttributesKey AUTO_LINK_ATTR_KEY = TextAttributesKey.createTextAttributesKey(

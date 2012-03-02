@@ -117,6 +117,11 @@ public interface MarkdownTokenTypes extends TokenType {
     IElementType REFERENCE_LINK = new MarkdownElementType("REFERENCE_LINK");
 
     /**
+     * Wiki link token type.
+     */
+    IElementType WIKI_LINK = new MarkdownElementType("WIKI_LINK");
+
+    /**
      * Auto link token type.
      */
     IElementType AUTO_LINK = new MarkdownElementType("AUTO_LINK");

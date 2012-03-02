@@ -67,6 +67,7 @@ public class MarkdownSyntaxHighlighter extends SyntaxHighlighterBase {
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.EXPLICIT_LINK_SET, MarkdownHighlighterColors.EXPLICIT_LINK_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.IMAGE_SET, MarkdownHighlighterColors.IMAGE_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.REFERENCE_LINK_SET, MarkdownHighlighterColors.REFERENCE_LINK_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.WIKI_LINK_SET, MarkdownHighlighterColors.WIKI_LINK_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.AUTO_LINK_SET, MarkdownHighlighterColors.AUTO_LINK_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.MAIL_LINK_SET, MarkdownHighlighterColors.MAIL_LINK_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.VERBATIM_SET, MarkdownHighlighterColors.VERBATIM_ATTR_KEY);
