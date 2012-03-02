@@ -147,43 +147,43 @@ dd p {
 h1 {
     font-size: x-large;
     font-weight: bold;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 20px;
+    margin-bottom: 0;
 }
 
 h2 {
     font-size: large;
     font-weight: bold;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 20px;
+    margin-bottom: 0;
 }
 
 h3 {
     font-size: medium;
     font-weight: bold;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 20px;
+    margin-bottom: 0;
 }
 
 h4 {
     font-size: small;
     font-weight: bold;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 20px;
+    margin-bottom: 0;
 }
 
 h5 {
     font-size: small;
     font-weight: bold;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 20px;
+    margin-bottom: 0;
 }
 
 h6 {
     font-size: small;
     font-weight: bold;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 20px;
+    margin-bottom: 0;
 }
 
 /* Code/quotes */
