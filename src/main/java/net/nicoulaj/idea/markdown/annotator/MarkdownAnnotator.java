@@ -29,8 +29,12 @@ import com.intellij.psi.tree.IElementType;
 import net.nicoulaj.idea.markdown.highlighter.MarkdownSyntaxHighlighter;
 import net.nicoulaj.idea.markdown.lang.MarkdownTokenTypes;
 import net.nicoulaj.idea.markdown.settings.MarkdownGlobalSettings;
+import org.jetbrains.annotations.NotNull;
 import org.pegdown.PegDownProcessor;
 import org.pegdown.ast.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * {@link ExternalAnnotator} responsible for syntax highlighting Markdown files.
@@ -41,25 +45,105 @@ import org.pegdown.ast.*;
  * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
  * @since 0.4
  */
-public class MarkdownAnnotator extends ExternalAnnotator {
+public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnnotator.HighlightableToken>> {
+
+    /**
+     * The {@link com.intellij.openapi.fileTypes.SyntaxHighlighter} used by
+     * {@link #apply(com.intellij.psi.PsiFile, java.util.Set, com.intellij.lang.annotation.AnnotationHolder)}.
+     */
+    protected static final SyntaxHighlighter SYNTAX_HIGHLIGHTER = new MarkdownSyntaxHighlighter();
 
     /**
      * The {@link PegDownProcessor} used for building the document AST.
      */
-    protected final PegDownProcessor processor = new PegDownProcessor(MarkdownGlobalSettings.getInstance().getExtensionsValue());
+    protected PegDownProcessor processor = new PegDownProcessor(MarkdownGlobalSettings.getInstance().getExtensionsValue());
 
     /**
-     * Annotates the specified file.
-     * <p/>
-     * Builds the AST and visit it with a {@link MarkdownASTVisitor}.
-     * <p/>
-     * FIXME Do not use deprecated API. See {@link ExternalAnnotator}.
+     * Get the text source of the given file.
      *
-     * @param file   the file to annotate.
-     * @param holder the container which receives annotations created by the plugin.
+     * @param file the {@link PsiFile} to process.
+     * @return the file text.
      */
-    public void annotate(PsiFile file, AnnotationHolder holder) {
-        processor.parseMarkdown(file.textToCharArray()).accept(new MarkdownASTVisitor(holder));
+    @Override
+    public char[] collectionInformation(final @NotNull PsiFile file) {
+        return file.textToCharArray();
+    }
+
+    /**
+     * Collect {@link net.nicoulaj.idea.markdown.annotator.MarkdownAnnotator.HighlightableToken}s from the given file.
+     *
+     * @param source the source text to process.
+     * @return a {@link Set} of {@link net.nicoulaj.idea.markdown.annotator.MarkdownAnnotator.HighlightableToken}s that should be used to do the file syntax highlighting.
+     */
+    @Override
+    public Set<HighlightableToken> doAnnotate(final char[] source) {
+        final MarkdownASTVisitor visitor = new MarkdownASTVisitor();
+        processor.parseMarkdown(source).accept(visitor);
+        return visitor.getTokens();
+    }
+
+    /**
+     * Convert collected {@link net.nicoulaj.idea.markdown.annotator.MarkdownAnnotator.HighlightableToken}s in syntax highlighting annotations.
+     *
+     * @param file             the source file.
+     * @param annotationResult the {@link Set} of {@link net.nicoulaj.idea.markdown.annotator.MarkdownAnnotator.HighlightableToken}s collected on the file.
+     * @param holder           the annotation holder.
+     */
+    @Override
+    public void apply(final @NotNull PsiFile file,
+                      final Set<HighlightableToken> annotationResult,
+                      final @NotNull AnnotationHolder holder) {
+        for (final HighlightableToken token : annotationResult)
+            holder.createInfoAnnotation(token.getRange(), null)
+                    .setTextAttributes(SYNTAX_HIGHLIGHTER.getTokenHighlights(token.getElementType())[0]);
+    }
+
+    /**
+     * Describes a range of text that should be highlighted with a specific element type.
+     *
+     * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
+     * @since 0.8
+     */
+    protected class HighlightableToken {
+
+        /**
+         * The text range.
+         */
+        protected final TextRange range;
+
+        /**
+         * The associated element type.
+         */
+        protected final IElementType elementType;
+
+        /**
+         * Build a new instance of {@link net.nicoulaj.idea.markdown.annotator.MarkdownAnnotator.HighlightableToken}.
+         *
+         * @param range       the text range.
+         * @param elementType the associated element type.
+         */
+        public HighlightableToken(final TextRange range, final IElementType elementType) {
+            this.range = range;
+            this.elementType = elementType;
+        }
+
+        /**
+         * Get the token text range.
+         *
+         * @return {@link #range}
+         */
+        public TextRange getRange() {
+            return range;
+        }
+
+        /**
+         * Get the token element type.
+         *
+         * @return {@link #elementType}
+         */
+        public IElementType getElementType() {
+            return elementType;
+        }
     }
 
     /**
@@ -68,26 +152,20 @@ public class MarkdownAnnotator extends ExternalAnnotator {
      * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
      * @since 0.4
      */
-    public class MarkdownASTVisitor implements Visitor {
+    protected class MarkdownASTVisitor implements Visitor {
 
         /**
-         * The {@link com.intellij.openapi.fileTypes.SyntaxHighlighter} used by
-         * {@link #highlight(org.pegdown.ast.Node, com.intellij.psi.tree.IElementType)}.
+         * The collected token set.
          */
-        protected final SyntaxHighlighter SYNTAX_HIGHLIGHTER = new MarkdownSyntaxHighlighter();
+        protected final Set<HighlightableToken> tokens = new HashSet<HighlightableToken>(20);
 
         /**
-         * The {@link AnnotationHolder} to use for creating {@link com.intellij.lang.annotation.Annotation}s.
-         */
-        protected AnnotationHolder annotationHolder;
-
-        /**
-         * Build a new instance of {@link MarkdownASTVisitor}.
+         * Get the collected tokens set.
          *
-         * @param annotationHolder the {@link AnnotationHolder} to use for creating {@link com.intellij.lang.annotation.Annotation}s.
+         * @return {@link #tokens}
          */
-        public MarkdownASTVisitor(AnnotationHolder annotationHolder) {
-            this.annotationHolder = annotationHolder;
+        public Set<HighlightableToken> getTokens() {
+            return tokens;
         }
 
         /**
@@ -109,7 +187,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
         public void visit(SimpleNode node) {
             switch (node.getType()) {
                 case HRule:
-                    highlight(node, MarkdownTokenTypes.HRULE);
+                    addToken(node, MarkdownTokenTypes.HRULE);
                     break;
                 case Apostrophe:
                 case Ellipsis:
@@ -147,7 +225,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link org.pegdown.ast.Node} to visit
          */
         public void visit(Node node) {
-            highlight(node, MarkdownTokenTypes.ERROR_ELEMENT);
+            addToken(node, MarkdownTokenTypes.ERROR_ELEMENT);
         }
 
         /**
@@ -156,7 +234,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link TextNode} to visit
          */
         public void visit(TextNode node) {
-            highlight(node, MarkdownTokenTypes.TEXT);
+            addToken(node, MarkdownTokenTypes.TEXT);
         }
 
         /**
@@ -165,7 +243,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link SpecialTextNode} to visit
          */
         public void visit(SpecialTextNode node) {
-            highlight(node, MarkdownTokenTypes.SPECIAL_TEXT);
+            addToken(node, MarkdownTokenTypes.SPECIAL_TEXT);
         }
 
         /**
@@ -174,7 +252,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link EmphNode} to visit
          */
         public void visit(EmphNode node) {
-            highlight(node, MarkdownTokenTypes.ITALIC);
+            addToken(node, MarkdownTokenTypes.ITALIC);
             visitChildren(node);
         }
 
@@ -184,7 +262,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link ExpImageNode} to visit
          */
         public void visit(ExpImageNode node) {
-            highlight(node, MarkdownTokenTypes.IMAGE);
+            addToken(node, MarkdownTokenTypes.IMAGE);
             visitChildren(node);
         }
 
@@ -194,7 +272,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link StrongNode} to visit
          */
         public void visit(StrongNode node) {
-            highlight(node, MarkdownTokenTypes.BOLD);
+            addToken(node, MarkdownTokenTypes.BOLD);
             visitChildren(node);
         }
 
@@ -204,7 +282,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link ExpLinkNode} to visit
          */
         public void visit(ExpLinkNode node) {
-            highlight(node, MarkdownTokenTypes.EXPLICIT_LINK);
+            addToken(node, MarkdownTokenTypes.EXPLICIT_LINK);
             visitChildren(node);
         }
 
@@ -214,7 +292,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link RefLinkNode} to visit
          */
         public void visit(final RefLinkNode node) {
-            highlight(node, MarkdownTokenTypes.REFERENCE_LINK);
+            addToken(node, MarkdownTokenTypes.REFERENCE_LINK);
             visitChildren(node);
         }
 
@@ -224,7 +302,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link AutoLinkNode} to visit
          */
         public void visit(AutoLinkNode node) {
-            highlight(node, MarkdownTokenTypes.AUTO_LINK);
+            addToken(node, MarkdownTokenTypes.AUTO_LINK);
         }
 
         /**
@@ -233,7 +311,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link MailLinkNode} to visit
          */
         public void visit(MailLinkNode node) {
-            highlight(node, MarkdownTokenTypes.MAIL_LINK);
+            addToken(node, MarkdownTokenTypes.MAIL_LINK);
         }
 
         /**
@@ -244,22 +322,22 @@ public class MarkdownAnnotator extends ExternalAnnotator {
         public void visit(HeaderNode node) {
             switch (node.getLevel()) {
                 case 1:
-                    highlight(node, MarkdownTokenTypes.HEADER_LEVEL_1);
+                    addToken(node, MarkdownTokenTypes.HEADER_LEVEL_1);
                     break;
                 case 2:
-                    highlight(node, MarkdownTokenTypes.HEADER_LEVEL_2);
+                    addToken(node, MarkdownTokenTypes.HEADER_LEVEL_2);
                     break;
                 case 3:
-                    highlight(node, MarkdownTokenTypes.HEADER_LEVEL_3);
+                    addToken(node, MarkdownTokenTypes.HEADER_LEVEL_3);
                     break;
                 case 4:
-                    highlight(node, MarkdownTokenTypes.HEADER_LEVEL_4);
+                    addToken(node, MarkdownTokenTypes.HEADER_LEVEL_4);
                     break;
                 case 5:
-                    highlight(node, MarkdownTokenTypes.HEADER_LEVEL_5);
+                    addToken(node, MarkdownTokenTypes.HEADER_LEVEL_5);
                     break;
                 case 6:
-                    highlight(node, MarkdownTokenTypes.HEADER_LEVEL_6);
+                    addToken(node, MarkdownTokenTypes.HEADER_LEVEL_6);
                     break;
             }
             visitChildren(node);
@@ -271,7 +349,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link CodeNode} to visit
          */
         public void visit(CodeNode node) {
-            highlight(node, MarkdownTokenTypes.CODE);
+            addToken(node, MarkdownTokenTypes.CODE);
         }
 
         /**
@@ -280,7 +358,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link VerbatimNode} to visit
          */
         public void visit(VerbatimNode node) {
-            highlight(node, MarkdownTokenTypes.VERBATIM);
+            addToken(node, MarkdownTokenTypes.VERBATIM);
         }
 
         /**
@@ -289,7 +367,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link WikiLinkNode} to visit
          */
         public void visit(WikiLinkNode node) {
-            highlight(node, MarkdownTokenTypes.REFERENCE_LINK); // TODO Add a dedicated token type
+            addToken(node, MarkdownTokenTypes.REFERENCE_LINK); // TODO Add a dedicated token type
         }
 
         /**
@@ -298,7 +376,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link QuotedNode} to visit
          */
         public void visit(QuotedNode node) {
-            highlight(node, MarkdownTokenTypes.QUOTE);
+            addToken(node, MarkdownTokenTypes.QUOTE);
         }
 
         /**
@@ -307,7 +385,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link BlockQuoteNode} to visit
          */
         public void visit(BlockQuoteNode node) {
-            highlight(node, MarkdownTokenTypes.BLOCK_QUOTE);
+            addToken(node, MarkdownTokenTypes.BLOCK_QUOTE);
             visitChildren(node);
         }
 
@@ -317,7 +395,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link BulletListNode} to visit
          */
         public void visit(BulletListNode node) {
-            highlight(node, MarkdownTokenTypes.BULLET_LIST);
+            addToken(node, MarkdownTokenTypes.BULLET_LIST);
             visitChildren(node);
         }
 
@@ -327,7 +405,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link OrderedListNode} to visit
          */
         public void visit(OrderedListNode node) {
-            highlight(node, MarkdownTokenTypes.ORDERED_LIST);
+            addToken(node, MarkdownTokenTypes.ORDERED_LIST);
             visitChildren(node);
         }
 
@@ -337,7 +415,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link ListItemNode} to visit
          */
         public void visit(ListItemNode node) {
-            highlight(node, MarkdownTokenTypes.LIST_ITEM);
+            addToken(node, MarkdownTokenTypes.LIST_ITEM);
             visitChildren(node);
         }
 
@@ -347,7 +425,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link DefinitionListNode} to visit
          */
         public void visit(DefinitionListNode node) {
-            highlight(node, MarkdownTokenTypes.DEFINITION_LIST);
+            addToken(node, MarkdownTokenTypes.DEFINITION_LIST);
             visitChildren(node);
         }
 
@@ -357,7 +435,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link DefinitionNode} to visit
          */
         public void visit(DefinitionNode node) {
-            highlight(node, MarkdownTokenTypes.DEFINITION);
+            addToken(node, MarkdownTokenTypes.DEFINITION);
             visitChildren(node);
         }
 
@@ -367,7 +445,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link DefinitionTermNode} to visit
          */
         public void visit(DefinitionTermNode node) {
-            highlight(node, MarkdownTokenTypes.DEFINITION_TERM);
+            addToken(node, MarkdownTokenTypes.DEFINITION_TERM);
             visitChildren(node);
         }
 
@@ -377,7 +455,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link TableNode} to visit
          */
         public void visit(TableNode node) {
-            highlight(node, MarkdownTokenTypes.TABLE);
+            addToken(node, MarkdownTokenTypes.TABLE);
             visitChildren(node);
         }
 
@@ -387,7 +465,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link TableBodyNode} to visit
          */
         public void visit(TableBodyNode node) {
-            highlight(node, MarkdownTokenTypes.TABLE_BODY);
+            addToken(node, MarkdownTokenTypes.TABLE_BODY);
             visitChildren(node);
         }
 
@@ -397,7 +475,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link TableCellNode} to visit
          */
         public void visit(TableCellNode node) {
-            highlight(node, MarkdownTokenTypes.TABLE_CELL);
+            addToken(node, MarkdownTokenTypes.TABLE_CELL);
             visitChildren(node);
         }
 
@@ -407,7 +485,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link TableColumnNode} to visit
          */
         public void visit(TableColumnNode node) {
-            highlight(node, MarkdownTokenTypes.TABLE_COLUMN);
+            addToken(node, MarkdownTokenTypes.TABLE_COLUMN);
             visitChildren(node);
         }
 
@@ -417,7 +495,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link TableHeaderNode} to visit
          */
         public void visit(TableHeaderNode node) {
-            highlight(node, MarkdownTokenTypes.TABLE_HEADER);
+            addToken(node, MarkdownTokenTypes.TABLE_HEADER);
             visitChildren(node);
         }
 
@@ -427,7 +505,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link TableRowNode} to visit
          */
         public void visit(TableRowNode node) {
-            highlight(node, MarkdownTokenTypes.TABLE_ROW);
+            addToken(node, MarkdownTokenTypes.TABLE_ROW);
             visitChildren(node);
         }
 
@@ -439,7 +517,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link HtmlBlockNode} to visit
          */
         public void visit(HtmlBlockNode node) {
-            highlight(node, MarkdownTokenTypes.HTML_BLOCK);
+            addToken(node, MarkdownTokenTypes.HTML_BLOCK);
         }
 
         /**
@@ -450,7 +528,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link InlineHtmlNode} to visit
          */
         public void visit(InlineHtmlNode node) {
-            highlight(node, MarkdownTokenTypes.INLINE_HTML);
+            addToken(node, MarkdownTokenTypes.INLINE_HTML);
         }
 
         /**
@@ -459,7 +537,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link ReferenceNode} to visit
          */
         public void visit(ReferenceNode node) {
-            highlight(node, MarkdownTokenTypes.REFERENCE);
+            addToken(node, MarkdownTokenTypes.REFERENCE);
             visitChildren(node);
         }
 
@@ -469,7 +547,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link RefImageNode} to visit
          */
         public void visit(RefImageNode node) {
-            highlight(node, MarkdownTokenTypes.IMAGE); // TODO Add a dedicated token type
+            addToken(node, MarkdownTokenTypes.IMAGE); // TODO Add a dedicated token type
             visitChildren(node);
         }
 
@@ -479,7 +557,7 @@ public class MarkdownAnnotator extends ExternalAnnotator {
          * @param node the {@link AbbreviationNode} to visit
          */
         public void visit(AbbreviationNode node) {
-            highlight(node, MarkdownTokenTypes.ABBREVIATION);
+            addToken(node, MarkdownTokenTypes.ABBREVIATION);
             visitChildren(node);
         }
 
@@ -493,15 +571,14 @@ public class MarkdownAnnotator extends ExternalAnnotator {
         }
 
         /**
-         * Set the highlighting type for the {@link Node} after an {@link com.intellij.psi.tree.IElementType}.
+         * Add the given {@link Node} to the set of highlightable tokens.
          *
          * @param node      the {@link Node} to setup highlighting for
          * @param tokenType the {IElementType} to use for highlighting
          */
-        protected void highlight(Node node, IElementType tokenType) {
+        protected void addToken(Node node, IElementType tokenType) {
             if (node.getStartIndex() < node.getEndIndex())
-                annotationHolder.createInfoAnnotation(new TextRange(node.getStartIndex(), node.getEndIndex()), null)
-                        .setTextAttributes(SYNTAX_HIGHLIGHTER.getTokenHighlights(tokenType)[0]);
+                tokens.add(new HighlightableToken(new TextRange(node.getStartIndex(), node.getEndIndex()), tokenType));
         }
     }
 }
