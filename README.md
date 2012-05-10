@@ -1,4 +1,4 @@
-idea-markdown
+idea-markdown [![Build Status](https://secure.travis-ci.org/nicoulaj/idea-markdown.png)](http://travis-ci.org/nicoulaj/idea-markdown)
 =============
 
 **[Markdown](http://daringfireball.net/projects/markdown) language support for [IntelliJ IDEA](http://www.jetbrains.com/idea), [RubyMine](http://www.jetbrains.com/ruby), [PhpStorm](http://www.jetbrains.com/phpstorm), [WebStorm](http://www.jetbrains.com/webstorm), [PyCharm](http://www.jetbrains.com/pycharm) and [appCode](http://www.jetbrains.com/objc).**

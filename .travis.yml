@@ -1,0 +1,3 @@
+language: java
+install: /bin/true # install is handled by build
+script: ant
