@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (c) 2011 Julien Nicoulaud <julien.nicoulaud@gmail.com>
+  ~ Copyright (c) 2011-2012 Julien Nicoulaud <julien.nicoulaud@gmail.com>
   ~
   ~ Licensed to the Apache Software Foundation (ASF) under one
   ~ or more contributor license agreements.  See the NOTICE file
@@ -20,20 +20,10 @@
   ~ under the License.
   -->
 <project name="idea-markdown" default="all">
-
-  <!-- IDEA_HOME environment variable check -->
   <property environment="env"/>
-  <fail unless="env.IDEA_HOME" message="IDEA_HOME must be set."/>
-  <available file="${env.IDEA_HOME}/lib/idea.jar" property="idea.home.valid"/>
-  <fail unless="${idea.home.valid}" message="IDEA_HOME is not pointing to a valid IntelliJ installation."/>
 
-  <!-- JUnit task definition -->
-  <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
-    <classpath>
-      <pathelement location="${env.IDEA_HOME}/lib/junit-*.jar"/>
-      <pathelement location="${env.IDEA_HOME}/lib/ant/lib/ant-junit.jar"/>
-    </classpath>
-  </taskdef>
+  <!-- Versions -->
+  <property name="idea.version" value="11.1.1"/>
 
   <!-- Paths definition -->
   <dirname property="project.basedir" file="${ant.file}"/>
@@ -46,14 +36,6 @@
   <property name="project.build.testOutputDirectory" value="${project.build.directory}/test/idea-markdown"/>
   <property name="project.build.finalName" value="${project.basedir}/idea-markdown.zip"/>
 
-  <!-- Targets classpath definition -->
-  <path id="project.classpath">
-    <fileset dir="${basedir}/lib" includes="*.jar"/>
-    <fileset dir="${env.IDEA_HOME}/lib" includes="*.jar"/>
-    <pathelement location="${project.build.outputDirectory}"/>
-    <pathelement location="${project.build.testOutputDirectory}"/>
-  </path>
-
   <!-- Targets -->
 
   <target name="clean" description="Delete all build output files">
@@ -61,10 +43,33 @@
     <delete file="${project.build.finalName}"/>
   </target>
 
-  <target name="compile" description="Compile project source classes">
+  <target name="ideaEnvironment" description="Validate and use Intellij IDEA from environment" if="env.IDEA_HOME">
+    <echo message="Using IDEA_HOME from environment (${env.IDEA_HOME})"/>
+    <available file="${env.IDEA_HOME}/lib/idea.jar" property="idea.home.valid"/>
+    <fail unless="${idea.home.valid}" message="IDEA_HOME is not pointing to a valid IntelliJ installation."/>
+    <property name="idea.home" value="${env.IDEA_HOME}"/>
+  </target>
+
+  <target name="ideaDownload" description="Download, unpack and use IntelliJ IDEA Community Edition" unless="env.IDEA_HOME">
+    <echo message="IDEA_HOME not set in environment, downloading IDEA ${idea.version}"/>
+    <mkdir dir="${project.build.directory}/IDEA"/>
+    <get src="http://download.jetbrains.com/idea/ideaIC-${idea.version}.tar.gz"
+         dest="${project.build.directory}/IDEA/IDEA-IC-${idea.version}.tar.gz"/>
+    <untar src="${project.build.directory}/IDEA/IDEA-IC-${idea.version}.tar.gz"
+           dest="${project.build.directory}/IDEA"
+           compression="gzip">
+      <regexpmapper from="[^/]*/(.*)" to="\1"/>
+    </untar>
+    <property name="idea.home" value="${project.build.directory}/IDEA"/>
+  </target>
+
+  <target name="compile" depends="ideaEnvironment,ideaDownload" description="Compile project source classes">
     <mkdir dir="${project.build.outputDirectory}"/>
     <javac destdir="${project.build.outputDirectory}" includeantruntime="false" fork="true">
-      <classpath refid="project.classpath"/>
+      <classpath>
+        <fileset dir="${basedir}/lib" includes="*.jar"/>
+        <fileset dir="${idea.home}/lib" includes="*.jar"/>
+      </classpath>
       <src location="${project.build.sourceDirectory}"/>
     </javac>
     <copy todir="${project.build.outputDirectory}">
@@ -75,14 +80,29 @@
   <target name="testCompile" depends="compile" description="Compile project test classes" unless="skipTests">
     <mkdir dir="${project.build.testOutputDirectory}"/>
     <javac destdir="${project.build.testOutputDirectory}" includeantruntime="false" fork="true">
-      <classpath refid="project.classpath"/>
+      <classpath>
+        <fileset dir="${basedir}/lib" includes="*.jar"/>
+        <fileset dir="${idea.home}/lib" includes="*.jar"/>
+        <pathelement location="${project.build.outputDirectory}"/>
+      </classpath>
       <src location="${project.build.testSourceDirectory}"/>
     </javac>
   </target>
 
   <target name="test" depends="testCompile" description="Run project tests" unless="skipTests">
+    <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
+      <classpath>
+        <pathelement location="${idea.home}/lib/junit-*.jar"/>
+        <pathelement location="${idea.home}/lib/ant/lib/ant-junit.jar"/>
+      </classpath>
+    </taskdef>
     <junit printsummary="withOutAndErr" haltonfailure="yes" logfailedtests="true" showoutput="yes">
-      <classpath refid="project.classpath"/>
+      <classpath>
+        <fileset dir="${basedir}/lib" includes="*.jar"/>
+        <fileset dir="${idea.home}/lib" includes="*.jar"/>
+        <pathelement location="${project.build.outputDirectory}"/>
+        <pathelement location="${project.build.testOutputDirectory}"/>
+      </classpath>
       <batchtest todir="${project.build.testOutputDirectory}">
         <formatter type="plain"/>
         <fileset dir="${project.basedir}/src/test/java" includes="**/*Test.java"/>
