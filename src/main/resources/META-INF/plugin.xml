@@ -25,7 +25,7 @@
   <name>Markdown</name>
   <category>Custom Languages</category>
   <vendor url="http://github.com/nicoulaj" email="julien.nicoulaud@gmail.com">Julien Nicoulaud</vendor>
-  <version>0.8</version>
+  <version>0.9</version>
   <idea-version since-build="110.000"/>
   <depends>com.intellij.modules.lang</depends>
   <description>
@@ -36,6 +36,10 @@
   <change-notes>
     <![CDATA[
       <p>
+        <b>0.9</b><br/>
+        <ul>
+          <li>?</li>
+        </ul>
         <b>0.8</b><br/>
         <ul>
           <li><a href="https://github.com/nicoulaj/idea-markdown/issues/40">#40</a>: Add support for local links/images in preview (<a href="https://github.com/grantham">Roger Grantham</a>)</li>
