@@ -27,7 +27,7 @@ Building with Ant
 
         cd idea-markdown
 
-* Make sure `$IDEA_HOME` is defined:
+* Define `$IDEA_HOME` if you don't want the build to automatically download IntelliJ IDEA Community Edition:
 
         export IDEA_HOME=/path/to/IDEA
 
