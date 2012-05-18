@@ -50,7 +50,8 @@
     <property name="idea.home" value="${env.IDEA_HOME}"/>
   </target>
 
-  <target name="ideaDownload" description="Download, unpack and use IntelliJ IDEA Community Edition" unless="env.IDEA_HOME">
+  <target name="ideaDownload" description="Download, unpack and use IntelliJ IDEA Community Edition"
+          unless="env.IDEA_HOME">
     <echo message="IDEA_HOME not set in environment, downloading IDEA ${idea.version}"/>
     <mkdir dir="${project.build.directory}/IDEA"/>
     <get src="http://download.jetbrains.com/idea/ideaIC-${idea.version}.tar.gz"
@@ -105,6 +106,7 @@
       </classpath>
       <batchtest todir="${project.build.testOutputDirectory}">
         <formatter type="plain"/>
+        <formatter type="xml"/>
         <fileset dir="${project.basedir}/src/test/java" includes="**/*Test.java"/>
       </batchtest>
     </junit>
