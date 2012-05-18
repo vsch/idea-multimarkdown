@@ -18,11 +18,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package net.nicoulaj.idea.markdown;
+
+import junit.framework.TestCase;
 
 /**
- * Tests for the Markdown language support plugin.
+ * Tests for {@link net.nicoulaj.idea.markdown.MarkdownIcons}.
  *
  * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
- * @since 0.1
+ * @since 0.9
  */
-package net.nicoulaj.idea.markdown.test;
+public class MarkdownIconsTest extends TestCase {
+
+    /**
+     * Check Markdown icons is loaded.
+     */
+    public void testIconLoaded() {
+        assertNotNull("Markdown icon is not loaded", MarkdownIcons.MARKDOWN_ICON);
+    }
+}
