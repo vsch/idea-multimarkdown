@@ -29,6 +29,7 @@ import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorLocation;
 import com.intellij.openapi.fileEditor.FileEditorState;
 import com.intellij.openapi.fileEditor.FileEditorStateLevel;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.UserDataHolderBase;
 import com.intellij.ui.components.JBScrollPane;
@@ -97,9 +98,10 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
     /**
      * Build a new instance of {@link MarkdownPreviewEditor}.
      *
-     * @param document the {@link Document} previewed in this editor.
+     * @param project the {@link Project} containing the document
+     * @param document the {@link com.intellij.openapi.editor.Document} previewed in this editor.
      */
-    public MarkdownPreviewEditor(@NotNull Document document) {
+    public MarkdownPreviewEditor(Project project, @NotNull Document document) {
         this.document = document;
 
         // Listen to the document modifications.
@@ -119,7 +121,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
         });
 
         // Setup the editor pane for rendering HTML.
-        final HTMLEditorKit kit = new MarkdownEditorKit();
+        final HTMLEditorKit kit = new MarkdownEditorKit(project);
         final StyleSheet style = new StyleSheet();
         style.importStyleSheet(MarkdownPreviewEditor.class.getResource(PREVIEW_STYLESHEET_PATH));
         kit.setStyleSheet(style);
@@ -127,7 +129,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
         jEditorPane.setEditable(false);
 
         // Add a custom link listener which can resolve local link references.
-        jEditorPane.addHyperlinkListener(new MarkdownLinkListener());
+        jEditorPane.addHyperlinkListener(new MarkdownLinkListener(project));
     }
 
     /**

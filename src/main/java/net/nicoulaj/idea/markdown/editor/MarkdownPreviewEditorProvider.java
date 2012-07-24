@@ -65,7 +65,7 @@ public class MarkdownPreviewEditorProvider implements FileEditorProvider {
      */
     @NotNull
     public FileEditor createEditor(@NotNull Project project, @NotNull VirtualFile file) {
-        return new MarkdownPreviewEditor(FileDocumentManager.getInstance().getDocument(file));
+        return new MarkdownPreviewEditor(project, FileDocumentManager.getInstance().getDocument(file));
     }
 
     /**

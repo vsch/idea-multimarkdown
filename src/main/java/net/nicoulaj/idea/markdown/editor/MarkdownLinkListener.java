@@ -20,12 +20,8 @@
  */
 package net.nicoulaj.idea.markdown.editor;
 
-import com.intellij.ide.DataManager;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.AsyncResult;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.vfs.ex.http.HttpFileSystem;
@@ -59,6 +55,12 @@ public class MarkdownLinkListener implements HyperlinkListener {
      */
     final BrowserHyperlinkListener browserLinkListener = new BrowserHyperlinkListener();
 
+    private final Project project;
+
+    public MarkdownLinkListener(Project project) {
+        this.project = project;
+    }
+
     /**
      * Handle hypertext link update.
      * <p/>
@@ -81,11 +83,9 @@ public class MarkdownLinkListener implements HyperlinkListener {
             if (VirtualFileManager.getInstance().getFileSystem(target.getProtocol()) instanceof HttpFileSystem) {
                 browserLinkListener.hyperlinkUpdate(e);
             } else {
-                final AsyncResult<DataContext> dataContext = DataManager.getInstance().getDataContextFromFocus();
-                final Project project = DataKeys.PROJECT.getData(dataContext.getResult());
                 VirtualFile virtualTarget = findVirtualFile(target);
                 if (virtualTarget == null || !virtualTarget.exists()) {
-                    virtualTarget = resolveRelativePath(e.getDescription());
+                    virtualTarget = resolveRelativePath(project, e.getDescription());
                 }
 
                 if (virtualTarget == null) { // Okay, try as if the link target is a class reference
