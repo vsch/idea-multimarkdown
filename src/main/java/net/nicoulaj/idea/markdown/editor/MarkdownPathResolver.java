@@ -25,7 +25,6 @@ import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.util.AsyncResult;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
@@ -59,31 +58,18 @@ public class MarkdownPathResolver {
      */
     public static VirtualFile findVirtualFile(URL target) {
         VirtualFileSystem vfs = VirtualFileManager.getInstance().getFileSystem(target.getProtocol());
-        final AsyncResult<DataContext> dataContext = DataManager.getInstance().getDataContextFromFocus();
-        final Project project = DataKeys.PROJECT.getData(dataContext.getResult());
         return vfs.findFileByPath(target.getFile());
     }
 
     /**
      * Interprets <var>target</var> as a path relative to the currently active editor.
      *
+     *
+     * @param project the project to look for files in
      * @param target relative path from which a VirtualFile is sought
      * @return VirtualFile or null
      */
-    public static VirtualFile resolveRelativePath(String target) {
-        final AsyncResult<DataContext> dataContextResult = DataManager.getInstance().getDataContextFromFocus();
-        final DataContext dataContext = dataContextResult.getResult();
-        Project project;
-        if (dataContext == null) {
-            final Project[] opened = ProjectManager.getInstance().getOpenProjects();
-            if (opened.length == 0) {
-                return null;
-            } else {
-                project = opened[0];
-            }
-        } else {
-            project = DataKeys.PROJECT.getData(dataContext);
-        }
+    public static VirtualFile resolveRelativePath(Project project, String target) {
         VirtualFile virtualTarget;
         // treat as relative
         final VirtualFile[] selected = FileEditorManager.getInstance(project).getSelectedFiles();

@@ -20,6 +20,7 @@
  */
 package net.nicoulaj.idea.markdown.editor;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 
 import javax.swing.text.Element;
@@ -43,6 +44,12 @@ import static net.nicoulaj.idea.markdown.editor.MarkdownPathResolver.resolveRela
  */
 public class MarkdownEditorKit extends HTMLEditorKit {
 
+    private final Project project;
+
+    public MarkdownEditorKit(Project project) {
+        this.project = project;
+    }
+
     /**
      * Creates a copy of the editor kit.
      *
@@ -51,7 +58,7 @@ public class MarkdownEditorKit extends HTMLEditorKit {
     @Override
     public Object clone() {
         super.clone();
-        return new MarkdownEditorKit();
+        return new MarkdownEditorKit(project);
     }
 
     /**
@@ -59,7 +66,7 @@ public class MarkdownEditorKit extends HTMLEditorKit {
      */
     @Override
     public ViewFactory getViewFactory() {
-        return new MarkdownViewFactory();
+        return new MarkdownViewFactory(project);
     }
 
     /**
@@ -70,10 +77,16 @@ public class MarkdownEditorKit extends HTMLEditorKit {
      * @since 0.8
      */
     private static class MarkdownViewFactory extends HTMLFactory {
+        private final Project project;
+
+        private MarkdownViewFactory(Project project) {
+            this.project = project;
+        }
+
         @Override
         public View create(Element elem) {
             if (HTML.Tag.IMG.equals(elem.getAttributes().getAttribute(StyleConstants.NameAttribute)))
-                return new MarkdownImageView(elem);
+                return new MarkdownImageView(project, elem);
             return super.create(elem);
         }
     }
@@ -85,14 +98,17 @@ public class MarkdownEditorKit extends HTMLEditorKit {
      * @since 0.8
      */
     private static class MarkdownImageView extends ImageView {
+        private final Project project;
 
         /**
          * Build a new instance of {@link MarkdownImageView}.
          *
+         * @param project containing the document
          * @param elem the element to create a view for
          */
-        private MarkdownImageView(Element elem) {
+        private MarkdownImageView(Project project, Element elem) {
             super(elem);
+            this.project = project;
             setLoadsSynchronously(true);
         }
 
@@ -108,7 +124,7 @@ public class MarkdownEditorKit extends HTMLEditorKit {
             URL imageURL = super.getImageURL();
             if (imageURL == null) {
                 final String src = (String) getElement().getAttributes().getAttribute(HTML.Attribute.SRC);
-                final VirtualFile localImage = resolveRelativePath(src);
+                final VirtualFile localImage = resolveRelativePath(project, src);
                 try {
                     if (localImage != null && localImage.exists()) {
                         imageURL = new File(localImage.getPath()).toURI().toURL();
