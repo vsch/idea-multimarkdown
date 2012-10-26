@@ -2,8 +2,8 @@
 /out/
 *.zip
 
-# Generated sources
-_*.java
+# Automatically downloaded dependencies
+/lib/dependencies
 
 # Host specific config files
 *.iws
@@ -11,3 +11,6 @@ _*.java
 
 # Annoying auto-created META-INF dir
 /META-INF/
+
+# Local stuff
+local/

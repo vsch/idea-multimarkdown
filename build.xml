@@ -23,10 +23,12 @@
   <property environment="env"/>
 
   <!-- Versions -->
-  <property name="idea.version" value="11.1.1"/>
+  <property name="idea.version" value="11.1.3"/>
 
   <!-- Paths definition -->
   <dirname property="project.basedir" file="${ant.file}"/>
+  <property name="project.lib.directory" value="${project.basedir}/lib"/>
+  <property name="project.dependencies.directory" value="${project.lib.directory}/dependencies"/>
   <property name="project.build.directory" value="${project.basedir}/out"/>
   <property name="project.build.sourceDirectory" value="${project.basedir}/src/main/java"/>
   <property name="project.build.resourcesDirectory" value="${project.basedir}/src/main/resources"/>
@@ -43,46 +45,51 @@
     <delete file="${project.build.finalName}"/>
   </target>
 
-  <target name="ideaEnvironment" description="Validate and use Intellij IDEA from environment" if="env.IDEA_HOME">
-    <echo message="Using IDEA_HOME from environment (${env.IDEA_HOME})"/>
-    <available file="${env.IDEA_HOME}/lib/idea.jar" property="idea.home.valid"/>
-    <fail unless="${idea.home.valid}" message="IDEA_HOME is not pointing to a valid IntelliJ installation."/>
-    <property name="idea.home" value="${env.IDEA_HOME}"/>
+  <target name="clean-all" depends="clean" description="Delete all unversioned files">
+    <delete dir="${project.dependencies.directory}"/>
   </target>
 
-  <target name="ideaDownload" description="Download, unpack and use IntelliJ IDEA Community Edition"
-          unless="env.IDEA_HOME">
-    <echo message="IDEA_HOME not set in environment, downloading IDEA ${idea.version}"/>
-    <mkdir dir="${project.build.directory}/IDEA"/>
+  <target name="check-idea">
+    <property name="idea.home" value="${project.dependencies.directory}/IDEA"/>
+    <available file="${idea.home}/lib/idea.jar" property="idea.present"/>
+  </target>
+  <target name="download-idea" description="Download and unpack IntelliJ IDEA Community Edition" depends="check-idea" unless="idea.present">
+    <mkdir dir="${idea.home}"/>
     <get src="http://download.jetbrains.com/idea/ideaIC-${idea.version}.tar.gz"
-         dest="${project.build.directory}/IDEA/IDEA-IC-${idea.version}.tar.gz"/>
-    <untar src="${project.build.directory}/IDEA/IDEA-IC-${idea.version}.tar.gz"
-           dest="${project.build.directory}/IDEA"
+         dest="${project.dependencies.directory}/IDEA-${idea.version}.tar.gz"
+         skipexisting="true"/>
+    <untar src="${project.dependencies.directory}/IDEA-${idea.version}.tar.gz"
+           dest="${idea.home}"
            compression="gzip">
       <regexpmapper from="[^/]*/(.*)" to="\1"/>
     </untar>
-    <property name="idea.home" value="${project.build.directory}/IDEA"/>
   </target>
 
-  <target name="compile" depends="ideaEnvironment,ideaDownload" description="Compile project source classes">
+  <target name="dependencies" depends="download-idea" description="Get project dependencies"/>
+
+  <target name="resources" description="Process project resources">
+    <mkdir dir="${project.build.outputDirectory}"/>
+    <copy todir="${project.build.outputDirectory}">
+      <fileset dir="${project.build.resourcesDirectory}" includes="**"/>
+    </copy>
+  </target>
+
+  <target name="compile" depends="dependencies,resources" description="Compile project source classes">
     <mkdir dir="${project.build.outputDirectory}"/>
     <javac destdir="${project.build.outputDirectory}" includeantruntime="false" fork="true">
       <classpath>
-        <fileset dir="${basedir}/lib" includes="*.jar"/>
+        <fileset dir="${project.lib.directory}" includes="*.jar"/>
         <fileset dir="${idea.home}/lib" includes="*.jar"/>
       </classpath>
       <src location="${project.build.sourceDirectory}"/>
     </javac>
-    <copy todir="${project.build.outputDirectory}">
-      <fileset dir="${project.basedir}/src/main/resources" includes="**"/>
-    </copy>
   </target>
 
-  <target name="testCompile" depends="compile" description="Compile project test classes" unless="skipTests">
+  <target name="test-compile" depends="compile" description="Compile project test classes" unless="skipTests">
     <mkdir dir="${project.build.testOutputDirectory}"/>
     <javac destdir="${project.build.testOutputDirectory}" includeantruntime="false" fork="true">
       <classpath>
-        <fileset dir="${basedir}/lib" includes="*.jar"/>
+        <fileset dir="${project.lib.directory}" includes="*.jar"/>
         <fileset dir="${idea.home}/lib" includes="*.jar"/>
         <pathelement location="${project.build.outputDirectory}"/>
       </classpath>
@@ -90,7 +97,7 @@
     </javac>
   </target>
 
-  <target name="test" depends="testCompile" description="Run project tests" unless="skipTests">
+  <target name="test" depends="test-compile" description="Run project tests" unless="skipTests">
     <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
       <classpath>
         <pathelement location="${idea.home}/lib/junit-*.jar"/>
@@ -99,15 +106,15 @@
     </taskdef>
     <junit printsummary="withOutAndErr" haltonfailure="yes" logfailedtests="true" showoutput="yes">
       <classpath>
-        <fileset dir="${basedir}/lib" includes="*.jar"/>
+        <fileset dir="${project.lib.directory}" includes="*.jar"/>
         <fileset dir="${idea.home}/lib" includes="*.jar"/>
         <pathelement location="${project.build.outputDirectory}"/>
         <pathelement location="${project.build.testOutputDirectory}"/>
       </classpath>
-      <batchtest todir="${project.build.testOutputDirectory}">
+      <batchtest todir="${project.build.testOutputDirectory}" haltonerror="false" haltonfailure="false">
         <formatter type="plain"/>
         <formatter type="xml"/>
-        <fileset dir="${project.basedir}/src/test/java" includes="**/*Test.java"/>
+        <fileset dir="${project.build.testSourceDirectory}" includes="**/*Test.java"/>
       </batchtest>
     </junit>
   </target>
@@ -121,7 +128,7 @@
       </manifest>
     </jar>
     <zip destfile="${project.build.finalName}">
-      <zipfileset dir="lib" includes="*.jar" prefix="lib"/>
+      <zipfileset dir="${project.lib.directory}" includes="*.jar" prefix="lib"/>
       <zipfileset file="${project.build.directory}/idea-markdown.jar" prefix="lib"/>
     </zip>
   </target>
