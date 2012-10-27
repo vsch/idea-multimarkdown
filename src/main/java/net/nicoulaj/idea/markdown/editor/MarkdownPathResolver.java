@@ -20,7 +20,8 @@
  */
 package net.nicoulaj.idea.markdown.editor;
 
-import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
@@ -35,6 +36,7 @@ import java.net.URL;
  * Static utilities for resolving resources paths.
  *
  * @author Roger Grantham (https://github.com/grantham)
+ * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
  * @since 0.8
  */
 public class MarkdownPathResolver {
@@ -57,19 +59,14 @@ public class MarkdownPathResolver {
     }
 
     /**
-     * Interprets <var>target</var> as a path relative to the currently active editor.
+     * Interprets <var>target</var> as a path relative to the given document.
      *
-     * @param project the project to look for files in
-     * @param target  relative path from which a VirtualFile is sought
+     * @param document the document
+     * @param target   relative path from which a VirtualFile is sought
      * @return VirtualFile or null
      */
-    public static VirtualFile resolveRelativePath(@NotNull Project project, @NotNull String target) {
-        final VirtualFile[] selected = FileEditorManager.getInstance(project).getSelectedFiles();
-        if (selected.length == 0)
-            return null; // no such file, but not sure how this could happen
-        return target.matches("^[.][.]")
-                ? selected[0].findFileByRelativePath(target)
-                : selected[0].getParent().findFileByRelativePath(target); // if a sibling or lower in tree, query from parent
+    public static VirtualFile resolveRelativePath(@NotNull Document document, @NotNull String target) {
+        return FileDocumentManager.getInstance().getFile(document).getParent().findFileByRelativePath(target);
     }
 
     /**

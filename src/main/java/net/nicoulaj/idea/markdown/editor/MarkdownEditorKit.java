@@ -20,8 +20,9 @@
  */
 package net.nicoulaj.idea.markdown.editor;
 
-import com.intellij.openapi.project.Project;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.vfs.VirtualFile;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.text.Element;
 import javax.swing.text.StyleConstants;
@@ -40,14 +41,23 @@ import static net.nicoulaj.idea.markdown.editor.MarkdownPathResolver.resolveRela
  * {@link HTMLEditorKit} that can display images with paths relative to the document.
  *
  * @author Roger Grantham (https://github.com/grantham)
+ * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
  * @since 0.8
  */
 public class MarkdownEditorKit extends HTMLEditorKit {
 
-    private final Project project;
+    /**
+     * The document.
+     */
+    private final Document document;
 
-    public MarkdownEditorKit(Project project) {
-        this.project = project;
+    /**
+     * Build a new instance of {@link MarkdownEditorKit}.
+     *
+     * @param document the document
+     */
+    public MarkdownEditorKit(@NotNull Document document) {
+        this.document = document;
     }
 
     /**
@@ -57,8 +67,7 @@ public class MarkdownEditorKit extends HTMLEditorKit {
      */
     @Override
     public Object clone() {
-        super.clone();
-        return new MarkdownEditorKit(project);
+        return new MarkdownEditorKit(document);
     }
 
     /**
@@ -66,7 +75,7 @@ public class MarkdownEditorKit extends HTMLEditorKit {
      */
     @Override
     public ViewFactory getViewFactory() {
-        return new MarkdownViewFactory(project);
+        return new MarkdownViewFactory(document);
     }
 
     /**
@@ -77,16 +86,25 @@ public class MarkdownEditorKit extends HTMLEditorKit {
      * @since 0.8
      */
     private static class MarkdownViewFactory extends HTMLFactory {
-        private final Project project;
 
-        private MarkdownViewFactory(Project project) {
-            this.project = project;
+        /**
+         * The document.
+         */
+        private final Document document;
+
+        /**
+         * Build a new instance of {@link MarkdownViewFactory}.
+         *
+         * @param document the document
+         */
+        private MarkdownViewFactory(Document document) {
+            this.document = document;
         }
 
         @Override
         public View create(Element elem) {
             if (HTML.Tag.IMG.equals(elem.getAttributes().getAttribute(StyleConstants.NameAttribute)))
-                return new MarkdownImageView(project, elem);
+                return new MarkdownImageView(document, elem);
             return super.create(elem);
         }
     }
@@ -98,17 +116,21 @@ public class MarkdownEditorKit extends HTMLEditorKit {
      * @since 0.8
      */
     private static class MarkdownImageView extends ImageView {
-        private final Project project;
+
+        /**
+         * The document.
+         */
+        private final Document document;
 
         /**
          * Build a new instance of {@link MarkdownImageView}.
          *
-         * @param project containing the document
-         * @param elem    the element to create a view for
+         * @param document the document
+         * @param elem     the element to create a view for
          */
-        private MarkdownImageView(Project project, Element elem) {
+        private MarkdownImageView(@NotNull Document document, @NotNull Element elem) {
             super(elem);
-            this.project = project;
+            this.document = document;
             setLoadsSynchronously(true);
         }
 
@@ -121,9 +143,8 @@ public class MarkdownEditorKit extends HTMLEditorKit {
          */
         @Override
         public URL getImageURL() {
-
             final String src = (String) getElement().getAttributes().getAttribute(HTML.Attribute.SRC);
-            final VirtualFile localImage = resolveRelativePath(project, src);
+            final VirtualFile localImage = resolveRelativePath(document, src);
             try {
                 if (localImage != null && localImage.exists())
                     return new File(localImage.getPath()).toURI().toURL();

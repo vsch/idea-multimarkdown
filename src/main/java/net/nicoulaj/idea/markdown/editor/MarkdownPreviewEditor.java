@@ -98,10 +98,10 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
     /**
      * Build a new instance of {@link MarkdownPreviewEditor}.
      *
-     * @param project the {@link Project} containing the document
+     * @param project  the {@link Project} containing the document
      * @param document the {@link com.intellij.openapi.editor.Document} previewed in this editor.
      */
-    public MarkdownPreviewEditor(Project project, @NotNull Document document) {
+    public MarkdownPreviewEditor(@NotNull Project project, @NotNull Document document) {
         this.document = document;
 
         // Listen to the document modifications.
@@ -121,7 +121,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
         });
 
         // Setup the editor pane for rendering HTML.
-        final HTMLEditorKit kit = new MarkdownEditorKit(project);
+        final HTMLEditorKit kit = new MarkdownEditorKit(document);
         final StyleSheet style = new StyleSheet();
         style.importStyleSheet(MarkdownPreviewEditor.class.getResource(PREVIEW_STYLESHEET_PATH));
         kit.setStyleSheet(style);
@@ -129,7 +129,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
         jEditorPane.setEditable(false);
 
         // Add a custom link listener which can resolve local link references.
-        jEditorPane.addHyperlinkListener(new MarkdownLinkListener(project));
+        jEditorPane.addHyperlinkListener(new MarkdownLinkListener(project, document));
     }
 
     /**

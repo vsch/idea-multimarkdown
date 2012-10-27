@@ -20,12 +20,14 @@
  */
 package net.nicoulaj.idea.markdown.editor;
 
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.vfs.ex.http.HttpFileSystem;
 import com.intellij.ui.BrowserHyperlinkListener;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
@@ -46,6 +48,7 @@ import static net.nicoulaj.idea.markdown.editor.MarkdownPathResolver.*;
  * MarkdownLinkListener will attempt to open non-local resources in a web browser.
  *
  * @author Roger Grantham (https://github.com/grantham)
+ * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
  * @since 0.8
  */
 public class MarkdownLinkListener implements HyperlinkListener {
@@ -55,10 +58,25 @@ public class MarkdownLinkListener implements HyperlinkListener {
      */
     final BrowserHyperlinkListener browserLinkListener = new BrowserHyperlinkListener();
 
+    /**
+     * The project.
+     */
     private final Project project;
 
-    public MarkdownLinkListener(Project project) {
+    /**
+     * The document.
+     */
+    private final Document document;
+
+    /**
+     * Build a new instance of {@link MarkdownLinkListener}.
+     *
+     * @param project  the project
+     * @param document the document
+     */
+    public MarkdownLinkListener(@NotNull Project project, @NotNull Document document) {
         this.project = project;
+        this.document = document;
     }
 
     /**
@@ -85,7 +103,7 @@ public class MarkdownLinkListener implements HyperlinkListener {
             } else {
                 VirtualFile virtualTarget = findVirtualFile(target);
                 if (virtualTarget == null || !virtualTarget.exists())
-                    virtualTarget = resolveRelativePath(project, e.getDescription());
+                    virtualTarget = resolveRelativePath(document, e.getDescription());
 
                 if (virtualTarget == null) // Okay, try as if the link target is a class reference
                     virtualTarget = resolveClassReference(project, e.getDescription());
