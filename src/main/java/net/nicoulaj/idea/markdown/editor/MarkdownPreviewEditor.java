@@ -203,7 +203,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
      * @return {@code true} if {@link #document} content is readable.
      */
     public boolean isValid() {
-        return document != null && document.getText() != null;
+        return document.getText() != null;
     }
 
     /**
