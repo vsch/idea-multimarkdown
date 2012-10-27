@@ -25,20 +25,22 @@
   <name>Markdown</name>
   <category>Custom Languages</category>
   <vendor url="http://github.com/nicoulaj" email="julien.nicoulaud@gmail.com">Julien Nicoulaud</vendor>
-  <version>0.9</version>
+  <version>0.8.1</version>
   <idea-version since-build="110.000"/>
   <depends>com.intellij.modules.lang</depends>
   <description>
     <![CDATA[
-      <b><a href="http://daringfireball.net/projects/markdown">Markdown</a> language support for IntelliJ IDEA.</b>
+      <b><a href="http://daringfireball.net/projects/markdown">Markdown</a> language support for IntelliJ platform.</b>
     ]]>
   </description>
   <change-notes>
     <![CDATA[
       <p>
-        <b>0.9</b><br/>
+        <b>0.8.1</b><br/>
         <ul>
-          <li>?</li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/56">#56</a>: Fix local/relative links/images resolving.</li></li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/60">#60</a>: Fix links broken on PHPStorm.</li></li>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/61">#61</a>: Update Pegdown to 1.2.0.</li></li>
         </ul>
         <b>0.8</b><br/>
         <ul>
