@@ -20,18 +20,14 @@
  */
 package net.nicoulaj.idea.markdown.editor;
 
-import com.intellij.ide.DataManager;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.AsyncResult;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.openapi.vfs.VirtualFileSystem;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
+import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;
 
@@ -56,50 +52,37 @@ public class MarkdownPathResolver {
      * @param target url from which a VirtualFile is sought
      * @return VirtualFile or null
      */
-    public static VirtualFile findVirtualFile(URL target) {
-        VirtualFileSystem vfs = VirtualFileManager.getInstance().getFileSystem(target.getProtocol());
-        return vfs.findFileByPath(target.getFile());
+    public static VirtualFile findVirtualFile(@NotNull URL target) {
+        return VirtualFileManager.getInstance().getFileSystem(target.getProtocol()).findFileByPath(target.getFile());
     }
 
     /**
      * Interprets <var>target</var> as a path relative to the currently active editor.
      *
-     *
      * @param project the project to look for files in
-     * @param target relative path from which a VirtualFile is sought
+     * @param target  relative path from which a VirtualFile is sought
      * @return VirtualFile or null
      */
-    public static VirtualFile resolveRelativePath(Project project, String target) {
-        VirtualFile virtualTarget;
-        // treat as relative
+    public static VirtualFile resolveRelativePath(@NotNull Project project, @NotNull String target) {
         final VirtualFile[] selected = FileEditorManager.getInstance(project).getSelectedFiles();
-        if (selected.length == 0) {
-            // no such file, but not sure how this could happen
-            return null;
-        }
-        virtualTarget = target.matches("^[.][.]")
+        if (selected.length == 0)
+            return null; // no such file, but not sure how this could happen
+        return target.matches("^[.][.]")
                 ? selected[0].findFileByRelativePath(target)
-                : selected[0].getParent().findFileByRelativePath(target); //if a sibling or lower in tree, query from parent
-        return virtualTarget;
+                : selected[0].getParent().findFileByRelativePath(target); // if a sibling or lower in tree, query from parent
     }
 
     /**
      * Interprets <var>target</var> as a class reference.
      *
-     * @param target from which a VirtualFile is sought
+     * @param project the project to look for files in
+     * @param target  from which a VirtualFile is sought
      * @return VirtualFile or null
      */
-    public static VirtualFile resolveClassReference(String target) {
-        final AsyncResult<DataContext> dataContext = DataManager.getInstance().getDataContextFromFocus();
-        final Project project = DataKeys.PROJECT.getData(dataContext.getResult());
-        if (project == null) {
-            return null;
-        }
+    public static VirtualFile resolveClassReference(@NotNull Project project, @NotNull String target) {
         final PsiClass classpathResource = JavaPsiFacade.getInstance(project).findClass(target, GlobalSearchScope.projectScope(project));
-        VirtualFile virtualTarget = null;
-        if (classpathResource != null) {
-            virtualTarget = classpathResource.getContainingFile().getVirtualFile();
-        }
-        return virtualTarget;
+        if (classpathResource != null)
+            return classpathResource.getContainingFile().getVirtualFile();
+        return null;
     }
 }

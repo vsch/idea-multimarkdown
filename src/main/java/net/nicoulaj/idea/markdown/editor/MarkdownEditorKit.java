@@ -104,7 +104,7 @@ public class MarkdownEditorKit extends HTMLEditorKit {
          * Build a new instance of {@link MarkdownImageView}.
          *
          * @param project containing the document
-         * @param elem the element to create a view for
+         * @param elem    the element to create a view for
          */
         private MarkdownImageView(Project project, Element elem) {
             super(elem);
@@ -121,19 +121,17 @@ public class MarkdownEditorKit extends HTMLEditorKit {
          */
         @Override
         public URL getImageURL() {
-            URL imageURL = super.getImageURL();
-            if (imageURL == null) {
-                final String src = (String) getElement().getAttributes().getAttribute(HTML.Attribute.SRC);
-                final VirtualFile localImage = resolveRelativePath(project, src);
-                try {
-                    if (localImage != null && localImage.exists()) {
-                        imageURL = new File(localImage.getPath()).toURI().toURL();
-                    }
-                } catch (MalformedURLException e) {
-                    imageURL = null;
-                }
+
+            final String src = (String) getElement().getAttributes().getAttribute(HTML.Attribute.SRC);
+            final VirtualFile localImage = resolveRelativePath(project, src);
+            try {
+                if (localImage != null && localImage.exists())
+                    return new File(localImage.getPath()).toURI().toURL();
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
             }
-            return imageURL;
+
+            return super.getImageURL();
         }
     }
 }

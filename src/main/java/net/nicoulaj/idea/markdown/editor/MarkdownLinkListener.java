@@ -84,17 +84,14 @@ public class MarkdownLinkListener implements HyperlinkListener {
                 browserLinkListener.hyperlinkUpdate(e);
             } else {
                 VirtualFile virtualTarget = findVirtualFile(target);
-                if (virtualTarget == null || !virtualTarget.exists()) {
+                if (virtualTarget == null || !virtualTarget.exists())
                     virtualTarget = resolveRelativePath(project, e.getDescription());
-                }
 
-                if (virtualTarget == null) { // Okay, try as if the link target is a class reference
-                    virtualTarget = resolveClassReference(e.getDescription());
-                }
+                if (virtualTarget == null) // Okay, try as if the link target is a class reference
+                    virtualTarget = resolveClassReference(project, e.getDescription());
 
-                if (virtualTarget != null) {
+                if (virtualTarget != null)
                     FileEditorManager.getInstance(project).openFile(virtualTarget, true);
-                }
             }
         }
     }
