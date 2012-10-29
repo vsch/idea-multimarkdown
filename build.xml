@@ -128,8 +128,8 @@
       </manifest>
     </jar>
     <zip destfile="${project.build.finalName}">
-      <zipfileset dir="${project.lib.directory}" includes="*.jar" prefix="lib"/>
-      <zipfileset file="${project.build.directory}/idea-markdown.jar" prefix="lib"/>
+      <zipfileset dir="${project.lib.directory}" includes="*.jar" prefix="idea-markdown/lib"/>
+      <zipfileset file="${project.build.directory}/idea-markdown.jar" prefix="idea-markdown/lib"/>
     </zip>
   </target>
 
