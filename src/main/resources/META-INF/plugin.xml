@@ -25,7 +25,7 @@
   <name>Markdown</name>
   <category>Custom Languages</category>
   <vendor url="http://github.com/nicoulaj" email="julien.nicoulaud@gmail.com">Julien Nicoulaud</vendor>
-  <version>0.8.2</version>
+  <version>0.8.3</version>
   <idea-version since-build="110.000"/>
   <depends>com.intellij.modules.lang</depends>
   <description>
@@ -36,6 +36,10 @@
   <change-notes>
     <![CDATA[
       <p>
+        <b>0.8.3</b><br/>
+        <ul>
+          <li><a href="https://github.com/nicoulaj/idea-markdown/issues/64">#64</a>: Fix NullPointerException when accessing settings.</li></li>
+        </ul>
         <b>0.8.2</b><br/>
         <ul>
           <li><a href="https://github.com/nicoulaj/idea-markdown/issues/62">#62</a>: Fix plugin cannot be installed.</li></li>
