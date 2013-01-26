@@ -31,15 +31,11 @@ import org.jetbrains.annotations.NonNls;
  */
 public class MarkdownLanguage extends Language {
 
-    /**
-     * The Markdown language name.
-     */
+    /** The Markdown language name. */
     @NonNls
     public static final String LANGUAGE_NAME = "Markdown";
 
-    /**
-     * Build a new instance of {@link MarkdownLanguage}.
-     */
+    /** Build a new instance of {@link MarkdownLanguage}. */
     public MarkdownLanguage() {
         super(LANGUAGE_NAME);
     }

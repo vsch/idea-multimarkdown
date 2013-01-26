@@ -41,9 +41,7 @@ import java.net.URL;
  */
 public class MarkdownPathResolver {
 
-    /**
-     * Not to be instantiated.
-     */
+    /** Not to be instantiated. */
     private MarkdownPathResolver() {
         // no op
     }

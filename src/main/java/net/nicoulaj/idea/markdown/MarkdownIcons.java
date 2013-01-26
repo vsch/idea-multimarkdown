@@ -32,13 +32,9 @@ import javax.swing.*;
  */
 public class MarkdownIcons {
 
-    /**
-     * The path to the Markdown icon.
-     */
+    /** The path to the Markdown icon. */
     public static final String MARKDOWN_ICON_PATH = "/net/nicoulaj/idea/markdown/markdown.png";
 
-    /**
-     * The Markdown {@link Icon}.
-     */
+    /** The Markdown {@link Icon}. */
     public static final Icon MARKDOWN_ICON = IconLoader.getIcon(MARKDOWN_ICON_PATH);
 }

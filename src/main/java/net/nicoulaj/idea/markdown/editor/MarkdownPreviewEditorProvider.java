@@ -37,9 +37,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class MarkdownPreviewEditorProvider implements FileEditorProvider {
 
-    /**
-     * The id of the editors provided by this {@link FileEditorProvider}.
-     */
+    /** The id of the editors provided by this {@link FileEditorProvider}. */
     public static final String EDITOR_TYPE_ID = MarkdownLanguage.LANGUAGE_NAME + "PreviewEditor";
 
     /**

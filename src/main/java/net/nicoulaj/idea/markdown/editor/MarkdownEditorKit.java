@@ -46,9 +46,7 @@ import static net.nicoulaj.idea.markdown.editor.MarkdownPathResolver.resolveRela
  */
 public class MarkdownEditorKit extends HTMLEditorKit {
 
-    /**
-     * The document.
-     */
+    /** The document. */
     private final Document document;
 
     /**
@@ -70,9 +68,7 @@ public class MarkdownEditorKit extends HTMLEditorKit {
         return new MarkdownEditorKit(document);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public ViewFactory getViewFactory() {
         return new MarkdownViewFactory(document);
@@ -87,9 +83,7 @@ public class MarkdownEditorKit extends HTMLEditorKit {
      */
     private static class MarkdownViewFactory extends HTMLFactory {
 
-        /**
-         * The document.
-         */
+        /** The document. */
         private final Document document;
 
         /**
@@ -117,9 +111,7 @@ public class MarkdownEditorKit extends HTMLEditorKit {
      */
     private static class MarkdownImageView extends ImageView {
 
-        /**
-         * The document.
-         */
+        /** The document. */
         private final Document document;
 
         /**

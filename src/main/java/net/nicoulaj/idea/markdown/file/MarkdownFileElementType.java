@@ -31,9 +31,7 @@ import com.intellij.psi.tree.IFileElementType;
  */
 public class MarkdownFileElementType extends IFileElementType {
 
-    /**
-     * Build a new instance of {@link MarkdownFileElementType}.
-     */
+    /** Build a new instance of {@link MarkdownFileElementType}. */
     public MarkdownFileElementType() {
         super(MarkdownFileType.LANGUAGE);
     }

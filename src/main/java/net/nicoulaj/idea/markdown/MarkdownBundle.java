@@ -34,9 +34,7 @@ import java.util.ResourceBundle;
  */
 public class MarkdownBundle {
 
-    /**
-     * The {@link ResourceBundle} path.
-     */
+    /** The {@link ResourceBundle} path. */
     @NonNls
     protected static final String BUNDLE_NAME = "net.nicoulaj.idea.markdown.localization.strings";
 
@@ -47,9 +45,7 @@ public class MarkdownBundle {
      */
     protected static final ResourceBundle BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
 
-    /**
-     * {@link MarkdownBundle} is a non-instantiable static class.
-     */
+    /** {@link MarkdownBundle} is a non-instantiable static class. */
     private MarkdownBundle() {
     }
 

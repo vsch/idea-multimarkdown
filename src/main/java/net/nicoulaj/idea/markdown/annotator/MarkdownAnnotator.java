@@ -54,14 +54,10 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
      */
     protected static final SyntaxHighlighter SYNTAX_HIGHLIGHTER = new MarkdownSyntaxHighlighter();
 
-    /**
-     * The {@link PegDownProcessor} used for building the document AST.
-     */
+    /** The {@link PegDownProcessor} used for building the document AST. */
     protected PegDownProcessor processor = new PegDownProcessor(MarkdownGlobalSettings.getInstance().getExtensionsValue());
 
-    /**
-     * Build a new instance of {@link MarkdownAnnotator}.
-     */
+    /** Build a new instance of {@link MarkdownAnnotator}. */
     public MarkdownAnnotator() {
         // Listen to global settings changes.
         MarkdownGlobalSettings.getInstance().addListener(new MarkdownGlobalSettingsListener() {
@@ -108,7 +104,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
                       final @NotNull AnnotationHolder holder) {
         for (final HighlightableToken token : annotationResult)
             holder.createInfoAnnotation(token.getRange(), null)
-                    .setTextAttributes(SYNTAX_HIGHLIGHTER.getTokenHighlights(token.getElementType())[0]);
+                  .setTextAttributes(SYNTAX_HIGHLIGHTER.getTokenHighlights(token.getElementType())[0]);
     }
 
     /**
@@ -119,14 +115,10 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
      */
     protected class HighlightableToken {
 
-        /**
-         * The text range.
-         */
+        /** The text range. */
         protected final TextRange range;
 
-        /**
-         * The associated element type.
-         */
+        /** The associated element type. */
         protected final IElementType elementType;
 
         /**
@@ -167,9 +159,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
      */
     protected class MarkdownASTVisitor implements Visitor {
 
-        /**
-         * The collected token set.
-         */
+        /** The collected token set. */
         protected final Set<HighlightableToken> tokens = new HashSet<HighlightableToken>(20);
 
         /**
@@ -199,16 +189,16 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          */
         public void visit(SimpleNode node) {
             switch (node.getType()) {
-                case HRule:
-                    addToken(node, MarkdownTokenTypes.HRULE);
-                    break;
-                case Apostrophe:
-                case Ellipsis:
-                case Emdash:
-                case Endash:
-                case Linebreak:
-                case Nbsp:
-                    break;
+            case HRule:
+                addToken(node, MarkdownTokenTypes.HRULE);
+                break;
+            case Apostrophe:
+            case Ellipsis:
+            case Emdash:
+            case Endash:
+            case Linebreak:
+            case Nbsp:
+                break;
             }
         }
 
@@ -334,24 +324,24 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          */
         public void visit(HeaderNode node) {
             switch (node.getLevel()) {
-                case 1:
-                    addToken(node, MarkdownTokenTypes.HEADER_LEVEL_1);
-                    break;
-                case 2:
-                    addToken(node, MarkdownTokenTypes.HEADER_LEVEL_2);
-                    break;
-                case 3:
-                    addToken(node, MarkdownTokenTypes.HEADER_LEVEL_3);
-                    break;
-                case 4:
-                    addToken(node, MarkdownTokenTypes.HEADER_LEVEL_4);
-                    break;
-                case 5:
-                    addToken(node, MarkdownTokenTypes.HEADER_LEVEL_5);
-                    break;
-                case 6:
-                    addToken(node, MarkdownTokenTypes.HEADER_LEVEL_6);
-                    break;
+            case 1:
+                addToken(node, MarkdownTokenTypes.HEADER_LEVEL_1);
+                break;
+            case 2:
+                addToken(node, MarkdownTokenTypes.HEADER_LEVEL_2);
+                break;
+            case 3:
+                addToken(node, MarkdownTokenTypes.HEADER_LEVEL_3);
+                break;
+            case 4:
+                addToken(node, MarkdownTokenTypes.HEADER_LEVEL_4);
+                break;
+            case 5:
+                addToken(node, MarkdownTokenTypes.HEADER_LEVEL_5);
+                break;
+            case 6:
+                addToken(node, MarkdownTokenTypes.HEADER_LEVEL_6);
+                break;
             }
             visitChildren(node);
         }

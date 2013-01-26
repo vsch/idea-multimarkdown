@@ -30,9 +30,7 @@ import junit.framework.TestCase;
  */
 public class MarkdownIconsTest extends TestCase {
 
-    /**
-     * Check Markdown icons is loaded.
-     */
+    /** Check Markdown icons is loaded. */
     public void testIconLoaded() {
         assertNotNull("Markdown icon is not loaded", MarkdownIcons.MARKDOWN_ICON);
     }

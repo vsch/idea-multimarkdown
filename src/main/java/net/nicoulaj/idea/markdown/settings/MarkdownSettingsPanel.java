@@ -32,128 +32,78 @@ import javax.swing.*;
  */
 public class MarkdownSettingsPanel {
 
-    /**
-     * The parent panel for the form.
-     */
+    /** The parent panel for the form. */
     public JPanel panel;
 
-    /**
-     * The "extensions" form container.
-     */
+    /** The "extensions" form container. */
     public JPanel extensionsPanel;
 
-    /**
-     * Description label for {@link #extensionsPanel}.
-     */
+    /** Description label for {@link #extensionsPanel}. */
     private JLabel extensionsPanelDescription;
 
-    /**
-     * Form element for {@link MarkdownGlobalSettings#smarts}.
-     */
+    /** Form element for {@link MarkdownGlobalSettings#smarts}. */
     public JCheckBox smartsCheckBox;
 
-    /**
-     * Form element for {@link MarkdownGlobalSettings#quotes}.
-     */
+    /** Form element for {@link MarkdownGlobalSettings#quotes}. */
     public JCheckBox quotesCheckBox;
 
-    /**
-     * Form element for {@link MarkdownGlobalSettings#abbreviations}.
-     */
+    /** Form element for {@link MarkdownGlobalSettings#abbreviations}. */
     public JCheckBox abbreviationsCheckBox;
 
-    /**
-     * Form element for {@link MarkdownGlobalSettings#hardWraps}.
-     */
+    /** Form element for {@link MarkdownGlobalSettings#hardWraps}. */
     public JCheckBox hardWrapsCheckBox;
 
-    /**
-     * Form element for {@link MarkdownGlobalSettings#autoLinks}.
-     */
+    /** Form element for {@link MarkdownGlobalSettings#autoLinks}. */
     public JCheckBox autoLinksCheckBox;
 
-    /**
-     * Form element for {@link MarkdownGlobalSettings#wikiLinks}.
-     */
+    /** Form element for {@link MarkdownGlobalSettings#wikiLinks}. */
     public JCheckBox wikiLinksCheckBox;
 
-    /**
-     * Form element for {@link MarkdownGlobalSettings#tables}.
-     */
+    /** Form element for {@link MarkdownGlobalSettings#tables}. */
     public JCheckBox tablesCheckBox;
 
-    /**
-     * Form element for {@link MarkdownGlobalSettings#definitions}.
-     */
+    /** Form element for {@link MarkdownGlobalSettings#definitions}. */
     public JCheckBox definitionsCheckBox;
 
-    /**
-     * Form element for {@link MarkdownGlobalSettings#fencedCodeBlocks}.
-     */
+    /** Form element for {@link MarkdownGlobalSettings#fencedCodeBlocks}. */
     public JCheckBox fencedCodeBlocksCheckBox;
 
-    /**
-     * Form element for {@link MarkdownGlobalSettings#suppressHTMLBlocks}.
-     */
+    /** Form element for {@link MarkdownGlobalSettings#suppressHTMLBlocks}. */
     public JCheckBox suppressHTMLBlocksCheckBox;
 
-    /**
-     * Form element for {@link MarkdownGlobalSettings#suppressInlineHTML}.
-     */
+    /** Form element for {@link MarkdownGlobalSettings#suppressInlineHTML}. */
     public JCheckBox suppressInlineHTMLCheckBox;
 
-    /**
-     * Description label for {@link #suppressInlineHTMLCheckBox}.
-     */
+    /** Description label for {@link #suppressInlineHTMLCheckBox}. */
     private JLabel suppressInlineHTMLDescriptionLabel;
 
-    /**
-     * Description label for {@link #suppressHTMLBlocksCheckBox}.
-     */
+    /** Description label for {@link #suppressHTMLBlocksCheckBox}. */
     private JLabel suppressHTMLBlocksDescriptionLabel;
 
-    /**
-     * Description label for {@link #fencedCodeBlocksCheckBox}.
-     */
+    /** Description label for {@link #fencedCodeBlocksCheckBox}. */
     private JLabel fencedCodeBlocksDescriptionLabel;
 
-    /**
-     * Description label for {@link #definitionsCheckBox}.
-     */
+    /** Description label for {@link #definitionsCheckBox}. */
     private JLabel definitionsDescriptionLabel;
 
-    /**
-     * Description label for {@link #tablesCheckBox}.
-     */
+    /** Description label for {@link #tablesCheckBox}. */
     private JLabel tablesDescriptionLabel;
 
-    /**
-     * Description label for {@link #autoLinksCheckBox}.
-     */
+    /** Description label for {@link #autoLinksCheckBox}. */
     private JLabel autoLinksDescriptionLabel;
 
-    /**
-     * Description label for {@link #wikiLinksCheckBox}.
-     */
+    /** Description label for {@link #wikiLinksCheckBox}. */
     private JLabel wikiLinksDescriptionLabel;
 
-    /**
-     * Description label for {@link #hardWrapsCheckBox}.
-     */
+    /** Description label for {@link #hardWrapsCheckBox}. */
     private JLabel hardWarpsDescriptionLabel;
 
-    /**
-     * Description label for {@link #abbreviationsCheckBox}.
-     */
+    /** Description label for {@link #abbreviationsCheckBox}. */
     private JLabel abbreviationsDescriptionLabel;
 
-    /**
-     * Description label for {@link #quotesCheckBox}.
-     */
+    /** Description label for {@link #quotesCheckBox}. */
     private JLabel quotesDescriptionLabel;
 
-    /**
-     * Description label for {@link #smartsCheckBox}.
-     */
+    /** Description label for {@link #smartsCheckBox}. */
     private JLabel smartsDescriptionLabel;
 }

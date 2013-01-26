@@ -39,14 +39,10 @@ import java.util.Map;
  */
 public class MarkdownSyntaxHighlighter extends SyntaxHighlighterBase {
 
-    /**
-     * The {@link Lexer} instance.
-     */
+    /** The {@link Lexer} instance. */
     protected final Lexer lexer = new EmptyLexer();
 
-    /**
-     * The map of text attribute keys for each token type.
-     */
+    /** The map of text attribute keys for each token type. */
     protected static final Map<IElementType, TextAttributesKey> ATTRIBUTES = new HashMap<IElementType, TextAttributesKey>();
 
     static {

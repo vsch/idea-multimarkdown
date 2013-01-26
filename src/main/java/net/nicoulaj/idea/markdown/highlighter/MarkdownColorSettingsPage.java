@@ -47,9 +47,7 @@ import java.util.Map;
  */
 public class MarkdownColorSettingsPage implements ColorSettingsPage {
 
-    /**
-     * The {@link Logger}.
-     */
+    /** The {@link Logger}. */
     private final static Logger LOGGER = Logger.getInstance(MarkdownColorSettingsPage.class.getName());
 
     /**
@@ -59,9 +57,7 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
      */
     protected static final ColorDescriptor[] EMPTY_COLOR_DESCRIPTOR_ARRAY = new ColorDescriptor[]{};
 
-    /**
-     * The path to the sample Markdown document shown in the colors settings dialog.
-     */
+    /** The path to the sample Markdown document shown in the colors settings dialog. */
     @NonNls
     protected static final String SAMPLE_MARKDOWN_DOCUMENT_PATH = "/net/nicoulaj/idea/markdown/sample-document.md";
 
@@ -79,9 +75,7 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
      */
     protected final List<AttributesDescriptor> attributeDescriptors = new LinkedList<AttributesDescriptor>();
 
-    /**
-     * Build a new instance of {@link MarkdownColorSettingsPage}.
-     */
+    /** Build a new instance of {@link MarkdownColorSettingsPage}. */
     public MarkdownColorSettingsPage() {
 
         // Populate attribute descriptors.

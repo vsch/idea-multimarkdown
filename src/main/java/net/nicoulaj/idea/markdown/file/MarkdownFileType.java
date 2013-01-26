@@ -38,25 +38,17 @@ import javax.swing.*;
  */
 public class MarkdownFileType extends LanguageFileType {
 
-    /**
-     * The {@link MarkdownFileType} instance.
-     */
+    /** The {@link MarkdownFileType} instance. */
     public static final MarkdownFileType INSTANCE = new MarkdownFileType();
 
-    /**
-     * The {@link Language} instance for this {@link com.intellij.openapi.fileTypes.FileType}.
-     */
+    /** The {@link Language} instance for this {@link com.intellij.openapi.fileTypes.FileType}. */
     public static final Language LANGUAGE = INSTANCE.getLanguage();
 
-    /**
-     * The extensions associated by default with this {@link com.intellij.openapi.fileTypes.FileType}.
-     */
+    /** The extensions associated by default with this {@link com.intellij.openapi.fileTypes.FileType}. */
     @NonNls
     public static final String[] DEFAULT_ASSOCIATED_EXTENSIONS = {"markdown", "mkd", "md"};
 
-    /**
-     * Build a new instance of {@link MarkdownFileType}.
-     */
+    /** Build a new instance of {@link MarkdownFileType}. */
     public MarkdownFileType() {
         super(new MarkdownLanguage());
     }

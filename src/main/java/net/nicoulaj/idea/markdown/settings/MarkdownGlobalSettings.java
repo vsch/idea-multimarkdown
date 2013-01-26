@@ -44,64 +44,40 @@ import java.util.Set;
 )
 public class MarkdownGlobalSettings implements PersistentStateComponent<Element> {
 
-    /**
-     * A set of listeners to this object state changes.
-     */
+    /** A set of listeners to this object state changes. */
     protected Set<WeakReference<MarkdownGlobalSettingsListener>> listeners;
 
-    /**
-     * Whether the "SmartyPants style pretty ellipsises, dashes and apostrophes" extension should be enabled.
-     */
+    /** Whether the "SmartyPants style pretty ellipsises, dashes and apostrophes" extension should be enabled. */
     private boolean smarts = false;
 
-    /**
-     * Whether the "SmartyPants style pretty single and double quotes" extension should be enabled.
-     */
+    /** Whether the "SmartyPants style pretty single and double quotes" extension should be enabled. */
     private boolean quotes = false;
 
-    /**
-     * Whether the "PHP Markdown Extra style abbreviations" extension should be enabled.
-     */
+    /** Whether the "PHP Markdown Extra style abbreviations" extension should be enabled. */
     private boolean abbreviations = false;
 
-    /**
-     * Whether the "PHP Markdown Extra style definition lists" extension should be enabled.
-     */
+    /** Whether the "PHP Markdown Extra style definition lists" extension should be enabled. */
     private boolean definitions = false;
 
-    /**
-     * Whether the "PHP Markdown Extra style fenced code blocks" extension should be enabled.
-     */
+    /** Whether the "PHP Markdown Extra style fenced code blocks" extension should be enabled. */
     private boolean fencedCodeBlocks = false;
 
-    /**
-     * Whether the "Github style hard wraps parsing as HTML linebreaks" extension should be enabled.
-     */
+    /** Whether the "Github style hard wraps parsing as HTML linebreaks" extension should be enabled. */
     private boolean hardWraps = false;
 
-    /**
-     * Whether the "Github style plain auto-links" extension should be enabled.
-     */
+    /** Whether the "Github style plain auto-links" extension should be enabled. */
     private boolean autoLinks = false;
 
-    /**
-     * Whether the "Wiki-style links" extension should be enabled.
-     */
+    /** Whether the "Wiki-style links" extension should be enabled. */
     private boolean wikiLinks = false;
 
-    /**
-     * Whether the "MultiMarkdown style tables support" extension should be enabled.
-     */
+    /** Whether the "MultiMarkdown style tables support" extension should be enabled. */
     private boolean tables = false;
 
-    /**
-     * Whether the "Suppress HTML blocks" extension should be enabled.
-     */
+    /** Whether the "Suppress HTML blocks" extension should be enabled. */
     private boolean suppressHTMLBlocks = false;
 
-    /**
-     * Whether the "Suppress inline HTML tags" extension should be enabled.
-     */
+    /** Whether the "Suppress inline HTML tags" extension should be enabled. */
     private boolean suppressInlineHTML = false;
 
     /**
@@ -395,16 +371,16 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
     public int getExtensionsValue() {
         return
                 (smarts ? Extensions.SMARTS : 0) +
-                        (quotes ? Extensions.QUOTES : 0) +
-                        (abbreviations ? Extensions.ABBREVIATIONS : 0) +
-                        (hardWraps ? Extensions.HARDWRAPS : 0) +
-                        (autoLinks ? Extensions.AUTOLINKS : 0) +
-                        (wikiLinks ? Extensions.WIKILINKS : 0) +
-                        (tables ? Extensions.TABLES : 0) +
-                        (definitions ? Extensions.DEFINITIONS : 0) +
-                        (fencedCodeBlocks ? Extensions.FENCED_CODE_BLOCKS : 0) +
-                        (suppressHTMLBlocks ? Extensions.SUPPRESS_HTML_BLOCKS : 0) +
-                        (suppressInlineHTML ? Extensions.SUPPRESS_INLINE_HTML : 0);
+                (quotes ? Extensions.QUOTES : 0) +
+                (abbreviations ? Extensions.ABBREVIATIONS : 0) +
+                (hardWraps ? Extensions.HARDWRAPS : 0) +
+                (autoLinks ? Extensions.AUTOLINKS : 0) +
+                (wikiLinks ? Extensions.WIKILINKS : 0) +
+                (tables ? Extensions.TABLES : 0) +
+                (definitions ? Extensions.DEFINITIONS : 0) +
+                (fencedCodeBlocks ? Extensions.FENCED_CODE_BLOCKS : 0) +
+                (suppressHTMLBlocks ? Extensions.SUPPRESS_HTML_BLOCKS : 0) +
+                (suppressInlineHTML ? Extensions.SUPPRESS_INLINE_HTML : 0);
     }
 
     /**
@@ -417,9 +393,7 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
         listeners.add(new WeakReference<MarkdownGlobalSettingsListener>(listener));
     }
 
-    /**
-     * Notify event listeners of changes.
-     */
+    /** Notify event listeners of changes. */
     protected void notifyListeners() {
         if (listeners != null)
             for (final WeakReference<MarkdownGlobalSettingsListener> listenerRef : listeners)

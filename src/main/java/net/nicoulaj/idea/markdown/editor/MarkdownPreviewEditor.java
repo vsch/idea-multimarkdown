@@ -59,40 +59,26 @@ import java.beans.PropertyChangeListener;
  */
 public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEditor {
 
-    /**
-     * The editor name, displayed as the tab name of the editor.
-     */
+    /** The editor name, displayed as the tab name of the editor. */
     public static final String EDITOR_NAME = MarkdownBundle.message("markdown.editor.preview.tab-name");
 
-    /**
-     * The path to the stylesheet used for displaying the HTML preview of the document.
-     */
+    /** The path to the stylesheet used for displaying the HTML preview of the document. */
     @NonNls
     public static final String PREVIEW_STYLESHEET_PATH = "/net/nicoulaj/idea/markdown/preview.css";
 
-    /**
-     * The MarkdownJ {@link PegDownProcessor} used to generate HTML from Markdown.
-     */
+    /** The MarkdownJ {@link PegDownProcessor} used to generate HTML from Markdown. */
     protected PegDownProcessor markdownProcessor = new PegDownProcessor(MarkdownGlobalSettings.getInstance().getExtensionsValue());
 
-    /**
-     * The {@link java.awt.Component} used to render the HTML preview.
-     */
+    /** The {@link java.awt.Component} used to render the HTML preview. */
     protected final JEditorPane jEditorPane = new JEditorPane();
 
-    /**
-     * The {@link JBScrollPane} allowing to browse {@link #jEditorPane}.
-     */
+    /** The {@link JBScrollPane} allowing to browse {@link #jEditorPane}. */
     protected final JBScrollPane scrollPane = new JBScrollPane(jEditorPane);
 
-    /**
-     * The {@link Document} previewed in this editor.
-     */
+    /** The {@link Document} previewed in this editor. */
     protected final Document document;
 
-    /**
-     * Indicates whether the HTML preview is obsolete and should regenerated from the Markdown {@link #document}.
-     */
+    /** Indicates whether the HTML preview is obsolete and should regenerated from the Markdown {@link #document}. */
     protected boolean previewIsObsolete = true;
 
     /**
@@ -276,9 +262,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
         return null;
     }
 
-    /**
-     * Dispose the editor.
-     */
+    /** Dispose the editor. */
     public void dispose() {
         Disposer.dispose(this);
     }

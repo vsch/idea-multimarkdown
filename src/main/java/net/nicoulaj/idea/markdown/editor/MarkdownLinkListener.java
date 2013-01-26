@@ -53,19 +53,13 @@ import static net.nicoulaj.idea.markdown.editor.MarkdownPathResolver.*;
  */
 public class MarkdownLinkListener implements HyperlinkListener {
 
-    /**
-     * The {@link BrowserHyperlinkListener} used for non-local resources.
-     */
+    /** The {@link BrowserHyperlinkListener} used for non-local resources. */
     final BrowserHyperlinkListener browserLinkListener = new BrowserHyperlinkListener();
 
-    /**
-     * The project.
-     */
+    /** The project. */
     private final Project project;
 
-    /**
-     * The document.
-     */
+    /** The document. */
     private final Document document;
 
     /**
