@@ -24,6 +24,7 @@
 
   <!-- Versions -->
   <property name="idea.version" value="12.0.2"/>
+  <property name="jdk.version" value="1.6"/>
 
   <!-- Paths definition -->
   <dirname property="project.basedir" file="${ant.file}"/>
@@ -47,6 +48,16 @@
 
   <target name="clean-all" depends="clean" description="Delete all unversioned files">
     <delete dir="${project.dependencies.directory}"/>
+  </target>
+
+  <target name="enforce-java-version" description="Fail if not using JDK ${jdk.version}">
+    <fail message="This build must be invoked using JDK ${jdk.version}">
+      <condition>
+        <not>
+          <contains string="${java.version}" substring="${jdk.version}" casesensitive="false" />
+        </not>
+      </condition>
+    </fail>
   </target>
 
   <target name="check-idea">
@@ -74,9 +85,9 @@
     </copy>
   </target>
 
-  <target name="compile" depends="dependencies,resources" description="Compile project source classes">
+  <target name="compile" depends="enforce-java-version,dependencies,resources" description="Compile project source classes">
     <mkdir dir="${project.build.outputDirectory}"/>
-    <javac destdir="${project.build.outputDirectory}" includeantruntime="false" fork="true">
+    <javac destdir="${project.build.outputDirectory}" includeantruntime="false" fork="true" source="${jdk.version}" target="${jdk.version}">
       <classpath>
         <fileset dir="${project.lib.directory}" includes="*.jar"/>
         <fileset dir="${idea.home}/lib" includes="*.jar"/>
@@ -87,7 +98,7 @@
 
   <target name="test-compile" depends="compile" description="Compile project test classes" unless="skipTests">
     <mkdir dir="${project.build.testOutputDirectory}"/>
-    <javac destdir="${project.build.testOutputDirectory}" includeantruntime="false" fork="true">
+    <javac destdir="${project.build.testOutputDirectory}" includeantruntime="false" fork="true" source="${jdk.version}" target="${jdk.version}">
       <classpath>
         <fileset dir="${project.lib.directory}" includes="*.jar"/>
         <fileset dir="${idea.home}/lib" includes="*.jar"/>

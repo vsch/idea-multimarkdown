@@ -38,6 +38,7 @@
     <p>
       <b>0.8.3</b><br/>
     <ul>
+      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/84">#84</a>: Java 6 support.</li>
       <li><a href="https://github.com/nicoulaj/idea-markdown/issues/64">#64</a>: Fix NullPointerException when accessing settings.</li>
     </ul>
     <b>0.8.2</b><br/>
