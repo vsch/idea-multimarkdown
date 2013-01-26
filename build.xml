@@ -23,7 +23,7 @@
   <property environment="env"/>
 
   <!-- Versions -->
-  <property name="idea.version" value="11.1.4"/>
+  <property name="idea.version" value="12.0.2"/>
 
   <!-- Paths definition -->
   <dirname property="project.basedir" file="${ant.file}"/>
