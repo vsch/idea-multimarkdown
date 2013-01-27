@@ -50,16 +50,6 @@
     <delete dir="${project.dependencies.directory}"/>
   </target>
 
-  <target name="enforce-java-version" description="Fail if not using JDK ${jdk.version}">
-    <fail message="This build must be invoked using JDK ${jdk.version}">
-      <condition>
-        <not>
-          <contains string="${java.version}" substring="${jdk.version}" casesensitive="false" />
-        </not>
-      </condition>
-    </fail>
-  </target>
-
   <target name="check-idea">
     <property name="idea.home" value="${project.dependencies.directory}/IDEA"/>
     <available file="${idea.home}/lib/idea.jar" property="idea.present"/>
@@ -85,27 +75,52 @@
     </copy>
   </target>
 
-  <target name="compile" depends="enforce-java-version,dependencies,resources" description="Compile project source classes">
-    <mkdir dir="${project.build.outputDirectory}"/>
-    <javac destdir="${project.build.outputDirectory}" includeantruntime="false" fork="true" source="${jdk.version}" target="${jdk.version}">
+  <target name="enforce-java-version" description="Fail if using wrong JDK version">
+    <fail message="This build must be invoked using JDK ${jdk.version}">
+      <condition>
+        <not>
+          <contains string="${java.version}" substring="${jdk.version}" casesensitive="false" />
+        </not>
+      </condition>
+    </fail>
+  </target>
+
+  <target name="setup-idea-compiler">
+    <taskdef name="javac2" classname="com.intellij.ant.Javac2">
       <classpath>
-        <fileset dir="${project.lib.directory}" includes="*.jar"/>
+        <pathelement location="${idea.home}/lib/javac2.jar"/>
+        <pathelement location="${idea.home}/lib/jdom.jar"/>
+        <pathelement location="${idea.home}/lib/asm4-all.jar"/>
+        <pathelement location="${idea.home}/lib/jgoodies-forms.jar"/>
+      </classpath>
+    </taskdef>
+  </target>
+
+  <target name="compiler" depends="dependencies,setup-idea-compiler,enforce-java-version" description="Setup IDEA custom compiler"/>
+
+  <target name="compile" depends="dependencies,compiler,resources" description="Compile project source classes">
+    <mkdir dir="${project.build.outputDirectory}"/>
+    <javac2 destdir="${project.build.outputDirectory}" includeantruntime="false" memorymaximumsize="128m" fork="true" source="${jdk.version}" target="${jdk.version}">
+      <classpath>
+        <fileset dir="${java.home}/lib" includes="*.jar"/>
         <fileset dir="${idea.home}/lib" includes="*.jar"/>
+        <fileset dir="${project.lib.directory}" includes="*.jar"/>
       </classpath>
       <src location="${project.build.sourceDirectory}"/>
-    </javac>
+    </javac2>
   </target>
 
   <target name="test-compile" depends="compile" description="Compile project test classes" unless="skipTests">
     <mkdir dir="${project.build.testOutputDirectory}"/>
-    <javac destdir="${project.build.testOutputDirectory}" includeantruntime="false" fork="true" source="${jdk.version}" target="${jdk.version}">
+    <javac2 destdir="${project.build.testOutputDirectory}" includeantruntime="false" memorymaximumsize="128m" fork="true" source="${jdk.version}" target="${jdk.version}">
       <classpath>
-        <fileset dir="${project.lib.directory}" includes="*.jar"/>
+        <fileset dir="${java.home}/lib" includes="*.jar"/>
         <fileset dir="${idea.home}/lib" includes="*.jar"/>
+        <fileset dir="${project.lib.directory}" includes="*.jar"/>
         <pathelement location="${project.build.outputDirectory}"/>
       </classpath>
       <src location="${project.build.testSourceDirectory}"/>
-    </javac>
+    </javac2>
   </target>
 
   <target name="test" depends="test-compile" description="Run project tests" unless="skipTests">
