@@ -96,7 +96,7 @@
     </taskdef>
   </target>
 
-  <target name="compiler" depends="dependencies,setup-idea-compiler,enforce-java-version" description="Setup IDEA custom compiler"/>
+  <target name="compiler" depends="dependencies,setup-idea-compiler" description="Setup IDEA custom compiler"/>
 
   <target name="compile" depends="dependencies,compiler,resources" description="Compile project source classes">
     <mkdir dir="${project.build.outputDirectory}"/>
