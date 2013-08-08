@@ -36,6 +36,11 @@
   <change-notes>
     <![CDATA[
     <p>
+      <b>0.8.4</b><br/>
+    <ul>
+      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/98">#98</a>: Better color scheme support.</li>
+      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/97">#97</a>: Fixed preview CSS for dark themes.</li>
+    </ul>
       <b>0.8.3</b><br/>
     <ul>
       <li><a href="https://github.com/nicoulaj/idea-markdown/issues/84">#84</a>: Java 6 support.</li>
@@ -113,6 +118,8 @@
     <fileTypeFactory implementation="net.nicoulaj.idea.markdown.file.MarkdownFileTypeFactory"/>
     <syntaxHighlighter key="Markdown" implementationClass="net.nicoulaj.idea.markdown.highlighter.MarkdownSyntaxHighlighter"/>
     <colorSettingsPage implementation="net.nicoulaj.idea.markdown.highlighter.MarkdownColorSettingsPage"/>
+    <additionalTextAttributes scheme="Default" file="net/nicoulaj/idea/markdown/schemes/default.xml"/>
+    <additionalTextAttributes scheme="Darcula" file="net/nicoulaj/idea/markdown/schemes/darcula.xml"/>
     <fileEditorProvider implementation="net.nicoulaj.idea.markdown.editor.MarkdownPreviewEditorProvider"/>
     <lang.parserDefinition language="Markdown" implementationClass="net.nicoulaj.idea.markdown.lang.parser.MarkdownParserDefinition"/>
     <externalAnnotator language="Markdown" implementationClass="net.nicoulaj.idea.markdown.annotator.MarkdownAnnotator"/>
