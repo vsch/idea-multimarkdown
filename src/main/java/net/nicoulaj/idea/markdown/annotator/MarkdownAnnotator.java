@@ -22,6 +22,7 @@ package net.nicoulaj.idea.markdown.annotator;
 
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.ExternalAnnotator;
+import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiFile;
@@ -103,9 +104,10 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
     public void apply(final @NotNull PsiFile file,
                       final Set<HighlightableToken> annotationResult,
                       final @NotNull AnnotationHolder holder) {
-        for (final HighlightableToken token : annotationResult)
-            holder.createInfoAnnotation(token.getRange(), null)
-                  .setTextAttributes(SYNTAX_HIGHLIGHTER.getTokenHighlights(token.getElementType())[0]);
+        for (final HighlightableToken token : annotationResult) {
+            final TextAttributesKey[] attrs = SYNTAX_HIGHLIGHTER.getTokenHighlights(token.getElementType());
+            if (attrs.length > 0) holder.createInfoAnnotation(token.getRange(), null).setTextAttributes(attrs[0]);
+        }
     }
 
     /**
