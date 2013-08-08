@@ -41,6 +41,7 @@
       <li><a href="https://github.com/nicoulaj/idea-markdown/issues/98">#98</a>: Better color scheme support.</li>
       <li><a href="https://github.com/nicoulaj/idea-markdown/issues/97">#97</a>: Fix preview CSS for dark themes.</li>
       <li><a href="https://github.com/nicoulaj/idea-markdown/issues/92">#92</a>: Fix ArrayIndexOutOfBoundsException when opening file.</li>
+      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/94">#94</a>: Fix preview tab scrolling to end of files by default.</li>
     </ul>
       <b>0.8.3</b><br/>
     <ul>

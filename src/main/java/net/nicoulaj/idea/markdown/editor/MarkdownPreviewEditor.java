@@ -42,8 +42,10 @@ import org.jetbrains.annotations.Nullable;
 import org.pegdown.PegDownProcessor;
 
 import javax.swing.*;
+import javax.swing.text.DefaultCaret;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
+import java.awt.*;
 import java.beans.PropertyChangeListener;
 
 /**
@@ -66,9 +68,6 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
     @NonNls
     public static final String PREVIEW_STYLESHEET_PATH = "/net/nicoulaj/idea/markdown/preview.css";
 
-    /** The MarkdownJ {@link PegDownProcessor} used to generate HTML from Markdown. */
-    protected PegDownProcessor markdownProcessor = new PegDownProcessor(MarkdownGlobalSettings.getInstance().getExtensionsValue());
-
     /** The {@link java.awt.Component} used to render the HTML preview. */
     protected final JEditorPane jEditorPane = new JEditorPane();
 
@@ -77,6 +76,9 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
 
     /** The {@link Document} previewed in this editor. */
     protected final Document document;
+
+    /** The MarkdownJ {@link PegDownProcessor} used to generate HTML from Markdown. */
+    protected PegDownProcessor markdownProcessor = new PegDownProcessor(MarkdownGlobalSettings.getInstance().getExtensionsValue());
 
     /** Indicates whether the HTML preview is obsolete and should regenerated from the Markdown {@link #document}. */
     protected boolean previewIsObsolete = true;
@@ -113,6 +115,10 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
         kit.setStyleSheet(style);
         jEditorPane.setEditorKit(kit);
         jEditorPane.setEditable(false);
+
+        // Set the editor pane position to top left, and do not let it reset it
+        jEditorPane.getCaret().setMagicCaretPosition(new Point(0,0));
+        ((DefaultCaret) jEditorPane.getCaret()).setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
 
         // Add a custom link listener which can resolve local link references.
         jEditorPane.addHyperlinkListener(new MarkdownLinkListener(project, document));
