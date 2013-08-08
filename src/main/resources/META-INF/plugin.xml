@@ -25,7 +25,7 @@
   <name>Markdown</name>
   <category>Custom Languages</category>
   <vendor url="http://github.com/nicoulaj" email="julien.nicoulaud@gmail.com">Julien Nicoulaud</vendor>
-  <version>0.8.4</version>
+  <version>0.9</version>
   <idea-version since-build="110.000"/>
   <depends>com.intellij.modules.lang</depends>
   <description>
@@ -36,7 +36,11 @@
   <change-notes>
     <![CDATA[
     <p>
-      <b>0.8.4</b><br/>
+      <b>0.9</b><br/>
+    <ul>
+      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/50">#50</a>: Spell checking support.</li>
+    </ul>
+    <b>0.8.4</b><br/>
     <ul>
       <li><a href="https://github.com/nicoulaj/idea-markdown/issues/98">#98</a>: Better color scheme support.</li>
       <li><a href="https://github.com/nicoulaj/idea-markdown/issues/97">#97</a>: Fix preview CSS for dark themes.</li>
@@ -44,7 +48,7 @@
       <li><a href="https://github.com/nicoulaj/idea-markdown/issues/94">#94</a>: Fix preview tab scrolling to end of files by default.</li>
       <li><a href="https://github.com/nicoulaj/idea-markdown/issues/75">#75</a>: Fix Markdown parser timeout.</li>
     </ul>
-      <b>0.8.3</b><br/>
+    <b>0.8.3</b><br/>
     <ul>
       <li><a href="https://github.com/nicoulaj/idea-markdown/issues/84">#84</a>: Java 6 support.</li>
       <li><a href="https://github.com/nicoulaj/idea-markdown/issues/64">#64</a>: Fix NullPointerException when accessing settings.</li>
@@ -126,6 +130,7 @@
     <fileEditorProvider implementation="net.nicoulaj.idea.markdown.editor.MarkdownPreviewEditorProvider"/>
     <lang.parserDefinition language="Markdown" implementationClass="net.nicoulaj.idea.markdown.lang.parser.MarkdownParserDefinition"/>
     <externalAnnotator language="Markdown" implementationClass="net.nicoulaj.idea.markdown.annotator.MarkdownAnnotator"/>
+    <spellchecker.support language="Markdown" implementationClass="net.nicoulaj.idea.markdown.spellchecking.MarkdownSpellcheckingStrategy"/>
     <applicationService serviceInterface="net.nicoulaj.idea.markdown.settings.MarkdownGlobalSettings" serviceImplementation="net.nicoulaj.idea.markdown.settings.MarkdownGlobalSettings"/>
     <applicationConfigurable instance="net.nicoulaj.idea.markdown.settings.MarkdownGlobalSettingsConfigurable"/>
   </extensions>
