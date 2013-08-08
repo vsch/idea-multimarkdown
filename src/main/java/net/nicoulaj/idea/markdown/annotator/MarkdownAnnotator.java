@@ -27,7 +27,6 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
 import net.nicoulaj.idea.markdown.highlighter.MarkdownSyntaxHighlighter;
-import net.nicoulaj.idea.markdown.lang.MarkdownTokenTypes;
 import net.nicoulaj.idea.markdown.settings.MarkdownGlobalSettings;
 import net.nicoulaj.idea.markdown.settings.MarkdownGlobalSettingsListener;
 import org.jetbrains.annotations.NotNull;
@@ -36,6 +35,8 @@ import org.pegdown.ast.*;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import static net.nicoulaj.idea.markdown.lang.MarkdownTokenTypes.*;
 
 /**
  * {@link ExternalAnnotator} responsible for syntax highlighting Markdown files.
@@ -190,7 +191,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
         public void visit(SimpleNode node) {
             switch (node.getType()) {
             case HRule:
-                addToken(node, MarkdownTokenTypes.HRULE);
+                addToken(node, HRULE);
                 break;
             case Apostrophe:
             case Ellipsis:
@@ -228,7 +229,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link org.pegdown.ast.Node} to visit
          */
         public void visit(Node node) {
-            addToken(node, MarkdownTokenTypes.ERROR_ELEMENT);
+            addToken(node, ERROR_ELEMENT);
         }
 
         /**
@@ -237,7 +238,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link TextNode} to visit
          */
         public void visit(TextNode node) {
-            addToken(node, MarkdownTokenTypes.TEXT);
+            addToken(node, TEXT);
         }
 
         /**
@@ -246,16 +247,16 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link SpecialTextNode} to visit
          */
         public void visit(SpecialTextNode node) {
-            addToken(node, MarkdownTokenTypes.SPECIAL_TEXT);
+            addToken(node, SPECIAL_TEXT);
         }
 
         /**
-         * Visit the {@link EmphNode}.
+         * Visit the {@link StrongEmphSuperNode}.
          *
-         * @param node the {@link EmphNode} to visit
+         * @param node the {@link StrongEmphSuperNode} to visit
          */
-        public void visit(EmphNode node) {
-            addToken(node, MarkdownTokenTypes.ITALIC);
+        public void visit(StrongEmphSuperNode node) {
+            addToken(node, node.isStrong() ? BOLD : ITALIC);
             visitChildren(node);
         }
 
@@ -265,17 +266,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link ExpImageNode} to visit
          */
         public void visit(ExpImageNode node) {
-            addToken(node, MarkdownTokenTypes.IMAGE);
-            visitChildren(node);
-        }
-
-        /**
-         * Visit the {@link StrongNode}.
-         *
-         * @param node the {@link StrongNode} to visit
-         */
-        public void visit(StrongNode node) {
-            addToken(node, MarkdownTokenTypes.BOLD);
+            addToken(node, IMAGE);
             visitChildren(node);
         }
 
@@ -285,7 +276,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link ExpLinkNode} to visit
          */
         public void visit(ExpLinkNode node) {
-            addToken(node, MarkdownTokenTypes.EXPLICIT_LINK);
+            addToken(node, EXPLICIT_LINK);
             visitChildren(node);
         }
 
@@ -295,7 +286,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link RefLinkNode} to visit
          */
         public void visit(final RefLinkNode node) {
-            addToken(node, MarkdownTokenTypes.REFERENCE_LINK);
+            addToken(node, REFERENCE_LINK);
             visitChildren(node);
         }
 
@@ -305,7 +296,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link AutoLinkNode} to visit
          */
         public void visit(AutoLinkNode node) {
-            addToken(node, MarkdownTokenTypes.AUTO_LINK);
+            addToken(node, AUTO_LINK);
         }
 
         /**
@@ -314,7 +305,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link MailLinkNode} to visit
          */
         public void visit(MailLinkNode node) {
-            addToken(node, MarkdownTokenTypes.MAIL_LINK);
+            addToken(node, MAIL_LINK);
         }
 
         /**
@@ -325,22 +316,22 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
         public void visit(HeaderNode node) {
             switch (node.getLevel()) {
             case 1:
-                addToken(node, MarkdownTokenTypes.HEADER_LEVEL_1);
+                addToken(node, HEADER_LEVEL_1);
                 break;
             case 2:
-                addToken(node, MarkdownTokenTypes.HEADER_LEVEL_2);
+                addToken(node, HEADER_LEVEL_2);
                 break;
             case 3:
-                addToken(node, MarkdownTokenTypes.HEADER_LEVEL_3);
+                addToken(node, HEADER_LEVEL_3);
                 break;
             case 4:
-                addToken(node, MarkdownTokenTypes.HEADER_LEVEL_4);
+                addToken(node, HEADER_LEVEL_4);
                 break;
             case 5:
-                addToken(node, MarkdownTokenTypes.HEADER_LEVEL_5);
+                addToken(node, HEADER_LEVEL_5);
                 break;
             case 6:
-                addToken(node, MarkdownTokenTypes.HEADER_LEVEL_6);
+                addToken(node, HEADER_LEVEL_6);
                 break;
             }
             visitChildren(node);
@@ -352,7 +343,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link CodeNode} to visit
          */
         public void visit(CodeNode node) {
-            addToken(node, MarkdownTokenTypes.CODE);
+            addToken(node, CODE);
         }
 
         /**
@@ -361,7 +352,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link VerbatimNode} to visit
          */
         public void visit(VerbatimNode node) {
-            addToken(node, MarkdownTokenTypes.VERBATIM);
+            addToken(node, VERBATIM);
         }
 
         /**
@@ -370,7 +361,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link WikiLinkNode} to visit
          */
         public void visit(WikiLinkNode node) {
-            addToken(node, MarkdownTokenTypes.WIKI_LINK);
+            addToken(node, WIKI_LINK);
         }
 
         /**
@@ -379,7 +370,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link QuotedNode} to visit
          */
         public void visit(QuotedNode node) {
-            addToken(node, MarkdownTokenTypes.QUOTE);
+            addToken(node, QUOTE);
         }
 
         /**
@@ -388,7 +379,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link BlockQuoteNode} to visit
          */
         public void visit(BlockQuoteNode node) {
-            addToken(node, MarkdownTokenTypes.BLOCK_QUOTE);
+            addToken(node, BLOCK_QUOTE);
             visitChildren(node);
         }
 
@@ -398,7 +389,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link BulletListNode} to visit
          */
         public void visit(BulletListNode node) {
-            addToken(node, MarkdownTokenTypes.BULLET_LIST);
+            addToken(node, BULLET_LIST);
             visitChildren(node);
         }
 
@@ -408,7 +399,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link OrderedListNode} to visit
          */
         public void visit(OrderedListNode node) {
-            addToken(node, MarkdownTokenTypes.ORDERED_LIST);
+            addToken(node, ORDERED_LIST);
             visitChildren(node);
         }
 
@@ -418,7 +409,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link ListItemNode} to visit
          */
         public void visit(ListItemNode node) {
-            addToken(node, MarkdownTokenTypes.LIST_ITEM);
+            addToken(node, LIST_ITEM);
             visitChildren(node);
         }
 
@@ -428,7 +419,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link DefinitionListNode} to visit
          */
         public void visit(DefinitionListNode node) {
-            addToken(node, MarkdownTokenTypes.DEFINITION_LIST);
+            addToken(node, DEFINITION_LIST);
             visitChildren(node);
         }
 
@@ -438,7 +429,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link DefinitionNode} to visit
          */
         public void visit(DefinitionNode node) {
-            addToken(node, MarkdownTokenTypes.DEFINITION);
+            addToken(node, DEFINITION);
             visitChildren(node);
         }
 
@@ -448,7 +439,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link DefinitionTermNode} to visit
          */
         public void visit(DefinitionTermNode node) {
-            addToken(node, MarkdownTokenTypes.DEFINITION_TERM);
+            addToken(node, DEFINITION_TERM);
             visitChildren(node);
         }
 
@@ -458,7 +449,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link TableNode} to visit
          */
         public void visit(TableNode node) {
-            addToken(node, MarkdownTokenTypes.TABLE);
+            addToken(node, TABLE);
             visitChildren(node);
         }
 
@@ -468,7 +459,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link TableBodyNode} to visit
          */
         public void visit(TableBodyNode node) {
-            addToken(node, MarkdownTokenTypes.TABLE_BODY);
+            addToken(node, TABLE_BODY);
             visitChildren(node);
         }
 
@@ -478,7 +469,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link TableCellNode} to visit
          */
         public void visit(TableCellNode node) {
-            addToken(node, MarkdownTokenTypes.TABLE_CELL);
+            addToken(node, TABLE_CELL);
             visitChildren(node);
         }
 
@@ -488,7 +479,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link TableColumnNode} to visit
          */
         public void visit(TableColumnNode node) {
-            addToken(node, MarkdownTokenTypes.TABLE_COLUMN);
+            addToken(node, TABLE_COLUMN);
             visitChildren(node);
         }
 
@@ -498,7 +489,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link TableHeaderNode} to visit
          */
         public void visit(TableHeaderNode node) {
-            addToken(node, MarkdownTokenTypes.TABLE_HEADER);
+            addToken(node, TABLE_HEADER);
             visitChildren(node);
         }
 
@@ -508,7 +499,17 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link TableRowNode} to visit
          */
         public void visit(TableRowNode node) {
-            addToken(node, MarkdownTokenTypes.TABLE_ROW);
+            addToken(node, TABLE_ROW);
+            visitChildren(node);
+        }
+
+        /**
+         * Visit the {@link TableCaptionNode}.
+         *
+         * @param node the {@link TableCaptionNode} to visit
+         */
+        public void visit(TableCaptionNode node) {
+            addToken(node, TABLE_CAPTION);
             visitChildren(node);
         }
 
@@ -520,7 +521,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link HtmlBlockNode} to visit
          */
         public void visit(HtmlBlockNode node) {
-            addToken(node, MarkdownTokenTypes.HTML_BLOCK);
+            addToken(node, HTML_BLOCK);
         }
 
         /**
@@ -531,7 +532,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link InlineHtmlNode} to visit
          */
         public void visit(InlineHtmlNode node) {
-            addToken(node, MarkdownTokenTypes.INLINE_HTML);
+            addToken(node, INLINE_HTML);
         }
 
         /**
@@ -540,7 +541,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link ReferenceNode} to visit
          */
         public void visit(ReferenceNode node) {
-            addToken(node, MarkdownTokenTypes.REFERENCE);
+            addToken(node, REFERENCE);
             visitChildren(node);
         }
 
@@ -550,7 +551,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link RefImageNode} to visit
          */
         public void visit(RefImageNode node) {
-            addToken(node, MarkdownTokenTypes.REFERENCE_IMAGE);
+            addToken(node, REFERENCE_IMAGE);
             visitChildren(node);
         }
 
@@ -560,7 +561,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
          * @param node the {@link AbbreviationNode} to visit
          */
         public void visit(AbbreviationNode node) {
-            addToken(node, MarkdownTokenTypes.ABBREVIATION);
+            addToken(node, ABBREVIATION);
             visitChildren(node);
         }
 

@@ -80,6 +80,7 @@ public class MarkdownSyntaxHighlighter extends SyntaxHighlighterBase {
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.TABLE_COLUMN_SET, MarkdownHighlighterColors.TABLE_COLUMN_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.TABLE_HEADER_SET, MarkdownHighlighterColors.TABLE_HEADER_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.TABLE_ROW_SET, MarkdownHighlighterColors.TABLE_ROW_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.TABLE_CAPTION_SET, MarkdownHighlighterColors.TABLE_CAPTION_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.HTML_BLOCK_SET, MarkdownHighlighterColors.HTML_BLOCK_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.INLINE_HTML_SET, MarkdownHighlighterColors.INLINE_HTML_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.REFERENCE_SET, MarkdownHighlighterColors.REFERENCE_ATTR_KEY);

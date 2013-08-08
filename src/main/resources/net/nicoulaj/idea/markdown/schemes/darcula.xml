@@ -258,6 +258,13 @@
       <option name="FONT_TYPE" value=""/>
     </value>
   </option>-->
+<!--  <option name="MARKDOWN.TABLE_CAPTION">
+    <value>
+      <option name="FOREGROUND" value=""/>
+      <option name="BACKGROUND" value=""/>
+      <option name="FONT_TYPE" value=""/>
+    </value>
+  </option>-->
 <!--  <option name="MARKDOWN.HTML_BLOCK">
     <value>
       <option name="FOREGROUND" value=""/>

@@ -132,6 +132,9 @@ public interface MarkdownTokenTypeSets extends MarkdownTokenTypes {
     /** Table row token type set. */
     TokenSet TABLE_ROW_SET = TokenSet.create(TABLE_ROW);
 
+    /** Table caption token type set. */
+    TokenSet TABLE_CAPTION_SET = TokenSet.create(TABLE_CAPTION);
+
     /** HTML block token type set. */
     TokenSet HTML_BLOCK_SET = TokenSet.create(HTML_BLOCK);
 

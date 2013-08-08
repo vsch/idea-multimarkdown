@@ -133,6 +133,9 @@ public interface MarkdownTokenTypes extends TokenType {
     /** Table row token type. */
     IElementType TABLE_ROW = new MarkdownElementType("TABLE_ROW");
 
+    /** Table caption token type. */
+    IElementType TABLE_CAPTION = new MarkdownElementType("TABLE_CAPTION");
+
     /** HTML block token type. */
     IElementType HTML_BLOCK = new MarkdownElementType("HTML_BLOCK");
 

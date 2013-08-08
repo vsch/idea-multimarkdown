@@ -89,6 +89,9 @@ public class MarkdownHighlighterColors {
     /** Default style for table rows. */
     public static final TextAttributesKey TABLE_ROW_ATTR_KEY = createTextAttributesKey("MARKDOWN.TABLE_ROW", IDENTIFIER);
 
+    /** Default style for table captions. */
+    public static final TextAttributesKey TABLE_CAPTION_ATTR_KEY = createTextAttributesKey("MARKDOWN.TABLE_CAPTION", IDENTIFIER);
+
     /** Default style for HTML blocks. */
     public static final TextAttributesKey HTML_BLOCK_ATTR_KEY = createTextAttributesKey("MARKDOWN.HTML_BLOCK", IDENTIFIER);
 

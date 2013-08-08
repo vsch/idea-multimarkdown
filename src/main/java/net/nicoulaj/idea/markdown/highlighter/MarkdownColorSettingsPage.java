@@ -212,6 +212,10 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
                 MarkdownHighlighterColors.TABLE_ROW_ATTR_KEY)
         );
         attributeDescriptors.add(new AttributesDescriptor(
+                MarkdownBundle.message("markdown.editor.colorsettingspage.table-caption"),
+                MarkdownHighlighterColors.TABLE_CAPTION_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
                 MarkdownBundle.message("markdown.editor.colorsettingspage.table-header"),
                 MarkdownHighlighterColors.TABLE_HEADER_ATTR_KEY)
         );
