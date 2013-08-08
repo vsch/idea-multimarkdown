@@ -42,6 +42,7 @@
       <li><a href="https://github.com/nicoulaj/idea-markdown/issues/97">#97</a>: Fix preview CSS for dark themes.</li>
       <li><a href="https://github.com/nicoulaj/idea-markdown/issues/92">#92</a>: Fix ArrayIndexOutOfBoundsException when opening file.</li>
       <li><a href="https://github.com/nicoulaj/idea-markdown/issues/94">#94</a>: Fix preview tab scrolling to end of files by default.</li>
+      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/75">#75</a>: Fix Markdown parser timeout.</li>
     </ul>
       <b>0.8.3</b><br/>
     <ul>
