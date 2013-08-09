@@ -39,6 +39,7 @@
       <b>0.9</b><br/>
     <ul>
       <li><a href="https://github.com/nicoulaj/idea-markdown/issues/50">#50</a>: Spell checking support.</li>
+      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/39">#39</a>: TODO tracking support.</li>
     </ul>
     <b>0.8.4</b><br/>
     <ul>
@@ -131,6 +132,7 @@
     <lang.parserDefinition language="Markdown" implementationClass="net.nicoulaj.idea.markdown.lang.parser.MarkdownParserDefinition"/>
     <externalAnnotator language="Markdown" implementationClass="net.nicoulaj.idea.markdown.annotator.MarkdownAnnotator"/>
     <spellchecker.support language="Markdown" implementationClass="net.nicoulaj.idea.markdown.spellchecking.MarkdownSpellcheckingStrategy"/>
+    <todoIndexer filetype="Markdown" implementationClass="net.nicoulaj.idea.markdown.todo.MarkdownTodoIndexer"/>
     <applicationService serviceInterface="net.nicoulaj.idea.markdown.settings.MarkdownGlobalSettings" serviceImplementation="net.nicoulaj.idea.markdown.settings.MarkdownGlobalSettings"/>
     <applicationConfigurable instance="net.nicoulaj.idea.markdown.settings.MarkdownGlobalSettingsConfigurable"/>
   </extensions>
