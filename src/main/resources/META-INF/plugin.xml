@@ -25,8 +25,8 @@
   <name>Markdown</name>
   <category>Custom Languages</category>
   <vendor url="http://github.com/nicoulaj" email="julien.nicoulaud@gmail.com">Julien Nicoulaud</vendor>
-  <version>0.9</version>
-  <idea-version since-build="110.000"/>
+  <version>0.9.1</version>
+  <idea-version since-build="125.000"/>
   <depends>com.intellij.modules.lang</depends>
   <description>
     <![CDATA[
@@ -36,7 +36,11 @@
   <change-notes>
     <![CDATA[
     <p>
-      <b>0.9</b><br/>
+      <b>0.9.1</b><br/>
+    <ul>
+      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/110">#110</a>: Fix required platform version.</li>
+    </ul>
+    <b>0.9</b><br/>
     <ul>
       <li><a href="https://github.com/nicoulaj/idea-markdown/issues/50">#50</a>: Spell checking support.</li>
       <li><a href="https://github.com/nicoulaj/idea-markdown/issues/39">#39</a>: TODO tracking support.</li>
