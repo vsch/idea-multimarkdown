@@ -75,7 +75,7 @@
     </copy>
   </target>
 
-  <target name="enforce-java-version" description="Fail if using wrong JDK version">
+  <target name="enforce-java-version" unless="skip.java.version.check" description="Fail if using wrong JDK version">
     <fail message="This build must be invoked using JDK ${jdk.version}">
       <condition>
         <not>
@@ -98,7 +98,7 @@
 
   <target name="compiler" depends="dependencies,setup-idea-compiler" description="Setup IDEA custom compiler"/>
 
-  <target name="compile" depends="dependencies,compiler,resources" description="Compile project source classes">
+  <target name="compile" depends="dependencies,compiler,resources,enforce-java-version" description="Compile project source classes">
     <mkdir dir="${project.build.outputDirectory}"/>
     <javac2 destdir="${project.build.outputDirectory}" includeantruntime="false" memorymaximumsize="128m" fork="true" source="${jdk.version}" target="${jdk.version}">
       <classpath>
