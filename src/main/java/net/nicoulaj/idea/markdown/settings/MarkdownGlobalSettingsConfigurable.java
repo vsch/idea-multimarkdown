@@ -115,6 +115,7 @@ public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurabl
      */
     public boolean isModified() {
         return settingsPanel == null
+               || settingsPanel.parsingTimeoutSpinner == null || globalSettings.getParsingTimeout() != (Integer) settingsPanel.parsingTimeoutSpinner.getValue()
                || settingsPanel.abbreviationsCheckBox == null || globalSettings.isAbbreviations() != settingsPanel.abbreviationsCheckBox.isSelected()
                || settingsPanel.autoLinksCheckBox == null || globalSettings.isAutoLinks() != settingsPanel.autoLinksCheckBox.isSelected()
                || settingsPanel.wikiLinksCheckBox == null || globalSettings.isWikiLinks() != settingsPanel.wikiLinksCheckBox.isSelected()
@@ -131,6 +132,7 @@ public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurabl
     /** Apply modifications to the settings done in the UI. */
     public void apply() {
         if (settingsPanel != null) {
+            globalSettings.setParsingTimeout((Integer) settingsPanel.parsingTimeoutSpinner.getValue());
             globalSettings.setAbbreviations(settingsPanel.abbreviationsCheckBox != null && settingsPanel.abbreviationsCheckBox.isSelected());
             globalSettings.setAutoLinks(settingsPanel.autoLinksCheckBox != null && settingsPanel.autoLinksCheckBox.isSelected());
             globalSettings.setWikiLinks(settingsPanel.wikiLinksCheckBox != null && settingsPanel.wikiLinksCheckBox.isSelected());
@@ -148,6 +150,7 @@ public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurabl
     /** Reset UI with settings values. */
     public void reset() {
         if (settingsPanel != null) {
+            if (settingsPanel.parsingTimeoutSpinner != null) settingsPanel.parsingTimeoutSpinner.setValue(globalSettings.getParsingTimeout());
             if (settingsPanel.abbreviationsCheckBox != null) settingsPanel.abbreviationsCheckBox.setSelected(globalSettings.isAbbreviations());
             if (settingsPanel.autoLinksCheckBox != null) settingsPanel.autoLinksCheckBox.setSelected(globalSettings.isAutoLinks());
             if (settingsPanel.wikiLinksCheckBox != null) settingsPanel.wikiLinksCheckBox.setSelected(globalSettings.isWikiLinks());

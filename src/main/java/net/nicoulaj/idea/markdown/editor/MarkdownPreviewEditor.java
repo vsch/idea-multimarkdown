@@ -22,6 +22,7 @@ package net.nicoulaj.idea.markdown.editor;
 
 import com.intellij.codeHighlighting.BackgroundEditorHighlighter;
 import com.intellij.ide.structureView.StructureViewBuilder;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.event.DocumentAdapter;
 import com.intellij.openapi.editor.event.DocumentEvent;
@@ -61,6 +62,9 @@ import java.beans.PropertyChangeListener;
  */
 public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEditor {
 
+    /** Logger. */
+    private static final Logger LOGGER = Logger.getInstance(MarkdownPreviewEditor.class);
+
     /** The editor name, displayed as the tab name of the editor. */
     public static final String EDITOR_NAME = MarkdownBundle.message("markdown.editor.preview.tab-name");
 
@@ -78,7 +82,8 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
     protected final Document document;
 
     /** The MarkdownJ {@link PegDownProcessor} used to generate HTML from Markdown. */
-    protected PegDownProcessor markdownProcessor = new PegDownProcessor(MarkdownGlobalSettings.getInstance().getExtensionsValue());
+    protected PegDownProcessor markdownProcessor = new PegDownProcessor(MarkdownGlobalSettings.getInstance().getExtensionsValue(),
+                                                                        MarkdownGlobalSettings.getInstance().getParsingTimeout());
 
     /** Indicates whether the HTML preview is obsolete and should regenerated from the Markdown {@link #document}. */
     protected boolean previewIsObsolete = true;
@@ -103,7 +108,8 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
         // Listen to settings changes
         MarkdownGlobalSettings.getInstance().addListener(new MarkdownGlobalSettingsListener() {
             public void handleSettingsChanged(@NotNull final MarkdownGlobalSettings newSettings) {
-                markdownProcessor = new PegDownProcessor(newSettings.getExtensionsValue());
+                markdownProcessor = new PegDownProcessor(newSettings.getExtensionsValue(),
+                                                         newSettings.getParsingTimeout());
                 previewIsObsolete = true;
             }
         });
@@ -205,8 +211,12 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
      */
     public void selectNotify() {
         if (previewIsObsolete) {
-            jEditorPane.setText(markdownProcessor.markdownToHtml(document.getText()));
-            previewIsObsolete = false;
+            try {
+                jEditorPane.setText(markdownProcessor.markdownToHtml(document.getText()));
+                previewIsObsolete = false;
+            } catch (Exception e) {
+                LOGGER.error("Failed processing Markdown document", e);
+            }
         }
     }
 

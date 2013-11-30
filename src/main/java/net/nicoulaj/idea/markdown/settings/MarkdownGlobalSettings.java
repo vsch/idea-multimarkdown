@@ -47,6 +47,9 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
     /** A set of listeners to this object state changes. */
     protected Set<WeakReference<MarkdownGlobalSettingsListener>> listeners;
 
+    /** Parsing timeout (milliseconds). */
+    private int parsingTimeout = 10000;
+
     /** Whether the "SmartyPants style pretty ellipsises, dashes and apostrophes" extension should be enabled. */
     private boolean smarts = false;
 
@@ -79,6 +82,36 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
 
     /** Whether the "Suppress inline HTML tags" extension should be enabled. */
     private boolean suppressInlineHTML = false;
+
+    /**
+     * Get the instance of this service.
+     *
+     * @return the unique {@link MarkdownGlobalSettings} instance.
+     */
+    public static MarkdownGlobalSettings getInstance() {
+        return ServiceManager.getService(MarkdownGlobalSettings.class);
+    }
+
+    /**
+     * Get the parsing timeout (milliseconds).
+     *
+     * @return parsing timeout (milliseconds)
+     */
+    public int getParsingTimeout() {
+        return parsingTimeout;
+    }
+
+    /**
+     * Set parsing timeout (milliseconds).
+     *
+     * @param parsingTimeout parsing timeout (milliseconds)
+     */
+    public void setParsingTimeout(int parsingTimeout) {
+        if (this.parsingTimeout != parsingTimeout) {
+            this.parsingTimeout = parsingTimeout;
+            notifyListeners();
+        }
+    }
 
     /**
      * Whether the "Suppress inline HTML tags" extension should be enabled.
@@ -312,15 +345,6 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
     }
 
     /**
-     * Get the instance of this service.
-     *
-     * @return the unique {@link MarkdownGlobalSettings} instance.
-     */
-    public static MarkdownGlobalSettings getInstance() {
-        return ServiceManager.getService(MarkdownGlobalSettings.class);
-    }
-
-    /**
      * Get the settings state as a DOM element.
      *
      * @return an ready to serialize DOM {@link Element}.
@@ -328,6 +352,7 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
      */
     public Element getState() {
         final Element element = new Element("MarkdownSettings");
+        element.setAttribute("parsingTimeout", Integer.toString(parsingTimeout));
         element.setAttribute("smarts", Boolean.toString(smarts));
         element.setAttribute("quotes", Boolean.toString(quotes));
         element.setAttribute("abbreviations", Boolean.toString(abbreviations));
@@ -349,6 +374,7 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
      * @see {@link #getState()}
      */
     public void loadState(@NotNull Element element) {
+        parsingTimeout = Integer.parseInt(element.getAttributeValue("parsingTimeout"));
         smarts = Boolean.parseBoolean(element.getAttributeValue("smarts"));
         quotes = Boolean.parseBoolean(element.getAttributeValue("quotes"));
         abbreviations = Boolean.parseBoolean(element.getAttributeValue("abbreviations"));

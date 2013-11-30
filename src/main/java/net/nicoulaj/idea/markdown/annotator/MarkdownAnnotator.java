@@ -22,6 +22,7 @@ package net.nicoulaj.idea.markdown.annotator;
 
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.ExternalAnnotator;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.openapi.util.TextRange;
@@ -51,21 +52,26 @@ import static net.nicoulaj.idea.markdown.lang.MarkdownTokenTypes.*;
  */
 public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnnotator.HighlightableToken>> {
 
+    /** Logger. */
+    private static final Logger LOGGER = Logger.getInstance(MarkdownAnnotator.class);
+
     /**
      * The {@link com.intellij.openapi.fileTypes.SyntaxHighlighter} used by
      * {@link #apply(com.intellij.psi.PsiFile, java.util.Set, com.intellij.lang.annotation.AnnotationHolder)}.
      */
-    protected static final SyntaxHighlighter SYNTAX_HIGHLIGHTER = new MarkdownSyntaxHighlighter();
+    private static final SyntaxHighlighter SYNTAX_HIGHLIGHTER = new MarkdownSyntaxHighlighter();
 
     /** The {@link PegDownProcessor} used for building the document AST. */
-    protected PegDownProcessor processor = new PegDownProcessor(MarkdownGlobalSettings.getInstance().getExtensionsValue());
+    private PegDownProcessor processor = new PegDownProcessor(MarkdownGlobalSettings.getInstance().getExtensionsValue(),
+                                                              MarkdownGlobalSettings.getInstance().getParsingTimeout());
 
     /** Build a new instance of {@link MarkdownAnnotator}. */
     public MarkdownAnnotator() {
         // Listen to global settings changes.
         MarkdownGlobalSettings.getInstance().addListener(new MarkdownGlobalSettingsListener() {
             public void handleSettingsChanged(@NotNull final MarkdownGlobalSettings newSettings) {
-                processor = new PegDownProcessor(newSettings.getExtensionsValue());
+                processor = new PegDownProcessor(newSettings.getExtensionsValue(),
+                                                 newSettings.getParsingTimeout());
             }
         });
     }
@@ -90,7 +96,11 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
     @Override
     public Set<HighlightableToken> doAnnotate(final String source) {
         final MarkdownASTVisitor visitor = new MarkdownASTVisitor();
-        processor.parseMarkdown(source.toCharArray()).accept(visitor);
+        try {
+            processor.parseMarkdown(source.toCharArray()).accept(visitor);
+        } catch (Exception e) {
+            LOGGER.error("Failed processing Markdown document", e);
+        }
         return visitor.getTokens();
     }
 

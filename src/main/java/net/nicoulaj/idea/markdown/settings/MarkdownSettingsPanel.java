@@ -35,11 +35,17 @@ public class MarkdownSettingsPanel {
     /** The parent panel for the form. */
     public JPanel panel;
 
+    /** The "settings" form container. */
+    public JPanel settingsPanel;
+
+    /** Form element for {@link MarkdownGlobalSettings#parsingTimeout}. */
+    public JSpinner parsingTimeoutSpinner;
+
+    /** Description label for {@link #parsingTimeoutSpinner}. */
+    private JLabel parsingTimeoutDescriptionLabel;
+
     /** The "extensions" form container. */
     public JPanel extensionsPanel;
-
-    /** Description label for {@link #extensionsPanel}. */
-    private JLabel extensionsPanelDescription;
 
     /** Form element for {@link MarkdownGlobalSettings#smarts}. */
     public JCheckBox smartsCheckBox;

@@ -38,6 +38,7 @@
     <p>
       <b>0.9.2</b><br/>
     <ul>
+      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/114">#114</a>: Raise parsing tiemout and make it configurable.</li>
       <li><a href="https://github.com/nicoulaj/idea-markdown/issues/125">#125</a>: Fix syntax highlighting not working in IntelliJ platform 13.</li>
     </ul>
     <p>
