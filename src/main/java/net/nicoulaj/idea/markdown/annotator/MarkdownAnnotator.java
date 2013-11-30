@@ -31,6 +31,7 @@ import net.nicoulaj.idea.markdown.highlighter.MarkdownSyntaxHighlighter;
 import net.nicoulaj.idea.markdown.settings.MarkdownGlobalSettings;
 import net.nicoulaj.idea.markdown.settings.MarkdownGlobalSettingsListener;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.pegdown.PegDownProcessor;
 import org.pegdown.ast.*;
 
@@ -48,7 +49,7 @@ import static net.nicoulaj.idea.markdown.lang.MarkdownTokenTypes.*;
  * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
  * @since 0.4
  */
-public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnnotator.HighlightableToken>> {
+public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnnotator.HighlightableToken>> {
 
     /**
      * The {@link com.intellij.openapi.fileTypes.SyntaxHighlighter} used by
@@ -75,9 +76,9 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
      * @param file the {@link PsiFile} to process.
      * @return the file text.
      */
-    @Override
-    public char[] collectionInformation(final @NotNull PsiFile file) {
-        return file.textToCharArray();
+    @Nullable @Override
+    public String collectInformation(@NotNull PsiFile file) {
+        return file.getText();
     }
 
     /**
@@ -87,9 +88,9 @@ public class MarkdownAnnotator extends ExternalAnnotator<char[], Set<MarkdownAnn
      * @return a {@link Set} of {@link net.nicoulaj.idea.markdown.annotator.MarkdownAnnotator.HighlightableToken}s that should be used to do the file syntax highlighting.
      */
     @Override
-    public Set<HighlightableToken> doAnnotate(final char[] source) {
+    public Set<HighlightableToken> doAnnotate(final String source) {
         final MarkdownASTVisitor visitor = new MarkdownASTVisitor();
-        processor.parseMarkdown(source).accept(visitor);
+        processor.parseMarkdown(source.toCharArray()).accept(visitor);
         return visitor.getTokens();
     }
 
