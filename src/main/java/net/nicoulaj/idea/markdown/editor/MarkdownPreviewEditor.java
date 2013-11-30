@@ -212,7 +212,9 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
     public void selectNotify() {
         if (previewIsObsolete) {
             try {
-                jEditorPane.setText(markdownProcessor.markdownToHtml(document.getText()));
+                jEditorPane.setText("<div id=\"markdown-preview\">" +
+                                    markdownProcessor.markdownToHtml(document.getText()) +
+                                    "</div>");
                 previewIsObsolete = false;
             } catch (Exception e) {
                 LOGGER.error("Failed processing Markdown document", e);

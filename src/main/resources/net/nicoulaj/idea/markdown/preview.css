@@ -21,123 +21,123 @@
 
 /* Base elements */
 
-samp {
+#markdown-preview samp {
     font-size: small;
     font-family: Monospaced, monospace;
 }
 
-kbd {
+#markdown-preview kbd {
     font-size: small;
     font-family: Monospaced, monospace;
 }
 
-strike {
+#markdown-preview strike {
     text-decoration: line-through;
 }
 
-cite {
+#markdown-preview cite {
     font-style: italic;
 }
 
-sub {
+#markdown-preview sub {
     vertical-align: sub;
 }
 
-em {
+#markdown-preview em {
     font-style: italic;
 }
 
-sup {
+#markdown-preview sup {
     vertical-align: sup;
 }
 
-u {
+#markdown-preview u {
     text-decoration: underline;
 }
 
-s {
+#markdown-preview s {
     text-decoration: line-through;
 }
 
-address {
+#markdown-preview address {
     color: blue;
     font-style: italic;
 }
 
-b {
+#markdown-preview b {
     font-weight: bold;
 }
 
-i {
+#markdown-preview i {
     font-style: italic;
 }
 
-var {
+#markdown-preview var {
     font-weight: bold;
     font-style: italic;
 }
 
-dfn {
+#markdown-preview dfn {
     font-style: italic;
 }
 
-dt {
+#markdown-preview dt {
     margin-top: 0;
     margin-bottom: 0;
 }
 
-dl {
+#markdown-preview dl {
     margin-left: 0;
     margin-top: 10px;
     margin-bottom: 10px;
 }
 
-tt {
+#markdown-preview tt {
     font-family: Monospaced, monospace;
 }
 
-body {
+#markdown-preview {
     background-color: #ffffff;
-    margin-left: 10px;
-    margin-right: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
     color: black;
     font-family: Helvetica, Arial, sans-serif;
     font-weight: normal;
 }
 
-small {
+#markdown-preview small {
     font-size: x-small;
 }
 
-big {
+#markdown-preview big {
     font-size: x-large;
 }
 
-a {
+#markdown-preview a {
     color: blue;
     text-decoration: underline;
 }
 
-p {
+#markdown-preview p {
     margin-top: 15px;
 }
 
-strong {
+#markdown-preview strong {
     font-weight: bold;
 }
 
-center {
+#markdown-preview center {
     text-align: center;
 }
 
-dd {
+#markdown-preview dd {
     margin-right-rtl: 40px;
     margin-top: 0;
     margin-left-ltr: 40px;
     margin-bottom: 0;
 }
 
-dd p {
+#markdown-preview dd p {
     margin-left: 0;
     margin-top: 0;
     margin-bottom: 0;
@@ -145,42 +145,42 @@ dd p {
 
 /* Headers */
 
-h1 {
+#markdown-preview h1 {
     font-size: x-large;
     font-weight: bold;
     margin-top: 20px;
     margin-bottom: 0;
 }
 
-h2 {
+#markdown-preview h2 {
     font-size: large;
     font-weight: bold;
     margin-top: 20px;
     margin-bottom: 0;
 }
 
-h3 {
+#markdown-preview h3 {
     font-size: medium;
     font-weight: bold;
     margin-top: 20px;
     margin-bottom: 0;
 }
 
-h4 {
+#markdown-preview h4 {
     font-size: small;
     font-weight: bold;
     margin-top: 20px;
     margin-bottom: 0;
 }
 
-h5 {
+#markdown-preview h5 {
     font-size: small;
     font-weight: bold;
     margin-top: 20px;
     margin-bottom: 0;
 }
 
-h6 {
+#markdown-preview h6 {
     font-size: small;
     font-weight: bold;
     margin-top: 20px;
@@ -189,24 +189,24 @@ h6 {
 
 /* Code/quotes */
 
-pre {
+#markdown-preview pre {
     font-family: Monospaced, monospace;
     margin: 5px 10px;
     padding: 5px;
     background-color: #dcdcdc;
 }
 
-pre p {
+#markdown-preview pre p {
     margin-top: 0;
 }
 
-code {
+#markdown-preview code {
     font-size: small;
     font-family: Monospaced, monospace;
     background-color: #dcdcdc;
 }
 
-blockquote {
+#markdown-preview blockquote {
     margin: 5px 10px;
     padding: 5px;
     background-color: #dcdcdc;
@@ -214,7 +214,7 @@ blockquote {
 
 /* Lists */
 
-ul {
+#markdown-preview ul {
     margin-right-rtl: 20px;
     margin-left-ltr: 20px;
     margin-top: 10px;
@@ -222,31 +222,31 @@ ul {
     list-style-type: disc;
 }
 
-ul li {
+#markdown-preview ul li {
     margin: 0;
 }
 
-ul li ul {
+#markdown-preview ul li ul {
     margin-right-rtl: 25px;
     margin-left-ltr: 25px;
     list-style-type: circle;
 }
 
-ul li ul li {
+#markdown-preview ul li ul li {
     margin: 0;
 }
 
-ul li ul li ul {
+#markdown-preview ul li ul li ul {
     margin-right-rtl: 25px;
     margin-left-ltr: 25px;
     list-style-type: square;
 }
 
-ul li ul li ul li {
+#markdown-preview ul li ul li ul li {
     margin: 0;
 }
 
-ol {
+#markdown-preview ol {
     margin-right-rtl: 20px;
     margin-left-ltr: 20px;
     margin-top: 10px;
@@ -254,39 +254,39 @@ ol {
     list-style-type: decimal;
 }
 
-ol li {
+#markdown-preview ol li {
     margin: 0;
 }
 
-li p {
+#markdown-preview li p {
     margin-top: 0;
     margin-bottom: 0;
 }
 
 /* Tables */
 
-table {
+#markdown-preview table {
     border-style: solid;
     border-width: 2px;
     border-color: gray;
 }
 
-td {
+#markdown-preview td {
     border-style: solid;
     border-width: 1px;
     border-color: gray;
     padding: 3px;
 }
 
-tr {
+#markdown-preview tr {
     text-align: left;
 }
 
-td p {
+#markdown-preview td p {
     margin-top: 0;
 }
 
-th {
+#markdown-preview th {
     border-style: solid;
     border-width: 1px;
     border-color: gray;
@@ -295,7 +295,7 @@ th {
     font-weight: bold;
 }
 
-caption {
+#markdown-preview caption {
     caption-side: top;
     text-align: center;
 }
