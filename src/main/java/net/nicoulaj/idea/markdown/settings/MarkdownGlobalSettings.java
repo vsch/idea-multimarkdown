@@ -374,18 +374,30 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
      * @see {@link #getState()}
      */
     public void loadState(@NotNull Element element) {
-        parsingTimeout = Integer.parseInt(element.getAttributeValue("parsingTimeout"));
-        smarts = Boolean.parseBoolean(element.getAttributeValue("smarts"));
-        quotes = Boolean.parseBoolean(element.getAttributeValue("quotes"));
-        abbreviations = Boolean.parseBoolean(element.getAttributeValue("abbreviations"));
-        hardWraps = Boolean.parseBoolean(element.getAttributeValue("hardWraps"));
-        autoLinks = Boolean.parseBoolean(element.getAttributeValue("autoLinks"));
-        wikiLinks = Boolean.parseBoolean(element.getAttributeValue("wikiLinks"));
-        tables = Boolean.parseBoolean(element.getAttributeValue("tables"));
-        definitions = Boolean.parseBoolean(element.getAttributeValue("definitions"));
-        fencedCodeBlocks = Boolean.parseBoolean(element.getAttributeValue("fencedCodeBlocks"));
-        suppressHTMLBlocks = Boolean.parseBoolean(element.getAttributeValue("suppressHTMLBlocks"));
-        suppressInlineHTML = Boolean.parseBoolean(element.getAttributeValue("suppressInlineHTML"));
+        String value = element.getAttributeValue("parsingTimeout");
+        if (value != null) parsingTimeout = Integer.parseInt(value);
+        value = element.getAttributeValue("smarts");
+        if (value != null) smarts = Boolean.parseBoolean(value);
+        value = element.getAttributeValue("quotes");
+        if (value != null) quotes = Boolean.parseBoolean(value);
+        value = element.getAttributeValue("abbreviations");
+        if (value != null) abbreviations = Boolean.parseBoolean(value);
+        value = element.getAttributeValue("hardWraps");
+        if (value != null) hardWraps = Boolean.parseBoolean(value);
+        value = element.getAttributeValue("autoLinks");
+        if (value != null) autoLinks = Boolean.parseBoolean(value);
+        value = element.getAttributeValue("wikiLinks");
+        if (value != null) wikiLinks = Boolean.parseBoolean(value);
+        value = element.getAttributeValue("tables");
+        if (value != null) tables = Boolean.parseBoolean(value);
+        value = element.getAttributeValue("definitions");
+        if (value != null) definitions = Boolean.parseBoolean(value);
+        value = element.getAttributeValue("fencedCodeBlocks");
+        if (value != null) fencedCodeBlocks = Boolean.parseBoolean(value);
+        value = element.getAttributeValue("suppressHTMLBlocks");
+        if (value != null) suppressHTMLBlocks = Boolean.parseBoolean(value);
+        value = element.getAttributeValue("suppressInlineHTML");
+        if (value != null) suppressInlineHTML = Boolean.parseBoolean(value);
         notifyListeners();
     }
 
