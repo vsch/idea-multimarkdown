@@ -50,7 +50,7 @@
           <font style="1"/>
         </border>
         <children>
-          <component id="fe99" class="javax.swing.JCheckBox" default-binding="true">
+          <component id="fe99" class="javax.swing.JCheckBox" binding="fencedCodeBlocksCheckBox">
             <constraints>
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="125" height="23"/>
@@ -61,7 +61,7 @@
               <toolTipText resource-bundle="net/nicoulaj/idea/markdown/localization/strings" key="markdown.settings.fenced-code-block.label"/>
             </properties>
           </component>
-          <component id="991f2" class="javax.swing.JCheckBox" default-binding="true">
+          <component id="991f2" class="javax.swing.JCheckBox" binding="definitionsCheckBox">
             <constraints>
               <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="125" height="23"/>
@@ -72,7 +72,7 @@
               <toolTipText resource-bundle="net/nicoulaj/idea/markdown/localization/strings" key="markdown.settings.definitions.label"/>
             </properties>
           </component>
-          <component id="899c8" class="javax.swing.JCheckBox" default-binding="true">
+          <component id="899c8" class="javax.swing.JCheckBox" binding="tablesCheckBox">
             <constraints>
               <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="125" height="23"/>
@@ -83,7 +83,7 @@
               <toolTipText resource-bundle="net/nicoulaj/idea/markdown/localization/strings" key="markdown.settings.tables.label"/>
             </properties>
           </component>
-          <component id="9369d" class="javax.swing.JCheckBox" default-binding="true">
+          <component id="9369d" class="javax.swing.JCheckBox" binding="autoLinksCheckBox">
             <constraints>
               <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="125" height="23"/>
@@ -94,7 +94,7 @@
               <toolTipText resource-bundle="net/nicoulaj/idea/markdown/localization/strings" key="markdown.settings.auto-links.label"/>
             </properties>
           </component>
-          <component id="473cc" class="javax.swing.JCheckBox" default-binding="true">
+          <component id="473cc" class="javax.swing.JCheckBox" binding="hardWrapsCheckBox">
             <constraints>
               <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="125" height="23"/>
@@ -150,7 +150,7 @@
               <text resource-bundle="net/nicoulaj/idea/markdown/localization/strings" key="markdown.settings.hard-wraps.description"/>
             </properties>
           </component>
-          <component id="cbaa8" class="javax.swing.JCheckBox" default-binding="true">
+          <component id="cbaa8" class="javax.swing.JCheckBox" binding="suppressHTMLBlocksCheckBox">
             <constraints>
               <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="125" height="23"/>
@@ -170,7 +170,7 @@
               <text resource-bundle="net/nicoulaj/idea/markdown/localization/strings" key="markdown.settings.suppress-html-blocks.description"/>
             </properties>
           </component>
-          <component id="6beaf" class="javax.swing.JCheckBox" default-binding="true">
+          <component id="6beaf" class="javax.swing.JCheckBox" binding="suppressInlineHTMLCheckBox">
             <constraints>
               <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="125" height="23"/>
@@ -190,7 +190,7 @@
               <text resource-bundle="net/nicoulaj/idea/markdown/localization/strings" key="markdown.settings.suppress-inline-html.description"/>
             </properties>
           </component>
-          <component id="e9df9" class="javax.swing.JCheckBox">
+          <component id="e9df9" class="javax.swing.JCheckBox" binding="quotesCheckBox">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="125" height="23"/>
@@ -210,7 +210,7 @@
               <text resource-bundle="net/nicoulaj/idea/markdown/localization/strings" key="markdown.settings.quotes.description"/>
             </properties>
           </component>
-          <component id="60fd1" class="javax.swing.JCheckBox">
+          <component id="60fd1" class="javax.swing.JCheckBox" binding="smartsCheckBox">
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="125" height="23"/>
@@ -230,7 +230,7 @@
               <text resource-bundle="net/nicoulaj/idea/markdown/localization/strings" key="markdown.settings.smarts.description"/>
             </properties>
           </component>
-          <component id="cd4af" class="javax.swing.JCheckBox">
+          <component id="cd4af" class="javax.swing.JCheckBox" binding="abbreviationsCheckBox">
             <constraints>
               <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="125" height="23"/>
@@ -250,7 +250,7 @@
               <text resource-bundle="net/nicoulaj/idea/markdown/localization/strings" key="markdown.settings.abbreviations.description"/>
             </properties>
           </component>
-          <component id="e5ea5" class="javax.swing.JCheckBox">
+          <component id="e5ea5" class="javax.swing.JCheckBox" binding="wikiLinksCheckBox">
             <constraints>
               <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="125" height="23"/>
