@@ -20,15 +20,3 @@ Setting up the project in Intellij IDEA
 
 * Use the run configurations to run the plugin and JUnit tests.
 * Use *Build > Prepare plugin for deployment* to generate the release package.
-
-
-Building with Ant
------------------
-
-* Go the project root:
-
-        cd idea-markdown
-
-* Generate sources, compile, run tests and generate release package:
-
-        ant
