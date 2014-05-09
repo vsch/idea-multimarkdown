@@ -62,16 +62,24 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
     private static final SyntaxHighlighter SYNTAX_HIGHLIGHTER = new MarkdownSyntaxHighlighter();
 
     /** The {@link PegDownProcessor} used for building the document AST. */
-    private PegDownProcessor processor = new PegDownProcessor(MarkdownGlobalSettings.getInstance().getExtensionsValue(),
-                                                              MarkdownGlobalSettings.getInstance().getParsingTimeout());
+    private ThreadLocal<PegDownProcessor> processor = initProcessor();
+
+    /** Init/reinit thread local {@link PegDownProcessor}. */
+    private static ThreadLocal<PegDownProcessor> initProcessor() {
+        return new ThreadLocal<PegDownProcessor>() {
+            @Override protected PegDownProcessor initialValue() {
+                return new PegDownProcessor(MarkdownGlobalSettings.getInstance().getExtensionsValue(),
+                                            MarkdownGlobalSettings.getInstance().getParsingTimeout());
+            }
+        };
+    }
 
     /** Build a new instance of {@link MarkdownAnnotator}. */
     public MarkdownAnnotator() {
         // Listen to global settings changes.
         MarkdownGlobalSettings.getInstance().addListener(new MarkdownGlobalSettingsListener() {
             public void handleSettingsChanged(@NotNull final MarkdownGlobalSettings newSettings) {
-                processor = new PegDownProcessor(newSettings.getExtensionsValue(),
-                                                 newSettings.getParsingTimeout());
+                initProcessor();
             }
         });
     }
@@ -97,7 +105,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
     public Set<HighlightableToken> doAnnotate(final String source) {
         final MarkdownASTVisitor visitor = new MarkdownASTVisitor();
         try {
-            processor.parseMarkdown(source.toCharArray()).accept(visitor);
+            processor.get().parseMarkdown(source.toCharArray()).accept(visitor);
         } catch (Exception e) {
             LOGGER.error("Failed processing Markdown document", e);
         }

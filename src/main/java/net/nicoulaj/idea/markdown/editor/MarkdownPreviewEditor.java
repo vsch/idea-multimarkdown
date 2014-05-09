@@ -81,9 +81,18 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
     /** The {@link Document} previewed in this editor. */
     protected final Document document;
 
-    /** The MarkdownJ {@link PegDownProcessor} used to generate HTML from Markdown. */
-    protected PegDownProcessor markdownProcessor = new PegDownProcessor(MarkdownGlobalSettings.getInstance().getExtensionsValue(),
-                                                                        MarkdownGlobalSettings.getInstance().getParsingTimeout());
+    /** The {@link PegDownProcessor} used for building the document AST. */
+    private ThreadLocal<PegDownProcessor> processor = initProcessor();
+
+    /** Init/reinit thread local {@link PegDownProcessor}. */
+    private static ThreadLocal<PegDownProcessor> initProcessor() {
+        return new ThreadLocal<PegDownProcessor>() {
+            @Override protected PegDownProcessor initialValue() {
+                return new PegDownProcessor(MarkdownGlobalSettings.getInstance().getExtensionsValue(),
+                                            MarkdownGlobalSettings.getInstance().getParsingTimeout());
+            }
+        };
+    }
 
     /** Indicates whether the HTML preview is obsolete and should regenerated from the Markdown {@link #document}. */
     protected boolean previewIsObsolete = true;
@@ -108,8 +117,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
         // Listen to settings changes
         MarkdownGlobalSettings.getInstance().addListener(new MarkdownGlobalSettingsListener() {
             public void handleSettingsChanged(@NotNull final MarkdownGlobalSettings newSettings) {
-                markdownProcessor = new PegDownProcessor(newSettings.getExtensionsValue(),
-                                                         newSettings.getParsingTimeout());
+                initProcessor();
                 previewIsObsolete = true;
             }
         });
@@ -123,7 +131,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
         jEditorPane.setEditable(false);
 
         // Set the editor pane position to top left, and do not let it reset it
-        jEditorPane.getCaret().setMagicCaretPosition(new Point(0,0));
+        jEditorPane.getCaret().setMagicCaretPosition(new Point(0, 0));
         ((DefaultCaret) jEditorPane.getCaret()).setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
 
         // Add a custom link listener which can resolve local link references.
@@ -213,7 +221,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
         if (previewIsObsolete) {
             try {
                 jEditorPane.setText("<div id=\"markdown-preview\">" +
-                                    markdownProcessor.markdownToHtml(document.getText()) +
+                                    processor.get().markdownToHtml(document.getText()) +
                                     "</div>");
                 previewIsObsolete = false;
             } catch (Exception e) {
