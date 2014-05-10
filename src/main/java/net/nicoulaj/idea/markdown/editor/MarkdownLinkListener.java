@@ -109,8 +109,12 @@ public class MarkdownLinkListener implements HyperlinkListener {
                 if (virtualTarget == null || !virtualTarget.exists())
                     virtualTarget = resolveRelativePath(document, e.getDescription());
 
-                if (virtualTarget == null) // Okay, try as if the link target is a class reference
-                    virtualTarget = resolveClassReference(project, e.getDescription());
+                try {
+                    if (virtualTarget == null) // Okay, try as if the link target is a class reference
+                        virtualTarget = resolveClassReference(project, e.getDescription());
+                } catch (NoClassDefFoundError silent) {
+                    // API might not be available on all IntelliJ platform IDEs
+                }
 
                 if (virtualTarget != null)
                     FileEditorManager.getInstance(project).openFile(virtualTarget, true);
