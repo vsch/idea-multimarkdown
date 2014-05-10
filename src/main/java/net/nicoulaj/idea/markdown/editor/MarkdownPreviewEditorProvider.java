@@ -21,6 +21,7 @@
 package net.nicoulaj.idea.markdown.editor;
 
 import com.intellij.openapi.fileEditor.*;
+import com.intellij.openapi.project.PossiblyDumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import net.nicoulaj.idea.markdown.MarkdownLanguage;
@@ -35,7 +36,7 @@ import org.jetbrains.annotations.NotNull;
  * @see MarkdownPreviewEditor
  * @since 0.1
  */
-public class MarkdownPreviewEditorProvider implements FileEditorProvider {
+public class MarkdownPreviewEditorProvider implements FileEditorProvider, PossiblyDumbAware {
 
     /** The id of the editors provided by this {@link FileEditorProvider}. */
     public static final String EDITOR_TYPE_ID = MarkdownLanguage.LANGUAGE_NAME + "PreviewEditor";
@@ -117,10 +118,20 @@ public class MarkdownPreviewEditorProvider implements FileEditorProvider {
     /**
      * Get the {@link FileEditorPolicy} defining how to show editors created via the {@link FileEditorProvider}.
      *
-     * @return {@link FileEditorPolicy#NONE}
+     * @return {@link FileEditorPolicy#PLACE_AFTER_DEFAULT_EDITOR}
      */
     @NotNull
     public FileEditorPolicy getPolicy() {
         return FileEditorPolicy.PLACE_AFTER_DEFAULT_EDITOR;
+    }
+
+    /**
+     * Indicates the editor can be created while background indexing is running.
+     *
+     * @return {@code true}
+     */
+    @Override
+    public boolean isDumbAware() {
+        return true;
     }
 }
