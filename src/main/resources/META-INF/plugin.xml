@@ -25,7 +25,7 @@
   <name>Markdown</name>
   <category>Custom Languages</category>
   <vendor url="http://github.com/nicoulaj" email="julien.nicoulaud@gmail.com">Julien Nicoulaud</vendor>
-  <version>0.9.4</version>
+  <version>0.9.5</version>
   <idea-version since-build="133.000"/>
   <depends>com.intellij.modules.lang</depends>
   <description>
@@ -36,20 +36,25 @@
   <change-notes>
     <![CDATA[
     <p>
-      <b>0.9.4</b><br/>
+      <b>0.9.5</b><br/>
     <ul>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/34">#34</a>Upgrade to Pegdown 1.4.2 (adds support for Github strikethrough text).</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/111">#111</a>Fix "Error while parsing action" error.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/113">#113</a>Fix tabs not restored on IDE restart.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/136">#136</a>Fix settings not applied/saved.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/140">#140</a>Fix NoClassDefFoundError when following internal links.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/153">#153</a>Follow internal links in the preview tab.</li>
+      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/139">#139</a>: Load images asynchronously.</li>
+      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/33">#33</a>: Suppress trailing spaces stripping.</li>
+    </ul>
+    <b>0.9.4</b><br/>
+    <ul>
+      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/34">#34</a>: Upgrade to Pegdown 1.4.2 (adds support for Github strikethrough text).</li>
+      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/111">#111</a>: Fix "Error while parsing action" error.</li>
+      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/113">#113</a>: Fix tabs not restored on IDE restart.</li>
+      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/136">#136</a>: Fix settings not applied/saved.</li>
+      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/140">#140</a>: Fix NoClassDefFoundError when following internal links.</li>
+      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/153">#153</a>: Follow internal links in the preview tab.</li>
     </ul>
     <b>0.9.3</b><br/>
     <ul>
       <li><a href="https://github.com/nicoulaj/idea-markdown/issues/126">#126</a>: Fix NumberFormatException while loading settings.</li>
     </ul>
-      <b>0.9.2</b><br/>
+    <b>0.9.2</b><br/>
     <ul>
       <li><a href="https://github.com/nicoulaj/idea-markdown/issues/114">#114</a>: Raise parsing timeout and make it configurable.</li>
       <li><a href="https://github.com/nicoulaj/idea-markdown/issues/125">#125</a>: Fix syntax highlighting not working in IntelliJ platform 13.</li>
