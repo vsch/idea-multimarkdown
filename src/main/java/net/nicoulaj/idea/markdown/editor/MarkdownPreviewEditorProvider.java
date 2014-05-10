@@ -121,6 +121,6 @@ public class MarkdownPreviewEditorProvider implements FileEditorProvider {
      */
     @NotNull
     public FileEditorPolicy getPolicy() {
-        return FileEditorPolicy.NONE;
+        return FileEditorPolicy.PLACE_AFTER_DEFAULT_EDITOR;
     }
 }
