@@ -135,7 +135,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
         ((DefaultCaret) jEditorPane.getCaret()).setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
 
         // Add a custom link listener which can resolve local link references.
-        jEditorPane.addHyperlinkListener(new MarkdownLinkListener(project, document));
+        jEditorPane.addHyperlinkListener(new MarkdownLinkListener(jEditorPane, project, document));
     }
 
     /**

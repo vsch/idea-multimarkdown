@@ -29,6 +29,7 @@ import com.intellij.openapi.vfs.ex.http.HttpFileSystem;
 import com.intellij.ui.BrowserHyperlinkListener;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import java.io.File;
@@ -54,7 +55,10 @@ import static net.nicoulaj.idea.markdown.editor.MarkdownPathResolver.*;
 public class MarkdownLinkListener implements HyperlinkListener {
 
     /** The {@link BrowserHyperlinkListener} used for non-local resources. */
-    final BrowserHyperlinkListener browserLinkListener = new BrowserHyperlinkListener();
+    private final BrowserHyperlinkListener browserLinkListener = new BrowserHyperlinkListener();
+
+    /** The editor. */
+    private final JEditorPane editor;
 
     /** The project. */
     private final Project project;
@@ -65,10 +69,12 @@ public class MarkdownLinkListener implements HyperlinkListener {
     /**
      * Build a new instance of {@link MarkdownLinkListener}.
      *
+     * @param editor the editor
      * @param project  the project
      * @param document the document
      */
-    public MarkdownLinkListener(@NotNull Project project, @NotNull Document document) {
+    public MarkdownLinkListener(@NotNull JEditorPane editor, @NotNull Project project, @NotNull Document document) {
+        this.editor = editor;
         this.project = project;
         this.document = document;
     }
@@ -85,6 +91,10 @@ public class MarkdownLinkListener implements HyperlinkListener {
             // Try to get a URL from the event.
             URL target = e.getURL();
             if (target == null) {
+                if (e.getDescription().startsWith("#")) {
+                    editor.scrollToReference(e.getDescription().substring(1));
+                    return;
+                }
                 try {
                     target = new File(e.getDescription()).toURI().toURL();
                 } catch (MalformedURLException e1) {
