@@ -123,7 +123,6 @@ public class MarkdownEditorKit extends HTMLEditorKit {
         private MarkdownImageView(@NotNull Document document, @NotNull Element elem) {
             super(elem);
             this.document = document;
-            setLoadsSynchronously(true);
         }
 
         /**
