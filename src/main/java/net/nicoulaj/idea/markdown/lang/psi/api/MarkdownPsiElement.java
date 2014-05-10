@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2013 Julien Nicoulaud <julien.nicoulaud@gmail.com>
+ * Copyright (c) 2011-2014 Julien Nicoulaud <julien.nicoulaud@gmail.com>
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
