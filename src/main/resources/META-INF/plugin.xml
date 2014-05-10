@@ -153,6 +153,7 @@
     <additionalTextAttributes scheme="Default" file="net/nicoulaj/idea/markdown/schemes/default.xml"/>
     <additionalTextAttributes scheme="Darcula" file="net/nicoulaj/idea/markdown/schemes/darcula.xml"/>
     <fileEditorProvider implementation="net.nicoulaj.idea.markdown.editor.MarkdownPreviewEditorProvider"/>
+    <lang.documentationProvider language="Markdown" implementationClass="net.nicoulaj.idea.markdown.documentation.MarkdownDocumentationProvider"/>
     <lang.parserDefinition language="Markdown" implementationClass="net.nicoulaj.idea.markdown.lang.parser.MarkdownParserDefinition"/>
     <externalAnnotator language="Markdown" implementationClass="net.nicoulaj.idea.markdown.annotator.MarkdownAnnotator"/>
     <spellchecker.support language="Markdown" implementationClass="net.nicoulaj.idea.markdown.spellchecking.MarkdownSpellcheckingStrategy"/>
