@@ -299,3 +299,11 @@
     caption-side: top;
     text-align: center;
 }
+
+#markdown-preview del {
+    text-decoration: line-through;
+}
+
+#markdown-preview p del {
+    text-decoration: line-through;
+}

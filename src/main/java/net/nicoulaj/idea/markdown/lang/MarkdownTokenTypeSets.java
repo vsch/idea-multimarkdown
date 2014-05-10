@@ -72,6 +72,9 @@ public interface MarkdownTokenTypeSets extends MarkdownTokenTypes {
     /** Special text token type set. */
     TokenSet SPECIAL_TEXT_SET = TokenSet.create(SPECIAL_TEXT);
 
+    /** Strikethrough token type set. */
+    TokenSet STRIKETHROUGH_SET = TokenSet.create(STRIKETHROUGH);
+
     /** Link token type set. */
     TokenSet EXPLICIT_LINK_SET = TokenSet.create(EXPLICIT_LINK);
 

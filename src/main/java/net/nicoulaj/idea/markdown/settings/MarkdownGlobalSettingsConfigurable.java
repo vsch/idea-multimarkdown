@@ -126,7 +126,8 @@ public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurabl
                || settingsPanel.smartsCheckBox == null || globalSettings.isSmarts() != settingsPanel.smartsCheckBox.isSelected()
                || settingsPanel.suppressHTMLBlocksCheckBox == null || globalSettings.isSuppressHTMLBlocks() != settingsPanel.suppressHTMLBlocksCheckBox.isSelected()
                || settingsPanel.suppressInlineHTMLCheckBox == null || globalSettings.isSuppressInlineHTML() != settingsPanel.suppressInlineHTMLCheckBox.isSelected()
-               || settingsPanel.tablesCheckBox == null || globalSettings.isTables() != settingsPanel.tablesCheckBox.isSelected();
+               || settingsPanel.tablesCheckBox == null || globalSettings.isTables() != settingsPanel.tablesCheckBox.isSelected()
+               || settingsPanel.strikethroughCheckBox == null || globalSettings.isStrikethrough() != settingsPanel.strikethroughCheckBox.isSelected();
     }
 
     /** Apply modifications to the settings done in the UI. */
@@ -144,6 +145,7 @@ public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurabl
             globalSettings.setSuppressHTMLBlocks(settingsPanel.suppressHTMLBlocksCheckBox != null && settingsPanel.suppressHTMLBlocksCheckBox.isSelected());
             globalSettings.setSuppressInlineHTML(settingsPanel.suppressInlineHTMLCheckBox != null && settingsPanel.suppressInlineHTMLCheckBox.isSelected());
             globalSettings.setTables(settingsPanel.tablesCheckBox != null && settingsPanel.tablesCheckBox.isSelected());
+            globalSettings.setStrikethrough(settingsPanel.strikethroughCheckBox != null && settingsPanel.strikethroughCheckBox.isSelected());
         }
     }
 
@@ -162,6 +164,7 @@ public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurabl
             if (settingsPanel.suppressHTMLBlocksCheckBox != null) settingsPanel.suppressHTMLBlocksCheckBox.setSelected(globalSettings.isSuppressHTMLBlocks());
             if (settingsPanel.suppressInlineHTMLCheckBox != null) settingsPanel.suppressInlineHTMLCheckBox.setSelected(globalSettings.isSuppressInlineHTML());
             if (settingsPanel.tablesCheckBox != null) settingsPanel.tablesCheckBox.setSelected(globalSettings.isTables());
+            if (settingsPanel.strikethroughCheckBox != null) settingsPanel.strikethroughCheckBox.setSelected(globalSettings.isStrikethrough());
         }
     }
 

@@ -73,6 +73,9 @@ public interface MarkdownTokenTypes extends TokenType {
     /** Special text token type. */
     IElementType SPECIAL_TEXT = new MarkdownElementType("SPECIAL_TEXT");
 
+    /** Strikethrough token type. */
+    IElementType STRIKETHROUGH = new MarkdownElementType("STRIKETHROUGH");
+
     /** Link token type. */
     IElementType EXPLICIT_LINK = new MarkdownElementType("EXPLICIT_LINK");
 

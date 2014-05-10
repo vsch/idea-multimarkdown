@@ -83,6 +83,9 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
     /** Whether the "Suppress inline HTML tags" extension should be enabled. */
     private boolean suppressInlineHTML = false;
 
+    /** Whether the "Strikethroughs" extension should be enabled. */
+    private boolean strikethrough = false;
+
     /**
      * Get the instance of this service.
      *
@@ -109,6 +112,27 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
     public void setParsingTimeout(int parsingTimeout) {
         if (this.parsingTimeout != parsingTimeout) {
             this.parsingTimeout = parsingTimeout;
+            notifyListeners();
+        }
+    }
+
+    /**
+     * Whether the "Strikethroughs" extension should be enabled.
+     *
+     * @return {@link #strikethrough}
+     */
+    public boolean isStrikethrough() {
+        return strikethrough;
+    }
+
+    /**
+     * Whether the "Strikethroughs" extension should be enabled.
+     *
+     * @param strikethrough whether the "Suppress inline HTML tags" extension should be enabled.
+     */
+    public void setStrikethrough(boolean strikethrough) {
+        if (this.strikethrough != strikethrough) {
+            this.strikethrough = strikethrough;
             notifyListeners();
         }
     }
@@ -364,6 +388,7 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
         element.setAttribute("fencedCodeBlocks", Boolean.toString(fencedCodeBlocks));
         element.setAttribute("suppressHTMLBlocks", Boolean.toString(suppressHTMLBlocks));
         element.setAttribute("suppressInlineHTML", Boolean.toString(suppressInlineHTML));
+        element.setAttribute("strikethrough", Boolean.toString(strikethrough));
         return element;
     }
 
@@ -398,6 +423,8 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
         if (value != null) suppressHTMLBlocks = Boolean.parseBoolean(value);
         value = element.getAttributeValue("suppressInlineHTML");
         if (value != null) suppressInlineHTML = Boolean.parseBoolean(value);
+        value = element.getAttributeValue("strikethrough");
+        if (value != null) strikethrough = Boolean.parseBoolean(value);
         notifyListeners();
     }
 
@@ -418,7 +445,8 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
                 (definitions ? Extensions.DEFINITIONS : 0) +
                 (fencedCodeBlocks ? Extensions.FENCED_CODE_BLOCKS : 0) +
                 (suppressHTMLBlocks ? Extensions.SUPPRESS_HTML_BLOCKS : 0) +
-                (suppressInlineHTML ? Extensions.SUPPRESS_INLINE_HTML : 0);
+                (suppressInlineHTML ? Extensions.SUPPRESS_INLINE_HTML : 0) +
+                (strikethrough ? Extensions.STRIKETHROUGH : 0);
     }
 
     /**

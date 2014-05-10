@@ -272,6 +272,17 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
         }
 
         /**
+         * Visit the {@link StrikeNode}.
+         *
+         * @param node the {@link StrikeNode} to visit
+         */
+        @Override
+        public void visit(StrikeNode node) {
+            addToken(node, STRIKETHROUGH);
+            visitChildren(node);
+        }
+
+        /**
          * Visit the {@link StrongEmphSuperNode}.
          *
          * @param node the {@link StrongEmphSuperNode} to visit

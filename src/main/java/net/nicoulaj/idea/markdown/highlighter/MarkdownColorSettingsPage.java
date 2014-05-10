@@ -88,8 +88,12 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
                 MarkdownHighlighterColors.BOLD_ATTR_KEY)
         );
         attributeDescriptors.add(new AttributesDescriptor(
-                MarkdownBundle.message("markdown.editor.colorsettingspage.italic"),
-                MarkdownHighlighterColors.ITALIC_ATTR_KEY)
+                                         MarkdownBundle.message("markdown.editor.colorsettingspage.italic"),
+                                         MarkdownHighlighterColors.ITALIC_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                                         MarkdownBundle.message("markdown.editor.colorsettingspage.strikethrough"),
+                                         MarkdownHighlighterColors.STRIKETHROUGH_ATTR_KEY)
         );
         attributeDescriptors.add(new AttributesDescriptor(
                 MarkdownBundle.message("markdown.editor.colorsettingspage.explicit-link"),

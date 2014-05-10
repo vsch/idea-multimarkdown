@@ -113,6 +113,9 @@ public class MarkdownHighlighterColors {
     /** Default style for italic text. */
     public static final TextAttributesKey ITALIC_ATTR_KEY = createTextAttributesKey("MARKDOWN.ITALIC", STRING);
 
+    /** Default style for strikethrough text. */
+    public static final TextAttributesKey STRIKETHROUGH_ATTR_KEY = createTextAttributesKey("MARKDOWN.STRIKETHROUGH", STRING);
+
     /** Default style for images. */
     public static final TextAttributesKey IMAGE_ATTR_KEY = createTextAttributesKey("MARKDOWN.IMAGE", STRING);
 

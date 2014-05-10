@@ -80,6 +80,9 @@ public class MarkdownSettingsPanel {
     /** Form element for {@link MarkdownGlobalSettings#suppressInlineHTML}. */
     public JCheckBox suppressInlineHTMLCheckBox;
 
+    /** Form element for {@link MarkdownGlobalSettings#strikethrough}. */
+    public JCheckBox strikethroughCheckBox;
+
     /** Description label for {@link #suppressInlineHTMLCheckBox}. */
     private JLabel suppressInlineHTMLDescriptionLabel;
 
@@ -112,4 +115,7 @@ public class MarkdownSettingsPanel {
 
     /** Description label for {@link #smartsCheckBox}. */
     private JLabel smartsDescriptionLabel;
+
+    /** Description label for {@link #strikethroughCheckBox}. */
+    private JLabel strikethroughDescriptionLabel;
 }
