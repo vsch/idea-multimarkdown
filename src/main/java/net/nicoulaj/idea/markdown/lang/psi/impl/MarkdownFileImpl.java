@@ -21,8 +21,6 @@
 package net.nicoulaj.idea.markdown.lang.psi.impl;
 
 import com.intellij.extapi.psi.PsiFileBase;
-import com.intellij.openapi.editor.ex.EditorSettingsExternalizable;
-import com.intellij.openapi.fileEditor.impl.TrailingSpacesStripper;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.FileViewProvider;
@@ -65,7 +63,8 @@ public class MarkdownFileImpl extends PsiFileBase implements MarkdownFile {
         final VirtualFile file =  super.getVirtualFile();
 
         // #138: ignore "strip trailing white space" setting
-        file.putUserData(OVERRIDE_STRIP_TRAILING_SPACES_KEY, STRIP_TRAILING_SPACES_NONE);
+        if (file != null)
+            file.putUserData(OVERRIDE_STRIP_TRAILING_SPACES_KEY, STRIP_TRAILING_SPACES_NONE);
 
         return file;
     }
