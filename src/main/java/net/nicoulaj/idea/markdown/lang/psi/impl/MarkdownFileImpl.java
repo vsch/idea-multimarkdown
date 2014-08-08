@@ -29,7 +29,7 @@ import net.nicoulaj.idea.markdown.lang.psi.api.MarkdownFile;
 import org.jetbrains.annotations.NotNull;
 
 import static com.intellij.openapi.editor.ex.EditorSettingsExternalizable.STRIP_TRAILING_SPACES_NONE;
-import static com.intellij.openapi.fileEditor.impl.TrailingSpacesStripper.OVERRIDE_STRIP_TRAILING_SPACES_KEY;
+import static com.intellij.openapi.editor.impl.TrailingSpacesStripper.OVERRIDE_STRIP_TRAILING_SPACES_KEY;
 
 /**
  * Implementation of {@link MarkdownFile}.
