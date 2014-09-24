@@ -25,7 +25,7 @@
   <name>Markdown</name>
   <category>Custom Languages</category>
   <vendor url="http://github.com/nicoulaj" email="julien.nicoulaud@gmail.com">Julien Nicoulaud</vendor>
-  <version>0.9.6</version>
+  <version>0.9.7</version>
   <idea-version since-build="134.549"/>
   <depends>com.intellij.modules.lang</depends>
   <description>
@@ -36,7 +36,11 @@
   <change-notes>
     <![CDATA[
     <p>
-      <b>0.9.6</b><br/>
+      <b>0.9.7</b><br/>
+    <ul>
+      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/172">#172</a>: Fix NoClassDefFoundError in IntelliJ platform 14.</li>
+    </ul>
+    <b>0.9.6</b><br/>
     <ul>
       <li><a href="https://github.com/nicoulaj/idea-markdown/issues/155">#155</a>: Fix unexpected exception when opening .md files.</li>
     </ul>

@@ -21,15 +21,20 @@
 package net.nicoulaj.idea.markdown.lang.psi.impl;
 
 import com.intellij.extapi.psi.PsiFileBase;
+import com.intellij.openapi.application.ApplicationInfo;
 import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.FileViewProvider;
 import net.nicoulaj.idea.markdown.file.MarkdownFileType;
 import net.nicoulaj.idea.markdown.lang.psi.api.MarkdownFile;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.intellij.openapi.editor.ex.EditorSettingsExternalizable.STRIP_TRAILING_SPACES_NONE;
-import static com.intellij.openapi.fileEditor.impl.TrailingSpacesStripper.OVERRIDE_STRIP_TRAILING_SPACES_KEY;
 
 /**
  * Implementation of {@link MarkdownFile}.
@@ -38,7 +43,6 @@ import static com.intellij.openapi.fileEditor.impl.TrailingSpacesStripper.OVERRI
  * @since 0.1
  */
 public class MarkdownFileImpl extends PsiFileBase implements MarkdownFile {
-
     /**
      * Build a new instance of {@link MarkdownFileImpl}.
      *
@@ -63,9 +67,51 @@ public class MarkdownFileImpl extends PsiFileBase implements MarkdownFile {
         final VirtualFile file =  super.getVirtualFile();
 
         // #138: ignore "strip trailing white space" setting
-        if (file != null)
-            file.putUserData(OVERRIDE_STRIP_TRAILING_SPACES_KEY, STRIP_TRAILING_SPACES_NONE);
+        if (file != null) {
+            Key<String> overrideStripTrailingSpacesKey = getOverrideStripTrailingSpacesKey();
+
+            if (overrideStripTrailingSpacesKey != null) {
+                file.putUserData(overrideStripTrailingSpacesKey, STRIP_TRAILING_SPACES_NONE);
+            }
+        }
 
         return file;
     }
+
+    /**
+     * #172
+     * Gets OVERRIDE_STRIP_TRAILING_SPACES_KEY from the TrailingSpacesStripper class. Since the package
+     * in which the class is located depends on api version, some checks are required.
+     *
+     * @return a key for "strip trailing white space" setting
+     */
+    @Nullable
+    private static Key<String> getOverrideStripTrailingSpacesKey() {
+        final String apiVersion = ApplicationInfo.getInstance().getApiVersion();
+        final Pattern apiVersionPattern = Pattern.compile("^[A-Z]+-(\\d+\\.\\d+)$");
+        final Matcher matcher = apiVersionPattern.matcher(apiVersion);
+
+        if (!matcher.matches()) {
+            return null;
+        }
+
+        String buildVersion = matcher.group(1);
+
+        final String classPath;
+        if (buildVersion.compareTo("138") >= 0) {
+            classPath = "com.intellij.openapi.editor.impl.TrailingSpacesStripper";
+        }
+        else {
+            classPath = "com.intellij.openapi.fileEditor.impl.TrailingSpacesStripper";
+        }
+
+        try {
+            //noinspection unchecked
+            return (Key<String>) Class.forName(classPath).getDeclaredField("OVERRIDE_STRIP_TRAILING_SPACES_KEY").get(null);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+
 }
