@@ -103,6 +103,7 @@
     color: black;
     font-family: Helvetica, Arial, sans-serif;
     font-weight: normal;
+    line-height: 1.6;
 }
 
 #markdown-preview small {
@@ -114,8 +115,8 @@
 }
 
 #markdown-preview a {
-    color: blue;
-    text-decoration: underline;
+    color: #4183c4;
+    text-decoration: none;
 }
 
 #markdown-preview p {
@@ -148,52 +149,62 @@
 #markdown-preview h1 {
     font-size: x-large;
     font-weight: bold;
-    margin-top: 20px;
-    margin-bottom: 0;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    line-height: 1.2;
+    border-bottom: 1px solid #eeeeee;
 }
 
 #markdown-preview h2 {
     font-size: large;
     font-weight: bold;
-    margin-top: 20px;
-    margin-bottom: 0;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    line-height: 1.225;
+    border-bottom: 1px solid #eeeeee;
 }
 
 #markdown-preview h3 {
     font-size: medium;
     font-weight: bold;
-    margin-top: 20px;
+    margin-top: 10px;
     margin-bottom: 0;
+    line-height: 1.4;
 }
 
 #markdown-preview h4 {
     font-size: small;
     font-weight: bold;
-    margin-top: 20px;
-    margin-bottom: 0;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    line-height: 1.4;
 }
 
 #markdown-preview h5 {
     font-size: small;
     font-weight: bold;
-    margin-top: 20px;
-    margin-bottom: 0;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    line-height: 1.4;
 }
 
 #markdown-preview h6 {
     font-size: small;
     font-weight: bold;
-    margin-top: 20px;
-    margin-bottom: 0;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    line-height: 1.4;
 }
 
 /* Code/quotes */
 
 #markdown-preview pre {
-    font-family: Monospaced, monospace;
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, Monospaced, monospace;
     margin: 5px 10px;
     padding: 5px;
-    background-color: #dcdcdc;
+    background-color: #f7f7f7;
 }
 
 #markdown-preview pre p {
@@ -202,14 +213,16 @@
 
 #markdown-preview code {
     font-size: small;
-    font-family: Monospaced, monospace;
-    background-color: #dcdcdc;
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, Monospaced, monospace;
+    background-color: #f7f7f7;
+    padding: 3px;
+    border-raduis: 3px;
 }
 
 #markdown-preview blockquote {
     margin: 5px 10px;
     padding: 5px;
-    background-color: #dcdcdc;
+    background-color: #f7f7f7;
 }
 
 /* Lists */
@@ -217,7 +230,7 @@
 #markdown-preview ul {
     margin-right-rtl: 20px;
     margin-left-ltr: 20px;
-    margin-top: 10px;
+    margin-top: 0;
     margin-bottom: 10px;
     list-style-type: disc;
 }
@@ -249,7 +262,7 @@
 #markdown-preview ol {
     margin-right-rtl: 20px;
     margin-left-ltr: 20px;
-    margin-top: 10px;
+    margin-top: 0;
     margin-bottom: 10px;
     list-style-type: decimal;
 }
