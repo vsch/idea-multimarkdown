@@ -28,6 +28,7 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.pegdown.Extensions;
 
+import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 import java.util.HashSet;
 import java.util.Set;
@@ -459,10 +460,14 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
         listeners.add(new WeakReference<MarkdownGlobalSettingsListener>(listener));
     }
 
+    public void removeListener(@NotNull final MarkdownGlobalSettingsListener listener) {
+        if (listeners != null) listeners.remove(listener);
+    }
+
     /** Notify event listeners of changes. */
     protected void notifyListeners() {
         if (listeners != null)
-            for (final WeakReference<MarkdownGlobalSettingsListener> listenerRef : listeners)
+            for (final Reference<MarkdownGlobalSettingsListener> listenerRef : listeners)
                 if (listenerRef.get() != null) listenerRef.get().handleSettingsChanged(this);
     }
 }

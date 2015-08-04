@@ -81,8 +81,12 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
     /** The {@link Document} previewed in this editor. */
     protected final Document document;
 
+    protected MarkdownGlobalSettingsListener globalSettingsListener;
+
     /** The {@link PegDownProcessor} used for building the document AST. */
     private ThreadLocal<PegDownProcessor> processor = initProcessor();
+
+    private boolean isActive = false;
 
     /** Init/reinit thread local {@link PegDownProcessor}. */
     private static ThreadLocal<PegDownProcessor> initProcessor() {
@@ -115,10 +119,11 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
         });
 
         // Listen to settings changes
-        MarkdownGlobalSettings.getInstance().addListener(new MarkdownGlobalSettingsListener() {
+        MarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MarkdownGlobalSettingsListener() {
             public void handleSettingsChanged(@NotNull final MarkdownGlobalSettings newSettings) {
-                initProcessor();
                 previewIsObsolete = true;
+                processor.remove();     // make it re-initialize when accessed
+                updateHtmlContent();         // make it refresh()
             }
         });
 
@@ -218,10 +223,18 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
      * Update the HTML content if obsolete.
      */
     public void selectNotify() {
+        isActive = true;
         if (previewIsObsolete) {
+            updateHtmlContent();
+        }
+    }
+
+    private void updateHtmlContent() {
+        if (isActive) {
             try {
+                String html;
                 jEditorPane.setText("<div id=\"markdown-preview\">" +
-                                    processor.get().markdownToHtml(document.getText()) +
+                                    (html = processor.get().markdownToHtml(document.getText())) +
                                     "</div>");
                 previewIsObsolete = false;
             } catch (Exception e) {
@@ -236,6 +249,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
      * Does nothing.
      */
     public void deselectNotify() {
+            isActive = false;
     }
 
     /**
@@ -290,6 +304,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
 
     /** Dispose the editor. */
     public void dispose() {
+        MarkdownGlobalSettings.getInstance().removeListener(globalSettingsListener);
         Disposer.dispose(this);
     }
 }

@@ -597,6 +597,11 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
             visitChildren(node);
         }
 
+        public void visit(AnchorLinkNode node)
+        {
+            // TODO: implement
+        }
+
         /**
          * Visit a {@link SuperNode}'s children.
          *
