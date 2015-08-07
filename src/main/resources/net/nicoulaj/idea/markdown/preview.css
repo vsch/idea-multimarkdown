@@ -93,18 +93,23 @@
 
 #markdown-preview tt {
     font-family: Monospaced, monospace;
+    line-height: 1.3;
 }
 
 #markdown-preview {
     font-family: Helvetica, arial, sans-serif;
     font-size: 12px;
-    line-height: 160%;
     padding-top: 10px;
     padding-bottom: 10px;
     background-color: white;
     padding: 30px;
-    line-height: 1.6;
+    line-height: 1.2;
     color: black;
+    max-width: 1200px;
+}
+
+body {
+max-width: 1200px;
 }
 
 #markdown-preview > *:first-child {
@@ -216,14 +221,16 @@
     font-size: 14px;
 }
 
-#markdown-preview p,
 #markdown-preview blockquote,
 #markdown-preview ul,
 #markdown-preview ol,
 #markdown-preview dl,
-#markdown-preview li,
 #markdown-preview pre {
-    margin: 10px 0;
+    margin: 5px 0;
+}
+
+#markdown-preview p {
+    margin: 5px 0;
 }
 
 #markdown-preview hr {
@@ -278,8 +285,13 @@
     margin-top: 0;
 }
 
-#markdown-preview li p.first {
+#markdown-preview li p:first-child {
     display: inline-block;
+    margin-top: 0;
+}
+
+#markdown-preview li p {
+    margin: 0 0 10px 0;
 }
 
 #markdown-preview li {
@@ -337,7 +349,7 @@
     border-left: 4px solid #cccccc;
     padding: 0 15px;
     font-size: 12px;
-    color: #777777;
+    color: #666666;
 }
 
 #markdown-preview blockquote >:first-child {
@@ -349,7 +361,7 @@
 }
 
 #markdown-preview img {
-    max-width: 100%;
+    width: 1000;
 }
 
 #markdown-preview span.frame {
@@ -440,7 +452,6 @@
     text-align: right;
 }
 
-#markdown-preview code,
 #markdown-preview tt {
     margin: 0 2px;
     padding: 0 5px;
@@ -448,6 +459,10 @@
     border: 1px solid #eaeaea;
     background-color: #f8f8f8;
     border-radius: 3px;
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, Monospaced, monospace;
+    font-size: 12px;
+    line-height: 1.3;
+    color: black;
 }
 
 #markdown-preview pre code {
@@ -456,14 +471,15 @@
     white-space: pre;
     border: none;
     background: transparent;
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, Monospaced, monospace;
+    font-size: 12px;
+    line-height: 1.3;
+    color: black;
 }
 
 #markdown-preview .highlight pre {
     background-color: #f8f8f8;
     border: 1px solid #cccccc;
-    /*    font-size: 12px;*/
-    
-    line-height: 16px;
     overflow: auto;
     padding: 6px 10px;
     border-radius: 3px;
@@ -472,18 +488,10 @@
 #markdown-preview pre {
     background-color: #f8f8f8;
     border: 1px solid #cccccc;
-    font-size: 11px;
     line-height: 14px;
     overflow: auto;
     padding: 6px 10px;
     border-radius: 3px;
-}
-
-#markdown-preview pre code,
-#markdown-preview pre tt {
-    background-color: transparent;
-    color: black;
-    border: none;
 }
 
 #markdown-preview sup {
@@ -493,8 +501,13 @@
 }
 
 #markdown-preview code {
-    font-size: 11px;
-    color: #d00000;
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, Monospaced, monospace;
+    font-size: 12px;
+    line-height: 1.3;
+    color: #B00020;
+    background-color: #f8f8f8;
+    padding: 3px;
+    border-raduis: 3px;
 }
 
 #markdown-preview table {
@@ -522,11 +535,11 @@
     padding: 6px 13px;
 }
 
-#markdown-preview table tr:nth-child(2n+1) {
+#markdown-preview table tr.odd-child {
     background-color: #fafafa;
 }
 
-#markdown-preview table tr:first-child {
+#markdown-preview table tr.first-child {
     background-color: #e0e8f0;
 }
 
@@ -553,12 +566,12 @@
     vertical-align: bottom;
 }
 
-#markdown-preview table > caption + thead > tr:first-child > th,
-#markdown-preview table > colgroup + thead > tr:first-child > th,
-#markdown-preview table > thead:first-child > tr:first-child > th,
-#markdown-preview table > caption + thead > tr:first-child > td,
-#markdown-preview table > colgroup + thead > tr:first-child > td,
-#markdown-preview table > thead:first-child > tr:first-child > td {
+#markdown-preview table tr.first-child > th,
+#markdown-preview table tr.first-child > th,
+#markdown-preview table tr.first-child > th,
+#markdown-preview table tr.first-child > td,
+#markdown-preview table tr.first-child > td,
+#markdown-preview table tr.first-child > td {
     border-top: 0;
 }
 

@@ -34,6 +34,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.UserDataHolderBase;
 import com.intellij.ui.components.JBScrollPane;
+
+import java.lang.String;
+
 import net.nicoulaj.idea.markdown.MarkdownBundle;
 import net.nicoulaj.idea.markdown.settings.MarkdownGlobalSettings;
 import net.nicoulaj.idea.markdown.settings.MarkdownGlobalSettingsListener;
@@ -41,6 +44,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pegdown.PegDownProcessor;
+import sun.misc.Regexp;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
@@ -48,6 +52,8 @@ import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
 import java.awt.*;
 import java.beans.PropertyChangeListener;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * {@link FileEditor} implementation that provides rendering preview for Markdown documents.
@@ -232,15 +238,54 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
     private void updateHtmlContent() {
         if (isActive) {
             try {
-                String html;
-                jEditorPane.setText("<div id=\"markdown-preview\">" +
-                                    (html = processor.get().markdownToHtml(document.getText())) +
-                                    "</div>");
+                String html = processor.get().markdownToHtml(document.getText());
+                // add class to table rows to compensate for lack of :first-child, :nth-child() so we can have striped tables
+                String procHtml = postProcessHtml(html);
+
+                jEditorPane.setText("<div id=\"markdown-preview\">" + procHtml + "</div>");
                 previewIsObsolete = false;
             } catch (Exception e) {
                 LOGGER.error("Failed processing Markdown document", e);
             }
         }
+    }
+
+    protected String postProcessHtml(String html) {
+        // scan for <table>, </table>, <tr> and </tr>
+        String result = "";
+        Pattern p = Pattern.compile("(<table>|<thead>|<tbody>|<tr>)", Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(html);
+        int lastPos = 0;
+        int rowCount = 0;
+
+        while (m.find()) {
+            String found = m.group();
+            if (lastPos < m.start(0)) {
+                result += html.substring(lastPos, m.start(0));
+            }
+
+            if (found.equals("<table>")) {
+                rowCount = 0;
+                result += found;
+            } else if (found.equals("<thead>")) {
+//                rowCount = 0;
+                result += found;
+            } else if (found.equals("<tbody>")) {
+//                rowCount = 0;
+                result += found;
+            } else if (found.equals("<tr>")) {
+                rowCount++;
+                result += "<tr class=\"" + (rowCount == 1 ? "first-child" : (rowCount & 1) != 0 ? "odd-child" : "even-child") + "\">";
+            }
+
+            lastPos = m.end(0);
+        }
+
+        if (lastPos < html.length()) {
+            result += html.substring(lastPos);
+        }
+
+        return result;
     }
 
     /**
@@ -249,7 +294,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
      * Does nothing.
      */
     public void deselectNotify() {
-            isActive = false;
+        isActive = false;
     }
 
     /**

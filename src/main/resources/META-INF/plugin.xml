@@ -20,12 +20,12 @@
   ~ under the License.
   -->
 <!DOCTYPE idea-plugin PUBLIC "Plugin/DTD" "http://plugins.intellij.net/plugin.dtd">
-<idea-plugin version="2" url="http://github.com/nicoulaj/idea-markdown">
+<idea-plugin version="2" url="http://github.com/vsch/idea-markdown">
   <id>net.nicoulaj.idea.markdown</id>
   <name>Markdown</name>
   <category>Custom Languages</category>
-  <vendor url="http://github.com/nicoulaj" email="julien.nicoulaud@gmail.com">Julien Nicoulaud</vendor>
-  <version>0.9.7</version>
+  <vendor url="http://github.com/vsch" email="vladimir.schneider@gmail.com">Vladimir Schneider</vendor>
+  <version>1.0.0</version>
   <idea-version since-build="134.549"/>
   <depends>com.intellij.modules.lang</depends>
   <description>
@@ -36,6 +36,16 @@
   <change-notes>
     <![CDATA[
     <p>
+      <b>1.0.0</b><br/>
+    <ul>
+      <li>: Limit images to 1000 pixels wide, resize if larger</li>
+      <li>: Fix table to be striped</li>
+    </ul>
+      <b>0.9.8</b><br/>
+    <ul>
+      <li>: Fix no refresh on settings change</li>
+      <li>: Update pegdown to 1.5.0 and parboiled to 1.1.7.</li>
+    </ul>
       <b>0.9.7</b><br/>
     <ul>
       <li><a href="https://github.com/nicoulaj/idea-markdown/issues/172">#172</a>: Fix NoClassDefFoundError in IntelliJ platform 14.</li>

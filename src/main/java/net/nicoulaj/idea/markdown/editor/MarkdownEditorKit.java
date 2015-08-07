@@ -20,17 +20,20 @@
  */
 package net.nicoulaj.idea.markdown.editor;
 
+import com.intellij.execution.ui.layout.*;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.text.Element;
-import javax.swing.text.StyleConstants;
+import javax.swing.*;
+import javax.swing.text.*;
 import javax.swing.text.View;
-import javax.swing.text.ViewFactory;
 import javax.swing.text.html.HTML;
+import javax.swing.text.html.HTML.Attribute;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.ImageView;
+import java.awt.*;
+import java.awt.image.ImageObserver;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -95,10 +98,13 @@ public class MarkdownEditorKit extends HTMLEditorKit {
             this.document = document;
         }
 
+        protected SimpleAttributeSet attributeSet;
+
         @Override
         public View create(Element elem) {
-            if (HTML.Tag.IMG.equals(elem.getAttributes().getAttribute(StyleConstants.NameAttribute)))
+            if (HTML.Tag.IMG.equals(elem.getAttributes().getAttribute(StyleConstants.NameAttribute))) {
                 return new MarkdownImageView(document, elem);
+            }
             return super.create(elem);
         }
     }
@@ -109,10 +115,16 @@ public class MarkdownEditorKit extends HTMLEditorKit {
      * @author Roger Grantham (https://github.com/grantham)
      * @since 0.8
      */
-    private static class MarkdownImageView extends ImageView {
-
+    protected static class MarkdownImageView extends ImageView {
         /** The document. */
         private final Document document;
+
+        private boolean scaled;
+
+        protected float maxWidth = 900;
+
+        public void setMaxWidth(float maxWidth) { this.maxWidth = maxWidth; };
+        public float getMaxWidth() { return maxWidth; };
 
         /**
          * Build a new instance of {@link MarkdownImageView}.
@@ -122,6 +134,9 @@ public class MarkdownEditorKit extends HTMLEditorKit {
          */
         private MarkdownImageView(@NotNull Document document, @NotNull Element elem) {
             super(elem);
+
+//            setLoadsSynchronously(true);
+            scaled = false;
             this.document = document;
         }
 
@@ -134,7 +149,7 @@ public class MarkdownEditorKit extends HTMLEditorKit {
          */
         @Override
         public URL getImageURL() {
-            final String src = (String) getElement().getAttributes().getAttribute(HTML.Attribute.SRC);
+            final String src = (String) getElement().getAttributes().getAttribute(Attribute.SRC);
             final VirtualFile localImage = resolveRelativePath(document, src);
             try {
                 if (localImage != null && localImage.exists())
@@ -144,6 +159,85 @@ public class MarkdownEditorKit extends HTMLEditorKit {
             }
 
             return super.getImageURL();
+        }
+
+        float width;
+
+        float height;
+
+        @Override
+        public float getPreferredSpan(int axis) {
+            if (!scaled) {
+                float width = super.getPreferredSpan(View.X_AXIS);
+                float height = super.getPreferredSpan(View.Y_AXIS);
+
+                if (width < 0 || height < 0) return super.getPreferredSpan(axis);
+
+                if (width > maxWidth) {
+                    this.width = maxWidth;
+                    this.height = (int) (height * maxWidth / width);
+
+                    // force refresh of the image size
+                    View parent = getParent();
+                    super.setParent(null);
+                    super.setParent(parent);
+                    scaled = true;
+                } else {
+                    this.width = super.getPreferredSpan(View.X_AXIS);
+                    this.height = super.getPreferredSpan(View.Y_AXIS);
+                }
+            }
+            return axis == View.X_AXIS ? this.width : (axis == View.Y_AXIS ? this.height : 0);
+        }
+
+        /**
+         * Paints the View.
+         *
+         * @param g the rendering surface to use
+         * @param a the allocated region to render into
+         * @see View#paint
+         */
+        @Override
+        public void paint(Graphics g, Shape a) {
+            float width = getPreferredSpan(View.X_AXIS);
+            float height = getPreferredSpan(View.Y_AXIS);
+
+            if (width > 1000) {
+                height = height * 1000 / width;
+                width = 1000;
+            }
+
+            Rectangle rect = (a instanceof Rectangle) ? (Rectangle) a :
+                             a.getBounds();
+            Rectangle clip = g.getClipBounds();
+
+            if (clip != null) {
+                g.clipRect(rect.x, rect.y,
+                           rect.width,
+                           rect.height);
+            }
+
+            Container host = getContainer();
+            Image img = getImage();
+            if (img != null) {
+                if (width > 0 && height > 0) {
+                    // Draw the image
+                    Graphics2D g2 = (Graphics2D) g;
+                    g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                                        RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                    g2.drawImage(img, rect.x, rect.y, (int) width, (int) height, null);
+                }
+            } else {
+                Icon icon = getNoImageIcon();
+                if (icon != null) {
+                    icon.paintIcon(host, g,
+                                   rect.x, rect.y);
+                }
+            }
+            if (clip != null) {
+                // Reset clip.
+                g.setClip(clip.x, clip.y, clip.width, clip.height);
+            }
         }
     }
 }
