@@ -1,0 +1,400 @@
+/*
+ * Copyright (c) 2011-2013 Julien Nicoulaud <julien.nicoulaud@gmail.com>
+ * Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+#multimarkdown-preview samp {
+    font-size: small;
+    font-family: Monospaced, monospace;
+}
+
+#multimarkdown-preview kbd {
+    font-size: small;
+    font-family: Monospaced, monospace;
+}
+
+#multimarkdown-preview strike {
+    text-decoration: line-through;
+}
+
+#multimarkdown-preview cite {
+    font-style: italic;
+}
+
+#multimarkdown-preview sub {
+    vertical-align: sub;
+}
+
+#multimarkdown-preview em {
+    font-style: italic;
+}
+
+#multimarkdown-preview strong {
+    font-weight: bold;
+}
+
+#multimarkdown-preview sup {
+    vertical-align: sup;
+}
+
+#multimarkdown-preview u {
+    text-decoration: underline;
+}
+
+#multimarkdown-preview s {
+    text-decoration: line-through;
+}
+
+#multimarkdown-preview address {
+    color: blue;
+    font-style: italic;
+}
+
+#multimarkdown-preview b {
+    font-weight: bold;
+}
+
+#multimarkdown-preview i {
+    font-style: italic;
+}
+
+#multimarkdown-preview var {
+    font-weight: bold;
+    font-style: italic;
+}
+
+#multimarkdown-preview dfn {
+    font-style: italic;
+}
+
+#multimarkdown-preview dt {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+#multimarkdown-preview dl {
+    margin-left: 0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#multimarkdown-preview tt {
+    font-family: Monospaced, monospace;
+    line-height: 1.3;
+}
+
+#multimarkdown-preview {
+    font-family: Helvetica, arial, sans-serif;
+    font-size: 12px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: white;
+    padding: 30px;
+    line-height: 1.2;
+    color: black;
+}
+
+#multimarkdown-preview a {
+    color: #4183C4;
+}
+
+#multimarkdown-preview a.absent {
+    color: #cc0000;
+}
+
+#multimarkdown-preview a.anchor {
+    display: block;
+    padding-left: 30px;
+    margin-left: -30px;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+}
+
+#multimarkdown-preview h1,
+#multimarkdown-preview h2,
+#multimarkdown-preview h3,
+#multimarkdown-preview h4,
+#multimarkdown-preview h5,
+#multimarkdown-preview h6 {
+    margin: 20px 0 10px;
+    padding: 0;
+    font-weight: bold;
+    cursor: text;
+    position: relative;
+}
+
+#multimarkdown-preview h1,
+#multimarkdown-preview h2,
+#multimarkdown-preview h3,
+#multimarkdown-preview h4,
+#multimarkdown-preview h5,
+#multimarkdown-preview h1 a,
+#multimarkdown-preview h2 a,
+#multimarkdown-preview h3 a,
+#multimarkdown-preview h4 a,
+#multimarkdown-preview h5 a {
+    color: black;
+}
+
+#multimarkdown-preview h6,
+#multimarkdown-preview h6 a {
+    color: #777777;
+}
+
+#multimarkdown-preview h1 tt,
+#multimarkdown-preview h1 code {
+    font-size: inherit;
+}
+
+#multimarkdown-preview h2 tt,
+#multimarkdown-preview h2 code {
+    font-size: inherit;
+}
+
+#multimarkdown-preview h3 tt,
+#multimarkdown-preview h3 code {
+    font-size: inherit;
+}
+
+#multimarkdown-preview h4 tt,
+#multimarkdown-preview h4 code {
+    font-size: inherit;
+}
+
+#multimarkdown-preview h5 tt,
+#multimarkdown-preview h5 code {
+    font-size: inherit;
+}
+
+#multimarkdown-preview h6 tt,
+#multimarkdown-preview h6 code {
+    font-size: inherit;
+}
+
+#multimarkdown-preview h1 {
+    font-size: 24px;
+}
+
+#multimarkdown-preview h2 {
+    font-size: 20px;
+    border-bottom: 1px solid #cccccc;
+}
+
+#multimarkdown-preview h3 {
+    font-size: 18px;
+}
+
+#multimarkdown-preview h4 {
+    font-size: 16px;
+}
+
+#multimarkdown-preview h5 {
+    font-size: 14px;
+}
+
+#multimarkdown-preview h6 {
+    font-size: 14px;
+}
+
+#multimarkdown-preview blockquote,
+#multimarkdown-preview ul,
+#multimarkdown-preview ol,
+#multimarkdown-preview dl,
+#multimarkdown-preview pre {
+    margin: 5px 0;
+}
+
+#multimarkdown-preview p {
+    margin: 5px 0;
+}
+
+#multimarkdown-preview hr {
+    border: 0 none;
+    color: #cccccc;
+    background-color: #cccccc;
+    height: 1px;
+    padding: 0;
+}
+
+#multimarkdown-preview h1 p,
+#multimarkdown-preview h2 p,
+#multimarkdown-preview h3 p,
+#multimarkdown-preview h4 p,
+#multimarkdown-preview h5 p,
+#multimarkdown-preview h6 p {
+    margin-top: 0;
+}
+
+#multimarkdown-preview li p {
+    margin: 0 0 10px 0;
+}
+
+#multimarkdown-preview li {
+    margin: 0;
+}
+
+#multimarkdown-preview ul,
+#multimarkdown-preview ol {
+    padding-left: 30px;
+}
+
+#multimarkdown-preview dl {
+    padding: 0;
+}
+
+#multimarkdown-preview dl dt {
+    font-size: 12px;
+    font-weight: bold;
+    font-style: italic;
+    padding: 0;
+    margin: 15px 0 5px;
+}
+
+#multimarkdown-preview dl dd {
+    margin: 0 0 15px;
+    padding: 0 15px;
+}
+
+#multimarkdown-preview blockquote {
+    border-left: 4px solid #cccccc;
+    padding: 0 15px;
+    font-size: 12px;
+    color: #666666;
+}
+
+#multimarkdown-preview tt {
+    margin: 0 2px;
+    padding: 0 5px;
+    white-space: nowrap;
+    border: 1px solid #eaeaea;
+    background-color: #f8f8f8;
+    border-radius: 3px;
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, Monospaced, monospace;
+    font-size: 12px;
+    line-height: 1.3;
+    color: black;
+}
+
+#multimarkdown-preview pre code {
+    margin: 0;
+    padding: 0;
+    white-space: pre;
+    border: none;
+    background: transparent;
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, Monospaced, monospace;
+    font-size: 12px;
+    line-height: 1.3;
+    color: black;
+}
+
+#multimarkdown-preview pre {
+    background-color: #f8f8f8;
+    border: 1px solid #cccccc;
+    line-height: 14px;
+    overflow: auto;
+    padding: 6px 10px;
+    border-radius: 3px;
+    white-space: pre;
+}
+
+#multimarkdown-preview sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+
+#multimarkdown-preview code {
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, Monospaced, monospace;
+    font-size: 12px;
+    line-height: 1.3;
+    color: #B00020;
+    background-color: #f8f8f8;
+    padding: 3px;
+    border-raduis: 3px;
+}
+
+#multimarkdown-preview table {
+    background-color: transparent;
+    width: 100%;
+    margin-bottom: 20px;
+    border-spacing: 0;
+    border-collapse: collapse;
+    padding: 0;
+}
+
+#multimarkdown-preview table tr th {
+    font-weight: bold;
+    border: 1px solid #cccccc;
+    margin: 0;
+    padding: 6px 13px;
+}
+
+#multimarkdown-preview table tr td {
+    border: 1px solid #cccccc;
+    margin: 0;
+    padding: 6px 13px;
+}
+
+#multimarkdown-preview table tr.odd-child {
+    background-color: #fafafa;
+}
+
+#multimarkdown-preview table tr.first-child {
+    background-color: #e0e8f0;
+}
+
+#multimarkdown-preview th {
+    text-align: left;
+}
+
+#multimarkdown-preview thead {
+    display: table-header-group;
+}
+
+#multimarkdown-preview table > thead > tr > th,
+#multimarkdown-preview table > tbody > tr > th,
+#multimarkdown-preview table > tfoot > tr > th,
+#multimarkdown-preview table > thead > tr > td,
+#multimarkdown-preview table > tbody > tr > td,
+#multimarkdown-preview table > tfoot > tr > td {
+    line-height: 1.4;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+}
+
+#multimarkdown-preview table > thead > tr > th {
+    vertical-align: bottom;
+}
+
+#multimarkdown-preview table tr.first-child > th,
+#multimarkdown-preview table tr.first-child > th,
+#multimarkdown-preview table tr.first-child > th,
+#multimarkdown-preview table tr.first-child > td,
+#multimarkdown-preview table tr.first-child > td,
+#multimarkdown-preview table tr.first-child > td {
+    border-top: 0;
+}
+
+#multimarkdown-preview table table {
+    background-color: #fff;
+}

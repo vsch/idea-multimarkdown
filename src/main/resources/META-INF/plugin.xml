@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright (c) 2011-2014 Julien Nicoulaud <julien.nicoulaud@gmail.com>
+  ~ Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
   ~
   ~ Licensed to the Apache Software Foundation (ASF) under one
   ~ or more contributor license agreements.  See the NOTICE file
@@ -20,12 +21,12 @@
   ~ under the License.
   -->
 <!DOCTYPE idea-plugin PUBLIC "Plugin/DTD" "http://plugins.intellij.net/plugin.dtd">
-<idea-plugin version="2" url="http://github.com/vsch/idea-markdown">
-  <id>net.nicoulaj.idea.markdown</id>
-  <name>Markdown</name>
+<idea-plugin version="2" url="http://github.com/vsch/idea-multimarkdown">
+  <id>com.vladsch.idea.multimarkdown</id>
+  <name>MultiMarkdown</name>
   <category>Custom Languages</category>
   <vendor url="http://github.com/vsch" email="vladimir.schneider@gmail.com">Vladimir Schneider</vendor>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <idea-version since-build="134.549"/>
   <depends>com.intellij.modules.lang</depends>
   <description>
@@ -36,6 +37,12 @@
   <change-notes>
     <![CDATA[
     <p>
+      <b>1.0.1</b><br/>
+    <ul>
+      <li>: Fork source into its own plug-in: MultiMarkdown</li>
+      <li>: Add settings for update delay, img max-width</li>
+      <li>: Add custom Css text area in settings and also ability to use defaults and load defaults for editing</li>
+    </ul>
       <b>1.0.0</b><br/>
     <ul>
       <li>: Limit images to 1000 pixels wide, resize if larger</li>
@@ -48,140 +55,24 @@
     </ul>
       <b>0.9.7</b><br/>
     <ul>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/172">#172</a>: Fix NoClassDefFoundError in IntelliJ platform 14.</li>
-    </ul>
-    <b>0.9.6</b><br/>
-    <ul>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/155">#155</a>: Fix unexpected exception when opening .md files.</li>
-    </ul>
-    <b>0.9.5</b><br/>
-    <ul>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/139">#139</a>: Load images asynchronously.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/33">#33</a>: Suppress trailing spaces stripping.</li>
-    </ul>
-    <b>0.9.4</b><br/>
-    <ul>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/34">#34</a>: Upgrade to Pegdown 1.4.2 (adds support for Github strikethrough text).</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/111">#111</a>: Fix "Error while parsing action" error.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/113">#113</a>: Fix tabs not restored on IDE restart.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/136">#136</a>: Fix settings not applied/saved.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/140">#140</a>: Fix NoClassDefFoundError when following internal links.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/153">#153</a>: Follow internal links in the preview tab.</li>
-    </ul>
-    <b>0.9.3</b><br/>
-    <ul>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/126">#126</a>: Fix NumberFormatException while loading settings.</li>
-    </ul>
-    <b>0.9.2</b><br/>
-    <ul>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/114">#114</a>: Raise parsing timeout and make it configurable.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/125">#125</a>: Fix syntax highlighting not working in IntelliJ platform 13.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/115">#115</a>: Fix preview tab CSS leaking in other parts of the IDE.</li>
-    </ul>
-    <p>
-      <b>0.9.1</b><br/>
-    <ul>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/110">#110</a>: Fix required platform version.</li>
-    </ul>
-    <b>0.9</b><br/>
-    <ul>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/50">#50</a>: Spell checking support.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/39">#39</a>: TODO tracking support.</li>
-    </ul>
-    <b>0.8.4</b><br/>
-    <ul>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/98">#98</a>: Better color scheme support.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/97">#97</a>: Fix preview CSS for dark themes.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/92">#92</a>: Fix ArrayIndexOutOfBoundsException when opening file.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/94">#94</a>: Fix preview tab scrolling to end of files by default.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/75">#75</a>: Fix Markdown parser timeout.</li>
-    </ul>
-    <b>0.8.3</b><br/>
-    <ul>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/84">#84</a>: Java 6 support.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/64">#64</a>: Fix NullPointerException when accessing settings.</li>
-    </ul>
-    <b>0.8.2</b><br/>
-    <ul>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/62">#62</a>: Fix plugin cannot be installed.</li>
-    </ul>
-    <b>0.8.1</b><br/>
-    <ul>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/56">#56</a>: Fix local/relative links/images resolving.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/60">#60</a>: Fix links broken on PHPStorm.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/61">#61</a>: Update Pegdown to 1.2.0.</li>
-    </ul>
-    <b>0.8</b><br/>
-    <ul>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/40">#40</a>: Add support for local links/images in preview (<a href="https://github.com/grantham">Roger Grantham</a>)</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/43">#43</a>: Table formatting not shown in preview.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/44">#44</a>: Enabling SmartyPants extensions has no apparent effect.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/45">#45</a>: Deprecated API usage in MarkdownAnnotator.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/46">#46</a>: Deprecated API usage in MarkdownLoader.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/47">#47</a>: Improve preview CSS (headers).</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/48">#48</a>: Add specific token type for Wiki links.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/49">#49</a>: Add specific token type for reference images.</li>
-    </ul>
-    <b>0.7</b><br/>
-    <ul>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/35">#35</a>: IntelliJ 11 compatibility.</li>
-    </ul>
-    <b>0.6.1</b><br/>
-    <ul>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/37">#37</a>: Add support for wiki links.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/36">#36</a>: Upgrade to Pegdown 1.1.0.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/31">#31</a>: Highlighting problem with certain Definition Lists Terms.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/30">#30</a>: Links not correctly rendered in preview.</li>
-    </ul>
-    <b>0.6</b><br/>
-    <ul>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/26">#26</a>: Allow to configure enabled Markdown extensions (globally).</li>
-    </ul>
-    <b>0.5.1</b><br/>
-    <ul>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/19">#19</a>: Various syntax highlighting fixes.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/3">#3</a>: Preview tab remains blank.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/25">#25</a>: Add highlighting options for remaining element types.</li>
-    </ul>
-    <b>0.5</b><br/>
-    <ul>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/10">#10</a>: Enable all supported Markdown extensions.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/15">#15</a>: Syntax highlighting inside list items.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/21">#21</a>: Improve style of the "Preview" tab.</li>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/22">#22</a>: Minimal IDEA build version does not work.</li>
-    </ul>
-    <b>0.4</b><br/>
-    <ul>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/19">#19</a>: Improved syntax highlighting.</li>
-    </ul>
-    <b>0.3</b><br/>
-    <ul>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/19">#19</a>: Very basic syntax highlighting.</li>
-    </ul>
-    <b>0.2</b><br/>
-    <ul>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/20">#20</a>: Compatibility with PyCharm/RubyMine/WebStorm/PHPStorm/etc.</li>
-    </ul>
-    <b>0.1</b><br/>
-    <ul>
-      <li><a href="https://github.com/nicoulaj/idea-markdown/issues/18">#18</a>: Initial release: Markdown file type support and "Preview" tab in the file editor.</li>
+      <li>Forked from <a href="https://github.com/nicoulaj/idea-markdown">idea-markdown</a></li>
     </ul>
     </p>
     ]]>
   </change-notes>
   <extensions defaultExtensionNs="com.intellij">
-    <fileTypeFactory implementation="net.nicoulaj.idea.markdown.file.MarkdownFileTypeFactory"/>
-    <syntaxHighlighter key="Markdown" implementationClass="net.nicoulaj.idea.markdown.highlighter.MarkdownSyntaxHighlighter"/>
-    <colorSettingsPage implementation="net.nicoulaj.idea.markdown.highlighter.MarkdownColorSettingsPage"/>
-    <additionalTextAttributes scheme="Default" file="net/nicoulaj/idea/markdown/schemes/default.xml"/>
-    <additionalTextAttributes scheme="Darcula" file="net/nicoulaj/idea/markdown/schemes/darcula.xml"/>
-    <fileEditorProvider implementation="net.nicoulaj.idea.markdown.editor.MarkdownPreviewEditorProvider"/>
-    <lang.documentationProvider language="Markdown" implementationClass="net.nicoulaj.idea.markdown.documentation.MarkdownDocumentationProvider"/>
-    <lang.parserDefinition language="Markdown" implementationClass="net.nicoulaj.idea.markdown.lang.parser.MarkdownParserDefinition"/>
-    <externalAnnotator language="Markdown" implementationClass="net.nicoulaj.idea.markdown.annotator.MarkdownAnnotator"/>
-    <spellchecker.support language="Markdown" implementationClass="net.nicoulaj.idea.markdown.spellchecking.MarkdownSpellcheckingStrategy"/>
-    <todoIndexer filetype="Markdown" implementationClass="net.nicoulaj.idea.markdown.todo.MarkdownTodoIndexer"/>
-    <applicationService serviceInterface="net.nicoulaj.idea.markdown.settings.MarkdownGlobalSettings" serviceImplementation="net.nicoulaj.idea.markdown.settings.MarkdownGlobalSettings"/>
-    <applicationConfigurable instance="net.nicoulaj.idea.markdown.settings.MarkdownGlobalSettingsConfigurable"/>
+    <fileTypeFactory implementation="com.vladsch.idea.multimarkdown.file.MarkdownFileTypeFactory"/>
+    <syntaxHighlighter key="Markdown" implementationClass="com.vladsch.idea.multimarkdown.highlighter.MarkdownSyntaxHighlighter"/>
+    <colorSettingsPage implementation="com.vladsch.idea.multimarkdown.highlighter.MarkdownColorSettingsPage"/>
+    <additionalTextAttributes scheme="Default" file="com/vladsch/idea/multimarkdown/schemes/default.xml"/>
+    <additionalTextAttributes scheme="Darcula" file="com/vladsch/idea/multimarkdown/schemes/darcula.xml"/>
+    <fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MarkdownPreviewEditorProvider"/>
+    <lang.documentationProvider language="Markdown" implementationClass="com.vladsch.idea.multimarkdown.documentation.MarkdownDocumentationProvider"/>
+    <lang.parserDefinition language="Markdown" implementationClass="com.vladsch.idea.multimarkdown.lang.parser.MarkdownParserDefinition"/>
+    <externalAnnotator language="Markdown" implementationClass="com.vladsch.idea.multimarkdown.annotator.MarkdownAnnotator"/>
+    <spellchecker.support language="Markdown" implementationClass="com.vladsch.idea.multimarkdown.spellchecking.MarkdownSpellcheckingStrategy"/>
+    <todoIndexer filetype="Markdown" implementationClass="com.vladsch.idea.multimarkdown.todo.MarkdownTodoIndexer"/>
+    <applicationService serviceInterface="com.vladsch.idea.multimarkdown.settings.MarkdownGlobalSettings" serviceImplementation="com.vladsch.idea.multimarkdown.settings.MarkdownGlobalSettings"/>
+    <applicationConfigurable instance="com.vladsch.idea.multimarkdown.settings.MarkdownGlobalSettingsConfigurable"/>
   </extensions>
 </idea-plugin>

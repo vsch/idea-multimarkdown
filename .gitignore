@@ -15,5 +15,5 @@
 # Local stuff
 local/
 
-src/main/resources/net/nicoulaj/idea/markdown/preview_orig.css
+src/main/resources/com/vladsch/idea/multimarkdown/preview_orig.css
 preview_orig.css
