@@ -97,10 +97,15 @@ Tables
 Horizontal rules
 ----------------
 
+Paragraph text separated by horizontal rules
+
 ---
+
+Paragraph text separated by horizontal rules
 
 ___
 
+Paragraph text separated by horizontal rules
 
 ***
 

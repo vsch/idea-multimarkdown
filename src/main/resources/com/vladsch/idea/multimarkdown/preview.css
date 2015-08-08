@@ -228,14 +228,6 @@
     margin: 5px 0;
 }
 
-#multimarkdown-preview hr {
-    border: 0 none;
-    color: #cccccc;
-    background-color: #cccccc;
-    height: 1px;
-    padding: 0;
-}
-
 #multimarkdown-preview h1 p,
 #multimarkdown-preview h2 p,
 #multimarkdown-preview h3 p,
@@ -397,4 +389,21 @@
 
 #multimarkdown-preview table table {
     background-color: #fff;
+}
+
+#multimarkdown-preview hr {
+/*
+    nothing is used in the CSS by the HTMLEditorKit hr element except alignment, margin and width.
+    size and noshade attributes are only setable in the element and size is 2px minimum, of any
+    color just as long as its black, hardcoded in the library.
+
+    ie. nothing useful that we can use to change the look so hr is simulated with a
+    <div class="hr">&nbsp;</div> instead.
+ */
+}
+
+#multimarkdown-preview div.hr {
+height: 1px;
+border-top: 1px solid #cccccc;
+margin: 10px 0 0 0;
 }

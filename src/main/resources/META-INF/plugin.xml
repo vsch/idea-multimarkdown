@@ -26,7 +26,7 @@
   <name>MultiMarkdown</name>
   <category>Custom Languages</category>
   <vendor url="http://github.com/vsch" email="vladimir.schneider@gmail.com">Vladimir Schneider</vendor>
-  <version>1.0.2</version>
+  <version>1.0.3</version>
   <idea-version since-build="134.549"/>
   <depends>com.intellij.modules.lang</depends>
   <description>
@@ -37,27 +37,33 @@
   <change-notes>
     <![CDATA[
     <p>
-      <b>1.0.2</b><br/>
+      <b>1.0.3</b><br/>
+    <ul>
+      <li>: Changed generated HTML to use div instead of hr to control the look through CSS</li>
+      <li>: Tweak document icon</li>
+    </ul>
+    <b>1.0.2</b><br/>
     <ul>
       <li>: Changed document icon</li>
       <li>: Fix use Application invokeLater, instead of SwingUtil</li>
-      <b>1.0.1</b><br/>
+    </ul>
+    <b>1.0.1</b><br/>
     <ul>
       <li>: Fork source into its own plug-in: MultiMarkdown</li>
       <li>: Add settings for update delay, img max-width</li>
       <li>: Add custom Css text area in settings and also ability to use defaults and load defaults for editing</li>
     </ul>
-      <b>1.0.0</b><br/>
+    <b>1.0.0</b><br/>
     <ul>
       <li>: Limit images to 1000 pixels wide, resize if larger</li>
       <li>: Fix table to be striped</li>
     </ul>
-      <b>0.9.8</b><br/>
+    <b>0.9.8</b><br/>
     <ul>
       <li>: Fix no refresh on settings change</li>
       <li>: Update pegdown to 1.5.0 and parboiled to 1.1.7.</li>
     </ul>
-      <b>0.9.7</b><br/>
+    <b>0.9.7</b><br/>
     <ul>
       <li>Forked from <a href="https://github.com/nicoulaj/idea-markdown">idea-markdown</a></li>
     </ul>
