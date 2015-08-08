@@ -43,7 +43,7 @@ public class MarkdownPreviewEditorProvider implements FileEditorProvider, Possib
     public static final String EDITOR_TYPE_ID = MarkdownLanguage.LANGUAGE_NAME + "PreviewEditor";
 
     /**
-     * Check wether this {@link FileEditorProvider} can create a valid {@link FileEditor} for the file.
+     * Check whether this {@link FileEditorProvider} can create a valid {@link FileEditor} for the file.
      *
      * @param project the project context.
      * @param file    the file to be tested for acceptance. This parameter must never be <code>null</code>.

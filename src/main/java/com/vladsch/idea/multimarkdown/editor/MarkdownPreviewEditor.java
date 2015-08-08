@@ -23,6 +23,8 @@ package com.vladsch.idea.multimarkdown.editor;
 
 import com.intellij.codeHighlighting.BackgroundEditorHighlighter;
 import com.intellij.ide.structureView.StructureViewBuilder;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.event.DocumentAdapter;
@@ -162,7 +164,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
         updateDelayTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                EventQueue.invokeLater(new Runnable() {
+                ApplicationManager.getApplication().invokeLater(new Runnable() {
                     @Override
                     public void run() {
                         previewIsObsolete = true;
@@ -174,7 +176,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
 
                         updateHtmlContent(true);
                     }
-                });
+                }, ModalityState.any());
             }
         }, updateDelay);
     }
