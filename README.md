@@ -6,10 +6,14 @@ idea-multimarkdown
 See the [official plugin page](http://plugins.intellij.net/plugin?id=).
 
 I wanted a Markdown preview plug-in that resembled GitHub's markdown style. I decided to start with [Markdown plug-in](https://github.com/nicoulaj/idea-markdown), upgrade it to latest pegdown, parboiled
- then add a few creature comforts for others like user settable style sheet so you don't need to rebuild the plug-in just to change the style, fix a few bugs then add other comforts like 
- the ability to split ide editors and display Markdown in one pane and HTML Preview in the other, with the preview automatically updated as you type.
+then add a few creature comforts like user editable style sheet, fix a few bugs then add ability to split ide editors and display Markdown in one pane and HTML Preview in the other.
 
-[![idea-markdown](https://github.com/vsch/idea-multimarkdown/raw/assets/screenshots/preview.png)](http://plugins.intellij.net/plugin?id=)
+[![idea-multimarkdown](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_preview.png)](http://plugins.intellij.net/plugin?id=)
+
+Change options and customize the CSS to your liking.
+
+[![idea-multimarkdown](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_settings.png)]
+
 
 *This plugin is based on the excellent [Markdown plug-in](https://github.com/nicoulaj/idea-markdown) by [nicoulaj](https://github.com/nicoulaj), 
 which is based on [PegDown](http://pegdown.org) library by [sirthias](https://github.com/sirthias). 
