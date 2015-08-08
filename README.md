@@ -12,7 +12,7 @@ then add a few creature comforts like user editable style sheet, fix a few bugs 
 
 Change options and customize the CSS to your liking.
 
-[![idea-multimarkdown](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_settings.png)]
+![idea-multimarkdown](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_settings.png)
 
 
 *This plugin is based on the excellent [Markdown plug-in](https://github.com/nicoulaj/idea-markdown) by [nicoulaj](https://github.com/nicoulaj), 
