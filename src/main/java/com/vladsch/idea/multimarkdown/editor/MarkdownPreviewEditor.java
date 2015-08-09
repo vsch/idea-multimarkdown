@@ -309,7 +309,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
     protected String postProcessHtml(String html) {
         // scan for <table>, </table>, <tr> and </tr>
         String result = "";
-        Pattern p = Pattern.compile("(<table>|<thead>|<tbody>|<tr>|<hr/>)", Pattern.CASE_INSENSITIVE);
+        Pattern p = Pattern.compile("(<table>|<thead>|<tbody>|<tr>|<hr/>|<del>|</del>)", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(html);
         int lastPos = 0;
         int rowCount = 0;
@@ -334,6 +334,10 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
                 result += "<tr class=\"" + (rowCount == 1 ? "first-child" : (rowCount & 1) != 0 ? "odd-child" : "even-child") + "\">";
             } else if (found.equals("<hr/>")) {
                 result += "<div class=\"hr\">&nbsp;</div>";
+            } else if (found.equals("<del>")) {
+                result += "<span class=\"del\">";
+            } else if (found.equals("</del>")) {
+                result += "</span>";
             }
 
             lastPos = m.end(0);

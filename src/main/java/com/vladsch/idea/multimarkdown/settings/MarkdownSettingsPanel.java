@@ -147,7 +147,6 @@ public class MarkdownSettingsPanel {
 
         btnLoadDefault.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) {
-                e.getActionCommand();
                 try {
                     textCustomCss.setText(Resources.toString(MarkdownPreviewEditor.class.getResource(MarkdownPreviewEditor.PREVIEW_STYLESHEET_PATH), Charsets.UTF_8));
                 } catch (IOException ex) {

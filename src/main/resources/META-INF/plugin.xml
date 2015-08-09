@@ -26,7 +26,7 @@
   <name>MultiMarkdown</name>
   <category>Custom Languages</category>
   <vendor url="http://github.com/vsch" email="vladimir.schneider@gmail.com">Vladimir Schneider</vendor>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
   <idea-version since-build="134.549"/>
   <depends>com.intellij.modules.lang</depends>
   <description>
@@ -37,14 +37,19 @@
   <change-notes>
     <![CDATA[
     <p>
-      <b>1.0.3</b><br/>
+      <b>1.0.4</b><br/>
     <ul>
-      <li>: Changed generated HTML to use div instead of hr to control the look through CSS</li>
+      <li>: Change generated HTML to use span instead of del for strikethrough to control the look through CSS</li>
+      <li>: Change max img width of 0 disables resizing</li>
+    </ul>
+    <b>1.0.3</b><br/>
+    <ul>
+      <li>: Change generated HTML to use div instead of hr to control the look through CSS</li>
       <li>: Tweak document icon</li>
     </ul>
     <b>1.0.2</b><br/>
     <ul>
-      <li>: Changed document icon</li>
+      <li>: Change document icon</li>
       <li>: Fix use Application invokeLater, instead of SwingUtil</li>
     </ul>
     <b>1.0.1</b><br/>

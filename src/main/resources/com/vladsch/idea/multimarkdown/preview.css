@@ -50,6 +50,14 @@
     font-weight: bold;
 }
 
+#multimarkdown-preview del {
+    text-decoration: line-through;
+}
+
+#multimarkdown-preview span.del {
+    text-decoration: line-through;
+}
+
 #multimarkdown-preview sup {
     vertical-align: sup;
 }
@@ -392,7 +400,7 @@
 }
 
 #multimarkdown-preview hr {
-/*
+    /*
     nothing is used in the CSS by the HTMLEditorKit hr element except alignment, margin and width.
     size and noshade attributes are only setable in the element and size is 2px minimum, of any
     color just as long as its black, hardcoded in the library.
@@ -403,7 +411,7 @@
 }
 
 #multimarkdown-preview div.hr {
-height: 1px;
-border-top: 1px solid #cccccc;
-margin: 10px 0 0 0;
+    height: 1px;
+    border-top: 1px solid #cccccc;
+    margin: 10px 0 0 0;
 }

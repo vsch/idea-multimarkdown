@@ -187,7 +187,7 @@ public class MarkdownEditorKit extends HTMLEditorKit {
 
                 final float maxWidth = editorKit.getMaxWidth();
 
-                if (width > maxWidth) {
+                if (maxWidth > 0 && width > maxWidth) {
                     scaled = true;
                     this.width = maxWidth;
                     this.height = (int) (height * maxWidth / width);
@@ -217,7 +217,7 @@ public class MarkdownEditorKit extends HTMLEditorKit {
             float height = getPreferredSpan(View.Y_AXIS);
             final float maxWidth = editorKit.getMaxWidth();
 
-            if (width > maxWidth) {
+            if (maxWidth > 0 && width > maxWidth) {
                 height = height * maxWidth / width;
                 width = maxWidth;
             }

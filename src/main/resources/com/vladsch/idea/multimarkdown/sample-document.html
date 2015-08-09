@@ -29,90 +29,147 @@
 </head>
 
 <body>
-<div id="markdown-preview">
-    <h1><a href="#test-markdown-document" name="test-markdown-document">Test Markdown document</a></h1><h2><a href="#text" name="text">Text</a></h2><p>Here is a paragraph with bold text. Here is a paragraph with bold text. Here is a paragraph with<br/>bold text. <strong>Here is a paragraph with bold text.</strong> Here is a paragraph with bold text. Here is a<br/>paragraph with bold text. Here is a paragraph with bold text. Here is a paragraph with bold text.</p><p>Here is another one with italic text. Here is another one with italic text. Here is another one<br/>with italic text. <em>Here is another one with italic text.</em> Here is another one with italic text.<br/>Here is another one with italic text. Here is another one with italic text. Here is another one<br/>with italic text. <em>Here is another one with</em> italic text. Here is another one with italic text.</p><h2><a href="#links" name="links">Links</a></h2><p>Autolink: <a href="http://example.com">http://example.com</a></p><p>Link: <a href="http://example.com">Example</a></p><p>Reference style <a href="http://example.com" title="Example">link</a>.</p><h2><a href="#images" name="images">Images</a></h2><p>Image: <img src="http://www.foo.bar/image.png" alt="My image" /></p><p><img src="https://raw.githubusercontent.com/vsch/laravel-translation-manager/master/images/ScreenShot_main.png" alt="Translation Manager Screenshot" /></p><h2><a href="#headers" name="headers">Headers</a></h2><h1><a href="#first-level-title" name="first-level-title">First level title</a></h1><h2><a href="#second-level-title" name="second-level-title">Second level title</a></h2><h3><a href="#third-level-title" name="third-level-title">Third level title</a></h3><h4><a href="#fourth-level-title" name="fourth-level-title">Fourth level title</a></h4><h5><a href="#fifth-level-title" name="fifth-level-title">Fifth level title</a></h5><h6><a href="#sixth-level-title" name="sixth-level-title">Sixth level title</a></h6><h3>Title with <a href="http://localhost">link</a></h3><h3>Title with <img src="http://localhost" alt="image" /></h3><h2><a href="#code" name="code">Code</a></h2><p>Inline <code>code in a</code> paragraph.</p><p>A code block:</p>
-<pre><code>/**
-    * Load a {@link String} from the {@link #BUNDLE} {@link ResourceBundle}.
-    *
-    * @param key    the key of the resource.
-    * @param params the optional parameters for the specific resource.
-    * @return the {@link String} value or {@code null} if no resource found for the key.
-    */
-    public static String message(@PropertyKey(resourceBundle = BUNDLE_NAME) String key, Object... params) {
+    <div id="markdown-preview">
+        <h1><a href="#test-markdown-document" name="test-markdown-document">Test Markdown document</a></h1>
+        <h2><a href="#text" name="text">Text</a></h2>
+        <p>Bold: <strong>Here is a paragraph with bold text.</strong> followed by normal text
+            <br/>Italic: <em>Here is a paragraph with italic text.</em> followed by normal text
+            <br/>Strikethrough: <del>Here is a paragraph with strikethrough.</del> followed by normal text</p>
+        <p>Here is another one with italic text. Here is another one with italic text. Here is another one
+            <br/>with italic text. <em>Here is another one with italic text.</em> Here is another one with italic text.
+            <br/>Here is another one with italic text. Here is another one with italic text. Here is another one
+            <br/>with italic text. <em>Here is another one with</em> italic text. Here is another one with italic text.</p>
+        <h2><a href="#links" name="links">Links</a></h2>
+        <p>Autolink: <a href="http://example.com">http://example.com</a>
+        </p>
+        <p>Link: <a href="http://example.com">Example</a>
+        </p>
+        <p>Reference style <a href="http://example.com" title="Example">link</a>.</p>
+        <h2><a href="#images" name="images">Images</a></h2>
+        <p>Image: <img src="http://www.foo.bar/image.png" alt="My image" />
+        </p>
+        <p><img src="https://raw.githubusercontent.com/vsch/laravel-translation-manager/master/images/ScreenShot_main.png" alt="Translation Manager Screenshot" />
+        </p>
+        <h2><a href="#headers" name="headers">Headers</a></h2>
+        <h1><a href="#first-level-title" name="first-level-title">First level title</a></h1>
+        <h2><a href="#second-level-title" name="second-level-title">Second level title</a></h2>
+        <h3><a href="#third-level-title" name="third-level-title">Third level title</a></h3>
+        <h4><a href="#fourth-level-title" name="fourth-level-title">Fourth level title</a></h4>
+        <h5><a href="#fifth-level-title" name="fifth-level-title">Fifth level title</a></h5>
+        <h6><a href="#sixth-level-title" name="sixth-level-title">Sixth level title</a></h6>
+        <h3>Title with <a href="http://localhost">link</a></h3>
+        <h3>Title with <img src="http://localhost" alt="image" /></h3>
+        <h2><a href="#code" name="code">Code</a></h2>
+        <p>Inline <code>code in a</code> paragraph.</p>
+        <p>A code block:</p>
+        <pre><code>/**
+ * Load a {@link String} from the {@link #BUNDLE} {@link ResourceBundle}.
+ *
+ * @param key    the key of the resource.
+ * @param params the optional parameters for the specific resource.
+ * @return the {@link String} value or {@code null} if no resource found for the key.
+ */
+public static String message(@PropertyKey(resourceBundle = BUNDLE_NAME) String key, Object... params) {
     return CommonBundle.message(BUNDLE, key, params);
-    }
-</code></pre><h2><a href="#quotes" name="quotes">Quotes</a></h2>
-    <blockquote><p>This is the first level of quoting.</p>
-        <blockquote><p>This is nested blockquote.</p>
-        </blockquote><p>Back to the first level.</p><p>A list within a blockquote:</p>
+}
+</code></pre>
+        <h2><a href="#quotes" name="quotes">Quotes</a></h2>
+        <blockquote>
+            <p>This is the first level of quoting.</p>
+            <blockquote>
+                <p>This is nested blockquote.</p>
+            </blockquote>
+            <p>Back to the first level.</p>
+            <p>A list within a blockquote:</p>
+            <ul>
+                <li>asterisk 1</li>
+                <li>asterisk 2</li>
+                <li>asterisk 3</li>
+            </ul>
+            <p>Formatting within a blockquote:</p>
+            <h3><a href="#header" name="header">header</a></h3>
+            <p>Link: <a href="http://example.com">Example</a>
+            </p>
+            <p>Master branch is now for Laravel version 5.1</p>
+            <ul>
+                <li>
+                    <p>double space item 1</p>
+                    <p>with added paragraph</p>
+                </li>
+                <li>
+                    <p>double spaced item 2</p>
+                </li>
+            </ul>
+        </blockquote>
+        <h2><a href="#tables" name="tables">Tables</a></h2>
+        <table>
+            <thead>
+                <tr class="first-child">
+                    <th align="left">Column 1 </th>
+                    <th align="center">Column 2 </th>
+                    <th align="right">Column 3 </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="even-child">
+                    <td align="left">Row 1 Cell 1</td>
+                    <td align="center">Row 1 Cell 2</td>
+                    <td align="right">Row 1 Cell 3</td>
+                </tr>
+                <tr class="odd-child">
+                    <td align="left">Row 2 Cell 1</td>
+                    <td align="center">Row 2 Cell 2</td>
+                    <td align="right">Row 2 Cell 3</td>
+                </tr>
+            </tbody>
+        </table>
+        <table>
+            <tr class="first-child">
+                <th>Column 1</th>
+                <th>Column 2</th>
+            </tr>
+            <tr class="even-child">
+                <td>Row 1 Cell 1</td>
+                <td>Row 1 Cell 2</td>
+            </tr>
+            <tr class="odd-child">
+                <td>Row 2 Cell 1</td>
+                <td>Row 2 Cell 2</td>
+            </tr>
+        </table>
+        <h2><a href="#horizontal-rules" name="horizontal-rules">Horizontal rules</a></h2>
+        <p>Paragraph text separated by horizontal rules</p>
+        <div class="hr">&nbsp;</div>
+        <p>Paragraph text separated by horizontal rules</p>
+        <div class="hr">&nbsp;</div>
+        <p>Paragraph text separated by horizontal rules</p>
+        <div class="hr">&nbsp;</div>
+        <h2><a href="#lists" name="lists">Lists</a></h2>
+        <p>Unordered list:</p>
         <ul>
             <li>asterisk 1</li>
             <li>asterisk 2</li>
             <li>asterisk 3</li>
-        </ul><p>Formatting within a blockquote:</p><h3><a href="#header" name="header">header</a></h3><p>Link: <a href="http://example.com">Example</a></p><p>Master branch is now for Laravel version 5.1</p>
-        <ul>
-            <li><p>double space item 1</p><p>with added paragraph</p></li>
-            <li><p>double spaced item 2</p></li>
         </ul>
-    </blockquote><h2><a href="#tables" name="tables">Tables</a></h2>
-    <table>
-        <thead>
-        <tr class="first-child">
-            <th align="left">Column 1 </th>
-            <th align="center">Column 2 </th>
-            <th align="right">Column 3 </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr class="even-child">
-            <td align="left">Row 1 Cell 1</td>
-            <td align="center">Row 1 Cell 2</td>
-            <td align="right">Row 1 Cell 3</td>
-        </tr>
-        <tr class="odd-child">
-            <td align="left">Row 2 Cell 1</td>
-            <td align="center">Row 2 Cell 2</td>
-            <td align="right">Row 2 Cell 3</td>
-        </tr>
-        </tbody>
-    </table>
-    <table>
-        <tr class="first-child">
-            <th>Column 1</th>
-            <th>Column 2</th>
-        </tr>
-        <tr class="even-child">
-            <td>Row 1 Cell 1</td>
-            <td>Row 1 Cell 2</td>
-        </tr>
-        <tr class="odd-child">
-            <td>Row 2 Cell 1</td>
-            <td>Row 2 Cell 2</td>
-        </tr>
-    </table><h2><a href="#horizontal-rules" name="horizontal-rules">Horizontal rules</a></h2><p>Paragraph text separated by horizontal rules</p>
-    <div class="hr">&nbsp;</div><p>Paragraph text separated by horizontal rules</p>
-    <div class="hr">&nbsp;</div><p>Paragraph text separated by horizontal rules</p>
-    <div class="hr">&nbsp;</div><h2><a href="#lists" name="lists">Lists</a></h2><p>Unordered list:</p>
-    <ul>
-        <li>asterisk 1</li>
-        <li>asterisk 2</li>
-        <li>asterisk 3</li>
-    </ul><p>Ordered list:</p>
-    <ol>
-        <li>First</li>
-        <li>Second</li>
-        <li>Third</li>
-    </ol><p>Mixed:</p>
-    <ol>
-        <li>First</li>
-        <li>Second:
-            <ul>
-                <li>Fee</li>
-                <li>Fie</li>
-                <li>Foe</li>
-            </ul></li>
-        <li>Third</li>
-    </ol>
-</div>
+        <p>Ordered list:</p>
+        <ol>
+            <li>First</li>
+            <li>Second</li>
+            <li>Third</li>
+        </ol>
+        <p>Mixed:</p>
+        <ol>
+            <li>First</li>
+            <li>Second:
+                <ul>
+                    <li>Fee</li>
+                    <li>Fie</li>
+                    <li>Foe</li>
+                </ul>
+            </li>
+            <li>Third</li>
+        </ol>
+    </div>
 </body>
+
 </html>
