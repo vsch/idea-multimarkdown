@@ -148,10 +148,26 @@ Unordered list:
 *	asterisk 2
 *	asterisk 3
 
+Double spaced:
+
+*	asterisk 1
+
+*	asterisk 2
+
+*	asterisk 3
+
 Ordered list:
 
 1.	First
 2.	Second
+3.	Third
+
+Double spaced:
+
+1.	First
+
+2.	Second
+
 3.	Third
 
 Mixed:

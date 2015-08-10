@@ -16,20 +16,20 @@ Features:
 
 To Do:
 
-- [] Add configurable HTML tag replacements. The need for this is caused by the java HTMLEditorKit, which is used to render the HTML,
-not handling css attributes for known tags in some cases. The workaround is to replace the generated HTML to something the editor kit will render better.
-- [] Change Parser to use Grammar-Kit and add the IntelliJ expected comforts:
-    - [] syntax highlighting
-    - [] formatting
-    - [] navigation
-    - [] document structure display
+- [ ] Add configurable HTML tag replacements. The need for this is caused by the java HTMLEditorKit, which is used to render the HTML,
+     ignoring CSS attributes for known tags. The workaround is to replace the generated HTML to something the editor kit will render better.
+     For example, `<hr/>` hardcodes color to black and size to minimum 2px. To have more control `<hr>` is replaced with `<div class="hr">&nbsp;</div>`.
+- [ ] Change Parser to use Grammar-Kit and add the IntelliJ expected comforts:
+    - [ ] syntax highlighting
+    - [ ] formatting
+    - [ ] navigation
+    - [ ] document structure display
 
 [![idea-multimarkdown](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_preview.png)](http://plugins.intellij.net/plugin?id=7896)
 
 Change options and customize the CSS to your liking.
 
 ![idea-multimarkdown](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_settings.png)
-
 
 *This plugin is based on the excellent [Markdown plug-in](https://github.com/nicoulaj/idea-markdown) by [nicoulaj](https://github.com/nicoulaj), 
 which is based on [PegDown](http://pegdown.org) library by [sirthias](https://github.com/sirthias). 

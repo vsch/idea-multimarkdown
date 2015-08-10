@@ -310,7 +310,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
         // scan for <table>, </table>, <tr> and </tr>
         String result = "";
         boolean taskLists = MarkdownGlobalSettings.getInstance().isTaskLists();
-        Pattern p = Pattern.compile("(<table>|<thead>|<tbody>|<tr>|<hr/>|<del>|</del>|<li>\\[x\\]|<li>\\[\\]|<li>\\[ \\])", Pattern.CASE_INSENSITIVE);
+        Pattern p = Pattern.compile("(<table>|<thead>|<tbody>|<tr>|<hr/>|<del>|</del>|<li>\\[x\\]|<li>\\[ \\]|<li><p>\\[x\\]|<li><p>\\[ \\])", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(html);
         int lastPos = 0;
         int rowCount = 0;
@@ -339,8 +339,12 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
                 result += "</span>";
             } else if (taskLists && found.equals("<li>[x]")) {
                 result += "<li class=\"task\"><input type=\"checkbox\" checked=\"checked\" disabled=\"disabled\">";
-            } else if (taskLists && (found.equals("<li>[]") || found.equals("<li>[ ]"))) {
+            } else if (taskLists && found.equals("<li>[ ]")) {
                 result += "<li class=\"task\"><input type=\"checkbox\" disabled=\"disabled\">";
+            } else if (taskLists && found.equals("<li><p>[x]")) {
+                result += "<li class=\"task\"><p><input type=\"checkbox\" checked=\"checked\" disabled=\"disabled\">";
+            } else if (taskLists && found.equals("<li><p>[ ]")) {
+                result += "<li class=\"task\"><p><input type=\"checkbox\" disabled=\"disabled\">";
             }
             else {
                 result += found;
