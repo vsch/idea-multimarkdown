@@ -1,6 +1,8 @@
 Markdown Syntax for Grammar-Kit
 ===============================
 
+This is a work in progress and is not currently implemented.
+
 Currently there are a lot of flavours of Markdown parsers and all differ in the details of how they recognize elements and convert to HTML.
 
 The original syntax provided by [John Gruber](http://daringfireball.net/projects/markdown/syntax#header) is a good start but some changes were
