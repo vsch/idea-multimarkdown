@@ -298,7 +298,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
                 String html = processor.get().markdownToHtml(document.getText());
                 // add class to table rows to compensate for lack of :first-child, :nth-child() so we can have striped tables
                 String procHtml = postProcessHtml(html);
-                jEditorPane.setText("<div id=\"multimarkdown-preview\">" + procHtml + "</div>");
+                jEditorPane.setText("<div id=\"multimarkdown-preview\">\n" + procHtml + "\n</div>\n");
                 previewIsObsolete = false;
             } catch (Exception e) {
                 LOGGER.error("Failed processing Markdown document", e);
@@ -309,7 +309,8 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
     protected String postProcessHtml(String html) {
         // scan for <table>, </table>, <tr> and </tr>
         String result = "";
-        Pattern p = Pattern.compile("(<table>|<thead>|<tbody>|<tr>|<hr/>|<del>|</del>)", Pattern.CASE_INSENSITIVE);
+        boolean taskLists = MarkdownGlobalSettings.getInstance().isTaskLists();
+        Pattern p = Pattern.compile("(<table>|<thead>|<tbody>|<tr>|<hr/>|<del>|</del>|<li>\\[x\\]|<li>\\[\\]|<li>\\[ \\])", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(html);
         int lastPos = 0;
         int rowCount = 0;
@@ -324,10 +325,8 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
                 rowCount = 0;
                 result += found;
             } else if (found.equals("<thead>")) {
-//                rowCount = 0;
                 result += found;
             } else if (found.equals("<tbody>")) {
-//                rowCount = 0;
                 result += found;
             } else if (found.equals("<tr>")) {
                 rowCount++;
@@ -338,6 +337,13 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
                 result += "<span class=\"del\">";
             } else if (found.equals("</del>")) {
                 result += "</span>";
+            } else if (taskLists && found.equals("<li>[x]")) {
+                result += "<li class=\"task\"><input type=\"checkbox\" checked=\"checked\" disabled=\"disabled\">";
+            } else if (taskLists && (found.equals("<li>[]") || found.equals("<li>[ ]"))) {
+                result += "<li class=\"task\"><input type=\"checkbox\" disabled=\"disabled\">";
+            }
+            else {
+                result += found;
             }
 
             lastPos = m.end(0);

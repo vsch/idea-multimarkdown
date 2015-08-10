@@ -4,11 +4,19 @@ Test Markdown document
 Text
 ----
 
-Bold: **Here is a paragraph with bold text.** followed by normal text
+Bold: \** **Here is a paragraph with bold text.**\** followed by normal text
+\<strong><strong>Here is a paragraph with bold text.</strong>\</strong> followed by normal text
+\<b><b>Here is a paragraph with bold text.</b>\</b> followed by normal text
 
-Italic: *Here is a paragraph with italic text.* followed by normal text
+Italic: \* *Here is a paragraph with italic text.*\* followed by normal text
+using \<i> *Here is a paragraph with italic text.*\</i> followed by normal text
 
-Strikethrough: ~~Here is a paragraph with strikethrough.~~ followed by normal text
+Strikethrough: \~~ ~~Here is a paragraph with strikethrough.~~\~~ followed by normal text
+\<del><del>Here is a paragraph with strikethrough.</del>\</del> followed by normal text
+\<strike><strike>Here is a paragraph with strikethrough.</strike>\</strike> followed by normal text
+\<s><s>Here is a paragraph with strikethrough.</s>\</s> followed by normal text
+
+Superscript/Subscript: normal<sup>superscript</sup> and normal<sub>subscript</sub> followed by normal text
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi commodo nibh eros, a aliquet diam pharetra nec. Proin tempus felis sit amet lacus tempor, vel dictum sem congue. Quisque in mi nulla. Sed orci urna, tincidunt id volutpat non, condimentum a augue. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec laoreet nec lacus vel egestas. In hac habitasse platea dictumst. Etiam volutpat odio tellus, vitae finibus est volutpat volutpat. Etiam justo augue, aliquet eget elit ut, scelerisque pulvinar ipsum. Morbi orci ante, eleifend eu libero nec, efficitur suscipit turpis.
 
@@ -95,6 +103,25 @@ Tables
 |:-----------|:----------:|-----------:|
 |Row 1 Cell 1|Row 1 Cell 2|Row 1 Cell 3|
 |Row 2 Cell 1|Row 2 Cell 2|Row 2 Cell 3|
+|Row 3 Cell 1|Row 3 Cell 2|Row 3 Cell 3|
+|Row 4 Cell 1|Row 4 Cell 2|Row 4 Cell 3|
+|Row 5 Cell 1|Row 5 Cell 2|Row 5 Cell 3|
+|Row 6 Cell 1|Row 6 Cell 2|Row 6 Cell 3|
+
+<table>
+  <tr>
+    <th>Column 1</th>
+    <th>Column 2</th>
+  </tr>
+  <tr>
+    <td>Row 1 Cell 1</td>
+    <td>Row 1 Cell 2</td>
+  </tr>
+  <tr>
+    <td>Row 2 Cell 1</td>
+    <td>Row 2 Cell 2</td>
+  </tr>
+</table>
 
 Horizontal rules
 ----------------
@@ -136,7 +163,7 @@ Mixed:
 	* Foe
 3. Third
 
-Task List:
+GitHub Style Task List:
 
 - [x] @mentions, #refs, [links](), **formatting**, and <del>tags</del> supported
 - [x] list syntax required (any unordered or ordered list supported)

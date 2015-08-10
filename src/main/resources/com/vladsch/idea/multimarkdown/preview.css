@@ -1,36 +1,32 @@
 /*
- * Copyright (c) 2011-2013 Julien Nicoulaud <julien.nicoulaud@gmail.com>
- * Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
- *
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
+-- Tags Regognized by the java HTMLEditorKit
+-- cause break and display block
+      blockquote body dd dir div dl dt h1 h2 h3 h4 h5 h6 head li menu
+      noframes ol p pre td th title ul
 
-#multimarkdown-preview samp {
-    font-size: small;
-    font-family: Monospaced, monospace;
-}
+-- cause break
+      form hr html isindex
 
-#multimarkdown-preview kbd {
-    font-size: small;
-    font-family: Monospaced, monospace;
-}
+-- display block
+      br center table tr
+
+-- cause no break and display inline
+      a address applet area b base basefont big caption cite code dfn em
+      font frame frameset i img input kbd link map meta nobr object option
+      param samp script select small span strike s strong style sub sup
+      textarea tt u var
+
+*/
 
 #multimarkdown-preview strike {
+    text-decoration: line-through;
+}
+
+#multimarkdown-preview span.del {
+    text-decoration: line-through;
+}
+
+#multimarkdown-preview s {
     text-decoration: line-through;
 }
 
@@ -39,7 +35,11 @@
 }
 
 #multimarkdown-preview sub {
-    vertical-align: sub;
+    font-size: 0.9em;
+}
+
+#multimarkdown-preview sup {
+    font-size: 0.9em;
 }
 
 #multimarkdown-preview em {
@@ -50,33 +50,17 @@
     font-weight: bold;
 }
 
-#multimarkdown-preview del {
-    text-decoration: line-through;
-}
-
-#multimarkdown-preview span.del {
-    text-decoration: line-through;
-}
-
-#multimarkdown-preview sup {
-    vertical-align: sup;
+#multimarkdown-preview b {
+    font-weight: bold;
 }
 
 #multimarkdown-preview u {
     text-decoration: underline;
 }
 
-#multimarkdown-preview s {
-    text-decoration: line-through;
-}
-
 #multimarkdown-preview address {
     color: blue;
     font-style: italic;
-}
-
-#multimarkdown-preview b {
-    font-weight: bold;
 }
 
 #multimarkdown-preview i {
@@ -103,19 +87,23 @@
     margin-bottom: 10px;
 }
 
+#multimarkdown-preview samp,
+#multimarkdown-preview kbd,
+#multimarkdown-preview code,
 #multimarkdown-preview tt {
-    font-family: Monospaced, monospace;
-    line-height: 1.3;
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, Monospaced, monospace;
+    font-size: 11px;
+    line-height: 1.6;
 }
 
 #multimarkdown-preview {
-    font-family: Helvetica, arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, arial, sans-serif;
     font-size: 12px;
     padding-top: 10px;
     padding-bottom: 10px;
     background-color: white;
     padding: 30px;
-    line-height: 1.2;
+    line-height: 1.4;
     color: black;
 }
 
@@ -144,20 +132,22 @@
 #multimarkdown-preview h4,
 #multimarkdown-preview h5,
 #multimarkdown-preview h6 {
-    margin: 20px 0 10px;
     padding: 0;
-    font-weight: bold;
     cursor: text;
     position: relative;
 }
 
-#multimarkdown-preview h1,
 #multimarkdown-preview h2,
+#multimarkdown-preview h2 a {
+    /*color: #325d72;*/
+    color: black;
+}
+
+#multimarkdown-preview h1,
 #multimarkdown-preview h3,
 #multimarkdown-preview h4,
 #multimarkdown-preview h5,
 #multimarkdown-preview h1 a,
-#multimarkdown-preview h2 a,
 #multimarkdown-preview h3 a,
 #multimarkdown-preview h4 a,
 #multimarkdown-preview h5 a {
@@ -200,28 +190,41 @@
 }
 
 #multimarkdown-preview h1 {
+    font-weight: bold ;
+    border-bottom: 1px solid #cccccc;
     font-size: 24px;
+    margin: 20px 0 10px;
 }
 
 #multimarkdown-preview h2 {
     font-size: 20px;
     border-bottom: 1px solid #cccccc;
+    font-weight: bold;
+    margin: 20px 0 10px;
 }
 
 #multimarkdown-preview h3 {
     font-size: 18px;
+    font-weight: bold;
+    margin: 15px 0 7px;
 }
 
 #multimarkdown-preview h4 {
     font-size: 16px;
+    font-weight: bold;
+    margin: 10px 0 7px;
 }
 
 #multimarkdown-preview h5 {
     font-size: 14px;
+    font-weight: bold;
+    margin: 7px 0 7px;
 }
 
 #multimarkdown-preview h6 {
     font-size: 14px;
+    font-weight: bold;
+    margin: 7px 0 7px;
 }
 
 #multimarkdown-preview blockquote,
@@ -249,8 +252,17 @@
     margin: 0 0 10px 0;
 }
 
-#multimarkdown-preview li {
+#multimarkdown-preview ul li {
     margin: 0;
+    list-style-type: disc;
+}
+
+#multimarkdown-preview ul li li {
+    list-style-type: circle;
+}
+
+#multimarkdown-preview ul li.task {
+    list-style-type: none;
 }
 
 #multimarkdown-preview ul,
@@ -282,6 +294,21 @@
     color: #666666;
 }
 
+#multimarkdown-preview blockquote h1,
+#multimarkdown-preview blockquote h2,
+#multimarkdown-preview blockquote h3,
+#multimarkdown-preview blockquote h4,
+#multimarkdown-preview blockquote h5,
+#multimarkdown-preview blockquote h6,
+#multimarkdown-preview blockquote h1 a,
+#multimarkdown-preview blockquote h2 a,
+#multimarkdown-preview blockquote h3 a,
+#multimarkdown-preview blockquote h4 a,
+#multimarkdown-preview blockquote h5 a,
+#multimarkdown-preview blockquote h6 a {
+    color: #666666;
+}
+
 #multimarkdown-preview tt {
     margin: 0 2px;
     padding: 0 5px;
@@ -289,9 +316,6 @@
     border: 1px solid #eaeaea;
     background-color: #f8f8f8;
     border-radius: 3px;
-    font-family: Consolas, "Liberation Mono", Menlo, Courier, Monospaced, monospace;
-    font-size: 12px;
-    line-height: 1.3;
     color: black;
 }
 
@@ -301,41 +325,27 @@
     white-space: pre;
     border: none;
     background: transparent;
-    font-family: Consolas, "Liberation Mono", Menlo, Courier, Monospaced, monospace;
-    font-size: 12px;
-    line-height: 1.3;
     color: black;
 }
 
 #multimarkdown-preview pre {
     background-color: #f8f8f8;
     border: 1px solid #cccccc;
-    line-height: 14px;
     overflow: auto;
     padding: 6px 10px;
     border-radius: 3px;
     white-space: pre;
 }
 
-#multimarkdown-preview sup {
-    font-size: 0.83em;
-    vertical-align: super;
-    line-height: 0;
-}
-
 #multimarkdown-preview code {
-    font-family: Consolas, "Liberation Mono", Menlo, Courier, Monospaced, monospace;
-    font-size: 12px;
-    line-height: 1.3;
     color: #B00020;
     background-color: #f8f8f8;
     padding: 3px;
-    border-raduis: 3px;
+    border-raduis: 2px;
 }
 
 #multimarkdown-preview table {
     background-color: transparent;
-    width: 100%;
     margin-bottom: 20px;
     border-spacing: 0;
     border-collapse: collapse;
@@ -401,9 +411,9 @@
 
 #multimarkdown-preview hr {
     /*
-    nothing is used in the CSS by the HTMLEditorKit hr element except alignment, margin and width.
+    nothing is used in the CSS by the HTMLEditorKit hr element except alignment, margin, width.
     size and noshade attributes are only setable in the element and size is 2px minimum, of any
-    color just as long as its black, hardcoded in the library.
+    color you want just as long as its black, hardcoded in the library.
 
     ie. nothing useful that we can use to change the look so hr is simulated with a
     <div class="hr">&nbsp;</div> instead.

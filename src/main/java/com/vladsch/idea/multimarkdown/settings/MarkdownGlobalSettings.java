@@ -71,6 +71,9 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
     /** Whether the "Github style hard wraps parsing as HTML linebreaks" extension should be enabled. */
     private boolean hardWraps = false;
 
+    /** Whether the "Github style task lists [ ], [x] should be enabled. */
+    private boolean taskLists = false;
+
     /** Whether the "Github style plain auto-links" extension should be enabled. */
     private boolean autoLinks = false;
 
@@ -327,6 +330,27 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
     }
 
     /**
+     * Whether the "Github style hard wraps parsing as HTML linebreaks" extension should be enabled.
+     *
+     * @return {@link #taskLists}
+     */
+    public boolean isTaskLists() {
+        return taskLists;
+    }
+
+    /**
+     * Whether the "Github style hard wraps parsing as HTML linebreaks" extension should be enabled.
+     *
+     * @param taskLists whether the "Github style hard wraps parsing as HTML linebreaks" extension should be enabled.
+     */
+    public void setTaskLists(boolean taskLists) {
+        if (this.taskLists != taskLists) {
+            this.taskLists = taskLists;
+            notifyListeners();
+        }
+    }
+
+    /**
      * Whether the "PHP Markdown Extra style fenced code blocks" extension should be enabled.
      *
      * @return {@link #fencedCodeBlocks}
@@ -444,6 +468,7 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
         element.setAttribute("quotes", Boolean.toString(quotes));
         element.setAttribute("abbreviations", Boolean.toString(abbreviations));
         element.setAttribute("hardWraps", Boolean.toString(hardWraps));
+        element.setAttribute("taskLists", Boolean.toString(taskLists));
         element.setAttribute("autoLinks", Boolean.toString(autoLinks));
         element.setAttribute("wikiLinks", Boolean.toString(wikiLinks));
         element.setAttribute("tables", Boolean.toString(tables));
@@ -475,6 +500,8 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
         if (value != null) abbreviations = Boolean.parseBoolean(value);
         value = element.getAttributeValue("hardWraps");
         if (value != null) hardWraps = Boolean.parseBoolean(value);
+        value = element.getAttributeValue("taskLists");
+        if (value != null) taskLists = Boolean.parseBoolean(value);
         value = element.getAttributeValue("autoLinks");
         if (value != null) autoLinks = Boolean.parseBoolean(value);
         value = element.getAttributeValue("wikiLinks");

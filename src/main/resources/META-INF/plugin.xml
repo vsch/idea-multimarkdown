@@ -26,7 +26,7 @@
   <name>MultiMarkdown</name>
   <category>Custom Languages</category>
   <vendor url="http://github.com/vsch" email="vladimir.schneider@gmail.com">Vladimir Schneider</vendor>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
   <idea-version since-build="134.549"/>
   <depends>com.intellij.modules.lang</depends>
   <description>
@@ -37,6 +37,13 @@
   <change-notes>
     <![CDATA[
     <p>
+      <b>1.0.5</b><br/>
+    <ul>
+      <li>: Change generated HTML to use span instead of del for strikethrough to control the look through CSS</li>
+      <li>: Change max img width of 0 disables resizing</li>
+      <li>: Fix tables had width=100%, removed</li>
+      <li>: Add GitHub style task list items, ones starting with [], [ ] or [x] and associated settings options</li>
+    </ul>
       <b>1.0.4</b><br/>
     <ul>
       <li>: Change generated HTML to use span instead of del for strikethrough to control the look through CSS</li>

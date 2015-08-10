@@ -123,6 +123,7 @@ public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurabl
                || settingsPanel.definitionsCheckBox == null || globalSettings.isDefinitions() != settingsPanel.definitionsCheckBox.isSelected()
                || settingsPanel.fencedCodeBlocksCheckBox == null || globalSettings.isFencedCodeBlocks() != settingsPanel.fencedCodeBlocksCheckBox.isSelected()
                || settingsPanel.hardWrapsCheckBox == null || globalSettings.isHardWraps() != settingsPanel.hardWrapsCheckBox.isSelected()
+               || settingsPanel.taskListsCheckBox == null || globalSettings.isTaskLists() != settingsPanel.taskListsCheckBox.isSelected()
                || settingsPanel.quotesCheckBox == null || globalSettings.isQuotes() != settingsPanel.quotesCheckBox.isSelected()
                || settingsPanel.smartsCheckBox == null || globalSettings.isSmarts() != settingsPanel.smartsCheckBox.isSelected()
                || settingsPanel.suppressHTMLBlocksCheckBox == null || globalSettings.isSuppressHTMLBlocks() != settingsPanel.suppressHTMLBlocksCheckBox.isSelected()
@@ -146,6 +147,7 @@ public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurabl
             globalSettings.setDefinitions(settingsPanel.definitionsCheckBox != null && settingsPanel.definitionsCheckBox.isSelected());
             globalSettings.setFencedCodeBlocks(settingsPanel.fencedCodeBlocksCheckBox != null && settingsPanel.fencedCodeBlocksCheckBox.isSelected());
             globalSettings.setHardWraps(settingsPanel.hardWrapsCheckBox != null && settingsPanel.hardWrapsCheckBox.isSelected());
+            globalSettings.setTaskLists(settingsPanel.taskListsCheckBox != null && settingsPanel.taskListsCheckBox.isSelected());
             globalSettings.setQuotes(settingsPanel.quotesCheckBox != null && settingsPanel.quotesCheckBox.isSelected());
             globalSettings.setSmarts(settingsPanel.smartsCheckBox != null && settingsPanel.smartsCheckBox.isSelected());
             globalSettings.setSuppressHTMLBlocks(settingsPanel.suppressHTMLBlocksCheckBox != null && settingsPanel.suppressHTMLBlocksCheckBox.isSelected());
@@ -169,6 +171,7 @@ public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurabl
             if (settingsPanel.definitionsCheckBox != null) settingsPanel.definitionsCheckBox.setSelected(globalSettings.isDefinitions());
             if (settingsPanel.fencedCodeBlocksCheckBox != null) settingsPanel.fencedCodeBlocksCheckBox.setSelected(globalSettings.isFencedCodeBlocks());
             if (settingsPanel.hardWrapsCheckBox != null) settingsPanel.hardWrapsCheckBox.setSelected(globalSettings.isHardWraps());
+            if (settingsPanel.taskListsCheckBox != null) settingsPanel.taskListsCheckBox.setSelected(globalSettings.isTaskLists());
             if (settingsPanel.quotesCheckBox != null) settingsPanel.quotesCheckBox.setSelected(globalSettings.isQuotes());
             if (settingsPanel.smartsCheckBox != null) settingsPanel.smartsCheckBox.setSelected(globalSettings.isSmarts());
             if (settingsPanel.suppressHTMLBlocksCheckBox != null) settingsPanel.suppressHTMLBlocksCheckBox.setSelected(globalSettings.isSuppressHTMLBlocks());

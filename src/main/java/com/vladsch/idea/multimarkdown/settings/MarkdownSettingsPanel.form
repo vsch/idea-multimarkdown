@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="panel" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="847" height="812"/>
+      <xy x="20" y="20" width="1281" height="812"/>
     </constraints>
     <properties/>
     <clientProperties>
@@ -83,7 +83,7 @@
           </component>
         </children>
       </grid>
-      <grid id="5fdf9" binding="extensionsPanel" layout-manager="GridLayoutManager" row-count="12" column-count="2" same-size-horizontally="false" same-size-vertically="true" hgap="-1" vgap="-1">
+      <grid id="5fdf9" binding="extensionsPanel" layout-manager="GridLayoutManager" row-count="13" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -195,7 +195,7 @@
           </component>
           <component id="cbaa8" class="javax.swing.JCheckBox" binding="suppressHTMLBlocksCheckBox">
             <constraints>
-              <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+              <grid row="11" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="50" height="23"/>
               </grid>
             </constraints>
@@ -206,7 +206,7 @@
           </component>
           <component id="6b0d3" class="javax.swing.JLabel">
             <constraints>
-              <grid row="10" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="11" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <font style="2"/>
@@ -215,7 +215,7 @@
           </component>
           <component id="6beaf" class="javax.swing.JCheckBox" binding="suppressInlineHTMLCheckBox">
             <constraints>
-              <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+              <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="50" height="23"/>
               </grid>
             </constraints>
@@ -226,7 +226,7 @@
           </component>
           <component id="6f718" class="javax.swing.JLabel">
             <constraints>
-              <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="10" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <font style="2"/>
@@ -315,7 +315,7 @@
           </component>
           <component id="a194b" class="javax.swing.JCheckBox" binding="strikethroughCheckBox">
             <constraints>
-              <grid row="11" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+              <grid row="12" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="50" height="23"/>
               </grid>
             </constraints>
@@ -326,11 +326,31 @@
           </component>
           <component id="845c0" class="javax.swing.JLabel">
             <constraints>
-              <grid row="11" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="12" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <font style="2"/>
               <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="markdown.settings.strikethrough.description"/>
+            </properties>
+          </component>
+          <component id="27047" class="javax.swing.JCheckBox" binding="taskListsCheckBox">
+            <constraints>
+              <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="50" height="23"/>
+              </grid>
+            </constraints>
+            <properties>
+              <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="markdown.settings.task-lists.label"/>
+              <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="markdown.settings.hard-wraps.label"/>
+            </properties>
+          </component>
+          <component id="484bc" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font style="2"/>
+              <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="markdown.settings.task-lists.description"/>
             </properties>
           </component>
         </children>
@@ -380,9 +400,7 @@
           </grid>
           <component id="181db" class="javax.swing.JTextArea" binding="textCustomCss">
             <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                <preferred-size width="250" height="50"/>
-              </grid>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <autoscrolls value="false"/>

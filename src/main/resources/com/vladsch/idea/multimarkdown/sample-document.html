@@ -29,147 +29,99 @@
 </head>
 
 <body>
-    <div id="markdown-preview">
-        <h1><a href="#test-markdown-document" name="test-markdown-document">Test Markdown document</a></h1>
-        <h2><a href="#text" name="text">Text</a></h2>
-        <p>Bold: <strong>Here is a paragraph with bold text.</strong> followed by normal text
-            <br/>Italic: <em>Here is a paragraph with italic text.</em> followed by normal text
-            <br/>Strikethrough: <del>Here is a paragraph with strikethrough.</del> followed by normal text</p>
-        <p>Here is another one with italic text. Here is another one with italic text. Here is another one
-            <br/>with italic text. <em>Here is another one with italic text.</em> Here is another one with italic text.
-            <br/>Here is another one with italic text. Here is another one with italic text. Here is another one
-            <br/>with italic text. <em>Here is another one with</em> italic text. Here is another one with italic text.</p>
-        <h2><a href="#links" name="links">Links</a></h2>
-        <p>Autolink: <a href="http://example.com">http://example.com</a>
-        </p>
-        <p>Link: <a href="http://example.com">Example</a>
-        </p>
-        <p>Reference style <a href="http://example.com" title="Example">link</a>.</p>
-        <h2><a href="#images" name="images">Images</a></h2>
-        <p>Image: <img src="http://www.foo.bar/image.png" alt="My image" />
-        </p>
-        <p><img src="https://raw.githubusercontent.com/vsch/laravel-translation-manager/master/images/ScreenShot_main.png" alt="Translation Manager Screenshot" />
-        </p>
-        <h2><a href="#headers" name="headers">Headers</a></h2>
-        <h1><a href="#first-level-title" name="first-level-title">First level title</a></h1>
-        <h2><a href="#second-level-title" name="second-level-title">Second level title</a></h2>
-        <h3><a href="#third-level-title" name="third-level-title">Third level title</a></h3>
-        <h4><a href="#fourth-level-title" name="fourth-level-title">Fourth level title</a></h4>
-        <h5><a href="#fifth-level-title" name="fifth-level-title">Fifth level title</a></h5>
-        <h6><a href="#sixth-level-title" name="sixth-level-title">Sixth level title</a></h6>
-        <h3>Title with <a href="http://localhost">link</a></h3>
-        <h3>Title with <img src="http://localhost" alt="image" /></h3>
-        <h2><a href="#code" name="code">Code</a></h2>
-        <p>Inline <code>code in a</code> paragraph.</p>
-        <p>A code block:</p>
-        <pre><code>/**
- * Load a {@link String} from the {@link #BUNDLE} {@link ResourceBundle}.
- *
- * @param key    the key of the resource.
- * @param params the optional parameters for the specific resource.
- * @return the {@link String} value or {@code null} if no resource found for the key.
- */
-public static String message(@PropertyKey(resourceBundle = BUNDLE_NAME) String key, Object... params) {
+<div id="markdown-preview">
+    <h1><a href="#test-markdown-document" name="test-markdown-document">Test Markdown document</a></h1><p>Text<br/>---- </p><p>Bold: ** <strong>Here is a paragraph with bold text.</strong>** followed by normal text<br/>&lt;strong&gt;<strong>Here is a paragraph with bold text.</strong>&lt;/strong&gt; followed by normal text<br/>&lt;b&gt;<b>Here is a paragraph with bold text.</b>&lt;/b&gt; followed by normal text</p><p>Italic: * <em>Here is a paragraph with italic text.</em>* followed by normal text<br/>using &lt;i&gt; <em>Here is a paragraph with italic text.</em>&lt;/i&gt; followed by normal text</p><p>Strikethrough: ~~ <span class="del">Here is a paragraph with strikethrough.</span>~~ followed by normal text<br/>&lt;del&gt;<span class="del">Here is a paragraph with strikethrough.</span>&lt;/del&gt; followed by normal text<br/>&lt;strike&gt;<strike>Here is a paragraph with strikethrough.</strike>&lt;/strike&gt; followed by normal text<br/>&lt;s&gt;<s>Here is a paragraph with strikethrough.</s>&lt;/s&gt; followed by normal text</p><p>Superscript/Subscript: normal<sup>superscript</sup> and normal<sub>subscript</sub> followed by normal text</p><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi commodo nibh eros, a aliquet diam pharetra nec. Proin tempus felis sit amet lacus tempor, vel dictum sem congue. Quisque in mi nulla. Sed orci urna, tincidunt id volutpat non, condimentum a augue. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec laoreet nec lacus vel egestas. In hac habitasse platea dictumst. Etiam volutpat odio tellus, vitae finibus est volutpat volutpat. Etiam justo augue, aliquet eget elit ut, scelerisque pulvinar ipsum. Morbi orci ante, eleifend eu libero nec, efficitur suscipit turpis.</p><p>Nullam condimentum fermentum enim non tristique. Vestibulum ultrices iaculis ex vel lacinia. Aliquam molestie velit pellentesque ipsum vehicula ullamcorper. Phasellus eget pretium dolor. Maecenas in faucibus eros, a iaculis erat. Praesent in porttitor risus. In nunc nisi, elementum eget tellus ac, pulvinar vestibulum sapien. Praesent gravida id ex in pulvinar. Curabitur eleifend vitae eros id placerat. Nulla egestas, dolor vestibulum ultrices feugiat, nulla dolor posuere velit, id accumsan nisl eros vitae risus. Curabitur laoreet pharetra mi, ut blandit lectus aliquet ut. Duis interdum, augue non eleifend sagittis, purus ipsum accumsan massa, ac fermentum diam elit nec enim. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Curabitur nunc justo, sagittis vitae justo nec, fringilla lobortis nibh. Donec congue eros at massa pretium auctor.</p><h2><a href="#links" name="links">Links</a></h2><p>Autolink: <a href="http://example.com">http://example.com</a></p><p>Link: <a href="http://example.com">Example</a></p><p>Reference style <a href="http://example.com" title="Example">link</a>.</p><h2><a href="#images" name="images">Images</a></h2><p>Image: <img src="http://www.foo.bar/image.png" alt="My image" /></p><h2><a href="#headers" name="headers">Headers</a></h2><h1><a href="#first-level-title" name="first-level-title">First level title</a></h1><h2><a href="#second-level-title" name="second-level-title">Second level title</a></h2><h3><a href="#third-level-title" name="third-level-title">Third level title</a></h3><h4><a href="#fourth-level-title" name="fourth-level-title">Fourth level title</a></h4><h5><a href="#fifth-level-title" name="fifth-level-title">Fifth level title</a></h5><h6><a href="#sixth-level-title" name="sixth-level-title">Sixth level title</a></h6><h3>Title with <a href="http://localhost">link</a></h3><h3>Title with <img src="http://localhost" alt="image" /></h3><h2><a href="#code" name="code">Code</a></h2><p>Inline <code>code in a</code> paragraph.</p><p>A code block:</p>
+<pre><code>/**
+    * Load a {@link String} from the {@link #BUNDLE} {@link ResourceBundle}.
+    *
+    * @param key    the key of the resource.
+    * @param params the optional parameters for the specific resource.
+    * @return the {@link String} value or {@code null} if no resource found for the key.
+    */
+    public static String message(@PropertyKey(resourceBundle = BUNDLE_NAME) String key, Object... params) {
     return CommonBundle.message(BUNDLE, key, params);
-}
-</code></pre>
-        <h2><a href="#quotes" name="quotes">Quotes</a></h2>
-        <blockquote>
-            <p>This is the first level of quoting.</p>
-            <blockquote>
-                <p>This is nested blockquote.</p>
-            </blockquote>
-            <p>Back to the first level.</p>
-            <p>A list within a blockquote:</p>
-            <ul>
-                <li>asterisk 1</li>
-                <li>asterisk 2</li>
-                <li>asterisk 3</li>
-            </ul>
-            <p>Formatting within a blockquote:</p>
-            <h3><a href="#header" name="header">header</a></h3>
-            <p>Link: <a href="http://example.com">Example</a>
-            </p>
-            <p>Master branch is now for Laravel version 5.1</p>
-            <ul>
-                <li>
-                    <p>double space item 1</p>
-                    <p>with added paragraph</p>
-                </li>
-                <li>
-                    <p>double spaced item 2</p>
-                </li>
-            </ul>
-        </blockquote>
-        <h2><a href="#tables" name="tables">Tables</a></h2>
-        <table>
-            <thead>
-                <tr class="first-child">
-                    <th align="left">Column 1 </th>
-                    <th align="center">Column 2 </th>
-                    <th align="right">Column 3 </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="even-child">
-                    <td align="left">Row 1 Cell 1</td>
-                    <td align="center">Row 1 Cell 2</td>
-                    <td align="right">Row 1 Cell 3</td>
-                </tr>
-                <tr class="odd-child">
-                    <td align="left">Row 2 Cell 1</td>
-                    <td align="center">Row 2 Cell 2</td>
-                    <td align="right">Row 2 Cell 3</td>
-                </tr>
-            </tbody>
-        </table>
-        <table>
-            <tr class="first-child">
-                <th>Column 1</th>
-                <th>Column 2</th>
-            </tr>
-            <tr class="even-child">
-                <td>Row 1 Cell 1</td>
-                <td>Row 1 Cell 2</td>
-            </tr>
-            <tr class="odd-child">
-                <td>Row 2 Cell 1</td>
-                <td>Row 2 Cell 2</td>
-            </tr>
-        </table>
-        <h2><a href="#horizontal-rules" name="horizontal-rules">Horizontal rules</a></h2>
-        <p>Paragraph text separated by horizontal rules</p>
-        <div class="hr">&nbsp;</div>
-        <p>Paragraph text separated by horizontal rules</p>
-        <div class="hr">&nbsp;</div>
-        <p>Paragraph text separated by horizontal rules</p>
-        <div class="hr">&nbsp;</div>
-        <h2><a href="#lists" name="lists">Lists</a></h2>
-        <p>Unordered list:</p>
+    }
+</code></pre><h2><a href="#quotes" name="quotes">Quotes</a></h2>
+    <blockquote><p>This is the first level of quoting.</p>
+        <blockquote><p>This is nested blockquote.</p>
+        </blockquote><p>Back to the first level.</p><p>A list within a blockquote:</p>
         <ul>
             <li>asterisk 1</li>
             <li>asterisk 2</li>
             <li>asterisk 3</li>
-        </ul>
-        <p>Ordered list:</p>
-        <ol>
-            <li>First</li>
-            <li>Second</li>
-            <li>Third</li>
-        </ol>
-        <p>Mixed:</p>
-        <ol>
-            <li>First</li>
-            <li>Second:
-                <ul>
-                    <li>Fee</li>
-                    <li>Fie</li>
-                    <li>Foe</li>
-                </ul>
-            </li>
-            <li>Third</li>
-        </ol>
-    </div>
+        </ul><p>Formatting within a blockquote:</p><h3><a href="#header" name="header">header</a></h3><p>Link: <a href="http://example.com">Example</a></p>
+    </blockquote><h2><a href="#tables" name="tables">Tables</a></h2>
+    <table>
+        <thead>
+        <tr class="first-child">
+            <th align="left">Column 1 </th>
+            <th align="center">Column 2 </th>
+            <th align="right">Column 3 </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="even-child">
+            <td align="left">Row 1 Cell 1</td>
+            <td align="center">Row 1 Cell 2</td>
+            <td align="right">Row 1 Cell 3</td>
+        </tr>
+        <tr class="odd-child">
+            <td align="left">Row 2 Cell 1</td>
+            <td align="center">Row 2 Cell 2</td>
+            <td align="right">Row 2 Cell 3</td>
+        </tr>
+        <tr class="even-child">
+            <td align="left">Row 3 Cell 1</td>
+            <td align="center">Row 3 Cell 2</td>
+            <td align="right">Row 3 Cell 3</td>
+        </tr>
+        <tr class="odd-child">
+            <td align="left">Row 4 Cell 1</td>
+            <td align="center">Row 4 Cell 2</td>
+            <td align="right">Row 4 Cell 3</td>
+        </tr>
+        <tr class="even-child">
+            <td align="left">Row 5 Cell 1</td>
+            <td align="center">Row 5 Cell 2</td>
+            <td align="right">Row 5 Cell 3</td>
+        </tr>
+        <tr class="odd-child">
+            <td align="left">Row 6 Cell 1</td>
+            <td align="center">Row 6 Cell 2</td>
+            <td align="right">Row 6 Cell 3</td>
+        </tr>
+        </tbody>
+    </table><h2><a href="#horizontal-rules" name="horizontal-rules">Horizontal rules</a></h2><p>Paragraph text separated by horizontal rules</p>
+    <div class="hr">&nbsp;</div><p>Paragraph text separated by horizontal rules</p>
+    <div class="hr">&nbsp;</div><p>Paragraph text separated by horizontal rules</p>
+    <div class="hr">&nbsp;</div><h2><a href="#lists" name="lists">Lists</a></h2><p>Unordered list:</p>
+    <ul>
+        <li>asterisk 1</li>
+        <li>asterisk 2</li>
+        <li>asterisk 3</li>
+    </ul><p>Ordered list:</p>
+    <ol>
+        <li>First</li>
+        <li>Second</li>
+        <li>Third</li>
+    </ol><p>Mixed:</p>
+    <ol>
+        <li>First</li>
+        <li>Second:
+            <ul>
+                <li>Fee</li>
+                <li>Fie</li>
+                <li>Foe</li>
+            </ul></li>
+        <li>Third</li>
+    </ol><p>Task List:</p>
+    <ul>
+        <li class="task"><input type="checkbox" checked="checked" disabled="disabled"> @mentions, #refs, <a href="">links</a>, <strong>formatting</strong>, and <span class="del">tags</span> supported</li>
+        <li class="task"><input type="checkbox" checked="checked" disabled="disabled"> list syntax required (any unordered or ordered list supported)</li>
+        <li class="task"><input type="checkbox" checked="checked" disabled="disabled"> this is a complete item</li>
+        <li class="task"><input type="checkbox" disabled="disabled"> this is an incomplete item</li>
+    </ul>
+</div>
 </body>
 
 </html>
