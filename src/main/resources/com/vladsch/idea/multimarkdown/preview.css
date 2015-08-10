@@ -87,13 +87,17 @@
     margin-bottom: 10px;
 }
 
-#multimarkdown-preview samp,
-#multimarkdown-preview kbd,
 #multimarkdown-preview code,
 #multimarkdown-preview tt {
     font-family: Consolas, "Liberation Mono", Menlo, Courier, Monospaced, monospace;
     font-size: 11px;
     line-height: 1.6;
+}
+
+#multimarkdown-preview samp,
+#multimarkdown-preview kbd {
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, Monospaced, monospace;
+    font-size: 12px;
 }
 
 #multimarkdown-preview {
@@ -263,6 +267,8 @@
 
 #multimarkdown-preview ul li.task {
     list-style-type: none;
+    text-indent: -20px;
+    padding-left: 20px;
 }
 
 #multimarkdown-preview ul,

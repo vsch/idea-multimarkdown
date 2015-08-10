@@ -11,8 +11,8 @@ Setting up the project in Intellij IDEA
 
 ### IntelliJ IDEA plugin SDK setup
 
-* Open the project (*File > Open project*).
-* Open the module settings (*Ctrl + Alt + Shift + S*).
+* Open the project (<kbd>File > Open project</kbd>).
+* Open the module settings (<kbd>Ctrl + Alt + Shift + S</kbd> or <kbd>⌘,</kbd>).
 * Setup the project SDK with an *Intellij IDEA Plugin SDK*.
 * Edit your *Intellij IDEA Plugin SDK* and add `$IDEA_HOME/lib/idea.jar` to its classpath.
 

@@ -6,7 +6,23 @@ idea-multimarkdown
 See the [official plugin page](http://plugins.intellij.net/plugin?id=7896).
 
 I wanted a Markdown preview plug-in that resembled GitHub's markdown style. I decided to start with [Markdown plug-in](https://github.com/nicoulaj/idea-markdown), upgrade it to latest pegdown, parboiled
-then add a few creature comforts like user editable style sheet, fix a few bugs then add ability to split ide editors and display Markdown in one pane and HTML Preview in the other.
+then add a few creature comforts like user editable style sheet, fix a few bugs then add ability to split ide editors and display Markdown in one pane and HTML Preview in the other, that is updated as you type.
+
+Features:
+
+- [x] Striped tables
+- [x] GitHub style task list items
+- [x] CSS editable in settings
+
+To Do:
+
+- [] Add configurable HTML tag replacements. The need for this is caused by the java HTMLEditorKit, which is used to render the HTML,
+not handling css attributes for known tags in some cases. The workaround is to replace the generated HTML to something the editor kit will render better.
+- [] Change Parser to use Grammar-Kit and add the IntelliJ expected comforts:
+    - [] syntax highlighting
+    - [] formatting
+    - [] navigation
+    - [] document structure display
 
 [![idea-multimarkdown](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_preview.png)](http://plugins.intellij.net/plugin?id=7896)
 
