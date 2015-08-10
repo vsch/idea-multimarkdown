@@ -83,23 +83,23 @@ will cause all the items in the list to be paragraph wrapped, ie. look double sp
 
 So to have two consecutive lists, instead of a single double spaced one, it is necessary to leave two blank lines between list items as in:
 
-- list 1 item 1
-- list 1 item 2
-- list 1 item 3
+1. list 1 item 1
+1. list 1 item 2
+1. list 1 item 3
 
-- list 1 itme 4 (causes all items to be double spaced)
-- list 1 itme 5
-- list 1 itme 6
-
-
-- list 2 item 1
-- list 2 item 2
-- list 2 item 3
+1. list 1 itme 4 (causes all items to be double spaced)
+1. list 1 itme 5
+1. list 1 itme 6
 
 
-- list 3 itme 1
-- list 3 itme 2
-- list 3 itme 3
+2. list 2 item 1
+2. list 2 item 2
+2. list 2 item 3
+
+
+3. list 3 itme 1
+3. list 3 itme 2
+3. list 3 itme 3
 
 
 Lazy continuation lines are associated with the most recent list item in all cases.
