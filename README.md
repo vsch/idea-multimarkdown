@@ -19,7 +19,9 @@ To Do:
 - [ ] Add configurable HTML tag replacements. The need for this is caused by the java HTMLEditorKit, which is used to render the HTML,
      ignoring CSS attributes for known tags. The workaround is to replace the generated HTML to something the editor kit will render better.
      For example, `<hr/>` hardcodes color to black and size to minimum 2px. To have more control `<hr>` is replaced with `<div class="hr">&nbsp;</div>`.
-- [ ] Change Parser to use Grammar-Kit and add the IntelliJ expected comforts:
+- [ ] Change Parser to use Grammar-Kit:
+    - [ ] finish the [Markdown for an Interactive Parser](https://github.com/vsch/idea-multimarkdown/blob/master/SPEC.md)
+    - [ ] add the IntelliJ expected comforts:
     - [ ] syntax highlighting
     - [ ] formatting
     - [ ] navigation
