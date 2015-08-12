@@ -1,5 +1,5 @@
-Markdown for an Interactive Parser
-==================================
+Specification for an Interactive Markdown Parser
+================================================
 
 This is a work in progress. It will be used to implement new Grammar-Kit based parsers
 and plug-in features.

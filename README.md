@@ -20,7 +20,7 @@ To Do:
      ignoring CSS attributes for known tags. The workaround is to replace the generated HTML to something the editor kit will render better.
      For example, `<hr/>` hardcodes color to black and size to minimum 2px. To have more control `<hr>` is replaced with `<div class="hr">&nbsp;</div>`.
 - [ ] Change Parser to use Grammar-Kit:
-    - [ ] finish the [Markdown for an Interactive Parser](https://github.com/vsch/idea-multimarkdown/blob/master/SPEC.md)
+    - [ ] finish the [Specification for an Interactive Markdown Parser](https://github.com/vsch/idea-multimarkdown/blob/master/SPEC.md)
     - [ ] add the IntelliJ expected comforts:
     - [ ] syntax highlighting
     - [ ] formatting
