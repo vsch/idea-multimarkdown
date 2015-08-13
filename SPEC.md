@@ -365,7 +365,7 @@ to generate two lists, which is closer to the formatted intent:
 
 Indented blocks that follow a list item will be associated with the previous list item whose nesting level matches the indentation level of the line being considered. This makes it easier to create multi-paragraph list items that themselves contain sub-lists, paragraphs and code blocks.
 
-In the case where the last block in an item list could be a paragraph for a list item or a code block of the parent's list item the block will be treated as a non-code block with an intent pop up to change this to a fenced code block unindented so that it becomes part of the parent list's item.
+In the case where the last block in an item list could be a paragraph for a list item or a code block of the parent's list item the block will be treated as a non-code block with an intent pop up to change this to a lesser indent level, fenced code block so that it becomes part of the parent list's item.
 
 ```
  1. List 1 Item 1
@@ -417,7 +417,7 @@ or alternately:
 
             sub list item 1 code block 1
 
-      sub list item 1 paragraph
+        sub list item 1 paragraph
 
             sub list item 1 code block 2
 
@@ -431,6 +431,30 @@ or alternately:
 List 1 Item 1 paragraph or main code block
 ```
 
+2. XYZ
+    1. A
+
+        - XYZ
+        - XYZ
+        - XYZ
+
+        Lorem ipsum...
+
+    2. B
+        - XYZ
+        - XYZ
+        - XYZ
+
+
+
+Definition Lists
+----------------
+
+Term
+
+:   Definition
+
+    additional paragraphs
 
 Tables
 ------

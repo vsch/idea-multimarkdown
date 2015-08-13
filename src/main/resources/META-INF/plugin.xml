@@ -26,7 +26,7 @@
   <name>MultiMarkdown</name>
   <category>Custom Languages</category>
   <vendor url="http://github.com/vsch" email="vladimir.schneider@gmail.com">Vladimir Schneider</vendor>
-  <version>1.0.5</version>
+  <version>1.0.6</version>
   <idea-version since-build="134.549"/>
   <depends>com.intellij.modules.lang</depends>
   <description>
@@ -37,6 +37,12 @@
   <change-notes>
     <![CDATA[
     <p>
+    <b>1.0.6</b><br/>
+    <ul>
+      <li>: Fixed list parser bugs in pegdown-1.5.0 and included the fixed jar in the plug-in.
+            <p>Now nested lists with paragraphs and code blocks are generated identical to GitHub.</p>
+      </li>
+    </ul>
     <b>1.0.5</b><br/>
     <ul>
       <li>: Change generated HTML to use span instead of del for strikethrough to control the look through CSS</li>
