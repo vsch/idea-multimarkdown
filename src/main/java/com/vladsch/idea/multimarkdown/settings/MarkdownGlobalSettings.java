@@ -71,6 +71,9 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
     /** Whether the "Github style hard wraps parsing as HTML linebreaks" extension should be enabled. */
     private boolean hardWraps = false;
 
+    /** Whether the GFM Style headers extension is enabled, require a space after # for headers. */
+    private boolean headerSpace = false;
+
     /** Whether the "Github style task lists [ ], [x] should be enabled. */
     private boolean taskLists = false;
 
@@ -330,6 +333,27 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
     }
 
     /**
+     * Whether the GFM Style headers extension is enabled, require a space after # for headers.
+     *
+     * @return {@link #headerSpace}
+     */
+    public boolean isHeaderSpace() {
+        return headerSpace;
+    }
+
+    /**
+     * Whether the GFM Style headers extension is enabled, require a space after # for headers.
+     *
+     * @param headerSpace whether the "Github style hard wraps parsing as HTML linebreaks" extension should be enabled.
+     */
+    public void setHeaderSpace(boolean headerSpace) {
+        if (this.headerSpace != headerSpace) {
+            this.headerSpace = headerSpace;
+            notifyListeners();
+        }
+    }
+
+    /**
      * Whether the "Github style hard wraps parsing as HTML linebreaks" extension should be enabled.
      *
      * @return {@link #taskLists}
@@ -468,6 +492,7 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
         element.setAttribute("quotes", Boolean.toString(quotes));
         element.setAttribute("abbreviations", Boolean.toString(abbreviations));
         element.setAttribute("hardWraps", Boolean.toString(hardWraps));
+        element.setAttribute("headerSpace", Boolean.toString(headerSpace));
         element.setAttribute("taskLists", Boolean.toString(taskLists));
         element.setAttribute("autoLinks", Boolean.toString(autoLinks));
         element.setAttribute("wikiLinks", Boolean.toString(wikiLinks));
@@ -500,6 +525,8 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
         if (value != null) abbreviations = Boolean.parseBoolean(value);
         value = element.getAttributeValue("hardWraps");
         if (value != null) hardWraps = Boolean.parseBoolean(value);
+        value = element.getAttributeValue("headerSpace");
+        if (value != null) headerSpace = Boolean.parseBoolean(value);
         value = element.getAttributeValue("taskLists");
         if (value != null) taskLists = Boolean.parseBoolean(value);
         value = element.getAttributeValue("autoLinks");
@@ -540,6 +567,7 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
                 (quotes ? Extensions.QUOTES : 0) +
                 (abbreviations ? Extensions.ABBREVIATIONS : 0) +
                 (hardWraps ? Extensions.HARDWRAPS : 0) +
+                (headerSpace ? Extensions.HEADERSPACE : 0) +
                 (autoLinks ? Extensions.AUTOLINKS : 0) +
                 (wikiLinks ? Extensions.WIKILINKS : 0) +
                 (tables ? Extensions.TABLES : 0) +

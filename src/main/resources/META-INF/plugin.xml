@@ -26,7 +26,7 @@
   <name>MultiMarkdown</name>
   <category>Custom Languages</category>
   <vendor url="http://github.com/vsch" email="vladimir.schneider@gmail.com">Vladimir Schneider</vendor>
-  <version>1.0.6</version>
+  <version>1.0.8</version>
   <idea-version since-build="134.549"/>
   <depends>com.intellij.modules.lang</depends>
   <description>
@@ -37,10 +37,21 @@
   <change-notes>
     <![CDATA[
     <p>
+    <b>1.0.8</b><br/>
+      <ul>
+        <li>: Add header space option, which requires a space between # and the title for headers GFM style</li>
+        <li>: Fix fenced code without preceding blank line would become a code block embedded in the paragraph (pegdown)</li>
+    </ul>
+    <b>1.0.7</b><br/>
+      <ul>
+        <li>: Fixed definition list parsing broken by last fix in pegdown</li>
+        <li>: Fixed loose list items ignored the next blank line and were loose only if they contained other blocks in pegdown</li>
+        <p>Now nested lists with paragraphs and code blocks are generated like GitHub but with better control over loose/tight lists.</p>
+    </ul>
     <b>1.0.6</b><br/>
     <ul>
       <li>: Fixed list parser bugs in pegdown-1.5.0 and included the fixed jar in the plug-in.
-            <p>Now nested lists with paragraphs and code blocks are generated identical to GitHub.</p>
+        <p>Now nested lists with paragraphs and code blocks are generated identical to GitHub.</p>
       </li>
     </ul>
     <b>1.0.5</b><br/>

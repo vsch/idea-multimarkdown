@@ -104,6 +104,8 @@ public class MarkdownSettingsPanel {
 
     public JCheckBox taskListsCheckBox;
 
+    public JCheckBox headerSpaceCheckBox;
+
     /** Description label for {@link #suppressInlineHTMLCheckBox}. */
     private JLabel suppressInlineHTMLDescriptionLabel;
 

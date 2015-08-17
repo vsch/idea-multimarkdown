@@ -72,34 +72,6 @@
     font-style: italic;
 }
 
-#multimarkdown-preview dfn {
-    font-style: italic;
-}
-
-#multimarkdown-preview dt {
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-#multimarkdown-preview dl {
-    margin-left: 0;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-#multimarkdown-preview code,
-#multimarkdown-preview tt {
-    font-family: Consolas, "Liberation Mono", Menlo, Courier, Monospaced, monospace;
-    font-size: 11px;
-    line-height: 1.6;
-}
-
-#multimarkdown-preview samp,
-#multimarkdown-preview kbd {
-    font-family: Consolas, "Liberation Mono", Menlo, Courier, Monospaced, monospace;
-    font-size: 12px;
-}
-
 #multimarkdown-preview {
     font-family: "Helvetica Neue", Helvetica, arial, sans-serif;
     font-size: 12px;
@@ -110,6 +82,15 @@
     line-height: 1.4;
     color: black;
 }
+
+#multimarkdown-preview blockquote,
+#multimarkdown-preview pre {
+    margin: 5px 0;
+}
+
+/**********************************
+ *  Anchor Related Formatting
+ **********************************/
 
 #multimarkdown-preview a {
     color: #4183C4;
@@ -130,6 +111,10 @@
     bottom: 0;
 }
 
+/**********************************
+ *  Header Related Formatting
+ **********************************/
+
 #multimarkdown-preview h1,
 #multimarkdown-preview h2,
 #multimarkdown-preview h3,
@@ -145,6 +130,15 @@
 #multimarkdown-preview h2 a {
     /*color: #325d72;*/
     color: black;
+}
+
+#multimarkdown-preview h1 p,
+#multimarkdown-preview h2 p,
+#multimarkdown-preview h3 p,
+#multimarkdown-preview h4 p,
+#multimarkdown-preview h5 p,
+#multimarkdown-preview h6 p {
+    margin-top: 0;
 }
 
 #multimarkdown-preview h1,
@@ -231,67 +225,9 @@
     margin: 7px 0 7px;
 }
 
-#multimarkdown-preview blockquote,
-#multimarkdown-preview ul,
-#multimarkdown-preview ol,
-#multimarkdown-preview dl,
-#multimarkdown-preview pre {
-    margin: 5px 0;
-}
-
-#multimarkdown-preview p {
-    margin: 5px 0;
-}
-
-#multimarkdown-preview h1 p,
-#multimarkdown-preview h2 p,
-#multimarkdown-preview h3 p,
-#multimarkdown-preview h4 p,
-#multimarkdown-preview h5 p,
-#multimarkdown-preview h6 p {
-    margin-top: 0;
-}
-
-#multimarkdown-preview li p {
-    margin: 0 0 10px 0;
-}
-
-#multimarkdown-preview ul li {
-    margin: 0;
-    list-style-type: disc;
-}
-
-#multimarkdown-preview ul li li {
-    list-style-type: circle;
-}
-
-#multimarkdown-preview ul li.task {
-    list-style-type: none;
-    text-indent: -20px;
-    padding-left: 20px;
-}
-
-#multimarkdown-preview ul,
-#multimarkdown-preview ol {
-    padding-left: 30px;
-}
-
-#multimarkdown-preview dl {
-    padding: 0;
-}
-
-#multimarkdown-preview dl dt {
-    font-size: 12px;
-    font-weight: bold;
-    font-style: italic;
-    padding: 0;
-    margin: 15px 0 5px;
-}
-
-#multimarkdown-preview dl dd {
-    margin: 0 0 15px;
-    padding: 0 15px;
-}
+/**********************************
+ *  Block Quote Related Formatting
+ **********************************/
 
 #multimarkdown-preview blockquote {
     border-left: 4px solid #cccccc;
@@ -313,6 +249,23 @@
 #multimarkdown-preview blockquote h5 a,
 #multimarkdown-preview blockquote h6 a {
     color: #666666;
+}
+
+/**********************************
+* Code Block Related Formatting
+ **********************************/
+
+#multimarkdown-preview code,
+#multimarkdown-preview tt {
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, Monospaced, monospace;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+#multimarkdown-preview samp,
+#multimarkdown-preview kbd {
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, Monospaced, monospace;
+    font-size: 12px;
 }
 
 #multimarkdown-preview tt {
@@ -349,6 +302,10 @@
     padding: 3px;
     border-raduis: 2px;
 }
+
+/**********************************
+ * Table Related formatting
+ **********************************/
 
 #multimarkdown-preview table {
     background-color: transparent;
@@ -415,6 +372,10 @@
     background-color: #fff;
 }
 
+/************************************
+ * Horizontal Rule Related Formatting
+ ************************************/
+
 #multimarkdown-preview hr {
     /*
     nothing is used in the CSS by the HTMLEditorKit hr element except alignment, margin, width.
@@ -430,4 +391,92 @@
     height: 1px;
     border-top: 1px solid #cccccc;
     margin: 10px 0 0 0;
+}
+
+/**********************************
+ *  List Item Related Formatting
+ **********************************/
+
+#multimarkdown-preview ul,
+#multimarkdown-preview ol,
+#multimarkdown-preview dl {
+    margin: 0;
+}
+
+#multimarkdown-preview ul li {
+    margin: 0;
+    list-style-type: disc;
+}
+
+#multimarkdown-preview li {
+    margin: 0;
+}
+
+#multimarkdown-preview li.p {
+    margin: 10px 0 0 0;
+}
+
+#multimarkdown-preview li.taskp {
+    margin: 0;
+}
+
+#multimarkdown-preview li.p p.p {
+    margin: 0;
+}
+
+#multimarkdown-preview li.taskp p.p {
+    margin: 0;
+}
+
+#multimarkdown-preview p {
+    margin: 5px 0 5px 0;
+}
+
+#multimarkdown-preview li p {
+    margin: 10px 0 10px 0;
+}
+
+#multimarkdown-preview ul li li {
+    list-style-type: circle;
+}
+
+#multimarkdown-preview ul li.task,
+#multimarkdown-preview ul li.taskp {
+    list-style-type: none;
+    text-indent: -20px;
+    padding-left: 20px;
+}
+
+#multimarkdown-preview ul,
+#multimarkdown-preview ol {
+    padding-left: 30px;
+}
+
+#multimarkdown-preview dfn {
+    font-style: italic;
+}
+
+#multimarkdown-preview dt {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+#multimarkdown-preview dl {
+    margin-left: 0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 0;
+}
+
+#multimarkdown-preview dl dt {
+    font-size: 12px;
+    font-weight: bold;
+    font-style: italic;
+    padding: 0;
+    margin: 15px 0 5px;
+}
+
+#multimarkdown-preview dl dd {
+    margin: 0 0 15px;
+    padding: 0 15px;
 }

@@ -185,3 +185,22 @@ GitHub Style Task List:
 - [x] list syntax required (any unordered or ordered list supported)
 - [x] this is a complete item
 - [ ] this is an incomplete item
+
+Loose:
+
+- [x] @mentions, #refs, [links](), **formatting**, and <del>tags</del> supported
+
+- [x] list syntax required (any unordered or ordered list supported)
+
+- [x] this is a complete item
+
+- [ ] this is an incomplete item
+
+Mixed:
+
+- [x] Tight
+- [x] Tight list syntax required (any unordered or ordered list supported)
+
+- [x] Loose this is a complete item
+- [ ] Tight, this is an incomplete item
+- [ ] Tight, this is an incomplete item
