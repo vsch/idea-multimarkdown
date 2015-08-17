@@ -12,13 +12,15 @@ References:
 [Adam Pritchard's Markdown Cheatsheet]: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
 [GitHub Flavored Markdown]: https://help.github.com/articles/github-flavored-markdown/
 [Pandoc’s markdown]: http://pandoc.org/demo/example9/pandocs-markdown.html/
-[CommonMark Spec]: http://spec.commonmark.org/0.21/
+[CommonMark]: http://commonmark.org/
+[MultiMarkdown]: http://fletcherpenney.net/multimarkdown/
 
 [John Gruber's Markdown][]
 [Adam Pritchard's Markdown Cheatsheet][]
 [GitHub Flavored Markdown][]
 [Pandoc’s markdown][]
-[CommonMark Spec][]
+[CommonMark][]
+[MultiMarkdown][]
 
 
 Background

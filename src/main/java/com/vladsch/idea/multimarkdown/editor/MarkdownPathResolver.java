@@ -26,6 +26,7 @@ import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.openapi.vfs.VirtualFileSystem;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -54,7 +55,8 @@ public class MarkdownPathResolver {
      * @return VirtualFile or null
      */
     public static VirtualFile findVirtualFile(@NotNull URL target) {
-        return VirtualFileManager.getInstance().getFileSystem(target.getProtocol()).findFileByPath(target.getFile());
+        VirtualFileSystem virtualFileSystem = VirtualFileManager.getInstance().getFileSystem(target.getProtocol());
+        return virtualFileSystem == null ? null : virtualFileSystem.findFileByPath(target.getFile());
     }
 
     /**
@@ -65,7 +67,9 @@ public class MarkdownPathResolver {
      * @return VirtualFile or null
      */
     public static VirtualFile resolveRelativePath(@NotNull Document document, @NotNull String target) {
-        return FileDocumentManager.getInstance().getFile(document).getParent().findFileByRelativePath(target);
+        VirtualFile file = FileDocumentManager.getInstance().getFile(document);
+        VirtualFile parent = file == null ? null : file.getParent();
+        return parent == null ? null : parent.findFileByRelativePath(target);
     }
 
     /**

@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Class-Path: asm-all-4.1.jar pegdown-1.5.4.jar parboiled-core-1.1.7.jar
+  parboiled-java-1.1.7.jar pegdown-1.5.0-sources.jar parboiled-core-1.
+ 1.7-sources.jar parboiled-java-1.1.7-sources.jar
+Main-Class: 
+
