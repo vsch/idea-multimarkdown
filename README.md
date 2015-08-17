@@ -3,7 +3,7 @@ idea-multimarkdown
 
 **[Markdown](http://daringfireball.net/projects/markdown) language support for [IntelliJ IDEA](http://www.jetbrains.com/idea), [RubyMine](http://www.jetbrains.com/ruby), [PhpStorm](http://www.jetbrains.com/phpstorm), [WebStorm](http://www.jetbrains.com/webstorm), [PyCharm](http://www.jetbrains.com/pycharm), [AppCode](http://www.jetbrains.com/objc) and [Android Studio](http://developer.android.com/sdk/installing/studio.html).**
 
-**If you like this plugin, please rate it on the [official plugin page](http://plugins.intellij.net/plugin?id=7896).**
+**<span color="#c00038">If you like this plugin, please leave a comment or rate it on the</span> [official plugin page](http://plugins.intellij.net/plugin?id=7896).**
 
 The Full Story
 --------------
@@ -16,7 +16,7 @@ Then I encountered some parsing bugs of compound nested lists in pegdown and had
 
 It has been a fun trip down the rabbit hole of IntelliJ IDEA plugin development that started with a simple desire for a Markdown preview that looked like GitHub's.
 
-Hope you enjoy using this plugin and **if you do then please rate it on the [official plugin page](http://plugins.intellij.net/plugin?id=7896).**
+Hope you enjoy using this plugin and **if you do then please leave a comment or rate it on the [official plugin page](http://plugins.intellij.net/plugin?id=7896).**
 
 Enhancements
 -------------

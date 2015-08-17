@@ -36,6 +36,8 @@
       <p>Now with HTML Preview and Optional HTML Text tabs</p>
       <p><b>Feature requests, problem reports and feedback are greatly appreciated.</b></p>
       <p>&nbsp;</p>
+      <p><b><span color="#C00038">If you like it then please leave a comment or rate it on the <a color="blue" href="http://plugins.intellij.net/plugin?id=7896">official plugin page</a></b></p>
+      <p>&nbsp;</p>
     ]]></description>
 
   <change-notes><![CDATA[
@@ -115,6 +117,7 @@
       <li>Forked from <a href="https://github.com/nicoulaj/idea-markdown">idea-markdown</a></li>
     </ul>
     </p>
+    <p>&nbsp;</p>
     ]]></change-notes>
 
   <extensions defaultExtensionNs="com.intellij">
