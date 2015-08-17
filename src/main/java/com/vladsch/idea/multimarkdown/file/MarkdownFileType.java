@@ -47,7 +47,7 @@ public class MarkdownFileType extends LanguageFileType {
 
     /** The extensions associated by default with this {@link com.intellij.openapi.fileTypes.FileType}. */
     @NonNls
-    public static final String[] DEFAULT_ASSOCIATED_EXTENSIONS = {"multimarkdown", "mkd", "md"};
+    public static final String[] DEFAULT_ASSOCIATED_EXTENSIONS = {"markdown", "mkd", "md"};
 
     /** Build a new instance of {@link MarkdownFileType}. */
     public MarkdownFileType() {

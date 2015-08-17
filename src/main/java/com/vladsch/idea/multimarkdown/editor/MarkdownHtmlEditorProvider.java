@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2011-2014 Julien Nicoulaud <julien.nicoulaud@gmail.com>
-* Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
+ * Copyright (c) 2015-2015 Vladimir Schneider <vladimir.schneider@gmail.com>
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -27,6 +27,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.vladsch.idea.multimarkdown.MarkdownLanguage;
 import com.vladsch.idea.multimarkdown.file.MarkdownFileType;
+import com.vladsch.idea.multimarkdown.settings.MarkdownGlobalSettings;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,10 +38,10 @@ import org.jetbrains.annotations.NotNull;
  * @see MarkdownPreviewEditor
  * @since 0.1
  */
-public class MarkdownPreviewEditorProvider implements FileEditorProvider, PossiblyDumbAware {
+public class MarkdownHtmlEditorProvider implements FileEditorProvider, PossiblyDumbAware {
 
     /** The id of the editors provided by this {@link FileEditorProvider}. */
-    public static final String EDITOR_TYPE_ID = MarkdownLanguage.LANGUAGE_NAME + "PreviewEditor";
+    public static final String EDITOR_TYPE_ID = MarkdownLanguage.LANGUAGE_NAME + "HtmlEditor";
 
     /**
      * Check whether this {@link FileEditorProvider} can create a valid {@link FileEditor} for the file.
@@ -50,7 +51,7 @@ public class MarkdownPreviewEditorProvider implements FileEditorProvider, Possib
      * @return whether the provider can create a valid editor for the specified <code>file</code>.
      */
     public boolean accept(@NotNull Project project, @NotNull VirtualFile file) {
-        return file.getFileType() instanceof MarkdownFileType;
+        return MarkdownGlobalSettings.getInstance().isShowHtmlText() && file.getFileType() instanceof MarkdownFileType;
     }
 
     /**
@@ -61,11 +62,11 @@ public class MarkdownPreviewEditorProvider implements FileEditorProvider, Possib
      * @param project the project context.
      * @param file    the file for which an editor must be created.
      * @return an editor for the specified file.
-     * @see #accept(com.intellij.openapi.project.Project, com.intellij.openapi.vfs.VirtualFile)
+     * @see #accept(Project, VirtualFile)
      */
     @NotNull
     public FileEditor createEditor(@NotNull Project project, @NotNull VirtualFile file) {
-        return new MarkdownPreviewEditor(project, FileDocumentManager.getInstance().getDocument(file), false);
+        return new MarkdownPreviewEditor(project, FileDocumentManager.getInstance().getDocument(file), true);
     }
 
     /**
@@ -86,7 +87,7 @@ public class MarkdownPreviewEditorProvider implements FileEditorProvider, Possib
      * @param project       the project.
      * @param file          the file.
      * @return {@link FileEditorState#INSTANCE}
-     * @see #writeState(com.intellij.openapi.fileEditor.FileEditorState, com.intellij.openapi.project.Project, org.jdom.Element)
+     * @see #writeState(FileEditorState, Project, Element)
      */
     @NotNull
     public FileEditorState readState(@NotNull Element sourceElement, @NotNull Project project, @NotNull VirtualFile file) {
@@ -101,7 +102,7 @@ public class MarkdownPreviewEditorProvider implements FileEditorProvider, Possib
      * @param state         the state to serialize.
      * @param project       the project.
      * @param targetElement the target element to serialize to.
-     * @see #readState(org.jdom.Element, com.intellij.openapi.project.Project, com.intellij.openapi.vfs.VirtualFile)
+     * @see #readState(Element, Project, VirtualFile)
      */
     public void writeState(@NotNull FileEditorState state, @NotNull Project project, @NotNull Element targetElement) {
     }

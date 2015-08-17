@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2011-2014 Julien Nicoulaud <julien.nicoulaud@gmail.com>
-* Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
+ * Copyright (c) 2015-2015 Vladimir Schneider <vladimir.schneider@gmail.com>
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -29,18 +29,12 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.event.DocumentAdapter;
 import com.intellij.openapi.editor.event.DocumentEvent;
-import com.intellij.openapi.fileEditor.FileEditor;
-import com.intellij.openapi.fileEditor.FileEditorLocation;
-import com.intellij.openapi.fileEditor.FileEditorState;
-import com.intellij.openapi.fileEditor.FileEditorStateLevel;
+import com.intellij.openapi.fileEditor.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.UserDataHolderBase;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.components.JBScrollPane;
-
-import java.io.IOException;
-import java.io.StringReader;
-import java.lang.String;
 
 import com.vladsch.idea.multimarkdown.MarkdownBundle;
 import com.vladsch.idea.multimarkdown.settings.MarkdownGlobalSettings;
@@ -51,8 +45,11 @@ import org.jetbrains.annotations.Nullable;
 import org.pegdown.PegDownProcessor;
 
 import javax.swing.*;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.Timer;
 import javax.swing.text.DefaultCaret;
+import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.html.StyleSheet;
 import java.awt.*;
 import java.beans.PropertyChangeListener;
@@ -78,7 +75,9 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
     private static final Logger LOGGER = Logger.getInstance(MarkdownPreviewEditor.class);
 
     /** The editor name, displayed as the tab name of the editor. */
-    public static final String EDITOR_NAME = MarkdownBundle.message("markdown.editor.preview.tab-name");
+    public static final String PREVIEW_EDITOR_NAME = MarkdownBundle.message("markdown.editor.preview.tab-name");
+
+    public static final String TEXT_EDITOR_NAME = MarkdownBundle.message("markdown.editor.html.tab-name");
 
     /** The path to the stylesheet used for displaying the HTML preview of the document. */
     @NonNls
@@ -100,6 +99,12 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
 
     private boolean isActive = false;
 
+    private boolean isRawHtml = false;
+
+    private boolean isEditorTabVisible = true;
+
+    private Project project;
+
     /** Init/reinit thread local {@link PegDownProcessor}. */
     private static ThreadLocal<PegDownProcessor> initProcessor() {
         return new ThreadLocal<PegDownProcessor>() {
@@ -117,14 +122,25 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
 
     protected int updateDelay = MarkdownGlobalSettings.getInstance().getUpdateDelay();
 
+    protected void updateEditorTabIsVisible() {
+        if (isRawHtml) {
+            isEditorTabVisible = MarkdownGlobalSettings.getInstance().isShowHtmlText();
+            getComponent().setVisible(isEditorTabVisible);
+        } else {
+            isEditorTabVisible = true;
+        }
+    }
+
     /**
      * Build a new instance of {@link MarkdownPreviewEditor}.
      *
      * @param project  the {@link Project} containing the document
      * @param document the {@link com.intellij.openapi.editor.Document} previewed in this editor.
      */
-    public MarkdownPreviewEditor(@NotNull Project project, @NotNull Document document) {
+    public MarkdownPreviewEditor(@NotNull Project project, @NotNull Document document, boolean isRawHtml) {
+        this.isRawHtml = isRawHtml;
         this.document = document;
+        this.project = project;
 
         // Listen to the document modifications.
         this.document.addDocumentListener(new DocumentAdapter() {
@@ -137,21 +153,27 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
         // Listen to settings changes
         MarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MarkdownGlobalSettingsListener() {
             public void handleSettingsChanged(@NotNull final MarkdownGlobalSettings newSettings) {
+                updateEditorTabIsVisible();
                 updateDelay = MarkdownGlobalSettings.getInstance().getUpdateDelay();
                 delayedHtmlPreviewUpdate(true);
             }
         });
 
-        // Setup the editor pane for rendering HTML.
-        setStyleSheet();
+        if (isRawHtml) {
+//            jEditorPane.setEditorKit(new DefaultEditorKit());
+        } else {
+            // Setup the editor pane for rendering HTML.
+            setStyleSheet();
+
+            // Add a custom link listener which can resolve local link references.
+            jEditorPane.addHyperlinkListener(new MarkdownLinkListener(jEditorPane, project, document));
+        }
+
         jEditorPane.setEditable(false);
 
-        // Set the editor pane position to top left, and do not let it reset it
+        // Set the editor pane caret position to top left, and do not let it reset it
         jEditorPane.getCaret().setMagicCaretPosition(new Point(0, 0));
         ((DefaultCaret) jEditorPane.getCaret()).setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
-
-        // Add a custom link listener which can resolve local link references.
-        jEditorPane.addHyperlinkListener(new MarkdownLinkListener(jEditorPane, project, document));
     }
 
     protected void delayedHtmlPreviewUpdate(final boolean fullKit) {
@@ -159,6 +181,9 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
             updateDelayTimer.cancel();
             updateDelayTimer = null;
         }
+
+        if (!isEditorTabVisible)
+            return;
 
         updateDelayTimer = new Timer();
         updateDelayTimer.schedule(new TimerTask() {
@@ -182,6 +207,8 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
     }
 
     protected void setStyleSheet() {
+        if (isRawHtml) return;
+
         MarkdownEditorKit htmlKit = new MarkdownEditorKit(document);
 
         final StyleSheet style = new StyleSheet();
@@ -224,12 +251,12 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
     /**
      * Get the editor displayable name.
      *
-     * @return {@link #EDITOR_NAME}
+     * @return editor name
      */
     @NotNull
     @NonNls
     public String getName() {
-        return EDITOR_NAME;
+        return isRawHtml ? TEXT_EDITOR_NAME : PREVIEW_EDITOR_NAME;
     }
 
     /**
@@ -293,20 +320,48 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
             updateDelayTimer = null;
         }
 
-        if (previewIsObsolete && (isActive || force)) {
+        if (previewIsObsolete && isEditorTabVisible && (isActive || force)) {
             try {
                 String html = processor.get().markdownToHtml(document.getText());
                 // add class to table rows to compensate for lack of :first-child, :nth-child() so we can have striped tables
                 String procHtml = postProcessHtml(html);
                 jEditorPane.setText("<div id=\"multimarkdown-preview\">\n" + procHtml + "\n</div>\n");
                 previewIsObsolete = false;
+
+                // here we can find our HTML Text counterpart but it is better to keep it separate
+//                VirtualFile file = FileDocumentManager.getInstance().getFile(document);
+//                FileEditorManager manager = FileEditorManager.getInstance(project);
+//                FileEditor[] editors = manager.getEditors(file);
+//                for (int i = 0; i < editors.length; i++)
+//                {
+//                    if (editors[i] == this)
+//                    {
+//                        if (editors.length > i && editors[i+1] instanceof MarkdownPreviewEditor) {
+//                            // update its html too
+//                            MarkdownPreviewEditor htmlEditor = (MarkdownPreviewEditor)editors[i+1];
+//                            boolean showModified = MarkdownGlobalSettings.getInstance().isShowHtmlTextAsModified();
+//                            htmlEditor.setHtmlContent("<div id=\"multimarkdown-preview\">\n" + (showModified ? procHtml : html) + "\n</div>\n");
+//                            break;
+//                        }
+//                    }
+//                }
             } catch (Exception e) {
                 LOGGER.error("Failed processing Markdown document", e);
             }
         }
     }
 
+    public void setHtmlContent(String html) {
+        jEditorPane.setText(html);
+    }
+
     protected String postProcessHtml(String html) {
+        if (isRawHtml) {
+            boolean showModified = MarkdownGlobalSettings.getInstance().isShowHtmlTextAsModified();
+            if (!showModified)
+                return html;
+        }
+
         // scan for <table>, </table>, <tr> and </tr>
         String result = "";
         boolean taskLists = MarkdownGlobalSettings.getInstance().isTaskLists();

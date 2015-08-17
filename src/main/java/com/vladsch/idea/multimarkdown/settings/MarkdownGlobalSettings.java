@@ -95,6 +95,12 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
     /** Whether the "Strikethroughs" extension should be enabled. */
     private boolean strikethrough = false;
 
+    /** Whether the html text tab shows text as it is modified for use in the preview tab extension should be enabled. */
+    private boolean showHtmlTextAsModified = false;
+
+    /** Whether the html text tab should be displayed */
+    private boolean showHtmlText = true;
+
     private int updateDelay = 1000;
 
     private int maxImgWidth = 900;
@@ -202,6 +208,48 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
     public void setStrikethrough(boolean strikethrough) {
         if (this.strikethrough != strikethrough) {
             this.strikethrough = strikethrough;
+            notifyListeners();
+        }
+    }
+
+    /**
+     * Whether the html text tab shows text as it is modified for use in the preview tab extension should be enabled.
+     *
+     * @return {@link #showHtmlTextAsModified}
+     */
+    public boolean isShowHtmlTextAsModified() {
+        return showHtmlTextAsModified;
+    }
+
+    /**
+     * Whether the html text tab shows text as it is modified for use in the preview tab extension should be enabled.
+     *
+     * @param showHtmlTextAsModified whether the "Suppress inline HTML tags" extension should be enabled.
+     */
+    public void setShowHtmlTextAsModified(boolean showHtmlTextAsModified) {
+        if (this.showHtmlTextAsModified != showHtmlTextAsModified) {
+            this.showHtmlTextAsModified = showHtmlTextAsModified;
+            notifyListeners();
+        }
+    }
+
+    /**
+     * Whether the html text tab should be displayed
+     *
+     * @return {@link #showHtmlText}
+     */
+    public boolean isShowHtmlText() {
+        return showHtmlText;
+    }
+
+    /**
+     * Whether the html text tab should be displayed
+     *
+     * @param showHtmlText whether the "Suppress inline HTML tags" extension should be enabled.
+     */
+    public void setShowHtmlText(boolean showHtmlText) {
+        if (this.showHtmlText != showHtmlText) {
+            this.showHtmlText = showHtmlText;
             notifyListeners();
         }
     }
@@ -502,6 +550,7 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
         element.setAttribute("suppressHTMLBlocks", Boolean.toString(suppressHTMLBlocks));
         element.setAttribute("suppressInlineHTML", Boolean.toString(suppressInlineHTML));
         element.setAttribute("strikethrough", Boolean.toString(strikethrough));
+        element.setAttribute("showHtmlTextAsModified", Boolean.toString(showHtmlTextAsModified));
         element.setAttribute("updateDelay", Integer.toString(updateDelay));
         element.setAttribute("maxImgWidth", Integer.toString(maxImgWidth));
         element.setAttribute("customCss", customCss);
@@ -545,6 +594,8 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
         if (value != null) suppressInlineHTML = Boolean.parseBoolean(value);
         value = element.getAttributeValue("strikethrough");
         if (value != null) strikethrough = Boolean.parseBoolean(value);
+        value = element.getAttributeValue("showHtmlTextAsModified");
+        if (value != null) showHtmlTextAsModified = Boolean.parseBoolean(value);
 
         value = element.getAttributeValue("updateDelay");
         if (value != null) updateDelay = Integer.parseInt(value);

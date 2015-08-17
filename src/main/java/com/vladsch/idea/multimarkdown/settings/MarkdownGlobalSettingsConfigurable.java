@@ -131,6 +131,8 @@ public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurabl
                || settingsPanel.suppressInlineHTMLCheckBox == null || globalSettings.isSuppressInlineHTML() != settingsPanel.suppressInlineHTMLCheckBox.isSelected()
                || settingsPanel.tablesCheckBox == null || globalSettings.isTables() != settingsPanel.tablesCheckBox.isSelected()
                || settingsPanel.strikethroughCheckBox == null || globalSettings.isStrikethrough() != settingsPanel.strikethroughCheckBox.isSelected()
+               || settingsPanel.showHtmlTextAsModifiedCheckBox == null || globalSettings.isShowHtmlTextAsModified() != settingsPanel.showHtmlTextAsModifiedCheckBox.isSelected()
+               || settingsPanel.showHtmlTextCheckBox == null || globalSettings.isShowHtmlText() != settingsPanel.showHtmlTextCheckBox.isSelected()
                || settingsPanel.updateDelaySpinner == null || globalSettings.getUpdateDelay() != (Integer)settingsPanel.updateDelaySpinner.getValue()
                || settingsPanel.maxImgWidthSpinner == null || globalSettings.getMaxImgWidth() != (Integer)settingsPanel.maxImgWidthSpinner.getValue()
                || settingsPanel.textCustomCss == null || !globalSettings.getCustomCss().equals(settingsPanel.textCustomCss.getText())
@@ -156,6 +158,8 @@ public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurabl
             globalSettings.setSuppressInlineHTML(settingsPanel.suppressInlineHTMLCheckBox != null && settingsPanel.suppressInlineHTMLCheckBox.isSelected());
             globalSettings.setTables(settingsPanel.tablesCheckBox != null && settingsPanel.tablesCheckBox.isSelected());
             globalSettings.setStrikethrough(settingsPanel.strikethroughCheckBox != null && settingsPanel.strikethroughCheckBox.isSelected());
+            globalSettings.setShowHtmlTextAsModified(settingsPanel.showHtmlTextAsModifiedCheckBox != null && settingsPanel.showHtmlTextAsModifiedCheckBox.isSelected());
+            globalSettings.setShowHtmlText(settingsPanel.showHtmlTextCheckBox != null && settingsPanel.showHtmlTextCheckBox.isSelected());
             globalSettings.setUpdateDelay((Integer) settingsPanel.updateDelaySpinner.getValue());
             globalSettings.setMaxWidth((Integer) settingsPanel.maxImgWidthSpinner.getValue());
             globalSettings.setCustomCss(settingsPanel.textCustomCss.getText());
@@ -181,6 +185,8 @@ public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurabl
             if (settingsPanel.suppressInlineHTMLCheckBox != null) settingsPanel.suppressInlineHTMLCheckBox.setSelected(globalSettings.isSuppressInlineHTML());
             if (settingsPanel.tablesCheckBox != null) settingsPanel.tablesCheckBox.setSelected(globalSettings.isTables());
             if (settingsPanel.strikethroughCheckBox != null) settingsPanel.strikethroughCheckBox.setSelected(globalSettings.isStrikethrough());
+            if (settingsPanel.showHtmlTextAsModifiedCheckBox != null) settingsPanel.showHtmlTextAsModifiedCheckBox.setSelected(globalSettings.isShowHtmlTextAsModified());
+            if (settingsPanel.showHtmlTextCheckBox != null) settingsPanel.showHtmlTextCheckBox.setSelected(globalSettings.isShowHtmlText());
             if (settingsPanel.updateDelaySpinner != null) settingsPanel.updateDelaySpinner.setValue(globalSettings.getUpdateDelay());
             if (settingsPanel.maxImgWidthSpinner != null) settingsPanel.maxImgWidthSpinner.setValue(globalSettings.getMaxImgWidth());
             if (settingsPanel.textCustomCss != null) settingsPanel.textCustomCss.setText(globalSettings.getCustomCss());

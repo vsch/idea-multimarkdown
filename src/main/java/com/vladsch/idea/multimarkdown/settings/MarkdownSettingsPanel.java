@@ -27,6 +27,8 @@ import org.apache.commons.codec.Charsets;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
 /**
@@ -106,6 +108,10 @@ public class MarkdownSettingsPanel {
 
     public JCheckBox headerSpaceCheckBox;
 
+    public JCheckBox showHtmlTextCheckBox;
+
+    public JCheckBox showHtmlTextAsModifiedCheckBox;
+
     /** Description label for {@link #suppressInlineHTMLCheckBox}. */
     private JLabel suppressInlineHTMLDescriptionLabel;
 
@@ -142,6 +148,14 @@ public class MarkdownSettingsPanel {
     /** Description label for {@link #strikethroughCheckBox}. */
     private JLabel strikethroughDescriptionLabel;
 
+    protected void showHtmlTextStateChanged()
+    {
+        if (showHtmlTextAsModifiedCheckBox != null) {
+            boolean checked = showHtmlTextCheckBox.isSelected();
+            showHtmlTextAsModifiedCheckBox.setEnabled(checked);
+        }
+    }
+
     public MarkdownSettingsPanel() {
         btnResetCss.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) {
@@ -156,6 +170,18 @@ public class MarkdownSettingsPanel {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
+            }
+        });
+
+        showHtmlTextCheckBox.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override public void propertyChange(PropertyChangeEvent evt) {
+                showHtmlTextStateChanged();;
+            }
+        });
+
+        showHtmlTextCheckBox.addActionListener(new ActionListener() {
+            @Override public void actionPerformed(ActionEvent e) {
+                showHtmlTextStateChanged();;
             }
         });
     }
