@@ -36,7 +36,7 @@
       <p>Now with HTML Preview and Optional HTML Text tabs</p>
       <p><b>Feature requests, problem reports and feedback are greatly appreciated.</b></p>
       <p>&nbsp;</p>
-      <p><b><span color="#C00038">If you like it then please leave a comment or rate it on the <a color="blue" href="http://plugins.intellij.net/plugin?id=7896">official plugin page</a></b></p>
+      <p><b><span color="#C00038">If you like it then please leave a comment or rate it on the <a color="#30A0D8" href="http://plugins.intellij.net/plugin?id=7896">official plugin page</a></b></p>
       <p>&nbsp;</p>
     ]]></description>
 
@@ -45,6 +45,7 @@
     <b>1.0.10</b><br/>
       <ul>
         <li>: Changed plugin.xml to display description and change-notes in the settings dialog, plug-in info panel</li>
+        <li>: Add 2x icons and dracula themed ones</li>
         <li>: Fixed default file extension was missing 'markdown'</li>
         <li>: Add HTML Text view to show generated HTML
           <ul>
