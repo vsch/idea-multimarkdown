@@ -112,6 +112,8 @@ public class MarkdownSettingsPanel {
 
     public JCheckBox showHtmlTextAsModifiedCheckBox;
 
+    public JCheckBox anchorLinksCheckBox;
+
     /** Description label for {@link #suppressInlineHTMLCheckBox}. */
     private JLabel suppressInlineHTMLDescriptionLabel;
 

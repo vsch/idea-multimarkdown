@@ -12,7 +12,7 @@ It all started with a desire to see Markdown files in my PhpStorm IDE as they wo
 
 I found out quickly that there was more to it than meets the eye. Rendering is done by Java not a browser, the parser is HTML 3.1 and not all features are implemented. Additionally, the Table extension did not work in the version of pegdown used by the plugin. I needed that because maintaining HTML tables is a pain. So I upgraded the plugin to use the latest pegdown, parboiled and fixed a few bugs. Since I was already in the code, I might as well add a few more desired features like user editable style sheet, fix a few more bugs, add updates to preview so that I could split the editor pane and edit in one while seeing the preview in the other.
 
-Then I encountered some parsing bugs of compound nested lists in pegdown and had to dive into its source to fix them. Having done that and gotten familiar with it, I decided to add a new extension. Finally, to help me with debugging and generating test expectations for pegdown, I had to have the HTML Text tab to display the generated HTML.
+Then I encountered some bugs in parsing of compound nested lists in pegdown and had to dive into its source to fix them. Having done that and gotten familiar with it, I decided to add a new extension. Finally, to help me with debugging and generating test expectations for pegdown, I had to have the HTML Text tab to display the generated HTML.
 
 It has been a fun trip down the rabbit hole of IntelliJ IDEA plugin development that started with a simple desire for a Markdown preview that looked like GitHub's.
 

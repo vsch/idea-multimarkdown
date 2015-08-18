@@ -44,7 +44,9 @@
     <p>
     <b>1.0.10</b><br/>
       <ul>
-        <li>: Changed plugin.xml to display description and change-notes in the settings dialog, plug-in info panel</li>
+        <li>: Change default style sheet to make fonts relative to the one and only set in px, clean up ignored attributes</li>
+        <li>: Change plugin.xml to display description and change-notes in the settings dialog, plug-in info panel</li>
+        <li>: Add Automatic generation of anchor links in headers in settings, pegdown ANCHORLINKS extension</li>
         <li>: Add 2x icons and dracula themed ones</li>
         <li>: Fixed default file extension was missing 'markdown'</li>
         <li>: Add HTML Text view to show generated HTML

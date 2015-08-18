@@ -80,6 +80,9 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
     /** Whether the "Github style plain auto-links" extension should be enabled. */
     private boolean autoLinks = false;
 
+    /** Whether the anchor links extension should be enabled. */
+    private boolean anchorLinks = false;
+
     /** Whether the "Wiki-style links" extension should be enabled. */
     private boolean wikiLinks = false;
 
@@ -348,13 +351,34 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
     }
 
     /**
-     * Whether the "Github style plain auto-links" extension should be enabled.
+     * Whether the anchor-links extension should be enabled.
      *
      * @param autoLinks whether the "Github style plain auto-links" extension should be enabled.
      */
     public void setAutoLinks(boolean autoLinks) {
         if (this.autoLinks != autoLinks) {
             this.autoLinks = autoLinks;
+            notifyListeners();
+        }
+    }
+
+    /**
+     * Whether the anchor-links extension should be enabled.
+     *
+     * @return {@link #anchorLinks}
+     */
+    public boolean isAnchorLinks() {
+        return anchorLinks;
+    }
+
+    /**
+     * Whether the "Github style plain auto-links" extension should be enabled.
+     *
+     * @param anchorLinks whether the "Github style plain auto-links" extension should be enabled.
+     */
+    public void setAnchorLinks(boolean anchorLinks) {
+        if (this.anchorLinks != anchorLinks) {
+            this.anchorLinks = anchorLinks;
             notifyListeners();
         }
     }
@@ -543,6 +567,7 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
         element.setAttribute("headerSpace", Boolean.toString(headerSpace));
         element.setAttribute("taskLists", Boolean.toString(taskLists));
         element.setAttribute("autoLinks", Boolean.toString(autoLinks));
+        element.setAttribute("anchorLinks", Boolean.toString(anchorLinks));
         element.setAttribute("wikiLinks", Boolean.toString(wikiLinks));
         element.setAttribute("tables", Boolean.toString(tables));
         element.setAttribute("definitions", Boolean.toString(definitions));
@@ -580,6 +605,8 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
         if (value != null) taskLists = Boolean.parseBoolean(value);
         value = element.getAttributeValue("autoLinks");
         if (value != null) autoLinks = Boolean.parseBoolean(value);
+        value = element.getAttributeValue("anchorLinks");
+        if (value != null) anchorLinks = Boolean.parseBoolean(value);
         value = element.getAttributeValue("wikiLinks");
         if (value != null) wikiLinks = Boolean.parseBoolean(value);
         value = element.getAttributeValue("tables");
@@ -620,6 +647,7 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
                 (hardWraps ? Extensions.HARDWRAPS : 0) +
                 (headerSpace ? Extensions.HEADERSPACE : 0) +
                 (autoLinks ? Extensions.AUTOLINKS : 0) +
+                (anchorLinks ? Extensions.ANCHORLINKS : 0) +
                 (wikiLinks ? Extensions.WIKILINKS : 0) +
                 (tables ? Extensions.TABLES : 0) +
                 (definitions ? Extensions.DEFINITIONS : 0) +
