@@ -18,89 +18,86 @@
 
 */
 
-#multimarkdown-preview strike {
+strike {
     text-decoration: line-through;
 }
 
-#multimarkdown-preview span.del {
+/* del is simulated via <span class="del"></span> */
+del,
+span.del {
     text-decoration: line-through;
 }
 
-#multimarkdown-preview s {
+s {
     text-decoration: line-through;
 }
 
-#multimarkdown-preview cite {
+cite {
     font-style: italic;
 }
 
-#multimarkdown-preview sub {
+sub {
     font-size: 0.9em;
 }
 
-#multimarkdown-preview sup {
+sup {
     font-size: 0.9em;
 }
 
-#multimarkdown-preview em {
+em {
     font-style: italic;
 }
 
-#multimarkdown-preview strong {
+strong {
     font-weight: bold;
 }
 
-#multimarkdown-preview b {
+b {
     font-weight: bold;
 }
 
-#multimarkdown-preview u {
+u {
     text-decoration: underline;
 }
 
-#multimarkdown-preview address {
-    color: blue;
+address {
+    color: #333366;
     font-style: italic;
 }
 
-#multimarkdown-preview i {
+i {
     font-style: italic;
 }
 
-#multimarkdown-preview var {
+var {
     font-weight: bold;
     font-style: italic;
 }
 
+/* NOTE: all other font sizes are set relative to font size given here */
 #multimarkdown-preview {
-    font-family: "Helvetica Neue", Helvetica, arial, sans-serif;
-    font-size: 12px;
+    font-family: "Helvetica Neue", Helvetica, Arial, freesans, sans-serif;
+    font-size: 11px;
     padding-top: 10px;
     padding-bottom: 10px;
     background-color: white;
     padding: 30px;
-    line-height: 1.4;
-    color: black;
-}
-
-#multimarkdown-preview blockquote,
-#multimarkdown-preview pre {
-    margin: 5px 0;
+    color: #222222;
 }
 
 /**********************************
  *  Anchor Related Formatting
  **********************************/
 
-#multimarkdown-preview a {
+a {
     color: #4183C4;
 }
 
-#multimarkdown-preview a.absent {
+a.absent {
     color: #cc0000;
 }
 
-#multimarkdown-preview a.anchor {
+a.anchor {
     display: block;
     padding-left: 30px;
     margin-left: -30px;
@@ -115,113 +112,97 @@
  *  Header Related Formatting
  **********************************/
 
-#multimarkdown-preview h1,
-#multimarkdown-preview h2,
-#multimarkdown-preview h3,
-#multimarkdown-preview h4,
-#multimarkdown-preview h5,
-#multimarkdown-preview h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     padding: 0;
     cursor: text;
     position: relative;
 }
 
-#multimarkdown-preview h2,
-#multimarkdown-preview h2 a {
-    /*color: #325d72;*/
-    color: black;
+h2,
+h2 a {
+    color: #222222;
 }
 
-#multimarkdown-preview h1 p,
-#multimarkdown-preview h2 p,
-#multimarkdown-preview h3 p,
-#multimarkdown-preview h4 p,
-#multimarkdown-preview h5 p,
-#multimarkdown-preview h6 p {
+h1,
+h3,
+h4,
+h5,
+h1 a,
+h3 a,
+h4 a,
+h5 a {
+    color: #222222;
+}
+
+h1 p,
+h2 p,
+h3 p,
+h4 p,
+h5 p,
+h6 p {
     margin-top: 0;
 }
 
-#multimarkdown-preview h1,
-#multimarkdown-preview h3,
-#multimarkdown-preview h4,
-#multimarkdown-preview h5,
-#multimarkdown-preview h1 a,
-#multimarkdown-preview h3 a,
-#multimarkdown-preview h4 a,
-#multimarkdown-preview h5 a {
-    color: black;
-}
-
-#multimarkdown-preview h6,
-#multimarkdown-preview h6 a {
+h6,
+h6 a {
     color: #777777;
 }
 
-#multimarkdown-preview h1 tt,
-#multimarkdown-preview h1 code {
+h1 tt,
+h2 tt,
+h3 tt,
+h4 tt,
+h5 tt,
+h6 tt,
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
     font-size: inherit;
 }
 
-#multimarkdown-preview h2 tt,
-#multimarkdown-preview h2 code {
-    font-size: inherit;
-}
-
-#multimarkdown-preview h3 tt,
-#multimarkdown-preview h3 code {
-    font-size: inherit;
-}
-
-#multimarkdown-preview h4 tt,
-#multimarkdown-preview h4 code {
-    font-size: inherit;
-}
-
-#multimarkdown-preview h5 tt,
-#multimarkdown-preview h5 code {
-    font-size: inherit;
-}
-
-#multimarkdown-preview h6 tt,
-#multimarkdown-preview h6 code {
-    font-size: inherit;
-}
-
-#multimarkdown-preview h1 {
-    font-weight: bold ;
-    border-bottom: 1px solid #cccccc;
-    font-size: 24px;
-    margin: 20px 0 10px;
-}
-
-#multimarkdown-preview h2 {
-    font-size: 20px;
-    border-bottom: 1px solid #cccccc;
+h1 {
     font-weight: bold;
-    margin: 20px 0 10px;
+    border-bottom: 1px solid #bbbbbb;
+    font-size: 1.5em;
+    margin: 20px 0 10px 0;
 }
 
-#multimarkdown-preview h3 {
-    font-size: 18px;
+h2 {
+    border-bottom: 1px solid #bbbbbb;
     font-weight: bold;
-    margin: 15px 0 7px;
+    font-size: 1.35em;
+    margin: 20px 0 10px 0;
 }
 
-#multimarkdown-preview h4 {
-    font-size: 16px;
+h3 {
     font-weight: bold;
+    font-size: 1.25em;
+    margin: 20px 0 10px 0;
+}
+
+h4 {
+    font-weight: bold;
+    font-size: 1.15em;
     margin: 10px 0 7px;
 }
 
-#multimarkdown-preview h5 {
-    font-size: 14px;
+h5 {
     font-weight: bold;
+    font-size: 1.1em;
     margin: 7px 0 7px;
 }
 
-#multimarkdown-preview h6 {
-    font-size: 14px;
+h6 {
     font-weight: bold;
+    font-size: 1.1em;
     margin: 7px 0 7px;
 }
 
@@ -229,25 +210,26 @@
  *  Block Quote Related Formatting
  **********************************/
 
-#multimarkdown-preview blockquote {
+blockquote {
     border-left: 4px solid #cccccc;
+    margin: 5px 0;
     padding: 0 15px;
-    font-size: 12px;
+    font-size: 1em;
     color: #666666;
 }
 
-#multimarkdown-preview blockquote h1,
-#multimarkdown-preview blockquote h2,
-#multimarkdown-preview blockquote h3,
-#multimarkdown-preview blockquote h4,
-#multimarkdown-preview blockquote h5,
-#multimarkdown-preview blockquote h6,
-#multimarkdown-preview blockquote h1 a,
-#multimarkdown-preview blockquote h2 a,
-#multimarkdown-preview blockquote h3 a,
-#multimarkdown-preview blockquote h4 a,
-#multimarkdown-preview blockquote h5 a,
-#multimarkdown-preview blockquote h6 a {
+blockquote h1,
+blockquote h2,
+blockquote h3,
+blockquote h4,
+blockquote h5,
+blockquote h6,
+blockquote h1 a,
+blockquote h2 a,
+blockquote h3 a,
+blockquote h4 a,
+blockquote h5 a,
+blockquote h6 a {
     color: #666666;
 }
 
@@ -255,59 +237,53 @@
 * Code Block Related Formatting
  **********************************/
 
-#multimarkdown-preview code,
-#multimarkdown-preview tt {
+code,
+samp,
+kbd, tt {
     font-family: Consolas, "Liberation Mono", Menlo, Courier, Monospaced, monospace;
-    font-size: 11px;
-    line-height: 1.6;
+    font-size: 1em;
 }
 
-#multimarkdown-preview samp,
-#multimarkdown-preview kbd {
-    font-family: Consolas, "Liberation Mono", Menlo, Courier, Monospaced, monospace;
-    font-size: 12px;
+pre {
+    margin: 5px 0;
 }
 
-#multimarkdown-preview tt {
+tt {
     margin: 0 2px;
     padding: 0 5px;
     white-space: nowrap;
     border: 1px solid #eaeaea;
     background-color: #f8f8f8;
-    border-radius: 3px;
-    color: black;
 }
 
-#multimarkdown-preview pre code {
+pre code {
     margin: 0;
     padding: 0;
     white-space: pre;
     border: none;
     background: transparent;
-    color: black;
+    color: #222222;
 }
 
-#multimarkdown-preview pre {
+pre {
     background-color: #f8f8f8;
     border: 1px solid #cccccc;
     overflow: auto;
     padding: 6px 10px;
-    border-radius: 3px;
     white-space: pre;
 }
 
-#multimarkdown-preview code {
+code {
     color: #B00020;
     background-color: #f8f8f8;
     padding: 3px;
-    border-raduis: 2px;
 }
 
 /**********************************
  * Table Related formatting
  **********************************/
 
-#multimarkdown-preview table {
+table {
     background-color: transparent;
     margin-bottom: 20px;
     border-spacing: 0;
@@ -315,68 +291,46 @@
     padding: 0;
 }
 
-#multimarkdown-preview table tr th {
+table tr th {
     font-weight: bold;
     border: 1px solid #cccccc;
+    border-width: 0 1px 0 1px;
     margin: 0;
     padding: 6px 13px;
 }
 
-#multimarkdown-preview table tr td {
+table tr td {
     border: 1px solid #cccccc;
+    border-width: 0 1px 0 1px;
     margin: 0;
     padding: 6px 13px;
 }
 
-#multimarkdown-preview table tr.odd-child {
-    background-color: #fafafa;
+table tr.odd-child {
+    background-color: #f4f4f4;
 }
 
-#multimarkdown-preview table tr.first-child {
-    background-color: #e0e8f0;
+table tr.first-child {
+    background-color: #e4e4e4;
 }
 
-#multimarkdown-preview th {
+th {
     text-align: left;
 }
 
-#multimarkdown-preview thead {
-    display: table-header-group;
-}
-
-#multimarkdown-preview table > thead > tr > th,
-#multimarkdown-preview table > tbody > tr > th,
-#multimarkdown-preview table > tfoot > tr > th,
-#multimarkdown-preview table > thead > tr > td,
-#multimarkdown-preview table > tbody > tr > td,
-#multimarkdown-preview table > tfoot > tr > td {
-    line-height: 1.4;
-    vertical-align: top;
-    border-top: 1px solid #ddd;
-}
-
-#multimarkdown-preview table > thead > tr > th {
+table thead tr th {
     vertical-align: bottom;
 }
 
-#multimarkdown-preview table tr.first-child > th,
-#multimarkdown-preview table tr.first-child > th,
-#multimarkdown-preview table tr.first-child > th,
-#multimarkdown-preview table tr.first-child > td,
-#multimarkdown-preview table tr.first-child > td,
-#multimarkdown-preview table tr.first-child > td {
-    border-top: 0;
-}
-
-#multimarkdown-preview table table {
-    background-color: #fff;
+table table {
+    background-color: #ffffff;
 }
 
 /************************************
  * Horizontal Rule Related Formatting
  ************************************/
 
-#multimarkdown-preview hr {
+hr {
     /*
     nothing is used in the CSS by the HTMLEditorKit hr element except alignment, margin, width.
     size and noshade attributes are only setable in the element and size is 2px minimum, of any
@@ -387,96 +341,96 @@
  */
 }
 
-#multimarkdown-preview div.hr {
+div.hr {
     height: 1px;
-    border-top: 1px solid #cccccc;
-    margin: 10px 0 0 0;
+    border-top: 1px solid #bbbbbb;
+    margin: 10px 0 5px 0;
 }
 
 /**********************************
  *  List Item Related Formatting
  **********************************/
 
-#multimarkdown-preview ul,
-#multimarkdown-preview ol,
-#multimarkdown-preview dl {
+ul,
+ol,
+dl {
     margin: 0;
 }
 
-#multimarkdown-preview ul li {
+ul li {
     margin: 0;
     list-style-type: disc;
 }
 
-#multimarkdown-preview li {
+li {
     margin: 0;
 }
 
-#multimarkdown-preview li.p {
+li.p {
     margin: 10px 0 0 0;
 }
 
-#multimarkdown-preview li.taskp {
+li.taskp {
     margin: 0;
 }
 
-#multimarkdown-preview li.p p.p {
+li.p p.p {
     margin: 0;
 }
 
-#multimarkdown-preview li.taskp p.p {
+li.taskp p.p {
     margin: 0;
 }
 
-#multimarkdown-preview p {
+p {
     margin: 5px 0 5px 0;
 }
 
-#multimarkdown-preview li p {
+li p {
     margin: 10px 0 10px 0;
 }
 
-#multimarkdown-preview ul li li {
+ul li li {
     list-style-type: circle;
 }
 
-#multimarkdown-preview ul li.task,
-#multimarkdown-preview ul li.taskp {
+ul li.task,
+ul li.taskp {
     list-style-type: none;
     text-indent: -20px;
     padding-left: 20px;
 }
 
-#multimarkdown-preview ul,
-#multimarkdown-preview ol {
+ul,
+ol {
     padding-left: 30px;
 }
 
-#multimarkdown-preview dfn {
+dfn {
     font-style: italic;
 }
 
-#multimarkdown-preview dt {
+dt {
     margin-top: 0;
     margin-bottom: 0;
 }
 
-#multimarkdown-preview dl {
+dl {
     margin-left: 0;
     margin-top: 10px;
     margin-bottom: 10px;
     padding: 0;
 }
 
-#multimarkdown-preview dl dt {
-    font-size: 12px;
+dl dt {
+    font-size: 1.05em;
     font-weight: bold;
     font-style: italic;
     padding: 0;
     margin: 15px 0 5px;
 }
 
-#multimarkdown-preview dl dd {
+dl dd {
     margin: 0 0 15px;
     padding: 0 15px;
 }
