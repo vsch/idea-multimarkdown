@@ -37,6 +37,9 @@ public interface MarkdownTokenTypeSets extends MarkdownTokenTypes {
     /** Bold text token type set. */
     TokenSet BOLD_SET = TokenSet.create(BOLD);
 
+    /** Bold text token type set. */
+    TokenSet BOLDITALIC_SET = TokenSet.create(BOLDITALIC);
+
     /** Italic token type set. */
     TokenSet ITALIC_SET = TokenSet.create(ITALIC);
 
@@ -125,7 +128,10 @@ public interface MarkdownTokenTypeSets extends MarkdownTokenTypes {
     TokenSet TABLE_BODY_SET = TokenSet.create(TABLE_BODY);
 
     /** Table cell token type set. */
-    TokenSet TABLE_CELL_SET = TokenSet.create(TABLE_CELL);
+    TokenSet TABLE_CELL_RODD_CODD_SET = TokenSet.create(TABLE_CELL_RODD_CODD);
+    TokenSet TABLE_CELL_RODD_CEVEN_SET = TokenSet.create(TABLE_CELL_RODD_CEVEN);
+    TokenSet TABLE_CELL_REVEN_CODD_SET = TokenSet.create(TABLE_CELL_REVEN_CODD);
+    TokenSet TABLE_CELL_REVEN_CEVEN_SET = TokenSet.create(TABLE_CELL_REVEN_CEVEN);
 
     /** Table column token type set. */
     TokenSet TABLE_COLUMN_SET = TokenSet.create(TABLE_COLUMN);
@@ -134,7 +140,8 @@ public interface MarkdownTokenTypeSets extends MarkdownTokenTypes {
     TokenSet TABLE_HEADER_SET = TokenSet.create(TABLE_HEADER);
 
     /** Table row token type set. */
-    TokenSet TABLE_ROW_SET = TokenSet.create(TABLE_ROW);
+    TokenSet TABLE_ROW_ODD_SET = TokenSet.create(TABLE_ROW_ODD);
+    TokenSet TABLE_ROW_EVEN_SET = TokenSet.create(TABLE_ROW_EVEN);
 
     /** Table caption token type set. */
     TokenSet TABLE_CAPTION_SET = TokenSet.create(TABLE_CAPTION);

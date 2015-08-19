@@ -31,12 +31,14 @@ import com.intellij.psi.tree.IElementType;
  * @since 0.1
  */
 public interface MarkdownTokenTypes extends TokenType {
-
     /** Plain text token type. */
     IElementType TEXT = new MarkdownElementType("TEXT");
 
     /** Bold text token type. */
     IElementType BOLD = new MarkdownElementType("BOLD");
+
+    /** Bold text token type. */
+    IElementType BOLDITALIC = new MarkdownElementType("BOLDITALIC");
 
     /** Italic token type. */
     IElementType ITALIC = new MarkdownElementType("ITALIC");
@@ -126,7 +128,10 @@ public interface MarkdownTokenTypes extends TokenType {
     IElementType TABLE_BODY = new MarkdownElementType("TABLE_BODY");
 
     /** Table cell token type. */
-    IElementType TABLE_CELL = new MarkdownElementType("TABLE_CELL");
+    IElementType TABLE_CELL_RODD_CODD = new MarkdownElementType("TABLE_CELL_RODD_CODD");
+    IElementType TABLE_CELL_RODD_CEVEN = new MarkdownElementType("TABLE_CELL_RODD_CEVEN");
+    IElementType TABLE_CELL_REVEN_CODD = new MarkdownElementType("TABLE_CELL_REVEN_CODD");
+    IElementType TABLE_CELL_REVEN_CEVEN = new MarkdownElementType("TABLE_CELL_REVEN_CEVEN");
 
     /** Table column token type. */
     IElementType TABLE_COLUMN = new MarkdownElementType("TABLE_COLUMN");
@@ -135,7 +140,8 @@ public interface MarkdownTokenTypes extends TokenType {
     IElementType TABLE_HEADER = new MarkdownElementType("TABLE_HEADER");
 
     /** Table row token type. */
-    IElementType TABLE_ROW = new MarkdownElementType("TABLE_ROW");
+    IElementType TABLE_ROW_ODD = new MarkdownElementType("TABLE_ROW_ODD");
+    IElementType TABLE_ROW_EVEN = new MarkdownElementType("TABLE_ROW_EVEN");
 
     /** Table caption token type. */
     IElementType TABLE_CAPTION = new MarkdownElementType("TABLE_CAPTION");

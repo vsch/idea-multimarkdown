@@ -26,7 +26,7 @@
   <name>MultiMarkdown</name>
   <category>Custom Languages</category>
   <vendor url="http://github.com/vsch" email="vladimir.schneider@gmail.com">Vladimir Schneider</vendor>
-  <version>1.0.10</version>
+  <version>1.0.11</version>
   <idea-version since-build="134.549"/>
   <depends>com.intellij.modules.lang</depends>
 
@@ -42,6 +42,14 @@
 
   <change-notes><![CDATA[
     <p>
+    <b>1.0.11</b><br/>
+      <ul>
+        <li>: Fix syntax highlighting broken since forking to a new plugin</li>
+        <li>: Fix syntax highlighting for elements at the end of a file which missing a new line</li>
+        <li>: Fix Setext headers with trailing blanks would not be recognized (pegdown)</li>
+        <li>: Fix syntax highlighting to handle all permutations of strikeout, bold and italic</li>
+        <li>: Add Table odd/even row and odd/even column syntax highlighting</li>
+    </ul>
     <b>1.0.10</b><br/>
       <ul>
         <li>: Change default style sheet to make fonts relative to the one and only set in px, clean up ignored attributes</li>
@@ -131,10 +139,10 @@
     <additionalTextAttributes scheme="Darcula" file="com/vladsch/idea/multimarkdown/schemes/darcula.xml"/>
     <fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MarkdownPreviewEditorProvider"/>
     <fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MarkdownHtmlEditorProvider"/>
-    <lang.documentationProvider language=" Markdown" implementationClass="com.vladsch.idea.multimarkdown.documentation.MarkdownDocumentationProvider"/>
-    <lang.parserDefinition language="Markdown" implementationClass="com.vladsch.idea.multimarkdown.lang.parser.MarkdownParserDefinition"/>
-    <externalAnnotator language="Markdown" implementationClass="com.vladsch.idea.multimarkdown.annotator.MarkdownAnnotator"/>
-    <spellchecker.support language="Markdown" implementationClass="com.vladsch.idea.multimarkdown.spellchecking.MarkdownSpellcheckingStrategy"/>
+    <lang.documentationProvider language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.documentation.MarkdownDocumentationProvider"/>
+    <lang.parserDefinition language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.lang.parser.MarkdownParserDefinition"/>
+    <externalAnnotator language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.annotator.MarkdownAnnotator"/>
+    <spellchecker.support language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.spellchecking.MarkdownSpellcheckingStrategy"/>
     <todoIndexer filetype="Markdown" implementationClass="com.vladsch.idea.multimarkdown.todo.MarkdownTodoIndexer"/>
     <applicationService serviceInterface="com.vladsch.idea.multimarkdown.settings.MarkdownGlobalSettings" serviceImplementation="com.vladsch.idea.multimarkdown.settings.MarkdownGlobalSettings"/>
     <applicationConfigurable instance="com.vladsch.idea.multimarkdown.settings.MarkdownGlobalSettingsConfigurable"/>

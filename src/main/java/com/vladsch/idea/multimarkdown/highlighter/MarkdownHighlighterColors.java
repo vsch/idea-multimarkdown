@@ -58,10 +58,10 @@ public class MarkdownHighlighterColors {
     public static final TextAttributesKey BLOCK_QUOTE_ATTR_KEY = createTextAttributesKey("MARKDOWN.BLOCK_QUOTE", BLOCK_COMMENT);
 
     /** Default style for bullet lists. */
-    public static final TextAttributesKey BULLET_LIST_ATTR_KEY = createTextAttributesKey("MARKDOWN.BULLET_LIST", IDENTIFIER);
+    public static final TextAttributesKey BULLET_LIST_ATTR_KEY = createTextAttributesKey("MARKDOWN.BULLET_LIST", CONSTANT);
 
     /** Default style for ordered lists. */
-    public static final TextAttributesKey ORDERED_LIST_ATTR_KEY = createTextAttributesKey("MARKDOWN.ORDERED_LIST", IDENTIFIER);
+    public static final TextAttributesKey ORDERED_LIST_ATTR_KEY = createTextAttributesKey("MARKDOWN.ORDERED_LIST", NUMBER);
 
     /** Default style for list items. */
     public static final TextAttributesKey LIST_ITEM_ATTR_KEY = createTextAttributesKey("MARKDOWN.LIST_ITEM", IDENTIFIER);
@@ -79,7 +79,10 @@ public class MarkdownHighlighterColors {
     public static final TextAttributesKey TABLE_BODY_ATTR_KEY = createTextAttributesKey("MARKDOWN.TABLE_BODY", IDENTIFIER);
 
     /** Default style for table cells. */
-    public static final TextAttributesKey TABLE_CELL_ATTR_KEY = createTextAttributesKey("MARKDOWN.TABLE_CELL", IDENTIFIER);
+    public static final TextAttributesKey TABLE_CELL_RODD_CODD_ATTR_KEY = createTextAttributesKey("MARKDOWN.TABLE_CELL_RODD_CODD", IDENTIFIER);
+    public static final TextAttributesKey TABLE_CELL_RODD_CEVEN_ATTR_KEY = createTextAttributesKey("MARKDOWN.TABLE_CELL_RODD_CEVEN", IDENTIFIER);
+    public static final TextAttributesKey TABLE_CELL_REVEN_CODD_ATTR_KEY = createTextAttributesKey("MARKDOWN.TABLE_CELL_REVEN_CODD", IDENTIFIER);
+    public static final TextAttributesKey TABLE_CELL_REVEN_CEVEN_ATTR_KEY = createTextAttributesKey("MARKDOWN.TABLE_CELL_REVEN_CEVEN", IDENTIFIER);
 
     /** Default style for table columns. */
     public static final TextAttributesKey TABLE_COLUMN_ATTR_KEY = createTextAttributesKey("MARKDOWN.TABLE_COLUMN", IDENTIFIER);
@@ -88,7 +91,8 @@ public class MarkdownHighlighterColors {
     public static final TextAttributesKey TABLE_HEADER_ATTR_KEY = createTextAttributesKey("MARKDOWN.TABLE_HEADER", IDENTIFIER);
 
     /** Default style for table rows. */
-    public static final TextAttributesKey TABLE_ROW_ATTR_KEY = createTextAttributesKey("MARKDOWN.TABLE_ROW", IDENTIFIER);
+    public static final TextAttributesKey TABLE_ROW_ODD_ATTR_KEY = createTextAttributesKey("MARKDOWN.TABLE_ROW_ODD", IDENTIFIER);
+    public static final TextAttributesKey TABLE_ROW_EVEN_ATTR_KEY = createTextAttributesKey("MARKDOWN.TABLE_ROW_EVEN", IDENTIFIER);
 
     /** Default style for table captions. */
     public static final TextAttributesKey TABLE_CAPTION_ATTR_KEY = createTextAttributesKey("MARKDOWN.TABLE_CAPTION", IDENTIFIER);
@@ -110,6 +114,9 @@ public class MarkdownHighlighterColors {
 
     /** Default style for bold text. */
     public static final TextAttributesKey BOLD_ATTR_KEY = createTextAttributesKey("MARKDOWN.BOLD", STRING);
+
+    /** Default style for bold text. */
+    public static final TextAttributesKey BOLDITALIC_ATTR_KEY = createTextAttributesKey("MARKDOWN.BOLDITALIC", STRING);
 
     /** Default style for italic text. */
     public static final TextAttributesKey ITALIC_ATTR_KEY = createTextAttributesKey("MARKDOWN.ITALIC", STRING);

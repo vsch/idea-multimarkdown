@@ -26,7 +26,7 @@ Enhancements
 - [x] CSS editable in settings
 - [x] Option to require a space after `#` for Atx headers
 - [x] HTML Text tab to view the generated HTML
-
+- [x] syntax highlighting, color striped tables by row and column in your source
 
 On the Event Horizon
 --------------------
@@ -36,7 +36,6 @@ On the Event Horizon
      For example, `<hr/>` hardcodes color to black and size to minimum 2px. To have more control `<hr>` is replaced with `<div class="hr">&nbsp;</div>`.
 - [ ] Change Parser to use Grammar-Kit:
     - [ ] add the IntelliJ expected comforts:
-    - [ ] syntax highlighting
     - [ ] formatting
     - [ ] navigation
     - [ ] document structure display
@@ -44,9 +43,15 @@ On the Event Horizon
 Screenshots
 -----------
 
+![idea-multimarkdown-source](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_source_preview.png)
+
+### Split your editor and see the preview as you type
+
 ![idea-multimarkdown](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_preview.png)
 
-![idea-multimarkdown](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_html.png)
+### Peek at the HTML
+
+![idea-multimarkdown-settings](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_html.png)
 
 #### Change options and customize the CSS to your liking.
 

@@ -204,3 +204,73 @@ Mixed:
 - [x] Loose this is a complete item
 - [ ] Tight, this is an incomplete item
 - [ ] Tight, this is an incomplete item
+
+```
+
+# This is just a line begining with '#'. Not a header.
+
+```
+
+```
+# used in the single view template to render the news content
+lib.mainContent < styles.content.col0
+
+lib.pageTemplate {
+    variables {
+        CONTENT = COA
+        CONTENT {
+            # load the plugin instead of any page template content on news pages
+            10 = COA
+            10 {
+                10 < tt_content.list.20.sgnews_singleview
+                if.value.field = doktype
+                if.equals = 116
+            }
+
+            # load the overview plugin on category pages
+            20 = COA
+            20 {
+                10 < tt_content.list.20.sgnews_overview
+                if.value.field = doktype
+                if.equals = 117
+            }
+        }
+    }
+}
+```
+
+1. List Item
+
+        ```
+        # Code Block
+
+        # With Newlines
+        ```
+  
+  
+##### See any Permutaion of attributes right in your source
+
+~~strikeout *italic* **bold** ***bold italic***~~ *italic* **bold** ***bold italic***
+
+##### Stripe tables on rows and columns
+
+| Language   | Locale | Language   | Locale | Language   | Locale |
+|------------|--------|------------|--------|------------|--------|
+| Albanian   | sq     | French     | fr     | Norwegian  | no     |
+| Arabian    | ar     | Georgian   | ka     | Polish     | pl     |
+| Armenian   | hy     | German     | de     | Portuguese | pt     |
+| Azeri      | az     | Greek      | el     | Romanian   | ro     |
+| Belarusian | be     | Hebrew     | he     | Russian    | ru     |
+| Bosnian    | bs     | Hungarian  | hu     | Spanish    | es     |
+| Bulgarian  | bg     | Icelandic  | is     | Serbian    | sr     |
+| Catalan    | ca     | Indonesian | id     | Slovak     | sk     |
+| Croatian   | hr     | Italian    | it     | Slovenian  | sl     |
+| Czech      | cs     | Japanese   | ja     | Swedish    | sv     |
+| Chinese    | zh     | Korean     | ko     | Thai       | th     |
+| Danish     | da     | Latvian    | lv     | Turkish    | tr     |
+| Dutch      | nl     | Lithuanian | lt     | Ukrainian  | uk     |
+| English    | en     | Macedonian | mk     | Vietnamese | vi     |
+| Estonian   | et     | Malay      | ms     |            |        |
+| Finnish    | fi     | Maltese    | mt     |            |        |
+
+  

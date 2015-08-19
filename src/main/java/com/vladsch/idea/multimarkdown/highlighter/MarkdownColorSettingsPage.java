@@ -89,6 +89,10 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
                         MarkdownHighlighterColors.BOLD_ATTR_KEY)
         );
         attributeDescriptors.add(new AttributesDescriptor(
+                        MarkdownBundle.message("markdown.editor.colorsettingspage.bold-italic"),
+                        MarkdownHighlighterColors.BOLDITALIC_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
                         MarkdownBundle.message("markdown.editor.colorsettingspage.italic"),
                         MarkdownHighlighterColors.ITALIC_ATTR_KEY)
         );
@@ -139,10 +143,6 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
         attributeDescriptors.add(new AttributesDescriptor(
                         MarkdownBundle.message("markdown.editor.colorsettingspage.quote"),
                         MarkdownHighlighterColors.QUOTE_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("markdown.editor.colorsettingspage.table"),
-                        MarkdownHighlighterColors.TABLE_ATTR_KEY)
         );
         attributeDescriptors.add(new AttributesDescriptor(
                         MarkdownBundle.message("markdown.editor.colorsettingspage.hrule"),
@@ -200,30 +200,52 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
                         MarkdownBundle.message("markdown.editor.colorsettingspage.definition-term"),
                         MarkdownHighlighterColors.DEFINITION_TERM_ATTR_KEY)
         );
+
         attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("markdown.editor.colorsettingspage.table-body"),
-                        MarkdownHighlighterColors.TABLE_BODY_ATTR_KEY)
+                        MarkdownBundle.message("markdown.editor.colorsettingspage.table"),
+                        MarkdownHighlighterColors.TABLE_ATTR_KEY)
+        );
+        // never rendered, covered by child nodes
+//        attributeDescriptors.add(new AttributesDescriptor(
+//                        MarkdownBundle.message("markdown.editor.colorsettingspage.table-body"),
+//                        MarkdownHighlighterColors.TABLE_BODY_ATTR_KEY)
+//        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                        MarkdownBundle.message("markdown.editor.colorsettingspage.table-cell-rodd-codd"),
+                        MarkdownHighlighterColors.TABLE_CELL_RODD_CODD_ATTR_KEY)
         );
         attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("markdown.editor.colorsettingspage.table-cell"),
-                        MarkdownHighlighterColors.TABLE_CELL_ATTR_KEY)
+                        MarkdownBundle.message("markdown.editor.colorsettingspage.table-cell-rodd-ceven"),
+                        MarkdownHighlighterColors.TABLE_CELL_RODD_CEVEN_ATTR_KEY)
         );
         attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("markdown.editor.colorsettingspage.table-column"),
-                        MarkdownHighlighterColors.TABLE_COLUMN_ATTR_KEY)
+                        MarkdownBundle.message("markdown.editor.colorsettingspage.table-cell-reven-codd"),
+                        MarkdownHighlighterColors.TABLE_CELL_REVEN_CODD_ATTR_KEY)
         );
         attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("markdown.editor.colorsettingspage.table-row"),
-                        MarkdownHighlighterColors.TABLE_ROW_ATTR_KEY)
+                        MarkdownBundle.message("markdown.editor.colorsettingspage.table-cell-reven-ceven"),
+                        MarkdownHighlighterColors.TABLE_CELL_REVEN_CEVEN_ATTR_KEY)
+        );
+//        attributeDescriptors.add(new AttributesDescriptor(
+//                        MarkdownBundle.message("markdown.editor.colorsettingspage.table-column"),
+//                        MarkdownHighlighterColors.TABLE_COLUMN_ATTR_KEY)
+//        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                        MarkdownBundle.message("markdown.editor.colorsettingspage.table-row-odd"),
+                        MarkdownHighlighterColors.TABLE_ROW_ODD_ATTR_KEY)
+        );
+        attributeDescriptors.add(new AttributesDescriptor(
+                        MarkdownBundle.message("markdown.editor.colorsettingspage.table-row-even"),
+                        MarkdownHighlighterColors.TABLE_ROW_EVEN_ATTR_KEY)
         );
         attributeDescriptors.add(new AttributesDescriptor(
                         MarkdownBundle.message("markdown.editor.colorsettingspage.table-caption"),
                         MarkdownHighlighterColors.TABLE_CAPTION_ATTR_KEY)
         );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("markdown.editor.colorsettingspage.table-header"),
-                        MarkdownHighlighterColors.TABLE_HEADER_ATTR_KEY)
-        );
+//        attributeDescriptors.add(new AttributesDescriptor(
+//                        MarkdownBundle.message("markdown.editor.colorsettingspage.table-header"),
+//                        MarkdownHighlighterColors.TABLE_HEADER_ATTR_KEY)
+//        );
         attributeDescriptors.add(new AttributesDescriptor(
                         MarkdownBundle.message("markdown.editor.colorsettingspage.html-block"),
                         MarkdownHighlighterColors.HTML_BLOCK_ATTR_KEY)

@@ -49,6 +49,7 @@ public class MarkdownSyntaxHighlighter extends SyntaxHighlighterBase {
     static {
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.TEXT_SET, MarkdownHighlighterColors.TEXT_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.BOLD_SET, MarkdownHighlighterColors.BOLD_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.BOLDITALIC_SET, MarkdownHighlighterColors.BOLDITALIC_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.ITALIC_SET, MarkdownHighlighterColors.ITALIC_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.HEADER_LEVEL_1_SET, MarkdownHighlighterColors.HEADER_LEVEL_1_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.HEADER_LEVEL_2_SET, MarkdownHighlighterColors.HEADER_LEVEL_2_ATTR_KEY);
@@ -78,10 +79,14 @@ public class MarkdownSyntaxHighlighter extends SyntaxHighlighterBase {
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.DEFINITION_SET, MarkdownHighlighterColors.DEFINITION_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.DEFINITION_TERM_SET, MarkdownHighlighterColors.DEFINITION_TERM_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.TABLE_BODY_SET, MarkdownHighlighterColors.TABLE_BODY_ATTR_KEY);
-        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.TABLE_CELL_SET, MarkdownHighlighterColors.TABLE_CELL_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.TABLE_CELL_RODD_CODD_SET, MarkdownHighlighterColors.TABLE_CELL_RODD_CODD_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.TABLE_CELL_RODD_CEVEN_SET, MarkdownHighlighterColors.TABLE_CELL_RODD_CEVEN_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.TABLE_CELL_REVEN_CODD_SET, MarkdownHighlighterColors.TABLE_CELL_REVEN_CODD_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.TABLE_CELL_REVEN_CEVEN_SET, MarkdownHighlighterColors.TABLE_CELL_REVEN_CEVEN_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.TABLE_COLUMN_SET, MarkdownHighlighterColors.TABLE_COLUMN_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.TABLE_HEADER_SET, MarkdownHighlighterColors.TABLE_HEADER_ATTR_KEY);
-        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.TABLE_ROW_SET, MarkdownHighlighterColors.TABLE_ROW_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.TABLE_ROW_ODD_SET, MarkdownHighlighterColors.TABLE_ROW_ODD_ATTR_KEY);
+        fillMap(ATTRIBUTES, MarkdownTokenTypeSets.TABLE_ROW_EVEN_SET, MarkdownHighlighterColors.TABLE_ROW_EVEN_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.TABLE_CAPTION_SET, MarkdownHighlighterColors.TABLE_CAPTION_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.HTML_BLOCK_SET, MarkdownHighlighterColors.HTML_BLOCK_ATTR_KEY);
         fillMap(ATTRIBUTES, MarkdownTokenTypeSets.INLINE_HTML_SET, MarkdownHighlighterColors.INLINE_HTML_ATTR_KEY);

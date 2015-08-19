@@ -39,8 +39,7 @@ import org.jetbrains.annotations.Nullable;
 import org.pegdown.PegDownProcessor;
 import org.pegdown.ast.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * {@link ExternalAnnotator} responsible for syntax highlighting Markdown files.
@@ -62,24 +61,363 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
      */
     private static final SyntaxHighlighter SYNTAX_HIGHLIGHTER = new MarkdownSyntaxHighlighter();
 
+    private MarkdownGlobalSettingsListener globalSettingsListener = null;
+
     /** The {@link PegDownProcessor} used for building the document AST. */
     private ThreadLocal<PegDownProcessor> processor = initProcessor();
+
+    private int currentStringLength;
+
+    private static Map<IElementType, HashSet<IElementType>> overrideExclusions = new HashMap<IElementType, HashSet<IElementType>>();
+    private static HashSet<IElementType> excludedTokenTypes = new HashSet<IElementType>();
+
+    static protected void addExclusion(IElementType parent, IElementType child) {
+        HashSet<IElementType> childExclusions;
+        if (!overrideExclusions.containsKey(child)) {
+            childExclusions = new HashSet<IElementType>();
+            overrideExclusions.put(child, childExclusions);
+        } else {
+            childExclusions = overrideExclusions.get(child);
+        }
+
+        childExclusions.add(parent);
+    }
+
+    static protected void addInlineExclusions(IElementType parent) {
+        addExclusion(parent, MarkdownTokenTypes.STRIKETHROUGH);
+        addExclusion(parent, MarkdownTokenTypes.TEXT);
+        addExclusion(parent, MarkdownTokenTypes.SPECIAL_TEXT);
+        if (parent != MarkdownTokenTypes.ITALIC && parent != MarkdownTokenTypes.BOLD) {
+            addExclusion(parent, MarkdownTokenTypes.BOLDITALIC);
+            addExclusion(parent, MarkdownTokenTypes.BOLD);
+            addExclusion(parent, MarkdownTokenTypes.ITALIC);
+        }
+    }
+
+    static protected boolean isExcluded(IElementType parent, IElementType child) {
+        HashSet<IElementType> childExclusions;
+
+        if (!overrideExclusions.containsKey(child)) return false;
+
+        childExclusions = overrideExclusions.get(child);
+        if (!childExclusions.contains(parent)) return false;
+        return true;
+    }
+
+    static {
+        // these are not used for highlighting, only to punch out the range of their parents
+        excludedTokenTypes.add(MarkdownTokenTypes.TABLE_BODY);
+        excludedTokenTypes.add(MarkdownTokenTypes.TABLE_COLUMN);
+        excludedTokenTypes.add(MarkdownTokenTypes.TABLE_HEADER);
+//        excludedTokenTypes.add(MarkdownTokenTypes.TABLE_CELL);
+
+        // table_cell does not punch out table_row so that the | dividers stay in the row, text will punch out row.
+        addExclusion(MarkdownTokenTypes.TABLE_ROW_ODD, MarkdownTokenTypes.TABLE_CELL_RODD_CODD);
+        addExclusion(MarkdownTokenTypes.TABLE_ROW_ODD, MarkdownTokenTypes.TABLE_CELL_RODD_CEVEN);
+        addExclusion(MarkdownTokenTypes.TABLE_ROW_ODD, MarkdownTokenTypes.TABLE_COLUMN);
+
+        addExclusion(MarkdownTokenTypes.TABLE_ROW_EVEN, MarkdownTokenTypes.TABLE_CELL_REVEN_CODD);
+        addExclusion(MarkdownTokenTypes.TABLE_ROW_EVEN, MarkdownTokenTypes.TABLE_CELL_REVEN_CEVEN);
+        addExclusion(MarkdownTokenTypes.TABLE_ROW_EVEN, MarkdownTokenTypes.TABLE_COLUMN);
+
+
+//        // leave table header alone
+//        addExclusion(MarkdownTokenTypes.TABLE_HEADER, MarkdownTokenTypes.TABLE_ROW_ODD);
+//        addExclusion(MarkdownTokenTypes.TABLE_HEADER, MarkdownTokenTypes.TABLE_ROW_EVEN);
+//        addExclusion(MarkdownTokenTypes.TABLE_HEADER, MarkdownTokenTypes.TABLE_CELL_RODD_CODD);
+//        addExclusion(MarkdownTokenTypes.TABLE_HEADER, MarkdownTokenTypes.TABLE_CELL_RODD_CEVEN);
+//        addExclusion(MarkdownTokenTypes.TABLE_HEADER, MarkdownTokenTypes.TABLE_CELL_REVEN_CODD);
+//        addExclusion(MarkdownTokenTypes.TABLE_HEADER, MarkdownTokenTypes.TABLE_CELL_REVEN_CEVEN);
+//        addExclusion(MarkdownTokenTypes.TABLE_HEADER, MarkdownTokenTypes.TABLE_COLUMN);
+
+        // thee can affect text and should combine attributes
+        addInlineExclusions(MarkdownTokenTypes.TABLE_HEADER);
+        addInlineExclusions(MarkdownTokenTypes.TABLE_CELL_RODD_CODD);
+        addInlineExclusions(MarkdownTokenTypes.TABLE_CELL_RODD_CEVEN);
+        addInlineExclusions(MarkdownTokenTypes.TABLE_CELL_REVEN_CODD);
+        addInlineExclusions(MarkdownTokenTypes.TABLE_CELL_REVEN_CEVEN);
+        addInlineExclusions(MarkdownTokenTypes.TABLE_CAPTION);
+
+        // list item is useless, should not punch out block quote, but it should punch out bullet_list
+        // that way only the bullets will be left to punch out  the block quote
+        addExclusion(MarkdownTokenTypes.BLOCK_QUOTE, MarkdownTokenTypes.LIST_ITEM);
+        addInlineExclusions(MarkdownTokenTypes.BLOCK_QUOTE);
+
+        // let all the inlines not punch through each other
+        addInlineExclusions(MarkdownTokenTypes.STRIKETHROUGH);
+        addInlineExclusions(MarkdownTokenTypes.ITALIC);
+        addInlineExclusions(MarkdownTokenTypes.BOLD);
+        addInlineExclusions(MarkdownTokenTypes.BOLDITALIC);
+
+        // bold or italic does not punch out bolditalic
+
+        // links should override text
+        addInlineExclusions(MarkdownTokenTypes.AUTO_LINK);
+        addInlineExclusions(MarkdownTokenTypes.REFERENCE);
+        addInlineExclusions(MarkdownTokenTypes.REFERENCE_IMAGE);
+        addInlineExclusions(MarkdownTokenTypes.REFERENCE_LINK);
+        addInlineExclusions(MarkdownTokenTypes.EXPLICIT_LINK);
+        addInlineExclusions(MarkdownTokenTypes.ABBREVIATION);
+
+        addInlineExclusions(MarkdownTokenTypes.HEADER_LEVEL_1);
+        addInlineExclusions(MarkdownTokenTypes.HEADER_LEVEL_2);
+        addInlineExclusions(MarkdownTokenTypes.HEADER_LEVEL_3);
+        addInlineExclusions(MarkdownTokenTypes.HEADER_LEVEL_4);
+        addInlineExclusions(MarkdownTokenTypes.HEADER_LEVEL_5);
+        addInlineExclusions(MarkdownTokenTypes.HEADER_LEVEL_6);
+
+        addInlineExclusions(MarkdownTokenTypes.DEFINITION);
+        addInlineExclusions(MarkdownTokenTypes.DEFINITION_TERM);
+
+    }
+
+    // Quick fix to overlapping ranges preventing syntax highlighting in parent nodes with highlighting
+    // this punches out the children from the parent range so that only unclaimed regions will take the parent's
+    // highlight
+    // KLUDGE: needs attention
+    class Range {
+        public int getStart() {
+            return start;
+        }
+
+        public void setStart(int start) {
+            this.start = start;
+        }
+
+        public int getEnd() {
+            return end;
+        }
+
+        public void setEnd(int end) {
+            this.end = end;
+        }
+
+        protected int start;
+
+        protected int end;
+
+        public Range(int start, int end) {
+            this.start = start;
+            this.end = end;
+        }
+
+        public Range(Range that) {
+            this.start = that.start;
+            this.end = that.end;
+        }
+
+        public boolean doesNotOverlap(Range that) {
+            return that.end <= start || that.start >= end;
+        }
+
+        public boolean doesOverlap(Range that) {
+            return !(that.end <= start || that.start >= end);
+        }
+
+        public boolean isEqual(Range that) {
+            return end == that.end && start == that.start;
+        }
+
+        public boolean doesContain(Range that) {
+            return end >= that.end && start <= that.start;
+        }
+
+        public boolean doesProperlyContain(Range that) {
+            return end > that.end && start < that.start;
+        }
+
+        public boolean isEmpty() {
+            return start >= end;
+        }
+
+        public boolean intersect(Range that) {
+            if (start < that.start) start = that.start;
+            if (end > that.end) end = that.end;
+
+            if (start >= end) start = end = 0;
+            return !isEmpty();
+        }
+
+        public boolean exclude(Range that) {
+            // lets make sure we don't need to split into 2 ranges
+            assert (doesOverlap(that) && !doesProperlyContain(that));
+
+            if (start >= that.start && start < that.end) start = that.end;
+            if (end <= that.end && end > that.start) end = that.start;
+
+            if (start >= end) start = end = 0;
+            return !isEmpty();
+        }
+    }
+
+    class SegmentedRange {
+        public ArrayList<Range> getSegments() {
+            return segments;
+        }
+
+        protected ArrayList<Range> segments;
+
+        public IElementType getTokenType() {
+            return tokenType;
+        }
+
+        public void setTokenType(IElementType tokenType) {
+            this.tokenType = tokenType;
+        }
+
+        protected IElementType tokenType;
+
+        public boolean isEmpty() {
+            return segments.isEmpty();
+        }
+
+        SegmentedRange() {
+            segments = new ArrayList<Range>();
+        }
+
+        SegmentedRange(int start, int end) {
+            segments = new ArrayList<Range>(1);
+            segments.add(0, new Range(start, end));
+        }
+
+        SegmentedRange(Range range) {
+            segments = new ArrayList<Range>(1);
+            segments.add(0, range);
+        }
+
+        SegmentedRange(ArrayList<Range> ranges) {
+            segments = new ArrayList<Range>(ranges);
+        }
+
+        SegmentedRange(SegmentedRange that) {
+            segments = new ArrayList<Range>(that.segments);
+        }
+
+        public boolean doesContain(Range range) {
+            for (Range range1 : segments) {
+                if (range1.doesContain(range)) return true;
+            }
+            return false;
+        }
+
+        public void addIntersections(Range range, SegmentedRange segmentedRange) {
+            for (Range range1 : segmentedRange.getSegments()) {
+                if (range.doesOverlap(range1)) {
+                    Range newRange = new Range(range);
+                    newRange.intersect(range1);
+                    segments.add(newRange);
+                }
+            }
+        }
+
+        public SegmentedRange exclude(Range range) {
+            int i, iMax = segments.size();
+
+            for (i = 0; i < iMax; i++) {
+                Range range1 = segments.get(i);
+                if (range1.doesOverlap(range)) {
+                    if (range1.doesContain(range)) {
+                        if (range1.doesProperlyContain(range)) {
+                            // split range1 into 2 and add the new one
+                            Range newRange1 = new Range(range1);
+                            Range newRange2 = new Range(range1);
+                            newRange1.setEnd(range.getStart());
+                            newRange2.setStart(range.getEnd());
+                            segments.set(i, newRange1);
+                            i++;
+                            segments.add(i, newRange2);
+                            iMax++;
+                        } else {
+                            if (range1.isEqual(range)) {
+                                // remove, they are the same
+                                segments.remove(i);
+                                i--;
+                                iMax--;
+                            } else {
+                                // truncate range1 and replace
+                                Range newRange1 = new Range(range1);
+                                newRange1.exclude(range);
+                                segments.set(i, newRange1);
+                            }
+                        }
+                    } else if (range.doesContain(range1)) {
+                        // delete it
+                        segments.remove(i);
+                        i--;
+                        iMax--;
+                    } else {
+                        // they overlap but neither contains the other
+                        // truncate range1 and replace
+                        Range newRange1 = new Range(range1);
+                        newRange1.exclude(range);
+                        segments.set(i, newRange1);
+                    }
+                }
+            }
+            return this;
+        }
+
+        protected boolean isExcludedBy(IElementType child) {
+            return !isExcluded(tokenType, child);
+        }
+    }
+
+    protected ArrayList<SegmentedRange> parentRanges = null;
+    protected int tableRows = 0;
+    protected int rowColumns = 0;
 
     /** Init/reinit thread local {@link PegDownProcessor}. */
     private static ThreadLocal<PegDownProcessor> initProcessor() {
         return new ThreadLocal<PegDownProcessor>() {
             @Override protected PegDownProcessor initialValue() {
                 return new PegDownProcessor(MarkdownGlobalSettings.getInstance().getExtensionsValue(),
-                                            MarkdownGlobalSettings.getInstance().getParsingTimeout());
+                        MarkdownGlobalSettings.getInstance().getParsingTimeout());
             }
         };
     }
 
+    protected void pushRange(Range range, IElementType type) {
+        SegmentedRange segmentedRange = new SegmentedRange(range);
+        segmentedRange.setTokenType(type);
+        parentRanges.add(parentRanges.size(), segmentedRange);
+    }
+
+    protected void pushRange(SegmentedRange segmentedRange) {
+        parentRanges.add(parentRanges.size(), segmentedRange);
+    }
+
+    protected void pushRange(int start, int end, IElementType type) {
+        SegmentedRange segmentedRange = new SegmentedRange(start, end);
+        segmentedRange.setTokenType(type);
+        parentRanges.add(parentRanges.size(), segmentedRange);
+    }
+
+    protected SegmentedRange popRange() {
+        assert (parentRanges.size() > 0);
+        return parentRanges.remove(parentRanges.size() - 1);
+    }
+
+    protected SegmentedRange getRange() {
+        assert (parentRanges.size() > 0);
+        return parentRanges.get(parentRanges.size() - 1);
+    }
+
+    protected void clearStack() {
+        if (parentRanges == null) {
+            parentRanges = new ArrayList<SegmentedRange>(100);
+        } else {
+            parentRanges.clear();
+        }
+    }
+
     /** Build a new instance of {@link MarkdownAnnotator}. */
     public MarkdownAnnotator() {
+        clearStack();
+
         // Listen to global settings changes.
-        MarkdownGlobalSettings.getInstance().addListener(new MarkdownGlobalSettingsListener() {
+        MarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MarkdownGlobalSettingsListener() {
             public void handleSettingsChanged(@NotNull final MarkdownGlobalSettings newSettings) {
+                processor.remove();
                 initProcessor();
             }
         });
@@ -106,6 +444,8 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
     public Set<HighlightableToken> doAnnotate(final String source) {
         final MarkdownASTVisitor visitor = new MarkdownASTVisitor();
         try {
+            clearStack();
+            currentStringLength = source.length();
             processor.get().parseMarkdown(source.toCharArray()).accept(visitor);
         } catch (Exception e) {
             LOGGER.error("Failed processing Markdown document", e);
@@ -122,10 +462,12 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
      */
     @Override
     public void apply(final @NotNull PsiFile file,
-                      final Set<HighlightableToken> annotationResult,
-                      final @NotNull AnnotationHolder holder) {
+            final Set<HighlightableToken> annotationResult,
+            final @NotNull AnnotationHolder holder) {
+
         for (final HighlightableToken token : annotationResult) {
             final TextAttributesKey[] attrs = SYNTAX_HIGHLIGHTER.getTokenHighlights(token.getElementType());
+
             if (attrs.length > 0) holder.createInfoAnnotation(token.getRange(), null).setTextAttributes(attrs[0]);
         }
     }
@@ -260,6 +602,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          * @param node the {@link TextNode} to visit
          */
         public void visit(TextNode node) {
+            // this prevents strike through from taking effect
             addToken(node, MarkdownTokenTypes.TEXT);
         }
 
@@ -279,8 +622,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          */
         @Override
         public void visit(StrikeNode node) {
-            addToken(node, MarkdownTokenTypes.STRIKETHROUGH);
-            visitChildren(node);
+            addTokenWithChildren(node, MarkdownTokenTypes.STRIKETHROUGH);
         }
 
         /**
@@ -289,8 +631,8 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          * @param node the {@link StrongEmphSuperNode} to visit
          */
         public void visit(StrongEmphSuperNode node) {
-            addToken(node, node.isStrong() ? MarkdownTokenTypes.BOLD : MarkdownTokenTypes.ITALIC);
-            visitChildren(node);
+            IElementType tokenType = node.isStrong() ? MarkdownTokenTypes.BOLD : MarkdownTokenTypes.ITALIC;
+            addTokenWithChildren(node, tokenType);
         }
 
         /**
@@ -299,8 +641,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          * @param node the {@link ExpImageNode} to visit
          */
         public void visit(ExpImageNode node) {
-            addToken(node, MarkdownTokenTypes.IMAGE);
-            visitChildren(node);
+            addTokenWithChildren(node, MarkdownTokenTypes.IMAGE);
         }
 
         /**
@@ -309,8 +650,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          * @param node the {@link ExpLinkNode} to visit
          */
         public void visit(ExpLinkNode node) {
-            addToken(node, MarkdownTokenTypes.EXPLICIT_LINK);
-            visitChildren(node);
+            addTokenWithChildren(node, MarkdownTokenTypes.EXPLICIT_LINK);
         }
 
         /**
@@ -319,8 +659,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          * @param node the {@link RefLinkNode} to visit
          */
         public void visit(final RefLinkNode node) {
-            addToken(node, MarkdownTokenTypes.REFERENCE_LINK);
-            visitChildren(node);
+            addTokenWithChildren(node, MarkdownTokenTypes.REFERENCE_LINK);
         }
 
         /**
@@ -347,6 +686,8 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          * @param node the {@link HeaderNode} to visit
          */
         public void visit(HeaderNode node) {
+            visitChildren(node);
+
             switch (node.getLevel()) {
             case 1:
                 addToken(node, MarkdownTokenTypes.HEADER_LEVEL_1);
@@ -367,7 +708,6 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
                 addToken(node, MarkdownTokenTypes.HEADER_LEVEL_6);
                 break;
             }
-            visitChildren(node);
         }
 
         /**
@@ -412,8 +752,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          * @param node the {@link BlockQuoteNode} to visit
          */
         public void visit(BlockQuoteNode node) {
-            addToken(node, MarkdownTokenTypes.BLOCK_QUOTE);
-            visitChildren(node);
+            addTokenWithChildren(node, MarkdownTokenTypes.BLOCK_QUOTE);
         }
 
         /**
@@ -422,8 +761,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          * @param node the {@link BulletListNode} to visit
          */
         public void visit(BulletListNode node) {
-            addToken(node, MarkdownTokenTypes.BULLET_LIST);
-            visitChildren(node);
+            addTokenWithChildren(node, MarkdownTokenTypes.BULLET_LIST);
         }
 
         /**
@@ -432,8 +770,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          * @param node the {@link OrderedListNode} to visit
          */
         public void visit(OrderedListNode node) {
-            addToken(node, MarkdownTokenTypes.ORDERED_LIST);
-            visitChildren(node);
+            addTokenWithChildren(node, MarkdownTokenTypes.ORDERED_LIST);
         }
 
         /**
@@ -442,8 +779,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          * @param node the {@link ListItemNode} to visit
          */
         public void visit(ListItemNode node) {
-            addToken(node, MarkdownTokenTypes.LIST_ITEM);
-            visitChildren(node);
+            addTokenWithChildren(node, MarkdownTokenTypes.LIST_ITEM);
         }
 
         /**
@@ -452,8 +788,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          * @param node the {@link DefinitionListNode} to visit
          */
         public void visit(DefinitionListNode node) {
-            addToken(node, MarkdownTokenTypes.DEFINITION_LIST);
-            visitChildren(node);
+            addTokenWithChildren(node, MarkdownTokenTypes.DEFINITION_LIST);
         }
 
         /**
@@ -462,8 +797,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          * @param node the {@link DefinitionNode} to visit
          */
         public void visit(DefinitionNode node) {
-            addToken(node, MarkdownTokenTypes.DEFINITION);
-            visitChildren(node);
+            addTokenWithChildren(node, MarkdownTokenTypes.DEFINITION);
         }
 
         /**
@@ -472,8 +806,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          * @param node the {@link DefinitionTermNode} to visit
          */
         public void visit(DefinitionTermNode node) {
-            addToken(node, MarkdownTokenTypes.DEFINITION_TERM);
-            visitChildren(node);
+            addTokenWithChildren(node, MarkdownTokenTypes.DEFINITION_TERM);
         }
 
         /**
@@ -482,8 +815,8 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          * @param node the {@link TableNode} to visit
          */
         public void visit(TableNode node) {
-            addToken(node, MarkdownTokenTypes.TABLE);
-            visitChildren(node);
+            tableRows = 0;
+            addTokenWithChildren(node, MarkdownTokenTypes.TABLE);
         }
 
         /**
@@ -492,8 +825,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          * @param node the {@link TableBodyNode} to visit
          */
         public void visit(TableBodyNode node) {
-            addToken(node, MarkdownTokenTypes.TABLE_BODY);
-            visitChildren(node);
+            addTokenWithChildren(node, MarkdownTokenTypes.TABLE_BODY);
         }
 
         /**
@@ -502,8 +834,9 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          * @param node the {@link TableCellNode} to visit
          */
         public void visit(TableCellNode node) {
-            addToken(node, MarkdownTokenTypes.TABLE_CELL);
-            visitChildren(node);
+            rowColumns++;
+            addTokenWithChildren(node, (tableRows & 1) != 0 ? ((rowColumns & 1) != 0 ? MarkdownTokenTypes.TABLE_CELL_RODD_CODD : MarkdownTokenTypes.TABLE_CELL_RODD_CEVEN)
+                    : ((rowColumns & 1) != 0 ? MarkdownTokenTypes.TABLE_CELL_REVEN_CODD : MarkdownTokenTypes.TABLE_CELL_REVEN_CEVEN));
         }
 
         /**
@@ -512,8 +845,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          * @param node the {@link TableColumnNode} to visit
          */
         public void visit(TableColumnNode node) {
-            addToken(node, MarkdownTokenTypes.TABLE_COLUMN);
-            visitChildren(node);
+            addTokenWithChildren(node, MarkdownTokenTypes.TABLE_COLUMN);
         }
 
         /**
@@ -522,8 +854,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          * @param node the {@link TableHeaderNode} to visit
          */
         public void visit(TableHeaderNode node) {
-            addToken(node, MarkdownTokenTypes.TABLE_HEADER);
-            visitChildren(node);
+            addTokenWithChildren(node, MarkdownTokenTypes.TABLE_HEADER);
         }
 
         /**
@@ -532,8 +863,9 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          * @param node the {@link TableRowNode} to visit
          */
         public void visit(TableRowNode node) {
-            addToken(node, MarkdownTokenTypes.TABLE_ROW);
-            visitChildren(node);
+            tableRows++;
+            rowColumns = 0;
+            addTokenWithChildren(node, (tableRows & 1) != 0 ? MarkdownTokenTypes.TABLE_ROW_ODD : MarkdownTokenTypes.TABLE_ROW_EVEN);
         }
 
         /**
@@ -542,8 +874,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          * @param node the {@link TableCaptionNode} to visit
          */
         public void visit(TableCaptionNode node) {
-            addToken(node, MarkdownTokenTypes.TABLE_CAPTION);
-            visitChildren(node);
+            addTokenWithChildren(node, MarkdownTokenTypes.TABLE_CAPTION);
         }
 
         /**
@@ -574,8 +905,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          * @param node the {@link ReferenceNode} to visit
          */
         public void visit(ReferenceNode node) {
-            addToken(node, MarkdownTokenTypes.REFERENCE);
-            visitChildren(node);
+            addTokenWithChildren(node, MarkdownTokenTypes.REFERENCE);
         }
 
         /**
@@ -584,8 +914,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          * @param node the {@link RefImageNode} to visit
          */
         public void visit(RefImageNode node) {
-            addToken(node, MarkdownTokenTypes.REFERENCE_IMAGE);
-            visitChildren(node);
+            addTokenWithChildren(node, MarkdownTokenTypes.REFERENCE_IMAGE);
         }
 
         /**
@@ -594,13 +923,11 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          * @param node the {@link AbbreviationNode} to visit
          */
         public void visit(AbbreviationNode node) {
-            addToken(node, MarkdownTokenTypes.ABBREVIATION);
-            visitChildren(node);
+            addTokenWithChildren(node, MarkdownTokenTypes.ABBREVIATION);
         }
 
-        public void visit(AnchorLinkNode node)
-        {
-            // TODO: implement
+        public void visit(AnchorLinkNode node) {
+            // TODO: implement and add new token type
         }
 
         /**
@@ -612,6 +939,92 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
             for (Node child : node.getChildren()) child.accept(this);
         }
 
+        protected boolean excludeAncestors(Range range, IElementType type) {
+            int iMax = parentRanges.size();
+            boolean applyType = true;
+
+            for (SegmentedRange parentRange : parentRanges) {
+                if (parentRange.isExcludedBy(type)) {
+                    parentRange.exclude(range);
+                } else {
+                    // exclude the parent from this range, we will assume that it is fully contained
+//                    applyType = false;
+                }
+            }
+            return applyType;
+        }
+
+        // to overcome the problem that a parent has a wider range than the child, we add children first
+        // so that their attributes take priority
+        protected void addTokenWithChildren(Node node, IElementType tokenType) {
+            int endIndex = node.getEndIndex();
+            int startIndex = node.getStartIndex();
+
+            // compensate for missing EOL at end of input causes pegdown to return a range past end of input
+            // in this case IDEA ignores the range. :(
+            if (endIndex > currentStringLength) endIndex = currentStringLength;
+
+            if (startIndex < endIndex) {
+                SegmentedRange boldItalic = null;
+
+                if (tokenType == MarkdownTokenTypes.BOLD || tokenType == MarkdownTokenTypes.ITALIC) {
+                    Range range = new Range(startIndex, endIndex);
+
+                    // here we have to combine bold and italic into bolditalic of our parent ranges
+                    for (SegmentedRange parentRange : parentRanges) {
+                        if (parentRange.getTokenType() == MarkdownTokenTypes.BOLD && tokenType == MarkdownTokenTypes.ITALIC
+                                || parentRange.getTokenType() == MarkdownTokenTypes.ITALIC && tokenType == MarkdownTokenTypes.BOLD) {
+                            if (boldItalic == null) {
+                                boldItalic = new SegmentedRange();
+                                boldItalic.setTokenType(MarkdownTokenTypes.BOLDITALIC);
+                            }
+
+                            // we will create an intersection and make it punch through parents and this range
+                            boldItalic.addIntersections(range, parentRange);
+                        }
+                    }
+
+                    // we now have a range that we need
+                    if (boldItalic != null && boldItalic.isEmpty()) boldItalic = null;
+                }
+
+                pushRange(startIndex, endIndex, tokenType);
+
+                if (boldItalic != null) {
+                    pushRange(boldItalic);
+                    visitChildren((SuperNode) node);
+                    popRange();
+                    addSegmentedToken(boldItalic, true);
+                } else {
+                    visitChildren((SuperNode) node);
+                }
+
+                SegmentedRange segmentedRange = popRange();
+                addSegmentedToken(segmentedRange, true);
+            } else {
+                // empty nothing to do
+                return;
+            }
+        }
+
+        protected void addSegmentedToken(SegmentedRange segmentedRange, boolean excludeAncestors) {
+            IElementType tokenType = segmentedRange.getTokenType();
+            boolean renderRange = !excludedTokenTypes.contains(tokenType);
+
+            if (parentRanges.size() <= 0) excludeAncestors = false;
+
+            for (Range range : segmentedRange.getSegments()) {
+                // now exclude from ancestors what is left by the children
+                if (!excludeAncestors || excludeAncestors(range, tokenType)) {
+                    // wasn't stripped out, set it
+                    if (renderRange) {
+                        tokens.add(new HighlightableToken(new TextRange(range.getStart(), range.getEnd()), tokenType));
+//                        System.out.print("adding " + tokenType + " for [" + range.getStart() + ", " + range.getEnd() + ")\n");
+                    }
+                }
+            }
+        }
+
         /**
          * Add the given {@link Node} to the set of highlightable tokens.
          *
@@ -619,8 +1032,19 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          * @param tokenType the {IElementType} to use for highlighting
          */
         protected void addToken(Node node, IElementType tokenType) {
-            if (node.getStartIndex() < node.getEndIndex())
-                tokens.add(new HighlightableToken(new TextRange(node.getStartIndex(), node.getEndIndex()), tokenType));
+            int endIndex = node.getEndIndex();
+            int startIndex = node.getStartIndex();
+
+            // compensate for missing EOL at end of input causes pegdown to return a range past end of input
+            // in this case IDEA ignores the range. :(
+            if (endIndex > currentStringLength) endIndex = currentStringLength;
+
+            Range range = new Range(startIndex, endIndex);
+            if (parentRanges.size() <= 0 || excludeAncestors(range, tokenType)) {
+                // wasn't stripped out, set it
+                tokens.add(new HighlightableToken(new TextRange(range.getStart(), range.getEnd()), tokenType));
+//                System.out.print("adding " + tokenType + " for [" + range.getStart() + ", " + range.getEnd() + ")\n");
+            }
         }
     }
 }
