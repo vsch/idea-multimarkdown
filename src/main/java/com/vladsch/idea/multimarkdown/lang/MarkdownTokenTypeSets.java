@@ -34,14 +34,19 @@ public interface MarkdownTokenTypeSets extends MarkdownTokenTypes {
     /** Plain text token type set. */
     TokenSet TEXT_SET = TokenSet.create(TEXT);
 
+    /** Anchor Link text token type set. */
+    TokenSet ANCHOR_LINK_SET = TokenSet.create(ANCHOR_LINK);
+
     /** Bold text token type set. */
     TokenSet BOLD_SET = TokenSet.create(BOLD);
+    TokenSet BOLD_MARKER_SET = TokenSet.create(BOLD_MARKER);
 
     /** Bold text token type set. */
     TokenSet BOLDITALIC_SET = TokenSet.create(BOLDITALIC);
 
     /** Italic token type set. */
     TokenSet ITALIC_SET = TokenSet.create(ITALIC);
+    TokenSet ITALIC_MARKER_SET = TokenSet.create(ITALIC_MARKER);
 
     /** Header of level 1 token type set. */
     TokenSet HEADER_LEVEL_1_SET = TokenSet.create(HEADER_LEVEL_1);
@@ -67,6 +72,8 @@ public interface MarkdownTokenTypeSets extends MarkdownTokenTypes {
     /** Quote token type set. */
     TokenSet QUOTE_SET = TokenSet.create(QUOTE);
 
+    TokenSet SMARTS_SET = TokenSet.create(SMARTS);
+
     /** Table token type set. */
     TokenSet TABLE_SET = TokenSet.create(TABLE);
 
@@ -78,6 +85,7 @@ public interface MarkdownTokenTypeSets extends MarkdownTokenTypes {
 
     /** Strikethrough token type set. */
     TokenSet STRIKETHROUGH_SET = TokenSet.create(STRIKETHROUGH);
+    TokenSet STRIKETHROUGH_MARKER_SET = TokenSet.create(STRIKETHROUGH_MARKER);
 
     /** Link token type set. */
     TokenSet EXPLICIT_LINK_SET = TokenSet.create(EXPLICIT_LINK);

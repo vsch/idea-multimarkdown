@@ -26,7 +26,12 @@ Nullam condimentum fermentum enim non tristique. Vestibulum ultrices iaculis ex 
 Links
 -----
 
+PlainLink: http://example.com
 Autolink: <http://example.com>
+e-mail: e-mail@example.com
+[e-mail](mailto:example@example.com)
+[~~Scala~~](http://www.scala-lang.org/)
+[[Wiki Link]]
 
 Link: [Example](http://example.com)
 
@@ -34,11 +39,16 @@ Reference style [link][1].
 
 [1]: http://example.com  "Example"
 
+Definitions
+----------- 
+
+Definition Term
+:   definition 
 
 Images
 ------
 
-Image: ![My image](http://www.foo.bar/image.png)
+Image: ![*My* image](http://www.foo.bar/image.png)
 
 Headers
 -------
@@ -107,6 +117,7 @@ Tables
 |Row 4 Cell 1|Row 4 Cell 2|Row 4 Cell 3|
 |Row 5 Cell 1|Row 5 Cell 2|Row 5 Cell 3|
 |Row 6 Cell 1|Row 6 Cell 2|Row 6 Cell 3|
+[Caption]
 
 <table>
   <tr>
@@ -248,7 +259,7 @@ lib.pageTemplate {
         ```
   
   
-##### See any Permutaion of attributes right in your source
+##### See any Permutation of attributes right in your source
 
 ~~strikeout *italic* **bold** ***bold italic***~~ *italic* **bold** ***bold italic***
 

@@ -69,7 +69,6 @@
   <option name="MULTIMARKDOWN.CODE">
     <value>
       <option name="FOREGROUND" value="bb002f"/>
-      <option name="BACKGROUND" value="ececec" />
       <option name="FONT_TYPE" value="3"/>
     </value>
   </option>

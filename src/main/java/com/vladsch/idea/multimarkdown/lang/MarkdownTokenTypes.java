@@ -36,12 +36,17 @@ public interface MarkdownTokenTypes extends TokenType {
 
     /** Bold text token type. */
     IElementType BOLD = new MarkdownElementType("BOLD");
+    IElementType BOLD_MARKER = new MarkdownElementType("BOLD_MARKER");
+
+    /** Anchor Link token type. */
+    IElementType ANCHOR_LINK = new MarkdownElementType("ANCHOR_LINK");
 
     /** Bold text token type. */
     IElementType BOLDITALIC = new MarkdownElementType("BOLDITALIC");
 
     /** Italic token type. */
     IElementType ITALIC = new MarkdownElementType("ITALIC");
+    IElementType ITALIC_MARKER = new MarkdownElementType("ITALIC_MARKER");
 
     /** Header of level 1 token type. */
     IElementType HEADER_LEVEL_1 = new MarkdownElementType("HEADER_LEVEL_1");
@@ -67,6 +72,9 @@ public interface MarkdownTokenTypes extends TokenType {
     /** Quote token type. */
     IElementType QUOTE = new MarkdownElementType("QUOTE");
 
+    /** Quote token type. */
+    IElementType SMARTS = new MarkdownElementType("SMARTS");
+
     /** Table token type. */
     IElementType TABLE = new MarkdownElementType("TABLE");
 
@@ -78,6 +86,7 @@ public interface MarkdownTokenTypes extends TokenType {
 
     /** Strikethrough token type. */
     IElementType STRIKETHROUGH = new MarkdownElementType("STRIKETHROUGH");
+    IElementType STRIKETHROUGH_MARKER = new MarkdownElementType("STRIKETHROUGH_MARKER");
 
     /** Link token type. */
     IElementType EXPLICIT_LINK = new MarkdownElementType("EXPLICIT_LINK");

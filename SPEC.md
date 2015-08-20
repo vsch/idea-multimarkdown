@@ -11,9 +11,10 @@ References:
 [John Gruber's Markdown]: http://daringfireball.net/projects/markdown/syntax
 [Adam Pritchard's Markdown Cheatsheet]: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
 [GitHub Flavored Markdown]: https://help.github.com/articles/github-flavored-markdown/
-[Pandoc’s markdown]: http://pandoc.org/demo/example9/pandocs-markdown.html/
+[Pandoc’s markdown]: http://pandoc.org
 [CommonMark]: http://commonmark.org/
 [MultiMarkdown]: http://fletcherpenney.net/multimarkdown/
+[Michel Fortin's PHP Markdown Extra]: https://michelf.ca/projects/php-markdown/extra/
 
 [John Gruber's Markdown][]
 [Adam Pritchard's Markdown Cheatsheet][]
@@ -21,6 +22,7 @@ References:
 [Pandoc’s markdown][]
 [CommonMark][]
 [MultiMarkdown][]
+[Michel Fortin's PHP Markdown Extra][]
 
 
 Background

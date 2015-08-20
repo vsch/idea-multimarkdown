@@ -69,6 +69,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
     private int currentStringLength;
 
     private static Map<IElementType, HashSet<IElementType>> overrideExclusions = new HashMap<IElementType, HashSet<IElementType>>();
+
     private static HashSet<IElementType> excludedTokenTypes = new HashSet<IElementType>();
 
     static protected void addExclusion(IElementType parent, IElementType child) {
@@ -84,13 +85,21 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
     }
 
     static protected void addInlineExclusions(IElementType parent) {
-        addExclusion(parent, MarkdownTokenTypes.STRIKETHROUGH);
+        if (parent != MarkdownTokenTypes.STRIKETHROUGH && parent != MarkdownTokenTypes.STRIKETHROUGH_MARKER) {
+            addExclusion(parent, MarkdownTokenTypes.STRIKETHROUGH);
+            addExclusion(parent, MarkdownTokenTypes.STRIKETHROUGH_MARKER);
+        }
+
         addExclusion(parent, MarkdownTokenTypes.TEXT);
         addExclusion(parent, MarkdownTokenTypes.SPECIAL_TEXT);
+        addExclusion(parent, MarkdownTokenTypes.CODE);
+
         if (parent != MarkdownTokenTypes.ITALIC && parent != MarkdownTokenTypes.BOLD) {
             addExclusion(parent, MarkdownTokenTypes.BOLDITALIC);
             addExclusion(parent, MarkdownTokenTypes.BOLD);
+            addExclusion(parent, MarkdownTokenTypes.BOLD_MARKER);
             addExclusion(parent, MarkdownTokenTypes.ITALIC);
+            addExclusion(parent, MarkdownTokenTypes.ITALIC_MARKER);
         }
     }
 
@@ -120,7 +129,6 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
         addExclusion(MarkdownTokenTypes.TABLE_ROW_EVEN, MarkdownTokenTypes.TABLE_CELL_REVEN_CEVEN);
         addExclusion(MarkdownTokenTypes.TABLE_ROW_EVEN, MarkdownTokenTypes.TABLE_COLUMN);
 
-
 //        // leave table header alone
 //        addExclusion(MarkdownTokenTypes.TABLE_HEADER, MarkdownTokenTypes.TABLE_ROW_ODD);
 //        addExclusion(MarkdownTokenTypes.TABLE_HEADER, MarkdownTokenTypes.TABLE_ROW_EVEN);
@@ -145,19 +153,25 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
 
         // let all the inlines not punch through each other
         addInlineExclusions(MarkdownTokenTypes.STRIKETHROUGH);
-        addInlineExclusions(MarkdownTokenTypes.ITALIC);
-        addInlineExclusions(MarkdownTokenTypes.BOLD);
+//        addInlineExclusions(MarkdownTokenTypes.STRIKETHROUGH_MARKER);
         addInlineExclusions(MarkdownTokenTypes.BOLDITALIC);
+
+        addInlineExclusions(MarkdownTokenTypes.BOLD);
+//        addInlineExclusions(MarkdownTokenTypes.BOLD_MARKER);
+        addInlineExclusions(MarkdownTokenTypes.ITALIC);
+//        addInlineExclusions(MarkdownTokenTypes.ITALIC_MARKER);
 
         // bold or italic does not punch out bolditalic
 
-        // links should override text
+        // these should override text
         addInlineExclusions(MarkdownTokenTypes.AUTO_LINK);
         addInlineExclusions(MarkdownTokenTypes.REFERENCE);
         addInlineExclusions(MarkdownTokenTypes.REFERENCE_IMAGE);
         addInlineExclusions(MarkdownTokenTypes.REFERENCE_LINK);
         addInlineExclusions(MarkdownTokenTypes.EXPLICIT_LINK);
+        addInlineExclusions(MarkdownTokenTypes.IMAGE);
         addInlineExclusions(MarkdownTokenTypes.ABBREVIATION);
+        addInlineExclusions(MarkdownTokenTypes.QUOTE);
 
         addInlineExclusions(MarkdownTokenTypes.HEADER_LEVEL_1);
         addInlineExclusions(MarkdownTokenTypes.HEADER_LEVEL_2);
@@ -168,7 +182,6 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
 
         addInlineExclusions(MarkdownTokenTypes.DEFINITION);
         addInlineExclusions(MarkdownTokenTypes.DEFINITION_TERM);
-
     }
 
     // Quick fix to overlapping ranges preventing syntax highlighting in parent nodes with highlighting
@@ -363,7 +376,9 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
     }
 
     protected ArrayList<SegmentedRange> parentRanges = null;
+
     protected int tableRows = 0;
+
     protected int rowColumns = 0;
 
     /** Init/reinit thread local {@link PegDownProcessor}. */
@@ -418,7 +433,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
         MarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MarkdownGlobalSettingsListener() {
             public void handleSettingsChanged(@NotNull final MarkdownGlobalSettings newSettings) {
                 processor.remove();
-                initProcessor();
+                processor = initProcessor();
             }
         });
     }
@@ -522,6 +537,12 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
      * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
      * @since 0.4
      */
+
+    protected static boolean recursingBold = false;
+
+    protected static boolean recursingItalic = false;
+    protected static boolean recursingStrike = false;
+
     protected class MarkdownASTVisitor implements Visitor {
 
         /** The collected token set. */
@@ -557,10 +578,14 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
             case HRule:
                 addToken(node, MarkdownTokenTypes.HRULE);
                 break;
+
             case Apostrophe:
             case Ellipsis:
             case Emdash:
             case Endash:
+                addToken(node, MarkdownTokenTypes.SMARTS);
+                break;
+
             case Linebreak:
             case Nbsp:
                 break;
@@ -602,7 +627,6 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          * @param node the {@link TextNode} to visit
          */
         public void visit(TextNode node) {
-            // this prevents strike through from taking effect
             addToken(node, MarkdownTokenTypes.TEXT);
         }
 
@@ -612,7 +636,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          * @param node the {@link SpecialTextNode} to visit
          */
         public void visit(SpecialTextNode node) {
-            addToken(node, MarkdownTokenTypes.SPECIAL_TEXT);
+            addToken(node, (node.getEndIndex() - node.getStartIndex() > 1) ? MarkdownTokenTypes.SPECIAL_TEXT : MarkdownTokenTypes.TEXT);
         }
 
         /**
@@ -622,17 +646,93 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          */
         @Override
         public void visit(StrikeNode node) {
-            addTokenWithChildren(node, MarkdownTokenTypes.STRIKETHROUGH);
+            if (!recursingStrike) {
+                String marker = "~~";
+                int markerLength = marker.length();
+
+                ArrayList<Node> children = new ArrayList<Node>(1);
+                children.add(node);
+
+                SuperNode parentNode = new SuperNode(children);
+                parentNode.setStartIndex(node.getStartIndex());
+                parentNode.setEndIndex(node.getEndIndex());
+
+                // now need to truncate children to this range
+                limitChildrensRange(parentNode, node.getStartIndex() + markerLength, node.getEndIndex() - (node.isClosed() ? markerLength : 0));
+
+                recursingStrike = true;
+                addTokenWithChildren(parentNode, MarkdownTokenTypes.STRIKETHROUGH_MARKER);
+                recursingStrike = false;
+            } else {
+                addTokenWithChildren(node, MarkdownTokenTypes.STRIKETHROUGH);
+            }
         }
 
         /**
          * Visit the {@link StrongEmphSuperNode}.
          *
          * @param node the {@link StrongEmphSuperNode} to visit
+         *             <p/>
+         *             <p/>
+         *             split out the lead-in and terminating sequence into faked parent node
+         *             and add new bold_marker and italic_marker token types for the lead and trail chars with child text node
+         *             taking on the BOLD and ITALIC tokens. So we can color the lead-in and terminating chars separately.
          */
         public void visit(StrongEmphSuperNode node) {
-            IElementType tokenType = node.isStrong() ? MarkdownTokenTypes.BOLD : MarkdownTokenTypes.ITALIC;
-            addTokenWithChildren(node, tokenType);
+            if (node.isClosed()) {
+                IElementType parentTokenType = node.isStrong() ? MarkdownTokenTypes.BOLD_MARKER : MarkdownTokenTypes.ITALIC_MARKER;
+                IElementType tokenType = node.isStrong() ? MarkdownTokenTypes.BOLD : MarkdownTokenTypes.ITALIC;
+
+                if (tokenType == MarkdownTokenTypes.BOLD && !recursingBold || tokenType == MarkdownTokenTypes.ITALIC && !recursingItalic) {
+                    String marker = node.getChars();
+                    int markerLength = marker.length();
+
+                    ArrayList<Node> children = new ArrayList<Node>(1);
+                    children.add(node);
+
+                    SuperNode parentNode = new SuperNode(children);
+                    parentNode.setStartIndex(node.getStartIndex());
+                    parentNode.setEndIndex(node.getEndIndex());
+
+                    // now need to truncate children to this range
+                    limitChildrensRange(parentNode, node.getStartIndex() + markerLength, node.getEndIndex() - markerLength);
+
+                    if (tokenType == MarkdownTokenTypes.BOLD) recursingBold = true;
+                    else recursingItalic = true;
+                    addTokenWithChildren(parentNode, parentTokenType);
+                    if (tokenType == MarkdownTokenTypes.BOLD) recursingBold = false;
+                    else recursingItalic = false;
+                } else {
+                    addTokenWithChildren(node, tokenType);
+                }
+            } else {
+                // not closed, ignore
+                visitChildren(node);
+            }
+        }
+
+        protected Node getLastChild(SuperNode node) {
+            Node lastChild = null;
+
+            for (; ; ) {
+                List<Node> children = node.getChildren();
+                int size = children.size();
+
+                if (size <= 0) break;
+                lastChild = children.get(size - 1);
+
+                if (!(lastChild instanceof SuperNode)) break;
+                node = (SuperNode) lastChild;
+            }
+            return lastChild;
+        }
+
+        protected void limitChildrensRange(SuperNode parentNode, int startIndex, int endIndex) {
+            for (Node node : parentNode.getChildren()) {
+                if (node.getStartIndex() < startIndex) ((AbstractNode) node).setStartIndex(startIndex);
+                if (node.getEndIndex() > endIndex) ((AbstractNode) node).setEndIndex(endIndex);
+                if (node instanceof SuperNode) limitChildrensRange((SuperNode) node, startIndex, endIndex);
+            }
         }
 
         /**
@@ -743,7 +843,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
          * @param node the {@link QuotedNode} to visit
          */
         public void visit(QuotedNode node) {
-            addToken(node, MarkdownTokenTypes.QUOTE);
+            addTokenWithChildren(node, MarkdownTokenTypes.QUOTE);
         }
 
         /**
@@ -927,7 +1027,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
         }
 
         public void visit(AnchorLinkNode node) {
-            // TODO: implement and add new token type
+            addToken(node, MarkdownTokenTypes.ANCHOR_LINK);
         }
 
         /**
@@ -1019,7 +1119,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
                     // wasn't stripped out, set it
                     if (renderRange) {
                         tokens.add(new HighlightableToken(new TextRange(range.getStart(), range.getEnd()), tokenType));
-//                        System.out.print("adding " + tokenType + " for [" + range.getStart() + ", " + range.getEnd() + ")\n");
+                        //System.out.print("adding " + tokenType + " for [" + range.getStart() + ", " + range.getEnd() + ")\n");
                     }
                 }
             }
@@ -1035,15 +1135,18 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
             int endIndex = node.getEndIndex();
             int startIndex = node.getStartIndex();
 
+            if (tokenType == MarkdownTokenTypes.QUOTE) {
+                int tmp = 0;
+            }
             // compensate for missing EOL at end of input causes pegdown to return a range past end of input
             // in this case IDEA ignores the range. :(
             if (endIndex > currentStringLength) endIndex = currentStringLength;
 
             Range range = new Range(startIndex, endIndex);
-            if (parentRanges.size() <= 0 || excludeAncestors(range, tokenType)) {
+            if (!range.isEmpty() && (parentRanges.size() <= 0 || excludeAncestors(range, tokenType))) {
                 // wasn't stripped out, set it
                 tokens.add(new HighlightableToken(new TextRange(range.getStart(), range.getEnd()), tokenType));
-//                System.out.print("adding " + tokenType + " for [" + range.getStart() + ", " + range.getEnd() + ")\n");
+                //System.out.print("adding " + tokenType + " for [" + range.getStart() + ", " + range.getEnd() + ")\n");
             }
         }
     }

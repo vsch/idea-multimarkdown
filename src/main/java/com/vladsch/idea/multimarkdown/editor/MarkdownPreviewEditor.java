@@ -75,9 +75,9 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
     private static final Logger LOGGER = Logger.getInstance(MarkdownPreviewEditor.class);
 
     /** The editor name, displayed as the tab name of the editor. */
-    public static final String PREVIEW_EDITOR_NAME = MarkdownBundle.message("markdown.editor.preview.tab-name");
+    public static final String PREVIEW_EDITOR_NAME = MarkdownBundle.message("multimarkdown.editor.preview.tab-name");
 
-    public static final String TEXT_EDITOR_NAME = MarkdownBundle.message("markdown.editor.html.tab-name");
+    public static final String TEXT_EDITOR_NAME = MarkdownBundle.message("multimarkdown.editor.html.tab-name");
 
     /** The path to the stylesheet used for displaying the HTML preview of the document. */
     @NonNls

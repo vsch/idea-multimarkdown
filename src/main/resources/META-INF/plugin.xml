@@ -26,22 +26,36 @@
   <name>MultiMarkdown</name>
   <category>Custom Languages</category>
   <vendor url="http://github.com/vsch" email="vladimir.schneider@gmail.com">Vladimir Schneider</vendor>
-  <version>1.0.11</version>
+  <version>1.0.12</version>
   <idea-version since-build="134.549"/>
   <depends>com.intellij.modules.lang</depends>
 
   <description><![CDATA[
       <b><a href="http://daringfireball.net/projects/markdown">Markdown</a> language support for IntelliJ platform.</b>
-      <p>With GitHub Flavoured Markdown extensions and GitHub style formatting.</p>
-      <p>Now with HTML Preview and Optional HTML Text tabs</p>
-      <p><b>Feature requests, problem reports and feedback are greatly appreciated.</b></p>
       <p>&nbsp;</p>
-      <p><b><span color="#C00038">If you like it then please leave a comment or rate it on the <a color="#30A0D8" href="https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896">official plugin page</a></b></p>
+      <p>With GitHub Flavoured Markdown extensions and GitHub style formatting. HTML Preview and HTML Text tabs</p>
+      <p>&nbsp;</p>
+      <p><b><span color="#2000C0">Feature requests and problem reports will be greatly appreciated!</span></b></p>
+      <p><b>You can submit them at <a color="#30A0D8" href="https://github.com/vsch/idea-multimarkdown/issues"><u>vsch/idea-multimarkdown/issues</u></a> on GitHub.</b></p>
+      <p>&nbsp;</p>
+      <p><b><span color="#C00038">If you like this plugin then please leave a comment or rate it.</span></b></p>
+      <p><b>You can do that on the JetBrains' </span> <a color="#30A0D8" href="https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896"><u>MultiMarkdown comment and rate</u></a> page</b></p>
+      <p>&nbsp;</p>
+      <img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_source_preview_Small.png" alt="Screenshot">
       <p>&nbsp;</p>
     ]]></description>
 
   <change-notes><![CDATA[
     <p>
+    <b>1.0.12</b><br/>
+      <ul>
+        <li>: Add separate color setting for strikethrough, italic and bold lead/trail marker than the contained text</li>
+        <li>: Add Smart character and Smart Quote color settings</li>
+        <li>: Add default color definitions for Default color scheme. Darcula in the next few days.</li>
+        <li>: Fix source range discrepancies for definition, list, html block, ... (pegdown)</li>
+        <li>: Fix special character now only escaped with \ and takes selected extension options, ... (pegdown)</li>
+        <li>: Fix table caption not syntax highlighting, (pegdown)</li>
+    </ul>
     <b>1.0.11</b><br/>
       <ul>
         <li>: Fix syntax highlighting broken since forking to a new plugin</li>
@@ -135,8 +149,8 @@
     <fileTypeFactory implementation="com.vladsch.idea.multimarkdown.file.MarkdownFileTypeFactory"/>
     <syntaxHighlighter key="Markdown" implementationClass="com.vladsch.idea.multimarkdown.highlighter.MarkdownSyntaxHighlighter"/>
     <colorSettingsPage implementation="com.vladsch.idea.multimarkdown.highlighter.MarkdownColorSettingsPage"/>
-    <additionalTextAttributes scheme="Default" file="com/vladsch/idea/multimarkdown/schemes/default.xml"/>
-    <additionalTextAttributes scheme="Darcula" file="com/vladsch/idea/multimarkdown/schemes/darcula.xml"/>
+    <additionalTextAttributes scheme="Default" file="com/vladsch/idea/multimarkdown/colorSchemes/MultiMarkdownDefault.xml"/>
+    <additionalTextAttributes scheme="Darcula" file="com/vladsch/idea/multimarkdown/colorSchemes/MultiMarkdownDarcula.xml"/>
     <fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MarkdownPreviewEditorProvider"/>
     <fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MarkdownHtmlEditorProvider"/>
     <lang.documentationProvider language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.documentation.MarkdownDocumentationProvider"/>
