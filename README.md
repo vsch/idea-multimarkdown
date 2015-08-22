@@ -27,13 +27,15 @@ Enhancements
 - [x] Option to require a space after `#` for Atx headers
 - [x] HTML Text tab to view the generated HTML
 - [x] syntax highlighting, color striped tables by row and column in your source
+- [x] Default and Darcula for syntax highlighting and for HTML Preview supported.
+    CSS Style sheet for HTML Perview selectable in Settings/Other Settings/MultiMarkdown.
 
 On the Event Horizon
 --------------------
 
 - [ ] Add configurable HTML tag replacements. The need for this is caused by the java HTMLEditorKit, which is used to render the HTML,
      ignoring CSS attributes for known tags. The workaround is to replace the generated HTML to something the editor kit will render better.
-     For example, `<hr/>` hardcodes color to black and size to minimum 2px. To have more control `<hr>` is replaced with `<div class="hr">&nbsp;</div>`.
+     For example, `<hr/>` is hardcoded to black with a minimum size of 2px. To have more control `<hr>` is replaced with `<div class="hr">&nbsp;</div>`.
 - [ ] Change Parser to use Grammar-Kit:
     - [ ] add the IntelliJ expected comforts:
     - [ ] formatting
