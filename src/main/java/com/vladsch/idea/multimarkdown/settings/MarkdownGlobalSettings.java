@@ -71,6 +71,9 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
     /** Whether the "Github style hard wraps parsing as HTML linebreaks" extension should be enabled. */
     private boolean hardWraps = false;
 
+    /** Whether to paragraph wrap list items and definition terms that contain more than a paragraph */
+    private boolean forceListPara = false;
+
     /** Whether the GFM Style headers extension is enabled, require a space after # for headers. */
     private boolean headerSpace = false;
 
@@ -88,6 +91,9 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
 
     /** Whether the "MultiMarkdown style tables support" extension should be enabled. */
     private boolean tables = false;
+
+    /** Whether to use GitHub Style relaxed HRule rules. */
+    private boolean relaxedHRules = false;
 
     /** Whether the "Suppress HTML blocks" extension should be enabled. */
     private boolean suppressHTMLBlocks = false;
@@ -109,6 +115,8 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
     private int maxImgWidth = 900;
 
     private String customCss = "";
+    
+    private int htmlTheme = 0;
 
     public int startGroupNotifications() {
         return groupNotifications++;
@@ -138,6 +146,17 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
     public void setUpdateDelay(int updateDelay) {
         if (this.updateDelay != updateDelay) {
             this.updateDelay = updateDelay;
+            notifyListeners();
+        }
+    }
+
+    public int getHtmlTheme() {
+        return htmlTheme;
+    }
+
+    public void setHtmlTheme(int htmlTheme) {
+        if (this.htmlTheme != htmlTheme) {
+            this.htmlTheme = htmlTheme;
             notifyListeners();
         }
     }
@@ -321,6 +340,27 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
     }
 
     /**
+     * Whether to use GitHub Style relaxed HRule rules
+     *
+     * @return {@link #relaxedHRules}
+     */
+    public boolean isRelaxedHRules() {
+        return relaxedHRules;
+    }
+
+    /**
+     * Whether to use GitHub Style relaxed HRule rules
+     *
+     * @param relaxedHRules whether the "MultiMarkdown style relaxedHRules support" extension should be enabled.
+     */
+    public void setRelaxedHRules(boolean relaxedHRules) {
+        if (this.relaxedHRules != relaxedHRules) {
+            this.relaxedHRules = relaxedHRules;
+            notifyListeners();
+        }
+    }
+
+    /**
      * Whether the "Wiki-style links" extension should be enabled.
      *
      * @return {@link #wikiLinks}
@@ -400,6 +440,27 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
     public void setHardWraps(boolean hardWraps) {
         if (this.hardWraps != hardWraps) {
             this.hardWraps = hardWraps;
+            notifyListeners();
+        }
+    }
+
+    /**
+     * Whether to paragraph wrap list items and definition terms that contain more than a paragraph
+     *
+     * @return {@link #forceListPara}
+     */
+    public boolean isforceListPara() {
+        return forceListPara;
+    }
+
+    /**
+     * Whether to paragraph wrap list items and definition terms that contain more than a paragraph
+     *
+     * @param forceListPara whether the "Github style hard wraps parsing as HTML linebreaks" extension should be enabled.
+     */
+    public void setforceListPara(boolean forceListPara) {
+        if (this.forceListPara != forceListPara) {
+            this.forceListPara = forceListPara;
             notifyListeners();
         }
     }
@@ -564,12 +625,14 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
         element.setAttribute("quotes", Boolean.toString(quotes));
         element.setAttribute("abbreviations", Boolean.toString(abbreviations));
         element.setAttribute("hardWraps", Boolean.toString(hardWraps));
+        element.setAttribute("forceListPara", Boolean.toString(forceListPara));
         element.setAttribute("headerSpace", Boolean.toString(headerSpace));
         element.setAttribute("taskLists", Boolean.toString(taskLists));
         element.setAttribute("autoLinks", Boolean.toString(autoLinks));
         element.setAttribute("anchorLinks", Boolean.toString(anchorLinks));
         element.setAttribute("wikiLinks", Boolean.toString(wikiLinks));
         element.setAttribute("tables", Boolean.toString(tables));
+        element.setAttribute("relaxedHRules", Boolean.toString(relaxedHRules));
         element.setAttribute("definitions", Boolean.toString(definitions));
         element.setAttribute("fencedCodeBlocks", Boolean.toString(fencedCodeBlocks));
         element.setAttribute("suppressHTMLBlocks", Boolean.toString(suppressHTMLBlocks));
@@ -579,6 +642,7 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
         element.setAttribute("updateDelay", Integer.toString(updateDelay));
         element.setAttribute("maxImgWidth", Integer.toString(maxImgWidth));
         element.setAttribute("customCss", customCss);
+        element.setAttribute("htmlTheme", Integer.toString(htmlTheme));
         return element;
     }
 
@@ -599,6 +663,8 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
         if (value != null) abbreviations = Boolean.parseBoolean(value);
         value = element.getAttributeValue("hardWraps");
         if (value != null) hardWraps = Boolean.parseBoolean(value);
+        value = element.getAttributeValue("forceListPara");
+        if (value != null) forceListPara = Boolean.parseBoolean(value);
         value = element.getAttributeValue("headerSpace");
         if (value != null) headerSpace = Boolean.parseBoolean(value);
         value = element.getAttributeValue("taskLists");
@@ -611,6 +677,8 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
         if (value != null) wikiLinks = Boolean.parseBoolean(value);
         value = element.getAttributeValue("tables");
         if (value != null) tables = Boolean.parseBoolean(value);
+        value = element.getAttributeValue("relaxedHRules");
+        if (value != null) relaxedHRules = Boolean.parseBoolean(value);
         value = element.getAttributeValue("definitions");
         if (value != null) definitions = Boolean.parseBoolean(value);
         value = element.getAttributeValue("fencedCodeBlocks");
@@ -630,6 +698,8 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
         if (value != null) maxImgWidth = Integer.parseInt(value);
         value = element.getAttributeValue("customCss");
         if (value != null) customCss = value;
+        value = element.getAttributeValue("htmlTheme");
+        if (value != null) htmlTheme = Integer.parseInt(value);
 
         notifyListeners();
     }
@@ -645,11 +715,13 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
                 (quotes ? Extensions.QUOTES : 0) +
                 (abbreviations ? Extensions.ABBREVIATIONS : 0) +
                 (hardWraps ? Extensions.HARDWRAPS : 0) +
-                (headerSpace ? Extensions.HEADERSPACE : 0) +
+                (forceListPara ? Extensions.FORCELISTITEMPARA : 0) +
+                (headerSpace ? Extensions.ATXHEADERSPACE : 0) +
                 (autoLinks ? Extensions.AUTOLINKS : 0) +
                 (anchorLinks ? Extensions.ANCHORLINKS : 0) +
                 (wikiLinks ? Extensions.WIKILINKS : 0) +
                 (tables ? Extensions.TABLES : 0) +
+                (relaxedHRules ? Extensions.RELAXEDHRULES : 0) +
                 (definitions ? Extensions.DEFINITIONS : 0) +
                 (fencedCodeBlocks ? Extensions.FENCED_CODE_BLOCKS : 0) +
                 (suppressHTMLBlocks ? Extensions.SUPPRESS_HTML_BLOCKS : 0) +
@@ -678,7 +750,7 @@ public class MarkdownGlobalSettings implements PersistentStateComponent<Element>
         } else {
             MarkdownGlobalSettingsListener listener;
             if (listeners != null)
-                for (final Reference<MarkdownGlobalSettingsListener> listenerRef : listeners)
+                for (final WeakReference<MarkdownGlobalSettingsListener> listenerRef : listeners)
                     if ((listener = listenerRef.get()) != null) listener.handleSettingsChanged(this);
         }
     }

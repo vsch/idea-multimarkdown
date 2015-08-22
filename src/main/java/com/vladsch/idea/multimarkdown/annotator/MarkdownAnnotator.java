@@ -647,7 +647,7 @@ public class MarkdownAnnotator extends ExternalAnnotator<String, Set<MarkdownAnn
         @Override
         public void visit(StrikeNode node) {
             if (!recursingStrike) {
-                String marker = "~~";
+                String marker = node.getChars();// != null ? node.getChars() : "~~";
                 int markerLength = marker.length();
 
                 ArrayList<Node> children = new ArrayList<Node>(1);

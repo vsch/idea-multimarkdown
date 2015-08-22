@@ -39,11 +39,11 @@
       <option name="BACKGROUND" value="b3ffbb"/>
     </value>
   </option>
-    <option name="MULTIMARKDOWN.BLOCK_QUOTE">
-      <value>
-        <option name="FOREGROUND" value="808080" />
-      </value>
-    </option>
+  <option name="MULTIMARKDOWN.BLOCK_QUOTE">
+    <value>
+      <option name="FOREGROUND" value="808080"/>
+    </value>
+  </option>
   <option name="MULTIMARKDOWN.BOLD">
     <value>
       <option name="FONT_TYPE" value="1"/>
@@ -62,7 +62,7 @@
   </option>
   <option name="MULTIMARKDOWN.BULLET_LIST">
     <value>
-      <option name="FOREGROUND" value="a012ba"/>
+      <option name="FOREGROUND" value="d40047"/>
       <option name="FONT_TYPE" value="1"/>
     </value>
   </option>
@@ -87,70 +87,70 @@
       <option name="FONT_TYPE" value="3"/>
     </value>
   </option>
-    <option name="MULTIMARKDOWN.EXPLICIT_LINK">
-      <value>
-        <option name="BACKGROUND" value="ecffe2" />
-        <option name="EFFECT_COLOR" value="0" />
+  <option name="MULTIMARKDOWN.EXPLICIT_LINK">
+    <value>
+      <option name="BACKGROUND" value="ecffe2"/>
+      <option name="EFFECT_COLOR" value="0"/>
       <option name="EFFECT_TYPE" value="1"/>
     </value>
   </option>
   <option name="MULTIMARKDOWN.HEADER_LEVEL_1">
     <value>
-        <option name="FOREGROUND" value="90" />
+      <option name="FOREGROUND" value="90"/>
       <option name="BACKGROUND" value="ececec"/>
       <option name="FONT_TYPE" value="1"/>
     </value>
   </option>
   <option name="MULTIMARKDOWN.HEADER_LEVEL_2">
     <value>
-        <option name="FOREGROUND" value="90" />
+      <option name="FOREGROUND" value="90"/>
       <option name="BACKGROUND" value="ececec"/>
       <option name="FONT_TYPE" value="1"/>
     </value>
   </option>
   <option name="MULTIMARKDOWN.HEADER_LEVEL_3">
     <value>
-        <option name="FOREGROUND" value="90" />
+      <option name="FOREGROUND" value="90"/>
       <option name="BACKGROUND" value="ececec"/>
       <option name="FONT_TYPE" value="1"/>
     </value>
   </option>
   <option name="MULTIMARKDOWN.HEADER_LEVEL_4">
     <value>
-        <option name="FOREGROUND" value="90" />
+      <option name="FOREGROUND" value="90"/>
       <option name="BACKGROUND" value="ececec"/>
       <option name="FONT_TYPE" value="1"/>
     </value>
   </option>
   <option name="MULTIMARKDOWN.HEADER_LEVEL_5">
     <value>
-        <option name="FOREGROUND" value="90" />
+      <option name="FOREGROUND" value="90"/>
       <option name="BACKGROUND" value="ececec"/>
       <option name="FONT_TYPE" value="1"/>
     </value>
   </option>
   <option name="MULTIMARKDOWN.HEADER_LEVEL_6">
     <value>
-        <option name="FOREGROUND" value="90" />
+      <option name="FOREGROUND" value="90"/>
       <option name="BACKGROUND" value="ececec"/>
       <option name="FONT_TYPE" value="1"/>
     </value>
   </option>
   <option name="MULTIMARKDOWN.HRULE">
     <value>
-        <option name="FOREGROUND" value="a448" />
+      <option name="FOREGROUND" value="a448"/>
       <option name="BACKGROUND" value="ececec"/>
-        <option name="FONT_TYPE" value="1" />
+      <option name="FONT_TYPE" value="1"/>
     </value>
   </option>
   <option name="MULTIMARKDOWN.HTML_BLOCK">
     <value>
-        <option name="BACKGROUND" value="dbebff" />
+      <option name="BACKGROUND" value="dbebff"/>
     </value>
   </option>
   <option name="MULTIMARKDOWN.IMAGE">
     <value>
-        <option name="BACKGROUND" value="d9fff4" />
+      <option name="BACKGROUND" value="d9fff4"/>
     </value>
   </option>
   <option name="MULTIMARKDOWN.INLINE_HTML">
@@ -176,15 +176,15 @@
   </option>
   <option name="MULTIMARKDOWN.MAIL_LINK">
     <value>
-        <option name="FOREGROUND" value="d052cd" />
-        <option name="FONT_TYPE" value="1" />
-        <option name="EFFECT_COLOR" value="d052cd" />
-        <option name="EFFECT_TYPE" value="1" />
+      <option name="FOREGROUND" value="d052cd"/>
+      <option name="FONT_TYPE" value="1"/>
+      <option name="EFFECT_COLOR" value="d052cd"/>
+      <option name="EFFECT_TYPE" value="1"/>
     </value>
   </option>
   <option name="MULTIMARKDOWN.ORDERED_LIST">
     <value>
-        <option name="FOREGROUND" value="90" />
+      <option name="FOREGROUND" value="d40047"/>
       <option name="FONT_TYPE" value="1"/>
     </value>
   </option>
@@ -206,8 +206,8 @@
   <option name="MULTIMARKDOWN.REFERENCE_LINK">
     <value>
       <option name="BACKGROUND" value="ffe2c4"/>
-        <option name="EFFECT_COLOR" value="0" />
-        <option name="EFFECT_TYPE" value="1" />
+      <option name="EFFECT_COLOR" value="0"/>
+      <option name="EFFECT_TYPE" value="1"/>
     </value>
   </option>
   <option name="MULTIMARKDOWN.SMARTS">
@@ -277,18 +277,18 @@
       <option name="FONT_TYPE" value="1"/>
     </value>
   </option>
-    <option name="MULTIMARKDOWN.VERBATIM">
-      <value>
-        <option name="BACKGROUND" value="ececec" />
-      </value>
-    </option>
+  <option name="MULTIMARKDOWN.VERBATIM">
+    <value>
+      <option name="BACKGROUND" value="ececec"/>
+    </value>
+  </option>
   <option name="MULTIMARKDOWN.WIKI_LINK">
     <value>
-        <option name="FOREGROUND" value="ba" />
+      <option name="FOREGROUND" value="ba"/>
       <option name="BACKGROUND" value="d7ffe3"/>
-        <option name="FONT_TYPE" value="1" />
-        <option name="EFFECT_COLOR" value="ba" />
-        <option name="EFFECT_TYPE" value="1" />
+      <option name="FONT_TYPE" value="1"/>
+      <option name="EFFECT_COLOR" value="ba"/>
+      <option name="EFFECT_TYPE" value="1"/>
     </value>
   </option>
 </list>

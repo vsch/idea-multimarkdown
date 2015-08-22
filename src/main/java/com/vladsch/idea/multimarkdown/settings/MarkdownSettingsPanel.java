@@ -24,6 +24,7 @@ package com.vladsch.idea.multimarkdown.settings;
 import com.google.common.io.Resources;
 import com.vladsch.idea.multimarkdown.editor.MarkdownPreviewEditor;
 import org.apache.commons.codec.Charsets;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -114,6 +115,12 @@ public class MarkdownSettingsPanel {
 
     public JCheckBox anchorLinksCheckBox;
 
+    public JCheckBox forceListParaCheckBox;
+
+    public JCheckBox relaxedHRulesCheckBox;
+
+    public JComboBox htmlThemeComboBox;
+
     /** Description label for {@link #suppressInlineHTMLCheckBox}. */
     private JLabel suppressInlineHTMLDescriptionLabel;
 
@@ -150,8 +157,7 @@ public class MarkdownSettingsPanel {
     /** Description label for {@link #strikethroughCheckBox}. */
     private JLabel strikethroughDescriptionLabel;
 
-    protected void showHtmlTextStateChanged()
-    {
+    protected void showHtmlTextStateChanged() {
         if (showHtmlTextAsModifiedCheckBox != null) {
             boolean checked = showHtmlTextCheckBox.isSelected();
             showHtmlTextAsModifiedCheckBox.setEnabled(checked);
@@ -168,7 +174,10 @@ public class MarkdownSettingsPanel {
         btnLoadDefault.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) {
                 try {
-                    textCustomCss.setText(Resources.toString(MarkdownPreviewEditor.class.getResource(MarkdownPreviewEditor.PREVIEW_STYLESHEET_PATH), Charsets.UTF_8));
+                    textCustomCss.setText(Resources.toString(MarkdownPreviewEditor.class.getResource(
+                            htmlThemeComboBox.getSelectedIndex() == 0
+                                    ? MarkdownPreviewEditor.PREVIEW_STYLESHEET_PATH0
+                                    : MarkdownPreviewEditor.PREVIEW_STYLESHEET_PATH1), Charsets.UTF_8));
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -177,14 +186,21 @@ public class MarkdownSettingsPanel {
 
         showHtmlTextCheckBox.addPropertyChangeListener(new PropertyChangeListener() {
             @Override public void propertyChange(PropertyChangeEvent evt) {
-                showHtmlTextStateChanged();;
+                showHtmlTextStateChanged();
+                ;
             }
         });
 
         showHtmlTextCheckBox.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) {
-                showHtmlTextStateChanged();;
+                showHtmlTextStateChanged();
             }
         });
+
+//        htmlThemeComboBox.addActionListener(new ActionListener() {
+//            @Override public void actionPerformed(ActionEvent e) {
+//
+//            }
+//        });
     }
 }

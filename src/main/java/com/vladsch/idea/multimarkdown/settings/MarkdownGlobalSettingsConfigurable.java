@@ -124,6 +124,7 @@ public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurabl
                || settingsPanel.definitionsCheckBox == null || globalSettings.isDefinitions() != settingsPanel.definitionsCheckBox.isSelected()
                || settingsPanel.fencedCodeBlocksCheckBox == null || globalSettings.isFencedCodeBlocks() != settingsPanel.fencedCodeBlocksCheckBox.isSelected()
                || settingsPanel.hardWrapsCheckBox == null || globalSettings.isHardWraps() != settingsPanel.hardWrapsCheckBox.isSelected()
+               || settingsPanel.forceListParaCheckBox == null || globalSettings.isforceListPara() != settingsPanel.forceListParaCheckBox.isSelected()
                || settingsPanel.headerSpaceCheckBox == null || globalSettings.isHeaderSpace() != settingsPanel.headerSpaceCheckBox.isSelected()
                || settingsPanel.taskListsCheckBox == null || globalSettings.isTaskLists() != settingsPanel.taskListsCheckBox.isSelected()
                || settingsPanel.quotesCheckBox == null || globalSettings.isQuotes() != settingsPanel.quotesCheckBox.isSelected()
@@ -131,12 +132,14 @@ public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurabl
                || settingsPanel.suppressHTMLBlocksCheckBox == null || globalSettings.isSuppressHTMLBlocks() != settingsPanel.suppressHTMLBlocksCheckBox.isSelected()
                || settingsPanel.suppressInlineHTMLCheckBox == null || globalSettings.isSuppressInlineHTML() != settingsPanel.suppressInlineHTMLCheckBox.isSelected()
                || settingsPanel.tablesCheckBox == null || globalSettings.isTables() != settingsPanel.tablesCheckBox.isSelected()
+               || settingsPanel.relaxedHRulesCheckBox == null || globalSettings.isRelaxedHRules() != settingsPanel.relaxedHRulesCheckBox.isSelected()
                || settingsPanel.strikethroughCheckBox == null || globalSettings.isStrikethrough() != settingsPanel.strikethroughCheckBox.isSelected()
                || settingsPanel.showHtmlTextAsModifiedCheckBox == null || globalSettings.isShowHtmlTextAsModified() != settingsPanel.showHtmlTextAsModifiedCheckBox.isSelected()
                || settingsPanel.showHtmlTextCheckBox == null || globalSettings.isShowHtmlText() != settingsPanel.showHtmlTextCheckBox.isSelected()
                || settingsPanel.updateDelaySpinner == null || globalSettings.getUpdateDelay() != (Integer)settingsPanel.updateDelaySpinner.getValue()
                || settingsPanel.maxImgWidthSpinner == null || globalSettings.getMaxImgWidth() != (Integer)settingsPanel.maxImgWidthSpinner.getValue()
                || settingsPanel.textCustomCss == null || !globalSettings.getCustomCss().equals(settingsPanel.textCustomCss.getText())
+               || settingsPanel.htmlThemeComboBox == null || globalSettings.getHtmlTheme() != settingsPanel.htmlThemeComboBox.getSelectedIndex()
                 ;
     }
 
@@ -152,6 +155,7 @@ public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurabl
             globalSettings.setDefinitions(settingsPanel.definitionsCheckBox != null && settingsPanel.definitionsCheckBox.isSelected());
             globalSettings.setFencedCodeBlocks(settingsPanel.fencedCodeBlocksCheckBox != null && settingsPanel.fencedCodeBlocksCheckBox.isSelected());
             globalSettings.setHardWraps(settingsPanel.hardWrapsCheckBox != null && settingsPanel.hardWrapsCheckBox.isSelected());
+            globalSettings.setforceListPara(settingsPanel.forceListParaCheckBox != null && settingsPanel.forceListParaCheckBox.isSelected());
             globalSettings.setHeaderSpace(settingsPanel.headerSpaceCheckBox != null && settingsPanel.headerSpaceCheckBox.isSelected());
             globalSettings.setTaskLists(settingsPanel.taskListsCheckBox != null && settingsPanel.taskListsCheckBox.isSelected());
             globalSettings.setQuotes(settingsPanel.quotesCheckBox != null && settingsPanel.quotesCheckBox.isSelected());
@@ -159,11 +163,13 @@ public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurabl
             globalSettings.setSuppressHTMLBlocks(settingsPanel.suppressHTMLBlocksCheckBox != null && settingsPanel.suppressHTMLBlocksCheckBox.isSelected());
             globalSettings.setSuppressInlineHTML(settingsPanel.suppressInlineHTMLCheckBox != null && settingsPanel.suppressInlineHTMLCheckBox.isSelected());
             globalSettings.setTables(settingsPanel.tablesCheckBox != null && settingsPanel.tablesCheckBox.isSelected());
+            globalSettings.setRelaxedHRules(settingsPanel.relaxedHRulesCheckBox != null && settingsPanel.relaxedHRulesCheckBox.isSelected());
             globalSettings.setStrikethrough(settingsPanel.strikethroughCheckBox != null && settingsPanel.strikethroughCheckBox.isSelected());
             globalSettings.setShowHtmlTextAsModified(settingsPanel.showHtmlTextAsModifiedCheckBox != null && settingsPanel.showHtmlTextAsModifiedCheckBox.isSelected());
             globalSettings.setShowHtmlText(settingsPanel.showHtmlTextCheckBox != null && settingsPanel.showHtmlTextCheckBox.isSelected());
             globalSettings.setUpdateDelay((Integer) settingsPanel.updateDelaySpinner.getValue());
             globalSettings.setMaxWidth((Integer) settingsPanel.maxImgWidthSpinner.getValue());
+            globalSettings.setHtmlTheme(settingsPanel.htmlThemeComboBox.getSelectedIndex());
             globalSettings.setCustomCss(settingsPanel.textCustomCss.getText());
             globalSettings.endGroupNotifications();
         }
@@ -180,6 +186,7 @@ public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurabl
             if (settingsPanel.definitionsCheckBox != null) settingsPanel.definitionsCheckBox.setSelected(globalSettings.isDefinitions());
             if (settingsPanel.fencedCodeBlocksCheckBox != null) settingsPanel.fencedCodeBlocksCheckBox.setSelected(globalSettings.isFencedCodeBlocks());
             if (settingsPanel.hardWrapsCheckBox != null) settingsPanel.hardWrapsCheckBox.setSelected(globalSettings.isHardWraps());
+            if (settingsPanel.forceListParaCheckBox != null) settingsPanel.forceListParaCheckBox.setSelected(globalSettings.isforceListPara());
             if (settingsPanel.headerSpaceCheckBox != null) settingsPanel.headerSpaceCheckBox.setSelected(globalSettings.isHeaderSpace());
             if (settingsPanel.taskListsCheckBox != null) settingsPanel.taskListsCheckBox.setSelected(globalSettings.isTaskLists());
             if (settingsPanel.quotesCheckBox != null) settingsPanel.quotesCheckBox.setSelected(globalSettings.isQuotes());
@@ -187,11 +194,13 @@ public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurabl
             if (settingsPanel.suppressHTMLBlocksCheckBox != null) settingsPanel.suppressHTMLBlocksCheckBox.setSelected(globalSettings.isSuppressHTMLBlocks());
             if (settingsPanel.suppressInlineHTMLCheckBox != null) settingsPanel.suppressInlineHTMLCheckBox.setSelected(globalSettings.isSuppressInlineHTML());
             if (settingsPanel.tablesCheckBox != null) settingsPanel.tablesCheckBox.setSelected(globalSettings.isTables());
+            if (settingsPanel.relaxedHRulesCheckBox != null) settingsPanel.relaxedHRulesCheckBox.setSelected(globalSettings.isRelaxedHRules());
             if (settingsPanel.strikethroughCheckBox != null) settingsPanel.strikethroughCheckBox.setSelected(globalSettings.isStrikethrough());
             if (settingsPanel.showHtmlTextAsModifiedCheckBox != null) settingsPanel.showHtmlTextAsModifiedCheckBox.setSelected(globalSettings.isShowHtmlTextAsModified());
             if (settingsPanel.showHtmlTextCheckBox != null) settingsPanel.showHtmlTextCheckBox.setSelected(globalSettings.isShowHtmlText());
             if (settingsPanel.updateDelaySpinner != null) settingsPanel.updateDelaySpinner.setValue(globalSettings.getUpdateDelay());
             if (settingsPanel.maxImgWidthSpinner != null) settingsPanel.maxImgWidthSpinner.setValue(globalSettings.getMaxImgWidth());
+            if (settingsPanel.htmlThemeComboBox != null) settingsPanel.htmlThemeComboBox.setSelectedIndex(globalSettings.getHtmlTheme());
             if (settingsPanel.textCustomCss != null) settingsPanel.textCustomCss.setText(globalSettings.getCustomCss());
         }
     }

@@ -26,27 +26,39 @@
   <name>MultiMarkdown</name>
   <category>Custom Languages</category>
   <vendor url="http://github.com/vsch" email="vladimir.schneider@gmail.com">Vladimir Schneider</vendor>
-  <version>1.0.12</version>
+  <version>1.0.13</version>
   <idea-version since-build="134.549"/>
   <depends>com.intellij.modules.lang</depends>
 
   <description><![CDATA[
+    <div>
       <b><a href="http://daringfireball.net/projects/markdown">Markdown</a> language support for IntelliJ platform.</b>
-      <p>&nbsp;</p>
       <p>With GitHub Flavoured Markdown extensions and GitHub style formatting. HTML Preview and HTML Text tabs</p>
-      <p>&nbsp;</p>
+      <br>
       <p><b><span color="#2000C0">Feature requests and problem reports will be greatly appreciated!</span></b></p>
       <p><b>You can submit them at <a color="#30A0D8" href="https://github.com/vsch/idea-multimarkdown/issues"><u>vsch/idea-multimarkdown/issues</u></a> on GitHub.</b></p>
-      <p>&nbsp;</p>
+      <br>
       <p><b><span color="#C00038">If you like this plugin then please leave a comment or rate it.</span></b></p>
       <p><b>You can do that on the JetBrains' </span> <a color="#30A0D8" href="https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896"><u>MultiMarkdown comment and rate</u></a> page</b></p>
-      <p>&nbsp;</p>
+      <br>
       <img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_source_preview_Small.png" alt="Screenshot">
-      <p>&nbsp;</p>
+    </div>
     ]]></description>
 
   <change-notes><![CDATA[
     <p>
+    <b>1.0.13</b><br/>
+      <ul>
+        <li>: Fix Compound Definition list parsing. (pegdown) </li>
+        <li>: Fix syntax highlighting for nested list elements would get out of sync with source. (pegdown) </li>
+        <li>: Add Darcula default settings for syntax highlighting</li>
+        <li>: Add Darcula CSS style sheet for HTML Preview</li>
+        <li>: Add Force Loose List Items option to force a list item/definition term to be loose if it is more than a simple paragraph. (pegdown) </li>
+        <li>: Add Header Space option to require a space after # for Atx Headers</li>
+        <li>: Add Relaxed HRules to not require a blank line after a horizontal ruler, GitHub style</li>
+        <li>: Change Tighten Definition list styles</li>
+        <li>: Change Default Bullet list and Ordered list color to match Default Definition list color</li>
+    </ul>
     <b>1.0.12</b><br/>
       <ul>
         <li>: Add separate color setting for strikethrough, italic and bold lead/trail marker than the contained text</li>

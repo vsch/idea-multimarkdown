@@ -47,6 +47,7 @@ import org.pegdown.PegDownProcessor;
 import javax.swing.*;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Timer;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.DefaultEditorKit;
@@ -81,7 +82,8 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
 
     /** The path to the stylesheet used for displaying the HTML preview of the document. */
     @NonNls
-    public static final String PREVIEW_STYLESHEET_PATH = "/com/vladsch/idea/multimarkdown/preview.css";
+    public static final String PREVIEW_STYLESHEET_PATH0 = "/com/vladsch/idea/multimarkdown/default.css";
+    public static final String PREVIEW_STYLESHEET_PATH1 = "/com/vladsch/idea/multimarkdown/darcula.css";
 
     /** The {@link java.awt.Component} used to render the HTML preview. */
     protected final JEditorPane jEditorPane = new JEditorPane();
@@ -215,7 +217,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
         String customCss;
 
         if ((customCss = MarkdownGlobalSettings.getInstance().getCustomCss()).equals("")) {
-            style.importStyleSheet(MarkdownPreviewEditor.class.getResource(PREVIEW_STYLESHEET_PATH));
+            style.importStyleSheet(MarkdownPreviewEditor.class.getResource(MarkdownGlobalSettings.getInstance().getHtmlTheme() == 0 ? PREVIEW_STYLESHEET_PATH0 : PREVIEW_STYLESHEET_PATH1));
         } else {
             try {
                 style.loadRules(new StringReader(customCss), null);
@@ -325,7 +327,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
                 String html = processor.get().markdownToHtml(document.getText());
                 // add class to table rows to compensate for lack of :first-child, :nth-child() so we can have striped tables
                 String procHtml = postProcessHtml(html);
-                jEditorPane.setText("<div id=\"multimarkdown-preview\">\n" + procHtml + "\n</div>\n");
+                jEditorPane.setText(isRawHtml ? html : "<div id=\"multimarkdown-preview\">\n" + procHtml + "\n</div>\n");
                 previewIsObsolete = false;
 
                 // here we can find our HTML Text counterpart but it is better to keep it separate
@@ -483,7 +485,10 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
 
     /** Dispose the editor. */
     public void dispose() {
-        MarkdownGlobalSettings.getInstance().removeListener(globalSettingsListener);
+        if (globalSettingsListener != null) {
+            MarkdownGlobalSettings.getInstance().removeListener(globalSettingsListener);
+            globalSettingsListener = null;
+        }
         Disposer.dispose(this);
     }
 }

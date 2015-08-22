@@ -1,0 +1,442 @@
+/*
+  ~ Copyright (c) 2015 Vladimir Schneider vladimir.schneider@gmail.com
+  ~
+  ~ Licensed to the Apache Software Foundation (ASF) under one
+  ~ or more contributor license agreements.  See the NOTICE file
+  ~ distributed with this work for additional information
+  ~ regarding copyright ownership.  The ASF licenses this file
+  ~ to you under the Apache License, Version 2.0 (the
+  ~ "License"); you may not use this file except in compliance
+  ~ with the License.  You may obtain a copy of the License at
+  ~
+  ~   http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied.  See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+
+*/
+
+/*
+   Default Color Theme for the MultiMarkdown plugin
+*/
+
+strike {
+    text-decoration: line-through;
+}
+
+/* del is simulated via <span class="del"></span> */
+del,
+span.del {
+    text-decoration: line-through;
+}
+
+s {
+    text-decoration: line-through;
+}
+
+cite {
+    font-style: italic;
+}
+
+sub {
+    font-size: 0.9em;
+}
+
+sup {
+    font-size: 0.9em;
+}
+
+em {
+    font-style: italic;
+}
+
+strong {
+    font-weight: bold;
+}
+
+b {
+    font-weight: bold;
+}
+
+u {
+    text-decoration: underline;
+}
+
+address {
+    color: #333366;
+    font-style: italic;
+}
+
+i {
+    font-style: italic;
+}
+
+var {
+    font-weight: bold;
+    font-style: italic;
+}
+
+/* NOTE: all other font sizes are set relative to font size given here */
+#multimarkdown-preview {
+    font-family: "Helvetica Neue", Helvetica, Arial, freesans, sans-serif;
+    font-size: 11px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: white;
+    padding: 30px;
+    color: #222222;
+}
+
+/**********************************
+ *  Anchor Related Formatting
+ **********************************/
+
+a {
+    color: #4183C4;
+}
+
+a.absent {
+    color: #cc0000;
+}
+
+a.anchor {
+    display: block;
+    padding-left: 30px;
+    margin-left: -30px;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+}
+
+/**********************************
+ *  Header Related Formatting
+ **********************************/
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    padding: 0;
+    cursor: text;
+    position: relative;
+}
+
+h2,
+h2 a {
+    color: #222222;
+}
+
+h1,
+h3,
+h4,
+h5,
+h1 a,
+h3 a,
+h4 a,
+h5 a {
+    color: #222222;
+}
+
+h1 p,
+h2 p,
+h3 p,
+h4 p,
+h5 p,
+h6 p {
+    margin-top: 0;
+}
+
+h6,
+h6 a {
+    color: #777777;
+}
+
+h1 tt,
+h2 tt,
+h3 tt,
+h4 tt,
+h5 tt,
+h6 tt,
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+    font-size: inherit;
+}
+
+h1 {
+    font-weight: bold;
+    border-bottom: 1px solid #bbbbbb;
+    font-size: 1.5em;
+    margin: 20px 0 10px 0;
+}
+
+h2 {
+    border-bottom: 1px solid #bbbbbb;
+    font-weight: bold;
+    font-size: 1.35em;
+    margin: 20px 0 10px 0;
+}
+
+h3 {
+    font-weight: bold;
+    font-size: 1.25em;
+    margin: 20px 0 10px 0;
+}
+
+h4 {
+    font-weight: bold;
+    font-size: 1.15em;
+    margin: 10px 0 7px;
+}
+
+h5 {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin: 7px 0 7px;
+}
+
+h6 {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin: 7px 0 7px;
+}
+
+/**********************************
+ *  Block Quote Related Formatting
+ **********************************/
+
+blockquote {
+    border-left: 4px solid #cccccc;
+    margin: 5px 0;
+    padding: 0 15px;
+    font-size: 1em;
+    color: #666666;
+}
+
+blockquote h1,
+blockquote h2,
+blockquote h3,
+blockquote h4,
+blockquote h5,
+blockquote h6,
+blockquote h1 a,
+blockquote h2 a,
+blockquote h3 a,
+blockquote h4 a,
+blockquote h5 a,
+blockquote h6 a {
+    color: #666666;
+}
+
+/**********************************
+* Code Block Related Formatting
+ **********************************/
+
+code,
+samp,
+kbd, tt {
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, Monospaced, monospace;
+    font-size: 1em;
+}
+
+pre {
+    margin: 5px 0;
+}
+
+tt {
+    margin: 0 2px;
+    padding: 0 5px;
+    white-space: nowrap;
+    border: 1px solid #eaeaea;
+    background-color: #f8f8f8;
+}
+
+pre code {
+    margin: 0;
+    padding: 0;
+    white-space: pre;
+    border: none;
+    background: transparent;
+    color: #222222;
+}
+
+pre {
+    background-color: #f8f8f8;
+    border: 1px solid #cccccc;
+    overflow: auto;
+    padding: 6px 10px;
+    white-space: pre;
+}
+
+code {
+    color: #B00020;
+    background-color: #f8f8f8;
+    padding: 3px;
+}
+
+/**********************************
+ * Table Related formatting
+ **********************************/
+
+table {
+    background-color: transparent;
+    margin-bottom: 20px;
+    border-spacing: 0;
+    border-collapse: collapse;
+    padding: 0;
+}
+
+table tr th {
+    font-weight: bold;
+    border: 1px solid #cccccc;
+    border-width: 0 1px 0 1px;
+    margin: 0;
+    padding: 6px 13px;
+}
+
+table tr td {
+    border: 1px solid #cccccc;
+    border-width: 0 1px 0 1px;
+    margin: 0;
+    padding: 6px 13px;
+}
+
+table tr.odd-child {
+    background-color: #f4f4f4;
+}
+
+table tr.first-child {
+    background-color: #e4e4e4;
+}
+
+th {
+    text-align: left;
+}
+
+table thead tr th {
+    vertical-align: bottom;
+}
+
+table table {
+    background-color: #ffffff;
+}
+
+/************************************
+ * Horizontal Rule Related Formatting
+ ************************************/
+
+hr {
+    /*
+    nothing is used in the CSS by the HTMLEditorKit hr element except alignment, margin, width.
+    size and noshade attributes are only setable in the element and size is 2px minimum, of any
+    color you want just as long as its black, hardcoded in the library.
+
+    ie. nothing useful that we can use to change the look so hr is simulated with a
+    <div class="hr">&nbsp;</div> instead.
+ */
+}
+
+div.hr {
+    height: 1px;
+    border-top: 1px solid #bbbbbb;
+    margin: 10px 0 5px 0;
+}
+
+/**********************************
+ *  List Item Related Formatting
+ **********************************/
+
+ul,
+ol,
+dl {
+    margin: 0;
+}
+
+ul li {
+    margin: 0;
+    list-style-type: disc;
+}
+
+li {
+    margin: 0;
+}
+
+li.p {
+    margin: 10px 0 0 0;
+}
+
+li.taskp {
+    margin: 0;
+}
+
+li.p p.p {
+    margin: 0;
+}
+
+li.taskp p.p {
+    margin: 0;
+}
+
+p {
+    margin: 5px 0 5px 0;
+}
+
+li p {
+    margin: 10px 0 10px 0;
+}
+
+ul li li {
+    list-style-type: circle;
+}
+
+ul li.task,
+ul li.taskp {
+    list-style-type: none;
+    text-indent: -20px;
+    padding-left: 20px;
+}
+
+ul,
+ol {
+    padding-left: 30px;
+}
+
+dfn {
+    font-style: italic;
+}
+
+dt {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+dl {
+    margin-left: 0;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 0;
+}
+
+dl dt {
+    font-size: 1.05em;
+    font-weight: bold;
+    font-style: italic;
+    padding: 0;
+    margin: 5px 0 5px;
+}
+
+dl dd {
+    margin: 0 0 5px;
+    padding: 0 20px;
+}
