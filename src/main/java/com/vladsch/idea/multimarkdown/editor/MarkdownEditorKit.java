@@ -66,11 +66,11 @@ public class MarkdownEditorKit extends HTMLEditorKit {
      */
     public MarkdownEditorKit(@NotNull Document document) {
         this.document = document;
-        maxWidth = MarkdownGlobalSettings.getInstance().getMaxImgWidth();
+        maxWidth = MarkdownGlobalSettings.getInstance().maxImgWidth.getValue();
 
         MarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MarkdownGlobalSettingsListener() {
             public void handleSettingsChanged(@NotNull final MarkdownGlobalSettings newSettings) {
-                maxWidth = MarkdownGlobalSettings.getInstance().getMaxImgWidth();
+                maxWidth = MarkdownGlobalSettings.getInstance().maxImgWidth.getValue();
             }
         });
     }

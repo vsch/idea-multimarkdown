@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Julien Nicoulaud <julien.nicoulaud@gmail.com>
- * Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
+ * Copyright (c) 2015-2015 Vladimir Schneider <vladimir.schneider@gmail.com>
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,17 +17,17 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
+ *
  */
-package com.vladsch.idea.multimarkdown.todo;
+package com.vladsch.idea.multimarkdown.highlighter;
 
-import com.intellij.lexer.Lexer;
-import com.intellij.psi.impl.cache.impl.OccurrenceConsumer;
-import com.intellij.psi.impl.cache.impl.todo.LexerBasedTodoIndexer;
+import com.intellij.openapi.fileTypes.SingleLazyInstanceSyntaxHighlighterFactory;
+import com.intellij.openapi.fileTypes.SyntaxHighlighter;
+import org.jetbrains.annotations.NotNull;
 
-public class MarkdownTodoIndexer extends LexerBasedTodoIndexer {
-
-    @Override
-    public Lexer createLexer(OccurrenceConsumer consumer) {
-        return MarkdownIdIndexer.createIndexingLexer(consumer);
+public class MarkdownSyntaxHighlighterFactory extends SingleLazyInstanceSyntaxHighlighterFactory {
+    @NotNull
+    protected SyntaxHighlighter createHighlighter() {
+        return new MarkdownSyntaxHighlighter();
     }
 }

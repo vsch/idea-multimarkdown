@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2011-2014 Julien Nicoulaud <julien.nicoulaud@gmail.com>
-* Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
+ * Copyright (c) 2015-2015 Vladimir Schneider <vladimir.schneider@gmail.com>
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,8 +18,11 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
+ *
+ * This file is based on the IntelliJ SimplePlugin tutorial
+ *
  */
-package com.vladsch.idea.multimarkdown.lang.psi.impl;
+package com.vladsch.idea.multimarkdown.psi;
 
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.application.ApplicationInfo;
@@ -27,52 +30,50 @@ import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.FileViewProvider;
-import com.vladsch.idea.multimarkdown.lang.psi.api.MarkdownFile;
-import com.vladsch.idea.multimarkdown.file.MarkdownFileType;
+import com.vladsch.idea.multimarkdown.MarkdownFileType;
+import com.vladsch.idea.multimarkdown.MarkdownLanguage;
+import com.vladsch.idea.multimarkdown.settings.MarkdownGlobalSettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.intellij.openapi.editor.ex.EditorSettingsExternalizable.STRIP_TRAILING_SPACES_NONE;
+import static com.intellij.openapi.editor.ex.EditorSettingsExternalizable.STRIP_TRAILING_SPACES_WHOLE;
 
-/**
- * Implementation of {@link MarkdownFile}.
- *
- * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
- * @since 0.1
- */
-public class MarkdownFileImpl extends PsiFileBase implements MarkdownFile {
-    /**
-     * Build a new instance of {@link MarkdownFileImpl}.
-     *
-     * @param viewProvider the {@link FileViewProvider} associated with this file.
-     */
-    public MarkdownFileImpl(FileViewProvider viewProvider) {
-        super(viewProvider, MarkdownFileType.LANGUAGE);
+public class MarkdownFile extends PsiFileBase {
+    public MarkdownFile(@NotNull FileViewProvider viewProvider) {
+        super(viewProvider, MarkdownLanguage.INSTANCE);
     }
 
-    /**
-     * Get the file type for the file.
-     *
-     * @return {@link MarkdownFileType#INSTANCE}
-     */
     @NotNull
+    @Override
     public FileType getFileType() {
         return MarkdownFileType.INSTANCE;
     }
 
     @Override
-    public VirtualFile getVirtualFile() {
-        final VirtualFile file =  super.getVirtualFile();
+    public String toString() {
+        return "MultiMarkdown File";
+    }
 
-        // #138: ignore "strip trailing white space" setting
+    @Override
+    public Icon getIcon(int flags) {
+        return super.getIcon(flags);
+    }
+
+    @Override
+    public VirtualFile getVirtualFile() {
+        final VirtualFile file = super.getVirtualFile();
+
+        // now it is a user selectable option.
         if (file != null) {
             Key<String> overrideStripTrailingSpacesKey = getOverrideStripTrailingSpacesKey();
 
             if (overrideStripTrailingSpacesKey != null) {
-                file.putUserData(overrideStripTrailingSpacesKey, STRIP_TRAILING_SPACES_NONE);
+                file.putUserData(overrideStripTrailingSpacesKey, MarkdownGlobalSettings.getInstance().enableTrimSpaces.getValue() ? STRIP_TRAILING_SPACES_WHOLE : STRIP_TRAILING_SPACES_NONE);
             }
         }
 
@@ -80,7 +81,6 @@ public class MarkdownFileImpl extends PsiFileBase implements MarkdownFile {
     }
 
     /**
-     * #172
      * Gets OVERRIDE_STRIP_TRAILING_SPACES_KEY from the TrailingSpacesStripper class. Since the package
      * in which the class is located depends on api version, some checks are required.
      *
@@ -101,8 +101,7 @@ public class MarkdownFileImpl extends PsiFileBase implements MarkdownFile {
         final String classPath;
         if (buildVersion.compareTo("138") >= 0) {
             classPath = "com.intellij.openapi.editor.impl.TrailingSpacesStripper";
-        }
-        else {
+        } else {
             classPath = "com.intellij.openapi.fileEditor.impl.TrailingSpacesStripper";
         }
 
@@ -113,6 +112,4 @@ public class MarkdownFileImpl extends PsiFileBase implements MarkdownFile {
             return null;
         }
     }
-
-
 }

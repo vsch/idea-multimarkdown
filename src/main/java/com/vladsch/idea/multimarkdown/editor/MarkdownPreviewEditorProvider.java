@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2011-2014 Julien Nicoulaud <julien.nicoulaud@gmail.com>
-* Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
+ * Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -26,53 +26,24 @@ import com.intellij.openapi.project.PossiblyDumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.vladsch.idea.multimarkdown.MarkdownLanguage;
-import com.vladsch.idea.multimarkdown.file.MarkdownFileType;
+import com.vladsch.idea.multimarkdown.MarkdownFileType;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * {@link FileEditorProvider} implementation to provide {@link MarkdownPreviewEditor}.
- *
- * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
- * @see MarkdownPreviewEditor
- * @since 0.1
- */
 public class MarkdownPreviewEditorProvider implements FileEditorProvider, PossiblyDumbAware {
 
-    /** The id of the editors provided by this {@link FileEditorProvider}. */
-    public static final String EDITOR_TYPE_ID = MarkdownLanguage.LANGUAGE_NAME + "PreviewEditor";
+    public static final String EDITOR_TYPE_ID = MarkdownLanguage.NAME + "PreviewEditor";
 
-    /**
-     * Check whether this {@link FileEditorProvider} can create a valid {@link FileEditor} for the file.
-     *
-     * @param project the project context.
-     * @param file    the file to be tested for acceptance. This parameter must never be <code>null</code>.
-     * @return whether the provider can create a valid editor for the specified <code>file</code>.
-     */
     public boolean accept(@NotNull Project project, @NotNull VirtualFile file) {
-        return file.getFileType() instanceof MarkdownFileType;
+        String name = file.getName();
+        return file.getFileType() instanceof MarkdownFileType || (name != null && name.startsWith("scratch_"));
     }
 
-    /**
-     * Create a valid editor for the specified file.
-     * <p/>
-     * Should be called only if the provider has accepted this file.
-     *
-     * @param project the project context.
-     * @param file    the file for which an editor must be created.
-     * @return an editor for the specified file.
-     * @see #accept(com.intellij.openapi.project.Project, com.intellij.openapi.vfs.VirtualFile)
-     */
     @NotNull
     public FileEditor createEditor(@NotNull Project project, @NotNull VirtualFile file) {
         return new MarkdownPreviewEditor(project, FileDocumentManager.getInstance().getDocument(file), false);
     }
 
-    /**
-     * Dispose the specified <code>editor</code>.
-     *
-     * @param editor editor to be disposed. This parameter must not be <code>null</code>.
-     */
     public void disposeEditor(@NotNull FileEditor editor) {
         editor.dispose();
     }
@@ -106,31 +77,16 @@ public class MarkdownPreviewEditorProvider implements FileEditorProvider, Possib
     public void writeState(@NotNull FileEditorState state, @NotNull Project project, @NotNull Element targetElement) {
     }
 
-    /**
-     * Get the id of the editors provided by this {@link FileEditorProvider}.
-     *
-     * @return {@link #EDITOR_TYPE_ID}
-     */
     @NotNull
     public String getEditorTypeId() {
         return EDITOR_TYPE_ID;
     }
 
-    /**
-     * Get the {@link FileEditorPolicy} defining how to show editors created via the {@link FileEditorProvider}.
-     *
-     * @return {@link FileEditorPolicy#PLACE_AFTER_DEFAULT_EDITOR}
-     */
     @NotNull
     public FileEditorPolicy getPolicy() {
         return FileEditorPolicy.PLACE_AFTER_DEFAULT_EDITOR;
     }
 
-    /**
-     * Indicates the editor can be created while background indexing is running.
-     *
-     * @return {@code true}
-     */
     @Override
     public boolean isDumbAware() {
         return true;

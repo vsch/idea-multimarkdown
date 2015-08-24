@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Julien Nicoulaud <julien.nicoulaud@gmail.com>
-* Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
+ * Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -28,185 +27,184 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import java.util.ArrayList;
 
-/**
- * Configuration interface for {@link MarkdownGlobalSettings}.
- *
- * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
- * @see MarkdownGlobalSettings
- * @see MarkdownSettingsPanel
- * @since 0.6
- */
 public class MarkdownGlobalSettingsConfigurable implements SearchableConfigurable {
-
-    /** The settings storage object. */
     protected MarkdownGlobalSettings globalSettings;
 
-    /** The settings UI form. */
     protected MarkdownSettingsPanel settingsPanel;
 
-    /** Build a new instance of {@link MarkdownGlobalSettingsConfigurable}. */
-    public MarkdownGlobalSettingsConfigurable() {
-        globalSettings = MarkdownGlobalSettings.getInstance();
-    }
-
-    /**
-     * Get the ID of this {@link SearchableConfigurable}.
-     *
-     * @return {@link MarkdownLanguage#LANGUAGE_NAME}
-     */
     @NotNull
     public String getId() {
-        return MarkdownLanguage.LANGUAGE_NAME;
+        return MarkdownLanguage.NAME;
     }
 
-    /**
-     * Search for a term.
-     *
-     * @param s the term to search.
-     * @return <code>null</code>
-     */
+    final private ArrayList<ComponentSetting> componentSettings = new ArrayList<ComponentSetting>(50);
+
+    public MarkdownGlobalSettingsConfigurable() {
+        globalSettings = MarkdownGlobalSettings.getInstance();
+        componentSettings.add(new CheckBoxComponent("abbreviationsCheckBox", globalSettings.abbreviations));
+        componentSettings.add(new CheckBoxComponent("anchorLinksCheckBox", globalSettings.anchorLinks));
+        componentSettings.add(new CheckBoxComponent("autoLinksCheckBox", globalSettings.autoLinks));
+        componentSettings.add(new CheckBoxComponent("definitionsCheckBox", globalSettings.definitions));
+        componentSettings.add(new CheckBoxComponent("fencedCodeBlocksCheckBox", globalSettings.fencedCodeBlocks));
+        componentSettings.add(new CheckBoxComponent("forceListParaCheckBox", globalSettings.forceListPara));
+        componentSettings.add(new CheckBoxComponent("hardWrapsCheckBox", globalSettings.hardWraps));
+        componentSettings.add(new CheckBoxComponent("headerSpaceCheckBox", globalSettings.headerSpace));
+        componentSettings.add(new CheckBoxComponent("relaxedHRulesCheckBox", globalSettings.relaxedHRules));
+        componentSettings.add(new CheckBoxComponent("showHtmlTextAsModifiedCheckBox", globalSettings.showHtmlTextAsModified));
+        componentSettings.add(new CheckBoxComponent("showHtmlTextCheckBox", globalSettings.showHtmlText));
+        componentSettings.add(new CheckBoxComponent("smartsCheckBox", globalSettings.smarts));
+        componentSettings.add(new CheckBoxComponent("strikethroughCheckBox", globalSettings.strikethrough));
+        componentSettings.add(new CheckBoxComponent("enableTrimSpacesCheckBox", globalSettings.enableTrimSpaces));
+        componentSettings.add(new CheckBoxComponent("suppressHTMLBlocksCheckBox", globalSettings.suppressHTMLBlocks));
+        componentSettings.add(new CheckBoxComponent("suppressInlineHTMLCheckBox", globalSettings.suppressInlineHTML));
+        componentSettings.add(new CheckBoxComponent("tablesCheckBox", globalSettings.tables));
+        componentSettings.add(new CheckBoxComponent("taskListsCheckBox", globalSettings.taskLists));
+        componentSettings.add(new CheckBoxComponent("wikiLinksCheckBox", globalSettings.wikiLinks));
+//        componentSettings.add(new CheckBoxComponent("todoCommentsCheckBox", globalSettings.todoComments));
+        componentSettings.add(new CheckBoxComponent("quotesCheckBox", globalSettings.quotes));
+        componentSettings.add(new SpinnerComponent("updateDelaySpinner", globalSettings.updateDelay));
+        componentSettings.add(new SpinnerComponent("maxImgWidthSpinner", globalSettings.maxImgWidth));
+        componentSettings.add(new SpinnerComponent("parsingTimeoutSpinner", globalSettings.parsingTimeout));
+        componentSettings.add(new ComboBoxComponent("htmlThemeComboBox", globalSettings.htmlTheme));
+        componentSettings.add(new TextAreaComponent("textCustomCss", globalSettings.customCss));
+    }
+
     public Runnable enableSearch(String s) {
         return null;
     }
 
-    /**
-     * Get the displayable name of this {@link com.intellij.openapi.options.Configurable}.
-     *
-     * @return {@link #getId()}
-     */
     @Nls
     public String getDisplayName() {
         return getId();
     }
 
-    /**
-     * Get the icon of this {@link com.intellij.openapi.options.Configurable}.
-     *
-     * @return {@link MarkdownIcons#MARKDOWN_ICON}
-     */
     public Icon getIcon() {
-        return MarkdownIcons.MARKDOWN_ICON;
+        return MarkdownIcons.FILE;
     }
 
-    /**
-     * Get the help topic name of this {@link com.intellij.openapi.options.Configurable}.
-     *
-     * @return {@link #getId()}
-     */
     public String getHelpTopic() {
         return getId();
     }
 
-    /**
-     * Setup the configuration UI if needed.
-     *
-     * @return the UI main panel.
-     */
     public JComponent createComponent() {
         if (settingsPanel == null) settingsPanel = new MarkdownSettingsPanel();
         reset();
         return settingsPanel.panel;
     }
 
-    /**
-     * Whether the settings are modified in the UI compared to the settings.
-     *
-     * @return true if settings are modified in the UI.
-     */
     public boolean isModified() {
-        return settingsPanel == null
-               || settingsPanel.parsingTimeoutSpinner == null || globalSettings.getParsingTimeout() != (Integer) settingsPanel.parsingTimeoutSpinner.getValue()
-               || settingsPanel.abbreviationsCheckBox == null || globalSettings.isAbbreviations() != settingsPanel.abbreviationsCheckBox.isSelected()
-               || settingsPanel.autoLinksCheckBox == null || globalSettings.isAutoLinks() != settingsPanel.autoLinksCheckBox.isSelected()
-               || settingsPanel.anchorLinksCheckBox == null || globalSettings.isAnchorLinks() != settingsPanel.anchorLinksCheckBox.isSelected()
-               || settingsPanel.wikiLinksCheckBox == null || globalSettings.isWikiLinks() != settingsPanel.wikiLinksCheckBox.isSelected()
-               || settingsPanel.definitionsCheckBox == null || globalSettings.isDefinitions() != settingsPanel.definitionsCheckBox.isSelected()
-               || settingsPanel.fencedCodeBlocksCheckBox == null || globalSettings.isFencedCodeBlocks() != settingsPanel.fencedCodeBlocksCheckBox.isSelected()
-               || settingsPanel.hardWrapsCheckBox == null || globalSettings.isHardWraps() != settingsPanel.hardWrapsCheckBox.isSelected()
-               || settingsPanel.forceListParaCheckBox == null || globalSettings.isforceListPara() != settingsPanel.forceListParaCheckBox.isSelected()
-               || settingsPanel.headerSpaceCheckBox == null || globalSettings.isHeaderSpace() != settingsPanel.headerSpaceCheckBox.isSelected()
-               || settingsPanel.taskListsCheckBox == null || globalSettings.isTaskLists() != settingsPanel.taskListsCheckBox.isSelected()
-               || settingsPanel.quotesCheckBox == null || globalSettings.isQuotes() != settingsPanel.quotesCheckBox.isSelected()
-               || settingsPanel.smartsCheckBox == null || globalSettings.isSmarts() != settingsPanel.smartsCheckBox.isSelected()
-               || settingsPanel.suppressHTMLBlocksCheckBox == null || globalSettings.isSuppressHTMLBlocks() != settingsPanel.suppressHTMLBlocksCheckBox.isSelected()
-               || settingsPanel.suppressInlineHTMLCheckBox == null || globalSettings.isSuppressInlineHTML() != settingsPanel.suppressInlineHTMLCheckBox.isSelected()
-               || settingsPanel.tablesCheckBox == null || globalSettings.isTables() != settingsPanel.tablesCheckBox.isSelected()
-               || settingsPanel.relaxedHRulesCheckBox == null || globalSettings.isRelaxedHRules() != settingsPanel.relaxedHRulesCheckBox.isSelected()
-               || settingsPanel.strikethroughCheckBox == null || globalSettings.isStrikethrough() != settingsPanel.strikethroughCheckBox.isSelected()
-               || settingsPanel.showHtmlTextAsModifiedCheckBox == null || globalSettings.isShowHtmlTextAsModified() != settingsPanel.showHtmlTextAsModifiedCheckBox.isSelected()
-               || settingsPanel.showHtmlTextCheckBox == null || globalSettings.isShowHtmlText() != settingsPanel.showHtmlTextCheckBox.isSelected()
-               || settingsPanel.updateDelaySpinner == null || globalSettings.getUpdateDelay() != (Integer)settingsPanel.updateDelaySpinner.getValue()
-               || settingsPanel.maxImgWidthSpinner == null || globalSettings.getMaxImgWidth() != (Integer)settingsPanel.maxImgWidthSpinner.getValue()
-               || settingsPanel.textCustomCss == null || !globalSettings.getCustomCss().equals(settingsPanel.textCustomCss.getText())
-               || settingsPanel.htmlThemeComboBox == null || globalSettings.getHtmlTheme() != settingsPanel.htmlThemeComboBox.getSelectedIndex()
-                ;
+        if (settingsPanel == null) return true;
+        for (ComponentSetting componentSetting : componentSettings) {
+            if (componentSetting.isChanged()) return true;
+        }
+        return false;
     }
 
-    /** Apply modifications to the settings done in the UI. */
     public void apply() {
-        if (settingsPanel != null) {
-            globalSettings.startGroupNotifications();
-            globalSettings.setParsingTimeout((Integer) settingsPanel.parsingTimeoutSpinner.getValue());
-            globalSettings.setAbbreviations(settingsPanel.abbreviationsCheckBox != null && settingsPanel.abbreviationsCheckBox.isSelected());
-            globalSettings.setAutoLinks(settingsPanel.autoLinksCheckBox != null && settingsPanel.autoLinksCheckBox.isSelected());
-            globalSettings.setAnchorLinks(settingsPanel.anchorLinksCheckBox != null && settingsPanel.anchorLinksCheckBox.isSelected());
-            globalSettings.setWikiLinks(settingsPanel.wikiLinksCheckBox != null && settingsPanel.wikiLinksCheckBox.isSelected());
-            globalSettings.setDefinitions(settingsPanel.definitionsCheckBox != null && settingsPanel.definitionsCheckBox.isSelected());
-            globalSettings.setFencedCodeBlocks(settingsPanel.fencedCodeBlocksCheckBox != null && settingsPanel.fencedCodeBlocksCheckBox.isSelected());
-            globalSettings.setHardWraps(settingsPanel.hardWrapsCheckBox != null && settingsPanel.hardWrapsCheckBox.isSelected());
-            globalSettings.setforceListPara(settingsPanel.forceListParaCheckBox != null && settingsPanel.forceListParaCheckBox.isSelected());
-            globalSettings.setHeaderSpace(settingsPanel.headerSpaceCheckBox != null && settingsPanel.headerSpaceCheckBox.isSelected());
-            globalSettings.setTaskLists(settingsPanel.taskListsCheckBox != null && settingsPanel.taskListsCheckBox.isSelected());
-            globalSettings.setQuotes(settingsPanel.quotesCheckBox != null && settingsPanel.quotesCheckBox.isSelected());
-            globalSettings.setSmarts(settingsPanel.smartsCheckBox != null && settingsPanel.smartsCheckBox.isSelected());
-            globalSettings.setSuppressHTMLBlocks(settingsPanel.suppressHTMLBlocksCheckBox != null && settingsPanel.suppressHTMLBlocksCheckBox.isSelected());
-            globalSettings.setSuppressInlineHTML(settingsPanel.suppressInlineHTMLCheckBox != null && settingsPanel.suppressInlineHTMLCheckBox.isSelected());
-            globalSettings.setTables(settingsPanel.tablesCheckBox != null && settingsPanel.tablesCheckBox.isSelected());
-            globalSettings.setRelaxedHRules(settingsPanel.relaxedHRulesCheckBox != null && settingsPanel.relaxedHRulesCheckBox.isSelected());
-            globalSettings.setStrikethrough(settingsPanel.strikethroughCheckBox != null && settingsPanel.strikethroughCheckBox.isSelected());
-            globalSettings.setShowHtmlTextAsModified(settingsPanel.showHtmlTextAsModifiedCheckBox != null && settingsPanel.showHtmlTextAsModifiedCheckBox.isSelected());
-            globalSettings.setShowHtmlText(settingsPanel.showHtmlTextCheckBox != null && settingsPanel.showHtmlTextCheckBox.isSelected());
-            globalSettings.setUpdateDelay((Integer) settingsPanel.updateDelaySpinner.getValue());
-            globalSettings.setMaxWidth((Integer) settingsPanel.maxImgWidthSpinner.getValue());
-            globalSettings.setHtmlTheme(settingsPanel.htmlThemeComboBox.getSelectedIndex());
-            globalSettings.setCustomCss(settingsPanel.textCustomCss.getText());
-            globalSettings.endGroupNotifications();
+        if (settingsPanel == null) return;
+
+        globalSettings.startGroupNotifications();
+        for (ComponentSetting componentSetting : componentSettings) {
+            componentSetting.setValue();
         }
+        globalSettings.endGroupNotifications();
     }
 
-    /** Reset UI with settings values. */
     public void reset() {
-        if (settingsPanel != null) {
-            if (settingsPanel.parsingTimeoutSpinner != null) settingsPanel.parsingTimeoutSpinner.setValue(globalSettings.getParsingTimeout());
-            if (settingsPanel.abbreviationsCheckBox != null) settingsPanel.abbreviationsCheckBox.setSelected(globalSettings.isAbbreviations());
-            if (settingsPanel.autoLinksCheckBox != null) settingsPanel.autoLinksCheckBox.setSelected(globalSettings.isAutoLinks());
-            if (settingsPanel.anchorLinksCheckBox != null) settingsPanel.anchorLinksCheckBox.setSelected(globalSettings.isAnchorLinks());
-            if (settingsPanel.wikiLinksCheckBox != null) settingsPanel.wikiLinksCheckBox.setSelected(globalSettings.isWikiLinks());
-            if (settingsPanel.definitionsCheckBox != null) settingsPanel.definitionsCheckBox.setSelected(globalSettings.isDefinitions());
-            if (settingsPanel.fencedCodeBlocksCheckBox != null) settingsPanel.fencedCodeBlocksCheckBox.setSelected(globalSettings.isFencedCodeBlocks());
-            if (settingsPanel.hardWrapsCheckBox != null) settingsPanel.hardWrapsCheckBox.setSelected(globalSettings.isHardWraps());
-            if (settingsPanel.forceListParaCheckBox != null) settingsPanel.forceListParaCheckBox.setSelected(globalSettings.isforceListPara());
-            if (settingsPanel.headerSpaceCheckBox != null) settingsPanel.headerSpaceCheckBox.setSelected(globalSettings.isHeaderSpace());
-            if (settingsPanel.taskListsCheckBox != null) settingsPanel.taskListsCheckBox.setSelected(globalSettings.isTaskLists());
-            if (settingsPanel.quotesCheckBox != null) settingsPanel.quotesCheckBox.setSelected(globalSettings.isQuotes());
-            if (settingsPanel.smartsCheckBox != null) settingsPanel.smartsCheckBox.setSelected(globalSettings.isSmarts());
-            if (settingsPanel.suppressHTMLBlocksCheckBox != null) settingsPanel.suppressHTMLBlocksCheckBox.setSelected(globalSettings.isSuppressHTMLBlocks());
-            if (settingsPanel.suppressInlineHTMLCheckBox != null) settingsPanel.suppressInlineHTMLCheckBox.setSelected(globalSettings.isSuppressInlineHTML());
-            if (settingsPanel.tablesCheckBox != null) settingsPanel.tablesCheckBox.setSelected(globalSettings.isTables());
-            if (settingsPanel.relaxedHRulesCheckBox != null) settingsPanel.relaxedHRulesCheckBox.setSelected(globalSettings.isRelaxedHRules());
-            if (settingsPanel.strikethroughCheckBox != null) settingsPanel.strikethroughCheckBox.setSelected(globalSettings.isStrikethrough());
-            if (settingsPanel.showHtmlTextAsModifiedCheckBox != null) settingsPanel.showHtmlTextAsModifiedCheckBox.setSelected(globalSettings.isShowHtmlTextAsModified());
-            if (settingsPanel.showHtmlTextCheckBox != null) settingsPanel.showHtmlTextCheckBox.setSelected(globalSettings.isShowHtmlText());
-            if (settingsPanel.updateDelaySpinner != null) settingsPanel.updateDelaySpinner.setValue(globalSettings.getUpdateDelay());
-            if (settingsPanel.maxImgWidthSpinner != null) settingsPanel.maxImgWidthSpinner.setValue(globalSettings.getMaxImgWidth());
-            if (settingsPanel.htmlThemeComboBox != null) settingsPanel.htmlThemeComboBox.setSelectedIndex(globalSettings.getHtmlTheme());
-            if (settingsPanel.textCustomCss != null) settingsPanel.textCustomCss.setText(globalSettings.getCustomCss());
+        if (settingsPanel == null) return;
+        for (ComponentSetting componentSetting : componentSettings) {
+            componentSetting.reset();
         }
     }
 
-    /** Dispose UI resources. */
     public void disposeUIResources() {
         settingsPanel = null;
+    }
+
+    abstract class ComponentSetting<T, S> {
+        String componentName;
+
+        S setting;
+
+        ComponentSetting(String componentName, S setting) {
+            this.componentName = componentName;
+            this.setting = setting;
+        }
+
+        public boolean isChanged() {
+            try {
+                T component = (T) settingsPanel.getComponent(componentName);
+                if (component != null) return isChanged(component);
+            } catch (ClassCastException ex) {
+                ex.printStackTrace();
+            }
+            return false;
+        }
+
+        public void setValue() {
+            try {
+                T component = (T) settingsPanel.getComponent(componentName);
+                if (component != null) setValue(component);
+            } catch (ClassCastException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        public void reset() {
+            try {
+                T component = (T) settingsPanel.getComponent(componentName);
+                if (component != null) reset(component);
+            } catch (ClassCastException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        abstract public boolean isChanged(T component);
+
+        abstract public void setValue(T component);
+
+        abstract public void reset(T component);
+    }
+
+    class TextAreaComponent extends ComponentSetting<JTextArea, MarkdownGlobalSettings.StringSetting> {
+        TextAreaComponent(String component, MarkdownGlobalSettings.StringSetting setting) { super(component, setting); }
+
+        @Override public boolean isChanged(JTextArea component) { return setting.isChanged(component); }
+
+        @Override public void setValue(JTextArea component) { setting.setValue(component); }
+
+        @Override public void reset(JTextArea component) { setting.reset(component); }
+    }
+
+    class SpinnerComponent extends ComponentSetting<JSpinner, MarkdownGlobalSettings.IntegerSetting> {
+        SpinnerComponent(String componentName, MarkdownGlobalSettings.IntegerSetting setting) { super(componentName, setting); }
+
+        @Override public boolean isChanged(JSpinner component) { return setting.isChanged(component); }
+
+        @Override public void setValue(JSpinner component) { setting.setValue(component); }
+
+        @Override public void reset(JSpinner component) { setting.reset(component); }
+    }
+
+    class ComboBoxComponent extends ComponentSetting<JComboBox, MarkdownGlobalSettings.IntegerSetting> {
+        ComboBoxComponent(String componentName, MarkdownGlobalSettings.IntegerSetting setting) { super(componentName, setting); }
+
+        @Override public boolean isChanged(JComboBox component) { return setting.isChanged(component); }
+
+        @Override public void setValue(JComboBox component) { setting.setValue(component); }
+
+        @Override public void reset(JComboBox component) { setting.reset(component); }
+    }
+
+    class CheckBoxComponent extends ComponentSetting<JCheckBox, MarkdownGlobalSettings.BooleanSetting> {
+        CheckBoxComponent(String componentName, MarkdownGlobalSettings.BooleanSetting setting) { super(componentName, setting); }
+
+        @Override public boolean isChanged(JCheckBox component) { return setting.isChanged(component); }
+
+        @Override public void setValue(JCheckBox component) { setting.setValue(component); }
+
+        @Override public void reset(JCheckBox component) { setting.reset(component); }
     }
 }

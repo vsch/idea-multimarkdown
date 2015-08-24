@@ -21,19 +21,34 @@
  * This file is based on the IntelliJ SimplePlugin tutorial
  *
  */
-package com.vladsch.idea.multimarkdown;
+package com.vladsch.idea.multimarkdown.psi.impl;
 
-import com.intellij.lang.Language;
-import org.jetbrains.annotations.NonNls;
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
+import com.intellij.lang.ASTNode;
+import com.intellij.navigation.ItemPresentation;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import com.vladsch.idea.multimarkdown.psi.MarkdownVisitor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class MarkdownLanguage extends Language {
-    @NonNls
-    public static final MarkdownLanguage INSTANCE = new MarkdownLanguage();
+public class MarkdownCommentImpl extends ASTWrapperPsiElement {
+    public MarkdownCommentImpl(ASTNode node) {
+        super(node);
+    }
 
-    @NotNull final static public String NAME = "MultiMarkdown";
+//    public void accept(@NotNull PsiElementVisitor visitor) {
+//        if (visitor instanceof MarkdownVisitor) ((MarkdownVisitor) visitor).visitProperty(this);
+//        else super.accept(visitor);
+//    }
 
-    private MarkdownLanguage() {
-        super(NAME);
+    @Nullable
+    public PsiElement getNameIdentifier() {
+        return null;
+    }
+
+    @Nullable
+    public ItemPresentation getPresentation() {
+        return null;
     }
 }

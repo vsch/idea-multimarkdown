@@ -1,6 +1,7 @@
+
 /*
  * Copyright (c) 2011-2014 Julien Nicoulaud <julien.nicoulaud@gmail.com>
-* Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
+ * Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -32,130 +33,90 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
-/**
- * UI form for {@link MarkdownGlobalSettings} edition.
- *
- * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
- * @see MarkdownGlobalSettingsConfigurable
- * @see MarkdownGlobalSettings
- * @since 0.6
- */
 public class MarkdownSettingsPanel {
 
-    /** The parent panel for the form. */
+    public JSpinner parsingTimeoutSpinner;
+    public JCheckBox smartsCheckBox;
+    public JCheckBox quotesCheckBox;
+    public JCheckBox abbreviationsCheckBox;
+    public JCheckBox hardWrapsCheckBox;
+    public JCheckBox autoLinksCheckBox;
+    public JCheckBox wikiLinksCheckBox;
+    public JCheckBox tablesCheckBox;
+    public JCheckBox definitionsCheckBox;
+    public JCheckBox fencedCodeBlocksCheckBox;
+    public JCheckBox suppressHTMLBlocksCheckBox;
+    public JCheckBox suppressInlineHTMLCheckBox;
+    public JCheckBox strikethroughCheckBox;
+    public JSpinner updateDelaySpinner;
+    public JSpinner maxImgWidthSpinner;
+    public JTextArea textCustomCss;
+    public JPanel customCssPanel;
+    public JButton btnResetCss;
+    public JButton btnLoadDefault;
+    public JCheckBox taskListsCheckBox;
+    public JCheckBox headerSpaceCheckBox;
+    public JCheckBox showHtmlTextCheckBox;
+    public JCheckBox showHtmlTextAsModifiedCheckBox;
+    public JCheckBox anchorLinksCheckBox;
+    public JCheckBox forceListParaCheckBox;
+    public JCheckBox relaxedHRulesCheckBox;
+    public JComboBox htmlThemeComboBox;
+    public JCheckBox enableTrimSpacesCheckBox;
+    private JCheckBox todoCommentsCheckBox;
+
     public JPanel panel;
 
-    /** The "settings" form container. */
+    // need this so that we dont try to access components before they are created
+    public JComponent getComponent(String name) {
+        if (name.equals("parsingTimeoutSpinner")) return parsingTimeoutSpinner;
+        if (name.equals("smartsCheckBox")) return smartsCheckBox;
+        if (name.equals("quotesCheckBox")) return quotesCheckBox;
+        if (name.equals("abbreviationsCheckBox")) return abbreviationsCheckBox;
+        if (name.equals("hardWrapsCheckBox")) return hardWrapsCheckBox;
+        if (name.equals("autoLinksCheckBox")) return autoLinksCheckBox;
+        if (name.equals("wikiLinksCheckBox")) return wikiLinksCheckBox;
+        if (name.equals("tablesCheckBox")) return tablesCheckBox;
+        if (name.equals("definitionsCheckBox")) return definitionsCheckBox;
+        if (name.equals("fencedCodeBlocksCheckBox")) return fencedCodeBlocksCheckBox;
+        if (name.equals("suppressHTMLBlocksCheckBox")) return suppressHTMLBlocksCheckBox;
+        if (name.equals("suppressInlineHTMLCheckBox")) return suppressInlineHTMLCheckBox;
+        if (name.equals("strikethroughCheckBox")) return strikethroughCheckBox;
+        if (name.equals("updateDelaySpinner")) return updateDelaySpinner;
+        if (name.equals("maxImgWidthSpinner")) return maxImgWidthSpinner;
+        if (name.equals("textCustomCss")) return textCustomCss;
+        if (name.equals("customCssPanel")) return customCssPanel;
+        if (name.equals("btnResetCss")) return btnResetCss;
+        if (name.equals("btnLoadDefault")) return btnLoadDefault;
+        if (name.equals("taskListsCheckBox")) return taskListsCheckBox;
+        if (name.equals("headerSpaceCheckBox")) return headerSpaceCheckBox;
+        if (name.equals("showHtmlTextCheckBox")) return showHtmlTextCheckBox;
+        if (name.equals("showHtmlTextAsModifiedCheckBox")) return showHtmlTextAsModifiedCheckBox;
+        if (name.equals("anchorLinksCheckBox")) return anchorLinksCheckBox;
+        if (name.equals("forceListParaCheckBox")) return forceListParaCheckBox;
+        if (name.equals("relaxedHRulesCheckBox")) return relaxedHRulesCheckBox;
+        if (name.equals("htmlThemeComboBox")) return htmlThemeComboBox;
+        if (name.equals("enableTrimSpacesCheckBox")) return enableTrimSpacesCheckBox;
+//        if (name.equals("todoCommentsCheckBox")) return todoCommentsCheckBox;
+        return null;
+    }
+
     public JPanel settingsPanel;
-
-    /** Form element for {@link MarkdownGlobalSettings#parsingTimeout}. */
-    public JSpinner parsingTimeoutSpinner;
-
-    /** Description label for {@link #parsingTimeoutSpinner}. */
-    private JLabel parsingTimeoutDescriptionLabel;
-
-    /** The "extensions" form container. */
     public JPanel extensionsPanel;
 
-    /** Form element for {@link MarkdownGlobalSettings#smarts}. */
-    public JCheckBox smartsCheckBox;
-
-    /** Form element for {@link MarkdownGlobalSettings#quotes}. */
-    public JCheckBox quotesCheckBox;
-
-    /** Form element for {@link MarkdownGlobalSettings#abbreviations}. */
-    public JCheckBox abbreviationsCheckBox;
-
-    /** Form element for {@link MarkdownGlobalSettings#hardWraps}. */
-    public JCheckBox hardWrapsCheckBox;
-
-    /** Form element for {@link MarkdownGlobalSettings#autoLinks}. */
-    public JCheckBox autoLinksCheckBox;
-
-    /** Form element for {@link MarkdownGlobalSettings#wikiLinks}. */
-    public JCheckBox wikiLinksCheckBox;
-
-    /** Form element for {@link MarkdownGlobalSettings#tables}. */
-    public JCheckBox tablesCheckBox;
-
-    /** Form element for {@link MarkdownGlobalSettings#definitions}. */
-    public JCheckBox definitionsCheckBox;
-
-    /** Form element for {@link MarkdownGlobalSettings#fencedCodeBlocks}. */
-    public JCheckBox fencedCodeBlocksCheckBox;
-
-    /** Form element for {@link MarkdownGlobalSettings#suppressHTMLBlocks}. */
-    public JCheckBox suppressHTMLBlocksCheckBox;
-
-    /** Form element for {@link MarkdownGlobalSettings#suppressInlineHTML}. */
-    public JCheckBox suppressInlineHTMLCheckBox;
-
-    /** Form element for {@link MarkdownGlobalSettings#strikethrough}. */
-    public JCheckBox strikethroughCheckBox;
-
-    public JSpinner updateDelaySpinner;
-
-    public JSpinner maxImgWidthSpinner;
-
-    public JTextArea textCustomCss;
-
-    public JPanel customCssPanel;
-
-    public JButton btnResetCss;
-
-    public JButton btnLoadDefault;
-
-    public JCheckBox taskListsCheckBox;
-
-    public JCheckBox headerSpaceCheckBox;
-
-    public JCheckBox showHtmlTextCheckBox;
-
-    public JCheckBox showHtmlTextAsModifiedCheckBox;
-
-    public JCheckBox anchorLinksCheckBox;
-
-    public JCheckBox forceListParaCheckBox;
-
-    public JCheckBox relaxedHRulesCheckBox;
-
-    public JComboBox htmlThemeComboBox;
-
-    /** Description label for {@link #suppressInlineHTMLCheckBox}. */
     private JLabel suppressInlineHTMLDescriptionLabel;
-
-    /** Description label for {@link #suppressHTMLBlocksCheckBox}. */
     private JLabel suppressHTMLBlocksDescriptionLabel;
-
-    /** Description label for {@link #fencedCodeBlocksCheckBox}. */
     private JLabel fencedCodeBlocksDescriptionLabel;
-
-    /** Description label for {@link #definitionsCheckBox}. */
     private JLabel definitionsDescriptionLabel;
-
-    /** Description label for {@link #tablesCheckBox}. */
     private JLabel tablesDescriptionLabel;
-
-    /** Description label for {@link #autoLinksCheckBox}. */
     private JLabel autoLinksDescriptionLabel;
-
-    /** Description label for {@link #wikiLinksCheckBox}. */
     private JLabel wikiLinksDescriptionLabel;
-
-    /** Description label for {@link #hardWrapsCheckBox}. */
     private JLabel hardWarpsDescriptionLabel;
-
-    /** Description label for {@link #abbreviationsCheckBox}. */
     private JLabel abbreviationsDescriptionLabel;
-
-    /** Description label for {@link #quotesCheckBox}. */
     private JLabel quotesDescriptionLabel;
-
-    /** Description label for {@link #smartsCheckBox}. */
     private JLabel smartsDescriptionLabel;
-
-    /** Description label for {@link #strikethroughCheckBox}. */
     private JLabel strikethroughDescriptionLabel;
+    private JLabel parsingTimeoutDescriptionLabel;
 
     protected void showHtmlTextStateChanged() {
         if (showHtmlTextAsModifiedCheckBox != null) {
@@ -187,7 +148,6 @@ public class MarkdownSettingsPanel {
         showHtmlTextCheckBox.addPropertyChangeListener(new PropertyChangeListener() {
             @Override public void propertyChange(PropertyChangeEvent evt) {
                 showHtmlTextStateChanged();
-                ;
             }
         });
 
@@ -196,11 +156,5 @@ public class MarkdownSettingsPanel {
                 showHtmlTextStateChanged();
             }
         });
-
-//        htmlThemeComboBox.addActionListener(new ActionListener() {
-//            @Override public void actionPerformed(ActionEvent e) {
-//
-//            }
-//        });
     }
 }

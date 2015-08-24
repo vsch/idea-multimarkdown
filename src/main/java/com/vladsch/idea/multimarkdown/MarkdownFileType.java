@@ -23,17 +23,41 @@
  */
 package com.vladsch.idea.multimarkdown;
 
-import com.intellij.lang.Language;
-import org.jetbrains.annotations.NonNls;
+import com.intellij.openapi.fileTypes.LanguageFileType;
+
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class MarkdownLanguage extends Language {
-    @NonNls
-    public static final MarkdownLanguage INSTANCE = new MarkdownLanguage();
+import javax.swing.*;
 
-    @NotNull final static public String NAME = "MultiMarkdown";
+public class MarkdownFileType extends LanguageFileType {
+    public static final MarkdownFileType INSTANCE = new MarkdownFileType();
 
-    private MarkdownLanguage() {
-        super(NAME);
+    private MarkdownFileType() {
+        super(MarkdownLanguage.INSTANCE);
+    }
+
+    @NotNull
+    @Override
+    public String getName() {
+        return MarkdownBundle.message("multimarkdown.filetype.name");
+    }
+
+    @NotNull
+    @Override
+    public String getDescription() {
+        return MarkdownBundle.message("multimarkdown.filetype.description");
+    }
+
+    @NotNull
+    @Override
+    public String getDefaultExtension() {
+        return MarkdownFileTypeFactory.DEFAULT_EXTENSION;
+    }
+
+    @Nullable
+    @Override
+    public Icon getIcon() {
+        return MarkdownIcons.FILE;
     }
 }

@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Julien Nicoulaud <julien.nicoulaud@gmail.com>
-* Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
+ * Copyright (c) 2015-2015 Vladimir Schneider <vladimir.schneider@gmail.com>
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,28 +17,25 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
+ *
+ * This file is based on the IntelliJ SimplePlugin tutorial
+ *
  */
-package com.vladsch.idea.multimarkdown.lang.psi.impl;
+package com.vladsch.idea.multimarkdown.psi;
 
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
-import com.intellij.lang.ASTNode;
-import com.vladsch.idea.multimarkdown.lang.psi.api.MarkdownPsiElement;
+import com.intellij.psi.tree.IElementType;
+import com.vladsch.idea.multimarkdown.MarkdownLanguage;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Base implementation of {@link MarkdownPsiElement}.
- *
- * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
- * @since 0.1
- */
-public class MarkdownPsiElementImpl extends ASTWrapperPsiElement implements MarkdownPsiElement {
+public class MarkdownTokenType extends IElementType {
 
-    /**
-     * Build a new instance of {@link MarkdownPsiElementImpl}.
-     *
-     * @param node the AST node.
-     */
-    public MarkdownPsiElementImpl(@NotNull ASTNode node) {
-        super(node);
+    public MarkdownTokenType(@NotNull @NonNls String debugName) {
+        super(debugName, MarkdownLanguage.INSTANCE);
+    }
+
+    @Override
+    public String toString() {
+        return "MarkdownTokenType." + super.toString();
     }
 }

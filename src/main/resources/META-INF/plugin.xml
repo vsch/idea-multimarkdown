@@ -26,7 +26,7 @@
   <name>MultiMarkdown</name>
   <category>Custom Languages</category>
   <vendor url="http://github.com/vsch" email="vladimir.schneider@gmail.com">Vladimir Schneider</vendor>
-  <version>1.0.13</version>
+  <version>1.0.15</version>
   <idea-version since-build="134.549"/>
   <depends>com.intellij.modules.lang</depends>
 
@@ -46,6 +46,19 @@
 
   <change-notes><![CDATA[
     <p>
+    <b>1.0.15</b><br/>
+      <ul>
+        <li>: Add Separate Setext header styles</li>
+        <li>: Fix highlighting not working on version 14.1, due to plugin.xml change</li>
+    </ul>
+    <b>1.0.14</b><br/>
+      <ul>
+        <li>: Fix Scratch files were not recognized as MultiMarkdown files</li>
+        <li>: Fix Implement a Lexer so that expected IntelliJ functionality can be implemented</li>
+        <li>: Fix Sample Text not working in Settings/Editor/Colors &amp; Fonts</li>
+        <li>: Fix TODO's. Now working in comments like: &lt;!-- TODO: this is a todo item --&gt;</li>
+        <li>: Add Option to trim trailing spaces from Markdown files. Previously it was disabled.</li>
+    </ul>
     <b>1.0.13</b><br/>
       <ul>
         <li>: Fix Compound Definition list parsing. (pegdown) </li>
@@ -157,15 +170,15 @@
     ]]></change-notes>
 
   <extensions defaultExtensionNs="com.intellij">
-    <fileTypeFactory implementation="com.vladsch.idea.multimarkdown.file.MarkdownFileTypeFactory"/>
-    <syntaxHighlighter key="Markdown" implementationClass="com.vladsch.idea.multimarkdown.highlighter.MarkdownSyntaxHighlighter"/>
+    <fileTypeFactory implementation="com.vladsch.idea.multimarkdown.MarkdownFileTypeFactory"/>
+    <lang.syntaxHighlighterFactory key="MultiMarkdown" language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.highlighter.MarkdownSyntaxHighlighterFactory"/>
     <colorSettingsPage implementation="com.vladsch.idea.multimarkdown.highlighter.MarkdownColorSettingsPage"/>
     <additionalTextAttributes scheme="Default" file="com/vladsch/idea/multimarkdown/colorSchemes/MultiMarkdownDefault.xml"/>
     <additionalTextAttributes scheme="Darcula" file="com/vladsch/idea/multimarkdown/colorSchemes/MultiMarkdownDarcula.xml"/>
     <fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MarkdownPreviewEditorProvider"/>
     <fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MarkdownHtmlEditorProvider"/>
     <lang.documentationProvider language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.documentation.MarkdownDocumentationProvider"/>
-    <lang.parserDefinition language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.lang.parser.MarkdownParserDefinition"/>
+    <lang.parserDefinition language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.parser.MarkdownParserDefinition"/>
     <externalAnnotator language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.annotator.MarkdownAnnotator"/>
     <spellchecker.support language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.spellchecking.MarkdownSpellcheckingStrategy"/>
     <todoIndexer filetype="Markdown" implementationClass="com.vladsch.idea.multimarkdown.todo.MarkdownTodoIndexer"/>

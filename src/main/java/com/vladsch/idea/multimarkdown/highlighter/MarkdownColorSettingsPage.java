@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2011-2014 Julien Nicoulaud <julien.nicoulaud@gmail.com>
-* Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
+ * Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -40,248 +40,74 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Color settings page for the Markdown editor.
- *
- * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
- * @since 0.1
- */
 public class MarkdownColorSettingsPage implements ColorSettingsPage {
 
-    /** The {@link Logger}. */
     private final static Logger LOGGER = Logger.getInstance(MarkdownColorSettingsPage.class.getName());
 
-    /**
-     * An empty {@link ColorDescriptor} array.
-     *
-     * @see #getColorDescriptors()
-     */
     protected static final ColorDescriptor[] EMPTY_COLOR_DESCRIPTOR_ARRAY = new ColorDescriptor[]{};
 
-    /** The path to the sample Markdown document shown in the colors settings dialog. */
     @NonNls
     protected static final String SAMPLE_MARKDOWN_DOCUMENT_PATH = "/com/vladsch/idea/multimarkdown/sample-document.md";
 
-    /**
-     * The sample Markdown document shown in the colors settings dialog.
-     *
-     * @see #loadSampleMarkdownDocument()
-     */
     protected static final String SAMPLE_MARKDOWN_DOCUMENT = loadSampleMarkdownDocument();
 
-    /**
-     * The set of {@link AttributesDescriptor} defining the configurable options in the dialog.
-     *
-     * @see #MarkdownColorSettingsPage()
-     */
     protected final List<AttributesDescriptor> attributeDescriptors = new LinkedList<AttributesDescriptor>();
 
-    /** Build a new instance of {@link MarkdownColorSettingsPage}. */
     public MarkdownColorSettingsPage() {
-
-        // Populate attribute descriptors.
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.text"),
-                        MarkdownHighlighterColors.TEXT_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.anchor-link"),
-                        MarkdownHighlighterColors.ANCHOR_LINK_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.bold"),
-                        MarkdownHighlighterColors.BOLD_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.bold-marker"),
-                        MarkdownHighlighterColors.BOLD_MARKER_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.bold-italic"),
-                        MarkdownHighlighterColors.BOLDITALIC_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.italic"),
-                        MarkdownHighlighterColors.ITALIC_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.italic-marker"),
-                        MarkdownHighlighterColors.ITALIC_MARKER_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.strikethrough"),
-                        MarkdownHighlighterColors.STRIKETHROUGH_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.strikethrough-marker"),
-                        MarkdownHighlighterColors.STRIKETHROUGH_MARKER_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.explicit-link"),
-                        MarkdownHighlighterColors.EXPLICIT_LINK_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.image"),
-                        MarkdownHighlighterColors.IMAGE_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.reference-image"),
-                        MarkdownHighlighterColors.REFERENCE_IMAGE_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.header-level-1"),
-                        MarkdownHighlighterColors.HEADER_LEVEL_1_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.header-level-2"),
-                        MarkdownHighlighterColors.HEADER_LEVEL_2_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.header-level-3"),
-                        MarkdownHighlighterColors.HEADER_LEVEL_3_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.header-level-4"),
-                        MarkdownHighlighterColors.HEADER_LEVEL_4_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.header-level-5"),
-                        MarkdownHighlighterColors.HEADER_LEVEL_5_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.header-level-6"),
-                        MarkdownHighlighterColors.HEADER_LEVEL_6_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.code"),
-                        MarkdownHighlighterColors.CODE_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.quote"),
-                        MarkdownHighlighterColors.QUOTE_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.smarts"),
-                        MarkdownHighlighterColors.SMARTS_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.hrule"),
-                        MarkdownHighlighterColors.HRULE_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.special-text"),
-                        MarkdownHighlighterColors.SPECIAL_TEXT_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.reference-link"),
-                        MarkdownHighlighterColors.REFERENCE_LINK_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.wiki-link"),
-                        MarkdownHighlighterColors.WIKI_LINK_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.auto-link"),
-                        MarkdownHighlighterColors.AUTO_LINK_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.mail-link"),
-                        MarkdownHighlighterColors.MAIL_LINK_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.verbatim"),
-                        MarkdownHighlighterColors.VERBATIM_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.blockquote"),
-                        MarkdownHighlighterColors.BLOCK_QUOTE_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.bullet-list"),
-                        MarkdownHighlighterColors.BULLET_LIST_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.ordered-list"),
-                        MarkdownHighlighterColors.ORDERED_LIST_ATTR_KEY)
-        );
-//        attributeDescriptors.add(new AttributesDescriptor(
-//                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.list-item"),
-//                        MarkdownHighlighterColors.LIST_ITEM_ATTR_KEY)
-//        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.definition-list"),
-                        MarkdownHighlighterColors.DEFINITION_LIST_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.definition"),
-                        MarkdownHighlighterColors.DEFINITION_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.definition-term"),
-                        MarkdownHighlighterColors.DEFINITION_TERM_ATTR_KEY)
-        );
-
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.table"),
-                        MarkdownHighlighterColors.TABLE_ATTR_KEY)
-        );
-        // never rendered, covered by child nodes
-//        attributeDescriptors.add(new AttributesDescriptor(
-//                        MarkdownBundle.message("markdown.editor.colorsettingspage.table-body"),
-//                        MarkdownHighlighterColors.TABLE_BODY_ATTR_KEY)
-//        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.table-cell-rodd-codd"),
-                        MarkdownHighlighterColors.TABLE_CELL_RODD_CODD_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.table-cell-rodd-ceven"),
-                        MarkdownHighlighterColors.TABLE_CELL_RODD_CEVEN_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.table-cell-reven-codd"),
-                        MarkdownHighlighterColors.TABLE_CELL_REVEN_CODD_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.table-cell-reven-ceven"),
-                        MarkdownHighlighterColors.TABLE_CELL_REVEN_CEVEN_ATTR_KEY)
-        );
-//        attributeDescriptors.add(new AttributesDescriptor(
-//                        MarkdownBundle.message("markdown.editor.colorsettingspage.table-column"),
-//                        MarkdownHighlighterColors.TABLE_COLUMN_ATTR_KEY)
-//        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.table-row-odd"),
-                        MarkdownHighlighterColors.TABLE_ROW_ODD_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.table-row-even"),
-                        MarkdownHighlighterColors.TABLE_ROW_EVEN_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.table-caption"),
-                        MarkdownHighlighterColors.TABLE_CAPTION_ATTR_KEY)
-        );
-//        attributeDescriptors.add(new AttributesDescriptor(
-//                        MarkdownBundle.message("markdown.editor.colorsettingspage.table-header"),
-//                        MarkdownHighlighterColors.TABLE_HEADER_ATTR_KEY)
-//        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.html-block"),
-                        MarkdownHighlighterColors.HTML_BLOCK_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.inline-html"),
-                        MarkdownHighlighterColors.INLINE_HTML_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.reference"),
-                        MarkdownHighlighterColors.REFERENCE_ATTR_KEY)
-        );
-        attributeDescriptors.add(new AttributesDescriptor(
-                        MarkdownBundle.message("multimarkdown.editor.colorsettingspage.abbreviation"),
-                        MarkdownHighlighterColors.ABBREVIATION_ATTR_KEY)
-        );
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.abbreviation"), MarkdownHighlighterColors.ABBREVIATION_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.anchor-link"), MarkdownHighlighterColors.ANCHOR_LINK_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.auto-link"), MarkdownHighlighterColors.AUTO_LINK_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.blockquote"), MarkdownHighlighterColors.BLOCK_QUOTE_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.bold"), MarkdownHighlighterColors.BOLD_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.bold-italic"), MarkdownHighlighterColors.BOLDITALIC_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.bold-marker"), MarkdownHighlighterColors.BOLD_MARKER_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.bullet-list"), MarkdownHighlighterColors.BULLET_LIST_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.comment"), MarkdownHighlighterColors.COMMENT_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.code"), MarkdownHighlighterColors.CODE_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.definition"), MarkdownHighlighterColors.DEFINITION_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.definition-list"), MarkdownHighlighterColors.DEFINITION_LIST_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.definition-term"), MarkdownHighlighterColors.DEFINITION_TERM_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.explicit-link"), MarkdownHighlighterColors.EXPLICIT_LINK_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.header-level-1"), MarkdownHighlighterColors.HEADER_LEVEL_1_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.header-level-1-setext"), MarkdownHighlighterColors.SETEXT_HEADER_LEVEL_1_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.header-level-2"), MarkdownHighlighterColors.HEADER_LEVEL_2_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.header-level-2-setext"), MarkdownHighlighterColors.SETEXT_HEADER_LEVEL_2_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.header-level-3"), MarkdownHighlighterColors.HEADER_LEVEL_3_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.header-level-4"), MarkdownHighlighterColors.HEADER_LEVEL_4_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.header-level-5"), MarkdownHighlighterColors.HEADER_LEVEL_5_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.header-level-6"), MarkdownHighlighterColors.HEADER_LEVEL_6_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.hrule"), MarkdownHighlighterColors.HRULE_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.html-block"), MarkdownHighlighterColors.HTML_BLOCK_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.image"), MarkdownHighlighterColors.IMAGE_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.inline-html"), MarkdownHighlighterColors.INLINE_HTML_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.italic"), MarkdownHighlighterColors.ITALIC_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.italic-marker"), MarkdownHighlighterColors.ITALIC_MARKER_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.mail-link"), MarkdownHighlighterColors.MAIL_LINK_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.ordered-list"), MarkdownHighlighterColors.ORDERED_LIST_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.quote"), MarkdownHighlighterColors.QUOTE_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.reference"), MarkdownHighlighterColors.REFERENCE_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.reference-image"), MarkdownHighlighterColors.REFERENCE_IMAGE_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.reference-link"), MarkdownHighlighterColors.REFERENCE_LINK_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.smarts"), MarkdownHighlighterColors.SMARTS_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.special-text"), MarkdownHighlighterColors.SPECIAL_TEXT_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.strikethrough"), MarkdownHighlighterColors.STRIKETHROUGH_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.strikethrough-bold"), MarkdownHighlighterColors.STRIKETHROUGH_BOLD_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.strikethrough-italic"), MarkdownHighlighterColors.STRIKETHROUGH_ITALIC_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.strikethrough-bolditalic"), MarkdownHighlighterColors.STRIKETHROUGH_BOLDITALIC_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.strikethrough-marker"), MarkdownHighlighterColors.STRIKETHROUGH_MARKER_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.table"), MarkdownHighlighterColors.TABLE_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.table-caption"), MarkdownHighlighterColors.TABLE_CAPTION_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.table-cell-reven-ceven"), MarkdownHighlighterColors.TABLE_CELL_REVEN_CEVEN_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.table-cell-reven-codd"), MarkdownHighlighterColors.TABLE_CELL_REVEN_CODD_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.table-cell-rodd-ceven"), MarkdownHighlighterColors.TABLE_CELL_RODD_CEVEN_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.table-cell-rodd-codd"), MarkdownHighlighterColors.TABLE_CELL_RODD_CODD_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.table-row-even"), MarkdownHighlighterColors.TABLE_ROW_EVEN_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.table-row-odd"), MarkdownHighlighterColors.TABLE_ROW_ODD_ATTR_KEY));
+//        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.task-item-done"), MarkdownHighlighterColors.TASK_DONE_ITEM_ATTR_KEY));
+//        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.task-item"), MarkdownHighlighterColors.TASK_ITEM_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.text"), MarkdownHighlighterColors.TEXT_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.verbatim"), MarkdownHighlighterColors.VERBATIM_ATTR_KEY));
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.wiki-link"), MarkdownHighlighterColors.WIKI_LINK_ATTR_KEY));
     }
 
     /**
@@ -326,10 +152,7 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
     @NonNls
     @NotNull
     public String getDemoText() {
-        // FIXME Issue #14: Demo text is not highlighted because highlighting is done with an
-        // ExternalAnnotator, which is not triggered in color settings pages.
-        // return SAMPLE_MARKDOWN_DOCUMENT;
-        return " ";
+         return SAMPLE_MARKDOWN_DOCUMENT;
     }
 
     /**
@@ -339,7 +162,7 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
      */
     @NotNull
     public String getDisplayName() {
-        return MarkdownBundle.message("markdown.filetype.name");
+        return MarkdownBundle.message("multimarkdown.filetype.name");
     }
 
     /**
@@ -356,11 +179,11 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
     /**
      * Get the icon for the page, shown in the dialog tab.
      *
-     * @return {@link MarkdownIcons#MARKDOWN_ICON}
+     * @return {@link MarkdownIcons#FILE}
      */
     @Nullable
     public Icon getIcon() {
-        return MarkdownIcons.MARKDOWN_ICON;
+        return MarkdownIcons.FILE;
     }
 
     /**
@@ -377,6 +200,7 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
         } catch (Exception e) {
             LOGGER.error("Failed loading sample Markdown document", e);
         }
-        return MarkdownBundle.message("multimarkdown.editor.colorsettingspage.sample-loading-error");
+        return MarkdownBundle.message("multimarkdown.colorsettings.sample-loading-error");
     }
 }
+

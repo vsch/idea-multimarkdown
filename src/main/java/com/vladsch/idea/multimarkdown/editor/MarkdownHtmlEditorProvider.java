@@ -26,102 +26,42 @@ import com.intellij.openapi.project.PossiblyDumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.vladsch.idea.multimarkdown.MarkdownLanguage;
-import com.vladsch.idea.multimarkdown.file.MarkdownFileType;
+import com.vladsch.idea.multimarkdown.MarkdownFileType;
 import com.vladsch.idea.multimarkdown.settings.MarkdownGlobalSettings;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * {@link FileEditorProvider} implementation to provide {@link MarkdownPreviewEditor}.
- *
- * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
- * @see MarkdownPreviewEditor
- * @since 0.1
- */
 public class MarkdownHtmlEditorProvider implements FileEditorProvider, PossiblyDumbAware {
 
-    /** The id of the editors provided by this {@link FileEditorProvider}. */
-    public static final String EDITOR_TYPE_ID = MarkdownLanguage.LANGUAGE_NAME + "HtmlEditor";
+    public static final String EDITOR_TYPE_ID = MarkdownLanguage.NAME + "HtmlEditor";
 
-    /**
-     * Check whether this {@link FileEditorProvider} can create a valid {@link FileEditor} for the file.
-     *
-     * @param project the project context.
-     * @param file    the file to be tested for acceptance. This parameter must never be <code>null</code>.
-     * @return whether the provider can create a valid editor for the specified <code>file</code>.
-     */
     public boolean accept(@NotNull Project project, @NotNull VirtualFile file) {
-        return MarkdownGlobalSettings.getInstance().isShowHtmlText() && file.getFileType() instanceof MarkdownFileType;
+        return MarkdownGlobalSettings.getInstance().showHtmlText.getValue()
+                && (file.getFileType() instanceof MarkdownFileType || file.getName().startsWith("scratch_"));
     }
 
-    /**
-     * Create a valid editor for the specified file.
-     * <p/>
-     * Should be called only if the provider has accepted this file.
-     *
-     * @param project the project context.
-     * @param file    the file for which an editor must be created.
-     * @return an editor for the specified file.
-     * @see #accept(Project, VirtualFile)
-     */
     @NotNull
     public FileEditor createEditor(@NotNull Project project, @NotNull VirtualFile file) {
         return new MarkdownPreviewEditor(project, FileDocumentManager.getInstance().getDocument(file), true);
     }
 
-    /**
-     * Dispose the specified <code>editor</code>.
-     *
-     * @param editor editor to be disposed. This parameter must not be <code>null</code>.
-     */
     public void disposeEditor(@NotNull FileEditor editor) {
         editor.dispose();
     }
 
-    /**
-     * Deserialize state from the specified <code>sourceElemet</code>.
-     * <p/>
-     * Does not do anything as {@link MarkdownPreviewEditor} is stateless.
-     *
-     * @param sourceElement the source element.
-     * @param project       the project.
-     * @param file          the file.
-     * @return {@link FileEditorState#INSTANCE}
-     * @see #writeState(FileEditorState, Project, Element)
-     */
     @NotNull
     public FileEditorState readState(@NotNull Element sourceElement, @NotNull Project project, @NotNull VirtualFile file) {
         return FileEditorState.INSTANCE;
     }
 
-    /**
-     * Serialize state into the specified <code>targetElement</code>
-     * <p/>
-     * Does not do anything as {@link MarkdownPreviewEditor} is stateless.
-     *
-     * @param state         the state to serialize.
-     * @param project       the project.
-     * @param targetElement the target element to serialize to.
-     * @see #readState(Element, Project, VirtualFile)
-     */
     public void writeState(@NotNull FileEditorState state, @NotNull Project project, @NotNull Element targetElement) {
     }
 
-    /**
-     * Get the id of the editors provided by this {@link FileEditorProvider}.
-     *
-     * @return {@link #EDITOR_TYPE_ID}
-     */
     @NotNull
     public String getEditorTypeId() {
         return EDITOR_TYPE_ID;
     }
 
-    /**
-     * Get the {@link FileEditorPolicy} defining how to show editors created via the {@link FileEditorProvider}.
-     *
-     * @return {@link FileEditorPolicy#PLACE_AFTER_DEFAULT_EDITOR}
-     */
     @NotNull
     public FileEditorPolicy getPolicy() {
         return FileEditorPolicy.PLACE_AFTER_DEFAULT_EDITOR;

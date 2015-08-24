@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Julien Nicoulaud <julien.nicoulaud@gmail.com>
-* Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
+ * Copyright (c) 2015-2015 Vladimir Schneider <vladimir.schneider@gmail.com>
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,23 +17,25 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */
-package com.vladsch.idea.multimarkdown.file;
-
-import com.intellij.psi.tree.IFileElementType;
-import com.vladsch.idea.multimarkdown.lang.parser.MarkdownParserDefinition;
-
-/**
- * {@link IFileElementType} for Markdown files.
  *
- * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
- * @see MarkdownParserDefinition#FILE_ELEMENT_TYPE
- * @since 0.1
+ * This file is based on the IntelliJ SimplePlugin tutorial
+ *
  */
-public class MarkdownFileElementType extends IFileElementType {
+package com.vladsch.idea.multimarkdown.psi;
 
-    /** Build a new instance of {@link MarkdownFileElementType}. */
-    public MarkdownFileElementType() {
-        super(MarkdownFileType.LANGUAGE);
+import com.intellij.psi.tree.IElementType;
+import com.vladsch.idea.multimarkdown.MarkdownLanguage;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+
+public class MarkdownElementType extends IElementType {
+
+    public MarkdownElementType(@NotNull @NonNls String debugName) {
+        super(debugName, MarkdownLanguage.INSTANCE);
+    }
+
+    @Override
+    public String toString() {
+        return "MarkdownElementType." + super.toString();
     }
 }

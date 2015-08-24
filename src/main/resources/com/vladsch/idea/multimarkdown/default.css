@@ -376,6 +376,7 @@ li.p {
     margin: 10px 0 0 0;
 }
 
+li.task-list-item,
 li.taskp {
     margin: 0;
 }
@@ -384,6 +385,7 @@ li.p p.p {
     margin: 0;
 }
 
+li.task-list-item p.p,
 li.taskp p.p {
     margin: 0;
 }
@@ -400,6 +402,7 @@ ul li li {
     list-style-type: circle;
 }
 
+ul li.task-list-item,
 ul li.task,
 ul li.taskp {
     list-style-type: none;

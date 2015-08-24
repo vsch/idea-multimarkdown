@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2011-2014 Julien Nicoulaud <julien.nicoulaud@gmail.com>
-* Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
+ * Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -25,17 +25,14 @@ import com.intellij.lexer.EmptyLexer;
 import com.intellij.lexer.Lexer;
 import com.intellij.psi.impl.cache.impl.OccurrenceConsumer;
 import com.intellij.psi.impl.cache.impl.id.LexerBasedIdIndexer;
+import com.vladsch.idea.multimarkdown.parser.MarkdownLexer;
+import com.vladsch.idea.multimarkdown.parser.MarkdownPlainTextLexer;
+import com.vladsch.idea.multimarkdown.settings.MarkdownGlobalSettings;
 
-/**
- * {@code Id} indexer for Markdown.
- *
- * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
- * @since 0.9
- */
 public class MarkdownIdIndexer extends LexerBasedIdIndexer {
 
     public static Lexer createIndexingLexer(OccurrenceConsumer consumer) {
-        return new MarkdownFilterLexer(new EmptyLexer(), consumer);
+        return new MarkdownFilterLexer(MarkdownGlobalSettings.getInstance().todoComments.getValue() ? new MarkdownLexer() : new MarkdownPlainTextLexer(), consumer);
     }
 
     @Override

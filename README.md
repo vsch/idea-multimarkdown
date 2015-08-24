@@ -8,11 +8,11 @@ idea-multimarkdown
 The Full Story
 --------------
 
-It all started with a desire to see Markdown files in my PhpStorm IDE as they would look on GitHub. I was already using [nicoulaj/idea-markdown plugin](https://github.com/nicoulaj/idea-markdown) but found its preview was more like [Craig's List](http://montreal.en.craigslist.ca/) than [GitHub](https://github.com/vsch/laravel-translation-manager). It did not appear to have been recently updated, so I decided to fork it and modify the style sheet it uses. How hard could that be?
+It all started with a desire to see Markdown files in PhpStorm IDE as they would look on GitHub. I was already using [nicoulaj/idea-markdown plugin](https://github.com/nicoulaj/idea-markdown) but found its preview was more like [Craig's List](http://montreal.en.craigslist.ca/) than [GitHub](https://github.com/vsch/laravel-translation-manager). It did not appear to have been recently updated, so I decided to fork it and modify the style sheet it uses. How hard could that be?
 
-I found out quickly that there was more to it than meets the eye. Rendering is done by Java not a browser, the parser is HTML 3.1 and not all features are implemented. Additionally, the Table extension did not work in the version of pegdown used by the plugin. I needed that because maintaining HTML tables is a pain. So I upgraded the plugin to use the latest pegdown, parboiled and fixed a few bugs. Since I was already in the code, I might as well add a few more desired features like user editable style sheet, fix a few more bugs, add updates to preview so that I could split the editor pane and edit in one while seeing the preview in the other.
+I found out quickly that there was more to it than meets the eye. Rendering is done by Java not a browser, the parser is HTML 3.1 and not all features are implemented. Additionally, the Table extension did not work in the version of `pegdown` used by the plugin. I needed that because maintaining HTML tables is a pain. So I upgraded the plugin to use the latest `pegdown`, `parboiled` and fixed a few bugs. Since I was already in the code, I might as well add a few more desired features like user editable style sheet, fix a few more bugs, add updates to preview so that I could split the editor pane and edit in one while seeing the preview in the other.
 
-Then I encountered some bugs in parsing of compound nested lists in pegdown and had to dive into its source to fix them. Having done that and gotten familiar with it, I decided to add a new extension. Finally, to help me with debugging and generating test expectations for pegdown, I had to have the HTML Text tab to display the generated HTML.
+Then I encountered some bugs in parsing of compound nested lists in `pegdown` and had to dive into its source to fix them. Having done that and gotten familiar with it, I decided to add a new extension. Finally, to help me with debugging and generating test expectations for `pegdown`, I had to have the HTML Text tab to display the generated HTML.
 
 It has been a fun trip down the rabbit hole of IntelliJ IDEA plugin development that started with a simple desire for a Markdown preview that looked like GitHub's.
 
@@ -29,15 +29,8 @@ Enhancements
 - [x] syntax highlighting, color striped tables by row and column in your source
 - [x] Default and Darcula for syntax highlighting and for HTML Preview supported.
     CSS Style sheet for HTML Perview selectable in Settings/Other Settings/MultiMarkdown.
-
-On the Event Horizon
---------------------
-
-- [ ] Add configurable HTML tag replacements. The need for this is caused by the java HTMLEditorKit, which is used to render the HTML,
-     ignoring CSS attributes for known tags. The workaround is to replace the generated HTML to something the editor kit will render better.
-     For example, `<hr/>` is hardcoded to black with a minimum size of 2px. To have more control `<hr>` is replaced with `<div class="hr">&nbsp;</div>`.
-- [ ] Change Parser to use Grammar-Kit:
-    - [ ] add the IntelliJ expected comforts:
+- [x] Add Lexer to use IntelliJ standard features
+- [ ] Add PsiBuilder compatible parser to implement expected comforts:
     - [ ] formatting
     - [ ] navigation
     - [ ] document structure display

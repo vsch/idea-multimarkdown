@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Julien Nicoulaud <julien.nicoulaud@gmail.com>
-* Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
+ * Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,21 +18,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.vladsch.idea.multimarkdown.lang.parser;
+package com.vladsch.idea.multimarkdown.parser;
 
-import com.intellij.lang.ASTNode;
 import com.intellij.lang.PsiBuilder;
-import com.intellij.lang.PsiParser;
+import com.intellij.lang.impl.PsiBuilderImpl;
+import com.intellij.lexer.Lexer;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.lang.ASTNode;
+import com.intellij.lang.PsiParser;
+import com.intellij.lang.LightPsiParser;
+import com.vladsch.idea.multimarkdown.psi.MarkdownTypes;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Parser implementation for Markdown.
- *
- * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
- * @since 0.1
- */
-public class MarkdownParser implements PsiParser {
+public class MarkdownParser implements PsiParser /*, LightPsiParser*/ {
+/*
+    @Override public void parseLight(IElementType iElementType, PsiBuilder psiBuilder) {
+
+    }
+*/
 
     /**
      * Parse the contents of the specified PSI builder and returns an AST tree with the
@@ -45,13 +47,20 @@ public class MarkdownParser implements PsiParser {
      */
     @NotNull
     public ASTNode parse(IElementType root, PsiBuilder builder) {
-
         PsiBuilder.Marker rootMarker = builder.mark();
-
-        // TODO Actual parsing not implemented
+        Lexer lexer = ((PsiBuilderImpl) builder).getLexer();
 
         while (!builder.eof()) {
             builder.advanceLexer();
+//            if (builder.getTokenType() == MarkdownTypes.COMMENT) {
+//                PsiBuilder.Marker tokenMarker = builder.mark();
+//                builder.advanceLexer();
+//                tokenMarker.done(MarkdownTypes.COMMENT);
+//            }
+//            else
+//            {
+//                builder.advanceLexer();
+//            }
         }
 
         rootMarker.done(root);

@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Julien Nicoulaud <julien.nicoulaud@gmail.com>
-* Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
+ * Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -25,22 +24,21 @@ import com.intellij.lexer.Lexer;
 import com.intellij.psi.impl.cache.impl.BaseFilterLexer;
 import com.intellij.psi.impl.cache.impl.OccurrenceConsumer;
 import com.intellij.psi.search.UsageSearchContext;
+import com.vladsch.idea.multimarkdown.parser.MarkdownLexer;
+import com.vladsch.idea.multimarkdown.parser.MarkdownPlainTextLexer;
+import com.vladsch.idea.multimarkdown.settings.MarkdownGlobalSettings;
 
-/**
- * Markdown filter lexer for {@code TO DO} indexing.
- *
- * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
- * @since 0.9
- */
 public class MarkdownFilterLexer extends BaseFilterLexer {
+    final protected Lexer lexer;
 
     public MarkdownFilterLexer(final Lexer originalLexer, final OccurrenceConsumer table) {
         super(originalLexer, table);
+        lexer = originalLexer;
     }
 
     @Override
     public void advance() {
-        scanWordsInToken(UsageSearchContext.IN_PLAIN_TEXT, false, false);
+        scanWordsInToken(lexer instanceof MarkdownLexer ? UsageSearchContext.IN_COMMENTS : UsageSearchContext.IN_COMMENTS, false, false);
         advanceTodoItemCountsInToken();
         myDelegate.advance();
     }

@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Julien Nicoulaud <julien.nicoulaud@gmail.com>
-* Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
+ * Copyright (c) 2015-2015 Vladimir Schneider <vladimir.schneider@gmail.com>
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,16 +17,19 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */
-package com.vladsch.idea.multimarkdown.lang.psi.api;
-
-import com.intellij.psi.PsiElement;
-
-/**
- * Implementation of {@link PsiElement} for Markdown.
  *
- * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
- * @since 0.1
+ * This file is based on the IntelliJ SimplePlugin tutorial
+ *
  */
-public interface MarkdownPsiElement extends PsiElement {
+package com.vladsch.idea.multimarkdown.psi.impl;
+
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
+import com.intellij.lang.ASTNode;
+import com.vladsch.idea.multimarkdown.psi.MarkdownNamedElement;
+import org.jetbrains.annotations.NotNull;
+
+public abstract class MarkdownNamedElementImpl extends ASTWrapperPsiElement implements MarkdownNamedElement {
+    public MarkdownNamedElementImpl(@NotNull ASTNode node) {
+        super(node);
+    }
 }

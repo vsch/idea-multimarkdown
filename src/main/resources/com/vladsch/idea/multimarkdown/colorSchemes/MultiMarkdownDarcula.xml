@@ -20,18 +20,13 @@
   ~ under the License.
   -->
 <list>
-  <option name="MULTIMARKDOWN.ABBREVIATION">
-    <value>
-        <option name="BACKGROUND" value="b3310" />
-    </value>
-  </option>
-  <option name="MULTIMARKDOWN.ANCHOR_LINK">
+  <option name="MULTIMARKDOWN_DEFAULT.ANCHOR_LINK">
     <value>
         <option name="BACKGROUND" value="e3c40" />
       <option name="EFFECT_TYPE" value="1" />
     </value>
   </option>
-    <option name="MULTIMARKDOWN.AUTO_LINK">
+    <option name="MULTIMARKDOWN_DEFAULT.AUTO_LINK">
       <value>
         <option name="FOREGROUND" value="2b8ccc" />
         <option name="FONT_TYPE" value="1" />
@@ -39,118 +34,143 @@
         <option name="EFFECT_TYPE" value="1" />
       </value>
     </option>
-  <option name="MULTIMARKDOWN.BLOCK_QUOTE">
+  <option name="MULTIMARKDOWN_DEFAULT.ABBREVIATION">
     <value>
-      <option name="FOREGROUND" value="939393" />
+        <option name="BACKGROUND" value="17661F" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.BOLD_MARKER">
+  <option name="MULTIMARKDOWN_DEFAULT.BLOCK_QUOTE">
+    <value>
+      <option name="FOREGROUND" value="939393" />
+        <option name="FONT_TYPE" value="1" />
+    </value>
+  </option>
+  <option name="MULTIMARKDOWN_DEFAULT.BOLD">
+    <value>
+      <option name="FONT_TYPE" value="1"/>
+    </value>
+  </option>
+  <option name="MULTIMARKDOWN_DEFAULT.BOLDITALIC">
+    <value>
+      <option name="FONT_TYPE" value="3"/>
+    </value>
+  </option>
+  <option name="MULTIMARKDOWN_DEFAULT.BOLD_MARKER">
     <value>
       <option name="FOREGROUND" value="b347aa" />
       <option name="FONT_TYPE" value="1" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.BULLET_LIST">
+  <option name="MULTIMARKDOWN_DEFAULT.BULLET_LIST">
     <value>
         <option name="FOREGROUND" value="b33e6b" />
       <option name="FONT_TYPE" value="1" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.CODE">
+  <option name="MULTIMARKDOWN_DEFAULT.CODE">
     <value>
         <option name="FOREGROUND" value="b33e6b" />
       <option name="FONT_TYPE" value="3" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.DEFINITION_LIST">
+  <option name="MULTIMARKDOWN_DEFAULT.DEFINITION">
     <value>
-        <option name="FOREGROUND" value="b33e6b" />
-      <option name="FONT_TYPE" value="3" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.DEFINITION_TERM">
+  <option name="MULTIMARKDOWN_DEFAULT.DEFINITION_TERM">
     <value>
       <option name="BACKGROUND" value="301f4d" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.EXPLICIT_LINK">
+  <option name="MULTIMARKDOWN_DEFAULT.DEFINITION_LIST">
+    <value>
+        <option name="FOREGROUND" value="b33e6b" />
+      <option name="FONT_TYPE" value="3" />
+    </value>
+  </option>
+  <option name="MULTIMARKDOWN_DEFAULT.EXPLICIT_LINK">
     <value>
         <option name="BACKGROUND" value="3c4016" />
         <option name="EFFECT_COLOR" value="b3b3b3" />
       <option name="EFFECT_TYPE" value="1" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.HEADER_LEVEL_1">
+  <option name="MULTIMARKDOWN_DEFAULT.HEADER_LEVEL_1">
     <value>
         <option name="FOREGROUND" value="5c8ae6" />
       <option name="BACKGROUND" value="383838" />
       <option name="FONT_TYPE" value="1" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.HEADER_LEVEL_2">
+  <option name="MULTIMARKDOWN_DEFAULT.HEADER_LEVEL_2">
     <value>
         <option name="FOREGROUND" value="5c8ae6" />
       <option name="BACKGROUND" value="383838" />
       <option name="FONT_TYPE" value="1" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.HEADER_LEVEL_3">
+  <option name="MULTIMARKDOWN_DEFAULT.HEADER_LEVEL_3">
     <value>
         <option name="FOREGROUND" value="5c8ae6" />
       <option name="BACKGROUND" value="383838" />
       <option name="FONT_TYPE" value="1" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.HEADER_LEVEL_4">
+  <option name="MULTIMARKDOWN_DEFAULT.HEADER_LEVEL_4">
     <value>
         <option name="FOREGROUND" value="5c8ae6" />
       <option name="BACKGROUND" value="383838" />
       <option name="FONT_TYPE" value="1" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.HEADER_LEVEL_5">
+  <option name="MULTIMARKDOWN_DEFAULT.HEADER_LEVEL_5">
     <value>
         <option name="FOREGROUND" value="5c8ae6" />
       <option name="BACKGROUND" value="383838" />
       <option name="FONT_TYPE" value="1" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.HEADER_LEVEL_6">
+  <option name="MULTIMARKDOWN_DEFAULT.HEADER_LEVEL_6">
     <value>
         <option name="FOREGROUND" value="5c8ae6" />
       <option name="BACKGROUND" value="383838" />
       <option name="FONT_TYPE" value="1" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.HRULE">
+  <option name="MULTIMARKDOWN_DEFAULT.HRULE">
     <value>
         <option name="FOREGROUND" value="24b35f" />
       <option name="BACKGROUND" value="404040" />
       <option name="FONT_TYPE" value="1" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.HTML_BLOCK">
+  <option name="MULTIMARKDOWN_DEFAULT.HTML_BLOCK">
     <value>
         <option name="BACKGROUND" value="1b2c4d" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.IMAGE">
+  <option name="MULTIMARKDOWN_DEFAULT.IMAGE">
     <value>
       <option name="BACKGROUND" value="113c40" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.INLINE_HTML">
+  <option name="MULTIMARKDOWN_DEFAULT.INLINE_HTML">
     <value>
         <option name="BACKGROUND" value="103952" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.ITALIC_MARKER">
+  <option name="MULTIMARKDOWN_DEFAULT.ITALIC">
+    <value>
+      <option name="FONT_TYPE" value="2"/>
+    </value>
+  </option>
+  <option name="MULTIMARKDOWN_DEFAULT.ITALIC_MARKER">
     <value>
       <option name="FOREGROUND" value="527acc" />
       <option name="FONT_TYPE" value="2" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.MAIL_LINK">
+  <option name="MULTIMARKDOWN_DEFAULT.MAIL_LINK">
     <value>
       <option name="FOREGROUND" value="a642a4" />
       <option name="FONT_TYPE" value="1" />
@@ -158,103 +178,128 @@
       <option name="EFFECT_TYPE" value="1" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.ORDERED_LIST">
+  <option name="MULTIMARKDOWN_DEFAULT.ORDERED_LIST">
     <value>
         <option name="FOREGROUND" value="b33e6b" />
       <option name="FONT_TYPE" value="1" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.QUOTE">
+  <option name="MULTIMARKDOWN_DEFAULT.QUOTE">
     <value>
       <option name="BACKGROUND" value="26402b" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.REFERENCE">
+  <option name="MULTIMARKDOWN_DEFAULT.REFERENCE">
     <value>
       <option name="BACKGROUND" value="59432d" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.REFERENCE_IMAGE">
+  <option name="MULTIMARKDOWN_DEFAULT.REFERENCE_IMAGE">
     <value>
       <option name="BACKGROUND" value="593637" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.REFERENCE_LINK">
+  <option name="MULTIMARKDOWN_DEFAULT.REFERENCE_LINK">
     <value>
       <option name="BACKGROUND" value="4d3726" />
       <option name="EFFECT_COLOR" value="b4b4b4" />
       <option name="EFFECT_TYPE" value="1" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.SMARTS">
+  <option name="MULTIMARKDOWN_DEFAULT.SMARTS">
     <value>
         <option name="BACKGROUND" value="4b1459" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.SPECIAL_TEXT">
+  <option name="MULTIMARKDOWN_DEFAULT.SPECIAL_TEXT">
     <value>
         <option name="BACKGROUND" value="4c174d" />
       <option name="FONT_TYPE" value="2" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.STRIKETHROUGH">
+  <option name="MULTIMARKDOWN_DEFAULT.STRIKETHROUGH">
     <value>
         <option name="EFFECT_COLOR" value="e6327d" />
       <option name="EFFECT_TYPE" value="3" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.STRIKETHROUGH_MARKER">
+    <option name="MULTIMARKDOWN_DEFAULT.STRIKETHROUGH_BOLD">
+      <value>
+        <option name="FONT_TYPE" value="1" />
+        <option name="EFFECT_COLOR" value="e6327d" />
+        <option name="EFFECT_TYPE" value="3" />
+      </value>
+    </option>
+    <option name="MULTIMARKDOWN_DEFAULT.STRIKETHROUGH_BOLDITALIC">
+      <value>
+        <option name="FONT_TYPE" value="3" />
+        <option name="EFFECT_COLOR" value="e6327d" />
+        <option name="EFFECT_TYPE" value="3" />
+      </value>
+    </option>
+    <option name="MULTIMARKDOWN_DEFAULT.STRIKETHROUGH_ITALIC">
+      <value>
+        <option name="FONT_TYPE" value="2" />
+        <option name="EFFECT_COLOR" value="e6327d" />
+        <option name="EFFECT_TYPE" value="3" />
+      </value>
+    </option>
+  <option name="MULTIMARKDOWN_DEFAULT.STRIKETHROUGH_MARKER">
     <value>
         <option name="FOREGROUND" value="24b35f" />
       <option name="FONT_TYPE" value="1" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.TABLE">
+  <option name="MULTIMARKDOWN_DEFAULT.TABLE">
     <value>
       <option name="FOREGROUND" value="9234d1" />
       <option name="BACKGROUND" value="333333" />
       <option name="FONT_TYPE" value="1" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.TABLE_CAPTION">
+  <option name="MULTIMARKDOWN_DEFAULT.TABLE_CAPTION">
     <value>
         <option name="BACKGROUND" value="354013" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.TABLE_CELL_REVEN_CEVEN">
+  <option name="MULTIMARKDOWN_DEFAULT.TABLE_CELL_REVEN_CEVEN">
     <value>
       <option name="BACKGROUND" value="3300" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.TABLE_CELL_REVEN_CODD">
+  <option name="MULTIMARKDOWN_DEFAULT.TABLE_CELL_REVEN_CODD">
     <value>
       <option name="BACKGROUND" value="3333" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.TABLE_CELL_RODD_CEVEN">
+  <option name="MULTIMARKDOWN_DEFAULT.TABLE_CELL_RODD_CEVEN">
     <value>
       <option name="BACKGROUND" value="404000" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.TABLE_ROW_EVEN">
+  <option name="MULTIMARKDOWN_DEFAULT.TABLE_CELL_RODD_CODD">
+    <value>
+    </value>
+  </option>
+  <option name="MULTIMARKDOWN_DEFAULT.TABLE_ROW_EVEN">
     <value>
       <option name="FOREGROUND" value="9234d1" />
       <option name="BACKGROUND" value="3333" />
       <option name="FONT_TYPE" value="1" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.TABLE_ROW_ODD">
+  <option name="MULTIMARKDOWN_DEFAULT.TABLE_ROW_ODD">
     <value>
       <option name="FOREGROUND" value="9234d1" />
       <option name="FONT_TYPE" value="1" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.VERBATIM">
+  <option name="MULTIMARKDOWN_DEFAULT.VERBATIM">
     <value>
         <option name="BACKGROUND" value="404040" />
     </value>
   </option>
-  <option name="MULTIMARKDOWN.WIKI_LINK">
+  <option name="MULTIMARKDOWN_DEFAULT.WIKI_LINK">
     <value>
         <option name="FOREGROUND" value="2b8ccc" />
         <option name="BACKGROUND" value="3333" />

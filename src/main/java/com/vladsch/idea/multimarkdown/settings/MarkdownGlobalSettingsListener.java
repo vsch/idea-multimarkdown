@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2011-2014 Julien Nicoulaud <julien.nicoulaud@gmail.com>
-* Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
+ * Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -25,18 +25,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.EventListener;
 
-/**
- * Listener to {@link MarkdownGlobalSettings} changes.
- *
- * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
- * @since 0.8
- */
 public interface MarkdownGlobalSettingsListener extends EventListener {
 
-    /**
-     * Handle a settings change event.
-     *
-     * @param newSettings the updated {@link MarkdownGlobalSettings} object.
-     */
     void handleSettingsChanged(@NotNull final MarkdownGlobalSettings newSettings);
 }
