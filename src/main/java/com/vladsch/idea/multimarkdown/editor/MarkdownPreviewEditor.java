@@ -172,6 +172,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
         if (isRawHtml) {
             // TODO: create a standard IntelliJ editor to display HTML so that we get all the goodies for free
             // just as soon as I can figure out how to create a temp VirtualFile to use for the document and make it readonly
+            // and then attach a standard editor to it. :(
             //EditorFactory editorFactory = EditorFactory.getInstance();
             //documentHtml = editorFactory.createDocument("");
             //FileType test = findHtmlFileType();
@@ -299,7 +300,9 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
      * Just returns {@link FileEditorState#INSTANCE} as {@link MarkdownPreviewEditor} is stateless.
      *
      * @param level the level.
+     *
      * @return {@link FileEditorState#INSTANCE}
+     *
      * @see #setState(com.intellij.openapi.fileEditor.FileEditorState)
      */
     @NotNull
@@ -313,6 +316,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
      * Does not do anything as {@link MarkdownPreviewEditor} is stateless.
      *
      * @param state the new state.
+     *
      * @see #getState(com.intellij.openapi.fileEditor.FileEditorStateLevel)
      */
     public void setState(@NotNull FileEditorState state) {
