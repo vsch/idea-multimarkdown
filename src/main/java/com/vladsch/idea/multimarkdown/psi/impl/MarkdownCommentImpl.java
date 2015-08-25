@@ -37,10 +37,10 @@ public class MarkdownCommentImpl extends ASTWrapperPsiElement {
         super(node);
     }
 
-//    public void accept(@NotNull PsiElementVisitor visitor) {
-//        if (visitor instanceof MarkdownVisitor) ((MarkdownVisitor) visitor).visitProperty(this);
-//        else super.accept(visitor);
-//    }
+    //public void accept(@NotNull PsiElementVisitor visitor) {
+    //    if (visitor instanceof MarkdownVisitor) ((MarkdownVisitor) visitor).visitProperty(this);
+    //    else super.accept(visitor);
+    //}
 
     @Nullable
     public PsiElement getNameIdentifier() {

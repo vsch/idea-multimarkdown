@@ -36,9 +36,12 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import static com.vladsch.idea.multimarkdown.highlighter.MarkdownHighlighterColors.*;
 
 public class MarkdownColorSettingsPage implements ColorSettingsPage {
 
@@ -53,68 +56,83 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
 
     protected final List<AttributesDescriptor> attributeDescriptors = new LinkedList<AttributesDescriptor>();
 
+    private void addTextAttributesKey(String name, TextAttributesKey attributesKey) {
+        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings." + name), attributesKey));
+    }
+
     public MarkdownColorSettingsPage() {
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.abbreviation"), MarkdownHighlighterColors.ABBREVIATION_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.anchor-link"), MarkdownHighlighterColors.ANCHOR_LINK_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.auto-link"), MarkdownHighlighterColors.AUTO_LINK_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.blockquote"), MarkdownHighlighterColors.BLOCK_QUOTE_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.bold"), MarkdownHighlighterColors.BOLD_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.bold-italic"), MarkdownHighlighterColors.BOLDITALIC_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.bold-marker"), MarkdownHighlighterColors.BOLD_MARKER_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.bullet-list"), MarkdownHighlighterColors.BULLET_LIST_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.comment"), MarkdownHighlighterColors.COMMENT_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.code"), MarkdownHighlighterColors.CODE_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.definition"), MarkdownHighlighterColors.DEFINITION_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.definition-list"), MarkdownHighlighterColors.DEFINITION_LIST_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.definition-term"), MarkdownHighlighterColors.DEFINITION_TERM_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.explicit-link"), MarkdownHighlighterColors.EXPLICIT_LINK_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.header-level-1"), MarkdownHighlighterColors.HEADER_LEVEL_1_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.header-level-1-setext"), MarkdownHighlighterColors.SETEXT_HEADER_LEVEL_1_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.header-level-2"), MarkdownHighlighterColors.HEADER_LEVEL_2_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.header-level-2-setext"), MarkdownHighlighterColors.SETEXT_HEADER_LEVEL_2_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.header-level-3"), MarkdownHighlighterColors.HEADER_LEVEL_3_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.header-level-4"), MarkdownHighlighterColors.HEADER_LEVEL_4_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.header-level-5"), MarkdownHighlighterColors.HEADER_LEVEL_5_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.header-level-6"), MarkdownHighlighterColors.HEADER_LEVEL_6_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.hrule"), MarkdownHighlighterColors.HRULE_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.html-block"), MarkdownHighlighterColors.HTML_BLOCK_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.image"), MarkdownHighlighterColors.IMAGE_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.inline-html"), MarkdownHighlighterColors.INLINE_HTML_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.italic"), MarkdownHighlighterColors.ITALIC_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.italic-marker"), MarkdownHighlighterColors.ITALIC_MARKER_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.mail-link"), MarkdownHighlighterColors.MAIL_LINK_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.ordered-list"), MarkdownHighlighterColors.ORDERED_LIST_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.quote"), MarkdownHighlighterColors.QUOTE_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.reference"), MarkdownHighlighterColors.REFERENCE_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.reference-image"), MarkdownHighlighterColors.REFERENCE_IMAGE_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.reference-link"), MarkdownHighlighterColors.REFERENCE_LINK_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.smarts"), MarkdownHighlighterColors.SMARTS_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.special-text"), MarkdownHighlighterColors.SPECIAL_TEXT_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.strikethrough"), MarkdownHighlighterColors.STRIKETHROUGH_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.strikethrough-bold"), MarkdownHighlighterColors.STRIKETHROUGH_BOLD_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.strikethrough-italic"), MarkdownHighlighterColors.STRIKETHROUGH_ITALIC_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.strikethrough-bolditalic"), MarkdownHighlighterColors.STRIKETHROUGH_BOLDITALIC_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.strikethrough-marker"), MarkdownHighlighterColors.STRIKETHROUGH_MARKER_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.table"), MarkdownHighlighterColors.TABLE_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.table-caption"), MarkdownHighlighterColors.TABLE_CAPTION_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.table-cell-reven-ceven"), MarkdownHighlighterColors.TABLE_CELL_REVEN_CEVEN_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.table-cell-reven-codd"), MarkdownHighlighterColors.TABLE_CELL_REVEN_CODD_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.table-cell-rodd-ceven"), MarkdownHighlighterColors.TABLE_CELL_RODD_CEVEN_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.table-cell-rodd-codd"), MarkdownHighlighterColors.TABLE_CELL_RODD_CODD_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.table-row-even"), MarkdownHighlighterColors.TABLE_ROW_EVEN_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.table-row-odd"), MarkdownHighlighterColors.TABLE_ROW_ODD_ATTR_KEY));
-//        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.task-item-done"), MarkdownHighlighterColors.TASK_DONE_ITEM_ATTR_KEY));
-//        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.task-item"), MarkdownHighlighterColors.TASK_ITEM_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.text"), MarkdownHighlighterColors.TEXT_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.verbatim"), MarkdownHighlighterColors.VERBATIM_ATTR_KEY));
-        attributeDescriptors.add(new AttributesDescriptor(MarkdownBundle.message("multimarkdown.colorsettings.wiki-link"), MarkdownHighlighterColors.WIKI_LINK_ATTR_KEY));
+        addTextAttributesKey("abbreviation", ABBREVIATION_ATTR_KEY);
+        addTextAttributesKey("anchor-link", ANCHOR_LINK_ATTR_KEY);
+        addTextAttributesKey("auto-link", AUTO_LINK_ATTR_KEY);
+        addTextAttributesKey("blockquote", BLOCK_QUOTE_ATTR_KEY);
+        addTextAttributesKey("bold", BOLD_ATTR_KEY);
+        addTextAttributesKey("bold-italic", BOLDITALIC_ATTR_KEY);
+        addTextAttributesKey("bold-marker", BOLD_MARKER_ATTR_KEY);
+        addTextAttributesKey("bullet-list", BULLET_LIST_ATTR_KEY);
+        addTextAttributesKey("comment", COMMENT_ATTR_KEY);
+        addTextAttributesKey("code", CODE_ATTR_KEY);
+        addTextAttributesKey("definition", DEFINITION_ATTR_KEY);
+        addTextAttributesKey("definition-list", DEFINITION_LIST_ATTR_KEY);
+        addTextAttributesKey("definition-term", DEFINITION_TERM_ATTR_KEY);
+        addTextAttributesKey("explicit-link", EXPLICIT_LINK_ATTR_KEY);
+        addTextAttributesKey("header-level-1", HEADER_LEVEL_1_ATTR_KEY);
+        addTextAttributesKey("header-level-1-setext", SETEXT_HEADER_LEVEL_1_ATTR_KEY);
+        addTextAttributesKey("header-level-2", HEADER_LEVEL_2_ATTR_KEY);
+        addTextAttributesKey("header-level-2-setext", SETEXT_HEADER_LEVEL_2_ATTR_KEY);
+        addTextAttributesKey("header-level-3", HEADER_LEVEL_3_ATTR_KEY);
+        addTextAttributesKey("header-level-4", HEADER_LEVEL_4_ATTR_KEY);
+        addTextAttributesKey("header-level-5", HEADER_LEVEL_5_ATTR_KEY);
+        addTextAttributesKey("header-level-6", HEADER_LEVEL_6_ATTR_KEY);
+        addTextAttributesKey("hrule", HRULE_ATTR_KEY);
+        addTextAttributesKey("html-block", HTML_BLOCK_ATTR_KEY);
+        addTextAttributesKey("image", IMAGE_ATTR_KEY);
+        addTextAttributesKey("inline-html", INLINE_HTML_ATTR_KEY);
+        addTextAttributesKey("italic", ITALIC_ATTR_KEY);
+        addTextAttributesKey("italic-marker", ITALIC_MARKER_ATTR_KEY);
+        addTextAttributesKey("mail-link", MAIL_LINK_ATTR_KEY);
+        addTextAttributesKey("ordered-list", ORDERED_LIST_ATTR_KEY);
+        addTextAttributesKey("quote", QUOTE_ATTR_KEY);
+        addTextAttributesKey("reference", REFERENCE_ATTR_KEY);
+        addTextAttributesKey("reference-image", REFERENCE_IMAGE_ATTR_KEY);
+        addTextAttributesKey("reference-link", REFERENCE_LINK_ATTR_KEY);
+        addTextAttributesKey("smarts", SMARTS_ATTR_KEY);
+        addTextAttributesKey("special-text", SPECIAL_TEXT_ATTR_KEY);
+        addTextAttributesKey("strikethrough", STRIKETHROUGH_ATTR_KEY);
+        addTextAttributesKey("strikethrough-bold", STRIKETHROUGH_BOLD_ATTR_KEY);
+        addTextAttributesKey("strikethrough-italic", STRIKETHROUGH_ITALIC_ATTR_KEY);
+        addTextAttributesKey("strikethrough-bolditalic", STRIKETHROUGH_BOLDITALIC_ATTR_KEY);
+        addTextAttributesKey("strikethrough-marker", STRIKETHROUGH_MARKER_ATTR_KEY);
+        addTextAttributesKey("table", TABLE_ATTR_KEY);
+        addTextAttributesKey("table-caption", TABLE_CAPTION_ATTR_KEY);
+        addTextAttributesKey("table-cell-reven-ceven", TABLE_CELL_REVEN_CEVEN_ATTR_KEY);
+        addTextAttributesKey("table-cell-reven-codd", TABLE_CELL_REVEN_CODD_ATTR_KEY);
+        addTextAttributesKey("table-cell-rodd-ceven", TABLE_CELL_RODD_CEVEN_ATTR_KEY);
+        addTextAttributesKey("table-cell-rodd-codd", TABLE_CELL_RODD_CODD_ATTR_KEY);
+        addTextAttributesKey("table-row-even", TABLE_ROW_EVEN_ATTR_KEY);
+        addTextAttributesKey("table-row-odd", TABLE_ROW_ODD_ATTR_KEY);
+        //addTextAttributesKey("task-item-done", TASK_DONE_ITEM_ATTR_KEY);
+        //addTextAttributesKey("task-item", TASK_ITEM_ATTR_KEY);
+        addTextAttributesKey("text", TEXT_ATTR_KEY);
+        addTextAttributesKey("verbatim", VERBATIM_ATTR_KEY);
+        addTextAttributesKey("wiki-link", WIKI_LINK_ATTR_KEY);
     }
 
     /**
      * Get the mapping from special tag names surrounding the regions to be highlighted in the preview text to text
      * attribute keys used to highlight the regions.
      *
-     * @return {@code null} as the demo text does not contain any additional highlighting tags.
+     * If some elements need to be highlighted in
+     * the preview text which are not highlighted by the syntax highlighter, they need to be
+     * surrounded by XML-like tags, for example: <code>&lt;class&gt;MyClass&lt;/class&gt;</code>.
+     * The mapping between the names of the tags and the text attribute keys used for highlighting
+     * is defined by the {@link #getAdditionalHighlightingTagToDescriptorMap()} method.
+     *
+     * Returns the mapping from special tag names surrounding the regions to be highlighted
+     * in the preview text (see {@link #getDemoText()}) to text attribute keys used to
+     * highlight the regions.
+     *
+     * @return the mapping from tag names to text attribute keys, or null if the demo text
+     * does not contain any additional highlighting tags.
      */
     @Nullable
     public Map<String, TextAttributesKey> getAdditionalHighlightingTagToDescriptorMap() {
@@ -143,16 +161,18 @@ public class MarkdownColorSettingsPage implements ColorSettingsPage {
     }
 
     /**
-     * Get the text shown in the preview pane.
+     * Returns the text shown in the preview pane. If some elements need to be highlighted in
+     * the preview text which are not highlighted by the syntax highlighter, they need to be
+     * surrounded by XML-like tags, for example: <code>&lt;class&gt;MyClass&lt;/class&gt;</code>.
+     * The mapping between the names of the tags and the text attribute keys used for highlighting
+     * is defined by the {@link #getAdditionalHighlightingTagToDescriptorMap()} method.
      *
-     * @return {@link #SAMPLE_MARKDOWN_DOCUMENT}
-     * @see #SAMPLE_MARKDOWN_DOCUMENT_PATH
-     * @see #loadSampleMarkdownDocument()
+     * @return the text to show in the preview pane.
      */
     @NonNls
     @NotNull
     public String getDemoText() {
-         return SAMPLE_MARKDOWN_DOCUMENT;
+        return SAMPLE_MARKDOWN_DOCUMENT;
     }
 
     /**

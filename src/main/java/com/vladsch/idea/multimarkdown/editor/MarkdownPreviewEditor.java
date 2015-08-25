@@ -25,16 +25,13 @@ import com.intellij.codeHighlighting.BackgroundEditorHighlighter;
 import com.intellij.ide.structureView.StructureViewBuilder;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
-import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.editor.event.DocumentAdapter;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.fileEditor.*;
 import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.FileTypeEditorHighlighterProviders;
 import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
@@ -175,11 +172,11 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
         if (isRawHtml) {
             // TODO: create a standard IntelliJ editor to display HTML so that we get all the goodies for free
             // just as soon as I can figure out how to create a temp VirtualFile to use for the document and make it readonly
-//            EditorFactory editorFactory = EditorFactory.getInstance();
-//            documentHtml = editorFactory.createDocument("");
-//            FileType test = findHtmlFileType();
-//            editor = editorFactory.createEditor(document, project, test, true);
-//            jEditorPane.add(editor.getComponent());
+            //EditorFactory editorFactory = EditorFactory.getInstance();
+            //documentHtml = editorFactory.createDocument("");
+            //FileType test = findHtmlFileType();
+            //editor = editorFactory.createEditor(document, project, test, true);
+            //jEditorPane.add(editor.getComponent());
 
             //documentHtml.setReadOnly(true);
             documentHtml = null;
@@ -205,7 +202,7 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
         FileType[] fileTypes = FileTypeManager.getInstance().getRegisteredFileTypes();
         for (FileType fileType : fileTypes) {
             String name = fileType.getName();
-//            if (name.equals("HTML")) return fileType;
+            //if (name.equals("HTML")) return fileType;
             if (name.equals("Scratch")) {
                 return fileType;
             }
@@ -369,22 +366,22 @@ public class MarkdownPreviewEditor extends UserDataHolderBase implements FileEdi
                 previewIsObsolete = false;
 
                 // here we can find our HTML Text counterpart but it is better to keep it separate for now
-//                VirtualFile file = FileDocumentManager.getInstance().getFile(document);
-//                FileEditorManager manager = FileEditorManager.getInstance(project);
-//                FileEditor[] editors = manager.getEditors(file);
-//                for (int i = 0; i < editors.length; i++)
-//                {
-//                    if (editors[i] == this)
-//                    {
-//                        if (editors.length > i && editors[i+1] instanceof MarkdownPreviewEditor) {
-//                            // update its html too
-//                            MarkdownPreviewEditor htmlEditor = (MarkdownPreviewEditor)editors[i+1];
-//                            boolean showModified = MarkdownGlobalSettings.getInstance().isShowHtmlTextAsModified();
-//                            htmlEditor.setHtmlContent("<div id=\"multimarkdown-preview\">\n" + (showModified ? procHtml : html) + "\n</div>\n");
-//                            break;
-//                        }
-//                    }
-//                }
+                //VirtualFile file = FileDocumentManager.getInstance().getFile(document);
+                //FileEditorManager manager = FileEditorManager.getInstance(project);
+                //FileEditor[] editors = manager.getEditors(file);
+                //for (int i = 0; i < editors.length; i++)
+                //{
+                //    if (editors[i] == this)
+                //    {
+                //        if (editors.length > i && editors[i+1] instanceof MarkdownPreviewEditor) {
+                //            // update its html too
+                //            MarkdownPreviewEditor htmlEditor = (MarkdownPreviewEditor)editors[i+1];
+                //            boolean showModified = MarkdownGlobalSettings.getInstance().isShowHtmlTextAsModified();
+                //            htmlEditor.setHtmlContent("<div id=\"multimarkdown-preview\">\n" + (showModified ? procHtml : html) + "\n</div>\n");
+                //            break;
+                //        }
+                //    }
+                //}
             } catch (Exception e) {
                 LOGGER.error("Failed processing Markdown document", e);
             }

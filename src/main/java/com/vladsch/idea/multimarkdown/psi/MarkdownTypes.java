@@ -27,7 +27,6 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
 import com.vladsch.idea.multimarkdown.psi.impl.MarkdownCommentImpl;
-import com.vladsch.idea.multimarkdown.psi.impl.MarkdownPropertyImpl;
 
 public interface MarkdownTypes {
 

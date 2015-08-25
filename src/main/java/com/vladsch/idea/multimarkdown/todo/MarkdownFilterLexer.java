@@ -25,8 +25,6 @@ import com.intellij.psi.impl.cache.impl.BaseFilterLexer;
 import com.intellij.psi.impl.cache.impl.OccurrenceConsumer;
 import com.intellij.psi.search.UsageSearchContext;
 import com.vladsch.idea.multimarkdown.parser.MarkdownLexer;
-import com.vladsch.idea.multimarkdown.parser.MarkdownPlainTextLexer;
-import com.vladsch.idea.multimarkdown.settings.MarkdownGlobalSettings;
 
 public class MarkdownFilterLexer extends BaseFilterLexer {
     final protected Lexer lexer;

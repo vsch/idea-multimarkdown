@@ -650,7 +650,7 @@ public class MarkdownLexParser { //implements Lexer, PsiParser {
         }
 
         public void visit(HeaderNode node) {
-//            visitChildren(node);
+            //visitChildren(node);
 
             switch (node.getLevel()) {
             case 1:

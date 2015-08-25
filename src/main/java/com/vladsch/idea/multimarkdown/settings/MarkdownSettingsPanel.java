@@ -97,7 +97,7 @@ public class MarkdownSettingsPanel {
         if (name.equals("relaxedHRulesCheckBox")) return relaxedHRulesCheckBox;
         if (name.equals("htmlThemeComboBox")) return htmlThemeComboBox;
         if (name.equals("enableTrimSpacesCheckBox")) return enableTrimSpacesCheckBox;
-//        if (name.equals("todoCommentsCheckBox")) return todoCommentsCheckBox;
+        //if (name.equals("todoCommentsCheckBox")) return todoCommentsCheckBox;
         return null;
     }
 

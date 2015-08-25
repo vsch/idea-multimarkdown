@@ -52,15 +52,15 @@ public class MarkdownParser implements PsiParser /*, LightPsiParser*/ {
 
         while (!builder.eof()) {
             builder.advanceLexer();
-//            if (builder.getTokenType() == MarkdownTypes.COMMENT) {
-//                PsiBuilder.Marker tokenMarker = builder.mark();
-//                builder.advanceLexer();
-//                tokenMarker.done(MarkdownTypes.COMMENT);
-//            }
-//            else
-//            {
-//                builder.advanceLexer();
-//            }
+            //if (builder.getTokenType() == MarkdownTypes.COMMENT) {
+            //    PsiBuilder.Marker tokenMarker = builder.mark();
+            //    builder.advanceLexer();
+            //    tokenMarker.done(MarkdownTypes.COMMENT);
+            //}
+            //else
+            //{
+            //    builder.advanceLexer();
+            //}
         }
 
         rootMarker.done(root);
