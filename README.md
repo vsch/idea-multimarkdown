@@ -56,11 +56,12 @@ Screenshots
 Forking
 -------
 
-This plugin is using a modified version of [sirthias/pegdown](https://github.com/sirthias), I post my PR's but there is a delay in both generating them, for them to be merged or even accepted.
-I added a few changes and extensions to the parser. For now I am using my forked copy until the official version has these features.
+This plugin is using a modified version of [sirthias/pegdown](https://github.com/sirthias), I post my PR's but there is always a delay in both generating them, for them to be merged.
+I added a few changes and extensions to the parser. For now I am using my forked copy until the official version has all the features. 
 
 The pegdown source used in this plugin can be found [vsch/pegdown](https://github.com/vsch/pegdown/tree/develop).
 
 ---
 
 \* This plugin is based on the [Markdown plugin](https://github.com/nicoulaj/idea-markdown) by [nicoulaj](https://github.com/nicoulaj), which is based on [pegdown](http://pegdown.org) library by [sirthias](https://github.com/sirthias).
+     
