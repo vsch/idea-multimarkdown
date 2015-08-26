@@ -26,7 +26,7 @@
   <name>MultiMarkdown</name>
   <category>Custom Languages</category>
   <vendor url="http://github.com/vsch" email="vladimir.schneider@gmail.com">Vladimir Schneider</vendor>
-  <version>1.0.15</version>
+  <version>1.0.16</version>
   <idea-version since-build="134.549"/>
   <depends>com.intellij.modules.lang</depends>
 
@@ -46,6 +46,11 @@
 
   <change-notes><![CDATA[
     <p>
+    <b>1.0.16</b><br/>
+      <ul>
+        <li>: Fix potential conflict with old Markdown plugin by prefixing all classes with MultiMarkdown</li>
+        <li>: Change HTML Text tab is now an IDEA syntax highlighting text view</li>
+    </ul>
     <b>1.0.15</b><br/>
       <ul>
         <li>: Add Separate Setext header styles</li>
@@ -170,19 +175,19 @@
     ]]></change-notes>
 
   <extensions defaultExtensionNs="com.intellij">
-    <fileTypeFactory implementation="com.vladsch.idea.multimarkdown.MarkdownFileTypeFactory"/>
-    <lang.syntaxHighlighterFactory key="MultiMarkdown" language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.highlighter.MarkdownSyntaxHighlighterFactory"/>
-    <colorSettingsPage implementation="com.vladsch.idea.multimarkdown.highlighter.MarkdownColorSettingsPage"/>
+    <fileTypeFactory implementation="com.vladsch.idea.multimarkdown.MultiMarkdownFileTypeFactory"/>
+    <lang.syntaxHighlighterFactory key="MultiMarkdown" language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.highlighter.MultiMarkdownSyntaxHighlighterFactory"/>
+    <colorSettingsPage implementation="com.vladsch.idea.multimarkdown.highlighter.MultiMarkdownColorSettingsPage"/>
     <additionalTextAttributes scheme="Default" file="com/vladsch/idea/multimarkdown/colorSchemes/MultiMarkdownDefault.xml"/>
     <additionalTextAttributes scheme="Darcula" file="com/vladsch/idea/multimarkdown/colorSchemes/MultiMarkdownDarcula.xml"/>
-    <fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MarkdownPreviewEditorProvider"/>
-    <fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MarkdownHtmlEditorProvider"/>
-    <lang.documentationProvider language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.documentation.MarkdownDocumentationProvider"/>
-    <lang.parserDefinition language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.parser.MarkdownParserDefinition"/>
-    <externalAnnotator language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.annotator.MarkdownAnnotator"/>
-    <spellchecker.support language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.spellchecking.MarkdownSpellcheckingStrategy"/>
-    <todoIndexer filetype="Markdown" implementationClass="com.vladsch.idea.multimarkdown.todo.MarkdownTodoIndexer"/>
-    <applicationService serviceInterface="com.vladsch.idea.multimarkdown.settings.MarkdownGlobalSettings" serviceImplementation="com.vladsch.idea.multimarkdown.settings.MarkdownGlobalSettings"/>
-    <applicationConfigurable instance="com.vladsch.idea.multimarkdown.settings.MarkdownGlobalSettingsConfigurable"/>
+    <fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MultiMarkdownPreviewEditorProvider"/>
+    <fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MultiMarkdownHtmlEditorProvider"/>
+    <lang.documentationProvider language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.documentation.MultiMarkdownDocumentationProvider"/>
+    <lang.parserDefinition language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.parser.MultiMarkdownParserDefinition"/>
+    <externalAnnotator language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.annotator.MultiMarkdownAnnotator"/>
+    <spellchecker.support language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.spellchecking.MultiMarkdownSpellcheckingStrategy"/>
+    <todoIndexer filetype="Markdown" implementationClass="com.vladsch.idea.multimarkdown.todo.MultiMarkdownTodoIndexer"/>
+    <applicationService serviceInterface="com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings" serviceImplementation="com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings"/>
+    <applicationConfigurable instance="com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsConfigurable"/>
   </extensions>
 </idea-plugin>

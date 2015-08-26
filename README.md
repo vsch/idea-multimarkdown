@@ -48,7 +48,8 @@ Screenshots
 
 ![idea-multimarkdown-settings](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_html.png)
 
-#### Change options and customize the CSS to your liking.
+#### Change options, customize the syntax colors and CSS to your liking.
+![idea-multimarkdown-settings](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_color_settings.png)
 
 ![idea-multimarkdown-settings](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_settings.png)
 
