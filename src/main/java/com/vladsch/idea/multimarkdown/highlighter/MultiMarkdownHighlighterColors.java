@@ -22,13 +22,18 @@
 package com.vladsch.idea.multimarkdown.highlighter;
 
 import com.intellij.openapi.editor.colors.TextAttributesKey;
+
 import static com.intellij.openapi.editor.DefaultLanguageHighlighterColors.*;
 import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey;
 
 public class MultiMarkdownHighlighterColors {
+
     private static TextAttributesKey createKey(String key) { return createTextAttributesKey("MULTIMARKDOWN." + key);}
+
     private static TextAttributesKey createKey(String key, TextAttributesKey defaultKey) { return createTextAttributesKey("MULTIMARKDOWN." + key, defaultKey);}
+
     private static TextAttributesKey createDefKey(String key) { return createTextAttributesKey("MULTIMARKDOWN_DEFAULT." + key);}
+
     private static TextAttributesKey createDefKey(String key, TextAttributesKey defaultKey) { return createTextAttributesKey("MULTIMARKDOWN_DEFAULT." + key, defaultKey);}
 
     // we also create defaults so that the user can reset his scheme
@@ -83,11 +88,13 @@ public class MultiMarkdownHighlighterColors {
     public static final TextAttributesKey DEFAULT_TABLE_HEADER_ATTR_KEY = createDefKey("TABLE_HEADER");
     public static final TextAttributesKey DEFAULT_TABLE_ROW_EVEN_ATTR_KEY = createDefKey("TABLE_ROW_EVEN");
     public static final TextAttributesKey DEFAULT_TABLE_ROW_ODD_ATTR_KEY = createDefKey("TABLE_ROW_ODD");
-    public static final TextAttributesKey DEFAULT_TASK_ITEM_ATTR_KEY = createDefKey("TASK_ITEM");
-    public static final TextAttributesKey DEFAULT_TASK_DONE_ITEM_ATTR_KEY = createDefKey("TASK_DONE_ITEM");
     public static final TextAttributesKey DEFAULT_TEXT_ATTR_KEY = createDefKey("TEXT");
     public static final TextAttributesKey DEFAULT_VERBATIM_ATTR_KEY = createDefKey("VERBATIM");
     public static final TextAttributesKey DEFAULT_WIKI_LINK_ATTR_KEY = createDefKey("WIKI_LINK");
+    public static final TextAttributesKey DEFAULT_TASK_ITEM_ATTR_KEY = createDefKey("TASK_ITEM");
+    public static final TextAttributesKey DEFAULT_TASK_DONE_ITEM_ATTR_KEY = createDefKey("TASK_DONE_ITEM", DEFAULT_TASK_ITEM_ATTR_KEY);
+    public static final TextAttributesKey DEFAULT_TASK_ITEM_MARKER_ATTR_KEY = createDefKey("TASK_ITEM_MARKER");
+    public static final TextAttributesKey DEFAULT_TASK_DONE_ITEM_MARKER_ATTR_KEY = createDefKey("TASK_DONE_ITEM_MARKER", DEFAULT_TASK_ITEM_MARKER_ATTR_KEY);
 
     public static final TextAttributesKey ABBREVIATION_ATTR_KEY = createKey("ABBREVIATION", DEFAULT_ABBREVIATION_ATTR_KEY);
     public static final TextAttributesKey ANCHOR_LINK_ATTR_KEY = createKey("ANCHOR_LINK", DEFAULT_ANCHOR_LINK_ATTR_KEY);
@@ -142,10 +149,11 @@ public class MultiMarkdownHighlighterColors {
     public static final TextAttributesKey TABLE_HEADER_ATTR_KEY = createKey("TABLE_HEADER", DEFAULT_TABLE_HEADER_ATTR_KEY);
     public static final TextAttributesKey TABLE_ROW_EVEN_ATTR_KEY = createKey("TABLE_ROW_EVEN", DEFAULT_TABLE_ROW_EVEN_ATTR_KEY);
     public static final TextAttributesKey TABLE_ROW_ODD_ATTR_KEY = createKey("TABLE_ROW_ODD", DEFAULT_TABLE_ROW_ODD_ATTR_KEY);
-    public static final TextAttributesKey TASK_ITEM_ATTR_KEY = createKey("TEXT", DEFAULT_TASK_ITEM_ATTR_KEY);
-    public static final TextAttributesKey TASK_DONE_ITEM_ATTR_KEY = createKey("TEXT", DEFAULT_TASK_DONE_ITEM_ATTR_KEY);
+    public static final TextAttributesKey TASK_ITEM_ATTR_KEY = createKey("TASK_ITEM", DEFAULT_TASK_ITEM_ATTR_KEY);
+    public static final TextAttributesKey TASK_DONE_ITEM_ATTR_KEY = createKey("TASK_DONE_ITEM", DEFAULT_TASK_DONE_ITEM_ATTR_KEY);
+    public static final TextAttributesKey TASK_ITEM_MARKER_ATTR_KEY = createKey("TASK_ITEM_MARKER", DEFAULT_TASK_ITEM_MARKER_ATTR_KEY);
+    public static final TextAttributesKey TASK_DONE_ITEM_MARKER_ATTR_KEY = createKey("TASK_DONE_ITEM_MARKER", DEFAULT_TASK_DONE_ITEM_MARKER_ATTR_KEY);
     public static final TextAttributesKey TEXT_ATTR_KEY = createKey("TEXT", DEFAULT_TEXT_ATTR_KEY);
     public static final TextAttributesKey VERBATIM_ATTR_KEY = createKey("VERBATIM", DEFAULT_VERBATIM_ATTR_KEY);
     public static final TextAttributesKey WIKI_LINK_ATTR_KEY = createKey("WIKI_LINK", DEFAULT_WIKI_LINK_ATTR_KEY);
-
 }

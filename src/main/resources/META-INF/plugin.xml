@@ -26,7 +26,7 @@
   <name>MultiMarkdown</name>
   <category>Custom Languages</category>
   <vendor url="http://github.com/vsch" email="vladimir.schneider@gmail.com">Vladimir Schneider</vendor>
-  <version>1.0.16</version>
+  <version>1.0.17</version>
   <idea-version since-build="134.549"/>
   <depends>com.intellij.modules.lang</depends>
 
@@ -46,6 +46,14 @@
 
   <change-notes><![CDATA[
     <p>
+    <b>1.0.17</b><br/>
+      <ul>
+        <li>: Fix styles for loose task list items spacing not being the same for first and following items</li>
+        <li>: Fix task list items checkbox to be disabled, look closer to GitHub's</li>
+        <li>: Add task item marker and task item marker (done) style attributes to settings</li>
+        <li>: Change Custom CSS text area now uses CSS syntax highlighting and shows line numbers</li>
+        <li>: Change Task list HTML conversion now done in pegdown</li>
+    </ul>
     <b>1.0.16</b><br/>
       <ul>
         <li>: Fix potential conflict with old Markdown plugin by prefixing all classes with MultiMarkdown</li>

@@ -428,18 +428,24 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         // scan for <table>, </table>, <tr>, </tr> and other tags we modify, this could be done with a custom plugin to pegdown but
         // then it would be more trouble to get un-modified HTML.
         String result = "<div id=\"multimarkdown-preview\">\n";
-        Pattern p = Pattern.compile("(<table>|<thead>|<tbody>|<tr>|<hr/>|<del>|</del>|<li>\\[x\\]|<li>\\[ \\]|<li>\\n*\\s*<p>\\[x\\]|<li>\\n*\\s*<p>\\[ \\]|<li>\\n*\\s*<p>)", Pattern.CASE_INSENSITIVE);
+        Pattern p = Pattern.compile("(<table>|<thead>|<tbody>|<tr>|<hr/>|<del>|</del>|</p>|<li class=\"task-list-item\">\\n*\\s*<p>|<li class=\"task-list-item\">|<li>\\[x\\]|<li>\\[ \\]|<li>\\n*\\s*<p>\\[x\\]|<li>\\n*\\s*<p>\\[ \\]|<li>\\n*\\s*<p>)", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(html);
         int lastPos = 0;
         int rowCount = 0;
+        boolean prevWasTask = false;
 
         while (m.find()) {
+            boolean thisWasTask = false;
+
             String found = m.group();
             if (lastPos < m.start(0)) {
                 result += html.substring(lastPos, m.start(0));
             }
 
-            if (found.equals("<table>")) {
+            if (found.equals("</p>")) {
+                if (prevWasTask) result += "</span></p>";
+                else result += found;
+            } else if (found.equals("<table>")) {
                 rowCount = 0;
                 result += found;
             } else if (found.equals("<thead>")) {
@@ -461,23 +467,32 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
                     result += "<li class=\"task\"><input type=\"checkbox\" checked=\"checked\" disabled=\"disabled\">";
                 } else if (taskLists && found.equals("<li>[ ]")) {
                     result += "<li class=\"task\"><input type=\"checkbox\" disabled=\"disabled\">";
+                } else if (taskLists && found.equals("<li class=\"task-list-item\">")) {
+                    result += "<li class=\"task\">";
                 } else {
                     // here we have <li>\n*\s*<p>, need to strip out \n*\s* so we can match them easier
                     String foundWithP = found;
-                    found = foundWithP.replaceAll("<li>\\n*\\s*<p>", "<li><p>");
+                    foundWithP = foundWithP.replaceAll("<li>\\n*\\s*<p>", "<li><p>");
+                    found = foundWithP.replaceAll("<li class=\"task-list-item\">\\n*\\s*<p>", "<li class=\"task-list-item\"><p>");
 
                     if (found.equals("<li><p>")) {
                         result += "<li class=\"p\"><p class=\"p\">";
                     } else if (taskLists && found.equals("<li><p>[x]")) {
-                        result += "<li class=\"taskp\"><p><input type=\"checkbox\" checked=\"checked\" disabled=\"disabled\">";
+                        result += "<li class=\"taskp\"><p class=\"p\"><input type=\"checkbox\" checked=\"checked\" disabled=\"disabled\"><span>";
+                        thisWasTask = true;
                     } else if (taskLists && found.equals("<li><p>[ ]")) {
-                        result += "<li class=\"taskp\"><p><input type=\"checkbox\" disabled=\"disabled\">";
+                        result += "<li class=\"taskp\"><p class=\"p\"><input type=\"checkbox\" disabled=\"disabled\"><span>";
+                        thisWasTask = true;
+                    } else if (taskLists && found.equals("<li class=\"task-list-item\"><p>")) {
+                        result += "<li class=\"taskp\"><p class=\"p\"><span>";
+                        thisWasTask = true;
                     } else {
                         result += found;
                     }
                 }
             }
 
+            prevWasTask = thisWasTask;
             lastPos = m.end(0);
         }
 

@@ -29,4 +29,6 @@ import javax.swing.*;
 
 public class MultiMarkdownIcons {
     public static final Icon FILE = IconLoader.getIcon("/com/vladsch/idea/multimarkdown/multimarkdown.png");
+    public static final Icon OPEN_TASK = IconLoader.getIcon("/com/vladsch/idea/multimarkdown/opentask.png");
+    public static final Icon CLOSED_TASK = IconLoader.getIcon("/com/vladsch/idea/multimarkdown/closedtask.png");
 }

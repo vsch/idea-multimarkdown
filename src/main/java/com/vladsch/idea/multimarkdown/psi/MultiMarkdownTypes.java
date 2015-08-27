@@ -95,6 +95,8 @@ public interface MultiMarkdownTypes {
     IElementType TABLE_ROW_ODD = new MultiMarkdownElementType("TABLE_ROW_ODD");
     IElementType TASK_ITEM = new MultiMarkdownTokenType("TASK_ITEM");
     IElementType TASK_DONE_ITEM = new MultiMarkdownTokenType("TASK_DONE_ITEM");
+    IElementType TASK_ITEM_MARKER = new MultiMarkdownTokenType("TASK_ITEM_MARKER");
+    IElementType TASK_DONE_ITEM_MARKER = new MultiMarkdownTokenType("TASK_DONE_ITEM_MARKER");
     IElementType TEXT = new MultiMarkdownTokenType("TEXT");
     IElementType VERBATIM = new MultiMarkdownElementType("VERBATIM");
     IElementType WIKI_LINK = new MultiMarkdownTokenType("WIKI_LINK");

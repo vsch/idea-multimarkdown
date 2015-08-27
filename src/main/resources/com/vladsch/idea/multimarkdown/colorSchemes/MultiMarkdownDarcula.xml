@@ -166,7 +166,7 @@
   </option>
   <option name="MULTIMARKDOWN_DEFAULT.ITALIC_MARKER">
     <value>
-      <option name="FOREGROUND" value="527acc" />
+      <option name="FOREGROUND" value="24B35F" />
       <option name="FONT_TYPE" value="2" />
     </value>
   </option>
@@ -291,6 +291,18 @@
   <option name="MULTIMARKDOWN_DEFAULT.TABLE_ROW_ODD">
     <value>
       <option name="FOREGROUND" value="9234d1" />
+      <option name="FONT_TYPE" value="1" />
+    </value>
+  </option>
+  <option name="MULTIMARKDOWN_DEFAULT.TASK_DONE_ITEM_MARKER">
+    <value>
+      <option name="FOREGROUND" value="808080" />
+      <option name="FONT_TYPE" value="1" />
+    </value>
+  </option>
+  <option name="MULTIMARKDOWN_DEFAULT.TASK_ITEM_MARKER">
+    <value>
+      <option name="FOREGROUND" value="aa09ae" />
       <option name="FONT_TYPE" value="1" />
     </value>
   </option>

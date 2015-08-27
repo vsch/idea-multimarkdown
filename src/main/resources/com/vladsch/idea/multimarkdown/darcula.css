@@ -372,22 +372,10 @@ li {
     margin: 0;
 }
 
-li.p {
-    margin: 10px 0 0 0;
-}
-
-li.task-list-item,
-li.taskp {
-    margin: 0;
-}
-
+/* loose list item first paragraph, loose task item first paragraph */
+li.taskp p.p,
 li.p p.p {
-    margin: 0;
-}
-
-li.task-list-item p.p,
-li.taskp p.p {
-    margin: 0;
+    margin: 10px 0 0 0;
 }
 
 p {
@@ -402,12 +390,11 @@ ul li li {
     list-style-type: circle;
 }
 
-ul li.task-list-item,
 ul li.task,
 ul li.taskp {
     list-style-type: none;
-    text-indent: -20px;
-    padding-left: 20px;
+    padding-left: 0;
+    text-indent: -17px;
 }
 
 ul,

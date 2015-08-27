@@ -24,6 +24,7 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
+import com.intellij.ui.EditorTextField;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.pegdown.Extensions;
@@ -73,7 +74,7 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     final public BooleanSetting suppressHTMLBlocks = new BooleanSetting(false, "suppressHTMLBlocks", Extensions.SUPPRESS_HTML_BLOCKS);
     final public BooleanSetting suppressInlineHTML = new BooleanSetting(false, "suppressInlineHTML", Extensions.SUPPRESS_INLINE_HTML);
     final public BooleanSetting tables = new BooleanSetting(false, "tables", Extensions.TABLES);
-    final public BooleanSetting taskLists = new BooleanSetting(false, "taskLists", 0); //Extensions.TASKLISTITEMS);
+    final public BooleanSetting taskLists = new BooleanSetting(false, "taskLists", Extensions.TASKLISTITEMS);
     final public BooleanSetting wikiLinks = new BooleanSetting(false, "wikiLinks", Extensions.WIKILINKS);
     final public BooleanSetting todoComments = new BooleanSetting(false, "todoComments", 0);
     final public IntegerSetting htmlTheme = new IntegerSetting(0, "htmlTheme");
@@ -228,9 +229,12 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
         @Override public String fromString(String value) { return value; }
 
         public void setValue(JTextArea component) { setValue(component.getText()); }
+        public void setValue(EditorTextField component) { setValue(component.getText()); }
 
         public void reset(JTextArea component) { component.setText(value); }
+        public void reset(EditorTextField component) { component.setText(value); }
 
         public boolean isChanged(JTextArea component) { return !value.equals(component.getText()); }
+        public boolean isChanged(EditorTextField component) { return !value.equals(component.getText()); }
     }
 }

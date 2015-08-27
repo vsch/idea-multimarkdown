@@ -53,7 +53,7 @@ public class MultiMarkdownColorSettingsPage implements ColorSettingsPage {
 
     protected static final String SAMPLE_MARKDOWN_DOCUMENT = loadSampleMarkdownDocument();
 
-    protected final List<AttributesDescriptor> attributeDescriptors = new LinkedList<AttributesDescriptor>();
+    protected static final List<AttributesDescriptor> attributeDescriptors = new LinkedList<AttributesDescriptor>();
 
     private void addTextAttributesKey(String name, TextAttributesKey attributesKey) {
         attributeDescriptors.add(new AttributesDescriptor(MultiMarkdownBundle.message("multimarkdown.colorsettings." + name), attributesKey));
@@ -111,6 +111,8 @@ public class MultiMarkdownColorSettingsPage implements ColorSettingsPage {
         addTextAttributesKey("table-row-odd", TABLE_ROW_ODD_ATTR_KEY);
         //addTextAttributesKey("task-item-done", TASK_DONE_ITEM_ATTR_KEY);
         //addTextAttributesKey("task-item", TASK_ITEM_ATTR_KEY);
+        addTextAttributesKey("task-item-marker-done", TASK_DONE_ITEM_MARKER_ATTR_KEY);
+        addTextAttributesKey("task-item-marker", TASK_ITEM_MARKER_ATTR_KEY);
         addTextAttributesKey("text", TEXT_ATTR_KEY);
         addTextAttributesKey("verbatim", VERBATIM_ATTR_KEY);
         addTextAttributesKey("wiki-link", WIKI_LINK_ATTR_KEY);

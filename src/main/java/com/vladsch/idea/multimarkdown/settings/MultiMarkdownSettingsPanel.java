@@ -23,12 +23,21 @@
 package com.vladsch.idea.multimarkdown.settings;
 
 import com.google.common.io.Resources;
+import com.intellij.ide.highlighter.HighlighterFactory;
+import com.intellij.lang.Language;
+import com.intellij.openapi.editor.EditorSettings;
+import com.intellij.openapi.editor.ex.EditorEx;
+import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.openapi.fileTypes.StdFileTypes;
+import com.intellij.openapi.fileTypes.ex.FileTypeManagerEx;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
 import com.vladsch.idea.multimarkdown.editor.MultiMarkdownPreviewEditor;
 import org.apache.commons.codec.Charsets;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
@@ -50,7 +59,7 @@ public class MultiMarkdownSettingsPanel {
     public JCheckBox strikethroughCheckBox;
     public JSpinner updateDelaySpinner;
     public JSpinner maxImgWidthSpinner;
-    public JTextArea textCustomCss;
+    //public JTextArea textCustomCss;
     public JPanel customCssPanel;
     public JButton btnResetCss;
     public JButton btnLoadDefault;
@@ -85,7 +94,6 @@ public class MultiMarkdownSettingsPanel {
         if (name.equals("updateDelaySpinner")) return updateDelaySpinner;
         if (name.equals("maxImgWidthSpinner")) return maxImgWidthSpinner;
         if (name.equals("textCustomCss")) return textCustomCss;
-        if (name.equals("customCssPanel")) return customCssPanel;
         if (name.equals("btnResetCss")) return btnResetCss;
         if (name.equals("btnLoadDefault")) return btnLoadDefault;
         if (name.equals("taskListsCheckBox")) return taskListsCheckBox;
@@ -117,6 +125,7 @@ public class MultiMarkdownSettingsPanel {
     private JLabel smartsDescriptionLabel;
     private JLabel strikethroughDescriptionLabel;
     private JLabel parsingTimeoutDescriptionLabel;
+    private CustomizableEditorTextField textCustomCss;
 
     protected void showHtmlTextStateChanged() {
         if (showHtmlTextAsModifiedCheckBox != null) {
@@ -154,6 +163,44 @@ public class MultiMarkdownSettingsPanel {
         showHtmlTextCheckBox.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) {
                 showHtmlTextStateChanged();
+            }
+        });
+    }
+
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
+        Language language = Language.findLanguageByID("CSS");
+        final boolean foundCSS = language != null;
+
+        final FileType fileType = language != null && language.getAssociatedFileType() != null ? language.getAssociatedFileType() : StdFileTypes.PLAIN_TEXT;
+
+        ProjectManager projectManager = ProjectManager.getInstance();
+        Project[] projects = projectManager.getOpenProjects();
+        Project project = projects.length > 0 ? projects[0] : null; //projectManager.getDefaultProject();
+        textCustomCss = new CustomizableEditorTextField(fileType, project, "", false);
+        textCustomCss.setFontInheritedFromLAF(false);
+        textCustomCss.registerListener(new CustomizableEditorTextField.EditorCustomizationListener() {
+            @Override public boolean editorCreated(@NotNull EditorEx editor, @NotNull Project project) {
+                EditorSettings settings = editor.getSettings();
+                settings.setRightMarginShown(true);
+                //settings.setRightMargin(-1);
+                if (foundCSS) settings.setFoldingOutlineShown(true);
+                settings.setLineNumbersShown(true);
+                if (foundCSS) settings.setLineMarkerAreaShown(true);
+                settings.setIndentGuidesShown(true);
+                settings.setVirtualSpace(true);
+                settings.setLineCursorWidth(2);
+                settings.setWheelFontChangeEnabled(false);
+                editor.setHorizontalScrollbarVisible(true);
+                editor.setVerticalScrollbarVisible(true);
+
+                FileType fileTypeH = FileTypeManagerEx.getInstanceEx().getFileTypeByExtension(".css");
+                FileType highlighterFileType = foundCSS ? fileType : fileTypeH;
+                if (highlighterFileType != null && project != null) {
+                    editor.setHighlighter(HighlighterFactory.createHighlighter(project, highlighterFileType));
+                }
+
+                return false;
             }
         });
     }

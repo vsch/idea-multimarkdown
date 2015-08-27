@@ -80,6 +80,8 @@ public interface MultiMarkdownTokenTypeSets extends MultiMarkdownTypes {
     TokenSet TABLE_SET = TokenSet.create(TABLE);
     TokenSet TASK_ITEM_SET = TokenSet.create(TASK_ITEM);
     TokenSet TASK_DONE_ITEM_SET = TokenSet.create(TASK_DONE_ITEM);
+    TokenSet TASK_ITEM_MARKER_SET = TokenSet.create(TASK_ITEM_MARKER);
+    TokenSet TASK_DONE_MARKER_ITEM_SET = TokenSet.create(TASK_DONE_ITEM_MARKER);
     TokenSet TEXT_SET = TokenSet.create(TEXT);
     TokenSet VERBATIM_SET = TokenSet.create(VERBATIM);
     TokenSet WIKI_LINK_SET = TokenSet.create(WIKI_LINK);

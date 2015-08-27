@@ -21,6 +21,8 @@
 package com.vladsch.idea.multimarkdown.settings;
 
 import com.intellij.openapi.options.SearchableConfigurable;
+import com.intellij.ui.EditorTextField;
+import com.intellij.ui.LanguageTextField;
 import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
 import com.vladsch.idea.multimarkdown.MultiMarkdownLanguage;
 import org.jetbrains.annotations.Nls;
@@ -68,7 +70,8 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
         componentSettings.add(new SpinnerComponent("maxImgWidthSpinner", globalSettings.maxImgWidth));
         componentSettings.add(new SpinnerComponent("parsingTimeoutSpinner", globalSettings.parsingTimeout));
         componentSettings.add(new ComboBoxComponent("htmlThemeComboBox", globalSettings.htmlTheme));
-        componentSettings.add(new TextAreaComponent("textCustomCss", globalSettings.customCss));
+        //componentSettings.add(new TextAreaComponent("textCustomCss", globalSettings.customCss));
+        componentSettings.add(new EditorTextFieldComponent("textCustomCss", globalSettings.customCss));
     }
 
     public Runnable enableSearch(String s) {
@@ -176,6 +179,16 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
         @Override public void setValue(JTextArea component) { setting.setValue(component); }
 
         @Override public void reset(JTextArea component) { setting.reset(component); }
+    }
+
+    class EditorTextFieldComponent extends ComponentSetting<EditorTextField, MultiMarkdownGlobalSettings.StringSetting> {
+        EditorTextFieldComponent(String component, MultiMarkdownGlobalSettings.StringSetting setting) { super(component, setting); }
+
+        @Override public boolean isChanged(EditorTextField component) { return setting.isChanged(component); }
+
+        @Override public void setValue(EditorTextField component) { setting.setValue(component); }
+
+        @Override public void reset(EditorTextField component) { setting.reset(component); }
     }
 
     class SpinnerComponent extends ComponentSetting<JSpinner, MultiMarkdownGlobalSettings.IntegerSetting> {

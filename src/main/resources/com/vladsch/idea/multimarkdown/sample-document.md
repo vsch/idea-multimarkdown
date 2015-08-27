@@ -20,6 +20,8 @@ WikiLink: [[Wiki Link]]
 
 * bullet list
 1. List Item 1
+* [ ] task item
+* [x] task item (done) 
 
 [1]: http://example.com  "Example"
 Reference link: [link][1].

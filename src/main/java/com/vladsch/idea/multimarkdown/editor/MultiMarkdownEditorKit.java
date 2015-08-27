@@ -23,6 +23,7 @@ package com.vladsch.idea.multimarkdown.editor;
 
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import org.jetbrains.annotations.NotNull;
@@ -30,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.text.View;
+import javax.swing.text.html.FormView;
 import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTML.Attribute;
 import javax.swing.text.html.HTMLEditorKit;
@@ -56,8 +58,8 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
     protected MultiMarkdownGlobalSettingsListener globalSettingsListener;
 
     public void setMaxWidth(float maxWidth) { this.maxWidth = maxWidth; }
-    public float getMaxWidth() { return maxWidth; }
 
+    public float getMaxWidth() { return maxWidth; }
 
     /**
      * Build a new instance of {@link MultiMarkdownEditorKit}.
@@ -121,8 +123,42 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
         public View create(Element elem) {
             if (HTML.Tag.IMG.equals(elem.getAttributes().getAttribute(StyleConstants.NameAttribute))) {
                 return new MarkdownImageView(document, elem, editorKit);
+            } else if (HTML.Tag.INPUT.equals(elem.getAttributes().getAttribute(StyleConstants.NameAttribute))) {
+                return new MarkdownInputView(elem);
             }
             return super.create(elem);
+        }
+    }
+
+    protected static class MarkdownInputView extends FormView {
+
+        private MarkdownInputView(@NotNull Element elem) {
+            super(elem);
+        }
+
+        @Override
+        protected Component createComponent() {
+            AttributeSet attr = getElement().getAttributes();
+            HTML.Tag t = (HTML.Tag)
+                    attr.getAttribute(StyleConstants.NameAttribute);
+            Component c = null;
+            Object model = attr.getAttribute(StyleConstants.ModelAttribute);
+            String type = (String) attr.getAttribute(HTML.Attribute.TYPE);
+
+            // Remove listeners previously registered in shared model
+            // when a new UI component is replaced.  See bug 7189299.
+            if (t == HTML.Tag.INPUT && type.equals("checkbox")) {
+                c = super.createComponent();
+                ((JCheckBox)c).setIcon(MultiMarkdownIcons.OPEN_TASK);
+                ((JCheckBox)c).setDisabledIcon(MultiMarkdownIcons.OPEN_TASK);
+                ((JCheckBox)c).setSelectedIcon(MultiMarkdownIcons.CLOSED_TASK);
+                ((JCheckBox)c).setDisabledSelectedIcon(MultiMarkdownIcons.CLOSED_TASK);
+                c.setEnabled(false);
+            } else {
+                c = super.createComponent();
+            }
+
+            return c;
         }
     }
 
@@ -134,6 +170,7 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
      * @since 0.8
      */
     protected static class MarkdownImageView extends ImageView {
+
         /** The document. */
         private final Document document;
         private MultiMarkdownEditorKit editorKit;
@@ -209,6 +246,7 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
          *
          * @param g the rendering surface to use
          * @param a the allocated region to render into
+         *
          * @see View#paint
          */
         @Override
@@ -223,13 +261,13 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
             }
 
             Rectangle rect = (a instanceof Rectangle) ? (Rectangle) a :
-                             a.getBounds();
+                    a.getBounds();
             Rectangle clip = g.getClipBounds();
 
             if (clip != null) {
                 g.clipRect(rect.x, rect.y,
-                           rect.width,
-                           rect.height);
+                        rect.width,
+                        rect.height);
             }
 
             Container host = getContainer();
@@ -239,14 +277,14 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
                     // Draw the image
                     Graphics2D g2 = (Graphics2D) g;
                     g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-                                        RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                            RenderingHints.VALUE_INTERPOLATION_BILINEAR);
                     g2.drawImage(img, rect.x, rect.y, (int) width, (int) height, null);
                 }
             } else {
                 Icon icon = getNoImageIcon();
                 if (icon != null) {
                     icon.paintIcon(host, g,
-                                   rect.x, rect.y);
+                            rect.x, rect.y);
                 }
             }
             if (clip != null) {

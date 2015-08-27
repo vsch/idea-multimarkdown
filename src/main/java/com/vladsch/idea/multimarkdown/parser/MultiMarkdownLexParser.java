@@ -159,13 +159,19 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
 
         addExclusion(MultiMarkdownTypes.ANCHOR_LINK, MultiMarkdownTypes.INLINE_HTML);
 
-        // thee can affect text and should combine attributes
+        // these can affect text and should combine attributes
         addInlineExclusions(MultiMarkdownTypes.TABLE_HEADER);
         addInlineExclusions(MultiMarkdownTypes.TABLE_CELL_RODD_CODD);
         addInlineExclusions(MultiMarkdownTypes.TABLE_CELL_RODD_CEVEN);
         addInlineExclusions(MultiMarkdownTypes.TABLE_CELL_REVEN_CODD);
         addInlineExclusions(MultiMarkdownTypes.TABLE_CELL_REVEN_CEVEN);
         addInlineExclusions(MultiMarkdownTypes.TABLE_CAPTION);
+
+        // task items
+        //addInlineExclusions(MultiMarkdownTypes.TASK_ITEM);
+        //addInlineExclusions(MultiMarkdownTypes.TASK_DONE_ITEM);
+        addInlineExclusions(MultiMarkdownTypes.TASK_ITEM_MARKER);
+        addInlineExclusions(MultiMarkdownTypes.TASK_DONE_ITEM_MARKER);
 
         // let all the inlines not punch through each other
         addInlineExclusions(MultiMarkdownTypes.STRIKETHROUGH_BOLDITALIC, false);
@@ -273,8 +279,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
                     if (!thatToken.doesExtend(thisToken)) {
                         lexerTokens.add(thisToken);
                         thisToken = thatToken;
-                    }
-                    else {
+                    } else {
                         thisToken.getRange().expandToInclude(thatToken.getRange());
                     }
                 }
@@ -705,7 +710,21 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         }
 
         public void visit(ListItemNode node) {
-            addTokenWithChildren(node, MultiMarkdownTypes.LIST_ITEM);
+            if (node instanceof TaskListNode) {
+                SuperNode newNode = new SuperNode();
+                TaskListNode taskListNode = (TaskListNode) node;
+
+                // marker is only the marker characters
+                newNode.setStartIndex(taskListNode.getStartIndex() - taskListNode.getTaskListMarker().length());
+                newNode.setEndIndex(newNode.getStartIndex() + 3);
+
+                // new node is all the text following
+                addTokenWithChildren(newNode, (taskListNode.isDone() ? MultiMarkdownTypes.TASK_DONE_ITEM_MARKER : MultiMarkdownTypes.TASK_ITEM_MARKER));
+                //addTokenWithChildren(node, (taskListNode.isDone() ? MultiMarkdownTypes.TASK_DONE_ITEM : MultiMarkdownTypes.TASK_ITEM));
+                addTokenWithChildren(node, MultiMarkdownTypes.LIST_ITEM);
+            } else {
+                addTokenWithChildren(node, MultiMarkdownTypes.LIST_ITEM);
+            }
         }
 
         public void visit(DefinitionListNode node) {

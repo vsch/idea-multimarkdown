@@ -166,7 +166,7 @@
   </option>
   <option name="MULTIMARKDOWN_DEFAULT.ITALIC_MARKER">
     <value>
-      <option name="FOREGROUND" value="1ab6"/>
+      <option name="FOREGROUND" value="00A441"/>
       <option name="FONT_TYPE" value="2"/>
     </value>
   </option>
@@ -292,6 +292,18 @@
     <value>
       <option name="FOREGROUND" value="4f0885"/>
       <option name="FONT_TYPE" value="1"/>
+    </value>
+  </option>
+  <option name="MULTIMARKDOWN_DEFAULT.TASK_DONE_ITEM_MARKER">
+    <value>
+      <option name="FOREGROUND" value="808080" />
+      <option name="FONT_TYPE" value="1" />
+    </value>
+  </option>
+  <option name="MULTIMARKDOWN_DEFAULT.TASK_ITEM_MARKER">
+    <value>
+      <option name="FOREGROUND" value="fb09ff" />
+      <option name="FONT_TYPE" value="1" />
     </value>
   </option>
   <option name="MULTIMARKDOWN_DEFAULT.VERBATIM">
