@@ -371,17 +371,20 @@ li {
     margin: 2px 0 3px 0;
 }
 
+li.bullet,
 li.task {
     margin: 1px 0 1px 0;
 }
 
 /* loosely spaced list items */
+li.bulletp,
 li.taskp,
 li.p {
     margin: 10px 0 0 0;
 }
 
 /* loose list item first paragraph, loose task item first paragraph */
+li.bulletp p.p,
 li.taskp p.p,
 li.p p.p {
     margin: 0;
@@ -399,6 +402,8 @@ ul li li {
     list-style-type: circle;
 }
 
+ul li.bullet,
+ul li.bulletp,
 ul li.task,
 ul li.taskp {
     list-style-type: none;

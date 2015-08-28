@@ -194,7 +194,7 @@ public class MultiMarkdownColorSettingsPage implements ColorSettingsPage {
      */
     @NotNull
     public SyntaxHighlighter getHighlighter() {
-        return new MultiMarkdownSyntaxHighlighter();
+        return new MultiMarkdownSyntaxHighlighter(true);
     }
 
     /**

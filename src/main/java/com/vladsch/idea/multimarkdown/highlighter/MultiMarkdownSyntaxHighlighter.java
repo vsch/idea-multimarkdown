@@ -37,6 +37,8 @@ import static com.vladsch.idea.multimarkdown.highlighter.MultiMarkdownHighlighte
 public class MultiMarkdownSyntaxHighlighter extends SyntaxHighlighterBase {
     protected static final Map<IElementType, TextAttributesKey> ATTRIBUTES = new HashMap<IElementType, TextAttributesKey>();
 
+    protected final boolean forSampleDoc;
+
     static {
         fillMap(ATTRIBUTES, TEXT_SET, TEXT_ATTR_KEY);
         fillMap(ATTRIBUTES, ABBREVIATION_SET, ABBREVIATION_ATTR_KEY);
@@ -100,9 +102,20 @@ public class MultiMarkdownSyntaxHighlighter extends SyntaxHighlighterBase {
         fillMap(ATTRIBUTES, WIKI_LINK_SET, WIKI_LINK_ATTR_KEY);
     }
 
+    public MultiMarkdownSyntaxHighlighter(boolean forSampleDoc) {
+        super();
+        this.forSampleDoc = forSampleDoc;
+    }
+
+    public MultiMarkdownSyntaxHighlighter() {
+        super();
+        this.forSampleDoc = false;
+    }
+
+
     @NotNull
     public Lexer getHighlightingLexer() {
-        return new MultiMarkdownLexer(Extensions.ALL_WITH_OPTIONALS);
+        return forSampleDoc ? new MultiMarkdownLexer(Extensions.ALL_WITH_OPTIONALS) : new MultiMarkdownLexer();
     }
 
     @NotNull

@@ -51,7 +51,7 @@
         <li>: Fix darcula.css did not set background for body. Short documents would have white bottom</li>
         <li>: Fix bullets and numbers for loose list items did not line up with text</li>
         <li>: Add option to render bullet lists via icons. Color is set by CSS option: default/darcula but you get smaller bullets, with retina resolution, if your displays allows it.</li>
-        <li>: Change HTML used for Preview Tab now has `<body class="multimarkdown-preview"></body>` instead of `<div id="multimarkdown-preview"></div>`. Otherwise, setting body attributes would affect background of IDEA balloons and other dialog elements.</li>
+        <li>: Change HTML used for Preview Tab now has body.multimarkdown-preview instead of div#multimarkdown-preview. Otherwise, setting body background would affect IDEA tooltips and other dialog elements.</li>
         <li>: Change FileType to MultiMarkdown to avoid conflicts with other Markdown plugins for syntax highlighting</li>
         <li>: Change Settings Sample Text syntax highlighting is now always done with all optional extensions except Force Item Para and HTML Suppression to make all atttributes show up in the sample</li>
         <li>: Change default style sheet defines ordered list styles like GitHub: 1. - decimal, 2. lower-roman, 3. lower-alpha</li>

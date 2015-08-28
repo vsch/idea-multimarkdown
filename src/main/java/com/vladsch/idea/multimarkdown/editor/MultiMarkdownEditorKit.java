@@ -147,10 +147,10 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
 
             // Remove listeners previously registered in shared model
             // when a new UI component is replaced.  See bug 7189299.
-            String subType = (String) attr.getAttribute("sub-type");
             if (t == HTML.Tag.INPUT && type.equals("checkbox")) {
+                String classType = (String) attr.getAttribute(Attribute.CLASS);
                 boolean isDark = MultiMarkdownGlobalSettings.getInstance().htmlTheme.getValue() > 0;
-                if (subType == null || subType.equals("")) {
+                if (classType != null && classType.equals("task-list-item-checkbox")) {
                     c = super.createComponent();
                     JCheckBox chk = (JCheckBox) c;
                     Icon openTask = isDark ? MultiMarkdownIcons.OPEN_TASK_DARK : MultiMarkdownIcons.OPEN_TASK;
@@ -160,7 +160,7 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
                     chk.setSelectedIcon(closedTask);
                     chk.setDisabledSelectedIcon(closedTask);
                     c.setEnabled(false);
-                } else if (subType.equals("bullet")) {
+                } else if (classType != null && classType.equals("list-item-bullet")) {
                     c = super.createComponent();
                     JCheckBox chk = (JCheckBox) c;
                     Icon bullet = isDark ? MultiMarkdownIcons.BULLET_DARK : MultiMarkdownIcons.BULLET;

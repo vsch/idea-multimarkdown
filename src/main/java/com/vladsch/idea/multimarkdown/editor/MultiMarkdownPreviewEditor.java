@@ -495,12 +495,12 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
             } else if (found.equals("</del>")) {
                 result += "</span>";
             } else if (iconBullets && listDepth >= 0 && !isOrderedList[listDepth] && found.equals("<li>")) {
-                result += "<li class=\"task\"><input type=\"checkbox\" sub-type=\"bullet\"></input>";
+                result += "<li class=\"bullet\"><input type=\"checkbox\" class=\"list-item-bullet\"></input>";
             } else {
                 if (taskLists && found.equals("<li>[x]")) {
-                    result += "<li class=\"task\"><input type=\"checkbox\" checked=\"checked\" disabled=\"disabled\">";
+                    result += "<li class=\"task\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" checked=\"checked\" disabled=\"disabled\">";
                 } else if (taskLists && found.equals("<li>[ ]")) {
-                    result += "<li class=\"task\"><input type=\"checkbox\" disabled=\"disabled\">";
+                    result += "<li class=\"task\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" disabled=\"disabled\">";
                 } else if (taskLists && found.equals("<li class=\"task-list-item\">")) {
                     result += "<li class=\"task\">";
                 } else {
@@ -510,14 +510,14 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
                     found = foundWithP.replaceAll("<li class=\"task-list-item\">\\n*\\s*<p>", "<li class=\"task-list-item\"><p>");
                     if (found.equals("<li><p>")) {
                         if (iconBullets && listDepth >= 0 && !isOrderedList[listDepth]) {
-                            result += "<li class=\"taskp\"><p class=\"p\"><input type=\"checkbox\" sub-type=\"bullet\"></input>";
+                            result += "<li class=\"bulletp\"><p class=\"p\"><input type=\"checkbox\" class=\"list-item-bullet\"></input>";
                         } else {
                             result += "<li class=\"p\"><p class=\"p\">";
                         }
                     } else if (taskLists && found.equals("<li><p>[x]")) {
-                        result += "<li class=\"taskp\"><p class=\"p\"><input type=\"checkbox\" checked=\"checked\" disabled=\"disabled\">";
+                        result += "<li class=\"taskp\"><p class=\"p\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" checked=\"checked\" disabled=\"disabled\">";
                     } else if (taskLists && found.equals("<li><p>[ ]")) {
-                        result += "<li class=\"taskp\"><p class=\"p\"><input type=\"checkbox\" disabled=\"disabled\">";
+                        result += "<li class=\"taskp\"><p class=\"p\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" disabled=\"disabled\">";
                     } else if (taskLists && found.equals("<li class=\"task-list-item\"><p>")) {
                         result += "<li class=\"taskp\"><p class=\"p\">";
                     } else {
