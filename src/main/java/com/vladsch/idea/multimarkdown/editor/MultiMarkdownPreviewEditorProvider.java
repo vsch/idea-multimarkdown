@@ -22,9 +22,11 @@
 package com.vladsch.idea.multimarkdown.editor;
 
 import com.intellij.openapi.fileEditor.*;
+import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.PossiblyDumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.vladsch.idea.multimarkdown.MultiMarkdownFileTypeFactory;
 import com.vladsch.idea.multimarkdown.MultiMarkdownLanguage;
 import com.vladsch.idea.multimarkdown.MultiMarkdownFileType;
 import org.jdom.Element;
@@ -34,9 +36,25 @@ public class MultiMarkdownPreviewEditorProvider implements FileEditorProvider, P
 
     public static final String EDITOR_TYPE_ID = MultiMarkdownLanguage.NAME + "PreviewEditor";
 
-    public boolean accept(@NotNull Project project, @NotNull VirtualFile file) {
+    public static boolean accept(@NotNull VirtualFile file) {
         String name = file.getName();
-        return file.getFileType() instanceof MultiMarkdownFileType || (name != null && name.startsWith("scratch_"));
+        String fileExt = file.getExtension();
+        FileType fileType = file.getFileType();
+        boolean doAccept = fileType instanceof MultiMarkdownFileType || (name != null && name.startsWith("scratch_"));
+
+        if (!doAccept) {
+            for (String ext : MultiMarkdownFileTypeFactory.getExtensions()) {
+                if (ext.equals(fileExt)) {
+                    doAccept = true;
+                    break;
+                }
+            }
+        }
+        return doAccept;
+    }
+
+    public boolean accept(@NotNull Project project, @NotNull VirtualFile file) {
+        return accept(file);
     }
 
     @NotNull
@@ -56,7 +74,9 @@ public class MultiMarkdownPreviewEditorProvider implements FileEditorProvider, P
      * @param sourceElement the source element.
      * @param project       the project.
      * @param file          the file.
+     *
      * @return {@link FileEditorState#INSTANCE}
+     *
      * @see #writeState(com.intellij.openapi.fileEditor.FileEditorState, com.intellij.openapi.project.Project, org.jdom.Element)
      */
     @NotNull
@@ -72,6 +92,7 @@ public class MultiMarkdownPreviewEditorProvider implements FileEditorProvider, P
      * @param state         the state to serialize.
      * @param project       the project.
      * @param targetElement the target element to serialize to.
+     *
      * @see #readState(org.jdom.Element, com.intellij.openapi.project.Project, com.intellij.openapi.vfs.VirtualFile)
      */
     public void writeState(@NotNull FileEditorState state, @NotNull Project project, @NotNull Element targetElement) {

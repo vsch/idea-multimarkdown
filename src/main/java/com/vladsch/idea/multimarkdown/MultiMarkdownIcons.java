@@ -30,9 +30,15 @@ import javax.swing.*;
 public class MultiMarkdownIcons {
     public static final Icon FILE = IconLoader.getIcon("/com/vladsch/idea/multimarkdown/multimarkdown.png");
     public static final Icon OPEN_TASK = IconLoader.getIcon("/com/vladsch/idea/multimarkdown/opentask.png");
+    public static final Icon OPEN_TASK_2X = IconLoader.getIcon("/com/vladsch/idea/multimarkdown/opentask@2x.png");
     public static final Icon CLOSED_TASK = IconLoader.getIcon("/com/vladsch/idea/multimarkdown/closedtask.png");
+    public static final Icon CLOSED_TASK_2X = IconLoader.getIcon("/com/vladsch/idea/multimarkdown/closedtask@2x.png");
     public static final Icon BULLET = IconLoader.getIcon("/com/vladsch/idea/multimarkdown/bullet.png");
+    public static final Icon BULLET_2X = IconLoader.getIcon("/com/vladsch/idea/multimarkdown/bullet@2x.png");
     public static final Icon OPEN_TASK_DARK = IconLoader.getIcon("/com/vladsch/idea/multimarkdown/opentask_dark.png");
+    public static final Icon OPEN_TASK_DARK_2X = IconLoader.getIcon("/com/vladsch/idea/multimarkdown/opentask_dark@2x.png");
     public static final Icon CLOSED_TASK_DARK = IconLoader.getIcon("/com/vladsch/idea/multimarkdown/closedtask_dark.png");
+    public static final Icon CLOSED_TASK_DARK_2X = IconLoader.getIcon("/com/vladsch/idea/multimarkdown/closedtask_dark@2x.png");
     public static final Icon BULLET_DARK = IconLoader.getIcon("/com/vladsch/idea/multimarkdown/bullet_dark.png");
+    public static final Icon BULLET_DARK_2X = IconLoader.getIcon("/com/vladsch/idea/multimarkdown/bullet_dark@2x.png");
 }

@@ -37,7 +37,7 @@ public class MultiMarkdownHtmlEditorProvider implements FileEditorProvider, Poss
 
     public boolean accept(@NotNull Project project, @NotNull VirtualFile file) {
         return MultiMarkdownGlobalSettings.getInstance().showHtmlText.getValue()
-                && (file.getFileType() instanceof MultiMarkdownFileType || file.getName().startsWith("scratch_"));
+                && (MultiMarkdownPreviewEditorProvider.accept(file));
     }
 
     @NotNull

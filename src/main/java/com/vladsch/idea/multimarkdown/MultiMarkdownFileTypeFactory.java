@@ -32,6 +32,10 @@ public class MultiMarkdownFileTypeFactory extends FileTypeFactory {
 
     final static private String[] EXTENSIONS = {DEFAULT_EXTENSION, "md", "mkd"};
 
+    static public String[] getExtensions() {
+        return EXTENSIONS;
+    }
+
     @Override
     public void createFileTypes(@NotNull FileTypeConsumer fileTypeConsumer) {
         for (String extension : EXTENSIONS) {
