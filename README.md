@@ -3,7 +3,9 @@ idea-multimarkdown
 
 **[Markdown](http://daringfireball.net/projects/markdown) language support for [IntelliJ IDEA](http://www.jetbrains.com/idea), [RubyMine](http://www.jetbrains.com/ruby), [PhpStorm](http://www.jetbrains.com/phpstorm), [WebStorm](http://www.jetbrains.com/webstorm), [PyCharm](http://www.jetbrains.com/pycharm), [AppCode](http://www.jetbrains.com/objc) and [Android Studio](http://developer.android.com/sdk/installing/studio.html).**
 
-**<span color="#c00038">If you like this plugin, please leave a comment or rate it on the</span> [official plugin page](https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896).**
+**<span color="#c00038">If you like this plugin, please leave a comment or rate it on the</span> [official plugin comment and rate page](https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896).**
+
+**You can download it on the [official plugin page](https://plugins.jetbrains.com/plugin?pr=&pluginId=7896).**
 
 The Full Story
 --------------
