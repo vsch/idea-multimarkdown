@@ -147,13 +147,31 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
 
             // Remove listeners previously registered in shared model
             // when a new UI component is replaced.  See bug 7189299.
+            String subType = (String) attr.getAttribute("sub-type");
             if (t == HTML.Tag.INPUT && type.equals("checkbox")) {
-                c = super.createComponent();
-                ((JCheckBox)c).setIcon(MultiMarkdownIcons.OPEN_TASK);
-                ((JCheckBox)c).setDisabledIcon(MultiMarkdownIcons.OPEN_TASK);
-                ((JCheckBox)c).setSelectedIcon(MultiMarkdownIcons.CLOSED_TASK);
-                ((JCheckBox)c).setDisabledSelectedIcon(MultiMarkdownIcons.CLOSED_TASK);
-                c.setEnabled(false);
+                boolean isDark = MultiMarkdownGlobalSettings.getInstance().htmlTheme.getValue() > 0;
+                if (subType == null || subType.equals("")) {
+                    c = super.createComponent();
+                    JCheckBox chk = (JCheckBox) c;
+                    Icon openTask = isDark ? MultiMarkdownIcons.OPEN_TASK_DARK : MultiMarkdownIcons.OPEN_TASK;
+                    Icon closedTask = isDark ? MultiMarkdownIcons.CLOSED_TASK_DARK : MultiMarkdownIcons.CLOSED_TASK;
+                    chk.setIcon(openTask);
+                    chk.setDisabledIcon(openTask);
+                    chk.setSelectedIcon(closedTask);
+                    chk.setDisabledSelectedIcon(closedTask);
+                    c.setEnabled(false);
+                } else if (subType.equals("bullet")) {
+                    c = super.createComponent();
+                    JCheckBox chk = (JCheckBox) c;
+                    Icon bullet = isDark ? MultiMarkdownIcons.BULLET_DARK : MultiMarkdownIcons.BULLET;
+                    chk.setIcon(bullet);
+                    chk.setDisabledIcon(bullet);
+                    chk.setSelectedIcon(bullet);
+                    chk.setDisabledSelectedIcon(bullet);
+                    c.setEnabled(false);
+                } else {
+                    c = super.createComponent();
+                }
             } else {
                 c = super.createComponent();
             }

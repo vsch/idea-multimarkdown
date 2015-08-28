@@ -24,6 +24,7 @@ package com.vladsch.idea.multimarkdown.editor;
 import com.intellij.codeHighlighting.BackgroundEditorHighlighter;
 import com.intellij.ide.structureView.StructureViewBuilder;
 import com.intellij.lang.Language;
+import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.command.CommandProcessor;
@@ -92,6 +93,8 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
     //private final EditorTextField myTextViewer;
     private final EditorImpl myTextViewer;
 
+    private boolean isReleased = false;
+
     protected MultiMarkdownGlobalSettingsListener globalSettingsListener;
 
     /** The {@link PegDownProcessor} used for building the document AST. */
@@ -119,6 +122,10 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
 
     public static boolean isTaskLists() {
         return MultiMarkdownGlobalSettings.getInstance().taskLists.getValue();
+    }
+
+    public static boolean isIconBullets() {
+        return MultiMarkdownGlobalSettings.getInstance().iconBullets.getValue();
     }
 
     public static String getCustomCss() {
@@ -181,13 +188,13 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
 
         if (isRawHtml) {
             jEditorPane = null;
+            scrollPane = null;
             Language language = Language.findLanguageByID("HTML");
             FileType fileType = language != null ? language.getAssociatedFileType() : null;
             //myTextViewer = new EditorTextField(EditorFactory.getInstance().createDocument(""), project, fileType, true, false);
             Document myDocument = EditorFactory.getInstance().createDocument("");
             myTextViewer = (EditorImpl) EditorFactory.getInstance().createViewer(myDocument, project);
             if (fileType != null) myTextViewer.setHighlighter(EditorHighlighterFactory.getInstance().createEditorHighlighter(project, fileType));
-            scrollPane = null;//new JBScrollPane(myTextViewer.getComponent());
         } else {
             // Setup the editor pane for rendering HTML.
             myTextViewer = null;
@@ -427,30 +434,56 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
     protected String postProcessHtml(String html) {
         // scan for <table>, </table>, <tr>, </tr> and other tags we modify, this could be done with a custom plugin to pegdown but
         // then it would be more trouble to get un-modified HTML.
-        String result = "<div id=\"multimarkdown-preview\">\n";
-        Pattern p = Pattern.compile("(<table>|<thead>|<tbody>|<tr>|<hr/>|<del>|</del>|</p>|<li class=\"task-list-item\">\\n*\\s*<p>|<li class=\"task-list-item\">|<li>\\[x\\]|<li>\\[ \\]|<li>\\n*\\s*<p>\\[x\\]|<li>\\n*\\s*<p>\\[ \\]|<li>\\n*\\s*<p>)", Pattern.CASE_INSENSITIVE);
+        String result = "<body class=\"multimarkdown-preview\">\n";
+        String regex = "(<table>|<thead>|<tbody>|<tr>|<hr/>|<del>|</del>|</p>|<li>\\n*\\s*<p>";
+        String regexTail = ")";
+        Boolean taskLists = isTaskLists();
+        Boolean iconBullets = isIconBullets();
+
+        if (taskLists) {
+            regex += "|<li class=\"task-list-item\">\\n*\\s*<p>|<li class=\"task-list-item\">|<li>\\[x\\]|<li>\\[ \\]|<li>\\n*\\s*<p>\\[x\\]|<li>\\n*\\s*<p>\\[ \\]";
+        }
+        if (iconBullets) {
+            regex += "|<ul>|<ol>|</ul>|</ol>";
+            regexTail = "|<li>" + regexTail;
+        }
+        regex += regexTail;
+
+        Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(html);
         int lastPos = 0;
         int rowCount = 0;
-        boolean prevWasTask = false;
+        boolean[] isOrderedList = new boolean[20];
+        int listDepth = -1;
 
         while (m.find()) {
-            boolean thisWasTask = false;
-
             String found = m.group();
             if (lastPos < m.start(0)) {
                 result += html.substring(lastPos, m.start(0));
             }
 
             if (found.equals("</p>")) {
-                if (prevWasTask) result += "</span></p>";
-                else result += found;
+                result += found;
             } else if (found.equals("<table>")) {
                 rowCount = 0;
                 result += found;
             } else if (found.equals("<thead>")) {
                 result += found;
             } else if (found.equals("<tbody>")) {
+                result += found;
+            } else if (iconBullets && found.equals("<ol>")) {
+                if (listDepth + 1 >= isOrderedList.length) listDepth = isOrderedList.length - 2;
+                isOrderedList[++listDepth] = true;
+                result += found;
+            } else if (iconBullets && found.equals("</ol>")) {
+                if (listDepth >= 0) listDepth--;
+                result += found;
+            } else if (iconBullets && found.equals("<ul>")) {
+                if (listDepth + 1 >= isOrderedList.length) listDepth = isOrderedList.length - 2;
+                isOrderedList[++listDepth] = false;
+                result += found;
+            } else if (iconBullets && found.equals("</ul>")) {
+                if (listDepth >= 0) listDepth--;
                 result += found;
             } else if (found.equals("<tr>")) {
                 rowCount++;
@@ -461,8 +494,9 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
                 result += "<span class=\"del\">";
             } else if (found.equals("</del>")) {
                 result += "</span>";
+            } else if (iconBullets && listDepth >= 0 && !isOrderedList[listDepth] && found.equals("<li>")) {
+                result += "<li class=\"task\"><input type=\"checkbox\" sub-type=\"bullet\"></input>";
             } else {
-                boolean taskLists = isTaskLists();
                 if (taskLists && found.equals("<li>[x]")) {
                     result += "<li class=\"task\"><input type=\"checkbox\" checked=\"checked\" disabled=\"disabled\">";
                 } else if (taskLists && found.equals("<li>[ ]")) {
@@ -474,25 +508,24 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
                     String foundWithP = found;
                     foundWithP = foundWithP.replaceAll("<li>\\n*\\s*<p>", "<li><p>");
                     found = foundWithP.replaceAll("<li class=\"task-list-item\">\\n*\\s*<p>", "<li class=\"task-list-item\"><p>");
-
                     if (found.equals("<li><p>")) {
-                        result += "<li class=\"p\"><p class=\"p\">";
+                        if (iconBullets && listDepth >= 0 && !isOrderedList[listDepth]) {
+                            result += "<li class=\"taskp\"><p class=\"p\"><input type=\"checkbox\" sub-type=\"bullet\"></input>";
+                        } else {
+                            result += "<li class=\"p\"><p class=\"p\">";
+                        }
                     } else if (taskLists && found.equals("<li><p>[x]")) {
-                        result += "<li class=\"taskp\"><p class=\"p\"><input type=\"checkbox\" checked=\"checked\" disabled=\"disabled\"><span>";
-                        thisWasTask = true;
+                        result += "<li class=\"taskp\"><p class=\"p\"><input type=\"checkbox\" checked=\"checked\" disabled=\"disabled\">";
                     } else if (taskLists && found.equals("<li><p>[ ]")) {
-                        result += "<li class=\"taskp\"><p class=\"p\"><input type=\"checkbox\" disabled=\"disabled\"><span>";
-                        thisWasTask = true;
+                        result += "<li class=\"taskp\"><p class=\"p\"><input type=\"checkbox\" disabled=\"disabled\">";
                     } else if (taskLists && found.equals("<li class=\"task-list-item\"><p>")) {
-                        result += "<li class=\"taskp\"><p class=\"p\"><span>";
-                        thisWasTask = true;
+                        result += "<li class=\"taskp\"><p class=\"p\">";
                     } else {
                         result += found;
                     }
                 }
             }
 
-            prevWasTask = thisWasTask;
             lastPos = m.end(0);
         }
 
@@ -500,7 +533,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
             result += html.substring(lastPos);
         }
 
-        result += "\n</div>\n";
+        result += "\n</body>\n";
         return result;
     }
 
@@ -565,10 +598,36 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
 
     /** Dispose the editor. */
     public void dispose() {
-        if (globalSettingsListener != null) {
-            MultiMarkdownGlobalSettings.getInstance().removeListener(globalSettingsListener);
-            globalSettingsListener = null;
+        if (!isReleased) {
+            isReleased = true;
+            if (jEditorPane != null) {
+                jEditorPane.removeAll();
+            }
+
+            if (globalSettingsListener != null) {
+                MultiMarkdownGlobalSettings.getInstance().removeListener(globalSettingsListener);
+                globalSettingsListener = null;
+            }
+
+            if (myTextViewer != null) {
+                final Application application = ApplicationManager.getApplication();
+                final Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!myTextViewer.isDisposed()) {
+                            EditorFactory.getInstance().releaseEditor(myTextViewer);
+                        }
+                    }
+                };
+
+                if (application.isUnitTestMode() || application.isDispatchThread()) {
+                    runnable.run();
+                } else {
+                    application.invokeLater(runnable);
+                }
+            }
+
+            Disposer.dispose(this);
         }
-        Disposer.dispose(this);
     }
 }

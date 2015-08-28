@@ -73,8 +73,26 @@ public class MultiMarkdownSettingsPanel {
     public JComboBox htmlThemeComboBox;
     public JCheckBox enableTrimSpacesCheckBox;
     private JCheckBox todoCommentsCheckBox;
+    private CustomizableEditorTextField textCustomCss;
+    private JCheckBox iconBulletsCheckBox;
 
     public JPanel panel;
+    public JPanel settingsPanel;
+    public JPanel extensionsPanel;
+
+    private JLabel suppressInlineHTMLDescriptionLabel;
+    private JLabel suppressHTMLBlocksDescriptionLabel;
+    private JLabel fencedCodeBlocksDescriptionLabel;
+    private JLabel definitionsDescriptionLabel;
+    private JLabel tablesDescriptionLabel;
+    private JLabel autoLinksDescriptionLabel;
+    private JLabel wikiLinksDescriptionLabel;
+    private JLabel hardWarpsDescriptionLabel;
+    private JLabel abbreviationsDescriptionLabel;
+    private JLabel quotesDescriptionLabel;
+    private JLabel smartsDescriptionLabel;
+    private JLabel strikethroughDescriptionLabel;
+    private JLabel parsingTimeoutDescriptionLabel;
 
     // need this so that we dont try to access components before they are created
     public JComponent getComponent(String name) {
@@ -103,29 +121,13 @@ public class MultiMarkdownSettingsPanel {
         if (name.equals("anchorLinksCheckBox")) return anchorLinksCheckBox;
         if (name.equals("forceListParaCheckBox")) return forceListParaCheckBox;
         if (name.equals("relaxedHRulesCheckBox")) return relaxedHRulesCheckBox;
+        if (name.equals("iconBulletsCheckBox")) return iconBulletsCheckBox;
         if (name.equals("htmlThemeComboBox")) return htmlThemeComboBox;
         if (name.equals("enableTrimSpacesCheckBox")) return enableTrimSpacesCheckBox;
         //if (name.equals("todoCommentsCheckBox")) return todoCommentsCheckBox;
         return null;
     }
 
-    public JPanel settingsPanel;
-    public JPanel extensionsPanel;
-
-    private JLabel suppressInlineHTMLDescriptionLabel;
-    private JLabel suppressHTMLBlocksDescriptionLabel;
-    private JLabel fencedCodeBlocksDescriptionLabel;
-    private JLabel definitionsDescriptionLabel;
-    private JLabel tablesDescriptionLabel;
-    private JLabel autoLinksDescriptionLabel;
-    private JLabel wikiLinksDescriptionLabel;
-    private JLabel hardWarpsDescriptionLabel;
-    private JLabel abbreviationsDescriptionLabel;
-    private JLabel quotesDescriptionLabel;
-    private JLabel smartsDescriptionLabel;
-    private JLabel strikethroughDescriptionLabel;
-    private JLabel parsingTimeoutDescriptionLabel;
-    private CustomizableEditorTextField textCustomCss;
 
     protected void showHtmlTextStateChanged() {
         if (showHtmlTextAsModifiedCheckBox != null) {

@@ -63,6 +63,9 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
     protected LexerToken[] lexerTokens = null;
     protected RootNode rootNode = null;
 
+    protected final Integer pegdownExtensions;
+    protected final Integer parsingTimeout;
+
     protected void clearParsed() {
         tableRows = 0;
         rowColumns = 0;
@@ -226,22 +229,36 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         addExclusion(MultiMarkdownTypes.BLOCK_QUOTE, MultiMarkdownTypes.LIST_ITEM);
     }
     /** Init/reinit thread local {@link PegDownProcessor}. */
-    private static ThreadLocal<PegDownProcessor> initProcessor() {
+    private ThreadLocal<PegDownProcessor> initProcessor() {
         return new ThreadLocal<PegDownProcessor>() {
             @Override protected PegDownProcessor initialValue() {
-                return new PegDownProcessor(MultiMarkdownGlobalSettings.getInstance().getExtensionsValue(),
-                        MultiMarkdownGlobalSettings.getInstance().parsingTimeout.getValue());
+                return new PegDownProcessor(pegdownExtensions != null ? pegdownExtensions : MultiMarkdownGlobalSettings.getInstance().getExtensionsValue(),
+                        parsingTimeout != null ? parsingTimeout : MultiMarkdownGlobalSettings.getInstance().parsingTimeout.getValue());
             }
         };
     }
 
     public MultiMarkdownLexParser() {
         // Listen to global settings changes.
+        pegdownExtensions = null;
+        parsingTimeout = null;
         MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
             public void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings) {
                 processor.remove();
             }
         });
+    }
+
+    public MultiMarkdownLexParser(int pegdownExtensions) {
+        // here we don't listen to global changes, our flags are fixed
+        this.pegdownExtensions = pegdownExtensions;
+        this.parsingTimeout = MultiMarkdownGlobalSettings.getInstance().parsingTimeout.getValue();
+    }
+
+    public MultiMarkdownLexParser(int pegdownExtensions, int parsingTimeout) {
+        // here we don't listen to global changes, our flags are fixed
+        this.pegdownExtensions = pegdownExtensions;
+        this.parsingTimeout = parsingTimeout;
     }
 
     public boolean parseMarkdown(final String source) {

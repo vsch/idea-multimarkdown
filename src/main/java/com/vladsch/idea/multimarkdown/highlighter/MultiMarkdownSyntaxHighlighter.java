@@ -27,7 +27,7 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.tree.IElementType;
 import com.vladsch.idea.multimarkdown.parser.MultiMarkdownLexer;
 import org.jetbrains.annotations.NotNull;
-
+import org.pegdown.Extensions;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -102,7 +102,7 @@ public class MultiMarkdownSyntaxHighlighter extends SyntaxHighlighterBase {
 
     @NotNull
     public Lexer getHighlightingLexer() {
-        return new MultiMarkdownLexer();
+        return new MultiMarkdownLexer(Extensions.ALL_WITH_OPTIONALS);
     }
 
     @NotNull

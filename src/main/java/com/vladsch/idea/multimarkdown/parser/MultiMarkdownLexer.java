@@ -45,6 +45,16 @@ public class MultiMarkdownLexer extends Lexer {
         lexParser = new MultiMarkdownLexParser();
     }
 
+    public MultiMarkdownLexer(int pegdownExtensions) {
+        super();
+        lexParser = new MultiMarkdownLexParser(pegdownExtensions);
+    }
+
+    public MultiMarkdownLexer(int pegdownExtensions, int parsingTimeout) {
+        super();
+        lexParser = new MultiMarkdownLexParser(pegdownExtensions, parsingTimeout);
+    }
+
     @Override public void start(@NotNull CharSequence buffer, int startOffset, int endOffset, int initialState) {
         this.buffer = buffer;
         lexParser.parseMarkdown(buffer.toString());

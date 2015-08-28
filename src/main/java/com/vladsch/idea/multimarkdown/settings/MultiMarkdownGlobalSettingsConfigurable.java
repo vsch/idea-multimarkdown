@@ -64,6 +64,7 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
         componentSettings.add(new CheckBoxComponent("tablesCheckBox", globalSettings.tables));
         componentSettings.add(new CheckBoxComponent("taskListsCheckBox", globalSettings.taskLists));
         componentSettings.add(new CheckBoxComponent("wikiLinksCheckBox", globalSettings.wikiLinks));
+        componentSettings.add(new CheckBoxComponent("iconBulletsCheckBox", globalSettings.iconBullets));
         //componentSettings.add(new CheckBoxComponent("todoCommentsCheckBox", globalSettings.todoComments));
         componentSettings.add(new CheckBoxComponent("quotesCheckBox", globalSettings.quotes));
         componentSettings.add(new SpinnerComponent("updateDelaySpinner", globalSettings.updateDelay));

@@ -3,8 +3,8 @@
 Auto link: <http://example.com> Inline `code` 
 Bold Italic Text: ***bold italic*** and ***normal text
 Bold: **bold**, ***bold italic***, and **normal text
-Escaped Character: \* \_ \` \& \[ \] \< \> \! \# \\ \" \. \- \( \) \{ \} \: \| \~
-Explicit Link : [Example](http://example.com)
+Escaped Character: \* \_ \` \& \[ \] \< \> \! \# \\ \" \' \. \- \( \) \{ \} \: \| \~
+Explicit Link : [Example](http://example.com)              
 Italic Text: *italic* and this one is not *italic
 Image: ![My image](http://www.foo.bar/image.png) 
 Inline HTML: <b>bold</b>
@@ -12,7 +12,7 @@ Mail Link: me@example.com
 Smart Characters: ... -- --- a's b's
 Smart quotes 'this is a quote' 
 Strikethrough: ~~strikethrough **strikethrough bold** *strikethrough italic* ***strikethrough bold italic***~~
-WikiLink: [[Wiki Link]]
+WikiLink: [[WikiLink|Wiki Link]]
  
 <!-- Comment -->
 

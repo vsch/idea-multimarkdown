@@ -77,6 +77,7 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     final public BooleanSetting taskLists = new BooleanSetting(false, "taskLists", Extensions.TASKLISTITEMS);
     final public BooleanSetting wikiLinks = new BooleanSetting(false, "wikiLinks", Extensions.WIKILINKS);
     final public BooleanSetting todoComments = new BooleanSetting(false, "todoComments", 0);
+    final public BooleanSetting iconBullets = new BooleanSetting(true, "iconBullets", 0);
     final public IntegerSetting htmlTheme = new IntegerSetting(0, "htmlTheme");
     final public IntegerSetting maxImgWidth = new IntegerSetting(900, "maxImgWidth");
     final public IntegerSetting parsingTimeout = new IntegerSetting(10000, "parsingTimeout");
