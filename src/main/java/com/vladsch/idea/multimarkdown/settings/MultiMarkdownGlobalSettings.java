@@ -135,7 +135,7 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     }
 
     public void endGroupNotifications() {
-        notifier.startGroupNotifications();
+        notifier.endGroupNotifications();
     }
 
 }

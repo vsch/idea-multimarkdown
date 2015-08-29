@@ -26,5 +26,4 @@ package com.vladsch.idea.multimarkdown.settings;
 import org.jetbrains.annotations.NotNull;
 
 public interface MultiMarkdownGlobalSettingsListener extends SettingsListener<MultiMarkdownGlobalSettings> {
-    @Override void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings);
 }
