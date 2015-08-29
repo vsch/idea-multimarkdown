@@ -33,7 +33,6 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.CaretModel;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.EditorFactory;
-import com.intellij.openapi.editor.EditorSettings;
 import com.intellij.openapi.editor.event.DocumentAdapter;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.ex.DocumentEx;
@@ -45,8 +44,6 @@ import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.UserDataHolderBase;
-import com.intellij.ui.EditorTextField;
-import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.components.JBScrollPane;
 
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
@@ -78,9 +75,9 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
     public static final String TEXT_EDITOR_NAME = MultiMarkdownBundle.message("multimarkdown.html-tab-name");
 
     @NonNls
-    public static final String PREVIEW_STYLESHEET_PATH0 = "/com/vladsch/idea/multimarkdown/default.css";
+    public static final String PREVIEW_STYLESHEET_LIGHT = "/com/vladsch/idea/multimarkdown/default.css";
 
-    public static final String PREVIEW_STYLESHEET_PATH1 = "/com/vladsch/idea/multimarkdown/darcula.css";
+    public static final String PREVIEW_STYLESHEET_DARK = "/com/vladsch/idea/multimarkdown/darcula.css";
 
     /** The {@link java.awt.Component} used to render the HTML preview. */
     protected final JEditorPane jEditorPane;
@@ -264,7 +261,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
 
         if (getCustomCss().equals("")) {
             style.importStyleSheet(MultiMarkdownPreviewEditor.class.getResource(
-                    MultiMarkdownGlobalSettings.getInstance().htmlTheme.getValue() == 0 ? PREVIEW_STYLESHEET_PATH0 : PREVIEW_STYLESHEET_PATH1));
+                    MultiMarkdownGlobalSettings.getInstance().isDarkHtmlPreview() ? PREVIEW_STYLESHEET_DARK : PREVIEW_STYLESHEET_LIGHT));
         } else {
             try {
                 style.loadRules(new StringReader(getCustomCss()), null);

@@ -20,222 +20,122 @@
  */
 package com.vladsch.idea.multimarkdown.settings;
 
+import com.intellij.ide.ui.UISettings;
+import com.intellij.ide.ui.UISettingsListener;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
-import com.intellij.ui.EditorTextField;
+import com.intellij.util.ui.UIUtil;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.pegdown.Extensions;
-
-import javax.swing.*;
-import java.lang.ref.WeakReference;
-import java.lang.String;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 @State(
         name = "MultiMarkdownSettings",
         storages = @Storage(id = "other", file = "$APP_CONFIG$/multimarkdown.xml")
 )
-public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Element> {
+public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Element>, Disposable {
+
+    final public static int HTML_THEME_DEFAULT = 0;
+    final public static int HTML_THEME_DARCULA = 1;
+    final public static int HTML_THEME_UI = 2;   // follow the Appearance setting of the application UI
 
     /** A set of listeners to this object state changes. */
-    protected Set<WeakReference<MultiMarkdownGlobalSettingsListener>> listeners;
+    @Override public void dispose() {
 
-    private int groupNotifications;
+    }
 
-    private boolean needToNotify;
+    protected final SettingsNotifierImpl<MultiMarkdownGlobalSettings> notifier = new SettingsNotifierImpl<MultiMarkdownGlobalSettings>(this);
+    protected final Settings settings = new Settings(notifier);
 
-    final private ArrayList<Setting> settings = new ArrayList<Setting>(50);
+    public MultiMarkdownGlobalSettings() {
+        // register to settings change on behalf of our listeners. If the UI changes and htmlTheme is Application UI then notify them
+        UISettings.getInstance().addUISettingsListener(new UISettingsListener() {
+            @Override public void uiSettingsChanged(UISettings source) {
+                if (htmlTheme.getValue() == HTML_THEME_UI) {
+                    notifier.notifyListeners();
+                }
+            }
+        }, this);
+    }
+
 
     public static MultiMarkdownGlobalSettings getInstance() {
         return ServiceManager.getService(MultiMarkdownGlobalSettings.class);
     }
 
     // these self-add to the list of settings
-    final public BooleanSetting abbreviations = new BooleanSetting(false, "abbreviations", Extensions.ABBREVIATIONS);
-    final public BooleanSetting anchorLinks = new BooleanSetting(false, "anchorLinks", Extensions.ANCHORLINKS);
-    final public BooleanSetting autoLinks = new BooleanSetting(false, "autoLinks", Extensions.AUTOLINKS);
-    final public BooleanSetting definitions = new BooleanSetting(false, "definitions", Extensions.DEFINITIONS);
-    final public BooleanSetting enableTrimSpaces = new BooleanSetting(false, "enableTrimSpaces", 0);
-    final public BooleanSetting fencedCodeBlocks = new BooleanSetting(false, "fencedCodeBlocks", Extensions.FENCED_CODE_BLOCKS);
-    final public BooleanSetting forceListPara = new BooleanSetting(false, "forceListPara", Extensions.FORCELISTITEMPARA);
-    final public BooleanSetting hardWraps = new BooleanSetting(false, "hardWraps", Extensions.HARDWRAPS);
-    final public BooleanSetting headerSpace = new BooleanSetting(false, "headerSpace", Extensions.ATXHEADERSPACE);
-    final public BooleanSetting quotes = new BooleanSetting(false, "quotes", Extensions.QUOTES);
-    final public BooleanSetting relaxedHRules = new BooleanSetting(false, "relaxedHRules", Extensions.RELAXEDHRULES);
-    final public BooleanSetting showHtmlText = new BooleanSetting(true, "showHtmlText", 0);
-    final public BooleanSetting showHtmlTextAsModified = new BooleanSetting(false, "showHtmlTextAsModified", 0);
-    final public BooleanSetting smarts = new BooleanSetting(false, "smarts", Extensions.SMARTS);
-    final public BooleanSetting strikethrough = new BooleanSetting(false, "strikethrough", Extensions.STRIKETHROUGH);
-    final public BooleanSetting suppressHTMLBlocks = new BooleanSetting(false, "suppressHTMLBlocks", Extensions.SUPPRESS_HTML_BLOCKS);
-    final public BooleanSetting suppressInlineHTML = new BooleanSetting(false, "suppressInlineHTML", Extensions.SUPPRESS_INLINE_HTML);
-    final public BooleanSetting tables = new BooleanSetting(false, "tables", Extensions.TABLES);
-    final public BooleanSetting taskLists = new BooleanSetting(false, "taskLists", Extensions.TASKLISTITEMS);
-    final public BooleanSetting wikiLinks = new BooleanSetting(false, "wikiLinks", Extensions.WIKILINKS);
-    final public BooleanSetting todoComments = new BooleanSetting(false, "todoComments", 0);
-    final public BooleanSetting iconBullets = new BooleanSetting(true, "iconBullets", 0);
-    final public IntegerSetting htmlTheme = new IntegerSetting(0, "htmlTheme");
-    final public IntegerSetting maxImgWidth = new IntegerSetting(900, "maxImgWidth");
-    final public IntegerSetting parsingTimeout = new IntegerSetting(10000, "parsingTimeout");
-    final public IntegerSetting updateDelay = new IntegerSetting(1000, "updateDelay");
-    final public StringSetting customCss = new StringSetting("", "customCss");
+    final public Settings.BooleanSetting abbreviations = settings.BooleanSetting(false, "abbreviations", Extensions.ABBREVIATIONS);
+    final public Settings.BooleanSetting anchorLinks = settings.BooleanSetting(false, "anchorLinks", Extensions.ANCHORLINKS);
+    final public Settings.BooleanSetting autoLinks = settings.BooleanSetting(false, "autoLinks", Extensions.AUTOLINKS);
+    final public Settings.BooleanSetting definitions = settings.BooleanSetting(false, "definitions", Extensions.DEFINITIONS);
+    final public Settings.BooleanSetting enableTrimSpaces = settings.BooleanSetting(false, "enableTrimSpaces", 0);
+    final public Settings.BooleanSetting fencedCodeBlocks = settings.BooleanSetting(false, "fencedCodeBlocks", Extensions.FENCED_CODE_BLOCKS);
+    final public Settings.BooleanSetting forceListPara = settings.BooleanSetting(false, "forceListPara", Extensions.FORCELISTITEMPARA);
+    final public Settings.BooleanSetting hardWraps = settings.BooleanSetting(false, "hardWraps", Extensions.HARDWRAPS);
+    final public Settings.BooleanSetting headerSpace = settings.BooleanSetting(false, "headerSpace", Extensions.ATXHEADERSPACE);
+    final public Settings.BooleanSetting quotes = settings.BooleanSetting(false, "quotes", Extensions.QUOTES);
+    final public Settings.BooleanSetting relaxedHRules = settings.BooleanSetting(false, "relaxedHRules", Extensions.RELAXEDHRULES);
+    final public Settings.BooleanSetting showHtmlText = settings.BooleanSetting(true, "showHtmlText", 0);
+    final public Settings.BooleanSetting showHtmlTextAsModified = settings.BooleanSetting(false, "showHtmlTextAsModified", 0);
+    final public Settings.BooleanSetting smarts = settings.BooleanSetting(false, "smarts", Extensions.SMARTS);
+    final public Settings.BooleanSetting strikethrough = settings.BooleanSetting(false, "strikethrough", Extensions.STRIKETHROUGH);
+    final public Settings.BooleanSetting suppressHTMLBlocks = settings.BooleanSetting(false, "suppressHTMLBlocks", Extensions.SUPPRESS_HTML_BLOCKS);
+    final public Settings.BooleanSetting suppressInlineHTML = settings.BooleanSetting(false, "suppressInlineHTML", Extensions.SUPPRESS_INLINE_HTML);
+    final public Settings.BooleanSetting tables = settings.BooleanSetting(false, "tables", Extensions.TABLES);
+    final public Settings.BooleanSetting taskLists = settings.BooleanSetting(false, "taskLists", Extensions.TASKLISTITEMS);
+    final public Settings.BooleanSetting wikiLinks = settings.BooleanSetting(false, "wikiLinks", Extensions.WIKILINKS);
+    final public Settings.BooleanSetting todoComments = settings.BooleanSetting(false, "todoComments", 0);
+    final public Settings.BooleanSetting iconBullets = settings.BooleanSetting(true, "iconBullets", 0);
+    final public Settings.IntegerSetting htmlTheme = settings.IntegerSetting(HTML_THEME_UI, "htmlTheme");
+    final public Settings.IntegerSetting maxImgWidth = settings.IntegerSetting(900, "maxImgWidth");
+    final public Settings.IntegerSetting parsingTimeout = settings.IntegerSetting(10000, "parsingTimeout");
+    final public Settings.IntegerSetting updateDelay = settings.IntegerSetting(1000, "updateDelay");
+    final public Settings.StringSetting customCss = settings.StringSetting("", "customCss");
+    final public Settings.ElementSetting customCssEditorState = settings.ElementSetting(null, "customCssEditorState");
 
     public Element getState() {
-        final Element element = new Element("MarkdownSettings");
-        for (Setting setting : settings) {
-            setting.saveState(element);
-        }
-        return element;
+        Element multiMarkdownSettings = settings.getState("MultiMarkdownSettings");
+        return multiMarkdownSettings;
     }
 
     public void loadState(@NotNull Element element) {
-        startGroupNotifications();
-        for (Setting setting : settings) {
-            setting.loadState(element);
-        }
-        endGroupNotifications();
+        settings.loadState(element);
+    }
+
+    public boolean isDarkHtmlPreview() {
+        return isDarkHtmlPreview(htmlTheme.getValue());
+    }
+
+    public boolean isDarkHtmlPreview(int htmlTheme) {
+        return htmlTheme == HTML_THEME_DARCULA
+                || htmlTheme == HTML_THEME_UI && UIUtil.isUnderDarcula();
+    }
+
+    public boolean isInvertedHtmlPreview() {
+        return UIUtil.isUnderDarcula() != isDarkHtmlPreview();
     }
 
     public int getExtensionsValue() {
-        int pegdownFlags = 0;
-        for (Setting setting : settings) {
-            pegdownFlags |= setting.selectedPegdownFlags();
-        }
-        return pegdownFlags;
+        return settings.getExtensionsValue();
     }
 
-    public void addListener(@NotNull final MultiMarkdownGlobalSettingsListener listener) {
-        if (listeners == null) listeners = new HashSet<WeakReference<MultiMarkdownGlobalSettingsListener>>();
-        listeners.add(new WeakReference<MultiMarkdownGlobalSettingsListener>(listener));
+    public void addListener(@NotNull final SettingsListener<MultiMarkdownGlobalSettings> listener) {
+        notifier.addListener(listener);
     }
 
-    public void removeListener(@NotNull final MultiMarkdownGlobalSettingsListener listener) {
-        if (listeners != null) listeners.remove(listener);
+    public void removeListener(@NotNull final SettingsListener<MultiMarkdownGlobalSettings> listener) {
+        notifier.removeListener(listener);
     }
 
-    public int startGroupNotifications() {
-        return groupNotifications++;
+    public void startGroupNotifications() {
+        notifier.startGroupNotifications();
     }
 
-    public int endGroupNotifications() {
-        if (groupNotifications == 0) return 0;
-
-        if (--groupNotifications == 0) {
-            if (needToNotify) {
-                needToNotify = false;
-                notifyListeners();
-            }
-        }
-
-        return groupNotifications;
+    public void endGroupNotifications() {
+        notifier.startGroupNotifications();
     }
 
-    protected void notifyListeners() {
-        if (groupNotifications > 0) {
-            needToNotify = true;
-        } else {
-            MultiMarkdownGlobalSettingsListener listener;
-            if (listeners != null)
-                for (final WeakReference<MultiMarkdownGlobalSettingsListener> listenerRef : listeners)
-                    if ((listener = listenerRef.get()) != null) listener.handleSettingsChanged(this);
-        }
-    }
-
-    public abstract class Setting<T> {
-
-        protected T value;
-
-        protected String persistName;
-
-        public Setting(T initialValue, String persistName) {
-            value = initialValue;
-            this.persistName = persistName;
-            settings.add(this);
-        }
-
-        public T getValue() { return value; }
-
-        public void setValue(T value) {
-            if (this.value != value) {
-                this.value = value;
-                notifyListeners();
-            }
-        }
-
-        public void loadState(Element element) {
-            String value = element.getAttributeValue(persistName);
-            if (value != null) setValue(fromString(value));
-        }
-
-        public void saveState(Element element) {
-            element.setAttribute(persistName, value.toString());
-        }
-
-        public int selectedPegdownFlags() {
-            return 0;
-        }
-
-        public boolean isChanged(T that) { return !value.equals(that); }
-
-        abstract public T fromString(String value);
-    }
-
-    public class IntegerSetting extends Setting<Integer> {
-
-        public IntegerSetting(Integer initialValue, String persistName) { super(initialValue, persistName); }
-
-        @Override public Integer fromString(String value) { return Integer.parseInt(value); }
-
-        public void setValue(JSpinner component) { setValue((Integer) component.getValue()); }
-
-        public void reset(JSpinner component) { component.setValue(value); }
-
-        public boolean isChanged(JSpinner component) { return !value.equals((Integer) component.getValue()); }
-
-        public void setValue(JComboBox component) { setValue((Integer) component.getSelectedIndex()); }
-
-        public void reset(JComboBox component) { component.setSelectedIndex(value); }
-
-        public boolean isChanged(JComboBox component) { return !value.equals((Integer) component.getSelectedIndex()); }
-    }
-
-    public class BooleanSetting extends Setting<Boolean> {
-
-        protected int pegdownFlags;
-
-        public BooleanSetting(Boolean initialValue, String persistName, int pegdownFlags) {
-            super(initialValue, persistName);
-            this.pegdownFlags = pegdownFlags;
-        }
-
-        @Override public Boolean fromString(String value) { return Boolean.parseBoolean(value); }
-
-        @Override public int selectedPegdownFlags() { return value ? pegdownFlags : 0; }
-
-        public void setValue(JCheckBox component) { setValue(component.isSelected()); }
-
-        public void reset(JCheckBox component) { component.setSelected(value); }
-
-        public boolean isChanged(JCheckBox component) { return !value.equals((Boolean) component.isSelected()); }
-    }
-
-    public class StringSetting extends Setting<String> {
-
-        public StringSetting(String initialValue, String persistName) { super(initialValue, persistName); }
-
-        @Override public String fromString(String value) { return value; }
-
-        public void setValue(JTextArea component) { setValue(component.getText()); }
-        public void setValue(EditorTextField component) { setValue(component.getText()); }
-
-        public void reset(JTextArea component) { component.setText(value); }
-        public void reset(EditorTextField component) { component.setText(value); }
-
-        public boolean isChanged(JTextArea component) { return !value.equals(component.getText()); }
-        public boolean isChanged(EditorTextField component) { return !value.equals(component.getText()); }
-    }
 }

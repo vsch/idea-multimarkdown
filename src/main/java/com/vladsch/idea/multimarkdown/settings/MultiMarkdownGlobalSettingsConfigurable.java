@@ -21,8 +21,6 @@
 package com.vladsch.idea.multimarkdown.settings;
 
 import com.intellij.openapi.options.SearchableConfigurable;
-import com.intellij.ui.EditorTextField;
-import com.intellij.ui.LanguageTextField;
 import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
 import com.vladsch.idea.multimarkdown.MultiMarkdownLanguage;
 import org.jetbrains.annotations.Nls;
@@ -73,6 +71,7 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
         componentSettings.add(new ComboBoxComponent("htmlThemeComboBox", globalSettings.htmlTheme));
         //componentSettings.add(new TextAreaComponent("textCustomCss", globalSettings.customCss));
         componentSettings.add(new EditorTextFieldComponent("textCustomCss", globalSettings.customCss));
+        componentSettings.add(new ComponentState("textCustomCss", globalSettings.customCssEditorState));
     }
 
     public Runnable enableSearch(String s) {
@@ -172,28 +171,32 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
         abstract public void reset(T component);
     }
 
-    class TextAreaComponent extends ComponentSetting<JTextArea, MultiMarkdownGlobalSettings.StringSetting> {
-        TextAreaComponent(String component, MultiMarkdownGlobalSettings.StringSetting setting) { super(component, setting); }
+    class EditorTextFieldComponent extends ComponentSetting<CustomizableEditorTextField, Settings.StringSetting> {
+        EditorTextFieldComponent(String component, Settings.StringSetting setting) { super(component, setting); }
 
-        @Override public boolean isChanged(JTextArea component) { return setting.isChanged(component); }
+        @Override public boolean isChanged(CustomizableEditorTextField component) { return setting.isChanged(component); }
 
-        @Override public void setValue(JTextArea component) { setting.setValue(component); }
+        @Override public void setValue(CustomizableEditorTextField component) { setting.setValue(component); }
 
-        @Override public void reset(JTextArea component) { setting.reset(component); }
+        @Override public void reset(CustomizableEditorTextField component) { setting.reset(component); }
     }
 
-    class EditorTextFieldComponent extends ComponentSetting<EditorTextField, MultiMarkdownGlobalSettings.StringSetting> {
-        EditorTextFieldComponent(String component, MultiMarkdownGlobalSettings.StringSetting setting) { super(component, setting); }
+    class ComponentState extends ComponentSetting<com.vladsch.idea.multimarkdown.settings.ComponentState, Settings.ElementSetting> {
+        ComponentState(String component, Settings.ElementSetting setting) { super(component, setting); }
 
-        @Override public boolean isChanged(EditorTextField component) { return setting.isChanged(component); }
+        @Override public boolean isChanged(com.vladsch.idea.multimarkdown.settings.ComponentState component) {
+            return setting.getValue() == null || component.isChanged(setting.getValue());
+        }
 
-        @Override public void setValue(EditorTextField component) { setting.setValue(component); }
+        @Override public void setValue(com.vladsch.idea.multimarkdown.settings.ComponentState component) {
+            setting.setValue(component.getState(setting.persistName));
+        }
 
-        @Override public void reset(EditorTextField component) { setting.reset(component); }
+        @Override public void reset(com.vladsch.idea.multimarkdown.settings.ComponentState component) { if (setting.getValue() != null) component.loadState(setting.getValue()); }
     }
 
-    class SpinnerComponent extends ComponentSetting<JSpinner, MultiMarkdownGlobalSettings.IntegerSetting> {
-        SpinnerComponent(String componentName, MultiMarkdownGlobalSettings.IntegerSetting setting) { super(componentName, setting); }
+    class SpinnerComponent extends ComponentSetting<JSpinner, Settings.IntegerSetting> {
+        SpinnerComponent(String componentName, Settings.IntegerSetting setting) { super(componentName, setting); }
 
         @Override public boolean isChanged(JSpinner component) { return setting.isChanged(component); }
 
@@ -202,8 +205,8 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
         @Override public void reset(JSpinner component) { setting.reset(component); }
     }
 
-    class ComboBoxComponent extends ComponentSetting<JComboBox, MultiMarkdownGlobalSettings.IntegerSetting> {
-        ComboBoxComponent(String componentName, MultiMarkdownGlobalSettings.IntegerSetting setting) { super(componentName, setting); }
+    class ComboBoxComponent extends ComponentSetting<JComboBox, Settings.IntegerSetting> {
+        ComboBoxComponent(String componentName, Settings.IntegerSetting setting) { super(componentName, setting); }
 
         @Override public boolean isChanged(JComboBox component) { return setting.isChanged(component); }
 
@@ -212,8 +215,8 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
         @Override public void reset(JComboBox component) { setting.reset(component); }
     }
 
-    class CheckBoxComponent extends ComponentSetting<JCheckBox, MultiMarkdownGlobalSettings.BooleanSetting> {
-        CheckBoxComponent(String componentName, MultiMarkdownGlobalSettings.BooleanSetting setting) { super(componentName, setting); }
+    class CheckBoxComponent extends ComponentSetting<JCheckBox, Settings.BooleanSetting> {
+        CheckBoxComponent(String componentName, Settings.BooleanSetting setting) { super(componentName, setting); }
 
         @Override public boolean isChanged(JCheckBox component) { return setting.isChanged(component); }
 

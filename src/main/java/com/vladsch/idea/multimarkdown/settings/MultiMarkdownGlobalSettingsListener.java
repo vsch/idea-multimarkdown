@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Julien Nicoulaud <julien.nicoulaud@gmail.com>
- * Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
+ * Copyright (c) 2015-2015 Vladimir Schneider <vladimir.schneider@gmail.com>
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,14 +17,14 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
+ *
+ * This file is based on the IntelliJ SimplePlugin tutorial
+ *
  */
 package com.vladsch.idea.multimarkdown.settings;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.EventListener;
-
-public interface MultiMarkdownGlobalSettingsListener extends EventListener {
-
-    void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings);
+public interface MultiMarkdownGlobalSettingsListener extends SettingsListener<MultiMarkdownGlobalSettings> {
+    @Override void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings);
 }

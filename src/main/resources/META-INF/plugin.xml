@@ -49,6 +49,8 @@
     <b>1.0.19</b><br/>
       <ul>
         <li>: Fix detection of files so that HTML Preview and HTML Text tabs will be displayed along with other plugins that handle Markdown</li>
+        <li>: Add Application UI option to CSS theme. This will make HTML Preview match the Application UI setting: Default or Darcula</li>
+        <li>: Add Custom CSS Editor in settings, now saves state of caret, selection and vertical scroll position when you apply or ok changes to make it more comfortable to experiment with custom CSS.</li>
     </ul>
     <b>1.0.18</b><br/>
       <ul>

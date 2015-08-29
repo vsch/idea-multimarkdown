@@ -31,18 +31,23 @@ import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.fileTypes.ex.FileTypeManagerEx;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectManager;
+import com.intellij.openapi.ui.ComboBox;
+import com.intellij.openapi.util.registry.Registry;
+import com.intellij.openapi.util.registry.RegistryValue;
+import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.editor.MultiMarkdownPreviewEditor;
 import org.apache.commons.codec.Charsets;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
-public class MultiMarkdownSettingsPanel {
+public class MultiMarkdownSettingsPanel implements SettingsProvider {
 
     public JSpinner parsingTimeoutSpinner;
     public JCheckBox smartsCheckBox;
@@ -93,41 +98,42 @@ public class MultiMarkdownSettingsPanel {
     private JLabel smartsDescriptionLabel;
     private JLabel strikethroughDescriptionLabel;
     private JLabel parsingTimeoutDescriptionLabel;
+    private JButton focusEditorButton;
 
     // need this so that we dont try to access components before they are created
-    public JComponent getComponent(String name) {
-        if (name.equals("parsingTimeoutSpinner")) return parsingTimeoutSpinner;
-        if (name.equals("smartsCheckBox")) return smartsCheckBox;
-        if (name.equals("quotesCheckBox")) return quotesCheckBox;
-        if (name.equals("abbreviationsCheckBox")) return abbreviationsCheckBox;
-        if (name.equals("hardWrapsCheckBox")) return hardWrapsCheckBox;
-        if (name.equals("autoLinksCheckBox")) return autoLinksCheckBox;
-        if (name.equals("wikiLinksCheckBox")) return wikiLinksCheckBox;
-        if (name.equals("tablesCheckBox")) return tablesCheckBox;
-        if (name.equals("definitionsCheckBox")) return definitionsCheckBox;
-        if (name.equals("fencedCodeBlocksCheckBox")) return fencedCodeBlocksCheckBox;
-        if (name.equals("suppressHTMLBlocksCheckBox")) return suppressHTMLBlocksCheckBox;
-        if (name.equals("suppressInlineHTMLCheckBox")) return suppressInlineHTMLCheckBox;
-        if (name.equals("strikethroughCheckBox")) return strikethroughCheckBox;
-        if (name.equals("updateDelaySpinner")) return updateDelaySpinner;
-        if (name.equals("maxImgWidthSpinner")) return maxImgWidthSpinner;
-        if (name.equals("textCustomCss")) return textCustomCss;
-        if (name.equals("btnResetCss")) return btnResetCss;
-        if (name.equals("btnLoadDefault")) return btnLoadDefault;
-        if (name.equals("taskListsCheckBox")) return taskListsCheckBox;
-        if (name.equals("headerSpaceCheckBox")) return headerSpaceCheckBox;
-        if (name.equals("showHtmlTextCheckBox")) return showHtmlTextCheckBox;
-        if (name.equals("showHtmlTextAsModifiedCheckBox")) return showHtmlTextAsModifiedCheckBox;
-        if (name.equals("anchorLinksCheckBox")) return anchorLinksCheckBox;
-        if (name.equals("forceListParaCheckBox")) return forceListParaCheckBox;
-        if (name.equals("relaxedHRulesCheckBox")) return relaxedHRulesCheckBox;
-        if (name.equals("iconBulletsCheckBox")) return iconBulletsCheckBox;
-        if (name.equals("htmlThemeComboBox")) return htmlThemeComboBox;
-        if (name.equals("enableTrimSpacesCheckBox")) return enableTrimSpacesCheckBox;
+    public @Nullable Object getComponent(@NotNull String persistName) {
+        if (persistName.equals("parsingTimeoutSpinner")) return parsingTimeoutSpinner;
+        if (persistName.equals("smartsCheckBox")) return smartsCheckBox;
+        if (persistName.equals("quotesCheckBox")) return quotesCheckBox;
+        if (persistName.equals("abbreviationsCheckBox")) return abbreviationsCheckBox;
+        if (persistName.equals("hardWrapsCheckBox")) return hardWrapsCheckBox;
+        if (persistName.equals("autoLinksCheckBox")) return autoLinksCheckBox;
+        if (persistName.equals("wikiLinksCheckBox")) return wikiLinksCheckBox;
+        if (persistName.equals("tablesCheckBox")) return tablesCheckBox;
+        if (persistName.equals("definitionsCheckBox")) return definitionsCheckBox;
+        if (persistName.equals("fencedCodeBlocksCheckBox")) return fencedCodeBlocksCheckBox;
+        if (persistName.equals("suppressHTMLBlocksCheckBox")) return suppressHTMLBlocksCheckBox;
+        if (persistName.equals("suppressInlineHTMLCheckBox")) return suppressInlineHTMLCheckBox;
+        if (persistName.equals("strikethroughCheckBox")) return strikethroughCheckBox;
+        if (persistName.equals("updateDelaySpinner")) return updateDelaySpinner;
+        if (persistName.equals("maxImgWidthSpinner")) return maxImgWidthSpinner;
+        if (persistName.equals("textCustomCss")) return textCustomCss;
+        if (persistName.equals("btnResetCss")) return btnResetCss;
+        if (persistName.equals("btnLoadDefault")) return btnLoadDefault;
+        if (persistName.equals("taskListsCheckBox")) return taskListsCheckBox;
+        if (persistName.equals("headerSpaceCheckBox")) return headerSpaceCheckBox;
+        if (persistName.equals("showHtmlTextCheckBox")) return showHtmlTextCheckBox;
+        if (persistName.equals("showHtmlTextAsModifiedCheckBox")) return showHtmlTextAsModifiedCheckBox;
+        if (persistName.equals("anchorLinksCheckBox")) return anchorLinksCheckBox;
+        if (persistName.equals("forceListParaCheckBox")) return forceListParaCheckBox;
+        if (persistName.equals("relaxedHRulesCheckBox")) return relaxedHRulesCheckBox;
+        if (persistName.equals("iconBulletsCheckBox")) return iconBulletsCheckBox;
+        if (persistName.equals("htmlThemeComboBox")) return htmlThemeComboBox;
+        if (persistName.equals("enableTrimSpacesCheckBox")) return enableTrimSpacesCheckBox;
         //if (name.equals("todoCommentsCheckBox")) return todoCommentsCheckBox;
+
         return null;
     }
-
 
     protected void showHtmlTextStateChanged() {
         if (showHtmlTextAsModifiedCheckBox != null) {
@@ -147,9 +153,9 @@ public class MultiMarkdownSettingsPanel {
             @Override public void actionPerformed(ActionEvent e) {
                 try {
                     textCustomCss.setText(Resources.toString(MultiMarkdownPreviewEditor.class.getResource(
-                            htmlThemeComboBox.getSelectedIndex() == 0
-                                    ? MultiMarkdownPreviewEditor.PREVIEW_STYLESHEET_PATH0
-                                    : MultiMarkdownPreviewEditor.PREVIEW_STYLESHEET_PATH1), Charsets.UTF_8));
+                            MultiMarkdownGlobalSettings.getInstance().isDarkHtmlPreview(htmlThemeComboBox.getSelectedIndex())
+                                    ? MultiMarkdownPreviewEditor.PREVIEW_STYLESHEET_DARK
+                                    : MultiMarkdownPreviewEditor.PREVIEW_STYLESHEET_LIGHT), Charsets.UTF_8));
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -167,19 +173,25 @@ public class MultiMarkdownSettingsPanel {
                 showHtmlTextStateChanged();
             }
         });
+        focusEditorButton.addActionListener(new ActionListener() {
+            @Override public void actionPerformed(ActionEvent e) {
+                textCustomCss.requestFocus();
+            }
+        });
     }
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
+
+        // create the CSS text edit control
         Language language = Language.findLanguageByID("CSS");
         final boolean foundCSS = language != null;
 
         final FileType fileType = language != null && language.getAssociatedFileType() != null ? language.getAssociatedFileType() : StdFileTypes.PLAIN_TEXT;
 
-        ProjectManager projectManager = ProjectManager.getInstance();
-        Project[] projects = projectManager.getOpenProjects();
-        Project project = projects.length > 0 ? projects[0] : null; //projectManager.getDefaultProject();
-        textCustomCss = new CustomizableEditorTextField(fileType, project, "", false);
+        // we pass a null project because we don't have one, the control will grab any project so that
+        // undo works properly in the edit control.
+        textCustomCss = new CustomizableEditorTextField(fileType, null, "", false);
         textCustomCss.setFontInheritedFromLAF(false);
         textCustomCss.registerListener(new CustomizableEditorTextField.EditorCustomizationListener() {
             @Override public boolean editorCreated(@NotNull EditorEx editor, @NotNull Project project) {
@@ -191,8 +203,12 @@ public class MultiMarkdownSettingsPanel {
                 if (foundCSS) settings.setLineMarkerAreaShown(true);
                 settings.setIndentGuidesShown(true);
                 settings.setVirtualSpace(true);
-                settings.setLineCursorWidth(2);
-                settings.setWheelFontChangeEnabled(false);
+
+                // get the standard caret width from the registry
+                RegistryValue value = Registry.get("editor.caret.width");
+                settings.setLineCursorWidth(value.asInteger());
+
+                //settings.setWheelFontChangeEnabled(false);
                 editor.setHorizontalScrollbarVisible(true);
                 editor.setVerticalScrollbarVisible(true);
 
@@ -202,8 +218,22 @@ public class MultiMarkdownSettingsPanel {
                     editor.setHighlighter(HighlighterFactory.createHighlighter(project, highlighterFileType));
                 }
 
+                focusEditorButton.setEnabled(textCustomCss.haveSavedState(editor));
+
                 return false;
             }
         });
+
+        // create the css themes combobox, make it locale aware
+        ArrayList<String> options = new ArrayList<String>(10);
+        for (int i = 0; ; i++) {
+            String message = MultiMarkdownBundle.messageOrBlank("multimarkdown.settings.html-theme-" + (i + 1));
+            if (message.isEmpty()) break;
+            options.add(message);
+        }
+
+        htmlThemeComboBox = new ComboBox(options.toArray(new String[options.size()]));
+        htmlThemeComboBox.setSelectedItem(2);
+
     }
 }

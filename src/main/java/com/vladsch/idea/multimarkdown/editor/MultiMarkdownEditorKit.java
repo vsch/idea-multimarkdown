@@ -149,12 +149,12 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
             // when a new UI component is replaced.  See bug 7189299.
             if (t == HTML.Tag.INPUT && type.equals("checkbox")) {
                 String classType = (String) attr.getAttribute(Attribute.CLASS);
-                boolean isDark = MultiMarkdownGlobalSettings.getInstance().htmlTheme.getValue() > 0;
+                boolean isInverted = MultiMarkdownGlobalSettings.getInstance().isInvertedHtmlPreview();
                 if (classType != null && classType.equals("task-list-item-checkbox")) {
                     c = super.createComponent();
                     JCheckBox chk = (JCheckBox) c;
-                    Icon openTask = isDark ? MultiMarkdownIcons.OPEN_TASK_DARK : MultiMarkdownIcons.OPEN_TASK;
-                    Icon closedTask = isDark ? MultiMarkdownIcons.CLOSED_TASK_DARK : MultiMarkdownIcons.CLOSED_TASK;
+                    Icon openTask = isInverted ? MultiMarkdownIcons.OPEN_TASK_INV : MultiMarkdownIcons.OPEN_TASK;
+                    Icon closedTask = isInverted ? MultiMarkdownIcons.CLOSED_TASK_INV : MultiMarkdownIcons.CLOSED_TASK;
                     chk.setIcon(openTask);
                     chk.setDisabledIcon(openTask);
                     chk.setSelectedIcon(closedTask);
@@ -163,7 +163,7 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
                 } else if (classType != null && classType.equals("list-item-bullet")) {
                     c = super.createComponent();
                     JCheckBox chk = (JCheckBox) c;
-                    Icon bullet = isDark ? MultiMarkdownIcons.BULLET_DARK : MultiMarkdownIcons.BULLET;
+                    Icon bullet = isInverted ? MultiMarkdownIcons.BULLET_INV : MultiMarkdownIcons.BULLET;
                     chk.setIcon(bullet);
                     chk.setDisabledIcon(bullet);
                     chk.setSelectedIcon(bullet);
