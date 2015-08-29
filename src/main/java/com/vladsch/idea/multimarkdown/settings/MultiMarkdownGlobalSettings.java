@@ -20,6 +20,7 @@
  */
 package com.vladsch.idea.multimarkdown.settings;
 
+import com.google.common.io.Resources;
 import com.intellij.ide.ui.UISettings;
 import com.intellij.ide.ui.UISettingsListener;
 import com.intellij.openapi.Disposable;
@@ -28,9 +29,15 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.ui.UIUtil;
+import com.vladsch.idea.multimarkdown.editor.MultiMarkdownPreviewEditor;
+import org.apache.commons.codec.Charsets;
 import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.pegdown.Extensions;
+
+import java.io.IOException;
 
 @State(
         name = "MultiMarkdownSettings",
@@ -41,6 +48,11 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     final public static int HTML_THEME_DEFAULT = 0;
     final public static int HTML_THEME_DARCULA = 1;
     final public static int HTML_THEME_UI = 2;   // follow the Appearance setting of the application UI
+
+    @NonNls
+    public static final String PREVIEW_STYLESHEET_LIGHT = "/com/vladsch/idea/multimarkdown/default.css";
+
+    public static final String PREVIEW_STYLESHEET_DARK = "/com/vladsch/idea/multimarkdown/darcula.css";
 
     /** A set of listeners to this object state changes. */
     @Override public void dispose() {
@@ -60,7 +72,6 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
             }
         }, this);
     }
-
 
     public static MultiMarkdownGlobalSettings getInstance() {
         return ServiceManager.getService(MultiMarkdownGlobalSettings.class);
@@ -89,6 +100,8 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     final public Settings.BooleanSetting wikiLinks = settings.BooleanSetting(false, "wikiLinks", Extensions.WIKILINKS);
     final public Settings.BooleanSetting todoComments = settings.BooleanSetting(false, "todoComments", 0);
     final public Settings.BooleanSetting iconBullets = settings.BooleanSetting(true, "iconBullets", 0);
+    final public Settings.BooleanSetting darkCustomCss = settings.BooleanSetting(true, "darkCustomCss", 0);
+    final public Settings.BooleanSetting useCustomCss = settings.BooleanSetting(true, "useCustomCss", 0);
     final public Settings.IntegerSetting htmlTheme = settings.IntegerSetting(HTML_THEME_UI, "htmlTheme");
     final public Settings.IntegerSetting maxImgWidth = settings.IntegerSetting(900, "maxImgWidth");
     final public Settings.IntegerSetting parsingTimeout = settings.IntegerSetting(10000, "parsingTimeout");
@@ -110,12 +123,50 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     }
 
     public boolean isDarkHtmlPreview(int htmlTheme) {
-        return htmlTheme == HTML_THEME_DARCULA
-                || htmlTheme == HTML_THEME_UI && UIUtil.isUnderDarcula();
+        return (htmlTheme == HTML_THEME_DARCULA
+                || htmlTheme == HTML_THEME_UI && UIUtil.isUnderDarcula());
+    }
+
+    public @NotNull String getCssFilePath(int htmlTheme) {
+        return isDarkHtmlPreview(htmlTheme) ? PREVIEW_STYLESHEET_DARK : PREVIEW_STYLESHEET_LIGHT;
+    }
+
+    public @NotNull java.net.URL getCssFileURL(int htmlTheme) {
+        return MultiMarkdownGlobalSettings.class.getResource(getCssFilePath(htmlTheme));
+    }
+
+    public @NotNull String getCssFileText(int htmlTheme) {
+        String htmlText = "";
+        try {
+            htmlText = Resources.toString(getCssFileURL(htmlTheme), Charsets.UTF_8);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return htmlText;
+    }
+
+    public @NotNull String getCssFilePath() {
+        return getCssFilePath(htmlTheme.getValue());
+    }
+
+    public @NotNull java.net.URL getCssFileURL() {
+        return getCssFileURL(htmlTheme.getValue());
+    }
+
+    public @NotNull String getCssFileText() {
+        return getCssFileText(htmlTheme.getValue());
+    }
+
+    public @NotNull String getCssText() {
+        return useCustomCss() ? customCss.getValue() : getCssFileText(htmlTheme.getValue());
     }
 
     public boolean isInvertedHtmlPreview() {
-        return UIUtil.isUnderDarcula() != isDarkHtmlPreview();
+        return (!useCustomCss() && UIUtil.isUnderDarcula() != isDarkHtmlPreview()) || (useCustomCss() && UIUtil.isUnderDarcula() != darkCustomCss.getValue());
+    }
+
+    public boolean useCustomCss() {
+        return useCustomCss.getValue() && customCss.getValue().trim().length() != 0;
     }
 
     public int getExtensionsValue() {
@@ -137,5 +188,4 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     public void endGroupNotifications() {
         notifier.endGroupNotifications();
     }
-
 }

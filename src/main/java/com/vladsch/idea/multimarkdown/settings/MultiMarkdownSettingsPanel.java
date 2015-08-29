@@ -22,10 +22,11 @@
  */
 package com.vladsch.idea.multimarkdown.settings;
 
-import com.google.common.io.Resources;
 import com.intellij.ide.highlighter.HighlighterFactory;
 import com.intellij.lang.Language;
 import com.intellij.openapi.editor.EditorSettings;
+import com.intellij.openapi.editor.event.DocumentAdapter;
+import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.ex.EditorEx;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.StdFileTypes;
@@ -35,8 +36,6 @@ import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.util.registry.RegistryValue;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
-import com.vladsch.idea.multimarkdown.editor.MultiMarkdownPreviewEditor;
-import org.apache.commons.codec.Charsets;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,7 +43,6 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class MultiMarkdownSettingsPanel implements SettingsProvider {
@@ -66,7 +64,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
     public JSpinner maxImgWidthSpinner;
     //public JTextArea textCustomCss;
     public JPanel customCssPanel;
-    public JButton btnResetCss;
+    public JButton clearCustomCssButton;
     public JButton btnLoadDefault;
     public JCheckBox taskListsCheckBox;
     public JCheckBox headerSpaceCheckBox;
@@ -99,6 +97,8 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
     private JLabel strikethroughDescriptionLabel;
     private JLabel parsingTimeoutDescriptionLabel;
     private JButton focusEditorButton;
+    private JCheckBox useCustomCssCheckBox;
+    private JCheckBox darkCustomCssCheckBox;
 
     // need this so that we dont try to access components before they are created
     public @Nullable Object getComponent(@NotNull String persistName) {
@@ -118,7 +118,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         if (persistName.equals("updateDelaySpinner")) return updateDelaySpinner;
         if (persistName.equals("maxImgWidthSpinner")) return maxImgWidthSpinner;
         if (persistName.equals("textCustomCss")) return textCustomCss;
-        if (persistName.equals("btnResetCss")) return btnResetCss;
+        if (persistName.equals("clearCustomCssButton")) return clearCustomCssButton;
         if (persistName.equals("btnLoadDefault")) return btnLoadDefault;
         if (persistName.equals("taskListsCheckBox")) return taskListsCheckBox;
         if (persistName.equals("headerSpaceCheckBox")) return headerSpaceCheckBox;
@@ -130,6 +130,8 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         if (persistName.equals("iconBulletsCheckBox")) return iconBulletsCheckBox;
         if (persistName.equals("htmlThemeComboBox")) return htmlThemeComboBox;
         if (persistName.equals("enableTrimSpacesCheckBox")) return enableTrimSpacesCheckBox;
+        if (persistName.equals("useCustomCssCheckBox")) return useCustomCssCheckBox;
+        if (persistName.equals("darkCustomCssCheckBox")) return darkCustomCssCheckBox;
         //if (name.equals("todoCommentsCheckBox")) return todoCommentsCheckBox;
 
         return null;
@@ -137,13 +139,21 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
 
     protected void showHtmlTextStateChanged() {
         if (showHtmlTextAsModifiedCheckBox != null) {
-            boolean checked = showHtmlTextCheckBox.isSelected();
-            showHtmlTextAsModifiedCheckBox.setEnabled(checked);
+            showHtmlTextAsModifiedCheckBox.setEnabled(showHtmlTextCheckBox.isSelected());
         }
     }
 
+    protected void updateCustomCssControls() {
+        boolean haveCustomCss = textCustomCss.getText().trim().length() > 0;
+        useCustomCssCheckBox.setEnabled(haveCustomCss);
+        clearCustomCssButton.setEnabled(haveCustomCss);
+        if (!haveCustomCss) useCustomCssCheckBox.setSelected(false);
+        darkCustomCssCheckBox.setEnabled(haveCustomCss && useCustomCssCheckBox.isSelected());
+        focusEditorButton.setEnabled(textCustomCss.haveSavedState());
+    }
+
     public MultiMarkdownSettingsPanel() {
-        btnResetCss.addActionListener(new ActionListener() {
+        clearCustomCssButton.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) {
                 textCustomCss.setText("");
             }
@@ -151,14 +161,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
 
         btnLoadDefault.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) {
-                try {
-                    textCustomCss.setText(Resources.toString(MultiMarkdownPreviewEditor.class.getResource(
-                            MultiMarkdownGlobalSettings.getInstance().isDarkHtmlPreview(htmlThemeComboBox.getSelectedIndex())
-                                    ? MultiMarkdownPreviewEditor.PREVIEW_STYLESHEET_DARK
-                                    : MultiMarkdownPreviewEditor.PREVIEW_STYLESHEET_LIGHT), Charsets.UTF_8));
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+                textCustomCss.setText(MultiMarkdownGlobalSettings.getInstance().getCssFileText(htmlThemeComboBox.getSelectedIndex()));
             }
         });
 
@@ -173,9 +176,29 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
                 showHtmlTextStateChanged();
             }
         });
+
         focusEditorButton.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) {
                 textCustomCss.requestFocus();
+            }
+        });
+
+        iconBulletsCheckBox.addItemListener(new ItemListener() {
+            @Override public void itemStateChanged(ItemEvent e) {
+                updateCustomCssControls();
+            }
+        });
+
+        useCustomCssCheckBox.addItemListener(new ItemListener() {
+            @Override public void itemStateChanged(ItemEvent e) {
+                updateCustomCssControls();
+            }
+        });
+
+        textCustomCss.addDocumentListener(new DocumentAdapter() {
+            @Override public void documentChanged(DocumentEvent e) {
+                super.documentChanged(e);
+                updateCustomCssControls();
             }
         });
     }
@@ -234,6 +257,5 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
 
         htmlThemeComboBox = new ComboBox(options.toArray(new String[options.size()]));
         htmlThemeComboBox.setSelectedItem(2);
-
     }
 }

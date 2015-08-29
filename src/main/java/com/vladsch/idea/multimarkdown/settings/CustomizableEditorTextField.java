@@ -215,6 +215,15 @@ public class CustomizableEditorTextField extends EditorTextField implements Comp
         return ex;
     }
 
+    @Override
+    public void setText(@Nullable final String text) {
+        ((Settings.IntegerSetting) selectionOffset.getSetting(0)).setValue(0);
+        ((Settings.IntegerSetting) selectionOffset.getSetting(1)).setValue(0);
+        ((Settings.IntegerSetting) caretOffset.getSetting(0)).setValue(0);
+        handlers.loadState((EditorEx) getEditor());
+        super.setText(text);
+    }
+
     @Override public Element getState(String elementName) {
         return handlers.getState((EditorEx) getEditor(), elementName, this);
     }

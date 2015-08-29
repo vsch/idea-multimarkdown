@@ -74,11 +74,6 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
 
     public static final String TEXT_EDITOR_NAME = MultiMarkdownBundle.message("multimarkdown.html-tab-name");
 
-    @NonNls
-    public static final String PREVIEW_STYLESHEET_LIGHT = "/com/vladsch/idea/multimarkdown/default.css";
-
-    public static final String PREVIEW_STYLESHEET_DARK = "/com/vladsch/idea/multimarkdown/darcula.css";
-
     /** The {@link java.awt.Component} used to render the HTML preview. */
     protected final JEditorPane jEditorPane;
 
@@ -259,12 +254,11 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
 
         final StyleSheet style = new StyleSheet();
 
-        if (getCustomCss().equals("")) {
-            style.importStyleSheet(MultiMarkdownPreviewEditor.class.getResource(
-                    MultiMarkdownGlobalSettings.getInstance().isDarkHtmlPreview() ? PREVIEW_STYLESHEET_DARK : PREVIEW_STYLESHEET_LIGHT));
+        if (!MultiMarkdownGlobalSettings.getInstance().useCustomCss()) {
+            style.importStyleSheet(MultiMarkdownGlobalSettings.getInstance().getCssFileURL());
         } else {
             try {
-                style.loadRules(new StringReader(getCustomCss()), null);
+                style.loadRules(new StringReader(MultiMarkdownGlobalSettings.getInstance().getCssText()), null);
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -26,7 +26,7 @@
   <name>MultiMarkdown</name>
   <category>Custom Languages</category>
   <vendor url="http://github.com/vsch" email="vladimir.schneider@gmail.com">Vladimir Schneider</vendor>
-  <version>1.0.20</version>
+  <version>1.0.21</version>
   <idea-version since-build="134.549"/>
   <depends>com.intellij.modules.lang</depends>
 
@@ -46,6 +46,13 @@
 
   <change-notes><![CDATA[
     <p>
+    <b>1.0.21</b><br/>
+      <ul>
+        <li>: Change Settings for Custom CSS, now a checkbox controls if the text in custom CSS editor will be used as the stylesheet.</li>
+        <li>: Fix clearing or loading new text into the CSS editor was not clearing caret position and selection</li>
+        <li>: Add check box to specify that the custom CSS should be treated as a dark theme. Used to determine which Icons to use for Bullets/Task items</li>
+        <li>: Add Focus Editor button to set focus to custom CSS editor without clearing selection or caret.</li>
+    </ul>
     <b>1.0.20</b><br/>
       <ul>
         <li>: Fix Changing settings was not updating files. My apologies, it was a one-line cut/paste error during heavy refactoring of code.</li>
