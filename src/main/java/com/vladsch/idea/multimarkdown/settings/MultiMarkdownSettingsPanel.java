@@ -99,6 +99,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
     private JButton focusEditorButton;
     private JCheckBox useCustomCssCheckBox;
     private JCheckBox darkCustomCssCheckBox;
+    private JCheckBox iconTasksCheckBox;
 
     // need this so that we dont try to access components before they are created
     public @Nullable Object getComponent(@NotNull String persistName) {
@@ -128,6 +129,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         if (persistName.equals("forceListParaCheckBox")) return forceListParaCheckBox;
         if (persistName.equals("relaxedHRulesCheckBox")) return relaxedHRulesCheckBox;
         if (persistName.equals("iconBulletsCheckBox")) return iconBulletsCheckBox;
+        if (persistName.equals("iconTasksCheckBox")) return iconTasksCheckBox;
         if (persistName.equals("htmlThemeComboBox")) return htmlThemeComboBox;
         if (persistName.equals("enableTrimSpacesCheckBox")) return enableTrimSpacesCheckBox;
         if (persistName.equals("useCustomCssCheckBox")) return useCustomCssCheckBox;

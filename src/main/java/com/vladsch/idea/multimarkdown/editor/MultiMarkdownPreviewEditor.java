@@ -24,6 +24,7 @@ package com.vladsch.idea.multimarkdown.editor;
 import com.intellij.codeHighlighting.BackgroundEditorHighlighter;
 import com.intellij.ide.structureView.StructureViewBuilder;
 import com.intellij.lang.Language;
+import com.intellij.notification.*;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
@@ -42,6 +43,7 @@ import com.intellij.openapi.fileEditor.*;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.popup.Balloon;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.UserDataHolderBase;
 import com.intellij.ui.components.JBScrollPane;
@@ -49,9 +51,11 @@ import com.intellij.ui.components.JBScrollPane;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
+import com.vladsch.idea.multimarkdown.settings.Settings;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
 
 import javax.swing.*;
@@ -116,8 +120,16 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         return MultiMarkdownGlobalSettings.getInstance().taskLists.getValue();
     }
 
+    public static boolean isDarkTheme() {
+        return MultiMarkdownGlobalSettings.getInstance().isDarkUITheme();
+    }
+
     public static boolean isIconBullets() {
         return MultiMarkdownGlobalSettings.getInstance().iconBullets.getValue();
+    }
+
+    public static boolean isIconTasks() {
+        return MultiMarkdownGlobalSettings.getInstance().iconTasks.getValue();
     }
 
     public static String getCustomCss() {
@@ -132,7 +144,8 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
     private static ThreadLocal<PegDownProcessor> initProcessor() {
         return new ThreadLocal<PegDownProcessor>() {
             @Override protected PegDownProcessor initialValue() {
-                return new PegDownProcessor(MultiMarkdownGlobalSettings.getInstance().getExtensionsValue(), getParsingTimeout());
+                // ISSUE: #7, we disable pegdown TaskList HTML rendering, they don't display well in Darcula.
+                return new PegDownProcessor(MultiMarkdownGlobalSettings.getInstance().getExtensionsValue() & ~Extensions.TASKLISTITEMS, getParsingTimeout());
             }
         };
     }
@@ -151,13 +164,42 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         }
     }
 
+    protected void checkNotifyUser() {
+        final Project project = this.project;
+        final MultiMarkdownGlobalSettings settings = MultiMarkdownGlobalSettings.getInstance();
+
+        settings.startSuspendNotifications();
+
+        if (settings.isDarkUITheme() && (settings.iconBullets.getValue() || settings.iconTasks.getValue()) && true && !settings.wasShownDarkBug.getValue()) {
+            // notify the user that the Icons for Tasks and Bullets will be turned off due to a rendering bug
+            settings.wasShownDarkBug.setValue(true);
+            NotificationGroup issueNotificationGroup = new NotificationGroup(MultiMarkdownGlobalSettings.NOTIFICATION_GROUP_ISSUES,
+                    NotificationDisplayType.BALLOON, true, null);
+
+            Notification notification = issueNotificationGroup.createNotification("<strong>MultiMarkdown</strong> Plugin Notification",
+                    "<p>An issue with rendering icons when the UI theme is <strong>Darcula</strong> prevents bullet "+
+                            "and task list items from using these options. " +
+                            "These settings will be ignored while <strong>Darcula</strong> "+
+                            "theme is in effect and until the issue is fixed.</p>\n" +
+                            "<p>&nbsp;</p>\n" +
+                            "<p>Feel free leave the <em>Bullets with Icons</em> and <em>Tasks with Icons</em> options turned on. "+
+                            "They will take effect when they no longer adversely affect the display.</p>\n" +
+                            "",
+                    NotificationType.INFORMATION, null);
+            notification.setImportant(true);
+            Notifications.Bus.notify(notification, project);
+        }
+        settings.endSuspendNotifications();
+
+    }
+
     /**
      * Build a new instance of {@link MultiMarkdownPreviewEditor}.
      *
      * @param project  the {@link Project} containing the document
      * @param document the {@link com.intellij.openapi.editor.Document} previewed in this editor.
      */
-    public MultiMarkdownPreviewEditor(@NotNull Project project, @NotNull Document document, boolean isRawHtml) {
+    public MultiMarkdownPreviewEditor(@NotNull final Project project, @NotNull Document document, boolean isRawHtml) {
         this.isRawHtml = isRawHtml;
         this.document = document;
         this.project = project;
@@ -175,6 +217,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
             public void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings) {
                 updateEditorTabIsVisible();
                 delayedHtmlPreviewUpdate(true);
+                checkNotifyUser();
             }
         });
 
@@ -203,6 +246,8 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
             jEditorPane.getCaret().setMagicCaretPosition(new Point(0, 0));
             ((DefaultCaret) jEditorPane.getCaret()).setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
         }
+
+        checkNotifyUser();
     }
 
     protected FileType findHtmlFileType() {
@@ -426,19 +471,22 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         // scan for <table>, </table>, <tr>, </tr> and other tags we modify, this could be done with a custom plugin to pegdown but
         // then it would be more trouble to get un-modified HTML.
         String result = "<body class=\"multimarkdown-preview\">\n";
-        String regex = "(<table>|<thead>|<tbody>|<tr>|<hr/>|<del>|</del>|</p>|<li>\\n*\\s*<p>";
-        String regexTail = ")";
-        Boolean taskLists = isTaskLists();
-        Boolean iconBullets = isIconBullets();
+        String regex = "(<table>|<thead>|<tbody>|<tr>|<hr/>|<del>|</del>|</p>";
+        String regexTail = "|<li>\\n*\\s*<p>";
+        boolean isDarkTheme = isDarkTheme();
+        boolean taskLists = isTaskLists();
+        boolean iconTasks = isIconTasks() && !isDarkTheme;
+        boolean iconBullets = isIconBullets() && !isDarkTheme;
 
         if (taskLists) {
-            regex += "|<li class=\"task-list-item\">\\n*\\s*<p>|<li class=\"task-list-item\">|<li>\\[x\\]|<li>\\[ \\]|<li>\\n*\\s*<p>\\[x\\]|<li>\\n*\\s*<p>\\[ \\]";
+            regex += "|<li class=\"task-list-item\">\\n*\\s*<p>|<li class=\"task-list-item\">|<li>\\[x\\]\\s*|<li>\\[ \\]\\s*|<li>\\n*\\s*<p>\\[x\\]\\s*|<li>\\n*\\s*<p>\\[ \\]\\s*";
         }
         if (iconBullets) {
             regex += "|<ul>|<ol>|</ul>|</ol>";
-            regexTail = "|<li>" + regexTail;
+            regexTail += "|<li>";
         }
         regex += regexTail;
+        regex += ")";
 
         Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(html);
@@ -488,10 +536,13 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
             } else if (iconBullets && listDepth >= 0 && !isOrderedList[listDepth] && found.equals("<li>")) {
                 result += "<li class=\"bullet\"><input type=\"checkbox\" class=\"list-item-bullet\"></input>";
             } else {
+                found = found.trim();
                 if (taskLists && found.equals("<li>[x]")) {
-                    result += "<li class=\"task\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" checked=\"checked\" disabled=\"disabled\">";
+                    if (!iconTasks) result += "<li class=\"dtask\">";
+                    else result += "<li class=\"task\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" checked=\"checked\" disabled=\"disabled\">";
                 } else if (taskLists && found.equals("<li>[ ]")) {
-                    result += "<li class=\"task\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" disabled=\"disabled\">";
+                    if (!iconTasks) result += "<li class=\"dtask\">";
+                    else result += "<li class=\"task\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" disabled=\"disabled\">";
                 } else if (taskLists && found.equals("<li class=\"task-list-item\">")) {
                     result += "<li class=\"task\">";
                 } else {
@@ -499,6 +550,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
                     String foundWithP = found;
                     foundWithP = foundWithP.replaceAll("<li>\\n*\\s*<p>", "<li><p>");
                     found = foundWithP.replaceAll("<li class=\"task-list-item\">\\n*\\s*<p>", "<li class=\"task-list-item\"><p>");
+                    found = found.trim();
                     if (found.equals("<li><p>")) {
                         if (iconBullets && listDepth >= 0 && !isOrderedList[listDepth]) {
                             result += "<li class=\"bulletp\"><p class=\"p\"><input type=\"checkbox\" class=\"list-item-bullet\"></input>";
@@ -506,9 +558,11 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
                             result += "<li class=\"p\"><p class=\"p\">";
                         }
                     } else if (taskLists && found.equals("<li><p>[x]")) {
-                        result += "<li class=\"taskp\"><p class=\"p\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" checked=\"checked\" disabled=\"disabled\">";
+                        if (!iconTasks) result += "<li class=\"dtaskp\"><p class=\"p\">";
+                        else result += "<li class=\"taskp\"><p class=\"p\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" checked=\"checked\" disabled=\"disabled\">";
                     } else if (taskLists && found.equals("<li><p>[ ]")) {
-                        result += "<li class=\"taskp\"><p class=\"p\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" disabled=\"disabled\">";
+                        if (!iconTasks) result += "<li class=\"dtaskp\"><p class=\"p\">";
+                        else result += "<li class=\"taskp\"><p class=\"p\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" disabled=\"disabled\">";
                     } else if (taskLists && found.equals("<li class=\"task-list-item\"><p>")) {
                         result += "<li class=\"taskp\"><p class=\"p\">";
                     } else {

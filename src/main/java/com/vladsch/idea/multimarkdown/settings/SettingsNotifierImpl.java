@@ -36,6 +36,7 @@ public class SettingsNotifierImpl<D> implements SettingsNotifier {
     protected final WeakReference<D> delegator;
 
     private int groupNotifications;
+    private int suspendNotifications;
 
     private boolean needToNotify;
 
@@ -50,6 +51,16 @@ public class SettingsNotifierImpl<D> implements SettingsNotifier {
 
     public void removeListener(@NotNull final SettingsListener<D> listener) {
         if (listeners != null) listeners.remove(listener);
+    }
+
+    public int startSuspendNotifications() {
+        return suspendNotifications++;
+    }
+
+    public int endSuspendNotifications() {
+        if (suspendNotifications == 0) return 0;
+        suspendNotifications--;
+        return suspendNotifications;
     }
 
     public int startGroupNotifications() {
@@ -70,6 +81,8 @@ public class SettingsNotifierImpl<D> implements SettingsNotifier {
     }
 
     public void notifyListeners() {
+        if (suspendNotifications > 0) return;
+
         if (groupNotifications > 0) {
             needToNotify = true;
         } else {

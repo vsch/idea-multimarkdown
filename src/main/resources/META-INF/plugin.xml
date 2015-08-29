@@ -52,6 +52,8 @@
         <li>: Fix clearing or loading new text into the CSS editor was not clearing caret position and selection</li>
         <li>: Add check box to specify that the custom CSS should be treated as a dark theme. Used to determine which Icons to use for Bullets/Task items</li>
         <li>: Add Focus Editor button to set focus to custom CSS editor without clearing selection or caret.</li>
+        <li>: Add Settings option for rendering tasks items as Icons. Turn off to get square list items. The latter causes all task items to display without a check mark</li>
+        <li>: Fix Temporary work around for issue #7, the IDEA's icon rendering bug with Darcula, to display bullets and task items using simple list items: circle for bullets, square for tasks.</li>
     </ul>
     <b>1.0.20</b><br/>
       <ul>

@@ -371,6 +371,7 @@ li {
     margin: 2px 0 3px 0;
 }
 
+li.dtask,
 li.bullet,
 li.task {
     margin: 1px 0 1px 0;
@@ -378,6 +379,7 @@ li.task {
 
 /* loosely spaced list items */
 li.bulletp,
+li.dtaskp,
 li.taskp,
 li.p {
     margin: 10px 0 0 0;
@@ -386,6 +388,7 @@ li.p {
 /* loose list item first paragraph, loose task item first paragraph */
 li.bulletp p.p,
 li.taskp p.p,
+li.dtaskp p.p,
 li.p p.p {
     margin: 0;
 }
@@ -409,6 +412,11 @@ ul li.taskp {
     list-style-type: none;
     padding-left: 0;
     text-indent: -17px;
+}
+
+ul li.dtask,
+ul li.dtaskp {
+    list-style-type: square;
 }
 
 ul,
