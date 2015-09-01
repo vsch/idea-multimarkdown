@@ -21,6 +21,7 @@
 package com.vladsch.idea.multimarkdown.settings;
 
 import com.intellij.openapi.options.SearchableConfigurable;
+import com.vladsch.idea.multimarkdown.MultiMarkdownFileType;
 import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
 import com.vladsch.idea.multimarkdown.MultiMarkdownLanguage;
 import org.jetbrains.annotations.Nls;
@@ -36,7 +37,7 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
 
     @NotNull
     public String getId() {
-        return MultiMarkdownLanguage.NAME;
+        return MultiMarkdownFileType.INSTANCE.getName();
     }
 
     final private ArrayList<ComponentSetting> componentSettings = new ArrayList<ComponentSetting>(50);

@@ -173,7 +173,8 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     }
 
     public boolean isInvertedHtmlPreview() {
-        return (!useCustomCss() && UIUtil.isUnderDarcula() != isDarkHtmlPreview()) || (useCustomCss() && UIUtil.isUnderDarcula() != darkCustomCss.getValue());
+        //return (!useCustomCss() && UIUtil.isUnderDarcula() != isDarkHtmlPreview()) || (useCustomCss() && UIUtil.isUnderDarcula() != darkCustomCss.getValue());
+        return (!useCustomCss() && isDarkHtmlPreview()) || (useCustomCss() && darkCustomCss.getValue());
     }
 
     public boolean useCustomCss() {

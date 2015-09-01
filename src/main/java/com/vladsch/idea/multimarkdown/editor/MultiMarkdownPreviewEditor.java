@@ -144,7 +144,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
     private static ThreadLocal<PegDownProcessor> initProcessor() {
         return new ThreadLocal<PegDownProcessor>() {
             @Override protected PegDownProcessor initialValue() {
-                // ISSUE: #7, we disable pegdown TaskList HTML rendering, they don't display well in Darcula.
+                // ISSUE: #7 worked around, we disable pegdown TaskList HTML rendering, they don't display well in Darcula.
                 return new PegDownProcessor(MultiMarkdownGlobalSettings.getInstance().getExtensionsValue() & ~Extensions.TASKLISTITEMS, getParsingTimeout());
             }
         };
@@ -165,32 +165,30 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
     }
 
     protected void checkNotifyUser() {
-        final Project project = this.project;
-        final MultiMarkdownGlobalSettings settings = MultiMarkdownGlobalSettings.getInstance();
-
-        settings.startSuspendNotifications();
-
-        if (settings.isDarkUITheme() && (settings.iconBullets.getValue() || settings.iconTasks.getValue()) && true && !settings.wasShownDarkBug.getValue()) {
-            // notify the user that the Icons for Tasks and Bullets will be turned off due to a rendering bug
-            settings.wasShownDarkBug.setValue(true);
-            NotificationGroup issueNotificationGroup = new NotificationGroup(MultiMarkdownGlobalSettings.NOTIFICATION_GROUP_ISSUES,
-                    NotificationDisplayType.BALLOON, true, null);
-
-            Notification notification = issueNotificationGroup.createNotification("<strong>MultiMarkdown</strong> Plugin Notification",
-                    "<p>An issue with rendering icons when the UI theme is <strong>Darcula</strong> prevents bullet "+
-                            "and task list items from using these options. " +
-                            "These settings will be ignored while <strong>Darcula</strong> "+
-                            "theme is in effect and until the issue is fixed.</p>\n" +
-                            "<p>&nbsp;</p>\n" +
-                            "<p>Feel free leave the <em>Bullets with Icons</em> and <em>Tasks with Icons</em> options turned on. "+
-                            "They will take effect when they no longer adversely affect the display.</p>\n" +
-                            "",
-                    NotificationType.INFORMATION, null);
-            notification.setImportant(true);
-            Notifications.Bus.notify(notification, project);
-        }
-        settings.endSuspendNotifications();
-
+        //final Project project = this.project;
+        //final MultiMarkdownGlobalSettings settings = MultiMarkdownGlobalSettings.getInstance();
+        //
+        //settings.startSuspendNotifications();
+        //if (settings.isDarkUITheme() && (settings.iconBullets.getValue() || settings.iconTasks.getValue()) && true && !settings.wasShownDarkBug.getValue()) {
+        //    // notify the user that the Icons for Tasks and Bullets will be turned off due to a rendering bug
+        //    settings.wasShownDarkBug.setValue(true);
+        //    NotificationGroup issueNotificationGroup = new NotificationGroup(MultiMarkdownGlobalSettings.NOTIFICATION_GROUP_ISSUES,
+        //            NotificationDisplayType.BALLOON, true, null);
+        //
+        //    Notification notification = issueNotificationGroup.createNotification("<strong>MultiMarkdown</strong> Plugin Notification",
+        //            "<p>An issue with rendering icons when the UI theme is <strong>Darcula</strong> prevents bullet "+
+        //                    "and task list items from using these options. " +
+        //                    "These settings will be ignored while <strong>Darcula</strong> "+
+        //                    "theme is in effect and until the issue is fixed.</p>\n" +
+        //                    "<p>&nbsp;</p>\n" +
+        //                    "<p>Feel free leave the <em>Bullets with Icons</em> and <em>Tasks with Icons</em> options turned on. "+
+        //                    "They will take effect when they no longer adversely affect the display.</p>\n" +
+        //                    "",
+        //            NotificationType.INFORMATION, null);
+        //    notification.setImportant(true);
+        //    Notifications.Bus.notify(notification, project);
+        //}
+        //settings.endSuspendNotifications();
     }
 
     /**
@@ -475,8 +473,8 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         String regexTail = "|<li>\\n*\\s*<p>";
         boolean isDarkTheme = isDarkTheme();
         boolean taskLists = isTaskLists();
-        boolean iconTasks = isIconTasks() && !isDarkTheme;
-        boolean iconBullets = isIconBullets() && !isDarkTheme;
+        boolean iconTasks = isIconTasks();// && !isDarkTheme;
+        boolean iconBullets = isIconBullets();// && !isDarkTheme;
 
         if (taskLists) {
             regex += "|<li class=\"task-list-item\">\\n*\\s*<p>|<li class=\"task-list-item\">|<li>\\[x\\]\\s*|<li>\\[ \\]\\s*|<li>\\n*\\s*<p>\\[x\\]\\s*|<li>\\n*\\s*<p>\\[ \\]\\s*";
@@ -534,15 +532,22 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
             } else if (found.equals("</del>")) {
                 result += "</span>";
             } else if (iconBullets && listDepth >= 0 && !isOrderedList[listDepth] && found.equals("<li>")) {
-                result += "<li class=\"bullet\"><input type=\"checkbox\" class=\"list-item-bullet\"></input>";
+                //result += "<li class=\"bullet\"><input type=\"checkbox\" class=\"list-item-bullet\"></input>";
+                result += "<li class=\"bullet\"><img width=\"12\" height=\"12\" class=\"list-item-bullet\" />&nbsp;";
             } else {
                 found = found.trim();
                 if (taskLists && found.equals("<li>[x]")) {
                     if (!iconTasks) result += "<li class=\"dtask\">";
-                    else result += "<li class=\"task\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" checked=\"checked\" disabled=\"disabled\">";
+                    else {
+                        //result += "<li class=\"task\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" checked=\"checked\" disabled=\"disabled\">";
+                        result += "<li class=\"task\"><img width=\"12\" height=\"12\" class=\"task-list-item-checkbox-checked\" />&nbsp;";
+                    }
                 } else if (taskLists && found.equals("<li>[ ]")) {
                     if (!iconTasks) result += "<li class=\"dtask\">";
-                    else result += "<li class=\"task\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" disabled=\"disabled\">";
+                    else {
+                        //result += "<li class=\"task\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" disabled=\"disabled\">";
+                        result += "<li class=\"task\"><img width=\"12\" height=\"12\" class=\"task-list-item-checkbox\" />&nbsp;";
+                    }
                 } else if (taskLists && found.equals("<li class=\"task-list-item\">")) {
                     result += "<li class=\"task\">";
                 } else {
@@ -553,16 +558,23 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
                     found = found.trim();
                     if (found.equals("<li><p>")) {
                         if (iconBullets && listDepth >= 0 && !isOrderedList[listDepth]) {
-                            result += "<li class=\"bulletp\"><p class=\"p\"><input type=\"checkbox\" class=\"list-item-bullet\"></input>";
+                            //result += "<li class=\"bulletp\"><p class=\"p\"><input type=\"checkbox\" class=\"list-item-bullet\"></input>";
+                            result += "<li class=\"bullet\"><p class=\"p\"><img width=\"12\" height=\"12\" class=\"list-item-bullet\" />&nbsp;";
                         } else {
                             result += "<li class=\"p\"><p class=\"p\">";
                         }
                     } else if (taskLists && found.equals("<li><p>[x]")) {
                         if (!iconTasks) result += "<li class=\"dtaskp\"><p class=\"p\">";
-                        else result += "<li class=\"taskp\"><p class=\"p\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" checked=\"checked\" disabled=\"disabled\">";
+                        else {
+                            //result += "<li class=\"taskp\"><p class=\"p\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" checked=\"checked\" disabled=\"disabled\">";
+                            result += "<li class=\"taskp\"><p class=\"p\"><img width=\"12\" height=\"12\" class=\"task-list-item-checkbox-checked\" />&nbsp;";
+                        }
                     } else if (taskLists && found.equals("<li><p>[ ]")) {
                         if (!iconTasks) result += "<li class=\"dtaskp\"><p class=\"p\">";
-                        else result += "<li class=\"taskp\"><p class=\"p\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" disabled=\"disabled\">";
+                        else {
+                            //result += "<li class=\"taskp\"><p class=\"p\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" disabled=\"disabled\">";
+                            result += "<li class=\"taskp\"><p class=\"p\"><img width=\"12\" height=\"12\" class=\"task-list-item-checkbox\" />&nbsp;";
+                        }
                     } else if (taskLists && found.equals("<li class=\"task-list-item\"><p>")) {
                         result += "<li class=\"taskp\"><p class=\"p\">";
                     } else {

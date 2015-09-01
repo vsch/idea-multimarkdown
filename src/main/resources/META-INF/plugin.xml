@@ -26,7 +26,7 @@
   <name>MultiMarkdown</name>
   <category>Custom Languages</category>
   <vendor url="http://github.com/vsch" email="vladimir.schneider@gmail.com">Vladimir Schneider</vendor>
-  <version>1.0.21</version>
+  <version>1.0.22</version>
   <idea-version since-build="134.549"/>
   <depends>com.intellij.modules.lang</depends>
 
@@ -46,6 +46,11 @@
 
   <change-notes><![CDATA[
     <p>
+    <b>1.0.22</b><br/>
+      <ul>
+        <li>: Fix issue #7, tasks and bullets use images instead of icons so that they are rendered correctly in Darcula.</li>
+        <li>: Change for issue #8, removed syntax highlighter inheritance from hidden DEFAULT_MARKDOWN type back to not inherited or inherited from Language Defaults.</li>
+    </ul>
     <b>1.0.21</b><br/>
       <ul>
         <li>: Change Settings for Custom CSS, now a checkbox controls if the text in custom CSS editor will be used as the stylesheet.</li>
@@ -223,7 +228,7 @@
     <lang.parserDefinition language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.parser.MultiMarkdownParserDefinition"/>
     <externalAnnotator language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.annotator.MultiMarkdownAnnotator"/>
     <spellchecker.support language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.spellchecking.MultiMarkdownSpellcheckingStrategy"/>
-    <todoIndexer filetype="Markdown" implementationClass="com.vladsch.idea.multimarkdown.todo.MultiMarkdownTodoIndexer"/>
+    <todoIndexer filetype="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.todo.MultiMarkdownTodoIndexer"/>
     <applicationService serviceInterface="com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings" serviceImplementation="com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings"/>
     <applicationConfigurable instance="com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsConfigurable"/>
   </extensions>
