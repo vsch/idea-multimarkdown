@@ -58,7 +58,7 @@ Screenshots
 Forking
 -------
 
-This plugin is using a modified version of [sirthias/pegdown](https://github.com/sirthias), I post my PR's but there is always a delay in both generating them, for them to be merged.
+This plugin is using a modified version of [sirthias/pegdown](https://github.com/sirthias), I post my PR's but there is always a delay in both generating them and for them to be merged.
 I added a few changes and extensions to the parser. For now I am using my forked copy until the official version has all the features. 
 
 The pegdown source used in this plugin can be found [vsch/pegdown](https://github.com/vsch/pegdown/tree/develop).
