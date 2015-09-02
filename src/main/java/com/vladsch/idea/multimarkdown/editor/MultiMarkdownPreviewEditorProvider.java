@@ -21,6 +21,8 @@
  */
 package com.vladsch.idea.multimarkdown.editor;
 
+import com.intellij.ide.scratch.ScratchFileService;
+import com.intellij.lang.Language;
 import com.intellij.openapi.fileEditor.*;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.PossiblyDumbAware;
@@ -40,9 +42,16 @@ public class MultiMarkdownPreviewEditorProvider implements FileEditorProvider, P
         String name = file.getName();
         String fileExt = file.getExtension();
         FileType fileType = file.getFileType();
-        boolean doAccept = fileType instanceof MultiMarkdownFileType || (name != null && name.startsWith("scratch_"));
+        boolean doAccept = fileType instanceof MultiMarkdownFileType;
 
         if (!doAccept) {
+            // Issue: #14 scratch files have to be matched differently
+            ScratchFileService fileService = ScratchFileService.getInstance();
+            Language language = fileService.getScratchesMapping().getMapping(file);
+            doAccept = language instanceof MultiMarkdownLanguage;
+        }
+
+        if (!doAccept && fileExt != null) {
             for (String ext : MultiMarkdownFileTypeFactory.getExtensions()) {
                 if (ext.equals(fileExt)) {
                     doAccept = true;

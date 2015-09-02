@@ -97,6 +97,11 @@ body.multimarkdown-preview {
 
 a {
     color: #4183C4;
+    text-decoration: underline;
+}
+
+a.mail-link {
+    color:  #aa33bb;
 }
 
 a.absent {
@@ -132,6 +137,7 @@ h6 {
 h2,
 h2 a {
     color: #222222;
+    text-decoration: none;
 }
 
 h1,
@@ -143,6 +149,7 @@ h3 a,
 h4 a,
 h5 a {
     color: #222222;
+    text-decoration: none;
 }
 
 h1 p,
@@ -157,6 +164,7 @@ h6 p {
 h6,
 h6 a {
     color: #777777;
+    text-decoration: none;
 }
 
 h1 tt,
@@ -275,7 +283,7 @@ pre {
     background-color: #f8f8f8;
     border: 1px solid #cccccc;
     overflow: auto;
-    padding: 6px 10px;
+    padding: 6px 0 3px 0;
     white-space: pre;
 }
 
@@ -289,24 +297,25 @@ code {
  * Table Related formatting
  **********************************/
 
-table {
+body table {
     background-color: transparent;
     margin-bottom: 20px;
     border-spacing: 0;
     border-collapse: collapse;
     padding: 0;
+    font-size: inherit;
 }
 
 table tr th {
     font-weight: bold;
-    border: 1px solid #cccccc;
+    border: 1px solid #d4d4d4;
     border-width: 0 1px 0 1px;
     margin: 0;
     padding: 6px 13px;
 }
 
 table tr td {
-    border: 1px solid #cccccc;
+    border: 1px solid #dddddd;
     border-width: 0 1px 0 1px;
     margin: 0;
     padding: 6px 13px;
@@ -328,7 +337,7 @@ table thead tr th {
     vertical-align: bottom;
 }
 
-table table {
+body table table {
     background-color: #ffffff;
 }
 
@@ -408,10 +417,27 @@ ul li li {
 ul li.bullet,
 ul li.bulletp,
 ul li.task,
-ul li.taskp {
+ul li.taskp,
+ul li.task-chk,
+ul li.taskp-chk {
     list-style-type: none;
     padding-left: 0;
     text-indent: -17px;
+}
+
+ul li.bullet,
+ul li.bulletp {
+    list-style-image: "bullet";
+}
+
+ul li.task,
+ul li.taskp {
+    list-style-image: "task";
+}
+
+ul li.task-chk,
+ul li.taskp-chk {
+    list-style-image: "task-checked";
 }
 
 ul li.dtask,
@@ -463,4 +489,9 @@ dl dt {
 dl dd {
     margin: 0 0 5px;
     padding: 0 20px;
+}
+
+
+caption {
+    text-align: center;
 }

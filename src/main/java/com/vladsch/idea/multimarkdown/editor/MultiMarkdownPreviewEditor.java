@@ -144,7 +144,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
     private static ThreadLocal<PegDownProcessor> initProcessor() {
         return new ThreadLocal<PegDownProcessor>() {
             @Override protected PegDownProcessor initialValue() {
-                // ISSUE: #7 worked around, we disable pegdown TaskList HTML rendering, they don't display well in Darcula.
+                // ISSUE: #7 worked around, disable pegdown TaskList HTML rendering, they don't display well in Darcula.
                 return new PegDownProcessor(MultiMarkdownGlobalSettings.getInstance().getExtensionsValue() & ~Extensions.TASKLISTITEMS, getParsingTimeout());
             }
         };
@@ -232,6 +232,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
             // Setup the editor pane for rendering HTML.
             myTextViewer = null;
             jEditorPane = new JEditorPane();
+            //jEditorPane = new BrowserPane();
             scrollPane = new JBScrollPane(jEditorPane);
 
             setStyleSheet();
@@ -295,7 +296,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
 
         MultiMarkdownEditorKit htmlKit = new MultiMarkdownEditorKit(document);
 
-        final StyleSheet style = new StyleSheet();
+        final StyleSheet style = new MultiMarkdownStyleSheet();
 
         if (!MultiMarkdownGlobalSettings.getInstance().useCustomCss()) {
             style.importStyleSheet(MultiMarkdownGlobalSettings.getInstance().getCssFileURL());
@@ -428,7 +429,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
 
         if (previewIsObsolete && isEditorTabVisible && (isActive || force)) {
             try {
-                final String html = processor.get().markdownToHtml(document.getText());
+                final String html = processor.get().markdownToHtml(document.getText(), new MultiMarkdownLinkRenderer());
                 if (isRawHtml) {
                     final String htmlTxt = isShowModified() ? postProcessHtml(html) : html;
                     //myTextViewer.setText(htmlTxt);
@@ -533,20 +534,23 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
                 result += "</span>";
             } else if (iconBullets && listDepth >= 0 && !isOrderedList[listDepth] && found.equals("<li>")) {
                 //result += "<li class=\"bullet\"><input type=\"checkbox\" class=\"list-item-bullet\"></input>";
-                result += "<li class=\"bullet\"><img width=\"12\" height=\"12\" class=\"list-item-bullet\" />&nbsp;";
+                result += "<li class=\"bullet\"><img width=\"12\" height=\"12\" class=\"bullet\" />&nbsp;";
+                //result += "<li class=\"bullet\">";
             } else {
                 found = found.trim();
                 if (taskLists && found.equals("<li>[x]")) {
                     if (!iconTasks) result += "<li class=\"dtask\">";
                     else {
                         //result += "<li class=\"task\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" checked=\"checked\" disabled=\"disabled\">";
-                        result += "<li class=\"task\"><img width=\"12\" height=\"12\" class=\"task-list-item-checkbox-checked\" />&nbsp;";
+                        result += "<li class=\"task\"><img width=\"12\" height=\"12\" class=\"task-checked\" />&nbsp;";
+                        //result += "<li class=\"task-chk\">";
                     }
                 } else if (taskLists && found.equals("<li>[ ]")) {
                     if (!iconTasks) result += "<li class=\"dtask\">";
                     else {
                         //result += "<li class=\"task\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" disabled=\"disabled\">";
-                        result += "<li class=\"task\"><img width=\"12\" height=\"12\" class=\"task-list-item-checkbox\" />&nbsp;";
+                        result += "<li class=\"task\"><img width=\"12\" height=\"12\" class=\"task\" />&nbsp;";
+                        //result += "<li class=\"task\">";
                     }
                 } else if (taskLists && found.equals("<li class=\"task-list-item\">")) {
                     result += "<li class=\"task\">";
@@ -554,12 +558,13 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
                     // here we have <li>\n*\s*<p>, need to strip out \n*\s* so we can match them easier
                     String foundWithP = found;
                     foundWithP = foundWithP.replaceAll("<li>\\n*\\s*<p>", "<li><p>");
-                    found = foundWithP.replaceAll("<li class=\"task-list-item\">\\n*\\s*<p>", "<li class=\"task-list-item\"><p>");
+                    found = foundWithP.replaceAll("<li class=\"task-list-item\">\\n*\\s*<p>", "<li class=\"task\"><p>");
                     found = found.trim();
                     if (found.equals("<li><p>")) {
                         if (iconBullets && listDepth >= 0 && !isOrderedList[listDepth]) {
                             //result += "<li class=\"bulletp\"><p class=\"p\"><input type=\"checkbox\" class=\"list-item-bullet\"></input>";
-                            result += "<li class=\"bullet\"><p class=\"p\"><img width=\"12\" height=\"12\" class=\"list-item-bullet\" />&nbsp;";
+                            result += "<li class=\"bulletp\"><p class=\"p\"><img width=\"12\" height=\"12\" class=\"bullet\" />&nbsp;";
+                            //result += "<li class=\"bulletp\"><p class=\"p\">";
                         } else {
                             result += "<li class=\"p\"><p class=\"p\">";
                         }
@@ -567,13 +572,15 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
                         if (!iconTasks) result += "<li class=\"dtaskp\"><p class=\"p\">";
                         else {
                             //result += "<li class=\"taskp\"><p class=\"p\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" checked=\"checked\" disabled=\"disabled\">";
-                            result += "<li class=\"taskp\"><p class=\"p\"><img width=\"12\" height=\"12\" class=\"task-list-item-checkbox-checked\" />&nbsp;";
+                            result += "<li class=\"taskp\"><p class=\"p\"><img width=\"12\" height=\"12\" class=\"task-checked\" />&nbsp;";
+                            //result += "<li class=\"taskp-chk\"><p class=\"p\">";
                         }
                     } else if (taskLists && found.equals("<li><p>[ ]")) {
                         if (!iconTasks) result += "<li class=\"dtaskp\"><p class=\"p\">";
                         else {
                             //result += "<li class=\"taskp\"><p class=\"p\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" disabled=\"disabled\">";
-                            result += "<li class=\"taskp\"><p class=\"p\"><img width=\"12\" height=\"12\" class=\"task-list-item-checkbox\" />&nbsp;";
+                            result += "<li class=\"taskp\"><p class=\"p\"><img width=\"12\" height=\"12\" class=\"task\" />&nbsp;";
+                            //result += "<li class=\"taskp\"><p class=\"p\">";
                         }
                     } else if (taskLists && found.equals("<li class=\"task-list-item\"><p>")) {
                         result += "<li class=\"taskp\"><p class=\"p\">";
@@ -684,6 +691,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
                 }
             }
 
+            project = null;
             Disposer.dispose(this);
         }
     }

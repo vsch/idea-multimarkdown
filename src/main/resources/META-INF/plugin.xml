@@ -26,7 +26,7 @@
   <name>MultiMarkdown</name>
   <category>Custom Languages</category>
   <vendor url="http://github.com/vsch" email="vladimir.schneider@gmail.com">Vladimir Schneider</vendor>
-  <version>1.0.22</version>
+  <version>1.0.23</version>
   <idea-version since-build="134.549"/>
   <depends>com.intellij.modules.lang</depends>
 
@@ -46,6 +46,11 @@
 
   <change-notes><![CDATA[
     <p>
+    <b>1.0.23</b><br/>
+      <ul>
+        <li>: Fix issue #14, all scratch files would have MultiMarkdown editor tabs attached.</li>
+        <li>: Minor tweaks to CSS default and darcula.</li>
+    </ul>
     <b>1.0.22</b><br/>
       <ul>
         <li>: Fix issue #7, tasks and bullets use images instead of icons so that they are rendered correctly in Darcula.</li>

@@ -22,6 +22,7 @@ package com.vladsch.idea.multimarkdown.settings;
 
 import com.intellij.ide.highlighter.HighlighterFactory;
 import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ex.EditorEx;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.StdFileTypes;
@@ -50,7 +51,7 @@ public class CustomizableEditorTextField extends EditorTextField implements Comp
     //private final List<FocusListener> myFocusListeners = ContainerUtil.createLockFreeCopyOnWriteList();
 
     // Could be null to allow usage in UI designer, as EditorTextField permits
-    private final @NotNull Project myProject;
+    private @NotNull Project myProject;
 
     protected final SettingHandlers<EditorEx> handlers = new SettingHandlers<EditorEx>(null);
 
@@ -198,7 +199,13 @@ public class CustomizableEditorTextField extends EditorTextField implements Comp
     @Override
     public void removeNotify() {
         listener = null;
+        myProject = null;
         super.removeNotify();
+    }
+
+    @Override
+    public void addNotify() {
+        super.addNotify();
     }
 
     @Override

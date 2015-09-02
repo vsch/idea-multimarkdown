@@ -219,22 +219,23 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
         public URL getImageURL() {
             String classType = (String) getElement().getAttributes().getAttribute(Attribute.CLASS);
             boolean isInverted = MultiMarkdownGlobalSettings.getInstance().isInvertedHtmlPreview();
-            if (classType != null && classType.equals("task-list-item-checkbox")) {
+            if (classType != null && classType.equals("task")) {
                 return MultiMarkdownIcons.getIconResourceURL(MultiMarkdownIcons.TYPE_TASK, isInverted);
-            } else if (classType != null && classType.equals("task-list-item-checkbox-checked")) {
+            } else if (classType != null && classType.equals("task-checked")) {
                 return MultiMarkdownIcons.getIconResourceURL(MultiMarkdownIcons.TYPE_TASK_CHECKED, isInverted);
-            } else if (classType != null && classType.equals("list-item-bullet")) {
+            } else if (classType != null && classType.equals("bullet")) {
                 return MultiMarkdownIcons.getIconResourceURL(MultiMarkdownIcons.TYPE_BULLET, isInverted);
             } else {
                 final String src = (String) getElement().getAttributes().getAttribute(Attribute.SRC);
-                final VirtualFile localImage = MultiMarkdownPathResolver.resolveRelativePath(document, src);
-                try {
-                    if (localImage != null && localImage.exists())
-                        return new File(localImage.getPath()).toURI().toURL();
-                } catch (MalformedURLException e) {
-                    throw new RuntimeException(e);
+                if (src != null) {
+                    final VirtualFile localImage = MultiMarkdownPathResolver.resolveRelativePath(document, src);
+                    try {
+                        if (localImage != null && localImage.exists())
+                            return new File(localImage.getPath()).toURI().toURL();
+                    } catch (MalformedURLException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
-
                 return super.getImageURL();
             }
         }
