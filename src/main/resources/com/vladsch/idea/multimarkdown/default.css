@@ -404,10 +404,12 @@ li.p p.p {
 
 p {
     margin: 5px 0 5px 0;
+    text-indent: 0;
 }
 
 li p {
     margin: 10px 0 10px 0;
+    text-indent: 0;
 }
 
 ul li li {

@@ -61,7 +61,7 @@ public class SettingHandlers<M> extends Settings {
     }
 
     public @Nullable Object getComponentValue(@Nullable M model, @NotNull String name) {
-        if (!handlersSettings.containsKey(name)) return null;
+        if (!handlersSettings.containsKey(name) || model == null) return null;
 
         HandlerSetting<M> handlerSetting = handlersSettings.get(name);
         return handlerSetting.getHandler().getModelValue(model, handlerSetting.getIndex());

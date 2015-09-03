@@ -75,7 +75,7 @@ public class Settings {
             if (value == null) {
                 value = (String) provider.getComponent(setting.persistName);
             }
-            setting.setValue(setting.fromString(value));
+            setting.setValue(value == null ? setting.getDefaultValue() : setting.fromString(value));
             setting.saveState(element);
         }
         return element;
@@ -149,6 +149,7 @@ public class Settings {
         public boolean isChanged(T that) { return !value.equals(that); }
 
         abstract public T fromString(String value);
+        abstract public T getDefaultValue();
     }
 
     public class IntegerSetting extends Setting<Integer> {
@@ -156,6 +157,7 @@ public class Settings {
         public IntegerSetting(Integer initialValue, String persistName) { super(initialValue, persistName); }
 
         @Override public Integer fromString(String value) { return Integer.parseInt(value); }
+        @Override public Integer getDefaultValue() { return 0; }
 
         public void setValue(JSpinner component) { setValue((Integer) component.getValue()); }
 
@@ -182,6 +184,7 @@ public class Settings {
         }
 
         @Override public Boolean fromString(String value) { return Boolean.parseBoolean(value); }
+        @Override public Boolean getDefaultValue() { return false; }
 
         @Override public int getExtensionValue() { return value ? flags : 0; }
 
@@ -196,15 +199,25 @@ public class Settings {
 
         public StringSetting(String initialValue, String persistName) { super(initialValue, persistName); }
 
-        @Override public String fromString(String value) { return value; }
+        @Override public String fromString(String value) {
+            return value;
+        }
+
+        @Override public String getDefaultValue() {
+            return "";
+        }
 
         public void setValue(JTextArea component) { setValue(component.getText()); }
 
-        public void setValue(EditorTextField component) { setValue(component.getText()); }
+        public void setValue(EditorTextField component) {
+            setValue(component.getText());
+        }
 
         public void reset(JTextArea component) { component.setText(value); }
 
-        public void reset(EditorTextField component) { component.setText(value); }
+        public void reset(EditorTextField component) {
+            component.setText(value);
+        }
 
         public boolean isChanged(JTextArea component) { return !value.equals(component.getText()); }
 
@@ -222,6 +235,7 @@ public class Settings {
         }
 
         @Override public Element fromString(String value) { return null; }
+        @Override public Element getDefaultValue() { return null; }
 
         @Override
         public void loadState(@NotNull Element element) {

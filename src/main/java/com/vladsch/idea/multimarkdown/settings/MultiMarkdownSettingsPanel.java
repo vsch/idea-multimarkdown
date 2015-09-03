@@ -24,6 +24,8 @@ package com.vladsch.idea.multimarkdown.settings;
 
 import com.intellij.ide.highlighter.HighlighterFactory;
 import com.intellij.lang.Language;
+import com.intellij.openapi.application.Application;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.EditorSettings;
 import com.intellij.openapi.editor.event.DocumentAdapter;
 import com.intellij.openapi.editor.event.DocumentEvent;
@@ -40,7 +42,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -145,7 +150,23 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         }
     }
 
+    protected boolean useCustomCSSOriginalState;
+
     protected void updateCustomCssControls() {
+        final Application application = ApplicationManager.getApplication();
+        if (!textCustomCss.isPendingTextUpdate()) {
+            updateRawCustomCssControls();
+        } else {
+            application.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    updateRawCustomCssControls();
+                }
+            }, application.getCurrentModalityState());
+        }
+    }
+
+    private void updateRawCustomCssControls() {
         boolean haveCustomCss = textCustomCss.getText().trim().length() > 0;
         useCustomCssCheckBox.setEnabled(haveCustomCss);
         clearCustomCssButton.setEnabled(haveCustomCss);
@@ -230,8 +251,17 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
                 settings.setVirtualSpace(true);
 
                 // get the standard caret width from the registry
-                RegistryValue value = Registry.get("editor.caret.width");
-                settings.setLineCursorWidth(value.asInteger());
+                int lineCursorWidth = 2;
+                try {
+                    RegistryValue value = Registry.get("editor.caret.width");
+                    if (value != null) {
+                        lineCursorWidth = value.asInteger();
+                    }
+                } catch (Exception ex) {
+                    // ignore
+                }
+
+                settings.setLineCursorWidth(lineCursorWidth);
 
                 //settings.setWheelFontChangeEnabled(false);
                 editor.setHorizontalScrollbarVisible(true);

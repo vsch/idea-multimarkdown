@@ -21,8 +21,9 @@
 package com.vladsch.idea.multimarkdown.settings;
 
 import com.intellij.ide.highlighter.HighlighterFactory;
+import com.intellij.openapi.application.Application;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ex.EditorEx;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.StdFileTypes;
@@ -31,8 +32,8 @@ import com.intellij.openapi.project.ProjectManager;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
-import com.intellij.util.LocalTimeCounter;
 import com.intellij.ui.EditorTextField;
+import com.intellij.util.LocalTimeCounter;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -222,12 +223,35 @@ public class CustomizableEditorTextField extends EditorTextField implements Comp
         return ex;
     }
 
+    public boolean isPendingTextUpdate() {
+        return pendingTextUpdate != 0;
+    }
+
+    protected int pendingTextUpdate = 0;
+
     @Override
     public void setText(@Nullable final String text) {
+        final Application application = ApplicationManager.getApplication();
+        if (application.isDispatchThread()) {
+            setRawText(text);
+        } else {
+            pendingTextUpdate++;
+            application.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    setRawText(text);
+                    pendingTextUpdate--;
+                }
+            }, application.getCurrentModalityState());
+        }
+    }
+
+    private void setRawText(@Nullable final String text) {
         ((Settings.IntegerSetting) selectionOffset.getSetting(0)).setValue(0);
         ((Settings.IntegerSetting) selectionOffset.getSetting(1)).setValue(0);
         ((Settings.IntegerSetting) caretOffset.getSetting(0)).setValue(0);
         handlers.loadState((EditorEx) getEditor());
+
         super.setText(text);
     }
 
@@ -235,8 +259,18 @@ public class CustomizableEditorTextField extends EditorTextField implements Comp
         return handlers.getState((EditorEx) getEditor(), elementName, this);
     }
 
-    public void loadState(@NotNull Element element) {
-        handlers.loadState((EditorEx) getEditor(), element);
+    public void loadState(@NotNull final Element element) {
+        final Application application = ApplicationManager.getApplication();
+        if (application.isDispatchThread()) {
+            handlers.loadState((EditorEx) getEditor(), element);
+        } else {
+            application.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    handlers.loadState((EditorEx) getEditor(), element);
+                }
+            }, application.getCurrentModalityState());
+        }
     }
 
     public boolean isChanged(@NotNull Element element) {

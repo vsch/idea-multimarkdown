@@ -24,7 +24,6 @@
 package com.vladsch.idea.multimarkdown;
 
 import com.intellij.openapi.util.IconLoader;
-import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 
 import javax.imageio.ImageIO;
