@@ -32,5 +32,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" exported="" name="jfxrt" level="project" />
   </component>
 </module>

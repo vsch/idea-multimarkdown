@@ -240,6 +240,8 @@
     <additionalTextAttributes scheme="Darcula" file="com/vladsch/idea/multimarkdown/colorSchemes/MultiMarkdownDarcula.xml"/>
     <fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MultiMarkdownPreviewEditorProvider"/>
     <fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MultiMarkdownHtmlEditorProvider"/>
+    <fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MultiMarkdownFxPreviewEditorProvider"/>
+    <fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MultiMarkdownFxHtmlEditorProvider"/>
     <lang.documentationProvider language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.documentation.MultiMarkdownDocumentationProvider"/>
     <lang.parserDefinition language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.parser.MultiMarkdownParserDefinition"/>
     <externalAnnotator language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.annotator.MultiMarkdownAnnotator"/>
