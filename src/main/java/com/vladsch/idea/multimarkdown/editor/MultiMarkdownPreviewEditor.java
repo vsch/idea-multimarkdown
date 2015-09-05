@@ -249,18 +249,6 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         checkNotifyUser();
     }
 
-    protected FileType findHtmlFileType() {
-        FileType[] fileTypes = FileTypeManager.getInstance().getRegisteredFileTypes();
-        for (FileType fileType : fileTypes) {
-            String name = fileType.getName();
-            //if (name.equals("HTML")) return fileType;
-            if (name.equals("Scratch")) {
-                return fileType;
-            }
-        }
-        return fileTypes[0];
-    }
-
     protected void delayedHtmlPreviewUpdate(final boolean fullKit) {
         if (updateDelayTimer != null) {
             updateDelayTimer.cancel();
@@ -329,7 +317,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
      */
     @Nullable
     public JComponent getPreferredFocusedComponent() {
-        return scrollPane != null ? scrollPane : myTextViewer.getComponent();
+        return scrollPane != null ? scrollPane : myTextViewer.getContentComponent();
     }
 
     /**
@@ -509,6 +497,8 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
                 result += found;
             } else if (found.equals("<tbody>")) {
                 result += found;
+            } else if (found.equals("/>")) {
+                result += ">";
             } else if (iconBullets && found.equals("<ol>")) {
                 if (listDepth + 1 >= isOrderedList.length) listDepth = isOrderedList.length - 2;
                 isOrderedList[++listDepth] = true;
@@ -534,7 +524,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
                 result += "</span>";
             } else if (iconBullets && listDepth >= 0 && !isOrderedList[listDepth] && found.equals("<li>")) {
                 //result += "<li class=\"bullet\"><input type=\"checkbox\" class=\"list-item-bullet\"></input>";
-                result += "<li class=\"bullet\"><img width=\"12\" height=\"12\" class=\"bullet\" />&nbsp;";
+                result += "<li class=\"bulleti\"><img width=\"12\" height=\"12\" class=\"bullet\" />&nbsp;";
                 //result += "<li class=\"bullet\">";
             } else {
                 found = found.trim();
@@ -542,18 +532,18 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
                     if (!iconTasks) result += "<li class=\"dtask\">";
                     else {
                         //result += "<li class=\"task\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" checked=\"checked\" disabled=\"disabled\">";
-                        result += "<li class=\"task\"><img width=\"12\" height=\"12\" class=\"task-checked\" />&nbsp;";
+                        result += "<li class=\"taski\"><img width=\"12\" height=\"12\" class=\"task-checked\" />&nbsp;";
                         //result += "<li class=\"task-chk\">";
                     }
                 } else if (taskLists && found.equals("<li>[ ]")) {
                     if (!iconTasks) result += "<li class=\"dtask\">";
                     else {
                         //result += "<li class=\"task\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" disabled=\"disabled\">";
-                        result += "<li class=\"task\"><img width=\"12\" height=\"12\" class=\"task\" />&nbsp;";
+                        result += "<li class=\"taski\"><img width=\"12\" height=\"12\" class=\"task\" />&nbsp;";
                         //result += "<li class=\"task\">";
                     }
                 } else if (taskLists && found.equals("<li class=\"task-list-item\">")) {
-                    result += "<li class=\"task\">";
+                    result += "<li class=\"taski\">";
                 } else {
                     // here we have <li>\n*\s*<p>, need to strip out \n*\s* so we can match them easier
                     String foundWithP = found;

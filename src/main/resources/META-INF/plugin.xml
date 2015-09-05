@@ -42,10 +42,16 @@
     </div>
     ]]></description>
 
-  <version>1.0.24</version>
+  <version>1.0.25</version>
   <idea-version since-build="135.1306"/>
   <change-notes><![CDATA[
     <p>
+    <b>1.0.25</b><br/>
+      <ul>
+        <li>: Fix issue #16, images in bullet list items or task items displayed as the bullet or task image instead. Bug in HTMLEditorKit CSS attribute inheritance passing class of parent to child nodes.</li>
+        <li>: Fix issue #17, nested lists not being indented correctly caused by CSS mess up.</li>
+        <li>: Fix Two or more blank lines would interrupt a list and start a new one, pegdown.</li>
+    </ul>
     <b>1.0.24</b><br/>
       <ul>
         <li>: Fix issue #15, will not load in build 139.1117, changed 'since-build' to 135.1306 earliest tested working IDEA 13, and updated classes.</li>

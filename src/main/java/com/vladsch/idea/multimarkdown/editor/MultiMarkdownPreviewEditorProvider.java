@@ -42,7 +42,6 @@ public class MultiMarkdownPreviewEditorProvider implements FileEditorProvider, P
     public static final String EDITOR_TYPE_ID = MultiMarkdownLanguage.NAME + "PreviewEditor";
 
     public static boolean accept(@NotNull VirtualFile file) {
-        String name = file.getName();
         String fileExt = file.getExtension();
         FileType fileType = file.getFileType();
         boolean doAccept = fileType instanceof MultiMarkdownFileType;

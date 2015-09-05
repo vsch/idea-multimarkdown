@@ -23,13 +23,41 @@
  */
 package com.vladsch.idea.multimarkdown.editor;
 import org.pegdown.LinkRenderer;
-import org.pegdown.ast.MailLinkNode;
+import org.pegdown.ast.*;
 
 import static org.pegdown.FastEncoder.obfuscate;
 
 public class MultiMarkdownLinkRenderer extends LinkRenderer {
     public MultiMarkdownLinkRenderer() {
         super();
+    }
+
+    @Override public Rendering render(AnchorLinkNode node) {
+        return super.render(node);
+    }
+
+    @Override public Rendering render(AutoLinkNode node) {
+        return super.render(node);
+    }
+
+    @Override public Rendering render(ExpLinkNode node, String text) {
+        return super.render(node, text);
+    }
+
+    @Override public Rendering render(ExpImageNode node, String text) {
+        return super.render(node, text);
+    }
+
+    @Override public Rendering render(RefLinkNode node, String url, String title, String text) {
+        return super.render(node, url, title, text);
+    }
+
+    @Override public Rendering render(RefImageNode node, String url, String title, String alt) {
+        return super.render(node, url, title, alt);
+    }
+
+    @Override public Rendering render(WikiLinkNode node) {
+        return super.render(node);
     }
 
     @Override
