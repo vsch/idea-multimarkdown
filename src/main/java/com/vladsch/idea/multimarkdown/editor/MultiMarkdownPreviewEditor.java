@@ -24,7 +24,6 @@ package com.vladsch.idea.multimarkdown.editor;
 import com.intellij.codeHighlighting.BackgroundEditorHighlighter;
 import com.intellij.ide.structureView.StructureViewBuilder;
 import com.intellij.lang.Language;
-import com.intellij.notification.*;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
@@ -39,19 +38,18 @@ import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.ex.DocumentEx;
 import com.intellij.openapi.editor.highlighter.EditorHighlighterFactory;
 import com.intellij.openapi.editor.impl.EditorImpl;
-import com.intellij.openapi.fileEditor.*;
+import com.intellij.openapi.fileEditor.FileEditor;
+import com.intellij.openapi.fileEditor.FileEditorLocation;
+import com.intellij.openapi.fileEditor.FileEditorState;
+import com.intellij.openapi.fileEditor.FileEditorStateLevel;
 import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.popup.Balloon;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.UserDataHolderBase;
 import com.intellij.ui.components.JBScrollPane;
-
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
-import com.vladsch.idea.multimarkdown.settings.Settings;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -59,13 +57,13 @@ import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
 
 import javax.swing.*;
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.Timer;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.html.StyleSheet;
 import java.awt.*;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -122,14 +120,6 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
 
     public static boolean isDarkTheme() {
         return MultiMarkdownGlobalSettings.getInstance().isDarkUITheme();
-    }
-
-    public static boolean isIconBullets() {
-        return MultiMarkdownGlobalSettings.getInstance().iconBullets.getValue();
-    }
-
-    public static boolean isIconTasks() {
-        return MultiMarkdownGlobalSettings.getInstance().iconTasks.getValue();
     }
 
     public static String getCustomCss() {
@@ -462,15 +452,9 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         String regexTail = "|<li>\\n*\\s*<p>";
         boolean isDarkTheme = isDarkTheme();
         boolean taskLists = isTaskLists();
-        boolean iconTasks = isIconTasks();// && !isDarkTheme;
-        boolean iconBullets = isIconBullets();// && !isDarkTheme;
 
         if (taskLists) {
             regex += "|<li class=\"task-list-item\">\\n*\\s*<p>|<li class=\"task-list-item\">|<li>\\[x\\]\\s*|<li>\\[ \\]\\s*|<li>\\n*\\s*<p>\\[x\\]\\s*|<li>\\n*\\s*<p>\\[ \\]\\s*";
-        }
-        if (iconBullets) {
-            regex += "|<ul>|<ol>|</ul>|</ol>";
-            regexTail += "|<li>";
         }
         regex += regexTail;
         regex += ")";
@@ -499,20 +483,6 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
                 result += found;
             } else if (found.equals("/>")) {
                 result += ">";
-            } else if (iconBullets && found.equals("<ol>")) {
-                if (listDepth + 1 >= isOrderedList.length) listDepth = isOrderedList.length - 2;
-                isOrderedList[++listDepth] = true;
-                result += found;
-            } else if (iconBullets && found.equals("</ol>")) {
-                if (listDepth >= 0) listDepth--;
-                result += found;
-            } else if (iconBullets && found.equals("<ul>")) {
-                if (listDepth + 1 >= isOrderedList.length) listDepth = isOrderedList.length - 2;
-                isOrderedList[++listDepth] = false;
-                result += found;
-            } else if (iconBullets && found.equals("</ul>")) {
-                if (listDepth >= 0) listDepth--;
-                result += found;
             } else if (found.equals("<tr>")) {
                 rowCount++;
                 result += "<tr class=\"" + (rowCount == 1 ? "first-child" : (rowCount & 1) != 0 ? "odd-child" : "even-child") + "\">";
@@ -522,26 +492,12 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
                 result += "<span class=\"del\">";
             } else if (found.equals("</del>")) {
                 result += "</span>";
-            } else if (iconBullets && listDepth >= 0 && !isOrderedList[listDepth] && found.equals("<li>")) {
-                //result += "<li class=\"bullet\"><input type=\"checkbox\" class=\"list-item-bullet\"></input>";
-                result += "<li class=\"bulleti\"><img width=\"12\" height=\"12\" class=\"bullet\" />&nbsp;";
-                //result += "<li class=\"bullet\">";
             } else {
                 found = found.trim();
                 if (taskLists && found.equals("<li>[x]")) {
-                    if (!iconTasks) result += "<li class=\"dtask\">";
-                    else {
-                        //result += "<li class=\"task\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" checked=\"checked\" disabled=\"disabled\">";
-                        result += "<li class=\"taski\"><img width=\"12\" height=\"12\" class=\"task-checked\" />&nbsp;";
-                        //result += "<li class=\"task-chk\">";
-                    }
+                    result += "<li class=\"dtask\">";
                 } else if (taskLists && found.equals("<li>[ ]")) {
-                    if (!iconTasks) result += "<li class=\"dtask\">";
-                    else {
-                        //result += "<li class=\"task\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" disabled=\"disabled\">";
-                        result += "<li class=\"taski\"><img width=\"12\" height=\"12\" class=\"task\" />&nbsp;";
-                        //result += "<li class=\"task\">";
-                    }
+                    result += "<li class=\"dtask\">";
                 } else if (taskLists && found.equals("<li class=\"task-list-item\">")) {
                     result += "<li class=\"taski\">";
                 } else {
@@ -551,27 +507,11 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
                     found = foundWithP.replaceAll("<li class=\"task-list-item\">\\n*\\s*<p>", "<li class=\"task\"><p>");
                     found = found.trim();
                     if (found.equals("<li><p>")) {
-                        if (iconBullets && listDepth >= 0 && !isOrderedList[listDepth]) {
-                            //result += "<li class=\"bulletp\"><p class=\"p\"><input type=\"checkbox\" class=\"list-item-bullet\"></input>";
-                            result += "<li class=\"bulletp\"><p class=\"p\"><img width=\"12\" height=\"12\" class=\"bullet\" />&nbsp;";
-                            //result += "<li class=\"bulletp\"><p class=\"p\">";
-                        } else {
-                            result += "<li class=\"p\"><p class=\"p\">";
-                        }
+                        result += "<li class=\"p\"><p class=\"p\">";
                     } else if (taskLists && found.equals("<li><p>[x]")) {
-                        if (!iconTasks) result += "<li class=\"dtaskp\"><p class=\"p\">";
-                        else {
-                            //result += "<li class=\"taskp\"><p class=\"p\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" checked=\"checked\" disabled=\"disabled\">";
-                            result += "<li class=\"taskp\"><p class=\"p\"><img width=\"12\" height=\"12\" class=\"task-checked\" />&nbsp;";
-                            //result += "<li class=\"taskp-chk\"><p class=\"p\">";
-                        }
+                        result += "<li class=\"dtaskp\"><p class=\"p\">";
                     } else if (taskLists && found.equals("<li><p>[ ]")) {
-                        if (!iconTasks) result += "<li class=\"dtaskp\"><p class=\"p\">";
-                        else {
-                            //result += "<li class=\"taskp\"><p class=\"p\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" disabled=\"disabled\">";
-                            result += "<li class=\"taskp\"><p class=\"p\"><img width=\"12\" height=\"12\" class=\"task\" />&nbsp;";
-                            //result += "<li class=\"taskp\"><p class=\"p\">";
-                        }
+                        result += "<li class=\"dtaskp\"><p class=\"p\">";
                     } else if (taskLists && found.equals("<li class=\"task-list-item\"><p>")) {
                         result += "<li class=\"taskp\"><p class=\"p\">";
                     } else {

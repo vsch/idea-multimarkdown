@@ -23,15 +23,12 @@ package com.vladsch.idea.multimarkdown.editor;
 
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
-import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
+import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.text.*;
-import javax.swing.text.View;
-import javax.swing.text.html.FormView;
 import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTML.Attribute;
 import javax.swing.text.html.HTMLEditorKit;
@@ -123,62 +120,10 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
         public View create(Element elem) {
             if (HTML.Tag.IMG.equals(elem.getAttributes().getAttribute(StyleConstants.NameAttribute))) {
                 return new MarkdownImageView(document, elem, editorKit);
-                //} else if (HTML.Tag.INPUT.equals(elem.getAttributes().getAttribute(StyleConstants.NameAttribute))) {
-                //    return new MarkdownInputView(elem);
             }
             return super.create(elem);
         }
     }
-
-    //protected static class MarkdownInputView extends FormView {
-    //
-    //    private MarkdownInputView(@NotNull Element elem) {
-    //        super(elem);
-    //    }
-    //
-    //    @Override
-    //    protected Component createComponent() {
-    //        AttributeSet attr = getElement().getAttributes();
-    //        HTML.Tag t = (HTML.Tag)
-    //                attr.getAttribute(StyleConstants.NameAttribute);
-    //        Component c = null;
-    //        Object model = attr.getAttribute(StyleConstants.ModelAttribute);
-    //        String type = (String) attr.getAttribute(HTML.Attribute.TYPE);
-    //
-    //        // Remove listeners previously registered in shared model
-    //        // when a new UI component is replaced.  See bug 7189299.
-    //        if (t == HTML.Tag.INPUT && type.equals("checkbox")) {
-    //            String classType = (String) attr.getAttribute(Attribute.CLASS);
-    //            boolean isInverted = MultiMarkdownGlobalSettings.getInstance().isInvertedHtmlPreview();
-    //            if (classType != null && classType.equals("task-list-item-checkbox")) {
-    //                c = super.createComponent();
-    //                JCheckBox chk = (JCheckBox) c;
-    //                Image openTask = isInverted ? MultiMarkdownIcons.OPEN_TASK_INV : MultiMarkdownIcons.OPEN_TASK;
-    //                Icon closedTask = isInverted ? MultiMarkdownIcons.CLOSED_TASK_INV : MultiMarkdownIcons.CLOSED_TASK;
-    //                chk.setIcon(openTask);
-    //                chk.setDisabledIcon(openTask);
-    //                chk.setSelectedIcon(closedTask);
-    //                chk.setDisabledSelectedIcon(closedTask);
-    //                c.setEnabled(false);
-    //            } else if (classType != null && classType.equals("list-item-bullet")) {
-    //                c = super.createComponent();
-    //                JCheckBox chk = (JCheckBox) c;
-    //                Icon bullet = isInverted ? MultiMarkdownIcons.BULLET_INV : MultiMarkdownIcons.BULLET;
-    //                chk.setIcon(bullet);
-    //                chk.setDisabledIcon(bullet);
-    //                chk.setSelectedIcon(bullet);
-    //                chk.setDisabledSelectedIcon(bullet);
-    //                c.setEnabled(false);
-    //            } else {
-    //                c = super.createComponent();
-    //            }
-    //        } else {
-    //            c = super.createComponent();
-    //        }
-    //
-    //        return c;
-    //    }
-    //}
 
     /**
      * An {@link ImageView} that can resolve the image URL relative to the document.
@@ -217,27 +162,17 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
          */
         @Override
         public URL getImageURL() {
-            String classType = (String) getElement().getAttributes().getAttribute(Attribute.CLASS);
-            boolean isInverted = MultiMarkdownGlobalSettings.getInstance().isInvertedHtmlPreview();
-            if (classType != null && classType.equals("task")) {
-                return MultiMarkdownIcons.getIconResourceURL(MultiMarkdownIcons.TYPE_TASK, isInverted);
-            } else if (classType != null && classType.equals("task-checked")) {
-                return MultiMarkdownIcons.getIconResourceURL(MultiMarkdownIcons.TYPE_TASK_CHECKED, isInverted);
-            } else if (classType != null && classType.equals("bullet")) {
-                return MultiMarkdownIcons.getIconResourceURL(MultiMarkdownIcons.TYPE_BULLET, isInverted);
-            } else {
-                final String src = (String) getElement().getAttributes().getAttribute(Attribute.SRC);
-                if (src != null) {
-                    final VirtualFile localImage = MultiMarkdownPathResolver.resolveRelativePath(document, src);
-                    try {
-                        if (localImage != null && localImage.exists())
-                            return new File(localImage.getPath()).toURI().toURL();
-                    } catch (MalformedURLException e) {
-                        throw new RuntimeException(e);
-                    }
+            final String src = (String) getElement().getAttributes().getAttribute(Attribute.SRC);
+            if (src != null) {
+                final VirtualFile localImage = MultiMarkdownPathResolver.resolveRelativePath(document, src);
+                try {
+                    if (localImage != null && localImage.exists())
+                        return new File(localImage.getPath()).toURI().toURL();
+                } catch (MalformedURLException e) {
+                    throw new RuntimeException(e);
                 }
-                return super.getImageURL();
             }
+            return super.getImageURL();
         }
 
         float width;
