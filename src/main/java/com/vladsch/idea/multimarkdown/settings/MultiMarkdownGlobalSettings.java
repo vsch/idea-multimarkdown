@@ -104,9 +104,6 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     final public Settings.BooleanSetting taskLists = settings.BooleanSetting(true, "taskLists", Extensions.TASKLISTITEMS);
     final public Settings.BooleanSetting wikiLinks = settings.BooleanSetting(true, "wikiLinks", Extensions.WIKILINKS);
     final public Settings.BooleanSetting todoComments = settings.BooleanSetting(false, "todoComments", 0);
-    final public Settings.BooleanSetting iconBullets = settings.BooleanSetting(true, "iconBullets", 0);
-    final public Settings.BooleanSetting iconTasks = settings.BooleanSetting(true, "iconTasks", 0);
-    final public Settings.BooleanSetting darkCustomCss = settings.BooleanSetting(false, "darkCustomCss", 0);
     final public Settings.BooleanSetting useCustomCss = settings.BooleanSetting(false, "useCustomCss", 0);
     final public Settings.IntegerSetting htmlTheme = settings.IntegerSetting(HTML_THEME_UI, "htmlTheme");
     final public Settings.IntegerSetting maxImgWidth = settings.IntegerSetting(900, "maxImgWidth");
@@ -123,10 +120,6 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
 
     public void loadState(@NotNull Element element) {
         settings.loadState(element);
-    }
-
-    public boolean isDarkHtmlPreview() {
-        return isDarkHtmlPreview(htmlTheme.getValue());
     }
 
     public boolean isDarkHtmlPreview(int htmlTheme) {
@@ -170,11 +163,6 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
 
     public @NotNull String getCssText() {
         return useCustomCss() ? customCss.getValue() : getCssFileText(htmlTheme.getValue());
-    }
-
-    public boolean isInvertedHtmlPreview() {
-        //return (!useCustomCss() && UIUtil.isUnderDarcula() != isDarkHtmlPreview()) || (useCustomCss() && UIUtil.isUnderDarcula() != darkCustomCss.getValue());
-        return (!useCustomCss() && isDarkHtmlPreview()) || (useCustomCss() && darkCustomCss.getValue());
     }
 
     public boolean useCustomCss() {

@@ -283,7 +283,7 @@ pre {
     background-color: #f8f8f8;
     border: 1px solid #cccccc;
     overflow: auto;
-    padding: 6px 0 3px 0;
+    padding: 6px 0px 6px 10px;
     white-space: pre;
 }
 
@@ -404,12 +404,10 @@ li.p p.p {
 
 p {
     margin: 5px 0 5px 0;
-    text-indent: 0;
 }
 
 li p {
-    margin: 10px 0 10px 0;
-    text-indent: 0;
+    margin: 10px 0px 10px 0px;
 }
 
 ul ul,

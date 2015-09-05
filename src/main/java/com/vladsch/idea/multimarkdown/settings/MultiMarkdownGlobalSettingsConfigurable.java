@@ -63,17 +63,12 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
         componentSettings.add(new CheckBoxComponent("tablesCheckBox", globalSettings.tables));
         componentSettings.add(new CheckBoxComponent("taskListsCheckBox", globalSettings.taskLists));
         componentSettings.add(new CheckBoxComponent("wikiLinksCheckBox", globalSettings.wikiLinks));
-        componentSettings.add(new CheckBoxComponent("iconBulletsCheckBox", globalSettings.iconBullets));
-        componentSettings.add(new CheckBoxComponent("iconTasksCheckBox", globalSettings.iconTasks));
-        componentSettings.add(new CheckBoxComponent("darkCustomCssCheckBox", globalSettings.darkCustomCss));
         componentSettings.add(new CheckBoxComponent("useCustomCssCheckBox", globalSettings.useCustomCss));
-        //componentSettings.add(new CheckBoxComponent("todoCommentsCheckBox", globalSettings.todoComments));
         componentSettings.add(new CheckBoxComponent("quotesCheckBox", globalSettings.quotes));
         componentSettings.add(new SpinnerComponent("updateDelaySpinner", globalSettings.updateDelay));
         componentSettings.add(new SpinnerComponent("maxImgWidthSpinner", globalSettings.maxImgWidth));
         componentSettings.add(new SpinnerComponent("parsingTimeoutSpinner", globalSettings.parsingTimeout));
         componentSettings.add(new ComboBoxComponent("htmlThemeComboBox", globalSettings.htmlTheme));
-        //componentSettings.add(new TextAreaComponent("textCustomCss", globalSettings.customCss));
         componentSettings.add(new EditorTextFieldComponent("textCustomCss", globalSettings.customCss));
         componentSettings.add(new ComponentState("textCustomCss", globalSettings.customCssEditorState));
     }

@@ -80,9 +80,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
     public JCheckBox relaxedHRulesCheckBox;
     public JComboBox htmlThemeComboBox;
     public JCheckBox enableTrimSpacesCheckBox;
-    private JCheckBox todoCommentsCheckBox;
     private CustomizableEditorTextField textCustomCss;
-    private JCheckBox iconBulletsCheckBox;
 
     public JPanel panel;
     public JPanel settingsPanel;
@@ -103,8 +101,6 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
     private JLabel parsingTimeoutDescriptionLabel;
     private JButton focusEditorButton;
     private JCheckBox useCustomCssCheckBox;
-    private JCheckBox darkCustomCssCheckBox;
-    private JCheckBox iconTasksCheckBox;
 
     // need this so that we dont try to access components before they are created
     public @Nullable Object getComponent(@NotNull String persistName) {
@@ -133,13 +129,9 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         if (persistName.equals("anchorLinksCheckBox")) return anchorLinksCheckBox;
         if (persistName.equals("forceListParaCheckBox")) return forceListParaCheckBox;
         if (persistName.equals("relaxedHRulesCheckBox")) return relaxedHRulesCheckBox;
-        if (persistName.equals("iconBulletsCheckBox")) return iconBulletsCheckBox;
-        if (persistName.equals("iconTasksCheckBox")) return iconTasksCheckBox;
         if (persistName.equals("htmlThemeComboBox")) return htmlThemeComboBox;
         if (persistName.equals("enableTrimSpacesCheckBox")) return enableTrimSpacesCheckBox;
         if (persistName.equals("useCustomCssCheckBox")) return useCustomCssCheckBox;
-        if (persistName.equals("darkCustomCssCheckBox")) return darkCustomCssCheckBox;
-        //if (name.equals("todoCommentsCheckBox")) return todoCommentsCheckBox;
 
         return null;
     }
@@ -171,7 +163,6 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         useCustomCssCheckBox.setEnabled(haveCustomCss);
         clearCustomCssButton.setEnabled(haveCustomCss);
         if (!haveCustomCss) useCustomCssCheckBox.setSelected(false);
-        darkCustomCssCheckBox.setEnabled(haveCustomCss && useCustomCssCheckBox.isSelected());
         focusEditorButton.setEnabled(textCustomCss.haveSavedState());
     }
 
@@ -203,12 +194,6 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         focusEditorButton.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) {
                 textCustomCss.requestFocus();
-            }
-        });
-
-        iconBulletsCheckBox.addItemListener(new ItemListener() {
-            @Override public void itemStateChanged(ItemEvent e) {
-                updateCustomCssControls();
             }
         });
 
