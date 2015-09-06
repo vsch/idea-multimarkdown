@@ -32,12 +32,10 @@ import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.ui.popup.Balloon;
 import com.intellij.openapi.ui.popup.BalloonBuilder;
 import com.intellij.util.ui.UIUtil;
-import com.vladsch.idea.multimarkdown.editor.MultiMarkdownPreviewEditor;
 import org.apache.commons.codec.Charsets;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.pegdown.Extensions;
 
 import java.io.IOException;
