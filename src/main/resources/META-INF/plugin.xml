@@ -31,14 +31,17 @@
   <description><![CDATA[
     <div xmlns="http://www.w3.org/1999/html">
       <img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_source_preview_Small.png" alt="Screenshot">
+
       <p><b><a href="http://daringfireball.net/projects/markdown">Markdown</a> language support for IntelliJ platform.</b><br>
-      With GitHub Flavoured Markdown extensions and GitHub style formatting. HTML Preview and HTML Text tabs</p>
+        With GitHub Flavoured Markdown extensions and GitHub style formatting. HTML Preview and HTML Text tabs.</p>
 
-      <p><b><span color="#2000C0">Feature requests and problem reports will be greatly appreciated!</span></b><br>
-      <b>You can submit them at <a color="#30A0D8" href="https://github.com/vsch/idea-multimarkdown/issues"><u>vsch/idea-multimarkdown/issues</u></a> on GitHub.</b></p>
+      <p><b><span color="#2000C0">Feature requests and problem reports will be greatly appreciated!</span></b>
+        <b>You can submit them at <a color="#30A0D8" href="https://github.com/vsch/idea-multimarkdown/issues"><u>vsch/idea-multimarkdown/issues</u></a> on GitHub.</b></p>
 
-      <p><b><span color="#C00038">If you like this plugin then please leave a comment or rate it.</span></b><br>
-      <b>You can do that on the JetBrains' </span> <a color="#30A0D8" href="https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896"><u>MultiMarkdown comment and rate</u></a> page</b></p>
+      <p><b><span color="#C00038">If you like this plugin then please rate it</span> on the JetBrains' <a color="#30A0D8" href="https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896"><u>MultiMarkdown comment and rate</u></a> page</b></p>
+
+      <p><b><span color="#C00038">It is not possible to reply to comments left on the plugin's JebBrains comment and rate page.</span> This functionality is no longer avaialble.</b>
+        <b>For all feedback requiring a reply please use the <a color="#30A0D8" href="https://github.com/vsch/idea-multimarkdown/issues"><u>MultiMarkdown GitHub Issues</u></a> page.</b></p>
     </div>
     ]]></description>
 
@@ -55,11 +58,12 @@
     </ul>
     <b>1.0.25</b><br/>
       <ul>
-        <li>: Last version able to be compatible with jre 1.6.</li>
+        <li>: <b><span color="#C00038">Note: </span>This will probably be the last release of this plugin that works with jre 1.6.</b> I implemented javafx WebView for the preview tab and it is a joy to look at, work with and maintain.</li>
         <li>: Change removed the use images for bullets and tasks. These introduced too many rendering side-effects that were impossible to resolve.</li>
         <li>: Fix issue #16, images in bullet list items or task items displayed as the bullet or task image instead. Bug in HTMLEditorKit CSS attribute inheritance passing class of parent to child nodes.</li>
         <li>: Fix issue #17, nested lists not being indented correctly caused by CSS mess up.</li>
-        <li>: Fix Two or more blank lines would end a list and start a new one, pegdown.</li>
+        <li>: Fix Two or more blank lines would interrupt a list and start a new one, pegdown.</li>
+        <li>: Fix loose task items would be rendered wrong, pegdown.</li>
     </ul>
     <b>1.0.24</b><br/>
       <ul>
