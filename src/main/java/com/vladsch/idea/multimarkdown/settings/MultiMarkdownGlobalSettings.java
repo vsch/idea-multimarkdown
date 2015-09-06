@@ -170,7 +170,7 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     }
 
     public int getExtensionsValue() {
-        return settings.getExtensionsValue();
+        return settings.getExtensionsValue() | Extensions.EXTANCHORLINKS;
     }
 
     public void addListener(@NotNull final SettingsListener<MultiMarkdownGlobalSettings> listener) {

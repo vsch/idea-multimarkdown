@@ -48,10 +48,12 @@
     <p>
     <b>1.0.25</b><br/>
       <ul>
+        <li>: Note: This will probably be the last release of this plugin that works with jre 1.6. I implemented javafx WebView for the preview tab and it is a joy to work with and maintain.</li>
         <li>: Change removed the use images for bullets and tasks. These introduced too many rendering side-effects that were impossible to resolve.</li>
         <li>: Fix issue #16, images in bullet list items or task items displayed as the bullet or task image instead. Bug in HTMLEditorKit CSS attribute inheritance passing class of parent to child nodes.</li>
         <li>: Fix issue #17, nested lists not being indented correctly caused by CSS mess up.</li>
         <li>: Fix Two or more blank lines would interrupt a list and start a new one, pegdown.</li>
+        <li>: Fix loose task items would be rendered wrong, pegdown.</li>
     </ul>
     <b>1.0.24</b><br/>
       <ul>

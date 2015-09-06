@@ -7,6 +7,13 @@ idea-multimarkdown
 
 **You can download it on the [official plugin page](https://plugins.jetbrains.com/plugin?pr=&pluginId=7896).**
 
+### Version 1.0.25 of this plugin will probably be the last one that will work with JDK 1.6
+
+I have implemented a javafx WebView based HTML Preview Tab and the results are stunning. Not only was I able to make it look like GitHub's markdown but it is a joy to work with and maintain compared to HTMLEditorKit. Here is a screen shot of the upcoming release of Version 1.1.0 of the plugin's HTML Preview and GitHub of this readme file. It will require that you run your IDEA on JDK 1.8 and on the Mac you cannot run it on the IDEA bundled JDK because it does not include the native libraries needed for javafx.    
+
+![Preview](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_jfx_webview.png)
+
+
 The Full Story
 --------------
 
