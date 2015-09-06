@@ -34,7 +34,7 @@ public class MultiMarkdownFxLinkRenderer extends LinkRenderer {
 
     @Override public Rendering render(AnchorLinkNode node) {
         String name = node.getName();
-        return new Rendering('#' + name, node.getText()).withAttribute("name", name).withAttribute("class", "anchor");
+        return new Rendering('#' + name, node.getText()).withAttribute("name", name).withAttribute("id", name).withAttribute("class", "anchor");
     }
 
     @Override public Rendering render(AutoLinkNode node) {

@@ -40,53 +40,71 @@ import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.ex.DocumentEx;
 import com.intellij.openapi.editor.highlighter.EditorHighlighterFactory;
 import com.intellij.openapi.editor.impl.EditorImpl;
-import com.intellij.openapi.fileEditor.FileEditor;
-import com.intellij.openapi.fileEditor.FileEditorLocation;
-import com.intellij.openapi.fileEditor.FileEditorState;
-import com.intellij.openapi.fileEditor.FileEditorStateLevel;
+import com.intellij.openapi.fileEditor.*;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.UserDataHolderBase;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.components.JBScrollPane;
+import com.intellij.util.ui.UIUtil;
+import com.sun.webkit.dom.HTMLImageElementImpl;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import netscape.javascript.JSException;
+import netscape.javascript.JSObject;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pegdown.LinkRenderer;
 import org.pegdown.ParsingTimeoutException;
 import org.pegdown.PegDownProcessor;
+import org.pegdown.ToHtmlSerializer;
 import org.pegdown.ast.RootNode;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.events.EventListener;
+import org.w3c.dom.events.EventTarget;
 
 import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements FileEditor {
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownFxPreviewEditor.class);
 
     private static final Logger LOGGER = Logger.getInstance(MultiMarkdownFxPreviewEditor.class);
 
-    public static final String PREVIEW_EDITOR_NAME = MultiMarkdownBundle.message("multimarkdown.fxpreview-tab-name");
+    public static final String PREVIEW_EDITOR_NAME = MultiMarkdownBundle.message("multimarkdown.preview-tab-name");
 
-    public static final String TEXT_EDITOR_NAME = MultiMarkdownBundle.message("multimarkdown.fxhtml-tab-name");
+    public static final String TEXT_EDITOR_NAME = MultiMarkdownBundle.message("multimarkdown.html-tab-name");
 
     /** The {@link Component} used to render the HTML preview. */
     protected final JPanel jEditorPane;
     private WebView webView;
     private WebEngine webEngine;
     private final JFXPanel jfxPanel;
+    private String scrollOffset = null;
+    private RootNode astRoot = null;
 
     /** The {@link JBScrollPane} allowing to browse {@link #jEditorPane}. */
     protected final JBScrollPane scrollPane;
@@ -111,7 +129,9 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
 
     private Project project;
 
-    private LinkRenderer linkRenderer;
+    private LinkRenderer linkRendererNormal;
+    private LinkRenderer linkRendererModified;
+    private String pageScript = null;
 
     public static boolean isShowModified() {
         return MultiMarkdownGlobalSettings.getInstance().showHtmlTextAsModified.getValue();
@@ -131,14 +151,6 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
 
     public static boolean isDarkTheme() {
         return MultiMarkdownGlobalSettings.getInstance().isDarkUITheme();
-    }
-
-    public static boolean isIconBullets() {
-        return MultiMarkdownGlobalSettings.getInstance().iconBullets.getValue();
-    }
-
-    public static boolean isIconTasks() {
-        return MultiMarkdownGlobalSettings.getInstance().iconTasks.getValue();
     }
 
     public static String getCustomCss() {
@@ -204,11 +216,11 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
      * Build a new instance of {@link MultiMarkdownFxPreviewEditor}.
      *
      * @param project  the {@link Project} containing the document
-     * @param document the {@link Document} previewed in this editor.
+     * @param doc the {@link Document} previewed in this editor.
      */
-    public MultiMarkdownFxPreviewEditor(@NotNull final Project project, @NotNull Document document, boolean isRawHtml) {
+    public MultiMarkdownFxPreviewEditor(@NotNull final Project project, @NotNull Document doc, boolean isRawHtml) {
         this.isRawHtml = isRawHtml;
-        this.document = document;
+        this.document = doc;
         this.project = project;
 
         // Listen to the document modifications.
@@ -228,7 +240,8 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
             }
         });
 
-        linkRenderer = new MultiMarkdownFxLinkRenderer();
+        linkRendererModified = new MultiMarkdownFxLinkRenderer();
+        linkRendererNormal = new MultiMarkdownFxLinkRenderer();
 
         if (isRawHtml) {
             jEditorPane = null;
@@ -238,7 +251,6 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
             webEngine = null;
             Language language = Language.findLanguageByID("HTML");
             FileType fileType = language != null ? language.getAssociatedFileType() : null;
-            //myTextViewer = new EditorTextField(EditorFactory.getInstance().createDocument(""), project, fileType, true, false);
             Document myDocument = EditorFactory.getInstance().createDocument("");
             myTextViewer = (EditorImpl) EditorFactory.getInstance().createViewer(myDocument, project);
             if (fileType != null) myTextViewer.setHighlighter(EditorHighlighterFactory.getInstance().createEditorHighlighter(project, fileType));
@@ -263,6 +275,133 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                     AnchorPane.setRightAnchor(webView, 0.0);
                     anchorPane.getChildren().add(webView);
                     jfxPanel.setScene(new Scene(anchorPane));
+
+                    webEngine.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {
+                        @Override
+                        public void changed(ObservableValue<? extends Worker.State> observable, Worker.State oldState, Worker.State newState) {
+                            if (newState == Worker.State.SUCCEEDED) {
+                                EventListener listener = new EventListener() {
+                                    @Override public void handleEvent(org.w3c.dom.events.Event evt) {
+                                        evt.stopPropagation();
+                                        evt.preventDefault();
+                                        Element link = (Element) evt.getCurrentTarget();
+                                        org.w3c.dom.Document doc = webEngine.getDocument();
+                                        String href = link.getAttribute("href");
+                                        if (href.charAt(0) == '#') {
+                                            // tries to go to an anchor
+                                            String hrefName = href.substring(1);
+                                            // scroll it into view
+                                            try {
+                                                JSObject result = (JSObject) webEngine.executeScript("(function () {\n" +
+                                                        "    var elemTop = 0;\n" +
+                                                        "    var elems = '';\n" +
+                                                        "    var elem = window.document.getElementById('" + hrefName + "');\n" +
+                                                        "    if (!elem) {\n" +
+                                                        "        var elemList = window.document.getElementsByTagName('a');\n" +
+                                                        "        for (a in elemList) {\n" +
+                                                        "            var aElem = elemList[a]\n" +
+                                                        "            if (aElem.hasOwnProperty('name') && aElem.name == '" + hrefName + "') {\n" +
+                                                        "                elem = aElem;\n" +
+                                                        "                break;\n" +
+                                                        "            }\n" +
+                                                        "        }\n" +
+                                                        "    }\n" +
+                                                        "    if (elem) {\n" +
+                                                        "        while (elem && elem.tagName !== 'HTML') {\n" +
+                                                        "            elems += ',' + elem.tagName + ':' + elem.offsetTop\n" +
+                                                        "            if (elem.offsetTop) {\n" +
+                                                        "                elemTop += elem.offsetTop;\n" +
+                                                        "                break;\n" +
+                                                        "            }\n" +
+                                                        "            elem = elem.parentNode\n" +
+                                                        "        }\n" +
+                                                        "    }\n" +
+                                                        "    return { elemTop: elemTop, elems: elems, found: !!elem };\n" +
+                                                        "})()" +
+                                                        "");
+                                                int elemTop = (Integer) result.getMember("elemTop");
+                                                boolean elemFound = (Boolean) result.getMember("found");
+                                                String parentList = (String) result.getMember("elems");
+                                                logger.trace(parentList);
+                                                if (elemFound) webEngine.executeScript("window.scroll(0, " + elemTop + ")");
+                                            } catch (JSException ex) {
+                                                String error = ex.toString();
+                                                logger.error("JSException on script", ex);
+                                            }
+                                        } else {
+                                            // TODO: we should really handle all of them
+                                            if (Desktop.isDesktopSupported()) {
+                                                try {
+                                                    Desktop.getDesktop().browse(new URI(href));
+                                                } catch (URISyntaxException ex) {
+                                                    // invalid URI, just log
+                                                    logger.error("URISyntaxException on '" + href + "'" + ex.toString());
+                                                } catch (IOException ex) {
+                                                    logger.error("IOException on '" + href + "'"+ ex.toString());
+                                                }
+                                            }
+                                        }
+                                    }
+                                };
+
+                                org.w3c.dom.Document doc = webEngine.getDocument();
+                                Element el = doc.getElementById("a");
+                                NodeList nodeList = doc.getElementsByTagName("a");
+                                for (int i = 0; i < nodeList.getLength(); i++) {
+                                    ((EventTarget) nodeList.item(i)).addEventListener("click", listener, false);
+                                }
+
+                                // see if we need to change img tag src to a resource, if the src is relative
+                                nodeList = doc.getElementsByTagName("img");
+                                for (int i = 0; i < nodeList.getLength(); i++) {
+                                    HTMLImageElementImpl imgNode = (HTMLImageElementImpl) nodeList.item(i);
+                                    String src = imgNode.getSrc();
+                                    if (src.charAt(0) == '#') {
+                                        // it is resource based, get name and provide the right src
+                                        if ("#bullet".equals(src)) {
+                                            // provide bullet, just for fun
+                                            imgNode.setWidth("12");
+                                            imgNode.setHeight("12");
+                                            imgNode.setSrc(getClass().getResource(UIUtil.isRetina() ? "/com/vladsch/idea/multimarkdown/bullet@2x.png.png": "/com/vladsch/idea/multimarkdown/bullet.png").toExternalForm());
+                                        } else if ("#opentask".equals(src)) {
+                                            // provide bullet, just for fun
+                                            imgNode.setWidth("12");
+                                            imgNode.setHeight("12");
+                                            imgNode.setSrc(getClass().getResource(UIUtil.isRetina() ? "/com/vladsch/idea/multimarkdown/opentask@2x.png": "/com/vladsch/idea/multimarkdown/opentask.png").toExternalForm());
+                                        } else if ("#closedtask".equals(src)) {
+                                            // provide bullet, just for fun
+                                            imgNode.setWidth("12");
+                                            imgNode.setHeight("12");
+                                            imgNode.setSrc(getClass().getResource(UIUtil.isRetina() ? "/com/vladsch/idea/multimarkdown/closedtask@2x.png": "/com/vladsch/idea/multimarkdown/closedtask.png").toExternalForm());
+                                        }
+                                    } else if (!src.startsWith("http://") && !src.startsWith("https://") && !src.startsWith("file://")) {
+                                        // relative to document, change it to absolute file://
+                                        final VirtualFile localImage = MultiMarkdownPathResolver.resolveRelativePath(document, src);
+                                        try {
+                                            if (localImage != null && localImage.exists()) {
+                                                imgNode.setSrc(String.valueOf(new File(localImage.getPath()).toURI().toURL()));
+                                            }
+                                        } catch (MalformedURLException e) {
+                                            logger.error("MalformedURLException", e);
+                                        }
+                                    }
+                                    int tmp = 0;
+                                }
+
+                                JSObject jsobj = (JSObject) webEngine.executeScript("window");
+                                jsobj.setMember("java", new JSBridge());
+                                if (pageScript != null && pageScript.length() > 0) {
+                                    webEngine.executeScript(pageScript);
+                                }
+
+                                // restore scroll if we had it
+                                if (scrollOffset != null) {
+                                    webEngine.executeScript(scrollOffset);
+                                    scrollOffset = null;
+                                }
+                            }
+                        }
+                    });
                 }
             });
 
@@ -281,6 +420,12 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         }
 
         checkNotifyUser();
+    }
+
+    // call backs from JavaScript will be handled by the bridge
+    public static class JSBridge {
+        public JSBridge() {
+        }
     }
 
     protected void delayedHtmlPreviewUpdate(final boolean fullKit) {
@@ -446,12 +591,20 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         });
     }
 
-    private String markdownToHtml(String markdownSource) {
-        try {
-            RootNode astRoot = processor.get().parseMarkdown(markdownSource.toCharArray());
-            return new MultiMarkdownToHtmlSerializer(linkRenderer).toHtml(astRoot);
-        } catch (ParsingTimeoutException e) {
+    private String markdownToHtml(boolean modified) {
+        if (astRoot == null) {
             return "<strong>Parser timed out</strong>";
+        }
+        else {
+            return modified ? new MultiMarkdownToHtmlSerializer(linkRendererModified).toHtml(astRoot) : new ToHtmlSerializer(linkRendererNormal).toHtml(astRoot);
+        }
+    }
+
+    private void parseMarkdown(String markdownSource) {
+        try {
+            astRoot = processor.get().parseMarkdown(markdownSource.toCharArray());
+        } catch (ParsingTimeoutException e) {
+            astRoot = null;
         }
     }
 
@@ -463,8 +616,9 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
 
         if (previewIsObsolete && isEditorTabVisible && (isActive || force)) {
             try {
-                final String html = markdownToHtml(document.getText());
-                final String htmlTxt = makeHtmlPage(isShowModified() ? postProcessHtml(html) : html);
+                parseMarkdown(document.getText());
+                final String html = makeHtmlPage(markdownToHtml(true));
+                final String htmlTxt = isShowModified() ? html : markdownToHtml(false);
                 if (isRawHtml) {
                     //myTextViewer.setText(htmlTxt);
                     updateRawHtmlText(htmlTxt);
@@ -472,7 +626,10 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            webView.getEngine().loadContent(htmlTxt);
+                            // TODO: add option to enable/disable keeping scroll position on update
+                            JSObject scrollPos = (JSObject) webEngine.executeScript("({ x: window.pageXOffset, y: window.pageYOffset })");
+                            scrollOffset = "window.scroll(" + scrollPos.getMember("x") + ", " + scrollPos.getMember("y") + ")";
+                            webEngine.loadContent(html);
                         }
                     });
                 }
@@ -503,155 +660,22 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     }
 
     protected String makeHtmlPage(String html) {
-        String result = "<style>\n" +
-                "    .markdown-body {\n" +
-                "        min-width: 200px;\n" +
-                "        max-width: 790px;\n" +
-                "        margin: 0 auto;\n" +
-                "        padding: 30px;\n" +
-                "    }\n" +
-                "</style>\n" +
-                "<body class=\"markdown-body\">\n" +
+        VirtualFile file = FileDocumentManager.getInstance().getFile(document);
+        String result = "" +
+                "<body>\n" +
+                "<div class=\"container\">\n" +
+                "<div id=\"readme\" class=\"boxed-group\">\n" +
+                "<h3>\n" +
+                "   <span class=\"bookicon octicon-book\"></span>\n" +
+                "  " + file.getName() + "\n" +
+                "</h3>\n" +
+                "<article class=\"markdown-body\">\n" +
                 "";
         result += html;
+        result += "</article>\n";
+        result += "</div>\n";
+        result += "</div>\n";
         result += "</body>\n";
-        return result;
-    }
-
-    protected String postProcessHtml(String html) {
-        // scan for <table>, </table>, <tr>, </tr> and other tags we modify, this could be done with a custom plugin to pegdown but
-        // then it would be more trouble to get un-modified HTML.
-        String result = "";//"<body class=\"multimarkdown-preview\">\n";
-        String regex = "(<table>|<thead>|<tbody>|<tr>|<hr/>|<del>|</del>|</p>";
-        String regexTail = "|<li>\\n*\\s*<p>";
-        boolean isDarkTheme = isDarkTheme();
-        boolean taskLists = isTaskLists();
-        boolean iconTasks = isIconTasks();// && !isDarkTheme;
-        boolean iconBullets = isIconBullets();// && !isDarkTheme;
-
-        if (taskLists) {
-            regex += "|<li class=\"task-list-item\">\\n*\\s*<p>|<li class=\"task-list-item\">|<li>\\[x\\]\\s*|<li>\\[ \\]\\s*|<li>\\n*\\s*<p>\\[x\\]\\s*|<li>\\n*\\s*<p>\\[ \\]\\s*";
-        }
-        if (iconBullets) {
-            regex += "|<ul>|<ol>|</ul>|</ol>";
-            regexTail += "|<li>";
-        }
-        regex += regexTail;
-        regex += ")";
-
-        Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        Matcher m = p.matcher(html);
-        int lastPos = 0;
-        int rowCount = 0;
-        boolean[] isOrderedList = new boolean[20];
-        int listDepth = -1;
-
-        while (m.find()) {
-            String found = m.group();
-            if (lastPos < m.start(0)) {
-                result += html.substring(lastPos, m.start(0));
-            }
-
-            if (found.equals("</p>")) {
-                result += found;
-            } else if (found.equals("<table>")) {
-                rowCount = 0;
-                result += found;
-            } else if (found.equals("<thead>")) {
-                result += found;
-            } else if (found.equals("<tbody>")) {
-                result += found;
-            } else if (found.equals("/>")) {
-                result += ">";
-            } else if (iconBullets && found.equals("<ol>")) {
-                if (listDepth + 1 >= isOrderedList.length) listDepth = isOrderedList.length - 2;
-                isOrderedList[++listDepth] = true;
-                result += found;
-            } else if (iconBullets && found.equals("</ol>")) {
-                if (listDepth >= 0) listDepth--;
-                result += found;
-            } else if (iconBullets && found.equals("<ul>")) {
-                if (listDepth + 1 >= isOrderedList.length) listDepth = isOrderedList.length - 2;
-                isOrderedList[++listDepth] = false;
-                result += found;
-            } else if (iconBullets && found.equals("</ul>")) {
-                if (listDepth >= 0) listDepth--;
-                result += found;
-            } else if (found.equals("<tr>")) {
-                rowCount++;
-                result += "<tr class=\"" + (rowCount == 1 ? "first-child" : (rowCount & 1) != 0 ? "odd-child" : "even-child") + "\">";
-            } else if (found.equals("<hr/>")) {
-                result += "<div class=\"hr\">&nbsp;</div>";
-            } else if (found.equals("<del>")) {
-                result += "<span class=\"del\">";
-            } else if (found.equals("</del>")) {
-                result += "</span>";
-            } else if (iconBullets && listDepth >= 0 && !isOrderedList[listDepth] && found.equals("<li>")) {
-                //result += "<li class=\"bullet\"><input type=\"checkbox\" class=\"list-item-bullet\"></input>";
-                result += "<li class=\"bulleti\"><img width=\"12\" height=\"12\" class=\"bullet\" />&nbsp;";
-                //result += "<li class=\"bullet\">";
-            } else {
-                found = found.trim();
-                if (taskLists && found.equals("<li>[x]")) {
-                    if (!iconTasks) result += "<li class=\"dtask\">";
-                    else {
-                        //result += "<li class=\"task\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" checked=\"checked\" disabled=\"disabled\">";
-                        result += "<li class=\"taski\"><img width=\"12\" height=\"12\" class=\"task-checked\" />&nbsp;";
-                        //result += "<li class=\"task-chk\">";
-                    }
-                } else if (taskLists && found.equals("<li>[ ]")) {
-                    if (!iconTasks) result += "<li class=\"dtask\">";
-                    else {
-                        //result += "<li class=\"task\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" disabled=\"disabled\">";
-                        result += "<li class=\"taski\"><img width=\"12\" height=\"12\" class=\"task\" />&nbsp;";
-                        //result += "<li class=\"task\">";
-                    }
-                } else if (taskLists && found.equals("<li class=\"task-list-item\">")) {
-                    result += "<li class=\"taski\">";
-                } else {
-                    // here we have <li>\n*\s*<p>, need to strip out \n*\s* so we can match them easier
-                    String foundWithP = found;
-                    foundWithP = foundWithP.replaceAll("<li>\\n*\\s*<p>", "<li><p>");
-                    found = foundWithP.replaceAll("<li class=\"task-list-item\">\\n*\\s*<p>", "<li class=\"task\"><p>");
-                    found = found.trim();
-                    if (found.equals("<li><p>")) {
-                        if (iconBullets && listDepth >= 0 && !isOrderedList[listDepth]) {
-                            //result += "<li class=\"bulletp\"><p class=\"p\"><input type=\"checkbox\" class=\"list-item-bullet\"></input>";
-                            result += "<li class=\"bulletp\"><p class=\"p\"><img width=\"12\" height=\"12\" class=\"bullet\" />&nbsp;";
-                            //result += "<li class=\"bulletp\"><p class=\"p\">";
-                        } else {
-                            result += "<li class=\"p\"><p class=\"p\">";
-                        }
-                    } else if (taskLists && found.equals("<li><p>[x]")) {
-                        if (!iconTasks) result += "<li class=\"dtaskp\"><p class=\"p\">";
-                        else {
-                            //result += "<li class=\"taskp\"><p class=\"p\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" checked=\"checked\" disabled=\"disabled\">";
-                            result += "<li class=\"taskp\"><p class=\"p\"><img width=\"12\" height=\"12\" class=\"task-checked\" />&nbsp;";
-                            //result += "<li class=\"taskp-chk\"><p class=\"p\">";
-                        }
-                    } else if (taskLists && found.equals("<li><p>[ ]")) {
-                        if (!iconTasks) result += "<li class=\"dtaskp\"><p class=\"p\">";
-                        else {
-                            //result += "<li class=\"taskp\"><p class=\"p\"><input type=\"checkbox\" class=\"task-list-item-checkbox\" disabled=\"disabled\">";
-                            result += "<li class=\"taskp\"><p class=\"p\"><img width=\"12\" height=\"12\" class=\"task\" />&nbsp;";
-                            //result += "<li class=\"taskp\"><p class=\"p\">";
-                        }
-                    } else if (taskLists && found.equals("<li class=\"task-list-item\"><p>")) {
-                        result += "<li class=\"taskp\"><p class=\"p\">";
-                    } else {
-                        result += found;
-                    }
-                }
-            }
-
-            lastPos = m.end(0);
-        }
-
-        if (lastPos < html.length()) {
-            result += html.substring(lastPos);
-        }
-
-        //result += "\n</body>\n";
         return result;
     }
 
@@ -719,8 +743,8 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         if (!isReleased) {
             isReleased = true;
             if (jEditorPane != null) {
-                //jEditorPane.removeAll();
-                jEditorPane.removeNotify();
+                jEditorPane.removeAll();
+                //jEditorPane.removeNotify();
             }
 
             if (globalSettingsListener != null) {

@@ -15,10 +15,7 @@
           <root url="file://$MODULE_DIR$/lib" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES>
-          <root url="file://$MODULE_DIR$/../pegdown/src/main/java" />
-          <root url="jar://$MODULE_DIR$/lib/pegdown-1.5.0-sources.jar!/" />
-        </SOURCES>
+        <SOURCES />
         <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" />
       </library>
     </orderEntry>
@@ -32,6 +29,5 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" exported="" name="jfxrt" level="project" />
   </component>
 </module>
