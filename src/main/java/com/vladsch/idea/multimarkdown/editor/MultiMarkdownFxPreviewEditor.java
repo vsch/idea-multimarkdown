@@ -24,6 +24,7 @@
 package com.vladsch.idea.multimarkdown.editor;
 
 import com.intellij.codeHighlighting.BackgroundEditorHighlighter;
+import com.intellij.ide.plugins.cl.PluginClassLoader;
 import com.intellij.ide.structureView.StructureViewBuilder;
 import com.intellij.lang.Language;
 import com.intellij.openapi.application.Application;
@@ -50,6 +51,7 @@ import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.ui.UIUtil;
 import com.sun.webkit.dom.HTMLImageElementImpl;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
+import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
 import javafx.application.Platform;
@@ -84,10 +86,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements FileEditor {
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownFxPreviewEditor.class);
@@ -212,11 +213,24 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         //settings.endSuspendNotifications();
     }
 
+    private class MyJFXPanel extends JFXPanel {
+        @Override public void addNotify() {
+            super.addNotify();
+            return;
+        }
+
+        @Override
+        public void removeNotify() {
+            super.removeNotify();
+            return;
+        }
+    }
+
     /**
      * Build a new instance of {@link MultiMarkdownFxPreviewEditor}.
      *
-     * @param project  the {@link Project} containing the document
-     * @param doc the {@link Document} previewed in this editor.
+     * @param project the {@link Project} containing the document
+     * @param doc     the {@link Document} previewed in this editor.
      */
     public MultiMarkdownFxPreviewEditor(@NotNull final Project project, @NotNull Document doc, boolean isRawHtml) {
         this.isRawHtml = isRawHtml;
@@ -258,7 +272,9 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
             // Setup the editor pane for rendering HTML.
             myTextViewer = null;
             jEditorPane = new JPanel(new BorderLayout(), true);
-            jfxPanel = new JFXPanel(); // initializing javafx
+
+            PluginClassLoader pluginClassLoader =MultiMarkdownPlugin.getInstance(project).getClassLoader();
+            jfxPanel = new MyJFXPanel(); // initializing javafx
             jEditorPane.add(jfxPanel, BorderLayout.CENTER);
             Platform.setImplicitExit(false);
             Platform.runLater(new Runnable() {
@@ -267,7 +283,6 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                     webView = new WebView();
                     webEngine = webView.getEngine();
                     webEngine.setUserStyleSheetLocation(getClass().getResource("/com/vladsch/idea/multimarkdown/defaultfx.css").toExternalForm());
-
                     AnchorPane anchorPane = new AnchorPane();
                     AnchorPane.setTopAnchor(webView, 0.0);
                     AnchorPane.setBottomAnchor(webView, 0.0);
@@ -275,6 +290,10 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                     AnchorPane.setRightAnchor(webView, 0.0);
                     anchorPane.getChildren().add(webView);
                     jfxPanel.setScene(new Scene(anchorPane));
+                    //jfxPanel.setScene(new Scene(webView));
+
+                    // TODO: add zoom control to the page using popups or actions
+                    //webView.setZoom(javafx.stage.Screen.getPrimary().getDpi() / 96);
 
                     webEngine.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {
                         @Override
@@ -337,7 +356,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                                                     // invalid URI, just log
                                                     logger.error("URISyntaxException on '" + href + "'" + ex.toString());
                                                 } catch (IOException ex) {
-                                                    logger.error("IOException on '" + href + "'"+ ex.toString());
+                                                    logger.error("IOException on '" + href + "'" + ex.toString());
                                                 }
                                             }
                                         }
@@ -362,21 +381,23 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                                             // provide bullet, just for fun
                                             imgNode.setWidth("12");
                                             imgNode.setHeight("12");
-                                            imgNode.setSrc(getClass().getResource(UIUtil.isRetina() ? "/com/vladsch/idea/multimarkdown/bullet@2x.png.png": "/com/vladsch/idea/multimarkdown/bullet.png").toExternalForm());
+                                            imgNode.setSrc(getClass().getResource(UIUtil.isRetina() ? "/com/vladsch/idea/multimarkdown/bullet@2x.png.png" : "/com/vladsch/idea/multimarkdown/bullet.png").toExternalForm());
                                         } else if ("#opentask".equals(src)) {
                                             // provide bullet, just for fun
                                             imgNode.setWidth("12");
                                             imgNode.setHeight("12");
-                                            imgNode.setSrc(getClass().getResource(UIUtil.isRetina() ? "/com/vladsch/idea/multimarkdown/opentask@2x.png": "/com/vladsch/idea/multimarkdown/opentask.png").toExternalForm());
+                                            imgNode.setSrc(getClass().getResource(UIUtil.isRetina() ? "/com/vladsch/idea/multimarkdown/opentask@2x.png" : "/com/vladsch/idea/multimarkdown/opentask.png").toExternalForm());
                                         } else if ("#closedtask".equals(src)) {
                                             // provide bullet, just for fun
                                             imgNode.setWidth("12");
                                             imgNode.setHeight("12");
-                                            imgNode.setSrc(getClass().getResource(UIUtil.isRetina() ? "/com/vladsch/idea/multimarkdown/closedtask@2x.png": "/com/vladsch/idea/multimarkdown/closedtask.png").toExternalForm());
+                                            imgNode.setSrc(getClass().getResource(UIUtil.isRetina() ? "/com/vladsch/idea/multimarkdown/closedtask@2x.png" : "/com/vladsch/idea/multimarkdown/closedtask.png").toExternalForm());
                                         }
                                     } else if (!src.startsWith("http://") && !src.startsWith("https://") && !src.startsWith("file://")) {
                                         // relative to document, change it to absolute file://
-                                        final VirtualFile localImage = MultiMarkdownPathResolver.resolveRelativePath(document, src);
+                                        VirtualFile file = FileDocumentManager.getInstance().getFile(document);
+                                        VirtualFile parent = file == null ? null : file.getParent();
+                                        final VirtualFile localImage = parent == null ? null : parent.findFileByRelativePath(src);
                                         try {
                                             if (localImage != null && localImage.exists()) {
                                                 imgNode.setSrc(String.valueOf(new File(localImage.getPath()).toURI().toURL()));
@@ -594,8 +615,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     private String markdownToHtml(boolean modified) {
         if (astRoot == null) {
             return "<strong>Parser timed out</strong>";
-        }
-        else {
+        } else {
             return modified ? new MultiMarkdownToHtmlSerializer(linkRendererModified).toHtml(astRoot) : new ToHtmlSerializer(linkRendererNormal).toHtml(astRoot);
         }
     }

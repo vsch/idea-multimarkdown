@@ -43,7 +43,7 @@ public class MultiMarkdownFxHtmlEditorProvider implements FileEditorProvider, Po
 
     @NotNull
     public FileEditor createEditor(@NotNull Project project, @NotNull VirtualFile file) {
-        return new MultiMarkdownFxPreviewEditor(project, FileDocumentManager.getInstance().getDocument(file), true);
+        return MultiMarkdownFxPreviewEditorProvider.createEditor(project, file, true);
     }
 
     public void disposeEditor(@NotNull FileEditor editor) {

@@ -3,13 +3,18 @@ idea-multimarkdown
 
 **[Markdown](http://daringfireball.net/projects/markdown) language support for [IntelliJ IDEA](http://www.jetbrains.com/idea), [RubyMine](http://www.jetbrains.com/ruby), [PhpStorm](http://www.jetbrains.com/phpstorm), [WebStorm](http://www.jetbrains.com/webstorm), [PyCharm](http://www.jetbrains.com/pycharm), [AppCode](http://www.jetbrains.com/objc) and [Android Studio](http://developer.android.com/sdk/installing/studio.html).**
 
-**<span color="#c00038">If you like this plugin, please leave a comment or rate it on the</span> [official plugin comment and rate page](https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896).**
+**<span color="#c00038">If you like this plugin, please leave a comment or rate it on the</span> [official plugin comment and rate page](https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896).** For any communications requiring a reply please use the GitHub Issues page for this plugin. There is no ability to reply or see the comments left on the official JetBrains plugin comment and rate page.   
 
 **You can download it on the [official plugin page](https://plugins.jetbrains.com/plugin?pr=&pluginId=7896).**
 
-### Version 1.0.25 of this plugin will probably be the last one that will work with JDK 1.6
+### Version 1.1.0 will work with JDK 1.6 with a catch
 
-I have implemented a javafx WebView based HTML Preview Tab and the results are stunning. Not only was I able to make it look like GitHub's markdown but it is a joy to work with and maintain compared to HTMLEditorKit. Here is a screen shot of the upcoming release of Version 1.1.0 of the plugin's HTML Preview and GitHub of this readme file. It will require that you run your IDEA on JDK 1.8 and on the Mac you cannot run it on the IDEA bundled JDK because it does not include the native libraries needed for javafx.    
+I have implemented a javafx WebView based HTML Preview Tab and the results are stunning. Not only was I able to make it look like GitHub's markdown but it is a joy to work with and maintain compared to HTMLEditorKit. It does require that you run your IDEA on JDK 1.8 and on the Mac you cannot run it on the IDEA bundled JDK because it does not include the native libraries needed for javafx.    
+
+The new JavaFX WebView based HTML Preview requires jdk 1.8. However, if the jfxrt.jar is not found in the JAVA_HOME/lib/ext directory the plugin will 
+fall back to using the JEditorPane with HTMLEditorKit preview. Ugly but it works on older installations.
+
+Here is a screen shot of the upcoming release of Version 1.1.0 of the plugin's HTML Preview and GitHub of this readme file: 
 
 ![Preview](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_jfx_webview.png)
 

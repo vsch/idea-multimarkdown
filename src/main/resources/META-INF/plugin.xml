@@ -51,7 +51,8 @@
     <p>
     <b>1.1.0</b><br/>
       <ul>
-        <li>: Change HTML Preview now using javafx WebView, <strong>requires jre 1.8+ as boot jdk for IDEA</strong>. Big Improvement on compatibility with browsers.</li>
+        <li>: Change HTML Preview now using javafx WebView, <strong>requires jre 1.8+ with JavaFX library under Java Home/lib/ext directory</strong>. Big Improvement on compatibility with browsers.</li>
+        <li>: Add If JavaFX library is not found then the plugin will fall back to using the old JEditorPane HTML Preview</li>
         <li>: Fix issue #16, No longer applicable with new HTML rendering engine.</li>
         <li>: Fix issue #17, No longer applicable with new HTML rendering engine.</li>
         <li>: Fix Two or more blank lines would end a list and start a new one, pegdown.</li>
@@ -244,6 +245,13 @@
     </p>
     <p>&nbsp;</p>
     ]]></change-notes>
+
+  <!-- Plugin's application components -->
+  <project-components>
+    <component>
+      <implementation-class>com.vladsch.idea.multimarkdown.MultiMarkdownPlugin</implementation-class>
+    </component>
+  </project-components>
 
   <extensions defaultExtensionNs="com.intellij">
     <fileTypeFactory implementation="com.vladsch.idea.multimarkdown.MultiMarkdownFileTypeFactory"/>

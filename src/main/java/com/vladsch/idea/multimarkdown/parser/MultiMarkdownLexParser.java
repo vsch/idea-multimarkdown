@@ -344,9 +344,9 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
                 LexerToken t2 = lexemes.get(i + 1);
                 if (t1.compare(t2) > 0 || t1.getRange().doesOverlap(t2.getRange())) {
                     int tmp = 0;
-                    assert false;
+                    //assert false;
                 }
-                assert (!t1.getRange().doesOverlap(t2.getRange()));
+                //assert (!t1.getRange().doesOverlap(t2.getRange()));
             }
 
             LexerToken[] lexerTokens = new LexerToken[lexemes.size()];
@@ -380,11 +380,11 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
                 } else if (!range.doesContain(range1)) {
                     if (!range.doesNotOverlap(range1)) {
                         int tmp = 0;
-                        assert false;
+                        //assert false;
                     }
                     if (range.compare(range1) <= 0) {
                         int tmp = 0;
-                        assert false;
+                        //assert false;
                     }
                     lexemes.add(token);
                     token = tokens[start];
@@ -1001,7 +1001,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
             }
             if (entryStackLevel != parentRanges.size()) {
                 int tmp = 0;
-                assert false;
+                //assert false;
             }
         }
 
@@ -1091,7 +1091,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
 
         public boolean exclude(Range that) {
             // lets make sure we don't need to split into 2 ranges
-            assert (doesOverlap(that) && !doesProperlyContain(that));
+            //assert (doesOverlap(that) && !doesProperlyContain(that));
 
             if (start >= that.start && start < that.end) start = that.end;
             if (end <= that.end && end > that.start) end = that.start;
