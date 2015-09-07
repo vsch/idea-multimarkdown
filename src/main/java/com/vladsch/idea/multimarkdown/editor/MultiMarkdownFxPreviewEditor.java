@@ -376,9 +376,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                                         }
                                     } else if (!src.startsWith("http://") && !src.startsWith("https://") && !src.startsWith("file://")) {
                                         // relative to document, change it to absolute file://
-                                        VirtualFile file = FileDocumentManager.getInstance().getFile(document);
-                                        VirtualFile parent = file == null ? null : file.getParent();
-                                        final VirtualFile localImage = parent == null ? null : parent.findFileByRelativePath(src);
+                                        final VirtualFile localImage = MultiMarkdownPathResolver.resolveRelativePath(document, src);
                                         try {
                                             if (localImage != null && localImage.exists()) {
                                                 imgNode.setSrc(String.valueOf(new File(localImage.getPath()).toURI().toURL()));
