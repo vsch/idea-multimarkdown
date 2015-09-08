@@ -65,6 +65,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSException;
 import netscape.javascript.JSObject;
+import org.apache.commons.net.util.Base64;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -87,11 +88,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import org.apache.commons.codec.binary.Base64;
 
 public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements FileEditor {
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownFxPreviewEditor.class);
@@ -138,6 +137,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     private LinkRenderer linkRendererModified;
     private String pageScript = null;
     private boolean needStyleSheetUpdate;
+    private File cssCustomFile;
 
     public static boolean isShowModified() {
         return MultiMarkdownGlobalSettings.getInstance().showHtmlTextAsModified.getValue();
@@ -263,6 +263,13 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
 
         linkRendererModified = new MultiMarkdownFxLinkRenderer();
         linkRendererNormal = new MultiMarkdownFxLinkRenderer();
+
+        try {
+            cssCustomFile = File.createTempFile("multimarkdown", "custom.css");
+            cssCustomFile.deleteOnExit();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         if (isRawHtml) {
             jEditorPane = null;
@@ -496,10 +503,19 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         if (isRawHtml) return;
 
         String cssURL = getClass().getResource(MultiMarkdownGlobalSettings.getInstance().getCssFilePath()).toExternalForm();
-        if (MultiMarkdownGlobalSettings.getInstance().useCustomCss()) {
-            cssURL = "data:css/text;charset=utf-8;base64," + Base64.encodeBase64URLSafeString(MultiMarkdownGlobalSettings.getInstance().getCssText().getBytes(Charset.forName("utf-8")));
+        if (MultiMarkdownGlobalSettings.getInstance().useCustomCss() && cssCustomFile != null) {
+            try {
+                FileWriter cssFile = new FileWriter(cssCustomFile);
+                cssFile.write(MultiMarkdownGlobalSettings.getInstance().getCssText());
+                cssFile.close();
+                //cssURL = "data:css/stylesheet;charset=utf-8;base64," + Base64.encodeBase64URLSafeString(MultiMarkdownGlobalSettings.getInstance().getCssText().getBytes(StandardCharsets.UTF_8));
+                cssURL = cssCustomFile.toURI().toURL().toExternalForm();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         needStyleSheetUpdate = false;
+        webEngine.setUserStyleSheetLocation(null);
         webEngine.setUserStyleSheetLocation(cssURL);
     }
 

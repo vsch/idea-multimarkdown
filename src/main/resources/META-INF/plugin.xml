@@ -56,8 +56,9 @@
         <li>: Add Setting to allow always using the old preview even if JavaFX is available.</li>
         <li>: Add default-fx.css and darcula-fx.css for the javafx WebView preview page.</li>
         <li>: Add custom font for task items, header link icon and book icon at the page title.</li>
-        <li>: Fix issue #16, No longer applicable with new HTML rendering engine.</li>
-        <li>: Fix issue #17, No longer applicable with new HTML rendering engine.</li>
+        <li>: Fix #16, No longer applicable with new HTML rendering engine.</li>
+        <li>: Fix #17, No longer applicable with new HTML rendering engine.</li>
+        <li>: Fix #4, Not able to handle Gravizo generated images.</li>
         <li>: Fix Two or more blank lines would end a list and start a new one, pegdown.</li>
     </ul>
     <b>1.0.25</b><br/>

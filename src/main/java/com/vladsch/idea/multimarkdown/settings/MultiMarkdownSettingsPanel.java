@@ -38,6 +38,7 @@ import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.util.registry.RegistryValue;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
+import org.apache.commons.net.util.Base64;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,6 +49,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class MultiMarkdownSettingsPanel implements SettingsProvider {
@@ -178,7 +181,10 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
 
         btnLoadDefault.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) {
-                textCustomCss.setText(MultiMarkdownGlobalSettings.getInstance().getCssFileText(htmlThemeComboBox.getSelectedIndex()));
+                String cssFileText = MultiMarkdownGlobalSettings.getInstance().getCssFileText(htmlThemeComboBox.getSelectedIndex());
+                String base64Css = Base64.encodeBase64URLSafeString(MultiMarkdownGlobalSettings.getInstance().getCssText().getBytes(StandardCharsets.UTF_8));
+                String cssText = new String(Base64.decodeBase64(base64Css), StandardCharsets.UTF_8);
+                textCustomCss.setText(cssText);
             }
         });
 

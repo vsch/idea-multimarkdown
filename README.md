@@ -3,23 +3,33 @@ idea-multimarkdown
 
 **[Markdown](http://daringfireball.net/projects/markdown) language support for [IntelliJ IDEA](http://www.jetbrains.com/idea), [RubyMine](http://www.jetbrains.com/ruby), [PhpStorm](http://www.jetbrains.com/phpstorm), [WebStorm](http://www.jetbrains.com/webstorm), [PyCharm](http://www.jetbrains.com/pycharm), [AppCode](http://www.jetbrains.com/objc) and [Android Studio](http://developer.android.com/sdk/installing/studio.html).**
 
-**<span color="#c00038">If you like this plugin, please leave a comment or rate it on the</span> [official plugin comment and rate page](https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896).** For any communications requiring a reply please use the GitHub Issues page for this plugin. There is no ability to reply or see the comments left on the official JetBrains plugin comment and rate page.   
+**<span color="#c00038">If you like this plugin, please rate it on the</span> [plugin comment and rate page](https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896).**
 
-**You can download it on the [official plugin page](https://plugins.jetbrains.com/plugin?pr=&pluginId=7896).**
+**For any communications requiring a reply** please use the [GitHub Issues page](https://github.com/vsch/idea-multimarkdown/issues) for this plugin. There is no ability to reply or see the comments left on the JetBrains plugin comment and rate page.   
 
-### Version 1.1.0 will work with JDK 1.6 with a catch
+**You can download it on the [JebBrains plugin page](https://plugins.jetbrains.com/plugin?pr=&pluginId=7896).**
 
-I have implemented a javafx WebView based HTML Preview Tab and the results are stunning. Not only was I able to make it look like GitHub's markdown but it is a joy to work with and maintain compared to HTMLEditorKit. It does require that you run your IDEA on JDK 1.8 and on the Mac you cannot run it on the IDEA bundled JDK because it does not include the native libraries needed for javafx.    
+### Version 1.1.0 is released
 
-The new JavaFX WebView based HTML Preview requires jdk 1.8. However, if the jfxrt.jar is not found in the JAVA_HOME/lib/ext directory the plugin will 
-fall back to using the JEditorPane with HTMLEditorKit preview. Ugly but it works on older installations.
+I have implemented a JavaFX WebView based HTML Preview Tab and the results are stunning. Not only was I able to make it look like GitHub's markdown, which I could not do with the old preview, but it is a joy to work with and maintain compared to `HTMLEditorKit`. It does require that you run your IDEA on JDK 1.8 with `jfxrt.jar` in the jdk's `lib/ext` directory, which is its standard location. 
 
-Here is a screen shot of the upcoming release of Version 1.1.0 of the plugin's HTML Preview and GitHub of this readme file: 
+Note that you **cannot** run it using the **IDEA bundled JDK** because it does not include the `jfxrt.jar` nor the native libraries needed for it.    
+
+If the `jfxrt.jar` is not found or the plugin cannot create the new editor class, it will fall back to using the `JEditorPane` with `HTMLEditorKit` preview. You can also disable using JavaFX based preview in plugin settings, for those that prefer to keep using the old preview.
+
+**For PHPStorm 9.5 EAP Mac with bundled JDK**
+:  As of release PS 142.4491, you can change the boot jdk from the GUI. However, due to a bug it keeps booting the IDEA with the bundled jdk. To change the boot jdk you need to add a `phpstorm.jdk` file with the path to the alternate jdk, for example:
+ 
+        /Library/Java/JavaVirtualMachines/jdk1.8.0_51.jdk
+
+    to the `/Library/Preferences/WebIde95` directory. Restart your PhpStorm. 
+
+Here is a screenshot of the plugin's HTML Preview and GitHub of this readme file: 
 
 ![Preview](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_jfx_webview.png)
 
 
-The Full Story
+The Background
 --------------
 
 It all started with a desire to see Markdown files in PhpStorm IDE as they would look on GitHub. I was already using [nicoulaj/idea-markdown plugin](https://github.com/nicoulaj/idea-markdown) but found its preview was more like [Craig's List](http://montreal.en.craigslist.ca/) than [GitHub](https://github.com/vsch/laravel-translation-manager). It did not appear to have been recently updated, so I decided to fork it and modify the style sheet it uses. How hard could that be?
@@ -33,7 +43,7 @@ It has been a fun trip down the rabbit hole of IntelliJ IDEA plugin development 
 Hope you enjoy using this plugin and **if you do then please leave a comment or rate it on the [official plugin page](https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896).**
 
 Enhancements
--------------
+------------
 
 - [x] Striped tables
 - [x] GitHub style task list items
@@ -44,6 +54,7 @@ Enhancements
 - [x] Default and Darcula for syntax highlighting and for HTML Preview supported.
     CSS Style sheet for HTML Perview selectable in Settings/Other Settings/MultiMarkdown.
 - [x] Add Lexer to use IntelliJ standard features
+- [x] Add Standard HTML/CSS rendering engine to make styling easier.
 - [ ] Add PsiBuilder compatible parser to implement expected comforts:
     - [ ] formatting
     - [ ] navigation

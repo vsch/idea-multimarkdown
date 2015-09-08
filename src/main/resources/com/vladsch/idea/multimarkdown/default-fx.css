@@ -100,7 +100,7 @@ table tbody tr:nth-child(2n) {
 
 code {
     background-color: rgba(0, 0, 0, 0.06);
-    color: #B00020;
+    /*color: #B00020;*/
 }
 
 .highlight pre,
@@ -119,6 +119,10 @@ kbd {
     border: solid 1px #ccc;
     box-shadow: inset 0 -1px 0 #bbb;
     color: #555;
+}
+
+del {
+    /*text-decoration-color: #B00020;*/
 }
 
 /* the rest */
@@ -179,6 +183,10 @@ strong {
     font-weight: bold;
 }
 
+del {
+    text-decoration: line-through;
+}
+
 h1 {
     font-size: 2em;
     margin: 0.67em 0;
@@ -218,6 +226,89 @@ kbd,
 pre {
     font-family: monospace, monospace;
     font-size: 1em;
+}
+
+code {
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 12px;
+}
+
+pre {
+    margin-top: 0;
+    margin-bottom: 0;
+    font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+
+code {
+    border-radius: 2px;
+    font-size: 85%;
+    margin: 0;
+    padding: 0.2em 0 0.2em 0;
+}
+
+code:before,
+code:after {
+    content: "\00a0";
+    letter-spacing: -0.2em;
+}
+
+pre > code {
+    background: transparent;
+    border: 0;
+    font-size: 100%;
+    margin: 0;
+    padding: 0;
+    white-space: pre;
+    word-break: normal;
+}
+
+.highlight {
+    margin-bottom: 16px;
+}
+
+.highlight pre,
+pre {
+    border-radius: 3px;
+    font-size: 85%;
+    line-height: 1.45;
+    overflow: auto;
+    padding: 16px;
+}
+
+.highlight pre {
+    margin-bottom: 0;
+    word-break: normal;
+}
+
+pre {
+    word-wrap: normal;
+}
+
+pre code {
+    background-color: transparent;
+    border: 0;
+    display: inline;
+    line-height: inherit;
+    margin: 0;
+    max-width: initial;
+    overflow: initial;
+    padding: 0;
+    word-wrap: normal;
+}
+
+pre code:before,
+pre code:after {
+    content: normal;
+}
+
+kbd {
+    border-radius: 3px;
+    display: inline-block;
+    font-size: 11px;
+    font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    line-height: 10px;
+    padding: 3px 5px;
+    vertical-align: middle;
 }
 
 input {
@@ -316,7 +407,7 @@ h6 .octicon-link {
     display: none;
     font-weight: normal;
     margin-left: 8px;
-    vertical-align: bottom;
+    vertical-align: middle;
 }
 
 h1:hover .anchor,
@@ -398,17 +489,6 @@ blockquote {
 
 dd {
     margin-left: 0;
-}
-
-code {
-    font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
-    font-size: 12px;
-}
-
-pre {
-    margin-top: 0;
-    margin-bottom: 0;
-    font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
 }
 
 .octicon {
@@ -517,17 +597,19 @@ ol ol ol {
 
 li.task-list-item {
     list-style-type: none;
-    text-indent: -0.85em;
+    text-indent: -0.78em;
 }
 
-li.task span.task {
-    margin-left: -2px;
-    margin-right: 2px;
+li.task-list-item > p:first-child {
+    margin-left: 0;
 }
 
-li.task .taskitem {
-    margin-left: -1px;
-    margin-right: 1px;
+li.task-list-item > p {
+    margin-left: 0.85em;
+}
+
+span.taskitem {
+    padding-right: 0.4em;
 }
 
 ul,
@@ -543,10 +625,6 @@ ol ul {
     margin-top: 0;
 }
 
-li > p {
-    margin-top: 16px;
-}
-
 .task-list-item {
     list-style-type: none;
 }
@@ -558,18 +636,6 @@ li > p {
 .task-list-item input {
     margin: 0 0.35em 0.25em -0.6em;
     vertical-align: middle;
-}
-
-li.task-list-item > p:first-child {
-    margin-left: 0;
-}
-
-li.task-list-item > p {
-    margin-left: 0.85em;
-}
-
-span.taskitem {
-    padding-right: 0.4em;
 }
 
 dl {
@@ -617,83 +683,11 @@ table th {
 
 th,
 td {
-    padding: 8px 10px 4px 10px !important;
+    padding: 6px 10px 2px 10px !important;
 }
 
 img {
     box-sizing: border-box;
     max-width: 100%;
-}
-
-code {
-    border-radius: 2px;
-    font-size: 85%;
-    margin: 0;
-    padding: 0.2em 0 0.2em 0;
-}
-
-code:before,
-code:after {
-    content: "\00a0";
-    letter-spacing: -0.2em;
-}
-
-pre > code {
-    background: transparent;
-    border: 0;
-    font-size: 100%;
-    margin: 0;
-    padding: 0;
-    white-space: pre;
-    word-break: normal;
-}
-
-.highlight {
-    margin-bottom: 16px;
-}
-
-.highlight pre,
-pre {
-    border-radius: 3px;
-    font-size: 85%;
-    line-height: 1.45;
-    overflow: auto;
-    padding: 16px;
-}
-
-.highlight pre {
-    margin-bottom: 0;
-    word-break: normal;
-}
-
-pre {
-    word-wrap: normal;
-}
-
-pre code {
-    background-color: transparent;
-    border: 0;
-    display: inline;
-    line-height: inherit;
-    margin: 0;
-    max-width: initial;
-    overflow: initial;
-    padding: 0;
-    word-wrap: normal;
-}
-
-pre code:before,
-pre code:after {
-    content: normal;
-}
-
-kbd {
-    border-radius: 3px;
-    display: inline-block;
-    font-size: 11px;
-    font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
-    line-height: 10px;
-    padding: 3px 5px;
-    vertical-align: middle;
 }
 
