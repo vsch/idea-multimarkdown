@@ -23,7 +23,6 @@ package com.vladsch.idea.multimarkdown.settings;
 import com.intellij.openapi.options.SearchableConfigurable;
 import com.vladsch.idea.multimarkdown.MultiMarkdownFileType;
 import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
-import com.vladsch.idea.multimarkdown.MultiMarkdownLanguage;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
@@ -65,12 +64,15 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
         componentSettings.add(new CheckBoxComponent("wikiLinksCheckBox", globalSettings.wikiLinks));
         componentSettings.add(new CheckBoxComponent("useCustomCssCheckBox", globalSettings.useCustomCss));
         componentSettings.add(new CheckBoxComponent("quotesCheckBox", globalSettings.quotes));
+        componentSettings.add(new CheckBoxComponent("useOldPreviewCheckBox", globalSettings.useOldPreview));
         componentSettings.add(new SpinnerComponent("updateDelaySpinner", globalSettings.updateDelay));
         componentSettings.add(new SpinnerComponent("maxImgWidthSpinner", globalSettings.maxImgWidth));
         componentSettings.add(new SpinnerComponent("parsingTimeoutSpinner", globalSettings.parsingTimeout));
         componentSettings.add(new ComboBoxComponent("htmlThemeComboBox", globalSettings.htmlTheme));
-        componentSettings.add(new EditorTextFieldComponent("textCustomCss", globalSettings.customCss));
-        componentSettings.add(new ComponentState("textCustomCss", globalSettings.customCssEditorState));
+        componentSettings.add(new EditorTextFieldComponent("textCustomCss", globalSettings.customCss, false));
+        componentSettings.add(new EditorTextFieldComponent("textCustomCss", globalSettings.customFxCss, true));
+        componentSettings.add(new ComponentState("textCustomCss", globalSettings.customCssEditorState, false));
+        componentSettings.add(new ComponentState("textCustomCss", globalSettings.customFxCssEditorState, true));
     }
 
     public Runnable enableSearch(String s) {
@@ -171,27 +173,69 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
     }
 
     class EditorTextFieldComponent extends ComponentSetting<CustomizableEditorTextField, Settings.StringSetting> {
-        EditorTextFieldComponent(String component, Settings.StringSetting setting) { super(component, setting); }
+        private final Boolean isFxPreviewState;
 
-        @Override public boolean isChanged(CustomizableEditorTextField component) { return setting.isChanged(component); }
+        EditorTextFieldComponent(String component, Settings.StringSetting setting) {
+            super(component, setting);
+            this.isFxPreviewState = null;
+        }
 
-        @Override public void setValue(CustomizableEditorTextField component) { setting.setValue(component); }
+        EditorTextFieldComponent(String component, Settings.StringSetting setting, boolean isFxPreviewState) {
+            super(component, setting);
+            this.isFxPreviewState = isFxPreviewState;
+        }
 
-        @Override public void reset(CustomizableEditorTextField component) { setting.reset(component); }
+        @Override public boolean isChanged(CustomizableEditorTextField component) {
+            if (isFxPreviewState == null || MultiMarkdownGlobalSettings.isFxHtmlPreview == isFxPreviewState) {
+                return setting.isChanged(component);
+            }
+            return false;
+        }
+
+        @Override public void setValue(CustomizableEditorTextField component) {
+            if (isFxPreviewState == null || MultiMarkdownGlobalSettings.isFxHtmlPreview == isFxPreviewState) {
+                setting.setValue(component);
+            }
+        }
+
+        @Override public void reset(CustomizableEditorTextField component) {
+            if (isFxPreviewState == null || MultiMarkdownGlobalSettings.isFxHtmlPreview == isFxPreviewState) {
+                setting.reset(component);
+            }
+        }
     }
 
     class ComponentState extends ComponentSetting<com.vladsch.idea.multimarkdown.settings.ComponentState, Settings.ElementSetting> {
-        ComponentState(String component, Settings.ElementSetting setting) { super(component, setting); }
+        private final Boolean isFxPreviewState;
+
+        ComponentState(String component, Settings.ElementSetting setting) {
+            super(component, setting);
+            this.isFxPreviewState = null;
+        }
+
+        ComponentState(String component, Settings.ElementSetting setting, boolean isFxPreview) {
+            super(component, setting);
+            this.isFxPreviewState = isFxPreview;
+        }
 
         @Override public boolean isChanged(com.vladsch.idea.multimarkdown.settings.ComponentState component) {
-            return setting.getValue() == null || component.isChanged(setting.getValue());
+            if (isFxPreviewState == null || MultiMarkdownGlobalSettings.isFxHtmlPreview == isFxPreviewState) {
+                return setting.getValue() == null || component.isChanged(setting.getValue());
+            }
+            return false;
         }
 
         @Override public void setValue(com.vladsch.idea.multimarkdown.settings.ComponentState component) {
-            setting.setValue(component.getState(setting.persistName));
+            if (isFxPreviewState == null || MultiMarkdownGlobalSettings.isFxHtmlPreview == isFxPreviewState) {
+                setting.setValue(component.getState(setting.persistName));
+            }
         }
 
-        @Override public void reset(com.vladsch.idea.multimarkdown.settings.ComponentState component) { if (setting.getValue() != null) component.loadState(setting.getValue()); }
+        @Override public void reset(com.vladsch.idea.multimarkdown.settings.ComponentState component) {
+            if (isFxPreviewState == null || MultiMarkdownGlobalSettings.isFxHtmlPreview == isFxPreviewState) {
+                if (setting.getValue() != null) component.loadState(setting.getValue());
+            }
+        }
     }
 
     class SpinnerComponent extends ComponentSetting<JSpinner, Settings.IntegerSetting> {

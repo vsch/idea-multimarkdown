@@ -82,13 +82,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import org.apache.commons.codec.binary.Base64;
 
 public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements FileEditor {
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownFxPreviewEditor.class);
@@ -106,6 +109,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     private final JFXPanel jfxPanel;
     private String scrollOffset = null;
     private RootNode astRoot = null;
+    private AnchorPane anchorPane;
 
     /** The {@link JBScrollPane} allowing to browse {@link #jEditorPane}. */
     protected final JBScrollPane scrollPane;
@@ -133,6 +137,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     private LinkRenderer linkRendererNormal;
     private LinkRenderer linkRendererModified;
     private String pageScript = null;
+    private boolean needStyleSheetUpdate;
 
     public static boolean isShowModified() {
         return MultiMarkdownGlobalSettings.getInstance().showHtmlTextAsModified.getValue();
@@ -155,7 +160,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     }
 
     public static String getCustomCss() {
-        return MultiMarkdownGlobalSettings.getInstance().customCss.getValue();
+        return MultiMarkdownGlobalSettings.getInstance().customFxCss.getValue();
     }
 
     public static boolean isShowHtmlText() {
@@ -216,6 +221,8 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     private class MyJFXPanel extends JFXPanel {
         @Override public void addNotify() {
             super.addNotify();
+            //Dimension dimension = getParent().getPreferredSize();
+            //anchorPane.resize(dimension.getWidth(), dimension.getHeight());
             return;
         }
 
@@ -273,163 +280,38 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
             myTextViewer = null;
             jEditorPane = new JPanel(new BorderLayout(), true);
 
-            PluginClassLoader pluginClassLoader =MultiMarkdownPlugin.getInstance(project).getClassLoader();
+            PluginClassLoader pluginClassLoader = MultiMarkdownPlugin.getInstance(project).getClassLoader();
             jfxPanel = new MyJFXPanel(); // initializing javafx
             jEditorPane.add(jfxPanel, BorderLayout.CENTER);
             Platform.setImplicitExit(false);
+
+            // create a temp file for the custorm stuff
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
                     webView = new WebView();
                     webEngine = webView.getEngine();
-                    webEngine.setUserStyleSheetLocation(getClass().getResource("/com/vladsch/idea/multimarkdown/defaultfx.css").toExternalForm());
-                    AnchorPane anchorPane = new AnchorPane();
+                    setStyleSheet();
+                    anchorPane = new AnchorPane();
                     AnchorPane.setTopAnchor(webView, 0.0);
                     AnchorPane.setBottomAnchor(webView, 0.0);
                     AnchorPane.setLeftAnchor(webView, 0.0);
                     AnchorPane.setRightAnchor(webView, 0.0);
                     anchorPane.getChildren().add(webView);
+                    //Dimension dimension = jEditorPane.getPreferredSize();
+                    //anchorPane.resize(dimension.getWidth(), dimension.getHeight());
                     jfxPanel.setScene(new Scene(anchorPane));
                     //jfxPanel.setScene(new Scene(webView));
 
                     // TODO: add zoom control to the page using popups or actions
-                    //webView.setZoom(javafx.stage.Screen.getPrimary().getDpi() / 96);
+                    webView.setZoom(1.0);
 
-                    webEngine.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {
-                        @Override
-                        public void changed(ObservableValue<? extends Worker.State> observable, Worker.State oldState, Worker.State newState) {
-                            if (newState == Worker.State.SUCCEEDED) {
-                                EventListener listener = new EventListener() {
-                                    @Override public void handleEvent(org.w3c.dom.events.Event evt) {
-                                        evt.stopPropagation();
-                                        evt.preventDefault();
-                                        Element link = (Element) evt.getCurrentTarget();
-                                        org.w3c.dom.Document doc = webEngine.getDocument();
-                                        String href = link.getAttribute("href");
-                                        if (href.charAt(0) == '#') {
-                                            // tries to go to an anchor
-                                            String hrefName = href.substring(1);
-                                            // scroll it into view
-                                            try {
-                                                JSObject result = (JSObject) webEngine.executeScript("(function () {\n" +
-                                                        "    var elemTop = 0;\n" +
-                                                        "    var elems = '';\n" +
-                                                        "    var elem = window.document.getElementById('" + hrefName + "');\n" +
-                                                        "    if (!elem) {\n" +
-                                                        "        var elemList = window.document.getElementsByTagName('a');\n" +
-                                                        "        for (a in elemList) {\n" +
-                                                        "            var aElem = elemList[a]\n" +
-                                                        "            if (aElem.hasOwnProperty('name') && aElem.name == '" + hrefName + "') {\n" +
-                                                        "                elem = aElem;\n" +
-                                                        "                break;\n" +
-                                                        "            }\n" +
-                                                        "        }\n" +
-                                                        "    }\n" +
-                                                        "    if (elem) {\n" +
-                                                        "        while (elem && elem.tagName !== 'HTML') {\n" +
-                                                        "            elems += ',' + elem.tagName + ':' + elem.offsetTop\n" +
-                                                        "            if (elem.offsetTop) {\n" +
-                                                        "                elemTop += elem.offsetTop;\n" +
-                                                        "                break;\n" +
-                                                        "            }\n" +
-                                                        "            elem = elem.parentNode\n" +
-                                                        "        }\n" +
-                                                        "    }\n" +
-                                                        "    return { elemTop: elemTop, elems: elems, found: !!elem };\n" +
-                                                        "})()" +
-                                                        "");
-                                                int elemTop = (Integer) result.getMember("elemTop");
-                                                boolean elemFound = (Boolean) result.getMember("found");
-                                                String parentList = (String) result.getMember("elems");
-                                                logger.trace(parentList);
-                                                if (elemFound) webEngine.executeScript("window.scroll(0, " + elemTop + ")");
-                                            } catch (JSException ex) {
-                                                String error = ex.toString();
-                                                logger.error("JSException on script", ex);
-                                            }
-                                        } else {
-                                            // TODO: we should really handle all of them
-                                            if (Desktop.isDesktopSupported()) {
-                                                try {
-                                                    Desktop.getDesktop().browse(new URI(href));
-                                                } catch (URISyntaxException ex) {
-                                                    // invalid URI, just log
-                                                    logger.error("URISyntaxException on '" + href + "'" + ex.toString());
-                                                } catch (IOException ex) {
-                                                    logger.error("IOException on '" + href + "'" + ex.toString());
-                                                }
-                                            }
-                                        }
-                                    }
-                                };
-
-                                org.w3c.dom.Document doc = webEngine.getDocument();
-                                Element el = doc.getElementById("a");
-                                NodeList nodeList = doc.getElementsByTagName("a");
-                                for (int i = 0; i < nodeList.getLength(); i++) {
-                                    ((EventTarget) nodeList.item(i)).addEventListener("click", listener, false);
-                                }
-
-                                // see if we need to change img tag src to a resource, if the src is relative
-                                nodeList = doc.getElementsByTagName("img");
-                                for (int i = 0; i < nodeList.getLength(); i++) {
-                                    HTMLImageElementImpl imgNode = (HTMLImageElementImpl) nodeList.item(i);
-                                    String src = imgNode.getSrc();
-                                    if (src.charAt(0) == '#') {
-                                        // it is resource based, get name and provide the right src
-                                        if ("#bullet".equals(src)) {
-                                            // provide bullet, just for fun
-                                            imgNode.setWidth("12");
-                                            imgNode.setHeight("12");
-                                            imgNode.setSrc(getClass().getResource(UIUtil.isRetina() ? "/com/vladsch/idea/multimarkdown/bullet@2x.png.png" : "/com/vladsch/idea/multimarkdown/bullet.png").toExternalForm());
-                                        } else if ("#opentask".equals(src)) {
-                                            // provide bullet, just for fun
-                                            imgNode.setWidth("12");
-                                            imgNode.setHeight("12");
-                                            imgNode.setSrc(getClass().getResource(UIUtil.isRetina() ? "/com/vladsch/idea/multimarkdown/opentask@2x.png" : "/com/vladsch/idea/multimarkdown/opentask.png").toExternalForm());
-                                        } else if ("#closedtask".equals(src)) {
-                                            // provide bullet, just for fun
-                                            imgNode.setWidth("12");
-                                            imgNode.setHeight("12");
-                                            imgNode.setSrc(getClass().getResource(UIUtil.isRetina() ? "/com/vladsch/idea/multimarkdown/closedtask@2x.png" : "/com/vladsch/idea/multimarkdown/closedtask.png").toExternalForm());
-                                        }
-                                    } else if (!src.startsWith("http://") && !src.startsWith("https://") && !src.startsWith("file://")) {
-                                        // relative to document, change it to absolute file://
-                                        VirtualFile file = FileDocumentManager.getInstance().getFile(document);
-                                        VirtualFile parent = file == null ? null : file.getParent();
-                                        final VirtualFile localImage = parent == null ? null : parent.findFileByRelativePath(src);
-                                        try {
-                                            if (localImage != null && localImage.exists()) {
-                                                imgNode.setSrc(String.valueOf(new File(localImage.getPath()).toURI().toURL()));
-                                            }
-                                        } catch (MalformedURLException e) {
-                                            logger.error("MalformedURLException", e);
-                                        }
-                                    }
-                                    int tmp = 0;
-                                }
-
-                                JSObject jsobj = (JSObject) webEngine.executeScript("window");
-                                jsobj.setMember("java", new JSBridge());
-                                if (pageScript != null && pageScript.length() > 0) {
-                                    webEngine.executeScript(pageScript);
-                                }
-
-                                // restore scroll if we had it
-                                if (scrollOffset != null) {
-                                    webEngine.executeScript(scrollOffset);
-                                    scrollOffset = null;
-                                }
-                            }
-                        }
-                    });
+                    addStateChangeListener();
                 }
             });
 
             //scrollPane = new JBScrollPane(jEditorPane);
             scrollPane = null;
-
-            setStyleSheet();
 
             // Add a custom link listener which can resolve local link references.
             //jEditorPane.addHyperlinkListener(new MultiMarkdownLinkListener(jEditorPane, project, document));
@@ -441,6 +323,137 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         }
 
         checkNotifyUser();
+    }
+
+    protected void addStateChangeListener() {
+        webEngine.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {
+            @Override
+            public void changed(ObservableValue<? extends Worker.State> observable, Worker.State oldState, Worker.State newState) {
+                if (newState == Worker.State.SUCCEEDED) {
+                    EventListener listener = new EventListener() {
+                        @Override public void handleEvent(org.w3c.dom.events.Event evt) {
+                            evt.stopPropagation();
+                            evt.preventDefault();
+                            Element link = (Element) evt.getCurrentTarget();
+                            org.w3c.dom.Document doc = webEngine.getDocument();
+                            String href = link.getAttribute("href");
+                            if (href.charAt(0) == '#') {
+                                // tries to go to an anchor
+                                String hrefName = href.substring(1);
+                                // scroll it into view
+                                try {
+                                    JSObject result = (JSObject) webEngine.executeScript("(function () {\n" +
+                                            "    var elemTop = 0;\n" +
+                                            "    var elems = '';\n" +
+                                            "    var elem = window.document.getElementById('" + hrefName + "');\n" +
+                                            "    if (!elem) {\n" +
+                                            "        var elemList = window.document.getElementsByTagName('a');\n" +
+                                            "        for (a in elemList) {\n" +
+                                            "            var aElem = elemList[a]\n" +
+                                            "            if (aElem.hasOwnProperty('name') && aElem.name == '" + hrefName + "') {\n" +
+                                            "                elem = aElem;\n" +
+                                            "                break;\n" +
+                                            "            }\n" +
+                                            "        }\n" +
+                                            "    }\n" +
+                                            "    if (elem) {\n" +
+                                            "        while (elem && elem.tagName !== 'HTML') {\n" +
+                                            "            elems += ',' + elem.tagName + ':' + elem.offsetTop\n" +
+                                            "            if (elem.offsetTop) {\n" +
+                                            "                elemTop += elem.offsetTop;\n" +
+                                            "                break;\n" +
+                                            "            }\n" +
+                                            "            elem = elem.parentNode\n" +
+                                            "        }\n" +
+                                            "    }\n" +
+                                            "    return { elemTop: elemTop, elems: elems, found: !!elem };\n" +
+                                            "})()" +
+                                            "");
+                                    int elemTop = (Integer) result.getMember("elemTop");
+                                    boolean elemFound = (Boolean) result.getMember("found");
+                                    String parentList = (String) result.getMember("elems");
+                                    logger.trace(parentList);
+                                    if (elemFound) webEngine.executeScript("window.scroll(0, " + elemTop + ")");
+                                } catch (JSException ex) {
+                                    String error = ex.toString();
+                                    logger.error("JSException on script", ex);
+                                }
+                            } else {
+                                // TODO: we should really handle all of them
+                                if (Desktop.isDesktopSupported()) {
+                                    try {
+                                        Desktop.getDesktop().browse(new URI(href));
+                                    } catch (URISyntaxException ex) {
+                                        // invalid URI, just log
+                                        logger.error("URISyntaxException on '" + href + "'" + ex.toString());
+                                    } catch (IOException ex) {
+                                        logger.error("IOException on '" + href + "'" + ex.toString());
+                                    }
+                                }
+                            }
+                        }
+                    };
+
+                    org.w3c.dom.Document doc = webEngine.getDocument();
+                    Element el = doc.getElementById("a");
+                    NodeList nodeList = doc.getElementsByTagName("a");
+                    for (int i = 0; i < nodeList.getLength(); i++) {
+                        ((EventTarget) nodeList.item(i)).addEventListener("click", listener, false);
+                    }
+
+                    // see if we need to change img tag src to a resource, if the src is relative
+                    nodeList = doc.getElementsByTagName("img");
+                    for (int i = 0; i < nodeList.getLength(); i++) {
+                        HTMLImageElementImpl imgNode = (HTMLImageElementImpl) nodeList.item(i);
+                        String src = imgNode.getSrc();
+                        if (src.charAt(0) == '#') {
+                            // it is resource based, get name and provide the right src
+                            if ("#bullet".equals(src)) {
+                                // provide bullet, just for fun
+                                imgNode.setWidth("12");
+                                imgNode.setHeight("12");
+                                imgNode.setSrc(getClass().getResource(UIUtil.isRetina() ? "/com/vladsch/idea/multimarkdown/bullet@2x.png.png" : "/com/vladsch/idea/multimarkdown/bullet.png").toExternalForm());
+                            } else if ("#opentask".equals(src)) {
+                                // provide bullet, just for fun
+                                imgNode.setWidth("12");
+                                imgNode.setHeight("12");
+                                imgNode.setSrc(getClass().getResource(UIUtil.isRetina() ? "/com/vladsch/idea/multimarkdown/opentask@2x.png" : "/com/vladsch/idea/multimarkdown/opentask.png").toExternalForm());
+                            } else if ("#closedtask".equals(src)) {
+                                // provide bullet, just for fun
+                                imgNode.setWidth("12");
+                                imgNode.setHeight("12");
+                                imgNode.setSrc(getClass().getResource(UIUtil.isRetina() ? "/com/vladsch/idea/multimarkdown/closedtask@2x.png" : "/com/vladsch/idea/multimarkdown/closedtask.png").toExternalForm());
+                            }
+                        } else if (!src.startsWith("http://") && !src.startsWith("https://") && !src.startsWith("file://")) {
+                            // relative to document, change it to absolute file://
+                            VirtualFile file = FileDocumentManager.getInstance().getFile(document);
+                            VirtualFile parent = file == null ? null : file.getParent();
+                            final VirtualFile localImage = parent == null ? null : parent.findFileByRelativePath(src);
+                            try {
+                                if (localImage != null && localImage.exists()) {
+                                    imgNode.setSrc(String.valueOf(new File(localImage.getPath()).toURI().toURL()));
+                                }
+                            } catch (MalformedURLException e) {
+                                logger.error("MalformedURLException", e);
+                            }
+                        }
+                        int tmp = 0;
+                    }
+
+                    JSObject jsobj = (JSObject) webEngine.executeScript("window");
+                    jsobj.setMember("java", new JSBridge());
+                    if (pageScript != null && pageScript.length() > 0) {
+                        webEngine.executeScript(pageScript);
+                    }
+
+                    // restore scroll if we had it
+                    if (scrollOffset != null) {
+                        webEngine.executeScript(scrollOffset);
+                        scrollOffset = null;
+                    }
+                }
+            }
+        });
     }
 
     // call backs from JavaScript will be handled by the bridge
@@ -468,7 +481,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                         previewIsObsolete = true;
 
                         if (fullKit) {
-                            setStyleSheet();
+                            needStyleSheetUpdate = true;
                             processor.remove();     // make it re-initialize when accessed
                         }
 
@@ -482,23 +495,12 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     protected void setStyleSheet() {
         if (isRawHtml) return;
 
-        // TODO: implement changing style sheets
-        //MultiMarkdownEditorKit htmlKit = new MultiMarkdownEditorKit(document);
-        //
-        //final StyleSheet style = new MultiMarkdownStyleSheet();
-        //
-        //if (!MultiMarkdownGlobalSettings.getInstance().useCustomCss()) {
-        //    style.importStyleSheet(MultiMarkdownGlobalSettings.getInstance().getCssFileURL());
-        //} else {
-        //    try {
-        //        style.loadRules(new StringReader(MultiMarkdownGlobalSettings.getInstance().getCssText()), null);
-        //    } catch (IOException e) {
-        //        e.printStackTrace();
-        //    }
-        //}
-        //htmlKit.setStyleSheet(style);
-        //
-        //jEditorPane.setEditorKit(htmlKit);
+        String cssURL = getClass().getResource(MultiMarkdownGlobalSettings.getInstance().getCssFilePath()).toExternalForm();
+        if (MultiMarkdownGlobalSettings.getInstance().useCustomCss()) {
+            cssURL = "data:css/text;charset=utf-8;base64," + Base64.encodeBase64URLSafeString(MultiMarkdownGlobalSettings.getInstance().getCssText().getBytes(Charset.forName("utf-8")));
+        }
+        needStyleSheetUpdate = false;
+        webEngine.setUserStyleSheetLocation(cssURL);
     }
 
     /**
@@ -649,6 +651,9 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                             // TODO: add option to enable/disable keeping scroll position on update
                             JSObject scrollPos = (JSObject) webEngine.executeScript("({ x: window.pageXOffset, y: window.pageYOffset })");
                             scrollOffset = "window.scroll(" + scrollPos.getMember("x") + ", " + scrollPos.getMember("y") + ")";
+                            if (needStyleSheetUpdate) {
+                                setStyleSheet();
+                            }
                             webEngine.loadContent(html);
                         }
                     });

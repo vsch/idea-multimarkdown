@@ -23,20 +23,16 @@ package com.vladsch.idea.multimarkdown.settings;
 import com.google.common.io.Resources;
 import com.intellij.ide.ui.UISettings;
 import com.intellij.ide.ui.UISettingsListener;
-import com.intellij.notification.*;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
-import com.intellij.openapi.ui.popup.Balloon;
-import com.intellij.openapi.ui.popup.BalloonBuilder;
 import com.intellij.util.ui.UIUtil;
 import org.apache.commons.codec.Charsets;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.pegdown.Extensions;
 
 import java.io.IOException;
@@ -55,6 +51,10 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     public static final String PREVIEW_STYLESHEET_LIGHT = "/com/vladsch/idea/multimarkdown/default.css";
 
     public static final String PREVIEW_STYLESHEET_DARK = "/com/vladsch/idea/multimarkdown/darcula.css";
+
+    public static final String PREVIEW_FX_STYLESHEET_LIGHT = "/com/vladsch/idea/multimarkdown/default-fx.css";
+
+    public static final String PREVIEW_FX_STYLESHEET_DARK = "/com/vladsch/idea/multimarkdown/darcula-fx.css";
 
     public static final String NOTIFICATION_GROUP_ISSUES = "MultiMarkdown Alerts";
 
@@ -109,8 +109,21 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     final public Settings.IntegerSetting parsingTimeout = settings.IntegerSetting(10000, "parsingTimeout");
     final public Settings.IntegerSetting updateDelay = settings.IntegerSetting(1000, "updateDelay");
     final public Settings.StringSetting customCss = settings.StringSetting("", "customCss");
+    final public Settings.StringSetting customFxCss = settings.StringSetting("", "customFxCss");
     final public Settings.ElementSetting customCssEditorState = settings.ElementSetting(null, "customCssEditorState");
+    final public Settings.ElementSetting customFxCssEditorState = settings.ElementSetting(null, "customFxCssEditorState");
     final public Settings.BooleanSetting wasShownDarkBug = settings.BooleanSetting(false, "wasShownDarkBug", 0);
+    final public Settings.BooleanSetting useOldPreview = settings.BooleanSetting(false, "useOldPreview", 0);
+
+    public static boolean isFxHtmlPreview() {
+        return isFxHtmlPreview;
+    }
+
+    public static void setIsFxHtmlPreview(boolean isFxHtmlPreview) {
+        MultiMarkdownGlobalSettings.isFxHtmlPreview = isFxHtmlPreview;
+    }
+
+    static boolean isFxHtmlPreview = false;
 
     public Element getState() {
         Element multiMarkdownSettings = settings.getState("MultiMarkdownSettings");
@@ -131,7 +144,12 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     }
 
     public @NotNull String getCssFilePath(int htmlTheme) {
+        if (isFxHtmlPreview) {
+        return isDarkHtmlPreview(htmlTheme) ? PREVIEW_FX_STYLESHEET_DARK : PREVIEW_FX_STYLESHEET_LIGHT;
+        } else {
         return isDarkHtmlPreview(htmlTheme) ? PREVIEW_STYLESHEET_DARK : PREVIEW_STYLESHEET_LIGHT;
+
+        }
     }
 
     public @NotNull java.net.URL getCssFileURL(int htmlTheme) {
@@ -161,11 +179,11 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     }
 
     public @NotNull String getCssText() {
-        return useCustomCss() ? customCss.getValue() : getCssFileText(htmlTheme.getValue());
+        return useCustomCss() ? (isFxHtmlPreview ? customFxCss.getValue() : customCss.getValue()) : getCssFileText(htmlTheme.getValue());
     }
 
     public boolean useCustomCss() {
-        return useCustomCss.getValue() && customCss.getValue().trim().length() != 0;
+        return useCustomCss.getValue() && (isFxHtmlPreview ? customFxCss.getValue() : customCss.getValue()).trim().length() != 0;
     }
 
     public int getExtensionsValue() {

@@ -24,15 +24,16 @@
 package com.vladsch.idea.multimarkdown;
 
 import com.intellij.ide.plugins.cl.PluginClassLoader;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.project.Project;
+import org.apache.log4j.Level;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class MultiMarkdownPlugin implements ProjectComponent {
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger("com.vladsch.idea.multimarkdown");
 
     private Project project;
     private PluginClassLoader myClassLoader;
@@ -44,12 +45,21 @@ public class MultiMarkdownPlugin implements ProjectComponent {
 
     public PluginClassLoader getClassLoader() {
         if (myClassLoader == null) {
-            myClassLoader = (PluginClassLoader)getClass().getClassLoader();
+            myClassLoader = (PluginClassLoader) getClass().getClassLoader();
+            String fileSeparator = System.getProperties().getProperty("file.separator");
             String javaHome = System.getProperties().getProperty("java.home");
             String javaVersion = System.getProperties().getProperty("java.version");
-            ArrayList<String> libs = new ArrayList<String>(1);
-            libs.add(javaHome + "/lib/ext");
-            myClassLoader.addLibDirectories(libs);
+            String fileName = javaHome + fileSeparator + "lib" + fileSeparator + "ext";
+            File file = new File(fileName);
+            if (!file.exists()) {
+                logger.warn("JavaFX library jfxrt.jar not found in the current jre: " + javaHome + ", version " + javaVersion);
+                logger.warn("MultiMarkdown HTML Preview will use a more limited implementation.");
+            } else {
+                logger.info("JavaFX library jfxrt.jar found in the current jre: " + javaHome + ", version " + javaVersion);
+                ArrayList<String> libs = new ArrayList<String>(1);
+                libs.add(fileName);
+                myClassLoader.addLibDirectories(libs);
+            }
         }
         return myClassLoader;
     }

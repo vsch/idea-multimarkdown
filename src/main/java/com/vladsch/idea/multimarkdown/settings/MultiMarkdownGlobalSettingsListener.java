@@ -23,7 +23,5 @@
  */
 package com.vladsch.idea.multimarkdown.settings;
 
-import org.jetbrains.annotations.NotNull;
-
 public interface MultiMarkdownGlobalSettingsListener extends SettingsListener<MultiMarkdownGlobalSettings> {
 }

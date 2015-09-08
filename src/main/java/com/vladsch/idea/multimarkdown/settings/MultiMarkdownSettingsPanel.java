@@ -101,6 +101,8 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
     private JLabel parsingTimeoutDescriptionLabel;
     private JButton focusEditorButton;
     private JCheckBox useCustomCssCheckBox;
+    private JCheckBox useOldPreviewCheckBox;
+    private JLabel maxImgWidthLabel;
 
     // need this so that we dont try to access components before they are created
     public @Nullable Object getComponent(@NotNull String persistName) {
@@ -132,6 +134,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         if (persistName.equals("htmlThemeComboBox")) return htmlThemeComboBox;
         if (persistName.equals("enableTrimSpacesCheckBox")) return enableTrimSpacesCheckBox;
         if (persistName.equals("useCustomCssCheckBox")) return useCustomCssCheckBox;
+        if (persistName.equals("useOldPreviewCheckBox")) return useOldPreviewCheckBox;
 
         return null;
     }
@@ -209,6 +212,11 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
                 updateCustomCssControls();
             }
         });
+
+        if (MultiMarkdownGlobalSettings.isFxHtmlPreview()) {
+            maxImgWidthSpinner.setVisible(false);
+            maxImgWidthLabel.setVisible(false);
+        }
     }
 
     private void createUIComponents() {
