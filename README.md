@@ -18,11 +18,11 @@ Note that you **cannot** run it using the **IDEA bundled JDK** because it does n
 If the `jfxrt.jar` is not found or the plugin cannot create the new editor class, it will fall back to using the `JEditorPane` with `HTMLEditorKit` preview. You can also disable using JavaFX based preview in plugin settings, for those that prefer to keep using the old preview.
 
 **For PHPStorm 9.5 EAP Mac with bundled JDK**
-:  As of release PS 142.4491, you can change the boot jdk from the GUI. However, due to a bug it keeps booting the IDEA with the bundled jdk. To change the boot jdk you need to add a `phpstorm.jdk` file with the path to the alternate jdk, for example:
+In release PS 142.4491, you can change the boot jdk from the GUI. However, due to a bug it keeps booting the IDEA with the bundled jdk. To change the boot jdk you need to add a `phpstorm.jdk` file with the path to the alternate jdk, for example:
  
-        /Library/Java/JavaVirtualMachines/jdk1.8.0_51.jdk
+    /Library/Java/JavaVirtualMachines/jdk1.8.0_51.jdk
 
-    to the `/Library/Preferences/WebIde95` directory. Restart your PhpStorm. 
+to the `/Library/Preferences/WebIde95` directory. Restart your PhpStorm. 
 
 Here is a screenshot of the plugin's HTML Preview and GitHub of this readme file: 
 
