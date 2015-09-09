@@ -447,7 +447,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
     protected String postProcessHtml(String html) {
         // scan for <table>, </table>, <tr>, </tr> and other tags we modify, this could be done with a custom plugin to pegdown but
         // then it would be more trouble to get un-modified HTML.
-        String result = "<body class=\"multimarkdown-preview\">\n";
+        String result = "<body class=\"multimarkdown-preview\">\n<div class=\"content\">\n";
         String regex = "(<table>|<thead>|<tbody>|<tr>|<hr/>|<del>|</del>|</p>";
         String regexTail = "|<li>\\n*\\s*<p>";
         boolean isDarkTheme = isDarkTheme();
@@ -527,7 +527,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
             result += html.substring(lastPos);
         }
 
-        result += "\n</body>\n";
+        result += "\n</div>\n</body>\n";
         return result;
     }
 

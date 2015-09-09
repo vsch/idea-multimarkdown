@@ -29,13 +29,16 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.ui.UIUtil;
+import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import org.apache.commons.codec.Charsets;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.pegdown.Extensions;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 @State(
         name = "MultiMarkdownSettings",
@@ -104,6 +107,7 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     final public Settings.BooleanSetting wikiLinks = settings.BooleanSetting(true, "wikiLinks", Extensions.WIKILINKS);
     final public Settings.BooleanSetting todoComments = settings.BooleanSetting(false, "todoComments", 0);
     final public Settings.BooleanSetting useCustomCss = settings.BooleanSetting(false, "useCustomCss", 0);
+    final public Settings.BooleanSetting enableFirebug = settings.BooleanSetting(false, "enableFirebug", 0);
     final public Settings.IntegerSetting htmlTheme = settings.IntegerSetting(HTML_THEME_UI, "htmlTheme");
     final public Settings.IntegerSetting maxImgWidth = settings.IntegerSetting(900, "maxImgWidth");
     final public Settings.IntegerSetting parsingTimeout = settings.IntegerSetting(10000, "parsingTimeout");
@@ -115,11 +119,11 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     final public Settings.BooleanSetting wasShownDarkBug = settings.BooleanSetting(false, "wasShownDarkBug", 0);
     final public Settings.BooleanSetting useOldPreview = settings.BooleanSetting(false, "useOldPreview", 0);
 
-    public static boolean isFxHtmlPreview() {
+    public boolean isFxHtmlPreview() {
         return isFxHtmlPreview;
     }
 
-    public static void setIsFxHtmlPreview(boolean isFxHtmlPreview) {
+    public void setIsFxHtmlPreview(boolean isFxHtmlPreview) {
         MultiMarkdownGlobalSettings.isFxHtmlPreview = isFxHtmlPreview;
     }
 
@@ -139,21 +143,40 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
                 || htmlTheme == HTML_THEME_UI && UIUtil.isUnderDarcula());
     }
 
+    public boolean isDarkHtmlPreview() {
+        return isDarkHtmlPreview(htmlTheme.getValue());
+    }
+
     public boolean isDarkUITheme() {
         return UIUtil.isUnderDarcula();
     }
 
+    public @NotNull String getCssExternalForm() {
+        if (useCustomCss()) {
+            String url = MultiMarkdownPlugin.getInstance().getUrlCustomFxCss();
+            if (url != null) return url;
+        }
+        return isDarkHtmlPreview() ? MultiMarkdownPlugin.getInstance().getUrlDarculaFxCss() : MultiMarkdownPlugin.getInstance().getUrlDefaultFxCss();
+    }
+
+    public @Nullable String getUrlCustomFont() {
+        return MultiMarkdownPlugin.getInstance().getUrlCustomFont();
+    }
+
     public @NotNull String getCssFilePath(int htmlTheme) {
         if (isFxHtmlPreview) {
-        return isDarkHtmlPreview(htmlTheme) ? PREVIEW_FX_STYLESHEET_DARK : PREVIEW_FX_STYLESHEET_LIGHT;
+            return isDarkHtmlPreview(htmlTheme) ? PREVIEW_FX_STYLESHEET_DARK : PREVIEW_FX_STYLESHEET_LIGHT;
         } else {
-        return isDarkHtmlPreview(htmlTheme) ? PREVIEW_STYLESHEET_DARK : PREVIEW_STYLESHEET_LIGHT;
-
+            return isDarkHtmlPreview(htmlTheme) ? PREVIEW_STYLESHEET_DARK : PREVIEW_STYLESHEET_LIGHT;
         }
     }
 
     public @NotNull java.net.URL getCssFileURL(int htmlTheme) {
         return MultiMarkdownGlobalSettings.class.getResource(getCssFilePath(htmlTheme));
+    }
+
+    public @NotNull java.net.URL getFirebugLiteFileURL() throws MalformedURLException {
+        return MultiMarkdownGlobalSettings.class.getResource("/firebug-lite.js");
     }
 
     public @NotNull String getCssFileText(int htmlTheme) {
@@ -205,6 +228,7 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     public void endGroupNotifications() {
         notifier.endGroupNotifications();
     }
+
     public void startSuspendNotifications() {
         notifier.startSuspendNotifications();
     }

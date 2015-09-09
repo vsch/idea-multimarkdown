@@ -65,6 +65,7 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
         componentSettings.add(new CheckBoxComponent("useCustomCssCheckBox", globalSettings.useCustomCss));
         componentSettings.add(new CheckBoxComponent("quotesCheckBox", globalSettings.quotes));
         componentSettings.add(new CheckBoxComponent("useOldPreviewCheckBox", globalSettings.useOldPreview));
+        componentSettings.add(new CheckBoxComponent("enableFirebugCheckBox", globalSettings.enableFirebug));
         componentSettings.add(new SpinnerComponent("updateDelaySpinner", globalSettings.updateDelay));
         componentSettings.add(new SpinnerComponent("maxImgWidthSpinner", globalSettings.maxImgWidth));
         componentSettings.add(new SpinnerComponent("parsingTimeoutSpinner", globalSettings.parsingTimeout));
@@ -186,20 +187,20 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
         }
 
         @Override public boolean isChanged(CustomizableEditorTextField component) {
-            if (isFxPreviewState == null || MultiMarkdownGlobalSettings.isFxHtmlPreview == isFxPreviewState) {
+            if (isFxPreviewState == null || globalSettings.isFxHtmlPreview == isFxPreviewState) {
                 return setting.isChanged(component);
             }
             return false;
         }
 
         @Override public void setValue(CustomizableEditorTextField component) {
-            if (isFxPreviewState == null || MultiMarkdownGlobalSettings.isFxHtmlPreview == isFxPreviewState) {
+            if (isFxPreviewState == null || globalSettings.isFxHtmlPreview == isFxPreviewState) {
                 setting.setValue(component);
             }
         }
 
         @Override public void reset(CustomizableEditorTextField component) {
-            if (isFxPreviewState == null || MultiMarkdownGlobalSettings.isFxHtmlPreview == isFxPreviewState) {
+            if (isFxPreviewState == null || globalSettings.isFxHtmlPreview == isFxPreviewState) {
                 setting.reset(component);
             }
         }
@@ -219,20 +220,20 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
         }
 
         @Override public boolean isChanged(com.vladsch.idea.multimarkdown.settings.ComponentState component) {
-            if (isFxPreviewState == null || MultiMarkdownGlobalSettings.isFxHtmlPreview == isFxPreviewState) {
+            if (isFxPreviewState == null || globalSettings.isFxHtmlPreview == isFxPreviewState) {
                 return setting.getValue() == null || component.isChanged(setting.getValue());
             }
             return false;
         }
 
         @Override public void setValue(com.vladsch.idea.multimarkdown.settings.ComponentState component) {
-            if (isFxPreviewState == null || MultiMarkdownGlobalSettings.isFxHtmlPreview == isFxPreviewState) {
+            if (isFxPreviewState == null || globalSettings.isFxHtmlPreview == isFxPreviewState) {
                 setting.setValue(component.getState(setting.persistName));
             }
         }
 
         @Override public void reset(com.vladsch.idea.multimarkdown.settings.ComponentState component) {
-            if (isFxPreviewState == null || MultiMarkdownGlobalSettings.isFxHtmlPreview == isFxPreviewState) {
+            if (isFxPreviewState == null || globalSettings.isFxHtmlPreview == isFxPreviewState) {
                 if (setting.getValue() != null) component.loadState(setting.getValue());
             }
         }

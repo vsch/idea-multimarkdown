@@ -24,9 +24,9 @@
 package com.vladsch.idea.multimarkdown.editor;
 
 import com.intellij.codeHighlighting.BackgroundEditorHighlighter;
-import com.intellij.ide.plugins.cl.PluginClassLoader;
 import com.intellij.ide.structureView.StructureViewBuilder;
 import com.intellij.lang.Language;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
@@ -47,11 +47,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.UserDataHolderBase;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.ui.components.JBScrollPane;
-import com.intellij.util.ui.UIUtil;
 import com.sun.webkit.dom.HTMLImageElementImpl;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
-import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
 import javafx.application.Platform;
@@ -65,7 +62,6 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSException;
 import netscape.javascript.JSObject;
-import org.apache.commons.net.util.Base64;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -83,16 +79,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
+import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements FileEditor {
+//import com.sun.javafx.scene.layout.region.CornerRadiiConverter;
+
+public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements FileEditor, Disposable {
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownFxPreviewEditor.class);
 
     private static final Logger LOGGER = Logger.getInstance(MultiMarkdownFxPreviewEditor.class);
@@ -105,13 +102,10 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     protected final JPanel jEditorPane;
     private WebView webView;
     private WebEngine webEngine;
-    private final JFXPanel jfxPanel;
+    private JFXPanel jfxPanel;
     private String scrollOffset = null;
     private RootNode astRoot = null;
     private AnchorPane anchorPane;
-
-    /** The {@link JBScrollPane} allowing to browse {@link #jEditorPane}. */
-    protected final JBScrollPane scrollPane;
 
     /** The {@link Document} previewed in this editor. */
     protected final Document document;
@@ -137,7 +131,8 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     private LinkRenderer linkRendererModified;
     private String pageScript = null;
     private boolean needStyleSheetUpdate;
-    private File cssCustomFile;
+
+    private String fireBugJS;
 
     public static boolean isShowModified() {
         return MultiMarkdownGlobalSettings.getInstance().showHtmlTextAsModified.getValue();
@@ -218,21 +213,6 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         //settings.endSuspendNotifications();
     }
 
-    private class MyJFXPanel extends JFXPanel {
-        @Override public void addNotify() {
-            super.addNotify();
-            //Dimension dimension = getParent().getPreferredSize();
-            //anchorPane.resize(dimension.getWidth(), dimension.getHeight());
-            return;
-        }
-
-        @Override
-        public void removeNotify() {
-            super.removeNotify();
-            return;
-        }
-    }
-
     /**
      * Build a new instance of {@link MultiMarkdownFxPreviewEditor}.
      *
@@ -243,6 +223,14 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         this.isRawHtml = isRawHtml;
         this.document = doc;
         this.project = project;
+
+        URL resource = null;
+        //try {
+        //    resource = MultiMarkdownGlobalSettings.getInstance().getFirebugLiteFileURL();
+        //    fireBugJS = resource.toExternalForm();
+        //} catch (MalformedURLException e) {
+        //    e.printStackTrace();
+        //}
 
         // Listen to the document modifications.
         this.document.addDocumentListener(new DocumentAdapter() {
@@ -264,16 +252,8 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         linkRendererModified = new MultiMarkdownFxLinkRenderer();
         linkRendererNormal = new MultiMarkdownFxLinkRenderer();
 
-        try {
-            cssCustomFile = File.createTempFile("multimarkdown", "custom.css");
-            cssCustomFile.deleteOnExit();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         if (isRawHtml) {
             jEditorPane = null;
-            scrollPane = null;
             jfxPanel = null;
             webView = null;
             webEngine = null;
@@ -285,30 +265,31 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         } else {
             // Setup the editor pane for rendering HTML.
             myTextViewer = null;
-            jEditorPane = new JPanel(new BorderLayout(), true);
-
-            PluginClassLoader pluginClassLoader = MultiMarkdownPlugin.getInstance(project).getClassLoader();
-            jfxPanel = new MyJFXPanel(); // initializing javafx
+            jEditorPane = new JPanel(new BorderLayout(), false);
+            jfxPanel = new JFXPanel(); // initializing javafx
             jEditorPane.add(jfxPanel, BorderLayout.CENTER);
             Platform.setImplicitExit(false);
 
-            // create a temp file for the custorm stuff
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
+
                     webView = new WebView();
                     webEngine = webView.getEngine();
-                    setStyleSheet();
+                    //setStyleSheet();
+
+                    //Group group = new Group();
+                    //Scene scene = new Scene(webView);
+                    //jfxPanel.setScene(scene);
+
                     anchorPane = new AnchorPane();
                     AnchorPane.setTopAnchor(webView, 0.0);
-                    AnchorPane.setBottomAnchor(webView, 0.0);
                     AnchorPane.setLeftAnchor(webView, 0.0);
+                    AnchorPane.setBottomAnchor(webView, 0.0);
                     AnchorPane.setRightAnchor(webView, 0.0);
                     anchorPane.getChildren().add(webView);
-                    //Dimension dimension = jEditorPane.getPreferredSize();
-                    //anchorPane.resize(dimension.getWidth(), dimension.getHeight());
+                    //group.getChildren().add(anchorPane);
                     jfxPanel.setScene(new Scene(anchorPane));
-                    //jfxPanel.setScene(new Scene(webView));
 
                     // TODO: add zoom control to the page using popups or actions
                     webView.setZoom(1.0);
@@ -316,17 +297,6 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                     addStateChangeListener();
                 }
             });
-
-            //scrollPane = new JBScrollPane(jEditorPane);
-            scrollPane = null;
-
-            // Add a custom link listener which can resolve local link references.
-            //jEditorPane.addHyperlinkListener(new MultiMarkdownLinkListener(jEditorPane, project, document));
-            //jEditorPane.setEditable(false);
-
-            // Set the editor pane caret position to top left, and do not let it reset it
-            //jEditorPane.getCaret().setMagicCaretPosition(new Point(0, 0));
-            //((DefaultCaret) jEditorPane.getCaret()).setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
         }
 
         checkNotifyUser();
@@ -386,7 +356,6 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                                     logger.error("JSException on script", ex);
                                 }
                             } else {
-                                // TODO: we should really handle all of them
                                 if (Desktop.isDesktopSupported()) {
                                     try {
                                         Desktop.getDesktop().browse(new URI(href));
@@ -413,25 +382,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                     for (int i = 0; i < nodeList.getLength(); i++) {
                         HTMLImageElementImpl imgNode = (HTMLImageElementImpl) nodeList.item(i);
                         String src = imgNode.getSrc();
-                        if (src.charAt(0) == '#') {
-                            // it is resource based, get name and provide the right src
-                            if ("#bullet".equals(src)) {
-                                // provide bullet, just for fun
-                                imgNode.setWidth("12");
-                                imgNode.setHeight("12");
-                                imgNode.setSrc(getClass().getResource(UIUtil.isRetina() ? "/com/vladsch/idea/multimarkdown/bullet@2x.png.png" : "/com/vladsch/idea/multimarkdown/bullet.png").toExternalForm());
-                            } else if ("#opentask".equals(src)) {
-                                // provide bullet, just for fun
-                                imgNode.setWidth("12");
-                                imgNode.setHeight("12");
-                                imgNode.setSrc(getClass().getResource(UIUtil.isRetina() ? "/com/vladsch/idea/multimarkdown/opentask@2x.png" : "/com/vladsch/idea/multimarkdown/opentask.png").toExternalForm());
-                            } else if ("#closedtask".equals(src)) {
-                                // provide bullet, just for fun
-                                imgNode.setWidth("12");
-                                imgNode.setHeight("12");
-                                imgNode.setSrc(getClass().getResource(UIUtil.isRetina() ? "/com/vladsch/idea/multimarkdown/closedtask@2x.png" : "/com/vladsch/idea/multimarkdown/closedtask.png").toExternalForm());
-                            }
-                        } else if (!src.startsWith("http://") && !src.startsWith("https://") && !src.startsWith("file://")) {
+                        if (!src.startsWith("http://") && !src.startsWith("https://") && !src.startsWith("file://")) {
                             // relative to document, change it to absolute file://
                             VirtualFile file = FileDocumentManager.getInstance().getFile(document);
                             VirtualFile parent = file == null ? null : file.getParent();
@@ -441,7 +392,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                                     imgNode.setSrc(String.valueOf(new File(localImage.getPath()).toURI().toURL()));
                                 }
                             } catch (MalformedURLException e) {
-                                logger.error("MalformedURLException", e);
+                                logger.error("MalformedURLException" + localImage.getPath());
                             }
                         }
                         int tmp = 0;
@@ -458,9 +409,54 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                         webEngine.executeScript(scrollOffset);
                         scrollOffset = null;
                     }
+
+                    // enable debug if it is enabled in settings
+                    if (MultiMarkdownGlobalSettings.getInstance().enableFirebug.getValue()) {
+                        enableDebug();
+                    }
+
+                    //if (needStyleSheetUpdate) {
+                    //    setStyleSheet();
+                    //}
                 }
             }
         });
+    }
+
+    public void enableDebug() {
+        //webView.getEngine().executeScript("if (!document.getElementById('FirebugLite')){E = document['createElement' + 'NS'] && document.documentElement.namespaceURI;E = E ? document['createElement' + 'NS'](E, 'script') : document['createElement']('script');E['setAttribute']('id', 'FirebugLite');E['setAttribute']('src', 'https://getfirebug.com/' + 'firebug-lite.js' + '#startOpened');E['setAttribute']('FirebugLite', '4');(document['getElementsByTagName']('head')[0] || document['getElementsByTagName']('body')[0]).appendChild(E);E = new Image;E['setAttribute']('src', 'https://getfirebug.com/' + '#startOpened');}");
+        //if (fireBugJS == null) return;
+
+        try {
+            //webEngine.executeScript("if (!document.getElementById('FirebugLite')) {\n" +
+            //        "    E = document['createElement' + 'NS'] && document.documentElement.namespaceURI;\n" +
+            //        "    E = E ? document['createElement' + 'NS'](E, 'script') : document['createElement']('script');\n" +
+            //        "    E['setAttribute']('id', 'FirebugLite');\n" +
+            //        "    E['setAttribute']('src', 'https://getfirebug.com/' + 'firebug-lite.js' + '#startOpened');\n" +
+            //        //"    E['setAttribute']('src', '" + fireBugJS + "');\n" +
+            //        "    E['setAttribute']('FirebugLite', '4');\n" +
+            //        "    (document['getElementsByTagName']('head')[0] || document['getElementsByTagName']('body')[0]).appendChild(E);\n" +
+            //        "    E = new Image;\n" +
+            //        "    E['setAttribute']('src', 'https://getfirebug.com/' + '#startOpened');\n" +
+            //        //"    E['setAttribute']('src', '" + fireBugJS + "' );\n" +
+            //        "}\n");
+
+            webEngine.executeScript("if (!document.getElementById('FirebugLite')) {\n" +
+                    "    E = document['createElement' + 'NS'] && document.documentElement.namespaceURI;\n" +
+                    "    E = E ? document['createElement' + 'NS'](E, 'script') : document['createElement']('script');\n" +
+                    "    E['setAttribute']('id', 'FirebugLite');\n" +
+                    "    E['setAttribute']('src', 'https://getfirebug.com/' + 'firebug-lite.js' + '#startOpened');\n" +
+                    //"    E['setAttribute']('src', '" + fireBugJS + "');\n" +
+                    "    E['setAttribute']('FirebugLite', '4');\n" +
+                    "    (document['getElementsByTagName']('head')[0] || document['getElementsByTagName']('body')[0]).appendChild(E);\n" +
+                    "    E = new Image;\n" +
+                    "    E['setAttribute']('src', 'https://getfirebug.com/' + '#startOpened');\n" +
+                    "}\n");
+
+        } catch (JSException ex) {
+            String error = ex.toString();
+            logger.error("JSException on script", ex);
+        }
     }
 
     // call backs from JavaScript will be handled by the bridge
@@ -499,53 +495,141 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         }, getUpdateDelay());
     }
 
-    protected void setStyleSheet() {
-        if (isRawHtml) return;
+    //protected void setStyleSheet() {
+    //    if (isRawHtml) return;
+    //
+    //    needStyleSheetUpdate = false;
+    //    webEngine.setUserStyleSheetLocation(MultiMarkdownGlobalSettings.getInstance().getCssExternalForm());
+    //}
 
-        String cssURL = getClass().getResource(MultiMarkdownGlobalSettings.getInstance().getCssFilePath()).toExternalForm();
-        if (MultiMarkdownGlobalSettings.getInstance().useCustomCss() && cssCustomFile != null) {
-            try {
-                FileWriter cssFile = new FileWriter(cssCustomFile);
-                cssFile.write(MultiMarkdownGlobalSettings.getInstance().getCssText());
-                cssFile.close();
-                //cssURL = "data:css/stylesheet;charset=utf-8;base64," + Base64.encodeBase64URLSafeString(MultiMarkdownGlobalSettings.getInstance().getCssText().getBytes(StandardCharsets.UTF_8));
-                cssURL = cssCustomFile.toURI().toURL().toExternalForm();
-            } catch (IOException e) {
-                e.printStackTrace();
+    protected void updateRawHtmlText(final String htmlTxt) {
+        final DocumentEx myDocument = myTextViewer.getDocument();
+
+        ApplicationManager.getApplication().runWriteAction(new Runnable() {
+            @Override
+            public void run() {
+                CommandProcessor.getInstance().executeCommand(project, new Runnable() {
+                    @Override
+                    public void run() {
+                        myDocument.replaceString(0, myDocument.getTextLength(), htmlTxt);
+                        final CaretModel caretModel = myTextViewer.getCaretModel();
+                        if (caretModel.getOffset() >= myDocument.getTextLength()) {
+                            caretModel.moveToOffset(myDocument.getTextLength());
+                        }
+                    }
+                }, null, null, UndoConfirmationPolicy.DEFAULT, myDocument);
             }
-        }
-        needStyleSheetUpdate = false;
-        webEngine.setUserStyleSheetLocation(null);
-        webEngine.setUserStyleSheetLocation(cssURL);
+        });
     }
 
-    /**
-     * Get the {@link Component} to display as this editor's UI.
-     *
-     * @return a scrollable {@link JEditorPane}.
-     */
+    private String markdownToHtml(boolean modified) {
+        if (astRoot == null) {
+            return "<strong>Parser timed out</strong>";
+        } else {
+            return modified ? new MultiMarkdownToHtmlSerializer(linkRendererModified).toHtml(astRoot) : new ToHtmlSerializer(linkRendererNormal).toHtml(astRoot);
+        }
+    }
+
+    private void parseMarkdown(String markdownSource) {
+        try {
+            astRoot = processor.get().parseMarkdown(markdownSource.toCharArray());
+        } catch (ParsingTimeoutException e) {
+            astRoot = null;
+        }
+    }
+
+    private void updateHtmlContent(boolean force) {
+        if (updateDelayTimer != null) {
+            updateDelayTimer.cancel();
+            updateDelayTimer = null;
+        }
+
+        if (previewIsObsolete && isEditorTabVisible && (isActive || force)) {
+            try {
+                parseMarkdown(document.getText());
+                final String html = makeHtmlPage(markdownToHtml(true));
+                final String htmlTxt = isShowModified() ? html : markdownToHtml(false);
+                if (isRawHtml) {
+                    //myTextViewer.setText(htmlTxt);
+                    updateRawHtmlText(htmlTxt);
+                } else {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO: add option to enable/disable keeping scroll position on update
+                            JSObject scrollPos = (JSObject) webEngine.executeScript("({ x: window.pageXOffset, y: window.pageYOffset })");
+                            scrollOffset = "window.scroll(" + scrollPos.getMember("x") + ", " + scrollPos.getMember("y") + ")";
+                            webEngine.loadContent(html);
+                        }
+                    });
+                }
+
+                previewIsObsolete = false;
+
+                // here we can find our HTML Text counterpart but it is better to keep it separate for now
+                //VirtualFile file = FileDocumentManager.getInstance().getFile(document);
+                //FileEditorManager manager = FileEditorManager.getInstance(project);
+                //FileEditor[] editors = manager.getEditors(file);
+                //for (int i = 0; i < editors.length; i++)
+                //{
+                //    if (editors[i] == this)
+                //    {
+                //        if (editors.length > i && editors[i+1] instanceof MultiMarkdownPreviewEditor) {
+                //            // update its html too
+                //            MultiMarkdownPreviewEditor htmlEditor = (MultiMarkdownPreviewEditor)editors[i+1];
+                //            boolean showModified = MultiMarkdownGlobalSettings.getInstance().isShowHtmlTextAsModified();
+                //            htmlEditor.setHtmlContent("<div id=\"multimarkdown-preview\">\n" + (showModified ? procHtml : html) + "\n</div>\n");
+                //            break;
+                //        }
+                //    }
+                //}
+            } catch (Exception e) {
+                LOGGER.error("Failed processing Markdown document", e);
+            }
+        }
+    }
+
+    protected String makeHtmlPage(String html) {
+        VirtualFile file = FileDocumentManager.getInstance().getFile(document);
+        String result = "" +
+                "<head>\n" +
+                "<link rel=\"stylesheet\" href=\""+MultiMarkdownGlobalSettings.getInstance().getCssExternalForm()+"\" />\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "<div class=\"container\">\n" +
+                "<div id=\"readme\" class=\"boxed-group\">\n" +
+                "<h3>\n" +
+                "   <span class=\"bookicon octicon-book\"></span>\n" +
+                "  " + file.getName() + "\n" +
+                "</h3>\n" +
+                "<article class=\"markdown-body\">\n" +
+                "";
+
+        result += html;
+        result += "</article>\n";
+        result += "</div>\n";
+        result += "</div>\n";
+        //if (fireBugJS != null && fireBugJS.length() > 0 && MultiMarkdownGlobalSettings.getInstance().enableFirebug.getValue()) {
+        //    result += "" +
+        //            "<script src='" + fireBugJS + "' id='FirebugLite' FirebugLite='4'/>\n" +
+        //            "";
+        //}
+        result += "</body>\n";
+        return result;
+    }
+
     @NotNull
     public JComponent getComponent() {
         //return scrollPane != null ? scrollPane : myTextViewer.getComponent();
         return jEditorPane != null ? jEditorPane : myTextViewer.getComponent();
     }
 
-    /**
-     * Get the component to be focused when the editor is opened.
-     *
-     * @return {@link #scrollPane}
-     */
     @Nullable
     public JComponent getPreferredFocusedComponent() {
         //return scrollPane != null ? scrollPane : myTextViewer.getComponent();
         return jEditorPane != null ? jEditorPane : myTextViewer.getContentComponent();
     }
 
-    /**
-     * Get the editor displayable name.
-     *
-     * @return editor name
-     */
     @NotNull
     @NonNls
     public String getName() {
@@ -608,116 +692,6 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         if (previewIsObsolete) {
             updateHtmlContent(false);
         }
-    }
-
-    protected void updateRawHtmlText(final String htmlTxt) {
-        final DocumentEx myDocument = myTextViewer.getDocument();
-
-        ApplicationManager.getApplication().runWriteAction(new Runnable() {
-            @Override
-            public void run() {
-                CommandProcessor.getInstance().executeCommand(project, new Runnable() {
-                    @Override
-                    public void run() {
-                        myDocument.replaceString(0, myDocument.getTextLength(), htmlTxt);
-                        final CaretModel caretModel = myTextViewer.getCaretModel();
-                        if (caretModel.getOffset() >= myDocument.getTextLength()) {
-                            caretModel.moveToOffset(myDocument.getTextLength());
-                        }
-                    }
-                }, null, null, UndoConfirmationPolicy.DEFAULT, myDocument);
-            }
-        });
-    }
-
-    private String markdownToHtml(boolean modified) {
-        if (astRoot == null) {
-            return "<strong>Parser timed out</strong>";
-        } else {
-            return modified ? new MultiMarkdownToHtmlSerializer(linkRendererModified).toHtml(astRoot) : new ToHtmlSerializer(linkRendererNormal).toHtml(astRoot);
-        }
-    }
-
-    private void parseMarkdown(String markdownSource) {
-        try {
-            astRoot = processor.get().parseMarkdown(markdownSource.toCharArray());
-        } catch (ParsingTimeoutException e) {
-            astRoot = null;
-        }
-    }
-
-    private void updateHtmlContent(boolean force) {
-        if (updateDelayTimer != null) {
-            updateDelayTimer.cancel();
-            updateDelayTimer = null;
-        }
-
-        if (previewIsObsolete && isEditorTabVisible && (isActive || force)) {
-            try {
-                parseMarkdown(document.getText());
-                final String html = makeHtmlPage(markdownToHtml(true));
-                final String htmlTxt = isShowModified() ? html : markdownToHtml(false);
-                if (isRawHtml) {
-                    //myTextViewer.setText(htmlTxt);
-                    updateRawHtmlText(htmlTxt);
-                } else {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            // TODO: add option to enable/disable keeping scroll position on update
-                            JSObject scrollPos = (JSObject) webEngine.executeScript("({ x: window.pageXOffset, y: window.pageYOffset })");
-                            scrollOffset = "window.scroll(" + scrollPos.getMember("x") + ", " + scrollPos.getMember("y") + ")";
-                            if (needStyleSheetUpdate) {
-                                setStyleSheet();
-                            }
-                            webEngine.loadContent(html);
-                        }
-                    });
-                }
-
-                previewIsObsolete = false;
-
-                // here we can find our HTML Text counterpart but it is better to keep it separate for now
-                //VirtualFile file = FileDocumentManager.getInstance().getFile(document);
-                //FileEditorManager manager = FileEditorManager.getInstance(project);
-                //FileEditor[] editors = manager.getEditors(file);
-                //for (int i = 0; i < editors.length; i++)
-                //{
-                //    if (editors[i] == this)
-                //    {
-                //        if (editors.length > i && editors[i+1] instanceof MultiMarkdownPreviewEditor) {
-                //            // update its html too
-                //            MultiMarkdownPreviewEditor htmlEditor = (MultiMarkdownPreviewEditor)editors[i+1];
-                //            boolean showModified = MultiMarkdownGlobalSettings.getInstance().isShowHtmlTextAsModified();
-                //            htmlEditor.setHtmlContent("<div id=\"multimarkdown-preview\">\n" + (showModified ? procHtml : html) + "\n</div>\n");
-                //            break;
-                //        }
-                //    }
-                //}
-            } catch (Exception e) {
-                LOGGER.error("Failed processing Markdown document", e);
-            }
-        }
-    }
-
-    protected String makeHtmlPage(String html) {
-        VirtualFile file = FileDocumentManager.getInstance().getFile(document);
-        String result = "" +
-                "<body>\n" +
-                "<div class=\"container\">\n" +
-                "<div id=\"readme\" class=\"boxed-group\">\n" +
-                "<h3>\n" +
-                "   <span class=\"bookicon octicon-book\"></span>\n" +
-                "  " + file.getName() + "\n" +
-                "</h3>\n" +
-                "<article class=\"markdown-body\">\n" +
-                "";
-        result += html;
-        result += "</article>\n";
-        result += "</div>\n";
-        result += "</div>\n";
-        result += "</body>\n";
-        return result;
     }
 
     /**

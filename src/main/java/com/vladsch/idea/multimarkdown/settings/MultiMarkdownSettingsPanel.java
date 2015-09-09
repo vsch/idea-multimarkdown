@@ -50,7 +50,6 @@ import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class MultiMarkdownSettingsPanel implements SettingsProvider {
@@ -106,6 +105,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
     private JCheckBox useCustomCssCheckBox;
     private JCheckBox useOldPreviewCheckBox;
     private JLabel maxImgWidthLabel;
+    private JCheckBox enableFirebugCheckBox;
 
     // need this so that we dont try to access components before they are created
     public @Nullable Object getComponent(@NotNull String persistName) {
@@ -138,6 +138,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         if (persistName.equals("enableTrimSpacesCheckBox")) return enableTrimSpacesCheckBox;
         if (persistName.equals("useCustomCssCheckBox")) return useCustomCssCheckBox;
         if (persistName.equals("useOldPreviewCheckBox")) return useOldPreviewCheckBox;
+        if (persistName.equals("enableFirebugCheckBox")) return enableFirebugCheckBox;
 
         return null;
     }
@@ -181,10 +182,10 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
 
         btnLoadDefault.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) {
-                String cssFileText = MultiMarkdownGlobalSettings.getInstance().getCssFileText(htmlThemeComboBox.getSelectedIndex());
-                String base64Css = Base64.encodeBase64URLSafeString(MultiMarkdownGlobalSettings.getInstance().getCssText().getBytes(StandardCharsets.UTF_8));
-                String cssText = new String(Base64.decodeBase64(base64Css), StandardCharsets.UTF_8);
-                textCustomCss.setText(cssText);
+                //String cssFileText = MultiMarkdownGlobalSettings.getInstance().getCssFileText(htmlThemeComboBox.getSelectedIndex());
+                //String base64Css = Base64.encodeBase64URLSafeString(MultiMarkdownGlobalSettings.getInstance().getCssText().getBytes(Charset.forName("utf-8")));
+                //String cssText = new String(Base64.decodeBase64(base64Css), Charset.forName("utf-8"));
+                textCustomCss.setText(MultiMarkdownGlobalSettings.getInstance().getCssFileText(htmlThemeComboBox.getSelectedIndex()));
             }
         });
 
@@ -219,10 +220,15 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
             }
         });
 
-        if (MultiMarkdownGlobalSettings.isFxHtmlPreview()) {
+        if (MultiMarkdownGlobalSettings.getInstance().isFxHtmlPreview()) {
             maxImgWidthSpinner.setVisible(false);
             maxImgWidthLabel.setVisible(false);
         }
+        useOldPreviewCheckBox.addItemListener(new ItemListener() {
+            @Override public void itemStateChanged(ItemEvent e) {
+                enableFirebugCheckBox.setEnabled(!useOldPreviewCheckBox.isSelected());
+            }
+        });
     }
 
     private void createUIComponents() {

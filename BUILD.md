@@ -29,3 +29,4 @@ I added a few changes and extensions to the parser. For now I am using my forked
 
 If you are not modifying pegdown then you build idea-multimarkdown with the included pegdown .jar in the lib directory. Otherwise, you will need to get the pegdown source used in this plug-in from [vsch/pegdown](https://github.com/vsch/pegdown/tree/develop).
 
+                    
