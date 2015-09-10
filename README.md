@@ -9,7 +9,7 @@ idea-multimarkdown
 
 **You can download it on the [JebBrains plugin page](https://plugins.jetbrains.com/plugin?pr=&pluginId=7896).**
 
-### Version 1.1.0 is released
+### Version 1.1 is released
 
 I have implemented a JavaFX WebView based HTML Preview Tab and the results are stunning. Not only was I able to make it look like GitHub's markdown, which I could not do with the old preview, but it is a joy to work with and maintain compared to `HTMLEditorKit`. It does require that you run your IDEA on JDK 1.8 with `jfxrt.jar` in the jdk's `lib/ext` directory, which is its standard location. 
 

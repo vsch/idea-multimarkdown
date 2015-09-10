@@ -45,10 +45,18 @@
     </div>
     ]]></description>
 
-  <version>1.1.1</version>
-  <idea-version since-build="135.1306"/>
+  <version>1.1.2</version>
+  <idea-version since-build="133.1711"/>
   <change-notes><![CDATA[
     <p>
+    <b>1.1.2</b><br/>
+      <ul>
+        <li>Fix Exception reporting for ScratchFileService not found on older versions. If the check fails then no others will be performed until build of IDE changes.</li>
+        <li>Fix WebView Preview Tab no working for 1.8u60 and up. In 1.8u60+ it no longer handles fonts with uri(data:) nor font/woff only .ttf.</li>
+        <li>Fix allowing capital X to mark closed tasks. Fix #24</li>
+        <li>Fix lack of ComboBox for Build 133.1711, now for earlier builds using List for theme selection instead of ComboBox.</li>
+        <li>Change since-build to 133.1711, earliest tested version IDEA 13.0 CE, new Preview is not available but old preview works.</li>
+    </ul>
     <b>1.1.1</b><br/>
       <ul>
         <li>Fix plugin was compiled for JRE 1.8 in error. It does not use language features beyond 1.6.</li>

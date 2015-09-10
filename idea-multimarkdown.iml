@@ -7,7 +7,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="IntelliJ IDEA Community Edition IC-141.2311.1 jdk 1.8.60" jdkType="IDEA JDK" />
     <orderEntry type="module-library" exported="">
       <library name="lib">
         <CLASSES>

@@ -35,9 +35,7 @@ import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListen
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -79,7 +77,7 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
         // but for some reason WebView won't accept a copy of the file to the temp dir and IDEA won't include .ttf files in resources
         // directory, but will if the file is .png, ok we live with that, WebView takes the file with a .png extension and correctly figures
         // out that it is .ttf
-        Boolean useOldPreview = settings.useOldPreview.getValue();
+        boolean useOldPreview = settings.useOldPreview.getValue();
 
         // Listen to settings changes
         urlCustomFont = null;
@@ -90,12 +88,12 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
         globalSettingsListener = null;
 
         if (!useOldPreview) {
-            urlCustomFont = createCustomFontUrl(useOldPreview);
-            urlDefaultFxCss = createTempCopy(useOldPreview, MultiMarkdownPlugin.class.getResource(MultiMarkdownGlobalSettings.PREVIEW_FX_STYLESHEET_LIGHT), "default-fx.css");
-            urlDarculaFxCss = createTempCopy(useOldPreview, MultiMarkdownPlugin.class.getResource(MultiMarkdownGlobalSettings.PREVIEW_FX_STYLESHEET_DARK), "darcula-fx.css");
+            urlCustomFont = createCustomFontUrl();
+            urlDefaultFxCss = createTempCopy(MultiMarkdownPlugin.class.getResource(MultiMarkdownGlobalSettings.PREVIEW_FX_STYLESHEET_LIGHT), "default-fx.css");
+            urlDarculaFxCss = createTempCopy(MultiMarkdownPlugin.class.getResource(MultiMarkdownGlobalSettings.PREVIEW_FX_STYLESHEET_DARK), "darcula-fx.css");
 
             try {
-                fileCustomFxCss = createTempCopy(useOldPreview, settings.customFxCss.getValue(), "custom-fx.css");
+                fileCustomFxCss = createTempCopy(settings.customFxCss.getValue(), "custom-fx.css");
                 urlCustomFxCss = fileCustomFxCss.toURI().toURL().toExternalForm();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -105,7 +103,11 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
                 MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
                     public void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings) {
                         try {
-                            updateTempCopy(fileCustomFxCss, newSettings.customFxCss.getValue());
+                            // 1.8u60 caches the css by name, we have to change the name or no refresh is done
+                            //updateTempCopy(fileCustomFxCss, newSettings.customFxCss.getValue());
+                            fileCustomFxCss.delete();
+                            fileCustomFxCss = createTempCopy(settings.customFxCss.getValue(), "custom-fx.css");
+                            urlCustomFxCss = fileCustomFxCss.toURI().toURL().toExternalForm();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -115,22 +117,36 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
         }
     }
 
-    protected String createCustomFontUrl(boolean useOldPreview) {
-        if (!useOldPreview) {
-            String fontPath = getClass().getResource("/com/vladsch/idea/multimarkdown/taskitems.ttf").toExternalForm();
-            File file = new File(fontPath);
+    protected String createCustomFontUrl() {
+        // create the freaking thing
+        try {
+            InputStream fontStream = getClass().getResourceAsStream("/com/vladsch/idea/multimarkdown/taskitems.ttf");
+            File tempFontFile = File.createTempFile("multimarkdown", "taskitems.ttf");
+            tempFontFile.deleteOnExit();
+            logger.error("creating temp font file: " + tempFontFile.getAbsolutePath());
 
-            if (file.exists()) {
-                return fontPath;
+            FileOutputStream fileOutputStream = new FileOutputStream(tempFontFile);
+            byte[] buffer = new byte[32768];
+            int length;
+            while ((length = fontStream.read(buffer)) > 0) {
+                fileOutputStream.write(buffer, 0, length);
             }
+            fileOutputStream.close();
+            fontStream.close();
+
+            return tempFontFile.toURI().toURL().toExternalForm();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
-    protected String createTempCopy(boolean useOldPreview, URL resourceFile, String suffix) {
-        if (!useOldPreview && urlCustomFont != null) {
+    protected String createTempCopy(URL resourceFile, String suffix) {
+        if (urlCustomFont != null) {
             try {
-                File cssTempFile = createTempCopy(useOldPreview, Resources.toString(resourceFile, Charsets.UTF_8), suffix);
+                File cssTempFile = createTempCopy(Resources.toString(resourceFile, Charsets.UTF_8), suffix);
                 return cssTempFile.toURI().toURL().toExternalForm();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -139,7 +155,7 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
         return resourceFile.toExternalForm();
     }
 
-    protected File createTempCopy(boolean useOldPreview, String cssText, String suffix) throws IOException {
+    protected File createTempCopy(String cssText, String suffix) throws IOException {
         File cssTempFile = File.createTempFile("multimarkdown", suffix);
         cssTempFile.deleteOnExit();
         updateTempCopy(cssTempFile, cssWithCustomFont(cssText));
@@ -171,10 +187,10 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
                 logger.warn("JavaFX library jfxrt.jar not found in the current jre: " + javaHome + ", version " + javaVersion);
                 logger.warn("MultiMarkdown HTML Preview will use a more limited implementation.");
                 MultiMarkdownGlobalSettings.getInstance().useOldPreview.setValue(true);
-            } else if (!file.exists() || "1.8.0_u51".compareTo(javaVersion.substring(0, Math.min(javaVersion.length(), "1.8.0_u51".length()))) < 0) {
-                logger.warn("JavaFX library jfxrt.jar was found in the current jre: " + javaHome + ", but version " + javaVersion + " is not supported, max version is 1.8.0_u51");
-                logger.warn("MultiMarkdown HTML Preview will use a more limited implementation.");
-                MultiMarkdownGlobalSettings.getInstance().useOldPreview.setValue(true);
+                //} else if (!file.exists() || "1.8.0_u51".compareTo(javaVersion.substring(0, Math.min(javaVersion.length(), "1.8.0_u51".length()))) < 0) {
+                //    logger.warn("JavaFX library jfxrt.jar was found in the current jre: " + javaHome + ", but version " + javaVersion + " is not supported, max version is 1.8.0_u51");
+                //    logger.warn("MultiMarkdown HTML Preview will use a more limited implementation.");
+                //    MultiMarkdownGlobalSettings.getInstance().useOldPreview.setValue(true);
             } else {
                 logger.info("JavaFX library jfxrt.jar found in " + libDir + " the current jre: " + javaHome + ", version " + javaVersion);
                 ArrayList<String> libs = new ArrayList<String>(1);
