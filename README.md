@@ -11,23 +11,34 @@ idea-multimarkdown
 
 ### Version 1.1 is released
 
-I have implemented a JavaFX WebView based HTML Preview Tab and the results are stunning. Not only was I able to make it look like GitHub's markdown, which I could not do with the old preview, but it is a joy to work with and maintain compared to `HTMLEditorKit`. It does require that you run your IDEA on JDK 1.8 with `jfxrt.jar` in the jdk's `lib/ext` directory, which is its standard location. 
-
-Note that you **cannot** run it using the **IDEA bundled JDK** because it does not include the `jfxrt.jar` nor the native libraries needed for it.    
-
-If the `jfxrt.jar` is not found or the plugin cannot create the new editor class, it will fall back to using the `JEditorPane` with `HTMLEditorKit` preview. You can also disable using JavaFX based preview in plugin settings, for those that prefer to keep using the old preview.
-
-**For PHPStorm 9.5 EAP Mac with bundled JDK**
-In release PS 142.4491, you can change the boot jdk from the GUI. However, due to a bug it keeps booting the IDEA with the bundled jdk. To change the boot jdk you need to add a `phpstorm.jdk` file with the path to the alternate jdk, for example:
- 
-    /Library/Java/JavaVirtualMachines/jdk1.8.0_51.jdk
-
-to the `/Library/Preferences/WebIde95` directory. Restart your PhpStorm. 
+I have implemented a JavaFX WebView based HTML Preview Tab and the results are stunning. Not only was I able to make it look like GitHub's markdown, which I could not do with the old preview, but it is a joy to work with and maintain compared to `HTMLEditorKit`. 
 
 Here is a screenshot of the plugin's HTML Preview and GitHub of this readme file: 
 
 ![Preview](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_jfx_webview.png)
 
+To get the new preview tab you need to configure your IDEA to use JDK 1.8 that includes `jfxrt.jar` in the jdk's `lib/ext` directory, which is its standard location. If `jfxrt.jar` is not found or the plugin cannot create the new editor class, it will fall back to using the `JEditorPane` with `HTMLEditorKit` preview. You can also disable using JavaFX based preview in plugin settings, for those that prefer to keep using the old preview.
+
+You **cannot** get the new preview if the boot JDK is the **IDEA bundled JDK**, which does not include `jfxrt.jar` nor the native libraries that it uses. 
+
+#### PHPStorm 9.5 EAP, WebStorm 11 EAP on OS X with bundled JDK
+
+You can switch the boot jdk from the GUI. However, due to a bug they keep booting with the bundled jdk. The bug and the workaround is similar. 
+
+- PhpStorm: (last checked in PS-142.4491) To change the boot jdk you need to add a `phpstorm.jdk` file with the path to the alternate jdk, for example:
+ 
+        /Library/Java/JavaVirtualMachines/jdk1.8.0_51.jdk
+
+    to the `/Library/Preferences/WebIde95` directory. Restart PhpStorm. 
+
+- WebStorm: (last checked in WS-142.4723) To change the boot jdk you need to do one of:
+    1. add a `webstorm.jdk` file with the path to the alternate jdk, for example: 
+    
+            /Library/Java/JavaVirtualMachines/jdk1.8.0_51.jdk
+
+    2. use the GUI to select the JDK but then rename `wstorm.jdk` created by the gui to `webstorm.jdk` that it uses to get the boot jdk setting
+ 
+    in the `/Library/Preferences/WebStorm11` directory. Restart WebStorm. 
 
 The Background
 --------------
