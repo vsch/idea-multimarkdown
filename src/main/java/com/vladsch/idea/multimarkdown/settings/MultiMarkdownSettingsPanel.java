@@ -45,17 +45,24 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class MultiMarkdownSettingsPanel implements SettingsProvider {
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownSettingsPanel.class);
 
     public JSpinner parsingTimeoutSpinner;
     public JCheckBox smartsCheckBox;
@@ -110,6 +117,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
     private JLabel maxImgWidthLabel;
     private JCheckBox enableFirebugCheckBox;
     private JList htmlThemeList;
+    private JEditorPane tippingJarEditorPane;
 
     // need this so that we dont try to access components before they are created
     public @Nullable Object getComponent(@NotNull String persistName) {
@@ -254,6 +262,49 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
                 }
             });
         }
+
+        tippingJarEditorPane.setText("" +
+                "<html>\n" +
+                "  <head>\n" +
+                "  <style>\n" +
+                "     td { text-align: center; }\n" +
+                "     p, table, tr, { margin: 0; padding: 0; }\n" +
+                "     p { margin-bottom: 5px; }\n" +
+                "  </style>\n" +
+                "  </head>\n" +
+                "  <body>\n" +
+                "    <p style=\"margin: 0\">\n" +
+                "      <table>\n" +
+                "        <tr><td><a href=\"http://flattr.com/thing/4603764/vschidea-multimarkdown-on-GitHub\" title=\"Donate monthly to vsch using Flattr\"><img src=\"https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/flattr-tips.png\" border=\"0\" width=\"43\" height=\"53\" alt=\"Donate monthly to vsch using Flattr\" /></a>\n" +
+                "          &nbsp;&nbsp;<a href=\"https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NR7DAGTC8CXLU\" title=\"Donate once-off to vsch using Paypal\"><img src=\"https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/paypal-tips.png\" border=\"0\" width=\"43\" height=\"53\" alt=\"Donate once-off to vsch using Paypal\" /></a></td>\n" +
+                "        </tr><tr>\n" +
+                "          <td><b>If you like my work then please feel free to tip me.<br>I will view it as a show of appreciation and as a reward for my effort.</b></td>\n" +
+                "        </tr>\n" +
+                "      </table>\n" +
+                "    </p>\n" +
+                "  </body>\n" +
+                "</html>\n" +
+                "");
+
+        tippingJarEditorPane.addHyperlinkListener(new HyperlinkListener() {
+            @Override public void hyperlinkUpdate(HyperlinkEvent e) {
+                if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
+                    URL href = e.getURL();
+                    if (href != null) {
+                        if (Desktop.isDesktopSupported()) {
+                            try {
+                                Desktop.getDesktop().browse(href.toURI());
+                            } catch (URISyntaxException ex) {
+                                // invalid URI, just log
+                                logger.error("URISyntaxException on '" + href.toString() + "'" + ex.toString());
+                            } catch (IOException ex) {
+                                logger.error("IOException on '" + href.toString() + "'" + ex.toString());
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private void createUIComponents() {

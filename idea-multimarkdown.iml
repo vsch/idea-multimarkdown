@@ -22,6 +22,6 @@
     </orderEntry>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="jfxrt" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="pegdown-1.5.13" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="pegdown-1.5.14" level="project" />
   </component>
 </module>

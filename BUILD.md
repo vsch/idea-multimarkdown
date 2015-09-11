@@ -27,6 +27,6 @@ Note
 This plug-in is using a modified version of [sirthias/pegdown](https://github.com/sirthias), I post my PR's but there is a delay in both generating them and for them to be merged.
 I added a few changes and extensions to the parser. For now I am using my forked copy until the official version has these features.
 
-If you are not modifying pegdown then you build idea-multimarkdown with the included pegdown .jar in the lib directory. Otherwise, you will need to get the pegdown source used in this plug-in from [vsch/pegdown](https://github.com/vsch/pegdown/tree/develop).
+If you are not modifying pegdown then you can build idea-multimarkdown with the included pegdown .jar in the lib directory. Otherwise, you will need to get the pegdown source used in this plug-in from [vsch/pegdown](https://github.com/vsch/pegdown/tree/develop).
 
                     
