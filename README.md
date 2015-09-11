@@ -3,11 +3,19 @@ idea-multimarkdown
 
 **[Markdown](http://daringfireball.net/projects/markdown) language support for [IntelliJ IDEA](http://www.jetbrains.com/idea), [RubyMine](http://www.jetbrains.com/ruby), [PhpStorm](http://www.jetbrains.com/phpstorm), [WebStorm](http://www.jetbrains.com/webstorm), [PyCharm](http://www.jetbrains.com/pycharm), [AppCode](http://www.jetbrains.com/objc) and [Android Studio](http://developer.android.com/sdk/installing/studio.html).**
 
-**<span color="#c00038">If you like this plugin, please rate it on the</span> [plugin comment and rate page](https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896).**
-
-**For any communications requiring a reply** please use the [GitHub Issues page](https://github.com/vsch/idea-multimarkdown/issues) for this plugin. There is no ability to reply or see the comments left on the JetBrains plugin comment and rate page.   
-
 **You can download it on the [JebBrains plugin page](https://plugins.jetbrains.com/plugin?pr=&pluginId=7896).**
+
+**For any communications requiring a reply** please use the [GitHub Issues page](https://github.com/vsch/idea-multimarkdown/issues) for this plugin. There is no ability to reply to comments left on the [JetBrains plugin comment and rate page](https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896).   
+
+
+<table>
+<tr><td><a href="http://flattr.com/thing/4603764/vschidea-multimarkdown-on-GitHub" title="Donate monthly to vsch using Flattr"><img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/flattr-donate.png" border="0" width="86" height="20" alt="Flattr donate button" /></a></td>
+<td rowspan="2"><b>If you like my work then please feel free to tip me as show of appreciation<br>
+and as a reward for my effort.</b></td>
+</tr>
+<tr><td><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NR7DAGTC8CXLU" title="Donate once-off to vsch using Paypal"><img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/paypal-donate.png" border="0" width="86" height="20" alt="PayPal donate button" /></a></td></tr>
+</table>
+
 
 ### Version 1.1 is released
 

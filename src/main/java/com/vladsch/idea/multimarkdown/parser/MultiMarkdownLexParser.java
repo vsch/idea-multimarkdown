@@ -26,8 +26,8 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes;
-import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
+import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
 import org.jetbrains.annotations.NotNull;
 import org.pegdown.PegDownProcessor;
 import org.pegdown.ast.*;
@@ -46,6 +46,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
     private MultiMarkdownGlobalSettingsListener globalSettingsListener = null;
     private ThreadLocal<PegDownProcessor> processor = initProcessor();
     private int currentStringLength;
+    //private String currentString;
 
     private static HashSet<IElementType> excludedTokenTypes = new HashSet<IElementType>();
     private static Map<IElementType, HashSet<IElementType>> overrideExclusions = new HashMap<IElementType, HashSet<IElementType>>();
@@ -62,6 +63,9 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
     protected LexerToken[] tokenArray = null;
     protected LexerToken[] lexerTokens = null;
     protected RootNode rootNode = null;
+    protected Map<String, MarkdownASTVisitor.ParserNodeInfo> abbreviations = null;
+    protected String abbreviationsRegEx = "";
+    protected Pattern abbreviationsPattern = null;
 
     protected final Integer pegdownExtensions;
     protected final Integer parsingTimeout;
@@ -72,11 +76,16 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         recursingBold = false;
         recursingItalic = false;
         recursingStrike = false;
+        abbreviations = null;
+        abbreviationsPattern = null;
         tokenArray = null;
         lexerTokens = null;
         rootNode = null;
 
         clearStack();
+
+        abbreviations = new HashMap<String, MarkdownASTVisitor.ParserNodeInfo>();
+        abbreviationsRegEx = "";
     }
 
     static protected void addExclusion(IElementType parent, IElementType child) {
@@ -264,6 +273,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
     public boolean parseMarkdown(final String source) {
         clearParsed();
         currentStringLength = source.length();
+        //currentString = source;
 
         try {
             rootNode = processor.get().parseMarkdown(source.toCharArray());
@@ -516,15 +526,118 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
     }
 
     protected class MarkdownASTVisitor implements Visitor {
-
         protected final ArrayList<LexerToken> tokens = new ArrayList<LexerToken>(100);
 
         public ArrayList<LexerToken> getTokens() { return tokens; }
 
+        class ParserNodeInfo {
+            public int startIndex = 0;
+            public int endIndex = 0;
+            public StringBuilder text = new StringBuilder();
+            public StringBuilder expansion = null;
+        }
+
+        protected void collectChildrensText(Node node, ParserNodeInfo nodeInfo) {
+            if (node.getClass() == TextNode.class || node.getClass() == SpecialTextNode.class) {
+                nodeInfo.text.append(((TextNode) node).getText());
+                if (nodeInfo.startIndex == 0) {
+                    nodeInfo.startIndex = node.getStartIndex();
+                }
+                nodeInfo.endIndex = node.getEndIndex();
+            } else if (node instanceof SuperNode) {
+                for (Node child : node.getChildren()) {
+                    collectChildrensText(child, nodeInfo);
+                }
+            }
+        }
+
         public void visit(RootNode node) {
-            for (AbbreviationNode abbreviationNode : node.getAbbreviations()) abbreviationNode.accept(this);
-            for (ReferenceNode referenceNode : node.getReferences()) referenceNode.accept(this);
+            for (AbbreviationNode abbrNode : node.getAbbreviations()) {
+                ParserNodeInfo abbrNodeInfo = new ParserNodeInfo();
+                ParserNodeInfo expansionNodeInfo = new ParserNodeInfo();
+
+                // need to collect the expanded abbreviation text from abbreviationNodes during child visit
+                collectChildrensText(abbrNode, abbrNodeInfo);
+                collectChildrensText(abbrNode.getExpansion(), expansionNodeInfo);
+
+                String abbr = abbrNodeInfo.text.toString();
+                abbrNodeInfo.expansion = expansionNodeInfo.text;
+                if (!abbreviations.containsKey(abbr)) {
+                    // we overwrite the old values? or we keep them all for error resolution
+                    abbreviations.put(abbr, abbrNodeInfo);
+                    if (abbreviationsRegEx.length() > 0) abbreviationsRegEx += "|";
+                    abbreviationsRegEx += "\\b\\Q" + abbr + "\\E\\b";
+                }
+            }
+
+            for (AbbreviationNode abbreviationNode : node.getAbbreviations()) {
+                abbreviationNode.accept(this);
+            }
+
+            for (ReferenceNode referenceNode : node.getReferences()) {
+                referenceNode.accept(this);
+            }
+
             visitChildren(node);
+        }
+
+        public void visit(TextNode node) {
+            if (node instanceof CommentNode) {
+                addToken(node, MultiMarkdownTypes.COMMENT);
+            } else {
+                if (abbreviations.isEmpty()) {
+                    addToken(node, MultiMarkdownTypes.TEXT);
+                } else {
+                    addTextTokenWithAbbreviations(node, MultiMarkdownTypes.TEXT, MultiMarkdownTypes.ABBREVIATED_TEXT);
+                }
+            }
+        }
+
+        protected void addTextTokenWithAbbreviations(TextNode node, IElementType tokenType, IElementType abbreviationType) {
+            int endIndex = node.getEndIndex();
+            int startIndex = node.getStartIndex();
+
+            // compensate for missing EOL at end of input causes pegdown to return a range past end of input
+            // in this case IDEA ignores the range. :(
+            if (endIndex > currentStringLength) endIndex = currentStringLength;
+
+            Range range = new Range(startIndex, endIndex);
+            if (!range.isEmpty() && (parentRanges.size() <= 0 || excludeAncestors(range, tokenType))) {
+                // wasn't stripped out, set it
+                // see if it contains abbreviations, we color them differently from text
+                if (abbreviationsPattern == null) {
+                    abbreviationsPattern = Pattern.compile(abbreviationsRegEx);
+                }
+
+                String nodeText = node.getText();// currentString.substring(startIndex, endIndex);
+                Matcher m = abbreviationsPattern.matcher(nodeText);
+                int lastPos = startIndex;
+
+                while (m.find()) {
+                    //String found = m.group();
+                    int foundStart = startIndex + m.start(0);
+                    int foundEnd = startIndex + m.end(0);
+
+                    if (lastPos < foundStart) {
+                        range = new Range(lastPos, foundStart);
+                        tokens.add(new LexerToken(range, tokenType));
+                    }
+
+                    if (foundStart < foundEnd) {
+                        range = new Range(foundStart, foundEnd);
+                        tokens.add(new LexerToken(range, abbreviationType));
+                    }
+
+                    lastPos = foundEnd;
+                }
+
+                if (lastPos < endIndex) {
+                    range = new Range(lastPos, endIndex);
+                    tokens.add(new LexerToken(range, tokenType));
+                }
+
+                //System.out.print("adding " + tokenType + " for [" + range.getStart() + ", " + range.getEnd() + ")\n");
+            }
         }
 
         public void visit(SimpleNode node) {
@@ -558,16 +671,9 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
             addToken(node, TokenType.ERROR_ELEMENT);
         }
 
-        public void visit(TextNode node) {
-            if (node instanceof CommentNode) {
-                addToken(node, MultiMarkdownTypes.COMMENT);
-            } else {
-                addToken(node, MultiMarkdownTypes.TEXT);
-            }
-        }
-
         public void visit(SpecialTextNode node) {
-            addToken(node, (node.getEndIndex() - node.getStartIndex() > 1) ? MultiMarkdownTypes.SPECIAL_TEXT : MultiMarkdownTypes.TEXT);
+            if ((node.getEndIndex() - node.getStartIndex() > 1)) addToken(node, MultiMarkdownTypes.SPECIAL_TEXT);
+            else visit((TextNode) node); // so that it is handled in TextNode manner
         }
 
         protected void splitOutMarker(StrongEmphSuperNode node, IElementType markerType) {
@@ -902,7 +1008,77 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         }
 
         protected void visitChildren(SuperNode node) {
-            for (Node child : node.getChildren()) child.accept(this);
+            // here we combine multiple segments of TextNode and SpecialText into a single TextNode
+            int startIndex = 0, endIndex = 0;
+            String combinedText = null;
+            Node lastTextNode = null;
+
+            for (Node child : node.getChildren()) {
+                boolean processed = false;
+                if (child.getClass() == TextNode.class || child.getClass() == SpecialTextNode.class) {
+                    if (combinedText != null) {
+                        // combine range and text, if possible
+                        if (endIndex == child.getStartIndex()) {
+                            // combine
+                            endIndex = child.getEndIndex();
+                            combinedText += ((TextNode) child).getText();
+                            lastTextNode = null;
+                            processed = true;
+                        } else {
+                            // insert collected up to now
+                            if (lastTextNode != null) {
+                                lastTextNode.accept(this);
+                                lastTextNode = null;
+                            } else {
+                                TextNode newNode = new TextNode(combinedText);
+                                newNode.setStartIndex(startIndex);
+                                newNode.setEndIndex(endIndex);
+                                newNode.accept(this);
+                            }
+
+                            combinedText = null;
+                        }
+                    }
+
+                    if (combinedText == null) {
+                        startIndex = child.getStartIndex();
+                        endIndex = child.getEndIndex();
+                        combinedText = ((TextNode) child).getText();
+                        lastTextNode = child;
+                        processed = true;
+                    }
+                }
+
+                if (!processed) {
+                    if (combinedText != null) {
+                        // process accumulated to date
+                        if (lastTextNode != null) {
+                            lastTextNode.accept(this);
+                        } else {
+                            TextNode newNode = new TextNode(combinedText);
+                            newNode.setStartIndex(startIndex);
+                            newNode.setEndIndex(endIndex);
+                            newNode.accept(this);
+                        }
+                        combinedText = null;
+                        lastTextNode = null;
+                    }
+
+                    child.accept(this);
+                }
+            }
+
+            if (combinedText != null) {
+                // process the last combined
+                if (lastTextNode != null) {
+                    lastTextNode.accept(this);
+                } else {
+                    TextNode newNode = new TextNode(combinedText);
+                    newNode.setStartIndex(startIndex);
+                    newNode.setEndIndex(endIndex);
+                    newNode.accept(this);
+                }
+            }
         }
 
         protected boolean excludeAncestors(Range range, IElementType type) {

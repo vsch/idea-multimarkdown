@@ -32,12 +32,13 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Enumeration;
 
 public class MultiMarkdownPlugin implements ApplicationComponent {
     private static final Logger logger = org.apache.log4j.Logger.getLogger("com.vladsch.idea.multimarkdown");
@@ -69,6 +70,19 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
     }
 
     public MultiMarkdownPlugin() {
+        //BasicConfigurator.configure();
+        //logger.addAppender(new ConsoleAppender(new PatternLayout("%r [%t] %p %c %x - %m%n")));
+        ConsoleAppender appender = new ConsoleAppender(new PatternLayout("%p %c %x - %m%n"));
+        Enumeration<Appender> appenders = Logger.getRootLogger().getAllAppenders();
+        while (appenders.hasMoreElements()) {
+            Appender app = appenders.nextElement();
+            String name = app.getName();
+            int tmp = 0;
+        }
+        logger.addAppender(appender);
+        logger.setAdditivity(false);
+        logger.setLevel(Level.INFO);
+
         myClassLoader = null;
         final MultiMarkdownGlobalSettings settings = MultiMarkdownGlobalSettings.getInstance();
         getClassLoader();
@@ -123,7 +137,7 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
             InputStream fontStream = getClass().getResourceAsStream("/com/vladsch/idea/multimarkdown/taskitems.ttf");
             File tempFontFile = File.createTempFile("multimarkdown", "taskitems.ttf");
             tempFontFile.deleteOnExit();
-            logger.error("creating temp font file: " + tempFontFile.getAbsolutePath());
+            logger.info("creating temp font file: " + tempFontFile.getAbsolutePath());
 
             FileOutputStream fileOutputStream = new FileOutputStream(tempFontFile);
             byte[] buffer = new byte[32768];
@@ -177,14 +191,17 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
 
     public PluginClassLoader getClassLoader() {
         if (myClassLoader == null) {
-            myClassLoader = (PluginClassLoader) getClass().getClassLoader();
+            PluginClassLoader pluginClassLoader = (PluginClassLoader) getClass().getClassLoader();
             String javaHome = System.getProperties().getProperty("java.home");
+            String javaFx = javaHome;// "/Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/jre";
             String javaVersion = System.getProperties().getProperty("java.version");
-            String libDir = FileUtil.join(javaHome, "lib", "ext");
-            String fileName = FileUtil.join(libDir, "jfxrt.jar");
+            String libDir = FileUtil.join(javaFx, "lib");
+            String libExtDir = FileUtil.join(libDir, "ext");
+            String fileName = FileUtil.join(libExtDir, "jfxrt.jar");
             File file = new File(fileName);
             if (!file.exists()) {
-                logger.warn("JavaFX library jfxrt.jar not found in the current jre: " + javaHome + ", version " + javaVersion);
+                //logger.warn("JavaFX library jfxrt.jar not found in the provided jre: " + javaHome + ", version " + javaVersion);
+                logger.warn("JavaFX library jfxrt.jar not found in the provided jre: " + javaFx + ", version " + javaVersion);
                 logger.warn("MultiMarkdown HTML Preview will use a more limited implementation.");
                 MultiMarkdownGlobalSettings.getInstance().useOldPreview.setValue(true);
                 //} else if (!file.exists() || "1.8.0_u51".compareTo(javaVersion.substring(0, Math.min(javaVersion.length(), "1.8.0_u51".length()))) < 0) {
@@ -193,10 +210,12 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
                 //    MultiMarkdownGlobalSettings.getInstance().useOldPreview.setValue(true);
             } else {
                 logger.info("JavaFX library jfxrt.jar found in " + libDir + " the current jre: " + javaHome + ", version " + javaVersion);
-                ArrayList<String> libs = new ArrayList<String>(1);
+                ArrayList<String> libs = new ArrayList<String>(200);
                 libs.add(libDir);
-                myClassLoader.addLibDirectories(libs);
+                libs.add(libExtDir);
+                pluginClassLoader.addLibDirectories(libs);
             }
+            myClassLoader = pluginClassLoader;
         }
         return myClassLoader;
     }

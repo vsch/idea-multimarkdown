@@ -87,6 +87,95 @@ public class MultiMarkdownToHtmlSerializer extends ToHtmlSerializer {
         }
     }
 
+    @Override
+    protected void visitChildren(SuperNode node) {
+        visitChildrenSkipFirst(node, 0);
+    }
+
+    @Override
+    protected void visitChildrenSkipFirst(SuperNode node) {
+        visitChildrenSkipFirst(node, 1);
+    }
+
+    protected void visitChildrenSkipFirst(SuperNode node, int skipFirst) {
+        // here we combine multiple segments of TextNode and SpecialText into a single TextNode
+        int startIndex = 0, endIndex = 0;
+        String combinedText = null;
+        Node lastTextNode = null;
+
+        for (Node child : node.getChildren()) {
+            if (skipFirst > 0) {
+                skipFirst--;
+                continue;
+            }
+
+            boolean processed = false;
+            if (child.getClass() == TextNode.class || child.getClass() == SpecialTextNode.class) {
+                if (combinedText != null) {
+                    // combine range and text, if possible
+                    if (endIndex == child.getStartIndex()) {
+                        // combine
+                        endIndex = child.getEndIndex();
+                        combinedText += ((TextNode) child).getText();
+                        lastTextNode = null;
+                        processed = true;
+                    } else {
+                        // insert collected up to now
+                        if (lastTextNode != null) {
+                            lastTextNode.accept(this);
+                            lastTextNode = null;
+                        } else {
+                            TextNode newNode = new TextNode(combinedText);
+                            newNode.setStartIndex(startIndex);
+                            newNode.setEndIndex(endIndex);
+                            newNode.accept(this);
+                        }
+
+                        combinedText = null;
+                    }
+                }
+
+                if (combinedText == null) {
+                    startIndex = child.getStartIndex();
+                    endIndex = child.getEndIndex();
+                    combinedText = ((TextNode) child).getText();
+                    lastTextNode = child;
+                    processed = true;
+                }
+            }
+
+            if (!processed) {
+                if (combinedText != null) {
+                    // process accumulated to date
+                    if (lastTextNode != null) {
+                        lastTextNode.accept(this);
+                    } else {
+                        TextNode newNode = new TextNode(combinedText);
+                        newNode.setStartIndex(startIndex);
+                        newNode.setEndIndex(endIndex);
+                        newNode.accept(this);
+                    }
+                    combinedText = null;
+                    lastTextNode = null;
+                }
+
+                child.accept(this);
+            }
+        }
+
+        if (combinedText != null) {
+            // process the last combined
+            if (lastTextNode != null) {
+                lastTextNode.accept(this);
+            } else {
+                TextNode newNode = new TextNode(combinedText);
+                newNode.setStartIndex(startIndex);
+                newNode.setEndIndex(endIndex);
+                newNode.accept(this);
+            }
+        }
+    }
+
     protected void printAnchorLink(LinkRenderer.Rendering rendering) {
         printer.print('<').print('a');
         printAttribute("href", rendering.href);

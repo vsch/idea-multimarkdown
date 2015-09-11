@@ -45,6 +45,11 @@ a {
     color: #4078c0;
 }
 
+abbr {
+   text-decoration: none;
+   border-bottom: 1px dashed #4078c0;
+}
+
 hr {
     background-color: #e7e7e7;
 }

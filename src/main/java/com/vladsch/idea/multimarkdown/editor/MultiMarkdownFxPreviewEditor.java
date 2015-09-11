@@ -58,8 +58,10 @@ import javafx.concurrent.Worker;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.web.PopupFeatures;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.util.Callback;
 import netscape.javascript.JSException;
 import netscape.javascript.JSObject;
 import org.jetbrains.annotations.NonNls;
@@ -72,6 +74,7 @@ import org.pegdown.ToHtmlSerializer;
 import org.pegdown.ast.RootNode;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.events.Event;
 import org.w3c.dom.events.EventListener;
 import org.w3c.dom.events.EventTarget;
 
@@ -86,6 +89,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static org.apache.commons.lang.StringEscapeUtils.escapeHtml;
 
 //import com.sun.javafx.scene.layout.region.CornerRadiiConverter;
 
@@ -294,6 +299,14 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                     // TODO: add zoom control to the page using popups or actions
                     webView.setZoom(1.0);
 
+                    webEngine.setCreatePopupHandler(new Callback<PopupFeatures, WebEngine>() {
+                        @Override public WebEngine call(PopupFeatures config) {
+                            // do something
+                            // return a web engine for the new browser window or null to block popups
+                            return null;
+                        }
+                    });
+
                     addStateChangeListener();
                 }
             });
@@ -315,45 +328,47 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                             org.w3c.dom.Document doc = webEngine.getDocument();
                             String href = link.getAttribute("href");
                             if (href.charAt(0) == '#') {
-                                // tries to go to an anchor
-                                String hrefName = href.substring(1);
-                                // scroll it into view
-                                try {
-                                    JSObject result = (JSObject) webEngine.executeScript("(function () {\n" +
-                                            "    var elemTop = 0;\n" +
-                                            "    var elems = '';\n" +
-                                            "    var elem = window.document.getElementById('" + hrefName + "');\n" +
-                                            "    if (!elem) {\n" +
-                                            "        var elemList = window.document.getElementsByTagName('a');\n" +
-                                            "        for (a in elemList) {\n" +
-                                            "            var aElem = elemList[a]\n" +
-                                            "            if (aElem.hasOwnProperty('name') && aElem.name == '" + hrefName + "') {\n" +
-                                            "                elem = aElem;\n" +
-                                            "                break;\n" +
-                                            "            }\n" +
-                                            "        }\n" +
-                                            "    }\n" +
-                                            "    if (elem) {\n" +
-                                            "        while (elem && elem.tagName !== 'HTML') {\n" +
-                                            "            elems += ',' + elem.tagName + ':' + elem.offsetTop\n" +
-                                            "            if (elem.offsetTop) {\n" +
-                                            "                elemTop += elem.offsetTop;\n" +
-                                            "                break;\n" +
-                                            "            }\n" +
-                                            "            elem = elem.parentNode\n" +
-                                            "        }\n" +
-                                            "    }\n" +
-                                            "    return { elemTop: elemTop, elems: elems, found: !!elem };\n" +
-                                            "})()" +
-                                            "");
-                                    int elemTop = (Integer) result.getMember("elemTop");
-                                    boolean elemFound = (Boolean) result.getMember("found");
-                                    String parentList = (String) result.getMember("elems");
-                                    logger.trace(parentList);
-                                    if (elemFound) webEngine.executeScript("window.scroll(0, " + elemTop + ")");
-                                } catch (JSException ex) {
-                                    String error = ex.toString();
-                                    logger.error("JSException on script", ex);
+                                if (href.length() != 1) {
+                                    // tries to go to an anchor
+                                    String hrefName = href.substring(1);
+                                    // scroll it into view
+                                    try {
+                                        JSObject result = (JSObject) webEngine.executeScript("(function () {\n" +
+                                                "    var elemTop = 0;\n" +
+                                                "    var elems = '';\n" +
+                                                "    var elem = window.document.getElementById('" + hrefName + "');\n" +
+                                                "    if (!elem) {\n" +
+                                                "        var elemList = window.document.getElementsByTagName('a');\n" +
+                                                "        for (a in elemList) {\n" +
+                                                "            var aElem = elemList[a]\n" +
+                                                "            if (aElem.hasOwnProperty('name') && aElem.name == '" + hrefName + "') {\n" +
+                                                "                elem = aElem;\n" +
+                                                "                break;\n" +
+                                                "            }\n" +
+                                                "        }\n" +
+                                                "    }\n" +
+                                                "    if (elem) {\n" +
+                                                "        while (elem && elem.tagName !== 'HTML') {\n" +
+                                                "            elems += ',' + elem.tagName + ':' + elem.offsetTop\n" +
+                                                "            if (elem.offsetTop) {\n" +
+                                                "                elemTop += elem.offsetTop;\n" +
+                                                "                break;\n" +
+                                                "            }\n" +
+                                                "            elem = elem.parentNode\n" +
+                                                "        }\n" +
+                                                "    }\n" +
+                                                "    return { elemTop: elemTop, elems: elems, found: !!elem };\n" +
+                                                "})()" +
+                                                "");
+                                        int elemTop = (Integer) result.getMember("elemTop");
+                                        boolean elemFound = (Boolean) result.getMember("found");
+                                        String parentList = (String) result.getMember("elems");
+                                        logger.trace(parentList);
+                                        if (elemFound) webEngine.executeScript("window.scroll(0, " + elemTop + ")");
+                                    } catch (JSException ex) {
+                                        String error = ex.toString();
+                                        logger.error("JSException on script", ex);
+                                    }
                                 }
                             } else {
                                 if (Desktop.isDesktopSupported()) {
@@ -376,6 +391,12 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                     for (int i = 0; i < nodeList.getLength(); i++) {
                         ((EventTarget) nodeList.item(i)).addEventListener("click", listener, false);
                     }
+
+                    ((EventTarget) doc.getDocumentElement()).addEventListener("contextmenu", new EventListener() {
+                        @Override public void handleEvent(Event evt) {
+                            evt.preventDefault();
+                        }
+                    }, false);
 
                     // see if we need to change img tag src to a resource, if the src is relative
                     nodeList = doc.getElementsByTagName("img");
@@ -423,6 +444,36 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         });
     }
 
+    protected String makeHtmlPage(String html) {
+        VirtualFile file = FileDocumentManager.getInstance().getFile(document);
+        String result = "" +
+                "<head>\n" +
+                "<link rel=\"stylesheet\" href=\"" + MultiMarkdownGlobalSettings.getInstance().getCssExternalForm() + "\" />\n" +
+                "<title>" + escapeHtml(file.getName()) + "</title>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "<div class=\"container\">\n" +
+                "<div id=\"readme\" class=\"boxed-group\">\n" +
+                "<h3>\n" +
+                "   <span class=\"bookicon octicon-book\"></span>\n" +
+                "  " + file.getName() + "\n" +
+                "</h3>\n" +
+                "<article class=\"markdown-body\">\n" +
+                "";
+
+        result += html;
+        result += "</article>\n";
+        result += "</div>\n";
+        result += "</div>\n";
+        //if (fireBugJS != null && fireBugJS.length() > 0 && MultiMarkdownGlobalSettings.getInstance().enableFirebug.getValue()) {
+        //    result += "" +
+        //            "<script src='" + fireBugJS + "' id='FirebugLite' FirebugLite='4'/>\n" +
+        //            "";
+        //}
+        result += "</body>\n";
+        return result;
+    }
+
     public void enableDebug() {
         //webView.getEngine().executeScript("if (!document.getElementById('FirebugLite')){E = document['createElement' + 'NS'] && document.documentElement.namespaceURI;E = E ? document['createElement' + 'NS'](E, 'script') : document['createElement']('script');E['setAttribute']('id', 'FirebugLite');E['setAttribute']('src', 'https://getfirebug.com/' + 'firebug-lite.js' + '#startOpened');E['setAttribute']('FirebugLite', '4');(document['getElementsByTagName']('head')[0] || document['getElementsByTagName']('body')[0]).appendChild(E);E = new Image;E['setAttribute']('src', 'https://getfirebug.com/' + '#startOpened');}");
         //if (fireBugJS == null) return;
@@ -452,7 +503,6 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                     "    E = new Image;\n" +
                     "    E['setAttribute']('src', 'https://getfirebug.com/' + '#startOpened');\n" +
                     "}\n");
-
         } catch (JSException ex) {
             String error = ex.toString();
             logger.error("JSException on script", ex);
@@ -587,35 +637,6 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                 LOGGER.error("Failed processing Markdown document", e);
             }
         }
-    }
-
-    protected String makeHtmlPage(String html) {
-        VirtualFile file = FileDocumentManager.getInstance().getFile(document);
-        String result = "" +
-                "<head>\n" +
-                "<link rel=\"stylesheet\" href=\""+MultiMarkdownGlobalSettings.getInstance().getCssExternalForm()+"\" />\n" +
-                "</head>\n" +
-                "<body>\n" +
-                "<div class=\"container\">\n" +
-                "<div id=\"readme\" class=\"boxed-group\">\n" +
-                "<h3>\n" +
-                "   <span class=\"bookicon octicon-book\"></span>\n" +
-                "  " + file.getName() + "\n" +
-                "</h3>\n" +
-                "<article class=\"markdown-body\">\n" +
-                "";
-
-        result += html;
-        result += "</article>\n";
-        result += "</div>\n";
-        result += "</div>\n";
-        //if (fireBugJS != null && fireBugJS.length() > 0 && MultiMarkdownGlobalSettings.getInstance().enableFirebug.getValue()) {
-        //    result += "" +
-        //            "<script src='" + fireBugJS + "' id='FirebugLite' FirebugLite='4'/>\n" +
-        //            "";
-        //}
-        result += "</body>\n";
-        return result;
     }
 
     @NotNull

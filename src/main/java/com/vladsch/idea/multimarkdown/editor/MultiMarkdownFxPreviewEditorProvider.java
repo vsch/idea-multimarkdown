@@ -25,6 +25,7 @@ package com.vladsch.idea.multimarkdown.editor;
 
 //import com.intellij.ide.scratch.ScratchFileService;
 
+import com.intellij.ide.plugins.cl.PluginClassLoader;
 import com.intellij.openapi.fileEditor.*;
 import com.intellij.openapi.project.PossiblyDumbAware;
 import com.intellij.openapi.project.Project;
@@ -35,6 +36,7 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 public class MultiMarkdownFxPreviewEditorProvider implements FileEditorProvider, PossiblyDumbAware {
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownFxPreviewEditorProvider.class);
@@ -74,10 +76,16 @@ public class MultiMarkdownFxPreviewEditorProvider implements FileEditorProvider,
                     return fileEditor;
                 } catch (NoClassDefFoundError er) {
                     //e.printStackTrace();
+                    logger.error("NoClassDefFoundError", er);
                     canLoadFxEditor = FX_PREVIEW_CANNOT_LOAD;
                     MultiMarkdownGlobalSettings.getInstance().setIsFxHtmlPreview(false);
                     MultiMarkdownGlobalSettings.getInstance().useOldPreview.setValue(true);
                 } catch (Exception e) {
+                    if (e instanceof InvocationTargetException) {
+                        logger.warn("InvocationTargetException", ((InvocationTargetException) e).getTargetException());
+                    } else {
+                        logger.warn("Exception", e);
+                    }
                     canLoadFxEditor = FX_PREVIEW_CANNOT_LOAD;
                     MultiMarkdownGlobalSettings.getInstance().setIsFxHtmlPreview(false);
                     MultiMarkdownGlobalSettings.getInstance().useOldPreview.setValue(true);
