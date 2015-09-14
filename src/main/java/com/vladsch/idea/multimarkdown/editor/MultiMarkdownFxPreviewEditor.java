@@ -87,6 +87,7 @@ import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.vladsch.idea.multimarkdown.editor.MultiMarkdownPathResolver.isWikiDocument;
 import static com.vladsch.idea.multimarkdown.editor.MultiMarkdownPathResolver.resolveLink;
 import static org.apache.commons.lang.StringEscapeUtils.escapeHtml;
 
@@ -112,6 +113,8 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
 
     /** The {@link Document} previewed in this editor. */
     protected final Document document;
+    protected final boolean isWikiDocument;
+
     //private final EditorTextField myTextViewer;
     private final EditorImpl myTextViewer;
 
@@ -226,6 +229,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         this.isRawHtml = isRawHtml;
         this.document = doc;
         this.project = project;
+        this.isWikiDocument = isWikiDocument(document);
 
         URL resource = null;
         //try {
@@ -441,17 +445,28 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                 "<title>" + escapeHtml(file.getName()) + "</title>\n" +
                 "</head>\n" +
                 "<body>\n" +
-                "<div class=\"container\">\n" +
-                "<div id=\"readme\" class=\"boxed-group\">\n" +
-                "<h3>\n" +
-                "   <span class=\"bookicon octicon-book\"></span>\n" +
-                "  " + file.getName() + "\n" +
-                "</h3>\n" +
-                "<article class=\"markdown-body\">\n" +
                 "";
 
+        if (isWikiDocument) {
+            result += "" +
+                    "<div class=\"wiki-container\">\n" +
+                    "<h1>" + escapeHtml(file.getNameWithoutExtension().replace('-', ' ')) + "</h1>\n" +
+                    "<article class=\"wiki-body\">\n" +
+                    "";
+        } else {
+            result += "" +
+                    "<div class=\"container\">\n" +
+                    "<div id=\"readme\" class=\"boxed-group\">\n" +
+                    "<h3>\n" +
+                    "   <span class=\"bookicon octicon-book\"></span>\n" +
+                    "  " + file.getName() + "\n" +
+                    "</h3>\n" +
+                    "<article class=\"markdown-body\">\n" +
+                    "";
+        }
+
         result += html;
-        result += "</article>\n";
+        result += "\n</article>\n";
         result += "</div>\n";
         result += "</div>\n";
         //if (fireBugJS != null && fireBugJS.length() > 0 && MultiMarkdownGlobalSettings.getInstance().enableFirebug.getValue()) {

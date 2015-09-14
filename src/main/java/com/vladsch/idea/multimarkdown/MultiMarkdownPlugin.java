@@ -83,6 +83,8 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
         logger.setAdditivity(false);
         logger.setLevel(Level.INFO);
 
+        // turn off lcd rendering, will use gray
+        System.setProperty("prism.lcdtext", "false");
         myClassLoader = null;
         final MultiMarkdownGlobalSettings settings = MultiMarkdownGlobalSettings.getInstance();
         getClassLoader();
@@ -101,33 +103,31 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
         urlDarculaFxCss = null;
         globalSettingsListener = null;
 
-        if (!useOldPreview) {
-            urlCustomFont = createCustomFontUrl();
-            urlDefaultFxCss = createTempCopy(MultiMarkdownPlugin.class.getResource(MultiMarkdownGlobalSettings.PREVIEW_FX_STYLESHEET_LIGHT), "default-fx.css");
-            urlDarculaFxCss = createTempCopy(MultiMarkdownPlugin.class.getResource(MultiMarkdownGlobalSettings.PREVIEW_FX_STYLESHEET_DARK), "darcula-fx.css");
+        urlCustomFont = createCustomFontUrl();
+        urlDefaultFxCss = createTempCopy(MultiMarkdownPlugin.class.getResource(MultiMarkdownGlobalSettings.PREVIEW_FX_STYLESHEET_LIGHT), "default-fx.css");
+        urlDarculaFxCss = createTempCopy(MultiMarkdownPlugin.class.getResource(MultiMarkdownGlobalSettings.PREVIEW_FX_STYLESHEET_DARK), "darcula-fx.css");
 
-            try {
-                fileCustomFxCss = createTempCopy(settings.customFxCss.getValue(), "custom-fx.css");
-                urlCustomFxCss = fileCustomFxCss.toURI().toURL().toExternalForm();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        try {
+            fileCustomFxCss = createTempCopy(settings.customFxCss.getValue(), "custom-fx.css");
+            urlCustomFxCss = fileCustomFxCss.toURI().toURL().toExternalForm();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-            if (fileCustomFxCss != null) {
-                MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
-                    public void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings) {
-                        try {
-                            // 1.8u60 caches the css by name, we have to change the name or no refresh is done
-                            //updateTempCopy(fileCustomFxCss, newSettings.customFxCss.getValue());
-                            fileCustomFxCss.delete();
-                            fileCustomFxCss = createTempCopy(settings.customFxCss.getValue(), "custom-fx.css");
-                            urlCustomFxCss = fileCustomFxCss.toURI().toURL().toExternalForm();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+        if (fileCustomFxCss != null) {
+            MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
+                public void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings) {
+                    try {
+                        // 1.8u60 caches the css by name, we have to change the name or no refresh is done
+                        //updateTempCopy(fileCustomFxCss, newSettings.customFxCss.getValue());
+                        fileCustomFxCss.delete();
+                        fileCustomFxCss = createTempCopy(settings.customFxCss.getValue(), "custom-fx.css");
+                        urlCustomFxCss = fileCustomFxCss.toURI().toURL().toExternalForm();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                });
-            }
+                }
+            });
         }
     }
 

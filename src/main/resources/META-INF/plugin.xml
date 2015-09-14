@@ -32,11 +32,10 @@
     <div xmlns="http://www.w3.org/1999/html">
       <img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_source_preview_Small.png" border="0" width="270" height="135" alt="Screenshot">
 
-      <p><b><a href="http://daringfireball.net/projects/markdown">Markdown</a> language support for IntelliJ platform.</b><br>
+      <p><b><a color="#30A0D8" href="http://daringfireball.net/projects/markdown">Markdown</a> language support for IntelliJ platform.</b><br>
         With GitHub Flavoured Markdown extensions and GitHub style formatting. HTML Preview and HTML Text tabs.</p>
 
       <p><b>For all feedback requiring a reply please use the <a color="#30A0D8" href="https://github.com/vsch/idea-multimarkdown/issues"><u>MultiMarkdown GitHub Issues</u></a> page.</b></p>
-      <p>Plugin Wiki <a color="#30A0D8" href="https://github.com/vsch/idea-multimarkdown/wiki"><u>MultiMarkdown GitHub Wiki</u></a> page.</b></p>
 
       <table>
         <tr><td><a href="http://flattr.com/thing/4603764/vschidea-multimarkdown-on-GitHub" title="Donate monthly to vsch using Flattr"><img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/flattr-tips.png" border="0" width="43" height="53" alt="Donate monthly to vsch using Flattr" /></a>&nbsp;&nbsp;<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NR7DAGTC8CXLU" title="Donate once-off to vsch using Paypal"><img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/paypal-tips.png" border="0" width="43" height="53" alt="Donate once-off to vsch using Paypal" /></a></td>
@@ -44,22 +43,25 @@
         </tr>
       </table>
 
+      <p><b>Documentation: <a color="#30A0D8" href="https://github.com/vsch/idea-multimarkdown/wiki"><u>MultiMarkdown GitHub Wiki page.</u></a></b></p>
     </div>
     ]]></description>
 
-  <version>1.1.4</version>
+  <version>1.1.4.1</version>
   <idea-version since-build="133.1711"/>
   <change-notes><![CDATA[
-    <h3>1.1.4 - Improve GitHub Wiki Markdown Support</h3>
-    <ul>
+    <ul><h3><b>1.1.5 - Improve GitHub Wiki Markdown Support</b></h3>
+      <li>Add Automatic H1 header insertion into documents contained under a folder that ends in &quot;.wiki&quot;.</li>
+      <li>Fix CSS for wiki page differences from regular pages.</li>
+    </ul>
+    <ul><h3><b>1.1.4 - Improve GitHub Wiki Markdown Support</b></h3>
       <li>Change the HTML Preview and HTML Text editors now require the index to be built, the tabs open after the index update is complete.</li>
       <li>Add Absent Link checking for HTML Preview for non HTTP type links.</li>
       <li>Add Open files in the IDE for non-HTTP links, files with no extension will attempt to find a class that matches the name in the link.</li>
       <li>Add wiki pages to GitHub project. If you want to maintain</li>
       <li>Add Adding GitHub Wiki To Your IntelliJ Project instructions, for those that would prefer to maintain and edit their project's wiki pages in their IntelliJ project.</li>
     </ul>
-    <h3>1.1.3 - Tweaks &amp; Cosmetics Release</h3>
-    <ul>
+    <ul><h3><b>1.1.3 - Tweaks &amp; Cosmetics Release</b></h3>
       <li>Fix icon to make text following it in the project tree line up with text of other nodes.</li>
       <li>Fix clicking on a link with href="#" now does nothing.</li>
       <li>Fix disable context menu in preview tab to prevent off page navigation.</li>
@@ -67,24 +69,21 @@
       <li>Add abbr tag styles to css for new preview pane.</li>
       <li>Add abbreviated text color attribute for syntax highlighting abbreviations that appear in the text.</li>
     </ul>
-    <b>1.1.2</b><br/>
-    <ul>
+    <ul><h3><b>1.1.2</b></h3>
       <li>Fix Exception reporting for ScratchFileService not found on older versions. If the check fails then no others will be performed until build of IDE changes.</li>
       <li>Fix WebView Preview Tab no working for 1.8u60 and up. In 1.8u60+ it no longer handles fonts with uri(data:) nor font/woff only .ttf.</li>
       <li>Fix allowing capital X to mark closed tasks. Fix #24</li>
       <li>Fix lack of ComboBox for Build 133.1711, now for earlier builds using List for theme selection instead of ComboBox.</li>
       <li>Change since-build to 133.1711, earliest tested version IDEA 13.0 CE, new Preview is not available but old preview works.</li>
     </ul>
-    <b>1.1.1</b><br/>
-    <ul>
+    <ul><h3><b>1.1.1</b></h3>
       <li>Fix plugin was compiled for JRE 1.8 in error. It does not use language features beyond 1.6.</li>
       <li>Fix scratch file associations broken in new preview and html tabs.</li>
       <li>Add Automatically set 'Use Old Preview' if the new preview could not be loaded, to eliminate errors on startup.</li>
       <li>Add add experimental setting `Enable firebug-lite' for JavaFX preview tab.</li>
       <li>Change CSS to reference font in temporary file instead of embedding via url(data:).</li>
     </ul>
-    <b>1.1.0</b><br/>
-    <ul>
+    <ul><h3><b>1.1.0</b></h3>
       <li>Change HTML Preview now using javafx WebView, <strong>requires jre 1.8+ with JavaFX library under Java Home/lib/ext directory</strong>. Big Improvement on compatibility with browsers.</li>
       <li>Add If JavaFX library is not found then the plugin will fall back to using the old JEditorPane HTML Preview.</li>
       <li>Add Setting to allow always using the old preview even if JavaFX is available.</li>
@@ -95,8 +94,7 @@
       <li>Fix #4, Not able to handle Gravizo generated images.</li>
       <li>Fix Two or more blank lines would end a list and start a new one, pegdown.</li>
     </ul>
-    <b>1.0.25</b><br/>
-    <ul>
+    <ul><h3><b>1.0.25</b></h3>
       <li><b><span color="#C00038">Note: </span>This will probably be the last release of this plugin that works with jre 1.6.</b> I implemented javafx WebView for the preview tab and it is a joy to look at, work with and maintain.</li>
       <li>Change removed the use images for bullets and tasks. These introduced too many rendering side-effects that were impossible to resolve.</li>
       <li>Fix issue #16, images in bullet list items or task items displayed as the bullet or task image instead. Bug in HTMLEditorKit CSS attribute inheritance passing class of parent to child nodes.</li>
@@ -104,23 +102,19 @@
       <li>Fix Two or more blank lines would interrupt a list and start a new one, pegdown.</li>
       <li>Fix loose task items would be rendered wrong, pegdown.</li>
     </ul>
-    <b>1.0.24</b><br/>
-    <ul>
+    <ul><h3><b>1.0.24</b></h3>
       <li>Fix issue #15, will not load in build 139.1117, changed 'since-build' to 135.1306 earliest tested working IDEA 13, and updated classes.</li>
       <li>Minor tweaks to CSS default and darcula.</li>
     </ul>
-    <b>1.0.23</b><br/>
-    <ul>
+    <ul><h3><b>1.0.23</b></h3>
       <li>Fix issue #14, all scratch files would have MultiMarkdown editor tabs attached.</li>
       <li>Minor tweaks to CSS default and darcula.</li>
     </ul>
-    <b>1.0.22</b><br/>
-    <ul>
+    <ul><h3><b>1.0.22</b></h3>
       <li>Fix issue #7, tasks and bullets use images instead of icons so that they are rendered correctly in Darcula.</li>
       <li>Change for issue #8, removed syntax highlighter inheritance from hidden DEFAULT_MARKDOWN type back to not inherited or inherited from Language Defaults.</li>
     </ul>
-    <b>1.0.21</b><br/>
-    <ul>
+    <ul><h3><b>1.0.21</b></h3>
       <li>Change Settings for Custom CSS, now a checkbox controls if the text in custom CSS editor will be used as the stylesheet.</li>
       <li>Fix clearing or loading new text into the CSS editor was not clearing caret position and selection</li>
       <li>Add check box to specify that the custom CSS should be treated as a dark theme. Used to determine which Icons to use for Bullets/Task items</li>
@@ -128,18 +122,15 @@
       <li>Add Settings option for rendering tasks items as Icons. Turn off to get square list items. The latter causes all task items to display without a check mark</li>
       <li>Fix Temporary work around for issue #7, the IDEA's icon rendering bug with Darcula, to display bullets and task items using simple list items: circle for bullets, square for tasks.</li>
     </ul>
-    <b>1.0.20</b><br/>
-    <ul>
+    <ul><h3><b>1.0.20</b></h3>
       <li>Fix Changing settings was not updating files. My apologies, it was a one-line cut/paste error during heavy refactoring of code.</li>
     </ul>
-    <b>1.0.19</b><br/>
-    <ul>
+    <ul><h3><b>1.0.19</b></h3>
       <li>Fix detection of files so that HTML Preview and HTML Text tabs will be displayed along with other plugins that handle Markdown</li>
       <li>Add Application UI option to CSS theme. This will make HTML Preview match the Application UI setting: Default or Darcula</li>
       <li>Add Custom CSS Editor in settings, now saves state of caret, selection and vertical scroll position when you apply or ok changes to make it more comfortable to experiment with custom CSS.</li>
     </ul>
-    <b>1.0.18</b><br/>
-    <ul>
+    <ul><h3><b>1.0.18</b></h3>
       <li>Fix darcula.css did not set background for body. Short documents would have white bottom</li>
       <li>Fix bullets and numbers for loose list items did not line up with text</li>
       <li>Add option to render bullet lists via icons. Color is set by CSS option: default/darcula but you get smaller bullets, with retina resolution, if your displays allows it.</li>
@@ -148,34 +139,29 @@
       <li>Change Settings Sample Text syntax highlighting is now always done with all optional extensions except Force Item Para and HTML Suppression to make all atttributes show up in the sample</li>
       <li>Change default style sheet defines ordered list styles like GitHub: 1. - decimal, 2. lower-roman, 3. lower-alpha</li>
     </ul>
-    <b>1.0.17</b><br/>
-    <ul>
+    <ul><h3><b>1.0.17</b></h3>
       <li>Fix styles for loose task list items spacing not being the same for first and following items</li>
       <li>Fix task list items checkbox to be disabled, look closer to GitHub's</li>
       <li>Add task item marker and task item marker (done) style attributes to settings</li>
       <li>Change Custom CSS text area now uses CSS syntax highlighting and shows line numbers</li>
       <li>Change Task list HTML conversion now done in pegdown</li>
     </ul>
-    <b>1.0.16</b><br/>
-    <ul>
+    <ul><h3><b>1.0.16</b></h3>
       <li>Fix potential conflict with old Markdown plugin by prefixing all classes with MultiMarkdown</li>
       <li>Change HTML Text tab is now an IDEA syntax highlighting text view</li>
     </ul>
-    <b>1.0.15</b><br/>
-    <ul>
+    <ul><h3><b>1.0.15</b></h3>
       <li>Add Separate Setext header styles</li>
       <li>Fix highlighting not working on version 14.1, due to plugin.xml change</li>
     </ul>
-    <b>1.0.14</b><br/>
-    <ul>
+    <ul><h3><b>1.0.14</b></h3>
       <li>Fix Scratch files were not recognized as MultiMarkdown files</li>
       <li>Fix Implement a Lexer so that expected IntelliJ functionality can be implemented</li>
       <li>Fix Sample Text not working in Settings/Editor/Colors &amp; Fonts</li>
       <li>Fix TODO's. Now working in comments like: &lt;!-- TODO: this is a todo item --&gt;</li>
       <li>Add Option to trim trailing spaces from Markdown files. Previously it was disabled.</li>
     </ul>
-    <b>1.0.13</b><br/>
-    <ul>
+    <ul><h3><b>1.0.13</b></h3>
       <li>Fix Compound Definition list parsing. (pegdown)</li>
       <li>Fix syntax highlighting for nested list elements would get out of sync with source. (pegdown)</li>
       <li>Add Darcula default settings for syntax highlighting</li>
@@ -186,8 +172,7 @@
       <li>Change Tighten Definition list styles</li>
       <li>Change Default Bullet list and Ordered list color to match Default Definition list color</li>
     </ul>
-    <b>1.0.12</b><br/>
-    <ul>
+    <ul><h3><b>1.0.12</b></h3>
       <li>Add separate color setting for strikethrough, italic and bold lead/trail marker than the contained text</li>
       <li>Add Smart character and Smart Quote color settings</li>
       <li>Add default color definitions for Default color scheme. Darcula in the next few days.</li>
@@ -195,16 +180,14 @@
       <li>Fix special character now only escaped with \ and takes selected extension options, ... (pegdown)</li>
       <li>Fix table caption not syntax highlighting, (pegdown)</li>
     </ul>
-    <b>1.0.11</b><br/>
-    <ul>
+    <ul><h3><b>1.0.11</b></h3>
       <li>Fix syntax highlighting broken since forking to a new plugin</li>
       <li>Fix syntax highlighting for elements at the end of a file which missing a new line</li>
       <li>Fix Setext headers with trailing blanks would not be recognized (pegdown)</li>
       <li>Fix syntax highlighting to handle all permutations of strikeout, bold and italic</li>
       <li>Add Table odd/even row and odd/even column syntax highlighting</li>
     </ul>
-    <b>1.0.10</b><br/>
-    <ul>
+    <ul><h3><b>1.0.10</b></h3>
       <li>Change default style sheet to make fonts relative to the one and only set in px, clean up ignored attributes</li>
       <li>Change plugin.xml to display description and change-notes in the settings dialog, plug-in info panel</li>
       <li>Add Automatic generation of anchor links in headers in settings, pegdown ANCHORLINKS extension</li>
@@ -216,68 +199,56 @@
           <li>Can show HTML as generated by pegdown or modified for idiosyncrasies of the HTMLEditorKit used to render the preview pane.</li>
         </ul>
     </ul>
-    <b>1.0.9</b><br/>
-    <ul>
+    <ul><h3><b>1.0.9</b></h3>
       <li>Fix null pointer exception when following a malformed link</li>
       <li>Change document icon</li>
     </ul>
-    <b>1.0.8</b><br/>
-    <ul>
+    <ul><h3><b>1.0.8</b></h3>
       <li>Add header space option, which requires a space between # and the title for headers GFM style</li>
       <li>Fix fenced code without preceding blank line would become a code block embedded in the paragraph (pegdown)</li>
     </ul>
-    <b>1.0.7</b><br/>
-    <ul>
+    <ul><h3><b>1.0.7</b></h3>
       <li>Fixed definition list parsing broken by last fix in pegdown</li>
       <li>Fixed loose list items ignored the next blank line and were loose only if they contained other blocks in pegdown</li>
       <p>Now nested lists with paragraphs and code blocks are generated like GitHub but with better control over loose/tight lists.</p>
     </ul>
-    <b>1.0.6</b><br/>
-    <ul>
+    <ul><h3><b>1.0.6</b></h3>
       <li>Fixed list parser bugs in pegdown-1.5.0 and included the fixed jar in the plug-in.
         <p>Now nested lists with paragraphs and code blocks are generated identical to GitHub.</p>
       </li>
     </ul>
-    <b>1.0.5</b><br/>
-    <ul>
+    <ul><h3><b>1.0.5</b></h3>
       <li>Change generated HTML to use span instead of del for strikethrough to control the look through CSS</li>
       <li>Change max img width of 0 disables resizing</li>
       <li>Fix tables had width=100%, removed</li>
       <li>Add GitHub style task list items, ones starting with [], [ ] or [x] and associated settings options</li>
     </ul>
-    <b>1.0.4</b><br/>
-    <ul>
+    <ul><h3><b>1.0.4</b></h3>
       <li>Change generated HTML to use span instead of del for strikethrough to control the look through CSS</li>
       <li>Change max img width of 0 disables resizing</li>
     </ul>
-    <b>1.0.3</b><br/>
-    <ul>
+    <ul><h3><b>1.0.3</b></h3>
       <li>Change generated HTML to use div instead of hr to control the look through CSS</li>
       <li>Tweak document icon</li>
     </ul>
-    <b>1.0.2</b><br/>
-    <ul>
+    <ul><h3><b>1.0.2</b></h3>
       <li>Change document icon</li>
       <li>Fix use Application invokeLater, instead of SwingUtil</li>
     </ul>
-    <b>1.0.1</b><br/>
-    <ul>
+    <ul><h3><b>1.0.1</b></h3>
       <li>Fork source into its own plug-in: MultiMarkdown</li>
       <li>Add settings for update delay, img max-width</li>
       <li>Add custom Css text area in settings and also ability to use defaults and load defaults for editing</li>
     </ul>
-    <b>1.0.0</b><br/>
-    <ul>
+    <ul><h3><b>1.0.0</b></h3>
       <li>Limit images to 1000 pixels wide, resize if larger</li>
       <li>Fix table to be striped</li>
     </ul>
-    <b>0.9.8</b><br/>
-    <ul>
+    <ul><h3><b>0.9.8</b></h3>
       <li>Fix no refresh on settings change</li>
       <li>Update pegdown to 1.5.0 and parboiled to 1.1.7.</li>
     </ul>
-    <b>0.9.7</b><br/>
-    <ul>
+    <ul><h3><b>0.9.7</b></h3>
       <li>Forked from <a href="https://github.com/nicoulaj/idea-markdown">idea-markdown</a></li>
     </ul>
     <p>&nbsp;</p>

@@ -103,6 +103,15 @@ public class MultiMarkdownPathResolver {
         return resolveLink(project, document, href, false,false,false);
     }
 
+    public static boolean isWikiDocument(@NotNull final Document document) {
+        VirtualFile file = FileDocumentManager.getInstance().getFile(document);
+        while (file != null) {
+            file = file.getParent();
+            if (file != null && file.getCanonicalPath().endsWith(".wiki")) return true;
+        }
+        return false;
+    }
+
     public static boolean resolveLink(@NotNull final Project project, @NotNull final Document document, @NotNull final String href, final boolean openFile, final boolean focusEditor, final boolean searchForOpen) {
         if (!href.startsWith("http://") && !href.startsWith("https://") && !href.startsWith("mailto:")) {
             final boolean[] foundFile = {false};

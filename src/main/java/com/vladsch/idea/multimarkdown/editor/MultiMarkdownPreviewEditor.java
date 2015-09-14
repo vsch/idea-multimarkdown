@@ -38,14 +38,12 @@ import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.ex.DocumentEx;
 import com.intellij.openapi.editor.highlighter.EditorHighlighterFactory;
 import com.intellij.openapi.editor.impl.EditorImpl;
-import com.intellij.openapi.fileEditor.FileEditor;
-import com.intellij.openapi.fileEditor.FileEditorLocation;
-import com.intellij.openapi.fileEditor.FileEditorState;
-import com.intellij.openapi.fileEditor.FileEditorStateLevel;
+import com.intellij.openapi.fileEditor.*;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.UserDataHolderBase;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.components.JBScrollPane;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
@@ -68,6 +66,9 @@ import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.vladsch.idea.multimarkdown.editor.MultiMarkdownPathResolver.isWikiDocument;
+import static org.apache.commons.lang.StringEscapeUtils.escapeHtml;
+
 public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements FileEditor {
 
     private static final Logger LOGGER = Logger.getInstance(MultiMarkdownPreviewEditor.class);
@@ -85,6 +86,8 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
 
     /** The {@link Document} previewed in this editor. */
     protected final Document document;
+    protected final boolean isWikiDocument;
+
     //private final EditorTextField myTextViewer;
     private final EditorImpl myTextViewer;
 
@@ -195,6 +198,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         this.isRawHtml = isRawHtml;
         this.document = document;
         this.project = project;
+        this.isWikiDocument = isWikiDocument(document);
 
         // Listen to the document modifications.
         this.document.addDocumentListener(new DocumentAdapter() {
@@ -244,6 +248,110 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         }
 
         checkNotifyUser();
+    }
+
+    protected String makeHtmlPage(String html) {
+        VirtualFile file = FileDocumentManager.getInstance().getFile(document);
+        // scan for <table>, </table>, <tr>, </tr> and other tags we modify, this could be done with a custom plugin to pegdown but
+        // then it would be more trouble to get un-modified HTML.
+        String regex = "(<table>|<thead>|<tbody>|<tr>|<hr/>|<del>|</del>|</p>";
+        String result = "";
+
+        if (isWikiDocument) {
+            result += "<body class=\"multimarkdown-wiki-preview\">\n<div class=\"content\">\n";
+            result += "" +
+                    "<h1 class=\"first-child\">" + escapeHtml(file.getNameWithoutExtension().replace('-', ' ')) + "</h1>\n" +
+                    "";
+        } else {
+            result += "<body class=\"multimarkdown-preview\">\n<div class=\"content\">\n";
+            // for now nothing
+            regex += "|<h1>";
+        }
+
+        String regexTail = "|<li>\\n*\\s*<p>";
+        boolean isDarkTheme = isDarkTheme();
+        boolean taskLists = isTaskLists();
+
+        if (taskLists) {
+            regex += "|<li class=\"task-list-item\">\\n*\\s*<p>|<li class=\"task-list-item\">|<li>\\[x\\]\\s*|<li>\\[ \\]\\s*|<li>\\n*\\s*<p>\\[x\\]\\s*|<li>\\n*\\s*<p>\\[ \\]\\s*";
+        }
+        regex += regexTail;
+        regex += ")";
+
+        Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(html);
+        int lastPos = 0;
+        int rowCount = 0;
+        boolean[] isOrderedList = new boolean[20];
+        int listDepth = -1;
+        boolean firstChildH1 = !isWikiDocument;
+
+        while (m.find()) {
+            String found = m.group();
+            if (lastPos < m.start(0)) {
+                result += html.substring(lastPos, m.start(0));
+            }
+
+            if (found.equals("</p>")) {
+                result += found;
+            } else if (found.equals("<table>")) {
+                rowCount = 0;
+                result += found;
+            } else if (found.equals("<thead>")) {
+                result += found;
+            } else if (found.equals("<tbody>")) {
+                result += found;
+            } else if (found.equals("/>")) {
+                result += ">";
+            } else if (found.equals("<tr>")) {
+                rowCount++;
+                result += "<tr class=\"" + (rowCount == 1 ? "first-child" : (rowCount & 1) != 0 ? "odd-child" : "even-child") + "\">";
+            } else if (found.equals("<hr/>")) {
+                result += "<div class=\"hr\">&nbsp;</div>";
+            } else if (found.equals("<h1>")) {
+                result += firstChildH1 ? "<h1 class=\"first-child\">" : "<h1>";
+                firstChildH1 = false;
+            } else if (found.equals("<del>")) {
+                result += "<span class=\"del\">";
+            } else if (found.equals("</del>")) {
+                result += "</span>";
+            } else {
+                found = found.trim();
+                if (taskLists && found.equals("<li>[x]")) {
+                    result += "<li class=\"dtask\">";
+                } else if (taskLists && found.equals("<li>[ ]")) {
+                    result += "<li class=\"dtask\">";
+                } else if (taskLists && found.equals("<li class=\"task-list-item\">")) {
+                    result += "<li class=\"taski\">";
+                } else {
+                    // here we have <li>\n*\s*<p>, need to strip out \n*\s* so we can match them easier
+                    String foundWithP = found;
+                    foundWithP = foundWithP.replaceAll("<li>\\n*\\s*<p>", "<li><p>");
+                    found = foundWithP.replaceAll("<li class=\"task-list-item\">\\n*\\s*<p>", "<li class=\"task\"><p>");
+                    found = found.trim();
+                    if (found.equals("<li><p>")) {
+                        result += "<li class=\"p\"><p class=\"p\">";
+                    } else if (taskLists && found.equals("<li><p>[x]")) {
+                        result += "<li class=\"dtaskp\"><p class=\"p\">";
+                    } else if (taskLists && found.equals("<li><p>[ ]")) {
+                        result += "<li class=\"dtaskp\"><p class=\"p\">";
+                    } else if (taskLists && found.equals("<li class=\"task-list-item\"><p>")) {
+                        result += "<li class=\"taskp\"><p class=\"p\">";
+                    } else {
+                        result += found;
+                    }
+                }
+            }
+
+            lastPos = m.end(0);
+        }
+
+        if (lastPos < html.length()) {
+            result += html.substring(lastPos);
+        }
+
+        result += "\n</div>\n</body>\n";
+        return result;
     }
 
     protected void delayedHtmlPreviewUpdate(final boolean fullKit) {
@@ -342,7 +450,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         if (previewIsObsolete && isEditorTabVisible && (isActive || force)) {
             try {
                 parseMarkdown(document.getText());
-                final String html = postProcessHtml(markdownToHtml(true));
+                final String html = makeHtmlPage(markdownToHtml(true));
                 if (isRawHtml) {
                     final String htmlTxt = isShowModified() ? html : markdownToHtml(false);
                     updateRawHtmlText(htmlTxt);
@@ -376,93 +484,6 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
 
     public void setHtmlContent(String html) {
         jEditorPane.setText(html);
-    }
-
-    protected String postProcessHtml(String html) {
-        // scan for <table>, </table>, <tr>, </tr> and other tags we modify, this could be done with a custom plugin to pegdown but
-        // then it would be more trouble to get un-modified HTML.
-        String result = "<body class=\"multimarkdown-preview\">\n<div class=\"content\">\n";
-        String regex = "(<table>|<thead>|<tbody>|<tr>|<hr/>|<del>|</del>|</p>";
-        String regexTail = "|<li>\\n*\\s*<p>";
-        boolean isDarkTheme = isDarkTheme();
-        boolean taskLists = isTaskLists();
-
-        if (taskLists) {
-            regex += "|<li class=\"task-list-item\">\\n*\\s*<p>|<li class=\"task-list-item\">|<li>\\[x\\]\\s*|<li>\\[ \\]\\s*|<li>\\n*\\s*<p>\\[x\\]\\s*|<li>\\n*\\s*<p>\\[ \\]\\s*";
-        }
-        regex += regexTail;
-        regex += ")";
-
-        Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        Matcher m = p.matcher(html);
-        int lastPos = 0;
-        int rowCount = 0;
-        boolean[] isOrderedList = new boolean[20];
-        int listDepth = -1;
-
-        while (m.find()) {
-            String found = m.group();
-            if (lastPos < m.start(0)) {
-                result += html.substring(lastPos, m.start(0));
-            }
-
-            if (found.equals("</p>")) {
-                result += found;
-            } else if (found.equals("<table>")) {
-                rowCount = 0;
-                result += found;
-            } else if (found.equals("<thead>")) {
-                result += found;
-            } else if (found.equals("<tbody>")) {
-                result += found;
-            } else if (found.equals("/>")) {
-                result += ">";
-            } else if (found.equals("<tr>")) {
-                rowCount++;
-                result += "<tr class=\"" + (rowCount == 1 ? "first-child" : (rowCount & 1) != 0 ? "odd-child" : "even-child") + "\">";
-            } else if (found.equals("<hr/>")) {
-                result += "<div class=\"hr\">&nbsp;</div>";
-            } else if (found.equals("<del>")) {
-                result += "<span class=\"del\">";
-            } else if (found.equals("</del>")) {
-                result += "</span>";
-            } else {
-                found = found.trim();
-                if (taskLists && found.equals("<li>[x]")) {
-                    result += "<li class=\"dtask\">";
-                } else if (taskLists && found.equals("<li>[ ]")) {
-                    result += "<li class=\"dtask\">";
-                } else if (taskLists && found.equals("<li class=\"task-list-item\">")) {
-                    result += "<li class=\"taski\">";
-                } else {
-                    // here we have <li>\n*\s*<p>, need to strip out \n*\s* so we can match them easier
-                    String foundWithP = found;
-                    foundWithP = foundWithP.replaceAll("<li>\\n*\\s*<p>", "<li><p>");
-                    found = foundWithP.replaceAll("<li class=\"task-list-item\">\\n*\\s*<p>", "<li class=\"task\"><p>");
-                    found = found.trim();
-                    if (found.equals("<li><p>")) {
-                        result += "<li class=\"p\"><p class=\"p\">";
-                    } else if (taskLists && found.equals("<li><p>[x]")) {
-                        result += "<li class=\"dtaskp\"><p class=\"p\">";
-                    } else if (taskLists && found.equals("<li><p>[ ]")) {
-                        result += "<li class=\"dtaskp\"><p class=\"p\">";
-                    } else if (taskLists && found.equals("<li class=\"task-list-item\"><p>")) {
-                        result += "<li class=\"taskp\"><p class=\"p\">";
-                    } else {
-                        result += found;
-                    }
-                }
-            }
-
-            lastPos = m.end(0);
-        }
-
-        if (lastPos < html.length()) {
-            result += html.substring(lastPos);
-        }
-
-        result += "\n</div>\n</body>\n";
-        return result;
     }
 
     /**
