@@ -45,6 +45,14 @@ a {
     color: #185BaE;
 }
 
+a.mail-link {
+    color:  #aa33bb;
+}
+
+a.absent {
+    color: #C34E7B;
+}
+
 abbr {
    text-decoration: none;
    border-bottom: 1px dashed #185BaE;

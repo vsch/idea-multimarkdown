@@ -23,6 +23,9 @@
  */
 package com.vladsch.idea.multimarkdown.editor;
 
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.project.Project;
 import org.pegdown.LinkRenderer;
 import org.pegdown.ToHtmlSerializer;
 import org.pegdown.VerbatimSerializer;
@@ -33,20 +36,37 @@ import java.util.List;
 import java.util.Map;
 
 public class MultiMarkdownToHtmlSerializer extends ToHtmlSerializer {
+    protected final Project project;
+    protected final Document document;
+
+    public MultiMarkdownToHtmlSerializer(Project project, Document document, LinkRenderer linkRenderer) {
+        super(linkRenderer);
+        this.project = project;
+        this.document = document;
+    }
+
     public MultiMarkdownToHtmlSerializer(LinkRenderer linkRenderer) {
         super(linkRenderer);
+        this.project = null;
+        this.document = null;
     }
 
     public MultiMarkdownToHtmlSerializer(LinkRenderer linkRenderer, List<ToHtmlSerializerPlugin> plugins) {
         super(linkRenderer, plugins);
+        this.project = null;
+        this.document = null;
     }
 
     public MultiMarkdownToHtmlSerializer(LinkRenderer linkRenderer, Map<String, VerbatimSerializer> verbatimSerializers) {
         super(linkRenderer, verbatimSerializers);
+        project = null;
+        document = null;
     }
 
     public MultiMarkdownToHtmlSerializer(LinkRenderer linkRenderer, Map<String, VerbatimSerializer> verbatimSerializers, List<ToHtmlSerializerPlugin> plugins) {
         super(linkRenderer, verbatimSerializers, plugins);
+        project = null;
+        document = null;
     }
 
     public void visit(HeaderNode node) {
@@ -95,6 +115,20 @@ public class MultiMarkdownToHtmlSerializer extends ToHtmlSerializer {
     @Override
     protected void visitChildrenSkipFirst(SuperNode node) {
         visitChildrenSkipFirst(node, 1);
+    }
+
+    public void visit(WikiLinkNode node) {
+        boolean isDispatchThread = ApplicationManager.getApplication().isDispatchThread();
+        MultiMarkdownLinkRenderer linkRenderer = new MultiMarkdownLinkRenderer();
+        LinkRenderer.Rendering rendering = linkRenderer.render(node);
+
+        boolean linkFound = MultiMarkdownPathResolver.resolveLink(project, document, rendering.href);
+
+        if (linkFound) {
+            printLink(rendering);
+        } else {
+            printLink(rendering.withAttribute("class", "absent"));
+        }
     }
 
     protected void visitChildrenSkipFirst(SuperNode node, int skipFirst) {

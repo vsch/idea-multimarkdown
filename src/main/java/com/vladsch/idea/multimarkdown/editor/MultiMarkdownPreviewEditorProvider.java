@@ -150,6 +150,6 @@ public class MultiMarkdownPreviewEditorProvider implements FileEditorProvider, P
 
     @Override
     public boolean isDumbAware() {
-        return true;
+        return false;
     }
 }

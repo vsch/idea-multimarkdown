@@ -135,6 +135,6 @@ public class MultiMarkdownFxPreviewEditorProvider implements FileEditorProvider,
 
     @Override
     public boolean isDumbAware() {
-        return true;
+        return false;
     }
 }

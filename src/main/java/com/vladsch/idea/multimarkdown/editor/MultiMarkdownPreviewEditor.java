@@ -53,8 +53,8 @@ import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListen
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pegdown.Extensions;
-import org.pegdown.PegDownProcessor;
+import org.pegdown.*;
+import org.pegdown.ast.RootNode;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
@@ -81,6 +81,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
 
     /** The {@link JBScrollPane} allowing to browse {@link #jEditorPane}. */
     protected final JBScrollPane scrollPane;
+    private RootNode astRoot = null;
 
     /** The {@link Document} previewed in this editor. */
     protected final Document document;
@@ -101,6 +102,9 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
     private boolean isEditorTabVisible = true;
 
     private Project project;
+
+    private LinkRenderer linkRendererNormal;
+    private LinkRenderer linkRendererModified;
 
     public static boolean isShowModified() {
         return MultiMarkdownGlobalSettings.getInstance().showHtmlTextAsModified.getValue();
@@ -209,6 +213,9 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
             }
         });
 
+        linkRendererModified = new MultiMarkdownFxLinkRenderer();
+        linkRendererNormal = new MultiMarkdownFxLinkRenderer();
+
         if (isRawHtml) {
             jEditorPane = null;
             scrollPane = null;
@@ -290,95 +297,6 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         jEditorPane.setEditorKit(htmlKit);
     }
 
-    /**
-     * Get the {@link java.awt.Component} to display as this editor's UI.
-     *
-     * @return a scrollable {@link JEditorPane}.
-     */
-    @NotNull
-    public JComponent getComponent() {
-        return scrollPane != null ? scrollPane : myTextViewer.getComponent();
-    }
-
-    /**
-     * Get the component to be focused when the editor is opened.
-     *
-     * @return {@link #scrollPane}
-     */
-    @Nullable
-    public JComponent getPreferredFocusedComponent() {
-        return scrollPane != null ? scrollPane : myTextViewer.getContentComponent();
-    }
-
-    /**
-     * Get the editor displayable name.
-     *
-     * @return editor name
-     */
-    @NotNull
-    @NonNls
-    public String getName() {
-        return isRawHtml ? TEXT_EDITOR_NAME : PREVIEW_EDITOR_NAME;
-    }
-
-    /**
-     * Get the state of the editor.
-     * <p/>
-     * Just returns {@link FileEditorState#INSTANCE} as {@link MultiMarkdownPreviewEditor} is stateless.
-     *
-     * @param level the level.
-     *
-     * @return {@link FileEditorState#INSTANCE}
-     *
-     * @see #setState(com.intellij.openapi.fileEditor.FileEditorState)
-     */
-    @NotNull
-    public FileEditorState getState(@NotNull FileEditorStateLevel level) {
-        return FileEditorState.INSTANCE;
-    }
-
-    /**
-     * Set the state of the editor.
-     * <p/>
-     * Does not do anything as {@link MultiMarkdownPreviewEditor} is stateless.
-     *
-     * @param state the new state.
-     *
-     * @see #getState(com.intellij.openapi.fileEditor.FileEditorStateLevel)
-     */
-    public void setState(@NotNull FileEditorState state) {
-    }
-
-    /**
-     * Indicates whether the document content is modified compared to its file.
-     *
-     * @return {@code false} as {@link MultiMarkdownPreviewEditor} is read-only.
-     */
-    public boolean isModified() {
-        return false;
-    }
-
-    /**
-     * Indicates whether the editor is valid.
-     *
-     * @return {@code true} if {@link #document} content is readable.
-     */
-    public boolean isValid() {
-        return true;
-    }
-
-    /**
-     * Invoked when the editor is selected.
-     * <p/>
-     * Update the HTML content if obsolete.
-     */
-    public void selectNotify() {
-        isActive = true;
-        if (previewIsObsolete) {
-            updateHtmlContent(false);
-        }
-    }
-
     protected void updateRawHtmlText(final String htmlTxt) {
         final DocumentEx myDocument = myTextViewer.getDocument();
 
@@ -399,6 +317,22 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         });
     }
 
+    private String markdownToHtml(boolean modified) {
+        if (astRoot == null) {
+            return "<strong>Parser timed out</strong>";
+        } else {
+            return modified ? new MultiMarkdownToHtmlSerializer(project, document, linkRendererModified).toHtml(astRoot) : new ToHtmlSerializer(linkRendererNormal).toHtml(astRoot);
+        }
+    }
+
+    private void parseMarkdown(String markdownSource) {
+        try {
+            astRoot = processor.get().parseMarkdown(markdownSource.toCharArray());
+        } catch (ParsingTimeoutException e) {
+            astRoot = null;
+        }
+    }
+
     private void updateHtmlContent(boolean force) {
         if (updateDelayTimer != null) {
             updateDelayTimer.cancel();
@@ -407,13 +341,13 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
 
         if (previewIsObsolete && isEditorTabVisible && (isActive || force)) {
             try {
-                final String html = processor.get().markdownToHtml(document.getText(), new MultiMarkdownLinkRenderer());
+                parseMarkdown(document.getText());
+                final String html = postProcessHtml(markdownToHtml(true));
                 if (isRawHtml) {
-                    final String htmlTxt = isShowModified() ? postProcessHtml(html) : html;
-                    //myTextViewer.setText(htmlTxt);
+                    final String htmlTxt = isShowModified() ? html : markdownToHtml(false);
                     updateRawHtmlText(htmlTxt);
                 } else {
-                    jEditorPane.setText(postProcessHtml(html));
+                    jEditorPane.setText(html);
                 }
                 previewIsObsolete = false;
 
@@ -529,6 +463,95 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
 
         result += "\n</div>\n</body>\n";
         return result;
+    }
+
+    /**
+     * Get the {@link java.awt.Component} to display as this editor's UI.
+     *
+     * @return a scrollable {@link JEditorPane}.
+     */
+    @NotNull
+    public JComponent getComponent() {
+        return scrollPane != null ? scrollPane : myTextViewer.getComponent();
+    }
+
+    /**
+     * Get the component to be focused when the editor is opened.
+     *
+     * @return {@link #scrollPane}
+     */
+    @Nullable
+    public JComponent getPreferredFocusedComponent() {
+        return scrollPane != null ? scrollPane : myTextViewer.getContentComponent();
+    }
+
+    /**
+     * Get the editor displayable name.
+     *
+     * @return editor name
+     */
+    @NotNull
+    @NonNls
+    public String getName() {
+        return isRawHtml ? TEXT_EDITOR_NAME : PREVIEW_EDITOR_NAME;
+    }
+
+    /**
+     * Get the state of the editor.
+     * <p/>
+     * Just returns {@link FileEditorState#INSTANCE} as {@link MultiMarkdownPreviewEditor} is stateless.
+     *
+     * @param level the level.
+     *
+     * @return {@link FileEditorState#INSTANCE}
+     *
+     * @see #setState(com.intellij.openapi.fileEditor.FileEditorState)
+     */
+    @NotNull
+    public FileEditorState getState(@NotNull FileEditorStateLevel level) {
+        return FileEditorState.INSTANCE;
+    }
+
+    /**
+     * Set the state of the editor.
+     * <p/>
+     * Does not do anything as {@link MultiMarkdownPreviewEditor} is stateless.
+     *
+     * @param state the new state.
+     *
+     * @see #getState(com.intellij.openapi.fileEditor.FileEditorStateLevel)
+     */
+    public void setState(@NotNull FileEditorState state) {
+    }
+
+    /**
+     * Indicates whether the document content is modified compared to its file.
+     *
+     * @return {@code false} as {@link MultiMarkdownPreviewEditor} is read-only.
+     */
+    public boolean isModified() {
+        return false;
+    }
+
+    /**
+     * Indicates whether the editor is valid.
+     *
+     * @return {@code true} if {@link #document} content is readable.
+     */
+    public boolean isValid() {
+        return true;
+    }
+
+    /**
+     * Invoked when the editor is selected.
+     * <p/>
+     * Update the HTML content if obsolete.
+     */
+    public void selectNotify() {
+        isActive = true;
+        if (previewIsObsolete) {
+            updateHtmlContent(false);
+        }
     }
 
     /**

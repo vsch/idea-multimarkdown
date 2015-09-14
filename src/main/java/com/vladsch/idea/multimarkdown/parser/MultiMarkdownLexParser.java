@@ -22,13 +22,17 @@
  */
 package com.vladsch.idea.multimarkdown.parser;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
+import com.vladsch.idea.multimarkdown.editor.MultiMarkdownLinkRenderer;
+import com.vladsch.idea.multimarkdown.editor.MultiMarkdownPathResolver;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
 import org.jetbrains.annotations.NotNull;
+import org.pegdown.LinkRenderer;
 import org.pegdown.PegDownProcessor;
 import org.pegdown.ast.*;
 

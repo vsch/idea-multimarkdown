@@ -210,8 +210,7 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
                 //    MultiMarkdownGlobalSettings.getInstance().useOldPreview.setValue(true);
             } else {
                 logger.info("JavaFX library jfxrt.jar found in " + libDir + " the current jre: " + javaHome + ", version " + javaVersion);
-                ArrayList<String> libs = new ArrayList<String>(200);
-                libs.add(libDir);
+                ArrayList<String> libs = new ArrayList<String>(1);
                 libs.add(libExtDir);
                 pluginClassLoader.addLibDirectories(libs);
             }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2011-2014 Julien Nicoulaud <julien.nicoulaud@gmail.com>
-* Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
+ * Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,8 +21,12 @@
  */
 package com.vladsch.idea.multimarkdown.editor;
 
+import com.intellij.openapi.application.Application;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
@@ -32,6 +36,11 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 /**
@@ -42,6 +51,7 @@ import java.net.URL;
  * @since 0.8
  */
 public class MultiMarkdownPathResolver {
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownPathResolver.class);
 
     /** Not to be instantiated. */
     private MultiMarkdownPathResolver() {
@@ -52,6 +62,7 @@ public class MultiMarkdownPathResolver {
      * Makes a simple attempt to convert the URL into a VirtualFile.
      *
      * @param target url from which a VirtualFile is sought
+     *
      * @return VirtualFile or null
      */
     public static VirtualFile findVirtualFile(@NotNull URL target) {
@@ -64,6 +75,7 @@ public class MultiMarkdownPathResolver {
      *
      * @param document the document
      * @param target   relative path from which a VirtualFile is sought
+     *
      * @return VirtualFile or null
      */
     public static VirtualFile resolveRelativePath(@NotNull Document document, @NotNull String target) {
@@ -77,6 +89,7 @@ public class MultiMarkdownPathResolver {
      *
      * @param project the project to look for files in
      * @param target  from which a VirtualFile is sought
+     *
      * @return VirtualFile or null
      */
     public static VirtualFile resolveClassReference(@NotNull Project project, @NotNull String target) {
@@ -84,5 +97,71 @@ public class MultiMarkdownPathResolver {
         if (classpathResource != null)
             return classpathResource.getContainingFile().getVirtualFile();
         return null;
+    }
+
+    public static boolean resolveLink(@NotNull final Project project, @NotNull final Document document, @NotNull final String href) {
+        return resolveLink(project, document, href, false,false,false);
+    }
+
+    public static boolean resolveLink(@NotNull final Project project, @NotNull final Document document, @NotNull final String href, final boolean openFile, final boolean focusEditor, final boolean searchForOpen) {
+        if (!href.startsWith("http://") && !href.startsWith("https://") && !href.startsWith("mailto:")) {
+            final boolean[] foundFile = {false};
+            final Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    VirtualFile virtualTarget = null;
+
+                    if (href.startsWith("file:")) {
+                        try {
+                            URL target = new URL(href);
+                            virtualTarget = findVirtualFile(target);
+                        } catch (MalformedURLException e) {
+                            //e.printStackTrace();
+                        }
+                    }
+
+                    if (virtualTarget == null || !virtualTarget.exists()) {
+                        virtualTarget = resolveRelativePath(document, href);
+                    }
+
+                    try {
+                        if (virtualTarget == null) { // Okay, try as if the link target is a class reference
+                            virtualTarget = resolveClassReference(project, href);
+                        }
+                    } catch (NoClassDefFoundError silent) {
+                        // API might not be available on all IntelliJ platform IDEs
+                    }
+
+                    foundFile[0] = virtualTarget != null;
+                    if (foundFile[0] && openFile) {
+                        FileEditorManager.getInstance(project).openFile(virtualTarget, focusEditor, searchForOpen);
+                    }
+                }
+            };
+
+            Application application = ApplicationManager.getApplication();
+            if (application.isDispatchThread()) {
+                runnable.run();
+                return foundFile[0];
+            } else {
+                application.invokeLater(runnable, ModalityState.any());
+
+                // we don't know so we guess?
+                return true;
+            }
+        } else {
+            if (Desktop.isDesktopSupported()) {
+                try {
+                    if (openFile) Desktop.getDesktop().browse(new URI(href));
+                    return true;
+                } catch (URISyntaxException ex) {
+                    // invalid URI, just log
+                    logger.info("URISyntaxException on '" + href + "'" + ex.toString());
+                } catch (IOException ex) {
+                    logger.info("IOException on '" + href + "'" + ex.toString());
+                }
+            }
+            return false;
+        }
     }
 }

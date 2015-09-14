@@ -82,14 +82,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.vladsch.idea.multimarkdown.editor.MultiMarkdownPathResolver.resolveLink;
 import static org.apache.commons.lang.StringEscapeUtils.escapeHtml;
 
 //import com.sun.javafx.scene.layout.region.CornerRadiiConverter;
@@ -326,7 +324,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                             evt.preventDefault();
                             Element link = (Element) evt.getCurrentTarget();
                             org.w3c.dom.Document doc = webEngine.getDocument();
-                            String href = link.getAttribute("href");
+                            final String href = link.getAttribute("href");
                             if (href.charAt(0) == '#') {
                                 if (href.length() != 1) {
                                     // tries to go to an anchor
@@ -371,16 +369,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                                     }
                                 }
                             } else {
-                                if (Desktop.isDesktopSupported()) {
-                                    try {
-                                        Desktop.getDesktop().browse(new URI(href));
-                                    } catch (URISyntaxException ex) {
-                                        // invalid URI, just log
-                                        logger.error("URISyntaxException on '" + href + "'" + ex.toString());
-                                    } catch (IOException ex) {
-                                        logger.error("IOException on '" + href + "'" + ex.toString());
-                                    }
-                                }
+                                resolveLink(project, document, href, true, true, true);
                             }
                         }
                     };
@@ -576,7 +565,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         if (astRoot == null) {
             return "<strong>Parser timed out</strong>";
         } else {
-            return modified ? new MultiMarkdownToHtmlSerializer(linkRendererModified).toHtml(astRoot) : new ToHtmlSerializer(linkRendererNormal).toHtml(astRoot);
+            return modified ? new MultiMarkdownToHtmlSerializer(project, document, linkRendererModified).toHtml(astRoot) : new ToHtmlSerializer(linkRendererNormal).toHtml(astRoot);
         }
     }
 
@@ -598,9 +587,8 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
             try {
                 parseMarkdown(document.getText());
                 final String html = makeHtmlPage(markdownToHtml(true));
-                final String htmlTxt = isShowModified() ? html : markdownToHtml(false);
                 if (isRawHtml) {
-                    //myTextViewer.setText(htmlTxt);
+                    final String htmlTxt = isShowModified() ? html : markdownToHtml(false);
                     updateRawHtmlText(htmlTxt);
                 } else {
                     Platform.runLater(new Runnable() {

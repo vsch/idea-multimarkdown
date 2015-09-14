@@ -36,6 +36,7 @@
         With GitHub Flavoured Markdown extensions and GitHub style formatting. HTML Preview and HTML Text tabs.</p>
 
       <p><b>For all feedback requiring a reply please use the <a color="#30A0D8" href="https://github.com/vsch/idea-multimarkdown/issues"><u>MultiMarkdown GitHub Issues</u></a> page.</b></p>
+      <p>Plugin Wiki <a color="#30A0D8" href="https://github.com/vsch/idea-multimarkdown/wiki"><u>MultiMarkdown GitHub Wiki</u></a> page.</b></p>
 
       <table>
         <tr><td><a href="http://flattr.com/thing/4603764/vschidea-multimarkdown-on-GitHub" title="Donate monthly to vsch using Flattr"><img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/flattr-tips.png" border="0" width="43" height="53" alt="Donate monthly to vsch using Flattr" /></a>&nbsp;&nbsp;<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NR7DAGTC8CXLU" title="Donate once-off to vsch using Paypal"><img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/paypal-tips.png" border="0" width="43" height="53" alt="Donate once-off to vsch using Paypal" /></a></td>
@@ -46,12 +47,16 @@
     </div>
     ]]></description>
 
-  <version>1.1.3.1</version>
+  <version>1.1.4</version>
   <idea-version since-build="133.1711"/>
   <change-notes><![CDATA[
-    <h3>1.1.4 - Tweaks &amp; Cosmetics Release</h3>
+    <h3>1.1.4 - Improve GitHub Wiki Markdown Support</h3>
     <ul>
-      <li></li>
+      <li>Change the HTML Preview and HTML Text editors now require the index to be built, the tabs open after the index update is complete.</li>
+      <li>Add Absent Link checking for HTML Preview for non HTTP type links.</li>
+      <li>Add Open files in the IDE for non-HTTP links, files with no extension will attempt to find a class that matches the name in the link.</li>
+      <li>Add wiki pages to GitHub project. If you want to maintain</li>
+      <li>Add Adding GitHub Wiki To Your IntelliJ Project instructions, for those that would prefer to maintain and edit their project's wiki pages in their IntelliJ project.</li>
     </ul>
     <h3>1.1.3 - Tweaks &amp; Cosmetics Release</h3>
     <ul>
