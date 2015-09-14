@@ -26,6 +26,7 @@ import com.intellij.psi.tree.TokenSet;
 public interface MultiMarkdownTokenTypeSets extends MultiMarkdownTypes {
 
     TokenSet ABBREVIATION_SET = TokenSet.create(ABBREVIATION);
+    TokenSet ABBREVIATED_TEXT_SET = TokenSet.create(ABBREVIATED_TEXT);
     TokenSet ANCHOR_LINK_SET = TokenSet.create(ANCHOR_LINK);
     TokenSet AUTO_LINK_SET = TokenSet.create(AUTO_LINK);
     TokenSet BLOCK_QUOTE_SET = TokenSet.create(BLOCK_QUOTE);

@@ -31,13 +31,14 @@ import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 
-public class MultiMarkdownHtmlEditorProvider implements FileEditorProvider, PossiblyDumbAware {
+public class MultiMarkdownHtmlEditorProvider extends MultiMarkdownPreviewEditorProvider {
 
     public static final String EDITOR_TYPE_ID = MultiMarkdownLanguage.NAME + "HtmlEditor";
 
+    @Override
     public boolean accept(@NotNull Project project, @NotNull VirtualFile file) {
         return MultiMarkdownGlobalSettings.getInstance().showHtmlText.getValue()
-                && (MultiMarkdownPreviewEditorProvider.accept(file));
+                && (super.accept(project, file));
     }
 
     @NotNull
@@ -45,35 +46,9 @@ public class MultiMarkdownHtmlEditorProvider implements FileEditorProvider, Poss
         return new MultiMarkdownPreviewEditor(project, FileDocumentManager.getInstance().getDocument(file), true);
     }
 
-    public void disposeEditor(@NotNull FileEditor editor) {
-        editor.dispose();
-    }
-
     @NotNull
-    public FileEditorState readState(@NotNull Element sourceElement, @NotNull Project project, @NotNull VirtualFile file) {
-        return FileEditorState.INSTANCE;
-    }
-
-    public void writeState(@NotNull FileEditorState state, @NotNull Project project, @NotNull Element targetElement) {
-    }
-
-    @NotNull
+    @Override
     public String getEditorTypeId() {
         return EDITOR_TYPE_ID;
-    }
-
-    @NotNull
-    public FileEditorPolicy getPolicy() {
-        return FileEditorPolicy.PLACE_AFTER_DEFAULT_EDITOR;
-    }
-
-    /**
-     * Indicates the editor can be created while background indexing is running.
-     *
-     * @return {@code true}
-     */
-    @Override
-    public boolean isDumbAware() {
-        return true;
     }
 }

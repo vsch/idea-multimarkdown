@@ -1,5 +1,5 @@
-*[HTML4]: Hyper Text Markup Language version 4
-
+*[ABBR]: Abbreviated Text
+Abbreviated Text: ABBR
 Auto link: <http://example.com> Inline `code` 
 Bold Italic Text: ***bold italic*** and ***normal text
 Bold: **bold**, ***bold italic***, and **normal text

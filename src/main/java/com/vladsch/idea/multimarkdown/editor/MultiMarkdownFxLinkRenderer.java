@@ -22,12 +22,10 @@
  *
  */
 package com.vladsch.idea.multimarkdown.editor;
-import org.pegdown.LinkRenderer;
-import org.pegdown.ast.*;
 
-import static org.pegdown.FastEncoder.obfuscate;
+import org.pegdown.ast.AnchorLinkNode;
 
-public class MultiMarkdownFxLinkRenderer extends LinkRenderer {
+public class MultiMarkdownFxLinkRenderer extends MultiMarkdownLinkRenderer {
     public MultiMarkdownFxLinkRenderer() {
         super();
     }
@@ -36,35 +34,4 @@ public class MultiMarkdownFxLinkRenderer extends LinkRenderer {
         String name = node.getName();
         return new Rendering('#' + name, node.getText()).withAttribute("name", name).withAttribute("id", name).withAttribute("class", "anchor");
     }
-
-    @Override public Rendering render(AutoLinkNode node) {
-        return super.render(node);
-    }
-
-    @Override public Rendering render(ExpLinkNode node, String text) {
-        return super.render(node, text);
-    }
-
-    @Override public Rendering render(ExpImageNode node, String text) {
-        return super.render(node, text);
-    }
-
-    @Override public Rendering render(RefLinkNode node, String url, String title, String text) {
-        return super.render(node, url, title, text);
-    }
-
-    @Override public Rendering render(RefImageNode node, String url, String title, String alt) {
-        return super.render(node, url, title, alt);
-    }
-
-    @Override public Rendering render(WikiLinkNode node) {
-        return super.render(node);
-    }
-
-    @Override
-    public Rendering render(MailLinkNode node) {
-        String obfuscated = obfuscate(node.getText());
-        return (new Rendering(obfuscate("mailto:") + obfuscated, obfuscated)).withAttribute("class", obfuscate("mail-link"));
-    }
-
 }

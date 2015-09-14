@@ -26,6 +26,7 @@ import com.intellij.ide.highlighter.HighlighterFactory;
 import com.intellij.lang.Language;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.EditorSettings;
 import com.intellij.openapi.editor.event.DocumentAdapter;
 import com.intellij.openapi.editor.event.DocumentEvent;
@@ -37,23 +38,25 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.util.registry.RegistryValue;
+import com.intellij.ui.EditorTextField;
+import com.intellij.ui.components.JBList;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
-import org.apache.commons.net.util.Base64;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import javax.swing.event.*;
+import java.awt.*;
+import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class MultiMarkdownSettingsPanel implements SettingsProvider {
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownSettingsPanel.class);
 
     public JSpinner parsingTimeoutSpinner;
     public JCheckBox smartsCheckBox;
@@ -81,9 +84,9 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
     public JCheckBox anchorLinksCheckBox;
     public JCheckBox forceListParaCheckBox;
     public JCheckBox relaxedHRulesCheckBox;
-    public JComboBox htmlThemeComboBox;
+    public JComponent htmlThemeComboBox;
     public JCheckBox enableTrimSpacesCheckBox;
-    private CustomizableEditorTextField textCustomCss;
+    private EditorTextField textCustomCss;
 
     public JPanel panel;
     public JPanel settingsPanel;
@@ -106,6 +109,11 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
     private JCheckBox useCustomCssCheckBox;
     private JCheckBox useOldPreviewCheckBox;
     private JLabel maxImgWidthLabel;
+    private JCheckBox enableFirebugCheckBox;
+    private JList htmlThemeList;
+    private JEditorPane tippingJarEditorPane;
+    private JSpinner pageZoomSpinner;
+    private JLabel pageZoomLabel;
 
     // need this so that we dont try to access components before they are created
     public @Nullable Object getComponent(@NotNull String persistName) {
@@ -134,10 +142,13 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         if (persistName.equals("anchorLinksCheckBox")) return anchorLinksCheckBox;
         if (persistName.equals("forceListParaCheckBox")) return forceListParaCheckBox;
         if (persistName.equals("relaxedHRulesCheckBox")) return relaxedHRulesCheckBox;
-        if (persistName.equals("htmlThemeComboBox")) return htmlThemeComboBox;
+        //if (persistName.equals("htmlThemeComboBox")) return htmlThemeComboBox;
         if (persistName.equals("enableTrimSpacesCheckBox")) return enableTrimSpacesCheckBox;
         if (persistName.equals("useCustomCssCheckBox")) return useCustomCssCheckBox;
         if (persistName.equals("useOldPreviewCheckBox")) return useOldPreviewCheckBox;
+        if (persistName.equals("enableFirebugCheckBox")) return enableFirebugCheckBox;
+        if (persistName.equals("htmlThemeList")) return htmlThemeList;
+        if (persistName.equals("pageZoomSpinner")) return pageZoomSpinner;
 
         return null;
     }
@@ -149,10 +160,11 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
     }
 
     protected boolean useCustomCSSOriginalState;
+    protected boolean haveCustomizableEditor;
 
     protected void updateCustomCssControls() {
         final Application application = ApplicationManager.getApplication();
-        if (!textCustomCss.isPendingTextUpdate()) {
+        if (haveCustomizableEditor && !((CustomizableEditorTextField) textCustomCss).isPendingTextUpdate()) {
             updateRawCustomCssControls();
         } else {
             application.invokeLater(new Runnable() {
@@ -169,7 +181,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         useCustomCssCheckBox.setEnabled(haveCustomCss);
         clearCustomCssButton.setEnabled(haveCustomCss);
         if (!haveCustomCss) useCustomCssCheckBox.setSelected(false);
-        focusEditorButton.setEnabled(textCustomCss.haveSavedState());
+        if (haveCustomCss && haveCustomizableEditor) focusEditorButton.setEnabled(((CustomizableEditorTextField) textCustomCss).haveSavedState());
     }
 
     public MultiMarkdownSettingsPanel() {
@@ -181,10 +193,10 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
 
         btnLoadDefault.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) {
-                String cssFileText = MultiMarkdownGlobalSettings.getInstance().getCssFileText(htmlThemeComboBox.getSelectedIndex());
-                String base64Css = Base64.encodeBase64URLSafeString(MultiMarkdownGlobalSettings.getInstance().getCssText().getBytes(StandardCharsets.UTF_8));
-                String cssText = new String(Base64.decodeBase64(base64Css), StandardCharsets.UTF_8);
-                textCustomCss.setText(cssText);
+                //String cssFileText = MultiMarkdownGlobalSettings.getInstance().getCssFileText(htmlThemeComboBox.getSelectedIndex());
+                //String base64Css = Base64.encodeBase64URLSafeString(MultiMarkdownGlobalSettings.getInstance().getCssText().getBytes(Charset.forName("utf-8")));
+                //String cssText = new String(Base64.decodeBase64(base64Css), Charset.forName("utf-8"));
+                textCustomCss.setText(MultiMarkdownGlobalSettings.getInstance().getCssFileText(htmlThemeList.getSelectedIndex()));
             }
         });
 
@@ -219,14 +231,106 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
             }
         });
 
-        if (MultiMarkdownGlobalSettings.isFxHtmlPreview()) {
-            maxImgWidthSpinner.setVisible(false);
-            maxImgWidthLabel.setVisible(false);
+        useOldPreviewCheckBox.addItemListener(new ItemListener() {
+            @Override public void itemStateChanged(ItemEvent e) {
+                boolean useNewPreview = !useOldPreviewCheckBox.isSelected();
+                enableFirebugCheckBox.setEnabled(useNewPreview);
+                pageZoomSpinner.setVisible(useNewPreview);
+                pageZoomLabel.setVisible(useNewPreview);
+                maxImgWidthSpinner.setVisible(useNewPreview);
+                maxImgWidthLabel.setVisible(useNewPreview);
+            }
+        });
+
+        if (htmlThemeComboBox instanceof ComboBox) {
+            ((JComboBox) htmlThemeComboBox).addItemListener(new ItemListener() {
+                @Override public void itemStateChanged(ItemEvent e) {
+                    if (((JComboBox) htmlThemeComboBox).getSelectedIndex() != htmlThemeList.getSelectedIndex()) {
+                        htmlThemeList.setSelectedIndex(((JComboBox) htmlThemeComboBox).getSelectedIndex());
+                    }
+                }
+            });
+
+            htmlThemeList.addListSelectionListener(new ListSelectionListener() {
+                @Override public void valueChanged(ListSelectionEvent e) {
+                    if (((JComboBox) htmlThemeComboBox).getSelectedIndex() != htmlThemeList.getSelectedIndex()) {
+                        ((JComboBox) htmlThemeComboBox).setSelectedIndex(htmlThemeList.getSelectedIndex());
+                    }
+                }
+            });
         }
+
+        tippingJarEditorPane.setText("" +
+                "<html>\n" +
+                "  <head>\n" +
+                "  <style>\n" +
+                "     td { text-align: center; }\n" +
+                "     p, table, tr, { margin: 0; padding: 0; }\n" +
+                "     p { margin-bottom: 5px; }\n" +
+                "  </style>\n" +
+                "  </head>\n" +
+                "  <body>\n" +
+                "    <p style=\"margin: 0\">\n" +
+                "      <table>\n" +
+                "        <tr><td><a href=\"http://flattr.com/thing/4603764/vschidea-multimarkdown-on-GitHub\" title=\"Donate monthly to vsch using Flattr\"><img src=\"https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/flattr-tips.png\" border=\"0\" width=\"43\" height=\"53\" alt=\"Donate monthly to vsch using Flattr\" /></a>\n" +
+                "          &nbsp;&nbsp;<a href=\"https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NR7DAGTC8CXLU\" title=\"Donate once-off to vsch using Paypal\"><img src=\"https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/paypal-tips.png\" border=\"0\" width=\"43\" height=\"53\" alt=\"Donate once-off to vsch using Paypal\" /></a></td>\n" +
+                "        </tr><tr>\n" +
+                "          <td><b>If you like my work then please feel free to tip me.<br>I will view it as a show of appreciation and as a reward for my effort.</b></td>\n" +
+                "        </tr>\n" +
+                "      </table>\n" +
+                "    </p>\n" +
+                "  </body>\n" +
+                "</html>\n" +
+                "");
+
+        tippingJarEditorPane.addHyperlinkListener(new HyperlinkListener() {
+            @Override public void hyperlinkUpdate(HyperlinkEvent e) {
+                if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
+                    URL href = e.getURL();
+                    if (href != null) {
+                        if (Desktop.isDesktopSupported()) {
+                            try {
+                                Desktop.getDesktop().browse(href.toURI());
+                            } catch (URISyntaxException ex) {
+                                // invalid URI, just log
+                                logger.error("URISyntaxException on '" + href.toString() + "'" + ex.toString());
+                            } catch (IOException ex) {
+                                logger.error("IOException on '" + href.toString() + "'" + ex.toString());
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
+        // create the css themes combobox, make it locale aware
+        ArrayList<String> options = new ArrayList<String>(10);
+        for (int i = 0; ; i++) {
+            String message = MultiMarkdownBundle.messageOrBlank("multimarkdown.settings.html-theme-" + (i + 1));
+            if (message.isEmpty()) break;
+            options.add(message);
+        }
+
+        // we use the list to report but combo box if available
+        htmlThemeList = new JBList(options);
+        htmlThemeList.setSelectedIndex(2);
+
+        htmlThemeComboBox = new JLabel();
+        htmlThemeComboBox.setVisible(false);
+        haveCustomizableEditor = false;
+        try {
+            htmlThemeComboBox = new ComboBox(options.toArray(new String[options.size()]));
+            ((JComboBox) htmlThemeComboBox).setSelectedIndex(2);
+            htmlThemeList.setVisible(false);
+            haveCustomizableEditor = true;
+        } catch (NoSuchMethodError e) {
+            // does not exist, use list box
+        } catch (NoClassDefFoundError e) {
+            // does not exist, use list box
+        }
 
         // create the CSS text edit control
         Language language = Language.findLanguageByID("CSS");
@@ -234,11 +338,12 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
 
         final FileType fileType = language != null && language.getAssociatedFileType() != null ? language.getAssociatedFileType() : StdFileTypes.PLAIN_TEXT;
 
-        // we pass a null project because we don't have one, the control will grab any project so that
-        // undo works properly in the edit control.
-        textCustomCss = new CustomizableEditorTextField(fileType, null, "", false);
-        textCustomCss.setFontInheritedFromLAF(false);
-        textCustomCss.registerListener(new CustomizableEditorTextField.EditorCustomizationListener() {
+        // Set zoom to 0.1 increments
+        final SpinnerNumberModel model=new SpinnerNumberModel(1.0, 0.2, 5.0, 0.01);
+        pageZoomSpinner = new JSpinner(model);
+        JSpinner.NumberEditor decimalFormat = new JSpinner.NumberEditor(pageZoomSpinner, "0.00");
+
+        CustomizableEditorTextField.EditorCustomizationListener listener = new CustomizableEditorTextField.EditorCustomizationListener() {
             @Override public boolean editorCreated(@NotNull EditorEx editor, @NotNull Project project) {
                 EditorSettings settings = editor.getSettings();
                 settings.setRightMarginShown(true);
@@ -248,19 +353,6 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
                 if (foundCSS) settings.setLineMarkerAreaShown(true);
                 settings.setIndentGuidesShown(true);
                 settings.setVirtualSpace(true);
-
-                // get the standard caret width from the registry
-                int lineCursorWidth = 2;
-                try {
-                    RegistryValue value = Registry.get("editor.caret.width");
-                    if (value != null) {
-                        lineCursorWidth = value.asInteger();
-                    }
-                } catch (Exception ex) {
-                    // ignore
-                }
-
-                settings.setLineCursorWidth(lineCursorWidth);
 
                 //settings.setWheelFontChangeEnabled(false);
                 editor.setHorizontalScrollbarVisible(true);
@@ -272,21 +364,39 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
                     editor.setHighlighter(HighlighterFactory.createHighlighter(project, highlighterFileType));
                 }
 
-                focusEditorButton.setEnabled(textCustomCss.haveSavedState(editor));
+                int lineCursorWidth = 2;
+                if (haveCustomizableEditor) {
+                    // get the standard caret width from the registry
+                    try {
+                        RegistryValue value = Registry.get("editor.caret.width");
+                        if (value != null) {
+                            lineCursorWidth = value.asInteger();
+                        }
+                    } catch (Exception ex) {
+                        // ignore
+                    }
+
+                    focusEditorButton.setEnabled(((CustomizableEditorTextField) textCustomCss).haveSavedState(editor));
+                }
+                settings.setLineCursorWidth(lineCursorWidth);
 
                 return false;
             }
-        });
+        };
 
-        // create the css themes combobox, make it locale aware
-        ArrayList<String> options = new ArrayList<String>(10);
-        for (int i = 0; ; i++) {
-            String message = MultiMarkdownBundle.messageOrBlank("multimarkdown.settings.html-theme-" + (i + 1));
-            if (message.isEmpty()) break;
-            options.add(message);
+        if (!haveCustomizableEditor) {
+            Project project = CustomizableEditorTextField.getAnyProject(null, true);
+            Document document = CustomizableEditorTextField.createDocument("", fileType, project, new CustomizableEditorTextField.SimpleDocumentCreator());
+            textCustomCss = new CustomizableLanguageEditorTextField(document, project, fileType, false, false);
+            textCustomCss.setFontInheritedFromLAF(false);
+            ((CustomizableLanguageEditorTextField) textCustomCss).registerListener(listener);
+            //focusEditorButton.setEnabled(false);
+        } else {
+            // we pass a null project because we don't have one, the control will grab any project so that
+            // undo works properly in the edit control.
+            textCustomCss = new CustomizableEditorTextField(fileType, null, "", false);
+            textCustomCss.setFontInheritedFromLAF(false);
+            ((CustomizableEditorTextField) textCustomCss).registerListener(listener);
         }
-
-        htmlThemeComboBox = new ComboBox(options.toArray(new String[options.size()]));
-        htmlThemeComboBox.setSelectedItem(2);
     }
 }

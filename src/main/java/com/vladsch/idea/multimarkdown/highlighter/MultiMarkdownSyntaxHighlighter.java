@@ -42,6 +42,7 @@ public class MultiMarkdownSyntaxHighlighter extends SyntaxHighlighterBase {
     static {
         fillMap(ATTRIBUTES, TEXT_SET, TEXT_ATTR_KEY);
         fillMap(ATTRIBUTES, ABBREVIATION_SET, ABBREVIATION_ATTR_KEY);
+        fillMap(ATTRIBUTES, ABBREVIATED_TEXT_SET, ABBREVIATED_TEXT_ATTR_KEY);
         fillMap(ATTRIBUTES, ANCHOR_LINK_SET, ANCHOR_LINK_ATTR_KEY);
         fillMap(ATTRIBUTES, AUTO_LINK_SET, AUTO_LINK_ATTR_KEY);
         fillMap(ATTRIBUTES, BLOCK_QUOTE_SET, BLOCK_QUOTE_ATTR_KEY);

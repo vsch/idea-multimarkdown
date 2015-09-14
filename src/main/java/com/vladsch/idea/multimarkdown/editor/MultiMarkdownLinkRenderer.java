@@ -25,6 +25,9 @@ package com.vladsch.idea.multimarkdown.editor;
 import org.pegdown.LinkRenderer;
 import org.pegdown.ast.*;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import static org.pegdown.FastEncoder.obfuscate;
 
 public class MultiMarkdownLinkRenderer extends LinkRenderer {
@@ -56,14 +59,29 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
         return super.render(node, url, title, alt);
     }
 
-    @Override public Rendering render(WikiLinkNode node) {
-        return super.render(node);
-    }
-
     @Override
     public Rendering render(MailLinkNode node) {
         String obfuscated = obfuscate(node.getText());
         return (new Rendering(obfuscate("mailto:") + obfuscated, obfuscated)).withAttribute("class", obfuscate("mail-link"));
     }
 
+    @Override
+    public Rendering render(WikiLinkNode node) {
+        try {
+            // vsch: #182 handle WikiLinks alternative format [[page|text]]
+            String text = node.getText();
+            String url = text;
+            int pos;
+            if ((pos = text.indexOf("|")) >= 0) {
+                url = text.substring(0, pos);
+                text = text.substring(pos+1);
+            }
+
+            // keep the .md file so that we can open it in the IDE
+            url = "./" + URLEncoder.encode(url.replace(' ', '-'), "UTF-8") + ".md";
+            return new Rendering(url, text);
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalStateException();
+        }
+    }
 }

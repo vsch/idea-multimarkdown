@@ -56,6 +56,10 @@ public class Settings {
         return new IntegerSetting(initialValue, persistName);
     }
 
+    public DoubleSetting DoubleSetting(Double initialValue, String persistName) {
+        return new DoubleSetting(initialValue, persistName);
+    }
+
     public StringSetting StringSetting(String initialValue, String persistName) {
         return new StringSetting(initialValue, persistName);
     }
@@ -166,12 +170,27 @@ public class Settings {
         public boolean isChanged(JSpinner component) { return !value.equals((Integer) component.getValue()); }
 
         public void setValue(JComboBox component) { setValue((Integer) component.getSelectedIndex()); }
+        public void setValue(JList component) { setValue((Integer) component.getSelectedIndex()); }
 
-        public void reset(JComboBox component) {
-            component.setSelectedIndex(value);
-        }
+        public void reset(JComboBox component) { component.setSelectedIndex(value); }
+        public void reset(JList component) { component.setSelectedIndex(value); }
 
         public boolean isChanged(JComboBox component) { return !value.equals((Integer) component.getSelectedIndex()); }
+        public boolean isChanged(JList component) { return !value.equals((Integer) component.getSelectedIndex()); }
+    }
+
+    public class DoubleSetting extends Setting<Double> {
+
+        public DoubleSetting(Double initialValue, String persistName) { super(initialValue, persistName); }
+
+        @Override public Double fromString(String value) { return Double.parseDouble(value); }
+        @Override public Double getDefaultValue() { return 0.0; }
+
+        public void setValue(JSpinner component) { setValue((Double) component.getValue()); }
+
+        public void reset(JSpinner component) { component.setValue(value); }
+
+        public boolean isChanged(JSpinner component) { return !value.equals((Double) component.getValue()); }
     }
 
     public class BooleanSetting extends Setting<Boolean> {

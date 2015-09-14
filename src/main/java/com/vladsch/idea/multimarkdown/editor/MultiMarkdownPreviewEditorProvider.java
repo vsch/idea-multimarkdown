@@ -22,16 +22,19 @@
 package com.vladsch.idea.multimarkdown.editor;
 
 //import com.intellij.ide.scratch.ScratchFileService;
+
 import com.intellij.lang.Language;
 import com.intellij.lang.PerFileMappings;
+import com.intellij.openapi.application.ApplicationInfo;
 import com.intellij.openapi.fileEditor.*;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.PossiblyDumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.vladsch.idea.multimarkdown.MultiMarkdownFileType;
 import com.vladsch.idea.multimarkdown.MultiMarkdownFileTypeFactory;
 import com.vladsch.idea.multimarkdown.MultiMarkdownLanguage;
-import com.vladsch.idea.multimarkdown.MultiMarkdownFileType;
+import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,8 +48,13 @@ public class MultiMarkdownPreviewEditorProvider implements FileEditorProvider, P
         String fileExt = file.getExtension();
         FileType fileType = file.getFileType();
         boolean doAccept = fileType instanceof MultiMarkdownFileType;
+        String ideaBuild = ApplicationInfo.getInstance().getBuild().asString();
+        String scratchFailedBuild = MultiMarkdownGlobalSettings.getInstance().scratchFileServiceFailedBuild.getValue();
+        boolean checkScratchFileService = !scratchFailedBuild.equals(ideaBuild);
 
-        if (!doAccept) {
+        if (!doAccept && checkScratchFileService) {
+            boolean failedScratchFileService = true;
+
             try {
                 // Issue: #14 scratch files have to be matched differently
                 //ScratchFileService fileService = ScratchFileService.getInstance();
@@ -62,8 +70,15 @@ public class MultiMarkdownPreviewEditorProvider implements FileEditorProvider, P
                 PerFileMappings<Language> mappings = (PerFileMappings<Language>) getScratchesMapping.invoke(fileService);
                 Language language = mappings.getMapping(file);
                 doAccept = language instanceof MultiMarkdownLanguage;
+                failedScratchFileService = false;
+            } catch (NoClassDefFoundError er) {
+                //e.printStackTrace();
             } catch (Exception ex) {
-                // no such beast
+                //e.printStackTrace();
+            }
+
+            if (failedScratchFileService) {
+                MultiMarkdownGlobalSettings.getInstance().scratchFileServiceFailedBuild.setValue(ideaBuild);
             }
         }
 
@@ -135,6 +150,6 @@ public class MultiMarkdownPreviewEditorProvider implements FileEditorProvider, P
 
     @Override
     public boolean isDumbAware() {
-        return true;
+        return false;
     }
 }
