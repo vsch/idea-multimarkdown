@@ -24,21 +24,6 @@ idea-multimarkdown
     </tr>
 </table>
 
-### Version 1.1 is released
-
-I have implemented a JavaFX WebView based HTML Preview Tab and the results are stunning. Not only was I able to make it look like GitHub's markdown, which I could not do with the old preview, but it is a joy to work with and maintain compared to `HTMLEditorKit`.
-
-**For any communications requiring a reply** please use the [GitHub Issues page](https://github.com/vsch/idea-multimarkdown/issues) for this plugin. There is no ability to reply to comments left on the [JetBrains plugin comment and rate page](https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896).
-
-**[Wiki Pages](https://github.com/vsch/idea-multimarkdown/wiki) added** with instructions on [how to include your GitHub wiki in the IntelliJ IDE](https://github.com/vsch/idea-multimarkdown/wiki/Adding-GitHub-Wiki-To-Your-IntelliJ-Project) so you can work on the wiki in the IDE and use the plugin for syntax highlighting and preview. Makes adding images and manipulating the wiki a lot easier.
-
-<table>
-    <tr><td><a href="http://flattr.com/thing/4603764/vschidea-multimarkdown-on-GitHub" title="Donate monthly to vsch using Flattr"><img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/flattr-tips.png" border="0" width="43" height="53" alt="Donate monthly to vsch using Flattr" /></a>
-        <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NR7DAGTC8CXLU" title="Donate once-off to vsch using Paypal"><img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/paypal-tips.png" border="0" width="43" height="53" alt="Donate once-off to vsch using Paypal" /></a></td>
-        <td><b>If you like my work then please feel free to tip me.<br>I will view it as a show of appreciation and as a reward for my effort.</b></td>
-    </tr>
-</table>
-
 
 ### Version 1.1 is released
 
