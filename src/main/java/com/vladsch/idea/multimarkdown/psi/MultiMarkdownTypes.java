@@ -42,6 +42,7 @@ public interface MultiMarkdownTypes {
     IElementType NONE = new MultiMarkdownTokenType("NONE");
 
     IElementType ABBREVIATION = new MultiMarkdownElementType("ABBREVIATION");
+    IElementType ABBREVIATED_TEXT = new MultiMarkdownElementType("ABBREVIATED_TEXT");
     IElementType ANCHOR_LINK = new MultiMarkdownTokenType("ANCHOR_LINK");
     IElementType AUTO_LINK = new MultiMarkdownTokenType("AUTO_LINK");
     IElementType BLOCK_QUOTE = new MultiMarkdownElementType("BLOCK_QUOTE");

@@ -23,58 +23,31 @@
  */
 package com.vladsch.idea.multimarkdown.editor;
 
-import com.intellij.openapi.fileEditor.*;
-import com.intellij.openapi.project.PossiblyDumbAware;
+import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.vladsch.idea.multimarkdown.MultiMarkdownLanguage;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
-import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 
-public class MultiMarkdownFxHtmlEditorProvider implements FileEditorProvider, PossiblyDumbAware {
+public class MultiMarkdownFxHtmlEditorProvider extends MultiMarkdownFxPreviewEditorProvider {
 
     public static final String EDITOR_TYPE_ID = MultiMarkdownLanguage.NAME + "FxHtmlEditor";
 
     public boolean accept(@NotNull Project project, @NotNull VirtualFile file) {
         return MultiMarkdownGlobalSettings.getInstance().showHtmlText.getValue()
-                && (MultiMarkdownFxPreviewEditorProvider.accept(file));
+                && (super.accept(project, file));
     }
 
     @NotNull
+    @Override
     public FileEditor createEditor(@NotNull Project project, @NotNull VirtualFile file) {
         return MultiMarkdownFxPreviewEditorProvider.createEditor(project, file, true);
     }
 
-    public void disposeEditor(@NotNull FileEditor editor) {
-        editor.dispose();
-    }
-
     @NotNull
-    public FileEditorState readState(@NotNull Element sourceElement, @NotNull Project project, @NotNull VirtualFile file) {
-        return FileEditorState.INSTANCE;
-    }
-
-    public void writeState(@NotNull FileEditorState state, @NotNull Project project, @NotNull Element targetElement) {
-    }
-
-    @NotNull
+    @Override
     public String getEditorTypeId() {
         return EDITOR_TYPE_ID;
-    }
-
-    @NotNull
-    public FileEditorPolicy getPolicy() {
-        return FileEditorPolicy.PLACE_AFTER_DEFAULT_EDITOR;
-    }
-
-    /**
-     * Indicates the editor can be created while background indexing is running.
-     *
-     * @return {@code true}
-     */
-    @Override
-    public boolean isDumbAware() {
-        return true;
     }
 }

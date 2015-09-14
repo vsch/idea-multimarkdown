@@ -26,25 +26,17 @@ package com.vladsch.idea.multimarkdown.editor;
 //import com.intellij.ide.scratch.ScratchFileService;
 
 import com.intellij.ide.plugins.cl.PluginClassLoader;
-import com.intellij.lang.Language;
-import com.intellij.lang.PerFileMappings;
-import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.*;
-import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.PossiblyDumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.vladsch.idea.multimarkdown.MultiMarkdownFileType;
-import com.vladsch.idea.multimarkdown.MultiMarkdownFileTypeFactory;
 import com.vladsch.idea.multimarkdown.MultiMarkdownLanguage;
-import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 public class MultiMarkdownFxPreviewEditorProvider implements FileEditorProvider, PossiblyDumbAware {
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownFxPreviewEditorProvider.class);
@@ -60,40 +52,7 @@ public class MultiMarkdownFxPreviewEditorProvider implements FileEditorProvider,
     private static Constructor<?> classConstructor;
 
     public static boolean accept(@NotNull VirtualFile file) {
-        String fileExt = file.getExtension();
-        FileType fileType = file.getFileType();
-        boolean doAccept = fileType instanceof MultiMarkdownFileType;
-
-        if (!doAccept) {
-            try {
-                // Issue: #14 scratch files have to be matched differently
-                //ScratchFileService fileService = ScratchFileService.classConstructor();
-                //PerFileMappings<Language> scratchesMapping = fileService.getScratchesMapping();
-                //Language language = scratchesMapping.getMapping(file);
-                //doAccept = language instanceof MultiMarkdownLanguage;
-
-                // Issue: #15 class not found ScratchFileService, so we take care of it through reflection
-                Class<?> ScratchFileService = Class.forName("com.intellij.ide.scratch.ScratchFileService");
-                Method getInstance = ScratchFileService.getMethod("classConstructor");
-                Method getScratchesMapping = ScratchFileService.getMethod("getScratchesMapping");
-                Object fileService = getInstance.invoke(ScratchFileService);
-                PerFileMappings<Language> mappings = (PerFileMappings<Language>) getScratchesMapping.invoke(fileService);
-                Language language = mappings.getMapping(file);
-                doAccept = language instanceof MultiMarkdownLanguage;
-            } catch (Exception ex) {
-                // no such beast
-            }
-        }
-
-        if (!doAccept && fileExt != null) {
-            for (String ext : MultiMarkdownFileTypeFactory.getExtensions()) {
-                if (ext.equals(fileExt)) {
-                    doAccept = true;
-                    break;
-                }
-            }
-        }
-        return doAccept;
+        return MultiMarkdownPreviewEditorProvider.accept(file);
     }
 
     public boolean accept(@NotNull Project project, @NotNull VirtualFile file) {
@@ -101,6 +60,7 @@ public class MultiMarkdownFxPreviewEditorProvider implements FileEditorProvider,
     }
 
     @NotNull
+    @Override
     public FileEditor createEditor(@NotNull Project project, @NotNull VirtualFile file) {
         return createEditor(project, file, false);
     }
@@ -110,40 +70,39 @@ public class MultiMarkdownFxPreviewEditorProvider implements FileEditorProvider,
         if (!MultiMarkdownGlobalSettings.getInstance().useOldPreview.getValue()) {
             if (canLoadFxEditor == FX_PREVIEW_UNKNOWN) {
                 try {
-                    MultiMarkdownPlugin plugin = MultiMarkdownPlugin.getInstance(project);
-                    PluginClassLoader pluginClassLoader = (PluginClassLoader) plugin.getClassLoader();
-                    MultiMarkdownFxPreviewEditor = Class.forName("com.vladsch.idea.multimarkdown.editor.MultiMarkdownFxPreviewEditor", true, pluginClassLoader);
-                    classConstructor = MultiMarkdownFxPreviewEditor.getConstructor(Project.class, Document.class, boolean.class);
-                    canLoadFxEditor = FX_PREVIEW_HAVE_JAR;
-                } catch (ClassNotFoundException e) {
-                    logger.error("ClaClassNotFoundException", e);
-                } catch (NoSuchMethodException e) {
-                    logger.error("NoSuchMethodException", e);
-                }
-            }
-
-            if (canLoadFxEditor == FX_PREVIEW_HAVE_JAR || canLoadFxEditor == FX_PREVIEW_CAN_LOAD) {
-                try {
-                    Object fileEditor = classConstructor.newInstance(project, FileDocumentManager.getInstance().getDocument(file), forRawHtml);
-                    if (canLoadFxEditor == FX_PREVIEW_HAVE_JAR) {
-                        MultiMarkdownGlobalSettings.setIsFxHtmlPreview(true);
-                        canLoadFxEditor = FX_PREVIEW_CAN_LOAD;
+                    MultiMarkdownGlobalSettings.getInstance().setIsFxHtmlPreview(true);
+                    canLoadFxEditor = FX_PREVIEW_CAN_LOAD;
+                    FileEditor fileEditor = new MultiMarkdownFxPreviewEditor(project, FileDocumentManager.getInstance().getDocument(file), forRawHtml);
+                    return fileEditor;
+                } catch (NoClassDefFoundError er) {
+                    //e.printStackTrace();
+                    logger.error("NoClassDefFoundError", er);
+                    canLoadFxEditor = FX_PREVIEW_CANNOT_LOAD;
+                    MultiMarkdownGlobalSettings.getInstance().setIsFxHtmlPreview(false);
+                    MultiMarkdownGlobalSettings.getInstance().useOldPreview.setValue(true);
+                } catch (Exception e) {
+                    if (e instanceof InvocationTargetException) {
+                        logger.warn("InvocationTargetException", ((InvocationTargetException) e).getTargetException());
+                    } else {
+                        logger.warn("Exception", e);
                     }
-                    return (FileEditor) fileEditor;
-                } catch (InvocationTargetException e) {
-                    logger.error("InvocationTargetException", e.getTargetException());
-                } catch (IllegalAccessException e) {
-                    logger.error("IllegalAccessException", e);
-                } catch (InstantiationException e) {
-                    logger.error("InstantiationException", e);
+                    canLoadFxEditor = FX_PREVIEW_CANNOT_LOAD;
+                    MultiMarkdownGlobalSettings.getInstance().setIsFxHtmlPreview(false);
+                    MultiMarkdownGlobalSettings.getInstance().useOldPreview.setValue(true);
+                    e.printStackTrace();
                 }
             }
-        }
 
-        // TODO: show notification of the problem and solutions
-        if (canLoadFxEditor != FX_PREVIEW_CANNOT_LOAD) {
-            canLoadFxEditor = FX_PREVIEW_CANNOT_LOAD;
-            MultiMarkdownGlobalSettings.setIsFxHtmlPreview(false);
+            if (canLoadFxEditor == FX_PREVIEW_CAN_LOAD) {
+                return new MultiMarkdownFxPreviewEditor(project, FileDocumentManager.getInstance().getDocument(file), forRawHtml);
+            }
+
+            // TODO: show notification of the problem and solutions
+            if (canLoadFxEditor != FX_PREVIEW_CANNOT_LOAD) {
+                canLoadFxEditor = FX_PREVIEW_CANNOT_LOAD;
+                MultiMarkdownGlobalSettings.getInstance().useOldPreview.setValue(true);
+                MultiMarkdownGlobalSettings.getInstance().setIsFxHtmlPreview(false);
+            }
         }
         return new MultiMarkdownPreviewEditor(project, FileDocumentManager.getInstance().getDocument(file), forRawHtml);
     }
@@ -153,25 +112,29 @@ public class MultiMarkdownFxPreviewEditorProvider implements FileEditorProvider,
     }
 
     @NotNull
+    @Override
     public FileEditorState readState(@NotNull Element sourceElement, @NotNull Project project, @NotNull VirtualFile file) {
         return FileEditorState.INSTANCE;
     }
 
+    @Override
     public void writeState(@NotNull FileEditorState state, @NotNull Project project, @NotNull Element targetElement) {
     }
 
     @NotNull
+    @Override
     public String getEditorTypeId() {
         return EDITOR_TYPE_ID;
     }
 
     @NotNull
+    @Override
     public FileEditorPolicy getPolicy() {
         return FileEditorPolicy.PLACE_AFTER_DEFAULT_EDITOR;
     }
 
     @Override
     public boolean isDumbAware() {
-        return true;
+        return false;
     }
 }

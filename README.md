@@ -5,17 +5,17 @@ idea-multimarkdown
 
 **You can download it on the [JebBrains plugin page](https://plugins.jetbrains.com/plugin?pr=&pluginId=7896).**
 
-**For any communications requiring a reply** please use the [GitHub Issues page](https://github.com/vsch/idea-multimarkdown/issues) for this plugin. There is no ability to reply to comments left on the [JetBrains plugin comment and rate page](https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896).   
+**For any communications requiring a reply** please use the [GitHub Issues page](https://github.com/vsch/idea-multimarkdown/issues) for this plugin. There is no ability to reply to comments left on the [JetBrains plugin comment and rate page](https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896).
 
 **[Wiki Pages](https://github.com/vsch/idea-multimarkdown/wiki) added** with instructions on [how to include your GitHub wiki in the IntelliJ IDE](https://github.com/vsch/idea-multimarkdown/wiki/Adding-GitHub-Wiki-To-Your-IntelliJ-Project) so you can work on the wiki in the IDE and use the plugin for syntax highlighting and preview. Makes adding images and manipulating the wiki a lot easier.
 
-#### This plugin is in the process of migrating to a two tier model 
+#### This plugin is in the process of migrating to a two tier model
 
 1. Free and open source for the basic functionality as it is present now. I will continue to support it, respond to issues and fix bugs. If you only need the basic functionality of editing and previewing Markdown, then you will not be affected and will continue to enjoy using this plugin with the same level of support you have received thus far.
 
 2. Licensed model with a 30 day trial period which will implement parser based advanced features such as refactoring, find usages, etc. After the 30 day trial it will revert to the functionality of the free, open source model, unless you purchase a $15 license that will give you free upgrades and maintenance for one year on the advanced features. I have to commercialize this plugin so that I can devote my full attention to its development. I feel that doing this will benefit both free and licensed versions because I will be able to concentrate my attention on delivering a quality product in the shortest amount of time.
 
-**Everyone who has generously given a tip** will get a one year license for every $10 that they have donated, plus one extra year for being a voluntary supporter. This policy will apply to all tippers until the licensed version is released, which I expect to be done by October 15, 2015.   
+**Everyone who has generously given a tip** will get a one year license for every $10 that they have donated, plus one extra year for being a voluntary supporter. This policy will apply to all tippers until the licensed version is released, which I expect to be done by October 15, 2015.
 
 <table>
     <tr><td><a href="http://flattr.com/thing/4603764/vschidea-multimarkdown-on-GitHub" title="Donate monthly to vsch using Flattr"><img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/flattr-tips.png" border="0" width="43" height="53" alt="Donate monthly to vsch using Flattr" /></a>
@@ -26,23 +26,50 @@ idea-multimarkdown
 
 ### Version 1.1 is released
 
-I have implemented a JavaFX WebView based HTML Preview Tab and the results are stunning. Not only was I able to make it look like GitHub's markdown, which I could not do with the old preview, but it is a joy to work with and maintain compared to `HTMLEditorKit`. 
+I have implemented a JavaFX WebView based HTML Preview Tab and the results are stunning. Not only was I able to make it look like GitHub's markdown, which I could not do with the old preview, but it is a joy to work with and maintain compared to `HTMLEditorKit`.
 
-Note that you **cannot** run it using the **IDEA bundled JDK** because it does not include the `jfxrt.jar` nor the native libraries needed for it.    
+**For any communications requiring a reply** please use the [GitHub Issues page](https://github.com/vsch/idea-multimarkdown/issues) for this plugin. There is no ability to reply to comments left on the [JetBrains plugin comment and rate page](https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896).
 
-If the `jfxrt.jar` is not found or the plugin cannot create the new editor class, it will fall back to using the `JEditorPane` with `HTMLEditorKit` preview. You can also disable using JavaFX based preview in plugin settings, for those that prefer to keep using the old preview.
+**[Wiki Pages](https://github.com/vsch/idea-multimarkdown/wiki) added** with instructions on [how to include your GitHub wiki in the IntelliJ IDE](https://github.com/vsch/idea-multimarkdown/wiki/Adding-GitHub-Wiki-To-Your-IntelliJ-Project) so you can work on the wiki in the IDE and use the plugin for syntax highlighting and preview. Makes adding images and manipulating the wiki a lot easier.
 
-**For PHPStorm 9.5 EAP Mac with bundled JDK**
-:  As of release PS 142.4491, you can change the boot jdk from the GUI. However, due to a bug it keeps booting the IDEA with the bundled jdk. To change the boot jdk you need to add a `phpstorm.jdk` file with the path to the alternate jdk, for example:
- 
-        /Library/Java/JavaVirtualMachines/jdk1.8.0_51.jdk
+<table>
+    <tr><td><a href="http://flattr.com/thing/4603764/vschidea-multimarkdown-on-GitHub" title="Donate monthly to vsch using Flattr"><img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/flattr-tips.png" border="0" width="43" height="53" alt="Donate monthly to vsch using Flattr" /></a>
+        <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NR7DAGTC8CXLU" title="Donate once-off to vsch using Paypal"><img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/paypal-tips.png" border="0" width="43" height="53" alt="Donate once-off to vsch using Paypal" /></a></td>
+        <td><b>If you like my work then please feel free to tip me.<br>I will view it as a show of appreciation and as a reward for my effort.</b></td>
+    </tr>
+</table>
 
-    to the `/Library/Preferences/WebIde95` directory. Restart your PhpStorm. 
 
-Here is a screenshot of the plugin's HTML Preview and GitHub of this readme file: 
+### Version 1.1 is released
+
+I have implemented a JavaFX WebView based HTML Preview Tab and the results are stunning. Not only was I able to make it look like GitHub's markdown, which I could not do with the old preview, but it is a joy to work with and maintain compared to `HTMLEditorKit`.
+
+Here is a screenshot of the plugin's HTML Preview and GitHub of this readme file:
 
 ![Preview](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_jfx_webview.png)
 
+To get the new preview tab you need to configure your IDEA to use JDK 1.8 that includes `jfxrt.jar` in the jdk's `lib/ext` directory, which is its standard location. If `jfxrt.jar` is not found or the plugin cannot create the new editor class, it will fall back to using the `JEditorPane` with `HTMLEditorKit` preview. You can also disable using JavaFX based preview in plugin settings, for those that prefer to keep using the old preview.
+
+You **cannot** get the new preview if the boot JDK is the **IDEA bundled JDK**, which does not include `jfxrt.jar` nor the native libraries that it uses.
+
+#### PHPStorm 9.5 EAP, WebStorm 11 EAP on OS X with bundled JDK
+
+You can switch the boot jdk from the GUI. However, due to a bug they keep booting with the bundled jdk. The bug and the workaround is similar.
+
+- PhpStorm: (last checked in PS-142.4491) To change the boot jdk you need to add a `phpstorm.jdk` file with the path to the alternate jdk, for example:
+
+        /Library/Java/JavaVirtualMachines/jdk1.8.0_51.jdk
+
+    to the `/Library/Preferences/WebIde95` directory. Restart PhpStorm.
+
+- WebStorm: (last checked in WS-142.4723) To change the boot jdk you need to do one of:
+    1. add a `webstorm.jdk` file with the path to the alternate jdk, for example:
+
+            /Library/Java/JavaVirtualMachines/jdk1.8.0_51.jdk
+
+    2. use the GUI to select the JDK but then rename `wstorm.jdk` created by the gui to `webstorm.jdk` that it uses to get the boot jdk setting
+
+    in the `/Library/Preferences/WebStorm11` directory. Restart WebStorm.
 
 The Background
 --------------
@@ -97,11 +124,11 @@ Forking
 -------
 
 This plugin is using a modified version of [sirthias/pegdown](https://github.com/sirthias), I post my PR's but there is always a delay in both generating them and for them to be merged.
-I added a few changes and extensions to the parser. For now I am using my forked copy until the official version has all the features. 
+I added a few changes and extensions to the parser. For now I am using my forked copy until the official version has all the features.
 
 The pegdown source used in this plugin can be found [vsch/pegdown](https://github.com/vsch/pegdown/tree/develop).
 
 ---
 
 \* This plugin is based on the [Markdown plugin](https://github.com/nicoulaj/idea-markdown) by [nicoulaj](https://github.com/nicoulaj), which is based on [pegdown](http://pegdown.org) library by [sirthias](https://github.com/sirthias).
-     
+

@@ -81,13 +81,12 @@ var {
 }
 
 /* NOTE: all other font sizes are set relative to font size given here */
-body.multimarkdown-preview {
+body.multimarkdown-preview,
+body.multimarkdown-wiki-preview {
     background-color: #2B2B2B;
     font-family: "Helvetica Neue", Helvetica, Arial, freesans, sans-serif;
     font-size: 11px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding: 30px;
+    padding: 20px;
     color: #A9B7C6;
 }
 
@@ -105,7 +104,7 @@ a.mail-link {
 }
 
 a.absent {
-    color: #cc0000;
+    color: #C34E7B;
 }
 
 a.anchor {
@@ -187,6 +186,14 @@ h1 {
     border-bottom: 1px solid #888888;
     font-size: 1.5em;
     margin: 20px 0 10px 0;
+}
+
+h1.first-child {
+    margin: 0 0 10px 0;
+}
+
+.multimarkdown-wiki-preview h1 {
+    font-weight: normal;
 }
 
 h2 {

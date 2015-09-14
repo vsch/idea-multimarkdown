@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2011-2014 Julien Nicoulaud <julien.nicoulaud@gmail.com>
-* Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
+ * Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -22,22 +22,16 @@
 package com.vladsch.idea.multimarkdown.editor;
 
 import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.openapi.vfs.ex.http.HttpFileSystem;
 import com.intellij.ui.BrowserHyperlinkListener;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
-import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 
-import static com.vladsch.idea.multimarkdown.editor.MultiMarkdownPathResolver.*;
+import static com.vladsch.idea.multimarkdown.editor.MultiMarkdownPathResolver.resolveLink;
 
 /**
  * {@link MultiMarkdownLinkListener} is able to resolve the following types of links and open them in a new editor window:
@@ -70,7 +64,7 @@ public class MultiMarkdownLinkListener implements HyperlinkListener {
     /**
      * Build a new instance of {@link MultiMarkdownLinkListener}.
      *
-     * @param editor the editor
+     * @param editor   the editor
      * @param project  the project
      * @param document the document
      */
@@ -94,31 +88,11 @@ public class MultiMarkdownLinkListener implements HyperlinkListener {
             if (target == null) {
                 if (e.getDescription().startsWith("#")) {
                     editor.scrollToReference(e.getDescription().substring(1));
-                    return;
+                } else {
+                    resolveLink(project, document, e.getDescription(), true, true, true);
                 }
-                try {
-                    target = new File(e.getDescription()).toURI().toURL();
-                } catch (MalformedURLException e1) {
-                    // can't find the link target, give up...
-                    return;
-                }
-            }
-            if (VirtualFileManager.getInstance().getFileSystem(target.getProtocol()) instanceof HttpFileSystem) {
-                browserLinkListener.hyperlinkUpdate(e);
             } else {
-                VirtualFile virtualTarget = findVirtualFile(target);
-                if (virtualTarget == null || !virtualTarget.exists())
-                    virtualTarget = resolveRelativePath(document, e.getDescription());
-
-                try {
-                    if (virtualTarget == null) // Okay, try as if the link target is a class reference
-                        virtualTarget = resolveClassReference(project, e.getDescription());
-                } catch (NoClassDefFoundError silent) {
-                    // API might not be available on all IntelliJ platform IDEs
-                }
-
-                if (virtualTarget != null)
-                    FileEditorManager.getInstance(project).openFile(virtualTarget, true);
+                resolveLink(project, document, e.getDescription(), true, true, true);
             }
         }
     }

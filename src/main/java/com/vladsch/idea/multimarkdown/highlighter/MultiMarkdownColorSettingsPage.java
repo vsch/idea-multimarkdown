@@ -61,6 +61,7 @@ public class MultiMarkdownColorSettingsPage implements ColorSettingsPage {
 
     public MultiMarkdownColorSettingsPage() {
         addTextAttributesKey("abbreviation", ABBREVIATION_ATTR_KEY);
+        addTextAttributesKey("abbreviated-text", ABBREVIATED_TEXT_ATTR_KEY);
         addTextAttributesKey("anchor-link", ANCHOR_LINK_ATTR_KEY);
         addTextAttributesKey("auto-link", AUTO_LINK_ATTR_KEY);
         addTextAttributesKey("blockquote", BLOCK_QUOTE_ATTR_KEY);

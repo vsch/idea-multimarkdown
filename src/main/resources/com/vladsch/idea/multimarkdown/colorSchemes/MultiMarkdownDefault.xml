@@ -34,6 +34,12 @@
       <option name="EFFECT_TYPE" value="1"/>
     </value>
   </option>
+  <option name="MULTIMARKDOWN.ABBREVIATED_TEXT">
+    <value>
+      <option name="EFFECT_COLOR" value="277c8" />
+      <option name="EFFECT_TYPE" value="5" />
+    </value>
+  </option>
   <option name="MULTIMARKDOWN.ABBREVIATION">
     <value>
       <option name="BACKGROUND" value="b3ffbb"/>

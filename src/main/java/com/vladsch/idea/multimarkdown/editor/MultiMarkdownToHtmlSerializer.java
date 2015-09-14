@@ -23,6 +23,9 @@
  */
 package com.vladsch.idea.multimarkdown.editor;
 
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.project.Project;
 import org.pegdown.LinkRenderer;
 import org.pegdown.ToHtmlSerializer;
 import org.pegdown.VerbatimSerializer;
@@ -33,20 +36,37 @@ import java.util.List;
 import java.util.Map;
 
 public class MultiMarkdownToHtmlSerializer extends ToHtmlSerializer {
+    protected final Project project;
+    protected final Document document;
+
+    public MultiMarkdownToHtmlSerializer(Project project, Document document, LinkRenderer linkRenderer) {
+        super(linkRenderer);
+        this.project = project;
+        this.document = document;
+    }
+
     public MultiMarkdownToHtmlSerializer(LinkRenderer linkRenderer) {
         super(linkRenderer);
+        this.project = null;
+        this.document = null;
     }
 
     public MultiMarkdownToHtmlSerializer(LinkRenderer linkRenderer, List<ToHtmlSerializerPlugin> plugins) {
         super(linkRenderer, plugins);
+        this.project = null;
+        this.document = null;
     }
 
     public MultiMarkdownToHtmlSerializer(LinkRenderer linkRenderer, Map<String, VerbatimSerializer> verbatimSerializers) {
         super(linkRenderer, verbatimSerializers);
+        project = null;
+        document = null;
     }
 
     public MultiMarkdownToHtmlSerializer(LinkRenderer linkRenderer, Map<String, VerbatimSerializer> verbatimSerializers, List<ToHtmlSerializerPlugin> plugins) {
         super(linkRenderer, verbatimSerializers, plugins);
+        project = null;
+        document = null;
     }
 
     public void visit(HeaderNode node) {
@@ -84,6 +104,109 @@ public class MultiMarkdownToHtmlSerializer extends ToHtmlSerializer {
                     .printchkln(startWasNewLine);
         } else {
             printConditionallyIndentedTag(node, "li");
+        }
+    }
+
+    @Override
+    protected void visitChildren(SuperNode node) {
+        visitChildrenSkipFirst(node, 0);
+    }
+
+    @Override
+    protected void visitChildrenSkipFirst(SuperNode node) {
+        visitChildrenSkipFirst(node, 1);
+    }
+
+    public void visit(WikiLinkNode node) {
+        boolean isDispatchThread = ApplicationManager.getApplication().isDispatchThread();
+        MultiMarkdownLinkRenderer linkRenderer = new MultiMarkdownLinkRenderer();
+        LinkRenderer.Rendering rendering = linkRenderer.render(node);
+
+        boolean linkFound = MultiMarkdownPathResolver.resolveLink(project, document, rendering.href);
+
+        if (linkFound) {
+            printLink(rendering);
+        } else {
+            printLink(rendering.withAttribute("class", "absent"));
+        }
+    }
+
+    protected void visitChildrenSkipFirst(SuperNode node, int skipFirst) {
+        // here we combine multiple segments of TextNode and SpecialText into a single TextNode
+        int startIndex = 0, endIndex = 0;
+        String combinedText = null;
+        Node lastTextNode = null;
+
+        for (Node child : node.getChildren()) {
+            if (skipFirst > 0) {
+                skipFirst--;
+                continue;
+            }
+
+            boolean processed = false;
+            if (child.getClass() == TextNode.class || child.getClass() == SpecialTextNode.class) {
+                if (combinedText != null) {
+                    // combine range and text, if possible
+                    if (endIndex == child.getStartIndex()) {
+                        // combine
+                        endIndex = child.getEndIndex();
+                        combinedText += ((TextNode) child).getText();
+                        lastTextNode = null;
+                        processed = true;
+                    } else {
+                        // insert collected up to now
+                        if (lastTextNode != null) {
+                            lastTextNode.accept(this);
+                            lastTextNode = null;
+                        } else {
+                            TextNode newNode = new TextNode(combinedText);
+                            newNode.setStartIndex(startIndex);
+                            newNode.setEndIndex(endIndex);
+                            newNode.accept(this);
+                        }
+
+                        combinedText = null;
+                    }
+                }
+
+                if (combinedText == null) {
+                    startIndex = child.getStartIndex();
+                    endIndex = child.getEndIndex();
+                    combinedText = ((TextNode) child).getText();
+                    lastTextNode = child;
+                    processed = true;
+                }
+            }
+
+            if (!processed) {
+                if (combinedText != null) {
+                    // process accumulated to date
+                    if (lastTextNode != null) {
+                        lastTextNode.accept(this);
+                    } else {
+                        TextNode newNode = new TextNode(combinedText);
+                        newNode.setStartIndex(startIndex);
+                        newNode.setEndIndex(endIndex);
+                        newNode.accept(this);
+                    }
+                    combinedText = null;
+                    lastTextNode = null;
+                }
+
+                child.accept(this);
+            }
+        }
+
+        if (combinedText != null) {
+            // process the last combined
+            if (lastTextNode != null) {
+                lastTextNode.accept(this);
+            } else {
+                TextNode newNode = new TextNode(combinedText);
+                newNode.setStartIndex(startIndex);
+                newNode.setEndIndex(endIndex);
+                newNode.accept(this);
+            }
         }
     }
 

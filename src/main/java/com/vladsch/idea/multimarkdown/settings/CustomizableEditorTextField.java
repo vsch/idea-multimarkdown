@@ -156,7 +156,7 @@ public class CustomizableEditorTextField extends EditorTextField implements Comp
         setEnabled(fileType != null);
     }
 
-    protected static Project getAnyProject(Project project, boolean neverNull) {
+    public static Project getAnyProject(Project project, boolean neverNull) {
         if (project == null) {
             ProjectManager projectManager = ProjectManager.getInstance();
             Project[] projects = projectManager.getOpenProjects();
@@ -180,7 +180,7 @@ public class CustomizableEditorTextField extends EditorTextField implements Comp
         }
     }
 
-    private static Document createDocument(String value, @NotNull FileType fileType, Project project,
+    public static Document createDocument(String value, @NotNull FileType fileType, Project project,
             @NotNull SimpleDocumentCreator documentCreator) {
         project = getAnyProject(project, true);
         final PsiFileFactory factory = PsiFileFactory.getInstance(project);
@@ -214,7 +214,7 @@ public class CustomizableEditorTextField extends EditorTextField implements Comp
         final EditorEx ex = super.createEditor();
 
         Project project = getAnyProject(myProject, true);
-        if (listener != null && listener.editorCreated(ex, project)) {
+        if (listener == null || listener.editorCreated(ex, project)) {
             ex.setHighlighter(HighlighterFactory.createHighlighter(project, myFileType));
         }
         ex.setEmbeddedIntoDialogWrapper(true);

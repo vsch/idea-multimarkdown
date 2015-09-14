@@ -39,6 +39,7 @@ public class MultiMarkdownHighlighterColors {
     //DOC_COMMENT_TAG_VALUE VALID_STRING_ESCAPE INVALID_STRING_ESCAPE PREDEFINED_SYMBOL METADATA MARKUP_TAG MARKUP_ATTRIBUTE MARKUP_ENTITY
 
     public static final TextAttributesKey ABBREVIATION_ATTR_KEY = createKey("ABBREVIATION");
+    public static final TextAttributesKey ABBREVIATED_TEXT_ATTR_KEY = createKey("ABBREVIATED_TEXT");
     public static final TextAttributesKey ANCHOR_LINK_ATTR_KEY = createKey("ANCHOR_LINK");
     public static final TextAttributesKey AUTO_LINK_ATTR_KEY = createKey("AUTO_LINK");
     public static final TextAttributesKey BLOCK_QUOTE_ATTR_KEY = createKey("BLOCK_QUOTE");
