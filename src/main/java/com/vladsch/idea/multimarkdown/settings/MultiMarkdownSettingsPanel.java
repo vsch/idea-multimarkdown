@@ -45,15 +45,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.event.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
@@ -118,6 +112,8 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
     private JCheckBox enableFirebugCheckBox;
     private JList htmlThemeList;
     private JEditorPane tippingJarEditorPane;
+    private JSpinner pageZoomSpinner;
+    private JLabel pageZoomLabel;
 
     // need this so that we dont try to access components before they are created
     public @Nullable Object getComponent(@NotNull String persistName) {
@@ -152,6 +148,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         if (persistName.equals("useOldPreviewCheckBox")) return useOldPreviewCheckBox;
         if (persistName.equals("enableFirebugCheckBox")) return enableFirebugCheckBox;
         if (persistName.equals("htmlThemeList")) return htmlThemeList;
+        if (persistName.equals("pageZoomSpinner")) return pageZoomSpinner;
 
         return null;
     }
@@ -234,14 +231,14 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
             }
         });
 
-        if (MultiMarkdownGlobalSettings.getInstance().isFxHtmlPreview()) {
-            maxImgWidthSpinner.setVisible(false);
-            maxImgWidthLabel.setVisible(false);
-        }
-
         useOldPreviewCheckBox.addItemListener(new ItemListener() {
             @Override public void itemStateChanged(ItemEvent e) {
-                enableFirebugCheckBox.setEnabled(!useOldPreviewCheckBox.isSelected());
+                boolean useNewPreview = !useOldPreviewCheckBox.isSelected();
+                enableFirebugCheckBox.setEnabled(useNewPreview);
+                pageZoomSpinner.setVisible(useNewPreview);
+                pageZoomLabel.setVisible(useNewPreview);
+                maxImgWidthSpinner.setVisible(useNewPreview);
+                maxImgWidthLabel.setVisible(useNewPreview);
             }
         });
 
@@ -340,6 +337,11 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         final boolean foundCSS = language != null;
 
         final FileType fileType = language != null && language.getAssociatedFileType() != null ? language.getAssociatedFileType() : StdFileTypes.PLAIN_TEXT;
+
+        // Set zoom to 0.1 increments
+        final SpinnerNumberModel model=new SpinnerNumberModel(1.0, 0.3, 3.0, 0.01);
+        pageZoomSpinner = new JSpinner(model);
+        JSpinner.NumberEditor decimalFormat = new JSpinner.NumberEditor(pageZoomSpinner, "0.00");
 
         CustomizableEditorTextField.EditorCustomizationListener listener = new CustomizableEditorTextField.EditorCustomizationListener() {
             @Override public boolean editorCreated(@NotNull EditorEx editor, @NotNull Project project) {

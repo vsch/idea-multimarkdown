@@ -1,6 +1,5 @@
 # Intellij IDEA build directory
 /out/
-*.zip
 
 # Automatically downloaded dependencies
 /lib/dependencies
@@ -17,3 +16,4 @@ local/
 
 src/main/resources/com/vladsch/idea/multimarkdown/preview_orig.css
 preview_orig.css
+idea-multimarkdown.zip

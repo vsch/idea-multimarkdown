@@ -52,6 +52,7 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
     private String urlCustomFxCss;
     private String urlCustomFont;
     private File fileCustomFxCss;
+    private String tempDirPath;
 
     public String getUrlDefaultFxCss() {
         return urlDefaultFxCss;
@@ -88,6 +89,16 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
         myClassLoader = null;
         final MultiMarkdownGlobalSettings settings = MultiMarkdownGlobalSettings.getInstance();
         getClassLoader();
+
+        // get the tmp directory location
+        try {
+            File tmpFile = File.createTempFile("multimarkdown_font_file", ".ttf");
+            String path = tmpFile.getAbsolutePath();
+            tempDirPath = path.substring(0, path.lastIndexOf("multimarkdown_font_file"));
+            tmpFile.delete();
+        } catch (IOException e) {
+            //e.printStackTrace();
+        }
 
         // now we make temp copies of the fx css files with the font reference replaced to tasklists.png, which is really a .ttf file
         // but for some reason WebView won't accept a copy of the file to the temp dir and IDEA won't include .ttf files in resources
@@ -135,8 +146,8 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
         // create the freaking thing
         try {
             InputStream fontStream = getClass().getResourceAsStream("/com/vladsch/idea/multimarkdown/taskitems.ttf");
-            File tempFontFile = File.createTempFile("multimarkdown", "taskitems.ttf");
-            tempFontFile.deleteOnExit();
+            File tempFontFile = new File(tempDirPath + "multimarkdown_taskitems.ttf");
+            //tempFontFile.deleteOnExit();
             logger.info("creating temp font file: " + tempFontFile.getAbsolutePath());
 
             FileOutputStream fileOutputStream = new FileOutputStream(tempFontFile);
@@ -170,8 +181,13 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
     }
 
     protected File createTempCopy(String cssText, String suffix) throws IOException {
-        File cssTempFile = File.createTempFile("multimarkdown", suffix);
-        cssTempFile.deleteOnExit();
+        File cssTempFile;
+        if ("custom-fx.css".equals(suffix)) {
+            cssTempFile = File.createTempFile("multimarkdown", suffix);
+            cssTempFile.deleteOnExit();
+        } else {
+            cssTempFile = new File(tempDirPath + "multimarkdown_" + suffix);
+        }
         updateTempCopy(cssTempFile, cssWithCustomFont(cssText));
         return cssTempFile;
     }

@@ -47,10 +47,11 @@
     </div>
     ]]></description>
 
-  <version>1.1.4.1</version>
+  <version>1.1.4.2</version>
   <idea-version since-build="133.1711"/>
   <change-notes><![CDATA[
-    <ul><h3><b>1.1.5 - Improve GitHub Wiki Markdown Support</b></h3>
+    <ul><h3><b>1.1.5 - Page Zoom and GitHub Wiki Improvements</b></h3>
+      <li>Add page zoom setting for JavaFx based preview tab.</li>
       <li>Add Automatic H1 header insertion into documents contained under a folder that ends in &quot;.wiki&quot;.</li>
       <li>Fix CSS for wiki page differences from regular pages.</li>
     </ul>

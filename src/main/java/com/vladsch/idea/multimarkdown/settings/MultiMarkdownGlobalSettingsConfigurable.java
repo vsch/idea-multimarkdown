@@ -69,9 +69,10 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
         componentSettings.add(new CheckBoxComponent("quotesCheckBox", globalSettings.quotes));
         componentSettings.add(new CheckBoxComponent("useOldPreviewCheckBox", globalSettings.useOldPreview));
         componentSettings.add(new CheckBoxComponent("enableFirebugCheckBox", globalSettings.enableFirebug));
-        componentSettings.add(new SpinnerComponent("updateDelaySpinner", globalSettings.updateDelay));
-        componentSettings.add(new SpinnerComponent("maxImgWidthSpinner", globalSettings.maxImgWidth));
-        componentSettings.add(new SpinnerComponent("parsingTimeoutSpinner", globalSettings.parsingTimeout));
+        componentSettings.add(new SpinnerIntegerComponent("updateDelaySpinner", globalSettings.updateDelay));
+        componentSettings.add(new SpinnerIntegerComponent("maxImgWidthSpinner", globalSettings.maxImgWidth));
+        componentSettings.add(new SpinnerIntegerComponent("parsingTimeoutSpinner", globalSettings.parsingTimeout));
+        componentSettings.add(new SpinnerDoubleComponent("pageZoomSpinner", globalSettings.pageZoom));
         //componentSettings.add(new ComboBoxComponent("htmlThemeComboBox", globalSettings.htmlTheme));
         componentSettings.add(new ListComponent("htmlThemeList", globalSettings.htmlTheme));
         componentSettings.add(new EditorTextFieldComponent("textCustomCss", globalSettings.customCss, false));
@@ -273,8 +274,18 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
         }
     }
 
-    class SpinnerComponent extends ComponentSetting<JSpinner, Settings.IntegerSetting> {
-        SpinnerComponent(String componentName, Settings.IntegerSetting setting) { super(componentName, setting); }
+    class SpinnerIntegerComponent extends ComponentSetting<JSpinner, Settings.IntegerSetting> {
+        SpinnerIntegerComponent(String componentName, Settings.IntegerSetting setting) { super(componentName, setting); }
+
+        @Override public boolean isChanged(JSpinner component) { return setting.isChanged(component); }
+
+        @Override public void setValue(JSpinner component) { setting.setValue(component); }
+
+        @Override public void reset(JSpinner component) { setting.reset(component); }
+    }
+
+    class SpinnerDoubleComponent extends ComponentSetting<JSpinner, Settings.DoubleSetting> {
+        SpinnerDoubleComponent(String componentName, Settings.DoubleSetting setting) { super(componentName, setting); }
 
         @Override public boolean isChanged(JSpinner component) { return setting.isChanged(component); }
 

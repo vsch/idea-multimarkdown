@@ -298,9 +298,6 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                     //group.getChildren().add(anchorPane);
                     jfxPanel.setScene(new Scene(anchorPane));
 
-                    // TODO: add zoom control to the page using popups or actions
-                    webView.setZoom(1.0);
-
                     webEngine.setCreatePopupHandler(new Callback<PopupFeatures, WebEngine>() {
                         @Override public WebEngine call(PopupFeatures config) {
                             // do something
@@ -610,6 +607,12 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                         @Override
                         public void run() {
                             // TODO: add option to enable/disable keeping scroll position on update
+                            // TODO: add zoom control to the page using popups or actions
+                            Double pageZoom = MultiMarkdownGlobalSettings.getInstance().pageZoom.getValue();
+                            if (webView.getZoom() != pageZoom) {
+                                webView.setZoom(pageZoom);
+                            }
+
                             JSObject scrollPos = (JSObject) webEngine.executeScript("({ x: window.pageXOffset, y: window.pageYOffset })");
                             scrollOffset = "window.scroll(" + scrollPos.getMember("x") + ", " + scrollPos.getMember("y") + ")";
                             webEngine.loadContent(html);
