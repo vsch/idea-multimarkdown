@@ -3,15 +3,30 @@ idea-multimarkdown
 
 **[Markdown](http://daringfireball.net/projects/markdown) language support for [IntelliJ IDEA](http://www.jetbrains.com/idea), [RubyMine](http://www.jetbrains.com/ruby), [PhpStorm](http://www.jetbrains.com/phpstorm), [WebStorm](http://www.jetbrains.com/webstorm), [PyCharm](http://www.jetbrains.com/pycharm), [AppCode](http://www.jetbrains.com/objc) and [Android Studio](http://developer.android.com/sdk/installing/studio.html).**
 
-**<span color="#c00038">If you like this plugin, please rate it on the</span> [plugin comment and rate page](https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896).**
-
-**For any communications requiring a reply** please use the [GitHub Issues page](https://github.com/vsch/idea-multimarkdown/issues) for this plugin. There is no ability to reply or see the comments left on the JetBrains plugin comment and rate page.   
-
 **You can download it on the [JebBrains plugin page](https://plugins.jetbrains.com/plugin?pr=&pluginId=7896).**
 
-### Version 1.1.0 is released
+**For any communications requiring a reply** please use the [GitHub Issues page](https://github.com/vsch/idea-multimarkdown/issues) for this plugin. There is no ability to reply to comments left on the [JetBrains plugin comment and rate page](https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896).   
 
-I have implemented a JavaFX WebView based HTML Preview Tab and the results are stunning. Not only was I able to make it look like GitHub's markdown, which I could not do with the old preview, but it is a joy to work with and maintain compared to `HTMLEditorKit`. It does require that you run your IDEA on JDK 1.8 with `jfxrt.jar` in the jdk's `lib/ext` directory, which is its standard location. 
+**[Wiki Pages](https://github.com/vsch/idea-multimarkdown/wiki) added** with instructions on [how to include your GitHub wiki in the IntelliJ IDE](https://github.com/vsch/idea-multimarkdown/wiki/Adding-GitHub-Wiki-To-Your-IntelliJ-Project) so you can work on the wiki in the IDE and use the plugin for syntax highlighting and preview. Makes adding images and manipulating the wiki a lot easier.
+
+#### This plugin is in the process of migrating to a two tier model 
+
+1. Free and open source for the basic functionality as it is present now. I will continue to support it, respond to issues and fix bugs. If you only need the basic functionality of editing and previewing Markdown, then you will not be affected and will continue to enjoy using this plugin with the same level of support you have received thus far.
+
+2. Licensed model with a 30 day trial period which will implement parser based advanced features such as refactoring, find usages, etc. After the 30 day trial it will revert to the functionality of the free, open source model, unless you purchase a $15 license that will give you free upgrades and maintenance for one year on the advanced features. I have to commercialize this plugin so that I can devote my full attention to its development. I feel that doing this will benefit both free and licensed versions because I will be able to concentrate my attention on delivering a quality product in the shortest amount of time.
+
+**Everyone who has generously given a tip** will get a one year license for every $10 that they have donated, plus one extra year for being a voluntary supporter. This policy will apply to all tippers until the licensed version is released, which I expect to be done by October 15, 2015.   
+
+<table>
+    <tr><td><a href="http://flattr.com/thing/4603764/vschidea-multimarkdown-on-GitHub" title="Donate monthly to vsch using Flattr"><img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/flattr-tips.png" border="0" width="43" height="53" alt="Donate monthly to vsch using Flattr" /></a>
+        <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NR7DAGTC8CXLU" title="Donate once-off to vsch using Paypal"><img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/paypal-tips.png" border="0" width="43" height="53" alt="Donate once-off to vsch using Paypal" /></a></td>
+        <td><b>If you like my work then please feel free to tip me.<br>I will view it as a show of appreciation and as a reward for my effort.</b></td>
+    </tr>
+</table>
+
+### Version 1.1 is released
+
+I have implemented a JavaFX WebView based HTML Preview Tab and the results are stunning. Not only was I able to make it look like GitHub's markdown, which I could not do with the old preview, but it is a joy to work with and maintain compared to `HTMLEditorKit`. 
 
 Note that you **cannot** run it using the **IDEA bundled JDK** because it does not include the `jfxrt.jar` nor the native libraries needed for it.    
 
