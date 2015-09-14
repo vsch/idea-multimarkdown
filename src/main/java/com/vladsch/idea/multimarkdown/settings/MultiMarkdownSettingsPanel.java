@@ -339,7 +339,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         final FileType fileType = language != null && language.getAssociatedFileType() != null ? language.getAssociatedFileType() : StdFileTypes.PLAIN_TEXT;
 
         // Set zoom to 0.1 increments
-        final SpinnerNumberModel model=new SpinnerNumberModel(1.0, 0.3, 3.0, 0.01);
+        final SpinnerNumberModel model=new SpinnerNumberModel(1.0, 0.2, 5.0, 0.01);
         pageZoomSpinner = new JSpinner(model);
         JSpinner.NumberEditor decimalFormat = new JSpinner.NumberEditor(pageZoomSpinner, "0.00");
 
