@@ -56,6 +56,7 @@ import org.pegdown.ast.RootNode;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
+import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
 import java.awt.*;
 import java.beans.PropertyChangeListener;
@@ -391,17 +392,35 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
 
         final StyleSheet style = new MultiMarkdownStyleSheet();
 
-        if (!MultiMarkdownGlobalSettings.getInstance().useCustomCss()) {
-            style.importStyleSheet(MultiMarkdownGlobalSettings.getInstance().getCssFileURL());
+        if (!MultiMarkdownGlobalSettings.getInstance().useCustomCss(false)) {
+            style.importStyleSheet(MultiMarkdownGlobalSettings.getInstance().getCssFileURL(false));
         } else {
             try {
-                style.loadRules(new StringReader(MultiMarkdownGlobalSettings.getInstance().getCssText()), null);
+                style.loadRules(new StringReader(MultiMarkdownGlobalSettings.getInstance().getCssText(false)), null);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         htmlKit.setStyleSheet(style);
 
+        jEditorPane.setEditorKit(htmlKit);
+    }
+
+    public static void setStyleSheet(JEditorPane jEditorPane) {
+        HTMLEditorKit htmlKit = new HTMLEditorKit();
+
+        final StyleSheet style = new StyleSheet();
+
+        if (!MultiMarkdownGlobalSettings.getInstance().useCustomCss(false)) {
+            style.importStyleSheet(MultiMarkdownGlobalSettings.getInstance().getCssFileURL(false));
+        } else {
+            try {
+                style.loadRules(new StringReader(MultiMarkdownGlobalSettings.getInstance().getCssText(false)), null);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        htmlKit.setStyleSheet(style);
         jEditorPane.setEditorKit(htmlKit);
     }
 

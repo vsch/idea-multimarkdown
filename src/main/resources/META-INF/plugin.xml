@@ -47,13 +47,16 @@
     </div>
     ]]></description>
 
-  <version>1.1.4.3</version>
+  <version>1.1.5</version>
   <idea-version since-build="133.1711"/>
   <change-notes><![CDATA[
     <ul><h3><b>1.1.5 - Page Zoom and GitHub Wiki Improvements</b></h3>
+      <li>Fix CSS for wiki page differences from regular pages.</li>
+      <li>Fix switching old and new preview could generate exceptions if markdown files were open.</li>
+      <li>Change Use Old Preview option takes effect when files are reopened. Now you can have some files open with new and some with old preview.</li>
+      <li>Change Settings to use tab control so that it is less crowded.</li>
       <li>Add page zoom setting for JavaFx based preview tab.</li>
       <li>Add Automatic H1 header insertion into documents contained under a folder that ends in &quot;.wiki&quot;.</li>
-      <li>Fix CSS for wiki page differences from regular pages.</li>
     </ul>
     <ul><h3><b>1.1.4 - Improve GitHub Wiki Markdown Support</b></h3>
       <li>Change the HTML Preview and HTML Text editors now require the index to be built, the tabs open after the index update is complete.</li>

@@ -113,6 +113,7 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     final public Settings.IntegerSetting parsingTimeout = settings.IntegerSetting(10000, "parsingTimeout");
     final public Settings.DoubleSetting pageZoom = settings.DoubleSetting(1.0, "pageZoom");
     final public Settings.IntegerSetting updateDelay = settings.IntegerSetting(1000, "updateDelay");
+    final public Settings.IntegerSetting tabbedPaneIndex = settings.IntegerSetting(0, "tabbedPaneIndex");
     final public Settings.StringSetting customCss = settings.StringSetting("", "customCss");
     final public Settings.StringSetting customFxCss = settings.StringSetting("", "customFxCss");
     final public Settings.StringSetting scratchFileServiceFailedBuild = settings.StringSetting("", "scratchFileServiceFailed");
@@ -153,8 +154,8 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
         return UIUtil.isUnderDarcula();
     }
 
-    public @NotNull String getCssExternalForm() {
-        if (useCustomCss()) {
+    public @NotNull String getCssExternalForm(boolean isFxHtmlPreview) {
+        if (useCustomCss(isFxHtmlPreview)) {
             String url = MultiMarkdownPlugin.getInstance().getUrlCustomFxCss();
             if (url != null) return url;
         }
@@ -165,7 +166,7 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
         return MultiMarkdownPlugin.getInstance().getUrlCustomFont();
     }
 
-    public @NotNull String getCssFilePath(int htmlTheme) {
+    public @NotNull String getCssFilePath(int htmlTheme, boolean isFxHtmlPreview) {
         if (isFxHtmlPreview) {
             return isDarkHtmlPreview(htmlTheme) ? PREVIEW_FX_STYLESHEET_DARK : PREVIEW_FX_STYLESHEET_LIGHT;
         } else {
@@ -173,41 +174,41 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
         }
     }
 
-    public @NotNull java.net.URL getCssFileURL(int htmlTheme) {
-        return MultiMarkdownGlobalSettings.class.getResource(getCssFilePath(htmlTheme));
+    public @NotNull java.net.URL getCssFileURL(int htmlTheme, boolean isFxHtmlPreview) {
+        return MultiMarkdownGlobalSettings.class.getResource(getCssFilePath(htmlTheme, isFxHtmlPreview));
     }
 
     public @NotNull java.net.URL getFirebugLiteFileURL() throws MalformedURLException {
         return MultiMarkdownGlobalSettings.class.getResource("/firebug-lite.js");
     }
 
-    public @NotNull String getCssFileText(int htmlTheme) {
+    public @NotNull String getCssFileText(int htmlTheme, boolean isFxHtmlPreview) {
         String htmlText = "";
         try {
-            htmlText = Resources.toString(getCssFileURL(htmlTheme), Charsets.UTF_8);
+            htmlText = Resources.toString(getCssFileURL(htmlTheme, isFxHtmlPreview), Charsets.UTF_8);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
         return htmlText;
     }
 
-    public @NotNull String getCssFilePath() {
-        return getCssFilePath(htmlTheme.getValue());
+    public @NotNull String getCssFilePath(boolean isFxHtmlPreview) {
+        return getCssFilePath(htmlTheme.getValue(), isFxHtmlPreview);
     }
 
-    public @NotNull java.net.URL getCssFileURL() {
-        return getCssFileURL(htmlTheme.getValue());
+    public @NotNull java.net.URL getCssFileURL(boolean isFxHtmlPreview) {
+        return getCssFileURL(htmlTheme.getValue(), isFxHtmlPreview);
     }
 
-    public @NotNull String getCssFileText() {
-        return getCssFileText(htmlTheme.getValue());
+    public @NotNull String getCssFileText(boolean isFxHtmlPreview) {
+        return getCssFileText(htmlTheme.getValue(), isFxHtmlPreview);
     }
 
-    public @NotNull String getCssText() {
-        return useCustomCss() ? (isFxHtmlPreview ? customFxCss.getValue() : customCss.getValue()) : getCssFileText(htmlTheme.getValue());
+    public @NotNull String getCssText(boolean isFxHtmlPreview) {
+        return useCustomCss(isFxHtmlPreview) ? (isFxHtmlPreview ? customFxCss.getValue() : customCss.getValue()) : getCssFileText(htmlTheme.getValue(), isFxHtmlPreview);
     }
 
-    public boolean useCustomCss() {
+    public boolean useCustomCss(boolean isFxHtmlPreview) {
         return useCustomCss.getValue() && (isFxHtmlPreview ? customFxCss.getValue() : customCss.getValue()).trim().length() != 0;
     }
 
