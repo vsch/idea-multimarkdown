@@ -22,6 +22,7 @@
  */
 package com.vladsch.idea.multimarkdown.settings;
 
+import com.google.common.io.Resources;
 import com.intellij.ide.highlighter.HighlighterFactory;
 import com.intellij.lang.Language;
 import com.intellij.openapi.application.Application;
@@ -41,13 +42,21 @@ import com.intellij.openapi.util.registry.RegistryValue;
 import com.intellij.ui.EditorTextField;
 import com.intellij.ui.components.JBList;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
+import com.vladsch.idea.multimarkdown.editor.MultiMarkdownPreviewEditor;
+import org.apache.commons.codec.Charsets;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
@@ -114,6 +123,9 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
     private JEditorPane tippingJarEditorPane;
     private JSpinner pageZoomSpinner;
     private JLabel pageZoomLabel;
+    private JTabbedPane tabbedPane;
+    private JEditorPane noticesEditorPane;
+    private JLabel enableFirebugLabel;
 
     // need this so that we dont try to access components before they are created
     public @Nullable Object getComponent(@NotNull String persistName) {
@@ -149,6 +161,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         if (persistName.equals("enableFirebugCheckBox")) return enableFirebugCheckBox;
         if (persistName.equals("htmlThemeList")) return htmlThemeList;
         if (persistName.equals("pageZoomSpinner")) return pageZoomSpinner;
+        if (persistName.equals("tabbedPane")) return tabbedPane;
 
         return null;
     }
@@ -184,6 +197,16 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         if (haveCustomCss && haveCustomizableEditor) focusEditorButton.setEnabled(((CustomizableEditorTextField) textCustomCss).haveSavedState());
     }
 
+    private void updateUseOldPreviewControls() {
+        boolean useNewPreview = !useOldPreviewCheckBox.isSelected();
+        enableFirebugCheckBox.setEnabled(useNewPreview);
+        enableFirebugLabel.setEnabled(useNewPreview);
+        pageZoomSpinner.setEnabled(useNewPreview);
+        pageZoomLabel.setEnabled(useNewPreview);
+        maxImgWidthSpinner.setEnabled(!useNewPreview);
+        maxImgWidthLabel.setEnabled(!useNewPreview);
+    }
+
     public MultiMarkdownSettingsPanel() {
         clearCustomCssButton.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) {
@@ -196,7 +219,8 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
                 //String cssFileText = MultiMarkdownGlobalSettings.getInstance().getCssFileText(htmlThemeComboBox.getSelectedIndex());
                 //String base64Css = Base64.encodeBase64URLSafeString(MultiMarkdownGlobalSettings.getInstance().getCssText().getBytes(Charset.forName("utf-8")));
                 //String cssText = new String(Base64.decodeBase64(base64Css), Charset.forName("utf-8"));
-                textCustomCss.setText(MultiMarkdownGlobalSettings.getInstance().getCssFileText(htmlThemeList.getSelectedIndex()));
+                MultiMarkdownGlobalSettings settings = MultiMarkdownGlobalSettings.getInstance();
+                textCustomCss.setText(settings.getCssFileText(htmlThemeList.getSelectedIndex(), settings.isFxHtmlPreview()));
             }
         });
 
@@ -231,14 +255,10 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
             }
         });
 
+        updateUseOldPreviewControls();
         useOldPreviewCheckBox.addItemListener(new ItemListener() {
             @Override public void itemStateChanged(ItemEvent e) {
-                boolean useNewPreview = !useOldPreviewCheckBox.isSelected();
-                enableFirebugCheckBox.setEnabled(useNewPreview);
-                pageZoomSpinner.setVisible(useNewPreview);
-                pageZoomLabel.setVisible(useNewPreview);
-                maxImgWidthSpinner.setVisible(useNewPreview);
-                maxImgWidthLabel.setVisible(useNewPreview);
+                updateUseOldPreviewControls();
             }
         });
 
@@ -264,26 +284,35 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
                 "<html>\n" +
                 "  <head>\n" +
                 "  <style>\n" +
-                "     td { text-align: center; }\n" +
-                "     p, table, tr, { margin: 0; padding: 0; }\n" +
-                "     p { margin-bottom: 5px; }\n" +
+                "     td { text-align: right; margin 0; padding 0 10px !important; }\n" +
+                "     td.pic { width: 0; }\n" +
+                "     p, table, tr, body, div { margin: 0 !important; padding: 0 !important; }\n" +
+                "     table { /*border: 1px solid black;*/ width: 100%; float: right !important; }\n" +
                 "  </style>\n" +
                 "  </head>\n" +
                 "  <body>\n" +
-                "    <p style=\"margin: 0\">\n" +
                 "      <table>\n" +
-                "        <tr><td><a href=\"http://flattr.com/thing/4603764/vschidea-multimarkdown-on-GitHub\" title=\"Donate monthly to vsch using Flattr\"><img src=\"https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/flattr-tips.png\" border=\"0\" width=\"43\" height=\"53\" alt=\"Donate monthly to vsch using Flattr\" /></a>\n" +
-                "          &nbsp;&nbsp;<a href=\"https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NR7DAGTC8CXLU\" title=\"Donate once-off to vsch using Paypal\"><img src=\"https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/paypal-tips.png\" border=\"0\" width=\"43\" height=\"53\" alt=\"Donate once-off to vsch using Paypal\" /></a></td>\n" +
-                "        </tr><tr>\n" +
+                "        <tr>\n" +
                 "          <td><b>If you like my work then please feel free to tip me.<br>I will view it as a show of appreciation and as a reward for my effort.</b></td>\n" +
+                "          <td class=\"pic\"><a href=\"http://flattr.com/thing/4603764/vschidea-multimarkdown-on-GitHub\" title=\"Donate monthly to vsch using Flattr\"><img src=\"https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/flattr-tips.png\" border=\"0\" width=\"43\" height=\"53\" alt=\"Donate monthly to vsch using Flattr\" /></a></td>\n" +
+                "          <td class=\"pic\"><a href=\"https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NR7DAGTC8CXLU\" title=\"Donate once-off to vsch using Paypal\"><img src=\"https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/paypal-tips.png\" border=\"0\" width=\"43\" height=\"53\" alt=\"Donate once-off to vsch using Paypal\" /></a></td>\n" +
                 "        </tr>\n" +
                 "      </table>\n" +
-                "    </p>\n" +
                 "  </body>\n" +
                 "</html>\n" +
                 "");
 
-        tippingJarEditorPane.addHyperlinkListener(new HyperlinkListener() {
+        String htmlText = "";
+        try {
+            htmlText = Resources.toString(getClass().getResource("/com/vladsch/idea/multimarkdown/NOTICE.html"), Charsets.UTF_8);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        MultiMarkdownPreviewEditor.setStyleSheet(noticesEditorPane);
+        noticesEditorPane.setText(htmlText);
+
+        HyperlinkListener listener = new HyperlinkListener() {
             @Override public void hyperlinkUpdate(HyperlinkEvent e) {
                 if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
                     URL href = e.getURL();
@@ -301,7 +330,10 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
                     }
                 }
             }
-        });
+        };
+
+        tippingJarEditorPane.addHyperlinkListener(listener);
+        noticesEditorPane.addHyperlinkListener(listener);
     }
 
     private void createUIComponents() {
@@ -339,7 +371,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         final FileType fileType = language != null && language.getAssociatedFileType() != null ? language.getAssociatedFileType() : StdFileTypes.PLAIN_TEXT;
 
         // Set zoom to 0.1 increments
-        final SpinnerNumberModel model=new SpinnerNumberModel(1.0, 0.2, 5.0, 0.01);
+        final SpinnerNumberModel model = new SpinnerNumberModel(1.0, 0.2, 5.0, 0.01);
         pageZoomSpinner = new JSpinner(model);
         JSpinner.NumberEditor decimalFormat = new JSpinner.NumberEditor(pageZoomSpinner, "0.00");
 

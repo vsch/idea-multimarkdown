@@ -438,7 +438,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         VirtualFile file = FileDocumentManager.getInstance().getFile(document);
         String result = "" +
                 "<head>\n" +
-                "<link rel=\"stylesheet\" href=\"" + MultiMarkdownGlobalSettings.getInstance().getCssExternalForm() + "\" />\n" +
+                "<link rel=\"stylesheet\" href=\"" + MultiMarkdownGlobalSettings.getInstance().getCssExternalForm(true) + "\" />\n" +
                 "<title>" + escapeHtml(file.getName()) + "</title>\n" +
                 "</head>\n" +
                 "<body>\n" +

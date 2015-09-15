@@ -72,6 +72,7 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
         componentSettings.add(new SpinnerIntegerComponent("updateDelaySpinner", globalSettings.updateDelay));
         componentSettings.add(new SpinnerIntegerComponent("maxImgWidthSpinner", globalSettings.maxImgWidth));
         componentSettings.add(new SpinnerIntegerComponent("parsingTimeoutSpinner", globalSettings.parsingTimeout));
+        componentSettings.add(new TabbedPaneIntegerComponent("tabbedPane", globalSettings.tabbedPaneIndex));
         componentSettings.add(new SpinnerDoubleComponent("pageZoomSpinner", globalSettings.pageZoom));
         //componentSettings.add(new ComboBoxComponent("htmlThemeComboBox", globalSettings.htmlTheme));
         componentSettings.add(new ListComponent("htmlThemeList", globalSettings.htmlTheme));
@@ -282,6 +283,16 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
         @Override public void setValue(JSpinner component) { setting.setValue(component); }
 
         @Override public void reset(JSpinner component) { setting.reset(component); }
+    }
+
+    class TabbedPaneIntegerComponent extends ComponentSetting<JTabbedPane, Settings.IntegerSetting> {
+        TabbedPaneIntegerComponent(String componentName, Settings.IntegerSetting setting) { super(componentName, setting); }
+
+        @Override public boolean isChanged(JTabbedPane component) { return setting.isChanged(component); }
+
+        @Override public void setValue(JTabbedPane component) { setting.setValue(component); }
+
+        @Override public void reset(JTabbedPane component) { setting.reset(component); }
     }
 
     class SpinnerDoubleComponent extends ComponentSetting<JSpinner, Settings.DoubleSetting> {
