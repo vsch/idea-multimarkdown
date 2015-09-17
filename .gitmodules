@@ -1,3 +1,6 @@
 [submodule "idea-multimarkdown2.wiki"]
 	path = idea-multimarkdown2.wiki
 	url = https://github.com/vsch/idea-multimarkdown2.wiki.git
+[submodule "idea-multimarkdown.wiki"]
+	path = idea-multimarkdown.wiki
+	url = https://github.com/vsch/idea-multimarkdown.wiki
