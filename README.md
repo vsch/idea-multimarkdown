@@ -28,7 +28,7 @@ idea-multimarkdown
 
 ### Version 1.1.6 Adds Wiki Link Refactoring/Code Completion, etc. 
 
-Wiki links are the first go get the boost to IntelliJ intelligence:
+Wiki links are the first to get the boost to IntelliJ intelligence:
 
 * Wiki link page references are linked to the files they target. For example `[[NOTICE]]` refers to `NOTICE.md` in the same directory as the file containing the link. 
 * Refactor rename operation on a wiki link does a file rename operation with all links that refer to it also changed.
