@@ -118,17 +118,7 @@ public class MultiMarkdownToHtmlSerializer extends ToHtmlSerializer {
     }
 
     public void visit(WikiLinkNode node) {
-        boolean isDispatchThread = ApplicationManager.getApplication().isDispatchThread();
-        MultiMarkdownLinkRenderer linkRenderer = new MultiMarkdownLinkRenderer();
-        LinkRenderer.Rendering rendering = linkRenderer.render(node);
-
-        boolean linkFound = MultiMarkdownPathResolver.resolveLink(project, document, rendering.href);
-
-        if (linkFound) {
-            printLink(rendering);
-        } else {
-            printLink(rendering.withAttribute("class", "absent"));
-        }
+        printLink(linkRenderer.render(node));
     }
 
     protected void visitChildrenSkipFirst(SuperNode node, int skipFirst) {
@@ -144,7 +134,8 @@ public class MultiMarkdownToHtmlSerializer extends ToHtmlSerializer {
             }
 
             boolean processed = false;
-            if (child.getClass() == TextNode.class || child.getClass() == SpecialTextNode.class) {
+            // TODO: we don't really need to do this here, it is needed for the parser but not for HTML Serialization
+            if (child.getClass() == TextNode.class || (child.getClass() == SpecialTextNode.class && child.getEndIndex() - child.getStartIndex() <= 1)) {
                 if (combinedText != null) {
                     // combine range and text, if possible
                     if (endIndex == child.getStartIndex()) {
