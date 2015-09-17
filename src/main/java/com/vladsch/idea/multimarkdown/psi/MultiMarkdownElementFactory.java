@@ -27,6 +27,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFileFactory;
 import com.vladsch.idea.multimarkdown.MultiMarkdownFileType;
+import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownWikiLinkImpl;
 
 public class MultiMarkdownElementFactory {
 
@@ -40,13 +41,22 @@ public class MultiMarkdownElementFactory {
         return (MultiMarkdownProperty) file.getFirstChild();
     }
 
+    public static MultiMarkdownWikiLink createWikiLink(Project project, String name) {
+        return createWikiLink(project, name, null);
+    }
+
+    public static MultiMarkdownWikiLink createWikiLink(Project project, String name, String title) {
+        final MultiMarkdownFile file = createFile(project, MultiMarkdownWikiLinkImpl.getElementText(name, title));
+        return (MultiMarkdownWikiLink) file.getFirstChild();
+    }
+
     public static PsiElement createCRLF(Project project) {
         final MultiMarkdownFile file = createFile(project, "\n");
         return file.getFirstChild();
     }
 
     public static MultiMarkdownFile createFile(Project project, String text) {
-        String name = "dummy.Markdown";
+        String name = "dummy.md";
         return (MultiMarkdownFile) PsiFileFactory.getInstance(project).
                 createFileFromText(name, MultiMarkdownFileType.INSTANCE, text);
     }

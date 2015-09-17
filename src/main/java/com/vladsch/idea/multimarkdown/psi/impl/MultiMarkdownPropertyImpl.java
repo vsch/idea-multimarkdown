@@ -45,6 +45,10 @@ public class MultiMarkdownPropertyImpl extends MultiMarkdownNamedElementImpl imp
         return MultiMarkdownPsiImplUtil.getKey(this);
     }
 
+    public String getDisplayName() {
+        return getKey();
+    }
+
     public String getValue() {
         return MultiMarkdownPsiImplUtil.getValue(this);
     }

@@ -22,6 +22,7 @@
 package com.vladsch.idea.multimarkdown.highlighter;
 
 import com.intellij.openapi.editor.colors.TextAttributesKey;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes;
 
 import static com.intellij.openapi.editor.DefaultLanguageHighlighterColors.*;
 import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey;
@@ -99,4 +100,7 @@ public class MultiMarkdownHighlighterColors {
     public static final TextAttributesKey TEXT_ATTR_KEY = createKey("TEXT");
     public static final TextAttributesKey VERBATIM_ATTR_KEY = createKey("VERBATIM");
     public static final TextAttributesKey WIKI_LINK_ATTR_KEY = createKey("WIKI_LINK");
+    public static final TextAttributesKey WIKI_LINK_REF_ATTR_KEY = createKey("WIKI_LINK_REF", WIKI_LINK_ATTR_KEY);
+    public static final TextAttributesKey WIKI_LINK_TEXT_ATTR_KEY = createKey("WIKI_LINK_TEXT", WIKI_LINK_ATTR_KEY);
+    public static final TextAttributesKey WIKI_LINK_SEPARATOR_ATTR_KEY = createKey("WIKI_LINK_SEPARATOR", WIKI_LINK_ATTR_KEY);
 }

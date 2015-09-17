@@ -426,7 +426,8 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         } else {
             // we pass a null project because we don't have one, the control will grab any project so that
             // undo works properly in the edit control.
-            textCustomCss = new CustomizableEditorTextField(fileType, null, "", false);
+            Project project = CustomizableEditorTextField.getAnyProject(null, true);
+            textCustomCss = new CustomizableEditorTextField(fileType, project, "", false);
             textCustomCss.setFontInheritedFromLAF(false);
             ((CustomizableEditorTextField) textCustomCss).registerListener(listener);
         }

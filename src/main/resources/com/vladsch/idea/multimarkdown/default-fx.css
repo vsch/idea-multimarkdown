@@ -116,6 +116,7 @@ table tbody tr:nth-child(2n) {
     background-color: #fafafa;
 }
 
+var,
 code {
     background-color: rgba(0, 0, 0, 0.06);
     /*color: #B00020;*/
@@ -252,14 +253,9 @@ pre {
     overflow: auto;
 }
 
+var,
 code,
-kbd,
-pre {
-    font-family: monospace, monospace;
-    font-size: 1em;
-}
-
-code {
+kbd {
     font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
     font-size: 12px;
 }
@@ -275,6 +271,10 @@ code {
     font-size: 85%;
     margin: 0;
     padding: 0.2em 0 0.2em 0;
+}
+
+var {
+    font-style: italic;
 }
 
 code:before,

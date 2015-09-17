@@ -38,10 +38,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.io.UnsupportedEncodingException;
+import java.net.*;
 
 /**
  * Static utilities for resolving resources paths.
@@ -99,22 +97,39 @@ public class MultiMarkdownPathResolver {
         return null;
     }
 
-    public static boolean resolveLink(@NotNull final Project project, @NotNull final Document document, @NotNull final String href) {
-        return resolveLink(project, document, href, false,false,false);
+    public static boolean canResolveLink(@NotNull final Project project, @NotNull final Document document, @NotNull final String href) {
+        return resolveLink(project, document, href, false, false, false) != null;
+    }
+
+    public static Object resolveLink(@NotNull final Project project, @NotNull final Document document, @NotNull final String href) {
+        return resolveLink(project, document, href, false, false, false);
     }
 
     public static boolean isWikiDocument(@NotNull final Document document) {
         VirtualFile file = FileDocumentManager.getInstance().getFile(document);
-        while (file != null) {
-            file = file.getParent();
-            if (file != null && file.getCanonicalPath().endsWith(".wiki")) return true;
+        return isWikiFile(file);
+    }
+
+    public static boolean isWikiFile(@NotNull final VirtualFile file) {
+        VirtualFile parent = file;
+        while (parent != null) {
+            parent = parent.getParent();
+            if (parent != null && parent.getCanonicalPath().endsWith(".wiki")) return true;
         }
         return false;
     }
 
-    public static boolean resolveLink(@NotNull final Project project, @NotNull final Document document, @NotNull final String href, final boolean openFile, final boolean focusEditor, final boolean searchForOpen) {
+    public static Object resolveLink(@NotNull final Project project, @NotNull final Document document, @NotNull final String hrefEnc, final boolean openFile, final boolean focusEditor, final boolean searchForOpen) {
+        String hrefDec = hrefEnc;
+        try {
+            hrefDec = URLDecoder.decode(hrefEnc, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        final String href = hrefDec;
+
         if (!href.startsWith("http://") && !href.startsWith("https://") && !href.startsWith("mailto:")) {
-            final boolean[] foundFile = {false};
+            final Object[] foundFile = {null};
             final Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
@@ -141,8 +156,8 @@ public class MultiMarkdownPathResolver {
                         // API might not be available on all IntelliJ platform IDEs
                     }
 
-                    foundFile[0] = virtualTarget != null;
-                    if (foundFile[0] && openFile) {
+                    foundFile[0] = virtualTarget;
+                    if (foundFile[0] != null && openFile) {
                         FileEditorManager.getInstance(project).openFile(virtualTarget, focusEditor, searchForOpen);
                     }
                 }
@@ -161,8 +176,9 @@ public class MultiMarkdownPathResolver {
         } else {
             if (Desktop.isDesktopSupported()) {
                 try {
-                    if (openFile) Desktop.getDesktop().browse(new URI(href));
-                    return true;
+                    Object foundFile = new URI(href);
+                    if (openFile) Desktop.getDesktop().browse((URI) foundFile);
+                    return foundFile;
                 } catch (URISyntaxException ex) {
                     // invalid URI, just log
                     logger.info("URISyntaxException on '" + href + "'" + ex.toString());
@@ -170,7 +186,7 @@ public class MultiMarkdownPathResolver {
                     logger.info("IOException on '" + href + "'" + ex.toString());
                 }
             }
-            return false;
+            return null;
         }
     }
 }

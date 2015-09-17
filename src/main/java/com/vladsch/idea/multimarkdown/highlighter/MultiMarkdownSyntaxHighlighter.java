@@ -101,6 +101,9 @@ public class MultiMarkdownSyntaxHighlighter extends SyntaxHighlighterBase {
         fillMap(ATTRIBUTES, TASK_DONE_MARKER_ITEM_SET, TASK_DONE_ITEM_MARKER_ATTR_KEY);
         fillMap(ATTRIBUTES, VERBATIM_SET, VERBATIM_ATTR_KEY);
         fillMap(ATTRIBUTES, WIKI_LINK_SET, WIKI_LINK_ATTR_KEY);
+        fillMap(ATTRIBUTES, WIKI_LINK_SEPARATOR_SET, WIKI_LINK_SEPARATOR_ATTR_KEY);
+        fillMap(ATTRIBUTES, WIKI_LINK_REF_SET, WIKI_LINK_REF_ATTR_KEY);
+        fillMap(ATTRIBUTES, WIKI_LINK_TEXT_SET, WIKI_LINK_TEXT_ATTR_KEY);
     }
 
     public MultiMarkdownSyntaxHighlighter(boolean forSampleDoc) {

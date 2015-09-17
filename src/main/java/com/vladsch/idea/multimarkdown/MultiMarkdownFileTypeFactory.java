@@ -28,9 +28,9 @@ import com.intellij.openapi.fileTypes.FileTypeFactory;
 import org.jetbrains.annotations.NotNull;
 
 public class MultiMarkdownFileTypeFactory extends FileTypeFactory {
-    final static public String DEFAULT_EXTENSION = "markdown";
+    final static public String DEFAULT_EXTENSION = "md";
 
-    final static private String[] EXTENSIONS = {DEFAULT_EXTENSION, "md", "mkd"};
+    final static private String[] EXTENSIONS = {DEFAULT_EXTENSION, "mkd", "markdown"};
 
     static public String[] getExtensions() {
         return EXTENSIONS;

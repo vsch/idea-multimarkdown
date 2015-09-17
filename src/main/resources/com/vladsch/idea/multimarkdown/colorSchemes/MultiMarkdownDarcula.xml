@@ -319,6 +319,27 @@
   </option>
   <option name="MULTIMARKDOWN.WIKI_LINK">
     <value>
+      <option name="FOREGROUND" value="b347aa"/>
+      <option name="FONT_TYPE" value="1"/>
+    </value>
+  </option>
+  <option name="MULTIMARKDOWN.WIKI_LINK_SEPARATOR">
+    <value>
+      <option name="FOREGROUND" value="b347aa"/>
+      <option name="FONT_TYPE" value="1"/>
+    </value>
+  </option>
+  <option name="MULTIMARKDOWN.WIKI_LINK_REF">
+    <value>
+      <option name="FOREGROUND" value="2b8ccc"/>
+      <option name="BACKGROUND" value="3333"/>
+      <option name="FONT_TYPE" value="1"/>
+      <option name="EFFECT_COLOR" value="2b8ccc"/>
+      <option name="EFFECT_TYPE" value="1"/>
+    </value>
+  </option>
+  <option name="MULTIMARKDOWN.WIKI_LINK_TEXT">
+    <value>
       <option name="FOREGROUND" value="2b8ccc"/>
       <option name="BACKGROUND" value="3333"/>
       <option name="FONT_TYPE" value="1"/>

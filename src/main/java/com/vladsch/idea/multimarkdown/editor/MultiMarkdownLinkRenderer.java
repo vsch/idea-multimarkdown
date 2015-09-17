@@ -22,6 +22,9 @@
  *
  */
 package com.vladsch.idea.multimarkdown.editor;
+
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.project.Project;
 import org.pegdown.LinkRenderer;
 import org.pegdown.ast.*;
 
@@ -31,32 +34,57 @@ import java.net.URLEncoder;
 import static org.pegdown.FastEncoder.obfuscate;
 
 public class MultiMarkdownLinkRenderer extends LinkRenderer {
+    protected Project project;
+    protected Document document;
+    protected String missingTargetClass;
+
     public MultiMarkdownLinkRenderer() {
         super();
+        project = null;
+        document = null;
+        missingTargetClass = null;
+    }
+
+    public MultiMarkdownLinkRenderer(Project project, Document document, String missingTargetClass) {
+        super();
+        this.project = project;
+        this.document = document;
+        this.missingTargetClass = missingTargetClass;
+    }
+
+    public Rendering checkTarget(Rendering rendering) {
+        if (project != null && document != null && missingTargetClass != null) {
+            boolean linkFound = MultiMarkdownPathResolver.canResolveLink(project, document, rendering.href);
+
+            if (!linkFound) {
+                rendering.withAttribute("class", missingTargetClass);
+            }
+        }
+        return rendering;
     }
 
     @Override public Rendering render(AnchorLinkNode node) {
-        return super.render(node);
+        return checkTarget(super.render(node));
     }
 
     @Override public Rendering render(AutoLinkNode node) {
-        return super.render(node);
+        return checkTarget(super.render(node));
     }
 
     @Override public Rendering render(ExpLinkNode node, String text) {
-        return super.render(node, text);
+        return checkTarget(super.render(node, text));
     }
 
     @Override public Rendering render(ExpImageNode node, String text) {
-        return super.render(node, text);
+        return checkTarget(super.render(node, text));
     }
 
     @Override public Rendering render(RefLinkNode node, String url, String title, String text) {
-        return super.render(node, url, title, text);
+        return checkTarget(super.render(node, url, title, text));
     }
 
     @Override public Rendering render(RefImageNode node, String url, String title, String alt) {
-        return super.render(node, url, title, alt);
+        return checkTarget(super.render(node, url, title, alt));
     }
 
     @Override
@@ -67,6 +95,9 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
 
     @Override
     public Rendering render(WikiLinkNode node) {
+        if (project == null || document == null || missingTargetClass == null) {
+            return checkTarget(super.render(node));
+        }
         try {
             // vsch: #182 handle WikiLinks alternative format [[page|text]]
             String text = node.getText();
@@ -74,10 +105,10 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
             int pos;
             if ((pos = text.indexOf("|")) >= 0) {
                 url = text.substring(0, pos);
-                text = text.substring(pos+1);
+                text = text.substring(pos + 1);
             }
 
-            // keep the .md file so that we can open it in the IDE
+            // vsch: need our own extension for the file
             url = "./" + URLEncoder.encode(url.replace(' ', '-'), "UTF-8") + ".md";
             return new Rendering(url, text);
         } catch (UnsupportedEncodingException e) {
