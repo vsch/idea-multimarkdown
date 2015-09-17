@@ -71,7 +71,6 @@ import static com.vladsch.idea.multimarkdown.editor.MultiMarkdownPathResolver.is
 import static org.apache.commons.lang.StringEscapeUtils.escapeHtml;
 
 public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements FileEditor {
-
     private static final Logger LOGGER = Logger.getInstance(MultiMarkdownPreviewEditor.class);
 
     public static final String PREVIEW_EDITOR_NAME = MultiMarkdownBundle.message("multimarkdown.preview-tab-name");
@@ -218,7 +217,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
             }
         });
 
-        linkRendererModified = new MultiMarkdownFxLinkRenderer();
+        linkRendererModified = new MultiMarkdownFxLinkRenderer(project, document, "absent");
         linkRendererNormal = new MultiMarkdownFxLinkRenderer();
 
         if (isRawHtml) {
@@ -255,7 +254,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         VirtualFile file = FileDocumentManager.getInstance().getFile(document);
         // scan for <table>, </table>, <tr>, </tr> and other tags we modify, this could be done with a custom plugin to pegdown but
         // then it would be more trouble to get un-modified HTML.
-        String regex = "(<table>|<thead>|<tbody>|<tr>|<hr/>|<del>|</del>|</p>";
+        String regex = "(<table>|<thead>|<tbody>|<tr>|<hr/>|<del>|</del>|</p>|<kbd>|</kbd>|<var>|</var>";
         String result = "";
 
         if (isWikiDocument) {
@@ -315,6 +314,14 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
             } else if (found.equals("<del>")) {
                 result += "<span class=\"del\">";
             } else if (found.equals("</del>")) {
+                result += "</span>";
+            } else if (found.equals("<kbd>")) {
+                result += "<span class=\"kbd\">";
+            } else if (found.equals("</kbd>")) {
+                result += "</span>";
+            } else if (found.equals("<var>")) {
+                result += "<span class=\"var\">";
+            } else if (found.equals("</var>")) {
                 result += "</span>";
             } else {
                 found = found.trim();

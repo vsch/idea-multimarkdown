@@ -22,14 +22,14 @@ package com.vladsch.idea.multimarkdown.parser;
 
 import com.intellij.lexer.Lexer;
 import com.intellij.lexer.LexerPosition;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.tree.IElementType;
+import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
+import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.debugger.values.StringValue;
 
 public class MultiMarkdownLexer extends Lexer {
-
-    private static final Logger LOGGER = Logger.getInstance(MultiMarkdownLexer.class);
     protected MultiMarkdownLexParser lexParser = null;
     protected int startOffset = 0;
     protected int endOffset = 0;
@@ -38,6 +38,11 @@ public class MultiMarkdownLexer extends Lexer {
     protected CharSequence buffer = null;
     protected MultiMarkdownLexParser.LexerToken lexerToken = null;
     protected MultiMarkdownLexParser.LexerToken[] lexerTokens = null;
+    protected Logger logger;
+
+    public MultiMarkdownLexParser getLexParser() {
+        return lexParser;
+    }
 
     public MultiMarkdownLexer() {
         super();
@@ -55,17 +60,49 @@ public class MultiMarkdownLexer extends Lexer {
         lexParser = new MultiMarkdownLexParser(pegdownExtensions, parsingTimeout);
     }
 
+    protected void logStackTrace() {
+        StackTraceElement[] traceElements = Thread.currentThread().getStackTrace();
+        for (StackTraceElement traceElement : traceElements) {
+            logger.info(traceElement.getMethodName() + " at " + traceElement.getFileName() + ":" + traceElement.getLineNumber());
+        }
+    }
+
+
     @Override public void start(@NotNull CharSequence buffer, int startOffset, int endOffset, int initialState) {
+        //logger = MultiMarkdownPlugin.getInstance().getLogger();
+        //logger.info("LexStart("+String.valueOf(startOffset) + ", " + String.valueOf(endOffset) + ", " + String.valueOf(initialState) + " for " + this.toString() + " from " + Thread.currentThread().toString());
+        //logStackTrace();
+
         this.buffer = buffer;
-        lexParser.parseMarkdown(buffer.toString());
         this.currentOffset = this.startOffset = startOffset;
         this.endOffset = endOffset;
         lexemeIndex = initialState;
-        lexerTokens = lexParser.getLexerTokens();
+        lexerTokens = null;
+
+        if (buffer.length() > 0) {
+            lexParser.parseMarkdown(buffer.toString());
+            lexerTokens = lexParser.getLexerTokens();
+        }
+
         lexerToken = null;
         //System.out.format("start lexer buffer end %d, start %d, end %d, state %d\n", buffer.length(), startOffset, endOffset, initialState);
 
-        advance();
+        // prime the lexeme stream, if the first is white space we need to start with that
+        if (lexerTokens != null && lexerTokens.length > 0) {
+            lexerToken = lexerTokens[lexemeIndex];
+            if (currentOffset < lexerToken.getRange().getStart()) {
+                lexerToken = lexParser.getSkippedSpaceToken(currentOffset, lexerToken.getRange().getStart());
+            } else {
+                lexemeIndex++;
+            }
+
+            currentOffset = lexerToken == null ? endOffset : lexerToken.getRange().getEnd();
+
+            assert currentOffset <= endOffset;
+            //if (currentOffset > endOffset) {
+            //    currentOffset = endOffset;
+            //}
+        }
     }
 
     @Override public int getState() {
@@ -73,6 +110,7 @@ public class MultiMarkdownLexer extends Lexer {
     }
 
     @Nullable @Override public IElementType getTokenType() {
+        //return lexerToken != null && lexerToken.getRange().getStart() < endOffset ? lexerToken.getElementType() : null;
         return lexerToken != null ? lexerToken.getElementType() : null;
     }
 
@@ -81,6 +119,7 @@ public class MultiMarkdownLexer extends Lexer {
     }
 
     @Override public int getTokenEnd() {
+        //return lexerToken != null && lexerToken.getRange().getEnd() <= endOffset ? lexerToken.getRange().getEnd() : endOffset;
         return lexerToken != null ? lexerToken.getRange().getEnd() : endOffset;
     }
 
@@ -107,6 +146,11 @@ public class MultiMarkdownLexer extends Lexer {
         } while (lexerToken != null && lexerToken.getRange().getEnd() < currentOffset);
 
         currentOffset = lexerToken == null ? endOffset : lexerToken.getRange().getEnd();
+
+        assert currentOffset <= endOffset;
+        //if (currentOffset > endOffset) {
+        //    currentOffset = endOffset;
+        //}
 
         //System.out.print("advanced to " + currentOffset + " (" + (lexerToken == null ? "null" : lexerToken.toString()) + ")\n");
     }

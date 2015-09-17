@@ -31,7 +31,7 @@ import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 public class MultiMarkdownIdIndexer extends LexerBasedIdIndexer {
 
     public static Lexer createIndexingLexer(OccurrenceConsumer consumer) {
-        return new MultiMarkdownFilterLexer(MultiMarkdownGlobalSettings.getInstance().todoComments.getValue() ? new MultiMarkdownLexer() : new MultiMarkdownPlainTextLexer(), consumer);
+        return new MultiMarkdownFilterLexer(new MultiMarkdownLexer(), consumer);
     }
 
     @Override

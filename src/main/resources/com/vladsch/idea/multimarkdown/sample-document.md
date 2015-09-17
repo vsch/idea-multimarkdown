@@ -12,7 +12,7 @@ Mail Link: me@example.com
 Smart Characters: ... -- --- a's b's
 Smart quotes 'this is a quote' 
 Strikethrough: ~~strikethrough **strikethrough bold** *strikethrough italic* ***strikethrough bold italic***~~
-WikiLink: [[WikiLink|Wiki Link]]
+WikiLink: [[Page Reference and Link Text]] [[Page Reference|Link Text]]
  
 <!-- Comment -->
 

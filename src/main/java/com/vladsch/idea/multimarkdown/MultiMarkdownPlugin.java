@@ -53,6 +53,11 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
     private String urlCustomFont;
     private File fileCustomFxCss;
     private String tempDirPath;
+    private boolean isLicensed;
+
+    public boolean isLicensed() {
+        return isLicensed;
+    }
 
     public String getUrlDefaultFxCss() {
         return urlDefaultFxCss;
@@ -78,17 +83,19 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
         while (appenders.hasMoreElements()) {
             Appender app = appenders.nextElement();
             String name = app.getName();
-            int tmp = 0;
         }
         logger.addAppender(appender);
         logger.setAdditivity(false);
         logger.setLevel(Level.INFO);
+
 
         // turn off lcd rendering, will use gray
         System.setProperty("prism.lcdtext", "false");
         myClassLoader = null;
         final MultiMarkdownGlobalSettings settings = MultiMarkdownGlobalSettings.getInstance();
         getClassLoader();
+
+        isLicensed = false;
 
         // get the tmp directory location
         try {
@@ -254,4 +261,9 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
     public static MultiMarkdownPlugin getInstance() {
         return ApplicationManager.getApplication().getComponent(MultiMarkdownPlugin.class);
     }
+
+    public Logger getLogger() {
+        return logger;
+    }
+
 }

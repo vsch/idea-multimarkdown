@@ -85,5 +85,8 @@ public interface MultiMarkdownTokenTypeSets extends MultiMarkdownTypes {
     TokenSet TASK_DONE_MARKER_ITEM_SET = TokenSet.create(TASK_DONE_ITEM_MARKER);
     TokenSet TEXT_SET = TokenSet.create(TEXT);
     TokenSet VERBATIM_SET = TokenSet.create(VERBATIM);
-    TokenSet WIKI_LINK_SET = TokenSet.create(WIKI_LINK);
+    TokenSet WIKI_LINK_SET = TokenSet.create(WIKI_LINK_OPEN, WIKI_LINK_CLOSE);
+    TokenSet WIKI_LINK_SEPARATOR_SET = TokenSet.create(WIKI_LINK_SEPARATOR);
+    TokenSet WIKI_LINK_REF_SET = TokenSet.create(WIKI_LINK_REF);
+    TokenSet WIKI_LINK_TEXT_SET = TokenSet.create(WIKI_LINK_TEXT);
 }

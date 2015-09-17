@@ -27,12 +27,13 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
 import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownCommentImpl;
+import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownWikiLinkImpl;
+import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownWikiPageRefImpl;
 
 public interface MultiMarkdownTypes {
 
     IElementType PROPERTY = new MultiMarkdownElementType("PROPERTY");
 
-    IElementType COMMENT = new MultiMarkdownElementType("COMMENT");
     IElementType CRLF = new MultiMarkdownTokenType("CRLF");
     IElementType KEY = new MultiMarkdownTokenType("KEY");
     IElementType SEPARATOR = new MultiMarkdownTokenType("SEPARATOR");
@@ -100,7 +101,15 @@ public interface MultiMarkdownTypes {
     IElementType TASK_DONE_ITEM_MARKER = new MultiMarkdownTokenType("TASK_DONE_ITEM_MARKER");
     IElementType TEXT = new MultiMarkdownTokenType("TEXT");
     IElementType VERBATIM = new MultiMarkdownElementType("VERBATIM");
-    IElementType WIKI_LINK = new MultiMarkdownTokenType("WIKI_LINK");
+
+    IElementType WIKI_LINK_OPEN = new MultiMarkdownTokenType("WIKI_LINK_OPEN");
+    IElementType WIKI_LINK_SEPARATOR = new MultiMarkdownTokenType("WIKI_LINK_SEPARATOR");
+    IElementType WIKI_LINK_CLOSE = new MultiMarkdownTokenType("WIKI_LINK_CLOSE");
+    IElementType WIKI_LINK_REF = new MultiMarkdownTokenType("WIKI_LINK_REF");
+    IElementType WIKI_LINK_TEXT = new MultiMarkdownTokenType("WIKI_LINK_TEXT");
+
+    IElementType COMMENT = new MultiMarkdownElementType("COMMENT");
+    IElementType WIKI_LINK = new MultiMarkdownElementType("WIKI_LINK");
 
     class Factory {
 
@@ -108,6 +117,10 @@ public interface MultiMarkdownTypes {
             IElementType type = node.getElementType();
             if (type == COMMENT) {
                 return new MultiMarkdownCommentImpl(node);
+            } else if (type == WIKI_LINK) {
+                return new MultiMarkdownWikiLinkImpl(node);
+            } else if (type == WIKI_LINK_REF) {
+                return new MultiMarkdownWikiPageRefImpl(node);
             }
             throw new AssertionError("Unknown element type: " + type);
         }

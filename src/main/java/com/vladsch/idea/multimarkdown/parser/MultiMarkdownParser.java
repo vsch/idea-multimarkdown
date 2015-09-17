@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
+ * Copyright (c) 2015-2015 Vladimir Schneider <vladimir.schneider@gmail.com>
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,20 +20,81 @@
  */
 package com.vladsch.idea.multimarkdown.parser;
 
-import com.intellij.lang.PsiBuilder;
-import com.intellij.lang.impl.PsiBuilderImpl;
-import com.intellij.lexer.Lexer;
-import com.intellij.psi.tree.IElementType;
 import com.intellij.lang.ASTNode;
+import com.intellij.lang.LightPsiParser;
+import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiParser;
+import com.intellij.lang.impl.PsiBuilderImpl;
+import com.intellij.psi.tree.IElementType;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import org.jetbrains.annotations.NotNull;
 
-public class MultiMarkdownParser implements PsiParser /*, LightPsiParser*/ {
-/*
-    @Override public void parseLight(IElementType iElementType, PsiBuilder psiBuilder) {
+import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.*;
 
+public class MultiMarkdownParser implements PsiParser, LightPsiParser {
+
+    @Override
+    public void parseLight(IElementType root, PsiBuilder builder) {
+
+        if (root == WIKI_LINK) {
+            parseWikiLink(builder);
+        } else if (root == WIKI_LINK_REF) {
+            PsiBuilder.Marker wikiPageRef = builder.mark();
+            builder.advanceLexer();
+            wikiPageRef.done(WIKI_LINK_REF);
+        } else {
+            parseRoot(root, builder);
+        }
     }
-*/
+
+    protected boolean parseRoot(IElementType root, PsiBuilder builder) {
+        // we need the pegdown references
+        //MultiMarkdownLexParser lexParser = ((MultiMarkdownLexer) ((PsiBuilderImpl) builder).getLexer()).getLexParser();
+
+        PsiBuilder.Marker rootMarker = builder.mark();
+        //Lexer lexer = ((PsiBuilderImpl) builder).getLexer();
+        while (!builder.eof()) {
+            if (builder.getTokenType() == COMMENT) {
+                PsiBuilder.Marker tokenMarker = builder.mark();
+                builder.advanceLexer();
+                tokenMarker.done(COMMENT);
+            } else if (builder.getTokenType() == WIKI_LINK_OPEN) {
+                parseWikiLink(builder);
+            } else {
+                builder.advanceLexer();
+            }
+        }
+
+        rootMarker.done(root);
+        return true;
+    }
+
+    protected boolean parseWikiLink(PsiBuilder builder) {
+        if (builder.getTokenType() != WIKI_LINK_OPEN) return false;
+
+        PsiBuilder.Marker wikiLinkMarker = builder.mark();
+        builder.advanceLexer();
+
+        if (builder.getTokenType() == WIKI_LINK_REF) {
+            PsiBuilder.Marker wikiPageRef = builder.mark();
+            builder.advanceLexer();
+            wikiPageRef.done(WIKI_LINK_REF);
+        }
+
+        if (builder.getTokenType() == WIKI_LINK_SEPARATOR) {
+            builder.advanceLexer();
+            if (builder.getTokenType() == WIKI_LINK_TEXT) {
+                builder.advanceLexer();
+            }
+        }
+
+        if (builder.getTokenType() == WIKI_LINK_CLOSE) {
+            builder.advanceLexer();
+        }
+
+        wikiLinkMarker.done(WIKI_LINK);
+        return true;
+    }
 
     /**
      * Parse the contents of the specified PSI builder and returns an AST tree with the
@@ -41,28 +102,12 @@ public class MultiMarkdownParser implements PsiParser /*, LightPsiParser*/ {
      *
      * @param root    the type of the root element in the AST tree.
      * @param builder the builder which is used to retrieve the original file tokens and build the AST tree.
+     *
      * @return the root of the resulting AST tree.
      */
     @NotNull
     public ASTNode parse(IElementType root, PsiBuilder builder) {
-        PsiBuilder.Marker rootMarker = builder.mark();
-        Lexer lexer = ((PsiBuilderImpl) builder).getLexer();
-
-        while (!builder.eof()) {
-            builder.advanceLexer();
-            //if (builder.getTokenType() == MultiMarkdownTypes.COMMENT) {
-            //    PsiBuilder.Marker tokenMarker = builder.mark();
-            //    builder.advanceLexer();
-            //    tokenMarker.done(MultiMarkdownTypes.COMMENT);
-            //}
-            //else
-            //{
-            //    builder.advanceLexer();
-            //}
-        }
-
-        rootMarker.done(root);
-
+        parseLight(root, builder);
         return builder.getTreeBuilt();
     }
 }

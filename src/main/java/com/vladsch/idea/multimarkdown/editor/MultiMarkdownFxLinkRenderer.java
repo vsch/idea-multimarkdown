@@ -23,11 +23,17 @@
  */
 package com.vladsch.idea.multimarkdown.editor;
 
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.project.Project;
 import org.pegdown.ast.AnchorLinkNode;
 
 public class MultiMarkdownFxLinkRenderer extends MultiMarkdownLinkRenderer {
     public MultiMarkdownFxLinkRenderer() {
         super();
+    }
+
+    public MultiMarkdownFxLinkRenderer(Project project, Document document, String missingTargetClass) {
+        super(project, document, missingTargetClass);
     }
 
     @Override public Rendering render(AnchorLinkNode node) {

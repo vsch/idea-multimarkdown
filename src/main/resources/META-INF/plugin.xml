@@ -47,9 +47,26 @@
     </div>
     ]]></description>
 
-  <version>1.1.5</version>
+  <version>1.1.6</version>
   <idea-version since-build="133.1711"/>
   <change-notes><![CDATA[
+    <ul><h3><b>1.1.6 - Wiki Link Refactoring/Code Completion/Navigation</b></h3>
+      <li>Add rudimentary `<kbd></kbd>` styling to old preview. It's not going away, so it must be maintained.</li>
+      <li>Add `<var></var>` styling to new preview.</li>
+      <li>Add Code style indentations settings for MultiMarkdown so that tab/spaces can be configured.</li>
+      <li>Add Comment provider and rudimentary PsiParser to allow commenting/uncommenting lines via standard actions.</li>
+      <li>Add error annotator for missing Wiki Links in source.</li>
+      <li>Add Quick Fix for missing wiki links to create a file.</li>
+      <li>Add Wiki Link Reference completion, will show all files in the project that are markdown, with proper sub-directory references. </li>
+      <li>Add Add Wiki Link refactoring. Now link and the file it refers to a linked. Renaming or moving the file, changes the links to that file.</li>
+      <li>Add Add Wiki Link go to definition, to jump from link ref to markdown file it is targeting.</li>
+      <li>Add Add Markdown file find usages, will show all wiki links to that file.</li>
+      <li>Add Separate Wiki link: marker, separator, link ref and link text highlighting attributes.</li>
+      <li>Change Markdown files whose ancestor directory has a .wiki extension show a different icon in project view and completion list.</li>
+      <li>Fix Escaped chars highlighting disappeared due to over-optimization. Restored.</li>
+      <li>Fix null project pointer exception if doing find/replace in custom css text editor in settings.</li>
+      <li>Fix make all HTML Preview links that are not http, https or mailto turn red if they cannot be resolved to a local resource. Previously only wiki links were affected.</li>
+    </ul>
     <ul><h3><b>1.1.5 - Page Zoom and GitHub Wiki Improvements</b></h3>
       <li>Fix CSS for wiki page differences from regular pages.</li>
       <li>Fix switching old and new preview could generate exceptions if markdown files were open.</li>
@@ -258,8 +275,11 @@
     <p>&nbsp;</p>
     ]]></change-notes>
 
-  <!-- Plugin's application components -->
   <project-components>
+  <!-- Plugin's project components -->
+    <component>
+      <implementation-class>com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent</implementation-class>
+    </component>
   </project-components>
 
   <application-components>
@@ -270,21 +290,33 @@
   </application-components>
 
   <extensions defaultExtensionNs="com.intellij">
-    <fileTypeFactory implementation="com.vladsch.idea.multimarkdown.MultiMarkdownFileTypeFactory"/>
-    <lang.syntaxHighlighterFactory key="MultiMarkdown" language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.highlighter.MultiMarkdownSyntaxHighlighterFactory"/>
-    <colorSettingsPage implementation="com.vladsch.idea.multimarkdown.highlighter.MultiMarkdownColorSettingsPage"/>
-    <additionalTextAttributes scheme="Default" file="com/vladsch/idea/multimarkdown/colorSchemes/MultiMarkdownDefault.xml"/>
-    <additionalTextAttributes scheme="Darcula" file="com/vladsch/idea/multimarkdown/colorSchemes/MultiMarkdownDarcula.xml"/>
-    <!--<fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MultiMarkdownPreviewEditorProvider"/>-->
+    <!--<externalAnnotator language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.annotator.MultiMarkdownAnnotator"/>-->
     <!--<fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MultiMarkdownHtmlEditorProvider"/>-->
+    <!--<fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MultiMarkdownPreviewEditorProvider"/>-->
+    <additionalTextAttributes scheme="Darcula" file="com/vladsch/idea/multimarkdown/colorSchemes/MultiMarkdownDarcula.xml"/>
+    <additionalTextAttributes scheme="Default" file="com/vladsch/idea/multimarkdown/colorSchemes/MultiMarkdownDefault.xml"/>
+    <annotator language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.annotator.MultiMarkdownAnnotator"/>
+    <applicationConfigurable instance="com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsConfigurable"/>
+    <applicationService serviceInterface="com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings" serviceImplementation="com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings"/>
+    <codeStyleSettingsProvider implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownCodeStyleSettingsProvider"/>
+    <colorSettingsPage implementation="com.vladsch.idea.multimarkdown.highlighter.MultiMarkdownColorSettingsPage"/>
+    <completion.contributor language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownCompletionContributor"/>
     <fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MultiMarkdownFxPreviewEditorProvider"/>
     <fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MultiMarkdownFxHtmlEditorProvider"/>
-    <lang.documentationProvider language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.documentation.MultiMarkdownDocumentationProvider"/>
+    <fileTypeFactory implementation="com.vladsch.idea.multimarkdown.MultiMarkdownFileTypeFactory"/>
+    <gotoSymbolContributor implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownChooseByNameContributor"/>
+    <lang.commenter language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownCommenter"/>
+    <!--<lang.documentationProvider language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.documentation.MultiMarkdownDocumentationProvider"/>-->
+    <lang.findUsagesProvider language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownFindUsagesProvider"/>
+    <lang.namesValidator language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownNamesValidator"></lang.namesValidator>
     <lang.parserDefinition language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.parser.MultiMarkdownParserDefinition"/>
-    <externalAnnotator language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.annotator.MultiMarkdownAnnotator"/>
+    <lang.refactoringSupport language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownRefactoringSupportProvider"/>
+    <lang.syntaxHighlighterFactory key="MultiMarkdown" language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.highlighter.MultiMarkdownSyntaxHighlighterFactory"/>
+    <langCodeStyleSettingsProvider implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownLanguageCodeStyleSettingsProvider"/>
+    <psi.referenceContributor implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownReferenceContributor"/>
     <spellchecker.support language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.spellchecking.MultiMarkdownSpellcheckingStrategy"/>
     <todoIndexer filetype="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.todo.MultiMarkdownTodoIndexer"/>
-    <applicationService serviceInterface="com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings" serviceImplementation="com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings"/>
-    <applicationConfigurable instance="com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsConfigurable"/>
+    <lang.elementManipulator forClass="com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef" implementationClass="com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownWikiPageRefManipulator"/>
+    <fileIconProvider implementation="com.vladsch.idea.multimarkdown.MultiMarkdownFileIconProvider"/>
   </extensions>
 </idea-plugin>
