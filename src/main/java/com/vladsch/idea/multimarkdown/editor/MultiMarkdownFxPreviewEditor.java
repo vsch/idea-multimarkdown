@@ -256,7 +256,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
             }
         });
 
-        linkRendererModified = new MultiMarkdownFxLinkRenderer();
+        linkRendererModified = new MultiMarkdownFxLinkRenderer(project, document, "absent");
         linkRendererNormal = new MultiMarkdownFxLinkRenderer();
 
         if (isRawHtml) {
@@ -406,7 +406,6 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                                 logger.error("MalformedURLException" + localImage.getPath());
                             }
                         }
-                        int tmp = 0;
                     }
 
                     JSObject jsobj = (JSObject) webEngine.executeScript("window");
@@ -438,7 +437,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         VirtualFile file = FileDocumentManager.getInstance().getFile(document);
         String result = "" +
                 "<head>\n" +
-                "<link rel=\"stylesheet\" href=\"" + MultiMarkdownGlobalSettings.getInstance().getCssExternalForm() + "\" />\n" +
+                "<link rel=\"stylesheet\" href=\"" + MultiMarkdownGlobalSettings.getInstance().getCssExternalForm(true) + "\" />\n" +
                 "<title>" + escapeHtml(file.getName()) + "</title>\n" +
                 "</head>\n" +
                 "<body>\n" +

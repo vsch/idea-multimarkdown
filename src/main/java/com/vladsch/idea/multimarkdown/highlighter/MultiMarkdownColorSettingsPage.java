@@ -43,7 +43,6 @@ import java.util.Map;
 import static com.vladsch.idea.multimarkdown.highlighter.MultiMarkdownHighlighterColors.*;
 
 public class MultiMarkdownColorSettingsPage implements ColorSettingsPage {
-
     private final static Logger LOGGER = Logger.getInstance(MultiMarkdownColorSettingsPage.class.getName());
 
     protected static final ColorDescriptor[] EMPTY_COLOR_DESCRIPTOR_ARRAY = new ColorDescriptor[]{};
@@ -116,7 +115,10 @@ public class MultiMarkdownColorSettingsPage implements ColorSettingsPage {
         addTextAttributesKey("task-item-marker", TASK_ITEM_MARKER_ATTR_KEY);
         addTextAttributesKey("text", TEXT_ATTR_KEY);
         addTextAttributesKey("verbatim", VERBATIM_ATTR_KEY);
-        addTextAttributesKey("wiki-link", WIKI_LINK_ATTR_KEY);
+        addTextAttributesKey("wiki-link-marker", WIKI_LINK_ATTR_KEY);
+        addTextAttributesKey("wiki-link-separator", WIKI_LINK_SEPARATOR_ATTR_KEY);
+        addTextAttributesKey("wiki-link-ref", WIKI_LINK_REF_ATTR_KEY);
+        addTextAttributesKey("wiki-link-text", WIKI_LINK_TEXT_ATTR_KEY);
     }
 
     /**

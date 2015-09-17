@@ -22,17 +22,13 @@
  */
 package com.vladsch.idea.multimarkdown.parser;
 
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
-import com.vladsch.idea.multimarkdown.editor.MultiMarkdownLinkRenderer;
-import com.vladsch.idea.multimarkdown.editor.MultiMarkdownPathResolver;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
 import org.jetbrains.annotations.NotNull;
-import org.pegdown.LinkRenderer;
 import org.pegdown.PegDownProcessor;
 import org.pegdown.ast.*;
 
@@ -45,8 +41,8 @@ import java.util.regex.Pattern;
  * here we just fake everything.
  */
 public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
-
     private static final Logger LOGGER = Logger.getInstance(MultiMarkdownLexParser.class);
+
     private MultiMarkdownGlobalSettingsListener globalSettingsListener = null;
     private ThreadLocal<PegDownProcessor> processor = initProcessor();
     private int currentStringLength;
@@ -57,6 +53,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
     private static Map<IElementType, HashMap<IElementType, IElementType>> combinationSplits = new HashMap<IElementType, HashMap<IElementType, IElementType>>();
 
     protected ArrayList<SegmentedRange> parentRanges = null;
+    protected int minStackLevel = 0;
     protected int tableRows = 0;
     protected int rowColumns = 0;
 
@@ -85,6 +82,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         tokenArray = null;
         lexerTokens = null;
         rootNode = null;
+        minStackLevel = 0;
 
         clearStack();
 
@@ -253,8 +251,9 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
 
     public MultiMarkdownLexParser() {
         // Listen to global settings changes.
-        pegdownExtensions = null;
-        parsingTimeout = null;
+        this.pegdownExtensions = MultiMarkdownGlobalSettings.getInstance().getExtensionsValue();
+        this.parsingTimeout = MultiMarkdownGlobalSettings.getInstance().parsingTimeout.getValue();
+
         MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
             public void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings) {
                 processor.remove();
@@ -340,6 +339,9 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
     }
 
     public LexerToken getSkippedSpaceToken(int start, int end) {
+        //if (end > currentStringLength) {
+        //    int tmp = 0;
+        //}
         return new LexerToken(new Range(start, end), MultiMarkdownTypes.NONE);
     }
 
@@ -356,12 +358,20 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
             for (int i = 0; i < end; i++) {
                 LexerToken t1 = lexemes.get(i);
                 LexerToken t2 = lexemes.get(i + 1);
-                if (t1.compare(t2) > 0 || t1.getRange().doesOverlap(t2.getRange())) {
-                    int tmp = 0;
-                    //assert false;
-                }
-                //assert (!t1.getRange().doesOverlap(t2.getRange()));
+                //if (t1.compare(t2) > 0 || t1.getRange().doesOverlap(t2.getRange())) {
+                //    int tmp = 0;
+                //}
             }
+
+            //if (lexemes.get(end).getRange().getEnd() > currentStringLength) {
+            //    int tmp = 0;
+            //    lexemes.get(end).getRange().setEnd(currentStringLength);
+            //    if (lexemes.get(end).getRange().isEmpty())
+            //    {
+            //        // pegdown issue, creates nodes beyond the end of file
+            //        lexemes.remove(end);
+            //    }
+            //}
 
             LexerToken[] lexerTokens = new LexerToken[lexemes.size()];
             return lexemes.toArray(lexerTokens);
@@ -392,14 +402,14 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
                         range = token.getRange();
                     }
                 } else if (!range.doesContain(range1)) {
-                    if (!range.doesNotOverlap(range1)) {
-                        int tmp = 0;
-                        //assert false;
-                    }
-                    if (range.compare(range1) <= 0) {
-                        int tmp = 0;
-                        //assert false;
-                    }
+                    //if (!range.doesNotOverlap(range1)) {
+                    //    int tmp = 0;
+                    //    //assert false;
+                    //}
+                    //if (range.compare(range1) <= 0) {
+                    //    int tmp = 0;
+                    //    //assert false;
+                    //}
                     lexemes.add(token);
                     token = tokens[start];
                     range = token.getRange();
@@ -513,6 +523,9 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
 
     protected SegmentedRange popRange() {
         assert (parentRanges.size() > 0);
+        //if (parentRanges.size() <= minStackLevel) {
+        //    int tmp = 0;
+        //}
         return parentRanges.remove(parentRanges.size() - 1);
     }
 
@@ -522,6 +535,9 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
     }
 
     protected void clearStack() {
+        //if (minStackLevel > 0) {
+        //    int tmp = 0;
+        //}
         if (parentRanges == null) {
             parentRanges = new ArrayList<SegmentedRange>(100);
         } else {
@@ -588,6 +604,10 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         public void visit(TextNode node) {
             if (node instanceof CommentNode) {
                 addToken(node, MultiMarkdownTypes.COMMENT);
+            } else if (node instanceof WikiPageRefNode) {
+                addToken(node, MultiMarkdownTypes.WIKI_LINK_REF);
+            } else if (node instanceof WikiPageTitleNode) {
+                addToken(node, MultiMarkdownTypes.WIKI_LINK_TEXT);
             } else {
                 if (abbreviations.isEmpty()) {
                     addToken(node, MultiMarkdownTypes.TEXT);
@@ -815,7 +835,20 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         }
 
         public void visit(WikiLinkNode node) {
-            addToken(node, MultiMarkdownTypes.WIKI_LINK);
+            String text = node.getText();
+            int pos = 0;
+
+            if ((pos = text.indexOf("|")) >= 0) {
+                addToken(node.getStartIndex(), node.getStartIndex() + 2, MultiMarkdownTypes.WIKI_LINK_OPEN);
+                addToken(node.getStartIndex() + 2, node.getStartIndex() + 2 + pos, MultiMarkdownTypes.WIKI_LINK_REF);
+                addToken(node.getStartIndex() + 2 + pos, node.getStartIndex() + 2 + pos + 1, MultiMarkdownTypes.WIKI_LINK_SEPARATOR);
+                addToken(node.getStartIndex() + 2 + pos + 1, node.getEndIndex() - 2, MultiMarkdownTypes.WIKI_LINK_TEXT);
+                addToken(node.getEndIndex() - 2, node.getEndIndex(), MultiMarkdownTypes.WIKI_LINK_CLOSE);
+            } else {
+                addToken(node.getStartIndex(), node.getStartIndex() + 2, MultiMarkdownTypes.WIKI_LINK_OPEN);
+                addToken(node.getStartIndex() + 2, node.getEndIndex() - 2, MultiMarkdownTypes.WIKI_LINK_REF);
+                addToken(node.getEndIndex() - 2, node.getEndIndex(), MultiMarkdownTypes.WIKI_LINK_CLOSE);
+            }
         }
 
         public void visit(QuotedNode node) {
@@ -901,13 +934,23 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         }
 
         abstract class NodeFactory {
-
             abstract public TextNode newNode(String text);
         }
 
         class CommentNode extends TextNode {
-
             public CommentNode(String text) {
+                super(text);
+            }
+        }
+
+        class WikiPageRefNode extends TextNode {
+            public WikiPageRefNode(String text) {
+                super(text);
+            }
+        }
+
+        class WikiPageTitleNode extends TextNode {
+            public WikiPageTitleNode(String text) {
                 super(text);
             }
         }
@@ -1019,7 +1062,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
 
             for (Node child : node.getChildren()) {
                 boolean processed = false;
-                if (child.getClass() == TextNode.class || child.getClass() == SpecialTextNode.class) {
+                if (child.getClass() == TextNode.class || (child.getClass() == SpecialTextNode.class && child.getEndIndex() - child.getStartIndex() <= 1)) {
                     if (combinedText != null) {
                         // combine range and text, if possible
                         if (endIndex == child.getStartIndex()) {
@@ -1148,6 +1191,13 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         // punch out the child's range from the parent's so that we can eliminate parent's highlighting
         // on the child text
         protected void addTokenWithChildren(Node node, IElementType tokenType) {
+            //if (node.getEndIndex() > currentStringLength) {
+            //    ((SuperNode) node).setEndIndex(currentStringLength);
+            //    if (node.getStartIndex() >= node.getEndIndex()) {
+            //        return;
+            //    }
+            //}
+
             int entryStackLevel = parentRanges.size();
             Range range = new Range(node.getStartIndex(), node.getEndIndex());
 
@@ -1160,14 +1210,25 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
             if (!range.isEmpty()) {
                 pushRange(range, tokenType);
                 //System.out.println("    addTokenWithChildren:pushed(" + tokenType + range + ")[" + parentRanges.size() + "]");
+                int prevMinStackLevel = minStackLevel;
                 int stackLevel = parentRanges.size();
+                minStackLevel = stackLevel;
 
                 // add split combinations to the parent stack, then children
                 addSplitCombinations();
 
+                if (parentRanges.size() < stackLevel) {
+                    int tmp = 0;
+                }
+
                 visitChildren((SuperNode) node);
 
+                minStackLevel = prevMinStackLevel;
+
                 // leave self on stack so it gets punched out by combinations, pop combination, we will now add them
+                //if (parentRanges.size() - stackLevel < 0) {
+                //    int tmp = 0;
+                //}
                 ArrayList<SegmentedRange> fakeRanges = new ArrayList<SegmentedRange>(parentRanges.size() - stackLevel);
                 while (stackLevel < parentRanges.size()) fakeRanges.add(popRange());
 
@@ -1179,10 +1240,10 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
                 //System.out.println("    addTokenWithChildren:poped(" + segmentedRange + ")[" + parentRanges.size() + "]");
                 addSegmentedToken(segmentedRange, true);
             }
-            if (entryStackLevel != parentRanges.size()) {
-                int tmp = 0;
-                //assert false;
-            }
+            //if (entryStackLevel != parentRanges.size()) {
+            //    int tmp = 0;
+            //    //assert false;
+            //}
         }
 
         protected void addSegmentedToken(SegmentedRange segmentedRange, boolean excludeAncestors) {
@@ -1204,12 +1265,17 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         }
 
         protected void addToken(Node node, IElementType tokenType) {
-            int endIndex = node.getEndIndex();
-            int startIndex = node.getStartIndex();
+            addToken(node.getStartIndex(), node.getEndIndex(), tokenType);
+        }
 
-            if (tokenType == MultiMarkdownTypes.QUOTE) {
-                int tmp = 0;
-            }
+        protected void addToken(Range range, IElementType tokenType) {
+            addToken(range.getStart(), range.getEnd(), tokenType);
+        }
+
+        protected void addToken(int startIndex, int endIndex, IElementType tokenType) {
+            //if (tokenType == MultiMarkdownTypes.QUOTE) {
+            //    int tmp = 0;
+            //}
             // compensate for missing EOL at end of input causes pegdown to return a range past end of input
             // in this case IDEA ignores the range. :(
             if (endIndex > currentStringLength) endIndex = currentStringLength;

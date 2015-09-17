@@ -75,9 +75,21 @@ i {
     font-style: italic;
 }
 
-var {
+var,
+span.var {
     font-weight: bold;
     font-style: italic;
+}
+
+kbd,
+span.kbd{
+    background-color: #fcfcfc;
+    border: solid 1px #ccc;
+    box-shadow: inset 0 -1px 0 #bbb;
+    color: #555;
+    display: inline-block;
+    padding: 3px 5px;
+    vertical-align: middle;
 }
 
 /* NOTE: all other font sizes are set relative to font size given here */
@@ -188,8 +200,13 @@ h1 {
     margin: 20px 0 10px 0;
 }
 
-h1.first-child {
-    margin: 0 0 10px 0;
+h1.first-child,
+h2.first-child,
+h3.first-child,
+h4.first-child,
+h5.first-child,
+h6.first-child {
+    margin-top: 0;
 }
 
 .multimarkdown-wiki-preview h1 {
@@ -260,7 +277,11 @@ blockquote h6 a {
 
 code,
 samp,
-kbd, tt {
+var,
+span.var,
+kbd,
+span.kbd,
+span.tt {
     font-family: Consolas, "Liberation Mono", Menlo, Courier, Monospaced, monospace;
     font-size: 1em;
 }
@@ -269,7 +290,7 @@ pre {
     margin: 5px 0;
 }
 
-tt {
+span.tt {
     margin: 0 2px;
     padding: 0 5px;
     white-space: nowrap;

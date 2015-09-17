@@ -164,18 +164,19 @@ public class Settings {
         @Override public Integer getDefaultValue() { return 0; }
 
         public void setValue(JSpinner component) { setValue((Integer) component.getValue()); }
-
         public void reset(JSpinner component) { component.setValue(value); }
-
         public boolean isChanged(JSpinner component) { return !value.equals((Integer) component.getValue()); }
 
         public void setValue(JComboBox component) { setValue((Integer) component.getSelectedIndex()); }
-        public void setValue(JList component) { setValue((Integer) component.getSelectedIndex()); }
-
         public void reset(JComboBox component) { component.setSelectedIndex(value); }
-        public void reset(JList component) { component.setSelectedIndex(value); }
-
         public boolean isChanged(JComboBox component) { return !value.equals((Integer) component.getSelectedIndex()); }
+
+        public void setValue(JTabbedPane component) { setValue((Integer) component.getSelectedIndex()); }
+        public void reset(JTabbedPane component) { component.setSelectedIndex(value); }
+        public boolean isChanged(JTabbedPane component) { return !value.equals((Integer) component.getSelectedIndex()); }
+
+        public void setValue(JList component) { setValue((Integer) component.getSelectedIndex()); }
+        public void reset(JList component) { component.setSelectedIndex(value); }
         public boolean isChanged(JList component) { return !value.equals((Integer) component.getSelectedIndex()); }
     }
 

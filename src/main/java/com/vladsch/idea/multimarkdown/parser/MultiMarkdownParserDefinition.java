@@ -43,15 +43,6 @@ import org.jetbrains.annotations.NotNull;
 public class MultiMarkdownParserDefinition implements ParserDefinition {
 
     public static final TokenSet WHITE_SPACES = TokenSet.create(MultiMarkdownTypes.NONE);
-    public static final TokenSet TODO_COMMENT_SET = TokenSet.create(
-            MultiMarkdownTypes.DEFINITION, MultiMarkdownTypes.DEFINITION_TERM,
-            MultiMarkdownTypes.TABLE_CELL_REVEN_CEVEN, MultiMarkdownTypes.TABLE_CELL_REVEN_CODD, MultiMarkdownTypes.TABLE_CELL_RODD_CEVEN, MultiMarkdownTypes.TABLE_CELL_RODD_CODD,
-            MultiMarkdownTypes.CODE, MultiMarkdownTypes.VERBATIM,
-            MultiMarkdownTypes.BLOCK_QUOTE,
-            MultiMarkdownTypes.COMMENT,
-            MultiMarkdownTypes.TEXT
-    );
-
     public static final IFileElementType FILE = new IFileElementType(Language.<MultiMarkdownLanguage>findInstance(MultiMarkdownLanguage.class));
 
     @NotNull

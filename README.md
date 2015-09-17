@@ -18,14 +18,30 @@ idea-multimarkdown
 **Everyone who has generously given a tip** will get a one year license for every $20 that they have donated, plus one extra year as my show of appreciation for your support. This policy will apply to all tippers until the licensed version is released, which I expect to be done by October 15, 2015.
 
 <table>
-    <tr><td><a href="http://flattr.com/thing/4603764/vschidea-multimarkdown-on-GitHub" title="Donate monthly to vsch using Flattr"><img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/flattr-tips.png" border="0" width="43" height="53" alt="Donate monthly to vsch using Flattr" /></a>
-        <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NR7DAGTC8CXLU" title="Donate once-off to vsch using Paypal"><img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/paypal-tips.png" border="0" width="43" height="53" alt="Donate once-off to vsch using Paypal" /></a></td>
+    <tr>
+        <td><a href="http://flattr.com/thing/4603764/vschidea-multimarkdown-on-GitHub" title="Donate monthly to vsch using Flattr"><img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/flattr-tips.png" border="0" width="43" height="53" alt="Donate monthly to vsch using Flattr" /></a></td>
+        <td><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NR7DAGTC8CXLU" title="Donate once-off to vsch using Paypal"><img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/paypal-tips.png" border="0" width="43" height="53" alt="Donate once-off to vsch using Paypal" /></a></td>
         <td><b>If you like my work then please feel free to tip me.<br>I will view it as a show of appreciation and as a reward for my effort.</b></td>
     </tr>
 </table>
 
 
-### Version 1.1 is released
+### Version 1.1.6 Adds Wiki Link Refactoring/Code Completion, etc. 
+
+Wiki links are the first go get the boost to IntelliJ intelligence:
+
+* Wiki link page references are linked to the files they target. For example `[[NOTICE]]` refers to `NOTICE.md` in the same directory as the file containing the link. 
+* Refactor rename operation on a wiki link does a file rename operation with all links that refer to it also changed.
+* Moving a file within the project tree also updates the links. There is an issue with wiki links with spaces and other character combinations causes IDEA not to respect references. see #28. 
+* Navigate to the file a wiki link targets in the markdown source via go to definition. 
+* Find all wiki link references to a markdown file in the project via find usages on the file node in the project view
+* Quick fix to create a wiki markdown file for wiki links with missing files.
+* Different icon []() vs. []() is used for files whose ancestor directory has a `.wiki` extension. These are treated as GitHub wiki pages and will display as on GitHub, minus footer and sidebar. These are TBI. 
+* Many more changes, see the plugin version notes on the JetBrains page or in the IDE <kbd>Settings > Plugins > MultiMarkdown</kbd>
+
+*[TBI]:To Be Implemented.
+
+### Version 1.1 out and humming
 
 I have implemented a JavaFX WebView based HTML Preview Tab and the results are stunning. Not only was I able to make it look like GitHub's markdown, which I could not do with the old preview, but it is a joy to work with and maintain compared to `HTMLEditorKit`.
 

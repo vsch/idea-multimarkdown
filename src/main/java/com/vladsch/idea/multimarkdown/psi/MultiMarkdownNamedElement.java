@@ -26,5 +26,5 @@ package com.vladsch.idea.multimarkdown.psi;
 import com.intellij.psi.PsiNameIdentifierOwner;
 
 public interface MultiMarkdownNamedElement extends PsiNameIdentifierOwner {
-
+    String getDisplayName();
 }
