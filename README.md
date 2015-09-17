@@ -36,7 +36,7 @@ Wiki links are the first to get the boost to IntelliJ intelligence:
 * Navigate to the file a wiki link targets in the markdown source via go to definition. 
 * Find all wiki link references to a markdown file in the project via find usages on the file node in the project view
 * Quick fix to create a wiki markdown file for wiki links with missing files.
-* Different icon []() vs. []() is used for files whose ancestor directory has a `.wiki` extension. These are treated as GitHub wiki pages and will display as on GitHub, minus footer and sidebar. These are TBI. 
+* Different icon <img src="https://github.com/vsch/idea-multimarkdown/raw/master/src/main/resources/com/vladsch/idea/multimarkdown/multimarkdown%402x.png" width="16" height="17" alt="MultiMarkdown file Icon"> for markdown files, <img src="https://github.com/vsch/idea-multimarkdown/raw/master/src/main/resources/com/vladsch/idea/multimarkdown/wikimarkdown%402x.png" width="16" height="17" alt="Wiki Page Icon"> is used for files whose ancestor directory has a `.wiki` extension. These are treated as GitHub wiki pages and will display pretty much as they do on GitHub, minus the footer and sidebar. Footer and sidebar are TBI for MultiMarkdown. 
 * Many more changes, see the plugin version notes on the JetBrains page or in the IDE <kbd>Settings > Plugins > MultiMarkdown</kbd>
 
 *[TBI]:To Be Implemented.
