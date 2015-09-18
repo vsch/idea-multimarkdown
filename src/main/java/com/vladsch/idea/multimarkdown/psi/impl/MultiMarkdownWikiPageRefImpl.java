@@ -26,22 +26,22 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.ResolveResult;
+import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.language.MultiMarkdownReference;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownVisitor;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl implements MultiMarkdownWikiPageRef {
     private static final Logger logger = Logger.getLogger(MultiMarkdownWikiPageRefImpl.class);
-    MultiMarkdownReference myReference;
-    String myReferenceName;
+    private Boolean haveNoReference = null;
 
     public MultiMarkdownWikiPageRefImpl(ASTNode node) {
         super(node);
-        myReference = null;
-        myReferenceName = null;
     }
 
     public void accept(@NotNull PsiElementVisitor visitor) {
@@ -51,7 +51,7 @@ public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl 
 
     @Override
     public String getDisplayName() {
-        return MultiMarkdownFile.makeFileName(getName(), true);
+        return MultiMarkdownProjectComponent.wikiPageRefToFileName(getName(), true);
     }
 
     @Override
@@ -61,12 +61,16 @@ public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl 
 
     @Override
     public String getFileName() {
-        return MultiMarkdownFile.makeFileName(getName(), true);
+        return MultiMarkdownProjectComponent.wikiPageRefToFileName(getName(), true);
     }
 
-    public PsiElement setName(String newName) {
-        myReference = null;
-        return MultiMarkdownPsiImplUtil.setName(this, newName);
+    public PsiElement setName(@NotNull String newName) {
+        return setName(newName, false);
+    }
+
+    public PsiElement setName(String newName, boolean fileMoved) {
+        haveNoReference = null;
+        return MultiMarkdownPsiImplUtil.setName(this, newName, fileMoved);
     }
 
     public PsiElement getNameIdentifier() {
@@ -90,20 +94,16 @@ public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl 
     @org.jetbrains.annotations.Nullable
     @Override
     public PsiReference getReference() {
-        String name = getName();
-        if (myReference == null || myReferenceName == null || !myReferenceName.equals(getText())) {
-            myReference = null;
-            if (MultiMarkdownReference.isReference(this)) {
-                myReferenceName = getText();
-                myReference = new MultiMarkdownReference(this, new TextRange(0, getTextLength()));
-            }
+        if (haveNoReference == null) {
+            String name = getName();
+            List<ResolveResult> result = name == null ? null : MultiMarkdownReference.getMultiResolveResults(this, name, false);
+            haveNoReference = result == null || result.size() != 1;
         }
-        //if (myReference != null) {
-        //    logger.info("Reference for " + name + " " + myReference + " to " + myReference.resolve().toString());
-        //} else {
-        //    logger.info("No Reference for " + name);
-        //}
-        return myReference;
+        return haveNoReference ? null : new MultiMarkdownReference(this, new TextRange(0, getTextLength()));
+    }
+
+    @Override public String toString() {
+        return "WIKI_LINK_REF '" + getName() + "'";
     }
 
     ///**

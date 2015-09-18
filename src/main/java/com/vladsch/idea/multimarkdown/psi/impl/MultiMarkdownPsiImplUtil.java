@@ -27,6 +27,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
@@ -34,6 +35,8 @@ import com.vladsch.idea.multimarkdown.psi.*;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class MultiMarkdownPsiImplUtil {
     public static String getKey(MultiMarkdownProperty element) {
@@ -100,9 +103,15 @@ public class MultiMarkdownPsiImplUtil {
         return getPageRef(element);
     }
 
-    public static PsiElement setName(MultiMarkdownWikiPageRef element, String newName) {
+    public static PsiElement setName(MultiMarkdownWikiPageRef element, String newName, boolean fileMoved) {
         ASTNode pageRefNode = element.getNode();
         if (pageRefNode != null) {
+            if (!fileMoved && element.getText().contains("/")) {
+                // keep the old path
+                Path p = Paths.get(element.getText()).getParent();
+                String file = p.toString() + "/" + newName;
+                newName = file;
+            }
             MultiMarkdownWikiLink property = MultiMarkdownElementFactory.createWikiLink(element.getProject(), newName);
             ASTNode newKeyNode = property.getNode().findChildByType(MultiMarkdownTypes.WIKI_LINK_REF);
             element.getParent().getNode().replaceChild(pageRefNode, newKeyNode);

@@ -393,7 +393,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                     for (int i = 0; i < nodeList.getLength(); i++) {
                         HTMLImageElementImpl imgNode = (HTMLImageElementImpl) nodeList.item(i);
                         String src = imgNode.getSrc();
-                        if (!src.startsWith("http://") && !src.startsWith("https://") && !src.startsWith("file://")) {
+                        if (!src.startsWith("http://") && !src.startsWith("https://") && !src.startsWith("ftp://") && !src.startsWith("file://")) {
                             // relative to document, change it to absolute file://
                             VirtualFile file = FileDocumentManager.getInstance().getFile(document);
                             VirtualFile parent = file == null ? null : file.getParent();

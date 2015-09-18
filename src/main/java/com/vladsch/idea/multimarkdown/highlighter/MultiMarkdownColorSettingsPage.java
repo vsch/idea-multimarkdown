@@ -55,7 +55,7 @@ public class MultiMarkdownColorSettingsPage implements ColorSettingsPage {
     protected static final List<AttributesDescriptor> attributeDescriptors = new LinkedList<AttributesDescriptor>();
 
     private void addTextAttributesKey(String name, TextAttributesKey attributesKey) {
-        attributeDescriptors.add(new AttributesDescriptor(MultiMarkdownBundle.message("multimarkdown.colorsettings." + name), attributesKey));
+        attributeDescriptors.add(new AttributesDescriptor(MultiMarkdownBundle.message("colorsettings." + name), attributesKey));
     }
 
     public MultiMarkdownColorSettingsPage() {
@@ -224,7 +224,7 @@ public class MultiMarkdownColorSettingsPage implements ColorSettingsPage {
         } catch (Exception e) {
             LOGGER.error("Failed loading sample Markdown document", e);
         }
-        return MultiMarkdownBundle.message("multimarkdown.colorsettings.sample-loading-error");
+        return MultiMarkdownBundle.message("colorsettings.sample-loading-error");
     }
 }
 

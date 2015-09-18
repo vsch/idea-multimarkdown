@@ -37,6 +37,14 @@ public class MultiMarkdownBundle {
     private MultiMarkdownBundle() {
     }
 
+    public static ResourceBundle getBundle() {
+        return BUNDLE;
+    }
+
+    public static String getString(String key, Object... params) {
+        return CommonBundle.message(BUNDLE, key, params);
+    }
+
     public static String message(@PropertyKey(resourceBundle = BUNDLE_NAME) String key, Object... params) {
         return CommonBundle.message(BUNDLE, key, params);
     }

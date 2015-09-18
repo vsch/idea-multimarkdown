@@ -33,7 +33,7 @@ import com.intellij.psi.FileViewProvider;
 import com.vladsch.idea.multimarkdown.MultiMarkdownFileType;
 import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
 import com.vladsch.idea.multimarkdown.MultiMarkdownLanguage;
-import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownWikiLinkImpl;
+import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -62,90 +62,41 @@ public class MultiMarkdownFile extends PsiFileBase {
         return isWikiPage() ? MultiMarkdownIcons.WIKI : MultiMarkdownIcons.FILE;
     }
 
-    public static String makeLinkRef(String name) {
-        return name.replace('-', ' ');
-    }
-
-    public static String makeFileName(String name, boolean addExtension) {
-        return name.replace(' ', '-') + (addExtension ? ".md" : "");
-    }
-
-    public static String makeFileName(String name) {
-        return makeFileName(name,false);
-    }
-
-    public static boolean isWikiPage(VirtualFile file) {
-        if (file == null) return false;
-
-        String canonicalPath = file.getCanonicalPath();
-        return canonicalPath != null && canonicalPath.contains(".wiki/");
-    }
-
     public boolean isWikiPage() {
-        return MultiMarkdownFile.isWikiPage(getVirtualFile());
+        return MultiMarkdownProjectComponent.isWikiPage(getVirtualFile());
     }
 
-    public boolean isPageReference(String name, VirtualFile inFile) {
-        // convert it just in case it has spaces
-        if (inFile == null) {
-            String wikiLinkName = MultiMarkdownFile.makeLinkRef(getVirtualFile().getCanonicalPath());
-            return wikiLinkName.endsWith("/" + name + "." + getVirtualFile().getExtension());
-        } else {
-            String wikiLinkName = getWikiLinkName(inFile);
-            return wikiLinkName.equals(name);
-        }
+    public String getWikiPageRef() {
+        return MultiMarkdownProjectComponent.fileNameToWikiRef(getVirtualFile().getNameWithoutExtension());
     }
 
-    public String getWikiLinkName() {
-        String wikiLinkName = MultiMarkdownFile.makeLinkRef(getVirtualFile().getNameWithoutExtension());
-        return wikiLinkName;
+    //public static @Nullable String getWikiLinkFileName(VirtualFile toFile, VirtualFile inFile, boolean addExtension) {
+    //    return makeFileName(getWikiPageRef(toFile, inFile), addExtension);
+    //}
+    //
+    //public @Nullable String getWikiLinkFileName(VirtualFile inFile, boolean addExtension) {
+    //    return MultiMarkdownFile.getWikiLinkFileName(getVirtualFile(), inFile, addExtension);
+    //}
+    //
+    //public @Nullable String getWikiLinkFileName(VirtualFile inFile) {
+    //    return MultiMarkdownFile.getWikiLinkFileName(getVirtualFile(), inFile, true);
+    //}
+    //
+
+    public @Nullable String getWikiPageRef(@Nullable VirtualFile inFile) {
+        return getWikiPageRef(inFile, 0);
     }
 
-    public static String getWikiLinkName(VirtualFile toFile, VirtualFile inFile) {
-        String wikiLinkName = toFile.getNameWithoutExtension();
-        String canonicalPath = toFile.getCanonicalPath();
-        String sourcePath = inFile.getCanonicalPath();
-        String pathPrefix = "";
-        if (canonicalPath != null && sourcePath != null) {
-            String[] targetParts = canonicalPath.split("/");
-            String[] sourceParts = sourcePath.split("/");
-            int iMax = Math.min(targetParts.length - 1, sourceParts.length - 1);
-            int i;
-            for (i = 1; i < iMax; i++) {
-                if (!targetParts[i].equals(sourceParts[i])) break;
-            }
-
-            // used up the common prefix, now for every source we need to add ../
-            iMax = sourceParts.length - 1;
-            for (int j = i; j < iMax; j++) {
-                pathPrefix += "../";
-            }
-
-            // used up the common prefix, now for every target we need to add the part/
-            iMax = targetParts.length - 1;
-            for (; i < iMax; i++) {
-                pathPrefix += targetParts[i] + "/";
-            }
-
-            wikiLinkName = pathPrefix + wikiLinkName;
-        }
-        return MultiMarkdownFile.makeLinkRef(wikiLinkName);
+    public @Nullable String getWikiPageRef(@Nullable VirtualFile inFile, int searchFlags) {
+        return MultiMarkdownProjectComponent.getWikiPageRef(getVirtualFile(), inFile, searchFlags);
     }
 
-    public static String getWikiLinkFileName(VirtualFile toFile, VirtualFile inFile, boolean addExtension) {
-        return makeFileName(getWikiLinkName(toFile, inFile), addExtension);
+    public @Nullable String getLinkRef(@Nullable VirtualFile inFile) {
+        return getWikiPageRef(inFile, 0);
     }
 
-    public String getWikiLinkFileName(VirtualFile inFile, boolean addExtension) {
-        return MultiMarkdownFile.getWikiLinkFileName(getVirtualFile(), inFile, addExtension);
-    }
-
-    public String getWikiLinkFileName(VirtualFile inFile) {
-        return MultiMarkdownFile.getWikiLinkFileName(getVirtualFile(), inFile, true);
-    }
-
-    public String getWikiLinkName(VirtualFile inFile) {
-        return getWikiLinkName(getVirtualFile(), inFile);
+    public @Nullable String getLinkRef(@Nullable VirtualFile inFile, int searchFlags) {
+        return MultiMarkdownProjectComponent.getLinkRef(getVirtualFile(), inFile, searchFlags);
     }
 
     @Override
@@ -197,46 +148,10 @@ public class MultiMarkdownFile extends PsiFileBase {
         }
     }
 
-    ///**
-    // * Returns the reference from this PSI element to another PSI element (or elements), if one exists.
-    // * If the element has multiple associated references (see {@link #getReferences()}
-    // * for an example), returns the first associated reference.
-    // *
-    // * @return the reference instance, or null if the PSI element does not have any
-    // * associated references.
-    // *
-    // * @see com.intellij.psi.search.searches.ReferencesSearch
-    // */
-    //@Nullable
-    //@Override
-    //public PsiReference getReference() {
-    //    return null;
-    //}
-    //
-    ///**
-    // * Returns all references from this PSI element to other PSI elements. An element can
-    // * have multiple references when, for example, the element is a string literal containing
-    // * multiple sub-strings which are valid full-qualified class names. If an element
-    // * contains only one text fragment which acts as a reference but the reference has
-    // * multiple possible targets, {@link PsiPolyVariantReference} should be used instead
-    // * of returning multiple references.
-    // * <p/>
-    // * Actually, it's preferable to call {@link com.intellij.psi.PsiReferenceService#getReferences} instead
-    // * as it allows adding references by plugins when the element implements {@link com.intellij.psi.ContributedReferenceHost}.
-    // *
-    // * @return the array of references, or an empty array if the element has no associated
-    // * references.
-    // *
-    // * @see com.intellij.psi.PsiReferenceService#getReferences
-    // * @see com.intellij.psi.search.searches.ReferencesSearch
-    // */
-    //@Override
-    //@NotNull
-    //public PsiReference[] getReferences() {
-    //    return SharedPsiElementImplUtil.getReferences(this);
-    //}
-
     @Override public String toString() {
+        if (getVirtualFile() == null) {
+            return super.toString();
+        }
         return "MultiMarkdownFile : " + getVirtualFile().toString();
     }
 }

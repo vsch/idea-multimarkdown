@@ -24,6 +24,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.ElementManipulator;
 import com.intellij.util.IncorrectOperationException;
+import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 import org.jetbrains.annotations.NotNull;
@@ -37,8 +38,8 @@ public class MultiMarkdownWikiPageRefManipulator implements ElementManipulator<M
     }
 
     @Override public MultiMarkdownWikiPageRef handleContentChange(@NotNull MultiMarkdownWikiPageRef element, String newContent) throws IncorrectOperationException {
-        String newName = MultiMarkdownFile.makeFileName(FileUtil.getNameWithoutExtension(newContent));
-        return (MultiMarkdownWikiPageRef) element.setName(newName);
+        String newName = MultiMarkdownProjectComponent.fileNameToWikiRef(FileUtil.getNameWithoutExtension(newContent));
+        return (MultiMarkdownWikiPageRef) element.setName(newName, false);
     }
 
     @NotNull @Override public TextRange getRangeInElement(@NotNull MultiMarkdownWikiPageRef element) {

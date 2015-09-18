@@ -30,6 +30,10 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
 import org.apache.log4j.*;
@@ -39,6 +43,7 @@ import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 
 public class MultiMarkdownPlugin implements ApplicationComponent {
     private static final Logger logger = org.apache.log4j.Logger.getLogger("com.vladsch.idea.multimarkdown");
@@ -87,7 +92,6 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
         logger.addAppender(appender);
         logger.setAdditivity(false);
         logger.setLevel(Level.INFO);
-
 
         // turn off lcd rendering, will use gray
         System.setProperty("prism.lcdtext", "false");
@@ -266,4 +270,8 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
         return logger;
     }
 
+    // find markdown and wikiPages in the project
+    public static @NotNull MultiMarkdownProjectComponent getProjectComponent(Project project) {
+        return project.getComponent(MultiMarkdownProjectComponent.class);
+    }
 }
