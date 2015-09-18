@@ -66,7 +66,7 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
             // test if it isn't internet protocol and mailto:, the rest we'll handle in the project file system
             //MultiMarkdownPathResolver.canResolveLink(project, document, rendering.href);
             String href = rendering.href;
-            boolean linkFound = (!href.startsWith("http://") && !href.startsWith("ftp://") && !href.startsWith("https://") && !href.startsWith("mailto:"));
+            boolean linkFound = !(!href.startsWith("http://") && !href.startsWith("ftp://") && !href.startsWith("https://") && !href.startsWith("mailto:"));
 
             if (!linkFound) {
                 // see if we can handle it

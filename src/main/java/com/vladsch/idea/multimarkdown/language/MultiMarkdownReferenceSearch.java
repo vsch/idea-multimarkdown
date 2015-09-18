@@ -44,8 +44,6 @@ public class MultiMarkdownReferenceSearch extends QueryExecutorBase<PsiReference
         String text = null;
         if (refElement instanceof MultiMarkdownFile) {
             text = ((MultiMarkdownFile) refElement).getWikiPageRef();
-        //} else if (refElement instanceof MultiMarkdownWikiPageRefImpl) {
-        //    text = ((MultiMarkdownWikiPageRefImpl) refElement).getFileName();
         }
         if (StringUtil.isNotEmpty(text)) {
             final SearchScope searchScope = p.getEffectiveSearchScope();

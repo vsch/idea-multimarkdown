@@ -28,7 +28,6 @@ import com.intellij.openapi.vfs.*;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
-import org.intellij.images.fileTypes.ImageFileTypeManager;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,12 +40,13 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
     public static int FILE_REF = 0;
 
     public static int WIKIPAGE_FILE = 1;
-    private static int MARKDOWN_FILE_ONLY = 2;
+    public static int MARKDOWN_FILE_ONLY = 2;
     public static int IMAGE_FILE = 4;
     public static int WIKI_REF = 8;
-    private static int ALLOW_INACCESSIBLE_REF = 16;
+    public static int ALLOW_INACCESSIBLE_REF = 16;
     public static int INCLUDE_SELF = 32;
     public static int WANT_WIKI_REF = 64;
+    public static int SPACE_DASH_EQUIVALENT = 128;
 
     public static int MARKDOWN_FILE = MARKDOWN_FILE_ONLY | WIKIPAGE_FILE | ALLOW_INACCESSIBLE_REF;
     public static int ALLOW_INACCESSIBLE_WIKI_REF = ALLOW_INACCESSIBLE_REF | MARKDOWN_FILE;
@@ -57,6 +57,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         this.project = project;
     }
 
+    // RELEASE: Need to implement this properly, don't want to go into an infinite loop on the user system
     protected void loadMarkdownFilesList() {
         //projectFiles = new ArrayList<VirtualFile>();
         //imageFiles = new ArrayList<VirtualFile>();
@@ -111,7 +112,6 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         addMarkdownFiles(baseDir, result, wikiPagesOnly);
         return result;
     }
-
 
     protected void ensureFileListsAvailable() {
         //if (projectFiles == null) {
@@ -219,9 +219,9 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
     public static @Nullable String getLinkRef(VirtualFile toFile, VirtualFile inFile, int searchFlags) {
         boolean wantWikiRef = (searchFlags & WANT_WIKI_REF) != 0;
         if (inFile == null) {
-            return wantWikiRef ? fileNameToWikiRef(toFile.getNameWithoutExtension()) : toFile.getName();
+            return wantWikiRef ? fileNameToWikiRef(toFile.getNameWithoutExtension()) : ((searchFlags & SPACE_DASH_EQUIVALENT) != 0 ? toFile.getNameWithoutExtension() : toFile.getName());
         } else {
-            String linkRef = wantWikiRef ? toFile.getNameWithoutExtension() : toFile.getName();
+            String linkRef = wantWikiRef ? toFile.getNameWithoutExtension() : ((searchFlags & SPACE_DASH_EQUIVALENT) != 0 ? toFile.getNameWithoutExtension() : toFile.getName());
             String path = toFile.getPath();
             String sourcePath = inFile.getPath();
             String pathPrefix = "";
@@ -272,8 +272,28 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
     // refLink is either a file name with extension, or a wikiPageRef or null if any will do
     // if null then as long as inFile can link to toFile return true, otherwise the link text should match what the getLinkRef returns
     public static boolean isLinkRefToFile(@Nullable String refLink, VirtualFile toFile, VirtualFile inFile, int searchFlags) {
-        String toFileRefLink = getLinkRef(toFile, inFile, searchFlags | ((searchFlags & WIKI_REF) != 0 ? WANT_WIKI_REF : 0));
-        return toFileRefLink != null && (refLink == null || toFileRefLink.equals(refLink));
+        String toFileRefLink = getLinkRef(toFile, inFile, (searchFlags & ~WANT_WIKI_REF) | SPACE_DASH_EQUIVALENT); // we want file name without extension
+        String refLinkFileName = (searchFlags & WIKI_REF) != 0 ? wikiPageRefToFileName(refLink) : refLink;
+
+        if (toFileRefLink != null && (refLink == null || (toFileRefLink.equals(refLinkFileName)))) {
+            if (!toFile.getName().contains(" ") && ((searchFlags & WIKI_REF) == 0 || refLink == null || !refLink.contains("-"))) {
+                return true;
+            }
+        }
+
+        if (toFileRefLink != null && (searchFlags & SPACE_DASH_EQUIVALENT) != 0 && toFileRefLink.length() == refLinkFileName.length()) {
+            int iMax = toFileRefLink.length();
+            for (int i = 0; i < iMax; i++) {
+                if (!(Character.toLowerCase(toFileRefLink.charAt(i)) == Character.toLowerCase(refLinkFileName.charAt(i))
+                        || (toFileRefLink.charAt(i) == ' ' || toFileRefLink.charAt(i) == '-')
+                        && (refLinkFileName.charAt(i) == ' ' || refLinkFileName.charAt(i) == '-'))) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        return false;
     }
 
     public @Nullable List<VirtualFile> findRefLinkFiles(@Nullable String refLink, VirtualFile inFile, int searchFlags) {

@@ -21,6 +21,7 @@
 package com.vladsch.idea.multimarkdown.parser;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.lang.LightPsiParser;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiParser;
 import com.intellij.psi.tree.IElementType;
@@ -28,8 +29,9 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.*;
 
-public class MultiMarkdownParser implements PsiParser {
+public class MultiMarkdownLightParser extends MultiMarkdownParser implements LightPsiParser {
 
+    @Override
     public void parseLight(IElementType root, PsiBuilder builder) {
 
         if (root == WIKI_LINK) {

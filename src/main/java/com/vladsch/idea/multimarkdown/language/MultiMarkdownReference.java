@@ -124,7 +124,7 @@ public class MultiMarkdownReference extends PsiReferenceBase<PsiElement> impleme
         if (linkRef != null) {
             List<ResolveResult> results = new ArrayList<ResolveResult>();
             MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
-            if ((searchSettings & MARKDOWN_FILE) != 0) {
+            if ((searchSettings & (MARKDOWN_FILE_ONLY | WIKIPAGE_FILE)) != 0) {
                 final List<MultiMarkdownFile> files = projectComponent.findRefLinkMarkdownFiles(linkRef, containingFile, searchSettings);
 
                 if (files != null) {
