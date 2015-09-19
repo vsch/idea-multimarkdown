@@ -117,6 +117,7 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     final public Settings.StringSetting customCss = settings.StringSetting("", "customCss");
     final public Settings.StringSetting customFxCss = settings.StringSetting("", "customFxCss");
     final public Settings.StringSetting scratchFileServiceFailedBuild = settings.StringSetting("", "scratchFileServiceFailed");
+    final public Settings.StringSetting lightParserFailedBuild = settings.StringSetting("", "lightParserFailedBuild");
     final public Settings.ElementSetting customCssEditorState = settings.ElementSetting(null, "customCssEditorState");
     final public Settings.ElementSetting customFxCssEditorState = settings.ElementSetting(null, "customFxCssEditorState");
     final public Settings.BooleanSetting wasShownDarkBug = settings.BooleanSetting(false, "wasShownDarkBug", 0);

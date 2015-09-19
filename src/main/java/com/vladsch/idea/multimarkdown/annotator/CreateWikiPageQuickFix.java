@@ -24,36 +24,32 @@ import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.fileChooser.actions.NewFileAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.impl.file.impl.FileManager;
 import com.intellij.util.IncorrectOperationException;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
-import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownWikiLinkImpl;
+import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-class CreateWikiLinkQuickFix extends BaseIntentionAction {
+class CreateWikiPageQuickFix extends BaseIntentionAction {
     private String name;
 
-    CreateWikiLinkQuickFix(String name) {
+    CreateWikiPageQuickFix(String name) {
         this.name = name;
     }
 
     @NotNull
     @Override
     public String getText() {
-        return "Create wiki file";
+        return MultiMarkdownBundle.message("quickfix.wikilink.create-page", name);
     }
 
     @NotNull
     @Override
     public String getFamilyName() {
-        return "MultiMarkdown wiki links";
+        return MultiMarkdownBundle.message("quickfix.wikilink.family-name");
     }
 
     @Override

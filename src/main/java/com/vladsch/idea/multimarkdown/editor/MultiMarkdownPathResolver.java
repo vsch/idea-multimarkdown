@@ -128,7 +128,7 @@ public class MultiMarkdownPathResolver {
         }
         final String href = hrefDec;
 
-        if (!href.startsWith("http://") && !href.startsWith("https://") && !href.startsWith("mailto:")) {
+        if (!href.startsWith("http://") && !href.startsWith("ftp://") && !href.startsWith("https://") && !href.startsWith("mailto:")) {
             final Object[] foundFile = {null};
             final Runnable runnable = new Runnable() {
                 @Override

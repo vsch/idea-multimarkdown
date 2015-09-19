@@ -341,7 +341,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         // create the css themes combobox, make it locale aware
         ArrayList<String> options = new ArrayList<String>(10);
         for (int i = 0; ; i++) {
-            String message = MultiMarkdownBundle.messageOrBlank("multimarkdown.settings.html-theme-" + (i + 1));
+            String message = MultiMarkdownBundle.messageOrBlank("settings.html-theme-" + (i + 1));
             if (message.isEmpty()) break;
             options.add(message);
         }

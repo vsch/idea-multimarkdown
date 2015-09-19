@@ -47,9 +47,18 @@
     </div>
     ]]></description>
 
-  <version>1.1.6</version>
+  <version>1.1.7</version>
   <idea-version since-build="133.1711"/>
   <change-notes><![CDATA[
+    <ul><h3><b>1.1.7 - Wiki Link Refactoring/Code Completion/Navigation</b></h3>
+      <li>Fix Wiki Link refactoring working.</li>
+      <li>Add Wiki Link quick fixes, line markers, completions.</li>
+      <li>Add Wiki Link annotation for wiki links that try to go outside their home directory tree.</li>
+      <li>Add Wiki Link annotation for wiki links that contain dashes, with quick fix.</li>
+      <li>Add Wiki Link annotation for wiki target files that contain spaces, with quick fix.</li>
+      <li>Add Wiki Link annotation for case mismatch between wiki link and its target's file name, with quick fix.</li>
+      <li>Add Wiki Link annotation for unresolved wiki links, with quick fixes to target another page or create the missing one.</li>
+    </ul>
     <ul><h3><b>1.1.6 - Wiki Link Refactoring/Code Completion/Navigation</b></h3>
       <li>Add rudimentary `<kbd></kbd>` styling to old preview. It's not going away, so it must be maintained.</li>
       <li>Add `<var></var>` styling to new preview.</li>
@@ -318,5 +327,7 @@
     <todoIndexer filetype="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.todo.MultiMarkdownTodoIndexer"/>
     <lang.elementManipulator forClass="com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef" implementationClass="com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownWikiPageRefManipulator"/>
     <fileIconProvider implementation="com.vladsch.idea.multimarkdown.MultiMarkdownFileIconProvider"/>
+    <referencesSearch implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownReferenceSearch"/>
+    <codeInsight.lineMarkerProvider language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownLineMarkerProvider"/>
   </extensions>
 </idea-plugin>

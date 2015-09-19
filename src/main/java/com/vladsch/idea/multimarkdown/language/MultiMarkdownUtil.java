@@ -30,7 +30,6 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.indexing.FileBasedIndex;
 import com.vladsch.idea.multimarkdown.MultiMarkdownFileType;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 
 import java.util.ArrayList;
@@ -83,48 +82,4 @@ public class MultiMarkdownUtil {
         return result != null ? result : Collections.<MultiMarkdownWikiPageRef>emptyList();
     }
 
-    public static List<MultiMarkdownFile> findWikiFiles(Project project, String name, VirtualFile inFile) {
-        List<MultiMarkdownFile> markdownFiles = findWikiFiles(project, false);
-        List<MultiMarkdownFile> result = new ArrayList<MultiMarkdownFile>(5);
-        for (MultiMarkdownFile markdownFile : markdownFiles) {
-            if (markdownFile != null) {
-                VirtualFile afile = markdownFile.getVirtualFile();
-                if (markdownFile.isPageReference(name, inFile)) {
-                    result.add(markdownFile);
-                }
-            }
-        }
-        return result;
-    }
-
-    public static List<MultiMarkdownFile> findWikiFiles(Project project, String name) {
-        return findWikiFiles(project, name, null);
-    }
-
-    protected static void addMarkdownFiles(Project project, VirtualFile virtualFile, List<MultiMarkdownFile> result, boolean wikiPagesOnly) {
-        PsiFile aFile = PsiManager.getInstance(project).findFile(virtualFile);
-        if (aFile != null) {
-            if (aFile instanceof MultiMarkdownFile) {
-                MultiMarkdownFile markdownFile = (MultiMarkdownFile) aFile;
-                if (!wikiPagesOnly || markdownFile.isWikiPage()) {
-                    result.add(markdownFile);
-                }
-            }
-        } else {
-            VirtualFile[] virtualFiles = virtualFile.getChildren();
-            if (virtualFiles != null) {
-                for (VirtualFile file : virtualFiles) {
-                    addMarkdownFiles(project, file, result, wikiPagesOnly);
-                }
-            }
-        }
-    }
-
-    public static List<MultiMarkdownFile> findWikiFiles(Project project, boolean wikiPagesOnly) {
-        List<MultiMarkdownFile> result = new ArrayList<MultiMarkdownFile>();
-        VirtualFile baseDir = project.getBaseDir();
-        //VirtualFile[] virtualFiles = baseDir != null ? baseDir.getChildren() : new VirtualFile[0];
-        addMarkdownFiles(project, baseDir, result, wikiPagesOnly);
-        return result;
-    }
 }
