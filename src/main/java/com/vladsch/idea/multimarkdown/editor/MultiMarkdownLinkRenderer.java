@@ -35,6 +35,7 @@ import org.pegdown.ast.*;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 import static org.pegdown.FastEncoder.obfuscate;
@@ -66,6 +67,12 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
             // test if it isn't internet protocol and mailto:, the rest we'll handle in the project file system
             //MultiMarkdownPathResolver.canResolveLink(project, document, rendering.href);
             String href = rendering.href;
+            try {
+                href = URLDecoder.decode(rendering.href, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
             boolean linkFound = !(!href.startsWith("http://") && !href.startsWith("ftp://") && !href.startsWith("https://") && !href.startsWith("mailto:"));
 
             if (!linkFound) {
