@@ -32,8 +32,8 @@ Wiki links are the first to get the boost to IntelliJ intelligence:
 
 * Wiki link page references are linked to the files they target. For example `[[NOTICE]]` refers to `NOTICE.md` in the same directory as the file containing the link. 
 * Refactor rename operation on a wiki link does a file rename operation with all links that refer to it also changed.
-* Moving a file within the project tree also updates the links. There is an issue with wiki links with spaces and other character combinations causes IDEA not to respect references. see #28. 
-* Navigate to the file a wiki link targets in the markdown source via go to definition. 
+* Moving a file within the project tree also updates the links. 
+* Navigate to the file a wiki link targets in the markdown source via go to definition or line marker. 
 * Find all wiki link references to a markdown file in the project via find usages on the file node in the project view
 * Quick fix to create a wiki markdown file for wiki links with missing files.
 * Different icon <img src="https://github.com/vsch/idea-multimarkdown/raw/master/src/main/resources/com/vladsch/idea/multimarkdown/multimarkdown%402x.png" width="16" height="17" alt="MultiMarkdown file Icon"> for markdown files, <img src="https://github.com/vsch/idea-multimarkdown/raw/master/src/main/resources/com/vladsch/idea/multimarkdown/wikimarkdown%402x.png" width="16" height="17" alt="Wiki Page Icon"> is used for files whose ancestor directory has a `.wiki` extension. These are treated as GitHub wiki pages and will display pretty much as they do on GitHub, minus the footer and sidebar. Footer and sidebar are TBI for MultiMarkdown. 
