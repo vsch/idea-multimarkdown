@@ -30,6 +30,10 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
 import org.apache.log4j.*;
@@ -39,6 +43,7 @@ import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 
 public class MultiMarkdownPlugin implements ApplicationComponent {
     private static final Logger logger = org.apache.log4j.Logger.getLogger("com.vladsch.idea.multimarkdown");
@@ -49,6 +54,9 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
 
     private String urlDefaultFxCss;
     private String urlDarculaFxCss;
+    private String urlHljsDefaultFxCss;
+    private String urlHljsDarculaFxCss;
+    private String urlHighlightJs;
     private String urlCustomFxCss;
     private String urlCustomFont;
     private File fileCustomFxCss;
@@ -75,6 +83,18 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
         return urlCustomFxCss;
     }
 
+    public String getUrlHljsDefaultFxCss() {
+        return urlHljsDefaultFxCss;
+    }
+
+    public String getUrlHljsDarculaFxCss() {
+        return urlHljsDarculaFxCss;
+    }
+
+    public String getUrlHighlightJs() {
+        return urlHighlightJs;
+    }
+
     public MultiMarkdownPlugin() {
         //BasicConfigurator.configure();
         //logger.addAppender(new ConsoleAppender(new PatternLayout("%r [%t] %p %c %x - %m%n")));
@@ -87,7 +107,6 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
         logger.addAppender(appender);
         logger.setAdditivity(false);
         logger.setLevel(Level.INFO);
-
 
         // turn off lcd rendering, will use gray
         System.setProperty("prism.lcdtext", "false");
@@ -119,11 +138,17 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
         urlCustomFxCss = null;
         urlDefaultFxCss = null;
         urlDarculaFxCss = null;
+        urlHljsDefaultFxCss = null;
+        urlHljsDarculaFxCss = null;
+        urlHighlightJs = null;
         globalSettingsListener = null;
 
         urlCustomFont = createCustomFontUrl();
         urlDefaultFxCss = createTempCopy(MultiMarkdownPlugin.class.getResource(MultiMarkdownGlobalSettings.PREVIEW_FX_STYLESHEET_LIGHT), "default-fx.css");
         urlDarculaFxCss = createTempCopy(MultiMarkdownPlugin.class.getResource(MultiMarkdownGlobalSettings.PREVIEW_FX_STYLESHEET_DARK), "darcula-fx.css");
+        urlHljsDefaultFxCss = createTempCopy(MultiMarkdownPlugin.class.getResource(MultiMarkdownGlobalSettings.PREVIEW_FX_HLJS_STYLESHEET_LIGHT), "hljs-default-fx.css");
+        urlHljsDarculaFxCss = createTempCopy(MultiMarkdownPlugin.class.getResource(MultiMarkdownGlobalSettings.PREVIEW_FX_HLJS_STYLESHEET_DARK), "hljs-darcula-fx.css");
+        urlHighlightJs = createTempCopy(MultiMarkdownPlugin.class.getResource(MultiMarkdownGlobalSettings.PREVIEW_FX_HIGHLIGHT_JS), "highlight.pack.js");
 
         try {
             fileCustomFxCss = createTempCopy(settings.customFxCss.getValue(), "custom-fx.css");
@@ -215,9 +240,9 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
     public PluginClassLoader getClassLoader() {
         if (myClassLoader == null) {
             PluginClassLoader pluginClassLoader = (PluginClassLoader) getClass().getClassLoader();
-            String javaHome = System.getProperties().getProperty("java.home");
+            String javaHome = System.getProperty("java.home");
             String javaFx = javaHome;// "/Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/jre";
-            String javaVersion = System.getProperties().getProperty("java.version");
+            String javaVersion = System.getProperty("java.version");
             String libDir = FileUtil.join(javaFx, "lib");
             String libExtDir = FileUtil.join(libDir, "ext");
             String fileName = FileUtil.join(libExtDir, "jfxrt.jar");
@@ -266,4 +291,8 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
         return logger;
     }
 
+    // find markdown and wikiPages in the project
+    public static @NotNull MultiMarkdownProjectComponent getProjectComponent(Project project) {
+        return project.getComponent(MultiMarkdownProjectComponent.class);
+    }
 }

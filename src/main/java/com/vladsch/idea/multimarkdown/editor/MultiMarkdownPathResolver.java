@@ -23,11 +23,12 @@ package com.vladsch.idea.multimarkdown.editor;
 
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.vfs.VirtualFileSystem;
@@ -90,10 +91,18 @@ public class MultiMarkdownPathResolver {
      *
      * @return VirtualFile or null
      */
-    public static VirtualFile resolveClassReference(@NotNull Project project, @NotNull String target) {
-        final PsiClass classpathResource = JavaPsiFacade.getInstance(project).findClass(target, GlobalSearchScope.projectScope(project));
-        if (classpathResource != null)
-            return classpathResource.getContainingFile().getVirtualFile();
+    public static VirtualFile resolveClassReference(@NotNull final Project project, @NotNull final String target) {
+        if (!DumbService.isDumb(project)) {
+            return ApplicationManager.getApplication().runReadAction(new Computable<VirtualFile>() {
+                @Override public VirtualFile compute() {
+                    final PsiClass classpathResource = JavaPsiFacade.getInstance(project).findClass(target, GlobalSearchScope.projectScope(project));
+                    if (classpathResource != null) {
+                        return classpathResource.getContainingFile().getVirtualFile();
+                    }
+                    return null;
+                }
+            });
+        }
         return null;
     }
 
@@ -128,7 +137,7 @@ public class MultiMarkdownPathResolver {
         }
         final String href = hrefDec;
 
-        if (!href.startsWith("http://") && !href.startsWith("https://") && !href.startsWith("mailto:")) {
+        if (!href.startsWith("http://") && !href.startsWith("ftp://") && !href.startsWith("https://") && !href.startsWith("mailto:")) {
             final Object[] foundFile = {null};
             final Runnable runnable = new Runnable() {
                 @Override
@@ -158,21 +167,18 @@ public class MultiMarkdownPathResolver {
 
                     foundFile[0] = virtualTarget;
                     if (foundFile[0] != null && openFile) {
-                        FileEditorManager.getInstance(project).openFile(virtualTarget, focusEditor, searchForOpen);
+                        ApplicationManager.getApplication().invokeLater(new Runnable() {
+                            @Override public void run() {
+                                FileEditorManager.getInstance(project).openFile((VirtualFile) foundFile[0], focusEditor, searchForOpen);
+                            }
+                        });
                     }
                 }
             };
 
             Application application = ApplicationManager.getApplication();
-            if (application.isDispatchThread()) {
-                runnable.run();
-                return foundFile[0];
-            } else {
-                application.invokeLater(runnable, ModalityState.any());
-
-                // we don't know so we guess?
-                return true;
-            }
+            application.runReadAction(runnable);
+            return foundFile[0];
         } else {
             if (Desktop.isDesktopSupported()) {
                 try {

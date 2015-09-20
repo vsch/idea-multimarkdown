@@ -26,7 +26,7 @@
           <grid id="d3c90" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
-              <tabbedpane title-resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" title-key="multimarkdown.settings.tab.general"/>
+              <tabbedpane title-resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" title-key="settings.tab.general"/>
             </constraints>
             <properties>
               <opaque value="true"/>
@@ -52,8 +52,8 @@
                       <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.show-html-text.label"/>
-                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.show-html-text.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.show-html-text.label"/>
+                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.show-html-text.description"/>
                     </properties>
                   </component>
                   <component id="a62c4" class="javax.swing.JLabel">
@@ -62,7 +62,7 @@
                     </constraints>
                     <properties>
                       <font style="2"/>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.show-html-text.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.show-html-text.description"/>
                     </properties>
                   </component>
                   <component id="f1033" class="javax.swing.JCheckBox" binding="showHtmlTextAsModifiedCheckBox">
@@ -71,7 +71,7 @@
                     </constraints>
                     <properties>
                       <selected value="false"/>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.html-text-as-used.label"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.html-text-as-used.label"/>
                     </properties>
                   </component>
                   <component id="53c16" class="javax.swing.JLabel">
@@ -80,7 +80,7 @@
                     </constraints>
                     <properties>
                       <font style="2"/>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.html-text-as-used.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.html-text-as-used.description"/>
                     </properties>
                   </component>
                   <component id="83b6f" class="javax.swing.JCheckBox" binding="enableTrimSpacesCheckBox">
@@ -88,8 +88,8 @@
                       <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.enable-trim-trailing-spaces.label"/>
-                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.enable-trim-trailing-spaces.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.enable-trim-trailing-spaces.label"/>
+                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.enable-trim-trailing-spaces.description"/>
                     </properties>
                   </component>
                   <component id="b77af" class="javax.swing.JLabel">
@@ -98,7 +98,7 @@
                     </constraints>
                     <properties>
                       <font style="2"/>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.enable-trim-trailing-spaces.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.enable-trim-trailing-spaces.description"/>
                     </properties>
                   </component>
                   <component id="ff1fc" class="javax.swing.JCheckBox" binding="useOldPreviewCheckBox">
@@ -106,8 +106,8 @@
                       <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.use-old-preview.label"/>
-                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.use-old-preview.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.use-old-preview.label"/>
+                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.use-old-preview.description"/>
                     </properties>
                   </component>
                   <component id="e9e09" class="javax.swing.JLabel">
@@ -116,7 +116,7 @@
                     </constraints>
                     <properties>
                       <font style="2"/>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.use-old-preview.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.use-old-preview.description"/>
                       <verifyInputWhenFocusTarget value="false"/>
                     </properties>
                   </component>
@@ -136,7 +136,7 @@
                     </constraints>
                     <properties>
                       <font style="2"/>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.zoom.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.zoom.description"/>
                     </properties>
                   </component>
                   <vspacer id="a8592">
@@ -149,8 +149,8 @@
                       <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.enable-firebug.label"/>
-                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.enable-firebug.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.enable-firebug.label"/>
+                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.enable-firebug.description"/>
                     </properties>
                   </component>
                   <component id="ded67" class="javax.swing.JLabel" binding="enableFirebugLabel">
@@ -159,7 +159,7 @@
                     </constraints>
                     <properties>
                       <font style="2"/>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.enable-firebug.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.enable-firebug.description"/>
                     </properties>
                   </component>
                   <component id="d485f" class="javax.swing.JSpinner" binding="maxImgWidthSpinner">
@@ -169,7 +169,7 @@
                       </grid>
                     </constraints>
                     <properties>
-                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.max-image-width.label"/>
+                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.max-image-width.label"/>
                     </properties>
                   </component>
                   <component id="acafe" class="javax.swing.JLabel" binding="maxImgWidthLabel">
@@ -178,7 +178,7 @@
                     </constraints>
                     <properties>
                       <font style="2"/>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.max-image-width.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.max-image-width.description"/>
                     </properties>
                   </component>
                   <component id="7a822" class="javax.swing.JSpinner" binding="updateDelaySpinner">
@@ -188,7 +188,7 @@
                       </grid>
                     </constraints>
                     <properties>
-                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.preview-update-delay.label"/>
+                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.preview-update-delay.label"/>
                     </properties>
                   </component>
                   <component id="e3e8b" class="javax.swing.JLabel">
@@ -197,7 +197,7 @@
                     </constraints>
                     <properties>
                       <font style="2"/>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.preview-update-delay.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.preview-update-delay.description"/>
                     </properties>
                   </component>
                   <component id="d58af" class="javax.swing.JSpinner" binding="parsingTimeoutSpinner">
@@ -207,7 +207,7 @@
                       </grid>
                     </constraints>
                     <properties>
-                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.parsing-timeout.label"/>
+                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.parsing-timeout.label"/>
                     </properties>
                   </component>
                   <component id="92bbe" class="javax.swing.JLabel" binding="parsingTimeoutDescriptionLabel">
@@ -216,7 +216,7 @@
                     </constraints>
                     <properties>
                       <font style="2"/>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.parsing-timeout.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.parsing-timeout.description"/>
                     </properties>
                   </component>
                 </children>
@@ -226,7 +226,7 @@
           <grid id="bbb7f" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
-              <tabbedpane title-resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" title-key="multimarkdown.settings.tab.rendering"/>
+              <tabbedpane title-resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" title-key="settings.tab.rendering"/>
             </constraints>
             <properties>
               <opaque value="true"/>
@@ -243,7 +243,7 @@
                 </properties>
                 <border type="none"/>
                 <children>
-                  <grid id="1d6e8" layout-manager="GridLayoutManager" row-count="7" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="1d6e8" layout-manager="GridLayoutManager" row-count="8" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -259,7 +259,7 @@
                     <children>
                       <vspacer id="117e2">
                         <constraints>
-                          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                          <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                         </constraints>
                       </vspacer>
                       <component id="ad9e3" class="javax.swing.JComboBox" binding="htmlThemeComboBox" custom-create="true">
@@ -270,42 +270,42 @@
                         </constraints>
                         <properties>
                           <requestFocusEnabled value="true"/>
-                          <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.custom-css-style.description"/>
+                          <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.custom-css-style.description"/>
                         </properties>
                       </component>
                       <component id="7ee05" class="javax.swing.JButton" binding="focusEditorButton" default-binding="true">
                         <constraints>
-                          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
-                          <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.focus-editor.label"/>
-                          <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.focus-editor.description"/>
+                          <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.focus-editor.label"/>
+                          <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.focus-editor.description"/>
                         </properties>
                       </component>
                       <component id="c478b" class="javax.swing.JCheckBox" binding="useCustomCssCheckBox">
                         <constraints>
-                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
-                          <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.use-custom-css.label"/>
-                          <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.use-custom-css.description"/>
+                          <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.use-custom-css.label"/>
+                          <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.use-custom-css.description"/>
                         </properties>
                       </component>
                       <component id="2be04" class="javax.swing.JButton" binding="btnLoadDefault">
                         <constraints>
-                          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
-                          <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.custom-css-load.label"/>
-                          <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.custom-css-load.description"/>
+                          <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.custom-css-load.label"/>
+                          <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.custom-css-load.description"/>
                         </properties>
                       </component>
                       <component id="b4f4f" class="javax.swing.JButton" binding="clearCustomCssButton">
                         <constraints>
-                          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
-                          <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.custom-css-reset.label"/>
+                          <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.custom-css-reset.label"/>
                         </properties>
                       </component>
                       <component id="21388" class="javax.swing.JList" binding="htmlThemeList" custom-create="true">
@@ -316,7 +316,16 @@
                         </constraints>
                         <properties>
                           <selectionMode value="0"/>
-                          <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.custom-css-style.description"/>
+                          <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.custom-css-style.description"/>
+                        </properties>
+                      </component>
+                      <component id="68747" class="javax.swing.JCheckBox" binding="useHighlightJsCheckBox">
+                        <constraints>
+                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.use-highlight-js.label"/>
+                          <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.use-highlight-js.description"/>
                         </properties>
                       </component>
                     </children>
@@ -346,7 +355,7 @@
           <grid id="9c9ce" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
-              <tabbedpane title-resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" title-key="multimarkdown.settings.tab.parser"/>
+              <tabbedpane title-resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" title-key="settings.tab.parser"/>
             </constraints>
             <properties>
               <opaque value="true"/>
@@ -370,8 +379,8 @@
                       <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.definitions.label"/>
-                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.definitions.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.definitions.label"/>
+                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.definitions.description"/>
                     </properties>
                   </component>
                   <component id="899c8" class="javax.swing.JCheckBox" binding="tablesCheckBox">
@@ -379,8 +388,8 @@
                       <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.tables.label"/>
-                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.tables.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.tables.label"/>
+                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.tables.description"/>
                     </properties>
                   </component>
                   <component id="9369d" class="javax.swing.JCheckBox" binding="autoLinksCheckBox">
@@ -388,8 +397,8 @@
                       <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.auto-links.label"/>
-                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.auto-links.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.auto-links.label"/>
+                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.auto-links.description"/>
                     </properties>
                   </component>
                   <component id="473cc" class="javax.swing.JCheckBox" binding="hardWrapsCheckBox">
@@ -397,8 +406,8 @@
                       <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.hard-wraps.label"/>
-                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.hard-wraps.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.hard-wraps.label"/>
+                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.hard-wraps.description"/>
                     </properties>
                   </component>
                   <component id="a2c89" class="javax.swing.JLabel">
@@ -407,7 +416,7 @@
                     </constraints>
                     <properties>
                       <font style="2"/>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.fenced-code-block.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.fenced-code-block.description"/>
                     </properties>
                   </component>
                   <component id="7e04d" class="javax.swing.JLabel">
@@ -416,7 +425,7 @@
                     </constraints>
                     <properties>
                       <font style="2"/>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.definitions.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.definitions.description"/>
                     </properties>
                   </component>
                   <component id="2063f" class="javax.swing.JLabel">
@@ -425,7 +434,7 @@
                     </constraints>
                     <properties>
                       <font style="2"/>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.tables.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.tables.description"/>
                     </properties>
                   </component>
                   <component id="a9253" class="javax.swing.JLabel">
@@ -434,7 +443,7 @@
                     </constraints>
                     <properties>
                       <font style="2"/>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.auto-links.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.auto-links.description"/>
                     </properties>
                   </component>
                   <component id="700d2" class="javax.swing.JLabel">
@@ -443,7 +452,7 @@
                     </constraints>
                     <properties>
                       <font style="2"/>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.hard-wraps.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.hard-wraps.description"/>
                     </properties>
                   </component>
                   <component id="e9df9" class="javax.swing.JCheckBox" binding="quotesCheckBox">
@@ -451,8 +460,8 @@
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.quotes.label"/>
-                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.quotes.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.quotes.label"/>
+                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.quotes.description"/>
                     </properties>
                   </component>
                   <component id="9dc06" class="javax.swing.JLabel">
@@ -461,7 +470,7 @@
                     </constraints>
                     <properties>
                       <font style="2"/>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.quotes.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.quotes.description"/>
                     </properties>
                   </component>
                   <component id="60fd1" class="javax.swing.JCheckBox" binding="smartsCheckBox">
@@ -469,8 +478,8 @@
                       <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.smarts.label"/>
-                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.smarts.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.smarts.label"/>
+                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.smarts.description"/>
                     </properties>
                   </component>
                   <component id="8b83a" class="javax.swing.JLabel">
@@ -479,7 +488,7 @@
                     </constraints>
                     <properties>
                       <font style="2"/>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.smarts.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.smarts.description"/>
                     </properties>
                   </component>
                   <component id="cd4af" class="javax.swing.JCheckBox" binding="abbreviationsCheckBox">
@@ -487,8 +496,8 @@
                       <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.abbreviations.label"/>
-                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.abbreviations.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.abbreviations.label"/>
+                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.abbreviations.description"/>
                     </properties>
                   </component>
                   <component id="a8b1b" class="javax.swing.JLabel">
@@ -497,7 +506,7 @@
                     </constraints>
                     <properties>
                       <font style="2"/>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.abbreviations.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.abbreviations.description"/>
                     </properties>
                   </component>
                   <component id="e5ea5" class="javax.swing.JCheckBox" binding="wikiLinksCheckBox">
@@ -505,8 +514,8 @@
                       <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.wiki-links.label"/>
-                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.wiki-links.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.wiki-links.label"/>
+                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.wiki-links.description"/>
                     </properties>
                   </component>
                   <component id="ab3ac" class="javax.swing.JLabel">
@@ -515,7 +524,7 @@
                     </constraints>
                     <properties>
                       <font style="2"/>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.wiki-links.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.wiki-links.description"/>
                     </properties>
                   </component>
                   <component id="a194b" class="javax.swing.JCheckBox" binding="strikethroughCheckBox">
@@ -523,8 +532,8 @@
                       <grid row="11" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.strikethrough.label"/>
-                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.strikethrough.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.strikethrough.label"/>
+                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.strikethrough.description"/>
                     </properties>
                   </component>
                   <component id="845c0" class="javax.swing.JLabel">
@@ -533,7 +542,7 @@
                     </constraints>
                     <properties>
                       <font style="2"/>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.strikethrough.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.strikethrough.description"/>
                     </properties>
                   </component>
                   <component id="27047" class="javax.swing.JCheckBox" binding="taskListsCheckBox">
@@ -541,8 +550,8 @@
                       <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.task-lists.label"/>
-                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.task-lists.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.task-lists.label"/>
+                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.task-lists.description"/>
                     </properties>
                   </component>
                   <component id="484bc" class="javax.swing.JLabel">
@@ -551,7 +560,7 @@
                     </constraints>
                     <properties>
                       <font style="2"/>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.task-lists.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.task-lists.description"/>
                     </properties>
                   </component>
                   <component id="96fc2" class="javax.swing.JLabel">
@@ -560,7 +569,7 @@
                     </constraints>
                     <properties>
                       <font style="2"/>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.header-space.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.header-space.description"/>
                     </properties>
                   </component>
                   <component id="bb888" class="javax.swing.JCheckBox" binding="headerSpaceCheckBox">
@@ -568,8 +577,8 @@
                       <grid row="12" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.header-space.label"/>
-                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.header-space.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.header-space.label"/>
+                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.header-space.description"/>
                     </properties>
                   </component>
                   <component id="6beaf" class="javax.swing.JCheckBox" binding="suppressInlineHTMLCheckBox">
@@ -577,8 +586,8 @@
                       <grid row="15" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.suppress-inline-html.label"/>
-                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.suppress-inline-html.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.suppress-inline-html.label"/>
+                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.suppress-inline-html.description"/>
                     </properties>
                   </component>
                   <component id="6f718" class="javax.swing.JLabel">
@@ -587,7 +596,7 @@
                     </constraints>
                     <properties>
                       <font style="2"/>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.suppress-inline-html.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.suppress-inline-html.description"/>
                     </properties>
                   </component>
                   <component id="cbaa8" class="javax.swing.JCheckBox" binding="suppressHTMLBlocksCheckBox">
@@ -595,8 +604,8 @@
                       <grid row="16" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.suppress-html-blocks.label"/>
-                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.suppress-html-blocks.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.suppress-html-blocks.label"/>
+                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.suppress-html-blocks.description"/>
                     </properties>
                   </component>
                   <component id="6b0d3" class="javax.swing.JLabel">
@@ -605,7 +614,7 @@
                     </constraints>
                     <properties>
                       <font style="2"/>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.suppress-html-blocks.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.suppress-html-blocks.description"/>
                     </properties>
                   </component>
                   <component id="555db" class="javax.swing.JCheckBox" binding="fencedCodeBlocksCheckBox">
@@ -613,8 +622,8 @@
                       <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.fenced-code-block.label"/>
-                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.fenced-code-block.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.fenced-code-block.label"/>
+                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.fenced-code-block.description"/>
                     </properties>
                   </component>
                   <component id="bf835" class="javax.swing.JCheckBox" binding="anchorLinksCheckBox">
@@ -622,8 +631,8 @@
                       <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.anchor-links.label"/>
-                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.anchor-links.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.anchor-links.label"/>
+                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.anchor-links.description"/>
                     </properties>
                   </component>
                   <component id="e8237" class="javax.swing.JLabel">
@@ -632,7 +641,7 @@
                     </constraints>
                     <properties>
                       <font style="2"/>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.anchor-links.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.anchor-links.description"/>
                     </properties>
                   </component>
                   <component id="d4489" class="javax.swing.JCheckBox" binding="forceListParaCheckBox">
@@ -640,8 +649,8 @@
                       <grid row="14" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.force-item-para.label"/>
-                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.force-item-para.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.force-item-para.label"/>
+                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.force-item-para.description"/>
                     </properties>
                   </component>
                   <component id="77803" class="javax.swing.JLabel">
@@ -650,7 +659,7 @@
                     </constraints>
                     <properties>
                       <font style="2"/>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.force-item-para.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.force-item-para.description"/>
                     </properties>
                   </component>
                   <component id="ccbaa" class="javax.swing.JCheckBox" binding="relaxedHRulesCheckBox">
@@ -658,8 +667,8 @@
                       <grid row="13" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.relaxed-hrules.label"/>
-                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.relaxed-hrules.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.relaxed-hrules.label"/>
+                      <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.relaxed-hrules.description"/>
                     </properties>
                   </component>
                   <component id="3dddc" class="javax.swing.JLabel">
@@ -668,7 +677,7 @@
                     </constraints>
                     <properties>
                       <font style="2"/>
-                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="multimarkdown.settings.relaxed-hrules.description"/>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.relaxed-hrules.description"/>
                     </properties>
                   </component>
                 </children>
@@ -683,7 +692,7 @@
           <grid id="20e3e" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
-              <tabbedpane title-resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" title-key="multimarkdown.settings.tab.notices"/>
+              <tabbedpane title-resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" title-key="settings.tab.notices"/>
             </constraints>
             <properties>
               <opaque value="true"/>
@@ -734,7 +743,7 @@
               <maximumSize width="2147483647" height="75"/>
               <minimumSize width="600" height="50"/>
               <opaque value="false"/>
-              <text value="&lt;html&gt;&#10;  &lt;head&gt;&#10;    &#10;  &lt;/head&gt;&#10;  &lt;body&gt;&#10;  &lt;/body&gt;&#10;&lt;/html&gt;&#10;"/>
+              <text value="&lt;html&gt;&#10;  &lt;head&gt;&#10;&#10;  &lt;/head&gt;&#10;  &lt;body&gt;&#10;    &lt;p style=&quot;margin-top: 0&quot;&gt;&#10;      &#10;    &lt;/p&gt;&#10;  &lt;/body&gt;&#10;&lt;/html&gt;&#10;"/>
               <verifyInputWhenFocusTarget value="false"/>
             </properties>
           </component>

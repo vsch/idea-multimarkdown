@@ -30,7 +30,7 @@ public class MultiMarkdownLanguageCodeStyleSettingsProvider extends LanguageCode
         } catch (Exception e) {
             LOGGER.error("Failed loading sample Markdown document", e);
         }
-        return MultiMarkdownBundle.message("multimarkdown.colorsettings.sample-loading-error");
+        return MultiMarkdownBundle.message("colorsettings.sample-loading-error");
     }
 
     @NotNull

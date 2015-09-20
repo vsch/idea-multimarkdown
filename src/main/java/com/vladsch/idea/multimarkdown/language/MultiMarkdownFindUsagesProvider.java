@@ -20,28 +20,28 @@
  */
 package com.vladsch.idea.multimarkdown.language;
 
+import com.intellij.lang.cacheBuilder.DefaultWordsScanner;
+import com.intellij.lang.cacheBuilder.WordOccurrence;
 import com.intellij.lang.cacheBuilder.WordsScanner;
 import com.intellij.lang.findUsages.FindUsagesProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.tree.TokenSet;
+import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.parser.MultiMarkdownLexer;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
-import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownWikiLinkImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.COMMENT;
-import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.WIKI_LINK_REF;
+import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.*;
 
 public class MultiMarkdownFindUsagesProvider implements FindUsagesProvider {
 
     @Nullable
     @Override
     public WordsScanner getWordsScanner() {
-        return /**
+        /**
          * Creates a new instance of the words scanner.
          *
          * @param lexer              the lexer used for breaking the text into tokens.
@@ -51,12 +51,28 @@ public class MultiMarkdownFindUsagesProvider implements FindUsagesProvider {
          * @param skipCodeContextTokenSet the set of token types which should not be considered as code context.
          */
 
-                new DefaultWordsScanner(new MultiMarkdownLexer(),
-                        TokenSet.EMPTY,
-                        TokenSet.create(COMMENT),
-                        TokenSet.create(WIKI_LINK_REF),
-                        //TokenSet.create(TEXT),
-                        TokenSet.EMPTY);
+        if (false) {
+            MultiMarkdownWordsScanner wordsScanner = new MultiMarkdownWordsScanner(new MultiMarkdownLexer(),
+                    TokenSet.create(WIKI_LINK_REF),
+                    TokenSet.create(COMMENT),
+                    TokenSet.EMPTY,
+                    TokenSet.create(NONE), 3);
+            wordsScanner.setMayHaveFileRefsInLiterals(false);
+            wordsScanner.setKeepCodeTokensWhole(false);
+            wordsScanner.setUseSpaceBreaks(false);
+            wordsScanner.setDefaultKind(WordOccurrence.Kind.LITERALS);
+            return wordsScanner;
+        } else {
+            DefaultWordsScanner wordsScanner = new DefaultWordsScanner(new MultiMarkdownLexer(),
+                    //TokenSet.create(TEXT, WIKI_LINK_REF, WIKI_LINK),
+                    TokenSet.create(WIKI_LINK_REF),
+                    TokenSet.create(COMMENT),
+                    TokenSet.EMPTY,
+                    TokenSet.EMPTY);
+
+            //wordsScanner.setMayHaveFileRefsInLiterals(false);
+            return wordsScanner;
+        }
     }
 
     @Override
@@ -74,7 +90,7 @@ public class MultiMarkdownFindUsagesProvider implements FindUsagesProvider {
     @Override
     public String getType(@NotNull PsiElement element) {
         if (element instanceof MultiMarkdownWikiPageRef) {
-            return "wiki page ref";
+            return MultiMarkdownBundle.message("findusages.wikilink.page-ref");
         } else {
             return "";
         }

@@ -126,6 +126,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
     private JTabbedPane tabbedPane;
     private JEditorPane noticesEditorPane;
     private JLabel enableFirebugLabel;
+    private JCheckBox useHighlightJsCheckBox;
 
     // need this so that we dont try to access components before they are created
     public @Nullable Object getComponent(@NotNull String persistName) {
@@ -162,6 +163,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         if (persistName.equals("htmlThemeList")) return htmlThemeList;
         if (persistName.equals("pageZoomSpinner")) return pageZoomSpinner;
         if (persistName.equals("tabbedPane")) return tabbedPane;
+        if (persistName.equals("useHighlightJsCheckBox")) return useHighlightJsCheckBox;
 
         return null;
     }
@@ -201,6 +203,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         boolean useNewPreview = !useOldPreviewCheckBox.isSelected();
         enableFirebugCheckBox.setEnabled(useNewPreview);
         enableFirebugLabel.setEnabled(useNewPreview);
+        useHighlightJsCheckBox.setEnabled(useNewPreview);
         pageZoomSpinner.setEnabled(useNewPreview);
         pageZoomLabel.setEnabled(useNewPreview);
         maxImgWidthSpinner.setEnabled(!useNewPreview);
@@ -220,7 +223,8 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
                 //String base64Css = Base64.encodeBase64URLSafeString(MultiMarkdownGlobalSettings.getInstance().getCssText().getBytes(Charset.forName("utf-8")));
                 //String cssText = new String(Base64.decodeBase64(base64Css), Charset.forName("utf-8"));
                 MultiMarkdownGlobalSettings settings = MultiMarkdownGlobalSettings.getInstance();
-                textCustomCss.setText(settings.getCssFileText(htmlThemeList.getSelectedIndex(), settings.isFxHtmlPreview()));
+                textCustomCss.setText(settings.getCssFileText(htmlThemeList.getSelectedIndex(), settings.isFxHtmlPreview()) +
+                        (settings.isFxHtmlPreview() && useHighlightJsCheckBox.isSelected() ? settings.getHljsCssFileText(htmlThemeList.getSelectedIndex(), settings.isFxHtmlPreview()) : ""));
             }
         });
 
@@ -254,6 +258,12 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
                 updateCustomCssControls();
             }
         });
+
+        if (MultiMarkdownGlobalSettings.getInstance().fxPreviewFailedBuild.isFailedBuild()) {
+            // set it and disable
+            useOldPreviewCheckBox.setSelected(true);
+            useOldPreviewCheckBox.setEnabled(false);
+        }
 
         updateUseOldPreviewControls();
         useOldPreviewCheckBox.addItemListener(new ItemListener() {
@@ -341,7 +351,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         // create the css themes combobox, make it locale aware
         ArrayList<String> options = new ArrayList<String>(10);
         for (int i = 0; ; i++) {
-            String message = MultiMarkdownBundle.messageOrBlank("multimarkdown.settings.html-theme-" + (i + 1));
+            String message = MultiMarkdownBundle.messageOrBlank("settings.html-theme-" + (i + 1));
             if (message.isEmpty()) break;
             options.add(message);
         }

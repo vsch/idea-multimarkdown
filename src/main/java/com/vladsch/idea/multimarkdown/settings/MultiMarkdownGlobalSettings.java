@@ -39,6 +39,7 @@ import org.pegdown.Extensions;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URL;
 
 @State(
         name = "MultiMarkdownSettings",
@@ -52,12 +53,12 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
 
     @NonNls
     public static final String PREVIEW_STYLESHEET_LIGHT = "/com/vladsch/idea/multimarkdown/default.css";
-
     public static final String PREVIEW_STYLESHEET_DARK = "/com/vladsch/idea/multimarkdown/darcula.css";
-
     public static final String PREVIEW_FX_STYLESHEET_LIGHT = "/com/vladsch/idea/multimarkdown/default-fx.css";
-
     public static final String PREVIEW_FX_STYLESHEET_DARK = "/com/vladsch/idea/multimarkdown/darcula-fx.css";
+    public static final String PREVIEW_FX_HLJS_STYLESHEET_LIGHT = "/com/vladsch/idea/multimarkdown/hljs-default.css";
+    public static final String PREVIEW_FX_HLJS_STYLESHEET_DARK = "/com/vladsch/idea/multimarkdown/hljs-darcula.css";
+    public static final String PREVIEW_FX_HIGHLIGHT_JS = "/com/vladsch/idea/multimarkdown/highlight.pack.js";
 
     public static final String NOTIFICATION_GROUP_ISSUES = "MultiMarkdown Alerts";
 
@@ -108,6 +109,7 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     final public Settings.BooleanSetting todoComments = settings.BooleanSetting(false, "todoComments", 0);
     final public Settings.BooleanSetting useCustomCss = settings.BooleanSetting(false, "useCustomCss", 0);
     final public Settings.BooleanSetting enableFirebug = settings.BooleanSetting(false, "enableFirebug", 0);
+    final public Settings.BooleanSetting useHighlightJs = settings.BooleanSetting(true, "useHighlightJs", 0);
     final public Settings.IntegerSetting htmlTheme = settings.IntegerSetting(HTML_THEME_UI, "htmlTheme");
     final public Settings.IntegerSetting maxImgWidth = settings.IntegerSetting(900, "maxImgWidth");
     final public Settings.IntegerSetting parsingTimeout = settings.IntegerSetting(10000, "parsingTimeout");
@@ -116,11 +118,16 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     final public Settings.IntegerSetting tabbedPaneIndex = settings.IntegerSetting(0, "tabbedPaneIndex");
     final public Settings.StringSetting customCss = settings.StringSetting("", "customCss");
     final public Settings.StringSetting customFxCss = settings.StringSetting("", "customFxCss");
-    final public Settings.StringSetting scratchFileServiceFailedBuild = settings.StringSetting("", "scratchFileServiceFailed");
     final public Settings.ElementSetting customCssEditorState = settings.ElementSetting(null, "customCssEditorState");
     final public Settings.ElementSetting customFxCssEditorState = settings.ElementSetting(null, "customFxCssEditorState");
     final public Settings.BooleanSetting wasShownDarkBug = settings.BooleanSetting(false, "wasShownDarkBug", 0);
     final public Settings.BooleanSetting useOldPreview = settings.BooleanSetting(false, "useOldPreview", 0);
+
+    // when loading of classes fails for some earlier builds these are used to store the build number to avoid retrying until the build changes
+    final public Settings.FailedBuildSetting scratchFileServiceFailed = settings.FailedBuildSetting("", "scratchFileServiceFailed");
+    final public Settings.FailedBuildSetting lightParserFailedBuild = settings.FailedBuildSetting("", "lightParserFailedBuild");
+    final public Settings.FailedBuildSetting fxPreviewFailedBuild = settings.FailedBuildSetting("", "fxPreviewFailedBuild", true);
+    //final public Settings.FailedBuildSetting fxPlatformFailedBuild = settings.FailedBuildSetting("", "fxPlatformFailedBuild", true);
 
     public boolean isFxHtmlPreview() {
         return isFxHtmlPreview;
@@ -133,8 +140,7 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     static boolean isFxHtmlPreview = false;
 
     public Element getState() {
-        Element multiMarkdownSettings = settings.getState("MultiMarkdownSettings");
-        return multiMarkdownSettings;
+        return settings.getState("MultiMarkdownSettings");
     }
 
     public void loadState(@NotNull Element element) {
@@ -162,6 +168,14 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
         return isDarkHtmlPreview() ? MultiMarkdownPlugin.getInstance().getUrlDarculaFxCss() : MultiMarkdownPlugin.getInstance().getUrlDefaultFxCss();
     }
 
+    public @NotNull String getHljsCssExternalForm(boolean isFxHtmlPreview) {
+        return isDarkHtmlPreview() ? MultiMarkdownPlugin.getInstance().getUrlHljsDarculaFxCss() : MultiMarkdownPlugin.getInstance().getUrlHljsDefaultFxCss();
+    }
+
+    public @NotNull String getHighlighJsExternalForm(boolean isFxHtmlPreview) {
+        return MultiMarkdownPlugin.getInstance().getUrlHighlightJs();
+    }
+
     public @Nullable String getUrlCustomFont() {
         return MultiMarkdownPlugin.getInstance().getUrlCustomFont();
     }
@@ -174,8 +188,21 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
         }
     }
 
+    public @NotNull String getHljsCssFilePath(int htmlTheme, boolean isFxHtmlPreview) {
+        if (isFxHtmlPreview) {
+            return isDarkHtmlPreview(htmlTheme) ? PREVIEW_FX_HLJS_STYLESHEET_DARK : PREVIEW_FX_HLJS_STYLESHEET_LIGHT;
+        } else {
+            return null;
+        }
+    }
+
     public @NotNull java.net.URL getCssFileURL(int htmlTheme, boolean isFxHtmlPreview) {
         return MultiMarkdownGlobalSettings.class.getResource(getCssFilePath(htmlTheme, isFxHtmlPreview));
+    }
+
+    public @NotNull java.net.URL getHljsCssFileURL(int htmlTheme, boolean isFxHtmlPreview) {
+        String hljsCssFilePath = getHljsCssFilePath(htmlTheme, isFxHtmlPreview);
+        return hljsCssFilePath == null ? null : MultiMarkdownGlobalSettings.class.getResource(hljsCssFilePath);
     }
 
     public @NotNull java.net.URL getFirebugLiteFileURL() throws MalformedURLException {
@@ -186,6 +213,21 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
         String htmlText = "";
         try {
             htmlText = Resources.toString(getCssFileURL(htmlTheme, isFxHtmlPreview), Charsets.UTF_8);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return htmlText;
+    }
+
+    public @NotNull String getHljsCssFileText(int htmlTheme, boolean isFxHtmlPreview) {
+        String htmlText = "";
+        try {
+            URL hljsCssFileURL = getHljsCssFileURL(htmlTheme, isFxHtmlPreview);
+            if (hljsCssFileURL != null) {
+                htmlText = Resources.toString(hljsCssFileURL, Charsets.UTF_8);
+            } else {
+                htmlText = "";
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }

@@ -34,7 +34,7 @@ import javax.swing.*;
 public class MultiMarkdownFileIconProvider implements FileIconProvider {
     @Nullable @Override public Icon getIcon(@NotNull VirtualFile file, @Iconable.IconFlags int flags, @Nullable Project project) {
         if (MultiMarkdownHtmlEditorProvider.accept(file)) {
-            return MultiMarkdownFile.isWikiPage(file) ? MultiMarkdownIcons.WIKI : MultiMarkdownIcons.FILE;
+            return MultiMarkdownProjectComponent.isWikiPage(file) ? MultiMarkdownIcons.WIKI : MultiMarkdownIcons.FILE;
         }
         return null;
     }

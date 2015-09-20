@@ -23,9 +23,9 @@ package com.vladsch.idea.multimarkdown.editor;
 
 //import com.intellij.ide.scratch.ScratchFileService;
 
+import com.intellij.ide.scratch.ScratchFileService;
 import com.intellij.lang.Language;
 import com.intellij.lang.PerFileMappings;
-import com.intellij.openapi.application.ApplicationInfo;
 import com.intellij.openapi.fileEditor.*;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.PossiblyDumbAware;
@@ -34,52 +34,45 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.vladsch.idea.multimarkdown.MultiMarkdownFileType;
 import com.vladsch.idea.multimarkdown.MultiMarkdownFileTypeFactory;
 import com.vladsch.idea.multimarkdown.MultiMarkdownLanguage;
+import com.vladsch.idea.multimarkdown.settings.FailedBuildRunnable;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
-
-import java.lang.reflect.Method;
+import org.jetbrains.annotations.Nullable;
 
 public class MultiMarkdownPreviewEditorProvider implements FileEditorProvider, PossiblyDumbAware {
 
     public static final String EDITOR_TYPE_ID = MultiMarkdownLanguage.NAME + "PreviewEditor";
 
-    public static boolean accept(@NotNull VirtualFile file) {
+    public static boolean accept(@NotNull final VirtualFile file) {
         String fileExt = file.getExtension();
         FileType fileType = file.getFileType();
         boolean doAccept = fileType instanceof MultiMarkdownFileType;
-        String ideaBuild = ApplicationInfo.getInstance().getBuild().asString();
-        String scratchFailedBuild = MultiMarkdownGlobalSettings.getInstance().scratchFileServiceFailedBuild.getValue();
-        boolean checkScratchFileService = !scratchFailedBuild.equals(ideaBuild);
 
-        if (!doAccept && checkScratchFileService) {
-            boolean failedScratchFileService = true;
+        if (!doAccept) {
+            doAccept = MultiMarkdownGlobalSettings.getInstance().scratchFileServiceFailed.runBuild(new FailedBuildRunnable<Boolean>() {
+                @Nullable @Override
+                public Boolean runCanFail() throws Throwable {
+                    // Issue: #14 scratch files have to be matched differently
+                    ScratchFileService fileService = ScratchFileService.getInstance();
+                    PerFileMappings<Language> scratchesMapping = fileService.getScratchesMapping();
+                    Language language = scratchesMapping.getMapping(file);
+                    return language instanceof MultiMarkdownLanguage;
 
-            try {
-                // Issue: #14 scratch files have to be matched differently
-                //ScratchFileService fileService = ScratchFileService.getInstance();
-                //PerFileMappings<Language> scratchesMapping = fileService.getScratchesMapping();
-                //Language language = scratchesMapping.getMapping(file);
-                //doAccept = language instanceof MultiMarkdownLanguage;
+                    //// Issue: #15 class not found ScratchFileService, so we take care of it through reflection
+                    //Class<?> ScratchFileService = Class.forName("com.intellij.ide.scratch.ScratchFileService");
+                    //Method getInstance = ScratchFileService.getMethod("getInstance");
+                    //Method getScratchesMapping = ScratchFileService.getMethod("getScratchesMapping");
+                    //Object fileService = getInstance.invoke(ScratchFileService);
+                    //PerFileMappings<Language> mappings = (PerFileMappings<Language>) getScratchesMapping.invoke(fileService);
+                    //Language language = mappings.getMapping(file);
+                    //return language instanceof MultiMarkdownLanguage;
+                }
 
-                // Issue: #15 class not found ScratchFileService, so we take care of it through reflection
-                Class<?> ScratchFileService = Class.forName("com.intellij.ide.scratch.ScratchFileService");
-                Method getInstance = ScratchFileService.getMethod("getInstance");
-                Method getScratchesMapping = ScratchFileService.getMethod("getScratchesMapping");
-                Object fileService = getInstance.invoke(ScratchFileService);
-                PerFileMappings<Language> mappings = (PerFileMappings<Language>) getScratchesMapping.invoke(fileService);
-                Language language = mappings.getMapping(file);
-                doAccept = language instanceof MultiMarkdownLanguage;
-                failedScratchFileService = false;
-            } catch (NoClassDefFoundError er) {
-                //e.printStackTrace();
-            } catch (Exception ex) {
-                //e.printStackTrace();
-            }
-
-            if (failedScratchFileService) {
-                MultiMarkdownGlobalSettings.getInstance().scratchFileServiceFailedBuild.setValue(ideaBuild);
-            }
+                @Nullable @Override public Boolean run() {
+                    return false;
+                }
+            });
         }
 
         if (!doAccept && fileExt != null) {

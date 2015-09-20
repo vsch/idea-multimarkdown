@@ -30,7 +30,11 @@ public interface MultiMarkdownWikiPageRef extends MultiMarkdownNamedElement {
     String getName();
 
     @Override
+    // this one will only change the name part, not the path part of the link
     PsiElement setName(String newName);
+
+    // this one will preserve the path and only change the name unless fileMoved is true
+    PsiElement setName(String newName, boolean fileMoved);
 
     @Override
     PsiElement getNameIdentifier();

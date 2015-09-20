@@ -15,6 +15,10 @@ This product is based on or uses the following copyrighted materials released un
         Copyright (C) JetBrains s.r.o.
         https://www.jetbrains.com/idea/
         
+    *   includes highlight.js 
+        Copyright (c) 2006, Ivan Sagalaev, <https://github.com/isagalaev/highlight.js>
+        <https://github.com/isagalaev/highlight.js/blob/master/LICENSE>               
+        
     *   parts based on https://github.com/sindresorhus/github-markdown-css
         Copyright (c) 2014-2015 Sindre Sorhus <http://sindresorhus.com>
         <https://opensource.org/licenses/MIT>               

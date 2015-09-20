@@ -24,11 +24,18 @@
 package com.vladsch.idea.multimarkdown.editor;
 
 import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.openapi.vfs.VirtualFileSystem;
 import org.pegdown.LinkRenderer;
 import org.pegdown.ast.*;
 
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 import static org.pegdown.FastEncoder.obfuscate;
@@ -52,11 +59,11 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
         this.missingTargetClass = missingTargetClass;
     }
 
+    // TODO: need to implement this using ProjectComponent methods so that we don't need
+    // to go into areas that may have threading issues.
     public Rendering checkTarget(Rendering rendering) {
         if (project != null && document != null && missingTargetClass != null) {
-            boolean linkFound = MultiMarkdownPathResolver.canResolveLink(project, document, rendering.href);
-
-            if (!linkFound) {
+            if (!rendering.href.startsWith("#") && !MultiMarkdownPathResolver.canResolveLink(project, document, rendering.href)) {
                 rendering.withAttribute("class", missingTargetClass);
             }
         }
@@ -110,7 +117,7 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
 
             // vsch: need our own extension for the file
             url = "./" + URLEncoder.encode(url.replace(' ', '-'), "UTF-8") + ".md";
-            return new Rendering(url, text);
+            return checkTarget(new Rendering(url, text));
         } catch (UnsupportedEncodingException e) {
             throw new IllegalStateException();
         }

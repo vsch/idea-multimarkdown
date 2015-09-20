@@ -28,6 +28,7 @@ import com.intellij.lang.Language;
 import com.intellij.lang.ParserDefinition;
 import com.intellij.lang.PsiParser;
 import com.intellij.lexer.Lexer;
+import com.intellij.openapi.application.ApplicationInfo;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
@@ -38,7 +39,10 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownLanguage;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownTokenTypeSets;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes;
+import com.vladsch.idea.multimarkdown.settings.FailedBuildRunnable;
+import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class MultiMarkdownParserDefinition implements ParserDefinition {
 
@@ -68,7 +72,15 @@ public class MultiMarkdownParserDefinition implements ParserDefinition {
 
     @NotNull
     public PsiParser createParser(final Project project) {
-        return new MultiMarkdownParser();
+        return MultiMarkdownGlobalSettings.getInstance().lightParserFailedBuild.runBuild(new FailedBuildRunnable<PsiParser>() {
+            @Nullable @Override public PsiParser runCanFail() throws Throwable {
+                return new MultiMarkdownLightParser();
+            }
+
+            @Nullable @Override public PsiParser run() {
+                return new MultiMarkdownParser();
+            }
+        });
     }
 
     @Override

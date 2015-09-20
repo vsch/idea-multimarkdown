@@ -37,7 +37,7 @@ public class MultiMarkdownReferenceContributor extends PsiReferenceContributor {
         //                // TODO: this is useless for references, we have references to files not wiki page references
         //                MultiMarkdownFile fileNode = (MultiMarkdownFile) element;
         //                if (fileNode.isWikiPage()) {
-        //                    return new PsiReference[]{new MultiMarkdownReference(element, fileNode.getWikiLinkName())};
+        //                    return new PsiReference[]{new MultiMarkdownReference(element, fileNode.getWikiPageRef())};
         //                }
         //                return new PsiReference[0];
         //            }

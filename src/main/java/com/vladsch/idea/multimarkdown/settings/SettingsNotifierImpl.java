@@ -26,12 +26,14 @@ package com.vladsch.idea.multimarkdown.settings;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class SettingsNotifierImpl<D> implements SettingsNotifier {
 
-    protected Set<WeakReference<SettingsListener<D>>> listeners;
+    final protected Set<WeakReference<SettingsListener<D>>> listeners = new HashSet<WeakReference<SettingsListener<D>>>();
 
     protected final WeakReference<D> delegator;
 
@@ -45,12 +47,23 @@ public class SettingsNotifierImpl<D> implements SettingsNotifier {
     }
 
     public void addListener(@NotNull final SettingsListener<D> listener) {
-        if (listeners == null) listeners = new HashSet<WeakReference<SettingsListener<D>>>();
-        listeners.add(new WeakReference<SettingsListener<D>>(listener));
+        synchronized (listeners) {
+            removeListener(listener);
+            listeners.add(new WeakReference<SettingsListener<D>>(listener));
+        }
     }
 
     public void removeListener(@NotNull final SettingsListener<D> listener) {
-        if (listeners != null) listeners.remove(listener);
+        synchronized (listeners) {
+            Object[] listenerList = listeners.toArray(new Object[listeners.size()]);
+
+            for (final Object listenerObj : listenerList) {
+                WeakReference<SettingsListener<D>> listenerRef = (WeakReference<SettingsListener<D>>) listenerObj;
+                if (listenerRef.get() == null || listenerRef.get() == listener) {
+                    listeners.remove(listenerRef);
+                }
+            }
+        }
     }
 
     public int startSuspendNotifications() {
@@ -81,15 +94,17 @@ public class SettingsNotifierImpl<D> implements SettingsNotifier {
     }
 
     public void notifyListeners() {
-        if (suspendNotifications > 0) return;
+        final D myDelegator = delegator.get();
+
+        if (suspendNotifications > 0 || myDelegator == null) return;
 
         if (groupNotifications > 0) {
             needToNotify = true;
         } else {
-            SettingsListener<D> listener;
-            if (listeners != null) {
+            synchronized (listeners) {
+                SettingsListener<D> listener;
                 for (final WeakReference<SettingsListener<D>> listenerRef : listeners) {
-                    if ((listener = listenerRef.get()) != null) listener.handleSettingsChanged(delegator.get());
+                    if ((listener = listenerRef.get()) != null) listener.handleSettingsChanged(myDelegator);
                 }
             }
         }
