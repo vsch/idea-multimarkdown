@@ -47,7 +47,7 @@
     </div>
     ]]></description>
 
-  <version>1.1.7.1</version>
+  <version>1.1.7.2</version>
   <idea-version since-build="133.1711"/>
   <change-notes><![CDATA[
     <ul><h3><b>1.1.8 - Cosmetic Changes.</b></h3>
@@ -55,6 +55,7 @@
       <li>Add option to allow customizing highlight.js in the custom css.</li>
       <li>Change separated color and font from layout for javafx preview css. Now layout is contained in a separate css. Custom Css can contain zero or more of: color, layout, hightlight.js css.</li>
       <li>Change font ordering for javafx preview css trying to improve poor font rendering.</li>
+      <li>Fix #32, spell checking inspections, broken since version 1.1.5.</li>
     </ul>
     <ul><h3><b>1.1.7 - Wiki Link Refactoring and highlight.js added</b></h3>
       <li>Fix make html preview and text tabs dumb aware so that they load properly in older versions if the index is not ready.</li>
