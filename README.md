@@ -26,7 +26,9 @@ idea-multimarkdown
 </table>
 
 
-### Version 1.1.6 Adds Wiki Link Refactoring/Code Completion, etc. 
+### Version 1.1.7 Adds highlight.js syntax highlighting and wiki link refactoring/completions
+
+* new preview tab now supports highlight.js for syntax highlighting verbatim code blocks.
 
 Wiki links are the first to get the boost to IntelliJ intelligence:
 
@@ -35,13 +37,13 @@ Wiki links are the first to get the boost to IntelliJ intelligence:
 * Moving a file within the project tree also updates the links. 
 * Navigate to the file a wiki link targets in the markdown source via go to definition or line marker. 
 * Find all wiki link references to a markdown file in the project via find usages on the file node in the project view
-* Quick fix to create a wiki markdown file for wiki links with missing files.
+* Quick fix to create a wiki markdown file for wiki links with missing files, also checks for spaces in target file name, dashes in wiki link target reference and mismatched case between link target and file name of the target.
 * Different icon <img src="https://github.com/vsch/idea-multimarkdown/raw/master/src/main/resources/com/vladsch/idea/multimarkdown/multimarkdown%402x.png" width="16" height="17" alt="MultiMarkdown file Icon"> for markdown files, <img src="https://github.com/vsch/idea-multimarkdown/raw/master/src/main/resources/com/vladsch/idea/multimarkdown/wikimarkdown%402x.png" width="16" height="17" alt="Wiki Page Icon"> is used for files whose ancestor directory has a `.wiki` extension. These are treated as GitHub wiki pages and will display pretty much as they do on GitHub, minus the footer and sidebar. Footer and sidebar are TBI for MultiMarkdown. 
 * Many more changes, see the plugin version notes on the JetBrains page or in the IDE <kbd>Settings > Plugins > MultiMarkdown</kbd>
 
 *[TBI]:To Be Implemented.
 
-### Version 1.1 out and humming
+### Version 1.1.x out and humming
 
 I have implemented a JavaFX WebView based HTML Preview Tab and the results are stunning. Not only was I able to make it look like GitHub's markdown, which I could not do with the old preview, but it is a joy to work with and maintain compared to `HTMLEditorKit`.
 

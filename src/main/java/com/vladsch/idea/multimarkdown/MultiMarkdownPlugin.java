@@ -54,6 +54,9 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
 
     private String urlDefaultFxCss;
     private String urlDarculaFxCss;
+    private String urlHljsDefaultFxCss;
+    private String urlHljsDarculaFxCss;
+    private String urlHighlightJs;
     private String urlCustomFxCss;
     private String urlCustomFont;
     private File fileCustomFxCss;
@@ -78,6 +81,18 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
 
     public String getUrlCustomFxCss() {
         return urlCustomFxCss;
+    }
+
+    public String getUrlHljsDefaultFxCss() {
+        return urlHljsDefaultFxCss;
+    }
+
+    public String getUrlHljsDarculaFxCss() {
+        return urlHljsDarculaFxCss;
+    }
+
+    public String getUrlHighlightJs() {
+        return urlHighlightJs;
     }
 
     public MultiMarkdownPlugin() {
@@ -123,11 +138,17 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
         urlCustomFxCss = null;
         urlDefaultFxCss = null;
         urlDarculaFxCss = null;
+        urlHljsDefaultFxCss = null;
+        urlHljsDarculaFxCss = null;
+        urlHighlightJs = null;
         globalSettingsListener = null;
 
         urlCustomFont = createCustomFontUrl();
         urlDefaultFxCss = createTempCopy(MultiMarkdownPlugin.class.getResource(MultiMarkdownGlobalSettings.PREVIEW_FX_STYLESHEET_LIGHT), "default-fx.css");
         urlDarculaFxCss = createTempCopy(MultiMarkdownPlugin.class.getResource(MultiMarkdownGlobalSettings.PREVIEW_FX_STYLESHEET_DARK), "darcula-fx.css");
+        urlHljsDefaultFxCss = createTempCopy(MultiMarkdownPlugin.class.getResource(MultiMarkdownGlobalSettings.PREVIEW_FX_HLJS_STYLESHEET_LIGHT), "hljs-default-fx.css");
+        urlHljsDarculaFxCss = createTempCopy(MultiMarkdownPlugin.class.getResource(MultiMarkdownGlobalSettings.PREVIEW_FX_HLJS_STYLESHEET_DARK), "hljs-darcula-fx.css");
+        urlHighlightJs = createTempCopy(MultiMarkdownPlugin.class.getResource(MultiMarkdownGlobalSettings.PREVIEW_FX_HIGHLIGHT_JS), "highlight.pack.js");
 
         try {
             fileCustomFxCss = createTempCopy(settings.customFxCss.getValue(), "custom-fx.css");
@@ -219,9 +240,9 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
     public PluginClassLoader getClassLoader() {
         if (myClassLoader == null) {
             PluginClassLoader pluginClassLoader = (PluginClassLoader) getClass().getClassLoader();
-            String javaHome = System.getProperties().getProperty("java.home");
+            String javaHome = System.getProperty("java.home");
             String javaFx = javaHome;// "/Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/jre";
-            String javaVersion = System.getProperties().getProperty("java.version");
+            String javaVersion = System.getProperty("java.version");
             String libDir = FileUtil.join(javaFx, "lib");
             String libExtDir = FileUtil.join(libDir, "ext");
             String fileName = FileUtil.join(libExtDir, "jfxrt.jar");

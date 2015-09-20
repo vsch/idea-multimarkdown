@@ -39,8 +39,10 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownLanguage;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownTokenTypeSets;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes;
+import com.vladsch.idea.multimarkdown.settings.FailedBuildRunnable;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class MultiMarkdownParserDefinition implements ParserDefinition {
 
@@ -70,18 +72,15 @@ public class MultiMarkdownParserDefinition implements ParserDefinition {
 
     @NotNull
     public PsiParser createParser(final Project project) {
-        String ideaBuild = ApplicationInfo.getInstance().getBuild().asString();
-        String lightParserFailedBuild = MultiMarkdownGlobalSettings.getInstance().lightParserFailedBuild.getValue();
-        boolean checkLightParser = !lightParserFailedBuild.equals(ideaBuild);
-
-        if (checkLightParser) {
-            try {
+        return MultiMarkdownGlobalSettings.getInstance().lightParserFailedBuild.runBuild(new FailedBuildRunnable<PsiParser>() {
+            @Nullable @Override public PsiParser runCanFail() throws Throwable {
                 return new MultiMarkdownLightParser();
-            } catch (NoClassDefFoundError e) {
-                // do nothing
             }
-        }
-        return new MultiMarkdownParser();
+
+            @Nullable @Override public PsiParser run() {
+                return new MultiMarkdownParser();
+            }
+        });
     }
 
     @Override

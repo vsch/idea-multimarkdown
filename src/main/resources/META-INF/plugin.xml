@@ -50,7 +50,10 @@
   <version>1.1.7</version>
   <idea-version since-build="133.1711"/>
   <change-notes><![CDATA[
-    <ul><h3><b>1.1.7 - Wiki Link Refactoring/Code Completion/Navigation</b></h3>
+    <ul><h3><b>1.1.7 - Wiki Link Refactoring and highlight.js added</b></h3>
+      <li>Fix make html preview and text tabs dumb aware so that they load properly in older versions if the index is not ready.</li>
+      <li>Fix attempting to use new preview with older versions of IDEA no longer generates an exception on the first run.</li>
+      <li>Change Use Old Preview is disabled if an attempt to use it on the current application build and jdk combination failed. It stays disabled until the build or jdk is changed.</li>
       <li>Fix Wiki Link refactoring working.</li>
       <li>Add Wiki Link quick fixes, line markers, completions.</li>
       <li>Add Wiki Link annotation for wiki links that try to go outside their home directory tree.</li>
@@ -58,6 +61,7 @@
       <li>Add Wiki Link annotation for wiki target files that contain spaces, with quick fix.</li>
       <li>Add Wiki Link annotation for case mismatch between wiki link and its target's file name, with quick fix.</li>
       <li>Add Wiki Link annotation for unresolved wiki links, with quick fixes to target another page or create the missing one.</li>
+      <li>Add highlight.js for syntax highlighting verbatim blocks, in the javafx WebView preview tab.</li>
     </ul>
     <ul><h3><b>1.1.6 - Wiki Link Refactoring/Code Completion/Navigation</b></h3>
       <li>Add rudimentary `<kbd></kbd>` styling to old preview. It's not going away, so it must be maintained.</li>

@@ -43,6 +43,7 @@ import com.intellij.openapi.editor.highlighter.EditorHighlighterFactory;
 import com.intellij.openapi.editor.impl.EditorImpl;
 import com.intellij.openapi.fileEditor.*;
 import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.UserDataHolderBase;
@@ -256,6 +257,18 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
             }
         });
 
+        project.getMessageBus().connect(this).subscribe(DumbService.DUMB_MODE, new DumbService.DumbModeListener() {
+            @Override
+            public void enteredDumbMode() {
+            }
+
+            @Override
+            public void exitDumbMode() {
+                // need to re-evaluate class link accessibility
+                delayedHtmlPreviewUpdate(false);
+            }
+        });
+
         linkRendererModified = new MultiMarkdownFxLinkRenderer(project, document, "absent");
         linkRendererNormal = new MultiMarkdownFxLinkRenderer();
 
@@ -375,35 +388,38 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                         }
                     };
 
+                    NodeList nodeList;
                     org.w3c.dom.Document doc = webEngine.getDocument();
-                    Element el = doc.getElementById("a");
-                    NodeList nodeList = doc.getElementsByTagName("a");
-                    for (int i = 0; i < nodeList.getLength(); i++) {
-                        ((EventTarget) nodeList.item(i)).addEventListener("click", listener, false);
-                    }
+                    if (doc != null) {
+                        ((EventTarget) doc.getDocumentElement()).addEventListener("contextmenu", new EventListener() {
+                            @Override public void handleEvent(Event evt) {
+                                evt.preventDefault();
+                            }
+                        }, false);
 
-                    ((EventTarget) doc.getDocumentElement()).addEventListener("contextmenu", new EventListener() {
-                        @Override public void handleEvent(Event evt) {
-                            evt.preventDefault();
+                        Element el = doc.getElementById("a");
+                        nodeList = doc.getElementsByTagName("a");
+                        for (int i = 0; i < nodeList.getLength(); i++) {
+                            ((EventTarget) nodeList.item(i)).addEventListener("click", listener, false);
                         }
-                    }, false);
 
-                    // see if we need to change img tag src to a resource, if the src is relative
-                    nodeList = doc.getElementsByTagName("img");
-                    for (int i = 0; i < nodeList.getLength(); i++) {
-                        HTMLImageElementImpl imgNode = (HTMLImageElementImpl) nodeList.item(i);
-                        String src = imgNode.getSrc();
-                        if (!src.startsWith("http://") && !src.startsWith("https://") && !src.startsWith("ftp://") && !src.startsWith("file://")) {
-                            // relative to document, change it to absolute file://
-                            VirtualFile file = FileDocumentManager.getInstance().getFile(document);
-                            VirtualFile parent = file == null ? null : file.getParent();
-                            final VirtualFile localImage = parent == null ? null : parent.findFileByRelativePath(src);
-                            try {
-                                if (localImage != null && localImage.exists()) {
-                                    imgNode.setSrc(String.valueOf(new File(localImage.getPath()).toURI().toURL()));
+                        // see if we need to change img tag src to a resource, if the src is relative
+                        nodeList = doc.getElementsByTagName("img");
+                        for (int i = 0; i < nodeList.getLength(); i++) {
+                            HTMLImageElementImpl imgNode = (HTMLImageElementImpl) nodeList.item(i);
+                            String src = imgNode.getSrc();
+                            if (!src.startsWith("http://") && !src.startsWith("https://") && !src.startsWith("ftp://") && !src.startsWith("file://")) {
+                                // relative to document, change it to absolute file://
+                                VirtualFile file = FileDocumentManager.getInstance().getFile(document);
+                                VirtualFile parent = file == null ? null : file.getParent();
+                                final VirtualFile localImage = parent == null ? null : parent.findFileByRelativePath(src);
+                                try {
+                                    if (localImage != null && localImage.exists()) {
+                                        imgNode.setSrc(String.valueOf(new File(localImage.getPath()).toURI().toURL()));
+                                    }
+                                } catch (MalformedURLException e) {
+                                    logger.error("MalformedURLException" + localImage.getPath());
                                 }
-                            } catch (MalformedURLException e) {
-                                logger.error("MalformedURLException" + localImage.getPath());
                             }
                         }
                     }
@@ -438,6 +454,22 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         String result = "" +
                 "<head>\n" +
                 "<link rel=\"stylesheet\" href=\"" + MultiMarkdownGlobalSettings.getInstance().getCssExternalForm(true) + "\" />\n" +
+                "";
+
+        // load highlight js script & css
+        if (MultiMarkdownGlobalSettings.getInstance().useHighlightJs.getValue()) {
+            if (!MultiMarkdownGlobalSettings.getInstance().useCustomCss(true)) {
+                result += "" +
+                        "<link rel=\"stylesheet\" href=\"" + MultiMarkdownGlobalSettings.getInstance().getHljsCssExternalForm(true) + "\">\n" +
+                        "";
+            }
+
+            result += "" +
+                    "<script src=\"" + MultiMarkdownGlobalSettings.getInstance().getHighlighJsExternalForm(true) + "\"></script>\n" +
+                    "";
+        }
+
+        result += "" +
                 "<title>" + escapeHtml(file.getName()) + "</title>\n" +
                 "</head>\n" +
                 "<body>\n" +
@@ -470,7 +502,9 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         //            "<script src='" + fireBugJS + "' id='FirebugLite' FirebugLite='4'/>\n" +
         //            "";
         //}
-        result += "</body>\n";
+        result += "" +
+                "<script>hljs.initHighlightingOnLoad();</script>\n" +
+                "</body>\n";
         return result;
     }
 
