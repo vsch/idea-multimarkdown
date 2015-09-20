@@ -480,6 +480,11 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         return result;
     }
 
+    public @Nullable List<MultiMarkdownFile> findRefLinkMarkdownFiles(@Nullable String refLink, int searchFlags) {
+        MultiMarkdownFile psiFile = null;
+        return findRefLinkMarkdownFiles(refLink, psiFile, searchFlags);
+    }
+
     public @Nullable List<MultiMarkdownFile> findRefLinkMarkdownFiles(@Nullable String refLink, @Nullable VirtualFile inFile, int searchFlags) {
         MultiMarkdownFile psiFile = null;
         if (inFile != null) {
