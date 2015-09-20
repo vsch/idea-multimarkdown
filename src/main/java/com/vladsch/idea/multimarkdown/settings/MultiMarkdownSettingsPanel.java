@@ -127,6 +127,9 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
     private JEditorPane noticesEditorPane;
     private JLabel enableFirebugLabel;
     private JCheckBox useHighlightJsCheckBox;
+    private JCheckBox includesHljsCssCheckBox;
+    private JCheckBox includesLayoutCssCheckBox;
+    private JCheckBox includesColorsCheckBox;
 
     // need this so that we dont try to access components before they are created
     public @Nullable Object getComponent(@NotNull String persistName) {
@@ -164,6 +167,9 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         if (persistName.equals("pageZoomSpinner")) return pageZoomSpinner;
         if (persistName.equals("tabbedPane")) return tabbedPane;
         if (persistName.equals("useHighlightJsCheckBox")) return useHighlightJsCheckBox;
+        if (persistName.equals("includesHljsCssCheckBox")) return includesHljsCssCheckBox;
+        if (persistName.equals("includesLayoutCssCheckBox")) return includesLayoutCssCheckBox;
+        if (persistName.equals("includesColorsCssCheckBox")) return includesColorsCheckBox;
 
         return null;
     }
@@ -196,6 +202,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         useCustomCssCheckBox.setEnabled(haveCustomCss);
         clearCustomCssButton.setEnabled(haveCustomCss);
         if (!haveCustomCss) useCustomCssCheckBox.setSelected(false);
+        includesHljsCssCheckBox.setEnabled(useHighlightJsCheckBox.isSelected() && useHighlightJsCheckBox.isEnabled());
         if (haveCustomCss && haveCustomizableEditor) focusEditorButton.setEnabled(((CustomizableEditorTextField) textCustomCss).haveSavedState());
     }
 
@@ -204,10 +211,16 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         enableFirebugCheckBox.setEnabled(useNewPreview);
         enableFirebugLabel.setEnabled(useNewPreview);
         useHighlightJsCheckBox.setEnabled(useNewPreview);
+        includesLayoutCssCheckBox.setEnabled(useNewPreview);
+        includesColorsCheckBox.setEnabled(useNewPreview);
         pageZoomSpinner.setEnabled(useNewPreview);
         pageZoomLabel.setEnabled(useNewPreview);
         maxImgWidthSpinner.setEnabled(!useNewPreview);
         maxImgWidthLabel.setEnabled(!useNewPreview);
+
+        btnLoadDefault.setEnabled (!useNewPreview || includesColorsCheckBox.isSelected() || includesHljsCssCheckBox.isSelected() || includesLayoutCssCheckBox.isSelected());
+
+        updateCustomCssControls();
     }
 
     public MultiMarkdownSettingsPanel() {
@@ -223,8 +236,16 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
                 //String base64Css = Base64.encodeBase64URLSafeString(MultiMarkdownGlobalSettings.getInstance().getCssText().getBytes(Charset.forName("utf-8")));
                 //String cssText = new String(Base64.decodeBase64(base64Css), Charset.forName("utf-8"));
                 MultiMarkdownGlobalSettings settings = MultiMarkdownGlobalSettings.getInstance();
-                textCustomCss.setText(settings.getCssFileText(htmlThemeList.getSelectedIndex(), settings.isFxHtmlPreview()) +
-                        (settings.isFxHtmlPreview() && useHighlightJsCheckBox.isSelected() ? settings.getHljsCssFileText(htmlThemeList.getSelectedIndex(), settings.isFxHtmlPreview()) : ""));
+                textCustomCss.setText((useOldPreviewCheckBox.isSelected() ? settings.getCssFileText(htmlThemeList.getSelectedIndex(), false)
+
+                        : (includesColorsCheckBox.isSelected() ? settings.getCssFileText(htmlThemeList.getSelectedIndex(), true) : "") +
+
+                                (includesLayoutCssCheckBox.isSelected()
+                                        ? settings.getLayoutCssFileText() : "") +
+
+                                (includesHljsCssCheckBox.isSelected() && useHighlightJsCheckBox.isSelected()
+                                        ? settings.getHljsCssFileText(htmlThemeList.getSelectedIndex(), true) : "")
+                ));
             }
         });
 
@@ -246,11 +267,13 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
             }
         });
 
-        useCustomCssCheckBox.addItemListener(new ItemListener() {
+        ItemListener itemListener1 = new ItemListener() {
             @Override public void itemStateChanged(ItemEvent e) {
                 updateCustomCssControls();
             }
-        });
+        };
+        useCustomCssCheckBox.addItemListener(itemListener1);
+        useHighlightJsCheckBox.addItemListener(itemListener1);
 
         textCustomCss.addDocumentListener(new DocumentAdapter() {
             @Override public void documentChanged(DocumentEvent e) {
@@ -266,11 +289,15 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         }
 
         updateUseOldPreviewControls();
-        useOldPreviewCheckBox.addItemListener(new ItemListener() {
+        ItemListener itemListener = new ItemListener() {
             @Override public void itemStateChanged(ItemEvent e) {
                 updateUseOldPreviewControls();
             }
-        });
+        };
+        useOldPreviewCheckBox.addItemListener(itemListener);
+        includesColorsCheckBox.addItemListener(itemListener);
+        includesHljsCssCheckBox.addItemListener(itemListener);
+        includesLayoutCssCheckBox.addItemListener(itemListener);
 
         if (htmlThemeComboBox instanceof ComboBox) {
             ((JComboBox) htmlThemeComboBox).addItemListener(new ItemListener() {
@@ -344,6 +371,8 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
 
         tippingJarEditorPane.addHyperlinkListener(listener);
         noticesEditorPane.addHyperlinkListener(listener);
+
+
     }
 
     private void createUIComponents() {

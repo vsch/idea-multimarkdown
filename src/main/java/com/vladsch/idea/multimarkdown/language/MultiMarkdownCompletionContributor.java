@@ -21,7 +21,6 @@
 package com.vladsch.idea.multimarkdown.language;
 
 import com.intellij.codeInsight.completion.*;
-import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;

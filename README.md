@@ -28,7 +28,7 @@ idea-multimarkdown
 
 ### Version 1.1.7 Adds highlight.js syntax highlighting and wiki link refactoring/completions
 
-* new preview tab now supports highlight.js for syntax highlighting verbatim code blocks.
+* new preview tab now supports [highlight.js](https://highlightjs.org/) for syntax highlighting verbatim code blocks.
 
 Wiki links are the first to get the boost to IntelliJ intelligence:
 

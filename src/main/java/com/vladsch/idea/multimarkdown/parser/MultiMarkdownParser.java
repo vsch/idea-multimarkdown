@@ -30,8 +30,7 @@ import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.*;
 
 public class MultiMarkdownParser implements PsiParser {
 
-    public void parseLight(IElementType root, PsiBuilder builder) {
-
+    public void parseLightImpl(IElementType root, PsiBuilder builder) {
         if (root == WIKI_LINK) {
             parseWikiLink(builder);
         } else if (root == WIKI_LINK_REF) {
@@ -103,7 +102,7 @@ public class MultiMarkdownParser implements PsiParser {
      */
     @NotNull
     public ASTNode parse(IElementType root, PsiBuilder builder) {
-        parseLight(root, builder);
+        parseLightImpl(root, builder);
         return builder.getTreeBuilt();
     }
 }

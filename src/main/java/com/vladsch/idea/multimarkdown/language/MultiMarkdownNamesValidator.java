@@ -22,21 +22,18 @@ package com.vladsch.idea.multimarkdown.language;
 
 import com.intellij.lang.refactoring.NamesValidator;
 import com.intellij.openapi.project.Project;
-import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
+// TODO: figure out if it is needed and try to figure out the context of this name change operation
 public class MultiMarkdownNamesValidator implements NamesValidator {
 
-    // TODO: figure out if it is needed and try to figure out the context of this name change operation
     @Override public boolean isKeyword(@NotNull String name, Project project) {
-        return true;
+        return false;
     }
 
     @Override public boolean isIdentifier(@NotNull String name, Project project) {
-        //List<MultiMarkdownFile> list = MultiMarkdownPlugin.getProjectComponent(project).findRefLinkMarkdownFiles(name);
-        return true; //list.size() > 0;
+        //List<MultiMarkdownFile> list = MultiMarkdownPlugin.getProjectComponent(project).findRefLinkMarkdownFiles(name, MARKDOWN_FILE | WANT_WIKI_REF | WIKI_REF | ALLOW_INACCESSIBLE_WIKI_REF);
+        //return list.size() > 0;
+        return false;
     }
 }

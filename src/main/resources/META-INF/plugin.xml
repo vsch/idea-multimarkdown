@@ -47,9 +47,17 @@
     </div>
     ]]></description>
 
-  <version>1.1.7</version>
+  <version>1.1.8</version>
   <idea-version since-build="133.1711"/>
   <change-notes><![CDATA[
+    <ul><h3><b>1.1.8 - Cosmetic Changes & Bug Fixes.</b></h3>
+      <li>Fix after list spacing in css for javafx preview.</li>
+      <li>Add option to allow customizing highlight.js in the custom css.</li>
+      <li>Change separated color and font from layout for javafx preview css. Now layout is contained in a separate css. Custom Css can contain zero or more of: color, layout, hightlight.js css.</li>
+      <li>Change font ordering for javafx preview css trying to improve poor font rendering.</li>
+      <li>Fix #32, spell checking inspections, broken since version 1.1.5.</li>
+      <li>Fix icons, wiki icon shown only if 'Show HTML Text' was enabled in settings.</li>
+    </ul>
     <ul><h3><b>1.1.7 - Wiki Link Refactoring and highlight.js added</b></h3>
       <li>Fix make html preview and text tabs dumb aware so that they load properly in older versions if the index is not ready.</li>
       <li>Fix attempting to use new preview with older versions of IDEA no longer generates an exception on the first run.</li>
@@ -321,7 +329,7 @@
     <lang.commenter language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownCommenter"/>
     <!--<lang.documentationProvider language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.documentation.MultiMarkdownDocumentationProvider"/>-->
     <lang.findUsagesProvider language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownFindUsagesProvider"/>
-    <lang.namesValidator language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownNamesValidator"></lang.namesValidator>
+    <!--<lang.namesValidator language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownNamesValidator"/>-->
     <lang.parserDefinition language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.parser.MultiMarkdownParserDefinition"/>
     <lang.refactoringSupport language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownRefactoringSupportProvider"/>
     <lang.syntaxHighlighterFactory key="MultiMarkdown" language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.highlighter.MultiMarkdownSyntaxHighlighterFactory"/>
