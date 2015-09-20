@@ -13,7 +13,6 @@
 
 # Local stuff
 local/
+/src/misc
 
 idea-multimarkdown.zip
-hljs-darkula.css
-src/highlight-js

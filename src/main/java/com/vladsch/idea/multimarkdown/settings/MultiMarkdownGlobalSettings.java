@@ -225,9 +225,9 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
         return hljsCssFilePath == null ? null : MultiMarkdownGlobalSettings.class.getResource(hljsCssFilePath);
     }
 
-    public @NotNull java.net.URL getFirebugLiteFileURL() throws MalformedURLException {
-        return MultiMarkdownGlobalSettings.class.getResource("/firebug-lite.js");
-    }
+    //public @NotNull java.net.URL getFirebugLiteFileURL() throws MalformedURLException {
+    //    return MultiMarkdownGlobalSettings.class.getResource("/src/firebug-lite.js");
+    //}
 
     public @NotNull String getCssFileText(int htmlTheme, boolean isFxHtmlPreview) {
         String htmlText = "";
