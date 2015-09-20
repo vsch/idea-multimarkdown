@@ -55,19 +55,19 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
                     public void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet resultSet) {
                         PsiElement element = parameters.getPosition();
                         int offset = parameters.getOffset();
-                        logger.info("Completion for " + element + " at pos " + String.valueOf(offset));
+                        //logger.info("Completion for " + element + " at pos " + String.valueOf(offset));
 
                         IElementType elementType = element.getNode().getElementType();
 
                         if (elementType == WIKI_LINK_CLOSE || elementType == WIKI_LINK_SEPARATOR || elementType == WIKI_LINK_TEXT) {
                             // suggest page titles based on link reference
-                            String[] suggestions = {"Hello", "Hi There", "More to come"};
-
-                            for (String suggestion : suggestions) {
-                                resultSet.addElement(LookupElementBuilder.create(suggestion)
-                                                .withCaseSensitivity(true)
-                                );
-                            }
+                            //String[] suggestions = {"Hello", "Hi There", "More to come"};
+                            //
+                            //for (String suggestion : suggestions) {
+                            //    resultSet.addElement(LookupElementBuilder.create(suggestion)
+                            //                    .withCaseSensitivity(true)
+                            //    );
+                            //}
                         } else if (elementType == WIKI_LINK_REF) {
                             Document document = parameters.getEditor().getDocument();
                             VirtualFile virtualFile = FileDocumentManager.getInstance().getFile(document);

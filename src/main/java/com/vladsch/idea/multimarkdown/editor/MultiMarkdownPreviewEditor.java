@@ -40,6 +40,7 @@ import com.intellij.openapi.editor.highlighter.EditorHighlighterFactory;
 import com.intellij.openapi.editor.impl.EditorImpl;
 import com.intellij.openapi.fileEditor.*;
 import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.UserDataHolderBase;
@@ -214,6 +215,18 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
                 updateEditorTabIsVisible();
                 delayedHtmlPreviewUpdate(true);
                 checkNotifyUser();
+            }
+        });
+
+        project.getMessageBus().connect(this).subscribe(DumbService.DUMB_MODE, new DumbService.DumbModeListener() {
+            @Override
+            public void enteredDumbMode() {
+            }
+
+            @Override
+            public void exitDumbMode() {
+                // need to re-evaluate class link accessibility
+                delayedHtmlPreviewUpdate(false);
             }
         });
 

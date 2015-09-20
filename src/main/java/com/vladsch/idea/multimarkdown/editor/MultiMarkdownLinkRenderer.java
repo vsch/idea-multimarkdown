@@ -63,42 +63,7 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
     // to go into areas that may have threading issues.
     public Rendering checkTarget(Rendering rendering) {
         if (project != null && document != null && missingTargetClass != null) {
-
-            // test if it isn't internet protocol and mailto:, the rest we'll handle in the project file system
-            //MultiMarkdownPathResolver.canResolveLink(project, document, rendering.href);
-            String href = rendering.href;
-            try {
-                href = URLDecoder.decode(rendering.href, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-
-            boolean linkFound = !(!href.startsWith("http://") && !href.startsWith("ftp://") && !href.startsWith("https://") && !href.startsWith("mailto:"));
-
-            if (!linkFound) {
-                // see if we can handle it
-                VirtualFile virtualTarget = null;
-
-                if (href.startsWith("file:")) {
-                    try {
-                        URL target = new URL(href);
-                        VirtualFileSystem virtualFileSystem = VirtualFileManager.getInstance().getFileSystem(target.getProtocol());
-                        virtualTarget = virtualFileSystem == null ? null : virtualFileSystem.findFileByPath(target.getFile());
-                    } catch (MalformedURLException e) {
-                        //e.printStackTrace();
-                    }
-                }
-
-                if (virtualTarget == null || !virtualTarget.exists()) {
-                    VirtualFile file = FileDocumentManager.getInstance().getFile(document);
-                    VirtualFile parent = file == null ? null : file.getParent();
-                    virtualTarget = parent == null ? null : parent.findFileByRelativePath(href);
-                }
-
-                linkFound = virtualTarget != null;
-            }
-
-            if (!linkFound) {
+            if (!rendering.href.startsWith("#") && !MultiMarkdownPathResolver.canResolveLink(project, document, rendering.href)) {
                 rendering.withAttribute("class", missingTargetClass);
             }
         }

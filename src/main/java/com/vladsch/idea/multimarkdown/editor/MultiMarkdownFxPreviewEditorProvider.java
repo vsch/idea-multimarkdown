@@ -25,18 +25,19 @@ package com.vladsch.idea.multimarkdown.editor;
 
 //import com.intellij.ide.scratch.ScratchFileService;
 
-import com.intellij.ide.plugins.cl.PluginClassLoader;
 import com.intellij.openapi.fileEditor.*;
 import com.intellij.openapi.project.PossiblyDumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.vladsch.idea.multimarkdown.MultiMarkdownLanguage;
+import com.vladsch.idea.multimarkdown.settings.FailedBuildRunnable;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
+import javafx.application.Platform;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 public class MultiMarkdownFxPreviewEditorProvider implements FileEditorProvider, PossiblyDumbAware {
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownFxPreviewEditorProvider.class);
@@ -66,43 +67,55 @@ public class MultiMarkdownFxPreviewEditorProvider implements FileEditorProvider,
     }
 
     @NotNull
-    public static FileEditor createEditor(@NotNull Project project, @NotNull VirtualFile file, boolean forRawHtml) {
+    public static FileEditor createEditor(@NotNull final Project project, @NotNull final VirtualFile file, final boolean forRawHtml) {
         if (!MultiMarkdownGlobalSettings.getInstance().useOldPreview.getValue()) {
-            if (canLoadFxEditor == FX_PREVIEW_UNKNOWN) {
-                try {
+            return MultiMarkdownGlobalSettings.getInstance().fxPreviewFailedBuild.runBuild(new FailedBuildRunnable<FileEditor>() {
+                @Nullable @Override public FileEditor runCanFail() throws Throwable {
                     MultiMarkdownGlobalSettings.getInstance().setIsFxHtmlPreview(true);
-                    canLoadFxEditor = FX_PREVIEW_CAN_LOAD;
-                    FileEditor fileEditor = new MultiMarkdownFxPreviewEditor(project, FileDocumentManager.getInstance().getDocument(file), forRawHtml);
-                    return fileEditor;
-                } catch (NoClassDefFoundError er) {
-                    //e.printStackTrace();
-                    logger.error("NoClassDefFoundError", er);
-                    canLoadFxEditor = FX_PREVIEW_CANNOT_LOAD;
-                    MultiMarkdownGlobalSettings.getInstance().setIsFxHtmlPreview(false);
-                    MultiMarkdownGlobalSettings.getInstance().useOldPreview.setValue(true);
-                } catch (Exception e) {
-                    if (e instanceof InvocationTargetException) {
-                        logger.warn("InvocationTargetException", ((InvocationTargetException) e).getTargetException());
-                    } else {
-                        logger.warn("Exception", e);
-                    }
-                    canLoadFxEditor = FX_PREVIEW_CANNOT_LOAD;
-                    MultiMarkdownGlobalSettings.getInstance().setIsFxHtmlPreview(false);
-                    MultiMarkdownGlobalSettings.getInstance().useOldPreview.setValue(true);
-                    e.printStackTrace();
+                    boolean isFxApplicationThread = Platform.isFxApplicationThread();
+                    return new MultiMarkdownFxPreviewEditor(project, FileDocumentManager.getInstance().getDocument(file), forRawHtml);
                 }
-            }
 
-            if (canLoadFxEditor == FX_PREVIEW_CAN_LOAD) {
-                return new MultiMarkdownFxPreviewEditor(project, FileDocumentManager.getInstance().getDocument(file), forRawHtml);
-            }
-
-            // TODO: show notification of the problem and solutions
-            if (canLoadFxEditor != FX_PREVIEW_CANNOT_LOAD) {
-                canLoadFxEditor = FX_PREVIEW_CANNOT_LOAD;
-                MultiMarkdownGlobalSettings.getInstance().useOldPreview.setValue(true);
-                MultiMarkdownGlobalSettings.getInstance().setIsFxHtmlPreview(false);
-            }
+                @Nullable @Override public FileEditor run() {
+                    MultiMarkdownGlobalSettings.getInstance().setIsFxHtmlPreview(false);
+                    MultiMarkdownGlobalSettings.getInstance().useOldPreview.setValue(true);
+                    return new MultiMarkdownPreviewEditor(project, FileDocumentManager.getInstance().getDocument(file), forRawHtml);
+                }
+            });
+            //if (canLoadFxEditor == FX_PREVIEW_UNKNOWN || !MultiMarkdownGlobalSettings.getInstance().isFxHtmlPreview()) {
+            //    try {
+            //        MultiMarkdownGlobalSettings.getInstance().setIsFxHtmlPreview(true);
+            //        canLoadFxEditor = FX_PREVIEW_CAN_LOAD;
+            //        return new MultiMarkdownFxPreviewEditor(project, FileDocumentManager.getInstance().getDocument(file), forRawHtml);
+            //    } catch (NoClassDefFoundError er) {
+            //        //e.printStackTrace();
+            //        logger.error("NoClassDefFoundError", er);
+            //        canLoadFxEditor = FX_PREVIEW_CANNOT_LOAD;
+            //        MultiMarkdownGlobalSettings.getInstance().setIsFxHtmlPreview(false);
+            //        MultiMarkdownGlobalSettings.getInstance().useOldPreview.setValue(true);
+            //    } catch (Exception e) {
+            //        if (e instanceof InvocationTargetException) {
+            //            logger.warn("InvocationTargetException", ((InvocationTargetException) e).getTargetException());
+            //        } else {
+            //            logger.warn("Exception", e);
+            //        }
+            //        canLoadFxEditor = FX_PREVIEW_CANNOT_LOAD;
+            //        MultiMarkdownGlobalSettings.getInstance().setIsFxHtmlPreview(false);
+            //        MultiMarkdownGlobalSettings.getInstance().useOldPreview.setValue(true);
+            //        e.printStackTrace();
+            //    }
+            //}
+            //
+            //if (canLoadFxEditor == FX_PREVIEW_CAN_LOAD) {
+            //    return new MultiMarkdownFxPreviewEditor(project, FileDocumentManager.getInstance().getDocument(file), forRawHtml);
+            //}
+            //
+            //// TODO: show notification of the problem and solutions
+            //if (canLoadFxEditor != FX_PREVIEW_CANNOT_LOAD) {
+            //    canLoadFxEditor = FX_PREVIEW_CANNOT_LOAD;
+            //    MultiMarkdownGlobalSettings.getInstance().useOldPreview.setValue(true);
+            //    MultiMarkdownGlobalSettings.getInstance().setIsFxHtmlPreview(false);
+            //}
         }
         return new MultiMarkdownPreviewEditor(project, FileDocumentManager.getInstance().getDocument(file), forRawHtml);
     }
@@ -135,6 +148,6 @@ public class MultiMarkdownFxPreviewEditorProvider implements FileEditorProvider,
 
     @Override
     public boolean isDumbAware() {
-        return false;
+        return true;
     }
 }

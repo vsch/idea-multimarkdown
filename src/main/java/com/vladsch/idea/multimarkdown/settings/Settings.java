@@ -23,6 +23,7 @@
  */
 package com.vladsch.idea.multimarkdown.settings;
 
+import com.intellij.openapi.application.ApplicationInfo;
 import com.intellij.ui.EditorTextField;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
@@ -62,6 +63,14 @@ public class Settings {
 
     public StringSetting StringSetting(String initialValue, String persistName) {
         return new StringSetting(initialValue, persistName);
+    }
+
+    public FailedBuildSetting FailedBuildSetting(String initialValue, String persistName) {
+        return new FailedBuildSetting(initialValue, persistName, false);
+    }
+
+    public FailedBuildSetting FailedBuildSetting(String initialValue, String persistName, boolean withJdk) {
+        return new FailedBuildSetting(initialValue, persistName, withJdk);
     }
 
     public Element getState(String name) {
@@ -153,6 +162,7 @@ public class Settings {
         public boolean isChanged(T that) { return !value.equals(that); }
 
         abstract public T fromString(String value);
+
         abstract public T getDefaultValue();
     }
 
@@ -161,22 +171,31 @@ public class Settings {
         public IntegerSetting(Integer initialValue, String persistName) { super(initialValue, persistName); }
 
         @Override public Integer fromString(String value) { return Integer.parseInt(value); }
+
         @Override public Integer getDefaultValue() { return 0; }
 
         public void setValue(JSpinner component) { setValue((Integer) component.getValue()); }
+
         public void reset(JSpinner component) { component.setValue(value); }
+
         public boolean isChanged(JSpinner component) { return !value.equals((Integer) component.getValue()); }
 
         public void setValue(JComboBox component) { setValue((Integer) component.getSelectedIndex()); }
+
         public void reset(JComboBox component) { component.setSelectedIndex(value); }
+
         public boolean isChanged(JComboBox component) { return !value.equals((Integer) component.getSelectedIndex()); }
 
         public void setValue(JTabbedPane component) { setValue((Integer) component.getSelectedIndex()); }
+
         public void reset(JTabbedPane component) { component.setSelectedIndex(value); }
+
         public boolean isChanged(JTabbedPane component) { return !value.equals((Integer) component.getSelectedIndex()); }
 
         public void setValue(JList component) { setValue((Integer) component.getSelectedIndex()); }
+
         public void reset(JList component) { component.setSelectedIndex(value); }
+
         public boolean isChanged(JList component) { return !value.equals((Integer) component.getSelectedIndex()); }
     }
 
@@ -185,6 +204,7 @@ public class Settings {
         public DoubleSetting(Double initialValue, String persistName) { super(initialValue, persistName); }
 
         @Override public Double fromString(String value) { return Double.parseDouble(value); }
+
         @Override public Double getDefaultValue() { return 0.0; }
 
         public void setValue(JSpinner component) { setValue((Double) component.getValue()); }
@@ -204,6 +224,7 @@ public class Settings {
         }
 
         @Override public Boolean fromString(String value) { return Boolean.parseBoolean(value); }
+
         @Override public Boolean getDefaultValue() { return false; }
 
         @Override public int getExtensionValue() { return value ? flags : 0; }
@@ -244,6 +265,44 @@ public class Settings {
         public boolean isChanged(EditorTextField component) { return !value.equals(component.getText()); }
     }
 
+    public class FailedBuildSetting extends StringSetting {
+        protected final boolean withJdk;
+
+        public FailedBuildSetting(String initialValue, String persistName, boolean withJdk) {
+            super(initialValue, persistName);
+            this.withJdk = withJdk;
+        }
+
+        protected String currentBuild() {
+            String ideaBuild = ApplicationInfo.getInstance().getBuild().asString();
+
+            if (withJdk) {
+                ideaBuild += ", " + System.getProperty("java.home");
+            }
+
+            return ideaBuild;
+        }
+
+        public boolean isFailedBuild() {
+            String ideaBuild = currentBuild();
+            return value != null && value.equals(ideaBuild);
+        }
+
+        public <T> T runBuild(FailedBuildRunnable<T> runnable) {
+            String ideaBuild = currentBuild();
+
+            if (value == null || !value.equals(ideaBuild)) {
+                try {
+                    return runnable.runCanFail();
+                } catch (Throwable e) {
+                    setValue(ideaBuild);
+                }
+            }
+
+            return runnable.run();
+        }
+    }
+
     public class ElementSetting extends Setting<Element> {
         public ElementSetting(Element initialValue, String persistName) {
             super(initialValue != null ? initialValue.clone() : null, persistName);
@@ -255,6 +314,7 @@ public class Settings {
         }
 
         @Override public Element fromString(String value) { return null; }
+
         @Override public Element getDefaultValue() { return null; }
 
         @Override

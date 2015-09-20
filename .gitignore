@@ -15,3 +15,5 @@
 local/
 
 idea-multimarkdown.zip
+hljs-darkula.css
+src/main/resources/com/vladsch/idea/multimarkdown/highlight-js
