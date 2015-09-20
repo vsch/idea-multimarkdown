@@ -35,7 +35,6 @@ import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.file.Path;
 import java.util.List;
 
 import static com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent.*;
@@ -85,15 +84,15 @@ public class MultiMarkdownAnnotator implements Annotator {
                 // get all accessibles
                 wikiFiles = projectComponent.findRefLinkMarkdownFiles(elementName, virtualFile, searchSettings | ALLOW_INACCESSIBLE_WIKI_REF);
 
-                boolean linkInAccessible = wikiFiles != null && wikiFiles.size() == 1;
+                boolean linkInaccessible = wikiFiles != null && wikiFiles.size() == 1;
 
                 String alreadyOfferedRename = "";
                 String linkRefFileName = "";
 
-                if (linkInAccessible) {
+                if (linkInaccessible) {
                     // can offer to move the file, just add the logic
-                    //annotator = holder.createErrorAnnotation(element.getTextRange(),
-                    //        MultiMarkdownBundle.message("annotation.wikilink.unreachable-page-reference"));
+                    annotator = holder.createErrorAnnotation(element.getTextRange(),
+                            MultiMarkdownBundle.message("annotation.wikilink.unreachable-page-reference"));
                 } else {
                     // see if the file with spaces instead of dashes exists
                     wikiFiles = projectComponent.findRefLinkMarkdownFiles(elementName, virtualFile, searchSettings | SPACE_DASH_EQUIVALENT);
@@ -123,7 +122,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                             }
                         }
 
-                        String fileNameNoExt = fileName.substring(0, fileName.length() - 3);
+                        String fileNameNoExt = fileName == null ? "" : fileName.substring(0, fileName.length() - 3);
                         if (alreadyOfferedRename.toLowerCase().equals(fileNameNoExt.replace('-', ' ').toLowerCase())
                                 && !alreadyOfferedRename.equals(fileNameNoExt.replace('-', ' '))) {
                             caseMismatch = true;
@@ -163,12 +162,12 @@ public class MultiMarkdownAnnotator implements Annotator {
                     }
                 }
 
-                annotator.setNeedsUpdateOnTyping(true);
+                if (annotator != null) annotator.setNeedsUpdateOnTyping(true);
 
                 // get all accessibles
                 wikiFiles = projectComponent.findRefLinkMarkdownFiles(null, virtualFile, searchSettings);
 
-                if (wikiFiles != null && wikiFiles.size() != 0) {
+                if (annotator != null && wikiFiles != null && wikiFiles.size() != 0) {
                     /*
                      *   have a file but it is not accessible we can:
                      *   1. rename the link to another accessible file?

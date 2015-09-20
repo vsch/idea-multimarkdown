@@ -28,7 +28,6 @@ import com.intellij.lang.Language;
 import com.intellij.lang.ParserDefinition;
 import com.intellij.lang.PsiParser;
 import com.intellij.lexer.Lexer;
-import com.intellij.openapi.application.ApplicationInfo;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
@@ -47,12 +46,13 @@ import org.jetbrains.annotations.Nullable;
 public class MultiMarkdownParserDefinition implements ParserDefinition {
 
     public static final TokenSet WHITE_SPACES = TokenSet.create(MultiMarkdownTypes.NONE);
-    public static final IFileElementType FILE = new IFileElementType(Language.<MultiMarkdownLanguage>findInstance(MultiMarkdownLanguage.class));
+    public static final IFileElementType MULTIMARKDOWN_FILE = new IFileElementType(Language.<MultiMarkdownLanguage>findInstance(MultiMarkdownLanguage.class));
 
     @NotNull
     @Override
     public Lexer createLexer(Project project) {
         return new MultiMarkdownLexer();
+        //return new EmptyLexer();
     }
 
     @NotNull
@@ -72,6 +72,7 @@ public class MultiMarkdownParserDefinition implements ParserDefinition {
 
     @NotNull
     public PsiParser createParser(final Project project) {
+        //return new MultiMarkdownParser();
         return MultiMarkdownGlobalSettings.getInstance().lightParserFailedBuild.runBuild(new FailedBuildRunnable<PsiParser>() {
             @Nullable @Override public PsiParser runCanFail() throws Throwable {
                 return new MultiMarkdownLightParser();
@@ -85,7 +86,7 @@ public class MultiMarkdownParserDefinition implements ParserDefinition {
 
     @Override
     public IFileElementType getFileNodeType() {
-        return FILE;
+        return MULTIMARKDOWN_FILE;
     }
 
     public PsiFile createFile(FileViewProvider viewProvider) {

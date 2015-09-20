@@ -30,10 +30,6 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
 import org.apache.log4j.*;
@@ -43,7 +39,6 @@ import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
 
 public class MultiMarkdownPlugin implements ApplicationComponent {
     private static final Logger logger = org.apache.log4j.Logger.getLogger("com.vladsch.idea.multimarkdown");
@@ -52,6 +47,7 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
     private Project project;
     private PluginClassLoader myClassLoader;
 
+    private String urlLayoutFxCss;
     private String urlDefaultFxCss;
     private String urlDarculaFxCss;
     private String urlHljsDefaultFxCss;
@@ -65,6 +61,10 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
 
     public boolean isLicensed() {
         return isLicensed;
+    }
+
+    public String getUrlLayoutFxCss() {
+        return urlLayoutFxCss;
     }
 
     public String getUrlDefaultFxCss() {
@@ -135,6 +135,7 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
         // Listen to settings changes
         urlCustomFont = null;
         fileCustomFxCss = null;
+        urlLayoutFxCss = null;
         urlCustomFxCss = null;
         urlDefaultFxCss = null;
         urlDarculaFxCss = null;
@@ -144,6 +145,7 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
         globalSettingsListener = null;
 
         urlCustomFont = createCustomFontUrl();
+        urlLayoutFxCss = createTempCopy(MultiMarkdownPlugin.class.getResource(MultiMarkdownGlobalSettings.PREVIEW_FX_STYLESHEET_LAYOUT), "layout-fx.css");
         urlDefaultFxCss = createTempCopy(MultiMarkdownPlugin.class.getResource(MultiMarkdownGlobalSettings.PREVIEW_FX_STYLESHEET_LIGHT), "default-fx.css");
         urlDarculaFxCss = createTempCopy(MultiMarkdownPlugin.class.getResource(MultiMarkdownGlobalSettings.PREVIEW_FX_STYLESHEET_DARK), "darcula-fx.css");
         urlHljsDefaultFxCss = createTempCopy(MultiMarkdownPlugin.class.getResource(MultiMarkdownGlobalSettings.PREVIEW_FX_HLJS_STYLESHEET_LIGHT), "hljs-default-fx.css");

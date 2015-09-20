@@ -22,11 +22,7 @@ package com.vladsch.idea.multimarkdown.language;
 
 import com.intellij.lang.refactoring.NamesValidator;
 import com.intellij.openapi.project.Project;
-import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class MultiMarkdownNamesValidator implements NamesValidator {
 

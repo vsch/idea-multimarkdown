@@ -36,6 +36,6 @@ public class MultiMarkdownElementType extends IElementType {
 
     @Override
     public String toString() {
-        return "MultiMarkdownElementType." + super.toString();
+        return "MultiMarkdown:" + super.toString();
     }
 }

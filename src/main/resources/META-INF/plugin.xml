@@ -47,9 +47,15 @@
     </div>
     ]]></description>
 
-  <version>1.1.7</version>
+  <version>1.1.7.1</version>
   <idea-version since-build="133.1711"/>
   <change-notes><![CDATA[
+    <ul><h3><b>1.1.8 - Cosmetic Changes.</b></h3>
+      <li>Fix after list spacing in css for javafx preview.</li>
+      <li>Add option to allow customizing highlight.js in the custom css.</li>
+      <li>Change separated color and font from layout for javafx preview css. Now layout is contained in a separate css. Custom Css can contain zero or more of: color, layout, hightlight.js css.</li>
+      <li>Change font ordering for javafx preview css trying to improve poor font rendering.</li>
+    </ul>
     <ul><h3><b>1.1.7 - Wiki Link Refactoring and highlight.js added</b></h3>
       <li>Fix make html preview and text tabs dumb aware so that they load properly in older versions if the index is not ready.</li>
       <li>Fix attempting to use new preview with older versions of IDEA no longer generates an exception on the first run.</li>

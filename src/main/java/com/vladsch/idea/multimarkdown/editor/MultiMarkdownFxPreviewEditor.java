@@ -451,14 +451,26 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
 
     protected String makeHtmlPage(String html) {
         VirtualFile file = FileDocumentManager.getInstance().getFile(document);
-        String result = "" +
-                "<head>\n" +
-                "<link rel=\"stylesheet\" href=\"" + MultiMarkdownGlobalSettings.getInstance().getCssExternalForm(true) + "\" />\n" +
+        String result = "<head>\n" +
                 "";
+
+        // load layout css
+        if (!(MultiMarkdownGlobalSettings.getInstance().useCustomCss(true) && MultiMarkdownGlobalSettings.getInstance().includesLayoutCss.getValue())) {
+            result += "" +
+                    "<link rel=\"stylesheet\" href=\"" + MultiMarkdownGlobalSettings.getInstance().getLayoutCssExternalForm(true) + "\">\n" +
+                    "";
+        }
+
+        // load colors css
+        if (!(MultiMarkdownGlobalSettings.getInstance().useCustomCss(true) && MultiMarkdownGlobalSettings.getInstance().includesColorsCss.getValue())) {
+            result += "" +
+                    "<link rel=\"stylesheet\" href=\"" + MultiMarkdownGlobalSettings.getInstance().getCssExternalForm(true) + "\">\n" +
+                    "";
+        }
 
         // load highlight js script & css
         if (MultiMarkdownGlobalSettings.getInstance().useHighlightJs.getValue()) {
-            if (!MultiMarkdownGlobalSettings.getInstance().useCustomCss(true)) {
+            if (!(MultiMarkdownGlobalSettings.getInstance().useCustomCss(true) && MultiMarkdownGlobalSettings.getInstance().includesHljsCss.getValue())) {
                 result += "" +
                         "<link rel=\"stylesheet\" href=\"" + MultiMarkdownGlobalSettings.getInstance().getHljsCssExternalForm(true) + "\">\n" +
                         "";
