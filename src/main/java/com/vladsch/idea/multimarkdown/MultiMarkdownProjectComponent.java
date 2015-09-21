@@ -40,6 +40,7 @@ import java.util.*;
 import java.util.concurrent.Executors;
 
 public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualFileListener {
+    private static final String WIKI_PAGE_EXTENSION = ".md";
     public static int ANY_FILE = 0;
     public static int FILE_REF = 0;
 
@@ -356,7 +357,17 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
 
     // call this function with the file name without an extension
     public static @Nullable String fileNameToWikiRef(@Nullable String fileName) {
-        return fileName == null ? null : fileName.replace('-', ' ');
+        return fileNameToWikiRef(fileName, true);
+    }
+
+    public static @Nullable String fileNameToWikiRef(@Nullable String fileName, boolean removeExtension) {
+        if (fileName == null) return null;
+
+        int endPos = fileName.length();
+        if (fileName.endsWith(WIKI_PAGE_EXTENSION)) {
+            endPos -= WIKI_PAGE_EXTENSION.length();
+        }
+        return fileName.substring(0, endPos).replace('-', ' ');
     }
 
     public static String wikiPageRefToFileName(String name) {
@@ -364,7 +375,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
     }
 
     public static @Nullable String wikiPageRefToFileName(@Nullable String wikiPageRef, boolean addExtension) {
-        return wikiPageRef == null ? null : wikiPageRef.replace(' ', '-') + (addExtension ? ".md" : "");
+        return wikiPageRef == null ? null : wikiPageRef.replace(' ', '-') + (addExtension ? WIKI_PAGE_EXTENSION : "");
     }
 
     public static boolean isWikiPage(VirtualFile file) {

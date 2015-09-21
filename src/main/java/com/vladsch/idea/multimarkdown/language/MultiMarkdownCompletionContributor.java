@@ -97,7 +97,7 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
             String wikiPageShortRef = toFile.getWikiPageRef(null, WANT_WIKI_REF | ALLOW_INACCESSIBLE_WIKI_REF);
             String linkRefFileName = toFile.getLinkRef(inFile, 0);
 
-            logger.info("Adding " + wikiPageRef + " to completions");
+            //logger.info("Adding " + wikiPageRef + " to completions");
             LookupElementBuilder lookupElementBuilder = LookupElementBuilder.create(wikiPageRef)
                     //.withLookupString(wikiPageShortRef)
                     .withCaseSensitivity(true)

@@ -21,12 +21,18 @@
  */
 package com.vladsch.idea.multimarkdown.spellchecking;
 
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.TokenSet;
+import com.intellij.spellchecker.quickfixes.SpellCheckerQuickFix;
 import com.intellij.spellchecker.tokenizer.SpellcheckingStrategy;
 import com.intellij.spellchecker.tokenizer.Tokenizer;
 import com.vladsch.idea.multimarkdown.parser.MultiMarkdownParserDefinition;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownElementType;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownTokenType;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
@@ -112,13 +118,41 @@ public class MultiMarkdownSpellcheckingStrategy extends SpellcheckingStrategy {
             WIKI_LINK
     );
 
+    protected static Tokenizer IDENTIFIER_TOKENIZER = new MultiMarkdownIdentifierTokenizer();
+
     @NotNull @Override
     public Tokenizer getTokenizer(PsiElement element) {
-        if (NO_SPELL_CHECK_SET.contains(element.getNode().getElementType())) {
-            //logger.info("empty tokenizer for " + element.toString());
-            return EMPTY_TOKENIZER;
+        if (element.getNode().getElementType() instanceof MultiMarkdownTokenType) {
+            if (element instanceof MultiMarkdownNamedElement) {
+                //logger.info("identifier tokenizer for " + element.toString());
+                return IDENTIFIER_TOKENIZER;
+            }
+
+            if (NO_SPELL_CHECK_SET.contains(element.getNode().getElementType())) {
+                //logger.info("empty tokenizer for " + element.toString());
+                return EMPTY_TOKENIZER;
+            }
+            // here we can return custom tokenizers if needed
+
+            //logger.info("text tokenizer for " + element.toString());
+            return TEXT_TOKENIZER;
         }
-        //logger.info("tokenizer for " + element.toString());
-        return TEXT_TOKENIZER;
+        return super.getTokenizer(element);
+    }
+
+    @Override
+    public SpellCheckerQuickFix[] getRegularFixes(PsiElement element,
+            int offset,
+            @NotNull TextRange textRange,
+            boolean useRename,
+            String wordWithTypo) {
+
+        SpellCheckerQuickFix[] fixes = getDefaultRegularFixes(useRename, wordWithTypo);
+
+        if (element instanceof MultiMarkdownWikiPageRef && useRename) {
+            fixes[0] = new TypoRenameToQuickFix(wordWithTypo);
+        }
+
+        return fixes;
     }
 }
