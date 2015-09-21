@@ -29,7 +29,6 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 public class MultiMarkdownTokenType extends IElementType {
-
     public MultiMarkdownTokenType(@NotNull @NonNls String debugName) {
         super(debugName, MultiMarkdownLanguage.INSTANCE);
     }

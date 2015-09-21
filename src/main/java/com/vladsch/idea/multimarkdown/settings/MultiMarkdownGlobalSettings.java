@@ -196,7 +196,7 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
         }
     }
 
-    public @NotNull String getLayoutCssFilePath(boolean isFxHtmlPreview) {
+    public @Nullable String getLayoutCssFilePath(boolean isFxHtmlPreview) {
         if (isFxHtmlPreview) {
             return PREVIEW_FX_STYLESHEET_LAYOUT;
         } else {
@@ -204,7 +204,7 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
         }
     }
 
-    public @NotNull String getHljsCssFilePath(int htmlTheme, boolean isFxHtmlPreview) {
+    public @Nullable String getHljsCssFilePath(int htmlTheme, boolean isFxHtmlPreview) {
         if (isFxHtmlPreview) {
             return isDarkHtmlPreview(htmlTheme) ? PREVIEW_FX_HLJS_STYLESHEET_DARK : PREVIEW_FX_HLJS_STYLESHEET_LIGHT;
         } else {
@@ -216,11 +216,12 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
         return MultiMarkdownGlobalSettings.class.getResource(getCssFilePath(htmlTheme, isFxHtmlPreview));
     }
 
-    public @NotNull java.net.URL getLayoutCssFileURL() {
-        return MultiMarkdownGlobalSettings.class.getResource(getLayoutCssFilePath(isFxHtmlPreview));
+    public @Nullable java.net.URL getLayoutCssFileURL() {
+        String layoutCssFilePath = getLayoutCssFilePath(isFxHtmlPreview);
+        return layoutCssFilePath == null ? null : MultiMarkdownGlobalSettings.class.getResource(layoutCssFilePath);
     }
 
-    public @NotNull java.net.URL getHljsCssFileURL(int htmlTheme, boolean isFxHtmlPreview) {
+    public @Nullable java.net.URL getHljsCssFileURL(int htmlTheme, boolean isFxHtmlPreview) {
         String hljsCssFilePath = getHljsCssFilePath(htmlTheme, isFxHtmlPreview);
         return hljsCssFilePath == null ? null : MultiMarkdownGlobalSettings.class.getResource(hljsCssFilePath);
     }
@@ -242,7 +243,8 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     public @NotNull String getLayoutCssFileText() {
         String htmlText = "";
         try {
-            htmlText = Resources.toString(getLayoutCssFileURL(), Charsets.UTF_8);
+            URL layoutCssFileURL = getLayoutCssFileURL();
+            if (layoutCssFileURL != null) htmlText = Resources.toString(layoutCssFileURL, Charsets.UTF_8);
         } catch (IOException ex) {
             ex.printStackTrace();
         }

@@ -38,8 +38,6 @@ import java.util.List;
 
 public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl implements MultiMarkdownWikiPageRef {
     private static final Logger logger = Logger.getLogger(MultiMarkdownWikiPageRefImpl.class);
-    private Boolean haveNoReference = null;
-    private String haveNoReferenceName = null;
 
     public MultiMarkdownWikiPageRefImpl(ASTNode node) {
         super(node);
@@ -70,8 +68,6 @@ public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl 
     }
 
     public PsiElement setName(String newName, boolean fileMoved) {
-        haveNoReference = null;
-        haveNoReferenceName = null;
         return MultiMarkdownPsiImplUtil.setName(this, newName, fileMoved);
     }
 
@@ -96,12 +92,7 @@ public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl 
     @org.jetbrains.annotations.Nullable
     @Override
     public PsiReference getReference() {
-        if (haveNoReference == null || haveNoReferenceName == null || haveNoReferenceName.equals(getName())) {
-            haveNoReferenceName = getName();
-            List<ResolveResult> result = haveNoReferenceName == null ? null : MultiMarkdownReference.getMultiResolveResults(this, haveNoReferenceName, false);
-            haveNoReference = result == null || result.size() != 1;
-        }
-        return haveNoReference ? null : new MultiMarkdownReference(this, new TextRange(0, getTextLength()));
+        return new MultiMarkdownReference(this, new TextRange(0, getTextLength()));
     }
 
     @Override public String toString() {
