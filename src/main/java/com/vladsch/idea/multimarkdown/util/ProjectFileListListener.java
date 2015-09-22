@@ -18,23 +18,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.vladsch.idea.multimarkdown.language;
+package com.vladsch.idea.multimarkdown.util;
 
-import com.intellij.lang.refactoring.NamesValidator;
-import com.intellij.openapi.project.Project;
-import org.jetbrains.annotations.NotNull;
+import java.util.EventListener;
 
-public class MultiMarkdownNamesValidator implements NamesValidator {
-
-    // markdown has no keywords
-    @Override public boolean isKeyword(@NotNull String name, Project project) {
-        return false;
-    }
-
-    // identifiers are all named elements that can be renamed, unfortunately we don't get any context at this point so we have to assume anything goes
-    @Override public boolean isIdentifier(@NotNull String name, Project project) {
-        //List<MultiMarkdownFile> list = MultiMarkdownPlugin.getProjectComponent(project).findRefLinkMarkdownFiles(name, MARKDOWN_FILE | WANT_WIKI_REF | WIKI_REF | ALLOW_INACCESSIBLE_WIKI_REF);
-        //return list.size() > 0;
-        return true;
-    }
+public interface ProjectFileListListener extends EventListener {
+    // listeners should only invalidate any cached values derived from project file lists, updating these
+    // should be done as a regular derivation of these values, not in this method.
+    void projectListsUpdated();
 }

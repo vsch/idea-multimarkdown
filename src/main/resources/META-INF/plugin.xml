@@ -47,9 +47,18 @@
     </div>
     ]]></description>
 
-  <version>1.1.9</version>
+  <version>1.1.10</version>
   <idea-version since-build="133.1711"/>
   <change-notes><![CDATA[
+    <ul><h3><b>1.1.10 - Wiki link refactoring bug fixes and enhancement.</b></h3>
+      <li>Fix wiki links to missing targets did not always update annotations after create file quick fix.</li>
+      <li>Fix wiki links with missing targets rename as a group with suggested names collected from available targets.</li>
+      <li>Change wiki link &amp;change to:&amp; quick fixes limited to max 10.</li>
+      <li>Change wiki link suggested names sorted by closest directory distance, with .. directories last.</li>
+      <li>Change refactor code to be more efficient in generating and resolving target reference links.</li>
+      <li>Change wiki page icon only used if file has no spaces in path parts, starting from the wiki home directory.</li>
+      <li>Change completions for wiki links only show files below the wiki home directory.</li>
+    </ul>
     <ul><h3><b>1.1.9 - Wiki link refactoring bug fixes.</b></h3>
       <li>Fix wiki links to missing targets would not have proper reference if create file quick fix is used until project is reopened.</li>
       <li>Add Spell check quick fix for Rename To: for wiki link page references, with proper suggested renames for the file.</li>
@@ -333,7 +342,7 @@
     <lang.commenter language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownCommenter"/>
     <!--<lang.documentationProvider language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.documentation.MultiMarkdownDocumentationProvider"/>-->
     <lang.findUsagesProvider language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownFindUsagesProvider"/>
-    <!--<lang.namesValidator language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownNamesValidator"/>-->
+    <lang.namesValidator language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownNamesValidator"/>
     <lang.parserDefinition language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.parser.MultiMarkdownParserDefinition"/>
     <lang.refactoringSupport language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownRefactoringSupportProvider"/>
     <lang.syntaxHighlighterFactory key="MultiMarkdown" language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.highlighter.MultiMarkdownSyntaxHighlighterFactory"/>
@@ -345,6 +354,6 @@
     <fileIconProvider implementation="com.vladsch.idea.multimarkdown.MultiMarkdownFileIconProvider"/>
     <referencesSearch implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownReferenceSearch"/>
     <codeInsight.lineMarkerProvider language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownLineMarkerProvider"/>
-    <nameSuggestionProvider implementation="com.vladsch.idea.multimarkdown.spellchecking.FileNameSuggestionProvider"/>
+    <nameSuggestionProvider implementation="com.vladsch.idea.multimarkdown.language.ElementNameSuggestionProvider"/>
   </extensions>
 </idea-plugin>

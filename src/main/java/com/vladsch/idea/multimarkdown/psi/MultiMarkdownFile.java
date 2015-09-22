@@ -24,31 +24,147 @@
  */
 package com.vladsch.idea.multimarkdown.psi;
 
+import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.application.ApplicationInfo;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.FileViewProvider;
-import com.vladsch.idea.multimarkdown.MultiMarkdownFileType;
-import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
-import com.vladsch.idea.multimarkdown.MultiMarkdownLanguage;
-import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
+import com.intellij.refactoring.listeners.RefactoringEventData;
+import com.intellij.refactoring.listeners.RefactoringEventListener;
+import com.intellij.util.messages.MessageBusConnection;
+import com.vladsch.idea.multimarkdown.*;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
+import com.vladsch.idea.multimarkdown.util.ListenerNotifier;
+import com.vladsch.idea.multimarkdown.util.ListenerNotifyDelegate;
+import com.vladsch.idea.multimarkdown.util.ProjectFileListListener;
+import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.intellij.openapi.editor.ex.EditorSettingsExternalizable.STRIP_TRAILING_SPACES_NONE;
 import static com.intellij.openapi.editor.ex.EditorSettingsExternalizable.STRIP_TRAILING_SPACES_WHOLE;
 
-public class MultiMarkdownFile extends PsiFileBase {
+public class MultiMarkdownFile extends PsiFileBase implements ListenerNotifyDelegate<ProjectFileListListener> {
+    private static final Logger logger = Logger.getLogger(MultiMarkdownFile.class);
+    private static final int MISSING_REFS_UPDATED = 1;
+
+    private HashMap<String, MultiMarkdownNamedElement> missingLinks = new HashMap<String, MultiMarkdownNamedElement>();
+    private final ProjectFileListListener projectFileListener = new ProjectFileListListener() {
+        @Override
+        public void projectListsUpdated() {
+            invalidateMissingLinkElements();
+        }
+    };
+
+    private final ListenerNotifier<ProjectFileListListener> notifier = new ListenerNotifier<ProjectFileListListener>(this);
+
+    // notification on addListener
+    @Override
+    public void notify(ProjectFileListListener listener, Object... params) {
+        if (params.length == 1) {
+            switch ((Integer) params[0]) {
+                case MISSING_REFS_UPDATED:
+                    listener.projectListsUpdated();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    public void addListener(@NotNull ProjectFileListListener listener) {
+        notifier.addListener(listener);
+    }
+
+    public void removeListener(@NotNull ProjectFileListListener listener) {
+        notifier.removeListener(listener);
+    }
+
     public MultiMarkdownFile(@NotNull FileViewProvider viewProvider) {
         super(viewProvider, MultiMarkdownLanguage.INSTANCE);
+        MultiMarkdownPlugin.getProjectComponent(getProject()).addListener(projectFileListener);
+
+        MessageBusConnection connect = getProject().getMessageBus().connect();
+        connect.subscribe(RefactoringEventListener.REFACTORING_EVENT_TOPIC, new RefactoringEventListener() {
+            @Override
+            public void refactoringStarted(@NotNull String refactoringId, @Nullable RefactoringEventData beforeData) {
+                //logger.info("refactoring started on " + this.hashCode());
+
+            }
+
+            @Override
+            public void refactoringDone(@NotNull String refactoringId, @Nullable RefactoringEventData afterData) {
+                //logger.info("refactoring done on " + this.hashCode());
+                invalidateAfterRefactoring();
+            }
+
+            @Override
+            public void conflictsDetected(@NotNull String refactoringId, @NotNull RefactoringEventData conflictsData) {
+                //logger.info("refactoring conflicts on " + this.hashCode());
+                invalidateAfterRefactoring();
+            }
+
+            @Override
+            public void undoRefactoring(@NotNull String refactoringId) {
+                //logger.info("refactoring undo on " + this.hashCode());
+                invalidateAfterRefactoring();
+            }
+        });
+    }
+
+    protected void invalidateAfterRefactoring() {
+        if (!missingLinks.isEmpty()) {
+            invalidateMissingLinkElements();
+            notifier.notifyListeners(MISSING_REFS_UPDATED);
+            DaemonCodeAnalyzer.getInstance(getProject()).restart(this);
+        }
+    }
+
+    public MultiMarkdownNamedElement getMissingLinkElement(MultiMarkdownNamedElement element, String name) {
+        // see if this element used to be the one that was referenced by other missing links
+        for (String key : missingLinks.keySet()) {
+            if (!key.equals(name) && missingLinks.get(key) == element) {
+                // yes it has, we need to invalidate an rebuild
+                ApplicationManager.getApplication().invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        invalidateAfterRefactoring();
+                    }
+                });
+
+                // just point to itself for now, it will be reset
+                return element;
+            }
+        }
+
+        if (!missingLinks.containsKey(name)) {
+            // see if this one had its name edited, so we can remove it from the list and reset
+            missingLinks.put(name, element);
+        }
+        return missingLinks.get(name);
+    }
+
+    //public void missingLinkElementNameChange(MultiMarkdownNamedElement oldElement, String oldName, MultiMarkdownNamedElement newElement, String newName) {
+    //    if (missingLinks.containsKey(oldName) && missingLinks.get(oldName).equals(oldElement)) {
+    //        missingLinks.remove(oldName, oldElement);
+    //        missingLinks.put(newName, newElement);
+    //        notifier.notifyListeners(MISSING_REFS_UPDATED);
+    //        DaemonCodeAnalyzer.getInstance(getProject()).restart(this);
+    //    }
+    //}
+
+    public void invalidateMissingLinkElements() {
+        //logger.info("invalidatingMissingLinks on " + this.hashCode());
+        missingLinks.clear();
     }
 
     @NotNull
@@ -84,19 +200,27 @@ public class MultiMarkdownFile extends PsiFileBase {
     //}
     //
 
-    public @Nullable String getWikiPageRef(@Nullable VirtualFile inFile) {
+    public
+    @Nullable
+    String getWikiPageRef(@Nullable VirtualFile inFile) {
         return getWikiPageRef(inFile, 0);
     }
 
-    public @Nullable String getWikiPageRef(@Nullable VirtualFile inFile, int searchFlags) {
+    public
+    @Nullable
+    String getWikiPageRef(@Nullable VirtualFile inFile, int searchFlags) {
         return MultiMarkdownProjectComponent.getWikiPageRef(getVirtualFile(), inFile, searchFlags);
     }
 
-    public @Nullable String getLinkRef(@Nullable VirtualFile inFile) {
+    public
+    @Nullable
+    String getLinkRef(@Nullable VirtualFile inFile) {
         return getWikiPageRef(inFile, 0);
     }
 
-    public @Nullable String getLinkRef(@Nullable VirtualFile inFile, int searchFlags) {
+    public
+    @Nullable
+    String getLinkRef(@Nullable VirtualFile inFile, int searchFlags) {
         return MultiMarkdownProjectComponent.getLinkRef(getVirtualFile(), inFile, searchFlags);
     }
 
@@ -109,7 +233,9 @@ public class MultiMarkdownFile extends PsiFileBase {
             Key<String> overrideStripTrailingSpacesKey = getOverrideStripTrailingSpacesKey();
 
             if (overrideStripTrailingSpacesKey != null) {
-                file.putUserData(overrideStripTrailingSpacesKey, MultiMarkdownGlobalSettings.getInstance().enableTrimSpaces.getValue() ? STRIP_TRAILING_SPACES_WHOLE : STRIP_TRAILING_SPACES_NONE);
+                file.putUserData(overrideStripTrailingSpacesKey,
+                        MultiMarkdownGlobalSettings.getInstance().enableTrimSpaces.getValue() ?
+                                STRIP_TRAILING_SPACES_WHOLE : STRIP_TRAILING_SPACES_NONE);
             }
         }
 
@@ -149,7 +275,8 @@ public class MultiMarkdownFile extends PsiFileBase {
         }
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         if (getVirtualFile() == null) {
             return super.toString();
         }

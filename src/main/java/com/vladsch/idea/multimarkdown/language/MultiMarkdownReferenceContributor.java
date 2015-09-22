@@ -49,8 +49,9 @@ public class MultiMarkdownReferenceContributor extends PsiReferenceContributor {
                     @Override
                     public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
                         if (element instanceof MultiMarkdownWikiPageRef && ((MultiMarkdownWikiPageRef) element).getName() != null) {
-                            return new PsiReference[]{new MultiMarkdownReference(element, element.getTextRange())};
-                        } else {
+                            return new PsiReference[] { new MultiMarkdownReference((MultiMarkdownWikiPageRef) element) };
+                        }
+                        else {
                             return new PsiReference[0];
                         }
                     }

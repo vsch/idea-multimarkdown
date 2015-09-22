@@ -22,25 +22,25 @@ package com.vladsch.idea.multimarkdown.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
-import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.ResolveResult;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.language.MultiMarkdownReference;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownVisitor;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl implements MultiMarkdownWikiPageRef {
     private static final Logger logger = Logger.getLogger(MultiMarkdownWikiPageRefImpl.class);
+    private final MultiMarkdownReference reference;
 
     public MultiMarkdownWikiPageRefImpl(ASTNode node) {
         super(node);
+        reference = new MultiMarkdownReference(this);
     }
 
     public void accept(@NotNull PsiElementVisitor visitor) {
@@ -68,7 +68,12 @@ public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl 
     }
 
     public PsiElement setName(String newName, boolean fileMoved) {
-        return MultiMarkdownPsiImplUtil.setName(this, newName, fileMoved);
+        String oldName = getName();
+        reference.invalidateResolveResults();
+        MultiMarkdownNamedElement element = MultiMarkdownPsiImplUtil.setName(this, newName, fileMoved);
+
+        //logger.info("setName on " + this.toString() + " from " + oldName + " to " + element.getName());
+        return element;
     }
 
     public PsiElement getNameIdentifier() {
@@ -86,17 +91,18 @@ public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl 
      *
      * @return the reference instance, or null if the PSI element does not have any
      * associated references.
-     *
      * @see com.intellij.psi.search.searches.ReferencesSearch
      */
     @org.jetbrains.annotations.Nullable
     @Override
     public PsiReference getReference() {
-        return new MultiMarkdownReference(this, new TextRange(0, getTextLength()));
+        reference.refreshName();
+        return reference;
     }
 
-    @Override public String toString() {
-        return "WIKI_LINK_REF '" + getName() + "'";
+    @Override
+    public String toString() {
+        return "WIKI_LINK_REF '" + getName() + "' " + super.hashCode();
     }
 
     ///**

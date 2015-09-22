@@ -16,3 +16,6 @@ local/
 /src/misc
 
 idea-multimarkdown.zip
+src/main/java/com/vladsch/idea/multimarkdown/annotator/ChangeToQuickFix.java
+src/main/java/com/vladsch/idea/multimarkdown/annotator/RenameToQuickFix.java
+src/main/java/com/vladsch/idea/multimarkdown/annotator/ShowSuggestions.java
