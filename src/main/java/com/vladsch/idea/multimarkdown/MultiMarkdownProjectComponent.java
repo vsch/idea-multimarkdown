@@ -86,9 +86,11 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
                 ApplicationManager.getApplication().invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        DaemonCodeAnalyzer instance = DaemonCodeAnalyzer.getInstance(project);
-                        for (MultiMarkdownFile markdownFile : markdownFiles) {
-                            instance.restart(markdownFile);
+                        if (!project.isDisposed()) {
+                            DaemonCodeAnalyzer instance = DaemonCodeAnalyzer.getInstance(project);
+                            for (MultiMarkdownFile markdownFile : markdownFiles) {
+                                instance.restart(markdownFile);
+                            }
                         }
                     }
                 });

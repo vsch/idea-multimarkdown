@@ -52,7 +52,9 @@ import java.net.*;
 public class MultiMarkdownPathResolver {
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownPathResolver.class);
 
-    /** Not to be instantiated. */
+    /**
+     * Not to be instantiated.
+     */
     private MultiMarkdownPathResolver() {
         // no op
     }
@@ -61,7 +63,6 @@ public class MultiMarkdownPathResolver {
      * Makes a simple attempt to convert the URL into a VirtualFile.
      *
      * @param target url from which a VirtualFile is sought
-     *
      * @return VirtualFile or null
      */
     public static VirtualFile findVirtualFile(@NotNull URL target) {
@@ -74,7 +75,6 @@ public class MultiMarkdownPathResolver {
      *
      * @param document the document
      * @param target   relative path from which a VirtualFile is sought
-     *
      * @return VirtualFile or null
      */
     public static VirtualFile resolveRelativePath(@NotNull Document document, @NotNull String target) {
@@ -88,13 +88,13 @@ public class MultiMarkdownPathResolver {
      *
      * @param project the project to look for files in
      * @param target  from which a VirtualFile is sought
-     *
      * @return VirtualFile or null
      */
     public static VirtualFile resolveClassReference(@NotNull final Project project, @NotNull final String target) {
         if (!DumbService.isDumb(project)) {
             return ApplicationManager.getApplication().runReadAction(new Computable<VirtualFile>() {
-                @Override public VirtualFile compute() {
+                @Override
+                public VirtualFile compute() {
                     final PsiClass classpathResource = JavaPsiFacade.getInstance(project).findClass(target, GlobalSearchScope.projectScope(project));
                     if (classpathResource != null) {
                         return classpathResource.getContainingFile().getVirtualFile();
@@ -138,7 +138,7 @@ public class MultiMarkdownPathResolver {
         final String href = hrefDec;
 
         if (!href.startsWith("http://") && !href.startsWith("ftp://") && !href.startsWith("https://") && !href.startsWith("mailto:")) {
-            final Object[] foundFile = {null};
+            final Object[] foundFile = { null };
             final Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
@@ -153,8 +153,14 @@ public class MultiMarkdownPathResolver {
                         }
                     }
 
+                    // relative path then we can open it.
                     if (virtualTarget == null || !virtualTarget.exists()) {
                         virtualTarget = resolveRelativePath(document, href);
+                    }
+
+                    if (virtualTarget == null) {
+                        // TODO: if the path ends in # then strip off the # and tryit without it
+                        // TODO: if the file has no extension, and a Markdown file exists in the project that has the same
                     }
 
                     try {
@@ -168,7 +174,8 @@ public class MultiMarkdownPathResolver {
                     foundFile[0] = virtualTarget;
                     if (foundFile[0] != null && openFile) {
                         ApplicationManager.getApplication().invokeLater(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 FileEditorManager.getInstance(project).openFile((VirtualFile) foundFile[0], focusEditor, searchForOpen);
                             }
                         });

@@ -47,9 +47,12 @@
     </div>
     ]]></description>
 
-  <version>1.1.10</version>
+  <version>1.1.10.1</version>
   <idea-version since-build="133.1711"/>
   <change-notes><![CDATA[
+    <ul><h3><b>1.1.11 - Bug Fixes.</b></h3>
+      <li>Fix intermittent project is disposed assertion failure on closing app.</li>
+    </ul>
     <ul><h3><b>1.1.10 - Wiki link refactoring bug fixes and enhancement.</b></h3>
       <li>Fix wiki links to missing targets did not always update annotations after create file quick fix.</li>
       <li>Fix wiki links with missing targets rename as a group with suggested names collected from available targets.</li>

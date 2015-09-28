@@ -50,8 +50,10 @@ import com.intellij.openapi.util.UserDataHolderBase;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.sun.webkit.dom.HTMLImageElementImpl;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
+import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
+import com.vladsch.idea.multimarkdown.util.ProjectFileListListener;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -103,7 +105,9 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
 
     public static final String TEXT_EDITOR_NAME = MultiMarkdownBundle.message("multimarkdown.html-tab-name");
 
-    /** The {@link Component} used to render the HTML preview. */
+    /**
+     * The {@link Component} used to render the HTML preview.
+     */
     protected final JPanel jEditorPane;
     private WebView webView;
     private WebEngine webEngine;
@@ -112,7 +116,9 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     private RootNode astRoot = null;
     private AnchorPane anchorPane;
 
-    /** The {@link Document} previewed in this editor. */
+    /**
+     * The {@link Document} previewed in this editor.
+     */
     protected final Document document;
     protected final boolean isWikiDocument;
 
@@ -122,8 +128,11 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     private boolean isReleased = false;
 
     protected MultiMarkdownGlobalSettingsListener globalSettingsListener;
+    protected ProjectFileListListener projectFileListener;
 
-    /** The {@link PegDownProcessor} used for building the document AST. */
+    /**
+     * The {@link PegDownProcessor} used for building the document AST.
+     */
     private ThreadLocal<PegDownProcessor> processor = initProcessor();
 
     private boolean isActive = false;
@@ -169,17 +178,22 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         return MultiMarkdownGlobalSettings.getInstance().showHtmlText.getValue();
     }
 
-    /** Init/reinit thread local {@link PegDownProcessor}. */
+    /**
+     * Init/reinit thread local {@link PegDownProcessor}.
+     */
     private static ThreadLocal<PegDownProcessor> initProcessor() {
         return new ThreadLocal<PegDownProcessor>() {
-            @Override protected PegDownProcessor initialValue() {
+            @Override
+            protected PegDownProcessor initialValue() {
                 // ISSUE: #7 worked around, disable pegdown TaskList HTML rendering, they don't display well in Darcula.
                 return new PegDownProcessor(MultiMarkdownGlobalSettings.getInstance().getExtensionsValue() /*& ~Extensions.TASKLISTITEMS*/, getParsingTimeout());
             }
         };
     }
 
-    /** Indicates whether the HTML preview is obsolete and should regenerated from the Markdown {@link #document}. */
+    /**
+     * Indicates whether the HTML preview is obsolete and should regenerated from the Markdown {@link #document}.
+     */
     protected boolean previewIsObsolete = true;
 
     protected Timer updateDelayTimer;
@@ -257,6 +271,13 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
             }
         });
 
+        MultiMarkdownPlugin.getProjectComponent(project).addListener(projectFileListener = new ProjectFileListListener() {
+            @Override
+            public void projectListsUpdated() {
+                delayedHtmlPreviewUpdate(false);
+            }
+        });
+
         project.getMessageBus().connect(this).subscribe(DumbService.DUMB_MODE, new DumbService.DumbModeListener() {
             @Override
             public void enteredDumbMode() {
@@ -281,7 +302,8 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
             FileType fileType = language != null ? language.getAssociatedFileType() : null;
             Document myDocument = EditorFactory.getInstance().createDocument("");
             myTextViewer = (EditorImpl) EditorFactory.getInstance().createViewer(myDocument, project);
-            if (fileType != null) myTextViewer.setHighlighter(EditorHighlighterFactory.getInstance().createEditorHighlighter(project, fileType));
+            if (fileType != null)
+                myTextViewer.setHighlighter(EditorHighlighterFactory.getInstance().createEditorHighlighter(project, fileType));
         } else {
             // Setup the editor pane for rendering HTML.
             myTextViewer = null;
@@ -312,7 +334,8 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                     jfxPanel.setScene(new Scene(anchorPane));
 
                     webEngine.setCreatePopupHandler(new Callback<PopupFeatures, WebEngine>() {
-                        @Override public WebEngine call(PopupFeatures config) {
+                        @Override
+                        public WebEngine call(PopupFeatures config) {
                             // do something
                             // return a web engine for the new browser window or null to block popups
                             return null;
@@ -333,7 +356,8 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
             public void changed(ObservableValue<? extends Worker.State> observable, Worker.State oldState, Worker.State newState) {
                 if (newState == Worker.State.SUCCEEDED) {
                     EventListener listener = new EventListener() {
-                        @Override public void handleEvent(org.w3c.dom.events.Event evt) {
+                        @Override
+                        public void handleEvent(org.w3c.dom.events.Event evt) {
                             evt.stopPropagation();
                             evt.preventDefault();
                             Element link = (Element) evt.getCurrentTarget();
@@ -392,7 +416,8 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                     org.w3c.dom.Document doc = webEngine.getDocument();
                     if (doc != null) {
                         ((EventTarget) doc.getDocumentElement()).addEventListener("contextmenu", new EventListener() {
-                            @Override public void handleEvent(Event evt) {
+                            @Override
+                            public void handleEvent(Event evt) {
                                 evt.preventDefault();
                             }
                         }, false);
@@ -622,7 +647,8 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         if (astRoot == null) {
             return "<strong>Parser timed out</strong>";
         } else {
-            return modified ? new MultiMarkdownToHtmlSerializer(project, document, linkRendererModified).toHtml(astRoot) : new ToHtmlSerializer(linkRendererNormal).toHtml(astRoot);
+            return modified ? new MultiMarkdownToHtmlSerializer(project, document, linkRendererModified).toHtml(astRoot) :
+                    new ToHtmlSerializer(linkRendererNormal).toHtml(astRoot);
         }
     }
 
@@ -714,9 +740,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
      * Just returns {@link FileEditorState#INSTANCE} as {@link MultiMarkdownFxPreviewEditor} is stateless.
      *
      * @param level the level.
-     *
      * @return {@link FileEditorState#INSTANCE}
-     *
      * @see #setState(FileEditorState)
      */
     @NotNull
@@ -730,7 +754,6 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
      * Does not do anything as {@link MultiMarkdownFxPreviewEditor} is stateless.
      *
      * @param state the new state.
-     *
      * @see #getState(FileEditorStateLevel)
      */
     public void setState(@NotNull FileEditorState state) {
@@ -825,7 +848,9 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         return null;
     }
 
-    /** Dispose the editor. */
+    /**
+     * Dispose the editor.
+     */
     public void dispose() {
         if (!isReleased) {
             isReleased = true;
