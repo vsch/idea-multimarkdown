@@ -53,7 +53,7 @@
     <ul><h3><b>1.1.11 - Bug Fixes.</b></h3>
       <li>Fix intermittent project is disposed assertion failure on closing app.</li>
       <li>Change removed old code trying to resolve a link to a Java Class file. Php storm was generating class def not found exception. Also caused issue #33</li>
-      <li>Fix directories marked excluded or libraries are skipped completely, only directories marked as source (this includes: source, test, resource directories) are scanned for markdown files for link resolution, directories marked as library-source are not scanned. Same for wiki pages. Now you need mark the wiki directory as sources root, if it isn't already under a parent that is sources root. This addresses issues: #36, #35, #34</li>
+      <li>Fix directories marked excluded or libraries are skipped completely, only directories marked as source (this includes: source, test, resource directories) are scanned for markdown files for link resolution. Same for wiki pages. Now you need to mark the wiki directory as sources root, if it isn't already under a parent that is sources root. This addresses issues: #36, #35, #34, #33</li>
     </ul>
     <ul><h3><b>1.1.10 - Wiki link refactoring bug fixes and enhancement.</b></h3>
       <li>Fix wiki links to missing targets did not always update annotations after create file quick fix.</li>
