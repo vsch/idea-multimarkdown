@@ -31,12 +31,12 @@ public class ThreadSafeMirrorCache<C> {
     }
 
     // this will only be called for the derived MainFileList instances
-    ThreadSafeMirrorCache() {
-        cache = null;
+    ThreadSafeMirrorCache(C cache) {
+        this.cache = cache;
     }
 
     public ThreadSafeMirrorCache(final @NotNull ThreadSafeMainCache<C> mainCache) {
-        cache = null;
+        cache = mainCache.getNewCache();
 
         mainCache.addListener(mainCacheListener = new ThreadSafeCacheListener<ThreadSafeMirrorCache<C>>() {
             @Override

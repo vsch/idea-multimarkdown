@@ -34,9 +34,12 @@ public class ThreadSafeMainCache<C> extends ThreadSafeMirrorCache<C> implements 
     private ListenerNotifier<ThreadSafeCacheListener<ThreadSafeMirrorCache<C>>> notifier = new ListenerNotifier<ThreadSafeCacheListener<ThreadSafeMirrorCache<C>>>(this);
 
     public ThreadSafeMainCache(ThreadSafeCacheUpdater<C> cacheFactory) {
-        super();
+        super(cacheFactory.newCache());
         this.cacheFactory = cacheFactory;
-        this.cache = this.cacheFactory.newCache();
+    }
+
+    protected C getNewCache() {
+        return cacheFactory.newCache();
     }
 
     public boolean cacheIsCurrent() {
