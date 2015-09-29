@@ -44,7 +44,7 @@ class ChangeWikiPageRefQuickFix extends BaseIntentionAction {
     @NotNull
     @Override
     public String getText() {
-        return MultiMarkdownBundle.message("quickfix.wikilink.change-target", MultiMarkdownProjectComponent.wikiPageRefToFileName(newWikiPageRef, true));
+        return MultiMarkdownBundle.message("quickfix.wikilink.0.change-target", MultiMarkdownProjectComponent.wikiPageRefToFileName(newWikiPageRef, true));
     }
 
     @NotNull

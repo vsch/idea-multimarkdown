@@ -31,7 +31,8 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 
 public class MultiMarkdownFileIconProvider implements FileIconProvider {
-    @Nullable @Override public Icon getIcon(@NotNull VirtualFile file, @Iconable.IconFlags int flags, @Nullable Project project) {
+    @Nullable @Override
+    public Icon getIcon(@NotNull VirtualFile file, @Iconable.IconFlags int flags, @Nullable Project project) {
         if (MultiMarkdownPreviewEditorProvider.accept(file)) {
             return MultiMarkdownProjectComponent.isWikiPage(file) ? MultiMarkdownIcons.WIKI : MultiMarkdownIcons.FILE;
         }

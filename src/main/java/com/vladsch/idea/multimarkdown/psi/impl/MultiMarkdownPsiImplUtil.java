@@ -103,7 +103,7 @@ public class MultiMarkdownPsiImplUtil {
         return getPageRef(element);
     }
 
-    public static PsiElement setName(MultiMarkdownWikiPageRef element, String newName, boolean fileMoved) {
+    public static MultiMarkdownNamedElement setName(MultiMarkdownWikiPageRef element, String newName, boolean fileMoved) {
         ASTNode pageRefNode = element.getNode();
         if (pageRefNode != null) {
             if (!fileMoved && element.getText().contains("/")) {

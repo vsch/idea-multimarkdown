@@ -28,6 +28,6 @@ import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 public class MultiMarkdownRefactoringSupportProvider extends RefactoringSupportProvider {
     @Override
     public boolean isMemberInplaceRenameAvailable(PsiElement element, PsiElement context) {
-        return element instanceof MultiMarkdownWikiPageRef;
+        return false && element instanceof MultiMarkdownWikiPageRef;
     }
 }

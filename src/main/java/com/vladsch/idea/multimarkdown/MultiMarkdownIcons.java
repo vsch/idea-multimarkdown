@@ -38,4 +38,5 @@ import java.net.URL;
 public class MultiMarkdownIcons {
     public static final Icon FILE = IconLoader.getIcon("/com/vladsch/idea/multimarkdown/multimarkdown.png");
     public static final Icon WIKI = IconLoader.getIcon("/com/vladsch/idea/multimarkdown/wikimarkdown.png");
+    public static final Icon QUICK_FIX = IconLoader.getIcon("/com/vladsch/idea/multimarkdown/markdownfix.png");
 }

@@ -29,28 +29,15 @@ import org.jetbrains.annotations.NotNull;
 public class MultiMarkdownReferenceContributor extends PsiReferenceContributor {
     @Override
     public void registerReferenceProviders(@NotNull PsiReferenceRegistrar registrar) {
-        //registrar.registerReferenceProvider(PlatformPatterns.psiElement(MultiMarkdownFile.class),
-        //        new PsiReferenceProvider() {
-        //            @NotNull
-        //            @Override
-        //            public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
-        //                // TODO: this is useless for references, we have references to files not wiki page references
-        //                MultiMarkdownFile fileNode = (MultiMarkdownFile) element;
-        //                if (fileNode.isWikiPage()) {
-        //                    return new PsiReference[]{new MultiMarkdownReference(element, fileNode.getWikiPageRef())};
-        //                }
-        //                return new PsiReference[0];
-        //            }
-        //        });
-        //
         registrar.registerReferenceProvider(PlatformPatterns.psiElement(MultiMarkdownWikiPageRef.class),
                 new PsiReferenceProvider() {
                     @NotNull
                     @Override
                     public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
                         if (element instanceof MultiMarkdownWikiPageRef && ((MultiMarkdownWikiPageRef) element).getName() != null) {
-                            return new PsiReference[]{new MultiMarkdownReference(element, element.getTextRange())};
-                        } else {
+                            return new PsiReference[] { new MultiMarkdownReference((MultiMarkdownWikiPageRef) element) };
+                        }
+                        else {
                             return new PsiReference[0];
                         }
                     }

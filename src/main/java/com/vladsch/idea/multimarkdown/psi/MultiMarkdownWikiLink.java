@@ -22,8 +22,6 @@ package com.vladsch.idea.multimarkdown.psi;
 
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.impl.source.PsiTypeElementImpl;
-import com.sun.istack.internal.NotNull;
 
 public interface MultiMarkdownWikiLink extends PsiElement {
 

@@ -35,6 +35,7 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownLanguage;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
+import com.vladsch.idea.multimarkdown.util.PathDistance;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
@@ -75,10 +76,12 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
                                 Project fileProject = parameters.getEditor().getProject();
                                 if (fileProject != null) {
                                     MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(fileProject);
-                                    List<MultiMarkdownFile> wikiFiles = projectComponent.findRefLinkMarkdownFiles(null, virtualFile, MARKDOWN_FILE | ALLOW_INACCESSIBLE_WIKI_REF);
+                                    List<MultiMarkdownFile> wikiFiles = projectComponent.findRefLinkMarkdownFiles(null, virtualFile, MARKDOWN_FILE | ALLOW_INACCESSIBLE_WIKI_REF | SPACE_DASH_EQUIVALENT);
+
                                     for (MultiMarkdownFile file : wikiFiles) {
                                         addWikiPageRefCompletion(resultSet, virtualFile, file, true);
                                     }
+
                                     for (MultiMarkdownFile file : wikiFiles) {
                                         addWikiPageRefCompletion(resultSet, virtualFile, file, false);
                                     }
@@ -91,26 +94,32 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
     }
 
     protected void addWikiPageRefCompletion(@NotNull CompletionResultSet resultSet, VirtualFile inFile, MultiMarkdownFile toFile, boolean accessible) {
-        boolean isWikiPageAccessible = toFile.getWikiPageRef(inFile, WANT_WIKI_REF) != null;
+        String wikiPageRef = toFile.getWikiPageRef(inFile, WANT_WIKI_REF);
+        boolean isWikiPageAccessible = wikiPageRef != null && !toFile.getVirtualFile().getPath().contains(" ");
+
         if (accessible == isWikiPageAccessible) {
-            String wikiPageRef = toFile.getWikiPageRef(inFile, WANT_WIKI_REF | ALLOW_INACCESSIBLE_WIKI_REF);
-            String wikiPageShortRef = toFile.getWikiPageRef(null, WANT_WIKI_REF | ALLOW_INACCESSIBLE_WIKI_REF);
-            String linkRefFileName = toFile.getLinkRef(inFile, 0);
+            if (!accessible) wikiPageRef = toFile.getWikiPageRef(inFile, WANT_WIKI_REF | ALLOW_INACCESSIBLE_WIKI_REF);
+            PathDistance pathDistance = new PathDistance(wikiPageRef);
 
-            //logger.info("Adding " + wikiPageRef + " to completions");
-            LookupElementBuilder lookupElementBuilder = LookupElementBuilder.create(wikiPageRef)
-                    //.withLookupString(wikiPageShortRef)
-                    .withCaseSensitivity(true)
-                    .withIcon(toFile.isWikiPage() ? MultiMarkdownIcons.WIKI : MultiMarkdownIcons.FILE)
-                    .withTypeText(linkRefFileName, false);
+            if (isWikiPageAccessible || pathDistance.getDistance() < 1) {
+                //String wikiPageShortRef = toFile.getWikiPageRef(null, WANT_WIKI_REF | ALLOW_INACCESSIBLE_WIKI_REF);
+                String linkRefFileName = toFile.getLinkRef(inFile, 0);
 
-            if (!isWikiPageAccessible) {
-                // TODO: get the color from color settings
-                lookupElementBuilder = lookupElementBuilder
-                        .withItemTextForeground(Color.RED);
+                //logger.info("Adding " + wikiPageRef + " to completions");
+                LookupElementBuilder lookupElementBuilder = LookupElementBuilder.create(wikiPageRef)
+                        //.withLookupString(wikiPageShortRef)
+                        .withCaseSensitivity(true)
+                        .withIcon(accessible && toFile.isWikiPage() ? MultiMarkdownIcons.WIKI : MultiMarkdownIcons.FILE)
+                        .withTypeText(linkRefFileName, false);
+
+                if (!isWikiPageAccessible) {
+                    // TODO: get the color from color settings
+                    lookupElementBuilder = lookupElementBuilder
+                            .withItemTextForeground(Color.RED);
+                }
+
+                resultSet.addElement(lookupElementBuilder);
             }
-
-            resultSet.addElement(lookupElementBuilder);
         }
     }
 }

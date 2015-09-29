@@ -24,16 +24,17 @@ import com.intellij.lang.refactoring.NamesValidator;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
-// TODO: figure out if it is needed and try to figure out the context of this name change operation
 public class MultiMarkdownNamesValidator implements NamesValidator {
 
+    // markdown has no keywords
     @Override public boolean isKeyword(@NotNull String name, Project project) {
         return false;
     }
 
+    // identifiers are all named elements that can be renamed, unfortunately we don't get any context at this point so we have to assume anything goes
     @Override public boolean isIdentifier(@NotNull String name, Project project) {
         //List<MultiMarkdownFile> list = MultiMarkdownPlugin.getProjectComponent(project).findRefLinkMarkdownFiles(name, MARKDOWN_FILE | WANT_WIKI_REF | WIKI_REF | ALLOW_INACCESSIBLE_WIKI_REF);
         //return list.size() > 0;
-        return false;
+        return true;
     }
 }

@@ -1217,9 +1217,9 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
                 // add split combinations to the parent stack, then children
                 addSplitCombinations();
 
-                if (parentRanges.size() < stackLevel) {
-                    int tmp = 0;
-                }
+                //if (parentRanges.size() < stackLevel) {
+                //    int tmp = 0;
+                //}
 
                 visitChildren((SuperNode) node);
 
