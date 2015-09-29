@@ -25,26 +25,30 @@ import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.startup.StartupManager;
 import com.intellij.openapi.vfs.*;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
-import com.vladsch.idea.multimarkdown.util.ListenerNotifier;
-import com.vladsch.idea.multimarkdown.util.ListenerNotifyDelegate;
-import com.vladsch.idea.multimarkdown.util.ProjectFileListListener;
-import org.intellij.images.fileTypes.ImageFileTypeManager;
+import com.vladsch.idea.multimarkdown.util.*;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.Executors;
 
 public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualFileListener, ListenerNotifyDelegate<ProjectFileListListener> {
+    private static final Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownProjectComponent.class);
+
     public final static int ANY_FILE = 0;
     public final static int FILE_REF = 0;
+
     public final static int WIKIPAGE_FILE = 1;
     public final static int MARKDOWN_FILE_ONLY = 2;
     public final static int IMAGE_FILE = 4;
@@ -55,48 +59,312 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
     public final static int SPACE_DASH_EQUIVALENT = 128;
     public final static int MARKDOWN_FILE = MARKDOWN_FILE_ONLY | WIKIPAGE_FILE | ALLOW_INACCESSIBLE_REF;
     public final static int ALLOW_INACCESSIBLE_WIKI_REF = ALLOW_INACCESSIBLE_REF | MARKDOWN_FILE;
+
     protected final static int LISTENER_ADDED = 0;
-    protected final static int LISTS_UPDATED = 1;
-    protected final static int UPDATE_DONE = 2;
+    protected final static int UPDATE_DONE = 1;
+
     private static final String WIKI_PAGE_EXTENSION = ".md";
+
     // this one is updating when files change, the thread local ones get updated by this one
-    private final MainFileList projectFileList = new MainFileList();
+    private final ThreadSafeMainCache<FileList> projectFileList = new ThreadSafeMainCache<FileList>(new MainFileListUpdater(this));
+    private ThreadLocal<ThreadSafeMirrorCache<FileList>> filesList = loadMarkdownFilesList();
+
+    // our listeners that want to know when project files change so they can clear cached references
     private final ListenerNotifier<ProjectFileListListener> projectFileListNotifier = new ListenerNotifier<ProjectFileListListener>(this);
+
     private Project project;
-    private ThreadLocal<FileList> filesList = loadMarkdownFilesList();
-    private ListLoadedListener projectFileListener;
 
     public MultiMarkdownProjectComponent(final Project project) {
         this.project = project;
+    }
 
-        projectFileList.addListener(projectFileListener = new ListLoadedListener() {
+    private ThreadLocal<ThreadSafeMirrorCache<FileList>> loadMarkdownFilesList() {
+        return new ThreadLocal<ThreadSafeMirrorCache<FileList>>() {
             @Override
-            public void updateLists(FileList updateLists) {
+            protected ThreadSafeMirrorCache<FileList> initialValue() {
+                return new ThreadSafeMirrorCache<FileList>(projectFileList);
             }
+        };
+    }
 
-            @Override
-            public void updateDone() {
-                // all threads have updated lists, invalidate references to files and restart parsing to the links are updated for validity
+    @Override
+    public void notify(ProjectFileListListener listener, Object... params) {
+        if (params.length == 1) {
+            switch ((Integer) params[0]) {
+                case LISTENER_ADDED:
+                    if (projectFileList.cacheIsCurrent()) {
+                        listener.projectListsUpdated();
+                    }
+                    break;
 
-                // allow references to invalidate cached values
-                projectFileListNotifier.notifyListeners(UPDATE_DONE);
+                case UPDATE_DONE:
+                    listener.projectListsUpdated();
+                    break;
 
-                final MultiMarkdownFile[] markdownFiles = projectFileList.markdownFiles;
+                default:
+                    break;
+            }
+        }
+    }
 
-                ApplicationManager.getApplication().invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!project.isDisposed()) {
-                            DaemonCodeAnalyzer instance = DaemonCodeAnalyzer.getInstance(project);
-                            for (MultiMarkdownFile markdownFile : markdownFiles) {
-                                instance.restart(markdownFile);
-                            }
+    public void addListener(@NotNull ProjectFileListListener listener) {
+        projectFileListNotifier.addListener(listener, LISTENER_ADDED);
+    }
+
+    public void removeListener(@NotNull ProjectFileListListener listener) {
+        projectFileListNotifier.removeListener(listener);
+    }
+
+    protected static class FileList {
+        protected VirtualFile[] projectFiles = new VirtualFile[0];
+        protected VirtualFile[] imageFiles = new VirtualFile[0];
+        protected MultiMarkdownFile[] markdownFiles = new MultiMarkdownFile[0];
+        protected MultiMarkdownFile[] wikiFiles = new MultiMarkdownFile[0];
+
+        public FileList() {
+        }
+
+        public FileList(FileList fileList) {
+            this.projectFiles = fileList.projectFiles;
+            this.imageFiles = fileList.imageFiles;
+            this.markdownFiles = fileList.markdownFiles;
+            this.wikiFiles = fileList.wikiFiles;
+        }
+
+        public FileList(VirtualFile[] projectFiles, VirtualFile[] imageFiles, MultiMarkdownFile[] markdownFiles, MultiMarkdownFile[] wikiFiles) {
+            this.projectFiles = projectFiles;
+            this.imageFiles = imageFiles;
+            this.markdownFiles = markdownFiles;
+            this.wikiFiles = wikiFiles;
+        }
+    }
+
+    private static class MainFileListUpdater extends ThreadSafeCacheUpdater<FileList> {
+        protected final MultiMarkdownProjectComponent projectComponent;
+
+        public MainFileListUpdater(MultiMarkdownProjectComponent projectComponent) {
+            this.projectComponent = projectComponent;
+        }
+
+        public FileList newCache() {
+            return new FileList();
+        }
+
+        @Override
+        public void beforeCacheUpdate(Object... params) {
+            // this cleans up all the threads and forces them to load a fresh cache on access
+            projectComponent.filesList.remove();
+        }
+
+        @Override
+        public void afterCacheUpdate(Object... params) {
+            // all threads have updated lists, invalidate references to files and restart parsing to the links are updated for validity
+
+            // we just schedule a later run in the dispatch thread
+            ApplicationManager.getApplication().invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    final FileList fileList = projectComponent.filesList.get().getCache();
+                    final Project project = projectComponent.project;
+
+                    // allow references to invalidate their cached values
+                    projectComponent.projectFileListNotifier.notifyListeners(UPDATE_DONE);
+
+                    if (!project.isDisposed()) {
+                        DaemonCodeAnalyzer instance = DaemonCodeAnalyzer.getInstance(project);
+                        for (MultiMarkdownFile markdownFile : fileList.markdownFiles) {
+                            instance.restart(markdownFile);
                         }
                     }
-                });
+                }
+            });
+        }
+
+        public void updateCache(final ThreadSafeMainCache.CacheUpdater<FileList> notifyWhenDone, final Object... params) {
+            final ArrayList<VirtualFile> projectFiles = new ArrayList<VirtualFile>();
+            final ArrayList<VirtualFile> imageFiles = new ArrayList<VirtualFile>();
+            final ArrayList<MultiMarkdownFile> markdownFiles = new ArrayList<MultiMarkdownFile>();
+            final ArrayList<MultiMarkdownFile> wikiFiles = new ArrayList<MultiMarkdownFile>();
+            final Project project = projectComponent.project;
+            final ProjectFileIndex projectFileIndex = ProjectFileIndex.SERVICE.getInstance(project);
+            final HashSet<String> imageFileExtensions = new HashSet<String>(5);
+            imageFileExtensions.add("png");
+            imageFileExtensions.add("jpg");
+            imageFileExtensions.add("jpeg");
+            imageFileExtensions.add("gif");
+
+            // run the list update in a separate thread
+            Executors.newCachedThreadPool().submit(new Runnable() {
+                @Override
+                public void run() {
+                    // run the file gathering in a read action
+                    ApplicationManager.getApplication().runReadAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            VirtualFile baseDir = project.getBaseDir();
+                            final int[] scanned = new int[2];
+                            VfsUtilCore.visitChildrenRecursively(baseDir, new VirtualFileVisitor() {
+                                @Override
+                                public boolean visitFile(@NotNull VirtualFile file) {
+                                    scanned[0]++;
+
+                                    // RELEASE: should only add the file only if it is part of the project source or under a .wiki parent
+                                    if (projectFileIndex.isExcluded(file) || projectFileIndex.isInLibrarySource(file)) {
+                                        // skip this one
+                                        return false;
+                                    }
+
+                                    if (projectFileIndex.isInSource(file)) {
+                                        //projectFiles.add(file);
+                                        if (imageFileExtensions.contains(FilenameUtils.getExtension(file.getPath()).toLowerCase())) {
+                                            //imageFiles.add(file);
+                                            scanned[1]++;
+                                            //logger.info(String.format("Adding image file '%s'", file.getPath()));
+                                        } else {
+                                            PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
+                                            if (psiFile != null && psiFile instanceof MultiMarkdownFile) {
+                                                markdownFiles.add((MultiMarkdownFile) psiFile);
+
+                                                if (((MultiMarkdownFile) psiFile).isWikiPage()) {
+                                                    wikiFiles.add((MultiMarkdownFile) psiFile);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    return super.visitFile(file);
+                                }
+                            });
+
+                            final FileList fileList = new FileList(
+                                    projectFiles.toArray(new VirtualFile[projectFiles.size()]),
+                                    imageFiles.toArray(new VirtualFile[imageFiles.size()]),
+                                    markdownFiles.toArray(new MultiMarkdownFile[markdownFiles.size()]),
+                                    wikiFiles.toArray(new MultiMarkdownFile[wikiFiles.size()])
+                            );
+
+                            notifyWhenDone.cacheUpdated(fileList);
+                            logger.info(String.format("Updated file list: scanned[%d], images[%d], cached:  project[%d],  image[%d],  markdown[%d], wiki[%d]", scanned[0], scanned[1], projectFiles.size(), imageFiles.size(), markdownFiles.size(), wikiFiles.size()));
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    protected void updateHighlighters() {
+        // project files have changed so we need to update the lists and then reparse for link validation
+        // We get a call back when all have been updated.
+        projectFileList.updateCache();
+    }
+
+    // TODO: detect extension change in a file and attach our editors if possible
+    @Override
+    public void propertyChanged(@NotNull VirtualFilePropertyEvent event) {
+        updateHighlighters();
+    }
+
+    @Override
+    public void contentsChanged(@NotNull VirtualFileEvent event) {
+        //updateHighlighters();
+    }
+
+    @Override
+    public void fileCreated(@NotNull VirtualFileEvent event) {
+        updateHighlighters();
+    }
+
+    @Override
+    public void fileDeleted(@NotNull VirtualFileEvent event) {
+        updateHighlighters();
+    }
+
+    @Override
+    public void fileMoved(@NotNull VirtualFileMoveEvent event) {
+        updateHighlighters();
+    }
+
+    @Override
+    public void fileCopied(@NotNull VirtualFileCopyEvent event) {
+        updateHighlighters();
+    }
+
+    @Override
+    public void beforePropertyChange(@NotNull VirtualFilePropertyEvent event) {
+        String s = event.getPropertyName();
+        //int tmp = 0;
+    }
+
+    @Override
+    public void beforeContentsChange(@NotNull VirtualFileEvent event) {
+        //int tmp = 0;
+    }
+
+    // return the files this name from inFile can refer to, wikiPagesOnly is set if the name is a wiki link
+    // name could be a wiki page ref or a link -
+    // search type could be markdownFiles, wikiFiles, imageFiles
+
+    @Override
+    public void beforeFileDeletion(@NotNull VirtualFileEvent event) {
+        //int tmp = 0;
+    }
+
+    @Override
+    public void beforeFileMovement(@NotNull VirtualFileMoveEvent event) {
+        //int tmp = 0;
+    }
+
+    public void projectOpened() {
+        VirtualFileManager.getInstance().addVirtualFileListener(this);
+        boolean initialized = project.isInitialized();
+    }
+
+    public void projectClosed() {
+        VirtualFileManager.getInstance().removeVirtualFileListener(this);
+        filesList.remove();     // remove the cached file list
+        this.project = null;
+    }
+
+    @NonNls
+    @NotNull
+    public String getComponentName() {
+        return this.getClass().getName();
+    }
+
+    public void initComponent() {
+        // get the file list updated
+        StartupManager.getInstance(project).registerPostStartupActivity(new Runnable() {
+            public void run() {
+                /* initialization code */
+                projectFileList.updateCache();
             }
         });
+        //int tmp = 0;
+        //MessageBusConnection connect = project.getMessageBus().connect();
+        //connect.subscribe(ProjectLifecycleListener.TOPIC, new ProjectLifecycleListener() {
+        //    @Override public void projectComponentsInitialized(Project aProject) {
+        //        if (aProject == project) projectFileList.loadList(project);
+        //    }
+        //
+        //    @Override public void beforeProjectLoaded(@NotNull Project project) {
+        //
+        //    }
+        //
+        //    @Override public void afterProjectClosed(@NotNull Project project) {
+        //
+        //    }
+        //});
     }
+
+    public void disposeComponent() {
+    }
+
+
+
+    /*
+
+    Crap below is to be moved out into separate implementation class(es)
+
+     */
 
     // call this function with the file name without an extension
     @Nullable
@@ -110,7 +378,8 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         int pathPos = fileName.lastIndexOf('/');
         if (pathPos < 0) pathPos = 0;
         int dotPos;
-        int endPos = !removeExtension ? fileName.length() : (dotPos = fileName.substring(pathPos).lastIndexOf('.')) < 0 ? dotPos : dotPos + pathPos;
+        int endPos = !removeExtension ? fileName.length() :
+                (dotPos = fileName.substring(pathPos).lastIndexOf('.')) < 0 ? dotPos : dotPos + pathPos;
         if (endPos <= 0) endPos = fileName.length();
         return fileName.substring(0, endPos).replace('-', ' ');
     }
@@ -250,156 +519,12 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         return false;
     }
 
-    private ThreadLocal<FileList> loadMarkdownFilesList() {
-        return new ThreadLocal<FileList>() {
-            @Override
-            protected FileList initialValue() {
-                return new FileList(projectFileList);
-            }
-        };
-    }
-
-    @Override
-    public void notify(ProjectFileListListener listener, Object... params) {
-        if (params.length == 1) {
-            switch ((Integer) params[0]) {
-                case LISTENER_ADDED:
-                    if (projectFileList.shouldNotify()) {
-                        listener.projectListsUpdated();
-                    }
-                    break;
-
-                case UPDATE_DONE:
-                    listener.projectListsUpdated();
-                    break;
-
-                default:
-                    break;
-            }
-        }
-    }
-
-    public void addListener(@NotNull ProjectFileListListener listener) {
-        projectFileListNotifier.addListener(listener, LISTENER_ADDED);
-    }
-
-    public void removeListener(@NotNull ProjectFileListListener listener) {
-        projectFileListNotifier.removeListener(listener);
-    }
-
     protected MultiMarkdownFile[] findWikiFiles(boolean wikiPagesOnly) {
-        return wikiPagesOnly ? filesList.get().wikiFiles : filesList.get().markdownFiles;
+        return wikiPagesOnly ? filesList.get().getCache().wikiFiles : filesList.get().getCache().markdownFiles;
     }
 
     protected VirtualFile[] findProjectFiles(boolean imagesOnly) {
-        return imagesOnly ? filesList.get().imageFiles : filesList.get().projectFiles;
-    }
-
-    protected void updateHighlighters() {
-        // project files have changed so we need to update the lists and then reparse for link validation
-        // We get a call back when all have been updated.
-        projectFileList.loadList(project);
-    }
-
-    // TODO: detect extension change in a file and attach our editors if possible
-    @Override
-    public void propertyChanged(@NotNull VirtualFilePropertyEvent event) {
-        updateHighlighters();
-    }
-
-    @Override
-    public void contentsChanged(@NotNull VirtualFileEvent event) {
-        //updateHighlighters();
-    }
-
-    @Override
-    public void fileCreated(@NotNull VirtualFileEvent event) {
-        updateHighlighters();
-    }
-
-    @Override
-    public void fileDeleted(@NotNull VirtualFileEvent event) {
-        updateHighlighters();
-    }
-
-    @Override
-    public void fileMoved(@NotNull VirtualFileMoveEvent event) {
-        updateHighlighters();
-    }
-
-    @Override
-    public void fileCopied(@NotNull VirtualFileCopyEvent event) {
-        updateHighlighters();
-    }
-
-    @Override
-    public void beforePropertyChange(@NotNull VirtualFilePropertyEvent event) {
-        String s = event.getPropertyName();
-        //int tmp = 0;
-    }
-
-    @Override
-    public void beforeContentsChange(@NotNull VirtualFileEvent event) {
-        //int tmp = 0;
-    }
-
-    // return the files this name from inFile can refer to, wikiPagesOnly is set if the name is a wiki link
-    // name could be a wiki page ref or a link -
-    // search type could be markdownFiles, wikiFiles, imageFiles
-
-    @Override
-    public void beforeFileDeletion(@NotNull VirtualFileEvent event) {
-        //int tmp = 0;
-    }
-
-    @Override
-    public void beforeFileMovement(@NotNull VirtualFileMoveEvent event) {
-        //int tmp = 0;
-    }
-
-    public void projectOpened() {
-        VirtualFileManager.getInstance().addVirtualFileListener(this);
-        boolean initialized = project.isInitialized();
-    }
-
-    public void projectClosed() {
-        VirtualFileManager.getInstance().removeVirtualFileListener(this);
-        filesList.remove();     // remove the cached file list
-        this.project = null;
-    }
-
-    @NonNls
-    @NotNull
-    public String getComponentName() {
-        return this.getClass().getName();
-    }
-
-    public void initComponent() {
-        // get the file list updated
-        StartupManager.getInstance(project).registerPostStartupActivity(new Runnable() {
-            public void run() {
-                /* initialization code */
-                projectFileList.loadList(project);
-            }
-        });
-        //int tmp = 0;
-        //MessageBusConnection connect = project.getMessageBus().connect();
-        //connect.subscribe(ProjectLifecycleListener.TOPIC, new ProjectLifecycleListener() {
-        //    @Override public void projectComponentsInitialized(Project aProject) {
-        //        if (aProject == project) projectFileList.loadList(project);
-        //    }
-        //
-        //    @Override public void beforeProjectLoaded(@NotNull Project project) {
-        //
-        //    }
-        //
-        //    @Override public void afterProjectClosed(@NotNull Project project) {
-        //
-        //    }
-        //});
-    }
-
-    public void disposeComponent() {
+        return imagesOnly ? filesList.get().getCache().imageFiles : filesList.get().getCache().projectFiles;
     }
 
     @Nullable
@@ -465,171 +590,5 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
             }
         }
         return result;
-    }
-
-    protected interface ListLoadedListener {
-        // use the new lists
-        void updateLists(FileList updateLists);
-
-        // all listeners have been updated
-        void updateDone();
-    }
-
-    protected static class FileList {
-        protected VirtualFile[] projectFiles = new VirtualFile[0];
-        protected VirtualFile[] imageFiles = new VirtualFile[0];
-        protected MultiMarkdownFile[] markdownFiles = new MultiMarkdownFile[0];
-        protected MultiMarkdownFile[] wikiFiles = new MultiMarkdownFile[0];
-        protected ListLoadedListener mainFileListener;
-
-        // this will only be called for the derived MainFileList instances
-        FileList() {
-        }
-
-        FileList(final MainFileList mainFileList) {
-            if (mainFileList != null) {
-                mainFileList.addListener(mainFileListener = new ListLoadedListener() {
-                    @Override
-                    public void updateLists(FileList updatedLists) {
-                        projectFiles = updatedLists.projectFiles;
-                        imageFiles = updatedLists.imageFiles;
-                        markdownFiles = updatedLists.markdownFiles;
-                        wikiFiles = updatedLists.wikiFiles;
-                    }
-
-                    @Override
-                    public void updateDone() {
-
-                    }
-                });
-            }
-        }
-    }
-
-    private static class MainFileList extends FileList implements ListenerNotifyDelegate<ListLoadedListener> {
-        private boolean isListLoaded = false;
-        private boolean isListLoading = false;
-        private ListenerNotifier<ListLoadedListener> notifier = new ListenerNotifier<ListLoadedListener>(this);
-
-        public MainFileList(MainFileList mainFileList) {
-            this();
-        }
-
-        public MainFileList() {
-            super();
-            final MainFileList mainFileList = this;
-        }
-
-        public boolean shouldNotify() {
-            return isListLoaded && !isListLoading;
-        }
-
-        public void addListener(@NotNull ListLoadedListener listener) {
-            notifier.addListener(listener, LISTENER_ADDED);
-        }        // used only during addListener processing
-
-        @Override
-        public void notify(ListLoadedListener listener, Object... params) {
-            if (params.length == 1) {
-                switch ((Integer) params[0]) {
-                    case LISTENER_ADDED:
-                        if (shouldNotify()) {
-                            listener.updateLists(this);
-                        }
-                        break;
-
-                    case LISTS_UPDATED:
-                        listener.updateLists(this);
-                        break;
-
-                    case UPDATE_DONE:
-                        listener.updateDone();
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-        }
-
-        public void removeListener(@NotNull ListLoadedListener listener) {
-            notifier.removeListener(listener);
-        }
-
-        public void notifyListeners() {
-            notifier.notifyListeners(LISTS_UPDATED);
-        }
-
-        public void notifyUpdateDone() {
-            notifier.notifyListeners(UPDATE_DONE);
-        }
-
-        protected void loadList(final Project project) {
-            boolean alreadyLoading = true;
-
-            synchronized (notifier.getListeners()) {
-                if (!isListLoading) {
-                    isListLoading = true;
-                    alreadyLoading = false;
-                }
-            }
-
-            if (!alreadyLoading) {
-                final ArrayList<VirtualFile> projectFiles = new ArrayList<VirtualFile>();
-                final ArrayList<VirtualFile> imageFiles = new ArrayList<VirtualFile>();
-                final ArrayList<MultiMarkdownFile> markdownFiles = new ArrayList<MultiMarkdownFile>();
-                final ArrayList<MultiMarkdownFile> wikiFiles = new ArrayList<MultiMarkdownFile>();
-                final MainFileList mainList = this;
-
-                // run the list update in a separate thread
-                Executors.newCachedThreadPool().submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        // run the file gathering in a read action
-                        ApplicationManager.getApplication().runReadAction(new Runnable() {
-                            @Override
-                            public void run() {
-                                VirtualFile baseDir = project.getBaseDir();
-                                VfsUtilCore.visitChildrenRecursively(baseDir, new VirtualFileVisitor() {
-                                    @Override
-                                    public boolean visitFile(@NotNull VirtualFile file) {
-                                        // RELEASE: should only add the file only if it is part of the project source or under a .wiki parent
-                                        projectFiles.add(file);
-                                        if (ImageFileTypeManager.getInstance().isImage(file)) {
-                                            imageFiles.add(file);
-                                        }
-
-                                        PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
-                                        if (psiFile != null && psiFile instanceof MultiMarkdownFile) {
-                                            markdownFiles.add((MultiMarkdownFile) psiFile);
-
-                                            if (isWikiPage(psiFile, SPACE_DASH_EQUIVALENT)) {
-                                                wikiFiles.add((MultiMarkdownFile) psiFile);
-                                            }
-                                        }
-
-                                        return super.visitFile(file);
-                                    }
-                                });
-
-                                synchronized (mainList.notifier.getListeners()) {
-                                    mainList.projectFiles = projectFiles.toArray(new VirtualFile[projectFiles.size()]);
-                                    mainList.imageFiles = imageFiles.toArray(new VirtualFile[imageFiles.size()]);
-                                    mainList.markdownFiles = markdownFiles.toArray(new MultiMarkdownFile[markdownFiles.size()]);
-                                    mainList.wikiFiles = wikiFiles.toArray(new MultiMarkdownFile[wikiFiles.size()]);
-
-                                    mainList.isListLoaded = true;
-                                    mainList.isListLoading = false;
-                                    mainList.notifyListeners();
-                                }
-
-                                // now the project can reparse the data
-                                mainList.notifyUpdateDone();
-                            }
-                        });
-                    }
-                });
-            }
-        }
     }
 }

@@ -18,14 +18,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.vladsch.idea.multimarkdown.psi;
+package com.vladsch.idea.multimarkdown.util;
 
-import com.intellij.navigation.ItemPresentation;
-import com.intellij.psi.PsiElement;
+public interface ThreadSafeCacheListener<C> {
+    // use the new cached data
+    void updateCache(C updatedCache);
 
-public interface MultiMarkdownWikiLink extends PsiElement {
-
-    String getPageTitle();
-    String getFileName();
-    ItemPresentation getPresentation();
+    // all listeners have been updated
+    void updateDone();
 }

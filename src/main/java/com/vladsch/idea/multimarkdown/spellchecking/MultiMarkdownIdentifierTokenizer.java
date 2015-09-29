@@ -16,7 +16,6 @@
 
 package com.vladsch.idea.multimarkdown.spellchecking;
 
-import com.intellij.psi.PsiIdentifier;
 import com.intellij.spellchecker.inspections.IdentifierSplitter;
 import com.intellij.spellchecker.tokenizer.TokenConsumer;
 import com.intellij.spellchecker.tokenizer.Tokenizer;

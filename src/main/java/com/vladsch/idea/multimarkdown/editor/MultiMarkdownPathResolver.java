@@ -91,18 +91,22 @@ public class MultiMarkdownPathResolver {
      * @return VirtualFile or null
      */
     public static VirtualFile resolveClassReference(@NotNull final Project project, @NotNull final String target) {
-        if (!DumbService.isDumb(project)) {
-            return ApplicationManager.getApplication().runReadAction(new Computable<VirtualFile>() {
-                @Override
-                public VirtualFile compute() {
-                    final PsiClass classpathResource = JavaPsiFacade.getInstance(project).findClass(target, GlobalSearchScope.projectScope(project));
-                    if (classpathResource != null) {
-                        return classpathResource.getContainingFile().getVirtualFile();
-                    }
-                    return null;
-                }
-            });
-        }
+        //if (!DumbService.isDumb(project)) {
+        //    return ApplicationManager.getApplication().runReadAction(new Computable<VirtualFile>() {
+        //        @Override
+        //        public VirtualFile compute() {
+        //            try {
+        //                final PsiClass classpathResource = JavaPsiFacade.getInstance(project).findClass(target, GlobalSearchScope.projectScope(project));
+        //                if (classpathResource != null) {
+        //                    return classpathResource.getContainingFile().getVirtualFile();
+        //                }
+        //            } catch (Throwable ignored) {
+        //
+        //            }
+        //            return null;
+        //        }
+        //    });
+        //}
         return null;
     }
 
