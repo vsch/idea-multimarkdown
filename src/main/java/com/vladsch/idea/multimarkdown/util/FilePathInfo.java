@@ -38,6 +38,8 @@ public final class FilePathInfo {
         this.nameStart = (lastSep = filePath.lastIndexOf('/')) < 0 ? 0 : (lastSep == filePath.length()-1 ? lastSep : lastSep+1);
         int wikiHomeEnd;
         this.wikiHomeEnd = (wikiHomeEnd = filePath.indexOf(WIKI_HOME_EXT + "/", 0)) >= nameStart || wikiHomeEnd < 0 ? 0 : wikiHomeEnd + WIKI_HOME_EXT.length();
+
+        // if file name ends in . then it has no extension and the . is part of its name.
         this.nameEnd = (extStart = filePath.lastIndexOf('.', filePath.length())) <= nameStart ? filePath.length() : extStart;
     }
 
@@ -48,11 +50,16 @@ public final class FilePathInfo {
 
     @NotNull
     public String getExt() {
+        return nameEnd+1 >= filePath.length() ? "" : filePath.substring(nameEnd+1);
+    }
+
+    @NotNull
+    public String getExtWithDot() {
         return nameEnd == filePath.length() ? "" : filePath.substring(nameEnd);
     }
 
     public boolean hasWikiPageExt() {
-        return getExt().endsWith(WIKI_PAGE_EXTENSION);
+        return filePath.endsWith(WIKI_PAGE_EXTENSION);
     }
 
     @NotNull

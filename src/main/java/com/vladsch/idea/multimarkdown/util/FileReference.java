@@ -39,6 +39,11 @@ public class FileReference {
         this.project = project;
     }
 
+    public FileReference(@NotNull VirtualFile file, Project project) {
+        this.filePathInfo = new FilePathInfo(file.getPath());
+        this.project = project;
+    }
+
     @NotNull
     public FilePathInfo getFilePathInfo() {
         return filePathInfo;
@@ -82,10 +87,22 @@ public class FileReference {
     // delegated FilePathInfo methods for convenience
 
     @NotNull
-    public String getPath() {return filePathInfo.getPath();}
+    public String getExt() {return filePathInfo.getExt();}
 
     @NotNull
-    public String getFileNameNoExtAsWikiRef() {return filePathInfo.getFileNameNoExtAsWikiRef();}
+    public String getExtWithDot() {return filePathInfo.getExtWithDot();}
+
+    public boolean hasWikiPageExt() {return filePathInfo.hasWikiPageExt();}
+
+    @NotNull
+    public String getFilePath() {return filePathInfo.getFilePath();}
+
+    @NotNull
+    public String getFilePathAsWikiRef() {return filePathInfo.getFilePathAsWikiRef();}
+
+    public boolean containsSpaces() {return filePathInfo.containsSpaces();}
+
+    public boolean isWikiHome() {return filePathInfo.isWikiHome();}
 
     @NotNull
     public String getFilePathNoExt() {return filePathInfo.getFilePathNoExt();}
@@ -94,38 +111,29 @@ public class FileReference {
     public String getFilePathNoExtAsWikiRef() {return filePathInfo.getFilePathNoExtAsWikiRef();}
 
     @NotNull
-    public String getFilePath() {return filePathInfo.getFilePath();}
-
-    public boolean hasWikiPageExt() {return filePathInfo.hasWikiPageExt();}
-
-    public boolean isWikiHome() {return filePathInfo.isWikiHome();}
+    public String getPath() {return filePathInfo.getPath();}
 
     @NotNull
-    public String getFilePathAsWikiRef() {return filePathInfo.getFilePathAsWikiRef();}
-
-    public boolean fileNameContainsSpaces() {return filePathInfo.fileNameContainsSpaces();}
-
-    @NotNull
-    public String getExt() {return filePathInfo.getExt();}
-
-    @NotNull
-    public String getFileNameNoExt() {return filePathInfo.getFileNameNoExt();}
-
-    public boolean pathContainsSpaces() {return filePathInfo.pathContainsSpaces();}
-
-    @NotNull
-    public String getFileNameAsWikiRef() {return filePathInfo.getFileNameAsWikiRef();}
+    public String getPathAsWikiRef() {return filePathInfo.getPathAsWikiRef();}
 
     public boolean isUnderWikiHome() {return filePathInfo.isUnderWikiHome();}
 
     @NotNull
-    public String getFileName() {return filePathInfo.getFileName();}
-
-    @NotNull
     public String getWikiHome() {return filePathInfo.getWikiHome();}
 
-    public boolean containsSpaces() {return filePathInfo.containsSpaces();}
+    public boolean pathContainsSpaces() {return filePathInfo.pathContainsSpaces();}
 
     @NotNull
-    public String getPathAsWikiRef() {return filePathInfo.getPathAsWikiRef();}
+    public String getFileName() {return filePathInfo.getFileName();}
+
+    public boolean fileNameContainsSpaces() {return filePathInfo.fileNameContainsSpaces();}
+
+    @NotNull
+    public String getFileNameAsWikiRef() {return filePathInfo.getFileNameAsWikiRef();}
+
+    @NotNull
+    public String getFileNameNoExt() {return filePathInfo.getFileNameNoExt();}
+
+    @NotNull
+    public String getFileNameNoExtAsWikiRef() {return filePathInfo.getFileNameNoExtAsWikiRef();}
 }

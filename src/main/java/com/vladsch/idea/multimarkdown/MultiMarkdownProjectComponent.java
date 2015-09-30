@@ -583,9 +583,11 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
 
             for (MultiMarkdownFile file : files) {
                 VirtualFile virtualFile = file.getVirtualFile();
-                if (((searchFlags & INCLUDE_SELF) != 0 || virtualInFile == null || !virtualInFile.getPath().equals(virtualFile.getPath())) && isLinkRefToFile(refLink, virtualFile, virtualInFile, searchFlags)) {
-                    if (result == null) result = new ArrayList<MultiMarkdownFile>();
-                    result.add(file);
+                if ((searchFlags & INCLUDE_SELF) != 0 || virtualInFile == null || !virtualInFile.getPath().equals(virtualFile.getPath())) {
+                    if (isLinkRefToFile(refLink, virtualFile, virtualInFile, searchFlags)) {
+                        if (result == null) result = new ArrayList<MultiMarkdownFile>();
+                        result.add(file);
+                    }
                 }
             }
         }

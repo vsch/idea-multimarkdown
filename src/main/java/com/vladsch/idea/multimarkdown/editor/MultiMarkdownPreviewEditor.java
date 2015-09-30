@@ -32,6 +32,7 @@ import com.intellij.openapi.command.UndoConfirmationPolicy;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.CaretModel;
 import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.editor.event.DocumentAdapter;
 import com.intellij.openapi.editor.event.DocumentEvent;
@@ -78,14 +79,20 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
 
     public static final String TEXT_EDITOR_NAME = MultiMarkdownBundle.message("multimarkdown.html-tab-name");
 
-    /** The {@link java.awt.Component} used to render the HTML preview. */
+    /**
+     * The {@link java.awt.Component} used to render the HTML preview.
+     */
     protected final JEditorPane jEditorPane;
 
-    /** The {@link JBScrollPane} allowing to browse {@link #jEditorPane}. */
+    /**
+     * The {@link JBScrollPane} allowing to browse {@link #jEditorPane}.
+     */
     protected final JBScrollPane scrollPane;
     private RootNode astRoot = null;
 
-    /** The {@link Document} previewed in this editor. */
+    /**
+     * The {@link Document} previewed in this editor.
+     */
     protected final Document document;
     protected final boolean isWikiDocument;
 
@@ -96,7 +103,9 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
 
     protected MultiMarkdownGlobalSettingsListener globalSettingsListener;
 
-    /** The {@link PegDownProcessor} used for building the document AST. */
+    /**
+     * The {@link PegDownProcessor} used for building the document AST.
+     */
     private ThreadLocal<PegDownProcessor> processor = initProcessor();
 
     private boolean isActive = false;
@@ -138,17 +147,22 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         return MultiMarkdownGlobalSettings.getInstance().showHtmlText.getValue();
     }
 
-    /** Init/reinit thread local {@link PegDownProcessor}. */
+    /**
+     * Init/reinit thread local {@link PegDownProcessor}.
+     */
     private static ThreadLocal<PegDownProcessor> initProcessor() {
         return new ThreadLocal<PegDownProcessor>() {
-            @Override protected PegDownProcessor initialValue() {
+            @Override
+            protected PegDownProcessor initialValue() {
                 // ISSUE: #7 worked around, disable pegdown TaskList HTML rendering, they don't display well in Darcula.
                 return new PegDownProcessor(MultiMarkdownGlobalSettings.getInstance().getExtensionsValue() & ~Extensions.TASKLISTITEMS, getParsingTimeout());
             }
         };
     }
 
-    /** Indicates whether the HTML preview is obsolete and should regenerated from the Markdown {@link #document}. */
+    /**
+     * Indicates whether the HTML preview is obsolete and should regenerated from the Markdown {@link #document}.
+     */
     protected boolean previewIsObsolete = true;
 
     protected Timer updateDelayTimer;
@@ -241,7 +255,8 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
             //myTextViewer = new EditorTextField(EditorFactory.getInstance().createDocument(""), project, fileType, true, false);
             Document myDocument = EditorFactory.getInstance().createDocument("");
             myTextViewer = (EditorImpl) EditorFactory.getInstance().createViewer(myDocument, project);
-            if (fileType != null) myTextViewer.setHighlighter(EditorHighlighterFactory.getInstance().createEditorHighlighter(project, fileType));
+            if (fileType != null)
+                myTextViewer.setHighlighter(EditorHighlighterFactory.getInstance().createEditorHighlighter(project, fileType));
         } else {
             // Setup the editor pane for rendering HTML.
             myTextViewer = null;
@@ -398,11 +413,36 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
                             processor.remove();     // make it re-initialize when accessed
                         }
 
-                        updateHtmlContent(true);
+                        updateHtmlContent(isActive || isMyTabSelected());
                     }
                 }, ModalityState.any());
             }
         }, getUpdateDelay());
+    }
+
+    protected boolean isMyTabSelected() {
+        FileEditorManager manager = FileEditorManager.getInstance(project);
+        FileEditor[] editors = manager.getSelectedEditors();
+        for (FileEditor editor : editors) {
+            if (editor == this) return true;
+        }
+        return false;
+    }
+
+    protected MultiMarkdownFxPreviewEditor findCounterpart() {
+        // here we can find our HTML Text counterpart and update its HTML at the same time. but it is better to keep it separate for now
+        VirtualFile file = FileDocumentManager.getInstance().getFile(document);
+        if (file != null) {
+            FileEditorManager manager = FileEditorManager.getInstance(project);
+            FileEditor[] editors = manager.getEditors(file);
+            for (FileEditor editor : editors) {
+                if (editor != this && editor instanceof MultiMarkdownFxPreviewEditor) {
+                    return (MultiMarkdownFxPreviewEditor) editor;
+                }
+            }
+        }
+
+        return null;
     }
 
     protected void setStyleSheet() {
@@ -468,7 +508,8 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         if (astRoot == null) {
             return "<strong>Parser timed out</strong>";
         } else {
-            return modified ? new MultiMarkdownToHtmlSerializer(project, document, linkRendererModified).toHtml(astRoot) : new ToHtmlSerializer(linkRendererNormal).toHtml(astRoot);
+            return modified ? new MultiMarkdownToHtmlSerializer(project, document, linkRendererModified).toHtml(astRoot) :
+                    new ToHtmlSerializer(linkRendererNormal).toHtml(astRoot);
         }
     }
 
@@ -562,9 +603,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
      * Just returns {@link FileEditorState#INSTANCE} as {@link MultiMarkdownPreviewEditor} is stateless.
      *
      * @param level the level.
-     *
      * @return {@link FileEditorState#INSTANCE}
-     *
      * @see #setState(com.intellij.openapi.fileEditor.FileEditorState)
      */
     @NotNull
@@ -578,7 +617,6 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
      * Does not do anything as {@link MultiMarkdownPreviewEditor} is stateless.
      *
      * @param state the new state.
-     *
      * @see #getState(com.intellij.openapi.fileEditor.FileEditorStateLevel)
      */
     public void setState(@NotNull FileEditorState state) {
@@ -673,10 +711,18 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         return null;
     }
 
-    /** Dispose the editor. */
+    /**
+     * Dispose the editor.
+     */
     public void dispose() {
         if (!isReleased) {
             isReleased = true;
+
+            if (updateDelayTimer != null) {
+                updateDelayTimer.cancel();
+                updateDelayTimer = null;
+            }
+
             if (jEditorPane != null) {
                 jEditorPane.removeAll();
             }
@@ -704,7 +750,6 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
                 }
             }
 
-            project = null;
             Disposer.dispose(this);
         }
     }

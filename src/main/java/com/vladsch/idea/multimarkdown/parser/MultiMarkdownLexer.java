@@ -23,11 +23,9 @@ package com.vladsch.idea.multimarkdown.parser;
 import com.intellij.lexer.Lexer;
 import com.intellij.lexer.LexerPosition;
 import com.intellij.psi.tree.IElementType;
-import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.debugger.values.StringValue;
 
 public class MultiMarkdownLexer extends Lexer {
     protected MultiMarkdownLexParser lexParser = null;
@@ -67,8 +65,8 @@ public class MultiMarkdownLexer extends Lexer {
         }
     }
 
-
-    @Override public void start(@NotNull CharSequence buffer, int startOffset, int endOffset, int initialState) {
+    @Override
+    public void start(@NotNull CharSequence buffer, int startOffset, int endOffset, int initialState) {
         //logger = MultiMarkdownPlugin.getInstance().getLogger();
         //logger.info("LexStart("+String.valueOf(startOffset) + ", " + String.valueOf(endOffset) + ", " + String.valueOf(initialState) + " for " + this.toString() + " from " + Thread.currentThread().toString());
         //logStackTrace();
@@ -98,59 +96,70 @@ public class MultiMarkdownLexer extends Lexer {
 
             currentOffset = lexerToken == null ? endOffset : lexerToken.getRange().getEnd();
 
-            assert currentOffset <= endOffset;
-            //if (currentOffset > endOffset) {
-            //    currentOffset = endOffset;
-            //}
+            //assert currentOffset <= endOffset;
+            if (currentOffset > endOffset) {
+                currentOffset = endOffset;
+            }
         }
     }
 
-    @Override public int getState() {
+    @Override
+    public int getState() {
         return lexemeIndex;
     }
 
-    @Nullable @Override public IElementType getTokenType() {
+    @Nullable
+    @Override
+    public IElementType getTokenType() {
         //return lexerToken != null && lexerToken.getRange().getStart() < endOffset ? lexerToken.getElementType() : null;
         return lexerToken != null ? lexerToken.getElementType() : null;
     }
 
-    @Override public int getTokenStart() {
+    @Override
+    public int getTokenStart() {
         return lexerToken != null ? lexerToken.getRange().getStart() : endOffset;
     }
 
-    @Override public int getTokenEnd() {
+    @Override
+    public int getTokenEnd() {
         //return lexerToken != null && lexerToken.getRange().getEnd() <= endOffset ? lexerToken.getRange().getEnd() : endOffset;
         return lexerToken != null ? lexerToken.getRange().getEnd() : endOffset;
     }
 
-    @Override public void advance() {
-        do {
-            if (lexerTokens != null && lexemeIndex >= 0 && lexemeIndex < lexerTokens.length) {
-                if (lexerToken == null || currentOffset < lexerToken.getRange().getStart()) {
-                    lexerToken = lexParser.getSkippedSpaceToken(currentOffset, lexerTokens[lexemeIndex].getRange().getStart());
-                } else {
-                    lexerToken = lexerTokens[lexemeIndex];
-                    if (currentOffset < lexerToken.getRange().getStart()) {
-                        lexerToken = lexParser.getSkippedSpaceToken(currentOffset, lexerToken.getRange().getStart());
+    @Override
+    public void advance() {
+        if (currentOffset < endOffset) {
+            do {
+                if (lexerTokens != null && lexemeIndex >= 0 && lexemeIndex < lexerTokens.length) {
+                    if (lexerToken == null || currentOffset < lexerToken.getRange().getStart()) {
+                        lexerToken = lexParser.getSkippedSpaceToken(currentOffset, lexerTokens[lexemeIndex].getRange().getStart());
                     } else {
-                        lexemeIndex++;
+                        lexerToken = lexerTokens[lexemeIndex];
+                        if (currentOffset < lexerToken.getRange().getStart()) {
+                            lexerToken = lexParser.getSkippedSpaceToken(currentOffset, lexerToken.getRange().getStart());
+                        } else {
+                            lexemeIndex++;
+                        }
+                    }
+                } else {
+                    if (currentOffset < endOffset) {
+                        lexerToken = lexParser.getSkippedSpaceToken(currentOffset, endOffset);
+                    } else {
+                        lexerToken = null;
                     }
                 }
-            } else {
-                if (currentOffset < endOffset) {
-                    lexerToken = lexParser.getSkippedSpaceToken(currentOffset, endOffset);
-                } else {
-                    lexerToken = null;
-                }
-            }
-        } while (lexerToken != null && lexerToken.getRange().getEnd() < currentOffset);
+            } while (lexerToken != null && lexerToken.getRange().getEnd() < currentOffset);
 
-        currentOffset = lexerToken == null ? endOffset : lexerToken.getRange().getEnd();
+            currentOffset = lexerToken == null ? endOffset : lexerToken.getRange().getEnd();
+        } else {
+            lexerToken = null;
+        }
 
-        assert currentOffset <= endOffset;
-        //if (currentOffset > endOffset) {
-        //    currentOffset = endOffset;
-        //}
+        //assert currentOffset <= endOffset;
+        if (currentOffset > endOffset) {
+            lexerToken = null;
+            currentOffset = endOffset;
+        }
 
         //System.out.print("advanced to " + currentOffset + " (" + (lexerToken == null ? "null" : lexerToken.toString()) + ")\n");
     }
@@ -165,31 +174,39 @@ public class MultiMarkdownLexer extends Lexer {
             this.state = state;
         }
 
-        @Override public int getOffset() {
+        @Override
+        public int getOffset() {
             return offset;
         }
 
-        @Override public int getState() {
+        @Override
+        public int getState() {
             return state;
         }
     }
 
-    @NotNull @Override public LexerPosition getCurrentPosition() {
+    @NotNull
+    @Override
+    public LexerPosition getCurrentPosition() {
         return new MarkdownLexerPosition(currentOffset, lexemeIndex);
     }
 
-    @Override public void restore(@NotNull LexerPosition lexerPosition) {
+    @Override
+    public void restore(@NotNull LexerPosition lexerPosition) {
         currentOffset = lexerPosition.getOffset();
         lexemeIndex = lexerPosition.getState();
         lexerToken = null;
         advance();
     }
 
-    @NotNull @Override public CharSequence getBufferSequence() {
+    @NotNull
+    @Override
+    public CharSequence getBufferSequence() {
         return buffer;
     }
 
-    @Override public int getBufferEnd() {
+    @Override
+    public int getBufferEnd() {
         return buffer.length();
     }
 }
