@@ -21,10 +21,13 @@
 
 package com.vladsch.idea.multimarkdown;
 
+import com.intellij.ProjectTopics;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ModuleRootAdapter;
+import com.intellij.openapi.roots.ModuleRootEvent;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.startup.StartupManager;
 import com.intellij.openapi.vfs.*;
@@ -115,11 +118,16 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         projectFileListNotifier.removeListener(listener);
     }
 
-    protected static class FileList {
+    public static class FileList {
         protected VirtualFile[] projectFiles = new VirtualFile[0];
         protected VirtualFile[] imageFiles = new VirtualFile[0];
         protected MultiMarkdownFile[] markdownFiles = new MultiMarkdownFile[0];
         protected MultiMarkdownFile[] wikiFiles = new MultiMarkdownFile[0];
+
+        protected FileReference[] projectFileRefs = new FileReference[0];
+        protected FileReference[] imageFileRefs = new FileReference[0];
+        protected FileReference[] markdownFileRefs = new FileReference[0];
+        protected FileReference[] wikiFileRefs = new FileReference[0];
 
         public FileList() {
         }
@@ -129,14 +137,55 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
             this.imageFiles = fileList.imageFiles;
             this.markdownFiles = fileList.markdownFiles;
             this.wikiFiles = fileList.wikiFiles;
+
+            // new implementation
+            this.projectFileRefs = fileList.projectFileRefs;
+            this.imageFileRefs = fileList.imageFileRefs;
+            this.markdownFileRefs = fileList.markdownFileRefs;
+            this.wikiFileRefs = fileList.wikiFileRefs;
         }
 
-        public FileList(VirtualFile[] projectFiles, VirtualFile[] imageFiles, MultiMarkdownFile[] markdownFiles, MultiMarkdownFile[] wikiFiles) {
+        public FileList(
+                VirtualFile[] projectFiles,
+                VirtualFile[] imageFiles,
+                MultiMarkdownFile[] markdownFiles,
+                MultiMarkdownFile[] wikiFiles,
+
+                FileReference[] projectFileRefs,
+                FileReference[] imageFileRefs,
+                FileReference[] markdownFileRefs,
+                FileReference[] wikiFileRefs
+        ) {
             this.projectFiles = projectFiles;
             this.imageFiles = imageFiles;
             this.markdownFiles = markdownFiles;
             this.wikiFiles = wikiFiles;
+
+            this.projectFileRefs = projectFileRefs;
+            this.imageFileRefs = imageFileRefs;
+            this.markdownFileRefs = markdownFileRefs;
+            this.wikiFileRefs = wikiFileRefs;
         }
+
+        public FileReference[] getProjectFileRefs() {
+            return projectFileRefs;
+        }
+
+        public FileReference[] getImageFileRefs() {
+            return imageFileRefs;
+        }
+
+        public FileReference[] getMarkdownFileRefs() {
+            return markdownFileRefs;
+        }
+
+        public FileReference[] getWikiFileRefs() {
+            return wikiFileRefs;
+        }
+    }
+
+    public FileList getFileList() {
+        return new FileList(filesList.get().getCache());
     }
 
     private static class MainFileListUpdater extends ThreadSafeCacheUpdater<FileList> {
@@ -164,13 +213,14 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
             ApplicationManager.getApplication().invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    final FileList fileList = projectComponent.filesList.get().getCache();
                     final Project project = projectComponent.project;
 
-                    // allow references to invalidate their cached values
-                    projectComponent.projectFileListNotifier.notifyListeners(UPDATE_DONE);
-
                     if (!project.isDisposed()) {
+                        final FileList fileList = projectComponent.filesList.get().getCache();
+
+                        // allow references to invalidate their cached values
+                        projectComponent.projectFileListNotifier.notifyListeners(UPDATE_DONE);
+
                         DaemonCodeAnalyzer instance = DaemonCodeAnalyzer.getInstance(project);
                         for (MultiMarkdownFile markdownFile : fileList.markdownFiles) {
                             instance.restart(markdownFile);
@@ -185,8 +235,15 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
             final ArrayList<VirtualFile> imageFiles = new ArrayList<VirtualFile>();
             final ArrayList<MultiMarkdownFile> markdownFiles = new ArrayList<MultiMarkdownFile>();
             final ArrayList<MultiMarkdownFile> wikiFiles = new ArrayList<MultiMarkdownFile>();
+
+            final ArrayList<FileReference> projectFileRefs = new ArrayList<FileReference>();
+            final ArrayList<FileReference> imageFileRefs = new ArrayList<FileReference>();
+            final ArrayList<FileReference> markdownFileRefs = new ArrayList<FileReference>();
+            final ArrayList<FileReference> wikiFileRefs = new ArrayList<FileReference>();
+
             final Project project = projectComponent.project;
             final ProjectFileIndex projectFileIndex = ProjectFileIndex.SERVICE.getInstance(project);
+
             final HashSet<String> imageFileExtensions = new HashSet<String>(5);
             imageFileExtensions.add("png");
             imageFileExtensions.add("jpg");
@@ -194,21 +251,29 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
             imageFileExtensions.add("gif");
 
             // run the list update in a separate thread
+            if (project.isDisposed()) return;
+
             Executors.newCachedThreadPool().submit(new Runnable() {
                 @Override
                 public void run() {
                     // run the file gathering in a read action
+                    if (project.isDisposed()) return;
+
                     ApplicationManager.getApplication().runReadAction(new Runnable() {
                         @Override
                         public void run() {
+                            if (project.isDisposed()) return;
+
                             VirtualFile baseDir = project.getBaseDir();
                             final int[] scanned = new int[2];
                             VfsUtilCore.visitChildrenRecursively(baseDir, new VirtualFileVisitor() {
                                 @Override
                                 public boolean visitFile(@NotNull VirtualFile file) {
+                                    if (project.isDisposed()) return false;
+
                                     scanned[0]++;
 
-                                    // RELEASE: should only add the file only if it is part of the project source or under a .wiki parent
+                                    // only add the file only if it is part of the project source or under a .wiki parent
                                     if (projectFileIndex.isExcluded(file) || projectFileIndex.isInLibrarySource(file)) {
                                         // skip this one
                                         return false;
@@ -216,34 +281,49 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
 
                                     if (projectFileIndex.isInSource(file)) {
                                         //projectFiles.add(file);
+                                        FileReference fileReference = new FileReference(file, project);
+                                        projectFileRefs.add(fileReference);
+
                                         if (imageFileExtensions.contains(FilenameUtils.getExtension(file.getPath()).toLowerCase())) {
                                             //imageFiles.add(file);
                                             scanned[1]++;
+                                            imageFileRefs.add(fileReference);
                                             //logger.info(String.format("Adding image file '%s'", file.getPath()));
                                         } else {
                                             PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
                                             if (psiFile != null && psiFile instanceof MultiMarkdownFile) {
                                                 markdownFiles.add((MultiMarkdownFile) psiFile);
+                                                markdownFileRefs.add(fileReference);
 
                                                 if (((MultiMarkdownFile) psiFile).isWikiPage()) {
                                                     wikiFiles.add((MultiMarkdownFile) psiFile);
+                                                    wikiFileRefs.add(fileReference);
                                                 }
                                             }
                                         }
                                     }
+
                                     return super.visitFile(file);
                                 }
                             });
+
+                            if (project.isDisposed()) return;
 
                             final FileList fileList = new FileList(
                                     projectFiles.toArray(new VirtualFile[projectFiles.size()]),
                                     imageFiles.toArray(new VirtualFile[imageFiles.size()]),
                                     markdownFiles.toArray(new MultiMarkdownFile[markdownFiles.size()]),
-                                    wikiFiles.toArray(new MultiMarkdownFile[wikiFiles.size()])
+                                    wikiFiles.toArray(new MultiMarkdownFile[wikiFiles.size()]),
+
+                                    // new implementation
+                                    projectFileRefs.toArray(new FileReference[projectFileRefs.size()]),
+                                    imageFileRefs.toArray(new FileReference[imageFileRefs.size()]),
+                                    markdownFileRefs.toArray(new FileReference[markdownFileRefs.size()]),
+                                    wikiFileRefs.toArray(new FileReference[wikiFileRefs.size()])
                             );
 
                             notifyWhenDone.cacheUpdated(fileList);
-                            logger.info(String.format("Updated file list: scanned[%d], images[%d], cached:  project[%d],  image[%d],  markdown[%d], wiki[%d]", scanned[0], scanned[1], projectFiles.size(), imageFiles.size(), markdownFiles.size(), wikiFiles.size()));
+                            logger.info(String.format("Updated file list: scanned[%d], images[%d], cached:  projectRefs[%d],  imageRefs[%d],  markdownRefs[%d], wikiRefs[%d]", scanned[0], scanned[1], projectFileRefs.size(), imageFileRefs.size(), markdownFileRefs.size(), wikiFileRefs.size()));
                         }
                     });
                 }
@@ -254,6 +334,8 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
     protected void updateHighlighters() {
         // project files have changed so we need to update the lists and then reparse for link validation
         // We get a call back when all have been updated.
+        if (project.isDisposed()) return;
+
         projectFileList.updateCache();
     }
 
@@ -316,12 +398,19 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
     public void projectOpened() {
         VirtualFileManager.getInstance().addVirtualFileListener(this);
         boolean initialized = project.isInitialized();
+
+        project.getMessageBus().connect().subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
+            public void rootsChanged(ModuleRootEvent event) {
+                if (project.isDisposed()) return;
+
+                projectFileList.updateCache();
+            }
+        });
     }
 
     public void projectClosed() {
         VirtualFileManager.getInstance().removeVirtualFileListener(this);
         filesList.remove();     // remove the cached file list
-        this.project = null;
     }
 
     @NonNls

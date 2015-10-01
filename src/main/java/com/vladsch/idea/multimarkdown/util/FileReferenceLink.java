@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class FileReferenceLink implements Comparable<FileReferenceLink> {
+public class FileReferenceLink extends FileReference implements Comparable<FileReferenceLink> {
 
     public static final int REASON_TARGET_HAS_SPACES = 1;
     public static final int REASON_CASE_MISMATCH = 2;
@@ -39,7 +39,6 @@ public class FileReferenceLink implements Comparable<FileReferenceLink> {
     public static final int REASON_MAX = 6;
 
     protected final FileReference sourceReference;
-    protected final FileReference targetReference;
     protected String linkRef;
     protected String wikiPageRef;
     protected boolean wikiAccessible;
@@ -47,32 +46,32 @@ public class FileReferenceLink implements Comparable<FileReferenceLink> {
     protected int downDirectories;
 
     public FileReferenceLink(@NotNull String sourcePath, @NotNull String targetPath, Project project) {
+        super(targetPath, project);
         this.sourceReference = new FileReference(sourcePath, project);
-        this.targetReference = new FileReference(targetPath, project);
 
         computeLinkRefInfo();
     }
 
     public FileReferenceLink(@NotNull FileReference sourceReference, @NotNull FileReference targetReference) {
+        super(targetReference);
+
         assert sourceReference.getProject() == targetReference.getProject();
         this.sourceReference = sourceReference;
-        this.targetReference = targetReference;
 
         computeLinkRefInfo();
     }
 
+    @NotNull
     public FileReference getSource() {
         return sourceReference;
     }
 
-    public FileReference getTarget() {
-        return targetReference;
-    }
-
+    @NotNull
     public String getLinkRef() {
         return linkRef;
     }
 
+    @NotNull
     public String getWikiPageRef() {
         return wikiPageRef;
     }
@@ -93,6 +92,7 @@ public class FileReferenceLink implements Comparable<FileReferenceLink> {
         return downDirectories;
     }
 
+    @NotNull
     public int[] inaccessibleWikiPageRefReasons(@Nullable String wikiPageRef) {
         int[] reasons = new int[REASON_MAX];
         int i = 0;
@@ -100,9 +100,9 @@ public class FileReferenceLink implements Comparable<FileReferenceLink> {
         if (linkRefHasSpaces()) reasons[i++] = REASON_TARGET_HAS_SPACES;
         if (wikiPageRef != null && wikiPageRef.equalsIgnoreCase(this.wikiPageRef) && !wikiPageRef.equals(this.wikiPageRef)) reasons[i++] = REASON_CASE_MISMATCH;
         if (wikiPageRef != null && wikiPageRef.indexOf('-') >= 0) reasons[i++] = REASON_WIKI_PAGEREF_HAS_DASHES;
-        if (!targetReference.isUnderWikiHome()) reasons[i++] = REASON_NOT_UNDER_WIKI_HOME;
-        if (!targetReference.hasWikiPageExt()) reasons[i++] = REASON_TARGET_NOT_WIKI_PAGE_EXT;
-        if (!targetReference.getWikiHome().startsWith(sourceReference.getWikiHome())) reasons[i++] = REASON_NOT_UNDER_SOURCE_WIKI_HOME;
+        if (!isUnderWikiHome()) reasons[i++] = REASON_NOT_UNDER_WIKI_HOME;
+        if (!hasWikiPageExt()) reasons[i++] = REASON_TARGET_NOT_WIKI_PAGE_EXT;
+        if (!getWikiHome().startsWith(sourceReference.getWikiHome())) reasons[i++] = REASON_NOT_UNDER_SOURCE_WIKI_HOME;
 
         return Arrays.copyOfRange(reasons, 0, i);
     }
@@ -116,7 +116,7 @@ public class FileReferenceLink implements Comparable<FileReferenceLink> {
 
     protected void computeLinkRefInfo() {
         String pathPrefix = "";
-        String[] targetParts = targetReference.getFilePath().split("/");
+        String[] targetParts = getFilePath().split("/");
         String[] sourceParts = sourceReference.getFilePath().split("/");
         downDirectories = 0;
         upDirectories = 0;
@@ -142,9 +142,9 @@ public class FileReferenceLink implements Comparable<FileReferenceLink> {
             downDirectories++;
         }
 
-        linkRef = pathPrefix + targetReference.getFileName();
-        wikiPageRef = FilePathInfo.asWikiRef(pathPrefix + targetReference.getFileNameNoExt());
+        linkRef = pathPrefix + getFileName();
+        wikiPageRef = FilePathInfo.asWikiRef(pathPrefix + getFileNameNoExt());
 
-        wikiAccessible = linkRef.indexOf(' ') < 0 && targetReference.hasWikiPageExt() && targetReference.getWikiHome().startsWith(sourceReference.getWikiHome());
+        wikiAccessible = linkRef.indexOf(' ') < 0 && hasWikiPageExt() && getWikiHome().startsWith(sourceReference.getWikiHome());
     }
 }

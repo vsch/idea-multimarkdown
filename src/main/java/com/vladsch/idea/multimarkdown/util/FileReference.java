@@ -29,24 +29,27 @@ import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FileReference {
-
-    protected final FilePathInfo filePathInfo;
+public class FileReference extends FilePathInfo {
     protected final Project project;
 
+    public FileReference(@NotNull String filePath) {
+        super(filePath);
+        this.project = null;
+    }
+
     public FileReference(@NotNull String filePath, Project project) {
-        this.filePathInfo = new FilePathInfo(filePath);
+        super(filePath);
         this.project = project;
     }
 
     public FileReference(@NotNull VirtualFile file, Project project) {
-        this.filePathInfo = new FilePathInfo(file.getPath());
+        super(file.getPath());
         this.project = project;
     }
 
-    @NotNull
-    public FilePathInfo getFilePathInfo() {
-        return filePathInfo;
+    public FileReference(@NotNull FileReference other) {
+        super(other);
+        this.project = other.project;
     }
 
     public Project getProject() {
@@ -54,13 +57,20 @@ public class FileReference {
     }
 
     @Nullable
-    public VirtualFile getSourceVirtualFile() {
-        return FileReference.getVirtualFile(filePathInfo.getFilePath(), project);
+    public VirtualFile getVirtualFile() {
+        return FileReference.getVirtualFile(getFilePath(), project);
     }
 
     @Nullable
-    public PsiFile getSourcePsiFile() {
-        return FileReference.getPsiFile(filePathInfo.getFilePath(), project);
+    public PsiFile getPsiFile() {
+        return FileReference.getPsiFile(getFilePath(), project);
+    }
+
+    @Nullable
+    public MultiMarkdownFile getMultiMarkdownFile() {
+        PsiFile file;
+        return (file = FileReference.getPsiFile(getFilePath(), project)) instanceof MultiMarkdownFile ?
+                (MultiMarkdownFile) file : null;
     }
 
     @Nullable
@@ -83,57 +93,4 @@ public class FileReference {
         }
         return null;
     }
-
-    // delegated FilePathInfo methods for convenience
-
-    @NotNull
-    public String getExt() {return filePathInfo.getExt();}
-
-    @NotNull
-    public String getExtWithDot() {return filePathInfo.getExtWithDot();}
-
-    public boolean hasWikiPageExt() {return filePathInfo.hasWikiPageExt();}
-
-    @NotNull
-    public String getFilePath() {return filePathInfo.getFilePath();}
-
-    @NotNull
-    public String getFilePathAsWikiRef() {return filePathInfo.getFilePathAsWikiRef();}
-
-    public boolean containsSpaces() {return filePathInfo.containsSpaces();}
-
-    public boolean isWikiHome() {return filePathInfo.isWikiHome();}
-
-    @NotNull
-    public String getFilePathNoExt() {return filePathInfo.getFilePathNoExt();}
-
-    @NotNull
-    public String getFilePathNoExtAsWikiRef() {return filePathInfo.getFilePathNoExtAsWikiRef();}
-
-    @NotNull
-    public String getPath() {return filePathInfo.getPath();}
-
-    @NotNull
-    public String getPathAsWikiRef() {return filePathInfo.getPathAsWikiRef();}
-
-    public boolean isUnderWikiHome() {return filePathInfo.isUnderWikiHome();}
-
-    @NotNull
-    public String getWikiHome() {return filePathInfo.getWikiHome();}
-
-    public boolean pathContainsSpaces() {return filePathInfo.pathContainsSpaces();}
-
-    @NotNull
-    public String getFileName() {return filePathInfo.getFileName();}
-
-    public boolean fileNameContainsSpaces() {return filePathInfo.fileNameContainsSpaces();}
-
-    @NotNull
-    public String getFileNameAsWikiRef() {return filePathInfo.getFileNameAsWikiRef();}
-
-    @NotNull
-    public String getFileNameNoExt() {return filePathInfo.getFileNameNoExt();}
-
-    @NotNull
-    public String getFileNameNoExtAsWikiRef() {return filePathInfo.getFileNameNoExtAsWikiRef();}
 }

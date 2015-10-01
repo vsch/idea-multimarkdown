@@ -173,6 +173,8 @@ public class MultiMarkdownPathResolver {
                         virtualTarget = resolveRelativePath(document, href);
                     }
 
+                    // IMPORTANT: figure out if this should apply only to wiki pages or .md files in general
+                    // TODO: add a configuration option for resolving to markdown files if an extension is not provided
                     if (virtualTarget == null) {
                         // if the file has no extension, and a Markdown file exists in the project that has the same
                         FilePathInfo hrefPathInfo = new FilePathInfo(href);
@@ -185,9 +187,10 @@ public class MultiMarkdownPathResolver {
                         }
                     }
 
-                    if (virtualTarget == null) { // Okay, try as if the link target is a class reference
-                        virtualTarget = resolveClassReference(project, href);
-                    }
+                    // TODO: add a configuration option for resolving optionally to java classes
+                    //if (virtualTarget == null) { // Okay, try as if the link target is a class reference
+                    //    virtualTarget = resolveClassReference(project, href);
+                    //}
 
                     foundFile[0] = virtualTarget;
                     if (foundFile[0] != null && openFile) {
@@ -198,7 +201,7 @@ public class MultiMarkdownPathResolver {
 
                                 if (hashSuffix.length() > 0) {
                                     // TODO: see if we can resolve the #hashSuffix in the file
-                                    logger.info("got hash suffixed href: " + href + "#" + hashSuffix);
+                                    //logger.info("got hash suffixed href: " + href + "#" + hashSuffix);
                                 }
                             }
                         });

@@ -22,7 +22,7 @@ package com.vladsch.idea.multimarkdown.util;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class FilePathInfo {
+public class FilePathInfo {
     public static final String WIKI_PAGE_EXTENSION = ".md";
     public static final String WIKI_HOME_EXT = ".wiki";
 
@@ -41,6 +41,13 @@ public final class FilePathInfo {
 
         // if file name ends in . then it has no extension and the . is part of its name.
         this.nameEnd = (extStart = filePath.lastIndexOf('.', filePath.length())) <= nameStart ? filePath.length() : extStart;
+    }
+
+    public FilePathInfo(@NotNull FilePathInfo other) {
+        this.wikiHomeEnd = other.wikiHomeEnd;
+        this.nameStart = other.nameStart;
+        this.nameEnd = other.nameEnd;
+        this.filePath = other.filePath;
     }
 
     @NotNull
