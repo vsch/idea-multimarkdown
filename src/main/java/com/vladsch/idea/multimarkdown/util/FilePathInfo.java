@@ -20,11 +20,15 @@
  */
 package com.vladsch.idea.multimarkdown.util;
 
+import com.vladsch.idea.multimarkdown.MultiMarkdownFileTypeFactory;
 import org.jetbrains.annotations.NotNull;
 
 public class FilePathInfo {
     public static final String WIKI_PAGE_EXTENSION = ".md";
     public static final String WIKI_HOME_EXT = ".wiki";
+    public static final String[] IMAGE_EXTENSIONS = { "png", "jpg", "jpeg", "gif", };
+    public static final String[] MARKDOWN_EXTENSIONS = MultiMarkdownFileTypeFactory.EXTENSIONS;
+    public static final String[] WIKI_PAGE_EXTENSIONS = { MultiMarkdownFileTypeFactory.DEFAULT_EXTENSION };
 
     private final int wikiHomeEnd;
     private final int nameStart;
@@ -35,9 +39,10 @@ public class FilePathInfo {
         this.filePath = filePath;
         int lastSep;
         int extStart;
-        this.nameStart = (lastSep = filePath.lastIndexOf('/')) < 0 ? 0 : (lastSep == filePath.length()-1 ? lastSep : lastSep+1);
+        this.nameStart = (lastSep = filePath.lastIndexOf('/')) < 0 ? 0 : (lastSep == filePath.length() - 1 ? lastSep : lastSep + 1);
         int wikiHomeEnd;
-        this.wikiHomeEnd = (wikiHomeEnd = filePath.indexOf(WIKI_HOME_EXT + "/", 0)) >= nameStart || wikiHomeEnd < 0 ? 0 : wikiHomeEnd + WIKI_HOME_EXT.length();
+        this.wikiHomeEnd = (wikiHomeEnd = filePath.indexOf(WIKI_HOME_EXT + "/", 0)) >= nameStart || wikiHomeEnd < 0 ? 0 :
+                wikiHomeEnd + WIKI_HOME_EXT.length();
 
         // if file name ends in . then it has no extension and the . is part of its name.
         this.nameEnd = (extStart = filePath.lastIndexOf('.', filePath.length())) <= nameStart ? filePath.length() : extStart;
@@ -55,9 +60,43 @@ public class FilePathInfo {
         return filePath.replace('-', ' ');
     }
 
+    protected static boolean compare(boolean caseSensitive, boolean spaceDashEquivalent, int i, int iMax, @NotNull String param, int paramOffs, @NotNull String tail, int tailOffs) {
+        for (; i < iMax; i++) {
+            char tC = tail.charAt(i + tailOffs);
+            char pC = param.charAt(i + paramOffs);
+            if (tC == pC) continue;
+            if (caseSensitive || Character.toLowerCase(pC) != Character.toLowerCase(tC)) return false;
+            if (spaceDashEquivalent || !((pC == ' ' || pC == '-') && (tC == ' ' || tC == '-'))) return false;
+        }
+        return true;
+    }
+
+    public static boolean endsWith(boolean caseSensitive, boolean spaceDashEquivalent, @NotNull String param, @NotNull String tail) {
+        if (!spaceDashEquivalent && caseSensitive) {
+            return param.endsWith(tail);
+        }
+
+        int tailLen = tail.length();
+        int paramLen = param.length();
+        int paramOffs = paramLen - tailLen;
+
+        return paramLen >= tailLen && compare(caseSensitive, spaceDashEquivalent, 0, tailLen, tail, 0, param, paramOffs);
+    }
+
+    public static boolean equivalent(boolean caseSensitive, boolean spaceDashEquivalent, @NotNull String param, @NotNull String other) {
+        if (!spaceDashEquivalent) {
+            return caseSensitive ? param.equals(other) : param.equalsIgnoreCase(other);
+        }
+
+        int tailLen = other.length();
+        int paramLen = param.length();
+
+        return paramLen == tailLen && compare(caseSensitive, spaceDashEquivalent, 0, tailLen, other, 0, param, 0);
+    }
+
     @NotNull
     public String getExt() {
-        return nameEnd+1 >= filePath.length() ? "" : filePath.substring(nameEnd+1);
+        return nameEnd + 1 >= filePath.length() ? "" : filePath.substring(nameEnd + 1);
     }
 
     @NotNull
@@ -142,5 +181,32 @@ public class FilePathInfo {
     @NotNull
     public String getFileNameNoExtAsWikiRef() {
         return asWikiRef(getFileNameNoExt());
+    }
+
+    public static boolean isExtInList(boolean caseSensitive, @NotNull String ext, String... extList) {
+        for (String listExt : extList) {
+            if (equivalent(caseSensitive, false, listExt, ext)) return true;
+        }
+        return false;
+    }
+
+    public static boolean isExtInList(@NotNull String ext, String... extList) {
+        return isExtInList(false, ext, extList);
+    }
+
+    public static boolean isExtInListCaseSensitive(@NotNull String ext, String... extList) {
+        return isExtInList(true, ext, extList);
+    }
+
+    public static boolean isImageExt(@NotNull String ext) {
+        return isExtInList(false, ext, IMAGE_EXTENSIONS);
+    }
+
+    public static boolean isMarkdownExt(@NotNull String ext) {
+        return isExtInList(false, ext, MARKDOWN_EXTENSIONS);
+    }
+
+    public static boolean isWikiPageExt(@NotNull String ext) {
+        return isExtInList(false, ext, WIKI_PAGE_EXTENSIONS);
     }
 }

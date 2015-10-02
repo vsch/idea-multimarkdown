@@ -8,6 +8,8 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/idea-multimarkdown2.wiki" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/idea-multimarkdown.wiki" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/src/misc" />
     </content>
     <orderEntry type="inheritedJdk" />

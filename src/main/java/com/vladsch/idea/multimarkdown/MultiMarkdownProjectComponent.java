@@ -76,6 +76,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
     private final ListenerNotifier<ProjectFileListListener> projectFileListNotifier = new ListenerNotifier<ProjectFileListListener>(this);
 
     private Project project;
+    private FileReferenceList fileReferenceList;
 
     public MultiMarkdownProjectComponent(final Project project) {
         this.project = project;
@@ -118,16 +119,25 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         projectFileListNotifier.removeListener(listener);
     }
 
+    public Project getProject() {
+        return project;
+    }
+
+    public FileReferenceList getFileReferenceList() {
+        return filesList.get().getCache().fileReferenceList;
+    }
+
+    public FileReferenceListQuery getFileReferenceListQuery() {
+        return new FileReferenceListQuery(this);
+    }
+
     public static class FileList {
         protected VirtualFile[] projectFiles = new VirtualFile[0];
         protected VirtualFile[] imageFiles = new VirtualFile[0];
         protected MultiMarkdownFile[] markdownFiles = new MultiMarkdownFile[0];
         protected MultiMarkdownFile[] wikiFiles = new MultiMarkdownFile[0];
 
-        protected FileReference[] projectFileRefs = new FileReference[0];
-        protected FileReference[] imageFileRefs = new FileReference[0];
-        protected FileReference[] markdownFileRefs = new FileReference[0];
-        protected FileReference[] wikiFileRefs = new FileReference[0];
+        public FileReferenceList fileReferenceList;
 
         public FileList() {
         }
@@ -139,10 +149,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
             this.wikiFiles = fileList.wikiFiles;
 
             // new implementation
-            this.projectFileRefs = fileList.projectFileRefs;
-            this.imageFileRefs = fileList.imageFileRefs;
-            this.markdownFileRefs = fileList.markdownFileRefs;
-            this.wikiFileRefs = fileList.wikiFileRefs;
+            this.fileReferenceList = fileList.fileReferenceList;
         }
 
         public FileList(
@@ -151,41 +158,35 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
                 MultiMarkdownFile[] markdownFiles,
                 MultiMarkdownFile[] wikiFiles,
 
-                FileReference[] projectFileRefs,
-                FileReference[] imageFileRefs,
-                FileReference[] markdownFileRefs,
-                FileReference[] wikiFileRefs
+                FileReferenceList fileReferenceList
         ) {
             this.projectFiles = projectFiles;
             this.imageFiles = imageFiles;
             this.markdownFiles = markdownFiles;
             this.wikiFiles = wikiFiles;
 
-            this.projectFileRefs = projectFileRefs;
-            this.imageFileRefs = imageFileRefs;
-            this.markdownFileRefs = markdownFileRefs;
-            this.wikiFileRefs = wikiFileRefs;
+            this.fileReferenceList = fileReferenceList;
         }
 
-        public FileReference[] getProjectFileRefs() {
-            return projectFileRefs;
+        public FileList(
+                VirtualFile[] projectFiles,
+                VirtualFile[] imageFiles,
+                MultiMarkdownFile[] markdownFiles,
+                MultiMarkdownFile[] wikiFiles,
+
+                FileReferenceList.Builder builder
+        ) {
+            this.projectFiles = projectFiles;
+            this.imageFiles = imageFiles;
+            this.markdownFiles = markdownFiles;
+            this.wikiFiles = wikiFiles;
+
+            this.fileReferenceList = new FileReferenceList(builder);
         }
 
-        public FileReference[] getImageFileRefs() {
-            return imageFileRefs;
+        public FileReferenceList getFileReferenceList() {
+            return fileReferenceList;
         }
-
-        public FileReference[] getMarkdownFileRefs() {
-            return markdownFileRefs;
-        }
-
-        public FileReference[] getWikiFileRefs() {
-            return wikiFileRefs;
-        }
-    }
-
-    public FileList getFileList() {
-        return new FileList(filesList.get().getCache());
     }
 
     private static class MainFileListUpdater extends ThreadSafeCacheUpdater<FileList> {
@@ -236,19 +237,10 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
             final ArrayList<MultiMarkdownFile> markdownFiles = new ArrayList<MultiMarkdownFile>();
             final ArrayList<MultiMarkdownFile> wikiFiles = new ArrayList<MultiMarkdownFile>();
 
-            final ArrayList<FileReference> projectFileRefs = new ArrayList<FileReference>();
-            final ArrayList<FileReference> imageFileRefs = new ArrayList<FileReference>();
-            final ArrayList<FileReference> markdownFileRefs = new ArrayList<FileReference>();
-            final ArrayList<FileReference> wikiFileRefs = new ArrayList<FileReference>();
+            final FileReferenceList.Builder builder = new FileReferenceList.Builder();
 
             final Project project = projectComponent.project;
             final ProjectFileIndex projectFileIndex = ProjectFileIndex.SERVICE.getInstance(project);
-
-            final HashSet<String> imageFileExtensions = new HashSet<String>(5);
-            imageFileExtensions.add("png");
-            imageFileExtensions.add("jpg");
-            imageFileExtensions.add("jpeg");
-            imageFileExtensions.add("gif");
 
             // run the list update in a separate thread
             if (project.isDisposed()) return;
@@ -282,22 +274,19 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
                                     if (projectFileIndex.isInSource(file)) {
                                         //projectFiles.add(file);
                                         FileReference fileReference = new FileReference(file, project);
-                                        projectFileRefs.add(fileReference);
+                                        builder.add(fileReference);
 
-                                        if (imageFileExtensions.contains(FilenameUtils.getExtension(file.getPath()).toLowerCase())) {
+                                        if (FilePathInfo.isImageExt(fileReference.getExt())) {
                                             //imageFiles.add(file);
                                             scanned[1]++;
-                                            imageFileRefs.add(fileReference);
                                             //logger.info(String.format("Adding image file '%s'", file.getPath()));
                                         } else {
                                             PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
                                             if (psiFile != null && psiFile instanceof MultiMarkdownFile) {
                                                 markdownFiles.add((MultiMarkdownFile) psiFile);
-                                                markdownFileRefs.add(fileReference);
 
                                                 if (((MultiMarkdownFile) psiFile).isWikiPage()) {
                                                     wikiFiles.add((MultiMarkdownFile) psiFile);
-                                                    wikiFileRefs.add(fileReference);
                                                 }
                                             }
                                         }
@@ -316,14 +305,11 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
                                     wikiFiles.toArray(new MultiMarkdownFile[wikiFiles.size()]),
 
                                     // new implementation
-                                    projectFileRefs.toArray(new FileReference[projectFileRefs.size()]),
-                                    imageFileRefs.toArray(new FileReference[imageFileRefs.size()]),
-                                    markdownFileRefs.toArray(new FileReference[markdownFileRefs.size()]),
-                                    wikiFileRefs.toArray(new FileReference[wikiFileRefs.size()])
+                                    builder
                             );
 
                             notifyWhenDone.cacheUpdated(fileList);
-                            logger.info(String.format("Updated file list: scanned[%d], images[%d], cached:  projectRefs[%d],  imageRefs[%d],  markdownRefs[%d], wikiRefs[%d]", scanned[0], scanned[1], projectFileRefs.size(), imageFileRefs.size(), markdownFileRefs.size(), wikiFileRefs.size()));
+                            logger.info(String.format("Updated file list: scanned[%d], images[%d], cached:  projectRefs[%d],  imageRefs[%d],  markdownRefs[%d], wikiRefs[%d]", scanned[0], scanned[1], projectFiles.size(), imageFiles.size(), markdownFiles.size(), wikiFiles.size()));
                         }
                     });
                 }

@@ -20,15 +20,10 @@
  */
 package com.vladsch.idea.multimarkdown.util;
 
-import com.intellij.openapi.project.Project;
-import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 public class FileReferenceListQuery {
     // types of files to search
@@ -46,321 +41,231 @@ public class FileReferenceListQuery {
     public final static int CASE_INSENSITIVE = 0x0040;
 
     // what is provided for the match
+    public final static int LINK_WITH_EXT_REF = 0x0000;
     public final static int WIKIPAGE_REF = 0x0080;
-    public final static int LINK_REF = 0x0100;
-    public final static int LINK_WITH_EXT_REF = 0x0180;
+    public final static int LINK_REF_NO_EXT = 0x0100;
 
-    public final static int MATCH_TYPE_FLAGS = LINK_WITH_EXT_REF;
+    public final static int MATCH_TYPE_FLAGS = LINK_REF_NO_EXT | WIKIPAGE_REF;
 
-    protected final @NotNull Project project;
-    protected int searchFlags;
-    protected String matchPattern;
-    protected FileReference sourceFileReference;
+    protected final @NotNull MultiMarkdownProjectComponent projectComponent;
+    protected int queryFlags;
+    protected String matchLinkRef;
+    protected FileReference sourceReference;
 
-    public FileReferenceListQuery(@NotNull Project project) {
-        this.project = project;
-        this.searchFlags = 0;
-        this.matchPattern = null;
-        this.sourceFileReference = null;
+    public FileReferenceListQuery(@NotNull MultiMarkdownProjectComponent projectComponent) {
+        this.projectComponent = projectComponent;
+        this.queryFlags = 0;
+        this.matchLinkRef = null;
+        this.sourceReference = null;
     }
 
-    public FileReferenceListQuery(@NotNull Project project, int searchFlags) {
-        this.project = project;
-        this.searchFlags = searchFlags;
-        this.matchPattern = null;
-        this.sourceFileReference = null;
+    public FileReferenceListQuery(@NotNull MultiMarkdownProjectComponent projectComponent, int queryFlags) {
+        this.projectComponent = projectComponent;
+        this.queryFlags = queryFlags;
+        this.matchLinkRef = null;
+        this.sourceReference = null;
     }
 
     public FileReferenceListQuery(@NotNull FileReferenceListQuery other) {
-        this.project = other.project;
-        this.searchFlags = other.searchFlags;
-        this.matchPattern = other.matchPattern;
-        this.sourceFileReference = other.sourceFileReference;
+        this.projectComponent = other.projectComponent;
+        this.queryFlags = other.queryFlags;
+        this.matchLinkRef = other.matchLinkRef;
+        this.sourceReference = other.sourceReference;
     }
 
     @NotNull
-    public Project getProject() {
-        return project;
+    public MultiMarkdownProjectComponent getProjectComponent() {
+        return projectComponent;
     }
 
-    public int getSearchFlags() {
-        return searchFlags;
+    public int getQueryFlags() {
+        return queryFlags;
     }
 
-    public String getMatchPattern() {
-        return matchPattern;
+    public String getMatchLinkRef() {
+        return matchLinkRef;
     }
 
-    public FileReference getSourceFileReference() {
-        return sourceFileReference;
+    public FileReference getSourceReference() {
+        return sourceReference;
     }
 
     @NotNull
     public FileReferenceListQuery wikiPages() {
-        searchFlags = (searchFlags & ~FILE_TYPE_FLAGS) | WIKIPAGE_FILE;
-        return this;
-    }
-
-    @NotNull
-    public FileReferenceListQuery includeSource() {
-        searchFlags = (searchFlags & ~FILE_TYPE_FLAGS) | WIKIPAGE_FILE;
+        queryFlags = (queryFlags & ~FILE_TYPE_FLAGS) | WIKIPAGE_FILE;
         return this;
     }
 
     @NotNull
     public FileReferenceListQuery markdownFiles() {
-        searchFlags = (searchFlags & ~FILE_TYPE_FLAGS) | MARKDOWN_FILE | WIKIPAGE_FILE;
+        queryFlags = (queryFlags & ~FILE_TYPE_FLAGS) | MARKDOWN_FILE;
+        return this;
+    }
+
+    @NotNull
+    public FileReferenceListQuery imageFiles() {
+        queryFlags = (queryFlags & ~FILE_TYPE_FLAGS) | IMAGE_FILE;
+        return this;
+    }
+
+    @NotNull
+    public FileReferenceListQuery allFiles() {
+        queryFlags = (queryFlags & ~FILE_TYPE_FLAGS);
         return this;
     }
 
     @NotNull
     public FileReferenceListQuery spaceDashEqual() {
-        searchFlags |= SPACE_DASH_EQUIVALENT;
+        queryFlags |= SPACE_DASH_EQUIVALENT;
         return this;
     }
 
     @NotNull
     public FileReferenceListQuery spaceDashNotEqual() {
-        searchFlags &= ~SPACE_DASH_EQUIVALENT;
+        queryFlags &= ~SPACE_DASH_EQUIVALENT;
         return this;
     }
 
     @NotNull
     public FileReferenceListQuery caseInsensitive() {
-        searchFlags |= CASE_INSENSITIVE;
+        queryFlags |= CASE_INSENSITIVE;
         return this;
     }
 
     @NotNull
     public FileReferenceListQuery caseSensitive() {
-        searchFlags &= ~CASE_INSENSITIVE;
+        queryFlags &= ~CASE_INSENSITIVE;
         return this;
     }
 
     @NotNull
-    public FileReferenceListQuery forAnyRef() {
-        this.matchPattern = null;
-        searchFlags &= ~MATCH_TYPE_FLAGS;
+    public FileReferenceListQuery matchAnyRef() {
+        this.matchLinkRef = null;
+        queryFlags &= ~MATCH_TYPE_FLAGS;
         return this;
     }
 
     @NotNull
-    public FileReferenceListQuery forWikiRef(@NotNull String wikiRef) {
-        this.matchPattern = wikiRef;
-        searchFlags &= ~MATCH_TYPE_FLAGS;
+    public FileReferenceListQuery matchWikiRef(@NotNull String wikiRef) {
+        this.matchLinkRef = wikiRef;
+        queryFlags = (queryFlags & ~MATCH_TYPE_FLAGS) | WIKIPAGE_REF;
         return this;
     }
 
     @NotNull
-    public FileReferenceListQuery forLinkRef(@NotNull String linkRef, boolean withExt) {
-        this.matchPattern = linkRef;
-        searchFlags = (searchFlags & ~MATCH_TYPE_FLAGS) | LINK_REF | (withExt ? LINK_WITH_EXT_REF : 0);
+    public FileReferenceListQuery matchLinkRef(@NotNull String linkRef, boolean withExt) {
+        this.matchLinkRef = linkRef;
+        queryFlags = (queryFlags & ~MATCH_TYPE_FLAGS) | (withExt ? LINK_WITH_EXT_REF : LINK_REF_NO_EXT);
         return this;
     }
 
     @NotNull
-    public FileReferenceListQuery forLinkRef(@NotNull String linkRef) {
-        return forLinkRef(linkRef, false);
+    public FileReferenceListQuery matchLinkRefNoExt(@NotNull String linkRef) {
+        return matchLinkRef(linkRef, false);
     }
 
     @NotNull
-    public FileReferenceListQuery forLinkRefWithExt(@NotNull String linkRef) {
-        return forLinkRef(linkRef, true);
+    public FileReferenceListQuery matchLinkRef(@NotNull String linkRef) {
+        return matchLinkRef(linkRef, true);
     }
 
     @NotNull
-    public FileReferenceListQuery forSource(@NotNull FileReference sourceFileReference) {
-        this.sourceFileReference = sourceFileReference;
+    public FileReferenceListQuery inSource(@NotNull FileReference sourceFileReference) {
+        this.sourceReference = sourceFileReference;
         return this;
     }
 
     @NotNull
-    public FileReferenceListQuery forSource(@NotNull MultiMarkdownFile sourceMarkdownFile) {
-        this.sourceFileReference = new FileReference(sourceMarkdownFile.getVirtualFile(), project);
+    public FileReferenceListQuery inSource(@NotNull MultiMarkdownFile sourceMarkdownFile) {
+        this.sourceReference = new FileReference(sourceMarkdownFile.getVirtualFile(), projectComponent.getProject());
         return this;
     }
 
     @NotNull
-    public FileReferenceListQuery forAnySource() {
-        this.sourceFileReference = null;
+    public FileReferenceListQuery inAnySource() {
+        this.sourceReference = null;
         return this;
     }
 
-    interface QueryFilter {
-        @Nullable
-        FileReference filter(@NotNull FileReference fileReference);
-    }
-
-    static class QueryResults {
-        protected final FileReference[] results;
-
-        public FileReference[] getResults() {
-            return results.clone();
-        }
-
-        protected QueryResults(Collection<? extends FileReference> c) {
-            this.results = c.toArray(new FileReference[c.size()]);
-        }
-
-        protected QueryResults(FileReference... fileReferences) {
-            this.results = fileReferences.clone();
-        }
-
-        protected QueryResults(@Nullable QueryFilter filter, @NotNull FileReference... fileReferences) {
-            ArrayList<FileReference> results = new ArrayList<FileReference>(fileReferences.length);
-
-            for (FileReference fileReference : fileReferences) {
-                FileReference addReference = filter == null || fileReference == null ? fileReference : filter.filter(fileReference);
-                if (addReference != null) results.add(addReference);
-            }
-            this.results = results.toArray(new FileReference[results.size()]);
-        }
-
-        public QueryResults(@NotNull QueryFilter[] filters, @NotNull FileReference... fileReferences) {
-            ArrayList<FileReference> results = new ArrayList<FileReference>(fileReferences.length);
-
-            Outer:
-            for (FileReference fileReference : fileReferences) {
-                FileReference addReference = fileReference;
-
-                if (addReference == null) continue;
-
-                for (QueryFilter filter : filters) {
-                    addReference = filter.filter(fileReference);
-                    if (addReference == null) continue Outer;
-                }
-
-                results.add(addReference);
-            }
-
-            this.results = results.toArray(new FileReference[results.size()]);
-        }
-
-        public QueryResults(@NotNull QueryFilter[] filters, @NotNull FileReference[]... fileReferenceLists) {
-            ArrayList<FileReference> results = new ArrayList<FileReference>();
-
-            for (FileReference[] fileReferences : fileReferenceLists) {
-
-                Outer:
-                for (FileReference fileReference : fileReferences) {
-                    FileReference addReference = fileReference;
-
-                    if (addReference == null) continue;
-
-                    for (QueryFilter filter : filters) {
-                        addReference = filter.filter(fileReference);
-                        if (addReference == null) continue Outer;
-                    }
-
-                    results.add(addReference);
-                }
-            }
-
-            this.results = results.toArray(new FileReference[results.size()]);
-        }
-
-        public QueryResults(@NotNull QueryResults other, QueryFilter... filters) {
-            this(filters, other.results);
-        }
-
-        public QueryResults(@NotNull QueryFilter[] filters, @NotNull QueryResults... queryResultLists) {
-            ArrayList<FileReference> results = new ArrayList<FileReference>();
-
-            for (QueryResults queryResults : queryResultLists) {
-
-                Outer:
-                for (FileReference fileReference : queryResults.results) {
-                    FileReference addReference = fileReference;
-
-                    if (addReference == null) continue;
-
-                    for (QueryFilter filter : filters) {
-                        addReference = filter.filter(fileReference);
-                        if (addReference == null) continue Outer;
-                    }
-
-                    results.add(addReference);
-                }
-            }
-
-            this.results = results.toArray(new FileReference[results.size()]);
-        }
+    @NotNull
+    public FileReferenceListQuery includeSource() {
+        this.queryFlags |= INCLUDE_SOURCE;
+        return this;
     }
 
     @NotNull
-    protected QueryResults buildResults(QueryFilter... postFilters) {
-        FileReference[] fileList = getFileReferences(project, searchFlags);
+    protected FileReferenceList buildResults(@Nullable FileReferenceList fileList, FileReferenceList.Filter... postFilters) {
+        if (fileList == null) fileList = projectComponent.getFileReferenceList();
+
         int iMax = postFilters.length;
-        QueryFilter[] filters = new QueryFilter[iMax+1];
-        filters[0] = getQueryFilter();
+        FileReferenceList.Filter[] filters = new FileReferenceList.Filter[iMax + 2];
+        filters[0] = getFileTypeFilter(queryFlags);
+        filters[1] = getQueryFilter();
         if (iMax > 0) System.arraycopy(postFilters, 0, filters, 1, iMax);
-        return new QueryResults(filters, fileList);
+        return new FileReferenceList(filters, fileList);
+    }
+
+    protected static FileReferenceList.Filter getFileTypeFilter(int searchFlags) {
+        FileReferenceList.Filter filter;
+
+        switch (searchFlags & FILE_TYPE_FLAGS) {
+            case IMAGE_FILE:
+                filter = FileReferenceList.IMAGE_FILE_FILTER;
+                break;
+
+            case MARKDOWN_FILE:
+                filter = FileReferenceList.MARKDOWN_FILE_FILTER;
+                break;
+
+            case WIKIPAGE_FILE:
+                filter = FileReferenceList.WIKIPAGE_FILE_FILTER;
+                break;
+
+            default:
+            case ANY_FILE:
+                filter = FileReferenceList.ANY_FILE_FILTER;
+                break;
+        }
+        return filter;
     }
 
     @Nullable
-    public QueryFilter getQueryFilter() {
-        return getQueryFilter(sourceFileReference, matchPattern, searchFlags);
+    public FileReferenceList.Filter getQueryFilter() {
+        return getQueryFilter(sourceReference, matchLinkRef, queryFlags);
     }
 
     @NotNull
-    public QueryResults getResults() {
-        return buildResults();
+    public FileReferenceList getResults() {
+        return buildResults(null);
     }
 
     @NotNull
-    public QueryResults getResults(QueryFilter... queryFilters) {
-        return buildResults(queryFilters);
+    public FileReferenceList getResults(@NotNull FileReferenceList fileReferenceList) {
+        return buildResults(fileReferenceList);
     }
 
     @NotNull
-    public QueryResults wikiPageRefs(boolean accessibleRefs, boolean inaccessibleRefs) {
+    public FileReferenceList getResults(FileReferenceList.Filter... queryFilters) {
+        return buildResults(null, queryFilters);
     }
 
     @NotNull
-    public QueryResults accessibleWikiPageRefs() {
-        return wikiPageRefs(true, false);
-    }
-
-    @NotNull
-    public QueryResults inaccessibleWikiPageRefs() {
-        return wikiPageRefs(false, true);
-    }
-
-    @NotNull
-    public QueryResults allWikiPageRefs() {
-        return wikiPageRefs(true, true);
+    public FileReferenceList getResults(@NotNull FileReferenceList fileReferenceList, FileReferenceList.Filter... queryFilters) {
+        return buildResults(fileReferenceList, queryFilters);
     }
 
     // Implementation details for queries and lists
-    protected static boolean compare(int searchFlags, int i, int iMax, @NotNull String param, int paramOffs, @NotNull String tail, int tailOffs) {
-        for (; i < iMax; i++) {
-            char tC = tail.charAt(i + tailOffs);
-            char pC = param.charAt(i + paramOffs);
-            if (tC == pC) continue;
-            if ((searchFlags & CASE_INSENSITIVE) == 0 || Character.toLowerCase(pC) != Character.toLowerCase(tC)) return false;
-            if ((searchFlags & SPACE_DASH_EQUIVALENT) == 0 || !((pC == ' ' || pC == '-') && (tC == ' ' || tC == '-'))) return false;
-        }
-        return true;
+    public static boolean endsWith(int searchFlags, @NotNull String param, @NotNull String tail) {
+        return FilePathInfo.endsWith((searchFlags & CASE_INSENSITIVE) == 0, (searchFlags & SPACE_DASH_EQUIVALENT) == 0, param, tail);
     }
 
-    protected static boolean endsWith(int searchFlags, @NotNull String param, @NotNull String tail) {
-        int tailLen = tail.length();
-        int paramLen = param.length();
-        int paramOffs = paramLen - tailLen;
-
-        return paramLen >= tailLen && compare(searchFlags, 0, tailLen, tail, 0, param, paramOffs);
-    }
-
-    protected static boolean equivalent(int searchFlags, @NotNull String param, @NotNull String other) {
-        int tailLen = other.length();
-        int paramLen = param.length();
-
-        return paramLen == tailLen && compare(searchFlags, 0, tailLen, other, 0, param, 0);
+    public static boolean equivalent(int searchFlags, @NotNull String param, @NotNull String tail) {
+        return FilePathInfo.equivalent((searchFlags & CASE_INSENSITIVE) == 0, (searchFlags & SPACE_DASH_EQUIVALENT) == 0, param, tail);
     }
 
     @Nullable
-    protected static QueryFilter getQueryFilter(FileReference sourceFileReference, String matchPattern, int searchFlags) {
-        QueryFilter filter;
+    protected static FileReferenceList.Filter getQueryFilter(FileReference sourceFileReference, String matchPattern, int searchFlags) {
+        FileReferenceList.Filter filter;
         if (sourceFileReference == null) {
             // if match then it is the ending of the reference path
             if (matchPattern == null) {
@@ -372,30 +277,40 @@ public class FileReferenceListQuery {
             if (matchPattern == null) {
                 filter = getAnyFileFilter(sourceFileReference);
             } else {
-                filter = getMatchFileFilter();
+                filter = getMatchFileFilter(matchPattern, searchFlags, sourceFileReference);
             }
         }
         return filter;
     }
 
     @NotNull
-    protected static QueryFilter getAnyFileFilter(@NotNull final FileReference sourceFileReference) {
-        return new QueryFilter() {
+    protected static FileReferenceList.Filter getAnyFileFilter(@NotNull final FileReference sourceFileReference) {
+        return new FileReferenceList.Filter() {
             @Override
-            public FileReference filter(@NotNull FileReference fileReference) {
+            public boolean filterExt(@NotNull String ext) {
+                return true;
+            }
+
+            @Override
+            public FileReference filterRef(@NotNull FileReference fileReference) {
                 return new FileReferenceLink(sourceFileReference, fileReference);
             }
         };
     }
 
     @NotNull
-    protected static QueryFilter getMatchAnyFileFilter(@NotNull final String matchPattern, final int searchFlags) {
-        QueryFilter filter;
+    protected static FileReferenceList.Filter getMatchAnyFileFilter(@NotNull final String matchPattern, final int searchFlags) {
+        FileReferenceList.Filter filter;
         switch (searchFlags & MATCH_TYPE_FLAGS) {
             case WIKIPAGE_REF:
-                filter = new QueryFilter() {
+                filter = new FileReferenceList.Filter() {
                     @Override
-                    public FileReference filter(@NotNull FileReference fileReference) {
+                    public boolean filterExt(@NotNull String ext) {
+                        return equivalent(searchFlags, ext, "md");
+                    }
+
+                    @Override
+                    public FileReference filterRef(@NotNull FileReference fileReference) {
                         return endsWith(searchFlags, fileReference.getFilePathNoExtAsWikiRef(),
                                 matchPattern.charAt(0) == '/' ? matchPattern : '/' + matchPattern) ? fileReference : null;
                     }
@@ -403,9 +318,14 @@ public class FileReferenceListQuery {
                 break;
 
             case LINK_WITH_EXT_REF:
-                filter = new QueryFilter() {
+                filter = new FileReferenceList.Filter() {
                     @Override
-                    public FileReference filter(@NotNull FileReference fileReference) {
+                    public boolean filterExt(@NotNull String ext) {
+                        return equivalent(searchFlags, ext, new FilePathInfo(matchPattern).getExt());
+                    }
+
+                    @Override
+                    public FileReference filterRef(@NotNull FileReference fileReference) {
                         return endsWith(searchFlags, fileReference.getFilePath(),
                                 matchPattern.charAt(0) == '/' ? matchPattern : '/' + matchPattern) ? fileReference : null;
                     }
@@ -413,10 +333,15 @@ public class FileReferenceListQuery {
                 break;
 
             default:
-            case LINK_REF:
-                filter = new QueryFilter() {
+            case LINK_REF_NO_EXT:
+                filter = new FileReferenceList.Filter() {
                     @Override
-                    public FileReference filter(@NotNull FileReference fileReference) {
+                    public boolean filterExt(@NotNull String ext) {
+                        return true;
+                    }
+
+                    @Override
+                    public FileReference filterRef(@NotNull FileReference fileReference) {
                         return endsWith(searchFlags, fileReference.getFilePathNoExt(),
                                 matchPattern.charAt(0) == '/' ? matchPattern : '/' + matchPattern) ? fileReference : null;
                     }
@@ -427,63 +352,58 @@ public class FileReferenceListQuery {
     }
 
     @NotNull
-    protected static QueryFilter getMatchFileFilter(@NotNull final String matchPattern, final int searchFlags, @NotNull final FileReference sourceFileReference) {
-        QueryFilter filter;
+    protected static FileReferenceList.Filter getMatchFileFilter(@NotNull final String matchPattern, final int searchFlags, @NotNull final FileReference sourceFileReference) {
+        FileReferenceList.Filter filter;
         switch (searchFlags & MATCH_TYPE_FLAGS) {
             case WIKIPAGE_REF:
-                filter = new QueryFilter() {
+                filter = new FileReferenceList.Filter() {
                     @Override
-                    public FileReference filter(@NotNull FileReference fileReference) {
-                        FileReferenceLink referenceLink = new FileReferenceLink(sourceFileReference, fileReference);
-                        return equivalent(searchFlags, referenceLink.getWikiPageRef(), matchPattern) ? referenceLink : null;
+                    public boolean filterExt(@NotNull String ext) {
+                        return true;
                     }
-                };
-                break;
 
-            case LINK_WITH_EXT_REF:
-                filter = new QueryFilter() {
                     @Override
-                    public FileReference filter(@NotNull FileReference fileReference) {
+                    public FileReference filterRef(@NotNull FileReference fileReference) {
                         FileReferenceLink referenceLink = new FileReferenceLink(sourceFileReference, fileReference);
-                        return equivalent(searchFlags, fileReference.getFilePath(), matchPattern) ? referenceLink : null;
+                        return equivalent(searchFlags, referenceLink.getWikiPageRef(), matchPattern) && ((searchFlags & INCLUDE_SOURCE) != 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ?
+                                referenceLink : null;
                     }
                 };
                 break;
 
             default:
-            case LINK_REF:
-                filter = new QueryFilter() {
+            case LINK_WITH_EXT_REF:
+                filter = new FileReferenceList.Filter() {
                     @Override
-                    public FileReference filter(@NotNull FileReference fileReference) {
+                    public boolean filterExt(@NotNull String ext) {
+                        return equivalent(searchFlags, ext, new FilePathInfo(matchPattern).getExt());
+                    }
+
+                    @Override
+                    public FileReference filterRef(@NotNull FileReference fileReference) {
                         FileReferenceLink referenceLink = new FileReferenceLink(sourceFileReference, fileReference);
-                        return equivalent(searchFlags, fileReference.getFilePathNoExt(), matchPattern) ? referenceLink : null;
+                        return equivalent(searchFlags, fileReference.getFilePath(), matchPattern) && ((searchFlags & INCLUDE_SOURCE) != 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ?
+                                referenceLink : null;
+                    }
+                };
+                break;
+
+            case LINK_REF_NO_EXT:
+                filter = new FileReferenceList.Filter() {
+                    @Override
+                    public boolean filterExt(@NotNull String ext) {
+                        return true;
+                    }
+
+                    @Override
+                    public FileReference filterRef(@NotNull FileReference fileReference) {
+                        FileReferenceLink referenceLink = new FileReferenceLink(sourceFileReference, fileReference);
+                        return equivalent(searchFlags, fileReference.getFilePathNoExt(), matchPattern) && ((searchFlags & INCLUDE_SOURCE) != 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ?
+                                referenceLink : null;
                     }
                 };
                 break;
         }
         return filter;
-    }
-
-    protected static FileReference[] getFileReferences(@NotNull Project project, int searchFlags) {
-        FileReference[] fileList;
-        MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
-        MultiMarkdownProjectComponent.FileList fileLists = projectComponent.getFileList();
-        switch (searchFlags & FILE_TYPE_FLAGS) {
-            case ANY_FILE:
-                fileList = fileLists.getProjectFileRefs();
-                break;
-            case IMAGE_FILE:
-                fileList = fileLists.getImageFileRefs();
-                break;
-            case MARKDOWN_FILE:
-                fileList = fileLists.getMarkdownFileRefs();
-                break;
-            case WIKIPAGE_FILE:
-                fileList = fileLists.getWikiFileRefs();
-                break;
-            default:
-                fileList = new FileReference[0];
-        }
-        return fileList;
     }
 }

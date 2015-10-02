@@ -38,7 +38,7 @@ public class FileReferenceLink extends FileReference implements Comparable<FileR
 
     public static final int REASON_MAX = 6;
 
-    protected final FileReference sourceReference;
+    protected final @NotNull FileReference sourceReference;
     protected String linkRef;
     protected String wikiPageRef;
     protected boolean wikiAccessible;
