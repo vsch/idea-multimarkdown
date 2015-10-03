@@ -20,12 +20,13 @@
  */
 package com.vladsch.idea.multimarkdown.util;
 
+import com.intellij.openapi.vfs.VirtualFile;
 import com.vladsch.idea.multimarkdown.MultiMarkdownFileTypeFactory;
 import org.jetbrains.annotations.NotNull;
 
-public class FilePathInfo {
+public class FilePathInfo implements Comparable<FilePathInfo> {
     public static final String WIKI_PAGE_EXTENSION = ".md";
-    public static final String WIKI_HOME_EXT = ".wiki";
+    public static final String WIKI_HOME_EXTENTION = ".wiki";
     public static final String[] IMAGE_EXTENSIONS = { "png", "jpg", "jpeg", "gif", };
     public static final String[] MARKDOWN_EXTENSIONS = MultiMarkdownFileTypeFactory.EXTENSIONS;
     public static final String[] WIKI_PAGE_EXTENSIONS = { MultiMarkdownFileTypeFactory.DEFAULT_EXTENSION };
@@ -41,11 +42,15 @@ public class FilePathInfo {
         int extStart;
         this.nameStart = (lastSep = filePath.lastIndexOf('/')) < 0 ? 0 : (lastSep == filePath.length() - 1 ? lastSep : lastSep + 1);
         int wikiHomeEnd;
-        this.wikiHomeEnd = (wikiHomeEnd = filePath.indexOf(WIKI_HOME_EXT + "/", 0)) >= nameStart || wikiHomeEnd < 0 ? 0 :
-                wikiHomeEnd + WIKI_HOME_EXT.length();
+        this.wikiHomeEnd = (wikiHomeEnd = filePath.indexOf(WIKI_HOME_EXTENTION + "/", 0)) >= nameStart || wikiHomeEnd < 0 ? 0 :
+                wikiHomeEnd + WIKI_HOME_EXTENTION.length();
 
         // if file name ends in . then it has no extension and the . is part of its name.
         this.nameEnd = (extStart = filePath.lastIndexOf('.', filePath.length())) <= nameStart ? filePath.length() : extStart;
+    }
+
+    public FilePathInfo(@NotNull VirtualFile file) {
+        this(file.getPath());
     }
 
     public FilePathInfo(@NotNull FilePathInfo other) {
@@ -60,132 +65,195 @@ public class FilePathInfo {
         return filePath.replace('-', ' ');
     }
 
-    protected static boolean compare(boolean caseSensitive, boolean spaceDashEquivalent, int i, int iMax, @NotNull String param, int paramOffs, @NotNull String tail, int tailOffs) {
-        for (; i < iMax; i++) {
-            char tC = tail.charAt(i + tailOffs);
-            char pC = param.charAt(i + paramOffs);
-            if (tC == pC) continue;
-            if (caseSensitive || Character.toLowerCase(pC) != Character.toLowerCase(tC)) return false;
-            if (spaceDashEquivalent || !((pC == ' ' || pC == '-') && (tC == ' ' || tC == '-'))) return false;
+    @NotNull
+    public static String asFileRef(@NotNull String filePath) {
+        return filePath.replace(' ', '-');
+    }
+
+    protected static boolean compare(boolean forWikiRef, boolean caseSensitive, boolean spaceDashEquivalent, int i, int iMax, @NotNull String fileRef, int fileRefOffs, @NotNull String wikiRef, int wikiRefOffs) {
+        if (forWikiRef) {
+            for (; i < iMax; i++) {
+                char wC = wikiRef.charAt(i + wikiRefOffs);
+                char fC = fileRef.charAt(i + fileRefOffs);
+                if (fC == '-') return false;
+                if (wC == '-' && !spaceDashEquivalent) return false;
+
+                if (wC == fC) continue;
+                if (fC == ' ' && wC == '-') continue;
+                if (!caseSensitive && Character.toLowerCase(fC) == Character.toLowerCase(wC)) continue;
+                return false;
+            }
+        } else {
+            for (; i < iMax; i++) {
+                char wC = wikiRef.charAt(i + wikiRefOffs);
+                char fC = fileRef.charAt(i + fileRefOffs);
+                if (wC == fC) continue;
+                if (!caseSensitive && Character.toLowerCase(fC) == Character.toLowerCase(wC)) continue;
+                if (spaceDashEquivalent && fC == '-' && wC == ' ') continue;
+                return false;
+            }
         }
         return true;
     }
 
-    public static boolean endsWith(boolean caseSensitive, boolean spaceDashEquivalent, @NotNull String param, @NotNull String tail) {
-        if (!spaceDashEquivalent && caseSensitive) {
-            return param.endsWith(tail);
+    private static boolean endsWith(boolean forWikiRef, boolean caseSensitive, boolean spaceDashEquivalent, @NotNull String fileRef, @NotNull String wikiRef) {
+        if (!forWikiRef && !spaceDashEquivalent && caseSensitive) {
+            return fileRef.endsWith(wikiRef);
         }
 
-        int tailLen = tail.length();
-        int paramLen = param.length();
-        int paramOffs = paramLen - tailLen;
+        int wikiRefLen = wikiRef.length();
+        int fileRefLen = fileRef.length();
+        int fileRefOffs = fileRefLen - wikiRefLen;
 
-        return paramLen >= tailLen && compare(caseSensitive, spaceDashEquivalent, 0, tailLen, tail, 0, param, paramOffs);
+        return fileRefLen >= wikiRefLen && compare(forWikiRef, caseSensitive, spaceDashEquivalent, 0, wikiRefLen, fileRef, fileRefOffs, wikiRef, 0);
     }
 
-    public static boolean equivalent(boolean caseSensitive, boolean spaceDashEquivalent, @NotNull String param, @NotNull String other) {
-        if (!spaceDashEquivalent) {
-            return caseSensitive ? param.equals(other) : param.equalsIgnoreCase(other);
+    private static boolean equivalent(boolean forWikiRef, boolean caseSensitive, boolean spaceDashEquivalent, @NotNull String fileRef, @NotNull String wikiRef) {
+        if (!forWikiRef && !spaceDashEquivalent) {
+            return caseSensitive ? fileRef.equals(wikiRef) : fileRef.equalsIgnoreCase(wikiRef);
         }
 
-        int tailLen = other.length();
-        int paramLen = param.length();
+        int wikiRefLen = wikiRef.length();
+        int fileRefLen = fileRef.length();
 
-        return paramLen == tailLen && compare(caseSensitive, spaceDashEquivalent, 0, tailLen, other, 0, param, 0);
+        return fileRefLen == wikiRefLen && compare(forWikiRef, caseSensitive, spaceDashEquivalent, 0, wikiRefLen, fileRef, 0, wikiRef, 0);
+    }
+
+    public static boolean equivalent(boolean caseSensitive, boolean spaceDashEquivalent, @NotNull String fileRef, @NotNull String wikiRef) {
+        return equivalent(false, caseSensitive, spaceDashEquivalent, fileRef, wikiRef);
+    }
+
+    public static boolean endsWith(boolean caseSensitive, boolean spaceDashEquivalent, @NotNull String fileRef, @NotNull String wikiRef) {
+        return endsWith(false, caseSensitive, spaceDashEquivalent, fileRef, wikiRef);
+    }
+
+    public static boolean equivalentWikiRef(boolean caseSensitive, boolean spaceDashEquivalent, @NotNull String fileRef, @NotNull String wikiRef) {
+        return equivalent(true, caseSensitive, spaceDashEquivalent, fileRef, wikiRef);
+    }
+
+    public static boolean endsWithWikiRef(boolean caseSensitive, boolean spaceDashEquivalent, @NotNull String fileRef, @NotNull String wikiRef) {
+        return endsWith(true, caseSensitive, spaceDashEquivalent, fileRef, wikiRef);
     }
 
     @NotNull
-    public String getExt() {
-        return nameEnd + 1 >= filePath.length() ? "" : filePath.substring(nameEnd + 1);
+    final public String getExt() {
+        return nameEnd + 1 < filePath.length() ? filePath.substring(nameEnd + 1) : "";
+    }
+
+    final public boolean isImageExt() {
+        return isImageExt(getExt());
+    }
+
+    final public boolean isMarkdownExt() {
+        return isMarkdownExt(getExt());
+    }
+
+    public boolean hasExt() {
+        return nameEnd + 1 < filePath.length();
     }
 
     @NotNull
-    public String getExtWithDot() {
-        return nameEnd == filePath.length() ? "" : filePath.substring(nameEnd);
+    final public String getExtWithDot() {
+        return nameEnd < filePath.length() ? filePath.substring(nameEnd) : "";
     }
 
-    public boolean hasWikiPageExt() {
+    final public boolean hasWikiPageExt() {
         return filePath.endsWith(WIKI_PAGE_EXTENSION);
     }
 
     @NotNull
-    public String getFilePath() {
+    final public String getFilePath() {
         return filePath;
     }
 
     @NotNull
-    public String getFilePathAsWikiRef() {
+    final public String getFilePathAsWikiRef() {
         return asWikiRef(filePath);
     }
 
-    public boolean containsSpaces() {
+    final public boolean containsSpaces() {
         return filePath.indexOf(' ') >= 0;
     }
 
-    public boolean isWikiHome() {
-        return filePath.endsWith(WIKI_HOME_EXT);
+    final public boolean isWikiHome() {
+        return filePath.endsWith(WIKI_HOME_EXTENTION);
     }
 
     @NotNull
-    public String getFilePathNoExt() {
+    final public String getFilePathNoExt() {
         return filePath.substring(0, nameEnd);
     }
 
     @NotNull
-    public String getFilePathNoExtAsWikiRef() {
+    final public String getFilePathNoExtAsWikiRef() {
         return asWikiRef(getFilePathNoExt());
     }
 
     @NotNull
-    public String getPath() {
+    final public String getPath() {
         return nameStart == 0 ? "" : filePath.substring(0, nameStart);
     }
 
     @NotNull
-    public String getPathAsWikiRef() {
+    final public String getPathAsWikiRef() {
         return asWikiRef(getPath());
     }
 
-    public boolean isUnderWikiHome() {
+    final public boolean isUnderWikiHome() {
         return wikiHomeEnd > 0;
     }
 
+    final public boolean isWikiPage() {
+        return isUnderWikiHome() && isWikiPageExt(getExt());
+    }
+
     @NotNull
-    public String getWikiHome() {
+    final public String getWikiHome() {
         return wikiHomeEnd <= 0 ? "" : filePath.substring(0, wikiHomeEnd);
     }
 
-    public boolean pathContainsSpaces() {
+    final public int getUpDirectoriesToWikiHome() {
+        if (wikiHomeEnd <= 0 || wikiHomeEnd == filePath.length()) return 0;
+        int pos = wikiHomeEnd;
+        int upDirs = 0;
+        while (pos < filePath.length() && (pos = filePath.indexOf('/', pos)) >= 0) {
+            upDirs++;
+            pos++;
+        }
+        return upDirs;
+    }
+
+    final public boolean pathContainsSpaces() {
         return getPath().indexOf(' ') >= 0;
     }
 
     @NotNull
-    public String getFileName() {
+    final public String getFileName() {
         return filePath.substring(nameStart, filePath.length());
     }
 
-    public boolean fileNameContainsSpaces() {
+    final public boolean fileNameContainsSpaces() {
         return getFileName().indexOf(' ') >= 0;
     }
 
     @NotNull
-    public String getFileNameAsWikiRef() {
+    final public String getFileNameAsWikiRef() {
         return asWikiRef(getFileName());
     }
 
     @NotNull
-    public String getFileNameNoExt() {
+    final public String getFileNameNoExt() {
         return filePath.substring(nameStart, nameEnd);
     }
 
     @NotNull
-    public String getFileNameNoExtAsWikiRef() {
+    final public String getFileNameNoExtAsWikiRef() {
         return asWikiRef(getFileNameNoExt());
     }
 
     public static boolean isExtInList(boolean caseSensitive, @NotNull String ext, String... extList) {
         for (String listExt : extList) {
-            if (equivalent(caseSensitive, false, listExt, ext)) return true;
+            if (caseSensitive ? listExt.equals(ext) : listExt.equalsIgnoreCase(ext)) return true;
         }
         return false;
     }
@@ -208,5 +276,40 @@ public class FilePathInfo {
 
     public static boolean isWikiPageExt(@NotNull String ext) {
         return isExtInList(false, ext, WIKI_PAGE_EXTENSIONS);
+    }
+
+    public static String wikiRefAsFileName(String name, boolean addExtension) {
+        return name.replace(' ', '-') + (addExtension ? WIKI_PAGE_EXTENSION : "");
+    }
+
+    public static String wikiRefAsFileNameNoExt(String name) {
+        return wikiRefAsFileName(name, false);
+    }
+
+    public static String wikiRefAsFileNameWithExt(String name) {
+        return wikiRefAsFileName(name, true);
+    }
+
+    @Override
+    public int compareTo(FilePathInfo o) {
+        return wikiHomeEnd == o.wikiHomeEnd &&
+                nameStart == o.nameStart &&
+                nameEnd == o.nameEnd ? filePath.compareTo(o.filePath) : -99;
+    }
+
+    @Override
+    public String toString() {
+        return "FilePathInfo(" +
+                innerString() +
+                ")";
+    }
+
+    public String innerString() {
+        return "" +
+                "wikiHomeEnd = " + wikiHomeEnd + ", " +
+                "nameStart = " + nameStart + ", " +
+                "nameEnd = " + nameEnd + ", " +
+                "filePath = " + "'" + filePath + "', " +
+                "";
     }
 }

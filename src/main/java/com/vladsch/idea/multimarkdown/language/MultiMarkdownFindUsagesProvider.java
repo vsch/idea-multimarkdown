@@ -56,7 +56,7 @@ public class MultiMarkdownFindUsagesProvider implements FindUsagesProvider {
                     TokenSet.create(WIKI_LINK_REF),
                     TokenSet.create(COMMENT),
                     TokenSet.EMPTY,
-                    TokenSet.create(NONE), 3);
+                    TokenSet.create(NONE), 5);
             wordsScanner.setMayHaveFileRefsInLiterals(false);
             wordsScanner.setKeepCodeTokensWhole(false);
             wordsScanner.setUseSpaceBreaks(false);
@@ -68,7 +68,13 @@ public class MultiMarkdownFindUsagesProvider implements FindUsagesProvider {
                     TokenSet.create(WIKI_LINK_REF),
                     TokenSet.create(COMMENT),
                     TokenSet.EMPTY,
-                    TokenSet.EMPTY);
+                    TokenSet.EMPTY)
+            {
+                @Override
+                public int getVersion() {
+                    return super.getVersion()+4;
+                }
+            };
 
             //wordsScanner.setMayHaveFileRefsInLiterals(false);
             return wordsScanner;

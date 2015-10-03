@@ -18,25 +18,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.vladsch.idea.multimarkdown;
+package com.vladsch.idea.multimarkdown.util;
 
-import com.intellij.ide.FileIconProvider;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Iconable;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.vladsch.idea.multimarkdown.editor.MultiMarkdownPreviewEditorProvider;
-import com.vladsch.idea.multimarkdown.util.FilePathInfo;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
-import javax.swing.*;
-
-public class MultiMarkdownFileIconProvider implements FileIconProvider {
-    @Nullable @Override
-    public Icon getIcon(@NotNull VirtualFile file, @Iconable.IconFlags int flags, @Nullable Project project) {
-        if (MultiMarkdownPreviewEditorProvider.accept(file)) {
-            return new FilePathInfo(file).isWikiPage() ? MultiMarkdownIcons.WIKI : MultiMarkdownIcons.FILE;
-        }
-        return null;
-    }
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+        TestFileReferenceListBuilder.class,
+        TestFileReferenceListQueryMatch.class
+})
+public class TestFileReferenceList {
 }

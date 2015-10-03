@@ -20,58 +20,63 @@
  */
 package com.vladsch.idea.multimarkdown.util;
 
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiFile;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 public class FileReferenceList {
-
-    public static final Filter ALL_WIKI_REFS_FILTER = new Filter() {
-        @Override
-        public boolean filterExt(@NotNull String ext) {
-            return FilePathInfo.equivalent(false, false, ext, "md");
-        }
-
-        @Override
-        public FileReference filterRef(@NotNull FileReference fileReference) {
-            return fileReference instanceof FileReferenceLink ? fileReference : null;
-        }
-    };
-    public static final Filter ACCESSIBLE_WIKI_REFS_FILTER = new Filter() {
-        @Override
-        public boolean filterExt(@NotNull String ext) {
-            return FilePathInfo.equivalent(true, false, ext, "md");
-        }
-
-        @Override
-        public FileReference filterRef(@NotNull FileReference fileReference) {
-            return fileReference instanceof FileReferenceLink && ((FileReferenceLink) fileReference).isWikiAccessible() ?
-                    fileReference : null;
-        }
-    };
-    public static final Filter INACCESSIBLE_WIKI_REFS_FILTER = new Filter() {
-        @Override
-        public boolean filterExt(@NotNull String ext) {
-            return FilePathInfo.equivalent(false, false, ext, "md");
-        }
-
-        @Override
-        public FileReference filterRef(@NotNull FileReference fileReference) {
-            return (fileReference instanceof FileReferenceLink) && !((FileReferenceLink) fileReference).isWikiAccessible() ?
-                    fileReference : null;
-        }
-    };
-
-    interface Filter {
+    public interface Filter {
         boolean filterExt(@NotNull String ext);
 
         @Nullable
         FileReference filterRef(@NotNull FileReference fileReference);
     }
+
+    public interface TransformFilter<T> extends Filter {
+        @Nullable
+        T transformRef(@NotNull FileReference fileReference);
+
+        T[] getResult(List<T> result);
+    }
+
+    public static final Filter ALL_WIKI_REFS_FILTER = new Filter() {
+        @Override
+        public boolean filterExt(@NotNull String ext) {
+            return FilePathInfo.isMarkdownExt(ext);
+        }
+
+        @Override
+        public FileReference filterRef(@NotNull FileReference fileReference) {
+            return fileReference;
+        }
+    };
+    public static final Filter ACCESSIBLE_WIKI_REFS_FILTER = new Filter() {
+        @Override
+        public boolean filterExt(@NotNull String ext) {
+            return FilePathInfo.isWikiPageExt(ext);
+        }
+
+        @Override
+        public FileReference filterRef(@NotNull FileReference fileReference) {
+            return fileReference instanceof FileReferenceLink && ((FileReferenceLink) fileReference).isWikiAccessible() ? fileReference : null;
+        }
+    };
+
+    public static final Filter INACCESSIBLE_WIKI_REFS_FILTER = new Filter() {
+        @Override
+        public boolean filterExt(@NotNull String ext) {
+            return true;
+        }
+
+        @Override
+        public FileReference filterRef(@NotNull FileReference fileReference) {
+            return !(fileReference instanceof FileReferenceLink) || !((FileReferenceLink) fileReference).isWikiAccessible() ? fileReference : null;
+        }
+    };
 
     public static final Filter IMAGE_FILE_FILTER = new FileReferenceList.Filter() {
         @Override
@@ -112,7 +117,9 @@ public class FileReferenceList {
         }
     };
 
-    public static final Filter NULL_FILTER = new FileReferenceList.Filter() {
+    public static final Filter NULL_FILTER = null;
+
+    public static final TransformFilter<VirtualFile> VIRTUAL_FILE_TRANSFILTER = new TransformFilter<VirtualFile>() {
         @Override
         public boolean filterExt(@NotNull String ext) {
             return true;
@@ -122,6 +129,233 @@ public class FileReferenceList {
         @Override
         public FileReference filterRef(@NotNull FileReference fileReference) {
             return fileReference;
+        }
+
+        @Nullable
+        @Override
+        public VirtualFile transformRef(@NotNull FileReference fileReference) {
+            return fileReference.getVirtualFile();
+        }
+
+        @Override
+        public VirtualFile[] getResult(List<VirtualFile> result) {
+            return result.toArray(new VirtualFile[result.size()]);
+        }
+    };
+
+    public static final TransformFilter<PsiFile> PSI_FILE_TRANSFILTER = new TransformFilter<PsiFile>() {
+        @Override
+        public boolean filterExt(@NotNull String ext) {
+            return true;
+        }
+
+        @Nullable
+        @Override
+        public FileReference filterRef(@NotNull FileReference fileReference) {
+            return fileReference;
+        }
+
+        @Nullable
+        @Override
+        public PsiFile transformRef(@NotNull FileReference fileReference) {
+            return fileReference.getPsiFile();
+        }
+
+        @Override
+        public PsiFile[] getResult(List<PsiFile> result) {
+            return result.toArray(new PsiFile[result.size()]);
+        }
+    };
+
+    public static final TransformFilter<MultiMarkdownFile> MARKDOWN_FILE_TRANSFILTER = new TransformFilter<MultiMarkdownFile>() {
+        @Override
+        public boolean filterExt(@NotNull String ext) {
+            return FilePathInfo.isMarkdownExt(ext);
+        }
+
+        @Nullable
+        @Override
+        public FileReference filterRef(@NotNull FileReference fileReference) {
+            return fileReference;
+        }
+
+        @Nullable
+        @Override
+        public MultiMarkdownFile transformRef(@NotNull FileReference fileReference) {
+            return fileReference.getMultiMarkdownFile();
+        }
+
+        @Override
+        public MultiMarkdownFile[] getResult(List<MultiMarkdownFile> result) {
+            return result.toArray(new MultiMarkdownFile[result.size()]);
+        }
+    };
+
+    public static final TransformFilter<MultiMarkdownFile> ALL_WIKIPAGE_FILE_TRANSFILTER = new TransformFilter<MultiMarkdownFile>() {
+        @Override
+        public boolean filterExt(@NotNull String ext) {
+            return FilePathInfo.isMarkdownExt(ext);
+        }
+
+        @Nullable
+        @Override
+        public FileReference filterRef(@NotNull FileReference fileReference) {
+            return fileReference;
+        }
+
+        @Nullable
+        @Override
+        public MultiMarkdownFile transformRef(@NotNull FileReference fileReference) {
+            return fileReference.getMultiMarkdownFile();
+        }
+
+        @Override
+        public MultiMarkdownFile[] getResult(List<MultiMarkdownFile> result) {
+            return result.toArray(new MultiMarkdownFile[result.size()]);
+        }
+    };
+
+    public static final TransformFilter<MultiMarkdownFile> ACCESSIBLE_WIKIPAGE_FILE_TRANSFILTER = new TransformFilter<MultiMarkdownFile>() {
+        @Override
+        public boolean filterExt(@NotNull String ext) {
+            return FilePathInfo.isWikiPageExt(ext);
+        }
+
+        @Nullable
+        @Override
+        public FileReference filterRef(@NotNull FileReference fileReference) {
+            return ACCESSIBLE_WIKI_REFS_FILTER.filterRef(fileReference);
+        }
+
+        @Nullable
+        @Override
+        public MultiMarkdownFile transformRef(@NotNull FileReference fileReference) {
+            return fileReference.getMultiMarkdownFile();
+        }
+
+        @Override
+        public MultiMarkdownFile[] getResult(List<MultiMarkdownFile> result) {
+            return result.toArray(new MultiMarkdownFile[result.size()]);
+        }
+    };
+
+    public static final TransformFilter<MultiMarkdownFile> INACCESSIBLE_WIKIPAGE_FILE_TRANSFILTER = new TransformFilter<MultiMarkdownFile>() {
+        @Override
+        public boolean filterExt(@NotNull String ext) {
+            return FilePathInfo.isMarkdownExt(ext);
+        }
+
+        @Nullable
+        @Override
+        public FileReference filterRef(@NotNull FileReference fileReference) {
+            return INACCESSIBLE_WIKI_REFS_FILTER.filterRef(fileReference);
+        }
+
+        @Nullable
+        @Override
+        public MultiMarkdownFile transformRef(@NotNull FileReference fileReference) {
+            return fileReference.getMultiMarkdownFile();
+        }
+
+        @Override
+        public MultiMarkdownFile[] getResult(List<MultiMarkdownFile> result) {
+            return result.toArray(new MultiMarkdownFile[result.size()]);
+        }
+    };
+
+    public static final TransformFilter<String> ALL_WIKIPAGE_REFS_TRANSFILTER = new TransformFilter<String>() {
+        @Override
+        public boolean filterExt(@NotNull String ext) {
+            return FilePathInfo.isMarkdownExt(ext);
+        }
+
+        @Nullable
+        @Override
+        public FileReference filterRef(@NotNull FileReference fileReference) {
+            return fileReference;
+        }
+
+        @Nullable
+        @Override
+        public String transformRef(@NotNull FileReference fileReference) {
+            return fileReference instanceof FileReferenceLink ? ((FileReferenceLink) fileReference).getWikiPageRef() : fileReference.getFileNameNoExtAsWikiRef();
+        }
+
+        @Override
+        public String[] getResult(List<String> result) {
+            return result.toArray(new String[result.size()]);
+        }
+    };
+
+    public static final TransformFilter<String> ACCESSIBLE_WIKIPAGE_REFS_TRANSFILTER = new TransformFilter<String>() {
+        @Override
+        public boolean filterExt(@NotNull String ext) {
+            return FilePathInfo.isWikiPageExt(ext);
+        }
+
+        @Nullable
+        @Override
+        public FileReference filterRef(@NotNull FileReference fileReference) {
+            return ACCESSIBLE_WIKI_REFS_FILTER.filterRef(fileReference);
+        }
+
+        @Nullable
+        @Override
+        public String transformRef(@NotNull FileReference fileReference) {
+            return ((FileReferenceLink) fileReference).getWikiPageRef();
+        }
+
+        @Override
+        public String[] getResult(List<String> result) {
+            return result.toArray(new String[result.size()]);
+        }
+    };
+
+    public static final TransformFilter<String> INACCESSIBLE_WIKIPAGE_REFS_TRANSFILTER = new TransformFilter<String>() {
+        @Override
+        public boolean filterExt(@NotNull String ext) {
+            return FilePathInfo.isMarkdownExt(ext);
+        }
+
+        @Nullable
+        @Override
+        public FileReference filterRef(@NotNull FileReference fileReference) {
+            return INACCESSIBLE_WIKI_REFS_FILTER.filterRef(fileReference);
+        }
+
+        @Nullable
+        @Override
+        public String transformRef(@NotNull FileReference fileReference) {
+            return fileReference instanceof FileReferenceLink ? ((FileReferenceLink) fileReference).getWikiPageRef() : fileReference.getFileNameNoExtAsWikiRef();
+        }
+
+        @Override
+        public String[] getResult(List<String> result) {
+            return result.toArray(new String[result.size()]);
+        }
+    };
+
+    public static final TransformFilter<String> ALL_LINK_REFS_TRANSFILTER = new TransformFilter<String>() {
+        @Override
+        public boolean filterExt(@NotNull String ext) {
+            return true;
+        }
+
+        @Nullable
+        @Override
+        public FileReference filterRef(@NotNull FileReference fileReference) {
+            return fileReference;
+        }
+
+        @Nullable
+        @Override
+        public String transformRef(@NotNull FileReference fileReference) {
+            return fileReference instanceof FileReferenceLink ? ((FileReferenceLink) fileReference).getLinkRef() : fileReference.getFilePath();
+        }
+
+        @Override
+        public String[] getResult(List<String> result) {
+            return result.toArray(new String[result.size()]);
         }
     };
 
@@ -151,6 +385,7 @@ public class FileReferenceList {
                     extIndicesArr[j] = extIndices.get(j);
                 }
                 extensionFileReferences[i] = extIndicesArr;
+                i++;
             }
             return extensionFileReferences;
         }
@@ -191,14 +426,21 @@ public class FileReferenceList {
     protected final int[][] extensionFileRefIndices; // [ext index][0....max] = index in fileReferences that contains that extension
     protected final String[] extensions;      //
 
+    public int length() {
+        return fileReferences.length;
+    }
+
+    @NotNull
     public FileReference[] getFileReferences() {
         return fileReferences.clone();
     }
 
+    @NotNull
     public int[][] getExtensionFileRefIndices() {
         return extensionFileRefIndices;
     }
 
+    @NotNull
     public String[] getExtensions() {
         return extensions;
     }
@@ -217,23 +459,24 @@ public class FileReferenceList {
         extensionFileRefIndices = builder.getExtensionFileReferences();
     }
 
-    public FileReferenceList(@NotNull Filter[] filters, @NotNull FileReference[]... fileReferenceLists) {
+    public FileReferenceList(@NotNull Filter[] filters, @NotNull FileReference[]... fileReferencesArray) {
         Builder builder = new Builder();
 
-        for (FileReference[] fileReferences : fileReferenceLists) {
+        for (FileReference[] fileReferences : fileReferencesArray) {
 
             Outer:
             for (FileReference fileReference : fileReferences) {
-                FileReference addReference = fileReference;
-
-                if (addReference == null) continue;
+                if (fileReference == null) continue;
 
                 for (Filter filter : filters) {
-                    addReference = filter.filterRef(fileReference);
-                    if (addReference == null) continue Outer;
+                    if (filter == null) continue;
+                    if (!filter.filterExt(fileReference.getExt())) continue Outer;
+
+                    fileReference = filter.filterRef(fileReference);
+                    if (fileReference == null) continue Outer;
                 }
 
-                builder.add(addReference);
+                builder.add(fileReference);
             }
         }
 
@@ -247,12 +490,14 @@ public class FileReferenceList {
         Builder builder = new Builder();
 
         for (FileReferenceList fileReferenceList : fileReferenceLists) {
-            int extIndex = 0;
+            int extIndex = -1;
 
             Outer_Ext:
             for (String ext : fileReferenceList.extensions) {
+                extIndex++;
+
                 for (Filter filter : filters) {
-                    if (!filter.filterExt(ext)) continue Outer_Ext;
+                    if (filter != null && !filter.filterExt(ext)) continue Outer_Ext;
                 }
 
                 Outer:
@@ -262,29 +507,19 @@ public class FileReferenceList {
                     if (addReference == null) continue;
 
                     for (Filter filter : filters) {
+                        if (filter == null) continue;
                         addReference = filter.filterRef(addReference);
                         if (addReference == null) continue Outer;
                     }
 
                     builder.add(addReference);
                 }
-
-                extIndex++;
             }
         }
 
         fileReferences = builder.getFileReferences();
         extensions = builder.getExtensions();
         extensionFileRefIndices = builder.getExtensionFileReferences();
-    }
-
-    public static FileReference[][] fileReferencesArray(FileReferenceList... fileReferenceLists) {
-        FileReference[][] fileReferences = new FileReference[fileReferenceLists.length][];
-        int i = 0;
-        for (FileReferenceList fileReferenceList : fileReferenceLists) {
-            fileReferences[i++] = fileReferenceList.fileReferences;
-        }
-        return fileReferences;
     }
 
     public FileReferenceList(@Nullable Filter filter, @NotNull FileReference... fileReferences) {
@@ -306,17 +541,139 @@ public class FileReferenceList {
     }
 
     @NotNull
+    public FileReferenceListQuery getQuery() {
+        return new FileReferenceListQuery(this);
+    }
+
+    @NotNull
+    public static FileReference[][] fileReferencesArray(FileReferenceList... fileReferenceLists) {
+        FileReference[][] fileReferences = new FileReference[fileReferenceLists.length][];
+        int i = 0;
+        for (FileReferenceList fileReferenceList : fileReferenceLists) {
+            fileReferences[i++] = fileReferenceList.fileReferences;
+        }
+        return fileReferences;
+    }
+
+    @NotNull
+    public FileReferenceList filter(Filter... filters) {
+        return new FileReferenceList(this, filters);
+    }
+
+    @NotNull
+    public FileReferenceList markdownFileRefs() {
+        return new FileReferenceList(this, MARKDOWN_FILE_FILTER);
+    }
+
+    @NotNull
+    public FileReferenceList imageFileRefs() {
+        return new FileReferenceList(this, IMAGE_FILE_FILTER);
+    }
+
+    @NotNull
     public FileReferenceList accessibleWikiPageRefs() {
-        return new FileReferenceList(this, ACCESSIBLE_WIKI_REFS_FILTER);
+        return filter(ACCESSIBLE_WIKI_REFS_FILTER);
     }
 
     @NotNull
     public FileReferenceList inaccessibleWikiPageRefs() {
-        return new FileReferenceList(this, INACCESSIBLE_WIKI_REFS_FILTER);
+        return filter(INACCESSIBLE_WIKI_REFS_FILTER);
     }
 
     @NotNull
     public FileReferenceList allWikiPageRefs() {
-        return new FileReferenceList(this, ALL_WIKI_REFS_FILTER);
+        return filter(ALL_WIKI_REFS_FILTER);
+    }
+
+    @NotNull
+    public <T> T[] transform(@NotNull TransformFilter<T> transFilter) {
+        ArrayList<T> result = new ArrayList<T>(fileReferences.length);
+
+        for (FileReference fileReference : fileReferences) {
+            int extIndex = -1;
+
+            for (String ext : extensions) {
+                extIndex++;
+
+                if (!transFilter.filterExt(ext)) continue;
+
+                for (int extFileIndex : extensionFileRefIndices[extIndex]) {
+                    FileReference addReference = fileReferences[extFileIndex];
+                    if (addReference == null) continue;
+
+                    addReference = transFilter.filterRef(addReference);
+                    if (addReference == null) continue;
+
+                    T transformed = transFilter.transformRef(addReference);
+                    if (transformed == null) continue;
+
+                    result.add(transformed);
+                }
+            }
+        }
+
+        return transFilter.getResult(result);
+    }
+
+    @NotNull
+    public VirtualFile[] getVirtualFiles() {
+        return transform(VIRTUAL_FILE_TRANSFILTER);
+    }
+
+    @NotNull
+    public PsiFile[] getPsiFiles() {
+        return transform(PSI_FILE_TRANSFILTER);
+    }
+
+    @NotNull
+    public MultiMarkdownFile[] getMarkdownFiles() {
+        return transform(MARKDOWN_FILE_TRANSFILTER);
+    }
+
+    @NotNull
+    public MultiMarkdownFile[] getAllWikiPageFiles() {
+        return transform(ALL_WIKIPAGE_FILE_TRANSFILTER);
+    }
+
+    @NotNull
+    public MultiMarkdownFile[] getAccessibleWikiPageFiles() {
+        return transform(ACCESSIBLE_WIKIPAGE_FILE_TRANSFILTER);
+    }
+
+    @NotNull
+    public MultiMarkdownFile[] getInaccessibleWikiPageFiles() {
+        return transform(INACCESSIBLE_WIKIPAGE_FILE_TRANSFILTER);
+    }
+
+    @NotNull
+    public String[] getWikiPageRefStrings(boolean allowInaccessible) {
+        return transform(allowInaccessible ? ALL_WIKIPAGE_REFS_TRANSFILTER : ACCESSIBLE_WIKIPAGE_REFS_TRANSFILTER);
+    }
+
+    @NotNull
+    public String[] getAllWikiPageRefStrings() {
+        return transform(ALL_WIKIPAGE_REFS_TRANSFILTER);
+    }
+
+    @NotNull
+    public String[] getAccessibleWikiPageRefStrings() {
+        return transform(ACCESSIBLE_WIKIPAGE_REFS_TRANSFILTER);
+    }
+
+    @NotNull
+    public String[] getInaccessibleWikiPageRefStrings() {
+        return transform(INACCESSIBLE_WIKIPAGE_REFS_TRANSFILTER);
+    }
+
+    @NotNull
+    public int[] countByFilter(Filter... filters) {
+        int[] result = new int[filters.length];
+        for (String ext : extensions) {
+            int filterIndex = 0;
+            for (Filter filter : filters) {
+                if (filter.filterExt(ext)) result[filterIndex++]++;
+            }
+        }
+        return result;
     }
 }

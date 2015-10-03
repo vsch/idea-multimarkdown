@@ -36,19 +36,17 @@ import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
-import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.util.FilePathInfo;
-import com.vladsch.idea.utils.PsiClassResolver;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.*;
-import java.util.List;
 
-import static com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent.*;
+import static com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent.INCLUDE_SELF;
+import static com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent.MARKDOWN_FILE;
 
 /**
  * Static utilities for resolving resources paths.
@@ -132,7 +130,7 @@ public class MultiMarkdownPathResolver {
 
     public static boolean isWikiDocument(@NotNull final Document document) {
         VirtualFile file = FileDocumentManager.getInstance().getFile(document);
-        return MultiMarkdownProjectComponent.isWikiPage(file);
+        return file != null && new FilePathInfo(file).isWikiPage();
     }
 
     public static Object resolveLink(@NotNull final Project project, @NotNull final Document document, @NotNull final String hrefEnc, final boolean openFile, final boolean focusEditor, final boolean searchForOpen) {
@@ -146,7 +144,7 @@ public class MultiMarkdownPathResolver {
         int posHash;
         String hash = "";
         if ((posHash = hrefDec.indexOf('#')) > 0) {
-            hash = hrefDec.substring(posHash+1);
+            hash = hrefDec.substring(posHash + 1);
             hrefDec = hrefDec.substring(0, posHash);
         }
         final String href = hrefDec;
@@ -178,11 +176,18 @@ public class MultiMarkdownPathResolver {
                     if (virtualTarget == null) {
                         // if the file has no extension, and a Markdown file exists in the project that has the same
                         FilePathInfo hrefPathInfo = new FilePathInfo(href);
-                        if (hrefPathInfo.getExtWithDot().length() == 0) {
+                        if (!hrefPathInfo.hasExt()) {
                             VirtualFile inFile = FileDocumentManager.getInstance().getFile(document);
-                            List<MultiMarkdownFile> list = MultiMarkdownPlugin.getProjectComponent(project).findRefLinkMarkdownFiles(href, inFile, MARKDOWN_FILE | INCLUDE_SELF);
-                            if (list != null && list.size() == 1) {
-                                virtualTarget = list.get(0).getVirtualFile();
+                            if (inFile != null) {
+                                MultiMarkdownFile[] list = MultiMarkdownPlugin.getProjectComponent(project)
+                                        .getFileReferenceListQuery()
+                                        .matchLinkRefNoExt(href, inFile, project)
+                                        .includeSource()
+                                        .getMarkdownFiles();
+
+                                if (list.length == 1) {
+                                    virtualTarget = list[0].getVirtualFile();
+                                }
                             }
                         }
                     }

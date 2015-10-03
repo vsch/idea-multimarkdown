@@ -21,35 +21,24 @@
  */
 package com.vladsch.idea.multimarkdown.annotator;
 
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ProblemHighlightType;
-import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.impl.EditorComponentImpl;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
-import com.intellij.spellchecker.quickfixes.SpellCheckerQuickFix;
-import com.intellij.spellchecker.util.SpellCheckerBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
-import com.vladsch.idea.multimarkdown.util.PathDistance;
+import com.vladsch.idea.multimarkdown.util.FileReference;
+import com.vladsch.idea.multimarkdown.util.FileReferenceLink;
+import com.vladsch.idea.multimarkdown.util.FileReferenceList;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
+import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
-
-import static com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent.*;
 
 //public class MultiMarkdownAnnotator extends ExternalAnnotator<String, Set<MultiMarkdownAnnotator.HighlightableToken>> {
 public class MultiMarkdownAnnotator implements Annotator {
@@ -71,149 +60,115 @@ public class MultiMarkdownAnnotator implements Annotator {
     public void annotate(@NotNull final PsiElement element, @NotNull AnnotationHolder holder) {
         if (element instanceof MultiMarkdownWikiPageRef) {
             // see if it exists
-            int searchSettings = WIKI_REF;
-
+            MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(element.getProject());
             MultiMarkdownFile containingFile = (MultiMarkdownFile) element.getContainingFile();
             VirtualFile virtualFile = containingFile.getVirtualFile();
 
-            boolean isWikiPage = containingFile.isWikiPage();
-            searchSettings |= isWikiPage ? WIKIPAGE_FILE : MARKDOWN_FILE;
+            FileReferenceList filesReferenceList = projectComponent.getFileReferenceList().getQuery()
+                    .markdownFiles()
+                    .getList();
 
-            MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(element.getProject());
-            String elementName = ((MultiMarkdownWikiPageRef) element).getName();
-            if (elementName == null) elementName = "";
+            FileReferenceList matchedFilesReferenceList = filesReferenceList.getQuery()
+                    .matchWikiRef((MultiMarkdownWikiPageRef) element)
+                    .spaceDashEqual()
+                    .caseInsensitive()
+                    .getAllWikiPageRefs();
 
-            List<MultiMarkdownFile> wikiFiles = projectComponent.findRefLinkMarkdownFiles(elementName, virtualFile, searchSettings);
+            FileReferenceList accessibleWikiPageRefs = matchedFilesReferenceList.getQuery()
+                    .matchWikiRef((MultiMarkdownWikiPageRef) element)
+                    .getAccessibleWikiPageRefs();
 
             Annotation annotator = null;
 
-            if (wikiFiles != null && wikiFiles.size() == 1) {
-                //String path = wikiFiles.get(0).getVirtualFile().getPath();
-                //annotator = holder.createInfoAnnotation(element.getTextRange(), " ");
-                //annotator.setTooltip(path);
-            } else {
+            if (accessibleWikiPageRefs.length() != 1) {
                 // not set to right name or to an accessible name
-                // get all accessibles
-                wikiFiles = projectComponent.findRefLinkMarkdownFiles(elementName, virtualFile, searchSettings | ALLOW_INACCESSIBLE_WIKI_REF);
-
-                boolean linkInaccessible = wikiFiles != null && wikiFiles.size() == 1;
-
-                String linkRefFileName = "";
-
                 HashSet<String> alreadyOffered = new HashSet<String>();
+                FileReference[] otherReferences = matchedFilesReferenceList.getFileReferences();
 
-                if (linkInaccessible) {
-                    // can offer to move the file, just add the logic
-                    annotator = holder.createErrorAnnotation(element.getTextRange(),
-                            MultiMarkdownBundle.message("annotation.wikilink.unreachable-page-reference"));
-                } else {
-                    // see if the file with spaces instead of dashes exists
-                    wikiFiles = projectComponent.findRefLinkMarkdownFiles(elementName, virtualFile, searchSettings | SPACE_DASH_EQUIVALENT);
+                if (otherReferences.length == 1) {
+                    FileReferenceLink referenceLink = (FileReferenceLink) otherReferences[0];
+                    FileReferenceLink.InaccessibleWikiPageReasons inaccessibleReasons = referenceLink.inaccessibleWikiPageRefReasons(((MultiMarkdownWikiPageRef) element).getName());
 
-                    if (wikiFiles != null && wikiFiles.size() == 1) {
+                    String linkRefFileName = "";
+
+                    if (inaccessibleReasons.targetNotInSameWikiHome() || inaccessibleReasons.targetNotInWikiHome()) {
+                        // can offer to move the file, just add the logic
+                        annotator = holder.createErrorAnnotation(element.getTextRange(),
+                                MultiMarkdownBundle.message("annotation.wikilink.unreachable-page-reference"));
+                    }
+
+                    if (inaccessibleReasons.caseMismatch() || inaccessibleReasons.targetNameHasSpaces() || inaccessibleReasons.wikiRefHasDashes() || inaccessibleReasons.targetNotWikiPageExt()) {
+                        // see if the file with spaces instead of dashes exists
                         // has a space in the file name instead of a dash
-                        String alreadyOfferedRename = "";
-                        boolean linkRefDashes = false;
-                        boolean fileNameSpaces = false;
-                        boolean caseMismatch = false;
 
-                        alreadyOfferedRename = elementName.replace('-', ' ');
-                        if (!alreadyOfferedRename.equals(elementName)) {
-                            linkRefDashes = true;
-                        }
+                        boolean wikiRefDashes = inaccessibleReasons.wikiRefHasDashes();
+                        boolean fileNameHasSpaces = inaccessibleReasons.targetNameHasSpaces();
+                        boolean caseMismatch = inaccessibleReasons.caseMismatch();
+                        String fileNameHasSpacesFixed = fileNameHasSpaces ? inaccessibleReasons.targetNameHasSpacedFixed() : null;
+                        String wikiRefDashesFixed = inaccessibleReasons.wikiRefHasDashesFixed();
+                        String caseMismatchFileNameFixed = inaccessibleReasons.caseMismatchFileNameFixed();
+                        String caseMismatchWikiRefFixed = inaccessibleReasons.caseMismatchWikiRefFixed();
 
-                        String fileName = wikiFiles.get(0).getLinkRef(null, searchSettings);
-                        linkRefFileName = wikiFiles.get(0).getLinkRef(virtualFile, searchSettings);
-                        if (linkRefFileName != null) {
-                            linkRefFileName = linkRefFileName.replace(' ', '-');
-                        }
-
-                        if (fileName != null && !fileName.replace(' ', '-').equals(fileName)) {
-                            VirtualFile parent = wikiFiles.get(0).getVirtualFile().getParent();
-                            fileName = fileName.replace(' ', '-');
-                            if (parent.findChild(fileName) == null) {
-                                fileNameSpaces = true;
+                        if (fileNameHasSpaces) {
+                            VirtualFile targetVirtualFile = referenceLink.getVirtualFile();
+                            VirtualFile parent = targetVirtualFile != null ? targetVirtualFile.getParent() : null;
+                            if (parent == null || parent.findChild(fileNameHasSpacesFixed) != null) {
+                                // already exists
+                                fileNameHasSpacesFixed = null;
                             }
-                        }
-
-                        String fileNameNoExt = fileName == null ? "" : fileName.substring(0, fileName.length() - 3);
-                        if (alreadyOfferedRename.toLowerCase().equals(fileNameNoExt.replace('-', ' ').toLowerCase())
-                                && !alreadyOfferedRename.equals(fileNameNoExt.replace('-', ' '))) {
-                            caseMismatch = true;
                         }
 
                         annotator = holder.createErrorAnnotation(element.getTextRange(),
                                 MultiMarkdownBundle.message("annotation.wikilink.unresolved-page-reference",
-                                        (linkRefDashes ? MultiMarkdownBundle.message("annotation.wikilink.link-dashes") : ""),
-                                        (fileNameSpaces ? MultiMarkdownBundle.message("annotation.wikilink.file-spaces") : ""),
+                                        (wikiRefDashes ? MultiMarkdownBundle.message("annotation.wikilink.link-dashes") : ""),
+                                        (fileNameHasSpaces ? MultiMarkdownBundle.message("annotation.wikilink.file-spaces") : ""),
                                         (caseMismatch ? MultiMarkdownBundle.message("annotation.wikilink.case-mismatch") : "")
                                 ));
 
-                        if (linkRefDashes) {
-                            if (!alreadyOffered.contains(alreadyOfferedRename)) {
-                                annotator.registerFix(new ChangeWikiPageRefQuickFix((MultiMarkdownWikiPageRef) element, alreadyOfferedRename));
-                                alreadyOffered.add(alreadyOfferedRename);
-                            }
+                        if (wikiRefDashes && !alreadyOffered.contains(wikiRefDashesFixed)) {
+                            annotator.registerFix(new ChangeWikiPageRefQuickFix((MultiMarkdownWikiPageRef) element, wikiRefDashesFixed));
+                            alreadyOffered.add(wikiRefDashesFixed);
                         }
-                        if (fileNameSpaces)
-                            annotator.registerFix(new RenameWikiPageQuickFix(wikiFiles.get(0).getVirtualFile(), fileName));
 
-                        if (caseMismatch) {
-                            // offer to rename the file to link ref case
-                            List<String> path = FileUtil.splitPath(alreadyOfferedRename);
-                            String name = path.get(path.size() - 1).replace(' ', '-') + ".md";
-                            annotator.registerFix(new RenameWikiPageQuickFix(wikiFiles.get(0).getVirtualFile(), name));
+                        if (fileNameHasSpacesFixed != null)
+                            annotator.registerFix(new RenameWikiPageQuickFix(referenceLink.getVirtualFile(), fileNameHasSpacesFixed));
 
-                            if (linkRefFileName != null && !fileNameSpaces) {
-                                // offer to rename the link to file case
-                                String replaced = linkRefFileName.substring(0, linkRefFileName.length() - 3).replace('-', ' ');
-                                if (!alreadyOffered.contains(replaced)) {
-                                    annotator.registerFix(new ChangeWikiPageRefQuickFix((MultiMarkdownWikiPageRef) element, replaced));
-                                    alreadyOffered.add(replaced);
-                                }
-                            }
+                        if (caseMismatch && !alreadyOffered.contains(caseMismatchWikiRefFixed)) {
+                            annotator.registerFix(new ChangeWikiPageRefQuickFix((MultiMarkdownWikiPageRef) element, caseMismatchWikiRefFixed));
+                            alreadyOffered.add(caseMismatchWikiRefFixed);
                         }
-                    } else {
-                        // allow creation fix
-                        annotator = holder.createErrorAnnotation(element.getTextRange(),
-                                MultiMarkdownBundle.message("annotation.wikilink.unresolved-page-reference", "", "", ""));
-
-                        // TODO: validate file name before creating a quick fix for it
-                        String fileName = ((MultiMarkdownWikiPageRef) element).getFileName();
-                        //VirtualFileSystem fileSystem = element.getContainingFile().getVirtualFile().getFileSystem();
-                        annotator.registerFix(new CreateWikiPageQuickFix(fileName));
                     }
+                } else {
+                    // allow creation fix
+                    annotator = holder.createErrorAnnotation(element.getTextRange(),
+                            MultiMarkdownBundle.message("annotation.wikilink.unresolved-page-reference", "", "", ""));
+
+                    // TODO: validate file name before creating a quick fix for it
+                    String fileName = ((MultiMarkdownWikiPageRef) element).getFileName();
+                    annotator.registerFix(new CreateWikiPageQuickFix(fileName));
                 }
 
                 if (annotator != null) annotator.setNeedsUpdateOnTyping(true);
 
                 // get all accessibles
-                wikiFiles = projectComponent.findRefLinkMarkdownFiles(null, virtualFile, searchSettings);
-
-                if (annotator != null && wikiFiles != null && wikiFiles.size() != 0) {
+                if (annotator != null && filesReferenceList.length() != 0) {
                     /*
                      *   have a file but it is not accessible we can:
                      *   1. rename the link to another accessible file?
                      */
-                    PathDistance[] paths = PathDistance.loadLinkRefsPaths(wikiFiles, virtualFile, searchSettings);
-                    for (PathDistance wikiPageRef : paths) {
-                        if (wikiPageRef.getDistance() < 1 && !alreadyOffered.contains(wikiPageRef.getPath())) {
-                            annotator.registerFix(new ChangeWikiPageRefQuickFix((MultiMarkdownWikiPageRef) element, wikiPageRef.getPath()));
-                            alreadyOffered.add(wikiPageRef.getPath());
-                            if (alreadyOffered.size() >= 10) break;
+                    FileReferenceList wikiPageRefs = filesReferenceList.getQuery().inSource(containingFile).getAllWikiPageRefs();
+
+                    FileReference[] references = wikiPageRefs.getFileReferences();
+                    Arrays.sort(references);
+
+                    for (FileReference fileReference : references) {
+                        FileReferenceLink wikiPageRef = (FileReferenceLink) fileReference;
+
+                        if (wikiPageRef.getUpDirectories() <= wikiPageRef.getUpDirectoriesToWikiHome() && !alreadyOffered.contains(wikiPageRef.getWikiPageRef())) {
+                            annotator.registerFix(new ChangeWikiPageRefQuickFix((MultiMarkdownWikiPageRef) element, wikiPageRef.getWikiPageRef()));
+                            alreadyOffered.add(wikiPageRef.getWikiPageRef());
+                            if (alreadyOffered.size() >= 20) break;
                         }
-                    }
-                }
-
-                if (false && !isWikiPage) {
-                    List<MultiMarkdownFile> markdownFiles = projectComponent.findRefLinkMarkdownFiles(elementName, virtualFile, (searchSettings & ~WIKIPAGE_FILE) | ALLOW_INACCESSIBLE_WIKI_REF);
-
-                    if (markdownFiles != null && markdownFiles.size() != 0) {
-                    /*
-                     *   have files but they are not accessible we can:
-                     *   1. move file
-                     */
-                        // TODO: create MoveFileQuickFix
                     }
                 }
             }

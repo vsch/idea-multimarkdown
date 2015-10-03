@@ -21,6 +21,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.codeStyle.NameUtil;
 import com.intellij.psi.codeStyle.SuggestedNameInfo;
 import com.intellij.refactoring.rename.PreferrableNameSuggestionProvider;
@@ -31,15 +32,15 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
-import com.vladsch.idea.multimarkdown.util.PathDistance;
+import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownWikiPageRefImpl;
+import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import com.vladsch.idea.multimarkdown.util.FileReferenceList;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-
-import static com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent.*;
 
 public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProvider {
     private boolean active;
@@ -84,8 +85,8 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
                 // remove the extension
                 if (text.contains(" ") || text.contains("'") || text.contains("/") || text.contains("\\")) {
                     // add fixed up version to result
-                    String wikiRef = MultiMarkdownProjectComponent.fileNameToWikiRef(text, true);
-                    String fixedUpName = MultiMarkdownProjectComponent.wikiPageRefToFileName(fixSuggestion(wikiRef, " '/\\", " "), true);
+                    String wikiRef = new FilePathInfo(text).getFileNameNoExtAsWikiRef();
+                    String fixedUpName = FilePathInfo.wikiRefAsFileNameWithExt(fixSuggestion(wikiRef, " '/\\", " "));
 
                     result.add(fixedUpName);
                     result.add(text.replace(" ", "").replace("'", "").replace("/", "").replace("\\", ""));
@@ -98,13 +99,13 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
             MultiMarkdownFile markdownFile = (MultiMarkdownFile) element.getContainingFile();
             VirtualFile virtualFile = markdownFile.getVirtualFile();
             boolean wikiPage = markdownFile.isWikiPage();
-            List<MultiMarkdownFile> wikiFiles = projectComponent.findRefLinkMarkdownFiles(null, virtualFile,
-                    WANT_WIKI_REF | (wikiPage ? WIKIPAGE_FILE : MARKDOWN_FILE));
+            FileReferenceList wikiFiles = projectComponent.getFileReferenceListQuery()
+                    .inSource(markdownFile)
+                    .getWikiPageRefs(!wikiPage);
 
-            if (wikiFiles != null && wikiFiles.size() != 0) {
+            if (wikiFiles.getFileReferences().length > 0) {
                 // add fixed up version to result
-                paths = PathDistance.loadLinkRefsStrings(wikiFiles, virtualFile, WANT_WIKI_REF | (wikiPage ? 0 :
-                        ALLOW_INACCESSIBLE_WIKI_REF));
+                paths = wikiFiles.getAllWikiPageRefStrings();
 
                 suggestedNameInfo = SuggestedNameInfo.NULL_INFO;
             }
@@ -119,7 +120,7 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
 
         SpellCheckerManager manager = SpellCheckerManager.getInstance(element.getProject());
 
-        if (isFileRename) text = MultiMarkdownProjectComponent.fileNameToWikiRef(text, true);
+        if (isFileRename) text = new FilePathInfo(text).getFileNameNoExtAsWikiRef();
 
         // add first cap versions if the words are either lowercase or upppercase
         String[] words = NameUtil.nameToWords(text);
@@ -155,12 +156,21 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
         for (String suggestion : suggestedNames) {
             if (suggestion != null && suggestion.length() > 0) {
                 String wikiRef = !isFileRename ? suggestion :
-                        MultiMarkdownProjectComponent.wikiPageRefToFileName(suggestion, false);
+                        FilePathInfo.wikiRefAsFileNameNoExt(suggestion);
 
                 if (wikiRef != null) {
-                    suggestions.add(wikiRef + ".md");
-                    suggestions.add(fixSuggestion(wikiRef, " -_.'/\\", "-") + ".md");
-                    suggestions.add(fixSuggestion(wikiRef, " -_.'/\\", "") + ".md");
+                    PsiReference reference = element.getReference();
+
+                    if (reference != null && reference instanceof MultiMarkdownReference && !((MultiMarkdownReference) reference).isResolveRefMissing()) {
+                        suggestions.add(wikiRef + FilePathInfo.WIKI_PAGE_EXTENSION);
+                        suggestions.add(fixSuggestion(wikiRef, " -_.'/\\", "-") + FilePathInfo.WIKI_PAGE_EXTENSION);
+                        suggestions.add(fixSuggestion(wikiRef, " -_.'/\\", "") + FilePathInfo.WIKI_PAGE_EXTENSION);
+                    } else {
+                        // not attached to any file, don't add extension
+                        suggestions.add(wikiRef);
+                        suggestions.add(fixSuggestion(wikiRef, " -_.'/\\", "-"));
+                        suggestions.add(fixSuggestion(wikiRef, " -_.'/\\", ""));
+                    }
                 }
             }
         }

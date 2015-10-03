@@ -35,7 +35,9 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownLanguage;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
-import com.vladsch.idea.multimarkdown.util.PathDistance;
+import com.vladsch.idea.multimarkdown.util.FileReference;
+import com.vladsch.idea.multimarkdown.util.FileReferenceLink;
+import com.vladsch.idea.multimarkdown.util.FileReferenceList;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
@@ -76,14 +78,17 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
                                 Project fileProject = parameters.getEditor().getProject();
                                 if (fileProject != null) {
                                     MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(fileProject);
-                                    List<MultiMarkdownFile> wikiFiles = projectComponent.findRefLinkMarkdownFiles(null, virtualFile, MARKDOWN_FILE | ALLOW_INACCESSIBLE_WIKI_REF | SPACE_DASH_EQUIVALENT);
+                                    FileReferenceList wikiFileReferenceList = projectComponent.getFileReferenceListQuery()
+                                            .inSource(virtualFile, fileProject)
+                                            .spaceDashEqual()
+                                            .getAllWikiPageRefs();
 
-                                    for (MultiMarkdownFile file : wikiFiles) {
-                                        addWikiPageRefCompletion(resultSet, virtualFile, file, true);
+                                    for (FileReference fileReference : wikiFileReferenceList.getFileReferences()) {
+                                        addWikiPageRefCompletion(resultSet, (FileReferenceLink) fileReference, true);
                                     }
 
-                                    for (MultiMarkdownFile file : wikiFiles) {
-                                        addWikiPageRefCompletion(resultSet, virtualFile, file, false);
+                                    for (FileReference fileReference : wikiFileReferenceList.getFileReferences()) {
+                                        addWikiPageRefCompletion(resultSet, (FileReferenceLink) fileReference, false);
                                     }
                                 }
                             }
@@ -93,23 +98,20 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
         );
     }
 
-    protected void addWikiPageRefCompletion(@NotNull CompletionResultSet resultSet, VirtualFile inFile, MultiMarkdownFile toFile, boolean accessible) {
-        String wikiPageRef = toFile.getWikiPageRef(inFile, WANT_WIKI_REF);
-        boolean isWikiPageAccessible = wikiPageRef != null && !toFile.getVirtualFile().getPath().contains(" ");
+    protected void addWikiPageRefCompletion(@NotNull CompletionResultSet resultSet, FileReferenceLink fileReference, boolean accessible) {
+        String wikiPageRef = fileReference.getWikiPageRef();
+        boolean isWikiPageAccessible = fileReference.isWikiAccessible();
 
         if (accessible == isWikiPageAccessible) {
-            if (!accessible) wikiPageRef = toFile.getWikiPageRef(inFile, WANT_WIKI_REF | ALLOW_INACCESSIBLE_WIKI_REF);
-            PathDistance pathDistance = new PathDistance(wikiPageRef);
-
-            if (isWikiPageAccessible || pathDistance.getDistance() < 1) {
+            if (isWikiPageAccessible || fileReference.getUpDirectories() == 0) {
                 //String wikiPageShortRef = toFile.getWikiPageRef(null, WANT_WIKI_REF | ALLOW_INACCESSIBLE_WIKI_REF);
-                String linkRefFileName = toFile.getLinkRef(inFile, 0);
+                String linkRefFileName = fileReference.getLinkRef();
 
                 //logger.info("Adding " + wikiPageRef + " to completions");
                 LookupElementBuilder lookupElementBuilder = LookupElementBuilder.create(wikiPageRef)
                         //.withLookupString(wikiPageShortRef)
                         .withCaseSensitivity(true)
-                        .withIcon(accessible && toFile.isWikiPage() ? MultiMarkdownIcons.WIKI : MultiMarkdownIcons.FILE)
+                        .withIcon(accessible && fileReference.isWikiPage() ? MultiMarkdownIcons.WIKI : MultiMarkdownIcons.FILE)
                         .withTypeText(linkRefFileName, false);
 
                 if (!isWikiPageAccessible) {

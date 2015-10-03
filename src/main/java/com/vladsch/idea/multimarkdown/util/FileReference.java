@@ -25,11 +25,21 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
+import com.thoughtworks.xstream.mapper.Mapper;
+import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
+import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class FileReference extends FilePathInfo {
+    public interface ProjectFileResolver {
+        VirtualFile getVirtualFile(@NotNull String sourcePath, @NotNull Project project);
+        PsiFile getPsiFile(@NotNull String sourcePath, @NotNull Project project);
+    }
+
+    public static ProjectFileResolver projectFileResolver = null;
+
     protected final Project project;
 
     public FileReference(@NotNull String filePath) {
@@ -45,6 +55,11 @@ public class FileReference extends FilePathInfo {
     public FileReference(@NotNull VirtualFile file, Project project) {
         super(file.getPath());
         this.project = project;
+    }
+
+    public FileReference(@NotNull PsiFile file) {
+        super(file.getVirtualFile().getPath());
+        this.project = file.getProject();
     }
 
     public FileReference(@NotNull FileReference other) {
@@ -75,22 +90,30 @@ public class FileReference extends FilePathInfo {
 
     @Nullable
     public static VirtualFile getVirtualFile(@NotNull String sourcePath, @NotNull Project project) {
-        String baseDir = project.getBasePath();
-        if (baseDir != null && sourcePath.startsWith(baseDir + "/")) {
-            return VirtualFileManager.getInstance().findFileByUrl("file:" + sourcePath);
-        }
-        return null;
+        return projectFileResolver == null ? null : projectFileResolver.getVirtualFile(sourcePath,project);
     }
 
     @Nullable
     public static PsiFile getPsiFile(@NotNull String sourcePath, @NotNull Project project) {
-        VirtualFile file = getVirtualFile(sourcePath, project);
-        if (file != null) {
-            PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
-            if (psiFile != null && psiFile instanceof MultiMarkdownFile) {
-                return (MultiMarkdownFile) psiFile;
-            }
-        }
-        return null;
+        return projectFileResolver == null ? null : projectFileResolver.getPsiFile(sourcePath, project);
+    }
+
+    @Override
+    public int compareTo(FilePathInfo o) {
+        return !(o instanceof FileReference) || project == ((FileReference) o).project ? super.compareTo(o) : -1;
+    }
+
+    @Override
+    public String toString() {
+        return "FileReference(" +
+                innerString() +
+                ")";
+    }
+
+    @Override
+    public String innerString() {
+        return super.innerString() +
+                "project = '" + (project == null ? "null" : project.getName() ) + "', " +
+                "";
     }
 }

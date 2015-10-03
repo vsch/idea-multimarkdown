@@ -30,6 +30,7 @@ import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
+import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import org.jetbrains.annotations.NotNull;
 
 class ChangeWikiPageRefQuickFix extends BaseIntentionAction {
@@ -44,7 +45,7 @@ class ChangeWikiPageRefQuickFix extends BaseIntentionAction {
     @NotNull
     @Override
     public String getText() {
-        return MultiMarkdownBundle.message("quickfix.wikilink.0.change-target", MultiMarkdownProjectComponent.wikiPageRefToFileName(newWikiPageRef, true));
+        return MultiMarkdownBundle.message("quickfix.wikilink.0.change-target", FilePathInfo.wikiRefAsFileNameWithExt(newWikiPageRef));
     }
 
     @NotNull

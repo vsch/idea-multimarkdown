@@ -125,7 +125,7 @@ public class MultiMarkdownSpellcheckingStrategy extends SpellcheckingStrategy {
         if (element.getNode().getElementType() instanceof MultiMarkdownTokenType) {
             if (element instanceof MultiMarkdownNamedElement) {
                 //logger.info("identifier tokenizer for " + element.toString());
-                return IDENTIFIER_TOKENIZER;
+                return TEXT_TOKENIZER;
             }
 
             if (NO_SPELL_CHECK_SET.contains(element.getNode().getElementType())) {

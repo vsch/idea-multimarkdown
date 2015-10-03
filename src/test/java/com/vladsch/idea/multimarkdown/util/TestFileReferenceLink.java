@@ -21,6 +21,7 @@
 package com.vladsch.idea.multimarkdown.util;
 
 import org.apache.commons.io.FilenameUtils;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -37,7 +38,7 @@ public class TestFileReferenceLink {
     //    int[] reasons = new int[REASON_MAX];
     //    int i = 0;
     //
-    //    if (linkRefHasSpaces()) reasons[i++] = REASON_TARGET_HAS_SPACES;
+    //    if (targetNameHasSpaces()) reasons[i++] = REASON_TARGET_HAS_SPACES;
     //    if (wikiPageRef.equalsIgnoreCase(this.wikiPageRef) && !wikiPageRef.equals(this.wikiPageRef)) reasons[i++] = REASON_CASE_MISMATCH;
     //    if (this.wikiPageRef.indexOf('-') >= 0) reasons[i++] = REASON_WIKI_PAGEREF_HAS_DASHES;
     //    if (!targetReference.isUnderWikiHome()) reasons[i++] = REASON_NOT_UNDER_WIKI_HOME;
@@ -46,6 +47,11 @@ public class TestFileReferenceLink {
     //
     //    return Arrays.copyOfRange(reasons, 0, i);
     //}
+
+    @Before
+    public void setUp() throws Exception {
+        FileReferenceLink.projectFileResolver = null;
+    }
 
     private final FileReferenceLink fileReferenceLink;
     private final String getLinkRef;
@@ -60,7 +66,7 @@ public class TestFileReferenceLink {
     /* 2:  getLinkRef, */
     /* 3:  getWikiPageRef, */
     /* 4:  isWikiAccessible, */
-    /* 5:  linkRefHasSpaces, */
+    /* 5:  targetNameHasSpaces, */
     /* 6:  getUpDirectories, */
     /* 7:  getDownDirectories, */
     public TestFileReferenceLink(
@@ -87,7 +93,7 @@ public class TestFileReferenceLink {
     @Test public void test_getWikiPageRef() { assertEquals(getWikiPageRef, fileReferenceLink.getWikiPageRef());}
     @Test public void test_isWikiAccessible() {
         if (isWikiAccessible != fileReferenceLink.isWikiAccessible()) {
-            int[] reasons = fileReferenceLink.inaccessibleWikiPageRefReasons(null);
+            FileReferenceLink.InaccessibleWikiPageReasons reasons = fileReferenceLink.inaccessibleWikiPageRefReasons(null);
             int tmp = 0;
         }
         assertEquals(isWikiAccessible, fileReferenceLink.isWikiAccessible());
@@ -102,9 +108,10 @@ public class TestFileReferenceLink {
     /* 2:  getLinkRef, */
     /* 3:  getWikiPageRef, */
     /* 4:  isWikiAccessible, */
-    /* 5:  linkRefHasSpaces, */
+    /* 5:  targetNameHasSpaces, */
     /* 6:  getUpDirectories, */
     /* 7:  getDownDirectories, */
+    /* 8:  getUpDirectoriesToWikiHome, */
     @Parameterized.Parameters
     public static Iterable<Object[]> data() {
         return Arrays.asList(
@@ -307,12 +314,21 @@ public class TestFileReferenceLink {
         return dirs;
     }
 
+    /* 0:  sourceReference, */
+    /* 1:  targetReference, */
+    /* 2:  getLinkRef, */
+    /* 3:  getWikiPageRef, */
+    /* 4:  isWikiAccessible, */
+    /* 5:  targetNameHasSpaces, */
+    /* 6:  getUpDirectories, */
+    /* 7:  getDownDirectories, */
     private static Object[] filePathInfoTestData(
             String sourceReference,
             String targetReference,
             boolean isWikiAccessible
     ) {
         Object[] result = new Object[8];
+        int itmp;
 
         result[0] = sourceReference;
         result[1] = targetReference;

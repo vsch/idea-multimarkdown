@@ -37,6 +37,7 @@ import com.intellij.refactoring.listeners.RefactoringEventListener;
 import com.intellij.util.messages.MessageBusConnection;
 import com.vladsch.idea.multimarkdown.*;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
+import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import com.vladsch.idea.multimarkdown.util.ListenerNotifier;
 import com.vladsch.idea.multimarkdown.util.ListenerNotifyDelegate;
 import com.vladsch.idea.multimarkdown.util.ProjectFileListListener;
@@ -105,6 +106,7 @@ public class MultiMarkdownFile extends PsiFileBase implements ListenerNotifyDele
             public void refactoringDone(@NotNull String refactoringId, @Nullable RefactoringEventData afterData) {
                 //logger.info("refactoring done on " + this.hashCode());
                 invalidateAfterRefactoring();
+                //logger.info("refactoring done on " + this.hashCode());
             }
 
             @Override
@@ -134,6 +136,7 @@ public class MultiMarkdownFile extends PsiFileBase implements ListenerNotifyDele
         for (String key : missingLinks.keySet()) {
             if (!key.equals(name) && missingLinks.get(key) == element) {
                 // yes it has, we need to invalidate an rebuild
+                //logger.info("missing element " + element + " was root");
                 ApplicationManager.getApplication().invokeLater(new Runnable() {
                     @Override
                     public void run() {
@@ -148,8 +151,12 @@ public class MultiMarkdownFile extends PsiFileBase implements ListenerNotifyDele
 
         if (!missingLinks.containsKey(name)) {
             // see if this one had its name edited, so we can remove it from the list and reset
+            //logger.info("adding missing element " + element);
             missingLinks.put(name, element);
+            return element;
         }
+
+        //logger.info("returning missing ref for element " + element + " to " + missingLinks.get(name));
         return missingLinks.get(name);
     }
 
@@ -180,48 +187,7 @@ public class MultiMarkdownFile extends PsiFileBase implements ListenerNotifyDele
     }
 
     public boolean isWikiPage() {
-        return MultiMarkdownProjectComponent.isWikiPage(getVirtualFile());
-    }
-
-    public String getWikiPageRef() {
-        return MultiMarkdownProjectComponent.fileNameToWikiRef(getVirtualFile().getNameWithoutExtension());
-    }
-
-    //public static @Nullable String getWikiLinkFileName(VirtualFile toFile, VirtualFile inFile, boolean addExtension) {
-    //    return makeFileName(getWikiPageRef(toFile, inFile), addExtension);
-    //}
-    //
-    //public @Nullable String getWikiLinkFileName(VirtualFile inFile, boolean addExtension) {
-    //    return MultiMarkdownFile.getWikiLinkFileName(getVirtualFile(), inFile, addExtension);
-    //}
-    //
-    //public @Nullable String getWikiLinkFileName(VirtualFile inFile) {
-    //    return MultiMarkdownFile.getWikiLinkFileName(getVirtualFile(), inFile, true);
-    //}
-    //
-
-    public
-    @Nullable
-    String getWikiPageRef(@Nullable VirtualFile inFile) {
-        return getWikiPageRef(inFile, 0);
-    }
-
-    public
-    @Nullable
-    String getWikiPageRef(@Nullable VirtualFile inFile, int searchFlags) {
-        return MultiMarkdownProjectComponent.getWikiPageRef(getVirtualFile(), inFile, searchFlags);
-    }
-
-    public
-    @Nullable
-    String getLinkRef(@Nullable VirtualFile inFile) {
-        return getWikiPageRef(inFile, 0);
-    }
-
-    public
-    @Nullable
-    String getLinkRef(@Nullable VirtualFile inFile, int searchFlags) {
-        return MultiMarkdownProjectComponent.getLinkRef(getVirtualFile(), inFile, searchFlags);
+        return new FilePathInfo(getVirtualFile()).isWikiPage();
     }
 
     @Override

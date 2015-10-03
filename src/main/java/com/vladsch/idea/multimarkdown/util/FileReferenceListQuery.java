@@ -20,17 +20,20 @@
  */
 package com.vladsch.idea.multimarkdown.util;
 
-import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class FileReferenceListQuery {
     // types of files to search
     public final static int ANY_FILE = 0x0000;
-    public final static int WIKIPAGE_FILE = 0x0001;
-    public final static int MARKDOWN_FILE = 0x0002;
-    public final static int IMAGE_FILE = 0x0003;
+    public final static int IMAGE_FILE = 0x0001;
+    public final static int WIKIPAGE_FILE = 0x0002;
+    public final static int MARKDOWN_FILE = 0x0003;
 
     public final static int FILE_TYPE_FLAGS = 0x000f;
 
@@ -47,35 +50,35 @@ public class FileReferenceListQuery {
 
     public final static int MATCH_TYPE_FLAGS = LINK_REF_NO_EXT | WIKIPAGE_REF;
 
-    protected final @NotNull MultiMarkdownProjectComponent projectComponent;
+    protected final @NotNull FileReferenceList defaultFileList;
     protected int queryFlags;
     protected String matchLinkRef;
     protected FileReference sourceReference;
 
-    public FileReferenceListQuery(@NotNull MultiMarkdownProjectComponent projectComponent) {
-        this.projectComponent = projectComponent;
+    public FileReferenceListQuery(@NotNull FileReferenceList defaultFileList) {
+        this.defaultFileList = defaultFileList;
         this.queryFlags = 0;
         this.matchLinkRef = null;
         this.sourceReference = null;
     }
 
-    public FileReferenceListQuery(@NotNull MultiMarkdownProjectComponent projectComponent, int queryFlags) {
-        this.projectComponent = projectComponent;
+    public FileReferenceListQuery(@NotNull FileReferenceList defaultFileList, int queryFlags) {
+        this.defaultFileList = defaultFileList;
         this.queryFlags = queryFlags;
         this.matchLinkRef = null;
         this.sourceReference = null;
     }
 
     public FileReferenceListQuery(@NotNull FileReferenceListQuery other) {
-        this.projectComponent = other.projectComponent;
+        this.defaultFileList = other.defaultFileList;
         this.queryFlags = other.queryFlags;
         this.matchLinkRef = other.matchLinkRef;
         this.sourceReference = other.sourceReference;
     }
 
     @NotNull
-    public MultiMarkdownProjectComponent getProjectComponent() {
-        return projectComponent;
+    public FileReferenceList detDefaultFileList() {
+        return defaultFileList;
     }
 
     public int getQueryFlags() {
@@ -146,10 +149,18 @@ public class FileReferenceListQuery {
     }
 
     @NotNull
-    public FileReferenceListQuery matchWikiRef(@NotNull String wikiRef) {
+    public FileReferenceListQuery matchWikiRef(@Nullable String wikiRef) {
+        // set wiki page files as default if not markdown or wikipages are already set
+        if ((this.queryFlags & FILE_TYPE_FLAGS) == 0) this.wikiPages();
         this.matchLinkRef = wikiRef;
         queryFlags = (queryFlags & ~MATCH_TYPE_FLAGS) | WIKIPAGE_REF;
         return this;
+    }
+
+    @NotNull
+    public FileReferenceListQuery matchWikiRef(@NotNull MultiMarkdownWikiPageRef wikiPageRef) {
+        return inSource(new FileReference(wikiPageRef.getContainingFile()))
+                .matchWikiRef(wikiPageRef.getName());
     }
 
     @NotNull
@@ -165,20 +176,44 @@ public class FileReferenceListQuery {
     }
 
     @NotNull
+    public FileReferenceListQuery matchLinkRefNoExt(@NotNull String href, @NotNull VirtualFile virtualFile, @NotNull Project project) {
+        return inSource(virtualFile, project)
+                .matchLinkRef(href, false);
+    }
+
+    @NotNull
+    public FileReferenceListQuery matchLinkRefWithExt(@NotNull String href, @NotNull VirtualFile virtualFile, @NotNull Project project) {
+        return inSource(virtualFile, project)
+                .matchLinkRef(href, false);
+    }
+
+    @NotNull
+    public FileReferenceListQuery matchLinkRef(@NotNull String href, @NotNull VirtualFile virtualFile, @NotNull Project project) {
+        return inSource(virtualFile, project)
+                .matchLinkRef(href, new FilePathInfo(href).hasExt());
+    }
+
+    @NotNull
     public FileReferenceListQuery matchLinkRef(@NotNull String linkRef) {
         return matchLinkRef(linkRef, true);
     }
 
     @NotNull
     public FileReferenceListQuery inSource(@NotNull FileReference sourceFileReference) {
+        // set default file types to wikipage if source is a wikipage
+        if ((queryFlags & FILE_TYPE_FLAGS) == 0) queryFlags |= (sourceFileReference.isWikiPage()) ? WIKIPAGE_FILE : MARKDOWN_FILE;
         this.sourceReference = sourceFileReference;
         return this;
     }
 
     @NotNull
-    public FileReferenceListQuery inSource(@NotNull MultiMarkdownFile sourceMarkdownFile) {
-        this.sourceReference = new FileReference(sourceMarkdownFile.getVirtualFile(), projectComponent.getProject());
-        return this;
+    public FileReferenceListQuery inSource(@NotNull PsiFile sourceMarkdownFile) {
+        return inSource(new FileReference(sourceMarkdownFile.getVirtualFile(), sourceMarkdownFile.getProject()));
+    }
+
+    @NotNull
+    public FileReferenceListQuery inSource(@NotNull VirtualFile virtualFile, @NotNull Project project) {
+        return inSource(new FileReference(virtualFile, project));
     }
 
     @NotNull
@@ -195,13 +230,13 @@ public class FileReferenceListQuery {
 
     @NotNull
     protected FileReferenceList buildResults(@Nullable FileReferenceList fileList, FileReferenceList.Filter... postFilters) {
-        if (fileList == null) fileList = projectComponent.getFileReferenceList();
+        if (fileList == null) fileList = defaultFileList;
 
         int iMax = postFilters.length;
         FileReferenceList.Filter[] filters = new FileReferenceList.Filter[iMax + 2];
         filters[0] = getFileTypeFilter(queryFlags);
         filters[1] = getQueryFilter();
-        if (iMax > 0) System.arraycopy(postFilters, 0, filters, 1, iMax);
+        if (iMax > 0) System.arraycopy(postFilters, 0, filters, 2, iMax);
         return new FileReferenceList(filters, fileList);
     }
 
@@ -235,32 +270,96 @@ public class FileReferenceListQuery {
     }
 
     @NotNull
-    public FileReferenceList getResults() {
+    public FileReferenceList getList() {
         return buildResults(null);
     }
 
     @NotNull
-    public FileReferenceList getResults(@NotNull FileReferenceList fileReferenceList) {
+    public FileReferenceList getList(@NotNull FileReferenceList fileReferenceList) {
         return buildResults(fileReferenceList);
     }
 
     @NotNull
-    public FileReferenceList getResults(FileReferenceList.Filter... queryFilters) {
+    public FileReferenceList getList(FileReferenceList.Filter... queryFilters) {
         return buildResults(null, queryFilters);
     }
 
     @NotNull
-    public FileReferenceList getResults(@NotNull FileReferenceList fileReferenceList, FileReferenceList.Filter... queryFilters) {
+    public FileReferenceList getAccessibleWikiPageRefs() {
+        return buildResults(null, FileReferenceList.ACCESSIBLE_WIKI_REFS_FILTER);
+    }
+
+    @NotNull
+    public FileReferenceList getInaccessibleWikiPageRefs() {
+        return buildResults(null, FileReferenceList.INACCESSIBLE_WIKI_REFS_FILTER);
+    }
+
+    @NotNull
+    public FileReferenceList getAllWikiPageRefs() {
+        return buildResults(null, FileReferenceList.ALL_WIKI_REFS_FILTER);
+    }
+
+    @NotNull
+    public FileReferenceList getWikiPageRefs(boolean allowInaccessibleRefs) {
+        return buildResults(null,
+                allowInaccessibleRefs ? FileReferenceList.ALL_WIKI_REFS_FILTER : FileReferenceList.ACCESSIBLE_WIKI_REFS_FILTER);
+    }
+
+    @NotNull
+    public FileReferenceList getList(@NotNull FileReferenceList fileReferenceList, FileReferenceList.Filter... queryFilters) {
         return buildResults(fileReferenceList, queryFilters);
     }
 
-    // Implementation details for queries and lists
-    public static boolean endsWith(int searchFlags, @NotNull String param, @NotNull String tail) {
-        return FilePathInfo.endsWith((searchFlags & CASE_INSENSITIVE) == 0, (searchFlags & SPACE_DASH_EQUIVALENT) == 0, param, tail);
+    @NotNull
+    public VirtualFile[] getVirtualFiles() {
+        return buildResults(null).getVirtualFiles();
     }
 
-    public static boolean equivalent(int searchFlags, @NotNull String param, @NotNull String tail) {
-        return FilePathInfo.equivalent((searchFlags & CASE_INSENSITIVE) == 0, (searchFlags & SPACE_DASH_EQUIVALENT) == 0, param, tail);
+    @NotNull
+    public PsiFile[] getPsiFiles() {
+        return buildResults(null).getPsiFiles();
+    }
+
+    @NotNull
+    public MultiMarkdownFile[] getMarkdownFiles() {
+        return buildResults(null).getMarkdownFiles();
+    }
+
+    @NotNull
+    public MultiMarkdownFile[] getWikiPageFiles(boolean allowInaccessiblePages) {
+        return allowInaccessiblePages ? getAllWikiPageFiles() : getAccessibleWikiPageFiles();
+    }
+
+    @NotNull
+    public MultiMarkdownFile[] getAllWikiPageFiles() {
+        return buildResults(null).getAllWikiPageFiles();
+    }
+
+    @NotNull
+    public MultiMarkdownFile[] getAccessibleWikiPageFiles() {
+        return buildResults(null).getAccessibleWikiPageFiles();
+    }
+
+    @NotNull
+    public MultiMarkdownFile[] getInaccessibleWikiPageFiles() {
+        return buildResults(null).getInaccessibleWikiPageFiles();
+    }
+
+    // Implementation details for queries and lists
+    public static boolean endsWith(int searchFlags, @NotNull String fileRef, @NotNull String wikiRef) {
+        return FilePathInfo.endsWith((searchFlags & CASE_INSENSITIVE) == 0, (searchFlags & SPACE_DASH_EQUIVALENT) != 0, fileRef, wikiRef);
+    }
+
+    public static boolean equivalent(int searchFlags, @NotNull String fileRef, @NotNull String wikiRef) {
+        return FilePathInfo.equivalent((searchFlags & CASE_INSENSITIVE) == 0, (searchFlags & SPACE_DASH_EQUIVALENT) != 0, fileRef, wikiRef);
+    }
+
+    public static boolean endsWithWikiRef(int searchFlags, @NotNull String fileRef, @NotNull String wikiRef) {
+        return FilePathInfo.endsWithWikiRef((searchFlags & CASE_INSENSITIVE) == 0, (searchFlags & SPACE_DASH_EQUIVALENT) != 0, fileRef, wikiRef);
+    }
+
+    public static boolean equivalentWikiRef(int searchFlags, @NotNull String fileRef, @NotNull String wikiRef) {
+        return FilePathInfo.equivalentWikiRef((searchFlags & CASE_INSENSITIVE) == 0, (searchFlags & SPACE_DASH_EQUIVALENT) != 0, fileRef, wikiRef);
     }
 
     @Nullable
@@ -301,6 +400,7 @@ public class FileReferenceListQuery {
     @NotNull
     protected static FileReferenceList.Filter getMatchAnyFileFilter(@NotNull final String matchPattern, final int searchFlags) {
         FileReferenceList.Filter filter;
+
         switch (searchFlags & MATCH_TYPE_FLAGS) {
             case WIKIPAGE_REF:
                 filter = new FileReferenceList.Filter() {
@@ -311,8 +411,7 @@ public class FileReferenceListQuery {
 
                     @Override
                     public FileReference filterRef(@NotNull FileReference fileReference) {
-                        return endsWith(searchFlags, fileReference.getFilePathNoExtAsWikiRef(),
-                                matchPattern.charAt(0) == '/' ? matchPattern : '/' + matchPattern) ? fileReference : null;
+                        return equivalentWikiRef(searchFlags, fileReference.getFileNameNoExtAsWikiRef(), matchPattern) ? fileReference : null;
                     }
                 };
                 break;
@@ -326,8 +425,7 @@ public class FileReferenceListQuery {
 
                     @Override
                     public FileReference filterRef(@NotNull FileReference fileReference) {
-                        return endsWith(searchFlags, fileReference.getFilePath(),
-                                matchPattern.charAt(0) == '/' ? matchPattern : '/' + matchPattern) ? fileReference : null;
+                        return equivalent(searchFlags, fileReference.getFileName(), matchPattern) ? fileReference : null;
                     }
                 };
                 break;
@@ -342,8 +440,7 @@ public class FileReferenceListQuery {
 
                     @Override
                     public FileReference filterRef(@NotNull FileReference fileReference) {
-                        return endsWith(searchFlags, fileReference.getFilePathNoExt(),
-                                matchPattern.charAt(0) == '/' ? matchPattern : '/' + matchPattern) ? fileReference : null;
+                        return equivalent(searchFlags, fileReference.getFileNameNoExt(), matchPattern) ? fileReference : null;
                     }
                 };
                 break;
@@ -364,9 +461,11 @@ public class FileReferenceListQuery {
 
                     @Override
                     public FileReference filterRef(@NotNull FileReference fileReference) {
+                        if (matchPattern.equals("sample-documents") && fileReference.getFileNameNoExt().equals("sample-documents")) {
+                            int tmp = 0;
+                        }
                         FileReferenceLink referenceLink = new FileReferenceLink(sourceFileReference, fileReference);
-                        return equivalent(searchFlags, referenceLink.getWikiPageRef(), matchPattern) && ((searchFlags & INCLUDE_SOURCE) != 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ?
-                                referenceLink : null;
+                        return equivalentWikiRef(searchFlags, referenceLink.getWikiPageRef(), matchPattern) && ((searchFlags & INCLUDE_SOURCE) != 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
                     }
                 };
                 break;

@@ -23,11 +23,11 @@ package com.vladsch.idea.multimarkdown.psi.impl;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
-import com.sun.istack.internal.Nullable;
-import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownVisitor;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
+import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class MultiMarkdownWikiLinkImpl extends ASTWrapperPsiElement implements MultiMarkdownWikiLink {
     public static String getElementText(@NotNull String name, @Nullable String title) {
@@ -50,6 +50,6 @@ public class MultiMarkdownWikiLinkImpl extends ASTWrapperPsiElement implements M
 
     @Override
     public String getFileName() {
-        return MultiMarkdownProjectComponent.wikiPageRefToFileName(getName(), true);
+        return FilePathInfo.wikiRefAsFileNameWithExt(getName());
     }
 }

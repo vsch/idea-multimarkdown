@@ -30,6 +30,7 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
+import com.vladsch.idea.multimarkdown.util.FileReferenceList;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -44,11 +45,13 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
     @Override
     protected void collectNavigationMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
         if (element instanceof MultiMarkdownWikiPageRef) {
-            Project project = element.getProject();
-            List<MultiMarkdownFile> markdownFiles = MultiMarkdownPlugin.getProjectComponent(project)
-                    .findRefLinkMarkdownFiles(((MultiMarkdownWikiPageRef) element).getName(), element.getContainingFile().getVirtualFile(), WIKI_REF | MARKDOWN_FILE);
-            if (markdownFiles != null && markdownFiles.size() > 0) {
-                MultiMarkdownFile file = markdownFiles.get(0);
+            MultiMarkdownFile[] markdownFiles = MultiMarkdownPlugin.getProjectComponent(element.getProject()).getFileReferenceListQuery()
+                    .matchWikiRef((MultiMarkdownWikiPageRef) element)
+                    .getAccessibleWikiPageFiles()
+                    ;
+
+            if (markdownFiles.length > 0) {
+                MultiMarkdownFile file = markdownFiles[0];
                 ArrayList<MultiMarkdownFile> markdownTargets = new ArrayList<MultiMarkdownFile>();
 
                 Iterator<? super RelatedItemLineMarkerInfo> iterator = result.iterator();

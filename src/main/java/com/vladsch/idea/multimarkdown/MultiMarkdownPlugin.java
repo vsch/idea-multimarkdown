@@ -30,8 +30,14 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
+import com.vladsch.idea.multimarkdown.util.FileReference;
 import org.apache.log4j.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,7 +46,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
-public class MultiMarkdownPlugin implements ApplicationComponent {
+public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.ProjectFileResolver {
     private static final Logger logger = org.apache.log4j.Logger.getLogger("com.vladsch.idea.multimarkdown");
     private MultiMarkdownGlobalSettingsListener globalSettingsListener;
 
@@ -107,6 +113,9 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
         logger.addAppender(appender);
         logger.setAdditivity(false);
         logger.setLevel(Level.INFO);
+
+
+        FileReference.projectFileResolver = this;
 
         // turn off lcd rendering, will use gray
         System.setProperty("prism.lcdtext", "false");
@@ -294,7 +303,30 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
     }
 
     // find markdown and wikiPages in the project
-    public static @NotNull MultiMarkdownProjectComponent getProjectComponent(Project project) {
+    public static
+    @NotNull
+    MultiMarkdownProjectComponent getProjectComponent(Project project) {
         return project.getComponent(MultiMarkdownProjectComponent.class);
+    }
+
+    @Override
+    public VirtualFile getVirtualFile(@NotNull String sourcePath, @NotNull Project project) {
+        String baseDir = project.getBasePath();
+        if (baseDir != null && sourcePath.startsWith(baseDir + "/")) {
+            return VirtualFileManager.getInstance().findFileByUrl("file://" + sourcePath);
+        }
+        return null;
+    }
+
+    @Override
+    public PsiFile getPsiFile(@NotNull String sourcePath, @NotNull Project project) {
+        VirtualFile file = getVirtualFile(sourcePath, project);
+        if (file != null) {
+            PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
+            if (psiFile != null && psiFile instanceof MultiMarkdownFile) {
+                return (MultiMarkdownFile) psiFile;
+            }
+        }
+        return null;
     }
 }
