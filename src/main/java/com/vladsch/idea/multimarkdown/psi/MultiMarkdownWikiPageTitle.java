@@ -24,6 +24,6 @@ import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
-public interface MultiMarkdownWikiPageRef extends MultiMarkdownNamedElement {
-    String getFileName();
+public interface MultiMarkdownWikiPageTitle extends MultiMarkdownNamedElement {
+
 }

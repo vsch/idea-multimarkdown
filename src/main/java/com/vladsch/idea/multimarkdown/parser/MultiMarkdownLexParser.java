@@ -607,7 +607,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
             } else if (node instanceof WikiPageRefNode) {
                 addToken(node, MultiMarkdownTypes.WIKI_LINK_REF);
             } else if (node instanceof WikiPageTitleNode) {
-                addToken(node, MultiMarkdownTypes.WIKI_LINK_TEXT);
+                addToken(node, MultiMarkdownTypes.WIKI_LINK_TITLE);
             } else {
                 if (abbreviations.isEmpty()) {
                     addToken(node, MultiMarkdownTypes.TEXT);
@@ -842,7 +842,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
                 addToken(node.getStartIndex(), node.getStartIndex() + 2, MultiMarkdownTypes.WIKI_LINK_OPEN);
                 addToken(node.getStartIndex() + 2, node.getStartIndex() + 2 + pos, MultiMarkdownTypes.WIKI_LINK_REF);
                 addToken(node.getStartIndex() + 2 + pos, node.getStartIndex() + 2 + pos + 1, MultiMarkdownTypes.WIKI_LINK_SEPARATOR);
-                addToken(node.getStartIndex() + 2 + pos + 1, node.getEndIndex() - 2, MultiMarkdownTypes.WIKI_LINK_TEXT);
+                addToken(node.getStartIndex() + 2 + pos + 1, node.getEndIndex() - 2, MultiMarkdownTypes.WIKI_LINK_TITLE);
                 addToken(node.getEndIndex() - 2, node.getEndIndex(), MultiMarkdownTypes.WIKI_LINK_CLOSE);
             } else {
                 addToken(node.getStartIndex(), node.getStartIndex() + 2, MultiMarkdownTypes.WIKI_LINK_OPEN);

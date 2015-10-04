@@ -51,9 +51,9 @@ public class TestFileReferenceListQueryMatch extends FileReferenceListTest {
 
         FileReferenceList fileReferenceList = loadFileList();
 
-        FileReferenceList fileRefList = fileReferenceList.getQuery()
-                .markdownFiles()
-                .getList();
+        FileReferenceList fileRefList = fileReferenceList.query()
+                .wantMarkdownFiles()
+                .all();
 
         HashMap<String, ArrayList<FileReference>> wikiRefs = new HashMap<String, ArrayList<FileReference>>();
 
@@ -69,7 +69,7 @@ public class TestFileReferenceListQueryMatch extends FileReferenceListTest {
         }
 
         for (String wikiRef : wikiRefs.keySet()) {
-            FileReferenceList wikiPageRefs = fileRefList.getQuery().markdownFiles().matchWikiRef(wikiRef).getAllWikiPageRefs();
+            FileReferenceList wikiPageRefs = fileRefList.query().wantMarkdownFiles().matchWikiRef(wikiRef).allWikiPageRefs();
             Object[] data = new Object[2];
 
             data[0] = wikiRef;
@@ -81,8 +81,8 @@ public class TestFileReferenceListQueryMatch extends FileReferenceListTest {
 
     @Test
     public void test_01_Match_WikiPageRef() throws Exception {
-        FileReferenceListQuery fileReferenceListQuery = fileReferenceList.getQuery().markdownFiles().matchWikiRef(wikiRef);
-        FileReferenceList refs = fileReferenceListQuery.getAllWikiPageRefs();
+        FileReferenceListQuery fileReferenceListQuery = fileReferenceList.query().wantMarkdownFiles().matchWikiRef(wikiRef);
+        FileReferenceList refs = fileReferenceListQuery.allWikiPageRefs();
         compareUnorderedLists(null, wikiRefMatches, refs);
     }
 }

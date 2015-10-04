@@ -29,7 +29,9 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.indexing.FileBasedIndex;
 import com.vladsch.idea.multimarkdown.MultiMarkdownFileType;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageTitle;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,48 +39,71 @@ import java.util.Collections;
 import java.util.List;
 
 public class MultiMarkdownUtil {
-    public static List<MultiMarkdownWikiPageRef> findWikiPageRefs(Project project, String name) {
-        List<MultiMarkdownWikiPageRef> result = null;
-        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, MultiMarkdownFileType.INSTANCE,
-                GlobalSearchScope.allScope(project));
+    public static List<MultiMarkdownNamedElement> findNamedElements(Project project, String name) {
+        List<MultiMarkdownNamedElement> result = null;
+        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, MultiMarkdownFileType.INSTANCE, GlobalSearchScope.allScope(project));
+
         for (VirtualFile virtualFile : virtualFiles) {
-            MultiMarkdownFile simpleFile = (MultiMarkdownFile) PsiManager.getInstance(project).findFile(virtualFile);
-            if (simpleFile != null) {
-                MultiMarkdownWikiPageRef[] properties = PsiTreeUtil.getChildrenOfType(simpleFile, MultiMarkdownWikiPageRef.class);
-                if (properties != null) {
-                    for (MultiMarkdownWikiPageRef property : properties) {
-                        if (name.equals(property.getName())) {
+            MultiMarkdownFile markdownFile = (MultiMarkdownFile) PsiManager.getInstance(project).findFile(virtualFile);
+            if (markdownFile != null) {
+                MultiMarkdownWikiPageRef[] wikiPageRefs = PsiTreeUtil.getChildrenOfType(markdownFile, MultiMarkdownWikiPageRef.class);
+                if (wikiPageRefs != null) {
+
+                    for (MultiMarkdownWikiPageRef wikiPageRef : wikiPageRefs) {
+                        if (name.equals(wikiPageRef.getName())) {
                             if (result == null) {
-                                result = new ArrayList<MultiMarkdownWikiPageRef>();
+                                result = new ArrayList<MultiMarkdownNamedElement>();
                             }
-                            result.add(property);
+                            result.add(wikiPageRef);
+                        }
+                    }
+
+                    MultiMarkdownWikiPageTitle[] wikiPageTitles = PsiTreeUtil.getChildrenOfType(markdownFile, MultiMarkdownWikiPageTitle.class);
+                    if (wikiPageTitles != null) {
+                        for (MultiMarkdownWikiPageTitle wikiPageTitle : wikiPageTitles) {
+                            if (name.equals(wikiPageTitle.getName())) {
+                                if (result == null) {
+                                    result = new ArrayList<MultiMarkdownNamedElement>();
+                                }
+                                result.add(wikiPageTitle);
+                            }
                         }
                     }
                 }
             }
         }
-        return result != null ? result : Collections.<MultiMarkdownWikiPageRef>emptyList();
+        return result != null ? result : Collections.<MultiMarkdownNamedElement>emptyList();
     }
 
-    public static List<MultiMarkdownWikiPageRef> findWikiPageRefs(Project project) {
-        List<MultiMarkdownWikiPageRef> result = null;
-        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, MultiMarkdownFileType.INSTANCE,
-                GlobalSearchScope.allScope(project));
+    public static List<MultiMarkdownNamedElement> findNamedElements(Project project) {
+        List<MultiMarkdownNamedElement> result = null;
+        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, MultiMarkdownFileType.INSTANCE, GlobalSearchScope.allScope(project));
+
         for (VirtualFile virtualFile : virtualFiles) {
-            MultiMarkdownFile simpleFile = (MultiMarkdownFile) PsiManager.getInstance(project).findFile(virtualFile);
-            if (simpleFile != null) {
-                MultiMarkdownWikiPageRef[] properties = PsiTreeUtil.getChildrenOfType(simpleFile, MultiMarkdownWikiPageRef.class);
-                if (properties != null) {
-                    for (MultiMarkdownWikiPageRef property : properties) {
+            MultiMarkdownFile markdownFile = (MultiMarkdownFile) PsiManager.getInstance(project).findFile(virtualFile);
+            if (markdownFile != null) {
+
+                MultiMarkdownWikiPageRef[] wikiPageRefs = PsiTreeUtil.getChildrenOfType(markdownFile, MultiMarkdownWikiPageRef.class);
+                if (wikiPageRefs != null) {
+                    for (MultiMarkdownWikiPageRef wikiPageRef : wikiPageRefs) {
                         if (result == null) {
-                            result = new ArrayList<MultiMarkdownWikiPageRef>();
+                            result = new ArrayList<MultiMarkdownNamedElement>();
                         }
-                        result.add(property);
+                        result.add(wikiPageRef);
+                    }
+                }
+
+                MultiMarkdownWikiPageTitle[] wikiPageTitles = PsiTreeUtil.getChildrenOfType(markdownFile, MultiMarkdownWikiPageTitle.class);
+                if (wikiPageTitles != null) {
+                    for (MultiMarkdownWikiPageTitle wikiPageTitle : wikiPageTitles) {
+                        if (result == null) {
+                            result = new ArrayList<MultiMarkdownNamedElement>();
+                        }
+                        result.add(wikiPageTitle);
                     }
                 }
             }
         }
-        return result != null ? result : Collections.<MultiMarkdownWikiPageRef>emptyList();
+        return result != null ? result : Collections.<MultiMarkdownNamedElement>emptyList();
     }
-
 }

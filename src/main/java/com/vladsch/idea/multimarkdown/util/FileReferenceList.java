@@ -541,7 +541,7 @@ public class FileReferenceList {
     }
 
     @NotNull
-    public FileReferenceListQuery getQuery() {
+    public FileReferenceListQuery query() {
         return new FileReferenceListQuery(this);
     }
 
@@ -562,12 +562,12 @@ public class FileReferenceList {
 
     @NotNull
     public FileReferenceList markdownFileRefs() {
-        return new FileReferenceList(this, MARKDOWN_FILE_FILTER);
+        return filter(MARKDOWN_FILE_FILTER);
     }
 
     @NotNull
     public FileReferenceList imageFileRefs() {
-        return new FileReferenceList(this, IMAGE_FILE_FILTER);
+        return filter(IMAGE_FILE_FILTER);
     }
 
     @NotNull

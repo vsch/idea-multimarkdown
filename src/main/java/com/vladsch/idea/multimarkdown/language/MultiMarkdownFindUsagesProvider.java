@@ -31,6 +31,7 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.parser.MultiMarkdownLexer;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageTitle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -53,7 +54,7 @@ public class MultiMarkdownFindUsagesProvider implements FindUsagesProvider {
 
         if (false) {
             MultiMarkdownWordsScanner wordsScanner = new MultiMarkdownWordsScanner(new MultiMarkdownLexer(),
-                    TokenSet.create(WIKI_LINK_REF),
+                    TokenSet.create(WIKI_LINK_REF, WIKI_LINK_TITLE),
                     TokenSet.create(COMMENT),
                     TokenSet.EMPTY,
                     TokenSet.create(NONE), 5);
@@ -65,14 +66,14 @@ public class MultiMarkdownFindUsagesProvider implements FindUsagesProvider {
         } else {
             DefaultWordsScanner wordsScanner = new DefaultWordsScanner(new MultiMarkdownLexer(),
                     //TokenSet.create(TEXT, WIKI_LINK_REF, WIKI_LINK),
-                    TokenSet.create(WIKI_LINK_REF),
+                    TokenSet.create(WIKI_LINK_REF, WIKI_LINK_TITLE),
                     TokenSet.create(COMMENT),
                     TokenSet.EMPTY,
                     TokenSet.EMPTY)
             {
                 @Override
                 public int getVersion() {
-                    return super.getVersion()+4;
+                    return super.getVersion()+5;
                 }
             };
 
@@ -83,7 +84,7 @@ public class MultiMarkdownFindUsagesProvider implements FindUsagesProvider {
 
     @Override
     public boolean canFindUsagesFor(@NotNull PsiElement psiElement) {
-        return psiElement instanceof PsiNamedElement;
+        return psiElement instanceof MultiMarkdownNamedElement;
     }
 
     @Nullable
@@ -97,6 +98,8 @@ public class MultiMarkdownFindUsagesProvider implements FindUsagesProvider {
     public String getType(@NotNull PsiElement element) {
         if (element instanceof MultiMarkdownWikiPageRef) {
             return MultiMarkdownBundle.message("findusages.wikilink.page-ref");
+        } else if (element instanceof MultiMarkdownWikiPageTitle) {
+            return MultiMarkdownBundle.message("findusages.wikilink.page-title");
         } else {
             return "";
         }
@@ -116,8 +119,8 @@ public class MultiMarkdownFindUsagesProvider implements FindUsagesProvider {
     @NotNull
     @Override
     public String getNodeText(@NotNull PsiElement element, boolean useFullName) {
-        if (element instanceof MultiMarkdownWikiPageRef) {
-            String name = ((MultiMarkdownWikiPageRef) element).getName();
+        if (element instanceof MultiMarkdownNamedElement) {
+            String name = ((MultiMarkdownNamedElement) element).getName();
             return (name == null ? "" : name);
         } else {
             return "";

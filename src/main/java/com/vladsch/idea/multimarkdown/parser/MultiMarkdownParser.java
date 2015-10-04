@@ -73,13 +73,16 @@ public class MultiMarkdownParser implements PsiParser {
         if (builder.getTokenType() == WIKI_LINK_REF) {
             PsiBuilder.Marker wikiPageRef = builder.mark();
             builder.advanceLexer();
+
             wikiPageRef.done(WIKI_LINK_REF);
         }
 
         if (builder.getTokenType() == WIKI_LINK_SEPARATOR) {
             builder.advanceLexer();
-            if (builder.getTokenType() == WIKI_LINK_TEXT) {
+            if (builder.getTokenType() == WIKI_LINK_TITLE) {
+                PsiBuilder.Marker wikiPageTitle = builder.mark();
                 builder.advanceLexer();
+                wikiPageTitle.done(WIKI_LINK_TITLE);
             }
         }
 
@@ -97,7 +100,6 @@ public class MultiMarkdownParser implements PsiParser {
      *
      * @param root    the type of the root element in the AST tree.
      * @param builder the builder which is used to retrieve the original file tokens and build the AST tree.
-     *
      * @return the root of the resulting AST tree.
      */
     @NotNull

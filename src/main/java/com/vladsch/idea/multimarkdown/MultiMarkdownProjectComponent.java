@@ -119,10 +119,6 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         return mirrorFileList.get().getCache();
     }
 
-    public FileReferenceListQuery getFileReferenceListQuery() {
-        return new FileReferenceListQuery(getFileReferenceList());
-    }
-
     private static class MainFileListUpdater extends ThreadSafeCacheUpdater<FileReferenceList> {
         protected final MultiMarkdownProjectComponent projectComponent;
 

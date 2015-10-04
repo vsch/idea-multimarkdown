@@ -30,9 +30,8 @@ import com.intellij.spellchecker.util.Strings;
 import com.intellij.util.containers.ContainerUtil;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
-import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownWikiPageRefImpl;
+import com.vladsch.idea.multimarkdown.psi.*;
+import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownPsiImplUtil;
 import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import com.vladsch.idea.multimarkdown.util.FileReferenceList;
 import org.jetbrains.annotations.NotNull;
@@ -66,7 +65,7 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
         SuggestedNameInfo suggestedNameInfo = null;
         String[] paths = null;
 
-        if (nameSuggestionContext == null || !(element instanceof MultiMarkdownFile || element instanceof MultiMarkdownWikiPageRef)) {
+        if (nameSuggestionContext == null || !(element instanceof MultiMarkdownFile || element instanceof MultiMarkdownNamedElement)) {
             return null;
         }
 
@@ -92,6 +91,19 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
                     result.add(text.replace(" ", "").replace("'", "").replace("/", "").replace("\\", ""));
                 }
             }
+        } else if (element instanceof MultiMarkdownWikiPageTitle) {
+            // this is a rename on a wiki page title
+            // always activate spelling suggestions for renaming wiki page refs
+            // Get suggestions from the name of the pageRef text
+            MultiMarkdownWikiPageRef wikiPageRef = (MultiMarkdownWikiPageRef) MultiMarkdownPsiImplUtil.findChildByType(element.getParent(), MultiMarkdownTypes.WIKI_LINK_REF);
+            if (wikiPageRef != null) {
+                text = wikiPageRef.getName();
+                if (text != null) {
+                    text = new FilePathInfo(text).getFileName();
+                }
+            } else {
+                text = ((MultiMarkdownNamedElement) element).getName();
+            }
         } else if (element instanceof MultiMarkdownWikiPageRef) {
             // this is a rename on a missing link element, provide list of valid markdown files that can be reached via wikiPageRef
             // always activate spelling suggestions for renaming wiki page refs
@@ -99,9 +111,9 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
             MultiMarkdownFile markdownFile = (MultiMarkdownFile) element.getContainingFile();
             VirtualFile virtualFile = markdownFile.getVirtualFile();
             boolean wikiPage = markdownFile.isWikiPage();
-            FileReferenceList wikiFiles = projectComponent.getFileReferenceListQuery()
+            FileReferenceList wikiFiles = projectComponent.getFileReferenceList().query()
                     .inSource(markdownFile)
-                    .getWikiPageRefs(!wikiPage);
+                    .wikiPageRefs(!wikiPage);
 
             if (wikiFiles.getFileReferences().length > 0) {
                 // add fixed up version to result
@@ -161,7 +173,7 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
                 if (wikiRef != null) {
                     PsiReference reference = element.getReference();
 
-                    if (reference != null && reference instanceof MultiMarkdownReference && !((MultiMarkdownReference) reference).isResolveRefMissing()) {
+                    if (reference != null && reference instanceof MultiMarkdownReferenceWikiPageRef && !((MultiMarkdownReferenceWikiPageRef) reference).isResolveRefMissing()) {
                         suggestions.add(wikiRef + FilePathInfo.WIKI_PAGE_EXTENSION);
                         suggestions.add(fixSuggestion(wikiRef, " -_.'/\\", "-") + FilePathInfo.WIKI_PAGE_EXTENSION);
                         suggestions.add(fixSuggestion(wikiRef, " -_.'/\\", "") + FilePathInfo.WIKI_PAGE_EXTENSION);

@@ -23,6 +23,7 @@ package com.vladsch.idea.multimarkdown.language;
 import com.intellij.navigation.ChooseByNameContributor;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.project.Project;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,11 +34,11 @@ public class MultiMarkdownChooseByNameContributor implements ChooseByNameContrib
     @NotNull
     @Override
     public String[] getNames(Project project, boolean includeNonProjectItems) {
-        List<MultiMarkdownWikiPageRef> wikiLinks = MultiMarkdownUtil.findWikiPageRefs(project);
-        List<String> names = new ArrayList<String>(wikiLinks.size());
-        for (MultiMarkdownWikiPageRef wikiLink : wikiLinks) {
-            if (wikiLink.getName() != null && wikiLink.getName().length() > 0) {
-                names.add(wikiLink.getName());
+        List<MultiMarkdownNamedElement> namedElements = MultiMarkdownUtil.findNamedElements(project);
+        List<String> names = new ArrayList<String>(namedElements.size());
+        for (MultiMarkdownNamedElement namedElement : namedElements) {
+            if (namedElement.getName() != null && namedElement.getName().length() > 0) {
+                names.add(namedElement.getName());
             }
         }
         return names.toArray(new String[names.size()]);
@@ -47,7 +48,7 @@ public class MultiMarkdownChooseByNameContributor implements ChooseByNameContrib
     @Override
     public NavigationItem[] getItemsByName(String name, String pattern, Project project, boolean includeNonProjectItems) {
         // todo include non project items
-        List<MultiMarkdownWikiPageRef> wikiLinks = MultiMarkdownUtil.findWikiPageRefs(project, name);
-        return wikiLinks.toArray(new NavigationItem[wikiLinks.size()]);
+        List<MultiMarkdownNamedElement> namedElements = MultiMarkdownUtil.findNamedElements(project, name);
+        return namedElements.toArray(new NavigationItem[namedElements.size()]);
     }
 }

@@ -64,19 +64,19 @@ public class MultiMarkdownAnnotator implements Annotator {
             MultiMarkdownFile containingFile = (MultiMarkdownFile) element.getContainingFile();
             VirtualFile virtualFile = containingFile.getVirtualFile();
 
-            FileReferenceList filesReferenceList = projectComponent.getFileReferenceList().getQuery()
-                    .markdownFiles()
-                    .getList();
+            FileReferenceList filesReferenceList = projectComponent.getFileReferenceList().query()
+                    .wantMarkdownFiles()
+                    .all();
 
-            FileReferenceList matchedFilesReferenceList = filesReferenceList.getQuery()
+            FileReferenceList matchedFilesReferenceList = filesReferenceList.query()
                     .matchWikiRef((MultiMarkdownWikiPageRef) element)
                     .spaceDashEqual()
                     .caseInsensitive()
-                    .getAllWikiPageRefs();
+                    .allWikiPageRefs();
 
-            FileReferenceList accessibleWikiPageRefs = matchedFilesReferenceList.getQuery()
+            FileReferenceList accessibleWikiPageRefs = matchedFilesReferenceList.query()
                     .matchWikiRef((MultiMarkdownWikiPageRef) element)
-                    .getAccessibleWikiPageRefs();
+                    .accessibleWikiPageRefs();
 
             Annotation annotator = null;
 
@@ -156,7 +156,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                      *   have a file but it is not accessible we can:
                      *   1. rename the link to another accessible file?
                      */
-                    FileReferenceList wikiPageRefs = filesReferenceList.getQuery().inSource(containingFile).getAllWikiPageRefs();
+                    FileReferenceList wikiPageRefs = filesReferenceList.query().inSource(containingFile).allWikiPageRefs();
 
                     FileReference[] references = wikiPageRefs.getFileReferences();
                     Arrays.sort(references);

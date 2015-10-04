@@ -24,8 +24,7 @@ import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
 
 public interface MultiMarkdownWikiLink extends PsiElement {
-
     String getPageTitle();
-    String getFileName();
+    String getPageRef();
     ItemPresentation getPresentation();
 }

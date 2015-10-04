@@ -49,7 +49,7 @@ public class MultiMarkdownWikiLinkImpl extends ASTWrapperPsiElement implements M
     }
 
     @Override
-    public String getFileName() {
-        return FilePathInfo.wikiRefAsFileNameWithExt(getName());
+    public String getPageRef() {
+        return MultiMarkdownPsiImplUtil.getPageRef(this);
     }
 }

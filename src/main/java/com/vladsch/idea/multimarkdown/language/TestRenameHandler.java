@@ -17,26 +17,35 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- *
- * This file is based on the IntelliJ SimplePlugin tutorial
- *
  */
-package com.vladsch.idea.multimarkdown.psi;
+package com.vladsch.idea.multimarkdown.language;
 
+import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
-import com.intellij.navigation.ItemPresentation;
+import com.intellij.psi.PsiFile;
+import com.intellij.refactoring.rename.RenameHandler;
+import org.jetbrains.annotations.NotNull;
 
-public interface MultiMarkdownProperty extends MultiMarkdownNamedElement {
+public class TestRenameHandler implements RenameHandler {
+    @Override
+    public boolean isAvailableOnDataContext(DataContext dataContext) {
+        return true;
+    }
 
-    String getKey();
+    @Override
+    public boolean isRenaming(DataContext dataContext) {
+        return true;
+    }
 
-    String getValue();
+    @Override
+    public void invoke(@NotNull Project project, Editor editor, PsiFile psiFile, DataContext dataContext) {
+        boolean d = true;
+    }
 
-    String getName();
-
-    PsiElement setName(String newName);
-
-    PsiElement getNameIdentifier();
-
-    ItemPresentation getPresentation();
+    @Override
+    public void invoke(@NotNull Project project, @NotNull PsiElement[] psiElements, DataContext dataContext) {
+        boolean d = true;
+    }
 }

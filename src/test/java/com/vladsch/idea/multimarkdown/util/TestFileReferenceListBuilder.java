@@ -121,9 +121,9 @@ public class TestFileReferenceListBuilder extends FileReferenceListTest {
 
     @Test
     public void test_08_FilterFileType_All() throws Exception {
-        FileReferenceList allFiles = fileReferenceList.getQuery()
-                .allFiles()
-                .getList();
+        FileReferenceList allFiles = fileReferenceList.query()
+                .wantAllFiles()
+                .all();
 
         assertArrayEquals(fileReferences, fileReferenceList.getFileReferences());
         assertArrayEquals(extensions, fileReferenceList.getExtensions());
@@ -132,9 +132,9 @@ public class TestFileReferenceListBuilder extends FileReferenceListTest {
 
     @Test
     public void test_09_FilterFileType_Image() throws Exception {
-        FileReferenceList fileRefList = fileReferenceList.getQuery()
-                .imageFiles()
-                .getList();
+        FileReferenceList fileRefList = fileReferenceList.query()
+                .wantImageFiles()
+                .all();
 
         FileReferenceList.Builder filesBuilder = new FileReferenceList.Builder();
 
@@ -149,9 +149,9 @@ public class TestFileReferenceListBuilder extends FileReferenceListTest {
 
     @Test
     public void test_10_FilterFileType_Markdown() throws Exception {
-        FileReferenceList fileRefList = fileReferenceList.getQuery()
-                .markdownFiles()
-                .getList();
+        FileReferenceList fileRefList = fileReferenceList.query()
+                .wantMarkdownFiles()
+                .all();
 
         FileReferenceList.Builder filesBuilder = new FileReferenceList.Builder();
 
@@ -166,9 +166,9 @@ public class TestFileReferenceListBuilder extends FileReferenceListTest {
 
     @Test
     public void test_11_FilterFileType_WikiPage() throws Exception {
-        FileReferenceList fileRefList = fileReferenceList.getQuery()
-                .wikiPages()
-                .getList();
+        FileReferenceList fileRefList = fileReferenceList.query()
+                .wantWikiPages()
+                .all();
 
         FileReferenceList.Builder filesBuilder = new FileReferenceList.Builder();
 

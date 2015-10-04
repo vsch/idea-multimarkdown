@@ -23,16 +23,11 @@
  */
 package com.vladsch.idea.multimarkdown.psi;
 
-import org.jetbrains.annotations.*;
-import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import org.jetbrains.annotations.NotNull;
 
 public class MultiMarkdownVisitor extends PsiElementVisitor {
-
-    public void visitProperty(@NotNull MultiMarkdownProperty o) {
-        visitNamedElement(o);
-    }
-
     public void visitNamedElement(@NotNull MultiMarkdownNamedElement o) {
         visitPsiElement(o);
     }
@@ -40,5 +35,4 @@ public class MultiMarkdownVisitor extends PsiElementVisitor {
     public void visitPsiElement(@NotNull PsiElement o) {
         visitElement(o);
     }
-
 }

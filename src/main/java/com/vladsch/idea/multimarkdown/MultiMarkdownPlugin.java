@@ -302,7 +302,7 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
         return logger;
     }
 
-    // find markdown and wikiPages in the project
+    // find markdown and wantWikiPages in the project
     public static
     @NotNull
     MultiMarkdownProjectComponent getProjectComponent(Project project) {

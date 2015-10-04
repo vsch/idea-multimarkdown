@@ -6,4 +6,4 @@
 [[Bads file Name]]
 [[Bads file Name]]
 
-[[]]
+[[main|Main]]

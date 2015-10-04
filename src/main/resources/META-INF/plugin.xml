@@ -361,13 +361,14 @@
     <lang.refactoringSupport language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownRefactoringSupportProvider"/>
     <lang.syntaxHighlighterFactory key="MultiMarkdown" language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.highlighter.MultiMarkdownSyntaxHighlighterFactory"/>
     <langCodeStyleSettingsProvider implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownLanguageCodeStyleSettingsProvider"/>
-    <!--<psi.referenceContributor implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownReferenceContributor"/>-->
+    <psi.referenceContributor implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownReferenceContributor"/>
     <spellchecker.support language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.spellchecking.MultiMarkdownSpellcheckingStrategy"/>
     <todoIndexer filetype="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.todo.MultiMarkdownTodoIndexer"/>
-    <lang.elementManipulator forClass="com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef" implementationClass="com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownWikiPageRefManipulator"/>
+    <lang.elementManipulator forClass="com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef" implementationClass="com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownNamedElementManipulator"/>
     <fileIconProvider implementation="com.vladsch.idea.multimarkdown.MultiMarkdownFileIconProvider"/>
     <referencesSearch implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownReferenceSearch"/>
     <codeInsight.lineMarkerProvider language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownLineMarkerProvider"/>
     <nameSuggestionProvider implementation="com.vladsch.idea.multimarkdown.language.ElementNameSuggestionProvider"/>
+    <!--<renameHandler implementation="com.vladsch.idea.multimarkdown.language.TestRenameHandler"/>-->
   </extensions>
 </idea-plugin>

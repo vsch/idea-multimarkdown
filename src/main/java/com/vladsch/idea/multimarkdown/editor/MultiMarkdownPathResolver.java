@@ -179,11 +179,10 @@ public class MultiMarkdownPathResolver {
                         if (!hrefPathInfo.hasExt()) {
                             VirtualFile inFile = FileDocumentManager.getInstance().getFile(document);
                             if (inFile != null) {
-                                MultiMarkdownFile[] list = MultiMarkdownPlugin.getProjectComponent(project)
-                                        .getFileReferenceListQuery()
+                                MultiMarkdownFile[] list = MultiMarkdownPlugin.getProjectComponent(project).getFileReferenceList().query()
                                         .matchLinkRefNoExt(href, inFile, project)
                                         .includeSource()
-                                        .getMarkdownFiles();
+                                        .markdownFiles();
 
                                 if (list.length == 1) {
                                     virtualTarget = list[0].getVirtualFile();

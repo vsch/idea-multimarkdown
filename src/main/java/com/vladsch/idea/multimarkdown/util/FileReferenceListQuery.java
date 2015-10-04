@@ -94,25 +94,25 @@ public class FileReferenceListQuery {
     }
 
     @NotNull
-    public FileReferenceListQuery wikiPages() {
+    public FileReferenceListQuery wantWikiPages() {
         queryFlags = (queryFlags & ~FILE_TYPE_FLAGS) | WIKIPAGE_FILE;
         return this;
     }
 
     @NotNull
-    public FileReferenceListQuery markdownFiles() {
+    public FileReferenceListQuery wantMarkdownFiles() {
         queryFlags = (queryFlags & ~FILE_TYPE_FLAGS) | MARKDOWN_FILE;
         return this;
     }
 
     @NotNull
-    public FileReferenceListQuery imageFiles() {
+    public FileReferenceListQuery wantImageFiles() {
         queryFlags = (queryFlags & ~FILE_TYPE_FLAGS) | IMAGE_FILE;
         return this;
     }
 
     @NotNull
-    public FileReferenceListQuery allFiles() {
+    public FileReferenceListQuery wantAllFiles() {
         queryFlags = (queryFlags & ~FILE_TYPE_FLAGS);
         return this;
     }
@@ -151,7 +151,7 @@ public class FileReferenceListQuery {
     @NotNull
     public FileReferenceListQuery matchWikiRef(@Nullable String wikiRef) {
         // set wiki page files as default if not markdown or wikipages are already set
-        if ((this.queryFlags & FILE_TYPE_FLAGS) == 0) this.wikiPages();
+        if ((this.queryFlags & FILE_TYPE_FLAGS) == 0) this.wantWikiPages();
         this.matchLinkRef = wikiRef;
         queryFlags = (queryFlags & ~MATCH_TYPE_FLAGS) | WIKIPAGE_REF;
         return this;
@@ -270,95 +270,95 @@ public class FileReferenceListQuery {
     }
 
     @NotNull
-    public FileReferenceList getList() {
+    public FileReferenceList all(@NotNull FileReferenceList fileReferenceList, FileReferenceList.Filter... queryFilters) {
+        return buildResults(fileReferenceList, queryFilters);
+    }
+
+    @NotNull
+    public FileReferenceList all() {
         return buildResults(null);
     }
 
     @NotNull
-    public FileReferenceList getList(@NotNull FileReferenceList fileReferenceList) {
+    public FileReferenceList all(@NotNull FileReferenceList fileReferenceList) {
         return buildResults(fileReferenceList);
     }
 
     @NotNull
-    public FileReferenceList getList(FileReferenceList.Filter... queryFilters) {
+    public FileReferenceList all(FileReferenceList.Filter... queryFilters) {
         return buildResults(null, queryFilters);
     }
 
     @NotNull
-    public FileReferenceList getAccessibleWikiPageRefs() {
+    public FileReferenceList accessibleWikiPageRefs() {
         return buildResults(null, FileReferenceList.ACCESSIBLE_WIKI_REFS_FILTER);
     }
 
     @NotNull
-    public FileReferenceList getInaccessibleWikiPageRefs() {
+    public FileReferenceList inaccessibleWikiPageRefs() {
         return buildResults(null, FileReferenceList.INACCESSIBLE_WIKI_REFS_FILTER);
     }
 
     @NotNull
-    public FileReferenceList getAllWikiPageRefs() {
+    public FileReferenceList allWikiPageRefs() {
         return buildResults(null, FileReferenceList.ALL_WIKI_REFS_FILTER);
     }
 
     @NotNull
-    public FileReferenceList getWikiPageRefs(boolean allowInaccessibleRefs) {
+    public FileReferenceList wikiPageRefs(boolean allowInaccessibleRefs) {
         return buildResults(null,
                 allowInaccessibleRefs ? FileReferenceList.ALL_WIKI_REFS_FILTER : FileReferenceList.ACCESSIBLE_WIKI_REFS_FILTER);
     }
 
     @NotNull
-    public FileReferenceList getList(@NotNull FileReferenceList fileReferenceList, FileReferenceList.Filter... queryFilters) {
-        return buildResults(fileReferenceList, queryFilters);
-    }
-
-    @NotNull
-    public VirtualFile[] getVirtualFiles() {
+    public VirtualFile[] virtualFiles() {
         return buildResults(null).getVirtualFiles();
     }
 
     @NotNull
-    public PsiFile[] getPsiFiles() {
+    public PsiFile[] psiFiles() {
         return buildResults(null).getPsiFiles();
     }
 
     @NotNull
-    public MultiMarkdownFile[] getMarkdownFiles() {
+    public MultiMarkdownFile[] markdownFiles() {
         return buildResults(null).getMarkdownFiles();
     }
 
     @NotNull
-    public MultiMarkdownFile[] getWikiPageFiles(boolean allowInaccessiblePages) {
-        return allowInaccessiblePages ? getAllWikiPageFiles() : getAccessibleWikiPageFiles();
+    public MultiMarkdownFile[] wikiPageFiles(boolean allowInaccessiblePages) {
+        return allowInaccessiblePages ? allWikiPageFiles() : accessibleWikiPageFiles();
     }
 
     @NotNull
-    public MultiMarkdownFile[] getAllWikiPageFiles() {
+    public MultiMarkdownFile[] allWikiPageFiles() {
         return buildResults(null).getAllWikiPageFiles();
     }
 
     @NotNull
-    public MultiMarkdownFile[] getAccessibleWikiPageFiles() {
+    public MultiMarkdownFile[] accessibleWikiPageFiles() {
         return buildResults(null).getAccessibleWikiPageFiles();
     }
 
     @NotNull
-    public MultiMarkdownFile[] getInaccessibleWikiPageFiles() {
+    public MultiMarkdownFile[] inaccessibleWikiPageFiles() {
         return buildResults(null).getInaccessibleWikiPageFiles();
     }
 
     // Implementation details for queries and lists
-    public static boolean endsWith(int searchFlags, @NotNull String fileRef, @NotNull String wikiRef) {
+    protected static boolean endsWith(int searchFlags, @NotNull String fileRef, @NotNull String wikiRef) {
         return FilePathInfo.endsWith((searchFlags & CASE_INSENSITIVE) == 0, (searchFlags & SPACE_DASH_EQUIVALENT) != 0, fileRef, wikiRef);
     }
 
-    public static boolean equivalent(int searchFlags, @NotNull String fileRef, @NotNull String wikiRef) {
+    protected static boolean equivalent(int searchFlags, @NotNull String fileRef, @NotNull String wikiRef) {
         return FilePathInfo.equivalent((searchFlags & CASE_INSENSITIVE) == 0, (searchFlags & SPACE_DASH_EQUIVALENT) != 0, fileRef, wikiRef);
     }
 
-    public static boolean endsWithWikiRef(int searchFlags, @NotNull String fileRef, @NotNull String wikiRef) {
+    protected static boolean endsWithWikiRef(int searchFlags, @NotNull String fileRef, @NotNull String wikiRef) {
         return FilePathInfo.endsWithWikiRef((searchFlags & CASE_INSENSITIVE) == 0, (searchFlags & SPACE_DASH_EQUIVALENT) != 0, fileRef, wikiRef);
     }
 
-    public static boolean equivalentWikiRef(int searchFlags, @NotNull String fileRef, @NotNull String wikiRef) {
+    protected static boolean equivalentWikiRef(int searchFlags, @NotNull String fileRef, @NotNull String wikiRef) {
         return FilePathInfo.equivalentWikiRef((searchFlags & CASE_INSENSITIVE) == 0, (searchFlags & SPACE_DASH_EQUIVALENT) != 0, fileRef, wikiRef);
     }
 

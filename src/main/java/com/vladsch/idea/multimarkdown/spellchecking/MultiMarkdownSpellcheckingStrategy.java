@@ -113,7 +113,7 @@ public class MultiMarkdownSpellcheckingStrategy extends SpellcheckingStrategy {
             WIKI_LINK_SEPARATOR,
             WIKI_LINK_CLOSE,
             //WIKI_LINK_REF,
-            //WIKI_LINK_TEXT,
+            //WIKI_LINK_TITLE,
             //COMMENT,
             WIKI_LINK
     );
