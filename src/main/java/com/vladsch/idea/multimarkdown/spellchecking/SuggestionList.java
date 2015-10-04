@@ -29,7 +29,11 @@ import java.util.HashSet;
 import java.util.List;
 
 public class SuggestionList {
+
     public interface SuggestionFixer {
+        String NEEDS_SPELLING_FIXER = "NeedsSpellingFixer";
+        String HAD_SPELLING_FIXER = "HadSpellingFixer";
+
         @Nullable
         SuggestionList fix(final @NotNull Suggestion suggestion, final Project project);
     }
@@ -52,6 +56,10 @@ public class SuggestionList {
         this(other.project);
 
         add(other);
+    }
+
+    public int size() {
+        return suggestions.size();
     }
 
     public void add(Suggestion... suggestions) {
@@ -83,14 +91,14 @@ public class SuggestionList {
         }
     }
 
-    public void add(@NotNull String suggestionText, @NotNull Suggestion sourceSuggestion) {
+    public void add(@NotNull String suggestionText, Suggestion... sourceSuggestions) {
         if (!this.suggestionSet.contains(suggestionText)) {
-            this.suggestions.add(new Suggestion(suggestionText, sourceSuggestion));
+            this.suggestions.add(new Suggestion(suggestionText, sourceSuggestions));
             this.suggestionSet.add(suggestionText);
         }
     }
 
-    public void add(@NotNull String suggestionText, @NotNull Suggestion.Param param, @NotNull Suggestion... sourceSuggestions) {
+    public void add(@NotNull String suggestionText, @NotNull Suggestion.Param param, Suggestion... sourceSuggestions) {
         if (!this.suggestionSet.contains(suggestionText)) {
             this.suggestions.add(new Suggestion(suggestionText, param, sourceSuggestions));
             this.suggestionSet.add(suggestionText);
@@ -166,7 +174,7 @@ public class SuggestionList {
     }
 
     @NotNull
-    public SuggestionList interleaveFixers(SuggestionFixer... fixers) {
+    public SuggestionList sequenceFixers(SuggestionFixer... fixers) {
         SuggestionList result = new SuggestionList();
 
         for (Suggestion suggestion : getSuggestions()) {

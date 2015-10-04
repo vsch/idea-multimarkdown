@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import static com.vladsch.idea.multimarkdown.TestUtils.compareUnorderedLists;
+
 @RunWith(value = Parameterized.class)
 public class TestFileReferenceListQueryMatch extends FileReferenceListTest {
     @Override

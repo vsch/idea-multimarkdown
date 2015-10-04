@@ -24,6 +24,7 @@ import com.intellij.psi.codeStyle.NameUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 public class Suggestion {
@@ -40,46 +41,73 @@ public class Suggestion {
     protected final String text;
     protected final HashMap<String, Param> params = new HashMap<String, Param>();
 
+    public Param[] paramsArray() {
+        Collection<Param> values = params.values();
+        return values.toArray(new Param[values.size()]);
+    }
+
     public boolean hasParam(@NotNull String key) {
         return params.containsKey(key);
     }
 
+    public boolean hasParams() {
+        return !params.isEmpty();
+    }
+
+    public boolean addParam(Param param) {
+        if (params.containsKey(param.key)) return false;
+        params.put(param.key, param);
+        return true;
+    }
+
     @Nullable
-    public Param getParam(@NotNull String key) {
+    protected Param getRawParam(@NotNull String key) {
         if (!params.containsKey(key)) return null;
         return params.get(key);
+    }
+
+    @Nullable
+    public Object getParam(@NotNull String key) {
+        if (!params.containsKey(key)) return null;
+        return params.get(key).value;
     }
 
     public boolean boolParam(@NotNull String key) {
         if (!params.containsKey(key)) return false;
         Param param = params.get(key);
-        return param.value instanceof Boolean && (Boolean)param.value;
+        return param.value instanceof Boolean && (Boolean) param.value;
     }
 
     public int intParam(@NotNull String key) {
         if (!params.containsKey(key)) return 0;
         Param param = params.get(key);
-        return param.value instanceof Integer ? (Integer)param.value : 0;
+        return param.value instanceof Integer ? (Integer) param.value : 0;
     }
 
     @NotNull
     public String stringParam(@NotNull String key) {
         if (!params.containsKey(key)) return "";
         Param param = params.get(key);
-        return param.value instanceof String ? (String)param.value : "";
+        return param.value instanceof String ? (String) param.value : "";
+    }
+
+    protected static void copyParams(HashMap<String, Param> params, Suggestion... sourceSuggestions) {
+        int iMax = sourceSuggestions.length;
+
+        for (int i = iMax; i-- > 0; ) {
+            if (sourceSuggestions[i] != null) params.putAll(sourceSuggestions[i].params);
+        }
     }
 
     public Suggestion(@NotNull String text, @NotNull Param param, Suggestion... sourceSuggestions) {
         this.text = text;
-        for (Suggestion suggestion : sourceSuggestions) {
-            this.params.putAll(suggestion.params);
-        }
+        copyParams(this.params, sourceSuggestions);
         this.params.put(param.key, param);
     }
 
-    public Suggestion(@NotNull String text, @NotNull Suggestion sourceSuggestion) {
+    public Suggestion(@NotNull String text, Suggestion... sourceSuggestions) {
         this.text = text;
-        this.params.putAll(sourceSuggestion.params);
+        copyParams(this.params, sourceSuggestions);
     }
 
     public Suggestion(@NotNull String text) {

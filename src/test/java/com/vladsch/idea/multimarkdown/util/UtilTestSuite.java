@@ -31,5 +31,5 @@ import org.junit.runners.Suite;
         TestFileReferenceLink.class,
         TestFileReferenceList.class
 })
-public class TestSuite {
+public class UtilTestSuite {
 }

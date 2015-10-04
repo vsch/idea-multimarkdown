@@ -49,24 +49,63 @@ public class SuggestionFixers {
     public static final CapSnakedWordsFixer SuggestCapSnakedWords = new CapSnakedWordsFixer();
     public static final LowerSnakedWordsFixer SuggestLowerSnakedWords = new LowerSnakedWordsFixer();
     public static final UpperSnakedWordsFixer SuggestUpperSnakedWords = new UpperSnakedWordsFixer();
-    public static final WikiRefAsFilNameWithExtFixer SuggestWikiRefAsFilNameWithExt = new WikiRefAsFilNameWithExtFixer();
     public static final SpellingFixer SuggestSpelling = new SpellingFixer();
+    public static final WikiRefAsFilNameWithExtFixer SuggestWikiRefAsFilNameWithExt = new WikiRefAsFilNameWithExtFixer();
+    public static final FileNameWithExtFixer SuggestFileNameWithExt = new FileNameWithExtFixer();
 
-    public static class WikiRefAsFilNameWithExtFixer implements SuggestionList.SuggestionFixer {
+    public static abstract class FixerBase implements SuggestionList.SuggestionFixer {
+        private SuggestionList suggestionList;
+        private Suggestion sourceSuggestion;
+
+        private void setFields(SuggestionList suggestionList, Suggestion sourceSuggestion) {
+            this.suggestionList = suggestionList;
+            this.sourceSuggestion = sourceSuggestion;
+        }
+
+        private void clearFields() {
+            setFields(null, null);
+        }
+
         @Nullable
         @Override
-        public SuggestionList fix(@NotNull Suggestion suggestion, Project project) {
-            SuggestionList suggestionList = new SuggestionList();
-            String wikiRef = FilePathInfo.wikiRefAsFileNameNoExt(suggestion.getText());
-            suggestionList.add(wikiRef + FilePathInfo.WIKI_PAGE_EXTENSION, suggestion);
-            return suggestionList;
+        final public SuggestionList fix(@NotNull Suggestion suggestion, Project project) {
+            SuggestionList suggestedNames = new SuggestionList();
+
+            setFields(suggestedNames, suggestion);
+            makeSuggestions(suggestion.getText(), suggestion, project);
+            clearFields();
+
+            return suggestedNames;
+        }
+
+        protected void addSuggestion(@NotNull Suggestion suggestion) {
+            suggestionList.add(suggestion.getText(), suggestion, sourceSuggestion);
+        }
+
+        protected void addSuggestion(@NotNull String suggestion) {
+            suggestionList.add(suggestion, sourceSuggestion);
+        }
+
+        public abstract void makeSuggestions(@NotNull String text, @NotNull Suggestion suggestion, Project project);
+    }
+
+    public static class WikiRefAsFilNameWithExtFixer extends FixerBase {
+        @Override
+        public void makeSuggestions(@NotNull String text, @NotNull Suggestion suggestion, Project project) {
+            String fileName = FilePathInfo.wikiRefAsFileNameWithExt(text);
+            addSuggestion(fileName);
+        }
+    }
+
+    public static class FileNameWithExtFixer extends FixerBase {
+        @Override
+        public void makeSuggestions(@NotNull String text, @NotNull Suggestion suggestion, Project project) {
+            String wikiRef = new FilePathInfo(text).getFileNameNoExt();
+            addSuggestion(wikiRef + FilePathInfo.WIKI_PAGE_EXTENSION);
         }
     }
 
     public static class SpellingFixer implements SuggestionList.SuggestionFixer {
-        final public static String NEEDS_SPELLING_FIXER = "NeedsSpellingFixer";
-        final public static String HAD_SPELLING_FIXER = "HadSpellingFixer";
-
         @Nullable
         @Override
         public SuggestionList fix(@NotNull Suggestion suggestion, Project project) {
@@ -83,27 +122,40 @@ public class SuggestionFixers {
         }
     }
 
-    public static abstract class WordsFixerBase implements SuggestionList.SuggestionFixer {
+    public static abstract class WordsFixerBase extends FixerBase {
         private Suggestion.Param<Boolean> param;
-        private SuggestionList suggestionList;
-        private Suggestion sourceSuggestion;
 
-        @Nullable
+        private void setFields(Suggestion.Param<Boolean> param) {
+            this.param = param;
+        }
+
+        private void clearFields() {
+            setFields(null);
+        }
+
         @Override
-        public SuggestionList fix(@NotNull Suggestion suggestion, @NotNull Project project) {
-            SuggestionList suggestedNames = new SuggestionList();
+        protected void addSuggestion(@NotNull Suggestion suggestion) {
+            super.addSuggestion(new Suggestion(suggestion.getText(), param, suggestion));
+        }
 
+        @Override
+        protected void addSuggestion(@NotNull String suggestion) {
+            super.addSuggestion(new Suggestion(suggestion, param));
+        }
+
+        @Override
+        final public void makeSuggestions(@NotNull String text, @NotNull Suggestion suggestion, Project project) {
             String[] words = suggestion.getWords();
             String cleanedSuggestion = "";
             boolean needSpellingSuggestions = false;
             boolean prevWasAlphaNum = false;
 
-            SpellCheckerManager manager = SpellCheckerManager.getInstance(project);
+            SpellCheckerManager manager = project != null ? SpellCheckerManager.getInstance(project) : null;
 
             for (String word : words) {
                 boolean isAlphaNum = isAlphaNum(word);
 
-                if (manager.hasProblem(word)) needSpellingSuggestions = true;
+                if (manager != null && manager.hasProblem(word)) needSpellingSuggestions = true;
                 if (isAlphaNum && prevWasAlphaNum) {
                     cleanedSuggestion += getWordSpacer();
                 }
@@ -111,79 +163,59 @@ public class SuggestionFixers {
                 prevWasAlphaNum = isAlphaNum;
             }
 
-            param = new Suggestion.Param<Boolean>(SpellingFixer.NEEDS_SPELLING_FIXER, true);
-            suggestionList = suggestedNames;
-            sourceSuggestion = suggestion;
-
-            cleanedSuggestion = fixSuggestion(cleanedSuggestion, " -_.'/\\", getWordSpacer());
+            cleanedSuggestion = fixSuggestion(cleanedSuggestion, getRemoveChars(), getWordSpacer());
+            setFields(new Suggestion.Param<Boolean>(SuggestionList.SuggestionFixer.NEEDS_SPELLING_FIXER, true));
             makeSuggestions(cleanedSuggestion);
-            return suggestedNames;
-        }
-
-        protected final void addSuggestion(@NotNull Suggestion suggestion) {
-            suggestionList.add(suggestion.getText(), param, sourceSuggestion, suggestion);
-        }
-
-        protected final void addSuggestion(@NotNull String suggestion) {
-            suggestionList.add(suggestion, param, sourceSuggestion);
+            clearFields();
         }
 
         @NotNull
-        public String getWordSpacer() {
-            return " ";
+        protected String getRemoveChars() {
+            return " -_.'/\\#\"";
         }
+
+        @NotNull
+        abstract public String getWordSpacer();
 
         @NotNull
         public String fixWord(@NotNull String word) {
             return word;
         }
 
-        public abstract void makeSuggestions(@NotNull String cleanedWord);
+        public void makeSuggestions(@NotNull String cleanedWord) {
+            addSuggestion(cleanedWord);
+        }
     }
 
     public static class CleanSpacedWordsFixer extends WordsFixerBase {
         @Override
-        public void makeSuggestions(@NotNull String cleanedWord) {
-            addSuggestion(new Suggestion(cleanedWord));
+        @NotNull
+        public String getWordSpacer() {
+            return " ";
         }
     }
 
-    public static class CapSpacedWordsFixer extends WordsFixerBase {
+    public static class CapSpacedWordsFixer extends CleanSpacedWordsFixer {
         @NotNull
         @Override
         public String fixWord(@NotNull String word) {
             return StringUtil.capitalize(word.toLowerCase());
         }
-
-        @Override
-        public void makeSuggestions(@NotNull String cleanedWord) {
-            addSuggestion(cleanedWord);
-        }
     }
 
-    public static class LowerSpacedWordsFixer extends WordsFixerBase {
+    public static class LowerSpacedWordsFixer extends CleanSpacedWordsFixer {
         @NotNull
         @Override
         public String fixWord(@NotNull String word) {
             return word.toLowerCase();
         }
-
-        @Override
-        public void makeSuggestions(@NotNull String cleanedWord) {
-            addSuggestion(cleanedWord);
-        }
     }
 
-    public static class UpperSpacedWordsFixer extends WordsFixerBase {
+    public static class UpperSpacedWordsFixer extends CleanSpacedWordsFixer {
         @NotNull
         @Override
         public String fixWord(@NotNull String word) {
             return word.toUpperCase();
-        }
-
-        @Override
-        public void makeSuggestions(@NotNull String cleanedWord) {
-            addSuggestion(cleanedWord);
         }
     }
 
@@ -286,8 +318,7 @@ public class SuggestionFixers {
     public static boolean isAlphaNum(@NotNull String word) {
         int iMax = word.length();
         for (int i = 0; i < iMax; i++) {
-            char c = word.charAt(i);
-            if (!(c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9')) {
+            if (!Character.isLetterOrDigit(word.charAt(i))) {
                 return false;
             }
         }
@@ -299,22 +330,27 @@ public class SuggestionFixers {
         int iMax = suggestion.length();
         remove += pad;
         StringBuilder newSuggestion = new StringBuilder(suggestion.length());
+        boolean lastWasPad = false;
         for (int i = 0; i < iMax; i++) {
             if (remove.indexOf(suggestion.charAt(i)) >= 0) {
                 if (newSuggestion.length() > 0 && newSuggestion.charAt(newSuggestion.length() - 1) != ' ') {
                     newSuggestion.append(pad);
+                    lastWasPad = true;
                 }
                 continue;
             }
             newSuggestion.append(suggestion.charAt(i));
+            lastWasPad = false;
+        }
+        if (lastWasPad && pad.length() > 0) {
+            newSuggestion.setLength(newSuggestion.length()-pad.length());
         }
         suggestion = newSuggestion.toString();
         return suggestion;
     }
 
     @NotNull
-    public static List<String> getSuggestions(SpellCheckerManager manager, @NotNull String text) {
-
+    protected static List<String> getSuggestions(SpellCheckerManager manager, @NotNull String text) {
         String[] words = NameUtil.nameToWords(text);
 
         int index = 0;

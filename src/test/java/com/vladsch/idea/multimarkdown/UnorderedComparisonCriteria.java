@@ -18,17 +18,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.vladsch.idea.multimarkdown.util;
+package com.vladsch.idea.multimarkdown;
 
 import org.junit.Assert;
 import org.junit.internal.ArrayComparisonFailure;
-import org.junit.internal.ComparisonCriteria;
 
 import java.lang.reflect.Array;
-import java.util.HashMap;
-import java.util.HashSet;
 
-public abstract class UnorderedComparisonCriteria extends ComparisonCriteria {
+public abstract class UnorderedComparisonCriteria<T> extends TypedComparisonCriteria<T> {
     public UnorderedComparisonCriteria() {
         super();
     }
@@ -45,7 +42,7 @@ public abstract class UnorderedComparisonCriteria extends ComparisonCriteria {
 
             for (int i = 0; i < expectedsLength; i++) {
                 for (int j = 0; j < expectedsLength; j++) {
-                    if (!usedUpActuals[j] && elementsAreEqual(Array.get(expecteds, i), Array.get(actuals,j))) {
+                    if (!usedUpActuals[j] && elementsAreEqual((T)Array.get(expecteds, i), (T)Array.get(actuals,j))) {
                         usedUpActuals[j] = true;
                         usedUpExpecteds[i] = true;
                         expectedOrdered[j] = Array.get(expecteds, i);
@@ -110,10 +107,5 @@ public abstract class UnorderedComparisonCriteria extends ComparisonCriteria {
 
         return expectedsLength;
     }
-
-    @Override
-    protected abstract void assertElementsEqual(Object o1, Object o2);
-
-    protected abstract boolean elementsAreEqual(Object o1, Object o2);
 
 }

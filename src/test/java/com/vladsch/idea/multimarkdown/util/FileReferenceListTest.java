@@ -20,12 +20,11 @@
  */
 package com.vladsch.idea.multimarkdown.util;
 
-import org.junit.Assert;
-import org.junit.Before;
+import junit.framework.TestCase;
 
 import java.util.Collection;
 
-public class FileReferenceListTest {
+public class FileReferenceListTest extends TestCase {
     FileReferenceList fileReferenceList = null;
 
     public static final String[] filePaths =
@@ -116,73 +115,4 @@ public class FileReferenceListTest {
         fileReferenceList = loadFileList();
     }
 
-    public static void compareOrderedLists(String message, FileReferenceList expected, FileReferenceList actual) {
-        new OrderedComparisonCriteria().arrayEquals(null, expected.getFileReferences(), actual.getFileReferences());
-    }
-
-    public static void compareOrderedLists(String message, FileReferenceList.Builder expected, FileReferenceList actual) {
-        new OrderedComparisonCriteria().arrayEquals(null, expected.getFileReferences(), actual.getFileReferences());
-    }
-
-    public static void compareUnorderedLists(String message, FileReferenceList expected, FileReferenceList actual) {
-        new UnorderedComparisonCriteria().arrayEquals(null, expected.getFileReferences(), actual.getFileReferences());
-    }
-
-    public static void compareUnorderedLists(String message, FileReferenceList.Builder expected, FileReferenceList actual) {
-        new UnorderedComparisonCriteria().arrayEquals(null, expected.getFileReferences(), actual.getFileReferences());
-    }
-
-    public static void compareUnorderedLists(String message, FileReference[] expected, FileReferenceList actual) {
-        new UnorderedComparisonCriteria().arrayEquals(null, expected, actual.getFileReferences());
-    }
-
-    public static <T> void compareUnorderedLists(String message, Collection<T> expected, FileReferenceList actual) {
-        new UnorderedComparisonCriteria().arrayEquals(null, expected.toArray(), actual.getFileReferences());
-    }
-
-    private static void failNotEquals(String message, Object expected, Object actual) {
-        Assert.fail(format(message, expected, actual));
-    }
-
-    static String format(String message, Object expected, Object actual) {
-        String formatted = "";
-        if(message != null && !message.equals("")) {
-            formatted = message + " ";
-        }
-
-        String expectedString = String.valueOf(expected);
-        String actualString = String.valueOf(actual);
-        return expectedString.equals(actualString)?formatted + "expected: " + formatClassAndValue(expected, expectedString) + " but was: " + formatClassAndValue(actual, actualString):formatted + "expected:<" + expectedString + "> but was:<" + actualString + ">";
-    }
-
-    static String formatClassAndValue(Object value, String valueString) {
-        String className = value == null?"null":value.getClass().getName();
-        return className + "<" + valueString + ">";
-    }
-
-
-    public static class OrderedComparisonCriteria extends org.junit.internal.ComparisonCriteria {
-        @Override
-        protected void assertElementsEqual(Object o1, Object o2) {
-            FileReference fr1 = (FileReference) o1;
-            FileReference fr2 = (FileReference) o2;
-            if (fr1.compareTo(fr2) != 0) failNotEquals("FileReferences not equal", fr1, fr2);
-        }
-    }
-
-    public static class UnorderedComparisonCriteria extends com.vladsch.idea.multimarkdown.util.UnorderedComparisonCriteria {
-        @Override
-        protected boolean elementsAreEqual(Object o1, Object o2) {
-            FileReference fr1 = (FileReference) o1;
-            FileReference fr2 = (FileReference) o2;
-            return fr1.compareTo(fr2) == 0;
-        }
-
-        @Override
-        protected void assertElementsEqual(Object o1, Object o2) {
-            FileReference fr1 = (FileReference) o1;
-            FileReference fr2 = (FileReference) o2;
-            if (fr1.compareTo(fr2) != 0) failNotEquals("FileReferences not equal", fr1, fr2);
-        }
-    }
 }
