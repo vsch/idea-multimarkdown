@@ -48,7 +48,10 @@ public class FileReferenceListQuery {
     public final static int WIKIPAGE_REF = 0x0080;
     public final static int LINK_REF_NO_EXT = 0x0100;
 
-    public final static int MATCH_TYPE_FLAGS = LINK_REF_NO_EXT | WIKIPAGE_REF;
+    public final static int MATCH_TYPE_FLAGS = LINK_REF_NO_EXT | WIKIPAGE_REF | LINK_WITH_EXT_REF;
+
+    // don't strip # from links so that files with # can be matched
+    public final static int MATCH_LINK_WITH_ANCHOR = 0x0200;
 
     protected final @NotNull FileReferenceList defaultFileList;
     protected int queryFlags;
@@ -142,6 +145,18 @@ public class FileReferenceListQuery {
     }
 
     @NotNull
+    public FileReferenceListQuery keepLinkRefAnchor() {
+        queryFlags |= MATCH_LINK_WITH_ANCHOR;
+        return this;
+    }
+
+    @NotNull
+    public FileReferenceListQuery removeLinkRefAnchor() {
+        queryFlags &= ~MATCH_LINK_WITH_ANCHOR;
+        return this;
+    }
+
+    @NotNull
     public FileReferenceListQuery matchAnyRef() {
         this.matchLinkRef = null;
         queryFlags &= ~MATCH_TYPE_FLAGS;
@@ -152,7 +167,7 @@ public class FileReferenceListQuery {
     public FileReferenceListQuery matchWikiRef(@Nullable String wikiRef) {
         // set wiki page files as default if not markdown or wikipages are already set
         if ((this.queryFlags & FILE_TYPE_FLAGS) == 0) this.wantWikiPages();
-        this.matchLinkRef = FilePathInfo.wikiRefNoAnchorRef(wikiRef);
+        this.matchLinkRef = (queryFlags & MATCH_LINK_WITH_ANCHOR) != 0 ? wikiRef : FilePathInfo.linkRefNoAnchor(wikiRef);
         queryFlags = (queryFlags & ~MATCH_TYPE_FLAGS) | WIKIPAGE_REF;
         return this;
     }
@@ -165,7 +180,7 @@ public class FileReferenceListQuery {
 
     @NotNull
     public FileReferenceListQuery matchLinkRef(@NotNull String linkRef, boolean withExt) {
-        this.matchLinkRef = linkRef;
+        this.matchLinkRef = (queryFlags & MATCH_LINK_WITH_ANCHOR) != 0 ? linkRef : FilePathInfo.linkRefNoAnchor(linkRef);
         queryFlags = (queryFlags & ~MATCH_TYPE_FLAGS) | (withExt ? LINK_WITH_EXT_REF : LINK_REF_NO_EXT);
         return this;
     }
@@ -391,6 +406,9 @@ public class FileReferenceListQuery {
             }
 
             @Override
+            public boolean isRefFilter() { return true; };
+
+            @Override
             public FileReference filterRef(@NotNull FileReference fileReference) {
                 return new FileReferenceLink(sourceFileReference, fileReference);
             }
@@ -410,6 +428,9 @@ public class FileReferenceListQuery {
                     }
 
                     @Override
+                    public boolean isRefFilter() { return true; };
+
+                    @Override
                     public FileReference filterRef(@NotNull FileReference fileReference) {
                         return equivalentWikiRef(searchFlags, fileReference.getFileNameNoExtAsWikiRef(), matchPattern) ? fileReference : null;
                     }
@@ -422,6 +443,9 @@ public class FileReferenceListQuery {
                     public boolean filterExt(@NotNull String ext) {
                         return equivalent(searchFlags, ext, new FilePathInfo(matchPattern).getExt());
                     }
+
+                    @Override
+                    public boolean isRefFilter() { return true; };
 
                     @Override
                     public FileReference filterRef(@NotNull FileReference fileReference) {
@@ -439,8 +463,12 @@ public class FileReferenceListQuery {
                     }
 
                     @Override
+                    public boolean isRefFilter() { return true; };
+
+                    @Override
                     public FileReference filterRef(@NotNull FileReference fileReference) {
-                        return equivalent(searchFlags, fileReference.getFileNameNoExt(), matchPattern) ? fileReference : null;
+                        String fileNameNoExt = fileReference.getFileNameNoExt();
+                        return equivalent(searchFlags, fileNameNoExt, matchPattern) ? fileReference : null;
                     }
                 };
                 break;
@@ -460,6 +488,9 @@ public class FileReferenceListQuery {
                     }
 
                     @Override
+                    public boolean isRefFilter() { return true; };
+
+                    @Override
                     public FileReference filterRef(@NotNull FileReference fileReference) {
                         FileReferenceLink referenceLink = new FileReferenceLink(sourceFileReference, fileReference);
                         return equivalentWikiRef(searchFlags, referenceLink.getWikiPageRef(), matchPattern) && ((searchFlags & INCLUDE_SOURCE) != 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
@@ -476,10 +507,12 @@ public class FileReferenceListQuery {
                     }
 
                     @Override
+                    public boolean isRefFilter() { return true; };
+
+                    @Override
                     public FileReference filterRef(@NotNull FileReference fileReference) {
                         FileReferenceLink referenceLink = new FileReferenceLink(sourceFileReference, fileReference);
-                        return equivalent(searchFlags, fileReference.getFilePath(), matchPattern) && ((searchFlags & INCLUDE_SOURCE) != 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ?
-                                referenceLink : null;
+                        return equivalent(searchFlags, referenceLink.getLinkRef(), matchPattern) && ((searchFlags & INCLUDE_SOURCE) != 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
                     }
                 };
                 break;
@@ -492,10 +525,12 @@ public class FileReferenceListQuery {
                     }
 
                     @Override
+                    public boolean isRefFilter() { return true; };
+
+                    @Override
                     public FileReference filterRef(@NotNull FileReference fileReference) {
                         FileReferenceLink referenceLink = new FileReferenceLink(sourceFileReference, fileReference);
-                        return equivalent(searchFlags, fileReference.getFilePathNoExt(), matchPattern) && ((searchFlags & INCLUDE_SOURCE) != 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ?
-                                referenceLink : null;
+                        return equivalent(searchFlags, referenceLink.getLinkRefNoExt(), matchPattern) && ((searchFlags & INCLUDE_SOURCE) != 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
                     }
                 };
                 break;

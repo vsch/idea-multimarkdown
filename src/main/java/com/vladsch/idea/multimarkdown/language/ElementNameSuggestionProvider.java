@@ -136,12 +136,15 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
         MultiMarkdownWikiPageRef wikiPageRef = (MultiMarkdownWikiPageRef) MultiMarkdownPsiImplUtil.findChildByType(parent, MultiMarkdownTypes.WIKI_LINK_REF);
         MultiMarkdownWikiPageTitle wikiPageTitle = (MultiMarkdownWikiPageTitle) MultiMarkdownPsiImplUtil.findChildByType(parent, MultiMarkdownTypes.WIKI_LINK_TITLE);
 
+        String originalText = null;
+
         if (wikiPageTitle != null) {
             String text = wikiPageTitle.getName();
             if (text != null) {
                 text = text.replace("IntellijIdeaRulezzz ", "").trim();
                 if (!text.isEmpty()) {
-                    suggestionList.add(FilePathInfo.wikiRefNoAnchorRef(text));
+                    originalText = text;
+                    suggestionList.add(FilePathInfo.linkRefNoAnchor(text));
                     suggestionList.add(text);
                 }
             }
@@ -152,12 +155,12 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
             if (text != null) {
                 FilePathInfo pathInfo = new FilePathInfo(text);
                 text = pathInfo.getFileName();
-                suggestionList.add(FilePathInfo.wikiRefNoAnchorRef(text));
+                suggestionList.add(FilePathInfo.linkRefNoAnchor(text));
                 suggestionList.add(text);
 
                 // add with path parts, to 2 directories above
                 String parentDir = (pathInfo = new FilePathInfo(pathInfo.getPath())).getFilePath();
-                suggestionList.add(parentDir + FilePathInfo.wikiRefNoAnchorRef(text));
+                suggestionList.add(parentDir + FilePathInfo.linkRefNoAnchor(text));
                 suggestionList.add(parentDir + text);
             }
         }
@@ -170,6 +173,7 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
                             //, SuggestCleanDashedWords, SuggestCapDashedWords
                             //, SuggestCleanSplicedWords, SuggestCapSplicedWords
                     )
+                    .add(originalText)
             ;
         }
 

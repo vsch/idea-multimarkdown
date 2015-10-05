@@ -166,13 +166,6 @@ public class MultiMarkdownPathResolver {
                         }
                     }
 
-                    // relative path then we can open it.
-                    if (virtualTarget == null || !virtualTarget.exists()) {
-                        virtualTarget = resolveRelativePath(document, href);
-                    }
-
-                    // IMPORTANT: figure out if this should apply only to wiki pages or .md files in general
-                    // TODO: add a configuration option for resolving to markdown files if an extension is not provided
                     if (virtualTarget == null) {
                         // if the file has no extension, and a Markdown file exists in the project that has the same
                         FilePathInfo hrefPathInfo = new FilePathInfo(href);
@@ -189,6 +182,11 @@ public class MultiMarkdownPathResolver {
                                 }
                             }
                         }
+                    }
+
+                    // relative path then we can open it.
+                    if (virtualTarget == null || !virtualTarget.exists()) {
+                        virtualTarget = resolveRelativePath(document, href);
                     }
 
                     // TODO: add a configuration option for resolving optionally to java classes

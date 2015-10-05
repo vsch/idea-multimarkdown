@@ -88,18 +88,24 @@ public class MultiMarkdownLexer extends Lexer {
         // prime the lexeme stream, if the first is white space we need to start with that
         if (lexerTokens != null && lexerTokens.length > 0) {
             lexerToken = lexerTokens[lexemeIndex];
-            if (currentOffset < lexerToken.getRange().getStart()) {
+            if (currentOffset <= lexerToken.getRange().getStart()) {
                 lexerToken = lexParser.getSkippedSpaceToken(currentOffset, lexerToken.getRange().getStart());
             } else {
                 lexemeIndex++;
             }
 
-            currentOffset = lexerToken == null ? endOffset : lexerToken.getRange().getEnd();
+        }
 
-            //assert currentOffset <= endOffset;
-            if (currentOffset > endOffset) {
-                currentOffset = endOffset;
-            }
+        if (lexerToken == null) {
+            // create a dummy whitespace token for the whole file
+            lexerToken = lexParser.getSkippedSpaceToken(currentOffset, this.endOffset);
+        }
+
+        currentOffset = lexerToken.getRange().getEnd();
+
+        //assert currentOffset <= endOffset;
+        if (currentOffset > endOffset) {
+            currentOffset = endOffset;
         }
     }
 

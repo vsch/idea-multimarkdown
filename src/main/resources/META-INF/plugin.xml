@@ -41,12 +41,11 @@
     </div>
     ]]></description>
 
-  <version>1.1.11.5</version>
+  <version>1.1.11.6</version>
   <idea-version since-build="133.1711"/>
   <change-notes><![CDATA[
     <ul><h3><b>1.1.12 - Bug Fixes &amp; Optimizations.</b></h3>
       <li>Fix url's with spaces showing up as unresolved.</li>
-      <li>Fix resolution of Java Classes from links that don't resolve to files, fix no class def found exception in PhpStorm.</li>
       <li>Fix resolution of file links that are followed by a hash. For now they just resolve to the file not to any anchor link in the file</li>
       <li>Add resolution of file links without an extension to markdown files.</li>
       <li>Fix HTML preview and text tabs to update only if they are visible instead of always.</li>
@@ -54,6 +53,8 @@
       <li>Fix intermittent null pointer exception on project close. Issue: #38.</li>
       <li>Fix Wiki Links with anchor references were not properly generated.</li>
       <li>Change completely refactored refactoring code.</li>
+      <li>Change link references without file extension will attempt to match markdown files first.</li>
+      <li>Fix exception starting to edit an empty file or when the file becomes empty after the edit.</li>
     </ul>
     <ul><h3><b>1.1.11 - Bug Fixes.</b></h3>
       <li>Fix intermittent project is disposed assertion failure on closing app.</li>

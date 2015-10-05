@@ -24,7 +24,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 
 import java.util.Arrays;
 
@@ -50,6 +49,9 @@ public class TestFilePathInfo {
     private boolean isUnderWikiHome;
     private boolean pathContainsSpaces;
     private boolean fileNameContainsSpaces;
+    private boolean containsAnchor;
+    private boolean pathContainsAnchor;
+    private boolean fileNameContainsAnchor;
     private String getFilePathNoExtAsWikiRef;
     private String getPathAsWikiRef;
     private String getFileNameAsWikiRef;
@@ -77,28 +79,34 @@ public class TestFilePathInfo {
     /* 18: pathContainsSpaces, */
     /* 19: fileNameContainsSpaces, */
     /* 20: getUpDirectoriesToWikiHome, */
+    /* 21: containsAnchor, */
+    /* 22: pathContainsAnchor, */
+    /* 23: fileNameContainsAnchor, */
     public TestFilePathInfo(
-    String filePath,
-    String getExt,
-    String getExtWithDot,
-    String getFilePath,
-    String getFilePathNoExt,
-    String getPath,
-    String getWikiHome,
-    String getFileName,
-    String getFileNameNoExt,
-    String getFilePathAsWikiRef,
-    String getFilePathNoExtAsWikiRef,
-    String getPathAsWikiRef,
-    String getFileNameAsWikiRef,
-    String getFileNameNoExtAsWikiRef,
-    boolean hasWikiPageExt,
-    boolean containsSpaces,
-    boolean isWikiHome,
-    boolean isUnderWikiHome,
-    boolean pathContainsSpaces,
-    boolean fileNameContainsSpaces,
-    int getUpDirectoriesToWikiHome
+            String filePath,
+            String getExt,
+            String getExtWithDot,
+            String getFilePath,
+            String getFilePathNoExt,
+            String getPath,
+            String getWikiHome,
+            String getFileName,
+            String getFileNameNoExt,
+            String getFilePathAsWikiRef,
+            String getFilePathNoExtAsWikiRef,
+            String getPathAsWikiRef,
+            String getFileNameAsWikiRef,
+            String getFileNameNoExtAsWikiRef,
+            boolean hasWikiPageExt,
+            boolean containsSpaces,
+            boolean isWikiHome,
+            boolean isUnderWikiHome,
+            boolean pathContainsSpaces,
+            boolean fileNameContainsSpaces,
+            int getUpDirectoriesToWikiHome,
+            boolean containsAnchor,
+            boolean pathContainsAnchor,
+            boolean fileNameContainsAnchor
     ) {
         this.filePath = filePath;
         this.filePathInfo = new FilePathInfo(filePath);
@@ -122,6 +130,9 @@ public class TestFilePathInfo {
         this.getFileNameAsWikiRef = getFileNameAsWikiRef;
         this.getFileNameNoExtAsWikiRef = getFileNameNoExtAsWikiRef;
         this.getUpDirectoriesToWikiHome = getUpDirectoriesToWikiHome;
+        this.containsAnchor = containsAnchor;
+        this.pathContainsAnchor = pathContainsAnchor;
+        this.fileNameContainsAnchor = fileNameContainsAnchor;
     }
 
     /* @formatter:off */
@@ -145,6 +156,10 @@ public class TestFilePathInfo {
     @Test public void test_getFileNameNoExt() { assertEquals(getFileNameNoExt, filePathInfo.getFileNameNoExt()); }
     @Test public void test_getFileNameNoExtAsWikiRef() { assertEquals(getFileNameNoExtAsWikiRef, filePathInfo.getFileNameNoExtAsWikiRef()); }
     @Test public void test_getUpDirectoriesToWikiHome() { assertEquals(getUpDirectoriesToWikiHome, filePathInfo.getUpDirectoriesToWikiHome()); }
+    @Test public void test_containsAnchor() { assertEquals(containsAnchor, filePathInfo.containsAnchor()); }
+    @Test public void test_pathContainsAnchor() { assertEquals(pathContainsAnchor, filePathInfo.pathContainsAnchor()); }
+    @Test public void test_fileNameContainsAnchor() { assertEquals(fileNameContainsAnchor, filePathInfo.fileNameContainsAnchor()); }
+
   /* @formatter:on */
 
     /* 0:  filePath, */
@@ -168,6 +183,9 @@ public class TestFilePathInfo {
     /* 18: pathContainsSpaces, */
     /* 19: fileNameContainsSpaces, */
     /* 20: getUpDirectoriesToWikiHome, */
+    /* 21: containsAnchor, */
+    /* 22: pathContainsAnchor, */
+    /* 23: fileNameContainsAnchor, */
     //@Parameterized.Parameters(name = "{index}: getExt({0})={1}") public static Iterable<Object[]> data_getExt() { return data();}
     //@Parameterized.Parameters(name = "{index}: getFilePath({0})={2}") public static Iterable<Object[]> data_getFilePath() { return data();}
     //@Parameterized.Parameters(name = "{index}: getFilePathNoExt({0})={3}") public static Iterable<Object[]> data_getFilePathNoExt() { return data();}
@@ -210,13 +228,13 @@ public class TestFilePathInfo {
                 /* 17 */ filePathInfoTestData("/is-home.wiki/path/with/file-Name.md", "/is-home.wiki", 3),
                 /* 18 */ filePathInfoTestData("/is-home.wiki/pathName/with/fileName.md", "/is-home.wiki", 3),
                 /* 19 */ filePathInfoTestData("/somepath/home.wiki/path-Name/with/file-Name.md", "/somepath/home.wiki", 3),
-                /* 20 */ filePathInfoTestData("/somepath/home.wiki/file-Name", "/somepath/home.wiki",1),
-                /* 21 */ filePathInfoTestData("/somepath/home.wiki/fileName.md", "/somepath/home.wiki",1),
-                /* 22 */ filePathInfoTestData("/somepath/home.wiki/file-Name.md", "/somepath/home.wiki",1),
-                /* 23 */ filePathInfoTestData("/somepath/home.wiki/path/with/fileName.md", "/somepath/home.wiki",3),
-                /* 24 */ filePathInfoTestData("/somepath/home.wiki/path/with/file-Name.md", "/somepath/home.wiki",3),
-                /* 25 */ filePathInfoTestData("/somepath/home.wiki/pathName/with/fileName.md", "/somepath/home.wiki",3),
-                /* 26 */ filePathInfoTestData("/somepath/home.wiki/path-Name/with/file-Name.md", "/somepath/home.wiki",3),
+                /* 20 */ filePathInfoTestData("/somepath/home.wiki/file-Name", "/somepath/home.wiki", 1),
+                /* 21 */ filePathInfoTestData("/somepath/home.wiki/fileName.md", "/somepath/home.wiki", 1),
+                /* 22 */ filePathInfoTestData("/somepath/home.wiki/file-Name.md", "/somepath/home.wiki", 1),
+                /* 23 */ filePathInfoTestData("/somepath/home.wiki/path/with/fileName.md", "/somepath/home.wiki", 3),
+                /* 24 */ filePathInfoTestData("/somepath/home.wiki/path/with/file-Name.md", "/somepath/home.wiki", 3),
+                /* 25 */ filePathInfoTestData("/somepath/home.wiki/pathName/with/fileName.md", "/somepath/home.wiki", 3),
+                /* 26 */ filePathInfoTestData("/somepath/home.wiki/path-Name/with/file-Name.md", "/somepath/home.wiki", 3),
                 /* 27 */ filePathInfoTestData("/somepath/is-home.wiki/file-Name", "/somepath/is-home.wiki", 1),
                 /* 28 */ filePathInfoTestData("/somepath/is-home.wiki/fileName.md", "/somepath/is-home.wiki", 1),
                 /* 29 */ filePathInfoTestData("/somepath/is-home.wiki/file-Name.md", "/somepath/is-home.wiki", 1),
@@ -226,11 +244,11 @@ public class TestFilePathInfo {
                 /* 33 */ filePathInfoTestData("/somepath/is-home.wiki/pathName/with/fileName.", "/somepath/is-home.wiki", 3),
                 /* 34 */ filePathInfoTestData("/somepath/is-home.wiki/path/file-Name.md", "/somepath/is-home.wiki", 2),
                 /* 35 */ filePathInfoTestData("/somepath/is-home.wiki/path/path2/path3/file-Name.md", "/somepath/is-home.wiki", 4)
-                );
+        );
     }
 
     private static Object[] filePathInfoTestData(String filePath, String wikiHome, int getUpDirectoriesToWikiHome) {
-        Object[] result = new Object[21];
+        Object[] result = new Object[24];
         String tmp;
         int itmp;
         /* @formatter:off */
@@ -255,6 +273,9 @@ public class TestFilePathInfo {
         /* 18: pathContainsSpaces, */        result[18] = ((tmp = FilenameUtils.getPath(filePath)).equals(FilenameUtils.getName(filePath)) ? "" : (tmp.length() > 1 ? "/" + tmp : tmp)).contains(" ");
         /* 19: fileNameContainsSpaces, */    result[19] = FilenameUtils.getName(filePath).contains(" ");
         /* 20: getUpDirectoriesToWikiHome, */    result[20] = getUpDirectoriesToWikiHome;
+        /* 21: containsAnchor, */           result[21] = filePath.contains("#");
+        /* 22: pathContainsAnchor, */       result[22] = FilenameUtils.getPath(filePath).contains("#");
+        /* 23: fileNameContainsAnchor, */   result[23] = FilenameUtils.getName(filePath).contains("#");
         /* @formatter:on */
         return result;
     }

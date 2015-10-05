@@ -34,6 +34,8 @@ public class FileReferenceLink extends FileReference {
     public static final int REASON_NOT_UNDER_WIKI_HOME = 8;
     public static final int REASON_TARGET_NOT_WIKI_PAGE_EXT = 16;
     public static final int REASON_NOT_UNDER_SOURCE_WIKI_HOME = 32;
+    public static final int REASON_TARGET_NAME_HAS_ANCHOR = 64;
+    public static final int REASON_TARGET_PATH_HAS_ANCHOR = 128;
 
     protected final @NotNull FileReference sourceReference;
     protected String linkRef;
@@ -147,6 +149,10 @@ public class FileReferenceLink extends FileReference {
         public boolean targetNotInSameWikiHome() { return (reasons & REASON_NOT_UNDER_SOURCE_WIKI_HOME) != 0; }
         public String targetNotInSameWikiHomeFixed() { return referenceLink.getSource().getPath() + referenceLink.getFileName(); }
 
+        public boolean targetNameHasAnchor() { return (reasons & REASON_TARGET_NAME_HAS_ANCHOR) != 0; }
+        public String targetNameHasAnchorFixed() { return referenceLink.getFileName().replace("#", ""); }
+
+        public boolean targetPathHasAnchor() { return (reasons & REASON_TARGET_PATH_HAS_ANCHOR) != 0; }
     }
 
     @NotNull
@@ -164,6 +170,9 @@ public class FileReferenceLink extends FileReference {
 
             if (!hasWikiPageExt()) reasons |= REASON_TARGET_NOT_WIKI_PAGE_EXT;
         }
+
+        if (pathContainsAnchor()) reasons |= REASON_TARGET_PATH_HAS_ANCHOR;
+        if (fileNameContainsAnchor()) reasons |= REASON_TARGET_NAME_HAS_ANCHOR;
 
         return new InaccessibleWikiPageReasons(reasons, wikiPageRef, this);
     }

@@ -32,6 +32,8 @@ public class FileReferenceList {
     public interface Filter {
         boolean filterExt(@NotNull String ext);
 
+        boolean isRefFilter();
+
         @Nullable
         FileReference filterRef(@NotNull FileReference fileReference);
     }
@@ -50,15 +52,22 @@ public class FileReferenceList {
         }
 
         @Override
+        public boolean isRefFilter() { return false; }
+
+        @Override
         public FileReference filterRef(@NotNull FileReference fileReference) {
             return fileReference;
         }
     };
+
     public static final Filter ACCESSIBLE_WIKI_REFS_FILTER = new Filter() {
         @Override
         public boolean filterExt(@NotNull String ext) {
             return FilePathInfo.isWikiPageExt(ext);
         }
+
+        @Override
+        public boolean isRefFilter() { return true; }
 
         @Override
         public FileReference filterRef(@NotNull FileReference fileReference) {
@@ -73,6 +82,9 @@ public class FileReferenceList {
         }
 
         @Override
+        public boolean isRefFilter() { return true; }
+
+        @Override
         public FileReference filterRef(@NotNull FileReference fileReference) {
             return !(fileReference instanceof FileReferenceLink) || !((FileReferenceLink) fileReference).isWikiAccessible() ? fileReference : null;
         }
@@ -83,6 +95,9 @@ public class FileReferenceList {
         public boolean filterExt(@NotNull String ext) {
             return FilePathInfo.isImageExt(ext);
         }
+
+        @Override
+        public boolean isRefFilter() { return false; }
 
         @Nullable
         @Override
@@ -97,6 +112,9 @@ public class FileReferenceList {
             return FilePathInfo.isMarkdownExt(ext);
         }
 
+        @Override
+        public boolean isRefFilter() { return false; }
+
         @Nullable
         @Override
         public FileReference filterRef(@NotNull FileReference fileReference) {
@@ -109,6 +127,9 @@ public class FileReferenceList {
         public boolean filterExt(@NotNull String ext) {
             return FilePathInfo.isWikiPageExt(ext);
         }
+
+        @Override
+        public boolean isRefFilter() { return true; }
 
         @Nullable
         @Override
@@ -124,6 +145,9 @@ public class FileReferenceList {
         public boolean filterExt(@NotNull String ext) {
             return true;
         }
+
+        @Override
+        public boolean isRefFilter() { return false; }
 
         @Nullable
         @Override
@@ -149,6 +173,9 @@ public class FileReferenceList {
             return true;
         }
 
+        @Override
+        public boolean isRefFilter() { return false; }
+
         @Nullable
         @Override
         public FileReference filterRef(@NotNull FileReference fileReference) {
@@ -172,6 +199,9 @@ public class FileReferenceList {
         public boolean filterExt(@NotNull String ext) {
             return FilePathInfo.isMarkdownExt(ext);
         }
+
+        @Override
+        public boolean isRefFilter() { return false; }
 
         @Nullable
         @Override
@@ -197,6 +227,9 @@ public class FileReferenceList {
             return FilePathInfo.isMarkdownExt(ext);
         }
 
+        @Override
+        public boolean isRefFilter() { return false; }
+
         @Nullable
         @Override
         public FileReference filterRef(@NotNull FileReference fileReference) {
@@ -220,6 +253,9 @@ public class FileReferenceList {
         public boolean filterExt(@NotNull String ext) {
             return FilePathInfo.isWikiPageExt(ext);
         }
+
+        @Override
+        public boolean isRefFilter() { return ACCESSIBLE_WIKI_REFS_FILTER.isRefFilter(); }
 
         @Nullable
         @Override
@@ -245,6 +281,9 @@ public class FileReferenceList {
             return FilePathInfo.isMarkdownExt(ext);
         }
 
+        @Override
+        public boolean isRefFilter() { return INACCESSIBLE_WIKI_REFS_FILTER.isRefFilter(); }
+
         @Nullable
         @Override
         public FileReference filterRef(@NotNull FileReference fileReference) {
@@ -268,6 +307,9 @@ public class FileReferenceList {
         public boolean filterExt(@NotNull String ext) {
             return FilePathInfo.isMarkdownExt(ext);
         }
+
+        @Override
+        public boolean isRefFilter() { return false; }
 
         @Nullable
         @Override
@@ -293,6 +335,9 @@ public class FileReferenceList {
             return FilePathInfo.isWikiPageExt(ext);
         }
 
+        @Override
+        public boolean isRefFilter() { return ACCESSIBLE_WIKI_REFS_FILTER.isRefFilter(); }
+
         @Nullable
         @Override
         public FileReference filterRef(@NotNull FileReference fileReference) {
@@ -317,6 +362,9 @@ public class FileReferenceList {
             return FilePathInfo.isMarkdownExt(ext);
         }
 
+        @Override
+        public boolean isRefFilter() { return INACCESSIBLE_WIKI_REFS_FILTER.isRefFilter(); }
+
         @Nullable
         @Override
         public FileReference filterRef(@NotNull FileReference fileReference) {
@@ -340,6 +388,9 @@ public class FileReferenceList {
         public boolean filterExt(@NotNull String ext) {
             return true;
         }
+
+        @Override
+        public boolean isRefFilter() { return false; }
 
         @Nullable
         @Override
@@ -472,6 +523,7 @@ public class FileReferenceList {
                     if (filter == null) continue;
                     if (!filter.filterExt(fileReference.getExt())) continue Outer;
 
+                    if (!filter.isRefFilter()) continue;
                     fileReference = filter.filterRef(fileReference);
                     if (fileReference == null) continue Outer;
                 }
@@ -507,7 +559,7 @@ public class FileReferenceList {
                     if (addReference == null) continue;
 
                     for (Filter filter : filters) {
-                        if (filter == null) continue;
+                        if (filter == null || !filter.isRefFilter()) continue;
                         addReference = filter.filterRef(addReference);
                         if (addReference == null) continue Outer;
                     }
@@ -601,8 +653,10 @@ public class FileReferenceList {
                     FileReference addReference = fileReferences[extFileIndex];
                     if (addReference == null) continue;
 
-                    addReference = transFilter.filterRef(addReference);
-                    if (addReference == null) continue;
+                    if (transFilter.isRefFilter()) {
+                        addReference = transFilter.filterRef(addReference);
+                        if (addReference == null) continue;
+                    }
 
                     T transformed = transFilter.transformRef(addReference);
                     if (transformed == null) continue;
@@ -668,11 +722,26 @@ public class FileReferenceList {
     @NotNull
     public int[] countByFilter(Filter... filters) {
         int[] result = new int[filters.length];
+        int extIndex = 0;
         for (String ext : extensions) {
+            int[] extFiles = extensionFileRefIndices[extIndex];
             int filterIndex = 0;
             for (Filter filter : filters) {
-                if (filter.filterExt(ext)) result[filterIndex++]++;
+                if (filter != null && filter.filterExt(ext)) {
+                    if (filter.isRefFilter()) {
+                        int keptFiles = 0;
+                        for (int refIndex : extFiles) {
+                            if (fileReferences[refIndex] != null && filter.filterRef(fileReferences[refIndex]) != null) keptFiles++;
+                        }
+                        result[filterIndex] += keptFiles;
+                    } else {
+                        result[filterIndex] += extFiles.length;
+                    }
+                }
+                filterIndex++;
             }
+
+            extIndex++;
         }
         return result;
     }

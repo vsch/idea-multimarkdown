@@ -33,6 +33,7 @@ import com.vladsch.idea.multimarkdown.util.FileReference;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 class CreateWikiPageQuickFix extends BaseIntentionAction {
     private String name;
@@ -79,6 +80,8 @@ class CreateWikiPageQuickFix extends BaseIntentionAction {
                 if (parentDir != null) {
                     try {
                         VirtualFile quickFixFile = parentDir.createChildData(this.getClass().toString(), newFile.getFileName());
+                        // TODO: create a file with the default content from file templates for wiki files or markdown files
+                        //quickFixFile.setBinaryContent("\n".getBytes(Charset.forName("UTF-8")));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

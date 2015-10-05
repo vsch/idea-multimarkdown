@@ -63,21 +63,21 @@ public class MultiMarkdownAnnotator implements Annotator {
             // see if it exists
             MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(element.getProject());
             MultiMarkdownFile containingFile = (MultiMarkdownFile) element.getContainingFile();
-            VirtualFile virtualFile = containingFile.getVirtualFile();
 
             FileReferenceList filesReferenceList = projectComponent.getFileReferenceList().query()
                     .wantMarkdownFiles()
                     .all();
 
             FileReferenceList matchedFilesReferenceList = filesReferenceList.query()
-                    .matchWikiRef((MultiMarkdownWikiPageRef) element)
                     .spaceDashEqual()
                     .caseInsensitive()
+                    .keepLinkRefAnchor()
+                    .matchWikiRef((MultiMarkdownWikiPageRef) element)
                     .allWikiPageRefs();
 
             FileReferenceList accessibleWikiPageRefs = matchedFilesReferenceList.query()
-                    .matchWikiRef((MultiMarkdownWikiPageRef) element)
                     .caseSensitive() // we want to catch mismatches
+                    .matchWikiRef((MultiMarkdownWikiPageRef) element)
                     .accessibleWikiPageRefs();
 
             Annotation annotator = null;
@@ -138,6 +138,31 @@ public class MultiMarkdownAnnotator implements Annotator {
                         if (canRenameFile(referenceLink.getVirtualFile(), reasons.targetNameHasSpacedFixed())) {
                             annotator.registerFix(new RenameWikiPageQuickFix(referenceLink.getVirtualFile(), reasons.targetNameHasSpacedFixed()));
                         }
+                    }
+
+                    if (reasons.targetNameHasAnchor()) {
+                        warningsOnly = false;
+                        annotator = holder.createErrorAnnotation(element.getTextRange(),
+                                MultiMarkdownBundle.message("annotation.wikilink.file-anchor"));
+
+                        annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
+
+                        if (canRenameFile(referenceLink.getVirtualFile(), reasons.targetNameHasAnchorFixed())) {
+                            annotator.registerFix(new RenameWikiPageQuickFix(referenceLink.getVirtualFile(), reasons.targetNameHasAnchorFixed()));
+                        }
+                    }
+
+                    if (reasons.targetPathHasAnchor()) {
+                        warningsOnly = false;
+                        annotator = holder.createErrorAnnotation(element.getTextRange(),
+                                MultiMarkdownBundle.message("annotation.wikilink.path-anchor"));
+
+                        annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
+
+                        // TODO: create quick fix to remove anchors from all directories in the path
+                        //if (canRenameFile(referenceLink.getVirtualFile(), reasons.targetNameHasAnchorFixed())) {
+                        //    annotator.registerFix(new RenameWikiPageQuickFix(referenceLink.getVirtualFile(), reasons.targetNameHasAnchorFixed()));
+                        //}
                     }
 
                     if (reasons.wikiRefHasDashes()) {

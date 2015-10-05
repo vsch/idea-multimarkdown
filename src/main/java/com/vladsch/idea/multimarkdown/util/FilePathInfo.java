@@ -40,13 +40,13 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     public FilePathInfo(@NotNull String filePath) {
         this.filePath = filePath;
         int lastSep;
-        int extStart;
         this.nameStart = (lastSep = filePath.lastIndexOf('/')) < 0 ? 0 : (lastSep == filePath.length() - 1 ? lastSep : lastSep + 1);
         int wikiHomeEnd;
         this.wikiHomeEnd = (wikiHomeEnd = filePath.indexOf(WIKI_HOME_EXTENTION + "/", 0)) >= nameStart || wikiHomeEnd < 0 ? 0 :
                 wikiHomeEnd + WIKI_HOME_EXTENTION.length();
 
         // if file name ends in . then it has no extension and the . is part of its name.
+        int extStart;
         this.nameEnd = (extStart = filePath.lastIndexOf('.', filePath.length())) <= nameStart ? filePath.length() : extStart;
     }
 
@@ -71,10 +71,10 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
         return filePath.replace(' ', '-');
     }
 
-    protected static boolean compare(boolean forWikiRef, boolean caseSensitive, boolean spaceDashEquivalent, int i, int iMax, @NotNull String fileRef, int fileRefOffs, @NotNull String wikiRef, int wikiRefOffs) {
+    protected static boolean compare(boolean forWikiRef, boolean caseSensitive, boolean spaceDashEquivalent, int i, int iMax, @NotNull String fileRef, int fileRefOffs, @NotNull String linkRef, int linkRefOffs) {
         if (forWikiRef) {
             for (; i < iMax; i++) {
-                char wC = wikiRef.charAt(i + wikiRefOffs);
+                char wC = linkRef.charAt(i + linkRefOffs);
                 char fC = fileRef.charAt(i + fileRefOffs);
                 if (fC == '-') return false;
                 if (wC == '-' && !spaceDashEquivalent) return false;
@@ -86,7 +86,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
             }
         } else {
             for (; i < iMax; i++) {
-                char wC = wikiRef.charAt(i + wikiRefOffs);
+                char wC = linkRef.charAt(i + linkRefOffs);
                 char fC = fileRef.charAt(i + fileRefOffs);
                 if (wC == fC) continue;
                 if (!caseSensitive && Character.toLowerCase(fC) == Character.toLowerCase(wC)) continue;
@@ -97,35 +97,47 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
         return true;
     }
 
-    private static boolean endsWith(boolean forWikiRef, boolean caseSensitive, boolean spaceDashEquivalent, @NotNull String fileRef, @NotNull String wikiRef) {
+    @NotNull
+    public static String removeDotDirectory(@NotNull String linkRef) {
+        linkRef = linkRef.replace("/./", "/");
+
+        if (linkRef.startsWith("./")) {
+            linkRef = linkRef.substring(2);
+        }
+        return linkRef;
+    }
+
+    private static boolean endsWith(boolean forWikiRef, boolean caseSensitive, boolean spaceDashEquivalent, @NotNull String fileRef, @NotNull String linkRef) {
+        linkRef = removeDotDirectory(linkRef);
         if (!forWikiRef && !spaceDashEquivalent && caseSensitive) {
-            return fileRef.endsWith(wikiRef);
+            return fileRef.endsWith(linkRef);
         }
 
-        int wikiRefLen = wikiRef.length();
+        int linkRefLen = linkRef.length();
         int fileRefLen = fileRef.length();
-        int fileRefOffs = fileRefLen - wikiRefLen;
+        int fileRefOffs = fileRefLen - linkRefLen;
 
-        return fileRefLen >= wikiRefLen && compare(forWikiRef, caseSensitive, spaceDashEquivalent, 0, wikiRefLen, fileRef, fileRefOffs, wikiRef, 0);
+        return fileRefLen >= linkRefLen && compare(forWikiRef, caseSensitive, spaceDashEquivalent, 0, linkRefLen, fileRef, fileRefOffs, linkRef, 0);
     }
 
-    private static boolean equivalent(boolean forWikiRef, boolean caseSensitive, boolean spaceDashEquivalent, @NotNull String fileRef, @NotNull String wikiRef) {
+    private static boolean equivalent(boolean forWikiRef, boolean caseSensitive, boolean spaceDashEquivalent, @NotNull String fileRef, @NotNull String linkRef) {
+        linkRef = removeDotDirectory(linkRef);
         if (!forWikiRef && !spaceDashEquivalent) {
-            return caseSensitive ? fileRef.equals(wikiRef) : fileRef.equalsIgnoreCase(wikiRef);
+            return caseSensitive ? fileRef.equals(linkRef) : fileRef.equalsIgnoreCase(linkRef);
         }
 
-        int wikiRefLen = wikiRef.length();
+        int linkRefLen = linkRef.length();
         int fileRefLen = fileRef.length();
 
-        return fileRefLen == wikiRefLen && compare(forWikiRef, caseSensitive, spaceDashEquivalent, 0, wikiRefLen, fileRef, 0, wikiRef, 0);
+        return fileRefLen == linkRefLen && compare(forWikiRef, caseSensitive, spaceDashEquivalent, 0, linkRefLen, fileRef, 0, linkRef, 0);
     }
 
-    public static boolean equivalent(boolean caseSensitive, boolean spaceDashEquivalent, @NotNull String fileRef, @NotNull String wikiRef) {
-        return equivalent(false, caseSensitive, spaceDashEquivalent, fileRef, wikiRef);
+    public static boolean equivalent(boolean caseSensitive, boolean spaceDashEquivalent, @NotNull String fileRef, @NotNull String linkRef) {
+        return equivalent(false, caseSensitive, spaceDashEquivalent, fileRef, linkRef);
     }
 
-    public static boolean endsWith(boolean caseSensitive, boolean spaceDashEquivalent, @NotNull String fileRef, @NotNull String wikiRef) {
-        return endsWith(false, caseSensitive, spaceDashEquivalent, fileRef, wikiRef);
+    public static boolean endsWith(boolean caseSensitive, boolean spaceDashEquivalent, @NotNull String fileRef, @NotNull String linkRef) {
+        return endsWith(false, caseSensitive, spaceDashEquivalent, fileRef, linkRef);
     }
 
     public static boolean equivalentWikiRef(boolean caseSensitive, boolean spaceDashEquivalent, @NotNull String fileRef, @NotNull String wikiRef) {
@@ -136,15 +148,15 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
         return endsWith(true, caseSensitive, spaceDashEquivalent, fileRef, wikiRef);
     }
     @Nullable
-    public static String wikiRefNoAnchorRef(@Nullable String wikiRef) {
-        if (wikiRef != null) {
+    public static String linkRefNoAnchor(@Nullable String linkRef) {
+        if (linkRef != null) {
             int pos;
-            // WikiLinks can have anchor # refs
-            if ((pos = wikiRef.lastIndexOf("#")) >= 0) {
-                wikiRef = wikiRef.substring(0, pos);
+            // Links can have anchor # refs
+            if ((pos = linkRef.indexOf("#")) >= 0) {
+                linkRef = linkRef.substring(0, pos);
             }
         }
-        return wikiRef;
+        return linkRef;
     }
 
     @NotNull
@@ -185,6 +197,10 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
 
     final public boolean containsSpaces() {
         return filePath.indexOf(' ') >= 0;
+    }
+
+    final public boolean containsAnchor() {
+        return filePath.indexOf('#') >= 0;
     }
 
     final public boolean isWikiHome() {
@@ -239,6 +255,10 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
         return getPath().indexOf(' ') >= 0;
     }
 
+    final public boolean pathContainsAnchor() {
+        return getPath().indexOf('#') >= 0;
+    }
+
     @NotNull
     final public String getFileName() {
         return filePath.substring(nameStart, filePath.length());
@@ -246,6 +266,10 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
 
     final public boolean fileNameContainsSpaces() {
         return getFileName().indexOf(' ') >= 0;
+    }
+
+    final public boolean fileNameContainsAnchor() {
+        return getFileName().indexOf('#') >= 0;
     }
 
     @NotNull
