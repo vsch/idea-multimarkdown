@@ -13,18 +13,9 @@ idea-multimarkdown
 
 1. Free and open source for the basic functionality as it is present now. I will continue to support it, respond to issues and fix bugs. If you only need the basic functionality of editing and previewing Markdown, then you will not be affected and will continue to enjoy using this plugin with the same level of support you have received thus far.
 
-2. Licensed model with a 30 day trial period which will implement parser based advanced features such as refactoring, find usages, etc. (see issue #12 for the roadmap). After the 30 day trial it will revert to the functionality of the free, open source model, unless you purchase a $25 license that will give you free upgrades and maintenance for one year on the advanced features. I have to commercialize this plugin so that I can devote my full attention to its development. I feel that doing this will benefit both free and licensed versions because I will be able to concentrate my attention on delivering a quality product in the shortest amount of time.
+2. Licensed model with a 30 day trial period which will implement parser based advanced features such as refactoring, find usages, etc. (see issue #12 for the roadmap). After the 30 day trial it will revert to the functionality of the free, open source model. $25 purchase of the license will give you free upgrades and maintenance for one year on the advanced features. I have to commercialize this plugin so that I can devote my full attention to its development. I feel that doing this will benefit both free and licensed versions because I will be able to concentrate my attention on delivering a quality product in the shortest amount of time.
 
-**Everyone who has generously given a tip** will get a one year license for every $20 that they have donated, plus one extra year as my show of appreciation for your support. This policy will apply to all tippers until the licensed version is released, which I expect to be done by October 15, 2015.
-
-<table>
-    <tr>
-        <td><a href="http://flattr.com/thing/4603764/vschidea-multimarkdown-on-GitHub" title="Donate monthly to vsch using Flattr"><img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/flattr-tips.png" border="0" width="43" height="53" alt="Donate monthly to vsch using Flattr" /></a></td>
-        <td><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NR7DAGTC8CXLU" title="Donate once-off to vsch using Paypal"><img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/paypal-tips.png" border="0" width="43" height="53" alt="Donate once-off to vsch using Paypal" /></a></td>
-        <td><b>If you like my work then please feel free to tip me.<br>I will view it as a show of appreciation and as a reward for my effort.</b></td>
-    </tr>
-</table>
-
+**Everyone who has generously given a tip** will get a one year license for every $20 that they have donated, plus one extra year as my show of appreciation for your support. ETA is October 15th, 2015.
 
 ### Version 1.1.7 Adds highlight.js syntax highlighting and wiki link refactoring/completions
 
@@ -33,6 +24,7 @@ idea-multimarkdown
 Wiki links are the first to get the boost to IntelliJ intelligence:
 
 * Wiki link page references are linked to the files they target. For example `[[NOTICE]]` refers to `NOTICE.md` in the same directory as the file containing the link. 
+* Auto completion of Wiki link text part ie. `[[LinkRef|Text]]` will take the text from the linkRef and present several variations. Also any link texts that are the same on the page can be renamed by using refactor/rename operation to change all of them in one operation.
 * Refactor rename operation on a wiki link does a file rename operation with all links that refer to it also changed.
 * Moving a file within the project tree also updates the links. 
 * Navigate to the file a wiki link targets in the markdown source via go to definition or line marker. 

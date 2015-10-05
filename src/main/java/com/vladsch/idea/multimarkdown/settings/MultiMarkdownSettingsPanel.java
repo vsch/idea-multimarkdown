@@ -120,7 +120,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
     private JLabel maxImgWidthLabel;
     private JCheckBox enableFirebugCheckBox;
     private JList htmlThemeList;
-    private JEditorPane tippingJarEditorPane;
+    //private JEditorPane tippingJarEditorPane;
     private JSpinner pageZoomSpinner;
     private JLabel pageZoomLabel;
     private JTabbedPane tabbedPane;
@@ -132,7 +132,9 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
     private JCheckBox includesColorsCheckBox;
 
     // need this so that we dont try to access components before they are created
-    public @Nullable Object getComponent(@NotNull String persistName) {
+    public
+    @Nullable
+    Object getComponent(@NotNull String persistName) {
         if (persistName.equals("parsingTimeoutSpinner")) return parsingTimeoutSpinner;
         if (persistName.equals("smartsCheckBox")) return smartsCheckBox;
         if (persistName.equals("quotesCheckBox")) return quotesCheckBox;
@@ -203,7 +205,8 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         clearCustomCssButton.setEnabled(haveCustomCss);
         if (!haveCustomCss) useCustomCssCheckBox.setSelected(false);
         includesHljsCssCheckBox.setEnabled(useHighlightJsCheckBox.isSelected() && useHighlightJsCheckBox.isEnabled());
-        if (haveCustomCss && haveCustomizableEditor) focusEditorButton.setEnabled(((CustomizableEditorTextField) textCustomCss).haveSavedState());
+        if (haveCustomCss && haveCustomizableEditor)
+            focusEditorButton.setEnabled(((CustomizableEditorTextField) textCustomCss).haveSavedState());
     }
 
     private void updateUseOldPreviewControls() {
@@ -218,20 +221,22 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         maxImgWidthSpinner.setEnabled(!useNewPreview);
         maxImgWidthLabel.setEnabled(!useNewPreview);
 
-        btnLoadDefault.setEnabled (!useNewPreview || includesColorsCheckBox.isSelected() || includesHljsCssCheckBox.isSelected() || includesLayoutCssCheckBox.isSelected());
+        btnLoadDefault.setEnabled(!useNewPreview || includesColorsCheckBox.isSelected() || includesHljsCssCheckBox.isSelected() || includesLayoutCssCheckBox.isSelected());
 
         updateCustomCssControls();
     }
 
     public MultiMarkdownSettingsPanel() {
         clearCustomCssButton.addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent e) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 textCustomCss.setText("");
             }
         });
 
         btnLoadDefault.addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent e) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 //String cssFileText = MultiMarkdownGlobalSettings.getInstance().getCssFileText(htmlThemeComboBox.getSelectedIndex());
                 //String base64Css = Base64.encodeBase64URLSafeString(MultiMarkdownGlobalSettings.getInstance().getCssText().getBytes(Charset.forName("utf-8")));
                 //String cssText = new String(Base64.decodeBase64(base64Css), Charset.forName("utf-8"));
@@ -240,35 +245,39 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
 
                         : (includesColorsCheckBox.isSelected() ? settings.getCssFileText(htmlThemeList.getSelectedIndex(), true) : "") +
 
-                                (includesLayoutCssCheckBox.isSelected()
-                                        ? settings.getLayoutCssFileText() : "") +
+                        (includesLayoutCssCheckBox.isSelected()
+                                ? settings.getLayoutCssFileText() : "") +
 
-                                (includesHljsCssCheckBox.isSelected() && useHighlightJsCheckBox.isSelected()
-                                        ? settings.getHljsCssFileText(htmlThemeList.getSelectedIndex(), true) : "")
+                        (includesHljsCssCheckBox.isSelected() && useHighlightJsCheckBox.isSelected()
+                                ? settings.getHljsCssFileText(htmlThemeList.getSelectedIndex(), true) : "")
                 ));
             }
         });
 
         showHtmlTextCheckBox.addPropertyChangeListener(new PropertyChangeListener() {
-            @Override public void propertyChange(PropertyChangeEvent evt) {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
                 showHtmlTextStateChanged();
             }
         });
 
         showHtmlTextCheckBox.addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent e) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 showHtmlTextStateChanged();
             }
         });
 
         focusEditorButton.addActionListener(new ActionListener() {
-            @Override public void actionPerformed(ActionEvent e) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 textCustomCss.requestFocus();
             }
         });
 
         ItemListener itemListener1 = new ItemListener() {
-            @Override public void itemStateChanged(ItemEvent e) {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
                 updateCustomCssControls();
             }
         };
@@ -276,7 +285,8 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         useHighlightJsCheckBox.addItemListener(itemListener1);
 
         textCustomCss.addDocumentListener(new DocumentAdapter() {
-            @Override public void documentChanged(DocumentEvent e) {
+            @Override
+            public void documentChanged(DocumentEvent e) {
                 super.documentChanged(e);
                 updateCustomCssControls();
             }
@@ -290,7 +300,8 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
 
         updateUseOldPreviewControls();
         ItemListener itemListener = new ItemListener() {
-            @Override public void itemStateChanged(ItemEvent e) {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
                 updateUseOldPreviewControls();
             }
         };
@@ -301,7 +312,8 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
 
         if (htmlThemeComboBox instanceof ComboBox) {
             ((JComboBox) htmlThemeComboBox).addItemListener(new ItemListener() {
-                @Override public void itemStateChanged(ItemEvent e) {
+                @Override
+                public void itemStateChanged(ItemEvent e) {
                     if (((JComboBox) htmlThemeComboBox).getSelectedIndex() != htmlThemeList.getSelectedIndex()) {
                         htmlThemeList.setSelectedIndex(((JComboBox) htmlThemeComboBox).getSelectedIndex());
                     }
@@ -309,7 +321,8 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
             });
 
             htmlThemeList.addListSelectionListener(new ListSelectionListener() {
-                @Override public void valueChanged(ListSelectionEvent e) {
+                @Override
+                public void valueChanged(ListSelectionEvent e) {
                     if (((JComboBox) htmlThemeComboBox).getSelectedIndex() != htmlThemeList.getSelectedIndex()) {
                         ((JComboBox) htmlThemeComboBox).setSelectedIndex(htmlThemeList.getSelectedIndex());
                     }
@@ -317,27 +330,27 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
             });
         }
 
-        tippingJarEditorPane.setText("" +
-                "<html>\n" +
-                "  <head>\n" +
-                "  <style>\n" +
-                "     td { text-align: right; margin 0; padding 0 10px !important; }\n" +
-                "     td.pic { width: 0; }\n" +
-                "     p, table, tr, body, div { margin: 0 !important; padding: 0 !important; }\n" +
-                "     table { /*border: 1px solid black;*/ width: 100%; float: right !important; }\n" +
-                "  </style>\n" +
-                "  </head>\n" +
-                "  <body>\n" +
-                "      <table>\n" +
-                "        <tr>\n" +
-                "          <td><b>If you like my work then please feel free to tip me.<br>I will view it as a show of appreciation and as a reward for my effort.</b></td>\n" +
-                "          <td class=\"pic\"><a href=\"http://flattr.com/thing/4603764/vschidea-multimarkdown-on-GitHub\" title=\"Donate monthly to vsch using Flattr\"><img src=\"https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/flattr-tips.png\" border=\"0\" width=\"43\" height=\"53\" alt=\"Donate monthly to vsch using Flattr\" /></a></td>\n" +
-                "          <td class=\"pic\"><a href=\"https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NR7DAGTC8CXLU\" title=\"Donate once-off to vsch using Paypal\"><img src=\"https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/paypal-tips.png\" border=\"0\" width=\"43\" height=\"53\" alt=\"Donate once-off to vsch using Paypal\" /></a></td>\n" +
-                "        </tr>\n" +
-                "      </table>\n" +
-                "  </body>\n" +
-                "</html>\n" +
-                "");
+        //tippingJarEditorPane.setText("" +
+        //        "<html>\n" +
+        //        "  <head>\n" +
+        //        "  <style>\n" +
+        //        "     td { text-align: right; margin 0; padding 0 10px !important; }\n" +
+        //        "     td.pic { width: 0; }\n" +
+        //        "     p, table, tr, body, div { margin: 0 !important; padding: 0 !important; }\n" +
+        //        "     table { /*border: 1px solid black;*/ width: 100%; float: right !important; }\n" +
+        //        "  </style>\n" +
+        //        "  </head>\n" +
+        //        "  <body>\n" +
+        //        "      <table>\n" +
+        //        "        <tr>\n" +
+        //        "          <td><b>If you like my work then please feel free to tip me.<br>I will view it as a show of appreciation and as a reward for my effort.</b></td>\n" +
+        //        "          <td class=\"pic\"><a href=\"http://flattr.com/thing/4603764/vschidea-multimarkdown-on-GitHub\" title=\"Donate monthly to vsch using Flattr\"><img src=\"https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/flattr-tips.png\" border=\"0\" width=\"43\" height=\"53\" alt=\"Donate monthly to vsch using Flattr\" /></a></td>\n" +
+        //        "          <td class=\"pic\"><a href=\"https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NR7DAGTC8CXLU\" title=\"Donate once-off to vsch using Paypal\"><img src=\"https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/paypal-tips.png\" border=\"0\" width=\"43\" height=\"53\" alt=\"Donate once-off to vsch using Paypal\" /></a></td>\n" +
+        //        "        </tr>\n" +
+        //        "      </table>\n" +
+        //        "  </body>\n" +
+        //        "</html>\n" +
+        //        "");
 
         String htmlText = "";
         try {
@@ -350,7 +363,8 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         noticesEditorPane.setText(htmlText);
 
         HyperlinkListener listener = new HyperlinkListener() {
-            @Override public void hyperlinkUpdate(HyperlinkEvent e) {
+            @Override
+            public void hyperlinkUpdate(HyperlinkEvent e) {
                 if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
                     URL href = e.getURL();
                     if (href != null) {
@@ -369,10 +383,8 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
             }
         };
 
-        tippingJarEditorPane.addHyperlinkListener(listener);
+        //tippingJarEditorPane.addHyperlinkListener(listener);
         noticesEditorPane.addHyperlinkListener(listener);
-
-
     }
 
     private void createUIComponents() {
@@ -415,7 +427,8 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         JSpinner.NumberEditor decimalFormat = new JSpinner.NumberEditor(pageZoomSpinner, "0.00");
 
         CustomizableEditorTextField.EditorCustomizationListener listener = new CustomizableEditorTextField.EditorCustomizationListener() {
-            @Override public boolean editorCreated(@NotNull EditorEx editor, @NotNull Project project) {
+            @Override
+            public boolean editorCreated(@NotNull EditorEx editor, @NotNull Project project) {
                 EditorSettings settings = editor.getSettings();
                 settings.setRightMarginShown(true);
                 //settings.setRightMargin(-1);
