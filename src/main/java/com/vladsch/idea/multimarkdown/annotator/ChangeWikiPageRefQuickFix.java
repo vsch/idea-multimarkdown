@@ -34,18 +34,44 @@ import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import org.jetbrains.annotations.NotNull;
 
 class ChangeWikiPageRefQuickFix extends BaseIntentionAction {
+    public static final int MATCH_CASE_TO_FILE = 1;
+    public static final int REMOVE_DASHES = 2;
+
     private String newWikiPageRef;
     private MultiMarkdownWikiPageRef wikiPageRefElement;
+    private final int alternativeMsg;
 
     ChangeWikiPageRefQuickFix(MultiMarkdownWikiPageRef wikiPageRefElement, String newWikiPageRef) {
         this.newWikiPageRef = newWikiPageRef;
         this.wikiPageRefElement = wikiPageRefElement;
+        this.alternativeMsg = 0;
+    }
+
+    ChangeWikiPageRefQuickFix(MultiMarkdownWikiPageRef wikiPageRefElement, String newWikiPageRef, int alternativeMsg) {
+        this.newWikiPageRef = newWikiPageRef;
+        this.wikiPageRefElement = wikiPageRefElement;
+        this.alternativeMsg = alternativeMsg;
     }
 
     @NotNull
     @Override
     public String getText() {
-        return MultiMarkdownBundle.message("quickfix.wikilink.0.change-target", FilePathInfo.wikiRefAsFileNameWithExt(newWikiPageRef));
+        String msg;
+        switch (alternativeMsg) {
+            case MATCH_CASE_TO_FILE:
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.match-target", FilePathInfo.wikiRefAsFileNameWithExt(newWikiPageRef));
+                break;
+
+            case REMOVE_DASHES:
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-dashes", FilePathInfo.wikiRefAsFileNameWithExt(newWikiPageRef));
+                break;
+
+            default:
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.change-target", FilePathInfo.wikiRefAsFileNameWithExt(newWikiPageRef));
+                break;
+        }
+
+        return msg;
     }
 
     @NotNull

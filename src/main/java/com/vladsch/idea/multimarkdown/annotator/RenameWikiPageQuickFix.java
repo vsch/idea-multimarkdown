@@ -29,6 +29,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
+import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -45,7 +46,8 @@ class RenameWikiPageQuickFix extends BaseIntentionAction {
     @NotNull
     @Override
     public String getText() {
-        return MultiMarkdownBundle.message("quickfix.wikilink.rename-page", name);
+        FilePathInfo filePathInfo = new FilePathInfo(targetFile.getPath());
+        return MultiMarkdownBundle.message("quickfix.wikilink.rename-page", filePathInfo.getFileName(), name);
     }
 
     @NotNull

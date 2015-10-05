@@ -25,6 +25,8 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.codeStyle.NameUtil;
 import com.intellij.spellchecker.SpellCheckerManager;
 import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import com.vladsch.idea.multimarkdown.util.FileReference;
+import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,8 +54,10 @@ public class SuggestionFixers {
     public static final SpellingFixer SuggestSpelling = new SpellingFixer();
     public static final WikiRefAsFilNameWithExtFixer SuggestWikiRefAsFilNameWithExt = new WikiRefAsFilNameWithExtFixer();
     public static final FileNameWithExtFixer SuggestFileNameWithExt = new FileNameWithExtFixer();
+    public static final RemoveInvalidFileNamesFixer SuggestRemoveInvalidFileNames = new RemoveInvalidFileNamesFixer();
+    //public static final SpaceCamelCaseWordsFixer SuggestSpaceCamelCaseWords = new SpaceCamelCaseWordsFixer();
 
-    public static abstract class FixerBase implements SuggestionList.SuggestionFixer {
+    public static abstract class FixerBase implements Suggestion.Fixer {
         private SuggestionList suggestionList;
         private Suggestion sourceSuggestion;
 
@@ -97,6 +101,45 @@ public class SuggestionFixers {
         }
     }
 
+    // not really needed CleanSpacedWords does it already
+    //public static class SpaceCamelCaseWordsFixer extends FixerBase {
+    //    @Override
+    //    public void makeSuggestions(@NotNull String text, @NotNull Suggestion suggestion, Project project) {
+    //        // if text is camel case we convert it to spaced words
+    //        int iMax = text.length();
+    //        boolean prevWasLower = false;
+    //        StringBuilder stringBuilder = new StringBuilder(iMax + 10);
+    //
+    //        for (int i = 0; i < iMax; i++) {
+    //            Character c = text.charAt(i);
+    //            if (Character.isLowerCase(c)) {
+    //                prevWasLower = true;
+    //            } else {
+    //                if (Character.isUpperCase(c)) {
+    //                    if (prevWasLower) {
+    //                        stringBuilder.append(' ');
+    //                    }
+    //                }
+    //                prevWasLower = false;
+    //            }
+    //            stringBuilder.append(c);
+    //        }
+    //        addSuggestion(stringBuilder.toString());
+    //    }
+    //}
+
+    public static class RemoveInvalidFileNamesFixer extends FixerBase {
+        private static final Logger logger = Logger.getLogger(RemoveInvalidFileNamesFixer.class);
+        @Override
+        public void makeSuggestions(final @NotNull String text, @NotNull final Suggestion suggestion, Project project) {
+            if (project != null && suggestion.hasParam(FILE_PATH)) {
+                FileReference fileReference = new FileReference(suggestion.stringParam(FILE_PATH), project);
+                if (!fileReference.canRenameFileTo(text)) return;
+            }
+            addSuggestion(suggestion);
+        }
+    }
+
     public static class FileNameWithExtFixer extends FixerBase {
         @Override
         public void makeSuggestions(@NotNull String text, @NotNull Suggestion suggestion, Project project) {
@@ -105,7 +148,7 @@ public class SuggestionFixers {
         }
     }
 
-    public static class SpellingFixer implements SuggestionList.SuggestionFixer {
+    public static class SpellingFixer implements Suggestion.Fixer {
         @Nullable
         @Override
         public SuggestionList fix(@NotNull Suggestion suggestion, Project project) {
@@ -164,7 +207,7 @@ public class SuggestionFixers {
             }
 
             cleanedSuggestion = fixSuggestion(cleanedSuggestion, getRemoveChars(), getWordSpacer());
-            setFields(new Suggestion.Param<Boolean>(SuggestionList.SuggestionFixer.NEEDS_SPELLING_FIXER, true));
+            setFields(new Suggestion.Param<Boolean>(Suggestion.Fixer.NEEDS_SPELLING_FIXER, true));
             makeSuggestions(cleanedSuggestion);
             clearFields();
         }
@@ -343,7 +386,7 @@ public class SuggestionFixers {
             lastWasPad = false;
         }
         if (lastWasPad && pad.length() > 0) {
-            newSuggestion.setLength(newSuggestion.length()-pad.length());
+            newSuggestion.setLength(newSuggestion.length() - pad.length());
         }
         suggestion = newSuggestion.toString();
         return suggestion;

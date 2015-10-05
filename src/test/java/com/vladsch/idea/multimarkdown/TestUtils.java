@@ -26,8 +26,6 @@ import com.vladsch.idea.multimarkdown.util.FileReference;
 import com.vladsch.idea.multimarkdown.util.FileReferenceList;
 import org.junit.internal.ArrayComparisonFailure;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -49,7 +47,7 @@ public class TestUtils {
         assertEquals(false, suggestion.hasParams());
     }
 
-    public static void assertSuggestionEquals(String text, String expected, SuggestionList.SuggestionFixer fixer) {
+    public static void assertSuggestionEquals(String text, String expected, Suggestion.Fixer fixer) {
         Suggestion suggestion = new Suggestion(text);
         SuggestionList result = fixer.fix(suggestion, null);
         if (result != null && result.getSuggestions().size() > 0) {

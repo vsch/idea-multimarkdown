@@ -29,6 +29,7 @@ import org.junit.runners.Suite;
         TestEndsWithWikiRef.class,
         TestFilePathInfo.class,
         TestFileReferenceLink.class,
+        TestFileReferenceLinkUnresolvedReasons.class,
         TestFileReferenceList.class
 })
 public class UtilTestSuite {

@@ -30,14 +30,6 @@ import java.util.List;
 
 public class SuggestionList {
 
-    public interface SuggestionFixer {
-        String NEEDS_SPELLING_FIXER = "NeedsSpellingFixer";
-        String HAD_SPELLING_FIXER = "HadSpellingFixer";
-
-        @Nullable
-        SuggestionList fix(final @NotNull Suggestion suggestion, final Project project);
-    }
-
     protected ArrayList<Suggestion> suggestions = null;
     protected HashSet<String> suggestionSet = null;
     protected final Project project;
@@ -62,7 +54,7 @@ public class SuggestionList {
         return suggestions.size();
     }
 
-    public void add(Suggestion... suggestions) {
+    public SuggestionList add(Suggestion... suggestions) {
         for (Suggestion suggestion : suggestions) {
             String suggestionText = suggestion.getText();
 
@@ -71,9 +63,10 @@ public class SuggestionList {
                 this.suggestionSet.add(suggestionText);
             }
         }
+        return this;
     }
 
-    public void add(@NotNull SuggestionList suggestionList) {
+    public SuggestionList add(@NotNull SuggestionList suggestionList) {
         for (Suggestion suggestion : suggestionList.suggestions) {
             String suggestionText = suggestion.getText();
 
@@ -82,27 +75,41 @@ public class SuggestionList {
                 this.suggestionSet.add(suggestionText);
             }
         }
+        return this;
     }
 
-    public void add(@NotNull String suggestionText) {
-        if (!this.suggestionSet.contains(suggestionText)) {
+    public SuggestionList addAll(String... suggestionTexts) {
+        for (String suggestionText : suggestionTexts) {
+            if (suggestionText != null && !this.suggestionSet.contains(suggestionText)) {
+                this.suggestions.add(new Suggestion(suggestionText));
+                this.suggestionSet.add(suggestionText);
+            }
+        }
+        return this;
+    }
+
+    public SuggestionList add(@Nullable String suggestionText) {
+        if (suggestionText != null && !this.suggestionSet.contains(suggestionText)) {
             this.suggestions.add(new Suggestion(suggestionText));
             this.suggestionSet.add(suggestionText);
         }
+        return this;
     }
 
-    public void add(@NotNull String suggestionText, Suggestion... sourceSuggestions) {
-        if (!this.suggestionSet.contains(suggestionText)) {
+    public SuggestionList add(@Nullable String suggestionText, Suggestion... sourceSuggestions) {
+        if (suggestionText != null && !this.suggestionSet.contains(suggestionText)) {
             this.suggestions.add(new Suggestion(suggestionText, sourceSuggestions));
             this.suggestionSet.add(suggestionText);
         }
+        return this;
     }
 
-    public void add(@NotNull String suggestionText, @NotNull Suggestion.Param param, Suggestion... sourceSuggestions) {
-        if (!this.suggestionSet.contains(suggestionText)) {
+    public SuggestionList add(@Nullable String suggestionText, @NotNull Suggestion.Param param, Suggestion... sourceSuggestions) {
+        if (suggestionText != null && !this.suggestionSet.contains(suggestionText)) {
             this.suggestions.add(new Suggestion(suggestionText, param, sourceSuggestions));
             this.suggestionSet.add(suggestionText);
         }
+        return this;
     }
 
     @NotNull
@@ -121,8 +128,8 @@ public class SuggestionList {
     }
 
     @Nullable
-    protected SuggestionList chainFixers(int index, SuggestionList inList, SuggestionFixer... fixers) {
-        SuggestionFixer fixer;
+    protected SuggestionList chainFixers(int index, SuggestionList inList, Suggestion.Fixer... fixers) {
+        Suggestion.Fixer fixer;
 
         do {
             if (fixers.length <= index) {
@@ -132,7 +139,7 @@ public class SuggestionList {
         }
         while (fixer == null);
 
-        SuggestionList resultList = new SuggestionList();
+        SuggestionList resultList = new SuggestionList(this.project);
 
         for (Suggestion suggestion : inList.getSuggestions()) {
             if (suggestion.isEmpty()) continue;
@@ -150,16 +157,17 @@ public class SuggestionList {
         return resultList;
     }
 
-    @Nullable
-    public SuggestionList chainFixers(SuggestionFixer... fixers) {
-        return chainFixers(0, this, fixers);
+    @NotNull
+    public SuggestionList chainFixers(Suggestion.Fixer... fixers) {
+        SuggestionList suggestionList = chainFixers(0, this, fixers);
+        return suggestionList == null ? new SuggestionList(this.project) : suggestionList;
     }
 
     @NotNull
-    public SuggestionList batchFixers(SuggestionFixer... fixers) {
-        SuggestionList result = new SuggestionList();
+    public SuggestionList batchFixers(Suggestion.Fixer... fixers) {
+        SuggestionList result = new SuggestionList(this.project);
 
-        for (SuggestionFixer fixer : fixers) {
+        for (Suggestion.Fixer fixer : fixers) {
             if (fixer == null) continue;
 
             for (Suggestion suggestion : getSuggestions()) {
@@ -174,13 +182,13 @@ public class SuggestionList {
     }
 
     @NotNull
-    public SuggestionList sequenceFixers(SuggestionFixer... fixers) {
-        SuggestionList result = new SuggestionList();
+    public SuggestionList sequenceFixers(Suggestion.Fixer... fixers) {
+        SuggestionList result = new SuggestionList(this.project);
 
         for (Suggestion suggestion : getSuggestions()) {
             if (suggestion.isEmpty()) continue;
 
-            for (SuggestionFixer fixer : fixers) {
+            for (Suggestion.Fixer fixer : fixers) {
                 if (fixer == null) continue;
                 SuggestionList fixedList = fixer.fix(suggestion, project);
                 if (fixedList != null) result.add(fixedList);

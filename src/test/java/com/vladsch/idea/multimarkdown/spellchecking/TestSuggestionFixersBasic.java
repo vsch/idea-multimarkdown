@@ -51,8 +51,10 @@ public class TestSuggestionFixersBasic extends TestCase {
     private final String SuggestUpperSnakedWords;
     private final String SuggestWikiRefAsFilNameWithExt;
     private final String SuggestFileNameWithExt;
+    //private final String SuggestSpaceCamelCaseWords;
 
-    public TestSuggestionFixersBasic(String suggestion, String suggestCleanSpacedWords, String suggestCapSpacedWords, String suggestLowerSpacedWords, String suggestUpperSpacedWords, String suggestCleanSplicedWords, String suggestCapSplicedWords, String suggestLowerSplicedWords, String suggestUpperSplicedWords, String suggestCleanDashedWords, String suggestCapDashedWords, String suggestLowerDashedWords, String suggestUpperDashedWords, String suggestCleanSnakedWords, String suggestCapSnakedWords, String suggestLowerSnakedWords, String suggestUpperSnakedWords, String suggestWikiRefAsFilNameWithExt, String suggestFileNameWithExt) {
+    public TestSuggestionFixersBasic(String suggestion, String suggestCleanSpacedWords, String suggestCapSpacedWords, String suggestLowerSpacedWords, String suggestUpperSpacedWords, String suggestCleanSplicedWords, String suggestCapSplicedWords, String suggestLowerSplicedWords, String suggestUpperSplicedWords, String suggestCleanDashedWords, String suggestCapDashedWords, String suggestLowerDashedWords, String suggestUpperDashedWords, String suggestCleanSnakedWords, String suggestCapSnakedWords, String suggestLowerSnakedWords, String suggestUpperSnakedWords, String suggestWikiRefAsFilNameWithExt, String suggestFileNameWithExt, String suggestSpaceCamelCaseWords
+    ) {
         this.suggestion = suggestion;
         SuggestCleanSpacedWords = suggestCleanSpacedWords;
         SuggestCapSpacedWords = suggestCapSpacedWords;
@@ -72,6 +74,7 @@ public class TestSuggestionFixersBasic extends TestCase {
         SuggestUpperSnakedWords = suggestUpperSnakedWords;
         SuggestWikiRefAsFilNameWithExt = suggestWikiRefAsFilNameWithExt;
         SuggestFileNameWithExt = suggestFileNameWithExt;
+        //SuggestSpaceCamelCaseWords = suggestSpaceCamelCaseWords;
     }
 
     /* @formatter:off */
@@ -93,6 +96,7 @@ public class TestSuggestionFixersBasic extends TestCase {
     @Test public void testSuggestUpperSnakedWords() { assertSuggestionEquals(suggestion, SuggestUpperSnakedWords, SuggestionFixers.SuggestUpperSnakedWords); }
     @Test public void testSuggestWikiRefAsFilNameWithExt() { assertSuggestionEquals(suggestion, SuggestWikiRefAsFilNameWithExt, SuggestionFixers.SuggestWikiRefAsFilNameWithExt); }
     @Test public void testSuggestFileNameWithExt() { assertSuggestionEquals(suggestion, SuggestFileNameWithExt, SuggestionFixers.SuggestFileNameWithExt); }
+    //@Test public void testSuggestSpaceCamelCaseWords() { assertSuggestionEquals(suggestion, SuggestSpaceCamelCaseWords, SuggestionFixers.SuggestSpaceCamelCaseWords); }
     /* @formatter:on */
 
     @Parameterized.Parameters(name = "{index}: suggest({0})")
@@ -123,6 +127,7 @@ public class TestSuggestionFixersBasic extends TestCase {
 
                         "simpledocumentsuggestion.md", // SuggestWikiRefAsFilNameWithExt
                         "simpledocumentsuggestion.md", // SuggestFileNameWithExt
+                        "simpledocumentsuggestion", // SuggestSpaceCamelCaseWords
                 },
                 {
                         "simple/document/suggestion",
@@ -148,6 +153,8 @@ public class TestSuggestionFixersBasic extends TestCase {
 
                         "simple/document/suggestion.md", // SuggestWikiRefAsFilNameWithExt
                         "suggestion.md", // SuggestFileNameWithExt
+                        "simple/document/suggestion", // SuggestSpaceCamelCaseWords
+
                 },
                 {
                         "simple document suggestion",
@@ -173,6 +180,7 @@ public class TestSuggestionFixersBasic extends TestCase {
 
                         "simple-document-suggestion.md", // SuggestWikiRefAsFilNameWithExt
                         "simple document suggestion.md", // SuggestFileNameWithExt
+                        "simple document suggestion", // SuggestSpaceCamelCaseWords
                 },
                 {
                         "simple-document-suggestion",
@@ -198,6 +206,7 @@ public class TestSuggestionFixersBasic extends TestCase {
 
                         "simple-document-suggestion.md", // SuggestWikiRefAsFilNameWithExt
                         "simple-document-suggestion.md", // SuggestFileNameWithExt
+                        "simple-document-suggestion", // SuggestSpaceCamelCaseWords
                 },
                 {
                         "simple#document#suggestion",
@@ -223,6 +232,33 @@ public class TestSuggestionFixersBasic extends TestCase {
 
                         "simple#document#suggestion.md", // SuggestWikiRefAsFilNameWithExt
                         "simple#document#suggestion.md", // SuggestFileNameWithExt
+                        "simple#document#suggestion", // SuggestSpaceCamelCaseWords
+                },
+                {
+                        "SimpleDocumentSuggestion",
+                        "Simple Document Suggestion", // SuggestCleanSpacedWords
+                        "Simple Document Suggestion", // SuggestCapSpacedWords
+                        "simple document suggestion", // SuggestLowerSpacedWords
+                        "SIMPLE DOCUMENT SUGGESTION", // SuggestUpperSpacedWords
+
+                        "SimpleDocumentSuggestion", // SuggestCleanSplicedWords
+                        "SimpleDocumentSuggestion", // SuggestCapSplicedWords
+                        "simpledocumentsuggestion", // SuggestLowerSplicedWords
+                        "SIMPLEDOCUMENTSUGGESTION", // SuggestUpperSplicedWords
+
+                        "Simple-Document-Suggestion", // SuggestCleanDashedWords
+                        "Simple-Document-Suggestion", // SuggestCapDashedWords
+                        "simple-document-suggestion", // SuggestLowerDashedWords
+                        "SIMPLE-DOCUMENT-SUGGESTION", // SuggestUpperDashedWords
+
+                        "Simple_Document_Suggestion", // SuggestCleanSnakedWords
+                        "Simple_Document_Suggestion", // SuggestCapSnakedWords
+                        "simple_document_suggestion", // SuggestLowerSnakedWords
+                        "SIMPLE_DOCUMENT_SUGGESTION", // SuggestUpperSnakedWords
+
+                        "SimpleDocumentSuggestion.md", // SuggestWikiRefAsFilNameWithExt
+                        "SimpleDocumentSuggestion.md", // SuggestFileNameWithExt
+                        "Simple Document Suggestion", // SuggestSpaceCamelCaseWords
                 },
                 /* @formatter:on */
         });

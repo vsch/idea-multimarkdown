@@ -29,6 +29,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
+import com.vladsch.idea.multimarkdown.util.FileReference;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -72,11 +73,15 @@ class CreateWikiPageQuickFix extends BaseIntentionAction {
             @Override
             public void run() {
                 //FileEditorManager.getInstance().openFile();
-                VirtualFile parentDir = file.getVirtualFile().getParent();
-                try {
-                    VirtualFile quickFixFile = parentDir.createChildData(this.getClass().toString(), fileName);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                FileReference thisFile = new FileReference(file);
+                FileReference newFile = new FileReference(thisFile.getPath() + fileName, project);
+                VirtualFile parentDir = newFile.getVirtualParent();
+                if (parentDir != null) {
+                    try {
+                        VirtualFile quickFixFile = parentDir.createChildData(this.getClass().toString(), newFile.getFileName());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }.execute();

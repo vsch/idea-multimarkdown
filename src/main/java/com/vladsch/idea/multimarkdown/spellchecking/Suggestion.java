@@ -20,6 +20,7 @@
  */
 package com.vladsch.idea.multimarkdown.spellchecking;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.codeStyle.NameUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,6 +29,15 @@ import java.util.Collection;
 import java.util.HashMap;
 
 public class Suggestion {
+    public interface Fixer {
+        String NEEDS_SPELLING_FIXER = "NeedsSpellingFixer";
+        String HAD_SPELLING_FIXER = "HadSpellingFixer";
+        String FILE_PATH = "FilePath";
+
+        @Nullable
+        SuggestionList fix(final @NotNull Suggestion suggestion, final Project project);
+    }
+
     public static class Param<T> {
         public final String key;
         public final T value;
@@ -124,5 +134,23 @@ public class Suggestion {
 
     public boolean isEmpty() {
         return text.trim().isEmpty();
+    }
+
+    public SuggestionList chainFixers(Project project, Fixer... fixers) {
+        SuggestionList suggestionList = new SuggestionList(project);
+        suggestionList.add(this);
+        return suggestionList.chainFixers(fixers);
+    }
+
+    public SuggestionList batchFixers(Project project, Fixer... fixers) {
+        SuggestionList suggestionList = new SuggestionList(project);
+        suggestionList.add(this);
+        return suggestionList.batchFixers(fixers);
+    }
+
+    public SuggestionList sequenceFixers(Project project, Fixer... fixers) {
+        SuggestionList suggestionList = new SuggestionList(project);
+        suggestionList.add(this);
+        return suggestionList.sequenceFixers(fixers);
     }
 }

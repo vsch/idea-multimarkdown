@@ -23,6 +23,7 @@ package com.vladsch.idea.multimarkdown.util;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.vladsch.idea.multimarkdown.MultiMarkdownFileTypeFactory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class FilePathInfo implements Comparable<FilePathInfo> {
     public static final String WIKI_PAGE_EXTENSION = ".md";
@@ -133,6 +134,17 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
 
     public static boolean endsWithWikiRef(boolean caseSensitive, boolean spaceDashEquivalent, @NotNull String fileRef, @NotNull String wikiRef) {
         return endsWith(true, caseSensitive, spaceDashEquivalent, fileRef, wikiRef);
+    }
+    @Nullable
+    public static String wikiRefNoAnchorRef(@Nullable String wikiRef) {
+        if (wikiRef != null) {
+            int pos;
+            // WikiLinks can have anchor # refs
+            if ((pos = wikiRef.lastIndexOf("#")) >= 0) {
+                wikiRef = wikiRef.substring(0, pos);
+            }
+        }
+        return wikiRef;
     }
 
     @NotNull

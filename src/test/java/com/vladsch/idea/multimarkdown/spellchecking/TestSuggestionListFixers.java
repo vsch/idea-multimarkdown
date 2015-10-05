@@ -38,28 +38,28 @@ public class TestSuggestionListFixers {
     public static final String PARAM_NAME_2 = "paramName2";
     public static final String PARAM_NAME_3 = "paramName3";
 
-    private static SuggestionList.SuggestionFixer fixer1 = new SuggestionFixers.FixerBase() {
+    private static Suggestion.Fixer fixer1 = new SuggestionFixers.FixerBase() {
         @Override
         public void makeSuggestions(@NotNull String text, @NotNull Suggestion suggestion, Project project) {
             addSuggestion(text + ".1");
         }
     };
 
-    private static SuggestionList.SuggestionFixer fixer2 = new SuggestionFixers.FixerBase() {
+    private static Suggestion.Fixer fixer2 = new SuggestionFixers.FixerBase() {
         @Override
         public void makeSuggestions(@NotNull String text, @NotNull Suggestion suggestion, Project project) {
             addSuggestion(text + ".2");
         }
     };
 
-    private static SuggestionList.SuggestionFixer fixer3 = new SuggestionFixers.FixerBase() {
+    private static Suggestion.Fixer fixer3 = new SuggestionFixers.FixerBase() {
         @Override
         public void makeSuggestions(@NotNull String text, @NotNull Suggestion suggestion, Project project) {
             addSuggestion(text + ".3");
         }
     };
 
-    private static SuggestionList.SuggestionFixer nullFixer = new SuggestionList.SuggestionFixer() {
+    private static Suggestion.Fixer nullFixer = new Suggestion.Fixer() {
         @Nullable
         @Override
         public SuggestionList fix(@NotNull Suggestion suggestion, Project project) {

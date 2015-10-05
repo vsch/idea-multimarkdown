@@ -57,7 +57,7 @@ public class FileReferenceListQuery {
 
     public FileReferenceListQuery(@NotNull FileReferenceList defaultFileList) {
         this.defaultFileList = defaultFileList;
-        this.queryFlags = 0;
+        this.queryFlags = CASE_INSENSITIVE;
         this.matchLinkRef = null;
         this.sourceReference = null;
     }
@@ -152,7 +152,7 @@ public class FileReferenceListQuery {
     public FileReferenceListQuery matchWikiRef(@Nullable String wikiRef) {
         // set wiki page files as default if not markdown or wikipages are already set
         if ((this.queryFlags & FILE_TYPE_FLAGS) == 0) this.wantWikiPages();
-        this.matchLinkRef = wikiRef;
+        this.matchLinkRef = FilePathInfo.wikiRefNoAnchorRef(wikiRef);
         queryFlags = (queryFlags & ~MATCH_TYPE_FLAGS) | WIKIPAGE_REF;
         return this;
     }
@@ -461,9 +461,6 @@ public class FileReferenceListQuery {
 
                     @Override
                     public FileReference filterRef(@NotNull FileReference fileReference) {
-                        if (matchPattern.equals("sample-documents") && fileReference.getFileNameNoExt().equals("sample-documents")) {
-                            int tmp = 0;
-                        }
                         FileReferenceLink referenceLink = new FileReferenceLink(sourceFileReference, fileReference);
                         return equivalentWikiRef(searchFlags, referenceLink.getWikiPageRef(), matchPattern) && ((searchFlags & INCLUDE_SOURCE) != 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
                     }

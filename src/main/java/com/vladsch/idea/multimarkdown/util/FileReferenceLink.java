@@ -128,28 +128,25 @@ public class FileReferenceLink extends FileReference {
         }
 
         public boolean targetNameHasSpaces() { return (reasons & REASON_TARGET_HAS_SPACES) != 0; }
-
-        public boolean caseMismatch() { return (reasons & REASON_CASE_MISMATCH) != 0; }
-
-        public boolean wikiRefHasDashes() { return (reasons & REASON_WIKI_PAGEREF_HAS_DASHES) != 0; }
-
-        public boolean targetNotInWikiHome() { return (reasons & REASON_NOT_UNDER_WIKI_HOME) != 0; }
-
-        public boolean targetNotWikiPageExt() { return (reasons & REASON_TARGET_NOT_WIKI_PAGE_EXT) != 0; }
-
-        public boolean targetNotInSameWikiHome() { return (reasons & REASON_NOT_UNDER_SOURCE_WIKI_HOME) != 0; }
-
         public String targetNameHasSpacedFixed() { return referenceLink.getFileName().replace(' ', '-'); }
 
-        public String caseMismatchWikiRefFixed() { return referenceLink.getLinkRef().replace('-', ' '); }
-
+        public boolean caseMismatchOnly() { return (reasons & REASON_CASE_MISMATCH) != 0 && reasons == REASON_CASE_MISMATCH; }
+        public boolean caseMismatch() { return (reasons & REASON_CASE_MISMATCH) != 0; }
+        public String caseMismatchWikiRefFixed() { return referenceLink.getLinkRefNoExt().replace('-', ' '); }
         public String caseMismatchFileNameFixed() { return FilePathInfo.wikiRefAsFileNameWithExt(new FilePathInfo(wikiRefHasDashesFixed()).getFileNameNoExt()); }
 
+        public boolean wikiRefHasDashes() { return (reasons & REASON_WIKI_PAGEREF_HAS_DASHES) != 0; }
         public String wikiRefHasDashesFixed() { return wikiRef.replace('-', ' '); }
 
-        //public String targetNotInWikiHomeFixed() { return (reasons & REASON_NOT_UNDER_WIKI_HOME) != 0; }
-        public String targetNotWikiPageExtFixed() { return referenceLink.getPath() + "/" + referenceLink.getFileNameNoExt() + FilePathInfo.WIKI_PAGE_EXTENSION; }
-        //public String targetNotInSameWikiHomeFixed() { return (reasons & REASON_NOT_UNDER_SOURCE_WIKI_HOME) != 0; }
+        public boolean targetNotWikiPageExt() { return (reasons & REASON_TARGET_NOT_WIKI_PAGE_EXT) != 0; }
+        public String targetNotWikiPageExtFixed() { return referenceLink.getFileNameNoExt() + WIKI_PAGE_EXTENSION; }
+
+        public boolean targetNotInWikiHome() { return (reasons & REASON_NOT_UNDER_WIKI_HOME) != 0; }
+        public String targetNotInWikiHomeFixed() { return referenceLink.getSource().getPath() + referenceLink.getFileName(); }
+
+        public boolean targetNotInSameWikiHome() { return (reasons & REASON_NOT_UNDER_SOURCE_WIKI_HOME) != 0; }
+        public String targetNotInSameWikiHomeFixed() { return referenceLink.getSource().getPath() + referenceLink.getFileName(); }
+
     }
 
     @NotNull
@@ -157,14 +154,15 @@ public class FileReferenceLink extends FileReference {
         int reasons = 0;
 
         if (linkRefHasSpaces()) reasons |= REASON_TARGET_HAS_SPACES;
-        if (wikiPageRef != null && wikiPageRef.equalsIgnoreCase(this.wikiPageRef) && !wikiPageRef.equals(this.wikiPageRef))
+        if (wikiPageRef != null && wikiPageRef.replace('-', ' ').equalsIgnoreCase(this.wikiPageRef.replace('-', ' ')) && !wikiPageRef.replace('-', ' ').equals(this.wikiPageRef.replace('-', ' ')))
             reasons |= REASON_CASE_MISMATCH;
         if (wikiPageRef != null && wikiPageRef.indexOf('-') >= 0) reasons |= REASON_WIKI_PAGEREF_HAS_DASHES;
 
         if (sourceReference.isWikiPage()) {
             if (!isUnderWikiHome()) reasons |= REASON_NOT_UNDER_WIKI_HOME;
+            else if (!getWikiHome().startsWith(sourceReference.getWikiHome())) reasons |= REASON_NOT_UNDER_SOURCE_WIKI_HOME;
+
             if (!hasWikiPageExt()) reasons |= REASON_TARGET_NOT_WIKI_PAGE_EXT;
-            if (!getWikiHome().startsWith(sourceReference.getWikiHome())) reasons |= REASON_NOT_UNDER_SOURCE_WIKI_HOME;
         }
 
         return new InaccessibleWikiPageReasons(reasons, wikiPageRef, this);

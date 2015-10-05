@@ -69,18 +69,18 @@ public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl 
 
     @Override
     public boolean isMemberInplaceRenameAvailable(PsiElement context) {
-        return ((MultiMarkdownReferenceWikiPageRef)reference).isResolveRefMissing();
+        return false;//((MultiMarkdownReferenceWikiPageRef)reference).isResolveRefMissing();
     }
 
     @Override
     public boolean isInplaceRenameAvailable(PsiElement context) {
-        return ((MultiMarkdownReferenceWikiPageRef)reference).isResolveRefMissing();
+        return false;//((MultiMarkdownReferenceWikiPageRef)reference).isResolveRefMissing();
     }
 
     @Override
     public PsiElement setName(@NotNull String newName, boolean fileMoved) {
         String oldName = getName();
-        MultiMarkdownNamedElement element = MultiMarkdownPsiImplUtil.setName(this, newName, fileMoved);
+        MultiMarkdownNamedElement element = MultiMarkdownPsiImplUtil.setName(this, newName, fileMoved || ((MultiMarkdownReferenceWikiPageRef)reference).isResolveRefMissing());
         //logger.info("setName on " + this.toString() + " from " + oldName + " to " + element.getName());
         //reference.notifyNamedElementChange(this, element);
         //reference.invalidateResolveResults();
