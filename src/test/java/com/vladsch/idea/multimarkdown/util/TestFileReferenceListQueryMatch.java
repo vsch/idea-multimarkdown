@@ -74,7 +74,7 @@ public class TestFileReferenceListQueryMatch extends FileReferenceListTest {
         for (String filePath : filePaths) {
             FileReference fileReference = new FileReference(filePath);
             if (fileReference.isMarkdownExt()) {
-                String linkRef = fileReference.getFileName();
+                String linkRef = fileReference.getFileNameWithAnchor();
                 if (!linkRefs.containsKey(linkRef)) {
                     linkRefs.put(linkRef, new ArrayList<FileReference>());
                 }

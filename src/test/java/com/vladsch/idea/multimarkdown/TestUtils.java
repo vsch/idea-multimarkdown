@@ -123,11 +123,11 @@ public class TestUtils {
         compareOrderedLists((String) null, suggestions, suggestionList);
     }
 
-    private static void failNotEquals(String message, Object expected, Object actual) {
+    public static void failNotEquals(String message, Object expected, Object actual) {
         fail(format(message, expected, actual));
     }
 
-    static String format(String message, Object expected, Object actual) {
+    public static String format(String message, Object expected, Object actual) {
         String formatted = "";
         if (message != null && !message.equals("")) {
             formatted = message + " ";
@@ -138,7 +138,7 @@ public class TestUtils {
         return expectedString.equals(actualString) ? formatted + "expected: " + formatClassAndValue(expected, expectedString) + " but was: " + formatClassAndValue(actual, actualString) : formatted + "expected:<" + expectedString + "> but was:<" + actualString + ">";
     }
 
-    static String formatClassAndValue(Object value, String valueString) {
+    public static String formatClassAndValue(Object value, String valueString) {
         String className = value == null ? "null" : value.getClass().getName();
         return className + "<" + valueString + ">";
     }

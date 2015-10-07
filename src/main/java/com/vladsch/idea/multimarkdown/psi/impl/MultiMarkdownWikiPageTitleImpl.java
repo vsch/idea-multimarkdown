@@ -50,10 +50,10 @@ public class MultiMarkdownWikiPageTitleImpl extends MultiMarkdownNamedElementImp
     }
 
     @Override
-    public PsiElement setName(@NotNull String newName, boolean fileMoved) {
+    public PsiElement setName(@NotNull String newName, int reason) {
         String oldName = getName();
         //logger.info("setting name on " + this + " to " + newName);
-        MultiMarkdownNamedElement element = MultiMarkdownPsiImplUtil.setName(this, newName, fileMoved);
+        MultiMarkdownNamedElement element = MultiMarkdownPsiImplUtil.setName(this, newName, reason);
         //logger.info("element rename change " + this + " to " + element);
         //reference.notifyNamedElementChange(this, element);
         //reference.invalidateResolveResults();

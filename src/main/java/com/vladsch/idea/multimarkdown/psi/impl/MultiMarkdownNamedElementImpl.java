@@ -31,7 +31,6 @@ import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.language.MultiMarkdownReference;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownVisitor;
-import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -68,7 +67,7 @@ public abstract class MultiMarkdownNamedElementImpl extends ASTWrapperPsiElement
     @Override
     public PsiElement setName(@NotNull String newName) {
         // logger.info("setting name on " + this + " to " + newName);
-        return setName(newName, false);
+        return setName(newName, REASON_FILE_RENAMED);
     }
 
     @Override
@@ -91,7 +90,7 @@ public abstract class MultiMarkdownNamedElementImpl extends ASTWrapperPsiElement
 
     @Override
     public MultiMarkdownNamedElement handleContentChange(String newContent) throws IncorrectOperationException {
-        return (MultiMarkdownNamedElement)setName(newContent, false);
+        return (MultiMarkdownNamedElement)setName(newContent, REASON_FILE_RENAMED);
     }
 
     /**

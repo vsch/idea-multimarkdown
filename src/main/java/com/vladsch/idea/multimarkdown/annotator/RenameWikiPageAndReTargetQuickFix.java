@@ -34,16 +34,21 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import org.jetbrains.annotations.NotNull;
 
-class RenameWikiPageQuickFix extends BaseIntentionAction {
+class RenameWikiPageAndReTargetQuickFix extends BaseIntentionAction {
     private String name;
     private PsiFile targetFile;
+    private MultiMarkdownWikiPageRef wikiPageRefElement;
+    private String newWikiPageRef;
 
-    RenameWikiPageQuickFix(PsiFile targetFile, String name) {
-        this.name = name;
+    RenameWikiPageAndReTargetQuickFix(PsiFile targetFile, String newName, MultiMarkdownWikiPageRef wikiPageRefElement, String newWikiPageRef) {
+        this.name = newName;
         this.targetFile = targetFile;
+        this.wikiPageRefElement = wikiPageRefElement;
+        this.newWikiPageRef = newWikiPageRef;
     }
 
     @NotNull
@@ -69,20 +74,21 @@ class RenameWikiPageQuickFix extends BaseIntentionAction {
         ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
-                renameWikiFile(project, targetFile, name);
+                renameWikiFile(project, targetFile, name, wikiPageRefElement, newWikiPageRef);
             }
         });
     }
 
-    private void renameWikiFile(final Project project, final PsiFile psiFile, final String fileName) {
+    private void renameWikiFile(final Project project, final PsiFile psiFile, final String fileName, final MultiMarkdownWikiPageRef wikiPageRefElement, final String newWikiPageRef) {
         new WriteCommandAction.Simple(project) {
             @Override
             public void run() {
                 JavaRefactoringFactory factory = JavaRefactoringFactory.getInstance(project);
                 JavaRenameRefactoring rename = factory.createRename(psiFile, fileName);
                 UsageInfo[] usages = rename.findUsages();
+
                 MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
-                projectComponent.setRefactoringReason(MultiMarkdownNamedElement.REASON_FILE_RENAMED);
+                projectComponent.setRefactoringReason(MultiMarkdownNamedElement.REASON_FILE_HAD_ANCHOR);
                 rename.doRefactoring(usages); // modified 'usages' array
                 projectComponent.setRefactoringReason(0);
             }

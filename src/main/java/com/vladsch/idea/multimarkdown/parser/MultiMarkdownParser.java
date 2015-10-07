@@ -37,6 +37,10 @@ public class MultiMarkdownParser implements PsiParser {
             PsiBuilder.Marker wikiPageRef = builder.mark();
             builder.advanceLexer();
             wikiPageRef.done(WIKI_LINK_REF);
+        } else if (root == WIKI_LINK_TITLE) {
+            PsiBuilder.Marker wikiPageRef = builder.mark();
+            builder.advanceLexer();
+            wikiPageRef.done(WIKI_LINK_TITLE);
         } else {
             parseRoot(root, builder);
         }
@@ -53,8 +57,7 @@ public class MultiMarkdownParser implements PsiParser {
                 PsiBuilder.Marker tokenMarker = builder.mark();
                 builder.advanceLexer();
                 tokenMarker.done(COMMENT);
-            } else if (builder.getTokenType() == WIKI_LINK_OPEN) {
-                parseWikiLink(builder);
+            } else if (parseWikiLink(builder)) {
             } else {
                 builder.advanceLexer();
             }
@@ -70,19 +73,30 @@ public class MultiMarkdownParser implements PsiParser {
         PsiBuilder.Marker wikiLinkMarker = builder.mark();
         builder.advanceLexer();
 
+        // creole syntax ref then title, github syntax either ref or title comes first
         if (builder.getTokenType() == WIKI_LINK_REF) {
-            PsiBuilder.Marker wikiPageRef = builder.mark();
+            PsiBuilder.Marker marker = builder.mark();
             builder.advanceLexer();
+            marker.done(WIKI_LINK_REF);
+        }
 
-            wikiPageRef.done(WIKI_LINK_REF);
+        if (builder.getTokenType() == WIKI_LINK_TITLE) {
+            PsiBuilder.Marker marker = builder.mark();
+            builder.advanceLexer();
+            marker.done(WIKI_LINK_TITLE);
         }
 
         if (builder.getTokenType() == WIKI_LINK_SEPARATOR) {
             builder.advanceLexer();
-            if (builder.getTokenType() == WIKI_LINK_TITLE) {
-                PsiBuilder.Marker wikiPageTitle = builder.mark();
+            if (builder.getTokenType() == WIKI_LINK_REF) {
+                PsiBuilder.Marker marker = builder.mark();
                 builder.advanceLexer();
-                wikiPageTitle.done(WIKI_LINK_TITLE);
+                marker.done(WIKI_LINK_REF);
+            }
+            if (builder.getTokenType() == WIKI_LINK_TITLE) {
+                PsiBuilder.Marker marker = builder.mark();
+                builder.advanceLexer();
+                marker.done(WIKI_LINK_TITLE);
             }
         }
 

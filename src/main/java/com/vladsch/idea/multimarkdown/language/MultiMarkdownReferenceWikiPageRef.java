@@ -31,6 +31,7 @@ import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 import com.vladsch.idea.multimarkdown.util.FileReferenceLink;
+import com.vladsch.idea.multimarkdown.util.FileReferenceList;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,6 +41,7 @@ import java.util.List;
 public class MultiMarkdownReferenceWikiPageRef extends MultiMarkdownReference {
     private static final Logger logger = Logger.getLogger(MultiMarkdownReferenceWikiPageRef.class);
     protected boolean resolveRefIsMissing;
+    protected boolean resolveRefIsAccessible;
     //private ResolveResult[] incompleteCodeResolveResults;
 
     public MultiMarkdownReferenceWikiPageRef(@NotNull MultiMarkdownWikiPageRef element, @NotNull TextRange textRange) {
@@ -52,10 +54,15 @@ public class MultiMarkdownReferenceWikiPageRef extends MultiMarkdownReference {
     public void invalidateResolveResults() {
         super.invalidateResolveResults();
         resolveRefIsMissing = false;
+        resolveRefIsAccessible = true;
     }
 
     public boolean isResolveRefMissing() {
         return resolveRefIsMissing;
+    }
+
+    public boolean isResolveRefIsAccessible() {
+        return resolveRefIsAccessible;
     }
 
     @Override
@@ -65,7 +72,7 @@ public class MultiMarkdownReferenceWikiPageRef extends MultiMarkdownReference {
             FileReferenceLink fileReferenceLink = new FileReferenceLink(myElement.getContainingFile(), ((PsiFile) element));
             String wikiPageRef = fileReferenceLink.getWikiPageRef();
             // this will create a new reference and loose connection to this one
-            return ((MultiMarkdownWikiPageRef) myElement).setName(wikiPageRef, true);
+            return ((MultiMarkdownWikiPageRef) myElement).setName(wikiPageRef, MultiMarkdownNamedElement.REASON_FILE_MOVED);
         }
         return super.bindToElement(element);
     }
@@ -85,6 +92,7 @@ public class MultiMarkdownReferenceWikiPageRef extends MultiMarkdownReference {
             if (files.length > 0) {
                 containingFile.removeListener(fileListListener);
                 resolveRefIsMissing = false;
+                resolveRefIsAccessible = true;
 
                 for (PsiFile file : files) {
                     results.add(new PsiElementResolveResult(file));
@@ -92,18 +100,38 @@ public class MultiMarkdownReferenceWikiPageRef extends MultiMarkdownReference {
                 }
             } else {
                 // this one is missing, see if there is a missing ref registered already
-                resolveRefIsMissing = true;
+                FileReferenceList all = MultiMarkdownPlugin.getProjectComponent(myElement.getProject()).getFileReferenceList().query()
+                        .spaceDashEqual()
+                        .caseInsensitive()
+                        .keepLinkRefAnchor()
+                        .wantMarkdownFiles()
+                        .matchWikiRef((MultiMarkdownWikiPageRef) myElement)
+                        .all();
 
-                //logger.info("getting dummy Reference" + " for " + myElement + " named: " + myElement.getMissingElementNamespace() + name);
-                MultiMarkdownNamedElement missingLinkElement = containingFile.getMissingLinkElement(myElement, myElement.getMissingElementNamespace() + name);
+                files = all.getPsiFilesWithAnchor();
 
-                //if (missingLinkElement == myElement) {
-                //    logger.info("dummy Reference" + " for " + myElement + " is itself");
-                //}
+                if (files.length > 0) {
+                    resolveRefIsAccessible = false;
 
-                //logger.info("setting dummy Reference" + " for " + myElement + " named: " + myElement.getMissingElementNamespace() + name);
-                results.add(new PsiElementResolveResult(missingLinkElement));
-                containingFile.addListener(fileListListener);
+                    for (PsiFile file : files) {
+                        results.add(new PsiElementResolveResult(file));
+                        //logger.info("Reference " + resolveResults.length + " for " + myElement + ": " + resolveResults[0].getElement().hashCode());
+                    }
+                }
+                else {
+                    resolveRefIsMissing = true;
+
+                    //logger.info("getting dummy Reference" + " for " + myElement + " named: " + myElement.getMissingElementNamespace() + name);
+                    MultiMarkdownNamedElement missingLinkElement = containingFile.getMissingLinkElement(myElement, myElement.getMissingElementNamespace() + name);
+
+                    //if (missingLinkElement == myElement) {
+                    //    logger.info("dummy Reference" + " for " + myElement + " is itself");
+                    //}
+
+                    //logger.info("setting dummy Reference" + " for " + myElement + " named: " + myElement.getMissingElementNamespace() + name);
+                    results.add(new PsiElementResolveResult(missingLinkElement));
+                    containingFile.addListener(fileListListener);
+                }
             }
 
             return results.toArray(new ResolveResult[results.size()]);

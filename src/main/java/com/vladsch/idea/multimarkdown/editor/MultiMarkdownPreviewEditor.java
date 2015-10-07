@@ -203,6 +203,12 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         //settings.endSuspendNotifications();
     }
 
+    protected void updateLinkRenderer() {
+        int options = MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue() ? MultiMarkdownLinkRenderer.GITHUB_WIKI_LINK_FORMAT : 0;
+        linkRendererModified = new MultiMarkdownLinkRenderer(project, document, "absent", options);
+        linkRendererNormal = new MultiMarkdownLinkRenderer(options);
+    }
+
     /**
      * Build a new instance of {@link MultiMarkdownPreviewEditor}.
      *
@@ -227,6 +233,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
             public void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings) {
                 updateEditorTabIsVisible();
+                updateLinkRenderer();
                 delayedHtmlPreviewUpdate(true);
                 checkNotifyUser();
             }
@@ -244,8 +251,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
             }
         });
 
-        linkRendererModified = new MultiMarkdownFxLinkRenderer(project, document, "absent");
-        linkRendererNormal = new MultiMarkdownFxLinkRenderer();
+        updateLinkRenderer();
 
         if (isRawHtml) {
             jEditorPane = null;

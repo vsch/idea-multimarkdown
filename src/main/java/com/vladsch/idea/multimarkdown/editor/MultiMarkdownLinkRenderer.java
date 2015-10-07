@@ -24,39 +24,45 @@
 package com.vladsch.idea.multimarkdown.editor;
 
 import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.openapi.vfs.VirtualFileSystem;
 import org.pegdown.LinkRenderer;
 import org.pegdown.ast.*;
 
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 import static org.pegdown.FastEncoder.obfuscate;
 
 public class MultiMarkdownLinkRenderer extends LinkRenderer {
-    protected Project project;
-    protected Document document;
-    protected String missingTargetClass;
+    final public static int GITHUB_WIKI_LINK_FORMAT = 1;
+
+    final protected Project project;
+    final protected Document document;
+    final protected String missingTargetClass;
+    final protected int options;
 
     public MultiMarkdownLinkRenderer() {
         super();
         project = null;
         document = null;
         missingTargetClass = null;
+        options = 0;
     }
 
-    public MultiMarkdownLinkRenderer(Project project, Document document, String missingTargetClass) {
+    public MultiMarkdownLinkRenderer(int options) {
+        super();
+        project = null;
+        document = null;
+        missingTargetClass = null;
+        this.options = options;
+    }
+
+    public MultiMarkdownLinkRenderer(Project project, Document document, String missingTargetClass, int options) {
         super();
         this.project = project;
         this.document = document;
         this.missingTargetClass = missingTargetClass;
+        this.options = options;
     }
 
     // TODO: need to implement this using ProjectComponent methods so that we don't need
@@ -70,27 +76,33 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
         return rendering;
     }
 
-    @Override public Rendering render(AnchorLinkNode node) {
+    @Override
+    public Rendering render(AnchorLinkNode node) {
         return checkTarget(super.render(node));
     }
 
-    @Override public Rendering render(AutoLinkNode node) {
+    @Override
+    public Rendering render(AutoLinkNode node) {
         return checkTarget(super.render(node));
     }
 
-    @Override public Rendering render(ExpLinkNode node, String text) {
+    @Override
+    public Rendering render(ExpLinkNode node, String text) {
         return checkTarget(super.render(node, text));
     }
 
-    @Override public Rendering render(ExpImageNode node, String text) {
+    @Override
+    public Rendering render(ExpImageNode node, String text) {
         return checkTarget(super.render(node, text));
     }
 
-    @Override public Rendering render(RefLinkNode node, String url, String title, String text) {
+    @Override
+    public Rendering render(RefLinkNode node, String url, String title, String text) {
         return checkTarget(super.render(node, url, title, text));
     }
 
-    @Override public Rendering render(RefImageNode node, String url, String title, String alt) {
+    @Override
+    public Rendering render(RefImageNode node, String url, String title, String alt) {
         return checkTarget(super.render(node, url, title, alt));
     }
 
@@ -108,23 +120,31 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
         try {
             int pos;
             String text = node.getText();
-            // vsch: #182 handle WikiLinks alternative format [[page|text]]
             String url = text;
-            if ((pos = text.indexOf("|")) >= 0) {
-                url = text.substring(0, pos);
-                text = text.substring(pos + 1);
+
+            if ((options & GITHUB_WIKI_LINK_FORMAT) != 0) {
+                // vsch: #202 handle WikiLinks a la GitHub alternative format [[text|page]]
+                if ((pos = text.indexOf("|")) >= 0) {
+                    url = text.substring(pos + 1);
+                    text = text.substring(0, pos);
+                }
+            } else {
+                // vsch: #182 handle WikiLinks alternative format [[page|text]]
+                if ((pos = text.indexOf("|")) >= 0) {
+                    url = text.substring(0, pos);
+                    text = text.substring(pos + 1);
+                }
             }
 
             // vsch: #200 WikiLinks can have anchor # refs
             String suffix = "";
-
             if ((pos = url.lastIndexOf("#")) >= 0) {
                 suffix = url.substring(pos);
                 url = url.substring(0, pos);
             }
 
             // vsch: need our own extension for the file
-            url = "./" + URLEncoder.encode(url.replace(' ', '-'), "UTF-8") + ".md" + suffix;
+            url = ((url.isEmpty()) ? "" : ("./" + URLEncoder.encode(url.replace(' ', '-'), "UTF-8") + ".md")) + suffix;
             return checkTarget(new Rendering(url, text));
         } catch (UnsupportedEncodingException e) {
             throw new IllegalStateException();

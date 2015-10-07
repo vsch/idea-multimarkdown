@@ -41,7 +41,7 @@
     </div>
     ]]></description>
 
-  <version>1.1.11.6</version>
+  <version>1.1.12</version>
   <idea-version since-build="133.1711"/>
   <change-notes><![CDATA[
     <ul><h3><b>1.1.12 - Bug Fixes &amp; Optimizations.</b></h3>
@@ -54,7 +54,12 @@
       <li>Fix Wiki Links with anchor references were not properly generated.</li>
       <li>Change completely refactored refactoring code.</li>
       <li>Change link references without file extension will attempt to match markdown files first.</li>
-      <li>Fix exception starting to edit an empty file or when the file becomes empty after the edit.</li>
+      <li>Fix exception starting to edit an empty file or when the file becomes empty after an edit.</li>
+      <li>Add wiki link text refactoring, completion, inspections.</li>
+      <li>Add quick fixes that rename files now do project wide refactoring on related links.</li>
+      <li>Add quick fixes that change a link target because it is unresolved now do refactor rename for links that have the same text in the file.</li>
+      <li>Add option in settings for GitHub wiki link syntax [[Link text|Link address]], vs Creole syntax: [[Link address|Link text]].</li>
+      <li>Add inspection and quick fix when wiki link text and address are reversed, link text is redundant, or link text is also a resovable page..</li>
     </ul>
     <ul><h3><b>1.1.11 - Bug Fixes.</b></h3>
       <li>Fix intermittent project is disposed assertion failure on closing app.</li>

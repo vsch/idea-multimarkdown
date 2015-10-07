@@ -96,7 +96,7 @@ public class SuggestionFixers {
     public static class WikiRefAsFilNameWithExtFixer extends FixerBase {
         @Override
         public void makeSuggestions(@NotNull String text, @NotNull Suggestion suggestion, Project project) {
-            String fileName = FilePathInfo.wikiRefAsFileNameWithExt(text);
+            String fileName = FilePathInfo.wikiRefAsFileNameWithExt(new FilePathInfo(text).getFileNameNoExt());
             addSuggestion(fileName);
         }
     }

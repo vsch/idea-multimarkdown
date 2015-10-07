@@ -20,10 +20,7 @@
  */
 package com.vladsch.idea.multimarkdown.psi;
 
-import com.intellij.navigation.ItemPresentation;
-import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.NotNull;
-
 public interface MultiMarkdownWikiPageRef extends MultiMarkdownNamedElement {
     String getFileName();
+    String getFileNameWithAnchor();
 }

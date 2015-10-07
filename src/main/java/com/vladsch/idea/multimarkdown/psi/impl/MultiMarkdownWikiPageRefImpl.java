@@ -24,6 +24,8 @@ import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
+import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
+import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.language.MultiMarkdownReference;
 import com.vladsch.idea.multimarkdown.language.MultiMarkdownReferenceWikiPageRef;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
@@ -48,7 +50,7 @@ public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl 
 
     @Override
     public MultiMarkdownReference createReference(@NotNull TextRange textRange) {
-        return  new MultiMarkdownReferenceWikiPageRef(this, textRange);
+        return new MultiMarkdownReferenceWikiPageRef(this, textRange);
     }
 
     @Override
@@ -58,13 +60,20 @@ public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl 
 
     @Override
     public String getFileName() {
-        return FilePathInfo.wikiRefAsFileNameWithExt(getName());
+        return FilePathInfo.wikiRefAsFileNameWithExt(new FilePathInfo(getName() == null ? "" : getName()).getFileName());
+    }
+
+    @Override
+    public String getFileNameWithAnchor() {
+        FilePathInfo pathInfo = new FilePathInfo(getName() == null ? "" : getName());
+        return FilePathInfo.wikiRefAsFileNameWithExt(pathInfo.getFileName()) + pathInfo.getAnchor();
     }
 
     @Override
     public MultiMarkdownNamedElement handleContentChange(String newContent) throws IncorrectOperationException {
         String newName = new FilePathInfo(newContent).getFileNameNoExtAsWikiRef();
-        return (MultiMarkdownNamedElement) setName(newName, false);
+        MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(getProject());
+        return (MultiMarkdownNamedElement) setName(newName, projectComponent.getRefactoringReason() != 0 ? projectComponent.getRefactoringReason() : REASON_FILE_RENAMED);
     }
 
     @Override
@@ -78,9 +87,12 @@ public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl 
     }
 
     @Override
-    public PsiElement setName(@NotNull String newName, boolean fileMoved) {
-        String oldName = getName();
-        MultiMarkdownNamedElement element = MultiMarkdownPsiImplUtil.setName(this, newName, fileMoved || ((MultiMarkdownReferenceWikiPageRef)reference).isResolveRefMissing());
+    public PsiElement setName(@NotNull String newName, int reason) {
+        MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(getProject());
+        if (projectComponent.getRefactoringReason() != 0) reason = projectComponent.getRefactoringReason();
+        else if (reason < REASON_FILE_MOVED && ((MultiMarkdownReferenceWikiPageRef) reference).isResolveRefMissing()) reason = REASON_FILE_MOVED;
+
+        MultiMarkdownNamedElement element = MultiMarkdownPsiImplUtil.setName(this, newName, reason);
         //logger.info("setName on " + this.toString() + " from " + oldName + " to " + element.getName());
         //reference.notifyNamedElementChange(this, element);
         //reference.invalidateResolveResults();

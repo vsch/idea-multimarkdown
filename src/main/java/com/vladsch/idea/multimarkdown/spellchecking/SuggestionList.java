@@ -30,23 +30,20 @@ import java.util.List;
 
 public class SuggestionList {
 
-    protected ArrayList<Suggestion> suggestions = null;
-    protected HashSet<String> suggestionSet = null;
-    protected final Project project;
+    final protected @NotNull ArrayList<Suggestion> suggestions = new ArrayList<Suggestion>();
+    final protected @NotNull HashSet<String> suggestionSet = new HashSet<String>();
+    final protected @Nullable Project project;
 
     public SuggestionList(@Nullable Project project) {
-        this.suggestions = new ArrayList<Suggestion>();
-        this.suggestionSet = new HashSet<String>();
         this.project = project;
     }
 
     public SuggestionList() {
-        this((Project) null);
+        project = null;
     }
 
     public SuggestionList(@NotNull SuggestionList other) {
         this(other.project);
-
         add(other);
     }
 
@@ -66,13 +63,15 @@ public class SuggestionList {
         return this;
     }
 
-    public SuggestionList add(@NotNull SuggestionList suggestionList) {
-        for (Suggestion suggestion : suggestionList.suggestions) {
-            String suggestionText = suggestion.getText();
+    public SuggestionList add(SuggestionList... suggestionLists) {
+        for (SuggestionList suggestionList : suggestionLists) {
+            for (Suggestion suggestion : suggestionList.suggestions) {
+                String suggestionText = suggestion.getText();
 
-            if (!this.suggestionSet.contains(suggestionText)) {
-                this.suggestions.add(suggestion);
-                this.suggestionSet.add(suggestionText);
+                if (!this.suggestionSet.contains(suggestionText)) {
+                    this.suggestions.add(suggestion);
+                    this.suggestionSet.add(suggestionText);
+                }
             }
         }
         return this;
@@ -123,6 +122,7 @@ public class SuggestionList {
         return list;
     }
 
+    @NotNull
     public ArrayList<Suggestion> getSuggestions() {
         return suggestions;
     }
@@ -196,5 +196,155 @@ public class SuggestionList {
         }
 
         return result;
+    }
+
+    @NotNull
+    public SuggestionList prefix(@Nullable String prefix) {
+        return wrap(prefix, null);
+    }
+
+    @NotNull
+    public SuggestionList suffix(@Nullable String suffix) {
+        return wrap(null, suffix);
+    }
+
+    @NotNull
+    public SuggestionList prefixAlign(@Nullable SuggestionList prefixes) {
+        return wrapAlign(prefixes, null);
+    }
+
+    @NotNull
+    public SuggestionList suffixAlign(@Nullable SuggestionList suffixes) {
+        return wrapAlign(null, suffixes);
+    }
+
+    @NotNull
+    public SuggestionList prefixPermute(@Nullable SuggestionList prefixes) {
+        return wrapPermute(prefixes, null);
+    }
+
+    @NotNull
+    public SuggestionList suffixPermute(@Nullable SuggestionList suffixes) {
+        return wrapPermute(null, suffixes);
+    }
+
+    // TEST: needs a test
+    @NotNull
+    public SuggestionList wrap(@Nullable String prefix, @Nullable String suffix) {
+        SuggestionList prefixedList;
+
+        if ((prefix == null || prefix.isEmpty()) && (suffix == null || suffix.isEmpty())) {
+            prefixedList = new SuggestionList(this);
+        } else {
+            prefixedList = new SuggestionList(this.project);
+            if (prefix == null) prefix = "";
+            if (suffix == null) suffix = "";
+            for (Suggestion suggestion : suggestions) {
+                prefixedList.add(prefix + suggestion.getText() + suffix, suggestion);
+            }
+        }
+        return prefixedList;
+    }
+
+    public boolean isEmpty() {
+        return suggestions.isEmpty();
+    }
+
+    // TEST: needs a test
+    @NotNull
+    public SuggestionList wrapPermute(@Nullable SuggestionList prefixes, @Nullable SuggestionList suffixes) {
+        SuggestionList wrappedList = new SuggestionList(project);
+
+        if (prefixes != null && !prefixes.isEmpty() && suffixes != null && !suffixes.isEmpty()) {
+            for (Suggestion prefix : prefixes.suggestions) {
+                for (Suggestion suffix : suffixes.suggestions) {
+                    for (Suggestion suggestion : suggestions) {
+                        wrappedList.add(prefix.getText() + suggestion.getText() + suffix.getText(), prefix, suffix);
+                    }
+                }
+            }
+        } else if (suffixes != null && !suffixes.isEmpty()) {
+            for (Suggestion suffix : suffixes.suggestions) {
+                for (Suggestion suggestion : suggestions) {
+                    wrappedList.add(suggestion.getText() + suffix.getText(), suffix);
+                }
+            }
+        } else if (prefixes != null && !prefixes.isEmpty()) {
+            for (Suggestion prefix : prefixes.suggestions) {
+                for (Suggestion suggestion : suggestions) {
+                    wrappedList.add(prefix.getText() + suggestion.getText(), prefix);
+                }
+            }
+        }
+        return wrappedList;
+    }
+
+    // TEST: needs a test
+    @NotNull
+    public SuggestionList wrapAlign(@Nullable SuggestionList prefixes, @Nullable SuggestionList suffixes) {
+        SuggestionList wrappedList = new SuggestionList(project);
+
+        if (prefixes != null && !prefixes.isEmpty() && suffixes != null && !suffixes.isEmpty()) {
+            int iMax = Math.min(Math.min(prefixes.size(), suffixes.size()), size());
+
+            for (int i = 0; i < iMax; i++) {
+                Suggestion suggestion = suggestions.get(i);
+                Suggestion prefix = prefixes.suggestions.get(i);
+                Suggestion suffix = suffixes.suggestions.get(i);
+                wrappedList.add(prefix.getText() + suggestion.getText() + suffix.getText(), prefix, suggestion, suffix);
+            }
+        } else if (suffixes != null && !suffixes.isEmpty()) {
+            int iMax = Math.min(suffixes.size(), size());
+
+            for (int i = 0; i < iMax; i++) {
+                Suggestion suggestion = suggestions.get(i);
+                Suggestion suffix = suffixes.suggestions.get(i);
+                wrappedList.add(suggestion.getText() + suffix.getText(), suggestion, suffix);
+            }
+        } else if (prefixes != null && !prefixes.isEmpty()) {
+            int iMax = Math.min(prefixes.size(), size());
+
+            for (int i = 0; i < iMax; i++) {
+                Suggestion suggestion = suggestions.get(i);
+                Suggestion prefix = prefixes.suggestions.get(i);
+                wrappedList.add(prefix.getText() + suggestion.getText(), prefix, suggestion);
+            }
+        }
+        return wrappedList;
+    }
+
+    // TEST: needs a test
+    /*
+        returns a list that permutes suggestions from this list, prefixed and suffixed.
+        filters applied to prefixes and suffixes and permutations happen on the fixed prefix and suffixed lists by applying a single fixer to both lists and then permuting. That way permutations happen on items returned by the same fixer type.
+     */
+    @NotNull
+    public SuggestionList wrapPermuteFixedAligned(@Nullable SuggestionList prefixes, @Nullable SuggestionList suffixes, Suggestion.Fixer... fixers) {
+        SuggestionList wrappedList = new SuggestionList(project);
+
+        if (prefixes != null && !prefixes.isEmpty() && suffixes != null && !suffixes.isEmpty()) {
+            for (Suggestion.Fixer fixer : fixers) {
+                SuggestionList fixedPrefixes = prefixes.batchFixers(fixer);
+                SuggestionList fixedSuffixes = suffixes.batchFixers(fixer);
+
+                wrappedList.add(wrapPermute(fixedPrefixes, fixedSuffixes));
+            }
+        } else if (suffixes != null && !suffixes.isEmpty()) {
+            for (Suggestion.Fixer fixer : fixers) {
+                SuggestionList fixedSuffixes = suffixes.batchFixers(fixer);
+                wrappedList.add(wrapPermute(null, fixedSuffixes));
+            }
+        } else if (prefixes != null && !prefixes.isEmpty()) {
+            for (Suggestion.Fixer fixer : fixers) {
+                SuggestionList fixedPrefixes = prefixes.batchFixers(fixer);
+                wrappedList.add(wrapPermute(fixedPrefixes, null));
+            }
+        }
+        return wrappedList;
+    }
+
+    @Nullable
+    public Project getProject() {
+        return project;
     }
 }

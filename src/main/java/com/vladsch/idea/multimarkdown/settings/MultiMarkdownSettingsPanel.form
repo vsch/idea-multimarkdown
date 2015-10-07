@@ -3,7 +3,7 @@
   <grid id="b9d78" binding="panel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="877" height="633"/>
+      <xy x="20" y="20" width="1179" height="633"/>
     </constraints>
     <properties>
       <opaque value="true"/>
@@ -389,7 +389,7 @@
             </properties>
             <border type="none"/>
             <children>
-              <grid id="5fdf9" binding="extensionsPanel" layout-manager="GridLayoutManager" row-count="17" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="5fdf9" binding="extensionsPanel" layout-manager="GridLayoutManager" row-count="18" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -430,7 +430,7 @@
                   </component>
                   <component id="473cc" class="javax.swing.JCheckBox" binding="hardWrapsCheckBox">
                     <constraints>
-                      <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.hard-wraps.label"/>
@@ -475,7 +475,7 @@
                   </component>
                   <component id="700d2" class="javax.swing.JLabel">
                     <constraints>
-                      <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="10" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <font style="2"/>
@@ -556,7 +556,7 @@
                   </component>
                   <component id="a194b" class="javax.swing.JCheckBox" binding="strikethroughCheckBox">
                     <constraints>
-                      <grid row="11" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="12" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.strikethrough.label"/>
@@ -565,7 +565,7 @@
                   </component>
                   <component id="845c0" class="javax.swing.JLabel">
                     <constraints>
-                      <grid row="11" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="12" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <font style="2"/>
@@ -574,7 +574,7 @@
                   </component>
                   <component id="27047" class="javax.swing.JCheckBox" binding="taskListsCheckBox">
                     <constraints>
-                      <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="11" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.task-lists.label"/>
@@ -583,7 +583,7 @@
                   </component>
                   <component id="484bc" class="javax.swing.JLabel">
                     <constraints>
-                      <grid row="10" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="11" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <font style="2"/>
@@ -592,7 +592,7 @@
                   </component>
                   <component id="96fc2" class="javax.swing.JLabel">
                     <constraints>
-                      <grid row="12" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="13" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <font style="2"/>
@@ -601,7 +601,7 @@
                   </component>
                   <component id="bb888" class="javax.swing.JCheckBox" binding="headerSpaceCheckBox">
                     <constraints>
-                      <grid row="12" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="13" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.header-space.label"/>
@@ -610,7 +610,7 @@
                   </component>
                   <component id="6beaf" class="javax.swing.JCheckBox" binding="suppressInlineHTMLCheckBox">
                     <constraints>
-                      <grid row="15" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="16" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.suppress-inline-html.label"/>
@@ -619,7 +619,7 @@
                   </component>
                   <component id="6f718" class="javax.swing.JLabel">
                     <constraints>
-                      <grid row="15" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="16" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <font style="2"/>
@@ -628,7 +628,7 @@
                   </component>
                   <component id="cbaa8" class="javax.swing.JCheckBox" binding="suppressHTMLBlocksCheckBox">
                     <constraints>
-                      <grid row="16" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="17" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.suppress-html-blocks.label"/>
@@ -637,7 +637,7 @@
                   </component>
                   <component id="6b0d3" class="javax.swing.JLabel">
                     <constraints>
-                      <grid row="16" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="17" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <font style="2"/>
@@ -673,7 +673,7 @@
                   </component>
                   <component id="d4489" class="javax.swing.JCheckBox" binding="forceListParaCheckBox">
                     <constraints>
-                      <grid row="14" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="15" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.force-item-para.label"/>
@@ -682,7 +682,7 @@
                   </component>
                   <component id="77803" class="javax.swing.JLabel">
                     <constraints>
-                      <grid row="14" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="15" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <font style="2"/>
@@ -691,7 +691,7 @@
                   </component>
                   <component id="ccbaa" class="javax.swing.JCheckBox" binding="relaxedHRulesCheckBox">
                     <constraints>
-                      <grid row="13" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="14" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.relaxed-hrules.label"/>
@@ -700,11 +700,27 @@
                   </component>
                   <component id="3dddc" class="javax.swing.JLabel">
                     <constraints>
-                      <grid row="13" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="14" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <font style="2"/>
                       <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.relaxed-hrules.description"/>
+                    </properties>
+                  </component>
+                  <component id="a579e" class="javax.swing.JCheckBox" binding="githubWikiLinksCheckBox">
+                    <constraints>
+                      <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.wiki-links-github.label"/>
+                    </properties>
+                  </component>
+                  <component id="9e709" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.wiki-links-github.description"/>
                     </properties>
                   </component>
                 </children>

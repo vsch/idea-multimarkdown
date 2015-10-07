@@ -125,7 +125,7 @@ public abstract class MultiMarkdownReference extends PsiReferenceBase<MultiMarkd
             String name = ((MultiMarkdownNamedElement) element).getName();
             // this will create a new reference and loose connection to this one
             // logger.info("rebinding " + myElement + " to " + element);
-            if (name != null) return myElement.setName(name, true);
+            if (name != null) return myElement.setName(name, MultiMarkdownNamedElement.REASON_FILE_MOVED);
         }
         throw new IncorrectOperationException("Rebind cannot be performed for " + getClass());
     }

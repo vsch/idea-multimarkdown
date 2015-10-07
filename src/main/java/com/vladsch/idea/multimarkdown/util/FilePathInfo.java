@@ -35,6 +35,8 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     private final int wikiHomeEnd;
     private final int nameStart;
     private final int nameEnd;
+    private final int withAnchorNameEnd;
+    private final int anchorStart;
     private final @NotNull String filePath;
 
     public FilePathInfo(@NotNull String filePath) {
@@ -47,7 +49,9 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
 
         // if file name ends in . then it has no extension and the . is part of its name.
         int extStart;
-        this.nameEnd = (extStart = filePath.lastIndexOf('.', filePath.length())) <= nameStart ? filePath.length() : extStart;
+        this.anchorStart = (extStart = filePath.indexOf('#', nameStart)) < 0 ? filePath.length() : extStart;
+        this.nameEnd = (extStart = filePath.lastIndexOf('.', anchorStart)) <= nameStart ? anchorStart : extStart;
+        this.withAnchorNameEnd = (extStart = filePath.lastIndexOf('.', filePath.length())) <= nameStart ? filePath.length() : extStart;
     }
 
     public FilePathInfo(@NotNull VirtualFile file) {
@@ -59,6 +63,232 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
         this.nameStart = other.nameStart;
         this.nameEnd = other.nameEnd;
         this.filePath = other.filePath;
+        this.anchorStart = other.anchorStart;
+        this.withAnchorNameEnd = other.withAnchorNameEnd;
+    }
+
+    @NotNull
+    final public String getExt() {
+        return nameEnd + 1 < anchorStart ? filePath.substring(nameEnd + 1, anchorStart) : "";
+    }
+
+    @NotNull
+    final public String getExtWithDot() {
+        return nameEnd < anchorStart ? filePath.substring(nameEnd, anchorStart) : "";
+    }
+
+    @NotNull
+    final public String getWithAnchorExt() {
+        return fileNameContainsAnchor() && withAnchorNameEnd+1 < filePath.length() ? filePath.substring(withAnchorNameEnd+1) : getExt();
+    }
+
+    @NotNull
+    final public String getWithAnchorExtWithDot() {
+        return fileNameContainsAnchor() && withAnchorNameEnd < filePath.length() ? filePath.substring(withAnchorNameEnd) : getExtWithDot();
+    }
+
+    @NotNull
+    final public String getAnchorNoHash() {
+        return anchorStart + 1 < filePath.length() ? filePath.substring(anchorStart + 1) : "";
+    }
+
+    @NotNull
+    final public String getAnchor() {
+        return anchorStart < filePath.length() ? filePath.substring(anchorStart) : "";
+    }
+
+    final public boolean isImageExt() {
+        return isImageExt(getExt());
+    }
+
+    final public boolean isMarkdownExt() {
+        return isMarkdownExt(getExt());
+    }
+
+    public boolean hasExt() {
+        return nameEnd + 1 < anchorStart;
+    }
+
+    final public boolean hasWikiPageExt() {
+        return getFilePath().endsWith(WIKI_PAGE_EXTENSION);
+    }
+
+    @NotNull
+    public String getFilePath() {
+        return filePath.substring(0, anchorStart);
+    }
+
+    @NotNull
+    final public String getFilePathWithAnchor() {
+        return filePath;
+    }
+
+    @NotNull
+    final public String getFilePathAsWikiRef() {
+        return asWikiRef(getFilePath());
+    }
+
+    @NotNull
+    final public String getFilePathWithAnchorAsWikiRef() {
+        return asWikiRef(getFilePath()) + getAnchor();
+    }
+
+    final public boolean containsSpaces() {
+        return filePath.indexOf(' ') >= 0;
+    }
+
+    final public boolean containsAnchor() {
+        return filePath.indexOf('#') >= 0;
+    }
+
+    final public boolean isWikiHome() {
+        return filePath.endsWith(WIKI_HOME_EXTENTION);
+    }
+
+    @NotNull
+    final public String getFilePathNoExt() {
+        return filePath.substring(0, nameEnd);
+    }
+
+    @NotNull
+    final public String getFilePathWithAnchorNoExt() {
+        return filePath.substring(0, withAnchorNameEnd);
+    }
+
+    @NotNull
+    final public String getFilePathNoExtAsWikiRef() {
+        return asWikiRef(getFilePathNoExt());
+    }
+
+    @NotNull
+    final public String getFilePathWithAnchorNoExtAsWikiRef() {
+        return asWikiRef(getFilePathWithAnchorNoExt());
+    }
+
+    @NotNull
+    final public String getPath() {
+        return nameStart == 0 ? "" : filePath.substring(0, nameStart);
+    }
+
+    @NotNull
+    final public String getPathAsWikiRef() {
+        return asWikiRef(getPath());
+    }
+
+    final public boolean isUnderWikiHome() {
+        return wikiHomeEnd > 0;
+    }
+
+    final public boolean isWikiPage() {
+        return isUnderWikiHome() && isWikiPageExt(getExt());
+    }
+
+    @NotNull
+    final public String getWikiHome() {
+        return wikiHomeEnd <= 0 ? "" : filePath.substring(0, wikiHomeEnd);
+    }
+
+    final public int getUpDirectoriesToWikiHome() {
+        if (wikiHomeEnd <= 0 || wikiHomeEnd == filePath.length()) return 0;
+        int pos = wikiHomeEnd;
+        int upDirs = 0;
+        while (pos < filePath.length() && (pos = filePath.indexOf('/', pos)) >= 0) {
+            upDirs++;
+            pos++;
+        }
+        return upDirs;
+    }
+
+    final public boolean pathContainsSpaces() {
+        return getPath().indexOf(' ') >= 0;
+    }
+
+    final public boolean pathContainsAnchor() {
+        return getPath().indexOf('#') >= 0;
+    }
+
+    @NotNull
+    final public String getFileNameWithAnchor() {
+        return filePath.substring(nameStart, filePath.length());
+    }
+
+    @NotNull
+    final public String getFileName() {
+        return filePath.substring(nameStart, anchorStart);
+    }
+
+    final public boolean fileNameContainsSpaces() {
+        return getFileName().indexOf(' ') >= 0;
+    }
+
+    final public boolean fileNameContainsAnchor() {
+        return anchorStart < filePath.length();
+    }
+
+    @NotNull
+    final public String getFileNameAsWikiRef() {
+        return asWikiRef(getFileName());
+    }
+
+    @NotNull
+    final public String getFileNameWithAnchorAsWikiRef() {
+        return asWikiRef(getFileNameWithAnchor());
+    }
+
+    @NotNull
+    final public String getFileNameNoExt() {
+        return filePath.substring(nameStart, nameEnd);
+    }
+
+    @NotNull
+    final public String getFileNameWithAnchorNoExt() {
+        return filePath.substring(nameStart, withAnchorNameEnd);
+    }
+
+    @NotNull
+    final public String getFileNameNoExtAsWikiRef() {
+        return asWikiRef(getFileNameNoExt());
+    }
+
+    @NotNull
+    final public String getFileNameWithAnchorNoExtAsWikiRef() {
+        return asWikiRef(getFileNameWithAnchorNoExt());
+    }
+
+    @Override
+    public int compareTo(FilePathInfo o) {
+        return wikiHomeEnd == o.wikiHomeEnd &&
+                nameStart == o.nameStart &&
+                nameEnd == o.nameEnd ? filePath.compareTo(o.filePath) : -99;
+    }
+
+    @Override
+    public String toString() {
+        return "FilePathInfo(" +
+                innerString() +
+                ")";
+    }
+
+    public String innerString() {
+        return "" +
+                "wikiHomeEnd = " + wikiHomeEnd + ", " +
+                "nameStart = " + nameStart + ", " +
+                "nameEnd = " + nameEnd + ", " +
+                "filePath = " + "'" + filePath + "', " +
+                "";
+    }
+
+    /*
+     *
+     * Statics
+     *
+     */
+
+    public static boolean isExtInList(boolean caseSensitive, @NotNull String ext, String... extList) {
+        for (String listExt : extList) {
+            if (caseSensitive ? listExt.equals(ext) : listExt.equalsIgnoreCase(ext)) return true;
+        }
+        return false;
     }
 
     @NotNull
@@ -147,7 +377,9 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     public static boolean endsWithWikiRef(boolean caseSensitive, boolean spaceDashEquivalent, @NotNull String fileRef, @NotNull String wikiRef) {
         return endsWith(true, caseSensitive, spaceDashEquivalent, fileRef, wikiRef);
     }
-    @Nullable
+
+    // TEST: needs a test
+    @NotNull
     public static String linkRefNoAnchor(@Nullable String linkRef) {
         if (linkRef != null) {
             int pos;
@@ -156,142 +388,29 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
                 linkRef = linkRef.substring(0, pos);
             }
         }
-        return linkRef;
+        return linkRef == null ? "" : linkRef;
     }
 
+    // TEST: needs a test
     @NotNull
-    final public String getExt() {
-        return nameEnd + 1 < filePath.length() ? filePath.substring(nameEnd + 1) : "";
-    }
-
-    final public boolean isImageExt() {
-        return isImageExt(getExt());
-    }
-
-    final public boolean isMarkdownExt() {
-        return isMarkdownExt(getExt());
-    }
-
-    public boolean hasExt() {
-        return nameEnd + 1 < filePath.length();
-    }
-
-    @NotNull
-    final public String getExtWithDot() {
-        return nameEnd < filePath.length() ? filePath.substring(nameEnd) : "";
-    }
-
-    final public boolean hasWikiPageExt() {
-        return filePath.endsWith(WIKI_PAGE_EXTENSION);
-    }
-
-    @NotNull
-    final public String getFilePath() {
-        return filePath;
-    }
-
-    @NotNull
-    final public String getFilePathAsWikiRef() {
-        return asWikiRef(filePath);
-    }
-
-    final public boolean containsSpaces() {
-        return filePath.indexOf(' ') >= 0;
-    }
-
-    final public boolean containsAnchor() {
-        return filePath.indexOf('#') >= 0;
-    }
-
-    final public boolean isWikiHome() {
-        return filePath.endsWith(WIKI_HOME_EXTENTION);
-    }
-
-    @NotNull
-    final public String getFilePathNoExt() {
-        return filePath.substring(0, nameEnd);
-    }
-
-    @NotNull
-    final public String getFilePathNoExtAsWikiRef() {
-        return asWikiRef(getFilePathNoExt());
-    }
-
-    @NotNull
-    final public String getPath() {
-        return nameStart == 0 ? "" : filePath.substring(0, nameStart);
-    }
-
-    @NotNull
-    final public String getPathAsWikiRef() {
-        return asWikiRef(getPath());
-    }
-
-    final public boolean isUnderWikiHome() {
-        return wikiHomeEnd > 0;
-    }
-
-    final public boolean isWikiPage() {
-        return isUnderWikiHome() && isWikiPageExt(getExt());
-    }
-
-    @NotNull
-    final public String getWikiHome() {
-        return wikiHomeEnd <= 0 ? "" : filePath.substring(0, wikiHomeEnd);
-    }
-
-    final public int getUpDirectoriesToWikiHome() {
-        if (wikiHomeEnd <= 0 || wikiHomeEnd == filePath.length()) return 0;
-        int pos = wikiHomeEnd;
-        int upDirs = 0;
-        while (pos < filePath.length() && (pos = filePath.indexOf('/', pos)) >= 0) {
-            upDirs++;
-            pos++;
+    public static String linkRefAnchor(@Nullable String linkRef) {
+        if (linkRef != null) {
+            int pos;
+            // Links can have anchor # refs
+            if ((pos = linkRef.indexOf("#")) >= 0) {
+                linkRef = linkRef.substring(pos);
+            } else {
+                linkRef = "";
+            }
         }
-        return upDirs;
+        return linkRef == null ? "" : linkRef;
     }
 
-    final public boolean pathContainsSpaces() {
-        return getPath().indexOf(' ') >= 0;
-    }
-
-    final public boolean pathContainsAnchor() {
-        return getPath().indexOf('#') >= 0;
-    }
-
+    // TEST: needs a test
     @NotNull
-    final public String getFileName() {
-        return filePath.substring(nameStart, filePath.length());
-    }
-
-    final public boolean fileNameContainsSpaces() {
-        return getFileName().indexOf(' ') >= 0;
-    }
-
-    final public boolean fileNameContainsAnchor() {
-        return getFileName().indexOf('#') >= 0;
-    }
-
-    @NotNull
-    final public String getFileNameAsWikiRef() {
-        return asWikiRef(getFileName());
-    }
-
-    @NotNull
-    final public String getFileNameNoExt() {
-        return filePath.substring(nameStart, nameEnd);
-    }
-
-    @NotNull
-    final public String getFileNameNoExtAsWikiRef() {
-        return asWikiRef(getFileNameNoExt());
-    }
-
-    public static boolean isExtInList(boolean caseSensitive, @NotNull String ext, String... extList) {
-        for (String listExt : extList) {
-            if (caseSensitive ? listExt.equals(ext) : listExt.equalsIgnoreCase(ext)) return true;
-        }
-        return false;
+    public static String linkRefAnchorNoHash(@Nullable String linkRef) {
+        linkRef = linkRefAnchor(linkRef);
+        return linkRef.isEmpty() ? linkRef : linkRef.charAt(0) == '#' ? linkRef.substring(1) : linkRef;
     }
 
     public static boolean isExtInList(@NotNull String ext, String... extList) {
@@ -324,28 +443,5 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
 
     public static String wikiRefAsFileNameWithExt(String name) {
         return wikiRefAsFileName(name, true);
-    }
-
-    @Override
-    public int compareTo(FilePathInfo o) {
-        return wikiHomeEnd == o.wikiHomeEnd &&
-                nameStart == o.nameStart &&
-                nameEnd == o.nameEnd ? filePath.compareTo(o.filePath) : -99;
-    }
-
-    @Override
-    public String toString() {
-        return "FilePathInfo(" +
-                innerString() +
-                ")";
-    }
-
-    public String innerString() {
-        return "" +
-                "wikiHomeEnd = " + wikiHomeEnd + ", " +
-                "nameStart = " + nameStart + ", " +
-                "nameEnd = " + nameEnd + ", " +
-                "filePath = " + "'" + filePath + "', " +
-                "";
     }
 }

@@ -38,9 +38,7 @@ public class FileReferenceLink extends FileReference {
     public static final int REASON_TARGET_PATH_HAS_ANCHOR = 128;
 
     protected final @NotNull FileReference sourceReference;
-    protected String linkRef;
-    protected String linkRefNoExt;
-    protected String wikiPageRef;
+    protected String pathPrefix;
     protected boolean wikiAccessible;
     protected int upDirectories;
     protected int downDirectories;
@@ -56,6 +54,22 @@ public class FileReferenceLink extends FileReference {
         super(targetReference);
 
         assert sourceReference.getProject() == targetReference.getProject();
+        this.sourceReference = sourceReference;
+
+        computeLinkRefInfo();
+    }
+
+    public FileReferenceLink(@NotNull VirtualFile sourceFile, @NotNull FileReference targetReference) {
+        super(targetReference);
+
+        this.sourceReference = new FileReference(sourceFile, project);
+
+        computeLinkRefInfo();
+    }
+
+    public FileReferenceLink(@NotNull FileReference sourceReference, @NotNull VirtualFile targetFile) {
+        super(new FileReference(targetFile, sourceReference.project));
+
         this.sourceReference = sourceReference;
 
         computeLinkRefInfo();
@@ -78,24 +92,62 @@ public class FileReferenceLink extends FileReference {
         computeLinkRefInfo();
     }
 
+    public FileReferenceLink(@NotNull FileReference sourceReference, @NotNull PsiFile targetFile) {
+        super(new FileReference(targetFile));
+
+        assert sourceReference.getProject() == targetFile.getProject();
+        this.sourceReference = sourceReference;
+
+        computeLinkRefInfo();
+    }
+
+    public FileReferenceLink(@NotNull PsiFile sourceFile, @NotNull FileReference targetReference) {
+        super(targetReference);
+
+        assert sourceFile.getProject() == targetReference.getProject();
+        this.sourceReference = new FileReference(sourceFile);
+
+        computeLinkRefInfo();
+    }
+
     @NotNull
-    public FileReference getSource() {
+    public FileReference getSourceReference() {
         return sourceReference;
     }
 
     @NotNull
     public String getLinkRef() {
-        return linkRef;
+        return pathPrefix + getFileName();
     }
 
     @NotNull
     public String getLinkRefNoExt() {
-        return linkRefNoExt;
+        return pathPrefix + getFileNameNoExt();
     }
 
     @NotNull
     public String getWikiPageRef() {
-        return wikiPageRef;
+        return FilePathInfo.asWikiRef(pathPrefix) + getFileNameNoExtAsWikiRef();
+    }
+
+    @NotNull
+    public String getWikiPageRefWithAnchor() {
+        return FilePathInfo.asWikiRef(pathPrefix) + getFileNameWithAnchorNoExtAsWikiRef();
+    }
+
+    @NotNull
+    public String getLinkRefWithAnchor() {
+        return pathPrefix + getFileNameWithAnchor();
+    }
+
+    @NotNull
+    public String getLinkRefWithAnchorNoExt() {
+        return pathPrefix + getFileNameWithAnchorNoExt();
+    }
+
+    @NotNull
+    public String getPathPrefix() {
+        return pathPrefix;
     }
 
     public boolean isWikiAccessible() {
@@ -103,11 +155,11 @@ public class FileReferenceLink extends FileReference {
     }
 
     public boolean linkRefHasSpaces() {
-        return linkRef.indexOf(' ') >= 0;
+        return getLinkRef().indexOf(' ') >= 0;
     }
 
     public boolean linkRefWithoutExtHasSpaces() {
-        return linkRefNoExt.indexOf(' ') >= 0;
+        return getLinkRefNoExt().indexOf(' ') >= 0;
     }
 
     public int getUpDirectories() {
@@ -144,13 +196,13 @@ public class FileReferenceLink extends FileReference {
         public String targetNotWikiPageExtFixed() { return referenceLink.getFileNameNoExt() + WIKI_PAGE_EXTENSION; }
 
         public boolean targetNotInWikiHome() { return (reasons & REASON_NOT_UNDER_WIKI_HOME) != 0; }
-        public String targetNotInWikiHomeFixed() { return referenceLink.getSource().getPath() + referenceLink.getFileName(); }
+        public String targetNotInWikiHomeFixed() { return referenceLink.getSourceReference().getPath() + referenceLink.getFileName(); }
 
         public boolean targetNotInSameWikiHome() { return (reasons & REASON_NOT_UNDER_SOURCE_WIKI_HOME) != 0; }
-        public String targetNotInSameWikiHomeFixed() { return referenceLink.getSource().getPath() + referenceLink.getFileName(); }
+        public String targetNotInSameWikiHomeFixed() { return referenceLink.getSourceReference().getPath() + referenceLink.getFileName(); }
 
         public boolean targetNameHasAnchor() { return (reasons & REASON_TARGET_NAME_HAS_ANCHOR) != 0; }
-        public String targetNameHasAnchorFixed() { return referenceLink.getFileName().replace("#", ""); }
+        public String targetNameHasAnchorFixed() { return referenceLink.getFileNameWithAnchor().replace("#", ""); }
 
         public boolean targetPathHasAnchor() { return (reasons & REASON_TARGET_PATH_HAS_ANCHOR) != 0; }
     }
@@ -160,7 +212,7 @@ public class FileReferenceLink extends FileReference {
         int reasons = 0;
 
         if (linkRefHasSpaces()) reasons |= REASON_TARGET_HAS_SPACES;
-        if (wikiPageRef != null && wikiPageRef.replace('-', ' ').equalsIgnoreCase(this.wikiPageRef.replace('-', ' ')) && !wikiPageRef.replace('-', ' ').equals(this.wikiPageRef.replace('-', ' ')))
+        if (wikiPageRef != null && wikiPageRef.replace('-', ' ').equalsIgnoreCase(this.getWikiPageRef().replace('-', ' ')) && !wikiPageRef.replace('-', ' ').equals(this.getWikiPageRef().replace('-', ' ')))
             reasons |= REASON_CASE_MISMATCH;
         if (wikiPageRef != null && wikiPageRef.indexOf('-') >= 0) reasons |= REASON_WIKI_PAGEREF_HAS_DASHES;
 
@@ -178,7 +230,7 @@ public class FileReferenceLink extends FileReference {
     }
 
     protected void computeLinkRefInfo() {
-        String pathPrefix = "";
+        pathPrefix = "";
         String[] targetParts = getFilePath().split("/");
         String[] sourceParts = sourceReference.getFilePath().split("/");
         downDirectories = 0;
@@ -205,17 +257,13 @@ public class FileReferenceLink extends FileReference {
             downDirectories++;
         }
 
-        linkRef = pathPrefix + getFileName();
-        linkRefNoExt = pathPrefix + getFileNameNoExt();
-        wikiPageRef = FilePathInfo.asWikiRef(pathPrefix + getFileNameNoExt());
-
-        wikiAccessible = linkRef.indexOf(' ') < 0 && hasWikiPageExt() && getWikiHome().startsWith(sourceReference.getWikiHome());
+        wikiAccessible = getLinkRef().indexOf(' ') < 0 && hasWikiPageExt() && getWikiHome().startsWith(sourceReference.getWikiHome()) && !containsAnchor();
     }
 
     public int reflinkCompareTo(@NotNull FileReferenceLink o) {
         if (upDirectories != o.upDirectories) return upDirectories - o.upDirectories;
         if (downDirectories != o.downDirectories) return downDirectories - o.downDirectories;
-        return linkRef.compareTo(o.linkRef);
+        return getLinkRef().compareTo(o.getLinkRef());
     }
 
     @Override
@@ -223,9 +271,11 @@ public class FileReferenceLink extends FileReference {
         return !(o instanceof FileReferenceLink) ||
                 (
                         sourceReference == ((FileReferenceLink) o).sourceReference &&
-                                linkRef.equals(((FileReferenceLink) o).linkRef) &&
-                                linkRefNoExt.equals(((FileReferenceLink) o).linkRefNoExt) &&
-                                wikiPageRef.equals(((FileReferenceLink) o).wikiPageRef) &&
+                                getLinkRef().equals(((FileReferenceLink) o).getLinkRef()) &&
+                                getLinkRefWithAnchor().equals(((FileReferenceLink) o).getLinkRefWithAnchor()) &&
+                                getLinkRefNoExt().equals(((FileReferenceLink) o).getLinkRefNoExt()) &&
+                                getWikiPageRef().equals(((FileReferenceLink) o).getWikiPageRef()) &&
+                                getWikiPageRefWithAnchor().equals(((FileReferenceLink) o).getWikiPageRefWithAnchor()) &&
                                 wikiAccessible == ((FileReferenceLink) o).wikiAccessible &&
                                 upDirectories == ((FileReferenceLink) o).upDirectories &&
                                 downDirectories == ((FileReferenceLink) o).downDirectories
@@ -244,9 +294,12 @@ public class FileReferenceLink extends FileReference {
     public String innerString() {
         return super.innerString() +
                 "sourceReference  = " + sourceReference + ", " +
-                "linkRef = " + "'" + linkRef + "', " +
-                "linkRefNoExt = " + "'" + linkRefNoExt + "', " +
-                "wikiPageRef = " + "'" + wikiPageRef + "', " +
+                "linkRef = " + "'" + getLinkRef() + "', " +
+                "linkRefNoExt = " + "'" + getLinkRefNoExt() + "', " +
+                "linkRefWithAnchor = " + "'" + getLinkRefWithAnchor() + "', " +
+                "linkRefWithAnchorNoExt = " + "'" + getLinkRefWithAnchorNoExt() + "', " +
+                "wikiPageRef = " + "'" + getWikiPageRef() + "', " +
+                "wikiPageRefWithAnchor = " + "'" + getWikiPageRefWithAnchor() + "', " +
                 "wikiAccessible  = " + wikiAccessible + ", " +
                 "upDirectories  = " + upDirectories + ", " +
                 "downDirectories  = " + downDirectories + ", " +

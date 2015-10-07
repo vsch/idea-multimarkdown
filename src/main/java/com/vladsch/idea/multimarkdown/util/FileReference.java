@@ -79,6 +79,11 @@ public class FileReference extends FilePathInfo {
     }
 
     @Nullable
+    public VirtualFile getVirtualFileWithAnchor() {
+        return FileReference.getVirtualFile(getFilePathWithAnchor(), project);
+    }
+
+    @Nullable
     public VirtualFile getVirtualParent() {
         return FileReference.getVirtualFile(getPath(), project);
     }
@@ -89,9 +94,21 @@ public class FileReference extends FilePathInfo {
     }
 
     @Nullable
+    public PsiFile getPsiFileWithAnchor() {
+        return FileReference.getPsiFile(getFilePathWithAnchor(), project);
+    }
+
+    @Nullable
     public MultiMarkdownFile getMultiMarkdownFile() {
         PsiFile file;
         return (file = FileReference.getPsiFile(getFilePath(), project)) instanceof MultiMarkdownFile ?
+                (MultiMarkdownFile) file : null;
+    }
+
+    @Nullable
+    public MultiMarkdownFile getMultiMarkdownFileWithAnchor() {
+        PsiFile file;
+        return (file = FileReference.getPsiFile(getFilePathWithAnchor(), project)) instanceof MultiMarkdownFile ?
                 (MultiMarkdownFile) file : null;
     }
 

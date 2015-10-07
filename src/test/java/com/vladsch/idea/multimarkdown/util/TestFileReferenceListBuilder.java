@@ -28,7 +28,6 @@ import java.util.HashMap;
 
 import static com.vladsch.idea.multimarkdown.TestUtils.compareUnorderedLists;
 import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
 
 public class TestFileReferenceListBuilder extends FileReferenceListTest {
     FileReferenceList.Builder builder = new FileReferenceList.Builder();
@@ -44,14 +43,24 @@ public class TestFileReferenceListBuilder extends FileReferenceListTest {
         for (String filePath : filePaths) {
             FilePathInfo pathInfo = new FilePathInfo(filePath);
             String ext = pathInfo.getExt();
+            String withAnchorExt = pathInfo.getWithAnchorExt();
             FileReference fileReference = new FileReference(filePath);
 
             builder.add(fileReference);
+
             if (!extMap.containsKey(ext)) {
                 extMap.put(ext, new ArrayList<Integer>());
             }
             extMap.get(ext).add(filePathList.size());
-            filePathList.add(filePath);
+
+            if (!ext.equals(withAnchorExt)) {
+                if (!extMap.containsKey(withAnchorExt)) {
+                    extMap.put(withAnchorExt, new ArrayList<Integer>());
+                }
+                extMap.get(withAnchorExt).add(filePathList.size());
+            }
+
+            filePathList.add(pathInfo.getFilePathWithAnchor());
         }
 
         fileReferences = builder.getFileReferences();
@@ -70,7 +79,7 @@ public class TestFileReferenceListBuilder extends FileReferenceListTest {
     public void test_02_FileReferencesContent() throws Exception {
         int index = 0;
         for (String filePath : filePathList) {
-            assertEquals(filePath, fileReferences[index].getFilePath());
+            assertEquals(filePath, fileReferences[index].getFilePathWithAnchor());
             index++;
         }
     }
@@ -92,7 +101,9 @@ public class TestFileReferenceListBuilder extends FileReferenceListTest {
     public void test_05_ExtFileReferenceIndicesCount() throws Exception {
         int index = 0;
         for (String ext : extMap.keySet()) {
-            assertEquals(extMap.get(ext).size(), extFileReferenceIndices[index].length);
+            if (extMap.get(ext).size() != extFileReferenceIndices[index].length) {
+                failNotEquals("Counts differ for ext " + ext, extMap.size(), extFileReferenceIndices[index].length);
+            }
             index++;
         }
     }
@@ -106,7 +117,9 @@ public class TestFileReferenceListBuilder extends FileReferenceListTest {
             ArrayList<Integer> extIndices = extMap.get(ext);
             int index = 0;
             for (Integer extIndexOffs : extIndices) {
-                assertEquals(extIndexOffs.intValue(), extFileReferenceIndices[extIndex][index]);
+                if (extIndexOffs != extFileReferenceIndices[extIndex][index]) {
+                    failNotEquals("ext " + ext + "[" + index + "] differs", extIndexOffs, extFileReferenceIndices[extIndex][index]);
+                }
                 index++;
             }
             extIndex++;
@@ -158,7 +171,7 @@ public class TestFileReferenceListBuilder extends FileReferenceListTest {
 
         for (String filePath : filePathList) {
             FileReference fileReference = new FileReference(filePath);
-            if (fileReference.isMarkdownExt()) {
+            if (fileReference.isMarkdownExt() || FilePathInfo.isMarkdownExt(fileReference.getWithAnchorExt())) {
                 filesBuilder.add(fileReference);
             }
         }
@@ -175,11 +188,10 @@ public class TestFileReferenceListBuilder extends FileReferenceListTest {
 
         for (String filePath : filePathList) {
             FileReference fileReference = new FileReference(filePath);
-            if (fileReference.isWikiPage()) {
+            if (fileReference.isWikiPage() || (fileReference.isUnderWikiHome() && FilePathInfo.isWikiPageExt(fileReference.getWithAnchorExt()))) {
                 filesBuilder.add(fileReference);
             }
         }
         compareUnorderedLists(null, filesBuilder, fileRefList);
     }
-
 }

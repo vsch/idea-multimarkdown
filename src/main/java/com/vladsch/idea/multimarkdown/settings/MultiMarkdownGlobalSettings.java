@@ -127,6 +127,9 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     final public Settings.BooleanSetting wasShownDarkBug = settings.BooleanSetting(false, "wasShownDarkBug", 0);
     final public Settings.BooleanSetting useOldPreview = settings.BooleanSetting(false, "useOldPreview", 0);
 
+    // TODO: add this option to pegdown
+    final public Settings.BooleanSetting githubWikiLinks = settings.BooleanSetting(true, "githubWikiLinks", 0);
+
     // when loading of classes fails for some earlier builds these are used to store the build number to avoid retrying until the build changes
     final public Settings.FailedBuildSetting scratchFileServiceFailed = settings.FailedBuildSetting("", "scratchFileServiceFailed");
     final public Settings.FailedBuildSetting lightParserFailedBuild = settings.FailedBuildSetting("", "lightParserFailedBuild");

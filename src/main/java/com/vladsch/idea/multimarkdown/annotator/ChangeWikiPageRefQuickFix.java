@@ -26,9 +26,14 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
+import com.intellij.refactoring.JavaRefactoringFactory;
+import com.intellij.refactoring.JavaRenameRefactoring;
+import com.intellij.usageView.UsageInfo;
 import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
+import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import org.jetbrains.annotations.NotNull;
@@ -100,7 +105,15 @@ class ChangeWikiPageRefQuickFix extends BaseIntentionAction {
             @Override
             public void run() {
                 // change the whole name
-                wikiPageRefElement.setName(fileName, true);
+                //wikiPageRefElement.setName(fileName, MultiMarkdownNamedElement.REASON_FILE_MOVED);
+                JavaRefactoringFactory factory = JavaRefactoringFactory.getInstance(project);
+                JavaRenameRefactoring rename = factory.createRename(wikiPageRefElement, fileName);
+                UsageInfo[] usages = rename.findUsages();
+
+                MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
+                projectComponent.setRefactoringReason(MultiMarkdownNamedElement.REASON_FILE_HAD_ANCHOR);
+                rename.doRefactoring(usages); // modified 'usages' array
+                projectComponent.setRefactoringReason(0);
             }
         }.execute();
     }

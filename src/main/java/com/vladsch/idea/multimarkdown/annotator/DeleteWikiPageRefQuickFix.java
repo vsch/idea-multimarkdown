@@ -26,31 +26,23 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
-import com.intellij.refactoring.JavaRefactoringFactory;
-import com.intellij.refactoring.JavaRenameRefactoring;
-import com.intellij.usageView.UsageInfo;
 import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
-import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
-import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
-import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
+import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownPsiImplUtil;
 import org.jetbrains.annotations.NotNull;
 
-class RenameWikiPageQuickFix extends BaseIntentionAction {
-    private String name;
-    private PsiFile targetFile;
+class DeleteWikiPageRefQuickFix extends BaseIntentionAction {
+    private MultiMarkdownWikiLink wikiLinkElement;
 
-    RenameWikiPageQuickFix(PsiFile targetFile, String name) {
-        this.name = name;
-        this.targetFile = targetFile;
+    DeleteWikiPageRefQuickFix(MultiMarkdownWikiLink wikiLinkElement) {
+        this.wikiLinkElement = wikiLinkElement;
     }
 
     @NotNull
     @Override
     public String getText() {
-        FilePathInfo filePathInfo = new FilePathInfo(targetFile.getVirtualFile().getPath());
-        return MultiMarkdownBundle.message("quickfix.wikilink.rename-page", filePathInfo.getFileNameWithAnchor(), name);
+        return MultiMarkdownBundle.message("quickfix.wikilink.delete-page-ref");
     }
 
     @NotNull
@@ -69,22 +61,17 @@ class RenameWikiPageQuickFix extends BaseIntentionAction {
         ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
-                renameWikiFile(project, targetFile, name);
+                deleteWikiPageRefTitle(project, wikiLinkElement);
             }
         });
     }
 
-    private void renameWikiFile(final Project project, final PsiFile psiFile, final String fileName) {
+    private void deleteWikiPageRefTitle(final Project project, final MultiMarkdownWikiLink wikiLinkElement) {
         new WriteCommandAction.Simple(project) {
             @Override
             public void run() {
-                JavaRefactoringFactory factory = JavaRefactoringFactory.getInstance(project);
-                JavaRenameRefactoring rename = factory.createRename(psiFile, fileName);
-                UsageInfo[] usages = rename.findUsages();
-                MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
-                projectComponent.setRefactoringReason(MultiMarkdownNamedElement.REASON_FILE_RENAMED);
-                rename.doRefactoring(usages); // modified 'usages' array
-                projectComponent.setRefactoringReason(0);
+                // change the whole name
+                MultiMarkdownPsiImplUtil.deleteWikiLinkRef(wikiLinkElement);
             }
         }.execute();
     }

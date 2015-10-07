@@ -235,6 +235,12 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         //settings.endSuspendNotifications();
     }
 
+    protected void updateLinkRenderer() {
+        int options = MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue() ? MultiMarkdownLinkRenderer.GITHUB_WIKI_LINK_FORMAT : 0;
+        linkRendererModified = new MultiMarkdownFxLinkRenderer(project, document, "absent",options);
+        linkRendererNormal = new MultiMarkdownFxLinkRenderer(options);
+    }
+
     /**
      * Build a new instance of {@link MultiMarkdownFxPreviewEditor}.
      *
@@ -246,14 +252,6 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         this.document = doc;
         this.project = project;
         this.isWikiDocument = isWikiDocument(document);
-
-        URL resource = null;
-        //try {
-        //    resource = MultiMarkdownGlobalSettings.getInstance().getFirebugLiteFileURL();
-        //    fireBugJS = resource.toExternalForm();
-        //} catch (MalformedURLException e) {
-        //    e.printStackTrace();
-        //}
 
         // Listen to the document modifications.
         this.document.addDocumentListener(new DocumentAdapter() {
@@ -267,6 +265,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
             public void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings) {
                 updateEditorTabIsVisible();
+                updateLinkRenderer();
                 delayedHtmlPreviewUpdate(true);
                 checkNotifyUser();
             }
@@ -291,8 +290,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
             }
         });
 
-        linkRendererModified = new MultiMarkdownFxLinkRenderer(project, document, "absent");
-        linkRendererNormal = new MultiMarkdownFxLinkRenderer();
+        updateLinkRenderer();
 
         if (isRawHtml) {
             jEditorPane = null;
@@ -319,11 +317,6 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
 
                     webView = new WebView();
                     webEngine = webView.getEngine();
-                    //setStyleSheet();
-
-                    //Group group = new Group();
-                    //Scene scene = new Scene(webView);
-                    //jfxPanel.setScene(scene);
 
                     anchorPane = new AnchorPane();
                     AnchorPane.setTopAnchor(webView, 0.0);
@@ -331,13 +324,11 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                     AnchorPane.setBottomAnchor(webView, 0.0);
                     AnchorPane.setRightAnchor(webView, 0.0);
                     anchorPane.getChildren().add(webView);
-                    //group.getChildren().add(anchorPane);
                     jfxPanel.setScene(new Scene(anchorPane));
 
                     webEngine.setCreatePopupHandler(new Callback<PopupFeatures, WebEngine>() {
                         @Override
                         public WebEngine call(PopupFeatures config) {
-                            // do something
                             // return a web engine for the new browser window or null to block popups
                             return null;
                         }

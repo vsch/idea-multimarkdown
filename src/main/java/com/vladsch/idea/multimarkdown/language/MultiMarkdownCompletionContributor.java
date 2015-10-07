@@ -34,8 +34,8 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
 import com.vladsch.idea.multimarkdown.MultiMarkdownLanguage;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
-import com.vladsch.idea.multimarkdown.psi.*;
-import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownPsiImplUtil;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
 import com.vladsch.idea.multimarkdown.spellchecking.SuggestionList;
 import com.vladsch.idea.multimarkdown.util.FileReference;
 import com.vladsch.idea.multimarkdown.util.FileReferenceLink;
@@ -71,12 +71,10 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
                             if (parent != null && parent instanceof MultiMarkdownWikiLink) {
                                 SuggestionList suggestionList = ElementNameSuggestionProvider.getWikiPageTitleSuggestions(parent);
 
-                                if (suggestionList.size() > 0) {
-                                    for (String suggestion : suggestionList.asList()) {
-                                        resultSet.addElement(LookupElementBuilder.create(suggestion)
-                                                .withCaseSensitivity(true)
-                                        );
-                                    }
+                                for (String suggestion : suggestionList.asList()) {
+                                    resultSet.addElement(LookupElementBuilder.create(suggestion)
+                                            .withCaseSensitivity(true)
+                                    );
                                 }
                             }
                         } else if (elementType == WIKI_LINK_REF) {

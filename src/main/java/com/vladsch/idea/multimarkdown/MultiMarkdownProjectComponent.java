@@ -32,6 +32,8 @@ import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.startup.StartupManager;
 import com.intellij.openapi.vfs.*;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
+import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
+import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
 import com.vladsch.idea.multimarkdown.util.*;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NonNls;
@@ -69,9 +71,31 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
     private final ListenerNotifier<ProjectFileListListener> projectFileListNotifier = new ListenerNotifier<ProjectFileListListener>(this);
 
     private Project project;
+    private boolean hadGithubLinks = MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue();
+    protected MultiMarkdownGlobalSettingsListener globalSettingsListener;
+    protected int refactoringReason;
+
+    public int getRefactoringReason() {
+        return refactoringReason;
+    }
+
+    public void setRefactoringReason(int refactoringReason) {
+        this.refactoringReason = refactoringReason;
+    }
 
     public MultiMarkdownProjectComponent(final Project project) {
         this.project = project;
+
+        // Listen to settings changes
+        MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
+            public void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings) {
+                if (hadGithubLinks != newSettings.githubWikiLinks.getValue()) {
+                    // need to reparse everything
+                    hadGithubLinks = newSettings.githubWikiLinks.getValue();
+                    updateHighlighters();
+                }
+            }
+        });
     }
 
     private ThreadLocal<ThreadSafeMirrorCache<FileReferenceList>> loadMarkdownFilesList() {
@@ -136,11 +160,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
             projectComponent.mirrorFileList.remove();
         }
 
-        @Override
-        public void afterCacheUpdate(Object... params) {
-            // all threads have updated lists, invalidate references to files and restart parsing to the links are updated for validity
-
-            // we just schedule a later run in the dispatch thread
+        protected void reparseMarkdown() {
             ApplicationManager.getApplication().invokeLater(new Runnable() {
                 @Override
                 public void run() {
@@ -159,6 +179,14 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
                     }
                 }
             });
+        }
+
+        @Override
+        public void afterCacheUpdate(Object... params) {
+            // all threads have updated lists, invalidate references to files and restart parsing to the links are updated for validity
+
+            // we just schedule a later run in the dispatch thread
+            reparseMarkdown();
         }
 
         public void updateCache(final ThreadSafeMainCache.CacheUpdater<FileReferenceList> notifyWhenDone, final Object... params) {

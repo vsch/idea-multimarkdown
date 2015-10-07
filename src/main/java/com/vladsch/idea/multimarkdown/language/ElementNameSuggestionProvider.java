@@ -103,7 +103,7 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
             // always activate spelling suggestions for renaming wiki page refs
             SuggestionList suggestionList = new SuggestionList(element.getProject());
 
-            suggestionList.add(((MultiMarkdownWikiPageRef) element).getName());
+            //suggestionList.add(FilePathInfo.linkRefNoAnchor(((MultiMarkdownWikiPageRef) element).getName()));
 
             MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(element.getProject());
             MultiMarkdownFile markdownFile = (MultiMarkdownFile) element.getContainingFile();
@@ -136,16 +136,15 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
         MultiMarkdownWikiPageRef wikiPageRef = (MultiMarkdownWikiPageRef) MultiMarkdownPsiImplUtil.findChildByType(parent, MultiMarkdownTypes.WIKI_LINK_REF);
         MultiMarkdownWikiPageTitle wikiPageTitle = (MultiMarkdownWikiPageTitle) MultiMarkdownPsiImplUtil.findChildByType(parent, MultiMarkdownTypes.WIKI_LINK_TITLE);
 
-        String originalText = null;
+        SuggestionList originalList = new SuggestionList(parent.getProject());
 
         if (wikiPageTitle != null) {
             String text = wikiPageTitle.getName();
             if (text != null) {
                 text = text.replace("IntellijIdeaRulezzz ", "").trim();
                 if (!text.isEmpty()) {
-                    originalText = text;
-                    suggestionList.add(FilePathInfo.linkRefNoAnchor(text));
-                    suggestionList.add(text);
+                    originalList.add(text);
+                    suggestionList.add(originalList);
                 }
             }
         }
@@ -155,6 +154,33 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
             if (text != null) {
                 FilePathInfo pathInfo = new FilePathInfo(text);
                 text = pathInfo.getFileName();
+
+                if (!FilePathInfo.linkRefAnchor(text).isEmpty()) {
+                    originalList.add(FilePathInfo.linkRefNoAnchor(text));
+                    originalList.add(FilePathInfo.linkRefNoAnchor(text) + ": " + FilePathInfo.linkRefAnchorNoHash(text));
+
+                    SuggestionList anchoredList = new SuggestionList(originalList.getProject())
+                            .add(FilePathInfo.linkRefNoAnchor(text));
+
+                    SuggestionList anchorList = new SuggestionList(originalList.getProject())
+                            .add(FilePathInfo.linkRefAnchorNoHash(text));
+
+                    anchoredList.add(anchoredList.sequenceFixers(SuggestCleanSpacedWords, SuggestCapSpacedWords));
+                    anchorList.add(anchorList.sequenceFixers(SuggestCleanSpacedWords, SuggestCapSpacedWords));
+
+                    SuggestionList suggestions = new SuggestionList(originalList.getProject()).add(": ");
+
+                    suggestions = suggestions.wrapPermuteFixedAligned(anchoredList, anchorList, SuggestCleanSpacedWords, SuggestCapSpacedWords);
+
+                    originalList.add(suggestions);
+
+                    //if (anchoredList.size() == 1 || anchorList.size() == 1) {
+                    //    originalList.add(anchorList.prefixPermute(anchoredList.suffix(": ")));
+                    //} else {
+                    //    originalList.add(anchorList.prefixAlign(anchoredList.suffix(": ")));
+                    //}
+                }
+
                 suggestionList.add(FilePathInfo.linkRefNoAnchor(text));
                 suggestionList.add(text);
 
@@ -165,17 +191,15 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
             }
         }
 
-        if (suggestionList.size() > 0) {
-            suggestionList = suggestionList
-                    .add(suggestionList.chainFixers(SuggestCleanSpacedWords, SuggestSpelling))
-                    .sequenceFixers(
-                            SuggestCleanSpacedWords, SuggestCapSpacedWords, SuggestLowerSpacedWords
-                            //, SuggestCleanDashedWords, SuggestCapDashedWords
-                            //, SuggestCleanSplicedWords, SuggestCapSplicedWords
-                    )
-                    .add(originalText)
-            ;
-        }
+        suggestionList = originalList
+                .add(suggestionList.chainFixers(SuggestCleanSpacedWords, SuggestSpelling)
+                        , suggestionList.sequenceFixers(
+                                SuggestCleanSpacedWords, SuggestCapSpacedWords, SuggestLowerSpacedWords
+                                //, SuggestCleanDashedWords, SuggestCapDashedWords
+                                //, SuggestCleanSplicedWords, SuggestCapSplicedWords
+                        )
+                )
+        ;
 
         return suggestionList;
     }

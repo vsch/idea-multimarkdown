@@ -51,6 +51,11 @@ public class Suggestion {
     protected final String text;
     protected final HashMap<String, Param> params = new HashMap<String, Param>();
 
+    @Override
+    public String toString() {
+        return text;
+    }
+
     public Param[] paramsArray() {
         Collection<Param> values = params.values();
         return values.toArray(new Param[values.size()]);
