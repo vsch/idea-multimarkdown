@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 public class MultiMarkdownFileTypeFactory extends FileTypeFactory {
     final static public String DEFAULT_EXTENSION = "md";
 
-    final static private String[] EXTENSIONS = {DEFAULT_EXTENSION, "mkd", "markdown"};
+    final static public String[] EXTENSIONS = {DEFAULT_EXTENSION, "mkd", "markdown"};
 
     static public String[] getExtensions() {
         return EXTENSIONS;

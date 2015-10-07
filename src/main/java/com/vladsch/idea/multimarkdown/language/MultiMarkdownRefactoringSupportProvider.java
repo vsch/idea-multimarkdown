@@ -22,12 +22,22 @@ package com.vladsch.idea.multimarkdown.language;
 
 import com.intellij.lang.refactoring.RefactoringSupportProvider;
 import com.intellij.psi.PsiElement;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
+import org.jetbrains.annotations.NotNull;
 
 public class MultiMarkdownRefactoringSupportProvider extends RefactoringSupportProvider {
     @Override
-    public boolean isMemberInplaceRenameAvailable(PsiElement element, PsiElement context) {
-        return false && element instanceof MultiMarkdownWikiPageRef;
+    public boolean isAvailable(@NotNull PsiElement context) {
+        return true; //context instanceof MultiMarkdownNamedElement && ((MultiMarkdownNamedElement) context).isAvailable(context);
+    }
+
+    @Override
+    public boolean isInplaceRenameAvailable(@NotNull PsiElement element, PsiElement context) {
+        return element instanceof MultiMarkdownNamedElement && ((MultiMarkdownNamedElement) element).isInplaceRenameAvailable(context);
+    }
+
+    @Override
+    public boolean isMemberInplaceRenameAvailable(@NotNull PsiElement element, PsiElement context) {
+        return element instanceof MultiMarkdownNamedElement && ((MultiMarkdownNamedElement) element).isMemberInplaceRenameAvailable(context);
     }
 }

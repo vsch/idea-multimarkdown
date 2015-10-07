@@ -23,19 +23,19 @@ package com.vladsch.idea.multimarkdown.language;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.*;
 import com.intellij.util.ProcessingContext;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import org.jetbrains.annotations.NotNull;
 
 public class MultiMarkdownReferenceContributor extends PsiReferenceContributor {
     @Override
     public void registerReferenceProviders(@NotNull PsiReferenceRegistrar registrar) {
-        registrar.registerReferenceProvider(PlatformPatterns.psiElement(MultiMarkdownWikiPageRef.class),
+        registrar.registerReferenceProvider(PlatformPatterns.psiElement(MultiMarkdownNamedElement.class),
                 new PsiReferenceProvider() {
                     @NotNull
                     @Override
                     public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
-                        if (element instanceof MultiMarkdownWikiPageRef && ((MultiMarkdownWikiPageRef) element).getName() != null) {
-                            return new PsiReference[] { new MultiMarkdownReference((MultiMarkdownWikiPageRef) element) };
+                        if (element instanceof MultiMarkdownNamedElement && ((MultiMarkdownNamedElement) element).getName() != null) {
+                            return new PsiReference[] { element.getReference() };
                         }
                         else {
                             return new PsiReference[0];

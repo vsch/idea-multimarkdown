@@ -37,6 +37,10 @@ public class MultiMarkdownParser implements PsiParser {
             PsiBuilder.Marker wikiPageRef = builder.mark();
             builder.advanceLexer();
             wikiPageRef.done(WIKI_LINK_REF);
+        } else if (root == WIKI_LINK_TITLE) {
+            PsiBuilder.Marker wikiPageRef = builder.mark();
+            builder.advanceLexer();
+            wikiPageRef.done(WIKI_LINK_TITLE);
         } else {
             parseRoot(root, builder);
         }
@@ -53,8 +57,7 @@ public class MultiMarkdownParser implements PsiParser {
                 PsiBuilder.Marker tokenMarker = builder.mark();
                 builder.advanceLexer();
                 tokenMarker.done(COMMENT);
-            } else if (builder.getTokenType() == WIKI_LINK_OPEN) {
-                parseWikiLink(builder);
+            } else if (parseWikiLink(builder)) {
             } else {
                 builder.advanceLexer();
             }
@@ -70,16 +73,30 @@ public class MultiMarkdownParser implements PsiParser {
         PsiBuilder.Marker wikiLinkMarker = builder.mark();
         builder.advanceLexer();
 
+        // creole syntax ref then title, github syntax either ref or title comes first
         if (builder.getTokenType() == WIKI_LINK_REF) {
-            PsiBuilder.Marker wikiPageRef = builder.mark();
+            PsiBuilder.Marker marker = builder.mark();
             builder.advanceLexer();
-            wikiPageRef.done(WIKI_LINK_REF);
+            marker.done(WIKI_LINK_REF);
+        }
+
+        if (builder.getTokenType() == WIKI_LINK_TITLE) {
+            PsiBuilder.Marker marker = builder.mark();
+            builder.advanceLexer();
+            marker.done(WIKI_LINK_TITLE);
         }
 
         if (builder.getTokenType() == WIKI_LINK_SEPARATOR) {
             builder.advanceLexer();
-            if (builder.getTokenType() == WIKI_LINK_TEXT) {
+            if (builder.getTokenType() == WIKI_LINK_REF) {
+                PsiBuilder.Marker marker = builder.mark();
                 builder.advanceLexer();
+                marker.done(WIKI_LINK_REF);
+            }
+            if (builder.getTokenType() == WIKI_LINK_TITLE) {
+                PsiBuilder.Marker marker = builder.mark();
+                builder.advanceLexer();
+                marker.done(WIKI_LINK_TITLE);
             }
         }
 
@@ -97,7 +114,6 @@ public class MultiMarkdownParser implements PsiParser {
      *
      * @param root    the type of the root element in the AST tree.
      * @param builder the builder which is used to retrieve the original file tokens and build the AST tree.
-     *
      * @return the root of the resulting AST tree.
      */
     @NotNull

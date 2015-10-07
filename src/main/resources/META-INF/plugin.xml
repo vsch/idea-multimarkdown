@@ -37,19 +37,30 @@
 
       <p><b>For all feedback requiring a reply please use the <a color="#30A0D8" href="https://github.com/vsch/idea-multimarkdown/issues"><u>MultiMarkdown GitHub Issues</u></a> page.</b></p>
 
-      <table>
-        <tr><td><a href="http://flattr.com/thing/4603764/vschidea-multimarkdown-on-GitHub" title="Donate monthly to vsch using Flattr"><img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/flattr-tips.png" border="0" width="43" height="53" alt="Donate monthly to vsch using Flattr" /></a>&nbsp;&nbsp;<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NR7DAGTC8CXLU" title="Donate once-off to vsch using Paypal"><img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/paypal-tips.png" border="0" width="43" height="53" alt="Donate once-off to vsch using Paypal" /></a></td>
-          <td><b>If you like my work then please feel free to tip me.<br>I will view it as a show of appreciation and as a reward for my effort.</b></td>
-        </tr>
-      </table>
-
       <p><b>Documentation: <a color="#30A0D8" href="https://github.com/vsch/idea-multimarkdown/wiki"><u>MultiMarkdown GitHub Wiki page.</u></a></b></p>
     </div>
     ]]></description>
 
-  <version>1.1.11</version>
+  <version>1.1.12</version>
   <idea-version since-build="133.1711"/>
   <change-notes><![CDATA[
+    <ul><h3><b>1.1.12 - Bug Fixes &amp; Optimizations.</b></h3>
+      <li>Fix url's with spaces showing up as unresolved.</li>
+      <li>Fix resolution of file links that are followed by a hash. For now they just resolve to the file not to any anchor link in the file</li>
+      <li>Add resolution of file links without an extension to markdown files.</li>
+      <li>Fix HTML preview and text tabs to update only if they are visible instead of always.</li>
+      <li>Fix intermittent loss of scroll position in the JavaFX HTML preview window. WebView issue.</li>
+      <li>Fix intermittent null pointer exception on project close. Issue: #38.</li>
+      <li>Fix Wiki Links with anchor references were not properly generated.</li>
+      <li>Change completely refactored refactoring code.</li>
+      <li>Change link references without file extension will attempt to match markdown files first.</li>
+      <li>Fix exception starting to edit an empty file or when the file becomes empty after an edit.</li>
+      <li>Add wiki link text refactoring, completion, inspections.</li>
+      <li>Add quick fixes that rename files now do project wide refactoring on related links.</li>
+      <li>Add quick fixes that change a link target because it is unresolved now do refactor rename for links that have the same text in the file.</li>
+      <li>Add option in settings for GitHub wiki link syntax [[Link text|Link address]], vs Creole syntax: [[Link address|Link text]].</li>
+      <li>Add inspection and quick fix when wiki link text and address are reversed, link text is redundant, or link text is also a resovable page..</li>
+    </ul>
     <ul><h3><b>1.1.11 - Bug Fixes.</b></h3>
       <li>Fix intermittent project is disposed assertion failure on closing app.</li>
       <li>Change removed old code trying to resolve a link to a Java Class file. Php storm was generating class def not found exception. Also caused issue #33</li>
@@ -352,13 +363,14 @@
     <lang.refactoringSupport language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownRefactoringSupportProvider"/>
     <lang.syntaxHighlighterFactory key="MultiMarkdown" language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.highlighter.MultiMarkdownSyntaxHighlighterFactory"/>
     <langCodeStyleSettingsProvider implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownLanguageCodeStyleSettingsProvider"/>
-    <!--<psi.referenceContributor implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownReferenceContributor"/>-->
+    <psi.referenceContributor implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownReferenceContributor"/>
     <spellchecker.support language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.spellchecking.MultiMarkdownSpellcheckingStrategy"/>
     <todoIndexer filetype="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.todo.MultiMarkdownTodoIndexer"/>
-    <lang.elementManipulator forClass="com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef" implementationClass="com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownWikiPageRefManipulator"/>
+    <lang.elementManipulator forClass="com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef" implementationClass="com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownNamedElementManipulator"/>
     <fileIconProvider implementation="com.vladsch.idea.multimarkdown.MultiMarkdownFileIconProvider"/>
     <referencesSearch implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownReferenceSearch"/>
     <codeInsight.lineMarkerProvider language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownLineMarkerProvider"/>
     <nameSuggestionProvider implementation="com.vladsch.idea.multimarkdown.language.ElementNameSuggestionProvider"/>
+    <!--<renameHandler implementation="com.vladsch.idea.multimarkdown.language.TestRenameHandler"/>-->
   </extensions>
 </idea-plugin>

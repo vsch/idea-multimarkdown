@@ -35,12 +35,18 @@ import com.intellij.openapi.vfs.VirtualFileSystem;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
+import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.*;
+
+import static com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent.INCLUDE_SELF;
+import static com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent.MARKDOWN_FILE;
 
 /**
  * Static utilities for resolving resources paths.
@@ -91,22 +97,26 @@ public class MultiMarkdownPathResolver {
      * @return VirtualFile or null
      */
     public static VirtualFile resolveClassReference(@NotNull final Project project, @NotNull final String target) {
-        //if (!DumbService.isDumb(project)) {
-        //    return ApplicationManager.getApplication().runReadAction(new Computable<VirtualFile>() {
-        //        @Override
-        //        public VirtualFile compute() {
-        //            try {
-        //                final PsiClass classpathResource = JavaPsiFacade.getInstance(project).findClass(target, GlobalSearchScope.projectScope(project));
-        //                if (classpathResource != null) {
-        //                    return classpathResource.getContainingFile().getVirtualFile();
-        //                }
-        //            } catch (Throwable ignored) {
-        //
-        //            }
-        //            return null;
-        //        }
-        //    });
-        //}
+        try {
+            if (!DumbService.isDumb(project)) {
+                return ApplicationManager.getApplication().runReadAction(new Computable<VirtualFile>() {
+                    @Override
+                    public VirtualFile compute() {
+                        try {
+                            final PsiClass classpathResource = JavaPsiFacade.getInstance(project).findClass(target, GlobalSearchScope.projectScope(project));
+                            if (classpathResource != null) {
+                                return classpathResource.getContainingFile().getVirtualFile();
+                            }
+                        } catch (NoClassDefFoundError ignored) {
+                            // API might not be available on all IntelliJ platform IDEs
+                        }
+                        return null;
+                    }
+                });
+            }
+        } catch (NoClassDefFoundError ignored) {
+
+        }
         return null;
     }
 
@@ -120,16 +130,7 @@ public class MultiMarkdownPathResolver {
 
     public static boolean isWikiDocument(@NotNull final Document document) {
         VirtualFile file = FileDocumentManager.getInstance().getFile(document);
-        return isWikiFile(file);
-    }
-
-    public static boolean isWikiFile(@NotNull final VirtualFile file) {
-        VirtualFile parent = file;
-        while (parent != null) {
-            parent = parent.getParent();
-            if (parent != null && parent.getCanonicalPath().endsWith(".wiki")) return true;
-        }
-        return false;
+        return file != null && new FilePathInfo(file).isWikiPage();
     }
 
     public static Object resolveLink(@NotNull final Project project, @NotNull final Document document, @NotNull final String hrefEnc, final boolean openFile, final boolean focusEditor, final boolean searchForOpen) {
@@ -139,7 +140,15 @@ public class MultiMarkdownPathResolver {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+
+        int posHash;
+        String hash = "";
+        if ((posHash = hrefDec.indexOf('#')) > 0) {
+            hash = hrefDec.substring(posHash + 1);
+            hrefDec = hrefDec.substring(0, posHash);
+        }
         final String href = hrefDec;
+        final String hashSuffix = hash;
 
         if (!href.startsWith("http://") && !href.startsWith("ftp://") && !href.startsWith("https://") && !href.startsWith("mailto:")) {
             final Object[] foundFile = { null };
@@ -157,23 +166,33 @@ public class MultiMarkdownPathResolver {
                         }
                     }
 
+                    if (virtualTarget == null) {
+                        // if the file has no extension, and a Markdown file exists in the project that has the same
+                        FilePathInfo hrefPathInfo = new FilePathInfo(href);
+                        if (!hrefPathInfo.hasExt()) {
+                            VirtualFile inFile = FileDocumentManager.getInstance().getFile(document);
+                            if (inFile != null) {
+                                MultiMarkdownFile[] list = MultiMarkdownPlugin.getProjectComponent(project).getFileReferenceList().query()
+                                        .matchLinkRefNoExt(href, inFile, project)
+                                        .includeSource()
+                                        .markdownFiles();
+
+                                if (list.length == 1) {
+                                    virtualTarget = list[0].getVirtualFile();
+                                }
+                            }
+                        }
+                    }
+
                     // relative path then we can open it.
                     if (virtualTarget == null || !virtualTarget.exists()) {
                         virtualTarget = resolveRelativePath(document, href);
                     }
 
-                    if (virtualTarget == null) {
-                        // TODO: if the path ends in # then strip off the # and tryit without it
-                        // TODO: if the file has no extension, and a Markdown file exists in the project that has the same
-                    }
-
-                    try {
-                        if (virtualTarget == null) { // Okay, try as if the link target is a class reference
-                            virtualTarget = resolveClassReference(project, href);
-                        }
-                    } catch (NoClassDefFoundError silent) {
-                        // API might not be available on all IntelliJ platform IDEs
-                    }
+                    // TODO: add a configuration option for resolving optionally to java classes
+                    //if (virtualTarget == null) { // Okay, try as if the link target is a class reference
+                    //    virtualTarget = resolveClassReference(project, href);
+                    //}
 
                     foundFile[0] = virtualTarget;
                     if (foundFile[0] != null && openFile) {
@@ -181,6 +200,11 @@ public class MultiMarkdownPathResolver {
                             @Override
                             public void run() {
                                 FileEditorManager.getInstance(project).openFile((VirtualFile) foundFile[0], focusEditor, searchForOpen);
+
+                                if (hashSuffix.length() > 0) {
+                                    // TODO: see if we can resolve the #hashSuffix in the file
+                                    //logger.info("got hash suffixed href: " + href + "#" + hashSuffix);
+                                }
                             }
                         });
                     }
@@ -193,7 +217,7 @@ public class MultiMarkdownPathResolver {
         } else {
             if (Desktop.isDesktopSupported()) {
                 try {
-                    Object foundFile = new URI(href);
+                    Object foundFile = new URI(hrefEnc);
                     if (openFile) Desktop.getDesktop().browse((URI) foundFile);
                     return foundFile;
                 } catch (URISyntaxException ex) {

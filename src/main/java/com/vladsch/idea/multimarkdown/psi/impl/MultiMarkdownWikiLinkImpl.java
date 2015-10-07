@@ -23,15 +23,21 @@ package com.vladsch.idea.multimarkdown.psi.impl;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
-import com.sun.istack.internal.Nullable;
-import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownVisitor;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
+import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
+import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class MultiMarkdownWikiLinkImpl extends ASTWrapperPsiElement implements MultiMarkdownWikiLink {
     public static String getElementText(@NotNull String name, @Nullable String title) {
-        return "[[" + name + (title != null && title.length() > 0 && !name.equals(title) ? "|" + title : "") + "]]";
+        boolean githubWikiLinks = MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue();
+
+        return  githubWikiLinks
+                ? "[[" + (title != null && title.length() > 0 && !name.equals(title) ? title + "|" : "") + name + "]]"
+                : "[[" + name + (title != null && title.length() > 0 && !name.equals(title) ? "|" + title : "") + "]]"
+                ;
     }
 
     public MultiMarkdownWikiLinkImpl(ASTNode node) {
@@ -49,7 +55,7 @@ public class MultiMarkdownWikiLinkImpl extends ASTWrapperPsiElement implements M
     }
 
     @Override
-    public String getFileName() {
-        return MultiMarkdownProjectComponent.wikiPageRefToFileName(getName(), true);
+    public String getPageRef() {
+        return MultiMarkdownPsiImplUtil.getPageRef(this);
     }
 }

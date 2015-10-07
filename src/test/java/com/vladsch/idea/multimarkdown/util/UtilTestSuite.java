@@ -26,8 +26,11 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         TestAsWikiRef.class,
+        TestEndsWithWikiRef.class,
         TestFilePathInfo.class,
-        TestFileReferenceLink.class
+        TestFileReferenceLink.class,
+        TestFileReferenceLinkUnresolvedReasons.class,
+        TestFileReferenceList.class
 })
-public class TestSuite {
+public class UtilTestSuite {
 }

@@ -31,16 +31,6 @@ import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownWikiLinkImpl;
 
 public class MultiMarkdownElementFactory {
 
-    public static MultiMarkdownProperty createProperty(Project project, String name, String value) {
-        final MultiMarkdownFile file = createFile(project, name + " = " + value);
-        return (MultiMarkdownProperty) file.getFirstChild();
-    }
-
-    public static MultiMarkdownProperty createProperty(Project project, String name) {
-        final MultiMarkdownFile file = createFile(project, name);
-        return (MultiMarkdownProperty) file.getFirstChild();
-    }
-
     public static MultiMarkdownWikiLink createWikiLink(Project project, String name) {
         return createWikiLink(project, name, null);
     }

@@ -101,6 +101,6 @@ public class MultiMarkdownHighlighterColors {
     public static final TextAttributesKey VERBATIM_ATTR_KEY = createKey("VERBATIM");
     public static final TextAttributesKey WIKI_LINK_ATTR_KEY = createKey("WIKI_LINK");
     public static final TextAttributesKey WIKI_LINK_REF_ATTR_KEY = createKey("WIKI_LINK_REF", WIKI_LINK_ATTR_KEY);
-    public static final TextAttributesKey WIKI_LINK_TEXT_ATTR_KEY = createKey("WIKI_LINK_TEXT", WIKI_LINK_ATTR_KEY);
+    public static final TextAttributesKey WIKI_LINK_TEXT_ATTR_KEY = createKey("WIKI_LINK_TITLE", WIKI_LINK_ATTR_KEY);
     public static final TextAttributesKey WIKI_LINK_SEPARATOR_ATTR_KEY = createKey("WIKI_LINK_SEPARATOR", WIKI_LINK_ATTR_KEY);
 }

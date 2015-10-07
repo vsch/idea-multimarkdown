@@ -32,8 +32,12 @@ public class MultiMarkdownFxLinkRenderer extends MultiMarkdownLinkRenderer {
         super();
     }
 
-    public MultiMarkdownFxLinkRenderer(Project project, Document document, String missingTargetClass) {
-        super(project, document, missingTargetClass);
+    public MultiMarkdownFxLinkRenderer(int options) {
+        super(options);
+    }
+
+    public MultiMarkdownFxLinkRenderer(Project project, Document document, String missingTargetClass, int options) {
+        super(project, document, missingTargetClass, options);
     }
 
     @Override public Rendering render(AnchorLinkNode node) {

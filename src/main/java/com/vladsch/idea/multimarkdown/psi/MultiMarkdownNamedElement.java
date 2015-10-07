@@ -23,8 +23,40 @@
  */
 package com.vladsch.idea.multimarkdown.psi;
 
+import com.intellij.navigation.ItemPresentation;
+import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNameIdentifierOwner;
+import com.intellij.util.IncorrectOperationException;
+import com.vladsch.idea.multimarkdown.language.MultiMarkdownReference;
+import org.jetbrains.annotations.NotNull;
 
 public interface MultiMarkdownNamedElement extends PsiNameIdentifierOwner {
+    final public static int REASON_FILE_RENAMED = 0;
+    final public static int REASON_FILE_MOVED = 1;
+    final public static int REASON_FILE_HAD_ANCHOR = 2;
     String getDisplayName();
+
+    // this one will only change the name part, not the path part of the link
+    @Override
+    PsiElement setName(@NotNull String newName);
+
+    // this one will preserve the path and only change the name unless fileMoved is true
+    PsiElement setName(@NotNull String newName, int reason);
+
+    @NotNull
+    String getMissingElementNamespace();
+
+    @Override
+    PsiElement getNameIdentifier();
+
+    ItemPresentation getPresentation();
+
+    MultiMarkdownNamedElement handleContentChange(@NotNull TextRange range, String newContent) throws IncorrectOperationException;
+    MultiMarkdownNamedElement handleContentChange(String newContent) throws IncorrectOperationException;
+
+    MultiMarkdownReference createReference(@NotNull TextRange textRange);
+
+    boolean isInplaceRenameAvailable(PsiElement context);
+    boolean isMemberInplaceRenameAvailable(PsiElement context);
 }

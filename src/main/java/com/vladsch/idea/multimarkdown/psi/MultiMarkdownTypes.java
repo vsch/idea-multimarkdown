@@ -29,10 +29,9 @@ import com.intellij.psi.tree.IElementType;
 import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownCommentImpl;
 import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownWikiLinkImpl;
 import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownWikiPageRefImpl;
+import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownWikiPageTitleImpl;
 
 public interface MultiMarkdownTypes {
-
-    IElementType PROPERTY = new MultiMarkdownElementType("PROPERTY");
 
     IElementType CRLF = new MultiMarkdownTokenType("CRLF");
     IElementType KEY = new MultiMarkdownTokenType("KEY");
@@ -106,7 +105,7 @@ public interface MultiMarkdownTypes {
     IElementType WIKI_LINK_SEPARATOR = new MultiMarkdownTokenType("WIKI_LINK_SEPARATOR");
     IElementType WIKI_LINK_CLOSE = new MultiMarkdownTokenType("WIKI_LINK_CLOSE");
     IElementType WIKI_LINK_REF = new MultiMarkdownTokenType("WIKI_LINK_REF");
-    IElementType WIKI_LINK_TEXT = new MultiMarkdownTokenType("WIKI_LINK_TEXT");
+    IElementType WIKI_LINK_TITLE = new MultiMarkdownTokenType("WIKI_LINK_TITLE");
 
     IElementType COMMENT = new MultiMarkdownElementType("COMMENT");
     IElementType WIKI_LINK = new MultiMarkdownElementType("WIKI_LINK");
@@ -121,6 +120,8 @@ public interface MultiMarkdownTypes {
                 return new MultiMarkdownWikiLinkImpl(node);
             } else if (type == WIKI_LINK_REF) {
                 return new MultiMarkdownWikiPageRefImpl(node);
+            } else if (type == WIKI_LINK_TITLE) {
+                return new MultiMarkdownWikiPageTitleImpl(node);
             }
             throw new AssertionError("Unknown element type: " + type);
         }

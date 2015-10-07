@@ -21,17 +21,15 @@
 package com.vladsch.idea.multimarkdown.language;
 
 import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiPolyVariantReference;
+import com.intellij.psi.PsiReferenceBase;
+import com.intellij.psi.ResolveResult;
+import com.intellij.refactoring.rename.BindablePsiReference;
 import com.intellij.util.IncorrectOperationException;
-import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
-import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
-import com.vladsch.idea.multimarkdown.util.ProjectFileListListener;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -39,13 +37,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent.*;
-
-public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedElement> implements PsiPolyVariantReference {
+public abstract class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedElement> implements PsiPolyVariantReference, BindablePsiReference {
     private static final Logger logger = Logger.getLogger(MultiMarkdownReference.class);
-    private ProjectFileListListener fileListListener;
-    private ResolveResult[] resolveResults;
-    private String resolveResultsName;
+    public static final ResolveResult[] EMPTY_RESULTS = new ResolveResult[0];
+    protected final MultiMarkdownFile.ReferenceChangeListener fileListListener;
+    protected ResolveResult[] resolveResults;
+    protected String resolveResultsName;
+    protected boolean nameElementChanging = false;
     //private ResolveResult[] incompleteCodeResolveResults;
 
     @Override
@@ -54,17 +52,39 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
         return "Reference for " + myElement.toString();
     }
 
-    public MultiMarkdownReference(@NotNull MultiMarkdownNamedElement element) {
-        super(element);
+    public MultiMarkdownReference(@NotNull MultiMarkdownNamedElement element, @NotNull TextRange textRange) {
+        super(element, textRange);
 
-        if (element instanceof MultiMarkdownWikiPageRef) {
-            MultiMarkdownPlugin.getProjectComponent(element.getProject()).addListener(fileListListener = new ProjectFileListListener() {
-                @Override
-                public void projectListsUpdated() {
-                    invalidateResolveResults();
-                }
-            });
-        }
+        fileListListener = new MultiMarkdownFile.ReferenceChangeListener() {
+            //@Override
+            //public void namedElementChanged(@NotNull MultiMarkdownNamedElement newElement, @NotNull MultiMarkdownNamedElement oldElement) {
+            //    boolean nameChanging = false;
+            //
+            //    synchronized (this) {
+            //        nameChanging = nameElementChanging;
+            //        if (!nameChanging) {
+            //            nameElementChanging = true;
+            //        }
+            //    }
+            //
+            //    if (!nameChanging) {
+            //        // only if our element is not the one being renamed
+            //        if (myElement != oldElement && myElement != newElement) {
+            //            logger.info("referenced element name changed " + " for " + myElement);
+            //            bindToElement(newElement);
+            //        }
+            //
+            //        synchronized (this) {
+            //            nameElementChanging = false;
+            //        }
+            //    }
+            //}
+
+            @Override
+            public void projectListsUpdated() {
+                invalidateResolveResults();
+            }
+        };
     }
 
     public void invalidateResolveResults() {
@@ -73,17 +93,8 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
         //logger.info("invalidateResolveResults on " + this.toString());
         resolveResults = null;
         resolveResultsName = null;
+        // logger.info("Invalidating resolve results" + " for " + myElement);
     }
-
-    //@Override
-    //public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-    //    return getManipulator().handleContentChange(myElement, getRangeInElement(), newElementName);
-    //}
-    //
-    //@Override
-    //public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
-    //    throw new IncorrectOperationException("Rebind cannot be performed for " + getClass());
-    //}
 
     @NotNull
     @Override
@@ -94,46 +105,51 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
             if (resolveResultsName == null) resolveResultsName = "";
             setRangeInElement(new TextRange(0, resolveResultsName.length()));
 
-            resolveResults = getMultiResolveResults(myElement, false);
-
-            ((MultiMarkdownFile) myElement.getContainingFile()).removeListener(fileListListener);
-
-            // register for changes in missingLinkElement list if we have one not a file
-            for (ResolveResult result : resolveResults) {
-                if (result.getElement() instanceof MultiMarkdownFile) {
-                    continue;
-                }
-
-                // have a missing link reference, register for missing link changes
-                ((MultiMarkdownFile) myElement.getContainingFile()).addListener(fileListListener);
-                break;
-            }
-
-            //logger.info((isMissingReferece ? "Missing Reference" : "Reference") + " for " + myElement.toString() + ": " + resolveResults[0].getElement().toString());
+            resolveResults = getMultiResolveResults(incompleteCode);
         }
         return resolveResults;
     }
 
-
     public void refreshName() {
         // check if our resolveResult is stale because the node has been edited and its name has changed
         if (resolveResults != null && (resolveResultsName == null || !resolveResultsName.equals(getElement().getName()))) {
-            resolveResults = null;
-            resolveResultsName = null;
+            // logger.info("refreshing name " + myElement);
+            invalidateResolveResults();
         }
     }
 
     @Override
     public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
         // we will handle this by renaming the element to point to the new location
-        if (myElement instanceof MultiMarkdownWikiPageRef && element instanceof PsiFile) {
-            VirtualFile file = ((PsiFile) element).getVirtualFile();
-            String wikiPageRef = getWikiPageRef(file, myElement.getContainingFile().getVirtualFile(), WANT_WIKI_REF | ALLOW_INACCESSIBLE_WIKI_REF);
+        if (element.getClass() == myElement.getClass()) {
+            String name = ((MultiMarkdownNamedElement) element).getName();
             // this will create a new reference and loose connection to this one
-            return ((MultiMarkdownWikiPageRef) myElement).setName(wikiPageRef, true);
+            // logger.info("rebinding " + myElement + " to " + element);
+            if (name != null) return myElement.setName(name, MultiMarkdownNamedElement.REASON_FILE_MOVED);
         }
         throw new IncorrectOperationException("Rebind cannot be performed for " + getClass());
     }
+
+    //public void notifyNamedElementChange(MultiMarkdownNamedElement oldElement, MultiMarkdownNamedElement newElement) {
+    //    String name = newElement.getName();
+    //    if (name != null) {
+    //        MultiMarkdownFile containingFile;
+    //        if (!(oldElement.getContainingFile() instanceof MultiMarkdownFile)) {
+    //            if (!(newElement.getContainingFile() instanceof MultiMarkdownFile)) {
+    //                int tmp = 0;
+    //                containingFile = null;
+    //            } else {
+    //                containingFile = (MultiMarkdownFile) newElement.getContainingFile();
+    //            }
+    //        } else {
+    //            containingFile = (MultiMarkdownFile) oldElement.getContainingFile();
+    //        }
+    //
+    //        if (containingFile != null) {
+    //            containingFile.setMissingLinkElement(oldElement, newElement, newElement.getMissingElementNamespace() + name);
+    //        }
+    //    }
+    //}
 
     @Nullable
     @Override
@@ -160,59 +176,6 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
         return variants.toArray();
     }
 
-    public static
     @NotNull
-    ResolveResult[] getMultiResolveResults(MultiMarkdownNamedElement myElement, boolean incompleteCode) {
-        Project project = myElement.getProject();
-        MultiMarkdownFile containingFile = (MultiMarkdownFile) myElement.getContainingFile();
-        int searchSettings = 0;
-        String linkRef = null;
-
-        if (myElement instanceof MultiMarkdownWikiPageRef) {
-            searchSettings = WANT_WIKI_REF | WIKI_REF;
-            searchSettings |= containingFile.isWikiPage() ? WIKIPAGE_FILE : MARKDOWN_FILE;
-
-            linkRef = ((MultiMarkdownWikiPageRef) myElement).getName();
-        }
-        //} else if (myElement instanceof MultiMarkdownWikiPageRef) {
-        //    searchSettings = MultiMarkdownProjectComponent.WANT_WIKI_REF | MultiMarkdownProjectComponent.WIKIPAGE_FILE;
-
-        if (linkRef != null) {
-            List<ResolveResult> results = new ArrayList<ResolveResult>();
-            MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
-            if ((searchSettings & (MARKDOWN_FILE_ONLY | WIKIPAGE_FILE)) != 0) {
-                final List<MultiMarkdownFile> files = projectComponent.findRefLinkMarkdownFiles(linkRef, containingFile, searchSettings);
-
-                if (files != null) {
-                    for (MultiMarkdownFile file : files) {
-                        if (isLinkRefToFile(linkRef, file.getVirtualFile(), containingFile.getVirtualFile(), searchSettings)) {
-                            results.add(new PsiElementResolveResult(file));
-                        }
-                    }
-                }
-            }
-            else {
-                final List<VirtualFile> files = projectComponent.findRefLinkFiles(linkRef, containingFile.getVirtualFile(), searchSettings);
-
-                if (files != null) {
-                    for (VirtualFile file : files) {
-                        if (isLinkRefToFile(linkRef, file, containingFile.getVirtualFile(), searchSettings)) {
-                            PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
-                            if (psiFile != null) {
-                                results.add(new PsiElementResolveResult(psiFile));
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (results.size() == 0) {
-                // this one is missing, see if there is a missing ref registered already
-                results.add(new PsiElementResolveResult(((MultiMarkdownFile) myElement.getContainingFile()).getMissingLinkElement(myElement, linkRef)));
-            }
-            return results.toArray(new ResolveResult[results.size()]);
-        }
-        return new ResolveResult[0];
-    }
-
+    public abstract ResolveResult[] getMultiResolveResults(boolean incompleteCode);
 }

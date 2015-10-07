@@ -20,24 +20,7 @@
  */
 package com.vladsch.idea.multimarkdown.psi;
 
-import com.intellij.navigation.ItemPresentation;
-import com.intellij.psi.PsiElement;
-
 public interface MultiMarkdownWikiPageRef extends MultiMarkdownNamedElement {
     String getFileName();
-
-    @Override
-    String getName();
-
-    @Override
-    // this one will only change the name part, not the path part of the link
-    PsiElement setName(String newName);
-
-    // this one will preserve the path and only change the name unless fileMoved is true
-    PsiElement setName(String newName, boolean fileMoved);
-
-    @Override
-    PsiElement getNameIdentifier();
-
-    ItemPresentation getPresentation();
+    String getFileNameWithAnchor();
 }

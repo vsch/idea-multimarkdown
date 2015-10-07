@@ -25,19 +25,23 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
+import com.intellij.refactoring.JavaRefactoringFactory;
+import com.intellij.refactoring.JavaRenameRefactoring;
+import com.intellij.usageView.UsageInfo;
 import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
+import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
+import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
+import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
 
 class RenameWikiPageQuickFix extends BaseIntentionAction {
     private String name;
-    private VirtualFile targetFile;
+    private PsiFile targetFile;
 
-    RenameWikiPageQuickFix(VirtualFile targetFile, String name) {
+    RenameWikiPageQuickFix(PsiFile targetFile, String name) {
         this.name = name;
         this.targetFile = targetFile;
     }
@@ -45,7 +49,8 @@ class RenameWikiPageQuickFix extends BaseIntentionAction {
     @NotNull
     @Override
     public String getText() {
-        return MultiMarkdownBundle.message("quickfix.wikilink.rename-page", name);
+        FilePathInfo filePathInfo = new FilePathInfo(targetFile.getVirtualFile().getPath());
+        return MultiMarkdownBundle.message("quickfix.wikilink.rename-page", filePathInfo.getFileNameWithAnchor(), name);
     }
 
     @NotNull
@@ -69,16 +74,17 @@ class RenameWikiPageQuickFix extends BaseIntentionAction {
         });
     }
 
-    private void renameWikiFile(final Project project, final VirtualFile file, final String fileName) {
+    private void renameWikiFile(final Project project, final PsiFile psiFile, final String fileName) {
         new WriteCommandAction.Simple(project) {
             @Override
             public void run() {
-                //FileEditorManager.getInstance().openFile();
-                try {
-                    file.rename(this, name);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                JavaRefactoringFactory factory = JavaRefactoringFactory.getInstance(project);
+                JavaRenameRefactoring rename = factory.createRename(psiFile, fileName);
+                UsageInfo[] usages = rename.findUsages();
+                MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
+                projectComponent.setRefactoringReason(MultiMarkdownNamedElement.REASON_FILE_RENAMED);
+                rename.doRefactoring(usages); // modified 'usages' array
+                projectComponent.setRefactoringReason(0);
             }
         }.execute();
     }

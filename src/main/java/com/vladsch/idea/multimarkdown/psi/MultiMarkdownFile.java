@@ -35,8 +35,12 @@ import com.intellij.psi.FileViewProvider;
 import com.intellij.refactoring.listeners.RefactoringEventData;
 import com.intellij.refactoring.listeners.RefactoringEventListener;
 import com.intellij.util.messages.MessageBusConnection;
-import com.vladsch.idea.multimarkdown.*;
+import com.vladsch.idea.multimarkdown.MultiMarkdownFileType;
+import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
+import com.vladsch.idea.multimarkdown.MultiMarkdownLanguage;
+import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
+import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import com.vladsch.idea.multimarkdown.util.ListenerNotifier;
 import com.vladsch.idea.multimarkdown.util.ListenerNotifyDelegate;
 import com.vladsch.idea.multimarkdown.util.ProjectFileListListener;
@@ -52,9 +56,10 @@ import java.util.regex.Pattern;
 import static com.intellij.openapi.editor.ex.EditorSettingsExternalizable.STRIP_TRAILING_SPACES_NONE;
 import static com.intellij.openapi.editor.ex.EditorSettingsExternalizable.STRIP_TRAILING_SPACES_WHOLE;
 
-public class MultiMarkdownFile extends PsiFileBase implements ListenerNotifyDelegate<ProjectFileListListener> {
+public class MultiMarkdownFile extends PsiFileBase implements ListenerNotifyDelegate<MultiMarkdownFile.ReferenceChangeListener> {
     private static final Logger logger = Logger.getLogger(MultiMarkdownFile.class);
     private static final int MISSING_REFS_UPDATED = 1;
+    private static final int MISSING_REFS_CHANGED = 2;
 
     private HashMap<String, MultiMarkdownNamedElement> missingLinks = new HashMap<String, MultiMarkdownNamedElement>();
     private final ProjectFileListListener projectFileListener = new ProjectFileListListener() {
@@ -64,16 +69,29 @@ public class MultiMarkdownFile extends PsiFileBase implements ListenerNotifyDele
         }
     };
 
-    private final ListenerNotifier<ProjectFileListListener> notifier = new ListenerNotifier<ProjectFileListListener>(this);
+    public interface ReferenceChangeListener extends ProjectFileListListener {
+    }
+
+    private final ListenerNotifier<ReferenceChangeListener> notifier = new ListenerNotifier<ReferenceChangeListener>(this);
 
     // notification on addListener
     @Override
-    public void notify(ProjectFileListListener listener, Object... params) {
-        if (params.length == 1) {
+    public void notify(ReferenceChangeListener listener, Object... params) {
+        if (params.length > 0) {
             switch ((Integer) params[0]) {
                 case MISSING_REFS_UPDATED:
+                    // logger.info("notify missing refs updated listeners" + this.hashCode());
                     listener.projectListsUpdated();
                     break;
+
+                //case MISSING_REFS_CHANGED:
+                //    if (params.length > 2) {
+                //        MultiMarkdownNamedElement oldElement = (MultiMarkdownNamedElement) params[1];
+                //        MultiMarkdownNamedElement newElement = (MultiMarkdownNamedElement) params[2];
+                //        logger.info("notify missing refs changed from " + oldElement + " to " + newElement);
+                //        listener.namedElementChanged(oldElement, newElement);
+                //    }
+                //    break;
 
                 default:
                     break;
@@ -81,11 +99,11 @@ public class MultiMarkdownFile extends PsiFileBase implements ListenerNotifyDele
         }
     }
 
-    public void addListener(@NotNull ProjectFileListListener listener) {
+    public void addListener(@NotNull ReferenceChangeListener listener) {
         notifier.addListener(listener);
     }
 
-    public void removeListener(@NotNull ProjectFileListListener listener) {
+    public void removeListener(@NotNull ReferenceChangeListener listener) {
         notifier.removeListener(listener);
     }
 
@@ -97,25 +115,25 @@ public class MultiMarkdownFile extends PsiFileBase implements ListenerNotifyDele
         connect.subscribe(RefactoringEventListener.REFACTORING_EVENT_TOPIC, new RefactoringEventListener() {
             @Override
             public void refactoringStarted(@NotNull String refactoringId, @Nullable RefactoringEventData beforeData) {
-                //logger.info("refactoring started on " + this.hashCode());
-
+                // logger.info("refactoring started on " + this.hashCode());
             }
 
             @Override
             public void refactoringDone(@NotNull String refactoringId, @Nullable RefactoringEventData afterData) {
-                //logger.info("refactoring done on " + this.hashCode());
+                // logger.info("refactoring done on " + this.hashCode());
                 invalidateAfterRefactoring();
+                //logger.info("refactoring done on " + this.hashCode());
             }
 
             @Override
             public void conflictsDetected(@NotNull String refactoringId, @NotNull RefactoringEventData conflictsData) {
-                //logger.info("refactoring conflicts on " + this.hashCode());
+                // logger.info("refactoring conflicts on " + this.hashCode());
                 invalidateAfterRefactoring();
             }
 
             @Override
             public void undoRefactoring(@NotNull String refactoringId) {
-                //logger.info("refactoring undo on " + this.hashCode());
+                // logger.info("refactoring undo on " + this.hashCode());
                 invalidateAfterRefactoring();
             }
         });
@@ -123,20 +141,23 @@ public class MultiMarkdownFile extends PsiFileBase implements ListenerNotifyDele
 
     protected void invalidateAfterRefactoring() {
         if (!missingLinks.isEmpty()) {
+            // logger.info("invalidating after refactoring " + this.hashCode());
             invalidateMissingLinkElements();
             notifier.notifyListeners(MISSING_REFS_UPDATED);
             DaemonCodeAnalyzer.getInstance(getProject()).restart(this);
         }
     }
 
-    public MultiMarkdownNamedElement getMissingLinkElement(MultiMarkdownNamedElement element, String name) {
+    public MultiMarkdownNamedElement getMissingLinkElement(final MultiMarkdownNamedElement element, String name) {
         // see if this element used to be the one that was referenced by other missing links
         for (String key : missingLinks.keySet()) {
             if (!key.equals(name) && missingLinks.get(key) == element) {
                 // yes it has, we need to invalidate an rebuild
+                // logger.info("element " + element + " was root");
                 ApplicationManager.getApplication().invokeLater(new Runnable() {
                     @Override
                     public void run() {
+                        // logger.info("invalidating references due to root change " + element);
                         invalidateAfterRefactoring();
                     }
                 });
@@ -148,17 +169,23 @@ public class MultiMarkdownFile extends PsiFileBase implements ListenerNotifyDele
 
         if (!missingLinks.containsKey(name)) {
             // see if this one had its name edited, so we can remove it from the list and reset
+            //logger.info("adding missing element " + element);
             missingLinks.put(name, element);
+            return element;
         }
+
+        //logger.info("returning missing ref for element " + element + " to " + missingLinks.get(name));
         return missingLinks.get(name);
     }
 
-    //public void missingLinkElementNameChange(MultiMarkdownNamedElement oldElement, String oldName, MultiMarkdownNamedElement newElement, String newName) {
-    //    if (missingLinks.containsKey(oldName) && missingLinks.get(oldName).equals(oldElement)) {
-    //        missingLinks.remove(oldName, oldElement);
-    //        missingLinks.put(newName, newElement);
-    //        notifier.notifyListeners(MISSING_REFS_UPDATED);
-    //        DaemonCodeAnalyzer.getInstance(getProject()).restart(this);
+    //public void setMissingLinkElement(final MultiMarkdownNamedElement oldElement, final MultiMarkdownNamedElement newElement, String name) {
+    //    // see if this element used to be the one that was referenced by other missing links
+    //    for (String key : missingLinks.keySet()) {
+    //        if ((!key.equals(name) || oldElement != newElement) && (missingLinks.get(key) == oldElement || missingLinks.get(key) == newElement)) {
+    //            // yes it has, we need to invalidate an rebuild
+    //            logger.info("set missing element" + oldElement + " to " + newElement);
+    //            notifier.notifyListeners(MISSING_REFS_CHANGED, oldElement, newElement);
+    //        }
     //    }
     //}
 
@@ -180,48 +207,7 @@ public class MultiMarkdownFile extends PsiFileBase implements ListenerNotifyDele
     }
 
     public boolean isWikiPage() {
-        return MultiMarkdownProjectComponent.isWikiPage(getVirtualFile());
-    }
-
-    public String getWikiPageRef() {
-        return MultiMarkdownProjectComponent.fileNameToWikiRef(getVirtualFile().getNameWithoutExtension());
-    }
-
-    //public static @Nullable String getWikiLinkFileName(VirtualFile toFile, VirtualFile inFile, boolean addExtension) {
-    //    return makeFileName(getWikiPageRef(toFile, inFile), addExtension);
-    //}
-    //
-    //public @Nullable String getWikiLinkFileName(VirtualFile inFile, boolean addExtension) {
-    //    return MultiMarkdownFile.getWikiLinkFileName(getVirtualFile(), inFile, addExtension);
-    //}
-    //
-    //public @Nullable String getWikiLinkFileName(VirtualFile inFile) {
-    //    return MultiMarkdownFile.getWikiLinkFileName(getVirtualFile(), inFile, true);
-    //}
-    //
-
-    public
-    @Nullable
-    String getWikiPageRef(@Nullable VirtualFile inFile) {
-        return getWikiPageRef(inFile, 0);
-    }
-
-    public
-    @Nullable
-    String getWikiPageRef(@Nullable VirtualFile inFile, int searchFlags) {
-        return MultiMarkdownProjectComponent.getWikiPageRef(getVirtualFile(), inFile, searchFlags);
-    }
-
-    public
-    @Nullable
-    String getLinkRef(@Nullable VirtualFile inFile) {
-        return getWikiPageRef(inFile, 0);
-    }
-
-    public
-    @Nullable
-    String getLinkRef(@Nullable VirtualFile inFile, int searchFlags) {
-        return MultiMarkdownProjectComponent.getLinkRef(getVirtualFile(), inFile, searchFlags);
+        return new FilePathInfo(getVirtualFile()).isWikiPage();
     }
 
     @Override

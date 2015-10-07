@@ -21,27 +21,29 @@
 package com.vladsch.idea.multimarkdown.psi.impl;
 
 import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.ElementManipulator;
 import com.intellij.util.IncorrectOperationException;
-import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
+import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import org.jetbrains.annotations.NotNull;
 
-public class MultiMarkdownWikiPageRefManipulator implements ElementManipulator<MultiMarkdownWikiPageRef> {
-    @Override public MultiMarkdownWikiPageRef handleContentChange(@NotNull MultiMarkdownWikiPageRef element, @NotNull TextRange range, String newContent) throws IncorrectOperationException {
+public class MultiMarkdownNamedElementManipulator implements ElementManipulator<MultiMarkdownNamedElement> {
+    @Override
+    public MultiMarkdownNamedElement handleContentChange(@NotNull MultiMarkdownNamedElement element, @NotNull TextRange range, String newContent) throws IncorrectOperationException {
         if (!range.equalsToRange(0, element.getTextLength())) {
             throw new IncorrectOperationException();
         }
         return handleContentChange(element, newContent);
     }
 
-    @Override public MultiMarkdownWikiPageRef handleContentChange(@NotNull MultiMarkdownWikiPageRef element, String newContent) throws IncorrectOperationException {
-        String newName = MultiMarkdownProjectComponent.fileNameToWikiRef(FileUtil.getNameWithoutExtension(newContent));
-        return (MultiMarkdownWikiPageRef) element.setName(newName, false);
+    @Override
+    public MultiMarkdownNamedElement handleContentChange(@NotNull MultiMarkdownNamedElement element, String newContent) throws IncorrectOperationException {
+        return (MultiMarkdownNamedElement) element.handleContentChange(newContent);
     }
 
-    @NotNull @Override public TextRange getRangeInElement(@NotNull MultiMarkdownWikiPageRef element) {
+    @NotNull
+    @Override
+    public TextRange getRangeInElement(@NotNull MultiMarkdownNamedElement element) {
         return new TextRange(0, element.getTextLength());
     }
 }

@@ -27,60 +27,18 @@ import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.tree.IElementType;
 import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
 import com.vladsch.idea.multimarkdown.psi.*;
+import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class MultiMarkdownPsiImplUtil {
-    public static String getKey(MultiMarkdownProperty element) {
-        ASTNode keyNode = element.getNode().findChildByType(MultiMarkdownTypes.KEY);
-        if (keyNode != null) {
-            // IMPORTANT: Convert embedded escaped spaces to Markdown spaces
-            return keyNode.getText().replaceAll("\\\\ ", " ");
-        } else {
-            return null;
-        }
-    }
-
-    public static String getValue(MultiMarkdownProperty element) {
-        ASTNode valueNode = element.getNode().findChildByType(MultiMarkdownTypes.VALUE);
-        if (valueNode != null) {
-            return valueNode.getText();
-        } else {
-            return null;
-        }
-    }
-
-    public static String getName(MultiMarkdownProperty element) {
-        return getKey(element);
-    }
-
-    public static PsiElement setName(MultiMarkdownProperty element, String newName) {
-        ASTNode keyNode = element.getNode().findChildByType(MultiMarkdownTypes.KEY);
-        if (keyNode != null) {
-            MultiMarkdownProperty property = MultiMarkdownElementFactory.createProperty(element.getProject(), newName);
-            ASTNode newKeyNode = property.getFirstChild().getNode();
-            element.getNode().replaceChild(keyNode, newKeyNode);
-        }
-        return element;
-    }
-
-    public static PsiElement getNameIdentifier(MultiMarkdownProperty element) {
-        ASTNode keyNode = element.getNode().findChildByType(MultiMarkdownTypes.KEY);
-        if (keyNode != null) {
-            return keyNode.getPsi();
-        } else {
-            return null;
-        }
-    }
-
     public static String getPageRef(MultiMarkdownWikiLink element) {
         ASTNode pageRefNode = element.getNode().findChildByType(MultiMarkdownTypes.WIKI_LINK_REF);
         if (pageRefNode != null) {
@@ -91,7 +49,7 @@ public class MultiMarkdownPsiImplUtil {
     }
 
     public static String getPageTitle(MultiMarkdownWikiLink element) {
-        ASTNode pageTitleNode = element.getNode().findChildByType(MultiMarkdownTypes.WIKI_LINK_TEXT);
+        ASTNode pageTitleNode = element.getNode().findChildByType(MultiMarkdownTypes.WIKI_LINK_TITLE);
         if (pageTitleNode != null) {
             return pageTitleNode.getText();
         } else {
@@ -103,47 +61,95 @@ public class MultiMarkdownPsiImplUtil {
         return getPageRef(element);
     }
 
-    public static MultiMarkdownNamedElement setName(MultiMarkdownWikiPageRef element, String newName, boolean fileMoved) {
+    @Nullable
+    public static PsiElement findChildByType(@NotNull PsiElement parentElement, @NotNull IElementType childType) {
+        PsiElement childElement = null;
+
+        for (PsiElement child : parentElement.getChildren()) {
+            if (child.getNode().getElementType() == childType) {
+                return child;
+            }
+        }
+        return null;
+    }
+
+    public static MultiMarkdownNamedElement setName(MultiMarkdownWikiPageRef element, String newName, int reason) {
         ASTNode pageRefNode = element.getNode();
         if (pageRefNode != null) {
-            if (!fileMoved && element.getText().contains("/")) {
+            if (reason == 0 && element.getText().contains("/")) {
                 // keep the old path
-                Path p = Paths.get(element.getText()).getParent();
-                String file = p.toString() + "/" + newName;
-                newName = file;
+                String path = new FilePathInfo(element.getText()).getPath();
+                String name = new FilePathInfo(newName).getFileName();
+                newName = path + name;
             }
-            MultiMarkdownWikiLink property = MultiMarkdownElementFactory.createWikiLink(element.getProject(), newName);
-            ASTNode newKeyNode = property.getNode().findChildByType(MultiMarkdownTypes.WIKI_LINK_REF);
-            element.getParent().getNode().replaceChild(pageRefNode, newKeyNode);
+
+            // preserve anchor on file move
+            if (reason == 1 && !FilePathInfo.linkRefAnchor(element.getText()).isEmpty()) {
+                newName = FilePathInfo.linkRefNoAnchor(newName) + FilePathInfo.linkRefAnchor(element.getText());
+            }
+
+            MultiMarkdownWikiLink wikiLink = MultiMarkdownElementFactory.createWikiLink(element.getProject(), newName);
+            MultiMarkdownWikiPageRef newElement = (MultiMarkdownWikiPageRef) findChildByType(wikiLink, MultiMarkdownTypes.WIKI_LINK_REF);
+            if (newElement != null) {
+                element.replace(newElement);
+                return newElement;
+            }
         }
+        return element;
+    }
+
+    public static MultiMarkdownNamedElement setName(MultiMarkdownWikiPageTitle element, String newName, int reason) {
+        ASTNode pageTitleNode = element.getNode();
+        ASTNode pageRefNode = element.getParent().getNode().findChildByType(MultiMarkdownTypes.WIKI_LINK_REF);
+        if (pageTitleNode != null && pageRefNode != null) {
+            MultiMarkdownWikiLink wikiLink = MultiMarkdownElementFactory.createWikiLink(element.getProject(), pageRefNode.getText(), newName);
+            MultiMarkdownWikiPageTitle newElement = (MultiMarkdownWikiPageTitle) findChildByType(wikiLink, MultiMarkdownTypes.WIKI_LINK_TITLE);
+            if (newElement != null) {
+                element.replace(newElement);
+                return newElement;
+            }
+        }
+        return element;
+    }
+
+    public static MultiMarkdownWikiLink swapWikiLinkRefTitle(MultiMarkdownWikiLink element) {
+        ASTNode pageTitleNode = element.getNode().findChildByType(MultiMarkdownTypes.WIKI_LINK_TITLE);
+        ASTNode pageRefNode = element.getNode().findChildByType(MultiMarkdownTypes.WIKI_LINK_REF);
+
+        if (pageRefNode != null && pageTitleNode != null) {
+            MultiMarkdownWikiLink wikiLink = MultiMarkdownElementFactory.createWikiLink(element.getProject(), pageTitleNode.getText(), pageRefNode.getText());
+            element.replace(wikiLink);
+        }
+
+        return element;
+    }
+
+    public static MultiMarkdownWikiLink deleteWikiLinkTitle(MultiMarkdownWikiLink element) {
+        ASTNode pageTitleNode = element.getNode().findChildByType(MultiMarkdownTypes.WIKI_LINK_TITLE);
+        ASTNode pageRefNode = element.getNode().findChildByType(MultiMarkdownTypes.WIKI_LINK_REF);
+
+        if (pageRefNode != null && pageTitleNode != null) {
+            MultiMarkdownWikiLink wikiLink = MultiMarkdownElementFactory.createWikiLink(element.getProject(), pageRefNode.getText());
+            element.replace(wikiLink);
+        }
+
+        return element;
+    }
+
+    public static MultiMarkdownWikiLink deleteWikiLinkRef(MultiMarkdownWikiLink element) {
+        ASTNode pageTitleNode = element.getNode().findChildByType(MultiMarkdownTypes.WIKI_LINK_TITLE);
+        ASTNode pageRefNode = element.getNode().findChildByType(MultiMarkdownTypes.WIKI_LINK_REF);
+
+        if (pageRefNode != null && pageTitleNode != null) {
+            MultiMarkdownWikiLink wikiLink = MultiMarkdownElementFactory.createWikiLink(element.getProject(), pageTitleNode.getText());
+            element.replace(wikiLink);
+        }
+
         return element;
     }
 
     public static Document getElementDocument(PsiElement element) {
         return FileDocumentManager.getInstance().getDocument(element.getContainingFile().getVirtualFile());
-    }
-
-    public static ItemPresentation getPresentation(final MultiMarkdownProperty element) {
-        return new ItemPresentation() {
-            @Nullable
-            @Override
-            public String getPresentableText() {
-                return element.getKey();
-            }
-
-            @Nullable
-            @Override
-            public String getLocationString() {
-                PsiFile containingFile = element.getContainingFile();
-                return containingFile == null ? null : containingFile.getName();
-            }
-
-            @Nullable
-            @Override
-            public Icon getIcon(boolean unused) {
-                return MultiMarkdownIcons.FILE;
-            }
-        };
     }
 
     public static ItemPresentation getPresentation(final MultiMarkdownNamedElement element) {

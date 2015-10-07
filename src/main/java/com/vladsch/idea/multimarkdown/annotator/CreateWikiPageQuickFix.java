@@ -29,9 +29,11 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
+import com.vladsch.idea.multimarkdown.util.FileReference;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 class CreateWikiPageQuickFix extends BaseIntentionAction {
     private String name;
@@ -72,11 +74,17 @@ class CreateWikiPageQuickFix extends BaseIntentionAction {
             @Override
             public void run() {
                 //FileEditorManager.getInstance().openFile();
-                VirtualFile parentDir = file.getVirtualFile().getParent();
-                try {
-                    VirtualFile quickFixFile = parentDir.createChildData(this.getClass().toString(), fileName);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                FileReference thisFile = new FileReference(file);
+                FileReference newFile = new FileReference(thisFile.getPath() + fileName, project);
+                VirtualFile parentDir = newFile.getVirtualParent();
+                if (parentDir != null) {
+                    try {
+                        VirtualFile quickFixFile = parentDir.createChildData(this.getClass().toString(), newFile.getFileName());
+                        // TODO: create a file with the default content from file templates for wiki files or markdown files
+                        //quickFixFile.setBinaryContent("\n".getBytes(Charset.forName("UTF-8")));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }.execute();

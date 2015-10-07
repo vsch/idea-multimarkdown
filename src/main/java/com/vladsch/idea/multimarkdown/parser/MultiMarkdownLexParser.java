@@ -70,6 +70,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
 
     protected final Integer pegdownExtensions;
     protected final Integer parsingTimeout;
+    protected boolean githubWikiLinks;
 
     protected void clearParsed() {
         tableRows = 0;
@@ -265,6 +266,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         // here we don't listen to global changes, our flags are fixed
         this.pegdownExtensions = pegdownExtensions;
         this.parsingTimeout = MultiMarkdownGlobalSettings.getInstance().parsingTimeout.getValue();
+
     }
 
     public MultiMarkdownLexParser(int pegdownExtensions, int parsingTimeout) {
@@ -289,6 +291,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
 
     public LexerToken[] getTokenArray() {
         if (tokenArray == null && rootNode != null) {
+            githubWikiLinks = MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue();
             MarkdownASTVisitor visitor = new MarkdownASTVisitor();
             rootNode.accept(visitor);
             ArrayList<LexerToken> lexerTokens = visitor.getTokens();
@@ -607,7 +610,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
             } else if (node instanceof WikiPageRefNode) {
                 addToken(node, MultiMarkdownTypes.WIKI_LINK_REF);
             } else if (node instanceof WikiPageTitleNode) {
-                addToken(node, MultiMarkdownTypes.WIKI_LINK_TEXT);
+                addToken(node, MultiMarkdownTypes.WIKI_LINK_TITLE);
             } else {
                 if (abbreviations.isEmpty()) {
                     addToken(node, MultiMarkdownTypes.TEXT);
@@ -840,9 +843,9 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
 
             if ((pos = text.indexOf("|")) >= 0) {
                 addToken(node.getStartIndex(), node.getStartIndex() + 2, MultiMarkdownTypes.WIKI_LINK_OPEN);
-                addToken(node.getStartIndex() + 2, node.getStartIndex() + 2 + pos, MultiMarkdownTypes.WIKI_LINK_REF);
+                addToken(node.getStartIndex() + 2, node.getStartIndex() + 2 + pos, githubWikiLinks ? MultiMarkdownTypes.WIKI_LINK_TITLE : MultiMarkdownTypes.WIKI_LINK_REF);
                 addToken(node.getStartIndex() + 2 + pos, node.getStartIndex() + 2 + pos + 1, MultiMarkdownTypes.WIKI_LINK_SEPARATOR);
-                addToken(node.getStartIndex() + 2 + pos + 1, node.getEndIndex() - 2, MultiMarkdownTypes.WIKI_LINK_TEXT);
+                addToken(node.getStartIndex() + 2 + pos + 1, node.getEndIndex() - 2, githubWikiLinks ? MultiMarkdownTypes.WIKI_LINK_REF : MultiMarkdownTypes.WIKI_LINK_TITLE);
                 addToken(node.getEndIndex() - 2, node.getEndIndex(), MultiMarkdownTypes.WIKI_LINK_CLOSE);
             } else {
                 addToken(node.getStartIndex(), node.getStartIndex() + 2, MultiMarkdownTypes.WIKI_LINK_OPEN);

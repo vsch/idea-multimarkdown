@@ -23,11 +23,11 @@ package com.vladsch.idea.multimarkdown.language;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
 import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.ResolveResult;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
-import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 import org.jetbrains.annotations.NotNull;
@@ -35,44 +35,48 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
-
-import static com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent.MARKDOWN_FILE;
-import static com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent.WIKI_REF;
 
 public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvider {
     @Override
     protected void collectNavigationMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
         if (element instanceof MultiMarkdownWikiPageRef) {
-            Project project = element.getProject();
-            List<MultiMarkdownFile> markdownFiles = MultiMarkdownPlugin.getProjectComponent(project)
-                    .findRefLinkMarkdownFiles(((MultiMarkdownWikiPageRef) element).getName(), element.getContainingFile().getVirtualFile(), WIKI_REF | MARKDOWN_FILE);
-            if (markdownFiles != null && markdownFiles.size() > 0) {
-                MultiMarkdownFile file = markdownFiles.get(0);
-                ArrayList<MultiMarkdownFile> markdownTargets = new ArrayList<MultiMarkdownFile>();
+            PsiReference psiReference = element.getReference();
+            //MultiMarkdownFile[] markdownFiles = MultiMarkdownPlugin.getProjectComponent(element.getProject()).getFileReferenceList().query()
+            //        .matchWikiRef((MultiMarkdownWikiPageRef) element)
+            //        .accessibleWikiPageFiles()
+            //        ;
 
-                Iterator<? super RelatedItemLineMarkerInfo> iterator = result.iterator();
-                boolean skipTarget = false;
-                while (iterator.hasNext()) {
-                    RelatedItemLineMarkerInfo<PsiElement> lineMarkerInfo = (RelatedItemLineMarkerInfo<PsiElement>) iterator.next();
+            ResolveResult[] results = ((MultiMarkdownReferenceWikiPageRef) psiReference) != null ? ((MultiMarkdownReferenceWikiPageRef) psiReference).getMultiResolveResults(false) : null;
+            if (results != null && results.length == 1) {
+                for (ResolveResult resolveResult : results) {
+                    if (resolveResult.getElement() instanceof MultiMarkdownFile) {
+                        MultiMarkdownFile file = (MultiMarkdownFile) resolveResult.getElement();
+                        ArrayList<MultiMarkdownFile> markdownTargets = new ArrayList<MultiMarkdownFile>();
 
-                    PsiElement lineMarkerElement = lineMarkerInfo.getElement();
-                    if (lineMarkerElement instanceof MultiMarkdownWikiPageRef) {
-                        String lineMarkerFileName = ((MultiMarkdownWikiPageRef) lineMarkerElement).getFileName();
-                        String fileName = ((MultiMarkdownWikiPageRef) element).getFileName();
-                        if (lineMarkerFileName.equals(fileName)) {
-                            //skipTarget = true;
-                            break;
-                        }
+                        Iterator<? super RelatedItemLineMarkerInfo> iterator = result.iterator();
+                        //boolean skipTarget = false;
+                        //while (iterator.hasNext()) {
+                        //    RelatedItemLineMarkerInfo<PsiElement> lineMarkerInfo = (RelatedItemLineMarkerInfo<PsiElement>) iterator.next();
+                        //
+                        //    PsiElement lineMarkerElement = lineMarkerInfo.getElement();
+                        //    if (lineMarkerElement instanceof MultiMarkdownWikiPageRef) {
+                        //        String lineMarkerFileName = ((MultiMarkdownWikiPageRef) lineMarkerElement).getFileName();
+                        //        String fileName = ((MultiMarkdownWikiPageRef) element).getFileName();
+                        //        if (lineMarkerFileName.equals(fileName)) {
+                        //            //skipTarget = true;
+                        //            break;
+                        //        }
+                        //    }
+                        //}
+                        //
+                        //if (!skipTarget) {
+                        NavigationGutterIconBuilder<PsiElement> builder =
+                                NavigationGutterIconBuilder.create(file.isWikiPage() ? MultiMarkdownIcons.WIKI : MultiMarkdownIcons.FILE)
+                                        .setTarget(file)
+                                        .setTooltipText(MultiMarkdownBundle.message("linemarker.navigate-to", ((MultiMarkdownWikiPageRef) element).getFileName()));
+                        result.add(builder.createLineMarkerInfo(element));
+                        //}
                     }
-                }
-
-                if (!skipTarget) {
-                    NavigationGutterIconBuilder<PsiElement> builder =
-                            NavigationGutterIconBuilder.create(file.isWikiPage() ? MultiMarkdownIcons.WIKI : MultiMarkdownIcons.FILE)
-                                    .setTarget(file)
-                                    .setTooltipText(MultiMarkdownBundle.message("linemarker.navigate-to", ((MultiMarkdownWikiPageRef) element).getFileName()));
-                    result.add(builder.createLineMarkerInfo(element));
                 }
             }
         }

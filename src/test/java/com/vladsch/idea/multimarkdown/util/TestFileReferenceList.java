@@ -17,26 +17,16 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- *
- * This file is based on the IntelliJ SimplePlugin tutorial
- *
  */
-package com.vladsch.idea.multimarkdown.psi;
+package com.vladsch.idea.multimarkdown.util;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.navigation.ItemPresentation;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
-public interface MultiMarkdownProperty extends MultiMarkdownNamedElement {
-
-    String getKey();
-
-    String getValue();
-
-    String getName();
-
-    PsiElement setName(String newName);
-
-    PsiElement getNameIdentifier();
-
-    ItemPresentation getPresentation();
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+        TestFileReferenceListBuilder.class,
+        TestFileReferenceListQueryMatch.class
+})
+public class TestFileReferenceList {
 }
