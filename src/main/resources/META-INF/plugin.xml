@@ -41,9 +41,12 @@
     </div>
     ]]></description>
 
-  <version>1.1.12</version>
+  <version>1.1.12.1</version>
   <idea-version since-build="133.1711"/>
   <change-notes><![CDATA[
+    <ul><h3><b>1.1.12.1 - Bug Fixes &amp; Optimizations.</b></h3>
+      <li>Fix now scan only project source roots as returned by IDEA.</li>
+    </ul>
     <ul><h3><b>1.1.12 - Bug Fixes &amp; Optimizations.</b></h3>
       <li>Fix url's with spaces showing up as unresolved.</li>
       <li>Fix resolution of file links that are followed by a hash. For now they just resolve to the file not to any anchor link in the file</li>

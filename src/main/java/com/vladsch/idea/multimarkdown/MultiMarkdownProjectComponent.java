@@ -29,6 +29,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootAdapter;
 import com.intellij.openapi.roots.ModuleRootEvent;
 import com.intellij.openapi.roots.ProjectFileIndex;
+import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.startup.StartupManager;
 import com.intellij.openapi.vfs.*;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
@@ -207,34 +208,40 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
                         public void run() {
                             if (project.isDisposed()) return;
 
-                            VirtualFile baseDir = project.getBaseDir();
+                            //VirtualFile baseDir = project.getBaseDir();
                             final int[] scanned = new int[2];
-                            VfsUtilCore.visitChildrenRecursively(baseDir, new VirtualFileVisitor() {
-                                @Override
-                                public boolean visitFile(@NotNull VirtualFile file) {
-                                    if (project.isDisposed()) return false;
+                            VirtualFile[] baseDirs = ProjectRootManager.getInstance(project).getContentSourceRoots();
 
-                                    scanned[0]++;
+                            for (VirtualFile baseDir : baseDirs) {
+                                VfsUtilCore.visitChildrenRecursively(baseDir, new VirtualFileVisitor() {
+                                    @Override
+                                    public boolean visitFile(@NotNull VirtualFile file) {
+                                        if (project.isDisposed()) return false;
 
-                                    // these don't exist in 133.1711
-                                    try {
-                                        // only add the file only if it is part of the project source or under a .wiki parent
-                                        if (projectFileIndex.isExcluded(file) || projectFileIndex.isInLibrarySource(file)) {
-                                            // skip this one
-                                            return false;
+                                        scanned[0]++;
+
+                                        // these don't exist in 133.1711
+                                        try {
+                                            // only add the file only if it is part of the project source or under a .wiki parent
+                                            if (projectFileIndex.isExcluded(file) || projectFileIndex.isInLibrarySource(file)) {
+                                                // skip this one
+                                                return false;
+                                            }
+                                        } catch (NoSuchMethodError ignored) {
                                         }
-                                    } catch (NoSuchMethodError ignored) {
-                                    }
 
-                                    if (projectFileIndex.isInSource(file)) {
-                                        //projectFiles.add(file);
-                                        FileReference fileReference = new FileReference(file, project);
-                                        builder.add(fileReference);
-                                    }
+                                        if (projectFileIndex.isInSource(file)) {
+                                            //projectFiles.add(file);
+                                            FileReference fileReference = new FileReference(file, project);
+                                            builder.add(fileReference);
+                                        }
 
-                                    return super.visitFile(file);
-                                }
-                            });
+                                        return super.visitFile(file);
+                                    }
+                                });
+
+                                if (project.isDisposed()) return;
+                            }
 
                             if (project.isDisposed()) return;
 
