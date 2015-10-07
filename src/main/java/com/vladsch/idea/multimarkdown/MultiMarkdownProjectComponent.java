@@ -39,8 +39,6 @@ import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.Executors;
-
 public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualFileListener, ListenerNotifyDelegate<ProjectFileListListener> {
     private static final Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownProjectComponent.class);
 
@@ -198,7 +196,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
             // run the list update in a separate thread
             if (project.isDisposed()) return;
 
-            Executors.newCachedThreadPool().submit(new Runnable() {
+            new Thread(new Runnable() {
                 @Override
                 public void run() {
                     // run the file gathering in a read action
@@ -218,10 +216,14 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
 
                                     scanned[0]++;
 
-                                    // only add the file only if it is part of the project source or under a .wiki parent
-                                    if (projectFileIndex.isExcluded(file) || projectFileIndex.isInLibrarySource(file)) {
-                                        // skip this one
-                                        return false;
+                                    // these don't exist in 133.1711
+                                    try {
+                                        // only add the file only if it is part of the project source or under a .wiki parent
+                                        if (projectFileIndex.isExcluded(file) || projectFileIndex.isInLibrarySource(file)) {
+                                            // skip this one
+                                            return false;
+                                        }
+                                    } catch (NoSuchMethodError ignored) {
                                     }
 
                                     if (projectFileIndex.isInSource(file)) {
@@ -245,7 +247,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
                         }
                     });
                 }
-            });
+            }).start();
         }
     }
 
