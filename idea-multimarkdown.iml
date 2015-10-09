@@ -10,6 +10,7 @@
       <sourceFolder url="file://$MODULE_DIR$/idea-multimarkdown.wiki" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/src/misc" />
+      <excludeFolder url="file://$MODULE_DIR$/src/test/resources/GitHubIssues" />
     </content>
     <orderEntry type="jdk" jdkName="IntelliJ IDEA Community Edition IC-141.2311.1 jdk 1.8.51" jdkType="IDEA JDK" />
     <orderEntry type="module-library" exported="">

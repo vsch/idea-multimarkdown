@@ -85,7 +85,6 @@ import java.awt.*;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -237,7 +236,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
 
     protected void updateLinkRenderer() {
         int options = MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue() ? MultiMarkdownLinkRenderer.GITHUB_WIKI_LINK_FORMAT : 0;
-        linkRendererModified = new MultiMarkdownFxLinkRenderer(project, document, "absent",options);
+        linkRendererModified = new MultiMarkdownFxLinkRenderer(project, document, "absent", options);
         linkRendererNormal = new MultiMarkdownFxLinkRenderer(options);
     }
 
@@ -264,6 +263,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         // Listen to settings changes
         MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
             public void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings) {
+                if (project.isDisposed()) return;
                 updateEditorTabIsVisible();
                 updateLinkRenderer();
                 delayedHtmlPreviewUpdate(true);
@@ -274,6 +274,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         MultiMarkdownPlugin.getProjectComponent(project).addListener(projectFileListener = new ProjectFileListListener() {
             @Override
             public void projectListsUpdated() {
+                if (project.isDisposed()) return;
                 delayedHtmlPreviewUpdate(false);
             }
         });
@@ -286,6 +287,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
             @Override
             public void exitDumbMode() {
                 // need to re-evaluate class link accessibility
+                if (project.isDisposed()) return;
                 delayedHtmlPreviewUpdate(false);
             }
         });
@@ -314,6 +316,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
+                    if (project.isDisposed()) return;
 
                     webView = new WebView();
                     webEngine = webView.getEngine();
@@ -346,6 +349,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         webEngine.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {
             @Override
             public void changed(ObservableValue<? extends Worker.State> observable, Worker.State oldState, Worker.State newState) {
+                if (project.isDisposed()) return;
                 workerStateChanged(observable, oldState, newState);
             }
         });
@@ -363,6 +367,9 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                 public void handleEvent(org.w3c.dom.events.Event evt) {
                     evt.stopPropagation();
                     evt.preventDefault();
+
+                    if (project.isDisposed()) return;
+
                     Element link = (Element) evt.getCurrentTarget();
                     org.w3c.dom.Document doc = webEngine.getDocument();
                     final String href = link.getAttribute("href");
@@ -513,11 +520,15 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         public void repaint() {
             //logger.info("[" + editor.instance + "] " + "before repaint");
             //jEditorPane.invalidate();
+            if (editor.project.isDisposed()) return;
+
             editor.jfxPanel.repaint();
             //logger.info("[" + editor.instance + "] " + "after repaint");
         }
 
         public void onScroll() {
+            if (editor.project.isDisposed()) return;
+
             JSObject scrollPos = (JSObject) editor.webEngine.executeScript("({ x: window.pageXOffset, y: window.pageYOffset })");
             //logger.info("[" + editor.instance + "] " + "window scrolled to " + scrollPos.getMember("x") + ", " + scrollPos.getMember("y"));
             editor.scrollOffset = "window.scroll(" + scrollPos.getMember("x") + ", " + scrollPos.getMember("y") + ")";
@@ -557,7 +568,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         }
 
         result += "" +
-                "<title>" + escapeHtml(file.getName()) + "</title>\n" +
+                "<title>" + escapeHtml(file != null ? file.getName() : "<null>") + "</title>\n" +
                 "</head>\n" +
                 "<body>\n" +
                 "";
@@ -565,7 +576,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         if (isWikiDocument) {
             result += "" +
                     "<div class=\"wiki-container\">\n" +
-                    "<h1>" + escapeHtml(file.getNameWithoutExtension().replace('-', ' ')) + "</h1>\n" +
+                    "<h1>" + escapeHtml(file != null ? file.getNameWithoutExtension().replace('-', ' ') : "<null>") + "</h1>\n" +
                     "<article class=\"wiki-body\">\n" +
                     "";
         } else {
@@ -574,7 +585,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                     "<div id=\"readme\" class=\"boxed-group\">\n" +
                     "<h3>\n" +
                     "   <span class=\"bookicon octicon-book\"></span>\n" +
-                    "  " + file.getName() + "\n" +
+                    "  " + (file != null ? file.getName() : "<null>") + "\n" +
                     "</h3>\n" +
                     "<article class=\"markdown-body\">\n" +
                     "";
@@ -636,6 +647,8 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
             updateDelayTimer = null;
         }
 
+        if (project.isDisposed()) return;
+
         if (!isEditorTabVisible)
             return;
 
@@ -643,9 +656,13 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         updateDelayTimer.schedule(new TimerTask() {
             @Override
             public void run() {
+                if (project.isDisposed()) return;
+
                 ApplicationManager.getApplication().invokeLater(new Runnable() {
                     @Override
                     public void run() {
+                        if (project.isDisposed()) return;
+
                         previewIsObsolete = true;
 
                         if (fullKit) {
@@ -694,12 +711,18 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     protected void updateRawHtmlText(final String htmlTxt) {
         final DocumentEx myDocument = myTextViewer.getDocument();
 
+        if (project.isDisposed()) return;
+
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
             @Override
             public void run() {
+                if (project.isDisposed()) return;
+
                 CommandProcessor.getInstance().executeCommand(project, new Runnable() {
                     @Override
                     public void run() {
+                        if (project.isDisposed()) return;
+
                         myDocument.replaceString(0, myDocument.getTextLength(), htmlTxt);
                         final CaretModel caretModel = myTextViewer.getCaretModel();
                         if (caretModel.getOffset() >= myDocument.getTextLength()) {
@@ -751,6 +774,8 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
+                                if (project.isDisposed()) return;
+
                                 // TODO: add option to enable/disable keeping scroll position on update
                                 Worker.State state = webEngine.getLoadWorker().getState();
                                 //logger.info("[" + instance + "] " + "State on update " + state);
