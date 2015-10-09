@@ -11,6 +11,8 @@ idea-multimarkdown
 
 #### This plugin is in the process of migrating to a two tier model
 
+[[WikiLink]]
+
 1. Free and open source for the basic functionality as it is present now. I will continue to support it, respond to issues and fix bugs. If you only need the basic functionality of editing and previewing Markdown, then you will not be affected and will continue to enjoy using this plugin with the same level of support you have received thus far.
 
 2. Licensed model with a 30 day trial period which will implement parser based advanced features such as refactoring, find usages, etc. (see issue #12 for the roadmap). After the 30 day trial it will revert to the functionality of the free, open source model. $25 purchase of the license will give you free upgrades and maintenance for one year on the advanced features. I have to commercialize this plugin so that I can devote my full attention to its development. I feel that doing this will benefit both free and licensed versions because I will be able to concentrate my attention on delivering a quality product in the shortest amount of time.
