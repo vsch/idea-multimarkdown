@@ -5,7 +5,7 @@ idea-multimarkdown
 
 **You can download it on the [JebBrains plugin page](https://plugins.jetbrains.com/plugin?pr=&pluginId=7896).**
 
-**For any communications requiring a reply** please use the [GitHub Issues page](../issues) for this plugin. There is no ability to reply to comments left on the [JetBrains plugin comment and rate page](https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896).
+**For any communications requiring a reply** please use the [GitHub Issues page](../../issues) for this plugin. There is no ability to reply to comments left on the [JetBrains plugin comment and rate page](https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896).
 
 **[Wiki Pages](https://github.com/vsch/idea-multimarkdown/wiki) added** with instructions on [how to include your GitHub wiki in the IntelliJ IDE](https://github.com/vsch/idea-multimarkdown/wiki/Adding-GitHub-Wiki-To-Your-IntelliJ-Project) so you can work on the wiki in the IDE and use the plugin for syntax highlighting and preview. Makes adding images and manipulating the wiki a lot easier.
 
