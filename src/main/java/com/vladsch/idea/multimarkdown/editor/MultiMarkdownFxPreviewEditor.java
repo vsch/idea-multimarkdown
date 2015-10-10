@@ -448,7 +448,8 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                         //VirtualFile file = FileDocumentManager.getInstance().getFile(document);
                         //VirtualFile parent = file == null ? null : file.getParent();
                         //final VirtualFile localImage = parent == null ? null : parent.findFileByRelativePath(src);
-                        final VirtualFile localImage = MultiMarkdownPathResolver.resolveRelativePath(document, src);
+                        //final VirtualFile localImage = MultiMarkdownPathResolver.resolveRelativePath(document, src);
+                        final VirtualFile localImage = (VirtualFile) MultiMarkdownPathResolver.resolveLink(project, document, src);
                         try {
                             if (localImage != null && localImage.exists()) {
                                 imgNode.setSrc(String.valueOf(new File(localImage.getPath()).toURI().toURL()));

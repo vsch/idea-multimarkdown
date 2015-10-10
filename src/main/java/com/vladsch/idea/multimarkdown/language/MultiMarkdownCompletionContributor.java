@@ -39,6 +39,7 @@ import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
 import com.vladsch.idea.multimarkdown.spellchecking.SuggestionList;
 import com.vladsch.idea.multimarkdown.util.FileReference;
 import com.vladsch.idea.multimarkdown.util.FileReferenceLink;
+import com.vladsch.idea.multimarkdown.util.FileReferenceLinkGitHubRules;
 import com.vladsch.idea.multimarkdown.util.FileReferenceList;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -86,15 +87,16 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
                                 if (fileProject != null) {
                                     MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(fileProject);
                                     FileReferenceList wikiFileReferenceList = projectComponent.getFileReferenceList().query()
+                                            .gitHubWikiRules()
                                             .inSource(virtualFile, fileProject)
                                             .spaceDashEqual()
                                             .allWikiPageRefs();
 
-                                    for (FileReference fileReference : wikiFileReferenceList.getFileReferences()) {
+                                    for (FileReference fileReference : wikiFileReferenceList.get()) {
                                         addWikiPageRefCompletion(resultSet, (FileReferenceLink) fileReference, true);
                                     }
 
-                                    for (FileReference fileReference : wikiFileReferenceList.getFileReferences()) {
+                                    for (FileReference fileReference : wikiFileReferenceList.get()) {
                                         addWikiPageRefCompletion(resultSet, (FileReferenceLink) fileReference, false);
                                     }
                                 }
@@ -106,19 +108,20 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
     }
 
     protected void addWikiPageRefCompletion(@NotNull CompletionResultSet resultSet, FileReferenceLink fileReference, boolean accessible) {
-        String wikiPageRef = fileReference.getWikiPageRef();
-        boolean isWikiPageAccessible = fileReference.isWikiAccessible();
+        FileReferenceLinkGitHubRules fileReferenceGitHub = (FileReferenceLinkGitHubRules) fileReference;
+        String wikiPageRef = fileReferenceGitHub.getWikiPageRef();
+        boolean isWikiPageAccessible = fileReferenceGitHub.isWikiAccessible();
 
         if (accessible == isWikiPageAccessible) {
-            if (isWikiPageAccessible || fileReference.getUpDirectories() == 0) {
+            if (isWikiPageAccessible || fileReferenceGitHub.getUpDirectories() == 0) {
                 //String wikiPageShortRef = toFile.getWikiPageRef(null, WANT_WIKI_REF | ALLOW_INACCESSIBLE_WIKI_REF);
-                String linkRefFileName = fileReference.getLinkRef();
+                String linkRefFileName = fileReferenceGitHub.getLinkRef();
 
                 //logger.info("Adding " + wikiPageRef + " to completions");
                 LookupElementBuilder lookupElementBuilder = LookupElementBuilder.create(wikiPageRef)
                         //.withLookupString(wikiPageShortRef)
                         .withCaseSensitivity(true)
-                        .withIcon(accessible && fileReference.isWikiPage() ? MultiMarkdownIcons.WIKI : MultiMarkdownIcons.FILE)
+                        .withIcon(accessible && fileReferenceGitHub.isWikiPage() ? MultiMarkdownIcons.WIKI : MultiMarkdownIcons.FILE)
                         .withTypeText(linkRefFileName, false);
 
                 if (!isWikiPageAccessible) {

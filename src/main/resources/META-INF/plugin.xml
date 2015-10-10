@@ -41,12 +41,17 @@
     </div>
     ]]></description>
 
-  <version>1.1.12.2</version>
+  <version>1.1.12.4</version>
   <idea-version since-build="133.1711"/>
   <change-notes><![CDATA[
     <ul><h3><b>1.1.13 - Bug Fixes &amp; Optimizations.</b></h3>
       <li>Fix now scan only project source roots as returned by IDEA.</li>
       <li>Fix #47, closing a project before preview update delay timer is triggered caused project already disposed assertion failure.</li>
+      <li>Change GitHub syntax wiki links are now default and not changeable.</li>
+      <li>Change to support GitHub wiki's not handling subdirectories in wiki links and resolving always on unique file name.</li>
+      <li>Add annotation error when GitHub wiki links have /. </li>
+      <li>Add annotation error when wiki links are used in non-wiki pages. GitHub only supports wiki links in wiki pages. </li>
+      <li>Add annotations to detect conflicts in GitHub wiki page names.</li>
     </ul>
     <ul><h3><b>1.1.12 - Bug Fixes &amp; Optimizations.</b></h3>
       <li>Fix url's with spaces showing up as unresolved.</li>

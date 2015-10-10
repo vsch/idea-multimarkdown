@@ -128,7 +128,7 @@ public class TestFileReferenceListBuilder extends FileReferenceListTest {
 
     @Test
     public void test_07_NewListFromBuilder() throws Exception {
-        assertArrayEquals(fileReferences, fileReferenceList.getFileReferences());
+        assertArrayEquals(fileReferences, fileReferenceList.get());
         assertArrayEquals(extensions, fileReferenceList.getExtensions());
         assertArrayEquals(extFileReferenceIndices, fileReferenceList.getExtensionFileRefIndices());
     }
@@ -139,7 +139,7 @@ public class TestFileReferenceListBuilder extends FileReferenceListTest {
                 .wantAllFiles()
                 .all();
 
-        assertArrayEquals(fileReferences, fileReferenceList.getFileReferences());
+        assertArrayEquals(fileReferences, fileReferenceList.get());
         assertArrayEquals(extensions, fileReferenceList.getExtensions());
         assertArrayEquals(extFileReferenceIndices, fileReferenceList.getExtensionFileRefIndices());
     }

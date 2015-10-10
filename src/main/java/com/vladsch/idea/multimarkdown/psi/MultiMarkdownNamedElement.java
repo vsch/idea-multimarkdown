@@ -32,9 +32,17 @@ import com.vladsch.idea.multimarkdown.language.MultiMarkdownReference;
 import org.jetbrains.annotations.NotNull;
 
 public interface MultiMarkdownNamedElement extends PsiNameIdentifierOwner {
-    final public static int REASON_FILE_RENAMED = 0;
-    final public static int REASON_FILE_MOVED = 1;
-    final public static int REASON_FILE_HAD_ANCHOR = 2;
+    int RENAME_NO_FLAGS = -1;
+
+    int RENAME_KEEP_NOTHING = 0;
+    int RENAME_KEEP_PATH = 1;
+    int RENAME_KEEP_ANCHOR = 2;
+    int RENAME_KEEP_NAME = 4;
+    int RENAME_KEEP_TITLE = 8;
+
+    int REASON_FILE_RENAMED = RENAME_KEEP_PATH | RENAME_KEEP_ANCHOR;
+    int REASON_FILE_MOVED = RENAME_KEEP_ANCHOR;
+
     String getDisplayName();
 
     // this one will only change the name part, not the path part of the link

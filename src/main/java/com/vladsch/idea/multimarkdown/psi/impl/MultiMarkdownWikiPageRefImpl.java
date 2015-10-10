@@ -73,7 +73,7 @@ public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl 
     public MultiMarkdownNamedElement handleContentChange(String newContent) throws IncorrectOperationException {
         String newName = new FilePathInfo(newContent).getFileNameNoExtAsWikiRef();
         MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(getProject());
-        return (MultiMarkdownNamedElement) setName(newName, projectComponent.getRefactoringReason() != 0 ? projectComponent.getRefactoringReason() : REASON_FILE_RENAMED);
+        return (MultiMarkdownNamedElement) setName(newName, projectComponent.getRefactoringRenameFlags() == RENAME_NO_FLAGS ? REASON_FILE_RENAMED : projectComponent.getRefactoringRenameFlags());
     }
 
     @Override
@@ -87,12 +87,13 @@ public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl 
     }
 
     @Override
-    public PsiElement setName(@NotNull String newName, int reason) {
+    public PsiElement setName(@NotNull String newName, int renameFlags) {
         MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(getProject());
-        if (projectComponent.getRefactoringReason() != 0) reason = projectComponent.getRefactoringReason();
-        else if (reason < REASON_FILE_MOVED && ((MultiMarkdownReferenceWikiPageRef) reference).isResolveRefMissing()) reason = REASON_FILE_MOVED;
 
-        MultiMarkdownNamedElement element = MultiMarkdownPsiImplUtil.setName(this, newName, reason);
+        if (projectComponent.getRefactoringRenameFlags() != RENAME_NO_FLAGS) renameFlags = projectComponent.getRefactoringRenameFlags();
+        else if (((MultiMarkdownReferenceWikiPageRef) reference).isResolveRefMissing()) renameFlags &= ~RENAME_KEEP_ANCHOR;
+
+        MultiMarkdownNamedElement element = MultiMarkdownPsiImplUtil.setName(this, newName, renameFlags);
         //logger.info("setName on " + this.toString() + " from " + oldName + " to " + element.getName());
         //reference.notifyNamedElementChange(this, element);
         //reference.invalidateResolveResults();

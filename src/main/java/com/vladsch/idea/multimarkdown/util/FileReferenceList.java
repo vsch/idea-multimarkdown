@@ -129,13 +129,80 @@ public class FileReferenceList {
     protected final int[][] extensionFileRefIndices; // [ext index][0....max] = index in fileReferences that contains that extension
     protected final String[] extensions;      //
 
-    public int length() {
+    public FileReferenceList sorted() {
+        return new FileReferenceList(getSorted());
+    }
+
+    public FileReferenceList sorted(int skip) {
+        return new FileReferenceList(getSorted(skip));
+    }
+
+    public FileReferenceList sorted(int skip, int get) {
+        return new FileReferenceList(getSorted(skip, get));
+    }
+
+    public FileReferenceList copy() {
+        return new FileReferenceList(get());
+    }
+
+    public FileReferenceList copy(int skip) {
+        return new FileReferenceList(get(skip));
+    }
+
+    public FileReferenceList copy(int skip, int get) {
+        return new FileReferenceList(get(skip, get));
+    }
+
+    public int size() {
         return fileReferences.length;
     }
 
+    public FileReference getAt(int i) {
+        return fileReferences.length > i ? fileReferences[i] : null;
+    }
+
     @NotNull
-    public FileReference[] getFileReferences() {
-        return fileReferences.clone();
+    public FileReference[] get() {
+        return get(0, size());
+    }
+
+    @NotNull
+    public FileReference[] get(int skip) {
+        return get(skip, size());
+    }
+
+    @NotNull
+    public FileReference[] get(int skip, int get) {
+        if (skip >= size()) {
+            return new FileReference[0];
+        }
+        if (get > size() - skip) get = size() - skip;
+        FileReference[] results = new FileReference[get];
+        System.arraycopy(fileReferences, skip, results, 0, get);
+        return results;
+    }
+
+    @NotNull
+    public FileReference[] getSorted() {
+        return getSorted(0, size());
+    }
+
+    @NotNull
+    public FileReference[] getSorted(int skip) {
+        return getSorted(skip, size());
+    }
+
+    @NotNull
+    public FileReference[] getSorted(int skip, int get) {
+        if (skip >= size()) {
+            return new FileReference[0];
+        }
+        FileReference[] sorted = fileReferences.clone();
+        Arrays.sort(sorted);
+        if (get > size() - skip) get = size() - skip;
+        FileReference[] results = new FileReference[get];
+        System.arraycopy(sorted, skip, results, 0, get);
+        return results;
     }
 
     @NotNull
@@ -290,6 +357,11 @@ public class FileReferenceList {
     }
 
     @NotNull
+    public FileReferenceList sameWikiHomePageRefs() {
+        return filter(SAME_WIKI_HOME_REFS_FILTER);
+    }
+
+    @NotNull
     public <T> T[] transform(@NotNull TransformFilter<T> transFilter) {
         HashSet<T> result = new HashSet<T>(fileReferences.length);
 
@@ -434,6 +506,22 @@ public class FileReferenceList {
         @Override
         public FileReference filterRef(@NotNull FileReference fileReference) {
             return fileReference;
+        }
+    };
+
+    public static final Filter SAME_WIKI_HOME_REFS_FILTER = new Filter() {
+        @Override
+        public boolean filterExt(@NotNull String ext, String anchor) {
+            return FilePathInfo.isWikiPageExt(ext);
+        }
+
+        @Override
+        public boolean isRefFilter() { return true; }
+
+        @Override
+        public FileReference filterRef(@NotNull FileReference fileReference) {
+            return fileReference instanceof FileReferenceLink
+                    && fileReference.getWikiHome().equals(((FileReferenceLink) fileReference).getSourceReference().getWikiHome()) ? fileReference : null;
         }
     };
 
@@ -971,5 +1059,4 @@ public class FileReferenceList {
     };
 
     public static final Filter ANY_FILE_FILTER = NULL_FILTER;
-
 }

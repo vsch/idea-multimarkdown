@@ -27,11 +27,10 @@ import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
 
-import static junit.framework.Assert.assertFalse;
 import static junit.framework.TestCase.assertEquals;
 
 @RunWith(value = Parameterized.class)
-public class TestEndsWithWikiRef {
+public class TestFilePathInfoEndsWithWikiRef {
     private String filePath;
     private String wikiRef;
     private boolean endsWith;
@@ -39,7 +38,7 @@ public class TestEndsWithWikiRef {
     private boolean endsWithSpaceDash;
     private boolean endsWithCaseSpaceDash;
 
-    public TestEndsWithWikiRef(String filePath, String wikiRef, boolean endsWith, boolean endsWithCase, boolean endsWithSpaceDash, boolean endsWithCaseSpaceDash) {
+    public TestFilePathInfoEndsWithWikiRef(String filePath, String wikiRef, boolean endsWith, boolean endsWithCase, boolean endsWithSpaceDash, boolean endsWithCaseSpaceDash) {
         this.filePath = filePath;
         this.wikiRef = wikiRef;
         this.endsWith = endsWith;

@@ -88,9 +88,12 @@ class RenameWikiPageAndReTargetQuickFix extends BaseIntentionAction {
                 UsageInfo[] usages = rename.findUsages();
 
                 MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
-                projectComponent.setRefactoringReason(MultiMarkdownNamedElement.REASON_FILE_HAD_ANCHOR);
-                rename.doRefactoring(usages); // modified 'usages' array
-                projectComponent.setRefactoringReason(0);
+                try {
+                    projectComponent.pushRefactoringRenameFlags(MultiMarkdownNamedElement.RENAME_KEEP_NOTHING);
+                    rename.doRefactoring(usages); // modified 'usages' array
+                } finally {
+                    projectComponent.popRefactoringRenameFlags();
+                }
             }
         }.execute();
     }

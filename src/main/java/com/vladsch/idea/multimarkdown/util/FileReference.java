@@ -20,23 +20,20 @@
  */
 package com.vladsch.idea.multimarkdown.util;
 
-import com.intellij.openapi.application.Application;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
+import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
-
 public class FileReference extends FilePathInfo {
     private static final Logger logger = Logger.getLogger(FileReference.class);
 
     public interface ProjectFileResolver {
-        VirtualFile getVirtualFile(@NotNull String sourcePath, @NotNull Project project);
+        VirtualFile getVirtualFile(@NotNull String sourcePath);
         PsiFile getPsiFile(@NotNull String sourcePath, @NotNull Project project);
     }
 
@@ -47,6 +44,16 @@ public class FileReference extends FilePathInfo {
     public FileReference(@NotNull String filePath) {
         super(filePath);
         this.project = null;
+    }
+
+    public FileReference(@NotNull FilePathInfo filePath) {
+        super(filePath);
+        this.project = null;
+    }
+
+    public FileReference(@NotNull FilePathInfo filePath, Project project) {
+        super(filePath);
+        this.project = project;
     }
 
     public FileReference(@NotNull String filePath, Project project) {
@@ -68,6 +75,50 @@ public class FileReference extends FilePathInfo {
         super(other);
         this.project = other.project;
     }
+    @Nullable
+    @Override
+    public FileReference resolveLinkRef(@Nullable String linkRef, boolean convertGitHubWikiHome) {
+        return resolveLinkRef(linkRef, convertGitHubWikiHome, false);
+    }
+    @Nullable
+    @Override
+    public FileReference resolveLinkRefWithAnchor(@Nullable String linkRef, boolean convertGitHubWikiHome) {
+        return resolveLinkRef(linkRef, convertGitHubWikiHome, true);
+    }
+    @Nullable
+    @Override
+    public FileReference resolveLinkRef(@Nullable String linkRef) {
+        return resolveLinkRef(linkRef, false, false);
+    }
+
+    @Nullable
+    @Override
+    public FileReference resolveLinkRefWithAnchor(@Nullable String linkRef) {
+        return resolveLinkRef(linkRef, false, true);
+    }
+
+    @Nullable
+    @Override
+    public FileReference resolveLinkRefToWikiPage(@Nullable String linkRef) {
+        return resolveLinkRef(linkRef, true, false);
+    }
+
+    @Nullable
+    @Override
+    public FileReference resolveLinkRefWithAnchorToWikiPage(@Nullable String linkRef) {
+        return resolveLinkRef(linkRef, true, true);
+    }
+
+    @Nullable
+    @Override
+    public FileReference resolveLinkRef(@Nullable String linkRef, boolean convertGitHubWikiHome, boolean withAnchor) {
+        FilePathInfo resolvedPathInfo = super.resolveLinkRef(linkRef, convertGitHubWikiHome, withAnchor);
+        return resolvedPathInfo != null ? new FileReference(resolvedPathInfo) : null;
+    }
+
+    private boolean fileExists() {
+        return getVirtualFile() != null;
+    }
 
     public Project getProject() {
         return project;
@@ -75,17 +126,17 @@ public class FileReference extends FilePathInfo {
 
     @Nullable
     public VirtualFile getVirtualFile() {
-        return FileReference.getVirtualFile(getFilePath(), project);
+        return FileReference.getVirtualFile(getFilePath());
     }
 
     @Nullable
     public VirtualFile getVirtualFileWithAnchor() {
-        return FileReference.getVirtualFile(getFilePathWithAnchor(), project);
+        return FileReference.getVirtualFile(getFilePathWithAnchor());
     }
 
     @Nullable
     public VirtualFile getVirtualParent() {
-        return FileReference.getVirtualFile(getPath(), project);
+        return FileReference.getVirtualFile(getPath());
     }
 
     @Nullable
@@ -113,8 +164,8 @@ public class FileReference extends FilePathInfo {
     }
 
     @Nullable
-    public static VirtualFile getVirtualFile(@NotNull String sourcePath, @NotNull Project project) {
-        return projectFileResolver == null ? null : projectFileResolver.getVirtualFile(sourcePath, project);
+    public static VirtualFile getVirtualFile(@NotNull String sourcePath) {
+        return projectFileResolver == null ? null : projectFileResolver.getVirtualFile(sourcePath);
     }
 
     @Nullable

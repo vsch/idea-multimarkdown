@@ -30,10 +30,11 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
-import com.vladsch.idea.multimarkdown.util.FileReferenceLink;
+import com.vladsch.idea.multimarkdown.util.FileReferenceLinkGitHubRules;
 import com.vladsch.idea.multimarkdown.util.FileReferenceList;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,14 +66,21 @@ public class MultiMarkdownReferenceWikiPageRef extends MultiMarkdownReference {
         return resolveRefIsAccessible;
     }
 
+    @Nullable
+    @Override
+    public PsiElement resolve() {
+        ResolveResult[] resolveResults = multiResolve(false);
+        return resolveResults.length > 0 && resolveRefIsAccessible && !resolveRefIsMissing ? resolveResults[0].getElement() : null;
+    }
+
     @Override
     public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
         // we will handle this by renaming the element to point to the new location
         if (myElement instanceof MultiMarkdownWikiPageRef && element instanceof PsiFile) {
-            FileReferenceLink fileReferenceLink = new FileReferenceLink(myElement.getContainingFile(), ((PsiFile) element));
+            FileReferenceLinkGitHubRules fileReferenceLink = new FileReferenceLinkGitHubRules(myElement.getContainingFile(), ((PsiFile) element));
             String wikiPageRef = fileReferenceLink.getWikiPageRef();
             // this will create a new reference and loose connection to this one
-            return ((MultiMarkdownWikiPageRef) myElement).setName(wikiPageRef, MultiMarkdownNamedElement.REASON_FILE_MOVED);
+            return myElement.setName(wikiPageRef, MultiMarkdownNamedElement.RENAME_KEEP_ANCHOR);
         }
         return super.bindToElement(element);
     }
@@ -85,9 +93,14 @@ public class MultiMarkdownReferenceWikiPageRef extends MultiMarkdownReference {
             MultiMarkdownFile containingFile = (MultiMarkdownFile) myElement.getContainingFile();
             List<ResolveResult> results = new ArrayList<ResolveResult>();
 
-            PsiFile[] files = MultiMarkdownPlugin.getProjectComponent(myElement.getProject()).getFileReferenceList().query()
+            FileReferenceList fileReferenceList = MultiMarkdownPlugin.getProjectComponent(myElement.getProject()).getFileReferenceList().query()
+                    .gitHubWikiRules()
                     .matchWikiRef((MultiMarkdownWikiPageRef) myElement)
-                    .accessibleWikiPageRefs().getPsiFiles();
+                    .accessibleWikiPageRefs()
+                    .sorted();
+
+            PsiFile[] files = fileReferenceList
+                    .getPsiFiles();
 
             if (files.length > 0) {
                 containingFile.removeListener(fileListListener);
@@ -105,8 +118,10 @@ public class MultiMarkdownReferenceWikiPageRef extends MultiMarkdownReference {
                         .caseInsensitive()
                         .keepLinkRefAnchor()
                         .wantMarkdownFiles()
+                        .gitHubWikiRules()
                         .matchWikiRef((MultiMarkdownWikiPageRef) myElement)
-                        .all();
+                        .all()
+                        .sorted();
 
                 files = all.getPsiFilesWithAnchor();
 
@@ -117,8 +132,7 @@ public class MultiMarkdownReferenceWikiPageRef extends MultiMarkdownReference {
                         results.add(new PsiElementResolveResult(file));
                         //logger.info("Reference " + resolveResults.length + " for " + myElement + ": " + resolveResults[0].getElement().hashCode());
                     }
-                }
-                else {
+                } else {
                     resolveRefIsMissing = true;
 
                     //logger.info("getting dummy Reference" + " for " + myElement + " named: " + myElement.getMissingElementNamespace() + name);

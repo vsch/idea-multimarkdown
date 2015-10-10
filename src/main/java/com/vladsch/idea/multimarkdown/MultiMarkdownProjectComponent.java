@@ -33,6 +33,7 @@ import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.startup.StartupManager;
 import com.intellij.openapi.vfs.*;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
 import com.vladsch.idea.multimarkdown.util.*;
@@ -72,14 +73,24 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
     private Project project;
     private boolean hadGithubLinks = MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue();
     protected MultiMarkdownGlobalSettingsListener globalSettingsListener;
-    protected int refactoringReason;
+    protected int refactoringRenameFlags = MultiMarkdownNamedElement.RENAME_NO_FLAGS;
 
-    public int getRefactoringReason() {
-        return refactoringReason;
+    protected int[] refactoringRenameFlagsStack = new int[10];
+    protected int refactoringRenameStack = 0;
+
+    public int getRefactoringRenameFlags() {
+        return refactoringRenameFlags;
     }
 
-    public void setRefactoringReason(int refactoringReason) {
-        this.refactoringReason = refactoringReason;
+    public void pushRefactoringRenameFlags(int refactoringReason) {
+        this.refactoringRenameFlagsStack[refactoringRenameStack++] = this.refactoringRenameFlags;
+        this.refactoringRenameFlags = refactoringReason;
+    }
+
+    public void popRefactoringRenameFlags() {
+        if (refactoringRenameStack > 0) {
+            refactoringRenameFlags = refactoringRenameFlagsStack[--refactoringRenameStack];
+        }
     }
 
     public MultiMarkdownProjectComponent(final Project project) {
@@ -250,7 +261,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
                             notifyWhenDone.cacheUpdated(fileList);
 
                             int[] counts = fileList.countByFilter(FileReferenceList.IMAGE_FILE_FILTER, FileReferenceList.MARKDOWN_FILE_FILTER, FileReferenceList.WIKIPAGE_FILE_FILTER);
-                            logger.info(String.format("Updated file list: scanned[%d] cached:  projectRefs[%d],  imageRefs[%d],  markdownRefs[%d], wikiRefs[%d]", scanned[0], fileList.getFileReferences().length, counts[0], counts[1], counts[2]));
+                            logger.info(String.format("Updated file list: scanned[%d] cached:  projectRefs[%d],  imageRefs[%d],  markdownRefs[%d], wikiRefs[%d]", scanned[0], fileList.size(), counts[0], counts[1], counts[2]));
                         }
                     });
                 }

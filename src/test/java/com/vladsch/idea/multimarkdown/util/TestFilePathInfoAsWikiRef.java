@@ -28,11 +28,11 @@ import java.util.Arrays;
 import static junit.framework.TestCase.assertEquals;
 
 @RunWith(value = Parameterized.class)
-public class TestAsWikiRef {
+public class TestFilePathInfoAsWikiRef {
     private String filePath;
     private String wikiRef;
 
-    public TestAsWikiRef(String filePath, String wikiRef) {
+    public TestFilePathInfoAsWikiRef(String filePath, String wikiRef) {
         this.filePath = filePath;
         this.wikiRef = wikiRef;
     }

@@ -23,13 +23,13 @@ package com.vladsch.idea.multimarkdown.parser;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiParser;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
 
 import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.*;
 
 public class MultiMarkdownParser implements PsiParser {
-
     public void parseLightImpl(IElementType root, PsiBuilder builder) {
         if (root == WIKI_LINK) {
             parseWikiLink(builder);

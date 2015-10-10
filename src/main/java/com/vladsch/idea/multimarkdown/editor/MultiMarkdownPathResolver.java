@@ -38,15 +38,14 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import com.vladsch.idea.multimarkdown.util.FileReference;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.*;
-
-import static com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent.INCLUDE_SELF;
-import static com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent.MARKDOWN_FILE;
 
 /**
  * Static utilities for resolving resources paths.
@@ -84,9 +83,25 @@ public class MultiMarkdownPathResolver {
      * @return VirtualFile or null
      */
     public static VirtualFile resolveRelativePath(@NotNull Document document, @NotNull String target) {
+        VirtualFile relativeFile = null;
         VirtualFile file = FileDocumentManager.getInstance().getFile(document);
-        VirtualFile parent = file == null ? null : file.getParent();
-        return parent == null ? null : parent.findFileByRelativePath(target);
+        if (file != null) {
+            FileReference documentFileReference = new FileReference(file.getPath());
+            VirtualFile parent = file.getParent();
+            if (parent != null) {
+                FileReference resolvedTarget = documentFileReference.resolveLinkRef(target, false);
+                if (resolvedTarget != null) {
+                    relativeFile = resolvedTarget.getVirtualFile();
+                }
+                if (relativeFile == null) {
+                    resolvedTarget = documentFileReference.resolveLinkRef(target, true);
+                    if (resolvedTarget != null) {
+                        relativeFile = resolvedTarget.getVirtualFile();
+                    }
+                }
+            }
+        }
+        return relativeFile;
     }
 
     /**
@@ -120,11 +135,11 @@ public class MultiMarkdownPathResolver {
         return null;
     }
 
-    public static boolean canResolveLink(@NotNull final Project project, @NotNull final Document document, @NotNull final String href) {
+    public static boolean canResolveLink(@Nullable final Project project, @NotNull final Document document, @NotNull final String href) {
         return resolveLink(project, document, href, false, false, false) != null;
     }
 
-    public static Object resolveLink(@NotNull final Project project, @NotNull final Document document, @NotNull final String href) {
+    public static Object resolveLink(@Nullable final Project project, @NotNull final Document document, @NotNull final String href) {
         return resolveLink(project, document, href, false, false, false);
     }
 
@@ -133,7 +148,7 @@ public class MultiMarkdownPathResolver {
         return file != null && new FilePathInfo(file).isWikiPage();
     }
 
-    public static Object resolveLink(@NotNull final Project project, @NotNull final Document document, @NotNull final String hrefEnc, final boolean openFile, final boolean focusEditor, final boolean searchForOpen) {
+    public static Object resolveLink(@Nullable final Project project, @NotNull final Document document, @NotNull final String hrefEnc, final boolean openFile, final boolean focusEditor, final boolean searchForOpen) {
         String hrefDec = hrefEnc;
         try {
             hrefDec = URLDecoder.decode(hrefEnc, "UTF-8");
@@ -166,7 +181,7 @@ public class MultiMarkdownPathResolver {
                         }
                     }
 
-                    if (virtualTarget == null) {
+                    if (virtualTarget == null && project != null) {
                         // if the file has no extension, and a Markdown file exists in the project that has the same
                         FilePathInfo hrefPathInfo = new FilePathInfo(href);
                         if (!hrefPathInfo.hasExt()) {
@@ -195,7 +210,7 @@ public class MultiMarkdownPathResolver {
                     //}
 
                     foundFile[0] = virtualTarget;
-                    if (foundFile[0] != null && openFile) {
+                    if (foundFile[0] != null && project != null && openFile) {
                         ApplicationManager.getApplication().invokeLater(new Runnable() {
                             @Override
                             public void run() {

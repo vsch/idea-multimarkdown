@@ -60,15 +60,15 @@ public class TestUtils {
     }
 
     public static void compareOrderedLists(String message, FileReferenceList expected, FileReferenceList actual) {
-        new OrderedFileReferenceComparison().arrayEquals(null, expected.getFileReferences(), actual.getFileReferences());
+        new OrderedFileReferenceComparison().arrayEquals(null, expected.get(), actual.get());
     }
 
     public static void compareOrderedLists(String message, FileReferenceList.Builder expected, FileReferenceList actual) {
-        new OrderedFileReferenceComparison().arrayEquals(null, expected.getFileReferences(), actual.getFileReferences());
+        new OrderedFileReferenceComparison().arrayEquals(null, expected.getFileReferences(), actual.get());
     }
 
     public static void compareOrderedLists(String message, FileReference[] expected, FileReferenceList actual) {
-        new OrderedFileReferenceComparison().arrayEquals(null, expected, actual.getFileReferences());
+        new OrderedFileReferenceComparison().arrayEquals(null, expected, actual.get());
     }
 
     public static void compareOrderedLists(String message, Suggestion[] expected, SuggestionList actual) {
@@ -96,15 +96,15 @@ public class TestUtils {
     }
 
     public static void compareUnorderedLists(String message, FileReferenceList expected, FileReferenceList actual) {
-        new UnorderedFileReferenceComparison().arrayEquals(null, expected.getFileReferences(), actual.getFileReferences());
+        new UnorderedFileReferenceComparison().arrayEquals(null, expected.get(), actual.get());
     }
 
     public static void compareUnorderedLists(String message, FileReferenceList.Builder expected, FileReferenceList actual) {
-        new UnorderedFileReferenceComparison().arrayEquals(null, expected.getFileReferences(), actual.getFileReferences());
+        new UnorderedFileReferenceComparison().arrayEquals(null, expected.getFileReferences(), actual.get());
     }
 
     public static void compareUnorderedLists(String message, FileReference[] expected, FileReferenceList actual) {
-        new UnorderedFileReferenceComparison().arrayEquals(null, expected, actual.getFileReferences());
+        new UnorderedFileReferenceComparison().arrayEquals(null, expected, actual.get());
     }
 
     public static void compareUnorderedLists(String message, Suggestion[] expected, SuggestionList actual) {

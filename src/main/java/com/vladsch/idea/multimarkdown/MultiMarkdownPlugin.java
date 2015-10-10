@@ -114,7 +114,6 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
         logger.setAdditivity(false);
         logger.setLevel(Level.INFO);
 
-
         FileReference.projectFileResolver = this;
 
         // turn off lcd rendering, will use gray
@@ -310,17 +309,13 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
     }
 
     @Override
-    public VirtualFile getVirtualFile(@NotNull String sourcePath, @NotNull Project project) {
-        String baseDir = project.getBasePath();
-        if (baseDir != null && sourcePath.startsWith(baseDir + "/")) {
-            return VirtualFileManager.getInstance().findFileByUrl("file://" + sourcePath);
-        }
-        return null;
+    public VirtualFile getVirtualFile(@NotNull String sourcePath) {
+        return VirtualFileManager.getInstance().findFileByUrl("file://" + sourcePath);
     }
 
     @Override
     public PsiFile getPsiFile(@NotNull String sourcePath, @NotNull Project project) {
-        VirtualFile file = getVirtualFile(sourcePath, project);
+        VirtualFile file = getVirtualFile(sourcePath);
         if (file != null) {
             PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
             if (psiFile != null && psiFile instanceof MultiMarkdownFile) {

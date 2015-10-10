@@ -108,10 +108,11 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
             MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(element.getProject());
             MultiMarkdownFile markdownFile = (MultiMarkdownFile) element.getContainingFile();
             FileReferenceList wikiPages = projectComponent.getFileReferenceList().query()
+                    .gitHubWikiRules()
                     .inSource(markdownFile)
                     .wikiPageRefs(!markdownFile.isWikiPage());
 
-            if (wikiPages.getFileReferences().length > 0) {
+            if (wikiPages.size() > 0) {
                 // add fixed up version to result
                 suggestionList.addAll(wikiPages.getAllWikiPageRefStrings());
             }

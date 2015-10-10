@@ -38,6 +38,8 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
+import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement.*;
+
 public class MultiMarkdownPsiImplUtil {
     public static String getPageRef(MultiMarkdownWikiLink element) {
         ASTNode pageRefNode = element.getNode().findChildByType(MultiMarkdownTypes.WIKI_LINK_REF);
@@ -73,26 +75,50 @@ public class MultiMarkdownPsiImplUtil {
         return null;
     }
 
-    public static MultiMarkdownNamedElement setName(MultiMarkdownWikiPageRef element, String newName, int reason) {
+    public static MultiMarkdownNamedElement setName(MultiMarkdownWikiPageRef element, String newName, int renameFlags) {
         ASTNode pageRefNode = element.getNode();
+        String title = null;
+
         if (pageRefNode != null) {
-            if (reason == 0 && element.getText().contains("/")) {
+            if ((renameFlags & RENAME_KEEP_PATH) != 0 && element.getText().contains("/")) {
                 // keep the old path
                 String path = new FilePathInfo(element.getText()).getPath();
                 String name = new FilePathInfo(newName).getFileName();
                 newName = path + name;
             }
 
+            if ((renameFlags & RENAME_KEEP_NAME) != 0) {
+                // keep the old name
+                String path = new FilePathInfo(newName).getPath();
+                String name = new FilePathInfo(element.getText()).getFileName();
+                newName = path + name;
+            }
+
             // preserve anchor on file move
-            if (reason == 1 && !FilePathInfo.linkRefAnchor(element.getText()).isEmpty()) {
+            if ((renameFlags & RENAME_KEEP_ANCHOR) != 0 && !FilePathInfo.linkRefAnchor(element.getText()).isEmpty()) {
                 newName = FilePathInfo.linkRefNoAnchor(newName) + FilePathInfo.linkRefAnchor(element.getText());
             }
 
-            MultiMarkdownWikiLink wikiLink = MultiMarkdownElementFactory.createWikiLink(element.getProject(), newName);
-            MultiMarkdownWikiPageRef newElement = (MultiMarkdownWikiPageRef) findChildByType(wikiLink, MultiMarkdownTypes.WIKI_LINK_REF);
-            if (newElement != null) {
-                element.replace(newElement);
-                return newElement;
+            // preserve title on file rename
+            if ((renameFlags & RENAME_KEEP_TITLE) != 0 && !FilePathInfo.linkRefAnchor(element.getText()).isEmpty()) {
+                ASTNode pageRefTitleNode = element.getParent().getNode().findChildByType(MultiMarkdownTypes.WIKI_LINK_TITLE);
+                if (pageRefTitleNode != null) {
+                    title = pageRefTitleNode.getText();
+                }
+            }
+
+            if (title != null) {
+                MultiMarkdownWikiLink wikiLink = MultiMarkdownElementFactory.createWikiLink(element.getProject(), newName, title);
+                element.getParent().replace(wikiLink);
+                MultiMarkdownWikiPageRef newElement = (MultiMarkdownWikiPageRef) findChildByType(wikiLink, MultiMarkdownTypes.WIKI_LINK_REF);
+                if (newElement != null) return newElement;
+            } else {
+                MultiMarkdownWikiLink wikiLink = MultiMarkdownElementFactory.createWikiLink(element.getProject(), newName);
+                MultiMarkdownWikiPageRef newElement = (MultiMarkdownWikiPageRef) findChildByType(wikiLink, MultiMarkdownTypes.WIKI_LINK_REF);
+                if (newElement != null) {
+                    element.replace(newElement);
+                    return newElement;
+                }
             }
         }
         return element;

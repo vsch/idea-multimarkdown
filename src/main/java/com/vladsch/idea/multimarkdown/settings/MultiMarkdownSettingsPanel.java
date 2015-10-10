@@ -131,6 +131,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
     private JCheckBox includesLayoutCssCheckBox;
     private JCheckBox includesColorsCheckBox;
     private JCheckBox githubWikiLinksCheckBox;
+    private JLabel githubWikiLinksLabel;
 
     // need this so that we dont try to access components before they are created
     public
@@ -387,6 +388,10 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
 
         //tippingJarEditorPane.addHyperlinkListener(listener);
         noticesEditorPane.addHyperlinkListener(listener);
+
+        // we don't change these
+        githubWikiLinksCheckBox.setEnabled(false);
+        //githubWikiLinksLabel.setVisible(false);
     }
 
     private void createUIComponents() {
