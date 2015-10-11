@@ -109,11 +109,96 @@ public class FileReference extends FilePathInfo {
         return resolveLinkRef(linkRef, true, true);
     }
 
+    protected class MarkdownGitHubLinkResolver extends FilePathInfo.LinkRefResolver {
+        MarkdownGitHubLinkResolver(@NotNull String lastPart) {
+            super("..", "..", lastPart);
+        }
+
+        @Override
+        boolean isMatched(FilePathInfo currentPath, String[] linkRefParts, int part) {
+            return project != null && !currentPath.isWikiHome() && super.isMatched(currentPath, linkRefParts, part);
+        }
+
+        @Override
+        FilePathInfo computePath(FilePathInfo currentPath) {
+            // if this is not a wiki home and what comes next is ../../{githubword} then we can replace is a subdirectory with current dir name with .wiki added
+            assert project != null;
+
+            GithubRepo githubRepo = MultiMarkdownPlugin.getProjectComponent(project).getGithubRepo(currentPath.getFullFilePath());
+            if (githubRepo != null) {
+                try {
+                    String url = githubRepo.githubBaseUrl();
+                    return new FilePathInfo(url).append(matchParts[matchParts.length - 1]);
+                } catch (RuntimeException ignored) {
+                    logger.info("Can't resolve GitHub url", ignored);
+                }
+            }
+            return currentPath;
+        }
+    }
+
+    protected class MarkdownGitHubWikiExternalLinkResolver extends FilePathInfo.LinkRefResolver {
+        MarkdownGitHubWikiExternalLinkResolver(@NotNull String lastPart) {
+            super("..", "..", lastPart);
+        }
+
+        @Override
+        boolean isMatched(FilePathInfo currentPath, String[] linkRefParts, int part) {
+            return project != null && !currentPath.isWikiHome() && super.isMatched(currentPath, linkRefParts, part);
+        }
+
+        @Override
+        FilePathInfo computePath(FilePathInfo currentPath) {
+            // if this is not a wiki home and what comes next is ../../wiki then we can replace is a subdirectory with current dir name with .wiki added
+            assert project != null;
+
+            FilePathInfo wikiPath = currentPath.append(currentPath.getFileName() + WIKI_HOME_EXTENTION);
+            GithubRepo githubRepo = MultiMarkdownPlugin.getProjectComponent(project).getGithubRepo(wikiPath.getFullFilePath());
+            if (githubRepo != null) {
+                try {
+                    String url = githubRepo.repoUrlFor("/");
+                    return new FilePathInfo(url);
+                } catch (RuntimeException ignored) {
+                    logger.info("Can't resolve GitHub url", ignored);
+                }
+            }
+            return currentPath;
+        }
+    }
+
+    protected final MarkdownGitHubWikiExternalLinkResolver markdownGitHubWikiLinkResolver = new MarkdownGitHubWikiExternalLinkResolver(WIKI_HOME_NAME);
+    protected final MarkdownGitHubLinkResolver markdownGitHubIssuesLinkResolver = new MarkdownGitHubLinkResolver(GITHUB_ISSUES_NAME);
+    protected final MarkdownGitHubLinkResolver markdownGitHubPullsLinkResolver = new MarkdownGitHubLinkResolver(GITHUB_PULLS_NAME);
+    protected final MarkdownGitHubLinkResolver markdownGitHubPulseLinkResolver = new MarkdownGitHubLinkResolver(GITHUB_PULSE_NAME);
+    protected final MarkdownGitHubLinkResolver markdownGitHubGraphsLinkResolver = new MarkdownGitHubLinkResolver(GITHUB_GRAPHS_NAME);
+
     @Nullable
     @Override
-    public FileReference resolveLinkRef(@Nullable String linkRef, boolean convertGitHubWikiHome, boolean withAnchor) {
-        FilePathInfo resolvedPathInfo = super.resolveLinkRef(linkRef, convertGitHubWikiHome, withAnchor);
-        return resolvedPathInfo != null ? new FileReference(resolvedPathInfo) : null;
+    protected FileReference resolveLinkRef(@Nullable String linkRef, boolean convertLinkRefs, boolean withAnchor, LinkRefResolver... linkRefResolvers) {
+        FilePathInfo resolvedPathInfo = super.resolveLinkRef(linkRef, convertLinkRefs, withAnchor, linkRefResolvers);
+        return resolvedPathInfo != null ? new FileReference(resolvedPathInfo, this.project) : null;
+    }
+
+    @Nullable
+    protected FileReference resolveExternalLinkRef(@Nullable String linkRef, boolean withAnchor, LinkRefResolver... linkRefResolvers) {
+        FilePathInfo resolvedPathInfo = super.resolveLinkRef(linkRef, true, withAnchor, appendResolvers(linkRefResolvers, markdownGitHubIssuesLinkResolver, markdownGitHubWikiLinkResolver, markdownGitHubPullsLinkResolver, markdownGitHubPulseLinkResolver, markdownGitHubGraphsLinkResolver));
+        return resolvedPathInfo != null ? new FileReference(resolvedPathInfo, this.project) : null;
+    }
+
+    @Nullable
+    public FileReference resolveExternalLinkRef(@Nullable String linkRef, boolean withAnchor) {
+        return resolveExternalLinkRef(linkRef, withAnchor, (LinkRefResolver) null);
+    }
+
+    @Nullable
+    public FileReference resolveExternalLinkRef(@Nullable String linkRef) {
+        return resolveExternalLinkRef(linkRef, false, (LinkRefResolver) null);
+    }
+
+    @NotNull
+    @Override
+    public FileReference withExt(@Nullable String ext) {
+        return new FileReference(super.withExt(ext), project);
     }
 
     private boolean fileExists() {

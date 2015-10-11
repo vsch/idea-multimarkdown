@@ -31,7 +31,13 @@ import com.intellij.openapi.roots.ModuleRootEvent;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.startup.StartupManager;
+import com.intellij.openapi.vcs.FileStatus;
+import com.intellij.openapi.vcs.FileStatusManager;
+import com.intellij.openapi.vcs.ProjectLevelVcsManager;
+import com.intellij.openapi.vcs.VcsListener;
 import com.intellij.openapi.vfs.*;
+import com.intellij.util.containers.HashMap;
+import com.intellij.util.messages.MessageBus;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
@@ -40,6 +46,7 @@ import com.vladsch.idea.multimarkdown.util.*;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualFileListener, ListenerNotifyDelegate<ProjectFileListListener> {
     private static final Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownProjectComponent.class);
@@ -62,6 +69,8 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
     protected final static int UPDATE_DONE = 1;
 
     private static final String WIKI_PAGE_EXTENSION = ".md";
+
+    private HashMap<String, GithubRepo> githubRepos = null;
 
     // this one is updating when files change, the thread local ones get updated by this one
     private final ThreadSafeMainCache<FileReferenceList> mainFileList = new ThreadSafeMainCache<FileReferenceList>(new MainFileListUpdater(this));
@@ -91,6 +100,21 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         if (refactoringRenameStack > 0) {
             refactoringRenameFlags = refactoringRenameFlagsStack[--refactoringRenameStack];
         }
+    }
+
+    public GithubRepo getGithubRepo(@Nullable String baseDirectoryPath) {
+        if (baseDirectoryPath == null) baseDirectoryPath = project.getBasePath();
+
+        if (githubRepos == null) {
+            githubRepos = new HashMap<String, GithubRepo>();
+        }
+
+        if (!githubRepos.containsKey(baseDirectoryPath)) {
+            GithubRepo githubRepo = GithubRepo.getGitHubRepo(baseDirectoryPath, project.getBasePath());
+            githubRepos.put(baseDirectoryPath, githubRepo);
+        }
+
+        return githubRepos.get(baseDirectoryPath);
     }
 
     public MultiMarkdownProjectComponent(final Project project) {
@@ -151,6 +175,20 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
 
     public FileReferenceList getFileReferenceList() {
         return mirrorFileList.get().getCache();
+    }
+
+    public boolean isUnderVcs(VirtualFile virtualFile) {
+        //ProjectLevelVcsManager instance = ProjectLevelVcsManager.getInstance(project);
+        //AbstractVcs vcs = instance.getVcsFor(virtualFile);
+        //boolean allAreUnder = instance.checkAllFilesAreUnder(vcs, new VirtualFile[] { virtualFile });
+        //boolean inContent = instance.isFileInContent(virtualFile);
+        //boolean isIgnored = instance.isIgnored(virtualFile);
+        FileStatus status = FileStatusManager.getInstance(project).getStatus(virtualFile);
+        String id = status.getId();
+        boolean fileStatus = status.equals(FileStatus.DELETED) || status.equals(FileStatus.ADDED) || status.equals(FileStatus.UNKNOWN) || status.equals(FileStatus.IGNORED)
+                || id.startsWith("IGNORE");
+        logger.info("isUnderVcs " + (!fileStatus) + " for file " + virtualFile + " status " + status);
+        return !fileStatus;
     }
 
     private static class MainFileListUpdater extends ThreadSafeCacheUpdater<FileReferenceList> {
@@ -337,11 +375,27 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         VirtualFileManager.getInstance().addVirtualFileListener(this);
         boolean initialized = project.isInitialized();
 
-        project.getMessageBus().connect().subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
+        final MessageBus messageBus = project.getMessageBus();
+
+        messageBus.connect().subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
             public void rootsChanged(ModuleRootEvent event) {
                 if (project.isDisposed()) return;
 
                 mainFileList.updateCache();
+            }
+        });
+
+        messageBus.connect().subscribe(ProjectLevelVcsManager.VCS_CONFIGURATION_CHANGED, new VcsListener() {
+            @Override
+            public void directoryMappingChanged() {
+                githubRepos = null;
+            }
+        });
+
+        messageBus.connect().subscribe(ProjectLevelVcsManager.VCS_CONFIGURATION_CHANGED_IN_PLUGIN, new VcsListener() {
+            @Override
+            public void directoryMappingChanged() {
+                githubRepos = null;
             }
         });
     }

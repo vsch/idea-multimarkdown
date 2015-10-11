@@ -31,6 +31,7 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import java.net.URL;
 
+import static com.vladsch.idea.multimarkdown.editor.MultiMarkdownPathResolver.launchExternalLink;
 import static com.vladsch.idea.multimarkdown.editor.MultiMarkdownPathResolver.resolveLink;
 
 /**
@@ -89,10 +90,10 @@ public class MultiMarkdownLinkListener implements HyperlinkListener {
                 if (e.getDescription().startsWith("#")) {
                     editor.scrollToReference(e.getDescription().substring(1));
                 } else {
-                    resolveLink(project, document, e.getDescription(), true, true, true);
+                    launchExternalLink(project, document, e.getDescription());
                 }
             } else {
-                resolveLink(project, document, e.getDescription(), true, true, true);
+                launchExternalLink(project, document, e.getDescription());
             }
         }
     }

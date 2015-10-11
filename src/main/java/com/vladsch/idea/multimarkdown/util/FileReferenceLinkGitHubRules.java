@@ -21,12 +21,17 @@
 package com.vladsch.idea.multimarkdown.util;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vcs.FilePath;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
+import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
+import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class FileReferenceLinkGitHubRules extends FileReferenceLink {
+    private static final Logger logger = org.apache.log4j.Logger.getLogger(FileReferenceLinkGitHubRules.class);
+
     protected String originalPrefix;
 
     public FileReferenceLinkGitHubRules(@NotNull String sourcePath, @NotNull String targetPath, Project project) {
@@ -96,7 +101,7 @@ public class FileReferenceLinkGitHubRules extends FileReferenceLink {
                     reasons |= REASON_WIKI_PAGEREF_HAS_SUBDIR;
                 } else if (equivalentWikiRef(false, false, getWikiPageRef(), wikiPageRef.replace("/", ""))) {
                     reasons |= REASON_WIKI_PAGEREF_HAS_FIXABLE_SLASH;
-                } else  {
+                } else {
                     reasons |= REASON_WIKI_PAGEREF_HAS_SLASH;
                 }
             }
@@ -113,7 +118,7 @@ public class FileReferenceLinkGitHubRules extends FileReferenceLink {
     @Override
     public int compareTo(FilePathInfo o) {
         int itmp;
-        return (itmp = getUpDirectoriesToWikiHome() - o.getUpDirectoriesToWikiHome()) != 0 ? itmp :  super.compareTo(o);
+        return (itmp = getLinkRefFromWikiHome().compareTo(o.getLinkRefFromWikiHome())) != 0 ? itmp : super.compareTo(o);
     }
 
     // TEST: needs testing

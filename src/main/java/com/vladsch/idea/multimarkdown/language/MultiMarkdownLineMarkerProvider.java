@@ -29,6 +29,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveResult;
+import com.intellij.util.NullableFunction;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
@@ -57,13 +58,14 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
             if (results != null && results.length > 0) {
                 final PsiFile containingFile = element.getContainingFile();
 
-                //NullableFunction<PsiElement, String> namer = new NullableFunction<PsiElement, String>() {
-                //    @Nullable
-                //    @Override
-                //    public String fun(PsiElement element) {
-                //        return new FileReferenceLink(containingFile, (PsiFile) element).getLinkRef();
-                //    }
-                //};
+                NullableFunction<PsiElement, String> namer = new NullableFunction<PsiElement, String>() {
+                    @Nullable
+                    @Override
+                    public String fun(PsiElement element) {
+                        return new FileReferenceLink(containingFile, (PsiFile) element).getLinkRef();
+                    }
+                };
+
                 final Project project = element.getProject();
                 final String basePath = project.getBasePath() == null ? "/" : project.getBasePath();
                 boolean showWikiHome = false;
@@ -71,9 +73,9 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
 
                 if (results.length > 0) {
                     ArrayList<MultiMarkdownFile> markdownTargets = new ArrayList<MultiMarkdownFile>();
-                    Icon icon = MultiMarkdownIcons.FILE;
+                    Icon icon = null;
                     for (ResolveResult resolveResult : results) {
-                        if (resolveResult.getElement() instanceof MultiMarkdownFile) {
+                        if (resolveResult.getElement() instanceof MultiMarkdownFile && resolveResult.getElement() != containingFile) {
                             MultiMarkdownFile file = (MultiMarkdownFile) resolveResult.getElement();
                             if (icon == null) {
                                 icon = file.isWikiPage() ? MultiMarkdownIcons.WIKI : MultiMarkdownIcons.FILE;
@@ -119,11 +121,13 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
                             }
                         };
 
+                        if (icon == null) icon = MultiMarkdownIcons.FILE;
+
                         NavigationGutterIconBuilder<PsiElement> builder =
                                 NavigationGutterIconBuilder.create(icon)
                                         .setCellRenderer(cellRenderer)
                                         .setTargets(markdownTargets)
-                                        //.setNamer(namer)
+                                        .setNamer(namer)
                                         .setTooltipText(MultiMarkdownBundle.message("linemarker.navigate-to"));
 
                         result.add(builder.createLineMarkerInfo(element));

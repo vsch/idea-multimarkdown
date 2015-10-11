@@ -48,7 +48,9 @@ public class MultiMarkdownReferenceWikiPageRef extends MultiMarkdownReference {
     public MultiMarkdownReferenceWikiPageRef(@NotNull MultiMarkdownWikiPageRef element, @NotNull TextRange textRange) {
         super(element, textRange);
 
-        MultiMarkdownPlugin.getProjectComponent(element.getProject()).addListener(fileListListener);
+        if (element.getParent() != null) {
+            MultiMarkdownPlugin.getProjectComponent(element.getProject()).addListener(fileListListener);
+        }
     }
 
     @Override

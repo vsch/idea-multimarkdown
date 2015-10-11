@@ -23,10 +23,12 @@ package com.vladsch.idea.multimarkdown.util;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
+import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class FileReferenceLink extends FileReference {
+    private static final Logger logger = org.apache.log4j.Logger.getLogger(FileReferenceLink.class);
 
     public static final int REASON_TARGET_HAS_SPACES = 1;
     public static final int REASON_CASE_MISMATCH = 2;

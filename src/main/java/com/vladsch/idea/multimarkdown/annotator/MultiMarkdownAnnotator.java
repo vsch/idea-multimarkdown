@@ -167,6 +167,12 @@ public class MultiMarkdownAnnotator implements Annotator {
                         for (FileReference referenceLink : sorted) {
                             String linkRef = referenceLink.getLinkRefFromWikiHome();
                             String newName = linkRef.replace('/', '-');
+
+                            if (!newName.equals(linkRef.contains("/"))) {
+                                // it is in wiki home, prefix with home-
+                                newName = "home-" + newName;
+                            }
+
                             if (!linkRef.equals(newName) && !referenceLink.getFileName().equals(newName) && referenceLink.canRenameFileTo(newName)) {
                                 annotator.registerFix(new RenameWikiPageQuickFix(referenceLink.getPsiFile(), linkRef, newName, RenameWikiPageQuickFix.RENAME_CONFLICTING_TARGET));
                             }

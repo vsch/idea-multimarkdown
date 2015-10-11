@@ -32,7 +32,6 @@ import com.intellij.openapi.command.UndoConfirmationPolicy;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.CaretModel;
 import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.editor.event.DocumentAdapter;
 import com.intellij.openapi.editor.event.DocumentEvent;
@@ -155,7 +154,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
             @Override
             protected PegDownProcessor initialValue() {
                 // ISSUE: #7 worked around, disable pegdown TaskList HTML rendering, they don't display well in Darcula.
-                return new PegDownProcessor(MultiMarkdownGlobalSettings.getInstance().getExtensionsValue() & ~Extensions.TASKLISTITEMS, getParsingTimeout());
+                return new PegDownProcessor((MultiMarkdownGlobalSettings.getInstance().getExtensionsValue() & ~Extensions.TASKLISTITEMS) | Extensions.EXTANCHORLINKS_WRAP, getParsingTimeout());
             }
         };
     }
@@ -292,12 +291,25 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         String result = "";
 
         if (isWikiDocument) {
+            String gitHubHref = MultiMarkdownPathResolver.getGitHubDocumentURL(project, document, isWikiDocument);
+            String gitHubClose = "";
+            if (gitHubHref == null) {
+                gitHubHref = "";
+            } else {
+                gitHubHref = "<a href=\"" + gitHubHref + "\" name=\"wikipage\" id=\"wikipage\">";
+                gitHubClose = "</a>";
+            }
+
             result += "<body class=\"multimarkdown-wiki-preview\">\n<div class=\"content\">\n";
             result += "" +
-                    "<h1 class=\"first-child\">" + escapeHtml(file.getNameWithoutExtension().replace('-', ' ')) + "</h1>\n" +
+                    "<h1 class=\"first-child\">" + gitHubHref + escapeHtml(file == null ? "" : file.getNameWithoutExtension().replace('-', ' ')) + gitHubClose + "</h1>\n" +
                     "";
         } else {
-            result += "<body class=\"multimarkdown-preview\">\n<div class=\"content\">\n";
+            String fileName = escapeHtml(file == null ? "" : file.getName());
+            result += "<body class=\"multimarkdown-preview\">\n<div class=\"content\">\n" +
+                    "<div class=\"page-header\"><a href=\""+ fileName +"\">"+ fileName +"</a></div>\n" +
+                    "<div class=\"hr\"></div>\n" +
+                    "";
             // for now nothing
             regex += "|<h1>";
         }
@@ -514,8 +526,17 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         if (astRoot == null) {
             return "<strong>Parser timed out</strong>";
         } else {
-            return modified ? new MultiMarkdownToHtmlSerializer(project, document, linkRendererModified).toHtml(astRoot) :
-                    new ToHtmlSerializer(linkRendererNormal).toHtml(astRoot);
+            if (modified) {
+                MultiMarkdownToHtmlSerializer htmlSerializer = new MultiMarkdownToHtmlSerializer(project, document, linkRendererModified);
+
+                if (!isWikiDocument) {
+                    htmlSerializer.setFlag(MultiMarkdownToHtmlSerializer.NO_WIKI_LINKS);
+                }
+                return htmlSerializer.toHtml(astRoot);
+            } else {
+
+                return new ToHtmlSerializer(linkRendererNormal).toHtml(astRoot);
+            }
         }
     }
 

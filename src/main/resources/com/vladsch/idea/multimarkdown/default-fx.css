@@ -69,6 +69,14 @@ a.absent {
     color: #B00020;
 }
 
+a.page-anchor {
+    color: #000;
+}
+
+a.page-anchor:hover {
+    color: #4078c0;
+}
+
 abbr {
    text-decoration: none;
    border-bottom: 1px dashed #4078c0;

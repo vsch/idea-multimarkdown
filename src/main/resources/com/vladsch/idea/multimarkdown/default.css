@@ -123,7 +123,6 @@ a.anchor {
     display: block;
     padding-left: 30px;
     margin-left: -30px;
-    cursor: pointer;
     position: absolute;
     top: 0;
     left: 0;
@@ -133,6 +132,16 @@ a.anchor {
 /**********************************
  *  Header Related Formatting
  **********************************/
+div.page-header {
+    background-color: #E0E0E0;
+    padding: 2px 0 4px 15px;
+}
+
+div.page-header a {
+    text-decoration: none;
+    color: 0;
+    font-weight: bold;
+}
 
 h1,
 h2,

@@ -40,7 +40,7 @@ public class FileReferenceListQuery {
 
     public final static int FILE_TYPE_FLAGS = 0x000f;
 
-    public final static int INCLUDE_SOURCE = 0x0010;
+    public final static int EXCLUDE_SOURCE = 0x0010;
 
     // comparison options
     public final static int SPACE_DASH_EQUIVALENT = 0x0020;
@@ -265,8 +265,8 @@ public class FileReferenceListQuery {
     }
 
     @NotNull
-    public FileReferenceListQuery includeSource() {
-        this.queryFlags |= INCLUDE_SOURCE;
+    public FileReferenceListQuery excludeSource() {
+        this.queryFlags |= EXCLUDE_SOURCE;
         return this;
     }
 
@@ -549,7 +549,7 @@ public class FileReferenceListQuery {
                         public FileReference filterRef(@NotNull FileReference fileReference) {
                             FileReferenceLinkGitHubRules referenceLink = new FileReferenceLinkGitHubRules(sourceFileReference, fileReference);
                             return equivalentWikiRef(queryFlags, ((queryFlags & MATCH_LINK_WITH_ANCHOR) != 0 ? referenceLink.getWikiPageRefWithAnchor() : referenceLink.getWikiPageRef())
-                                    , matchPattern) && ((queryFlags & INCLUDE_SOURCE) != 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
+                                    , matchPattern) && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
                         }
                     };
                 } else {
@@ -567,7 +567,7 @@ public class FileReferenceListQuery {
                         public FileReference filterRef(@NotNull FileReference fileReference) {
                             FileReferenceLink referenceLink = new FileReferenceLink(sourceFileReference, fileReference);
                             return equivalentWikiRef(queryFlags, ((queryFlags & MATCH_LINK_WITH_ANCHOR) != 0 ? referenceLink.getWikiPageRefWithAnchor() : referenceLink.getWikiPageRef())
-                                    , matchPattern) && ((queryFlags & INCLUDE_SOURCE) != 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
+                                    , matchPattern) && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
                         }
                     };
                 }
@@ -589,7 +589,7 @@ public class FileReferenceListQuery {
                         @Override
                         public FileReference filterRef(@NotNull FileReference fileReference) {
                             FileReferenceLinkGitHubRules referenceLink = new FileReferenceLinkGitHubRules(sourceFileReference, fileReference);
-                            return equivalent(queryFlags, ((queryFlags & MATCH_LINK_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchor() : referenceLink.getLinkRef()), matchPattern) && ((queryFlags & INCLUDE_SOURCE) != 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
+                            return equivalent(queryFlags, ((queryFlags & MATCH_LINK_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchor() : referenceLink.getLinkRef()), matchPattern) && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
                         }
                     };
                 } else {
@@ -605,7 +605,7 @@ public class FileReferenceListQuery {
                         @Override
                         public FileReference filterRef(@NotNull FileReference fileReference) {
                             FileReferenceLink referenceLink = new FileReferenceLink(sourceFileReference, fileReference);
-                            return equivalent(queryFlags, ((queryFlags & MATCH_LINK_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchor() : referenceLink.getLinkRef()), matchPattern) && ((queryFlags & INCLUDE_SOURCE) != 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
+                            return equivalent(queryFlags, ((queryFlags & MATCH_LINK_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchor() : referenceLink.getLinkRef()), matchPattern) && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
                         }
                     };
                 }
@@ -626,7 +626,7 @@ public class FileReferenceListQuery {
                         @Override
                         public FileReference filterRef(@NotNull FileReference fileReference) {
                             FileReferenceLinkGitHubRules referenceLink = new FileReferenceLinkGitHubRules(sourceFileReference, fileReference);
-                            return equivalent(queryFlags, ((queryFlags & MATCH_LINK_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchorNoExt() : referenceLink.getLinkRefNoExt()), matchPattern) && ((queryFlags & INCLUDE_SOURCE) != 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
+                            return equivalent(queryFlags, ((queryFlags & MATCH_LINK_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchorNoExt() : referenceLink.getLinkRefNoExt()), matchPattern) && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
                         }
                     };
                 } else {
@@ -643,7 +643,7 @@ public class FileReferenceListQuery {
                         @Override
                         public FileReference filterRef(@NotNull FileReference fileReference) {
                             FileReferenceLink referenceLink = new FileReferenceLink(sourceFileReference, fileReference);
-                            return equivalent(queryFlags, ((queryFlags & MATCH_LINK_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchorNoExt() : referenceLink.getLinkRefNoExt()), matchPattern) && ((queryFlags & INCLUDE_SOURCE) != 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
+                            return equivalent(queryFlags, ((queryFlags & MATCH_LINK_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchorNoExt() : referenceLink.getLinkRefNoExt()), matchPattern) && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
                         }
                     };
                 }

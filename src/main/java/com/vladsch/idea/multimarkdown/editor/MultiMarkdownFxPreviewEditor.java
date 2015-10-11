@@ -89,7 +89,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static com.vladsch.idea.multimarkdown.editor.MultiMarkdownPathResolver.isWikiDocument;
-import static com.vladsch.idea.multimarkdown.editor.MultiMarkdownPathResolver.resolveLink;
 import static org.apache.commons.lang.StringEscapeUtils.escapeHtml;
 
 //import com.sun.javafx.scene.layout.region.CornerRadiiConverter;
@@ -417,7 +416,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                             }
                         }
                     } else {
-                        resolveLink(project, document, href, true, true, true);
+                        MultiMarkdownPathResolver.launchExternalLink(project, document, href);
                     }
                 }
             };
@@ -449,13 +448,18 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                         //VirtualFile parent = file == null ? null : file.getParent();
                         //final VirtualFile localImage = parent == null ? null : parent.findFileByRelativePath(src);
                         //final VirtualFile localImage = MultiMarkdownPathResolver.resolveRelativePath(document, src);
-                        final VirtualFile localImage = (VirtualFile) MultiMarkdownPathResolver.resolveLink(project, document, src);
-                        try {
-                            if (localImage != null && localImage.exists()) {
+                        final VirtualFile localImage = (VirtualFile) MultiMarkdownPathResolver.resolveLink(project, document, src, false, true);
+                        if (localImage != null && localImage.exists()) {
+                            try {
                                 imgNode.setSrc(String.valueOf(new File(localImage.getPath()).toURI().toURL()));
+                            } catch (MalformedURLException e) {
+                                logger.info("[" + instance + "] " + "MalformedURLException" + localImage.getPath());
                             }
-                        } catch (MalformedURLException e) {
-                            logger.info("[" + instance + "] " + "MalformedURLException" + localImage.getPath());
+                        } else {
+                            String href = MultiMarkdownPathResolver.resolveExternalReference(project, document, src);
+                            if (href != null) {
+                                imgNode.setSrc(href);
+                            }
                         }
                     }
                 }
@@ -574,18 +578,33 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                 "<body>\n" +
                 "";
 
+        String gitHubHref = MultiMarkdownPathResolver.getGitHubDocumentURL(project, document, isWikiDocument);
+        String gitHubClose = "";
         if (isWikiDocument) {
+            if (gitHubHref == null) {
+                gitHubHref = "";
+            } else {
+                gitHubHref = "<a href=\"" + gitHubHref + "\" name=\"wikipage\" id=\"wikipage\" class=\"anchor\"><span class=\"octicon octicon-link\"></span>";
+                gitHubClose = "</a>";
+            }
+
             result += "" +
                     "<div class=\"wiki-container\">\n" +
-                    "<h1>" + escapeHtml(file != null ? file.getNameWithoutExtension().replace('-', ' ') : "<null>") + "</h1>\n" +
+                    "<h1>" + gitHubHref + gitHubClose + escapeHtml(file != null ? file.getNameWithoutExtension().replace('-', ' ') : "<null>") + "</h1>\n" +
                     "<article class=\"wiki-body\">\n" +
                     "";
         } else {
+            if (gitHubHref == null) {
+                gitHubHref = "";
+            } else {
+                gitHubHref = "<a href=\"" + gitHubHref + "\" name=\"markdown-page\" id=\"markdown-page\" class=\"page-anchor\">";
+                gitHubClose = "</a>";
+            }
             result += "" +
                     "<div class=\"container\">\n" +
                     "<div id=\"readme\" class=\"boxed-group\">\n" +
                     "<h3>\n" +
-                    "   <span class=\"bookicon octicon-book\"></span>\n" +
+                    "   " + gitHubHref + "<span class=\"bookicon octicon-book\"></span>\n" + gitHubClose +
                     "  " + (file != null ? file.getName() : "<null>") + "\n" +
                     "</h3>\n" +
                     "<article class=\"markdown-body\">\n" +
@@ -739,8 +758,18 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         if (astRoot == null) {
             return "<strong>Parser timed out</strong>";
         } else {
-            return modified ? new MultiMarkdownToHtmlSerializer(project, document, linkRendererModified).toHtml(astRoot) :
-                    new ToHtmlSerializer(linkRendererNormal).toHtml(astRoot);
+            if (modified) {
+                MultiMarkdownToHtmlSerializer htmlSerializer = new MultiMarkdownToHtmlSerializer(project, document, linkRendererModified);
+
+                if (!isWikiDocument) {
+                    htmlSerializer.setFlag(MultiMarkdownToHtmlSerializer.NO_WIKI_LINKS);
+                }
+
+                return htmlSerializer.toHtml(astRoot);
+            } else {
+
+                return new ToHtmlSerializer(linkRendererNormal).toHtml(astRoot);
+            }
         }
     }
 
