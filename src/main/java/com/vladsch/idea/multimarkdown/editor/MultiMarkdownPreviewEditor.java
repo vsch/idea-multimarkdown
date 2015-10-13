@@ -287,7 +287,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         VirtualFile file = FileDocumentManager.getInstance().getFile(document);
         // scan for <table>, </table>, <tr>, </tr> and other tags we modify, this could be done with a custom plugin to pegdown but
         // then it would be more trouble to get un-modified HTML.
-        String regex = "(<table>|<thead>|<tbody>|<tr>|<hr/>|<del>|</del>|</p>|<kbd>|</kbd>|<var>|</var>";
+        String regex = "(<table>|<thead>|<tbody>|<tr>|<hr/>|<del>|</del>|</p>|<kbd>|</kbd>|<var>|</var>";//|<code>|</code>";
         String result = "";
 
         if (isWikiDocument) {
@@ -364,6 +364,10 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
             } else if (found.equals("<kbd>")) {
                 result += "<span class=\"kbd\">";
             } else if (found.equals("</kbd>")) {
+                result += "</span>";
+            } else if (found.equals("<code>")) {
+                result += "<span class=\"code\">";
+            } else if (found.equals("</code>")) {
                 result += "</span>";
             } else if (found.equals("<var>")) {
                 result += "<span class=\"var\">";

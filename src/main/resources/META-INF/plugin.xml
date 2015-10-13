@@ -55,11 +55,12 @@
       <li>Add links from non-wiki markdown files of the '../../wiki/{other stuff}' will try to resolve to a link '{dir}.wiki/{other stuff}. This is to mimic GitHub relative links from the main repository to wiki pages. This means that your wiki directory should have the name of its parent directory with '.wiki' extension added, again to follow GitHub wiki naming conventions.'.</li>
       <li>Add duplicate matching wiki pages resolve to the first one based on alphabetically sorted relative path from the wiki home folder. Same as GitHub wiki.</li>
       <li>Add Preview Tab links to wiki pages and markdown documents now open the corresponding files on github.com.</li>
-      <li>Add header with file name to markdown in old preview tab, clicking on file name takes you to the file on github.</li>
-      <li>Add Clicking on the book icon in file header in new preview takes you to the file on github.</li>
-      <li>Add Relative links in markdown documents now also support github specific links for: wiki, issues, pulls, graphs, pulse. For example from the readme.md file in VCS root you can create a link to issues using: [Issues](../../issues). The same way you would do it on github. These also resolve to their corresponding pages on github when clicked. These links always resolve to the master branch on github, regardless of what branch is current in the IDE.</li>
-      <li>Add relative image links resolve to local files the same way they would resolve to files on github, so you can use relative links for embedded images.</li>
-      <li>Change Wiki links now fully github like with same resolution rules except with warnings and annotations.</li>
+      <li>Add header with file name to markdown in old preview tab, clicking on file name takes you to the file on GitHub.</li>
+      <li>Add Clicking on the book icon in file header in new preview takes you to the file on GitHub.</li>
+      <li>Add Relative links in markdown documents now also support GitHub specific links for: wiki, issues, pulls, graphs, pulse. For example from the readme.md file in VCS root you can create a link to issues using: [Issues](../../issues). The same way you would do it on GitHub. These also resolve to their corresponding pages on GitHub when clicked. These links always resolve to the master branch on GitHub, regardless of what branch is current in the IDE.</li>
+      <li>Add relative image links resolve to local files the same way they would resolve to files on GitHub, so you can use relative links for embedded images.</li>
+      <li>Change Wiki links now fully GitHub like with same resolution rules except with warnings and annotations.</li>
+      <li>Fix comment/uncomment would leave a space around text.</li>
     </ul>
     <ul><h3><b>1.1.12 - Bug Fixes &amp; Optimizations.</b></h3>
       <li>Fix url's with spaces showing up as unresolved.</li>

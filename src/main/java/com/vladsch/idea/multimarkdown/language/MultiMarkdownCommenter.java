@@ -33,13 +33,13 @@ public class MultiMarkdownCommenter implements Commenter {
     @Nullable
     @Override
     public String getBlockCommentPrefix() {
-        return "<!-- ";
+        return "<!--";
     }
 
     @Nullable
     @Override
     public String getBlockCommentSuffix() {
-        return " -->";
+        return "-->";
     }
 
     @Nullable
