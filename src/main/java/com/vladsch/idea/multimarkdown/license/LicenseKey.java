@@ -1,3 +1,17 @@
+/*
+ * Copyright (c) 2015-2015 Vladimir Schneider <vladimir.schneider@gmail.com>, all rights reserved.
+ *
+ * This code is private property of the copyright holder and cannot be used without having obtained
+ * a license or prior written permission of the of the copyright holder.
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ */
 package com.vladsch.idea.multimarkdown.license;
 
 import org.apache.commons.codec.binary.Base64;
@@ -21,16 +35,21 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 
 public class LicenseKey {
+    final public static String ALGORITHM_RSA = "RSA";
     public static final int KEY_LENGTH = 4096;
+
     // PKCS#8 format
     final public static String PRIVATE_KEY_HEADER = "-----BEGIN PRIVATE KEY-----";
     final public static String PRIVATE_KEY_FOOTER = "-----END PRIVATE KEY-----";
+
     // PKCS#1 format
     final public static String RSA_PRIVATE_KEY_HEADER = "-----BEGIN RSA PRIVATE KEY-----";
     final public static String RSA_PRIVATE_KEY_FOOTER = "-----END RSA PRIVATE KEY-----";
+
     // X509 format
     final public static String PUBLIC_KEY_HEADER = "-----BEGIN PUBLIC KEY-----";
     final public static String PUBLIC_KEY_FOOTER = "-----END PUBLIC KEY-----";
+
     final private Cipher cipher;
     final private Key key;
     final private int keyLength;
@@ -41,7 +60,7 @@ public class LicenseKey {
         PrivateKey privateKey = null;
 
         try {
-            cipher = Cipher.getInstance(LicenseKeyPair.ALGORITHM_RSA);
+            cipher = Cipher.getInstance(ALGORITHM_RSA);
             if (isPrivate) {
                 privateKey = getPrivateKey(encodedKey);
             } else {
@@ -60,7 +79,7 @@ public class LicenseKey {
         PrivateKey privateKey = null;
 
         try {
-            cipher = Cipher.getInstance(LicenseKeyPair.ALGORITHM_RSA);
+            cipher = Cipher.getInstance(ALGORITHM_RSA);
             Boolean isPrivate = isKeyPrivate(wrappedKey);
             if (isPrivate == null) throw new InvalidKeySpecException();
 
@@ -80,7 +99,7 @@ public class LicenseKey {
         Cipher cipher = null;
 
         try {
-            cipher = Cipher.getInstance(LicenseKeyPair.ALGORITHM_RSA);
+            cipher = Cipher.getInstance(ALGORITHM_RSA);
         } finally {
             this.key = publicKey;
             this.keyLength = KEY_LENGTH;
@@ -92,7 +111,7 @@ public class LicenseKey {
         Cipher cipher = null;
 
         try {
-            cipher = Cipher.getInstance(LicenseKeyPair.ALGORITHM_RSA);
+            cipher = Cipher.getInstance(ALGORITHM_RSA);
         } finally {
             this.key = privateKey;
             this.keyLength = KEY_LENGTH;
@@ -185,7 +204,7 @@ public class LicenseKey {
         String encodedKey = getUnwrappedKey(wrappedKey, PUBLIC_KEY_HEADER, PUBLIC_KEY_FOOTER);
         byte[] decodedKey = Base64.decodeBase64(encodedKey);
         X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decodedKey);
-        KeyFactory keyFactory = KeyFactory.getInstance(LicenseKeyPair.ALGORITHM_RSA);
+        KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM_RSA);
         return keyFactory.generatePublic(keySpec);
     }
 

@@ -61,6 +61,7 @@
       <li>Add relative image links resolve to local files the same way they would resolve to files on GitHub, so you can use relative links for embedded images.</li>
       <li>Change Wiki links now fully GitHub like with same resolution rules except with warnings and annotations.</li>
       <li>Fix comment/uncomment would leave a space around text.</li>
+      <li>Fix minimized parser memory hogging. pegdown processor ast was kept around long after it was needed.</li>
     </ul>
     <ul><h3><b>1.1.12 - Bug Fixes &amp; Optimizations.</b></h3>
       <li>Fix url's with spaces showing up as unresolved.</li>

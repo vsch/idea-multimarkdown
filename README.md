@@ -13,9 +13,11 @@ idea-multimarkdown
 
 1. Free and open source for the basic functionality as it is present now. I will continue to support it, respond to issues and fix bugs. If you only need the basic functionality of editing and previewing Markdown, then you will not be affected and will continue to enjoy using this plugin with the same level of support you have received thus far.
 
-2. Licensed model with a 30 day trial period which will implement parser based advanced features such as refactoring, find usages, etc. (see issue #12 for the road map). After the 30 day trial it will revert to the functionality of the free, open source model. $25 purchase of the license will give you free upgrades and maintenance for one year on the advanced features. I have to commercialize this plugin so that I can devote my full attention to its development. I feel that doing this will benefit both free and licensed versions because I will be able to concentrate my attention on delivering a quality product in the shortest amount of time.
+2. Licensed model with a 30 day trial period which will implement parser based advanced features such as refactoring, find usages, etc. (see issue #12 for the road map). After the 30 day trial it will revert to the functionality of the free, open source model. $24 purchase of the license will give you free upgrades and maintenance for one year on the advanced features. I have to commercialize this plugin so that I can devote my full attention to its development. I feel that doing this will benefit both free and licensed versions because I will be able to concentrate my attention on delivering a quality product in the shortest amount of time.
 
-**Everyone who has generously given a tip** will get a one year license for every $20 that they have donated, plus one extra year as my show of appreciation for your support. ETA is October 15th, 2015.
+**Everyone who has generously given a tip** will get a one year license for every $20 that they have donated, plus one extra year as my show of appreciation for your support. 
+
+**Updated ETA is October 29th, 2015.** I underestimated the time it was going to take to re-purpose and migrate a Laravel 4.2 based website to Laravel 5.1. This is now complete with license generation, management and PayPal integration. The next week is going to be devoted to adding licensing and free trial features into the plugin so I can finally release and updated version.   
 
 ### Version 1.1.7 Adds highlight.js syntax highlighting and wiki link refactoring/completions
 
@@ -30,7 +32,7 @@ Wiki links are the first to get the boost to IntelliJ intelligence:
 * Navigate to the file a wiki link targets in the markdown source via go to definition or line marker. 
 * Find all wiki link references to a markdown file in the project via find usages on the file node in the project view
 * Quick fix to create a wiki markdown file for wiki links with missing files, also checks for spaces in target file name, dashes in wiki link target reference and mismatched case between link target and file name of the target.
-* Different icon <img src="src/main/resources/com/vladsch/idea/multimarkdown/multimarkdown%402x.png" width="16" height="17" alt="MultiMarkdown file Icon"> for markdown files, <img src="src/main/resources/com/vladsch/idea/multimarkdown/wikimarkdown%402x.png" width="16" height="17" alt="Wiki Page Icon"> is used for files whose ancestor directory has a `.wiki` extension. These are treated as GitHub wiki pages and will display pretty much as they do on GitHub, minus the footer and sidebar. Footer and sidebar are TBI for MultiMarkdown. 
+* Different icon <img src="src/main/resources/com/vladsch/idea/multimarkdown/multimarkdown@2x.png" width="16" height="17" alt="MultiMarkdown file Icon"> for markdown files, <img src="src/main/resources/com/vladsch/idea/multimarkdown/wikimarkdown@2x.png" width="16" height="17" alt="Wiki Page Icon"> is used for files whose ancestor directory has a `.wiki` extension. These are treated as GitHub wiki pages and will display pretty much as they do on GitHub, minus the footer and sidebar. Footer and sidebar are TBI for MultiMarkdown. 
 
 * Many more changes, see the plugin version notes on the JetBrains page or in the IDE <kbd>Settings > Plugins > MultiMarkdown</kbd>
 

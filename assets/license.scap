@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <ScappleDocument Version="1.1" ID="8A78A424-0C00-46F9-94BA-C2CF49F3BD5F">
     <Notes>
-        <Note ID="0" FontSize="12.0" Position="1405.0,434.0" Width="74.0">
+        <Note ID="0" FontSize="12.0" Position="1409.0,513.0" Width="50.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
-            <String>License Key</String>
+            <String>License</String>
         </Note>
-        <Note ID="1" FontSize="12.0" Position="1332.0,383.0" Width="70.0">
+        <Note ID="1" FontSize="12.0" Position="1337.0,437.0" Width="70.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
             <String>User e-mail</String>
         </Note>
-        <Note ID="6" FontSize="12.0" Position="53.003906,458.003906" Width="77.0">
+        <Note ID="6" FontSize="12.0" Position="57.0,497.0" Width="77.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
             <String>User System</String>
         </Note>
-        <Note ID="9" FontSize="12.0" Position="979.0,457.0" Width="72.0">
+        <Note ID="9" FontSize="12.0" Position="979.0,512.0" Width="72.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -30,45 +30,37 @@
             <String>Web Server</String>
             <ConnectedNoteIDs>46-47</ConnectedNoteIDs>
         </Note>
-        <Note ID="11" FontSize="12.0" Position="1259.0,356.0" Width="70.0">
+        <Note ID="11" FontSize="12.0" Position="1264.0,410.0" Width="70.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
             <String>License DB</String>
         </Note>
-        <Note ID="12" FontSize="12.0" Position="304.0,266.0" Width="70.0">
+        <Note ID="13" FontSize="12.0" Position="1339.0,495.0" Width="56.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
-            <String>User e-mail</String>
+            <String>Licenses</String>
+        </Note>
+        <Note ID="14" FontSize="12.0" Position="309.0,272.0" Width="50.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>License</String>
             <ConnectedNoteIDs>37</ConnectedNoteIDs>
         </Note>
-        <Note ID="13" FontSize="12.0" Position="1332.0,408.0" Width="80.0">
+        <Note ID="16" FontSize="12.0" Position="532.0,515.0" Width="99.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
-            <String>License Keys</String>
-        </Note>
-        <Note ID="14" FontSize="12.0" Position="303.0,294.0" Width="74.0">
-            <Appearance>
-                <Alignment>Left</Alignment>
-                <Border Weight="1"></Border>
-            </Appearance>
-            <String>License Key</String>
-            <ConnectedNoteIDs>37</ConnectedNoteIDs>
-        </Note>
-        <Note ID="16" FontSize="12.0" Position="547.101562,485.0" Width="65.0">
-            <Appearance>
-                <Alignment>Left</Alignment>
-                <Border Weight="1"></Border>
-            </Appearance>
-            <String>Public Key</String>
+            <String>License Pub Key</String>
             <ConnectedNoteIDs>91</ConnectedNoteIDs>
         </Note>
-        <Note ID="19" FontSize="12.0" Position="881.0,62.0" Width="87.0">
+        <Note ID="19" FontSize="12.0" Position="821.0,63.0" Width="87.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -76,64 +68,64 @@
             <String>Activation Gen</String>
             <ConnectedNoteIDs>23</ConnectedNoteIDs>
         </Note>
-        <Note ID="21" FontSize="12.0" Position="842.0,227.0" Width="74.0">
+        <Note ID="21" FontSize="12.0" Position="805.0,159.0" Width="50.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
-            <String>License Key</String>
+            <String>License</String>
         </Note>
-        <Note ID="22" FontSize="12.0" Position="987.0,199.0" Width="93.0">
+        <Note ID="22" FontSize="12.0" Position="963.0,187.0" Width="93.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
             <String>Activation Code</String>
         </Note>
-        <Note ID="23" FontSize="12.0" Position="985.0,63.0" Width="70.0">
+        <Note ID="23" FontSize="12.0" Position="940.0,62.0" Width="74.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
-            <String>Private Key</String>
+            <String>License Key</String>
             <ConnectedNoteIDs>19</ConnectedNoteIDs>
         </Note>
-        <Note ID="25" FontSize="12.0" Position="439.0,270.0" Width="114.0">
+        <Note ID="25" FontSize="12.0" Position="437.0,197.0" Width="114.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
             <String>Activation Request</String>
         </Note>
-        <Note ID="29" FontSize="12.0" Position="1406.0,458.0" Width="99.0">
+        <Note ID="29" FontSize="12.0" Position="1410.0,593.0" Width="99.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
             <String>Activation Codes</String>
         </Note>
-        <Note ID="30" FontSize="12.0" Position="1481.0,483.0" Width="93.0">
+        <Note ID="30" FontSize="12.0" Position="1485.0,618.0" Width="93.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
             <String>Activation Code</String>
         </Note>
-        <Note ID="31" FontSize="12.0" Position="1481.0,511.0" Width="34.0">
+        <Note ID="31" FontSize="12.0" Position="1485.0,646.0" Width="34.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
             <String>Date</String>
         </Note>
-        <Note ID="32" FontSize="12.0" Position="1481.0,539.0" Width="20.0">
+        <Note ID="32" FontSize="12.0" Position="1524.0,645.0" Width="20.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
             <String>ip</String>
         </Note>
-        <Note ID="33" FontSize="12.0" Position="1481.0,567.0" Width="122.0">
+        <Note ID="33" FontSize="12.0" Position="1485.0,674.0" Width="131.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -146,9 +138,9 @@
                 <Border Weight="1"></Border>
             </Appearance>
             <String>Plugin Config</String>
-            <ConnectedNoteIDs>12, 14, 38</ConnectedNoteIDs>
+            <ConnectedNoteIDs>14, 38</ConnectedNoteIDs>
         </Note>
-        <Note ID="38" FontSize="12.0" Position="303.0,322.0" Width="93.0">
+        <Note ID="38" FontSize="12.0" Position="304.0,337.0" Width="93.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -156,14 +148,15 @@
             <String>Activation Code</String>
             <ConnectedNoteIDs>37</ConnectedNoteIDs>
         </Note>
-        <Note ID="40" FontSize="12.0" Position="279.0,459.0" Width="43.0">
+        <Note ID="40" FontSize="12.0" Position="215.0,502.0" Width="43.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
             <String>Plugin</String>
+            <ConnectedNoteIDs>111-112</ConnectedNoteIDs>
         </Note>
-        <Note ID="41" FontSize="12.0" Position="711.0,423.0" Width="125.0">
+        <Note ID="41" FontSize="12.0" Position="744.0,451.0" Width="125.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -172,7 +165,7 @@
             <ConnectedNoteIDs>8, 39</ConnectedNoteIDs>
             <PointsToNoteIDs>8</PointsToNoteIDs>
         </Note>
-        <Note ID="42" FontSize="12.0" Position="709.0,451.0" Width="125.0">
+        <Note ID="42" FontSize="12.0" Position="744.0,479.0" Width="125.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -181,7 +174,7 @@
             <ConnectedNoteIDs>8, 39</ConnectedNoteIDs>
             <PointsToNoteIDs>39</PointsToNoteIDs>
         </Note>
-        <Note ID="43" FontSize="12.0" Position="709.0,479.0" Width="125.0">
+        <Note ID="43" FontSize="12.0" Position="744.0,507.0" Width="125.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -190,7 +183,7 @@
             <ConnectedNoteIDs>8, 39</ConnectedNoteIDs>
             <PointsToNoteIDs>8</PointsToNoteIDs>
         </Note>
-        <Note ID="44" FontSize="12.0" Position="709.0,507.0" Width="125.0">
+        <Note ID="44" FontSize="12.0" Position="744.0,535.0" Width="125.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -199,7 +192,7 @@
             <ConnectedNoteIDs>8, 39</ConnectedNoteIDs>
             <PointsToNoteIDs>39</PointsToNoteIDs>
         </Note>
-        <Note ID="46" FontSize="12.0" Position="1062.0,447.0" Width="61.0">
+        <Note ID="46" FontSize="12.0" Position="1062.0,502.0" Width="61.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -207,7 +200,7 @@
             <String>request ip</String>
             <ConnectedNoteIDs>9</ConnectedNoteIDs>
         </Note>
-        <Note ID="47" FontSize="12.0" Position="1061.0,472.0" Width="64.0">
+        <Note ID="47" FontSize="12.0" Position="1061.0,527.0" Width="64.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -215,28 +208,28 @@
             <String>timestamp</String>
             <ConnectedNoteIDs>9</ConnectedNoteIDs>
         </Note>
-        <Note ID="50" FontSize="12.0" Position="594.0,268.0" Width="98.0">
+        <Note ID="50" FontSize="12.0" Position="594.0,239.0" Width="98.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
             <String>License Request</String>
         </Note>
-        <Note ID="51" FontSize="12.0" Position="602.960938,297.003906" Width="70.0">
+        <Note ID="51" FontSize="12.0" Position="594.0,267.0" Width="70.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
             <String>User e-mail</String>
         </Note>
-        <Note ID="54" FontSize="12.0" Position="837.0,316.0" Width="122.0">
+        <Note ID="54" FontSize="12.0" Position="806.0,334.0" Width="122.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
             <String>Product/Version/JRE</String>
         </Note>
-        <Note ID="56" FontSize="12.0" Position="1161.0,61.0" Width="76.0">
+        <Note ID="56" FontSize="12.0" Position="1362.0,56.0" Width="76.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -244,273 +237,740 @@
             <String>License Gen</String>
             <ConnectedNoteIDs>60</ConnectedNoteIDs>
         </Note>
-        <Note ID="58" FontSize="12.0" Position="1264.042969,199.0" Width="74.0">
+        <Note ID="58" FontSize="12.0" Position="1481.0,155.0" Width="50.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
-            <String>License Key</String>
+            <String>License</String>
         </Note>
-        <Note ID="60" FontSize="12.0" Position="1255.0,62.0" Width="70.0">
+        <Note ID="60" FontSize="12.0" Position="1456.0,57.0" Width="74.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
-            <String>Private Key</String>
+            <String>Product Key</String>
             <ConnectedNoteIDs>56</ConnectedNoteIDs>
         </Note>
-        <Note ID="62" FontSize="12.0" Position="1264.042969,171.0" Width="47.0">
-            <Appearance>
-                <Alignment>Left</Alignment>
-                <Border Weight="1"></Border>
-            </Appearance>
-            <String>Ouputs</String>
-        </Note>
-        <Note ID="65" FontSize="12.0" Position="1157.0,199.0" Width="70.0">
+        <Note ID="65" FontSize="12.0" Position="1361.0,159.0" Width="70.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
             <String>User e-mail</String>
         </Note>
-        <Note ID="67" FontSize="12.0" Position="1157.0,171.0" Width="41.0">
-            <Appearance>
-                <Alignment>Left</Alignment>
-                <Border Weight="1"></Border>
-            </Appearance>
-            <String>Inputs</String>
-        </Note>
-        <Note ID="72" FontSize="12.0" Position="987.042969,169.0" Width="47.0">
-            <Appearance>
-                <Alignment>Left</Alignment>
-                <Border Weight="1"></Border>
-            </Appearance>
-            <String>Ouputs</String>
-        </Note>
-        <Note ID="73" FontSize="12.0" Position="842.0,199.0" Width="70.0">
-            <Appearance>
-                <Alignment>Left</Alignment>
-                <Border Weight="1"></Border>
-            </Appearance>
-            <String>User e-mail</String>
-        </Note>
-        <Note ID="74" FontSize="12.0" Position="842.0,171.0" Width="41.0">
-            <Appearance>
-                <Alignment>Left</Alignment>
-                <Border Weight="1"></Border>
-            </Appearance>
-            <String>Inputs</String>
-        </Note>
-        <Note ID="77" FontSize="12.0" Position="845.0,256.0" Width="61.0">
+        <Note ID="77" FontSize="12.0" Position="806.0,278.0" Width="61.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
             <String>request ip</String>
         </Note>
-        <Note ID="78" FontSize="12.0" Position="842.0,288.0" Width="64.0">
+        <Note ID="78" FontSize="12.0" Position="806.0,306.0" Width="64.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
             <String>timestamp</String>
         </Note>
-        <Note ID="79" FontSize="12.0" Position="1157.0,227.0" Width="79.0">
+        <Note ID="79" FontSize="12.0" Position="1361.0,187.0" Width="79.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
             <String>License Type</String>
         </Note>
-        <Note ID="80" FontSize="12.0" Position="1157.0,255.0" Width="54.0">
+        <Note ID="81" FontSize="12.0" Position="438.0,228.0" Width="50.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
-            <String>Duration</String>
+            <String>License</String>
         </Note>
-        <Note ID="81" FontSize="12.0" Position="439.0,326.0" Width="74.0">
-            <Appearance>
-                <Alignment>Left</Alignment>
-                <Border Weight="1"></Border>
-            </Appearance>
-            <String>License Key</String>
-        </Note>
-        <Note ID="82" FontSize="12.0" Position="439.0,354.0" Width="114.0">
+        <Note ID="82" FontSize="12.0" Position="438.0,256.0" Width="114.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
             <String>Product/Version/JRE</String>
         </Note>
-        <Note ID="83" FontSize="12.0" Position="439.0,298.0" Width="70.0">
-            <Appearance>
-                <Alignment>Left</Alignment>
-                <Border Weight="1"></Border>
-            </Appearance>
-            <String>User e-mail</String>
-        </Note>
-        <Note ID="91" FontSize="12.0" Position="499.0,452.0" Width="84.0">
+        <Note ID="91" FontSize="12.0" Position="439.0,489.0" Width="84.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
             <String>License Agent</String>
-            <ConnectedNoteIDs>16</ConnectedNoteIDs>
+            <ConnectedNoteIDs>16, 105, 134, 180</ConnectedNoteIDs>
         </Note>
-        <Note ID="94" FontSize="12.0" Position="1481.0,595.0" Width="43.0">
+        <Note ID="102" FontSize="12.0" Position="594.0,295.0" Width="67.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
-            <String>Status</String>
+            <String>User name</String>
         </Note>
-        <Note ID="95" FontSize="12.0" Position="439.0,396.0" Width="85.0">
+        <Note ID="104" FontSize="12.0" Position="437.0,328.0" Width="85.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
             <String>Plugin Version</String>
         </Note>
+        <Note ID="105" FontSize="12.0" Position="532.0,487.0" Width="83.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Agent Version</String>
+            <ConnectedNoteIDs>91</ConnectedNoteIDs>
+        </Note>
+        <Note ID="107" FontSize="12.0" Position="57.0,532.0" Width="82.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Host Instance</String>
+        </Note>
+        <Note ID="108" FontSize="12.0" Position="802.0,247.0" Width="91.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Plugin Instance</String>
+        </Note>
+        <Note ID="109" FontSize="12.0" Position="438.0,353.0" Width="82.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Host Instance</String>
+        </Note>
+        <Note ID="110" FontSize="12.0" Position="804.0,215.0" Width="85.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Plugin Version</String>
+        </Note>
+        <Note ID="111" FontSize="12.0" Position="271.0,501.0" Width="119.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Product/Version/JRE</String>
+            <ConnectedNoteIDs>40</ConnectedNoteIDs>
+        </Note>
+        <Note ID="112" FontSize="12.0" Position="271.0,529.0" Width="85.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Plugin Version</String>
+            <ConnectedNoteIDs>40</ConnectedNoteIDs>
+        </Note>
+        <Note ID="113" FontSize="12.0" Position="1337.0,465.0" Width="67.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>User name</String>
+        </Note>
+        <Note ID="116" FontSize="12.0" Position="380.0,649.0" Width="50.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>License</String>
+        </Note>
+        <Note ID="117" FontSize="12.0" Position="511.0,648.0" Width="131.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Product Key Encrypted</String>
+        </Note>
+        <Note ID="119" FontSize="12.0" Position="1265.0,825.0" Width="70.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Product DB</String>
+        </Note>
+        <Note ID="120" FontSize="12.0" Position="1408.0,542.0" Width="52.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>PluginId</String>
+        </Note>
+        <Note ID="121" FontSize="12.0" Position="1485.0,702.0" Width="89.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Plugin Version</String>
+        </Note>
+        <Note ID="122" FontSize="12.0" Position="1330.0,853.0" Width="60.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>ProductId</String>
+        </Note>
+        <Note ID="123" FontSize="12.0" Position="1330.0,905.0" Width="99.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Product Versions</String>
+        </Note>
+        <Note ID="124" FontSize="12.0" Position="1401.0,933.0" Width="93.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Product Version</String>
+        </Note>
+        <Note ID="125" FontSize="12.0" Position="1405.0,962.0" Width="56.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>File Path</String>
+        </Note>
+        <Note ID="126" FontSize="12.0" Position="1407.0,1014.0" Width="83.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Agent Version</String>
+        </Note>
+        <Note ID="129" FontSize="12.0" Position="1478.0,1039.0" Width="99.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>License Pub Key</String>
+        </Note>
+        <Note ID="130" FontSize="12.0" Position="1478.0,1067.0" Width="74.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>License Key</String>
+        </Note>
+        <Note ID="131" FontSize="12.0" Position="1478.0,1095.0" Width="95.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Agent Signature</String>
+        </Note>
+        <Note ID="133" FontSize="12.0" Position="1406.0,988.0" Width="100.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Version Info (md)</String>
+        </Note>
+        <Note ID="134" FontSize="12.0" Position="532.0,543.0" Width="52.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>PluginId</String>
+            <ConnectedNoteIDs>91</ConnectedNoteIDs>
+        </Note>
+        <Note ID="135" FontSize="12.0" Position="379.0,718.0" Width="133.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Random 4096 bit string</String>
+        </Note>
+        <Note ID="136" FontSize="12.0" Position="380.0,685.0" Width="52.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>PluginId</String>
+        </Note>
+        <Note ID="138" FontSize="12.0" Position="381.0,772.0" Width="61.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Activation</String>
+        </Note>
+        <Note ID="139" FontSize="12.0" Position="504.0,772.0" Width="131.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>License Key Encrypted</String>
+        </Note>
+        <Note ID="141" FontSize="12.0" Position="381.0,808.0" Width="52.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>PluginId</String>
+        </Note>
+        <Note ID="142" FontSize="12.0" Position="804.0,185.0" Width="52.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>PluginId</String>
+        </Note>
+        <Note ID="143" FontSize="12.0" Position="594.0,323.0" Width="95.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Agent Signature</String>
+        </Note>
+        <Note ID="144" FontSize="12.0" Position="438.0,381.0" Width="95.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Agent Signature</String>
+        </Note>
+        <Note ID="145" FontSize="12.0" Position="440.0,809.0" Width="85.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Plugin Version</String>
+        </Note>
+        <Note ID="146" FontSize="12.0" Position="533.0,809.0" Width="95.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Agent Signature</String>
+        </Note>
+        <Note ID="148" FontSize="12.0" Position="1485.0,730.0" Width="82.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Host Instance</String>
+        </Note>
+        <Note ID="149" FontSize="12.0" Position="1361.0,269.0" Width="52.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>PluginId</String>
+        </Note>
+        <Note ID="151" FontSize="12.0" Position="382.0,840.0" Width="82.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Host Instance</String>
+        </Note>
+        <Note ID="152" FontSize="12.0" Position="596.0,352.0" Width="52.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>PluginId</String>
+        </Note>
+        <Note ID="153" FontSize="12.0" Position="595.0,382.0" Width="83.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Agent Version</String>
+        </Note>
+        <Note ID="154" FontSize="12.0" Position="438.0,300.0" Width="52.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>PluginId</String>
+        </Note>
+        <Note ID="156" FontSize="12.0" Position="1102.0,62.0" Width="75.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>License Req</String>
+            <ConnectedNoteIDs>157</ConnectedNoteIDs>
+        </Note>
+        <Note ID="157" FontSize="12.0" Position="1196.0,63.0" Width="74.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>License Key</String>
+            <ConnectedNoteIDs>156</ConnectedNoteIDs>
+        </Note>
+        <Note ID="159" FontSize="12.0" Position="1104.0,159.0" Width="98.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>License Request</String>
+        </Note>
+        <Note ID="160" FontSize="12.0" Position="1104.0,187.0" Width="70.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>User e-mail</String>
+        </Note>
+        <Note ID="161" FontSize="12.0" Position="1104.0,215.0" Width="67.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>User name</String>
+        </Note>
+        <Note ID="162" FontSize="12.0" Position="1103.0,322.0" Width="95.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Agent Signature</String>
+        </Note>
+        <Note ID="163" FontSize="12.0" Position="1104.0,271.0" Width="52.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>PluginId</String>
+        </Note>
+        <Note ID="164" FontSize="12.0" Position="1104.0,296.0" Width="83.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Agent Version</String>
+        </Note>
+        <Note ID="166" FontSize="12.0" Position="1229.0,179.0" Width="50.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>License</String>
+        </Note>
+        <Note ID="167" FontSize="12.0" Position="1466.0,541.0" Width="92.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Max Activations</String>
+        </Note>
+        <Note ID="168" FontSize="12.0" Position="744.0,563.0" Width="125.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Remove License</String>
+            <ConnectedNoteIDs>8, 39</ConnectedNoteIDs>
+            <PointsToNoteIDs>39</PointsToNoteIDs>
+        </Note>
+        <Note ID="171" FontSize="12.0" Position="1555.0,758.0" Width="74.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Disactivated</String>
+        </Note>
+        <Note ID="172" FontSize="12.0" Position="807.0,360.0" Width="83.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Agent Version</String>
+        </Note>
+        <Note ID="173" FontSize="12.0" Position="1471.0,961.0" Width="81.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Release Date</String>
+        </Note>
+        <Note ID="174" FontSize="12.0" Position="1408.0,570.0" Width="66.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Valid From</String>
+        </Note>
+        <Note ID="175" FontSize="12.0" Position="1483.0,568.0" Width="50.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Valid To</String>
+        </Note>
+        <Note ID="176" FontSize="12.0" Position="1361.0,215.0" Width="66.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Valid From</String>
+        </Note>
+        <Note ID="177" FontSize="12.0" Position="1362.0,240.0" Width="50.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Valid To</String>
+        </Note>
+        <Note ID="178" FontSize="12.0" Position="1331.0,879.0" Width="127.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Product Agent Version</String>
+        </Note>
+        <Note ID="180" FontSize="12.0" Position="533.0,571.0" Width="95.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Agent Signature</String>
+            <ConnectedNoteIDs>91</ConnectedNoteIDs>
+        </Note>
+        <Note ID="182" FontSize="12.0" Position="383.0,904.0" Width="133.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Random 2048 bit string</String>
+        </Note>
+        <Note ID="183" FontSize="12.0" Position="963.0,152.0" Width="93.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Type: Activation</String>
+            <ConnectedNoteIDs>76</ConnectedNoteIDs>
+        </Note>
+        <Note ID="184" FontSize="12.0" Position="1226.0,152.0" Width="83.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Type: License</String>
+        </Note>
+        <Note ID="185" FontSize="12.0" Position="1104.0,244.0" Width="61.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Password</String>
+        </Note>
+        <Note ID="186" FontSize="12.0" Position="495.0,872.0" Width="93.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>License Expires</String>
+        </Note>
+        <Note ID="187" FontSize="12.0" Position="382.0,872.0" Width="104.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Activation Expires</String>
+        </Note>
     </Notes>
     <BackgroundShapes>
-        <Shape ID="4" Sticky="Yes" Position="43.0,443.0" Width="97.0" Height="54.0">
+        <Shape ID="4" Sticky="Yes" Position="47.0,482.0" Width="102.0" Height="89.0">
             <Appearance>
                 <Border Weight="1"></Border>
             </Appearance>
             <ConnectedNoteIDs>89</ConnectedNoteIDs>
         </Shape>
-        <Shape ID="8" Sticky="Yes" Position="969.0,432.0" Width="166.0" Height="78.0">
+        <Shape ID="8" Sticky="Yes" Position="969.0,487.0" Width="166.0" Height="79.0">
             <Appearance>
                 <Border Weight="1"></Border>
             </Appearance>
-            <ConnectedNoteIDs>10, 41-44, 69-70, 75-76</ConnectedNoteIDs>
-            <PointsToNoteIDs>10</PointsToNoteIDs>
+            <ConnectedNoteIDs>10, 41-44, 69-70, 75-76, 158, 165, 168</ConnectedNoteIDs>
+            <PointsToNoteIDs>10, 158</PointsToNoteIDs>
         </Shape>
-        <Shape ID="10" Sticky="Yes" Position="1249.0,341.0" Width="364.0" Height="355.0">
+        <Shape ID="10" Sticky="Yes" Position="1254.0,395.0" Width="385.0" Height="402.0">
             <Appearance>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <ConnectedNoteIDs>8</ConnectedNoteIDs>
             <PointsToNoteIDs>8</PointsToNoteIDs>
         </Shape>
-        <Shape ID="18" Sticky="Yes" Position="871.0,47.0" Width="194.0" Height="55.0">
+        <Shape ID="18" Sticky="Yes" Position="806.0,47.0" Width="259.0" Height="55.0">
             <Appearance>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <ConnectedNoteIDs>75-76</ConnectedNoteIDs>
+            <PointsToNoteIDs>76</PointsToNoteIDs>
         </Shape>
-        <Shape ID="36" Sticky="Yes" Position="198.0,251.0" Width="208.0" Height="110.0">
+        <Shape ID="36" Sticky="Yes" Position="198.0,257.0" Width="209.0" Height="120.0">
             <Appearance>
                 <Border Weight="1"></Border>
             </Appearance>
             <ConnectedNoteIDs>89</ConnectedNoteIDs>
             <PointsToNoteIDs>89</PointsToNoteIDs>
         </Shape>
-        <Shape ID="39" Sticky="Yes" Position="489.0,437.0" Width="133.0" Height="87.0">
+        <Shape ID="39" Sticky="Yes" Position="429.0,472.0" Width="212.0" Height="137.0">
             <Appearance>
                 <Border Weight="1"></Border>
             </Appearance>
-            <ConnectedNoteIDs>41-44, 49, 85, 89</ConnectedNoteIDs>
+            <ConnectedNoteIDs>41-44, 49, 85, 89, 168</ConnectedNoteIDs>
             <PointsToNoteIDs>89</PointsToNoteIDs>
         </Shape>
-        <Shape ID="49" Sticky="Yes" Position="584.0,253.0" Width="118.0" Height="83.0">
+        <Shape ID="49" Sticky="Yes" Position="584.0,227.0" Width="118.0" Height="193.0">
             <Appearance>
                 <Border Weight="1"></Border>
             </Appearance>
             <ConnectedNoteIDs>39</ConnectedNoteIDs>
         </Shape>
-        <Shape ID="55" Sticky="Yes" Position="1151.0,46.0" Width="183.0" Height="60.0">
+        <Shape ID="55" Sticky="Yes" Position="1352.0,41.0" Width="212.0" Height="55.0">
             <Appearance>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <ConnectedNoteIDs>69-70</ConnectedNoteIDs>
+            <PointsToNoteIDs>70</PointsToNoteIDs>
         </Shape>
-        <Shape ID="69" Sticky="Yes" Position="1147.0,156.0" Width="99.0" Height="138.0">
+        <Shape ID="69" Sticky="Yes" Position="1351.0,144.0" Width="99.0" Height="159.0">
             <Appearance>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <ConnectedNoteIDs>8, 55</ConnectedNoteIDs>
             <PointsToNoteIDs>55</PointsToNoteIDs>
         </Shape>
-        <Shape ID="70" Sticky="Yes" Position="1254.0,156.0" Width="94.0" Height="82.0">
+        <Shape ID="70" Sticky="Yes" Position="1469.0,144.0" Width="113.0" Height="45.0">
             <Appearance>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <ConnectedNoteIDs>8, 55</ConnectedNoteIDs>
             <PointsToNoteIDs>8</PointsToNoteIDs>
         </Shape>
-        <Shape ID="75" Sticky="Yes" Position="827.0,156.0" Width="142.0" Height="199.0">
+        <Shape ID="75" Sticky="Yes" Position="792.0,144.0" Width="146.0" Height="255.0">
             <Appearance>
                 <Border Weight="1"></Border>
             </Appearance>
             <ConnectedNoteIDs>8, 18</ConnectedNoteIDs>
             <PointsToNoteIDs>18</PointsToNoteIDs>
         </Shape>
-        <Shape ID="76" Sticky="Yes" Position="978.0,156.0" Width="113.0" Height="82.0">
+        <Shape ID="76" Sticky="Yes" Position="954.0,144.0" Width="113.0" Height="74.0">
             <Appearance>
                 <Border Weight="1"></Border>
             </Appearance>
-            <ConnectedNoteIDs>8, 18</ConnectedNoteIDs>
+            <ConnectedNoteIDs>8, 18, 183</ConnectedNoteIDs>
             <PointsToNoteIDs>8</PointsToNoteIDs>
         </Shape>
-        <Shape ID="85" Sticky="Yes" Position="429.0,255.0" Width="134.0" Height="173.0">
+        <Shape ID="85" Sticky="Yes" Position="427.0,186.0" Width="135.0" Height="231.0">
             <Appearance>
                 <Border Weight="1"></Border>
             </Appearance>
             <ConnectedNoteIDs>39</ConnectedNoteIDs>
         </Shape>
-        <Shape ID="89" Sticky="Yes" Position="269.0,444.0" Width="62.0" Height="54.0">
+        <Shape ID="89" Sticky="Yes" Position="205.0,486.0" Width="195.0" Height="82.0">
             <Appearance>
                 <Border Weight="1"></Border>
             </Appearance>
             <ConnectedNoteIDs>4, 36, 39</ConnectedNoteIDs>
             <PointsToNoteIDs>36, 39</PointsToNoteIDs>
         </Shape>
+        <Shape ID="115" Sticky="Yes" Position="373.0,643.0" Width="276.0" Height="105.0">
+            <Appearance>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
+            </Appearance>
+        </Shape>
+        <Shape ID="118" Sticky="Yes" Position="1255.0,810.0" Width="332.0" Height="324.0">
+            <Appearance>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
+            </Appearance>
+        </Shape>
+        <Shape ID="137" Sticky="Yes" Position="371.0,757.0" Width="274.0" Height="186.0">
+            <Appearance>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
+            </Appearance>
+        </Shape>
+        <Shape ID="155" Sticky="Yes" Position="1092.0,47.0" Width="222.0" Height="55.0">
+            <Appearance>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <ConnectedNoteIDs>158, 165</ConnectedNoteIDs>
+            <PointsToNoteIDs>165</PointsToNoteIDs>
+        </Shape>
+        <Shape ID="158" Sticky="Yes" Position="1093.0,144.0" Width="119.0" Height="217.0">
+            <Appearance>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <ConnectedNoteIDs>8, 155</ConnectedNoteIDs>
+            <PointsToNoteIDs>155</PointsToNoteIDs>
+        </Shape>
+        <Shape ID="165" Sticky="Yes" Position="1221.0,144.0" Width="94.0" Height="64.0">
+            <Appearance>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <ConnectedNoteIDs>8, 155</ConnectedNoteIDs>
+            <PointsToNoteIDs>8</PointsToNoteIDs>
+        </Shape>
     </BackgroundShapes>
     <Stacks>
-        <Stack>1, 13</Stack>
-        <Stack>14, 38</Stack>
-        <Stack>25, 83, 81-82, 95</Stack>
-        <Stack>30-33, 94</Stack>
-        <Stack>42-44</Stack>
-        <Stack>62, 58</Stack>
-        <Stack>65, 79-80</Stack>
-        <Stack>73, 21</Stack>
+        <Stack>1, 113</Stack>
+        <Stack>16, 134</Stack>
+        <Stack>30-31, 33, 121, 148</Stack>
+        <Stack>41-44, 168</Stack>
+        <Stack>50-51, 102, 143</Stack>
+        <Stack>65, 79, 176</Stack>
+        <Stack>77-78, 54</Stack>
+        <Stack>81-82</Stack>
+        <Stack>109, 144</Stack>
+        <Stack>111-112</Stack>
+        <Stack>120, 174</Stack>
+        <Stack>129-131</Stack>
+        <Stack>159-161, 185, 163-164</Stack>
     </Stacks>
-    <AutoFit>0-1, 4, 6, 9, 11-14, 16, 18-19, 21-23, 29-32, 36-39, 46-47, 49-51, 56, 58, 60, 62, 65, 67, 69-70, 72-75, 77-81, 83, 91, 94-95</AutoFit>
+    <AutoFit>0-1, 4, 6, 8-11, 13-14, 16, 19, 21-23, 29-32, 37-38, 46-47, 50-51, 56, 58, 60, 65, 75, 77-79, 81, 89, 91, 102, 104-105, 107-113, 116-120, 122-126, 129-131, 133-139, 141-146, 148-149, 151-154, 156-164, 166-167, 171-178, 180, 182-187</AutoFit>
     <NoteStyles>
-        <Style Name="Title Text" ID="26CD7242-6012-4B10-A0C3-3F37A221CF16" AffectFontStyle="Yes" AffectAlignment="Yes" AffectTextColor="No" AffectNoteBody="No" AffectFade="No">
-            <FontSize>28.0</FontSize>
-            <IsBold>Yes</IsBold>
-        </Style>
-        <Style Name="Red Text" ID="6BC43031-D690-4624-BEF3-76DB36EF9E62" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="Yes" AffectNoteBody="No" AffectFade="No">
-            <TextColor>1.0 0.0 0.0</TextColor>
+        <Style Name="Blue Bubble" ID="4B1C6936-5C1E-4B2E-8A8D-8D0C63B3C5DC" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.477193 0.557066 0.76433</BorderColor>
+            <FillColor>0.840969 0.866828 0.925903</FillColor>
         </Style>
         <Style Name="Brown Bubble" ID="61681A2F-EBF9-450B-9814-34A71ADA8EBC" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
             <BorderThickness>1</BorderThickness>
             <BorderColor>0.290055 0.1523 0.182215</BorderColor>
             <FillColor>0.940019 0.892907 0.779716</FillColor>
         </Style>
-        <Style Name="Yellow Bubble" ID="D5C3FEE7-76D4-421E-A190-458690909109" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
-            <BorderThickness>1</BorderThickness>
-            <BorderColor>0.756763 0.785592 0.373258</BorderColor>
-            <FillColor>0.906773 0.910625 0.634363</FillColor>
-        </Style>
         <Style Name="Green Bubble" ID="DB845A25-26FC-45E6-BA80-08E1F5C66FA3" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
             <BorderThickness>1</BorderThickness>
             <BorderColor>0.331867 0.609932 0.356197</BorderColor>
             <FillColor>0.790123 0.882327 0.80198</FillColor>
         </Style>
-        <Style Name="Blue Bubble" ID="4B1C6936-5C1E-4B2E-8A8D-8D0C63B3C5DC" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
-            <BorderThickness>1</BorderThickness>
-            <BorderColor>0.477193 0.557066 0.76433</BorderColor>
-            <FillColor>0.840969 0.866828 0.925903</FillColor>
-        </Style>
         <Style Name="Pink Bubble" ID="541392A8-4383-4B83-8186-D8D309185EF4" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
             <BorderThickness>1</BorderThickness>
             <BorderColor>0.747881 0.366532 0.542813</BorderColor>
             <FillColor>0.918452 0.807302 0.863467</FillColor>
+        </Style>
+        <Style Name="Red Text" ID="6BC43031-D690-4624-BEF3-76DB36EF9E62" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="Yes" AffectNoteBody="No" AffectFade="No">
+            <TextColor>1.0 0.0 0.0</TextColor>
+        </Style>
+        <Style Name="Title Text" ID="26CD7242-6012-4B10-A0C3-3F37A221CF16" AffectFontStyle="Yes" AffectAlignment="Yes" AffectTextColor="No" AffectNoteBody="No" AffectFade="No">
+            <FontSize>28.0</FontSize>
+            <IsBold>Yes</IsBold>
+        </Style>
+        <Style Name="Yellow Bubble" ID="D5C3FEE7-76D4-421E-A190-458690909109" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.756763 0.785592 0.373258</BorderColor>
+            <FillColor>0.906773 0.910625 0.634363</FillColor>
         </Style>
     </NoteStyles>
     <UISettings>
@@ -518,5 +978,5 @@
         <DefaultFont>Helvetica</DefaultFont>
         <DefaultTextColor>0.0 0.0 0.0</DefaultTextColor>
     </UISettings>
-    <PrintSettings PaperSize="612.0,792.0" LeftMargin="72.0" RightMargin="72.0" TopMargin="90.0" BottomMargin="90.0" PaperType="na-letter" Orientation="Portrait" HorizontalPagination="Clip" VerticalPagination="Auto" ScaleFactor="1.0" HorizontallyCentered="Yes" VerticallyCentered="Yes" Collates="Yes" PagesAcross="1" PagesDown="1"></PrintSettings>
+    <PrintSettings PaperSize="612.0,792.0" LeftMargin="72.0" RightMargin="72.0" TopMargin="90.0" BottomMargin="90.0" PaperType="8 1/2x11" Orientation="Portrait" HorizontalPagination="Clip" VerticalPagination="Auto" ScaleFactor="1.0" HorizontallyCentered="Yes" VerticallyCentered="Yes" Collates="Yes" PagesAcross="1" PagesDown="1"></PrintSettings>
 </ScappleDocument>

@@ -44,7 +44,8 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
     private static final Logger LOGGER = Logger.getInstance(MultiMarkdownLexParser.class);
 
     private MultiMarkdownGlobalSettingsListener globalSettingsListener = null;
-    private ThreadLocal<PegDownProcessor> processor = initProcessor();
+    //private ThreadLocal<PegDownProcessor> processor = initProcessor();
+    private PegDownProcessor processor = null;
     private int currentStringLength;
     //private String currentString;
 
@@ -240,14 +241,19 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         // that way only the bullets will be left to punch out  the block quote
         addExclusion(MultiMarkdownTypes.BLOCK_QUOTE, MultiMarkdownTypes.LIST_ITEM);
     }
-    /** Init/reinit thread local {@link PegDownProcessor}. */
-    private ThreadLocal<PegDownProcessor> initProcessor() {
-        return new ThreadLocal<PegDownProcessor>() {
-            @Override protected PegDownProcessor initialValue() {
-                return new PegDownProcessor(pegdownExtensions != null ? pegdownExtensions : MultiMarkdownGlobalSettings.getInstance().getExtensionsValue(),
-                        parsingTimeout != null ? parsingTimeout : MultiMarkdownGlobalSettings.getInstance().parsingTimeout.getValue());
-            }
-        };
+    ///** Init/reinit thread local {@link PegDownProcessor}. */
+    //private ThreadLocal<PegDownProcessor> initProcessor() {
+    //    return new ThreadLocal<PegDownProcessor>() {
+    //        @Override protected PegDownProcessor initialValue() {
+    //            return getProcessor();
+    //        }
+    //    };
+    //}
+
+    @NotNull
+    private PegDownProcessor getProcessor() {
+        return new PegDownProcessor(pegdownExtensions != null ? pegdownExtensions : MultiMarkdownGlobalSettings.getInstance().getExtensionsValue(),
+                parsingTimeout != null ? parsingTimeout : MultiMarkdownGlobalSettings.getInstance().parsingTimeout.getValue());
     }
 
     public MultiMarkdownLexParser() {
@@ -257,7 +263,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
 
         MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
             public void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings) {
-                processor.remove();
+                processor = null;
             }
         });
     }
@@ -266,7 +272,6 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         // here we don't listen to global changes, our flags are fixed
         this.pegdownExtensions = pegdownExtensions;
         this.parsingTimeout = MultiMarkdownGlobalSettings.getInstance().parsingTimeout.getValue();
-
     }
 
     public MultiMarkdownLexParser(int pegdownExtensions, int parsingTimeout) {
@@ -281,7 +286,10 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         //currentString = source;
 
         try {
-            rootNode = processor.get().parseMarkdown(source.toCharArray());
+            if (processor == null) {
+                processor = getProcessor();
+            }
+            rootNode = processor.parseMarkdown(source.toCharArray());
             return true;
         } catch (Exception e) {
             LOGGER.error("Failed processing Markdown document", e);

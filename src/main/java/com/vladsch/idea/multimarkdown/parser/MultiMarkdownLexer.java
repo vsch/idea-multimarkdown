@@ -80,6 +80,7 @@ public class MultiMarkdownLexer extends Lexer {
         if (buffer.length() > 0) {
             lexParser.parseMarkdown(buffer.toString());
             lexerTokens = lexParser.getLexerTokens();
+            lexParser.clearParsed();    // release all memory from the parse, we don't need it.
         }
 
         lexerToken = null;

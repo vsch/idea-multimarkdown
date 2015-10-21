@@ -69,10 +69,7 @@ import netscape.javascript.JSObject;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pegdown.LinkRenderer;
-import org.pegdown.ParsingTimeoutException;
-import org.pegdown.PegDownProcessor;
-import org.pegdown.ToHtmlSerializer;
+import org.pegdown.*;
 import org.pegdown.ast.RootNode;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -130,9 +127,10 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     /**
      * The {@link PegDownProcessor} used for building the document AST.
      */
-    protected ThreadLocal<PegDownProcessor> processor = initProcessor();
+    //private ThreadLocal<PegDownProcessor> processor = initProcessor();
+	private PegDownProcessor processor = null;
 
-    protected boolean isActive = false;
+	protected boolean isActive = false;
 
     protected boolean isRawHtml = false;
 
@@ -179,14 +177,19 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     /**
      * Init/reinit thread local {@link PegDownProcessor}.
      */
-    protected static ThreadLocal<PegDownProcessor> initProcessor() {
-        return new ThreadLocal<PegDownProcessor>() {
-            @Override
-            protected PegDownProcessor initialValue() {
-                // ISSUE: #7 worked around, disable pegdown TaskList HTML rendering, they don't display well in Darcula.
-                return new PegDownProcessor(MultiMarkdownGlobalSettings.getInstance().getExtensionsValue() /*& ~Extensions.TASKLISTITEMS*/, getParsingTimeout());
-            }
-        };
+    //protected static ThreadLocal<PegDownProcessor> initProcessor() {
+    //    return new ThreadLocal<PegDownProcessor>() {
+    //        @Override
+    //        protected PegDownProcessor initialValue() {
+    //            // ISSUE: #7 worked around, disable pegdown TaskList HTML rendering, they don't display well in Darcula.
+    //            return getProcessor();
+    //        }
+    //    };
+    //}
+
+    @NotNull
+    private static PegDownProcessor getProcessor() {
+        return new PegDownProcessor(MultiMarkdownGlobalSettings.getInstance().getExtensionsValue() /*& ~Extensions.TASKLISTITEMS*/, getParsingTimeout());
     }
 
     /**
@@ -263,6 +266,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
             public void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings) {
                 if (project.isDisposed()) return;
+                processor = null;
                 updateEditorTabIsVisible();
                 updateLinkRenderer();
                 delayedHtmlPreviewUpdate(true);
@@ -687,7 +691,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
 
                         if (fullKit) {
                             needStyleSheetUpdate = true;
-                            processor.remove();     // make it re-initialize when accessed
+                            //processor.remove();     // make it re-initialize when accessed
                         }
                         updateHtmlContent(isActive || isMyTabSelected());
                     }
@@ -775,7 +779,10 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
 
     protected void parseMarkdown(String markdownSource) {
         try {
-            astRoot = processor.get().parseMarkdown(markdownSource.toCharArray());
+            if (processor == null) {
+                processor = getProcessor();
+            }
+            astRoot = processor.parseMarkdown(markdownSource.toCharArray());
         } catch (ParsingTimeoutException e) {
             astRoot = null;
         }
@@ -793,6 +800,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                     parseMarkdown(document.getText());
                     final String html = makeHtmlPage(markdownToHtml(true));
                     final String htmlTxt = isShowModified() ? html : markdownToHtml(false);
+                    astRoot = null;
                     updateRawHtmlText(htmlTxt);
                 } else {
                     if (!htmlWorkerRunning) {
@@ -801,6 +809,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
 
                         parseMarkdown(document.getText());
                         final String html = makeHtmlPage(markdownToHtml(true));
+                        astRoot = null;
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
@@ -896,7 +905,6 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
      * <p/>
      * Update the HTML content if obsolete.
      */
-
     public void selectNotify() {
         isActive = true;
         if (previewIsObsolete) {
@@ -910,7 +918,6 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
      * Does nothing.
      */
     public void deselectNotify() {
-        //isEditorTabHidden();
         isActive = false;
     }
 
@@ -978,7 +985,6 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
 
             if (jEditorPane != null) {
                 jEditorPane.removeAll();
-                //jEditorPane.removeNotify();
             }
 
             if (globalSettingsListener != null) {
