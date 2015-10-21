@@ -5,17 +5,19 @@ idea-multimarkdown
 
 **You can download it on the [JebBrains plugin page](https://plugins.jetbrains.com/plugin?pr=&pluginId=7896).**
 
-**For any communications requiring a reply** please use the [GitHub Issues page](https://github.com/vsch/idea-multimarkdown/issues) for this plugin. There is no ability to reply to comments left on the [JetBrains plugin comment and rate page](https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896).
+**For any communications requiring a reply** please use the [GitHub Issues page](../../issues) for this plugin. There is no ability to reply to comments left on the [JetBrains plugin comment and rate page](https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896).
 
-**[Wiki Pages](https://github.com/vsch/idea-multimarkdown/wiki) added** with instructions on [how to include your GitHub wiki in the IntelliJ IDE](https://github.com/vsch/idea-multimarkdown/wiki/Adding-GitHub-Wiki-To-Your-IntelliJ-Project) so you can work on the wiki in the IDE and use the plugin for syntax highlighting and preview. Makes adding images and manipulating the wiki a lot easier.
+**[Wiki Pages](../../wiki) added** with instructions on [how to include your GitHub wiki in the IntelliJ IDE](../../wiki/Adding-GitHub-Wiki-to-Your-IntelliJ-Project) so you can work on the wiki in the IDE and use the plugin for syntax highlighting and preview. Makes adding images and manipulating the wiki a lot easier.
 
 #### This plugin is in the process of migrating to a two tier model
 
 1. Free and open source for the basic functionality as it is present now. I will continue to support it, respond to issues and fix bugs. If you only need the basic functionality of editing and previewing Markdown, then you will not be affected and will continue to enjoy using this plugin with the same level of support you have received thus far.
 
-2. Licensed model with a 30 day trial period which will implement parser based advanced features such as refactoring, find usages, etc. (see issue #12 for the roadmap). After the 30 day trial it will revert to the functionality of the free, open source model. $25 purchase of the license will give you free upgrades and maintenance for one year on the advanced features. I have to commercialize this plugin so that I can devote my full attention to its development. I feel that doing this will benefit both free and licensed versions because I will be able to concentrate my attention on delivering a quality product in the shortest amount of time.
+2. Licensed model with a 30 day trial period which will implement parser based advanced features such as refactoring, find usages, etc. (see issue #12 for the road map). After the 30 day trial it will revert to the functionality of the free, open source model. $24 purchase of the license will give you free upgrades and maintenance for one year on the advanced features. I have to commercialize this plugin so that I can devote my full attention to its development. I feel that doing this will benefit both free and licensed versions because I will be able to concentrate my attention on delivering a quality product in the shortest amount of time.
 
-**Everyone who has generously given a tip** will get a one year license for every $20 that they have donated, plus one extra year as my show of appreciation for your support. ETA is October 15th, 2015.
+**Everyone who has generously given a tip** will get a one year license for every $20 that they have donated, plus one extra year as my show of appreciation for your support.
+
+**Updated ETA is October 29th, 2015.** I underestimated the time it was going to take to re-purpose and migrate a Laravel 4.2 based website to Laravel 5.1. This is now complete with license generation, management and PayPal integration. The next week is going to be devoted to adding licensing and free trial features into the plugin so I can finally release and updated version.
 
 ### Version 1.1.7 Adds highlight.js syntax highlighting and wiki link refactoring/completions
 
@@ -23,14 +25,15 @@ idea-multimarkdown
 
 Wiki links are the first to get the boost to IntelliJ intelligence:
 
-* Wiki link page references are linked to the files they target. For example `[[NOTICE]]` refers to `NOTICE.md` in the same directory as the file containing the link. 
+* Wiki link page references are linked to the files they target. For example `[[NOTICE]]` refers to `NOTICE.md` in the same directory as the file containing the link.
 * Auto completion of Wiki link text part ie. `[[LinkRef|Text]]` will take the text from the linkRef and present several variations. Also any link texts that are the same on the page can be renamed by using refactor/rename operation to change all of them in one operation.
 * Refactor rename operation on a wiki link does a file rename operation with all links that refer to it also changed.
-* Moving a file within the project tree also updates the links. 
-* Navigate to the file a wiki link targets in the markdown source via go to definition or line marker. 
+* Moving a file within the project tree also updates the links.
+* Navigate to the file a wiki link targets in the markdown source via go to definition or line marker.
 * Find all wiki link references to a markdown file in the project via find usages on the file node in the project view
 * Quick fix to create a wiki markdown file for wiki links with missing files, also checks for spaces in target file name, dashes in wiki link target reference and mismatched case between link target and file name of the target.
-* Different icon <img src="https://github.com/vsch/idea-multimarkdown/raw/master/src/main/resources/com/vladsch/idea/multimarkdown/multimarkdown%402x.png" width="16" height="17" alt="MultiMarkdown file Icon"> for markdown files, <img src="https://github.com/vsch/idea-multimarkdown/raw/master/src/main/resources/com/vladsch/idea/multimarkdown/wikimarkdown%402x.png" width="16" height="17" alt="Wiki Page Icon"> is used for files whose ancestor directory has a `.wiki` extension. These are treated as GitHub wiki pages and will display pretty much as they do on GitHub, minus the footer and sidebar. Footer and sidebar are TBI for MultiMarkdown. 
+* Different icon <img src="src/main/resources/com/vladsch/idea/multimarkdown/multimarkdown@2x.png" width="16" height="17" alt="MultiMarkdown file Icon"> for markdown files, <img src="src/main/resources/com/vladsch/idea/multimarkdown/wikimarkdown@2x.png" width="16" height="17" alt="Wiki Page Icon"> is used for files whose ancestor directory has a `.wiki` extension. These are treated as GitHub wiki pages and will display pretty much as they do on GitHub, minus the footer and sidebar. Footer and sidebar are TBI for MultiMarkdown.
+
 * Many more changes, see the plugin version notes on the JetBrains page or in the IDE <kbd>Settings > Plugins > MultiMarkdown</kbd>
 
 *[TBI]:To Be Implemented.
@@ -41,7 +44,7 @@ I have implemented a JavaFX WebView based HTML Preview Tab and the results are s
 
 Here is a screenshot of the plugin's HTML Preview and GitHub of this readme file:
 
-![Preview](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_jfx_webview.png)
+![Preview](assets/images/ScreenShot_jfx_webview.png)
 
 To get the new preview tab you need to configure your IDEA to use JDK 1.8 that includes `jfxrt.jar` in the jdk's `lib/ext` directory, which is its standard location. If `jfxrt.jar` is not found or the plugin cannot create the new editor class, it will fall back to using the `JEditorPane` with `HTMLEditorKit` preview. You can also disable using JavaFX based preview in plugin settings, for those that prefer to keep using the old preview.
 
