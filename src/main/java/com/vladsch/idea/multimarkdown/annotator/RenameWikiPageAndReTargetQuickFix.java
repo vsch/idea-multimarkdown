@@ -80,21 +80,23 @@ class RenameWikiPageAndReTargetQuickFix extends BaseIntentionAction {
     }
 
     private void renameWikiFile(final Project project, final PsiFile psiFile, final String fileName, final MultiMarkdownWikiPageRef wikiPageRefElement, final String newWikiPageRef) {
-        new WriteCommandAction.Simple(project) {
-            @Override
-            public void run() {
-                JavaRefactoringFactory factory = JavaRefactoringFactory.getInstance(project);
-                JavaRenameRefactoring rename = factory.createRename(psiFile, fileName);
-                UsageInfo[] usages = rename.findUsages();
+        final MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
+        if (projectComponent != null) {
+            new WriteCommandAction.Simple(project) {
+                @Override
+                public void run() {
+                    JavaRefactoringFactory factory = JavaRefactoringFactory.getInstance(project);
+                    JavaRenameRefactoring rename = factory.createRename(psiFile, fileName);
+                    UsageInfo[] usages = rename.findUsages();
 
-                MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
-                try {
-                    projectComponent.pushRefactoringRenameFlags(MultiMarkdownNamedElement.RENAME_KEEP_NOTHING);
-                    rename.doRefactoring(usages); // modified 'usages' array
-                } finally {
-                    projectComponent.popRefactoringRenameFlags();
+                    try {
+                        projectComponent.pushRefactoringRenameFlags(MultiMarkdownNamedElement.RENAME_KEEP_NOTHING);
+                        rename.doRefactoring(usages); // modified 'usages' array
+                    } finally {
+                        projectComponent.popRefactoringRenameFlags();
+                    }
                 }
-            }
-        }.execute();
+            }.execute();
+        }
     }
 }

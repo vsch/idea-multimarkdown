@@ -33,8 +33,6 @@ import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
-import com.vladsch.idea.multimarkdown.util.FileReference;
-import com.vladsch.idea.multimarkdown.util.FileReferenceLink;
 import org.jetbrains.annotations.NotNull;
 
 import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement.*;
@@ -98,20 +96,22 @@ class RenameWikiPageQuickFix extends BaseIntentionAction {
     }
 
     private void renameWikiFile(final Project project, final PsiFile psiFile, final String fileName) {
-        new WriteCommandAction.Simple(project) {
-            @Override
-            public void run() {
-                JavaRefactoringFactory factory = JavaRefactoringFactory.getInstance(project);
-                JavaRenameRefactoring rename = factory.createRename(psiFile, fileName);
-                UsageInfo[] usages = rename.findUsages();
-                MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
-                try {
-                    projectComponent.pushRefactoringRenameFlags(alternativeMsg == RENAME_CONFLICTING_TARGET ? RENAME_KEEP_ANCHOR | RENAME_KEEP_PATH | RENAME_KEEP_TITLE  : REASON_FILE_RENAMED);
-                    rename.doRefactoring(usages); // modified 'usages' array
-                } finally {
-                    projectComponent.popRefactoringRenameFlags();
+        final MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
+        if (projectComponent != null) {
+            new WriteCommandAction.Simple(project) {
+                @Override
+                public void run() {
+                    JavaRefactoringFactory factory = JavaRefactoringFactory.getInstance(project);
+                    JavaRenameRefactoring rename = factory.createRename(psiFile, fileName);
+                    UsageInfo[] usages = rename.findUsages();
+                    try {
+                        projectComponent.pushRefactoringRenameFlags(alternativeMsg == RENAME_CONFLICTING_TARGET ? RENAME_KEEP_ANCHOR | RENAME_KEEP_PATH | RENAME_KEEP_TITLE : REASON_FILE_RENAMED);
+                        rename.doRefactoring(usages); // modified 'usages' array
+                    } finally {
+                        projectComponent.popRefactoringRenameFlags();
+                    }
                 }
-            }
-        }.execute();
+            }.execute();
+        }
     }
 }

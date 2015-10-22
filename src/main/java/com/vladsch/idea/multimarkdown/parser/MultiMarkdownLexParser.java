@@ -70,7 +70,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
     protected Pattern abbreviationsPattern = null;
 
     protected final Integer pegdownExtensions;
-    protected final Integer parsingTimeout;
+    protected Integer parsingTimeout;
     protected boolean githubWikiLinks;
 
     protected void clearParsed() {
@@ -258,8 +258,8 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
 
     public MultiMarkdownLexParser() {
         // Listen to global settings changes.
-        this.pegdownExtensions = MultiMarkdownGlobalSettings.getInstance().getExtensionsValue();
-        this.parsingTimeout = MultiMarkdownGlobalSettings.getInstance().parsingTimeout.getValue();
+        this.pegdownExtensions = null;
+        this.parsingTimeout = null;
 
         MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
             public void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings) {
@@ -271,7 +271,13 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
     public MultiMarkdownLexParser(int pegdownExtensions) {
         // here we don't listen to global changes, our flags are fixed
         this.pegdownExtensions = pegdownExtensions;
-        this.parsingTimeout = MultiMarkdownGlobalSettings.getInstance().parsingTimeout.getValue();
+        this.parsingTimeout = null;
+
+        MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
+            public void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings) {
+                processor = null;
+            }
+        });
     }
 
     public MultiMarkdownLexParser(int pegdownExtensions, int parsingTimeout) {

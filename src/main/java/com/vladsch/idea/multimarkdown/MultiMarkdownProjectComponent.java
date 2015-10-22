@@ -25,6 +25,7 @@ import com.intellij.ProjectTopics;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ProjectComponent;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootAdapter;
 import com.intellij.openapi.roots.ModuleRootEvent;
@@ -80,12 +81,12 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
     private final ListenerNotifier<ProjectFileListListener> projectFileListNotifier = new ListenerNotifier<ProjectFileListListener>(this);
 
     private Project project;
-    private boolean hadGithubLinks = MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue();
     protected MultiMarkdownGlobalSettingsListener globalSettingsListener;
     protected int refactoringRenameFlags = MultiMarkdownNamedElement.RENAME_NO_FLAGS;
 
     protected int[] refactoringRenameFlagsStack = new int[10];
     protected int refactoringRenameStack = 0;
+    protected boolean needReparseOnDumbModeExit = false;
 
     public int getRefactoringRenameFlags() {
         return refactoringRenameFlags;
@@ -123,10 +124,23 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         // Listen to settings changes
         MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
             public void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings) {
-                if (hadGithubLinks != newSettings.githubWikiLinks.getValue()) {
-                    // need to reparse everything
-                    hadGithubLinks = newSettings.githubWikiLinks.getValue();
-                    updateHighlighters();
+                updateHighlighters();
+            }
+        });
+
+        project.getMessageBus().connect(project).subscribe(DumbService.DUMB_MODE, new DumbService.DumbModeListener() {
+            @Override
+            public void enteredDumbMode() {
+            }
+
+            @Override
+            public void exitDumbMode() {
+                // need to re-evaluate class link accessibility
+                if (project.isDisposed()) return;
+
+                if (needReparseOnDumbModeExit) {
+                    needReparseOnDumbModeExit = false;
+                    reparseMarkdown();
                 }
             }
         });
@@ -191,6 +205,25 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         return !fileStatus;
     }
 
+    protected void reparseMarkdown() {
+        if (!project.isDisposed()) {
+            if (DumbService.isDumb(project)) {
+                needReparseOnDumbModeExit = true;
+                return;
+            }
+
+            final MultiMarkdownFile[] fileList = getFileReferenceList().getMarkdownFiles();
+
+            // allow references to invalidate their cached values
+            projectFileListNotifier.notifyListeners(UPDATE_DONE);
+
+            DaemonCodeAnalyzer instance = DaemonCodeAnalyzer.getInstance(project);
+            for (MultiMarkdownFile markdownFile : fileList) {
+                instance.restart(markdownFile);
+            }
+        }
+    }
+
     private static class MainFileListUpdater extends ThreadSafeCacheUpdater<FileReferenceList> {
         protected final MultiMarkdownProjectComponent projectComponent;
 
@@ -212,19 +245,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
             ApplicationManager.getApplication().invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    final Project project = projectComponent.project;
-
-                    if (!project.isDisposed()) {
-                        final MultiMarkdownFile[] fileList = projectComponent.getFileReferenceList().getMarkdownFiles();
-
-                        // allow references to invalidate their cached values
-                        projectComponent.projectFileListNotifier.notifyListeners(UPDATE_DONE);
-
-                        DaemonCodeAnalyzer instance = DaemonCodeAnalyzer.getInstance(project);
-                        for (MultiMarkdownFile markdownFile : fileList) {
-                            instance.restart(markdownFile);
-                        }
-                    }
+                    projectComponent.reparseMarkdown();
                 }
             });
         }

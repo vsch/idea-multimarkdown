@@ -86,18 +86,20 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
                                 Project fileProject = parameters.getEditor().getProject();
                                 if (fileProject != null) {
                                     MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(fileProject);
-                                    FileReferenceList wikiFileReferenceList = projectComponent.getFileReferenceList().query()
-                                            .gitHubWikiRules()
-                                            .inSource(virtualFile, fileProject)
-                                            .spaceDashEqual()
-                                            .allWikiPageRefs();
+                                    if (projectComponent != null) {
+                                        FileReferenceList wikiFileReferenceList = projectComponent.getFileReferenceList().query()
+                                                .gitHubWikiRules()
+                                                .inSource(virtualFile, fileProject)
+                                                .spaceDashEqual()
+                                                .allWikiPageRefs();
 
-                                    for (FileReference fileReference : wikiFileReferenceList.get()) {
-                                        addWikiPageRefCompletion(resultSet, (FileReferenceLink) fileReference, true);
-                                    }
+                                        for (FileReference fileReference : wikiFileReferenceList.get()) {
+                                            addWikiPageRefCompletion(resultSet, (FileReferenceLink) fileReference, true);
+                                        }
 
-                                    for (FileReference fileReference : wikiFileReferenceList.get()) {
-                                        addWikiPageRefCompletion(resultSet, (FileReferenceLink) fileReference, false);
+                                        for (FileReference fileReference : wikiFileReferenceList.get()) {
+                                            addWikiPageRefCompletion(resultSet, (FileReferenceLink) fileReference, false);
+                                        }
                                     }
                                 }
                             }

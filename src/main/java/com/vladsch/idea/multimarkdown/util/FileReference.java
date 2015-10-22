@@ -24,6 +24,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
+import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -124,13 +125,16 @@ public class FileReference extends FilePathInfo {
             // if this is not a wiki home and what comes next is ../../{githubword} then we can replace is a subdirectory with current dir name with .wiki added
             assert project != null;
 
-            GithubRepo githubRepo = MultiMarkdownPlugin.getProjectComponent(project).getGithubRepo(currentPath.getFullFilePath());
-            if (githubRepo != null) {
-                try {
-                    String url = githubRepo.githubBaseUrl();
-                    return new FilePathInfo(url).append(matchParts[matchParts.length - 1]);
-                } catch (RuntimeException ignored) {
-                    logger.info("Can't resolve GitHub url", ignored);
+            MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
+            if (projectComponent != null) {
+                GithubRepo githubRepo = projectComponent.getGithubRepo(currentPath.getFullFilePath());
+                if (githubRepo != null) {
+                    try {
+                        String url = githubRepo.githubBaseUrl();
+                        return new FilePathInfo(url).append(matchParts[matchParts.length - 1]);
+                    } catch (RuntimeException ignored) {
+                        logger.info("Can't resolve GitHub url", ignored);
+                    }
                 }
             }
             return currentPath;
@@ -153,13 +157,16 @@ public class FileReference extends FilePathInfo {
             assert project != null;
 
             FilePathInfo wikiPath = currentPath.append(currentPath.getFileName() + WIKI_HOME_EXTENTION);
-            GithubRepo githubRepo = MultiMarkdownPlugin.getProjectComponent(project).getGithubRepo(wikiPath.getFullFilePath());
-            if (githubRepo != null) {
-                try {
-                    String url = githubRepo.repoUrlFor("/");
-                    return new FilePathInfo(url);
-                } catch (RuntimeException ignored) {
-                    logger.info("Can't resolve GitHub url", ignored);
+            MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
+            if (projectComponent != null) {
+                GithubRepo githubRepo = projectComponent.getGithubRepo(wikiPath.getFullFilePath());
+                if (githubRepo != null) {
+                    try {
+                        String url = githubRepo.repoUrlFor("/");
+                        return new FilePathInfo(url);
+                    } catch (RuntimeException ignored) {
+                        logger.info("Can't resolve GitHub url", ignored);
+                    }
                 }
             }
             return currentPath;

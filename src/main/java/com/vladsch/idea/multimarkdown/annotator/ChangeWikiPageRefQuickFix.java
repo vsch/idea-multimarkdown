@@ -37,7 +37,7 @@ import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import org.jetbrains.annotations.NotNull;
 
-import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement.*;
+import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement.RENAME_KEEP_NOTHING;
 
 class ChangeWikiPageRefQuickFix extends BaseIntentionAction {
     public static final int MATCH_CASE_TO_FILE = 1;
@@ -116,23 +116,25 @@ class ChangeWikiPageRefQuickFix extends BaseIntentionAction {
     }
 
     private void changeWikiPageRef(final Project project, final MultiMarkdownWikiPageRef wikiPageRefElement, final String fileName) {
-        new WriteCommandAction.Simple(project) {
-            @Override
-            public void run() {
-                // change the whole name
-                //wikiPageRefElement.setName(fileName, MultiMarkdownNamedElement.REASON_FILE_MOVED);
-                JavaRefactoringFactory factory = JavaRefactoringFactory.getInstance(project);
-                JavaRenameRefactoring rename = factory.createRename(wikiPageRefElement, fileName);
-                UsageInfo[] usages = rename.findUsages();
+        final MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
+        if (projectComponent != null) {
+            new WriteCommandAction.Simple(project) {
+                @Override
+                public void run() {
+                    // change the whole name
+                    //wikiPageRefElement.setName(fileName, MultiMarkdownNamedElement.REASON_FILE_MOVED);
+                    JavaRefactoringFactory factory = JavaRefactoringFactory.getInstance(project);
+                    JavaRenameRefactoring rename = factory.createRename(wikiPageRefElement, fileName);
+                    UsageInfo[] usages = rename.findUsages();
 
-                MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
-                try {
-                    projectComponent.pushRefactoringRenameFlags(RENAME_KEEP_NOTHING);
-                    rename.doRefactoring(usages); // modified 'usages' array
-                } finally {
-                    projectComponent.popRefactoringRenameFlags();
+                    try {
+                        projectComponent.pushRefactoringRenameFlags(RENAME_KEEP_NOTHING);
+                        rename.doRefactoring(usages); // modified 'usages' array
+                    } finally {
+                        projectComponent.popRefactoringRenameFlags();
+                    }
                 }
-            }
-        }.execute();
+            }.execute();
+        }
     }
 }

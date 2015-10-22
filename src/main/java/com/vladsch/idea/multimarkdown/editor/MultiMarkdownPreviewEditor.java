@@ -48,6 +48,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.components.JBScrollPane;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
+import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
 import com.vladsch.idea.multimarkdown.util.ProjectFileListListener;
@@ -251,13 +252,16 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
             }
         });
 
-        MultiMarkdownPlugin.getProjectComponent(project).addListener(projectFileListener = new ProjectFileListListener() {
-            @Override
-            public void projectListsUpdated() {
-                if (project.isDisposed()) return;
-                delayedHtmlPreviewUpdate(false);
-            }
-        });
+        MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
+        if (projectComponent != null) {
+            projectComponent.addListener(projectFileListener = new ProjectFileListListener() {
+                @Override
+                public void projectListsUpdated() {
+                    if (project.isDisposed()) return;
+                    delayedHtmlPreviewUpdate(false);
+                }
+            });
+        }
 
         project.getMessageBus().connect(this).subscribe(DumbService.DUMB_MODE, new DumbService.DumbModeListener() {
             @Override

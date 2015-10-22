@@ -73,6 +73,8 @@ public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl 
     public MultiMarkdownNamedElement handleContentChange(String newContent) throws IncorrectOperationException {
         String newName = new FilePathInfo(newContent).getFileNameNoExtAsWikiRef();
         MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(getProject());
+        if (projectComponent == null) return this;
+
         return (MultiMarkdownNamedElement) setName(newName, projectComponent.getRefactoringRenameFlags() == RENAME_NO_FLAGS ? REASON_FILE_RENAMED : projectComponent.getRefactoringRenameFlags());
     }
 
@@ -89,8 +91,9 @@ public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl 
     @Override
     public PsiElement setName(@NotNull String newName, int renameFlags) {
         MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(getProject());
+        if (projectComponent == null) return this;
 
-        if (projectComponent.getRefactoringRenameFlags() != RENAME_NO_FLAGS) renameFlags = projectComponent.getRefactoringRenameFlags();
+            if (projectComponent.getRefactoringRenameFlags() != RENAME_NO_FLAGS) renameFlags = projectComponent.getRefactoringRenameFlags();
         else if (((MultiMarkdownReferenceWikiPageRef) reference).isResolveRefMissing()) renameFlags &= ~RENAME_KEEP_ANCHOR;
 
         MultiMarkdownNamedElement element = MultiMarkdownPsiImplUtil.setName(this, newName, renameFlags);

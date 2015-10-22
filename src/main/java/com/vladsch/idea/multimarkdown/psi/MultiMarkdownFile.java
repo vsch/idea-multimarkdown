@@ -35,10 +35,7 @@ import com.intellij.psi.FileViewProvider;
 import com.intellij.refactoring.listeners.RefactoringEventData;
 import com.intellij.refactoring.listeners.RefactoringEventListener;
 import com.intellij.util.messages.MessageBusConnection;
-import com.vladsch.idea.multimarkdown.MultiMarkdownFileType;
-import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
-import com.vladsch.idea.multimarkdown.MultiMarkdownLanguage;
-import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
+import com.vladsch.idea.multimarkdown.*;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import com.vladsch.idea.multimarkdown.util.ListenerNotifier;
@@ -109,34 +106,37 @@ public class MultiMarkdownFile extends PsiFileBase implements ListenerNotifyDele
 
     public MultiMarkdownFile(@NotNull FileViewProvider viewProvider) {
         super(viewProvider, MultiMarkdownLanguage.INSTANCE);
-        MultiMarkdownPlugin.getProjectComponent(getProject()).addListener(projectFileListener);
+        MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(getProject());
+        if (projectComponent != null) {
+            projectComponent.addListener(projectFileListener);
 
-        MessageBusConnection connect = getProject().getMessageBus().connect();
-        connect.subscribe(RefactoringEventListener.REFACTORING_EVENT_TOPIC, new RefactoringEventListener() {
-            @Override
-            public void refactoringStarted(@NotNull String refactoringId, @Nullable RefactoringEventData beforeData) {
-                // logger.info("refactoring started on " + this.hashCode());
-            }
+            MessageBusConnection connect = getProject().getMessageBus().connect();
+            connect.subscribe(RefactoringEventListener.REFACTORING_EVENT_TOPIC, new RefactoringEventListener() {
+                @Override
+                public void refactoringStarted(@NotNull String refactoringId, @Nullable RefactoringEventData beforeData) {
+                    // logger.info("refactoring started on " + this.hashCode());
+                }
 
-            @Override
-            public void refactoringDone(@NotNull String refactoringId, @Nullable RefactoringEventData afterData) {
-                // logger.info("refactoring done on " + this.hashCode());
-                invalidateAfterRefactoring();
-                //logger.info("refactoring done on " + this.hashCode());
-            }
+                @Override
+                public void refactoringDone(@NotNull String refactoringId, @Nullable RefactoringEventData afterData) {
+                    // logger.info("refactoring done on " + this.hashCode());
+                    invalidateAfterRefactoring();
+                    //logger.info("refactoring done on " + this.hashCode());
+                }
 
-            @Override
-            public void conflictsDetected(@NotNull String refactoringId, @NotNull RefactoringEventData conflictsData) {
-                // logger.info("refactoring conflicts on " + this.hashCode());
-                invalidateAfterRefactoring();
-            }
+                @Override
+                public void conflictsDetected(@NotNull String refactoringId, @NotNull RefactoringEventData conflictsData) {
+                    // logger.info("refactoring conflicts on " + this.hashCode());
+                    invalidateAfterRefactoring();
+                }
 
-            @Override
-            public void undoRefactoring(@NotNull String refactoringId) {
-                // logger.info("refactoring undo on " + this.hashCode());
-                invalidateAfterRefactoring();
-            }
-        });
+                @Override
+                public void undoRefactoring(@NotNull String refactoringId) {
+                    // logger.info("refactoring undo on " + this.hashCode());
+                    invalidateAfterRefactoring();
+                }
+            });
+        }
     }
 
     protected void invalidateAfterRefactoring() {

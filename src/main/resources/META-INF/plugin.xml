@@ -41,7 +41,7 @@
     </div>
     ]]></description>
 
-  <version>1.1.13</version>
+  <version>1.1.12.6</version>
   <idea-version since-build="133.1711"/>
   <change-notes><![CDATA[
     <ul><h3><b>1.1.13 - More GitHub integration, Bug Fixes &amp; Optimizations.</b></h3>
@@ -61,7 +61,9 @@
       <li>Add relative image links resolve to local files the same way they would resolve to files on GitHub, so you can use relative links for embedded images.</li>
       <li>Change Wiki links now fully GitHub like with same resolution rules except with warnings and annotations.</li>
       <li>Fix comment/uncomment would leave a space around text.</li>
-      <li>Fix minimized parser memory hogging. pegdown processor ast was kept around long after it was needed.</li>
+      <li>Fix minimized parser memory hogging. pegdown processor AST was kept around long after it was needed.</li>
+      <li>Fix #50 hang when >20 files were modified in the file system triggering re-indexing in dumb mode. Plugin did not check for dumb service mode before trying to collect PsiFile(s) for re-parse.</li>
+      <li>Fix #49 inline code being interpreted as start of code fence.</li>
     </ul>
     <ul><h3><b>1.1.12 - Bug Fixes &amp; Optimizations.</b></h3>
       <li>Fix url's with spaces showing up as unresolved.</li>

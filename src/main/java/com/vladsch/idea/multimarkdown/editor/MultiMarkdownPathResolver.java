@@ -276,16 +276,18 @@ public class MultiMarkdownPathResolver {
     @Nullable
     public static String getGitHubDocumentURL(@NotNull Project project, @NotNull Document document, boolean noExtension) {
         MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
-        VirtualFile virtualFile = FileDocumentManager.getInstance().getFile(document);
         String githubhref = null;
+        if (projectComponent != null) {
+            VirtualFile virtualFile = FileDocumentManager.getInstance().getFile(document);
 
-        if (virtualFile != null && projectComponent.isUnderVcs(virtualFile)) {
-            GithubRepo githubRepo = projectComponent.getGithubRepo(virtualFile.getPath());
-            if (githubRepo != null) {
-                FilePathInfo pathInfo = new FilePathInfo(virtualFile);
-                githubhref = githubRepo.repoUrlFor(githubRepo.getRelativePath(noExtension ? pathInfo.getFilePathNoExt() : pathInfo.getFilePath()));
-                if (githubhref != null && !FilePathInfo.isExternalReference(githubhref)) {
-                    githubhref = null;
+            if (virtualFile != null && projectComponent.isUnderVcs(virtualFile)) {
+                GithubRepo githubRepo = projectComponent.getGithubRepo(virtualFile.getPath());
+                if (githubRepo != null) {
+                    FilePathInfo pathInfo = new FilePathInfo(virtualFile);
+                    githubhref = githubRepo.repoUrlFor(githubRepo.getRelativePath(noExtension ? pathInfo.getFilePathNoExt() : pathInfo.getFilePath()));
+                    if (githubhref != null && !FilePathInfo.isExternalReference(githubhref)) {
+                        githubhref = null;
+                    }
                 }
             }
         }
@@ -299,32 +301,34 @@ public class MultiMarkdownPathResolver {
             FilePathInfo pathInfo = new FilePathInfo((VirtualFile) resolved);
             // if it is under git source code control map it to remote
             MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
-            if (projectComponent.isUnderVcs((VirtualFile) resolved)) {
-                GithubRepo githubRepo = projectComponent.getGithubRepo(pathInfo.getPath());
-                if (githubRepo != null) {
-                    String githubhref = null;
-                    FilePathInfo hrefInfo = new FilePathInfo(href);
-                    if (hrefInfo.isMarkdownExt() && githubRepo.isWiki()) {
-                        githubhref = githubRepo.repoUrlFor(hrefInfo.getFilePathNoExt() + hrefInfo.getAnchor());
-                    } else {
-                        githubhref = githubRepo.repoUrlFor(hrefInfo.getFilePathWithAnchor());
-                    }
+            if (projectComponent != null) {
+                if (projectComponent.isUnderVcs((VirtualFile) resolved)) {
+                    GithubRepo githubRepo = projectComponent.getGithubRepo(pathInfo.getPath());
+                    if (githubRepo != null) {
+                        String githubhref = null;
+                        FilePathInfo hrefInfo = new FilePathInfo(href);
+                        if (hrefInfo.isMarkdownExt() && githubRepo.isWiki()) {
+                            githubhref = githubRepo.repoUrlFor(hrefInfo.getFilePathNoExt() + hrefInfo.getAnchor());
+                        } else {
+                            githubhref = githubRepo.repoUrlFor(hrefInfo.getFilePathWithAnchor());
+                        }
 
-                    if (githubhref == null) {
-                        githubhref = githubRepo.repoUrlFor(githubRepo.getRelativePath(githubRepo.isWiki() ? pathInfo.getFilePathWithAnchorNoExt() : pathInfo.getFullFilePath()));
-                    }
+                        if (githubhref == null) {
+                            githubhref = githubRepo.repoUrlFor(githubRepo.getRelativePath(githubRepo.isWiki() ? pathInfo.getFilePathWithAnchorNoExt() : pathInfo.getFullFilePath()));
+                        }
 
-                    if (githubhref != null && FilePathInfo.isExternalReference(githubhref)) {
-                        // remap it to external and launch browser
-                        if (Desktop.isDesktopSupported()) {
-                            try {
-                                Desktop.getDesktop().browse((URI) new URI(githubhref));
-                                return;
-                            } catch (URISyntaxException ex) {
-                                // invalid URI, just log
-                                logger.info("URISyntaxException on '" + githubhref + "'" + ex.toString());
-                            } catch (IOException ex) {
-                                logger.info("IOException on '" + githubhref + "'" + ex.toString());
+                        if (githubhref != null && FilePathInfo.isExternalReference(githubhref)) {
+                            // remap it to external and launch browser
+                            if (Desktop.isDesktopSupported()) {
+                                try {
+                                    Desktop.getDesktop().browse((URI) new URI(githubhref));
+                                    return;
+                                } catch (URISyntaxException ex) {
+                                    // invalid URI, just log
+                                    logger.info("URISyntaxException on '" + githubhref + "'" + ex.toString());
+                                } catch (IOException ex) {
+                                    logger.info("IOException on '" + githubhref + "'" + ex.toString());
+                                }
                             }
                         }
                     }
