@@ -54,7 +54,7 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
             //        .accessibleWikiPageFiles()
             //        ;
 
-            ResolveResult[] results = ((MultiMarkdownReferenceWikiPageRef) psiReference) != null ? ((MultiMarkdownReferenceWikiPageRef) psiReference).getMultiResolveResults(false) : null;
+            ResolveResult[] results = ((MultiMarkdownReferenceWikiPageRef) psiReference) != null ? ((MultiMarkdownReferenceWikiPageRef) psiReference).multiResolve(false) : null;
             if (results != null && results.length > 0) {
                 final PsiFile containingFile = element.getContainingFile();
 

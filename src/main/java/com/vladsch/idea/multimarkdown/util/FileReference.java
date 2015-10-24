@@ -35,57 +35,69 @@ public class FileReference extends FilePathInfo {
 
     public interface ProjectFileResolver {
         VirtualFile getVirtualFile(@NotNull String sourcePath);
-        PsiFile getPsiFile(@NotNull String sourcePath, @NotNull Project project);
+        PsiFile getPsiFile(@NotNull VirtualFile file, @NotNull Project project);
     }
 
     public static ProjectFileResolver projectFileResolver = null;
 
     protected final Project project;
+    protected VirtualFile virtualFile;
 
     public FileReference(@NotNull String filePath) {
         super(filePath);
         this.project = null;
+        this.virtualFile = null;
     }
 
     public FileReference(@NotNull FilePathInfo filePath) {
         super(filePath);
         this.project = null;
+        this.virtualFile = null;
     }
 
     public FileReference(@NotNull FilePathInfo filePath, Project project) {
         super(filePath);
         this.project = project;
+        this.virtualFile = null;
+        this.virtualFile = null;
     }
 
     public FileReference(@NotNull String filePath, Project project) {
         super(filePath);
         this.project = project;
+        this.virtualFile = null;
     }
 
-    public FileReference(@NotNull VirtualFile file, Project project) {
-        super(file.getPath());
+    public FileReference(@NotNull VirtualFile virtualFile, Project project) {
+        super(virtualFile.getPath());
         this.project = project;
+        this.virtualFile = virtualFile;
     }
 
-    public FileReference(@NotNull PsiFile file) {
-        super(file.getVirtualFile().getPath());
-        this.project = file.getProject();
+    public FileReference(@NotNull PsiFile psiFile) {
+        super(psiFile.getVirtualFile().getPath());
+        this.project = psiFile.getProject();
+        this.virtualFile = psiFile.getVirtualFile();
     }
 
     public FileReference(@NotNull FileReference other) {
         super(other);
         this.project = other.project;
+        this.virtualFile = other.virtualFile;
     }
+
     @Nullable
     @Override
     public FileReference resolveLinkRef(@Nullable String linkRef, boolean convertGitHubWikiHome) {
         return resolveLinkRef(linkRef, convertGitHubWikiHome, false);
     }
+
     @Nullable
     @Override
     public FileReference resolveLinkRefWithAnchor(@Nullable String linkRef, boolean convertGitHubWikiHome) {
         return resolveLinkRef(linkRef, convertGitHubWikiHome, true);
     }
+
     @Nullable
     @Override
     public FileReference resolveLinkRef(@Nullable String linkRef) {
@@ -218,41 +230,49 @@ public class FileReference extends FilePathInfo {
 
     @Nullable
     public VirtualFile getVirtualFile() {
-        return FileReference.getVirtualFile(getFilePath());
+        if (virtualFile == null) {
+            virtualFile = FileReference.getVirtualFile(getFilePath());
+        }
+        return virtualFile != null && virtualFile.getPath().equals(getFilePath()) ? virtualFile : null;
     }
 
     @Nullable
     public VirtualFile getVirtualFileWithAnchor() {
-        return FileReference.getVirtualFile(getFilePathWithAnchor());
+        if (virtualFile == null) {
+            virtualFile = FileReference.getVirtualFile(getFilePathWithAnchor());
+        }
+        return virtualFile != null && virtualFile.getPath().equals(getFilePathWithAnchor()) ? virtualFile : null;
     }
 
     @Nullable
     public VirtualFile getVirtualParent() {
-        return FileReference.getVirtualFile(getPath());
+        return virtualFile != null ? virtualFile.getParent() : FileReference.getVirtualFile(getPath());
     }
 
     @Nullable
     public PsiFile getPsiFile() {
-        return FileReference.getPsiFile(getFilePath(), project);
+        VirtualFile virtualFile = getVirtualFile();
+        return virtualFile != null ? FileReference.getPsiFile(virtualFile, project) : null;
     }
 
     @Nullable
     public PsiFile getPsiFileWithAnchor() {
-        return FileReference.getPsiFile(getFilePathWithAnchor(), project);
+        VirtualFile virtualFile = getVirtualFileWithAnchor();
+        return virtualFile != null ? FileReference.getPsiFile(virtualFile, project) : null;
     }
 
     @Nullable
     public MultiMarkdownFile getMultiMarkdownFile() {
         PsiFile file;
-        return (file = FileReference.getPsiFile(getFilePath(), project)) instanceof MultiMarkdownFile ?
-                (MultiMarkdownFile) file : null;
+        VirtualFile virtualFile = getVirtualFile();
+        return virtualFile != null && (file = FileReference.getPsiFile(virtualFile, project)) instanceof MultiMarkdownFile ? (MultiMarkdownFile) file : null;
     }
 
     @Nullable
     public MultiMarkdownFile getMultiMarkdownFileWithAnchor() {
         PsiFile file;
-        return (file = FileReference.getPsiFile(getFilePathWithAnchor(), project)) instanceof MultiMarkdownFile ?
-                (MultiMarkdownFile) file : null;
+        VirtualFile virtualFile = getVirtualFileWithAnchor();
+        return virtualFile != null && (file = FileReference.getPsiFile(virtualFile, project)) instanceof MultiMarkdownFile ? (MultiMarkdownFile) file : null;
     }
 
     @Nullable
@@ -261,8 +281,8 @@ public class FileReference extends FilePathInfo {
     }
 
     @Nullable
-    public static PsiFile getPsiFile(@NotNull String sourcePath, @NotNull Project project) {
-        return projectFileResolver == null ? null : projectFileResolver.getPsiFile(sourcePath, project);
+    public static PsiFile getPsiFile(@NotNull VirtualFile file, @NotNull Project project) {
+        return projectFileResolver == null ? null : projectFileResolver.getPsiFile(file, project);
     }
 
     @Override
@@ -294,27 +314,6 @@ public class FileReference extends FilePathInfo {
             if (parent != null) {
                 if (parent.findChild(newName) == null) {
                     return true;
-                    //final boolean[] result = new boolean[1];
-                    //
-                    //ApplicationManager.getApplication().runWriteAction(new Runnable() {
-                    //    @Override
-                    //    public void run() {
-                    //        try {
-                    //            VirtualFile newVirtualFile = parent.createChildData(this, newName);
-                    //            result[0] = true;
-                    //            try {
-                    //                newVirtualFile.delete(this);
-                    //            } catch (IOException ignore) {
-                    //                logger.info("IOException on delete " + newName, ignore);
-                    //            }
-                    //        } catch (IOException ignore) {
-                    //            // can't create it, so we remove it
-                    //            logger.info("IOException on create " + newName, ignore);
-                    //        }
-                    //    }
-                    //});
-                    //
-                    //return result[0];
                 }
             }
         }
@@ -328,35 +327,10 @@ public class FileReference extends FilePathInfo {
 
     public boolean canCreateFile(@NotNull final String newName) {
         if (project != null) {
-            // not just changing file name case
             final VirtualFile parent = getVirtualParent();
             if (parent != null) {
                 if (parent.findChild(newName) == null) {
                     return true;
-                    //final boolean[] result = new boolean[1];
-                    //
-                    //Application application = ApplicationManager.getApplication();
-                    //
-                    //if (!application.isWriteAccessAllowed()) return true;
-                    //
-                    //application.runWriteAction(new Runnable() {
-                    //    @Override
-                    //    public void run() {
-                    //        try {
-                    //            VirtualFile newVirtualFile = parent.createChildData(this, newName);
-                    //            result[0] = true;
-                    //            try {
-                    //                newVirtualFile.delete(this);
-                    //            } catch (IOException ignore) {
-                    //                logger.info("IOException on delete " + newName, ignore);
-                    //            }
-                    //        } catch (IOException ignore) {
-                    //            // can't create it, so we remove it
-                    //            logger.info("IOException on create " + newName, ignore);
-                    //        }
-                    //    }
-                    //});
-                    //return result[0];
                 }
             }
         }

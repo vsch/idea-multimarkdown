@@ -53,7 +53,7 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
-import com.vladsch.idea.multimarkdown.util.ProjectFileListListener;
+import com.vladsch.idea.multimarkdown.util.ReferenceChangeListener;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -123,7 +123,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     protected boolean isReleased = false;
 
     protected MultiMarkdownGlobalSettingsListener globalSettingsListener;
-    protected ProjectFileListListener projectFileListener;
+    protected ReferenceChangeListener projectFileListener;
 
     /**
      * The {@link PegDownProcessor} used for building the document AST.
@@ -277,9 +277,9 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
 
         MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
         if (projectComponent != null) {
-            projectComponent.addListener(projectFileListener = new ProjectFileListListener() {
+            projectComponent.addListener(MultiMarkdownProjectComponent.ALL_NAMESPACES, projectFileListener = new ReferenceChangeListener() {
                 @Override
-                public void projectListsUpdated() {
+                public void referencesChanged(@Nullable String name) {
                     if (project.isDisposed()) return;
                     delayedHtmlPreviewUpdate(false);
                 }

@@ -422,6 +422,8 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
             if (linkRefParts[i].equals(".")) continue;
 
             if (linkRefParts[i].equals("..")) {
+                if (pathInfo.isEmpty() || pathInfo.isRoot()) return null;
+
                 if (convertLinkRefs) {
                     for (LinkRefResolver linkRefResolver : linkRefResolvers) {
                         if (linkRefResolver != null) {
@@ -433,8 +435,6 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
                         }
                     }
                 }
-
-                if (pathInfo.isEmpty() || pathInfo.isRoot()) return null;
 
                 pathInfo = new FilePathInfo(pathInfo.getPath());
             } else {

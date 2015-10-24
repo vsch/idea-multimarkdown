@@ -20,6 +20,7 @@
  */
 package com.vladsch.idea.multimarkdown.util;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
@@ -27,6 +28,7 @@ import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.security.InvalidParameterException;
 import java.util.*;
 
 public class FileReferenceList {
@@ -93,8 +95,31 @@ public class FileReferenceList {
             }
         }
 
-        public Builder(Collection<? extends FileReference> fileReferences) {
-            for (FileReference fileReference : fileReferences) {
+        public Builder(@NotNull Collection fileReferences, @Nullable Project project, FileReferenceList.Filter... filters) {
+            Outer:
+            for (Object o : fileReferences) {
+                FileReference fileReference = null;
+                if (o instanceof FileReference) {
+                    if (project == null) project = ((FileReference) o).getProject();
+                    fileReference = (FileReference) o;
+                } else if (o instanceof String) {
+                    fileReference = new FileReference((String) o, project);
+                } else if (o instanceof VirtualFile) {
+                    fileReference = new FileReference((VirtualFile) o, project);
+                } else if (o instanceof PsiFile) {
+                    if (project == null) project = ((PsiFile) o).getProject();
+                    fileReference = new FileReference((PsiFile) o);
+                } else {
+                    throw new InvalidParameterException("Collection can only contain String, FileReference, VirtualFile or PsiFile elements");
+                }
+
+                for (FileReferenceList.Filter filter : filters) {
+                    if (filter == null) continue;
+
+                    if (!filter.filterExt(fileReference.getExt(), fileReference.getFullFilePath())) continue Outer;
+                    if (filter.isRefFilter() && (fileReference = filter.filterRef(fileReference)) == null) continue Outer;
+                }
+
                 add(fileReference);
             }
         }
@@ -215,8 +240,12 @@ public class FileReferenceList {
         return extensions;
     }
 
-    public FileReferenceList(Collection<? extends FileReference> c) {
-        this(new Builder(c));
+    public FileReferenceList(@NotNull Collection c) {
+        this(new Builder(c, null));
+    }
+
+    public FileReferenceList(@NotNull Collection c, Project project) {
+        this(new Builder(c, project));
     }
 
     public FileReferenceList(FileReference... fileReferences) {
@@ -240,7 +269,7 @@ public class FileReferenceList {
 
                 for (Filter filter : filters) {
                     if (filter == null) continue;
-                    if (!filter.filterExt(fileReference.getExt(), fileReference.getAnchor())) continue Outer;
+                    if (!filter.filterExt(fileReference.getExt(), fileReference.getFullFilePath())) continue Outer;
 
                     if (!filter.isRefFilter()) continue;
                     fileReference = filter.filterRef(fileReference);
@@ -494,6 +523,7 @@ public class FileReferenceList {
         }
         return result;
     }
+
     public static final Filter ALL_WIKI_REFS_FILTER = new Filter() {
         @Override
         public boolean filterExt(@NotNull String ext, String anchor) {

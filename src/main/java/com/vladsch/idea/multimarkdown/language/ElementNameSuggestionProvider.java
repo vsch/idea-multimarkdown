@@ -21,14 +21,13 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.SuggestedNameInfo;
 import com.intellij.refactoring.rename.PreferrableNameSuggestionProvider;
 import com.intellij.util.containers.ContainerUtil;
-import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
-import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.*;
 import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownPsiImplUtil;
 import com.vladsch.idea.multimarkdown.spellchecking.Suggestion;
 import com.vladsch.idea.multimarkdown.spellchecking.SuggestionList;
 import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import com.vladsch.idea.multimarkdown.util.FileReferenceList;
+import com.vladsch.idea.multimarkdown.util.FileReferenceListQuery;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -106,17 +105,14 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
             //suggestionList.add(FilePathInfo.linkRefNoAnchor(((MultiMarkdownWikiPageRef) element).getName()));
 
             MultiMarkdownFile markdownFile = (MultiMarkdownFile) element.getContainingFile();
-            MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(element.getProject());
-            if (projectComponent != null) {
-                FileReferenceList wikiPages = projectComponent.getFileReferenceList().query()
-                        .gitHubWikiRules()
-                        .inSource(markdownFile)
-                        .wikiPageRefs(!markdownFile.isWikiPage());
+            FileReferenceList wikiPages = new FileReferenceListQuery(element.getProject())
+                    .gitHubWikiRules()
+                    .inSource(markdownFile)
+                    .wikiPageRefs(!markdownFile.isWikiPage());
 
-                if (wikiPages.size() > 0) {
-                    // add fixed up version to result
-                    suggestionList.addAll(wikiPages.getAllWikiPageRefStrings());
-                }
+            if (wikiPages.size() > 0) {
+                // add fixed up version to result
+                suggestionList.addAll(wikiPages.getAllWikiPageRefStrings());
             }
 
             if (suggestionList.size() > 0) {

@@ -539,7 +539,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
     }
 
     protected SegmentedRange popRange() {
-        assert (parentRanges.size() > 0);
+        assert parentRanges.size() > 0;
         //if (parentRanges.size() <= minStackLevel) {
         //    int tmp = 0;
         //}
@@ -547,7 +547,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
     }
 
     protected SegmentedRange getRange() {
-        assert (parentRanges.size() > 0);
+        assert parentRanges.size() > 0;
         return parentRanges.get(parentRanges.size() - 1);
     }
 

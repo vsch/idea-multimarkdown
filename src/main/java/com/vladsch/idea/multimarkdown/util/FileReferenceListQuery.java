@@ -20,15 +20,22 @@
  */
 package com.vladsch.idea.multimarkdown.util;
 
-import com.intellij.dvcs.push.VcsPushReferenceStrategy;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.search.FileTypeIndex;
+import com.intellij.psi.search.FilenameIndex;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.util.indexing.FileBasedIndex;
+import com.vladsch.idea.multimarkdown.MultiMarkdownFileType;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 import org.apache.log4j.Logger;
+import org.intellij.images.fileTypes.ImageFileTypeManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
 
 public class FileReferenceListQuery {
     private static final Logger logger = org.apache.log4j.Logger.getLogger(FileReferenceListQuery.class);
@@ -47,20 +54,21 @@ public class FileReferenceListQuery {
     public final static int CASE_INSENSITIVE = 0x0040;
 
     // what is provided for the match
-    public final static int LINK_WITH_EXT_REF = 0x0000;
-    public final static int WIKIPAGE_REF = 0x0080;
-    public final static int LINK_REF_NO_EXT = 0x0100;
+    public final static int LINK_WITH_EXT_REF = 0x0080;
+    public final static int WIKIPAGE_REF = 0x0100;
+    public final static int LINK_REF_NO_EXT = 0x0200;
 
     public final static int MATCH_TYPE_FLAGS = LINK_REF_NO_EXT | WIKIPAGE_REF | LINK_WITH_EXT_REF;
 
     // don't strip # from links so that files with # can be matched
-    public final static int MATCH_LINK_WITH_ANCHOR = 0x0200;
-    public final static int WIKIPAGE_GITHUB_RULES = 0x0400;
+    public final static int MATCH_WITH_ANCHOR = 0x0400;
+    public final static int WIKIPAGE_GITHUB_RULES = 0x0800;
 
-    protected final @NotNull FileReferenceList defaultFileList;
+    protected @Nullable FileReferenceList defaultFileList;
     protected int queryFlags;
     protected String matchLinkRef;
     protected FileReference sourceReference;
+    protected Project project = null;
 
     public FileReferenceListQuery(@NotNull FileReferenceList defaultFileList) {
         this.defaultFileList = defaultFileList;
@@ -83,9 +91,49 @@ public class FileReferenceListQuery {
         this.sourceReference = other.sourceReference;
     }
 
+    public FileReferenceListQuery(@NotNull Collection c) {
+        this.defaultFileList = new FileReferenceList(c);
+        this.queryFlags = CASE_INSENSITIVE;
+        this.matchLinkRef = null;
+        this.sourceReference = null;
+    }
+
+    public FileReferenceListQuery(@NotNull Project project) {
+        this.defaultFileList = null;
+        this.queryFlags = CASE_INSENSITIVE;
+        this.matchLinkRef = null;
+        this.sourceReference = null;
+        this.project = project;
+    }
+
+    public FileReferenceListQuery(@NotNull Collection c, Project project) {
+        this.defaultFileList = new FileReferenceList(c, project);
+        this.queryFlags = CASE_INSENSITIVE;
+        this.matchLinkRef = null;
+        this.sourceReference = null;
+    }
+
+    public FileReferenceListQuery(@NotNull Collection c, int queryFlags) {
+        this.defaultFileList = new FileReferenceList(c);
+        this.queryFlags = queryFlags;
+        this.matchLinkRef = null;
+        this.sourceReference = null;
+    }
+
+    public FileReferenceListQuery(@NotNull Collection c, Project project, int queryFlags) {
+        this.defaultFileList = new FileReferenceList(c, project);
+        this.queryFlags = queryFlags;
+        this.matchLinkRef = null;
+        this.sourceReference = null;
+    }
+
     @NotNull
-    public FileReferenceList detDefaultFileList() {
-        return defaultFileList;
+    public FileReferenceList detDefaultFileList(FileReferenceList.Filter... filters) {
+        if (defaultFileList == null) {
+            // build it from project and query flags
+            return getProjectFileType(project, queryFlags, filters);
+        }
+        return filters.length > 0 ? defaultFileList.filter(filters) : defaultFileList;
     }
 
     public int getQueryFlags() {
@@ -137,6 +185,18 @@ public class FileReferenceListQuery {
     }
 
     @NotNull
+    public FileReferenceListQuery withoutAnchor() {
+        queryFlags &= ~MATCH_WITH_ANCHOR;
+        return this;
+    }
+
+    @NotNull
+    public FileReferenceListQuery withAnchor() {
+        queryFlags |= MATCH_WITH_ANCHOR;
+        return this;
+    }
+
+    @NotNull
     public FileReferenceListQuery caseInsensitive() {
         queryFlags |= CASE_INSENSITIVE;
         return this;
@@ -166,13 +226,13 @@ public class FileReferenceListQuery {
 
     @NotNull
     public FileReferenceListQuery keepLinkRefAnchor() {
-        queryFlags |= MATCH_LINK_WITH_ANCHOR;
+        queryFlags |= MATCH_WITH_ANCHOR;
         return this;
     }
 
     @NotNull
     public FileReferenceListQuery removeLinkRefAnchor() {
-        queryFlags &= ~MATCH_LINK_WITH_ANCHOR;
+        queryFlags &= ~MATCH_WITH_ANCHOR;
         return this;
     }
 
@@ -190,9 +250,9 @@ public class FileReferenceListQuery {
         if (wikiRef != null) {
             if ((queryFlags & WIKIPAGE_GITHUB_RULES) != 0) {
                 FilePathInfo pathInfo = new FilePathInfo(wikiRef);
-                this.matchLinkRef = (queryFlags & MATCH_LINK_WITH_ANCHOR) != 0 ? pathInfo.getFileNameWithAnchor() : pathInfo.getFileName();
+                this.matchLinkRef = (queryFlags & MATCH_WITH_ANCHOR) != 0 ? pathInfo.getFileNameWithAnchor() : pathInfo.getFileName();
             } else {
-                this.matchLinkRef = (queryFlags & MATCH_LINK_WITH_ANCHOR) != 0 ? wikiRef : FilePathInfo.linkRefNoAnchor(wikiRef);
+                this.matchLinkRef = (queryFlags & MATCH_WITH_ANCHOR) != 0 ? wikiRef : FilePathInfo.linkRefNoAnchor(wikiRef);
             }
         }
         queryFlags = (queryFlags & ~MATCH_TYPE_FLAGS) | WIKIPAGE_REF;
@@ -207,7 +267,7 @@ public class FileReferenceListQuery {
 
     @NotNull
     public FileReferenceListQuery matchLinkRef(@NotNull String linkRef, boolean withExt) {
-        this.matchLinkRef = (queryFlags & MATCH_LINK_WITH_ANCHOR) != 0 ? linkRef : FilePathInfo.linkRefNoAnchor(linkRef);
+        this.matchLinkRef = (queryFlags & MATCH_WITH_ANCHOR) != 0 ? linkRef : FilePathInfo.linkRefNoAnchor(linkRef);
         queryFlags = (queryFlags & ~MATCH_TYPE_FLAGS) | (withExt ? LINK_WITH_EXT_REF : LINK_REF_NO_EXT);
         return this;
     }
@@ -272,14 +332,37 @@ public class FileReferenceListQuery {
 
     @NotNull
     protected FileReferenceList buildResults(@Nullable FileReferenceList fileList, FileReferenceList.Filter... postFilters) {
-        if (fileList == null) fileList = defaultFileList;
+        boolean haveTypeFilter = false;
+        boolean haveQueryFilter = false;
 
+        FileReferenceList.Filter queryFilter = getQueryFilter();
+        FileReferenceList.Filter typeFilter = getFileTypeFilter(queryFlags);
         int iMax = postFilters.length;
-        FileReferenceList.Filter[] filters = new FileReferenceList.Filter[iMax + 2];
-        filters[0] = getFileTypeFilter(queryFlags);
-        filters[1] = getQueryFilter();
-        if (iMax > 0) System.arraycopy(postFilters, 0, filters, 2, iMax);
-        return new FileReferenceList(filters, fileList);
+        int additionalFilters = 0;
+
+        for (FileReferenceList.Filter filter : postFilters) {
+            if (filter == queryFilter) {
+                haveQueryFilter = true;
+                if (haveTypeFilter) break;
+            }
+
+            if (filter == typeFilter) {
+                haveTypeFilter = true;
+                if (haveQueryFilter) break;
+            }
+        }
+
+        if (!haveTypeFilter) additionalFilters++;
+        if (!haveQueryFilter) additionalFilters++;
+
+        FileReferenceList.Filter[] filters = new FileReferenceList.Filter[iMax + additionalFilters];
+
+        int filterIndex = 0;
+        if (!haveTypeFilter) filters[filterIndex++] = typeFilter;
+        if (!haveQueryFilter) filters[filterIndex++] = queryFilter;
+
+        if (iMax > 0) System.arraycopy(postFilters, 0, filters, filterIndex, iMax);
+        return (fileList == null) ? detDefaultFileList(filters) : new FileReferenceList(filters, fileList);
     }
 
     protected static FileReferenceList.Filter getFileTypeFilter(int queryFlags) {
@@ -287,15 +370,15 @@ public class FileReferenceListQuery {
 
         switch (queryFlags & FILE_TYPE_FLAGS) {
             case IMAGE_FILE:
-                filter = (queryFlags & MATCH_LINK_WITH_ANCHOR) != 0 ? FileReferenceList.IMAGE_FILE_FILTER_WITH_ANCHOR : FileReferenceList.IMAGE_FILE_FILTER;
+                filter = (queryFlags & MATCH_WITH_ANCHOR) != 0 ? FileReferenceList.IMAGE_FILE_FILTER_WITH_ANCHOR : FileReferenceList.IMAGE_FILE_FILTER;
                 break;
 
             case MARKDOWN_FILE:
-                filter = (queryFlags & MATCH_LINK_WITH_ANCHOR) != 0 ? FileReferenceList.MARKDOWN_FILE_FILTER_WITH_ANCHOR : FileReferenceList.MARKDOWN_FILE_FILTER;
+                filter = (queryFlags & MATCH_WITH_ANCHOR) != 0 ? FileReferenceList.MARKDOWN_FILE_FILTER_WITH_ANCHOR : FileReferenceList.MARKDOWN_FILE_FILTER;
                 break;
 
             case WIKIPAGE_FILE:
-                filter = (queryFlags & MATCH_LINK_WITH_ANCHOR) != 0 ? FileReferenceList.WIKIPAGE_FILE_FILTER_WITH_ANCHOR : FileReferenceList.WIKIPAGE_FILE_FILTER;
+                filter = (queryFlags & MATCH_WITH_ANCHOR) != 0 ? FileReferenceList.WIKIPAGE_FILE_FILTER_WITH_ANCHOR : FileReferenceList.WIKIPAGE_FILE_FILTER;
                 break;
 
             default:
@@ -304,6 +387,28 @@ public class FileReferenceListQuery {
                 break;
         }
         return filter;
+    }
+
+    protected static FileReferenceList getProjectFileType(Project project, int queryFlags, FileReferenceList.Filter... filters) {
+        FileReferenceList.Builder builder;
+
+        switch (queryFlags & FILE_TYPE_FLAGS) {
+            case WIKIPAGE_FILE:
+            case MARKDOWN_FILE:
+                builder = new FileReferenceList.Builder(FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, MultiMarkdownFileType.INSTANCE, GlobalSearchScope.allScope(project)), project, filters);
+                break;
+
+            case IMAGE_FILE:
+                builder = new FileReferenceList.Builder(FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, ImageFileTypeManager.getInstance().getImageFileType(), GlobalSearchScope.allScope(project)), project, filters);
+                break;
+
+            case ANY_FILE:
+            default:
+                builder = new FileReferenceList.Builder(FileBasedIndex.getInstance().getAllKeys(FilenameIndex.NAME, project), project, filters);
+                break;
+        }
+
+        return new FileReferenceList(builder);
     }
 
     @Nullable
@@ -364,6 +469,9 @@ public class FileReferenceListQuery {
 
     @NotNull
     public MultiMarkdownFile[] markdownFiles() {
+        if ((queryFlags & FILE_TYPE_FLAGS) == 0) {
+            wantMarkdownFiles();
+        }
         return buildResults(null).getMarkdownFiles();
     }
 
@@ -374,16 +482,25 @@ public class FileReferenceListQuery {
 
     @NotNull
     public MultiMarkdownFile[] allWikiPageFiles() {
+        if ((queryFlags & FILE_TYPE_FLAGS) == 0) {
+            wantWikiPages();
+        }
         return buildResults(null).getAllWikiPageFiles();
     }
 
     @NotNull
     public MultiMarkdownFile[] accessibleWikiPageFiles() {
+        if ((queryFlags & FILE_TYPE_FLAGS) == 0) {
+            wantWikiPages();
+        }
         return buildResults(null).getAccessibleWikiPageFiles();
     }
 
     @NotNull
     public MultiMarkdownFile[] inaccessibleWikiPageFiles() {
+        if ((queryFlags & FILE_TYPE_FLAGS) == 0) {
+            wantWikiPages();
+        }
         return buildResults(null).getInaccessibleWikiPageFiles();
     }
 
@@ -416,7 +533,7 @@ public class FileReferenceListQuery {
             }
         } else {
             if (matchPattern == null) {
-                filter = (queryFlags & WIKIPAGE_GITHUB_RULES) != 0 ? getAnyFileFilterGitHubRules(sourceFileReference) :getAnyFileFilter(sourceFileReference);
+                filter = (queryFlags & WIKIPAGE_GITHUB_RULES) != 0 ? getAnyFileFilterGitHubRules(sourceFileReference) : getAnyFileFilter(sourceFileReference);
             } else {
                 filter = getMatchFileFilter(matchPattern, queryFlags, sourceFileReference);
             }
@@ -480,7 +597,7 @@ public class FileReferenceListQuery {
 
                     @Override
                     public FileReference filterRef(@NotNull FileReference fileReference) {
-                        return equivalentWikiRef(queryFlags, ((queryFlags & MATCH_LINK_WITH_ANCHOR) != 0 ? fileReference.getFileNameWithAnchorNoExtAsWikiRef()
+                        return equivalentWikiRef(queryFlags, ((queryFlags & MATCH_WITH_ANCHOR) != 0 ? fileReference.getFileNameWithAnchorNoExtAsWikiRef()
                                 : fileReference.getFileNameNoExtAsWikiRef()), matchPattern) ? fileReference : null;
                     }
                 };
@@ -548,7 +665,7 @@ public class FileReferenceListQuery {
                         @Override
                         public FileReference filterRef(@NotNull FileReference fileReference) {
                             FileReferenceLinkGitHubRules referenceLink = new FileReferenceLinkGitHubRules(sourceFileReference, fileReference);
-                            return equivalentWikiRef(queryFlags, ((queryFlags & MATCH_LINK_WITH_ANCHOR) != 0 ? referenceLink.getWikiPageRefWithAnchor() : referenceLink.getWikiPageRef())
+                            return equivalentWikiRef(queryFlags, ((queryFlags & MATCH_WITH_ANCHOR) != 0 ? referenceLink.getWikiPageRefWithAnchor() : referenceLink.getWikiPageRef())
                                     , matchPattern) && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
                         }
                     };
@@ -566,7 +683,7 @@ public class FileReferenceListQuery {
                         @Override
                         public FileReference filterRef(@NotNull FileReference fileReference) {
                             FileReferenceLink referenceLink = new FileReferenceLink(sourceFileReference, fileReference);
-                            return equivalentWikiRef(queryFlags, ((queryFlags & MATCH_LINK_WITH_ANCHOR) != 0 ? referenceLink.getWikiPageRefWithAnchor() : referenceLink.getWikiPageRef())
+                            return equivalentWikiRef(queryFlags, ((queryFlags & MATCH_WITH_ANCHOR) != 0 ? referenceLink.getWikiPageRefWithAnchor() : referenceLink.getWikiPageRef())
                                     , matchPattern) && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
                         }
                     };
@@ -589,7 +706,7 @@ public class FileReferenceListQuery {
                         @Override
                         public FileReference filterRef(@NotNull FileReference fileReference) {
                             FileReferenceLinkGitHubRules referenceLink = new FileReferenceLinkGitHubRules(sourceFileReference, fileReference);
-                            return equivalent(queryFlags, ((queryFlags & MATCH_LINK_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchor() : referenceLink.getLinkRef()), matchPattern) && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
+                            return equivalent(queryFlags, ((queryFlags & MATCH_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchor() : referenceLink.getLinkRef()), matchPattern) && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
                         }
                     };
                 } else {
@@ -605,7 +722,7 @@ public class FileReferenceListQuery {
                         @Override
                         public FileReference filterRef(@NotNull FileReference fileReference) {
                             FileReferenceLink referenceLink = new FileReferenceLink(sourceFileReference, fileReference);
-                            return equivalent(queryFlags, ((queryFlags & MATCH_LINK_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchor() : referenceLink.getLinkRef()), matchPattern) && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
+                            return equivalent(queryFlags, ((queryFlags & MATCH_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchor() : referenceLink.getLinkRef()), matchPattern) && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
                         }
                     };
                 }
@@ -626,7 +743,7 @@ public class FileReferenceListQuery {
                         @Override
                         public FileReference filterRef(@NotNull FileReference fileReference) {
                             FileReferenceLinkGitHubRules referenceLink = new FileReferenceLinkGitHubRules(sourceFileReference, fileReference);
-                            return equivalent(queryFlags, ((queryFlags & MATCH_LINK_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchorNoExt() : referenceLink.getLinkRefNoExt()), matchPattern) && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
+                            return equivalent(queryFlags, ((queryFlags & MATCH_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchorNoExt() : referenceLink.getLinkRefNoExt()), matchPattern) && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
                         }
                     };
                 } else {
@@ -643,7 +760,7 @@ public class FileReferenceListQuery {
                         @Override
                         public FileReference filterRef(@NotNull FileReference fileReference) {
                             FileReferenceLink referenceLink = new FileReferenceLink(sourceFileReference, fileReference);
-                            return equivalent(queryFlags, ((queryFlags & MATCH_LINK_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchorNoExt() : referenceLink.getLinkRefNoExt()), matchPattern) && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
+                            return equivalent(queryFlags, ((queryFlags & MATCH_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchorNoExt() : referenceLink.getLinkRefNoExt()), matchPattern) && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
                         }
                     };
                 }

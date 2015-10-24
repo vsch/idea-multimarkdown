@@ -26,6 +26,7 @@ package com.vladsch.idea.multimarkdown.editor;
 import com.intellij.ide.scratch.ScratchFileService;
 import com.intellij.lang.Language;
 import com.intellij.lang.PerFileMappings;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.*;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.PossiblyDumbAware;
@@ -74,15 +75,6 @@ public class MultiMarkdownPreviewEditorProvider implements FileEditorProvider, P
                 }
             });
         }
-
-        if (!doAccept && fileExt != null) {
-            for (String ext : MultiMarkdownFileTypeFactory.getExtensions()) {
-                if (ext.equals(fileExt)) {
-                    doAccept = true;
-                    break;
-                }
-            }
-        }
         return doAccept;
     }
 
@@ -92,7 +84,9 @@ public class MultiMarkdownPreviewEditorProvider implements FileEditorProvider, P
 
     @NotNull
     public FileEditor createEditor(@NotNull Project project, @NotNull VirtualFile file) {
-        return new MultiMarkdownPreviewEditor(project, FileDocumentManager.getInstance().getDocument(file), false);
+        Document document = FileDocumentManager.getInstance().getDocument(file);
+        assert document != null;
+        return new MultiMarkdownPreviewEditor(project, document, false);
     }
 
     public void disposeEditor(@NotNull FileEditor editor) {

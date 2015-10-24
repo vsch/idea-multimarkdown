@@ -23,22 +23,21 @@ package com.vladsch.idea.multimarkdown;
 
 import com.intellij.ProjectTopics;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootAdapter;
 import com.intellij.openapi.roots.ModuleRootEvent;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.startup.StartupManager;
 import com.intellij.openapi.vcs.FileStatus;
 import com.intellij.openapi.vcs.FileStatusManager;
 import com.intellij.openapi.vcs.ProjectLevelVcsManager;
 import com.intellij.openapi.vcs.VcsListener;
 import com.intellij.openapi.vfs.*;
+import com.intellij.refactoring.listeners.RefactoringEventData;
+import com.intellij.refactoring.listeners.RefactoringEventListener;
 import com.intellij.util.containers.HashMap;
 import com.intellij.util.messages.MessageBus;
+import com.intellij.util.messages.MessageBusConnection;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
@@ -49,36 +48,18 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualFileListener, ListenerNotifyDelegate<ProjectFileListListener> {
+public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualFileListener, ListenerNotifyDelegate<ReferenceChangeListener> {
     private static final Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownProjectComponent.class);
 
-    public final static int ANY_FILE = 0;
-    public final static int FILE_REF = 0;
-
-    public final static int WIKIPAGE_FILE = 1;
-    public final static int MARKDOWN_FILE_ONLY = 2;
-    public final static int IMAGE_FILE = 4;
-    public final static int WIKI_REF = 8;
-    public final static int ALLOW_INACCESSIBLE_REF = 16;
-    public final static int INCLUDE_SELF = 32;
-    public final static int WANT_WIKI_REF = 64;
-    public final static int SPACE_DASH_EQUIVALENT = 128;
-    public final static int MARKDOWN_FILE = MARKDOWN_FILE_ONLY | WIKIPAGE_FILE | ALLOW_INACCESSIBLE_REF;
-    public final static int ALLOW_INACCESSIBLE_WIKI_REF = ALLOW_INACCESSIBLE_REF | MARKDOWN_FILE;
-
-    protected final static int LISTENER_ADDED = 0;
-    protected final static int UPDATE_DONE = 1;
-
-    private static final String WIKI_PAGE_EXTENSION = ".md";
+    private final static int LISTENER_ADDED = 0;
+    private final static int MISSING_REFS_UPDATED = 1;
+    private final static int MISSING_REFS_CHANGED = 2;
+    public static final String ALL_NAMESPACES = "";
 
     private HashMap<String, GithubRepo> githubRepos = null;
 
-    // this one is updating when files change, the thread local ones get updated by this one
-    private final ThreadSafeMainCache<FileReferenceList> mainFileList = new ThreadSafeMainCache<FileReferenceList>(new MainFileListUpdater(this));
-    private ThreadLocal<ThreadSafeMirrorCache<FileReferenceList>> mirrorFileList = loadMarkdownFilesList();
-
     // our listeners that want to know when project files change so they can clear cached references
-    private final ListenerNotifier<ProjectFileListListener> projectFileListNotifier = new ListenerNotifier<ProjectFileListListener>(this);
+    private final HashMap<String, ListenerNotifier<ReferenceChangeListener>> notifiers = new HashMap<String, ListenerNotifier<ReferenceChangeListener>>();
 
     private Project project;
     protected MultiMarkdownGlobalSettingsListener globalSettingsListener;
@@ -87,6 +68,8 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
     protected int[] refactoringRenameFlagsStack = new int[10];
     protected int refactoringRenameStack = 0;
     protected boolean needReparseOnDumbModeExit = false;
+
+    private final HashMap<String, HashMap<String, MultiMarkdownNamedElement>> missingLinkNamespaces = new HashMap<String, HashMap<String, MultiMarkdownNamedElement>>();
 
     public int getRefactoringRenameFlags() {
         return refactoringRenameFlags;
@@ -128,81 +111,121 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
             }
         });
 
-        project.getMessageBus().connect(project).subscribe(DumbService.DUMB_MODE, new DumbService.DumbModeListener() {
+        MessageBusConnection connect = getProject().getMessageBus().connect();
+        connect.subscribe(RefactoringEventListener.REFACTORING_EVENT_TOPIC, new RefactoringEventListener() {
             @Override
-            public void enteredDumbMode() {
+            public void refactoringStarted(@NotNull String refactoringId, @Nullable RefactoringEventData beforeData) {
+                // logger.info("refactoring started on " + this.hashCode());
             }
 
             @Override
-            public void exitDumbMode() {
-                // need to re-evaluate class link accessibility
-                if (project.isDisposed()) return;
+            public void refactoringDone(@NotNull String refactoringId, @Nullable RefactoringEventData afterData) {
+                //logger.info("refactoring done on " + this.hashCode());
+                invalidateAfterRefactoring(ALL_NAMESPACES);
+                //logger.info("refactoring done on " + this.hashCode());
+            }
 
-                if (needReparseOnDumbModeExit) {
-                    needReparseOnDumbModeExit = false;
-                    reparseMarkdown();
-                }
+            @Override
+            public void conflictsDetected(@NotNull String refactoringId, @NotNull RefactoringEventData conflictsData) {
+                logger.info("refactoring conflicts on " + this.hashCode());
+                invalidateAfterRefactoring(ALL_NAMESPACES);
+            }
+
+            @Override
+            public void undoRefactoring(@NotNull String refactoringId) {
+                // logger.info("refactoring undo on " + this.hashCode());
+                invalidateAfterRefactoring(ALL_NAMESPACES);
             }
         });
     }
 
-    private ThreadLocal<ThreadSafeMirrorCache<FileReferenceList>> loadMarkdownFilesList() {
-        return new ThreadLocal<ThreadSafeMirrorCache<FileReferenceList>>() {
-            @Override
-            protected ThreadSafeMirrorCache<FileReferenceList> initialValue() {
-                return new ThreadSafeMirrorCache<FileReferenceList>(mainFileList);
+    protected void notifyListeners(@NotNull String namespace, int notificationType, @Nullable String name) {
+        if (ALL_NAMESPACES.equals(namespace)) {
+            // all namespaces
+            for (ListenerNotifier<ReferenceChangeListener> notifier : notifiers.values()) {
+                notifier.notifyListeners(notificationType, name);
             }
-        };
+        } else if (notifiers.containsKey(namespace)) {
+            notifiers.get(namespace).notifyListeners(notificationType, name);
+
+            if (notifiers.containsKey(ALL_NAMESPACES)) {
+                notifiers.get(ALL_NAMESPACES).notifyListeners(notificationType, name);
+            }
+        }
+    }
+
+    protected void invalidateAfterRefactoring(@NotNull String namespace) {
+        synchronized (missingLinkNamespaces) {
+            if (!missingLinkNamespaces.isEmpty()) {
+                // logger.info("invalidating after refactoring " + this.hashCode());
+                clearMissingLinkElements(namespace);
+                notifyListeners(namespace, MISSING_REFS_UPDATED, null);
+                //DaemonCodeAnalyzer.getInstance(getProject()).restart(this);
+            }
+        }
+    }
+
+    @NotNull
+    public MultiMarkdownNamedElement getMissingLinkElement(@NotNull final MultiMarkdownNamedElement element, @NotNull final String namespace, @NotNull String name) {
+        synchronized (missingLinkNamespaces) {
+            if (!missingLinkNamespaces.containsKey(namespace)) {
+                missingLinkNamespaces.put(namespace, new HashMap<String, MultiMarkdownNamedElement>());
+            }
+
+            HashMap<String, MultiMarkdownNamedElement> missingLinks = missingLinkNamespaces.get(namespace);
+
+            // see if this element used to be the one that was referenced by other missing links
+            // TODO: this is inefficient, need to optimize
+            for (String key : missingLinks.keySet()) {
+                if (!key.equals(name) && missingLinks.get(key) == element) {
+                    // yes it has, we need to invalidate an rebuild
+                    logger.info("Invalidating " + namespace + key + " element " + element + " was root");
+                    missingLinks.remove(key);
+                    notifyListeners(namespace, MISSING_REFS_CHANGED, key);
+                    break;
+                }
+            }
+
+            if (!missingLinks.containsKey(name)) {
+                //logger.info("adding missing element " + element);
+                missingLinks.put(name, element);
+                return element;
+            }
+
+            //logger.info("returning missing ref for element " + element + " to " + missingLinks.get(name));
+            return missingLinks.get(name);
+        }
+    }
+
+    protected void clearMissingLinkElements(@NotNull String namespace) {
+        synchronized (missingLinkNamespaces) {
+            //logger.info("invalidatingMissingLinks on " + this.hashCode());
+            if (ALL_NAMESPACES.equals(namespace)) missingLinkNamespaces.clear();
+            else {
+                if (missingLinkNamespaces.containsKey(namespace)) {
+                    missingLinkNamespaces.get(namespace).clear();
+                }
+            }
+        }
     }
 
     @Override
-    public void notify(ProjectFileListListener listener, Object... params) {
-        if (params.length == 1) {
+    public void notify(com.vladsch.idea.multimarkdown.util.ReferenceChangeListener listener, Object... params) {
+        if (params.length >= 1) {
+            String name = params.length > 1 ? (String) params[1] : null;
             switch ((Integer) params[0]) {
                 case LISTENER_ADDED:
-                    if (mainFileList.cacheIsCurrent()) {
-                        listener.projectListsUpdated();
-                    }
                     break;
 
-                case UPDATE_DONE:
-                    listener.projectListsUpdated();
+                case MISSING_REFS_CHANGED:
+                case MISSING_REFS_UPDATED:
+                    listener.referencesChanged(name);
                     break;
 
                 default:
                     break;
             }
         }
-    }
-
-    public void addListener(@NotNull ProjectFileListListener listener) {
-        projectFileListNotifier.addListener(listener, LISTENER_ADDED);
-    }
-
-    public void removeListener(@NotNull ProjectFileListListener listener) {
-        projectFileListNotifier.removeListener(listener);
-    }
-
-    public Project getProject() {
-        return project;
-    }
-
-    public FileReferenceList getFileReferenceList() {
-        return mirrorFileList.get().getCache();
-    }
-
-    public boolean isUnderVcs(VirtualFile virtualFile) {
-        //ProjectLevelVcsManager instance = ProjectLevelVcsManager.getInstance(project);
-        //AbstractVcs vcs = instance.getVcsFor(virtualFile);
-        //boolean allAreUnder = instance.checkAllFilesAreUnder(vcs, new VirtualFile[] { virtualFile });
-        //boolean inContent = instance.isFileInContent(virtualFile);
-        //boolean isIgnored = instance.isIgnored(virtualFile);
-        FileStatus status = FileStatusManager.getInstance(project).getStatus(virtualFile);
-        String id = status.getId();
-        boolean fileStatus = status.equals(FileStatus.DELETED) || status.equals(FileStatus.ADDED) || status.equals(FileStatus.UNKNOWN) || status.equals(FileStatus.IGNORED)
-                || id.startsWith("IGNORE");
-        logger.info("isUnderVcs " + (!fileStatus) + " for file " + virtualFile + " status " + status);
-        return !fileStatus;
     }
 
     protected void reparseMarkdown() {
@@ -212,119 +235,18 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
                 return;
             }
 
-            final MultiMarkdownFile[] fileList = getFileReferenceList().getMarkdownFiles();
+            final MultiMarkdownFile[] markdownFiles = new FileReferenceListQuery(project).markdownFiles();
 
             // allow references to invalidate their cached values
-            projectFileListNotifier.notifyListeners(UPDATE_DONE);
+            invalidateAfterRefactoring(ALL_NAMESPACES);
+            //FileReferenceList fileList = new FileReferenceListQuery(project).all();
+            //int[] counts = fileList.countByFilter(FileReferenceList.IMAGE_FILE_FILTER, FileReferenceList.MARKDOWN_FILE_FILTER, FileReferenceList.WIKIPAGE_FILE_FILTER);
+            //logger.info(String.format("Updated file list: projectRefs[%d],  imageRefs[%d],  markdownRefs[%d], wikiRefs[%d]", fileList.size(), counts[0], counts[1], counts[2]));
 
             DaemonCodeAnalyzer instance = DaemonCodeAnalyzer.getInstance(project);
-            for (MultiMarkdownFile markdownFile : fileList) {
+            for (MultiMarkdownFile markdownFile : markdownFiles) {
                 instance.restart(markdownFile);
             }
-        }
-    }
-
-    private static class MainFileListUpdater extends ThreadSafeCacheUpdater<FileReferenceList> {
-        protected final MultiMarkdownProjectComponent projectComponent;
-
-        public MainFileListUpdater(MultiMarkdownProjectComponent projectComponent) {
-            this.projectComponent = projectComponent;
-        }
-
-        public FileReferenceList newCache() {
-            return new FileReferenceList();
-        }
-
-        @Override
-        public void beforeCacheUpdate(Object... params) {
-            // this cleans up all the threads and forces them to load a fresh cache on access
-            projectComponent.mirrorFileList.remove();
-        }
-
-        protected void reparseMarkdown() {
-            ApplicationManager.getApplication().invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    projectComponent.reparseMarkdown();
-                }
-            });
-        }
-
-        @Override
-        public void afterCacheUpdate(Object... params) {
-            // all threads have updated lists, invalidate references to files and restart parsing to the links are updated for validity
-
-            // we just schedule a later run in the dispatch thread
-            reparseMarkdown();
-        }
-
-        public void updateCache(final ThreadSafeMainCache.CacheUpdater<FileReferenceList> notifyWhenDone, final Object... params) {
-            final FileReferenceList.Builder builder = new FileReferenceList.Builder();
-
-            final Project project = projectComponent.project;
-            final ProjectFileIndex projectFileIndex = ProjectFileIndex.SERVICE.getInstance(project);
-
-            // run the list update in a separate thread
-            if (project.isDisposed()) return;
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    // run the file gathering in a read action
-                    if (project.isDisposed()) return;
-
-                    ApplicationManager.getApplication().runReadAction(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (project.isDisposed()) return;
-
-                            //VirtualFile baseDir = project.getBaseDir();
-                            final int[] scanned = new int[2];
-                            VirtualFile[] baseDirs = ProjectRootManager.getInstance(project).getContentSourceRoots();
-
-                            for (VirtualFile baseDir : baseDirs) {
-                                VfsUtilCore.visitChildrenRecursively(baseDir, new VirtualFileVisitor() {
-                                    @Override
-                                    public boolean visitFile(@NotNull VirtualFile file) {
-                                        if (project.isDisposed()) return false;
-
-                                        scanned[0]++;
-
-                                        // these don't exist in 133.1711
-                                        try {
-                                            // only add the file only if it is part of the project source or under a .wiki parent
-                                            if (projectFileIndex.isExcluded(file) || projectFileIndex.isInLibrarySource(file)) {
-                                                // skip this one
-                                                return false;
-                                            }
-                                        } catch (NoSuchMethodError ignored) {
-                                        }
-
-                                        if (projectFileIndex.isInSource(file)) {
-                                            //projectFiles.add(file);
-                                            FileReference fileReference = new FileReference(file, project);
-                                            builder.add(fileReference);
-                                        }
-
-                                        return super.visitFile(file);
-                                    }
-                                });
-
-                                if (project.isDisposed()) return;
-                            }
-
-                            if (project.isDisposed()) return;
-
-                            final FileReferenceList fileList = new FileReferenceList(builder);
-
-                            notifyWhenDone.cacheUpdated(fileList);
-
-                            int[] counts = fileList.countByFilter(FileReferenceList.IMAGE_FILE_FILTER, FileReferenceList.MARKDOWN_FILE_FILTER, FileReferenceList.WIKIPAGE_FILE_FILTER);
-                            logger.info(String.format("Updated file list: scanned[%d] cached:  projectRefs[%d],  imageRefs[%d],  markdownRefs[%d], wikiRefs[%d]", scanned[0], fileList.size(), counts[0], counts[1], counts[2]));
-                        }
-                    });
-                }
-            }).start();
         }
     }
 
@@ -332,8 +254,33 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         // project files have changed so we need to update the lists and then reparse for link validation
         // We get a call back when all have been updated.
         if (project.isDisposed()) return;
+        reparseMarkdown();
+    }
 
-        mainFileList.updateCache();
+    public void addListener(@Nullable String namespace, @NotNull ReferenceChangeListener listener) {
+        if (!notifiers.containsKey(namespace)) {
+            notifiers.put(namespace, new ListenerNotifier<ReferenceChangeListener>(this));
+        }
+        notifiers.get(namespace).addListener(listener, LISTENER_ADDED);
+    }
+
+    public void removeListener(@NotNull String namespace, @NotNull ReferenceChangeListener listener) {
+        if (notifiers.containsKey(namespace)) {
+            notifiers.get(namespace).removeListener(listener);
+        }
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public boolean isUnderVcs(VirtualFile virtualFile) {
+        FileStatus status = FileStatusManager.getInstance(project).getStatus(virtualFile);
+        String id = status.getId();
+        boolean fileStatus = status.equals(FileStatus.DELETED) || status.equals(FileStatus.ADDED) || status.equals(FileStatus.UNKNOWN) || status.equals(FileStatus.IGNORED)
+                || id.startsWith("IGNORE");
+        logger.info("isUnderVcs " + (!fileStatus) + " for file " + virtualFile + " status " + status);
+        return !fileStatus;
     }
 
     // TODO: detect extension change in a file and attach our editors if possible
@@ -393,16 +340,17 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
     }
 
     public void projectOpened() {
+        // TODO: is this still needed?
         VirtualFileManager.getInstance().addVirtualFileListener(this);
         boolean initialized = project.isInitialized();
 
         final MessageBus messageBus = project.getMessageBus();
 
+        // TODO: is this still needed?
         messageBus.connect().subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
             public void rootsChanged(ModuleRootEvent event) {
                 if (project.isDisposed()) return;
-
-                mainFileList.updateCache();
+                reparseMarkdown();
             }
         });
 
@@ -423,7 +371,6 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
 
     public void projectClosed() {
         VirtualFileManager.getInstance().removeVirtualFileListener(this);
-        mirrorFileList.remove();     // remove the cached file list
     }
 
     @NonNls
@@ -434,12 +381,12 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
 
     public void initComponent() {
         // get the file list updated
-        StartupManager.getInstance(project).registerPostStartupActivity(new Runnable() {
-            public void run() {
-                /* initialization code */
-                mainFileList.updateCache();
-            }
-        });
+        //StartupManager.getInstance(project).registerPostStartupActivity(new Runnable() {
+        //    public void run() {
+        //        /* initialization code */
+        //        mainFileList.updateCache();
+        //    }
+        //});
         //int tmp = 0;
         //MessageBusConnection connect = project.getMessageBus().connect();
         //connect.subscribe(ProjectLifecycleListener.TOPIC, new ProjectLifecycleListener() {

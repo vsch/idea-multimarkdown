@@ -25,6 +25,7 @@ package com.vladsch.idea.multimarkdown.editor;
 
 //import com.intellij.ide.scratch.ScratchFileService;
 
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.*;
 import com.intellij.openapi.project.PossiblyDumbAware;
 import com.intellij.openapi.project.Project;
@@ -68,22 +69,25 @@ public class MultiMarkdownFxPreviewEditorProvider implements FileEditorProvider,
 
     @NotNull
     public static FileEditor createEditor(@NotNull final Project project, @NotNull final VirtualFile file, final boolean forRawHtml) {
+        final Document document = FileDocumentManager.getInstance().getDocument(file);
+        assert document != null;
+
         if (!MultiMarkdownGlobalSettings.getInstance().useOldPreview.getValue()) {
             return MultiMarkdownGlobalSettings.getInstance().fxPreviewFailedBuild.runBuild(new FailedBuildRunnable<FileEditor>() {
                 @Nullable @Override public FileEditor runCanFail() throws Throwable {
                     MultiMarkdownGlobalSettings.getInstance().setIsFxHtmlPreview(true);
                     boolean isFxApplicationThread = Platform.isFxApplicationThread();
-                    return new MultiMarkdownFxPreviewEditor(project, FileDocumentManager.getInstance().getDocument(file), forRawHtml);
+                    return new MultiMarkdownFxPreviewEditor(project, document, forRawHtml);
                 }
 
                 @Nullable @Override public FileEditor run() {
                     MultiMarkdownGlobalSettings.getInstance().setIsFxHtmlPreview(false);
                     MultiMarkdownGlobalSettings.getInstance().useOldPreview.setValue(true);
-                    return new MultiMarkdownPreviewEditor(project, FileDocumentManager.getInstance().getDocument(file), forRawHtml);
+                    return new MultiMarkdownPreviewEditor(project, document, forRawHtml);
                 }
             });
         }
-        return new MultiMarkdownPreviewEditor(project, FileDocumentManager.getInstance().getDocument(file), forRawHtml);
+        return new MultiMarkdownPreviewEditor(project, document, forRawHtml);
     }
 
     public void disposeEditor(@NotNull FileEditor editor) {

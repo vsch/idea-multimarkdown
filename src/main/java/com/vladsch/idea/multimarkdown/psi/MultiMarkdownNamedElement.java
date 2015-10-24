@@ -25,13 +25,14 @@ package com.vladsch.idea.multimarkdown.psi;
 
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNameIdentifierOwner;
 import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.language.MultiMarkdownReference;
 import org.jetbrains.annotations.NotNull;
 
-public interface MultiMarkdownNamedElement extends PsiNameIdentifierOwner {
+public interface MultiMarkdownNamedElement extends PsiNameIdentifierOwner, Navigatable {
     int RENAME_NO_FLAGS = -1;
 
     int RENAME_KEEP_NOTHING = 0;

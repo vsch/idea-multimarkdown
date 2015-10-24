@@ -151,6 +151,7 @@ public class TestFileReferenceListBuilder extends FileReferenceListTest {
                 .all();
 
         FileReferenceList.Builder filesBuilder = new FileReferenceList.Builder();
+        //final String[] readerFormatNames = ImageIO.getReaderFormatNames();
 
         for (String filePath : filePathList) {
             FileReference fileReference = new FileReference(filePath);
@@ -164,6 +165,24 @@ public class TestFileReferenceListBuilder extends FileReferenceListTest {
     @Test
     public void test_10_FilterFileType_Markdown() throws Exception {
         FileReferenceList fileRefList = fileReferenceList.query()
+                .wantMarkdownFiles()
+                .all();
+
+        FileReferenceList.Builder filesBuilder = new FileReferenceList.Builder();
+
+        for (String filePath : filePathList) {
+            FileReference fileReference = new FileReference(filePath);
+            if (fileReference.isMarkdownExt()) {
+                filesBuilder.add(fileReference);
+            }
+        }
+        compareUnorderedLists(null, filesBuilder, fileRefList);
+    }
+
+    @Test
+    public void test_10_FilterFileType_MarkdownWithAnchor() throws Exception {
+        FileReferenceList fileRefList = fileReferenceList.query()
+                .withAnchor()
                 .wantMarkdownFiles()
                 .all();
 

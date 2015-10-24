@@ -38,7 +38,10 @@ import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
 import com.vladsch.idea.multimarkdown.util.FileReference;
-import org.apache.log4j.*;
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -313,13 +316,10 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
     }
 
     @Override
-    public PsiFile getPsiFile(@NotNull String sourcePath, @NotNull Project project) {
-        VirtualFile file = getVirtualFile(sourcePath);
-        if (file != null) {
-            PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
-            if (psiFile != null && psiFile instanceof MultiMarkdownFile) {
-                return psiFile;
-            }
+    public PsiFile getPsiFile(@NotNull VirtualFile file, @NotNull Project project) {
+        PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
+        if (psiFile != null && psiFile instanceof MultiMarkdownFile) {
+            return psiFile;
         }
         return null;
     }

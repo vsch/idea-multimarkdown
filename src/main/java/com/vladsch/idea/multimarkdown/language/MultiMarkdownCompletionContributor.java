@@ -32,15 +32,10 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.util.ProcessingContext;
 import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
 import com.vladsch.idea.multimarkdown.MultiMarkdownLanguage;
-import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
-import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
 import com.vladsch.idea.multimarkdown.spellchecking.SuggestionList;
-import com.vladsch.idea.multimarkdown.util.FileReference;
-import com.vladsch.idea.multimarkdown.util.FileReferenceLink;
-import com.vladsch.idea.multimarkdown.util.FileReferenceLinkGitHubRules;
-import com.vladsch.idea.multimarkdown.util.FileReferenceList;
+import com.vladsch.idea.multimarkdown.util.*;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
@@ -85,21 +80,18 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
                             if (virtualFile != null) {
                                 Project fileProject = parameters.getEditor().getProject();
                                 if (fileProject != null) {
-                                    MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(fileProject);
-                                    if (projectComponent != null) {
-                                        FileReferenceList wikiFileReferenceList = projectComponent.getFileReferenceList().query()
-                                                .gitHubWikiRules()
-                                                .inSource(virtualFile, fileProject)
-                                                .spaceDashEqual()
-                                                .allWikiPageRefs();
+                                    FileReferenceList wikiFileReferenceList = new FileReferenceListQuery(fileProject)
+                                            .gitHubWikiRules()
+                                            .inSource(virtualFile, fileProject)
+                                            .spaceDashEqual()
+                                            .allWikiPageRefs();
 
-                                        for (FileReference fileReference : wikiFileReferenceList.get()) {
-                                            addWikiPageRefCompletion(resultSet, (FileReferenceLink) fileReference, true);
-                                        }
+                                    for (FileReference fileReference : wikiFileReferenceList.get()) {
+                                        addWikiPageRefCompletion(resultSet, (FileReferenceLink) fileReference, true);
+                                    }
 
-                                        for (FileReference fileReference : wikiFileReferenceList.get()) {
-                                            addWikiPageRefCompletion(resultSet, (FileReferenceLink) fileReference, false);
-                                        }
+                                    for (FileReference fileReference : wikiFileReferenceList.get()) {
+                                        addWikiPageRefCompletion(resultSet, (FileReferenceLink) fileReference, false);
                                     }
                                 }
                             }
