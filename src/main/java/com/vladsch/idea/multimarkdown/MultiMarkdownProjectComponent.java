@@ -23,6 +23,7 @@ package com.vladsch.idea.multimarkdown;
 
 import com.intellij.ProjectTopics;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
@@ -33,11 +34,13 @@ import com.intellij.openapi.vcs.FileStatusManager;
 import com.intellij.openapi.vcs.ProjectLevelVcsManager;
 import com.intellij.openapi.vcs.VcsListener;
 import com.intellij.openapi.vfs.*;
-import com.intellij.refactoring.listeners.RefactoringEventData;
-import com.intellij.refactoring.listeners.RefactoringEventListener;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.search.FileTypeIndex;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.containers.HashMap;
+import com.intellij.util.containers.HashSet;
+import com.intellij.util.indexing.FileBasedIndex;
 import com.intellij.util.messages.MessageBus;
-import com.intellij.util.messages.MessageBusConnection;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
@@ -47,6 +50,9 @@ import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualFileListener, ListenerNotifyDelegate<ReferenceChangeListener> {
     private static final Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownProjectComponent.class);
@@ -107,36 +113,53 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         // Listen to settings changes
         MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
             public void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings) {
-                updateHighlighters();
+                reparseMarkdown();
             }
         });
 
-        MessageBusConnection connect = getProject().getMessageBus().connect();
-        connect.subscribe(RefactoringEventListener.REFACTORING_EVENT_TOPIC, new RefactoringEventListener() {
+        project.getMessageBus().connect(project).subscribe(DumbService.DUMB_MODE, new DumbService.DumbModeListener() {
             @Override
-            public void refactoringStarted(@NotNull String refactoringId, @Nullable RefactoringEventData beforeData) {
-                // logger.info("refactoring started on " + this.hashCode());
+            public void enteredDumbMode() {
             }
 
             @Override
-            public void refactoringDone(@NotNull String refactoringId, @Nullable RefactoringEventData afterData) {
-                //logger.info("refactoring done on " + this.hashCode());
-                invalidateAfterRefactoring(ALL_NAMESPACES);
-                //logger.info("refactoring done on " + this.hashCode());
-            }
+            public void exitDumbMode() {
+                // need to re-evaluate class link accessibility
+                if (project.isDisposed()) return;
 
-            @Override
-            public void conflictsDetected(@NotNull String refactoringId, @NotNull RefactoringEventData conflictsData) {
-                logger.info("refactoring conflicts on " + this.hashCode());
-                invalidateAfterRefactoring(ALL_NAMESPACES);
-            }
-
-            @Override
-            public void undoRefactoring(@NotNull String refactoringId) {
-                // logger.info("refactoring undo on " + this.hashCode());
-                invalidateAfterRefactoring(ALL_NAMESPACES);
+                if (needReparseOnDumbModeExit) {
+                    needReparseOnDumbModeExit = false;
+                    reparseMarkdown();
+                }
             }
         });
+
+        //MessageBusConnection connect = getProject().getMessageBus().connect();
+        //connect.subscribe(RefactoringEventListener.REFACTORING_EVENT_TOPIC, new RefactoringEventListener() {
+        //    @Override
+        //    public void refactoringStarted(@NotNull String refactoringId, @Nullable RefactoringEventData beforeData) {
+        //         logger.info("refactoring started on " + this.hashCode());
+        //    }
+        //
+        //    @Override
+        //    public void refactoringDone(@NotNull String refactoringId, @Nullable RefactoringEventData afterData) {
+        //        logger.info("refactoring done on " + this.hashCode());
+        //        //invalidateAfterRefactoring(ALL_NAMESPACES);
+        //        //logger.info("refactoring done on " + this.hashCode());
+        //    }
+        //
+        //    @Override
+        //    public void conflictsDetected(@NotNull String refactoringId, @NotNull RefactoringEventData conflictsData) {
+        //        logger.info("refactoring conflicts on " + this.hashCode());
+        //        //invalidateAfterRefactoring(ALL_NAMESPACES);
+        //    }
+        //
+        //    @Override
+        //    public void undoRefactoring(@NotNull String refactoringId) {
+        //         logger.info("refactoring undo on " + this.hashCode());
+        //        //invalidateAfterRefactoring(ALL_NAMESPACES);
+        //    }
+        //});
     }
 
     protected void notifyListeners(@NotNull String namespace, int notificationType, @Nullable String name) {
@@ -179,7 +202,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
             for (String key : missingLinks.keySet()) {
                 if (!key.equals(name) && missingLinks.get(key) == element) {
                     // yes it has, we need to invalidate an rebuild
-                    logger.info("Invalidating " + namespace + key + " element " + element + " was root");
+                    //logger.info("Invalidating " + namespace + key + " element " + element + " was root");
                     missingLinks.remove(key);
                     notifyListeners(namespace, MISSING_REFS_CHANGED, key);
                     break;
@@ -235,26 +258,53 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
                 return;
             }
 
-            final MultiMarkdownFile[] markdownFiles = new FileReferenceListQuery(project).markdownFiles();
+            ApplicationManager.getApplication().executeOnPooledThread(new Runnable() {
+                @Override
+                public void run() {
+                    ApplicationManager.getApplication().runReadAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            Collection<VirtualFile> markdownFileLists = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, MultiMarkdownFileType.INSTANCE, GlobalSearchScope.allScope(project));
+                            Collection<MultiMarkdownFile> markdownFiles;
 
-            // allow references to invalidate their cached values
-            invalidateAfterRefactoring(ALL_NAMESPACES);
-            //FileReferenceList fileList = new FileReferenceListQuery(project).all();
-            //int[] counts = fileList.countByFilter(FileReferenceList.IMAGE_FILE_FILTER, FileReferenceList.MARKDOWN_FILE_FILTER, FileReferenceList.WIKIPAGE_FILE_FILTER);
-            //logger.info(String.format("Updated file list: projectRefs[%d],  imageRefs[%d],  markdownRefs[%d], wikiRefs[%d]", fileList.size(), counts[0], counts[1], counts[2]));
+                            if (markdownFileLists.size() < 5000) {
+                                ArrayList<MultiMarkdownFile> markdownFileArr = new ArrayList<MultiMarkdownFile>(markdownFileLists.size());
+                                PsiManager psiManager = PsiManager.getInstance(project);
 
-            DaemonCodeAnalyzer instance = DaemonCodeAnalyzer.getInstance(project);
-            for (MultiMarkdownFile markdownFile : markdownFiles) {
-                instance.restart(markdownFile);
-            }
+                                for (VirtualFile file : markdownFileLists) {
+                                    MultiMarkdownFile markdownFile = (MultiMarkdownFile) psiManager.findFile(file);
+                                    markdownFileArr.add(markdownFile);
+                                }
+                                markdownFiles = markdownFileArr;
+                            } else {
+                                // too many files to reparse, just reparse ones with missing links
+                                HashSet<MultiMarkdownFile> markdownFileHash = new HashSet<MultiMarkdownFile>();
+
+                                // allow references to invalidate their cached values before reparse
+                                for (HashMap<String, MultiMarkdownNamedElement> missingLinks : missingLinkNamespaces.values()) {
+                                    for (MultiMarkdownNamedElement element : missingLinks.values()) {
+                                        if (element.getName() != null)
+                                            markdownFileHash.add((MultiMarkdownFile) element.getContainingFile());
+                                    }
+                                }
+                                markdownFiles = markdownFileHash;
+                            }
+
+                            invalidateAfterRefactoring(ALL_NAMESPACES);
+
+                            DaemonCodeAnalyzer instance = DaemonCodeAnalyzer.getInstance(project);
+                            for (MultiMarkdownFile markdownFile : markdownFiles) {
+                                instance.restart(markdownFile);
+                            }
+
+                            //FileReferenceList fileList = new FileReferenceListQuery(project).all();
+                            //int[] counts = fileList.countByFilter(FileReferenceList.IMAGE_FILE_FILTER, FileReferenceList.MARKDOWN_FILE_FILTER, FileReferenceList.WIKIPAGE_FILE_FILTER);
+                            //logger.info(String.format("Updated file list: projectRefs[%d],  imageRefs[%d],  markdownRefs[%d], wikiRefs[%d]", fileList.size(), counts[0], counts[1], counts[2]));
+                        }
+                    });
+                }
+            });
         }
-    }
-
-    protected void updateHighlighters() {
-        // project files have changed so we need to update the lists and then reparse for link validation
-        // We get a call back when all have been updated.
-        if (project.isDisposed()) return;
-        reparseMarkdown();
     }
 
     public void addListener(@Nullable String namespace, @NotNull ReferenceChangeListener listener) {
@@ -286,32 +336,32 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
     // TODO: detect extension change in a file and attach our editors if possible
     @Override
     public void propertyChanged(@NotNull VirtualFilePropertyEvent event) {
-        updateHighlighters();
+        reparseMarkdown();
     }
 
     @Override
     public void contentsChanged(@NotNull VirtualFileEvent event) {
-        //updateHighlighters();
+        //reparseMarkdown();
     }
 
     @Override
     public void fileCreated(@NotNull VirtualFileEvent event) {
-        updateHighlighters();
+        reparseMarkdown();
     }
 
     @Override
     public void fileDeleted(@NotNull VirtualFileEvent event) {
-        updateHighlighters();
+        reparseMarkdown();
     }
 
     @Override
     public void fileMoved(@NotNull VirtualFileMoveEvent event) {
-        updateHighlighters();
+        reparseMarkdown();
     }
 
     @Override
     public void fileCopied(@NotNull VirtualFileCopyEvent event) {
-        updateHighlighters();
+        reparseMarkdown();
     }
 
     @Override

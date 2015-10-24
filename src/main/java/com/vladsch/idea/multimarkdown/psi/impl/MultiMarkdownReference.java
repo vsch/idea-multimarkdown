@@ -12,7 +12,7 @@
  * under the License.
  *
  */
-package com.vladsch.idea.multimarkdown.language;
+package com.vladsch.idea.multimarkdown.psi.impl;
 
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;

@@ -23,7 +23,6 @@ package com.vladsch.idea.multimarkdown.psi.impl;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.vladsch.idea.multimarkdown.language.MultiMarkdownReference;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageTitle;
 import org.apache.log4j.Logger;

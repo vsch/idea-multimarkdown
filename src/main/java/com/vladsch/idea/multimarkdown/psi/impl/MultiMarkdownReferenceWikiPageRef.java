@@ -12,7 +12,7 @@
  * under the License.
  *
  */
-package com.vladsch.idea.multimarkdown.language;
+package com.vladsch.idea.multimarkdown.psi.impl;
 
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
@@ -123,11 +123,11 @@ public class MultiMarkdownReferenceWikiPageRef extends MultiMarkdownReference {
                     //logger.info("getting dummy Reference" + " for " + myElement + " named: " + myElement.getMissingElementNamespace() + name);
                     MultiMarkdownNamedElement missingLinkElement = getMissingLinkElement(name);
 
-                    if (missingLinkElement == myElement) {
-                        logger.info("dummy Reference" + " for " + myElement + " is itself");
-                    }
-
-                    logger.info("setting dummy Reference" + " for " + myElement + " named: " + myElement.getMissingElementNamespace() + name + " to " + missingLinkElement);
+                    //if (missingLinkElement == myElement) {
+                    //    logger.info("dummy Reference" + " for " + myElement + " is itself");
+                    //}
+                    //
+                    //logger.info("setting dummy Reference" + " for " + myElement + " named: " + myElement.getMissingElementNamespace() + name + " to " + missingLinkElement);
                     results.add(new PsiElementResolveResult(missingLinkElement));
                 }
             }

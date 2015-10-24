@@ -96,16 +96,18 @@ public class FileReferenceList {
         }
 
         public Builder(@NotNull Collection fileReferences, @Nullable Project project, FileReferenceList.Filter... filters) {
-            Outer:
+            FileReferenceList.Filter firstFilter = filters.length > 0 ? filters[0] : null;
+            ArrayList<FileReference> files = new ArrayList<FileReference>();
+
             for (Object o : fileReferences) {
                 FileReference fileReference = null;
-                if (o instanceof FileReference) {
+                if (o instanceof VirtualFile) {
+                    fileReference = new FileReference((VirtualFile) o, project);
+                } else if (o instanceof FileReference) {
                     if (project == null) project = ((FileReference) o).getProject();
                     fileReference = (FileReference) o;
                 } else if (o instanceof String) {
                     fileReference = new FileReference((String) o, project);
-                } else if (o instanceof VirtualFile) {
-                    fileReference = new FileReference((VirtualFile) o, project);
                 } else if (o instanceof PsiFile) {
                     if (project == null) project = ((PsiFile) o).getProject();
                     fileReference = new FileReference((PsiFile) o);
@@ -113,9 +115,15 @@ public class FileReferenceList {
                     throw new InvalidParameterException("Collection can only contain String, FileReference, VirtualFile or PsiFile elements");
                 }
 
+                if (firstFilter == null || firstFilter.filterExt(fileReference.getExt(), fileReference.getFullFilePath())) {
+                    files.add(fileReference);
+                }
+            }
+
+            Outer:
+            for (FileReference fileReference : files) {
                 for (FileReferenceList.Filter filter : filters) {
                     if (filter == null) continue;
-
                     if (!filter.filterExt(fileReference.getExt(), fileReference.getFullFilePath())) continue Outer;
                     if (filter.isRefFilter() && (fileReference = filter.filterRef(fileReference)) == null) continue Outer;
                 }

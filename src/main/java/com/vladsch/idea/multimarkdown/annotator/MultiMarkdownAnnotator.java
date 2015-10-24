@@ -29,7 +29,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
-import com.vladsch.idea.multimarkdown.language.MultiMarkdownReferenceWikiPageRef;
+import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownReferenceWikiPageRef;
 import com.vladsch.idea.multimarkdown.psi.*;
 import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownPsiImplUtil;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;

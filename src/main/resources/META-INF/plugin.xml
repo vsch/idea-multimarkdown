@@ -44,7 +44,6 @@
   <idea-version since-build="133.1711"/>
   <change-notes><![CDATA[
     <ul><h3><b>1.1.13 - More GitHub integration, Bug Fixes &amp; Optimizations.</b></h3>
-      <li>Fix now scan only project source roots as returned by IDEA.</li>
       <li>Fix #47, closing a project before preview update delay timer is triggered caused project already disposed assertion failure.</li>
       <li>Change GitHub syntax wiki links are now default and not changeable.</li>
       <li>Change to support GitHub wiki's not handling subdirectories in wiki links and resolving always on unique file name.</li>
@@ -63,6 +62,9 @@
       <li>Fix minimized parser memory hogging. pegdown processor AST was kept around long after it was needed.</li>
       <li>Fix #50 hang when >20 files were modified in the file system triggering re-indexing in dumb mode. Plugin did not check for dumb service mode before trying to collect PsiFile(s) for re-parse.</li>
       <li>Fix #49 inline code being interpreted as start of code fence.</li>
+      <li>Fix now using FileBasedIndex to find files for link resolution.</li>
+      <li>Add unresolved links with the same text are the same reference so can be renamed as a group.</li>
+      <li>Add wiki link titles with the same text and the same link address are the same reference so the link text can be renamed as a group.</li>
     </ul>
     <ul><h3><b>1.1.12 - Bug Fixes &amp; Optimizations.</b></h3>
       <li>Fix url's with spaces showing up as unresolved.</li>

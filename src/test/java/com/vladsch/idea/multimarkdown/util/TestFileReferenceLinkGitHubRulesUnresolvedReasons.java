@@ -134,7 +134,7 @@ public class TestFileReferenceLinkGitHubRulesUnresolvedReasons {
                 // /Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/level-1/level-2/Level-2-File.md
                 // /Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/level-1/level-2/wiki-links.md
                 // /Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/level-1/Level-1-File.md
-                // /Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/Bad File Name.md
+                // /Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/Bad-File-Name.md
                 // /Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/Other-File.md
                 // /Users/vlad/src/idea-multimarkdown2/src/test/resources/markdown/level-1/level-2/level3.wiki/Level-1-File.md
                 // /Users/vlad/src/idea-multimarkdown2/src/test/resources/markdown/level-1/level-2/level3.wiki/Level-2-File.md

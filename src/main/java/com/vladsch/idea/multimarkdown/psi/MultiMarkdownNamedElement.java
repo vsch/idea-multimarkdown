@@ -29,7 +29,7 @@ import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNameIdentifierOwner;
 import com.intellij.util.IncorrectOperationException;
-import com.vladsch.idea.multimarkdown.language.MultiMarkdownReference;
+import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownReference;
 import org.jetbrains.annotations.NotNull;
 
 public interface MultiMarkdownNamedElement extends PsiNameIdentifierOwner, Navigatable {
