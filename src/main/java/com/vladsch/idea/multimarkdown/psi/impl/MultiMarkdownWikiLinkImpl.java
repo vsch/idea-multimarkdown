@@ -50,6 +50,11 @@ public class MultiMarkdownWikiLinkImpl extends ASTWrapperPsiElement implements M
     }
 
     @Override
+    public String getDisplayName() {
+        return getText();
+    }
+
+    @Override
     public String getPageTitle() {
         return MultiMarkdownPsiImplUtil.getPageTitle(this);
     }

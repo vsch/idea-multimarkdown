@@ -46,6 +46,11 @@ public class MultiMarkdownWikiPageRefAnchorImpl extends MultiMarkdownNamedElemen
     }
 
     @Override
+    public String getDisplayName() {
+        return getParent() instanceof MultiMarkdownWikiLink  ? ((MultiMarkdownWikiLink) getParent()).getDisplayName() : getName();
+    }
+
+    @Override
     public PsiElement setName(@NotNull String newName, int reason) {
         return MultiMarkdownPsiImplUtil.setName(this, newName, reason);
     }
