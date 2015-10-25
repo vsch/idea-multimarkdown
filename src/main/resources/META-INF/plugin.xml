@@ -40,7 +40,7 @@
     </div>
     ]]></description>
 
-  <version>1.1.12.8</version>
+  <version>1.1.12.9</version>
   <idea-version since-build="133.1711"/>
   <change-notes><![CDATA[
     <ul><h3><b>1.1.13 - More GitHub integration, Bug Fixes &amp; Optimizations.</b></h3>
@@ -66,7 +66,7 @@
       <li>Fix #49 inline code being interpreted as start of code fence.</li>
       <li>Add unresolved links within a wiki with the same text are the same reference so can be renamed as a group.</li>
       <li>Add wiki link titles within a wiki with the same text and the same link address are the same reference so the link text can be renamed as a group.</li>
-      <li>Add wiki link ref anchor and ref anchor marker coloring attributes.</li>
+      <li>Add wiki link ref anchor and ref anchor marker coloring attributes and psi elements for anchors.</li>
       <li>Add wiki link ref anchors within a wiki with the same text and the same parent link address are the same reference so the text can be renamed as a group for all of them.</li>
     </ul>
     <ul><h3><b>1.1.12 - Bug Fixes &amp; Optimizations.</b></h3>
