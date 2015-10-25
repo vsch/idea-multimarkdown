@@ -143,7 +143,6 @@ public class FileReferenceLink extends FileReference {
         return FilePathInfo.asWikiRef(pathPrefix);
     }
 
-
     @NotNull
     public String getWikiPageRef() {
         return getWikiPageRefPathPrefix() + getFileNameNoExtAsWikiRef();
@@ -187,6 +186,11 @@ public class FileReferenceLink extends FileReference {
 
     public int getDownDirectories() {
         return downDirectories;
+    }
+
+    // return true if the given string is a wikiRef of this link reference
+    public boolean isWikiPageRef(@NotNull String wikiRef) {
+        return equivalentWikiRef(true, false, getWikiPageRef(), wikiRef);
     }
 
     public static class InaccessibleWikiPageReasons {

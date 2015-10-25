@@ -40,9 +40,10 @@ public interface MultiMarkdownNamedElement extends PsiNameIdentifierOwner, Navig
     int RENAME_KEEP_ANCHOR = 2;
     int RENAME_KEEP_NAME = 4;
     int RENAME_KEEP_TITLE = 8;
+    int RENAME_KEEP_RENAMED_TITLE = 16;  //not implemented
 
-    int REASON_FILE_RENAMED = RENAME_KEEP_PATH | RENAME_KEEP_ANCHOR;
-    int REASON_FILE_MOVED = RENAME_KEEP_ANCHOR;
+    int REASON_FILE_RENAMED = RENAME_KEEP_PATH | RENAME_KEEP_ANCHOR | RENAME_KEEP_RENAMED_TITLE | RENAME_KEEP_TITLE;
+    int REASON_FILE_MOVED = RENAME_KEEP_ANCHOR | RENAME_KEEP_TITLE;
 
     String getDisplayName();
 

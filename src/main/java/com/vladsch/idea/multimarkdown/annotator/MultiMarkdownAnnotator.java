@@ -29,9 +29,9 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
-import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownReferenceWikiPageRef;
 import com.vladsch.idea.multimarkdown.psi.*;
 import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownPsiImplUtil;
+import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownReferenceWikiPageRef;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.util.*;
 import org.jetbrains.annotations.NotNull;
@@ -59,7 +59,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                 // see if the link title resolves to a page
                 MultiMarkdownFile containingFile = (MultiMarkdownFile) element.getContainingFile();
 
-                if (wikiPageTitle.getName().equals(wikiPageRef.getName())) {
+                if (wikiPageTitle.getName().equals(wikiPageRef.getNameWithAnchor())) {
                     // can get rid off the text
                     annotator = holder.createWeakWarningAnnotation(wikiPageTitle.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.redundant-page-title"));
                     annotator.registerFix(new DeleteWikiPageTitleQuickFix(element));
@@ -106,7 +106,7 @@ public class MultiMarkdownAnnotator implements Annotator {
             MultiMarkdownWikiLink wikiLink = (MultiMarkdownWikiLink) element.getParent();
             if (wikiLink != null) annotator = checkWikiLinkSwapRefTitle(wikiLink, holder);
 
-            FilePathInfo pathInfo = new FilePathInfo(element.getText());
+            FilePathInfo pathInfo = new FilePathInfo(((MultiMarkdownWikiPageRef) element).getNameWithAnchor());
 
             // if not reversed ref and text and not just a link reference
             if (annotator == null && !FilePathInfo.linkRefNoAnchor(pathInfo.getFileName()).isEmpty()) {
@@ -222,19 +222,6 @@ public class MultiMarkdownAnnotator implements Annotator {
                                 }
                             }
 
-                            if (reasons.targetNotWikiPageExt()) {
-                                // can offer to move the file, just add the logic
-                                warningsOnly = false;
-                                annotator = holder.createErrorAnnotation(element.getTextRange(),
-                                        MultiMarkdownBundle.message("annotation.wikilink.target-not-wiki-page-ext"));
-
-                                annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
-
-                                if (referenceLink.canRenameFileTo(reasons.targetNotWikiPageExtFixed())) {
-                                    annotator.registerFix(new RenameWikiPageQuickFix(referenceLink.getPsiFile(), null, reasons.targetNotWikiPageExtFixed()));
-                                }
-                            }
-
                             if (reasons.targetNameHasSpaces()) {
                                 needTargetList = false;
                                 warningsOnly = false;
@@ -260,6 +247,17 @@ public class MultiMarkdownAnnotator implements Annotator {
                                     FileReference targetReference = new FileReference(referenceLink.getPath() + reasons.targetNameHasAnchorFixed(), element.getProject());
                                     FileReferenceLink re_targetedLink = new FileReferenceLink(containingFile, targetReference);
                                     annotator.registerFix(new RenameWikiPageAndReTargetQuickFix(referenceLink.getPsiFileWithAnchor(), reasons.targetNameHasAnchorFixed(), (MultiMarkdownWikiPageRef) element, re_targetedLink.getWikiPageRef()));
+                                }
+                            } else if (reasons.targetNotWikiPageExt()) {
+                                // can offer to move the file, just add the logic
+                                warningsOnly = false;
+                                annotator = holder.createErrorAnnotation(element.getTextRange(),
+                                        MultiMarkdownBundle.message("annotation.wikilink.target-not-wiki-page-ext"));
+
+                                annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
+
+                                if (referenceLink.canRenameFileTo(reasons.targetNotWikiPageExtFixed())) {
+                                    annotator.registerFix(new RenameWikiPageQuickFix(referenceLink.getPsiFile(), null, reasons.targetNotWikiPageExtFixed()));
                                 }
                             }
 

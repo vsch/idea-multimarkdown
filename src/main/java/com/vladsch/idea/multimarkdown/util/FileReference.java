@@ -309,7 +309,7 @@ public class FileReference extends FilePathInfo {
             if (equivalent(false, false, getFileName(), newName)) return true;
 
             // not just changing file name case
-            final VirtualFile virtualFile = getVirtualFile();
+            final VirtualFile virtualFile = getVirtualFileWithAnchor();
             final VirtualFile parent = virtualFile != null ? virtualFile.getParent() : null;
             if (parent != null) {
                 if (parent.findChild(newName) == null) {

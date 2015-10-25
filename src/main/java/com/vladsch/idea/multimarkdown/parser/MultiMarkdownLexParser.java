@@ -153,9 +153,11 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
 
     static protected void addCombinationSplit(IElementType resultingType, IElementType elementType1, IElementType elementType2) {
         if (!combinationSplits.containsKey(elementType1)) combinationSplits.put(elementType1, new HashMap<IElementType, IElementType>(2));
-        if (!combinationSplits.get(elementType1).containsKey(elementType2)) combinationSplits.get(elementType1).put(elementType2, resultingType);
+        if (!combinationSplits.get(elementType1).containsKey(elementType2))
+            combinationSplits.get(elementType1).put(elementType2, resultingType);
         if (!combinationSplits.containsKey(elementType2)) combinationSplits.put(elementType2, new HashMap<IElementType, IElementType>(2));
-        if (!combinationSplits.get(elementType2).containsKey(elementType1)) combinationSplits.get(elementType2).put(elementType1, resultingType);
+        if (!combinationSplits.get(elementType2).containsKey(elementType1))
+            combinationSplits.get(elementType2).put(elementType1, resultingType);
     }
 
     static {
@@ -474,7 +476,8 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
 
     protected static class LexerToken implements Comparable<LexerToken> {
 
-        @Override public int compareTo(LexerToken o) {
+        @Override
+        public int compareTo(LexerToken o) {
             return compare(o);
         }
 
@@ -683,20 +686,20 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
 
         public void visit(SimpleNode node) {
             switch (node.getType()) {
-            case HRule:
-                addToken(node, MultiMarkdownTypes.HRULE);
-                break;
+                case HRule:
+                    addToken(node, MultiMarkdownTypes.HRULE);
+                    break;
 
-            case Apostrophe:
-            case Ellipsis:
-            case Emdash:
-            case Endash:
-                addToken(node, MultiMarkdownTypes.SMARTS);
-                break;
+                case Apostrophe:
+                case Ellipsis:
+                case Emdash:
+                case Endash:
+                    addToken(node, MultiMarkdownTypes.SMARTS);
+                    break;
 
-            case Linebreak:
-            case Nbsp:
-                break;
+                case Linebreak:
+                case Nbsp:
+                    break;
             }
         }
 
@@ -822,24 +825,24 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
             //visitChildren(node);
 
             switch (node.getLevel()) {
-            case 1:
-                addTokenWithChildren(node, node.isSetext() ? MultiMarkdownTypes.SETEXT_HEADER_LEVEL_1 : MultiMarkdownTypes.HEADER_LEVEL_1);
-                break;
-            case 2:
-                addTokenWithChildren(node, node.isSetext() ? MultiMarkdownTypes.SETEXT_HEADER_LEVEL_2 : MultiMarkdownTypes.HEADER_LEVEL_2);
-                break;
-            case 3:
-                addTokenWithChildren(node, MultiMarkdownTypes.HEADER_LEVEL_3);
-                break;
-            case 4:
-                addTokenWithChildren(node, MultiMarkdownTypes.HEADER_LEVEL_4);
-                break;
-            case 5:
-                addTokenWithChildren(node, MultiMarkdownTypes.HEADER_LEVEL_5);
-                break;
-            case 6:
-                addTokenWithChildren(node, MultiMarkdownTypes.HEADER_LEVEL_6);
-                break;
+                case 1:
+                    addTokenWithChildren(node, node.isSetext() ? MultiMarkdownTypes.SETEXT_HEADER_LEVEL_1 : MultiMarkdownTypes.HEADER_LEVEL_1);
+                    break;
+                case 2:
+                    addTokenWithChildren(node, node.isSetext() ? MultiMarkdownTypes.SETEXT_HEADER_LEVEL_2 : MultiMarkdownTypes.HEADER_LEVEL_2);
+                    break;
+                case 3:
+                    addTokenWithChildren(node, MultiMarkdownTypes.HEADER_LEVEL_3);
+                    break;
+                case 4:
+                    addTokenWithChildren(node, MultiMarkdownTypes.HEADER_LEVEL_4);
+                    break;
+                case 5:
+                    addTokenWithChildren(node, MultiMarkdownTypes.HEADER_LEVEL_5);
+                    break;
+                case 6:
+                    addTokenWithChildren(node, MultiMarkdownTypes.HEADER_LEVEL_6);
+                    break;
             }
         }
 
@@ -857,13 +860,42 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
 
             if ((pos = text.indexOf("|")) >= 0) {
                 addToken(node.getStartIndex(), node.getStartIndex() + 2, MultiMarkdownTypes.WIKI_LINK_OPEN);
-                addToken(node.getStartIndex() + 2, node.getStartIndex() + 2 + pos, githubWikiLinks ? MultiMarkdownTypes.WIKI_LINK_TITLE : MultiMarkdownTypes.WIKI_LINK_REF);
-                addToken(node.getStartIndex() + 2 + pos, node.getStartIndex() + 2 + pos + 1, MultiMarkdownTypes.WIKI_LINK_SEPARATOR);
-                addToken(node.getStartIndex() + 2 + pos + 1, node.getEndIndex() - 2, githubWikiLinks ? MultiMarkdownTypes.WIKI_LINK_REF : MultiMarkdownTypes.WIKI_LINK_TITLE);
-                addToken(node.getEndIndex() - 2, node.getEndIndex(), MultiMarkdownTypes.WIKI_LINK_CLOSE);
+                if (githubWikiLinks) {
+                    int anchorPos = text.indexOf('#', pos + 1);
+                    addToken(node.getStartIndex() + 2, node.getStartIndex() + 2 + pos, MultiMarkdownTypes.WIKI_LINK_TITLE);
+                    addToken(node.getStartIndex() + 2 + pos, node.getStartIndex() + 2 + pos + 1, MultiMarkdownTypes.WIKI_LINK_SEPARATOR);
+                    if (anchorPos >= 0) {
+                        addToken(node.getStartIndex() + 2 + pos + 1, node.getStartIndex() + 2 + anchorPos, MultiMarkdownTypes.WIKI_LINK_REF);
+                        addToken(node.getStartIndex() + 2 + anchorPos, node.getStartIndex() + 2 + anchorPos + 1, MultiMarkdownTypes.WIKI_LINK_REF_ANCHOR_MARKER);
+                        addToken(node.getStartIndex() + 2 + anchorPos + 1, node.getEndIndex() - 2, MultiMarkdownTypes.WIKI_LINK_REF_ANCHOR);
+                    } else {
+                        addToken(node.getStartIndex() + 2 + pos + 1, node.getEndIndex() - 2, MultiMarkdownTypes.WIKI_LINK_REF);
+                    }
+                    addToken(node.getEndIndex() - 2, node.getEndIndex(), MultiMarkdownTypes.WIKI_LINK_CLOSE);
+                } else {
+                    int anchorPos = text.indexOf('#');
+                    if (anchorPos > pos) anchorPos = -1;
+                    if (anchorPos >= 0) {
+                        addToken(node.getStartIndex() + 2, node.getStartIndex() + 2 + anchorPos, MultiMarkdownTypes.WIKI_LINK_REF);
+                        addToken(node.getStartIndex() + 2 + anchorPos, node.getStartIndex() + 2 + anchorPos + 1, MultiMarkdownTypes.WIKI_LINK_REF_ANCHOR_MARKER);
+                        addToken(node.getStartIndex() + 2 + anchorPos + 1, node.getStartIndex() + 2 + pos, MultiMarkdownTypes.WIKI_LINK_REF_ANCHOR);
+                    } else {
+                        addToken(node.getStartIndex() + 2, node.getStartIndex() + 2 + pos, MultiMarkdownTypes.WIKI_LINK_REF);
+                    }
+                    addToken(node.getStartIndex() + 2 + pos, node.getStartIndex() + 2 + pos + 1, MultiMarkdownTypes.WIKI_LINK_SEPARATOR);
+                    addToken(node.getStartIndex() + 2 + pos + 1, node.getEndIndex() - 2, MultiMarkdownTypes.WIKI_LINK_TITLE);
+                    addToken(node.getEndIndex() - 2, node.getEndIndex(), MultiMarkdownTypes.WIKI_LINK_CLOSE);
+                }
             } else {
                 addToken(node.getStartIndex(), node.getStartIndex() + 2, MultiMarkdownTypes.WIKI_LINK_OPEN);
-                addToken(node.getStartIndex() + 2, node.getEndIndex() - 2, MultiMarkdownTypes.WIKI_LINK_REF);
+                int anchorPos = text.indexOf('#');
+                if (anchorPos >= 0) {
+                    addToken(node.getStartIndex() + 2, node.getStartIndex() + 2 + anchorPos, MultiMarkdownTypes.WIKI_LINK_REF);
+                    addToken(node.getStartIndex() + 2 + anchorPos, node.getStartIndex() + 2 + anchorPos + 1, MultiMarkdownTypes.WIKI_LINK_REF_ANCHOR_MARKER);
+                    addToken(node.getStartIndex() + 2 + anchorPos + 1, node.getEndIndex() - 2, MultiMarkdownTypes.WIKI_LINK_REF_ANCHOR);
+                } else {
+                    addToken(node.getStartIndex() + 2, node.getEndIndex() - 2, MultiMarkdownTypes.WIKI_LINK_REF);
+                }
                 addToken(node.getEndIndex() - 2, node.getEndIndex(), MultiMarkdownTypes.WIKI_LINK_CLOSE);
             }
         }
@@ -1041,7 +1073,8 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
 
         public void visit(HtmlBlockNode node) {
             if (node.getChildren().size() > 1 || !extractHtmlComments(node, new NodeFactory() {
-                @Override public TextNode newNode(String text) {
+                @Override
+                public TextNode newNode(String text) {
                     return new HtmlBlockNode(text);
                 }
             })) addToken(node, MultiMarkdownTypes.HTML_BLOCK);
@@ -1049,7 +1082,8 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
 
         public void visit(InlineHtmlNode node) {
             if (node.getChildren().size() > 1 || !extractHtmlComments(node, new NodeFactory() {
-                @Override public TextNode newNode(String text) {
+                @Override
+                public TextNode newNode(String text) {
                     return new InlineHtmlNode(text);
                 }
             })) addToken(node, MultiMarkdownTypes.INLINE_HTML);

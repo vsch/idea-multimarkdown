@@ -254,9 +254,9 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
 
         MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
         if (projectComponent != null) {
-            projectComponent.addListener(MultiMarkdownProjectComponent.ALL_NAMESPACES, projectFileListener = new ReferenceChangeListener() {
+            projectComponent.addListener(projectFileListener = new ReferenceChangeListener() {
                 @Override
-                public void referencesChanged(@Nullable String name) {
+                public void referenceChanged(@Nullable String name) {
                     if (project.isDisposed()) return;
                     delayedHtmlPreviewUpdate(false);
                 }

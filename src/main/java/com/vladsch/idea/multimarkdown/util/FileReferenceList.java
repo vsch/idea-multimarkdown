@@ -115,7 +115,7 @@ public class FileReferenceList {
                     throw new InvalidParameterException("Collection can only contain String, FileReference, VirtualFile or PsiFile elements");
                 }
 
-                if (firstFilter == null || firstFilter.filterExt(fileReference.getExt(), fileReference.getFullFilePath())) {
+                if (firstFilter == null || firstFilter.filterExt(fileReference.getExt(), fileReference.getAnchor())) {
                     files.add(fileReference);
                 }
             }
@@ -277,7 +277,7 @@ public class FileReferenceList {
 
                 for (Filter filter : filters) {
                     if (filter == null) continue;
-                    if (!filter.filterExt(fileReference.getExt(), fileReference.getFullFilePath())) continue Outer;
+                    if (!filter.filterExt(fileReference.getExt(), fileReference.getAnchor())) continue Outer;
 
                     if (!filter.isRefFilter()) continue;
                     fileReference = filter.filterRef(fileReference);

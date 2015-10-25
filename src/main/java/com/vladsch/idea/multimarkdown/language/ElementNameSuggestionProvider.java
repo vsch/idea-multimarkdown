@@ -149,7 +149,7 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
         }
 
         if (wikiPageRef != null) {
-            String text = wikiPageRef.getName();
+            String text = wikiPageRef.getNameWithAnchor();
             if (text != null) {
                 FilePathInfo pathInfo = new FilePathInfo(text);
                 text = pathInfo.getFileName();

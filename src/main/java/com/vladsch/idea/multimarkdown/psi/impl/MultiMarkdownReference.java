@@ -15,10 +15,7 @@
 package com.vladsch.idea.multimarkdown.psi.impl;
 
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiPolyVariantReference;
-import com.intellij.psi.PsiReferenceBase;
-import com.intellij.psi.ResolveResult;
+import com.intellij.psi.*;
 import com.intellij.refactoring.rename.BindablePsiReference;
 import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
@@ -29,12 +26,13 @@ import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedElement> implements PsiPolyVariantReference, BindablePsiReference {
+public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedElement> implements PsiPolyVariantReference, BindablePsiReference {
     private static final Logger logger = Logger.getLogger(MultiMarkdownReference.class);
     public static final ResolveResult[] EMPTY_RESULTS = new ResolveResult[0];
     protected ResolveResult[] resolveResults;
     protected String resolveResultsName;
     protected final ReferenceChangeListener referenceChangeListener;
+    protected boolean resolveRefIsMissing;
 
     @Override
     public String toString() {
@@ -48,9 +46,11 @@ public abstract class MultiMarkdownReference extends PsiReferenceBase<MultiMarkd
         final MultiMarkdownReference thizz = this;
         referenceChangeListener = new ReferenceChangeListener() {
             @Override
-            public void referencesChanged(@Nullable String name) {
+            public void referenceChanged(@Nullable String name) {
                 synchronized (thizz) {
-                    if (resolveResultsName != null && (name == null || resolveResultsName.equals(name))) invalidateResolveResults();
+                    if (resolveResultsName != null && (name == null || resolveResultsName.equals(name))) {
+                        invalidateResolveResults();
+                    }
                 }
             }
         };
@@ -66,31 +66,30 @@ public abstract class MultiMarkdownReference extends PsiReferenceBase<MultiMarkd
     }
 
     protected void removeReferenceChangeListener() {
-        if (myElement.getParent() != null) {
+        if (resolveRefIsMissing && myElement.getParent() != null) {
             MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(myElement.getProject());
             if (projectComponent != null) {
                 projectComponent.removeListener(myElement.getMissingElementNamespace(), referenceChangeListener);
             }
         }
-    }
 
-    protected void addReferenceChangeListener() {
-        if (myElement.getParent() != null) {
-            MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(myElement.getProject());
-            if (projectComponent != null) {
-                projectComponent.addListener(myElement.getMissingElementNamespace(), referenceChangeListener);
-            }
-        }
+        resolveRefIsMissing = false;
     }
 
     @NotNull
-    protected MultiMarkdownNamedElement getMissingLinkElement(@NotNull String name) {
+    protected MultiMarkdownNamedElement getMissingRefElement(@NotNull String name) {
         if (myElement.getParent() != null) {
             MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(myElement.getProject());
             if (projectComponent != null) {
-                projectComponent.removeListener(myElement.getMissingElementNamespace(), referenceChangeListener);
-                MultiMarkdownNamedElement referencedElement = projectComponent.getMissingLinkElement(myElement, myElement.getMissingElementNamespace(), name);
-                projectComponent.addListener(myElement.getMissingElementNamespace(), referenceChangeListener);
+                String namespace = myElement.getMissingElementNamespace();
+
+                MultiMarkdownNamedElement referencedElement = projectComponent.getMissingLinkElement(myElement, namespace, name);
+
+                if (!resolveRefIsMissing) {
+                    projectComponent.addListener(namespace, referenceChangeListener);
+                    resolveRefIsMissing = true;
+                }
+
                 return referencedElement;
             }
         }
@@ -107,8 +106,8 @@ public abstract class MultiMarkdownReference extends PsiReferenceBase<MultiMarkd
                 setRangeInElement(new TextRange(0, resolveResultsName.length()));
                 resolveResults = getMultiResolveResults(incompleteCode);
             }
-            return resolveResults;
         }
+        return resolveResults;
     }
 
     @Override
@@ -121,6 +120,10 @@ public abstract class MultiMarkdownReference extends PsiReferenceBase<MultiMarkd
             if (name != null) return myElement.setName(name, MultiMarkdownNamedElement.REASON_FILE_MOVED);
         }
         throw new IncorrectOperationException("Rebind cannot be performed for " + getClass());
+    }
+
+    public boolean isResolveRefMissing() {
+        return resolveRefIsMissing;
     }
 
     @Nullable
@@ -149,6 +152,21 @@ public abstract class MultiMarkdownReference extends PsiReferenceBase<MultiMarkd
         return new Object[0];
     }
 
+    /**
+     * Default implementation resolves to missing element reference by namespace of the referencing element
+     *
+     * @param incompleteCode code is incomplete
+     * @return resolve results
+     */
     @NotNull
-    protected abstract ResolveResult[] getMultiResolveResults(boolean incompleteCode);
+    protected ResolveResult[] getMultiResolveResults(boolean incompleteCode) {
+        String name = myElement.getName();
+        if (name != null) {
+            // these are always missing but we create references by namespace and name of the element in the project so they can be renamed as a group
+            MultiMarkdownNamedElement missingLinkElement = getMissingRefElement(name);
+            return new ResolveResult[] { new PsiElementResolveResult(missingLinkElement) };
+        }
+
+        return EMPTY_RESULTS;
+    }
 }

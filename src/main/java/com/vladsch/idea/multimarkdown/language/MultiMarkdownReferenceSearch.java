@@ -51,13 +51,13 @@ public class MultiMarkdownReferenceSearch extends QueryExecutorBase<PsiReference
         }
         else if (refElement instanceof MultiMarkdownWikiPageRef) {
             text = ((MultiMarkdownWikiPageRef) refElement).getName();
-            //text2 = ((MultiMarkdownWikiPageRef) refElement).getName();
+            text2 = ((MultiMarkdownWikiPageRef) refElement).getNameWithAnchor();
         }
         if (StringUtil.isNotEmpty(text)) {
             final SearchScope searchScope = p.getEffectiveSearchScope();
             p.getOptimizer().searchWord(text, searchScope, refElement.getLanguage().isCaseSensitive(), refElement);
         }
-        if (StringUtil.isNotEmpty(text2)) {
+        if (StringUtil.isNotEmpty(text2) && !text2.equals(text)) {
             final SearchScope searchScope = p.getEffectiveSearchScope();
             p.getOptimizer().searchWord(text2, searchScope, refElement.getLanguage().isCaseSensitive(), refElement);
         }

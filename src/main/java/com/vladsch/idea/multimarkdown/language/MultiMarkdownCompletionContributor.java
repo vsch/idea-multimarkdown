@@ -33,7 +33,11 @@ import com.intellij.util.ProcessingContext;
 import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
 import com.vladsch.idea.multimarkdown.MultiMarkdownLanguage;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
+import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownPsiImplUtil;
+import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownReferenceWikiPageRef;
 import com.vladsch.idea.multimarkdown.spellchecking.SuggestionList;
 import com.vladsch.idea.multimarkdown.util.*;
 import org.apache.log4j.Logger;
@@ -41,8 +45,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
-import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.WIKI_LINK_REF;
-import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.WIKI_LINK_TITLE;
+import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.*;
 
 public class MultiMarkdownCompletionContributor extends CompletionContributor {
     private static final Logger logger = Logger.getLogger(MultiMarkdownCompletionContributor.class);
@@ -93,6 +96,15 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
                                     for (FileReference fileReference : wikiFileReferenceList.get()) {
                                         addWikiPageRefCompletion(resultSet, (FileReferenceLink) fileReference, false);
                                     }
+                                }
+                            }
+                        } else if (elementType == WIKI_LINK_REF_ANCHOR) {
+                            MultiMarkdownWikiPageRef pageRef = (MultiMarkdownWikiPageRef) MultiMarkdownPsiImplUtil.findChildByType(element.getParent(), MultiMarkdownTypes.WIKI_LINK_REF);
+                            MultiMarkdownReferenceWikiPageRef pageRefRef = pageRef == null ? null : (MultiMarkdownReferenceWikiPageRef) pageRef.getReference();
+                            if (pageRefRef != null && !pageRefRef.isResolveRefMissing()) {
+                                MultiMarkdownFile markdownFile = (MultiMarkdownFile) pageRefRef.resolve();
+                                if (markdownFile != null) {
+                                    // TODO: 2015-10-25 add list of anchors when anchor parsing is implemented
                                 }
                             }
                         }

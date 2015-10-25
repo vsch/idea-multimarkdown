@@ -118,6 +118,8 @@ public class MultiMarkdownColorSettingsPage implements ColorSettingsPage {
         addTextAttributesKey("wiki-link-marker", WIKI_LINK_ATTR_KEY);
         addTextAttributesKey("wiki-link-separator", WIKI_LINK_SEPARATOR_ATTR_KEY);
         addTextAttributesKey("wiki-link-ref", WIKI_LINK_REF_ATTR_KEY);
+        addTextAttributesKey("wiki-link-ref-anchor", WIKI_LINK_REF_ANCHOR_ATTR_KEY);
+        addTextAttributesKey("wiki-link-ref-anchor-marker", WIKI_LINK_REF_ANCHOR_MARKER_ATTR_KEY);
         addTextAttributesKey("wiki-link-text", WIKI_LINK_TEXT_ATTR_KEY);
     }
 

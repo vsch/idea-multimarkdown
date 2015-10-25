@@ -25,6 +25,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.EventListener;
 
 public interface ReferenceChangeListener extends EventListener {
-    // if name == null then all are invalidated, else just ones that match the name
-    void referencesChanged(@Nullable String name);
+    // if name == null then all are invalidated, else just ones that matches the name
+    void referenceChanged(@Nullable String name);
 }

@@ -262,7 +262,7 @@ public class FileReferenceListQuery {
     @NotNull
     public FileReferenceListQuery matchWikiRef(@NotNull MultiMarkdownWikiPageRef wikiPageRef) {
         return inSource(new FileReference(wikiPageRef.getContainingFile()))
-                .matchWikiRef(wikiPageRef.getName());
+                .matchWikiRef(wikiPageRef.getNameWithAnchor());
     }
 
     @NotNull
@@ -352,14 +352,14 @@ public class FileReferenceListQuery {
             }
         }
 
-        if (!haveTypeFilter) additionalFilters++;
-        if (!haveQueryFilter) additionalFilters++;
+        if (!haveTypeFilter && typeFilter != null) additionalFilters++;
+        if (!haveQueryFilter && queryFilter != null) additionalFilters++;
 
         FileReferenceList.Filter[] filters = new FileReferenceList.Filter[iMax + additionalFilters];
 
         int filterIndex = 0;
-        if (!haveTypeFilter) filters[filterIndex++] = typeFilter;
-        if (!haveQueryFilter) filters[filterIndex++] = queryFilter;
+        if (!haveTypeFilter && typeFilter != null) filters[filterIndex++] = typeFilter;
+        if (!haveQueryFilter && queryFilter != null) filters[filterIndex++] = queryFilter;
 
         if (iMax > 0) System.arraycopy(postFilters, 0, filters, filterIndex, iMax);
         return (fileList == null) ? detDefaultFileList(filters) : new FileReferenceList(filters, fileList);
@@ -550,8 +550,9 @@ public class FileReferenceListQuery {
             }
 
             @Override
-            public boolean isRefFilter() { return true; }
-            ;
+            public boolean isRefFilter() {
+                return true;
+            }
 
             @Override
             public FileReference filterRef(@NotNull FileReference fileReference) {
@@ -588,12 +589,13 @@ public class FileReferenceListQuery {
                 filter = new FileReferenceList.Filter() {
                     @Override
                     public boolean filterExt(@NotNull String ext, String anchor) {
-                        return FilePathInfo.isExtInList((queryFlags & CASE_INSENSITIVE) == 0, ext, FilePathInfo.WIKI_PAGE_EXTENSIONS);
+                        return true;
                     }
 
                     @Override
-                    public boolean isRefFilter() { return true; }
-                    ;
+                    public boolean isRefFilter() {
+                        return true;
+                    }
 
                     @Override
                     public FileReference filterRef(@NotNull FileReference fileReference) {
@@ -607,12 +609,13 @@ public class FileReferenceListQuery {
                 filter = new FileReferenceList.Filter() {
                     @Override
                     public boolean filterExt(@NotNull String ext, String anchor) {
-                        return equivalent(queryFlags, ext, new FilePathInfo(matchPattern).getExt());
+                        return true;
                     }
 
                     @Override
-                    public boolean isRefFilter() { return true; }
-                    ;
+                    public boolean isRefFilter() {
+                        return true;
+                    }
 
                     @Override
                     public FileReference filterRef(@NotNull FileReference fileReference) {
@@ -631,8 +634,9 @@ public class FileReferenceListQuery {
                     }
 
                     @Override
-                    public boolean isRefFilter() { return true; }
-                    ;
+                    public boolean isRefFilter() {
+                        return true;
+                    }
 
                     @Override
                     public FileReference filterRef(@NotNull FileReference fileReference) {
@@ -655,12 +659,13 @@ public class FileReferenceListQuery {
                     filter = new FileReferenceList.Filter() {
                         @Override
                         public boolean filterExt(@NotNull String ext, String anchor) {
-                            return FilePathInfo.isExtInList((queryFlags & CASE_INSENSITIVE) == 0, ext, FilePathInfo.WIKI_PAGE_EXTENSIONS);
+                            return true;
                         }
 
                         @Override
-                        public boolean isRefFilter() { return true; }
-                        ;
+                        public boolean isRefFilter() {
+                            return true;
+                        }
 
                         @Override
                         public FileReference filterRef(@NotNull FileReference fileReference) {
@@ -673,12 +678,13 @@ public class FileReferenceListQuery {
                     filter = new FileReferenceList.Filter() {
                         @Override
                         public boolean filterExt(@NotNull String ext, String anchor) {
-                            return FilePathInfo.isExtInList((queryFlags & CASE_INSENSITIVE) == 0, ext, FilePathInfo.WIKI_PAGE_EXTENSIONS);
+                            return true;
                         }
 
                         @Override
-                        public boolean isRefFilter() { return true; }
-                        ;
+                        public boolean isRefFilter() {
+                            return true;
+                        }
 
                         @Override
                         public FileReference filterRef(@NotNull FileReference fileReference) {
@@ -697,11 +703,13 @@ public class FileReferenceListQuery {
                     filter = new FileReferenceList.Filter() {
                         @Override
                         public boolean filterExt(@NotNull String ext, String anchor) {
-                            return equivalent(queryFlags, ext, new FilePathInfo(matchPattern).getExt());
+                            return true;
                         }
 
                         @Override
-                        public boolean isRefFilter() { return true; }
+                        public boolean isRefFilter() {
+                            return true;
+                        }
 
                         @Override
                         public FileReference filterRef(@NotNull FileReference fileReference) {
@@ -713,11 +721,13 @@ public class FileReferenceListQuery {
                     filter = new FileReferenceList.Filter() {
                         @Override
                         public boolean filterExt(@NotNull String ext, String anchor) {
-                            return equivalent(queryFlags, ext, new FilePathInfo(matchPattern).getExt());
+                            return true;
                         }
 
                         @Override
-                        public boolean isRefFilter() { return true; }
+                        public boolean isRefFilter() {
+                            return true;
+                        }
 
                         @Override
                         public FileReference filterRef(@NotNull FileReference fileReference) {
@@ -737,8 +747,9 @@ public class FileReferenceListQuery {
                         }
 
                         @Override
-                        public boolean isRefFilter() { return true; }
-                        ;
+                        public boolean isRefFilter() {
+                            return true;
+                        }
 
                         @Override
                         public FileReference filterRef(@NotNull FileReference fileReference) {
@@ -754,8 +765,9 @@ public class FileReferenceListQuery {
                         }
 
                         @Override
-                        public boolean isRefFilter() { return true; }
-                        ;
+                        public boolean isRefFilter() {
+                            return true;
+                        }
 
                         @Override
                         public FileReference filterRef(@NotNull FileReference fileReference) {
