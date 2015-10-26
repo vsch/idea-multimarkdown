@@ -3,7 +3,7 @@
 [[missing link]]
 
 [[Bads File Name]]
-[[Bads file Name]]
-[[Bads file Name]]
+[[Bad file Name]]
+[[Bad file Name]]
 
 [[]]

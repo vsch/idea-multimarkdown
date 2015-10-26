@@ -24,7 +24,13 @@
 package com.vladsch.idea.multimarkdown.editor;
 
 import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
+import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
+import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import com.vladsch.idea.multimarkdown.util.GithubRepo;
 import org.pegdown.LinkRenderer;
 import org.pegdown.ast.*;
 
@@ -69,8 +75,12 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
     // to go into areas that may have threading issues.
     public Rendering checkTarget(Rendering rendering) {
         if (project != null && document != null && missingTargetClass != null) {
-            if (!rendering.href.startsWith("#") && !MultiMarkdownPathResolver.canResolveLink(project, document, rendering.href)) {
-                rendering.withAttribute("class", missingTargetClass);
+            if (!FilePathInfo.isExternalReference(rendering.href)) {
+                if (!rendering.href.startsWith("#")) {
+                    if (!MultiMarkdownPathResolver.canResolveLink(project, document, rendering.href, true)) {
+                        rendering.withAttribute("class", missingTargetClass);
+                    }
+                }
             }
         }
         return rendering;
@@ -143,8 +153,9 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
                 url = url.substring(0, pos);
             }
 
-            // vsch: need our own extension for the file
+            //vsch: need our own extension for the file
             url = ((url.isEmpty()) ? "" : ("./" + URLEncoder.encode(url.replace(' ', '-'), "UTF-8") + ".md")) + suffix;
+            //url = ((url.isEmpty()) ? "" : ("./" + URLEncoder.encode(url.replace(' ', '-'), "UTF-8"))) + suffix;
             return checkTarget(new Rendering(url, text));
         } catch (UnsupportedEncodingException e) {
             throw new IllegalStateException();

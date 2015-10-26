@@ -33,24 +33,45 @@ import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
-import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import org.jetbrains.annotations.NotNull;
 
-class RenameWikiPageQuickFix extends BaseIntentionAction {
-    private String name;
-    private PsiFile targetFile;
+import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement.*;
 
-    RenameWikiPageQuickFix(PsiFile targetFile, String name) {
-        this.name = name;
+class RenameWikiPageQuickFix extends BaseIntentionAction {
+    public static final int RENAME_CONFLICTING_TARGET = 1;
+
+    private String displayName;
+    private String newName;
+    private PsiFile targetFile;
+    private final int alternativeMsg;
+
+    RenameWikiPageQuickFix(PsiFile targetFile, String displayName, String newName) {
+        this(targetFile, displayName, newName, 0);
+    }
+
+    RenameWikiPageQuickFix(PsiFile targetFile, String displayName, String newName, int alternativeMsg) {
+        this.displayName = displayName != null ? displayName : targetFile.getVirtualFile().getName();
+        this.newName = newName;
         this.targetFile = targetFile;
+        this.alternativeMsg = alternativeMsg;
     }
 
     @NotNull
     @Override
     public String getText() {
-        FilePathInfo filePathInfo = new FilePathInfo(targetFile.getVirtualFile().getPath());
-        return MultiMarkdownBundle.message("quickfix.wikilink.rename-page", filePathInfo.getFileNameWithAnchor(), name);
+        String msg;
+
+        switch (alternativeMsg) {
+            case RENAME_CONFLICTING_TARGET:
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.rename-conflicting-page", displayName, newName);
+                break;
+
+            default:
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.rename-page", displayName, newName);
+                break;
+        }
+
+        return msg;
     }
 
     @NotNull
@@ -69,23 +90,28 @@ class RenameWikiPageQuickFix extends BaseIntentionAction {
         ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
-                renameWikiFile(project, targetFile, name);
+                renameWikiFile(project, targetFile, newName);
             }
         });
     }
 
     private void renameWikiFile(final Project project, final PsiFile psiFile, final String fileName) {
-        new WriteCommandAction.Simple(project) {
-            @Override
-            public void run() {
-                JavaRefactoringFactory factory = JavaRefactoringFactory.getInstance(project);
-                JavaRenameRefactoring rename = factory.createRename(psiFile, fileName);
-                UsageInfo[] usages = rename.findUsages();
-                MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
-                projectComponent.setRefactoringReason(MultiMarkdownNamedElement.REASON_FILE_RENAMED);
-                rename.doRefactoring(usages); // modified 'usages' array
-                projectComponent.setRefactoringReason(0);
-            }
-        }.execute();
+        final MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
+        if (projectComponent != null) {
+            new WriteCommandAction.Simple(project) {
+                @Override
+                public void run() {
+                    JavaRefactoringFactory factory = JavaRefactoringFactory.getInstance(project);
+                    JavaRenameRefactoring rename = factory.createRename(psiFile, fileName);
+                    UsageInfo[] usages = rename.findUsages();
+                    try {
+                        projectComponent.pushRefactoringRenameFlags(alternativeMsg == RENAME_CONFLICTING_TARGET ? RENAME_KEEP_ANCHOR | RENAME_KEEP_PATH | RENAME_KEEP_TITLE : REASON_FILE_RENAMED);
+                        rename.doRefactoring(usages); // modified 'usages' array
+                    } finally {
+                        projectComponent.popRefactoringRenameFlags();
+                    }
+                }
+            }.execute();
+        }
     }
 }

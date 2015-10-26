@@ -22,12 +22,19 @@ package com.vladsch.idea.multimarkdown.util;
 
 import com.intellij.openapi.vfs.VirtualFile;
 import com.vladsch.idea.multimarkdown.MultiMarkdownFileTypeFactory;
+import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class FilePathInfo implements Comparable<FilePathInfo> {
+    private static final Logger logger = org.apache.log4j.Logger.getLogger(FilePathInfo.class);
     public static final String WIKI_PAGE_EXTENSION = ".md";
     public static final String WIKI_HOME_EXTENTION = ".wiki";
+    public static final String WIKI_HOME_NAME = "wiki";
+    public static final String GITHUB_ISSUES_NAME = "issues";
+    public static final String GITHUB_GRAPHS_NAME = "graphs";
+    public static final String GITHUB_PULSE_NAME = "pulse";
+    public static final String GITHUB_PULLS_NAME = "pulls";
     public static final String[] IMAGE_EXTENSIONS = { "png", "jpg", "jpeg", "gif", };
     public static final String[] MARKDOWN_EXTENSIONS = MultiMarkdownFileTypeFactory.EXTENSIONS;
     public static final String[] WIKI_PAGE_EXTENSIONS = { MultiMarkdownFileTypeFactory.DEFAULT_EXTENSION };
@@ -40,12 +47,19 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     private final @NotNull String filePath;
 
     public FilePathInfo(@NotNull String filePath) {
+        if (!filePath.isEmpty() && filePath.charAt(filePath.length() - 1) == '/') {
+            filePath = filePath.substring(0, filePath.length() - 1);
+        }
+
         this.filePath = filePath;
         int lastSep;
         this.nameStart = (lastSep = filePath.lastIndexOf('/')) < 0 ? 0 : (lastSep == filePath.length() - 1 ? lastSep : lastSep + 1);
-        int wikiHomeEnd;
-        this.wikiHomeEnd = (wikiHomeEnd = filePath.indexOf(WIKI_HOME_EXTENTION + "/", 0)) >= nameStart || wikiHomeEnd < 0 ? 0 :
-                wikiHomeEnd + WIKI_HOME_EXTENTION.length();
+
+        int ghWikiHomeEnd = (ghWikiHomeEnd = filePath.lastIndexOf(WIKI_HOME_NAME + "/", nameStart)) >= nameStart || ghWikiHomeEnd < 0 || (ghWikiHomeEnd > 0 && filePath.charAt(ghWikiHomeEnd - 1) != '/') ? 0 : ghWikiHomeEnd + WIKI_HOME_NAME.length();
+
+        int wikiHomeEnd = (wikiHomeEnd = filePath.lastIndexOf(WIKI_HOME_EXTENTION + "/", nameStart)) >= nameStart || wikiHomeEnd < 0 ? 0 : wikiHomeEnd + WIKI_HOME_EXTENTION.length();
+
+        this.wikiHomeEnd = wikiHomeEnd > ghWikiHomeEnd ? wikiHomeEnd : ghWikiHomeEnd;
 
         // if file name ends in . then it has no extension and the . is part of its name.
         int extStart;
@@ -79,7 +93,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
 
     @NotNull
     final public String getWithAnchorExt() {
-        return fileNameContainsAnchor() && withAnchorNameEnd+1 < filePath.length() ? filePath.substring(withAnchorNameEnd+1) : getExt();
+        return fileNameContainsAnchor() && withAnchorNameEnd + 1 < filePath.length() ? filePath.substring(withAnchorNameEnd + 1) : getExt();
     }
 
     @NotNull
@@ -124,6 +138,11 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     }
 
     @NotNull
+    final public String getFullFilePath() {
+        return filePath;
+    }
+
+    @NotNull
     final public String getFilePathAsWikiRef() {
         return asWikiRef(getFilePath());
     }
@@ -142,7 +161,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     }
 
     final public boolean isWikiHome() {
-        return filePath.endsWith(WIKI_HOME_EXTENTION);
+        return filePath.endsWith(WIKI_HOME_EXTENTION) || getFileName().equals(WIKI_HOME_NAME);
     }
 
     @NotNull
@@ -186,6 +205,10 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     @NotNull
     final public String getWikiHome() {
         return wikiHomeEnd <= 0 ? "" : filePath.substring(0, wikiHomeEnd);
+    }
+
+    public String getLinkRefFromWikiHome() {
+        return wikiHomeEnd <= 0 ? filePath : filePath.substring(wikiHomeEnd + 1);
     }
 
     final public int getUpDirectoriesToWikiHome() {
@@ -278,11 +301,202 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
                 "";
     }
 
+    public boolean isEmpty() {
+        return filePath.isEmpty();
+    }
+
+    public boolean isRoot() {
+        return filePath.equals("/");
+    }
+
+    public boolean isRelative() {
+        return filePath.isEmpty() || filePath.charAt(0) != '/';
+    }
+
+    public FilePathInfo append(String... parts) {
+        StringBuilder path = new StringBuilder(filePath.length() + 100);
+        path.append(filePath);
+
+        for (String part : parts) {
+            if (part != null && !part.isEmpty()) {
+                if (path.length() == 0 || path.charAt(path.length() - 1) != '/') path.append('/');
+                path.append(part);
+            }
+        }
+        return new FilePathInfo(path.toString());
+    }
+    public boolean isExternalReference() {
+        return isExternalReference(filePath);
+    }
+
+    protected abstract static class LinkRefResolver {
+        protected final String[] matchParts;
+
+        abstract FilePathInfo computePath(FilePathInfo currentPath);
+
+        boolean isMatched(FilePathInfo currentPath, String[] linkRefParts, int part) {
+            if (part + matchParts.length <= linkRefParts.length) {
+                for (String matchPart : matchParts) {
+                    if (!linkRefParts[part++].equals(matchPart)) return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public LinkRefResolver(String... matchParts) {
+            this.matchParts = matchParts;
+        }
+    }
+
+    @NotNull
+    protected static LinkRefResolver[] appendResolvers(LinkRefResolver[] linkRefResolvers, LinkRefResolver... append) {
+        int resolversLength = linkRefResolvers == null ? 0 : linkRefResolvers.length;
+        int appendLength = append.length;
+
+        LinkRefResolver[] appendedLinkRefResolvers = new LinkRefResolver[resolversLength + appendLength];
+        if (resolversLength > 0) System.arraycopy(linkRefResolvers, 0, appendedLinkRefResolvers, 0, resolversLength);
+        if (appendLength > 0) System.arraycopy(append, 0, appendedLinkRefResolvers, resolversLength, appendLength);
+        return appendedLinkRefResolvers;
+    }
+
+    protected static class WikiPageWikiHomeLinkResolver extends FilePathInfo.LinkRefResolver {
+        public WikiPageWikiHomeLinkResolver() {
+            super("..", WIKI_HOME_NAME);
+        }
+
+        @Override
+        boolean isMatched(FilePathInfo currentPath, String[] linkRefParts, int part) {
+            return currentPath.isWikiHome() && super.isMatched(currentPath, linkRefParts, part);
+        }
+
+        @Override
+        FilePathInfo computePath(FilePathInfo currentPath) {
+            // if this is a wiki home and what comes next is 'wiki' then we can replace it with nothing, it is just the current path
+            return currentPath;
+        }
+    }
+
+    protected static final WikiPageWikiHomeLinkResolver wikiPageWikiHomeLinkResolver = new WikiPageWikiHomeLinkResolver();
+
+    protected static class MarkdownWikiHomeLinkResolver extends FilePathInfo.LinkRefResolver {
+        public MarkdownWikiHomeLinkResolver() {
+            super("..", "..", WIKI_HOME_NAME);
+        }
+
+        @Override
+        boolean isMatched(FilePathInfo currentPath, String[] linkRefParts, int part) {
+            return !currentPath.isWikiHome() && super.isMatched(currentPath, linkRefParts, part);
+        }
+
+        @Override
+        FilePathInfo computePath(FilePathInfo currentPath) {
+            // if this is not a wiki home and what comes next is ../../wiki then we can replace is a subdirectory with current dir name with .wiki added
+            return currentPath.append(currentPath.getFileName() + WIKI_HOME_EXTENTION);
+        }
+    }
+
+    protected static final MarkdownWikiHomeLinkResolver markdownWikiHomeLinkResolver = new MarkdownWikiHomeLinkResolver();
+
+    protected static final LinkRefResolver[] EMPTY_RESOLVERS = new LinkRefResolver[0];
+
+    @Nullable
+    protected FilePathInfo resolveLinkRef(@Nullable String linkRef, boolean convertLinkRefs, boolean withAnchor, LinkRefResolver... appendlinkRefResolvers) {
+        String cleanLinkRef = linkRef;
+        if (cleanLinkRef == null || cleanLinkRef.isEmpty()) return null;
+
+        if (!withAnchor) {
+            cleanLinkRef = new FilePathInfo(linkRef).getFilePath();
+        }
+
+        if (cleanLinkRef.charAt(0) == '/') return new FilePathInfo(cleanLinkRef);
+
+        String[] linkRefParts = cleanLinkRef.split("/");
+        FilePathInfo pathInfo = new FilePathInfo(getPath());
+
+        LinkRefResolver[] linkRefResolvers = !convertLinkRefs ? EMPTY_RESOLVERS : appendResolvers(appendlinkRefResolvers, wikiPageWikiHomeLinkResolver, markdownWikiHomeLinkResolver);
+
+        int iMax = linkRefParts.length;
+        Parts:
+        for (int i = 0; i < iMax; i++) {
+            if (linkRefParts[i].equals(".")) continue;
+
+            if (linkRefParts[i].equals("..")) {
+                if (pathInfo.isEmpty() || pathInfo.isRoot()) return null;
+
+                if (convertLinkRefs) {
+                    for (LinkRefResolver linkRefResolver : linkRefResolvers) {
+                        if (linkRefResolver != null) {
+                            if (linkRefResolver.isMatched(pathInfo, linkRefParts, i)) {
+                                if (linkRefResolver.matchParts.length > 1) i += linkRefResolver.matchParts.length - 1;
+                                pathInfo = linkRefResolver.computePath(pathInfo);
+                                continue Parts;
+                            }
+                        }
+                    }
+                }
+
+                pathInfo = new FilePathInfo(pathInfo.getPath());
+            } else {
+                pathInfo = pathInfo.append(linkRefParts[i]);
+            }
+        }
+        if (convertLinkRefs) {
+            if (pathInfo != null && pathInfo.isWikiHome()) {
+                pathInfo = new FileReference(pathInfo.append("Home"));
+            }
+        }
+        return pathInfo;
+    }
+
+    @Nullable
+    public FilePathInfo resolveLinkRef(@Nullable String linkRef, boolean convertGitHubWikiHome) {
+        return resolveLinkRef(linkRef, convertGitHubWikiHome, false);
+    }
+
+    @Nullable
+    public FilePathInfo resolveLinkRefWithAnchor(@Nullable String linkRef, boolean convertGitHubWikiHome) {
+        return resolveLinkRef(linkRef, convertGitHubWikiHome, true);
+    }
+
+    @Nullable
+    public FilePathInfo resolveLinkRef(@Nullable String linkRef) {
+        return resolveLinkRef(linkRef, false, false);
+    }
+
+    @Nullable
+    public FilePathInfo resolveLinkRefWithAnchor(@Nullable String linkRef) {
+        return resolveLinkRef(linkRef, false, true);
+    }
+
+    @Nullable
+    public FilePathInfo resolveLinkRefToWikiPage(@Nullable String linkRef) {
+        return resolveLinkRef(linkRef, true, false);
+    }
+
+    @Nullable
+    public FilePathInfo resolveLinkRefWithAnchorToWikiPage(@Nullable String linkRef) {
+        return resolveLinkRef(linkRef, true, true);
+    }
+
+    @NotNull
+    public FilePathInfo withExt(@Nullable String ext) {
+        return new FilePathInfo(getFilePathNoExt() + (ext != null && !ext.isEmpty() ? startWith(ext, '.') : "") + getAnchor());
+    }
+
     /*
      *
      * Statics
      *
      */
+
+    public static boolean isWikiHome(String path) {
+        return path != null && path.endsWith(WIKI_HOME_EXTENTION);
+    }
+
+    public static boolean isExternalReference(@Nullable String href) {
+        return href == null || href.startsWith("http://") || href.startsWith("ftp://") || href.startsWith("https://") || href.startsWith("mailto:");
+    }
 
     public static boolean isExtInList(boolean caseSensitive, @NotNull String ext, String... extList) {
         for (String listExt : extList) {
@@ -443,5 +657,77 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
 
     public static String wikiRefAsFileNameWithExt(String name) {
         return wikiRefAsFileName(name, true);
+    }
+
+    // TEST: needs a test
+    public static String endWith(@Nullable String dir, char c) {
+        if (dir != null && (dir.isEmpty() || dir.charAt(dir.length() - 1) != c)) {
+            return dir + c;
+        }
+        return dir;
+    }
+
+    // TEST: needs a test
+    public static String removeEnd(@Nullable String dir, char c) {
+        if (dir != null && (!dir.isEmpty() && dir.charAt(dir.length() - 1) == c)) {
+            return dir.substring(0, dir.length() - 1);
+        }
+        return dir;
+    }
+
+    public static String removeEnd(@Nullable String dir, String c) {
+        if (dir != null && (!dir.isEmpty() && dir.endsWith(c))) {
+            return dir.substring(0, dir.length() - c.length());
+        }
+        return dir;
+    }
+
+    // TEST: needs a test
+    public static String startWith(@Nullable String dir, char c) {
+        if (dir != null && (dir.isEmpty() || dir.charAt(0) != c)) {
+            return c + dir;
+        }
+        return dir;
+    }
+
+    // TEST: needs a test
+    public static String removeStart(@Nullable String dir, char c) {
+        if (dir != null && (!dir.isEmpty() && dir.charAt(0) == c)) {
+            return dir.substring(1);
+        }
+        return dir;
+    }
+
+    public static String removeStart(@Nullable String dir, String c) {
+        if (dir != null && (!dir.isEmpty() && dir.startsWith(c))) {
+            return dir.substring(c.length());
+        }
+        return dir;
+    }
+
+    // TEST: needs a test
+    public static int countOccurrence(@Nullable String dir, char c) {
+        int count = 0;
+        if (dir != null) {
+            int pos = 0;
+            while ((pos = dir.indexOf(c, pos)) >= 0) {
+                count++;
+                pos++;
+            }
+        }
+        return count;
+    }
+
+    // TEST: needs a test
+    public static int countOccurrence(@Nullable String dir, @NotNull String s) {
+        int count = 0;
+        if (dir != null) {
+            int pos = 0;
+            while ((pos = dir.indexOf(s, pos)) >= 0) {
+                count++;
+                pos += s.length();
+            }
+        }
+        return count;
     }
 }

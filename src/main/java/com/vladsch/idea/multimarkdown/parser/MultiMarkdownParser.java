@@ -29,7 +29,6 @@ import org.jetbrains.annotations.NotNull;
 import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.*;
 
 public class MultiMarkdownParser implements PsiParser {
-
     public void parseLightImpl(IElementType root, PsiBuilder builder) {
         if (root == WIKI_LINK) {
             parseWikiLink(builder);
@@ -78,6 +77,15 @@ public class MultiMarkdownParser implements PsiParser {
             PsiBuilder.Marker marker = builder.mark();
             builder.advanceLexer();
             marker.done(WIKI_LINK_REF);
+
+            if (builder.getTokenType() == WIKI_LINK_REF_ANCHOR_MARKER) {
+                builder.advanceLexer();
+                if (builder.getTokenType() == WIKI_LINK_REF_ANCHOR) {
+                    PsiBuilder.Marker anchor = builder.mark();
+                    builder.advanceLexer();
+                    anchor.done(WIKI_LINK_REF_ANCHOR);
+                }
+            }
         }
 
         if (builder.getTokenType() == WIKI_LINK_TITLE) {
@@ -92,7 +100,17 @@ public class MultiMarkdownParser implements PsiParser {
                 PsiBuilder.Marker marker = builder.mark();
                 builder.advanceLexer();
                 marker.done(WIKI_LINK_REF);
+
+                if (builder.getTokenType() == WIKI_LINK_REF_ANCHOR_MARKER) {
+                    builder.advanceLexer();
+                    if (builder.getTokenType() == WIKI_LINK_REF_ANCHOR) {
+                        PsiBuilder.Marker anchor = builder.mark();
+                        builder.advanceLexer();
+                        anchor.done(WIKI_LINK_REF_ANCHOR);
+                    }
+                }
             }
+
             if (builder.getTokenType() == WIKI_LINK_TITLE) {
                 PsiBuilder.Marker marker = builder.mark();
                 builder.advanceLexer();

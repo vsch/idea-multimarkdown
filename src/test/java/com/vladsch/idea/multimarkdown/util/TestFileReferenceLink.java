@@ -118,7 +118,7 @@ public class TestFileReferenceLink {
                 // /Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/level-1/level-2/Level-2-File.md
                 // /Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/level-1/level-2/wiki-links.md
                 // /Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/level-1/Level-1-File.md
-                // /Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/Bad File Name.md
+                // /Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/Bad-File-Name.md
                 // /Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/Other-File.md
                 // /Users/vlad/src/idea-multimarkdown2/src/test/resources/markdown/level-1/level-2/level3.wiki/Level-1-File.md
                 // /Users/vlad/src/idea-multimarkdown2/src/test/resources/markdown/level-1/level-2/level3.wiki/Level-2-File.md
@@ -144,7 +144,7 @@ public class TestFileReferenceLink {
                                               , "/Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/level-1/Level-1-File.md"
                                               , true ),
                 /* 5 */   filePathInfoTestData( "/Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/wiki-links.md"
-                                              , "/Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/Bad File Name.md"
+                                              , "/Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/Bad-File-Name.md"
                                               , false ),
                 /* 6 */   filePathInfoTestData( "/Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/wiki-links.md"
                                               , "/Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/Other-File.md"
@@ -184,7 +184,7 @@ public class TestFileReferenceLink {
                                               , "/Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/level-1/Level-1-File.md"
                                               , true ),
                 /* 18 */  filePathInfoTestData( "/Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/level-1/level-2/wiki-links.md"
-                                              , "/Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/Bad File Name.md"
+                                              , "/Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/Bad-File-Name.md"
                                               , false ),
                 /* 19 */  filePathInfoTestData( "/Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/level-1/level-2/wiki-links.md"
                                               , "/Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/Other-File.md"
@@ -224,7 +224,7 @@ public class TestFileReferenceLink {
                                               , "/Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/level-1/Level-1-File.md"
                                               , true ),
                 /* 31 */  filePathInfoTestData( "/Users/vlad/src/idea-multimarkdown2/src/test/resources/markdown/wiki-links.md"
-                                              , "/Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/Bad File Name.md"
+                                              , "/Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/Bad-File-Name.md"
                                               , false ),
                 /* 32 */  filePathInfoTestData( "/Users/vlad/src/idea-multimarkdown2/src/test/resources/markdown/wiki-links.md"
                                               , "/Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/Other-File.md"
@@ -264,7 +264,7 @@ public class TestFileReferenceLink {
                                               , "/Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/level-1/Level-1-File.md"
                                               , false ),
                 /* 44 */  filePathInfoTestData( "/Users/vlad/src/idea-multimarkdown2/src/test/resources/markdown/level-1/level-2/level3.wiki/wiki-links.md"
-                                              , "/Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/Bad File Name.md"
+                                              , "/Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/Bad-File-Name.md"
                                               , false ),
                 /* 45 */  filePathInfoTestData( "/Users/vlad/src/idea-multimarkdown2/src/test/resources/markdown/level-1/level-2/level3.wiki/wiki-links.md"
                                               , "/Users/vlad/src/idea-multimarkdown2/src/test/resources/WikiPages.wiki/Other-File.md"

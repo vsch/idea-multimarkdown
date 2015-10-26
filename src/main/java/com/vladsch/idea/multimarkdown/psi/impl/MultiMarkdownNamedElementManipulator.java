@@ -24,7 +24,6 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.ElementManipulator;
 import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
-import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import org.jetbrains.annotations.NotNull;
 
 public class MultiMarkdownNamedElementManipulator implements ElementManipulator<MultiMarkdownNamedElement> {
@@ -38,7 +37,7 @@ public class MultiMarkdownNamedElementManipulator implements ElementManipulator<
 
     @Override
     public MultiMarkdownNamedElement handleContentChange(@NotNull MultiMarkdownNamedElement element, String newContent) throws IncorrectOperationException {
-        return (MultiMarkdownNamedElement) element.handleContentChange(newContent);
+        return element.handleContentChange(newContent);
     }
 
     @NotNull

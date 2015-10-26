@@ -20,7 +20,6 @@
   ~ specific language governing permissions and limitations
   ~ under the License.
   -->
-<!DOCTYPE idea-plugin PUBLIC "Plugin/DTD" "http://plugins.intellij.net/plugin.dtd">
 <idea-plugin version="2" url="http://github.com/vsch/idea-multimarkdown">
   <id>com.vladsch.idea.multimarkdown</id>
   <name>MultiMarkdown</name>
@@ -41,11 +40,34 @@
     </div>
     ]]></description>
 
-  <version>1.1.12.1</version>
+  <version>1.1.13</version>
   <idea-version since-build="133.1711"/>
   <change-notes><![CDATA[
-    <ul><h3><b>1.1.12.1 - Bug Fixes &amp; Optimizations.</b></h3>
-      <li>Fix now scan only project source roots as returned by IDEA.</li>
+    <ul><h3><b>1.1.13 - More GitHub integration, Bug Fixes &amp; Optimizations.</b></h3>
+      <li>Fix now using FileBasedIndex to find files for link resolution. No longer need to mark wiki directories as source or resource roots</li>
+      <li>Add re-targeting an invalid wiki link using quick fixes will also re-target all matching wiki refs located in the same wiki</li>
+      <li>Fix #47, closing a project before preview update delay timer is triggered caused project already disposed assertion failure.</li>
+      <li>Change GitHub syntax wiki links are now default and not changeable.</li>
+      <li>Change to support GitHub wiki's not handling subdirectories in wiki links and resolving always on unique file name.</li>
+      <li>Add annotation error when GitHub wiki links have /. </li>
+      <li>Add annotation error when wiki links are used in non-wiki pages. GitHub only supports wiki links in wiki pages. </li>
+      <li>Add annotations to detect conflicts in GitHub wiki page names.</li>
+      <li>Add links from non-wiki markdown files of the '../../wiki/{other stuff}' will try to resolve to a link '{dir}.wiki/{other stuff}. This is to mimic GitHub relative links from the main repository to wiki pages. This means that your wiki directory should have the name of its parent directory with '.wiki' extension added, again to follow GitHub wiki naming conventions.'.</li>
+      <li>Add duplicate matching wiki pages resolve to the first one based on alphabetically sorted relative path from the wiki home folder. Same as GitHub wiki.</li>
+      <li>Add Preview Tab links to wiki pages and markdown documents now open the corresponding files on github.com.</li>
+      <li>Add header with file name to markdown in old preview tab, clicking on file name takes you to the file on GitHub.</li>
+      <li>Add Clicking on the book icon in file header in new preview takes you to the file on GitHub.</li>
+      <li>Add Relative links in markdown documents now also support GitHub specific links for: wiki, issues, pulls, graphs, pulse. For example from the readme.md file in VCS root you can create a link to issues using: [Issues](../../issues). The same way you would do it on GitHub. These also resolve to their corresponding pages on GitHub when clicked. These links always resolve to the master branch on GitHub, regardless of what branch is current in the IDE.</li>
+      <li>Add relative image links resolve to local files the same way they would resolve to files on GitHub, so you can use relative links for embedded images.</li>
+      <li>Change Wiki links now fully GitHub like with same resolution rules except with warnings and annotations.</li>
+      <li>Fix comment/uncomment would leave a space around text.</li>
+      <li>Fix minimized parser memory hogging. pegdown processor AST was kept around long after it was needed.</li>
+      <li>Fix #50 hang when >20 files were modified in the file system triggering re-indexing in dumb mode. Plugin did not check for dumb service mode before trying to collect PsiFile(s) for re-parse.</li>
+      <li>Fix #49 inline code being interpreted as start of code fence.</li>
+      <li>Add unresolved links within a wiki with the same text are the same reference so can be renamed as a group.</li>
+      <li>Add wiki link titles within a wiki with the same text and the same link address are the same reference so the link text can be renamed as a group.</li>
+      <li>Add wiki link ref anchor and ref anchor marker coloring attributes and psi elements for anchors.</li>
+      <li>Add wiki link ref anchors within a wiki with the same text and the same parent link address are the same reference so the text can be renamed as a group for all of them.</li>
     </ul>
     <ul><h3><b>1.1.12 - Bug Fixes &amp; Optimizations.</b></h3>
       <li>Fix url's with spaces showing up as unresolved.</li>
@@ -366,10 +388,10 @@
     <lang.refactoringSupport language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownRefactoringSupportProvider"/>
     <lang.syntaxHighlighterFactory key="MultiMarkdown" language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.highlighter.MultiMarkdownSyntaxHighlighterFactory"/>
     <langCodeStyleSettingsProvider implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownLanguageCodeStyleSettingsProvider"/>
-    <psi.referenceContributor implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownReferenceContributor"/>
+    <psi.referenceContributor language="MultiMarkdown" implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownReferenceContributor"/>
     <spellchecker.support language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.spellchecking.MultiMarkdownSpellcheckingStrategy"/>
     <todoIndexer filetype="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.todo.MultiMarkdownTodoIndexer"/>
-    <lang.elementManipulator forClass="com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef" implementationClass="com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownNamedElementManipulator"/>
+    <lang.elementManipulator forClass="com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement" implementationClass="com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownNamedElementManipulator"/>
     <fileIconProvider implementation="com.vladsch.idea.multimarkdown.MultiMarkdownFileIconProvider"/>
     <referencesSearch implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownReferenceSearch"/>
     <codeInsight.lineMarkerProvider language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownLineMarkerProvider"/>

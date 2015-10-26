@@ -23,10 +23,12 @@ package com.vladsch.idea.multimarkdown.util;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
+import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class FileReferenceLink extends FileReference {
+    private static final Logger logger = org.apache.log4j.Logger.getLogger(FileReferenceLink.class);
 
     public static final int REASON_TARGET_HAS_SPACES = 1;
     public static final int REASON_CASE_MISMATCH = 2;
@@ -36,6 +38,9 @@ public class FileReferenceLink extends FileReference {
     public static final int REASON_NOT_UNDER_SOURCE_WIKI_HOME = 32;
     public static final int REASON_TARGET_NAME_HAS_ANCHOR = 64;
     public static final int REASON_TARGET_PATH_HAS_ANCHOR = 128;
+    public static final int REASON_WIKI_PAGEREF_HAS_SLASH = 256;
+    public static final int REASON_WIKI_PAGEREF_HAS_FIXABLE_SLASH = 512;
+    public static final int REASON_WIKI_PAGEREF_HAS_SUBDIR = 1024;
 
     protected final @NotNull FileReference sourceReference;
     protected String pathPrefix;
@@ -47,7 +52,15 @@ public class FileReferenceLink extends FileReference {
         super(targetPath, project);
         this.sourceReference = new FileReference(sourcePath, project);
 
-        computeLinkRefInfo();
+        computeLinkRefInfo(sourceReference.getFilePath(), getFilePath());
+    }
+
+    public FileReferenceLink(@NotNull FileReferenceLink other) {
+        super(other);
+
+        this.sourceReference = other.sourceReference;
+
+        computeLinkRefInfo(sourceReference.getFilePath(), getFilePath());
     }
 
     public FileReferenceLink(@NotNull FileReference sourceReference, @NotNull FileReference targetReference) {
@@ -56,7 +69,7 @@ public class FileReferenceLink extends FileReference {
         assert sourceReference.getProject() == targetReference.getProject();
         this.sourceReference = sourceReference;
 
-        computeLinkRefInfo();
+        computeLinkRefInfo(sourceReference.getFilePath(), getFilePath());
     }
 
     public FileReferenceLink(@NotNull VirtualFile sourceFile, @NotNull FileReference targetReference) {
@@ -64,7 +77,7 @@ public class FileReferenceLink extends FileReference {
 
         this.sourceReference = new FileReference(sourceFile, project);
 
-        computeLinkRefInfo();
+        computeLinkRefInfo(sourceReference.getFilePath(), getFilePath());
     }
 
     public FileReferenceLink(@NotNull FileReference sourceReference, @NotNull VirtualFile targetFile) {
@@ -72,7 +85,7 @@ public class FileReferenceLink extends FileReference {
 
         this.sourceReference = sourceReference;
 
-        computeLinkRefInfo();
+        computeLinkRefInfo(sourceReference.getFilePath(), getFilePath());
     }
 
     public FileReferenceLink(@NotNull VirtualFile sourceFile, @NotNull VirtualFile targetFile, Project project) {
@@ -80,7 +93,7 @@ public class FileReferenceLink extends FileReference {
 
         this.sourceReference = new FileReference(sourceFile, project);
 
-        computeLinkRefInfo();
+        computeLinkRefInfo(sourceReference.getFilePath(), getFilePath());
     }
 
     public FileReferenceLink(@NotNull PsiFile sourceFile, @NotNull PsiFile targetFile) {
@@ -89,7 +102,7 @@ public class FileReferenceLink extends FileReference {
         assert sourceFile.getProject() == targetFile.getProject();
         this.sourceReference = new FileReference(sourceFile);
 
-        computeLinkRefInfo();
+        computeLinkRefInfo(sourceReference.getFilePath(), getFilePath());
     }
 
     public FileReferenceLink(@NotNull FileReference sourceReference, @NotNull PsiFile targetFile) {
@@ -98,7 +111,7 @@ public class FileReferenceLink extends FileReference {
         assert sourceReference.getProject() == targetFile.getProject();
         this.sourceReference = sourceReference;
 
-        computeLinkRefInfo();
+        computeLinkRefInfo(sourceReference.getFilePath(), getFilePath());
     }
 
     public FileReferenceLink(@NotNull PsiFile sourceFile, @NotNull FileReference targetReference) {
@@ -107,7 +120,7 @@ public class FileReferenceLink extends FileReference {
         assert sourceFile.getProject() == targetReference.getProject();
         this.sourceReference = new FileReference(sourceFile);
 
-        computeLinkRefInfo();
+        computeLinkRefInfo(sourceReference.getFilePath(), getFilePath());
     }
 
     @NotNull
@@ -126,13 +139,18 @@ public class FileReferenceLink extends FileReference {
     }
 
     @NotNull
+    protected String getWikiPageRefPathPrefix() {
+        return FilePathInfo.asWikiRef(pathPrefix);
+    }
+
+    @NotNull
     public String getWikiPageRef() {
-        return FilePathInfo.asWikiRef(pathPrefix) + getFileNameNoExtAsWikiRef();
+        return getWikiPageRefPathPrefix() + getFileNameNoExtAsWikiRef();
     }
 
     @NotNull
     public String getWikiPageRefWithAnchor() {
-        return FilePathInfo.asWikiRef(pathPrefix) + getFileNameWithAnchorNoExtAsWikiRef();
+        return getWikiPageRefPathPrefix() + getFileNameWithAnchorNoExtAsWikiRef();
     }
 
     @NotNull
@@ -170,6 +188,11 @@ public class FileReferenceLink extends FileReference {
         return downDirectories;
     }
 
+    // return true if the given string is a wikiRef of this link reference
+    public boolean isWikiPageRef(@NotNull String wikiRef) {
+        return equivalentWikiRef(true, false, getWikiPageRef(), wikiRef);
+    }
+
     public static class InaccessibleWikiPageReasons {
         final int reasons;
         final String wikiRef;
@@ -205,10 +228,21 @@ public class FileReferenceLink extends FileReference {
         public String targetNameHasAnchorFixed() { return referenceLink.getFileNameWithAnchor().replace("#", ""); }
 
         public boolean targetPathHasAnchor() { return (reasons & REASON_TARGET_PATH_HAS_ANCHOR) != 0; }
+
+        public boolean wikiRefHasSlash() { return false; }
+        public boolean wikiRefHasFixableSlash() { return (reasons & REASON_WIKI_PAGEREF_HAS_FIXABLE_SLASH) != 0; }
+        public String wikiRefHasSlashFixed() { return wikiRef; }
+
+        public boolean wikiRefHasSubDir() { return false; }
+        public String wikiRefHasSubDirFixed() { return wikiRef; }
     }
 
     @NotNull
     public InaccessibleWikiPageReasons inaccessibleWikiPageRefReasons(@Nullable String wikiPageRef) {
+        return new InaccessibleWikiPageReasons(computeWikiPageRefReasonsFlags(wikiPageRef), wikiPageRef, this);
+    }
+
+    protected int computeWikiPageRefReasonsFlags(@Nullable String wikiPageRef) {
         int reasons = 0;
 
         if (linkRefHasSpaces()) reasons |= REASON_TARGET_HAS_SPACES;
@@ -226,13 +260,13 @@ public class FileReferenceLink extends FileReference {
         if (pathContainsAnchor()) reasons |= REASON_TARGET_PATH_HAS_ANCHOR;
         if (fileNameContainsAnchor()) reasons |= REASON_TARGET_NAME_HAS_ANCHOR;
 
-        return new InaccessibleWikiPageReasons(reasons, wikiPageRef, this);
+        return reasons;
     }
 
-    protected void computeLinkRefInfo() {
+    protected void computeLinkRefInfo(@NotNull String sourceReferencePath, @NotNull String targetReferencePath) {
         pathPrefix = "";
-        String[] targetParts = getFilePath().split("/");
-        String[] sourceParts = sourceReference.getFilePath().split("/");
+        String[] targetParts = targetReferencePath.split("/");
+        String[] sourceParts = sourceReferencePath.split("/");
         downDirectories = 0;
         upDirectories = 0;
 

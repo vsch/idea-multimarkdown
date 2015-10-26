@@ -20,6 +20,7 @@
  */
 package com.vladsch.idea.multimarkdown.util;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
@@ -27,6 +28,7 @@ import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.security.InvalidParameterException;
 import java.util.*;
 
 public class FileReferenceList {
@@ -93,8 +95,39 @@ public class FileReferenceList {
             }
         }
 
-        public Builder(Collection<? extends FileReference> fileReferences) {
-            for (FileReference fileReference : fileReferences) {
+        public Builder(@NotNull Collection fileReferences, @Nullable Project project, FileReferenceList.Filter... filters) {
+            FileReferenceList.Filter firstFilter = filters.length > 0 ? filters[0] : null;
+            ArrayList<FileReference> files = new ArrayList<FileReference>();
+
+            for (Object o : fileReferences) {
+                FileReference fileReference = null;
+                if (o instanceof VirtualFile) {
+                    fileReference = new FileReference((VirtualFile) o, project);
+                } else if (o instanceof FileReference) {
+                    if (project == null) project = ((FileReference) o).getProject();
+                    fileReference = (FileReference) o;
+                } else if (o instanceof String) {
+                    fileReference = new FileReference((String) o, project);
+                } else if (o instanceof PsiFile) {
+                    if (project == null) project = ((PsiFile) o).getProject();
+                    fileReference = new FileReference((PsiFile) o);
+                } else {
+                    throw new InvalidParameterException("Collection can only contain String, FileReference, VirtualFile or PsiFile elements");
+                }
+
+                if (firstFilter == null || firstFilter.filterExt(fileReference.getExt(), fileReference.getAnchor())) {
+                    files.add(fileReference);
+                }
+            }
+
+            Outer:
+            for (FileReference fileReference : files) {
+                for (FileReferenceList.Filter filter : filters) {
+                    if (filter == null) continue;
+                    if (!filter.filterExt(fileReference.getExt(), fileReference.getFullFilePath())) continue Outer;
+                    if (filter.isRefFilter() && (fileReference = filter.filterRef(fileReference)) == null) continue Outer;
+                }
+
                 add(fileReference);
             }
         }
@@ -129,13 +162,80 @@ public class FileReferenceList {
     protected final int[][] extensionFileRefIndices; // [ext index][0....max] = index in fileReferences that contains that extension
     protected final String[] extensions;      //
 
-    public int length() {
+    public FileReferenceList sorted() {
+        return new FileReferenceList(getSorted());
+    }
+
+    public FileReferenceList sorted(int skip) {
+        return new FileReferenceList(getSorted(skip));
+    }
+
+    public FileReferenceList sorted(int skip, int get) {
+        return new FileReferenceList(getSorted(skip, get));
+    }
+
+    public FileReferenceList copy() {
+        return new FileReferenceList(get());
+    }
+
+    public FileReferenceList copy(int skip) {
+        return new FileReferenceList(get(skip));
+    }
+
+    public FileReferenceList copy(int skip, int get) {
+        return new FileReferenceList(get(skip, get));
+    }
+
+    public int size() {
         return fileReferences.length;
     }
 
+    public FileReference getAt(int i) {
+        return fileReferences.length > i ? fileReferences[i] : null;
+    }
+
     @NotNull
-    public FileReference[] getFileReferences() {
-        return fileReferences.clone();
+    public FileReference[] get() {
+        return get(0, size());
+    }
+
+    @NotNull
+    public FileReference[] get(int skip) {
+        return get(skip, size());
+    }
+
+    @NotNull
+    public FileReference[] get(int skip, int get) {
+        if (skip >= size()) {
+            return new FileReference[0];
+        }
+        if (get > size() - skip) get = size() - skip;
+        FileReference[] results = new FileReference[get];
+        System.arraycopy(fileReferences, skip, results, 0, get);
+        return results;
+    }
+
+    @NotNull
+    public FileReference[] getSorted() {
+        return getSorted(0, size());
+    }
+
+    @NotNull
+    public FileReference[] getSorted(int skip) {
+        return getSorted(skip, size());
+    }
+
+    @NotNull
+    public FileReference[] getSorted(int skip, int get) {
+        if (skip >= size()) {
+            return new FileReference[0];
+        }
+        FileReference[] sorted = fileReferences.clone();
+        Arrays.sort(sorted);
+        if (get > size() - skip) get = size() - skip;
+        FileReference[] results = new FileReference[get];
+        System.arraycopy(sorted, skip, results, 0, get);
+        return results;
     }
 
     @NotNull
@@ -148,8 +248,12 @@ public class FileReferenceList {
         return extensions;
     }
 
-    public FileReferenceList(Collection<? extends FileReference> c) {
-        this(new Builder(c));
+    public FileReferenceList(@NotNull Collection c) {
+        this(new Builder(c, null));
+    }
+
+    public FileReferenceList(@NotNull Collection c, Project project) {
+        this(new Builder(c, project));
     }
 
     public FileReferenceList(FileReference... fileReferences) {
@@ -290,6 +394,11 @@ public class FileReferenceList {
     }
 
     @NotNull
+    public FileReferenceList sameWikiHomePageRefs() {
+        return filter(SAME_WIKI_HOME_REFS_FILTER);
+    }
+
+    @NotNull
     public <T> T[] transform(@NotNull TransformFilter<T> transFilter) {
         HashSet<T> result = new HashSet<T>(fileReferences.length);
 
@@ -422,6 +531,7 @@ public class FileReferenceList {
         }
         return result;
     }
+
     public static final Filter ALL_WIKI_REFS_FILTER = new Filter() {
         @Override
         public boolean filterExt(@NotNull String ext, String anchor) {
@@ -434,6 +544,22 @@ public class FileReferenceList {
         @Override
         public FileReference filterRef(@NotNull FileReference fileReference) {
             return fileReference;
+        }
+    };
+
+    public static final Filter SAME_WIKI_HOME_REFS_FILTER = new Filter() {
+        @Override
+        public boolean filterExt(@NotNull String ext, String anchor) {
+            return FilePathInfo.isWikiPageExt(ext);
+        }
+
+        @Override
+        public boolean isRefFilter() { return true; }
+
+        @Override
+        public FileReference filterRef(@NotNull FileReference fileReference) {
+            return fileReference instanceof FileReferenceLink
+                    && fileReference.getWikiHome().equals(((FileReferenceLink) fileReference).getSourceReference().getWikiHome()) ? fileReference : null;
         }
     };
 
@@ -971,5 +1097,4 @@ public class FileReferenceList {
     };
 
     public static final Filter ANY_FILE_FILTER = NULL_FILTER;
-
 }

@@ -38,19 +38,21 @@ import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
 import com.vladsch.idea.multimarkdown.util.FileReference;
-import org.apache.log4j.*;
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Enumeration;
 
 public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.ProjectFileResolver {
     private static final Logger logger = org.apache.log4j.Logger.getLogger("com.vladsch.idea.multimarkdown");
     private MultiMarkdownGlobalSettingsListener globalSettingsListener;
 
-    private Project project;
     private PluginClassLoader myClassLoader;
 
     private String urlLayoutFxCss;
@@ -105,15 +107,14 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
         //BasicConfigurator.configure();
         //logger.addAppender(new ConsoleAppender(new PatternLayout("%r [%t] %p %c %x - %m%n")));
         ConsoleAppender appender = new ConsoleAppender(new PatternLayout("%p %c %x - %m%n"));
-        Enumeration<Appender> appenders = Logger.getRootLogger().getAllAppenders();
-        while (appenders.hasMoreElements()) {
-            Appender app = appenders.nextElement();
-            String name = app.getName();
-        }
+        //Enumeration appenders = Logger.getRootLogger().getAllAppenders();
+        //while (appenders.hasMoreElements()) {
+        //    Appender app = (Appender) appenders.nextElement();
+        //    String name = app.getName();
+        //}
         logger.addAppender(appender);
         logger.setAdditivity(false);
         logger.setLevel(Level.INFO);
-
 
         FileReference.projectFileResolver = this;
 
@@ -130,6 +131,7 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
             File tmpFile = File.createTempFile("multimarkdown_font_file", ".ttf");
             String path = tmpFile.getAbsolutePath();
             tempDirPath = path.substring(0, path.lastIndexOf("multimarkdown_font_file"));
+            //noinspection ResultOfMethodCallIgnored
             tmpFile.delete();
         } catch (IOException e) {
             //e.printStackTrace();
@@ -139,7 +141,6 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
         // but for some reason WebView won't accept a copy of the file to the temp dir and IDEA won't include .ttf files in resources
         // directory, but will if the file is .png, ok we live with that, WebView takes the file with a .png extension and correctly figures
         // out that it is .ttf
-        boolean useOldPreview = settings.useOldPreview.getValue();
 
         // Listen to settings changes
         urlCustomFont = null;
@@ -174,6 +175,7 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
                     try {
                         // 1.8u60 caches the css by name, we have to change the name or no refresh is done
                         //updateTempCopy(fileCustomFxCss, newSettings.customFxCss.getValue());
+                        //noinspection ResultOfMethodCallIgnored
                         fileCustomFxCss.delete();
                         fileCustomFxCss = createTempCopy(settings.customFxCss.getValue(), "custom-fx.css");
                         urlCustomFxCss = fileCustomFxCss.toURI().toURL().toExternalForm();
@@ -252,15 +254,14 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
         if (myClassLoader == null) {
             PluginClassLoader pluginClassLoader = (PluginClassLoader) getClass().getClassLoader();
             String javaHome = System.getProperty("java.home");
-            String javaFx = javaHome;// "/Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/jre";
             String javaVersion = System.getProperty("java.version");
-            String libDir = FileUtil.join(javaFx, "lib");
+            String libDir = FileUtil.join(javaHome, "lib");
             String libExtDir = FileUtil.join(libDir, "ext");
             String fileName = FileUtil.join(libExtDir, "jfxrt.jar");
             File file = new File(fileName);
             if (!file.exists()) {
                 //logger.warn("JavaFX library jfxrt.jar not found in the provided jre: " + javaHome + ", version " + javaVersion);
-                logger.warn("JavaFX library jfxrt.jar not found in the provided jre: " + javaFx + ", version " + javaVersion);
+                logger.warn("JavaFX library jfxrt.jar not found in the provided jre: " + javaHome + ", version " + javaVersion);
                 logger.warn("MultiMarkdown HTML Preview will use a more limited implementation.");
                 MultiMarkdownGlobalSettings.getInstance().useOldPreview.setValue(true);
                 //} else if (!file.exists() || "1.8.0_u51".compareTo(javaVersion.substring(0, Math.min(javaVersion.length(), "1.8.0_u51".length()))) < 0) {
@@ -304,28 +305,21 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
 
     // find markdown and wantWikiPages in the project
     public static
-    @NotNull
+    @Nullable
     MultiMarkdownProjectComponent getProjectComponent(Project project) {
         return project.getComponent(MultiMarkdownProjectComponent.class);
     }
 
     @Override
-    public VirtualFile getVirtualFile(@NotNull String sourcePath, @NotNull Project project) {
-        String baseDir = project.getBasePath();
-        if (baseDir != null && sourcePath.startsWith(baseDir + "/")) {
-            return VirtualFileManager.getInstance().findFileByUrl("file://" + sourcePath);
-        }
-        return null;
+    public VirtualFile getVirtualFile(@NotNull String sourcePath) {
+        return VirtualFileManager.getInstance().findFileByUrl("file://" + sourcePath);
     }
 
     @Override
-    public PsiFile getPsiFile(@NotNull String sourcePath, @NotNull Project project) {
-        VirtualFile file = getVirtualFile(sourcePath, project);
-        if (file != null) {
-            PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
-            if (psiFile != null && psiFile instanceof MultiMarkdownFile) {
-                return (MultiMarkdownFile) psiFile;
-            }
+    public PsiFile getPsiFile(@NotNull VirtualFile file, @NotNull Project project) {
+        PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
+        if (psiFile != null && psiFile instanceof MultiMarkdownFile) {
+            return psiFile;
         }
         return null;
     }

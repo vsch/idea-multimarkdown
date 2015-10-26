@@ -46,7 +46,7 @@ THE SOFTWARE.
 .wiki-container {
     width: 770px;
     margin: 0 auto;
-    padding-left: 10px;
+    padding-left: 20px;
     float: left !important;
 }
 
@@ -58,6 +58,8 @@ THE SOFTWARE.
 
 .wiki-body {
     width: 640px;
+    margin-left: -20px;
+    padding-left: 20px;
 }
 
 #readme .markdown-body {

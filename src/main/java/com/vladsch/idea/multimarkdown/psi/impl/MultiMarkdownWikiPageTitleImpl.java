@@ -23,10 +23,9 @@ package com.vladsch.idea.multimarkdown.psi.impl;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.vladsch.idea.multimarkdown.language.MultiMarkdownReference;
-import com.vladsch.idea.multimarkdown.language.MultiMarkdownReferenceWikiPageTitle;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageTitle;
+import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,7 +36,10 @@ public class MultiMarkdownWikiPageTitleImpl extends MultiMarkdownNamedElementImp
     @NotNull
     @Override
     public String getMissingElementNamespace() {
-        return MISSING_ELEMENT_NAME_SPACE;
+        String pageRef = MultiMarkdownPsiImplUtil.getPageRefWithAnchor((MultiMarkdownWikiLink) getParent());
+        FilePathInfo filePathInfo = new FilePathInfo(getContainingFile().getVirtualFile());
+        String wikiHome = filePathInfo.getWikiHome();
+        return MISSING_ELEMENT_NAME_SPACE + (wikiHome.isEmpty() ? wikiHome : wikiHome + "::") + (pageRef.isEmpty() ? pageRef : pageRef + "::");
     }
 
     public MultiMarkdownWikiPageTitleImpl(ASTNode node) {
@@ -46,18 +48,17 @@ public class MultiMarkdownWikiPageTitleImpl extends MultiMarkdownNamedElementImp
 
     @Override
     public MultiMarkdownReference createReference(@NotNull TextRange textRange) {
-        return  new MultiMarkdownReferenceWikiPageTitle(this, textRange);
+        return  new MultiMarkdownReference(this, textRange);
+    }
+
+    @Override
+    public String getDisplayName() {
+        return getParent() instanceof MultiMarkdownWikiLink  ? ((MultiMarkdownWikiLink) getParent()).getDisplayName() : getName();
     }
 
     @Override
     public PsiElement setName(@NotNull String newName, int reason) {
-        String oldName = getName();
-        //logger.info("setting name on " + this + " to " + newName);
-        MultiMarkdownNamedElement element = MultiMarkdownPsiImplUtil.setName(this, newName, reason);
-        //logger.info("element rename change " + this + " to " + element);
-        //reference.notifyNamedElementChange(this, element);
-        //reference.invalidateResolveResults();
-        return element;
+        return MultiMarkdownPsiImplUtil.setName(this, newName, reason);
     }
 
     @Override

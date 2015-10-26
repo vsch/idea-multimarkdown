@@ -25,99 +25,155 @@ import com.intellij.ProjectTopics;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ProjectComponent;
+import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootAdapter;
 import com.intellij.openapi.roots.ModuleRootEvent;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.startup.StartupManager;
+import com.intellij.openapi.vcs.FileStatus;
+import com.intellij.openapi.vcs.FileStatusManager;
+import com.intellij.openapi.vcs.ProjectLevelVcsManager;
+import com.intellij.openapi.vcs.VcsListener;
 import com.intellij.openapi.vfs.*;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
+import com.intellij.refactoring.listeners.RefactoringEventData;
+import com.intellij.refactoring.listeners.RefactoringEventListener;
+import com.intellij.util.containers.HashMap;
+import com.intellij.util.containers.HashSet;
+import com.intellij.util.messages.MessageBus;
+import com.intellij.util.messages.MessageBusConnection;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
-import com.vladsch.idea.multimarkdown.util.*;
+import com.vladsch.idea.multimarkdown.util.GithubRepo;
+import com.vladsch.idea.multimarkdown.util.ListenerNotifier;
+import com.vladsch.idea.multimarkdown.util.ListenerNotifyDelegate;
+import com.vladsch.idea.multimarkdown.util.ReferenceChangeListener;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualFileListener, ListenerNotifyDelegate<ProjectFileListListener> {
+import java.util.Collection;
+
+public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualFileListener, ListenerNotifyDelegate<ReferenceChangeListener> {
     private static final Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownProjectComponent.class);
 
-    public final static int ANY_FILE = 0;
-    public final static int FILE_REF = 0;
+    private final static int LISTENER_ADDED = 0;
+    private final static int SYMBOL_REF_CHANGED = 1;
 
-    public final static int WIKIPAGE_FILE = 1;
-    public final static int MARKDOWN_FILE_ONLY = 2;
-    public final static int IMAGE_FILE = 4;
-    public final static int WIKI_REF = 8;
-    public final static int ALLOW_INACCESSIBLE_REF = 16;
-    public final static int INCLUDE_SELF = 32;
-    public final static int WANT_WIKI_REF = 64;
-    public final static int SPACE_DASH_EQUIVALENT = 128;
-    public final static int MARKDOWN_FILE = MARKDOWN_FILE_ONLY | WIKIPAGE_FILE | ALLOW_INACCESSIBLE_REF;
-    public final static int ALLOW_INACCESSIBLE_WIKI_REF = ALLOW_INACCESSIBLE_REF | MARKDOWN_FILE;
-
-    protected final static int LISTENER_ADDED = 0;
-    protected final static int UPDATE_DONE = 1;
-
-    private static final String WIKI_PAGE_EXTENSION = ".md";
-
-    // this one is updating when files change, the thread local ones get updated by this one
-    private final ThreadSafeMainCache<FileReferenceList> mainFileList = new ThreadSafeMainCache<FileReferenceList>(new MainFileListUpdater(this));
-    private ThreadLocal<ThreadSafeMirrorCache<FileReferenceList>> mirrorFileList = loadMarkdownFilesList();
-
-    // our listeners that want to know when project files change so they can clear cached references
-    private final ListenerNotifier<ProjectFileListListener> projectFileListNotifier = new ListenerNotifier<ProjectFileListListener>(this);
+    private HashMap<String, GithubRepo> gitHubRepos = null;
 
     private Project project;
-    private boolean hadGithubLinks = MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue();
     protected MultiMarkdownGlobalSettingsListener globalSettingsListener;
-    protected int refactoringReason;
+    protected int refactoringRenameFlags = MultiMarkdownNamedElement.RENAME_NO_FLAGS;
 
-    public int getRefactoringReason() {
-        return refactoringReason;
-    }
+    protected int[] refactoringRenameFlagsStack = new int[10];
+    protected int refactoringRenameStack = 0;
+    protected boolean needReparseOnDumbModeExit = false;
 
-    public void setRefactoringReason(int refactoringReason) {
-        this.refactoringReason = refactoringReason;
-    }
+    private final HashMap<String, ElementNamespace> elementNamespaces = new HashMap<String, ElementNamespace>();
+    private final ListenerNotifier<ReferenceChangeListener> allNamespacesNotifier = new ListenerNotifier<ReferenceChangeListener>(this);
+    private boolean needAllSpacesNotification;
 
-    public MultiMarkdownProjectComponent(final Project project) {
-        this.project = project;
+    private class ElementNamespace {
+        final String namespace;
+        final HashMap<String, MultiMarkdownNamedElement> symbolTable = new HashMap<String, MultiMarkdownNamedElement>();
+        final ListenerNotifier<ReferenceChangeListener> notifier = new ListenerNotifier<ReferenceChangeListener>(MultiMarkdownProjectComponent.this);
+        final HashMap<MultiMarkdownNamedElement, String> rootElements = new HashMap<MultiMarkdownNamedElement, String>();
 
-        // Listen to settings changes
-        MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
-            public void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings) {
-                if (hadGithubLinks != newSettings.githubWikiLinks.getValue()) {
-                    // need to reparse everything
-                    hadGithubLinks = newSettings.githubWikiLinks.getValue();
-                    updateHighlighters();
+        public ElementNamespace(String namespace) {
+            this.namespace = namespace;
+        }
+
+        MultiMarkdownNamedElement getSymbol(@NotNull MultiMarkdownNamedElement element, @NotNull String name) {
+            String oldName = null;
+            boolean log = false;
+            MultiMarkdownNamedElement refElement = element;
+
+            synchronized (this) {
+                if (rootElements.containsKey(element)) {
+                    if (!rootElements.get(element).equals(name)) {
+                        // root element's name changed, inform listeners that they need to remap references
+                        oldName = rootElements.get(element);
+                        if (log) logger.info("root element " + element + " renamed from '" + oldName + "' to '" + name + "'");
+                        symbolTable.remove(oldName);
+                        if (!symbolTable.containsKey(name)) {
+                            // still root element but under a new name
+                            symbolTable.put(name, element);
+                            rootElements.put(element, name);
+                            if (log) logger.info(" old root " + element + " now under new name");
+                        } else {
+                            // no longer root element
+                            rootElements.remove(element);
+                            refElement = symbolTable.get(name);
+                            if (log) logger.info("removed old root element " + element + " now referencing " + refElement);
+                        }
+                    }
+                } else {
+                    if (!symbolTable.containsKey(name)) {
+                        // new root element
+                        symbolTable.put(name, element);
+                        rootElements.put(element, name);
+                        //logger.info("new root for " + namespace + " element " + element);
+                    } else {
+                        refElement = symbolTable.get(name);
+                        assert refElement != element;
+                    }
                 }
             }
-        });
+
+            if (oldName != null) {
+                // do the notifications that the reference symbol for oldName has changed
+                if (log) logger.info("notifiying listeners of " + namespace + " ref changed to '" + oldName + "'");
+                notifier.notifyListeners(SYMBOL_REF_CHANGED, oldName);
+                needAllSpacesNotification = true;
+            }
+
+            return refElement;
+        }
+
+        void notifyRefsInvalidated() {
+            notifier.notifyListeners(SYMBOL_REF_CHANGED);
+        }
+
+        void addListener(ReferenceChangeListener listener) {
+            notifier.addListener(listener, LISTENER_ADDED);
+        }
+
+        public void removeListener(ReferenceChangeListener listener) {
+            notifier.removeListener(listener);
+        }
     }
 
-    private ThreadLocal<ThreadSafeMirrorCache<FileReferenceList>> loadMarkdownFilesList() {
-        return new ThreadLocal<ThreadSafeMirrorCache<FileReferenceList>>() {
-            @Override
-            protected ThreadSafeMirrorCache<FileReferenceList> initialValue() {
-                return new ThreadSafeMirrorCache<FileReferenceList>(mainFileList);
+    @NotNull
+    public MultiMarkdownNamedElement getMissingLinkElement(@NotNull final MultiMarkdownNamedElement element, @NotNull final String namespace, @NotNull String name) {
+        ElementNamespace elementNamespace;
+        synchronized (elementNamespaces) {
+            if (!elementNamespaces.containsKey(namespace)) {
+                elementNamespaces.put(namespace, elementNamespace = new ElementNamespace(namespace));
+            } else {
+                elementNamespace = elementNamespaces.get(namespace);
             }
-        };
+        }
+
+        MultiMarkdownNamedElement symbol = elementNamespace.getSymbol(element, name);
+        if (needAllSpacesNotification) allNamespacesNotifier.notifyListeners(MultiMarkdownProjectComponent.SYMBOL_REF_CHANGED);
+        return symbol;
     }
 
     @Override
-    public void notify(ProjectFileListListener listener, Object... params) {
-        if (params.length == 1) {
+    public void notify(com.vladsch.idea.multimarkdown.util.ReferenceChangeListener listener, Object... params) {
+        if (params.length >= 1) {
+            String name = params.length > 1 ? (String) params[1] : null;
             switch ((Integer) params[0]) {
                 case LISTENER_ADDED:
-                    if (mainFileList.cacheIsCurrent()) {
-                        listener.projectListsUpdated();
-                    }
                     break;
 
-                case UPDATE_DONE:
-                    listener.projectListsUpdated();
+                case SYMBOL_REF_CHANGED:
+                    listener.referenceChanged(name);
                     break;
 
                 default:
@@ -126,175 +182,213 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         }
     }
 
-    public void addListener(@NotNull ProjectFileListListener listener) {
-        projectFileListNotifier.addListener(listener, LISTENER_ADDED);
+    protected void reparseMarkdown() {
+        if (!project.isDisposed()) {
+            if (DumbService.isDumb(project)) {
+                needReparseOnDumbModeExit = true;
+                return;
+            }
+
+            ApplicationManager.getApplication().executeOnPooledThread(new Runnable() {
+                @Override
+                public void run() {
+                    ApplicationManager.getApplication().runReadAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            Collection<MultiMarkdownFile> markdownFiles;
+                            HashSet<MultiMarkdownFile> markdownFileHash = new HashSet<MultiMarkdownFile>();
+
+                            // reparse all open markdown editors
+                            VirtualFile[] files = FileEditorManager.getInstance(project).getOpenFiles();
+                            PsiManager psiManager = PsiManager.getInstance(project);
+
+                            for (VirtualFile file : files) {
+                                PsiFile psiFile = psiManager.findFile(file);
+                                if (psiFile != null && psiFile instanceof MultiMarkdownFile) {
+                                    markdownFileHash.add((MultiMarkdownFile) psiFile);
+                                }
+                            }
+                            markdownFiles = markdownFileHash;
+
+                            clearNamespaces();
+
+                            DaemonCodeAnalyzer instance = DaemonCodeAnalyzer.getInstance(project);
+                            for (MultiMarkdownFile markdownFile : markdownFiles) {
+                                instance.restart(markdownFile);
+                            }
+
+                            //FileReferenceList fileList = new FileReferenceListQuery(project).all();
+                            //int[] counts = fileList.countByFilter(FileReferenceList.IMAGE_FILE_FILTER, FileReferenceList.MARKDOWN_FILE_FILTER, FileReferenceList.WIKIPAGE_FILE_FILTER);
+                            //logger.info(String.format("Updated file list: projectRefs[%d],  imageRefs[%d],  markdownRefs[%d], wikiRefs[%d]", fileList.size(), counts[0], counts[1], counts[2]));
+                        }
+                    });
+                }
+            });
+        }
+    }
+    private void clearNamespaces() {
+        for (ElementNamespace elementNamespace : elementNamespaces.values()) {
+            elementNamespace.notifyRefsInvalidated();
+        }
+        allNamespacesNotifier.notifyListeners(SYMBOL_REF_CHANGED);
+        elementNamespaces.clear();
     }
 
-    public void removeListener(@NotNull ProjectFileListListener listener) {
-        projectFileListNotifier.removeListener(listener);
+    public void addListener(@NotNull String namespace, @NotNull ReferenceChangeListener listener) {
+        ElementNamespace elementNamespace;
+
+        synchronized (elementNamespaces) {
+            if (!elementNamespaces.containsKey(namespace)) {
+                elementNamespaces.put(namespace, elementNamespace = new ElementNamespace(namespace));
+            } else {
+                elementNamespace = elementNamespaces.get(namespace);
+            }
+        }
+
+        elementNamespace.addListener(listener);
+    }
+
+    public void removeListener(@NotNull String namespace, @NotNull ReferenceChangeListener listener) {
+        if (elementNamespaces.containsKey(namespace)) {
+            elementNamespaces.get(namespace).removeListener(listener);
+        }
+    }
+
+    public void addListener(@NotNull ReferenceChangeListener listener) {
+        allNamespacesNotifier.addListener(listener, LISTENER_ADDED);
+    }
+
+    public void removeListener(@NotNull ReferenceChangeListener listener) {
+        allNamespacesNotifier.removeListener(listener);
+    }
+
+    public int getRefactoringRenameFlags() {
+        return refactoringRenameFlags;
+    }
+
+    public void pushRefactoringRenameFlags(int refactoringReason) {
+        this.refactoringRenameFlagsStack[refactoringRenameStack++] = this.refactoringRenameFlags;
+        this.refactoringRenameFlags = refactoringReason;
+    }
+
+    public void popRefactoringRenameFlags() {
+        if (refactoringRenameStack > 0) {
+            refactoringRenameFlags = refactoringRenameFlagsStack[--refactoringRenameStack];
+        }
+    }
+
+    public GithubRepo getGithubRepo(@Nullable String baseDirectoryPath) {
+        if (baseDirectoryPath == null) baseDirectoryPath = project.getBasePath();
+
+        if (gitHubRepos == null) {
+            gitHubRepos = new HashMap<String, GithubRepo>();
+        }
+
+        if (!gitHubRepos.containsKey(baseDirectoryPath)) {
+            GithubRepo githubRepo = GithubRepo.getGitHubRepo(baseDirectoryPath, project.getBasePath());
+            gitHubRepos.put(baseDirectoryPath, githubRepo);
+        }
+
+        return gitHubRepos.get(baseDirectoryPath);
+    }
+
+    public MultiMarkdownProjectComponent(final Project project) {
+        this.project = project;
+
+        // Listen to settings changes
+        MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
+            public void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings) {
+                reparseMarkdown();
+            }
+        });
+
+        project.getMessageBus().connect(project).subscribe(DumbService.DUMB_MODE, new DumbService.DumbModeListener() {
+            @Override
+            public void enteredDumbMode() {
+            }
+
+            @Override
+            public void exitDumbMode() {
+                // need to re-evaluate class link accessibility
+                if (project.isDisposed()) return;
+
+                if (needReparseOnDumbModeExit) {
+                    needReparseOnDumbModeExit = false;
+                    reparseMarkdown();
+                }
+            }
+        });
+
+        MessageBusConnection connect = getProject().getMessageBus().connect();
+        connect.subscribe(RefactoringEventListener.REFACTORING_EVENT_TOPIC, new RefactoringEventListener() {
+            @Override
+            public void refactoringStarted(@NotNull String refactoringId, @Nullable RefactoringEventData beforeData) {
+                //logger.info("refactoring started on " + this.hashCode());
+            }
+
+            @Override
+            public void refactoringDone(@NotNull String refactoringId, @Nullable RefactoringEventData afterData) {
+                //logger.info("refactoring done on " + this.hashCode());
+                //notifyMissingLinks(ALL_NAMESPACES);
+                //logger.info("refactoring done on " + this.hashCode());
+            }
+
+            @Override
+            public void conflictsDetected(@NotNull String refactoringId, @NotNull RefactoringEventData conflictsData) {
+                //logger.info("refactoring conflicts on " + this.hashCode());
+                //notifyMissingLinks(ALL_NAMESPACES);
+            }
+
+            @Override
+            public void undoRefactoring(@NotNull String refactoringId) {
+                //logger.info("refactoring undo on " + this.hashCode());
+                clearNamespaces();
+            }
+        });
     }
 
     public Project getProject() {
         return project;
     }
 
-    public FileReferenceList getFileReferenceList() {
-        return mirrorFileList.get().getCache();
-    }
-
-    private static class MainFileListUpdater extends ThreadSafeCacheUpdater<FileReferenceList> {
-        protected final MultiMarkdownProjectComponent projectComponent;
-
-        public MainFileListUpdater(MultiMarkdownProjectComponent projectComponent) {
-            this.projectComponent = projectComponent;
-        }
-
-        public FileReferenceList newCache() {
-            return new FileReferenceList();
-        }
-
-        @Override
-        public void beforeCacheUpdate(Object... params) {
-            // this cleans up all the threads and forces them to load a fresh cache on access
-            projectComponent.mirrorFileList.remove();
-        }
-
-        protected void reparseMarkdown() {
-            ApplicationManager.getApplication().invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    final Project project = projectComponent.project;
-
-                    if (!project.isDisposed()) {
-                        final MultiMarkdownFile[] fileList = projectComponent.getFileReferenceList().getMarkdownFiles();
-
-                        // allow references to invalidate their cached values
-                        projectComponent.projectFileListNotifier.notifyListeners(UPDATE_DONE);
-
-                        DaemonCodeAnalyzer instance = DaemonCodeAnalyzer.getInstance(project);
-                        for (MultiMarkdownFile markdownFile : fileList) {
-                            instance.restart(markdownFile);
-                        }
-                    }
-                }
-            });
-        }
-
-        @Override
-        public void afterCacheUpdate(Object... params) {
-            // all threads have updated lists, invalidate references to files and restart parsing to the links are updated for validity
-
-            // we just schedule a later run in the dispatch thread
-            reparseMarkdown();
-        }
-
-        public void updateCache(final ThreadSafeMainCache.CacheUpdater<FileReferenceList> notifyWhenDone, final Object... params) {
-            final FileReferenceList.Builder builder = new FileReferenceList.Builder();
-
-            final Project project = projectComponent.project;
-            final ProjectFileIndex projectFileIndex = ProjectFileIndex.SERVICE.getInstance(project);
-
-            // run the list update in a separate thread
-            if (project.isDisposed()) return;
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    // run the file gathering in a read action
-                    if (project.isDisposed()) return;
-
-                    ApplicationManager.getApplication().runReadAction(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (project.isDisposed()) return;
-
-                            //VirtualFile baseDir = project.getBaseDir();
-                            final int[] scanned = new int[2];
-                            VirtualFile[] baseDirs = ProjectRootManager.getInstance(project).getContentSourceRoots();
-
-                            for (VirtualFile baseDir : baseDirs) {
-                                VfsUtilCore.visitChildrenRecursively(baseDir, new VirtualFileVisitor() {
-                                    @Override
-                                    public boolean visitFile(@NotNull VirtualFile file) {
-                                        if (project.isDisposed()) return false;
-
-                                        scanned[0]++;
-
-                                        // these don't exist in 133.1711
-                                        try {
-                                            // only add the file only if it is part of the project source or under a .wiki parent
-                                            if (projectFileIndex.isExcluded(file) || projectFileIndex.isInLibrarySource(file)) {
-                                                // skip this one
-                                                return false;
-                                            }
-                                        } catch (NoSuchMethodError ignored) {
-                                        }
-
-                                        if (projectFileIndex.isInSource(file)) {
-                                            //projectFiles.add(file);
-                                            FileReference fileReference = new FileReference(file, project);
-                                            builder.add(fileReference);
-                                        }
-
-                                        return super.visitFile(file);
-                                    }
-                                });
-
-                                if (project.isDisposed()) return;
-                            }
-
-                            if (project.isDisposed()) return;
-
-                            final FileReferenceList fileList = new FileReferenceList(builder);
-
-                            notifyWhenDone.cacheUpdated(fileList);
-
-                            int[] counts = fileList.countByFilter(FileReferenceList.IMAGE_FILE_FILTER, FileReferenceList.MARKDOWN_FILE_FILTER, FileReferenceList.WIKIPAGE_FILE_FILTER);
-                            logger.info(String.format("Updated file list: scanned[%d] cached:  projectRefs[%d],  imageRefs[%d],  markdownRefs[%d], wikiRefs[%d]", scanned[0], fileList.getFileReferences().length, counts[0], counts[1], counts[2]));
-                        }
-                    });
-                }
-            }).start();
-        }
-    }
-
-    protected void updateHighlighters() {
-        // project files have changed so we need to update the lists and then reparse for link validation
-        // We get a call back when all have been updated.
-        if (project.isDisposed()) return;
-
-        mainFileList.updateCache();
+    public boolean isUnderVcs(VirtualFile virtualFile) {
+        FileStatus status = FileStatusManager.getInstance(project).getStatus(virtualFile);
+        String id = status.getId();
+        boolean fileStatus = status.equals(FileStatus.DELETED) || status.equals(FileStatus.ADDED) || status.equals(FileStatus.UNKNOWN) || status.equals(FileStatus.IGNORED)
+                || id.startsWith("IGNORE");
+        logger.info("isUnderVcs " + (!fileStatus) + " for file " + virtualFile + " status " + status);
+        return !fileStatus;
     }
 
     // TODO: detect extension change in a file and attach our editors if possible
     @Override
     public void propertyChanged(@NotNull VirtualFilePropertyEvent event) {
-        updateHighlighters();
+        reparseMarkdown();
     }
 
     @Override
     public void contentsChanged(@NotNull VirtualFileEvent event) {
-        //updateHighlighters();
+        //reparseMarkdown();
     }
 
     @Override
     public void fileCreated(@NotNull VirtualFileEvent event) {
-        updateHighlighters();
+        reparseMarkdown();
     }
 
     @Override
     public void fileDeleted(@NotNull VirtualFileEvent event) {
-        updateHighlighters();
+        reparseMarkdown();
     }
 
     @Override
     public void fileMoved(@NotNull VirtualFileMoveEvent event) {
-        updateHighlighters();
+        reparseMarkdown();
     }
 
     @Override
     public void fileCopied(@NotNull VirtualFileCopyEvent event) {
-        updateHighlighters();
+        reparseMarkdown();
     }
 
     @Override
@@ -323,21 +417,37 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
     }
 
     public void projectOpened() {
+        // TODO: is this still needed?
         VirtualFileManager.getInstance().addVirtualFileListener(this);
         boolean initialized = project.isInitialized();
 
-        project.getMessageBus().connect().subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
+        final MessageBus messageBus = project.getMessageBus();
+
+        // TODO: is this still needed?
+        messageBus.connect().subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
             public void rootsChanged(ModuleRootEvent event) {
                 if (project.isDisposed()) return;
+                reparseMarkdown();
+            }
+        });
 
-                mainFileList.updateCache();
+        messageBus.connect().subscribe(ProjectLevelVcsManager.VCS_CONFIGURATION_CHANGED, new VcsListener() {
+            @Override
+            public void directoryMappingChanged() {
+                gitHubRepos = null;
+            }
+        });
+
+        messageBus.connect().subscribe(ProjectLevelVcsManager.VCS_CONFIGURATION_CHANGED_IN_PLUGIN, new VcsListener() {
+            @Override
+            public void directoryMappingChanged() {
+                gitHubRepos = null;
             }
         });
     }
 
     public void projectClosed() {
         VirtualFileManager.getInstance().removeVirtualFileListener(this);
-        mirrorFileList.remove();     // remove the cached file list
     }
 
     @NonNls
@@ -348,12 +458,12 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
 
     public void initComponent() {
         // get the file list updated
-        StartupManager.getInstance(project).registerPostStartupActivity(new Runnable() {
-            public void run() {
-                /* initialization code */
-                mainFileList.updateCache();
-            }
-        });
+        //StartupManager.getInstance(project).registerPostStartupActivity(new Runnable() {
+        //    public void run() {
+        //        /* initialization code */
+        //        mainFileList.updateCache();
+        //    }
+        //});
         //int tmp = 0;
         //MessageBusConnection connect = project.getMessageBus().connect();
         //connect.subscribe(ProjectLifecycleListener.TOPIC, new ProjectLifecycleListener() {

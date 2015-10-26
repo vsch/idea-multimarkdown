@@ -35,8 +35,31 @@ import java.util.List;
 import java.util.Map;
 
 public class MultiMarkdownToHtmlSerializer extends ToHtmlSerializer {
+    final public static int NO_WIKI_LINKS = 1;
+
     protected final Project project;
     protected final Document document;
+    protected int flags = 0;
+
+    public int getFlags() {
+        return flags;
+    }
+
+    public void setFlags(int flags) {
+        this.flags = flags;
+    }
+
+    public boolean isSet(int flags) {
+        return (this.flags & flags) != 0;
+    }
+
+    public void setFlag(int flags) {
+        this.flags |= flags;
+    }
+
+    public void clearFlag(int flags) {
+        this.flags &= ~flags;
+    }
 
     public MultiMarkdownToHtmlSerializer(Project project, Document document, LinkRenderer linkRenderer) {
         super(linkRenderer);
@@ -72,7 +95,8 @@ public class MultiMarkdownToHtmlSerializer extends ToHtmlSerializer {
         printBreakBeforeTag(node, "h" + node.getLevel());
     }
 
-    @Override public void visit(AnchorLinkNode node) {
+    @Override
+    public void visit(AnchorLinkNode node) {
         printAnchorLink(linkRenderer.render(node));
     }
 
@@ -119,7 +143,11 @@ public class MultiMarkdownToHtmlSerializer extends ToHtmlSerializer {
     }
 
     public void visit(WikiLinkNode node) {
-        printLink(linkRenderer.render(node));
+        if (isSet(NO_WIKI_LINKS)) {
+            printer.printEncoded("[[" + node.getText() + "]]");
+        } else {
+            printLink(linkRenderer.render(node));
+        }
     }
 
     protected void visitChildrenSkipFirst(SuperNode node, int skipFirst) {
@@ -208,6 +236,6 @@ public class MultiMarkdownToHtmlSerializer extends ToHtmlSerializer {
         for (LinkRenderer.Attribute attr : rendering.attributes) {
             printAttribute(attr.name, attr.value);
         }
-        printer.print('>').print("<span class=\"octicon octicon-link\"></span>").print("</a>").print(rendering.text);
+        printer.print('>').print("<span class=\"octicon octicon-link\"></span>").print(rendering.text).print("</a>");
     }
 }

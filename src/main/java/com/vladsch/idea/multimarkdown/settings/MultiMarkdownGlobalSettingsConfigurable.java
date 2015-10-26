@@ -116,6 +116,7 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
 
     public boolean isModified() {
         if (settingsPanel == null) return true;
+
         for (ComponentSetting componentSetting : componentSettings) {
             if (componentSetting.isChanged()) return true;
         }
@@ -138,6 +139,8 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
         for (ComponentSetting componentSetting : componentSettings) {
             componentSetting.setValue();
         }
+        // vsch: hardwire github wiki links
+        globalSettings.githubWikiLinks.setValue(true);
         globalSettings.endGroupNotifications();
     }
 
@@ -161,6 +164,10 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
 
     protected void resetRaw() {
         if (settingsPanel == null) return;
+
+        // vsch: hardwire github wiki links
+        globalSettings.githubWikiLinks.setValue(true);
+
         for (ComponentSetting componentSetting : componentSettings) {
             componentSetting.reset();
         }

@@ -26,6 +26,7 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiReference;
 import com.intellij.refactoring.JavaRefactoringFactory;
 import com.intellij.refactoring.JavaRenameRefactoring;
 import com.intellij.usageView.UsageInfo;
@@ -36,7 +37,10 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import com.vladsch.idea.multimarkdown.util.FileReferenceLink;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.HashSet;
 
 class RenameWikiPageAndReTargetQuickFix extends BaseIntentionAction {
     private String name;
@@ -80,18 +84,50 @@ class RenameWikiPageAndReTargetQuickFix extends BaseIntentionAction {
     }
 
     private void renameWikiFile(final Project project, final PsiFile psiFile, final String fileName, final MultiMarkdownWikiPageRef wikiPageRefElement, final String newWikiPageRef) {
-        new WriteCommandAction.Simple(project) {
-            @Override
-            public void run() {
-                JavaRefactoringFactory factory = JavaRefactoringFactory.getInstance(project);
-                JavaRenameRefactoring rename = factory.createRename(psiFile, fileName);
-                UsageInfo[] usages = rename.findUsages();
+        final MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
+        if (projectComponent != null) {
+            new WriteCommandAction.Simple(project) {
+                @Override
+                public void run() {
+                    projectComponent.pushRefactoringRenameFlags(MultiMarkdownNamedElement.RENAME_KEEP_TITLE | MultiMarkdownNamedElement.RENAME_KEEP_RENAMED_TITLE);
 
-                MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
-                projectComponent.setRefactoringReason(MultiMarkdownNamedElement.REASON_FILE_HAD_ANCHOR);
-                rename.doRefactoring(usages); // modified 'usages' array
-                projectComponent.setRefactoringReason(0);
-            }
-        }.execute();
+                    try {
+                        final JavaRefactoringFactory factory = JavaRefactoringFactory.getInstance(project);
+                        JavaRenameRefactoring rename = (JavaRenameRefactoring) factory.createRename(psiFile, fileName, true, true);
+
+                        UsageInfo[] usages = rename.findUsages();
+                        rename.doRefactoring(usages);
+
+                        // now rename the links, get the root element for all of these
+                        PsiReference reference = wikiPageRefElement.getReference();
+                        MultiMarkdownNamedElement rootElement;
+
+                        if (reference != null && (rootElement = (MultiMarkdownNamedElement) reference.resolve()) instanceof MultiMarkdownWikiPageRef) {
+                            JavaRenameRefactoring renameWiki = (JavaRenameRefactoring) factory.createRename(rootElement, newWikiPageRef, true, true);
+                            UsageInfo[] wikiUsages = renameWiki.findUsages();
+                            HashSet<UsageInfo> realUsages = new HashSet<UsageInfo>(wikiUsages.length);
+
+                            // see if all the usages will resolve to this file if not then leave them out
+                            for (UsageInfo usageInfo : wikiUsages) {
+                                PsiFile sourceFile = usageInfo.getFile();
+                                if (sourceFile != null) {
+                                    FileReferenceLink fileReferenceLink = new FileReferenceLink(sourceFile, psiFile);
+                                    if (fileReferenceLink.getSourceReference().isWikiPage() && fileReferenceLink.isWikiAccessible() && fileReferenceLink.isWikiPageRef(newWikiPageRef)) {
+                                        // this one's a keeper
+                                        realUsages.add(usageInfo);
+                                    }
+                                }
+                            }
+
+                            if (realUsages.size() > 0) {
+                                renameWiki.doRefactoring(realUsages.size() == wikiUsages.length ? wikiUsages : realUsages.toArray(new UsageInfo[realUsages.size()]));
+                            }
+                        }
+                    } finally {
+                        projectComponent.popRefactoringRenameFlags();
+                    }
+                }
+            }.execute();
+        }
     }
 }

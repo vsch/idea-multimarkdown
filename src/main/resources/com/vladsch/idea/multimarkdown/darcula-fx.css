@@ -58,7 +58,7 @@ body {
 }
 
 a {
-    color: #185BaE;
+    color: #185BAE;
 }
 
 a.mail-link {
@@ -69,9 +69,17 @@ a.absent {
     color: #C34E7B;
 }
 
+a.page-anchor {
+    color: #A9B7C6;
+}
+
+a.page-anchor:hover {
+    color: #185BAE;
+}
+
 abbr {
    text-decoration: none;
-   border-bottom: 1px dashed #185BaE;
+   border-bottom: 1px dashed #185BAE;
 }
 
 hr {

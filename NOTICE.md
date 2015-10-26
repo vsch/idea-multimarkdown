@@ -27,6 +27,10 @@ This product is based on or uses the following copyrighted materials released un
         Copyright (c) 2015 shyyko.serhiy <https://github.com/ShyykoSerhiy/gfm-plugin>
         <https://opensource.org/licenses/MIT>               
 
+    *   parts based on intellij-plugin-copy-and-open-github-url
+        Copyright 2013 Square, Inc. <https://github.com/jawspeak/intellij-plugin-copy-and-open-github-url>
+        No license information provided               
+
     *   parts based on LanguageTextField
         Copyright 2006 Sascha Weinreuter
         <http://www.apache.org/licenses/LICENSE-2.0>

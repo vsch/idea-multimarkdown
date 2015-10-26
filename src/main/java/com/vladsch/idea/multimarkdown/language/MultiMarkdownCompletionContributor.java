@@ -32,21 +32,20 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.util.ProcessingContext;
 import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
 import com.vladsch.idea.multimarkdown.MultiMarkdownLanguage;
-import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
-import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
+import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownPsiImplUtil;
+import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownReferenceWikiPageRef;
 import com.vladsch.idea.multimarkdown.spellchecking.SuggestionList;
-import com.vladsch.idea.multimarkdown.util.FileReference;
-import com.vladsch.idea.multimarkdown.util.FileReferenceLink;
-import com.vladsch.idea.multimarkdown.util.FileReferenceList;
+import com.vladsch.idea.multimarkdown.util.*;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
-import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.WIKI_LINK_REF;
-import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.WIKI_LINK_TITLE;
+import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.*;
 
 public class MultiMarkdownCompletionContributor extends CompletionContributor {
     private static final Logger logger = Logger.getLogger(MultiMarkdownCompletionContributor.class);
@@ -84,19 +83,28 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
                             if (virtualFile != null) {
                                 Project fileProject = parameters.getEditor().getProject();
                                 if (fileProject != null) {
-                                    MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(fileProject);
-                                    FileReferenceList wikiFileReferenceList = projectComponent.getFileReferenceList().query()
+                                    FileReferenceList wikiFileReferenceList = new FileReferenceListQuery(fileProject)
+                                            .gitHubWikiRules()
                                             .inSource(virtualFile, fileProject)
                                             .spaceDashEqual()
                                             .allWikiPageRefs();
 
-                                    for (FileReference fileReference : wikiFileReferenceList.getFileReferences()) {
+                                    for (FileReference fileReference : wikiFileReferenceList.get()) {
                                         addWikiPageRefCompletion(resultSet, (FileReferenceLink) fileReference, true);
                                     }
 
-                                    for (FileReference fileReference : wikiFileReferenceList.getFileReferences()) {
+                                    for (FileReference fileReference : wikiFileReferenceList.get()) {
                                         addWikiPageRefCompletion(resultSet, (FileReferenceLink) fileReference, false);
                                     }
+                                }
+                            }
+                        } else if (elementType == WIKI_LINK_REF_ANCHOR) {
+                            MultiMarkdownWikiPageRef pageRef = (MultiMarkdownWikiPageRef) MultiMarkdownPsiImplUtil.findChildByType(element.getParent(), MultiMarkdownTypes.WIKI_LINK_REF);
+                            MultiMarkdownReferenceWikiPageRef pageRefRef = pageRef == null ? null : (MultiMarkdownReferenceWikiPageRef) pageRef.getReference();
+                            if (pageRefRef != null && !pageRefRef.isResolveRefMissing()) {
+                                MultiMarkdownFile markdownFile = (MultiMarkdownFile) pageRefRef.resolve();
+                                if (markdownFile != null) {
+                                    // TODO: 2015-10-25 add list of anchors when anchor parsing is implemented
                                 }
                             }
                         }
@@ -106,19 +114,20 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
     }
 
     protected void addWikiPageRefCompletion(@NotNull CompletionResultSet resultSet, FileReferenceLink fileReference, boolean accessible) {
-        String wikiPageRef = fileReference.getWikiPageRef();
-        boolean isWikiPageAccessible = fileReference.isWikiAccessible();
+        FileReferenceLinkGitHubRules fileReferenceGitHub = (FileReferenceLinkGitHubRules) fileReference;
+        String wikiPageRef = fileReferenceGitHub.getWikiPageRef();
+        boolean isWikiPageAccessible = fileReferenceGitHub.isWikiAccessible();
 
         if (accessible == isWikiPageAccessible) {
-            if (isWikiPageAccessible || fileReference.getUpDirectories() == 0) {
+            if (isWikiPageAccessible || fileReferenceGitHub.getUpDirectories() == 0) {
                 //String wikiPageShortRef = toFile.getWikiPageRef(null, WANT_WIKI_REF | ALLOW_INACCESSIBLE_WIKI_REF);
-                String linkRefFileName = fileReference.getLinkRef();
+                String linkRefFileName = fileReferenceGitHub.getLinkRef();
 
                 //logger.info("Adding " + wikiPageRef + " to completions");
                 LookupElementBuilder lookupElementBuilder = LookupElementBuilder.create(wikiPageRef)
                         //.withLookupString(wikiPageShortRef)
                         .withCaseSensitivity(true)
-                        .withIcon(accessible && fileReference.isWikiPage() ? MultiMarkdownIcons.WIKI : MultiMarkdownIcons.FILE)
+                        .withIcon(accessible && fileReferenceGitHub.isWikiPage() ? MultiMarkdownIcons.WIKI : MultiMarkdownIcons.FILE)
                         .withTypeText(linkRefFileName, false);
 
                 if (!isWikiPageAccessible) {

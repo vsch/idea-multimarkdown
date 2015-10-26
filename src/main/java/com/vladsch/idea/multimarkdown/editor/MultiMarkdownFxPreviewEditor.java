@@ -50,9 +50,10 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.sun.webkit.dom.HTMLImageElementImpl;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
+import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
-import com.vladsch.idea.multimarkdown.util.ProjectFileListListener;
+import com.vladsch.idea.multimarkdown.util.ReferenceChangeListener;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -69,10 +70,7 @@ import netscape.javascript.JSObject;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pegdown.LinkRenderer;
-import org.pegdown.ParsingTimeoutException;
-import org.pegdown.PegDownProcessor;
-import org.pegdown.ToHtmlSerializer;
+import org.pegdown.*;
 import org.pegdown.ast.RootNode;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -85,12 +83,10 @@ import java.awt.*;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import static com.vladsch.idea.multimarkdown.editor.MultiMarkdownPathResolver.isWikiDocument;
-import static com.vladsch.idea.multimarkdown.editor.MultiMarkdownPathResolver.resolveLink;
 import static org.apache.commons.lang.StringEscapeUtils.escapeHtml;
 
 //import com.sun.javafx.scene.layout.region.CornerRadiiConverter;
@@ -127,14 +123,15 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     protected boolean isReleased = false;
 
     protected MultiMarkdownGlobalSettingsListener globalSettingsListener;
-    protected ProjectFileListListener projectFileListener;
+    protected ReferenceChangeListener projectFileListener;
 
     /**
      * The {@link PegDownProcessor} used for building the document AST.
      */
-    protected ThreadLocal<PegDownProcessor> processor = initProcessor();
+    //private ThreadLocal<PegDownProcessor> processor = initProcessor();
+	private PegDownProcessor processor = null;
 
-    protected boolean isActive = false;
+	protected boolean isActive = false;
 
     protected boolean isRawHtml = false;
 
@@ -181,14 +178,19 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     /**
      * Init/reinit thread local {@link PegDownProcessor}.
      */
-    protected static ThreadLocal<PegDownProcessor> initProcessor() {
-        return new ThreadLocal<PegDownProcessor>() {
-            @Override
-            protected PegDownProcessor initialValue() {
-                // ISSUE: #7 worked around, disable pegdown TaskList HTML rendering, they don't display well in Darcula.
-                return new PegDownProcessor(MultiMarkdownGlobalSettings.getInstance().getExtensionsValue() /*& ~Extensions.TASKLISTITEMS*/, getParsingTimeout());
-            }
-        };
+    //protected static ThreadLocal<PegDownProcessor> initProcessor() {
+    //    return new ThreadLocal<PegDownProcessor>() {
+    //        @Override
+    //        protected PegDownProcessor initialValue() {
+    //            // ISSUE: #7 worked around, disable pegdown TaskList HTML rendering, they don't display well in Darcula.
+    //            return getProcessor();
+    //        }
+    //    };
+    //}
+
+    @NotNull
+    private static PegDownProcessor getProcessor() {
+        return new PegDownProcessor(MultiMarkdownGlobalSettings.getInstance().getExtensionsValue() /*& ~Extensions.TASKLISTITEMS*/, getParsingTimeout());
     }
 
     /**
@@ -237,7 +239,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
 
     protected void updateLinkRenderer() {
         int options = MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue() ? MultiMarkdownLinkRenderer.GITHUB_WIKI_LINK_FORMAT : 0;
-        linkRendererModified = new MultiMarkdownFxLinkRenderer(project, document, "absent",options);
+        linkRendererModified = new MultiMarkdownFxLinkRenderer(project, document, "absent", options);
         linkRendererNormal = new MultiMarkdownFxLinkRenderer(options);
     }
 
@@ -264,6 +266,8 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         // Listen to settings changes
         MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
             public void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings) {
+                if (project.isDisposed()) return;
+                processor = null;
                 updateEditorTabIsVisible();
                 updateLinkRenderer();
                 delayedHtmlPreviewUpdate(true);
@@ -271,12 +275,16 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
             }
         });
 
-        MultiMarkdownPlugin.getProjectComponent(project).addListener(projectFileListener = new ProjectFileListListener() {
-            @Override
-            public void projectListsUpdated() {
-                delayedHtmlPreviewUpdate(false);
-            }
-        });
+        MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
+        if (projectComponent != null) {
+            projectComponent.addListener(projectFileListener = new ReferenceChangeListener() {
+                @Override
+                public void referenceChanged(@Nullable String name) {
+                    if (project.isDisposed()) return;
+                    delayedHtmlPreviewUpdate(false);
+                }
+            });
+        }
 
         project.getMessageBus().connect(this).subscribe(DumbService.DUMB_MODE, new DumbService.DumbModeListener() {
             @Override
@@ -286,6 +294,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
             @Override
             public void exitDumbMode() {
                 // need to re-evaluate class link accessibility
+                if (project.isDisposed()) return;
                 delayedHtmlPreviewUpdate(false);
             }
         });
@@ -314,6 +323,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
+                    if (project.isDisposed()) return;
 
                     webView = new WebView();
                     webEngine = webView.getEngine();
@@ -346,6 +356,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         webEngine.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {
             @Override
             public void changed(ObservableValue<? extends Worker.State> observable, Worker.State oldState, Worker.State newState) {
+                if (project.isDisposed()) return;
                 workerStateChanged(observable, oldState, newState);
             }
         });
@@ -363,6 +374,9 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                 public void handleEvent(org.w3c.dom.events.Event evt) {
                     evt.stopPropagation();
                     evt.preventDefault();
+
+                    if (project.isDisposed()) return;
+
                     Element link = (Element) evt.getCurrentTarget();
                     org.w3c.dom.Document doc = webEngine.getDocument();
                     final String href = link.getAttribute("href");
@@ -410,7 +424,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                             }
                         }
                     } else {
-                        resolveLink(project, document, href, true, true, true);
+                        MultiMarkdownPathResolver.launchExternalLink(project, document, href);
                     }
                 }
             };
@@ -441,13 +455,19 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                         //VirtualFile file = FileDocumentManager.getInstance().getFile(document);
                         //VirtualFile parent = file == null ? null : file.getParent();
                         //final VirtualFile localImage = parent == null ? null : parent.findFileByRelativePath(src);
-                        final VirtualFile localImage = MultiMarkdownPathResolver.resolveRelativePath(document, src);
-                        try {
-                            if (localImage != null && localImage.exists()) {
+                        //final VirtualFile localImage = MultiMarkdownPathResolver.resolveRelativePath(document, src);
+                        final VirtualFile localImage = (VirtualFile) MultiMarkdownPathResolver.resolveLink(project, document, src, false, true);
+                        if (localImage != null && localImage.exists()) {
+                            try {
                                 imgNode.setSrc(String.valueOf(new File(localImage.getPath()).toURI().toURL()));
+                            } catch (MalformedURLException e) {
+                                logger.info("[" + instance + "] " + "MalformedURLException" + localImage.getPath());
                             }
-                        } catch (MalformedURLException e) {
-                            logger.info("[" + instance + "] " + "MalformedURLException" + localImage.getPath());
+                        } else {
+                            String href = MultiMarkdownPathResolver.resolveExternalReference(project, document, src);
+                            if (href != null) {
+                                imgNode.setSrc(href);
+                            }
                         }
                     }
                 }
@@ -513,11 +533,15 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         public void repaint() {
             //logger.info("[" + editor.instance + "] " + "before repaint");
             //jEditorPane.invalidate();
+            if (editor.project.isDisposed()) return;
+
             editor.jfxPanel.repaint();
             //logger.info("[" + editor.instance + "] " + "after repaint");
         }
 
         public void onScroll() {
+            if (editor.project.isDisposed()) return;
+
             JSObject scrollPos = (JSObject) editor.webEngine.executeScript("({ x: window.pageXOffset, y: window.pageYOffset })");
             //logger.info("[" + editor.instance + "] " + "window scrolled to " + scrollPos.getMember("x") + ", " + scrollPos.getMember("y"));
             editor.scrollOffset = "window.scroll(" + scrollPos.getMember("x") + ", " + scrollPos.getMember("y") + ")";
@@ -557,24 +581,39 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         }
 
         result += "" +
-                "<title>" + escapeHtml(file.getName()) + "</title>\n" +
+                "<title>" + escapeHtml(file != null ? file.getName() : "<null>") + "</title>\n" +
                 "</head>\n" +
                 "<body>\n" +
                 "";
 
+        String gitHubHref = MultiMarkdownPathResolver.getGitHubDocumentURL(project, document, isWikiDocument);
+        String gitHubClose = "";
         if (isWikiDocument) {
+            if (gitHubHref == null) {
+                gitHubHref = "";
+            } else {
+                gitHubHref = "<a href=\"" + gitHubHref + "\" name=\"wikipage\" id=\"wikipage\" class=\"anchor\"><span class=\"octicon octicon-link\"></span>";
+                gitHubClose = "</a>";
+            }
+
             result += "" +
                     "<div class=\"wiki-container\">\n" +
-                    "<h1>" + escapeHtml(file.getNameWithoutExtension().replace('-', ' ')) + "</h1>\n" +
+                    "<h1>" + gitHubHref + gitHubClose + escapeHtml(file != null ? file.getNameWithoutExtension().replace('-', ' ') : "<null>") + "</h1>\n" +
                     "<article class=\"wiki-body\">\n" +
                     "";
         } else {
+            if (gitHubHref == null) {
+                gitHubHref = "";
+            } else {
+                gitHubHref = "<a href=\"" + gitHubHref + "\" name=\"markdown-page\" id=\"markdown-page\" class=\"page-anchor\">";
+                gitHubClose = "</a>";
+            }
             result += "" +
                     "<div class=\"container\">\n" +
                     "<div id=\"readme\" class=\"boxed-group\">\n" +
                     "<h3>\n" +
-                    "   <span class=\"bookicon octicon-book\"></span>\n" +
-                    "  " + file.getName() + "\n" +
+                    "   " + gitHubHref + "<span class=\"bookicon octicon-book\"></span>\n" + gitHubClose +
+                    "  " + (file != null ? file.getName() : "<null>") + "\n" +
                     "</h3>\n" +
                     "<article class=\"markdown-body\">\n" +
                     "";
@@ -636,6 +675,8 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
             updateDelayTimer = null;
         }
 
+        if (project.isDisposed()) return;
+
         if (!isEditorTabVisible)
             return;
 
@@ -643,14 +684,18 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         updateDelayTimer.schedule(new TimerTask() {
             @Override
             public void run() {
+                if (project.isDisposed()) return;
+
                 ApplicationManager.getApplication().invokeLater(new Runnable() {
                     @Override
                     public void run() {
+                        if (project.isDisposed()) return;
+
                         previewIsObsolete = true;
 
                         if (fullKit) {
                             needStyleSheetUpdate = true;
-                            processor.remove();     // make it re-initialize when accessed
+                            //processor.remove();     // make it re-initialize when accessed
                         }
                         updateHtmlContent(isActive || isMyTabSelected());
                     }
@@ -694,12 +739,18 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     protected void updateRawHtmlText(final String htmlTxt) {
         final DocumentEx myDocument = myTextViewer.getDocument();
 
+        if (project.isDisposed()) return;
+
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
             @Override
             public void run() {
+                if (project.isDisposed()) return;
+
                 CommandProcessor.getInstance().executeCommand(project, new Runnable() {
                     @Override
                     public void run() {
+                        if (project.isDisposed()) return;
+
                         myDocument.replaceString(0, myDocument.getTextLength(), htmlTxt);
                         final CaretModel caretModel = myTextViewer.getCaretModel();
                         if (caretModel.getOffset() >= myDocument.getTextLength()) {
@@ -715,14 +766,27 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         if (astRoot == null) {
             return "<strong>Parser timed out</strong>";
         } else {
-            return modified ? new MultiMarkdownToHtmlSerializer(project, document, linkRendererModified).toHtml(astRoot) :
-                    new ToHtmlSerializer(linkRendererNormal).toHtml(astRoot);
+            if (modified) {
+                MultiMarkdownToHtmlSerializer htmlSerializer = new MultiMarkdownToHtmlSerializer(project, document, linkRendererModified);
+
+                if (!isWikiDocument) {
+                    htmlSerializer.setFlag(MultiMarkdownToHtmlSerializer.NO_WIKI_LINKS);
+                }
+
+                return htmlSerializer.toHtml(astRoot);
+            } else {
+
+                return new ToHtmlSerializer(linkRendererNormal).toHtml(astRoot);
+            }
         }
     }
 
     protected void parseMarkdown(String markdownSource) {
         try {
-            astRoot = processor.get().parseMarkdown(markdownSource.toCharArray());
+            if (processor == null) {
+                processor = getProcessor();
+            }
+            astRoot = processor.parseMarkdown(markdownSource.toCharArray());
         } catch (ParsingTimeoutException e) {
             astRoot = null;
         }
@@ -740,6 +804,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                     parseMarkdown(document.getText());
                     final String html = makeHtmlPage(markdownToHtml(true));
                     final String htmlTxt = isShowModified() ? html : markdownToHtml(false);
+                    astRoot = null;
                     updateRawHtmlText(htmlTxt);
                 } else {
                     if (!htmlWorkerRunning) {
@@ -748,9 +813,12 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
 
                         parseMarkdown(document.getText());
                         final String html = makeHtmlPage(markdownToHtml(true));
+                        astRoot = null;
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
+                                if (project.isDisposed()) return;
+
                                 // TODO: add option to enable/disable keeping scroll position on update
                                 Worker.State state = webEngine.getLoadWorker().getState();
                                 //logger.info("[" + instance + "] " + "State on update " + state);
@@ -841,7 +909,6 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
      * <p/>
      * Update the HTML content if obsolete.
      */
-
     public void selectNotify() {
         isActive = true;
         if (previewIsObsolete) {
@@ -855,7 +922,6 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
      * Does nothing.
      */
     public void deselectNotify() {
-        //isEditorTabHidden();
         isActive = false;
     }
 
@@ -923,7 +989,6 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
 
             if (jEditorPane != null) {
                 jEditorPane.removeAll();
-                //jEditorPane.removeNotify();
             }
 
             if (globalSettingsListener != null) {

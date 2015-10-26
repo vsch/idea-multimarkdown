@@ -27,4 +27,5 @@ public interface MultiMarkdownWikiLink extends PsiElement {
     String getPageTitle();
     String getPageRef();
     ItemPresentation getPresentation();
+    String getDisplayName();
 }

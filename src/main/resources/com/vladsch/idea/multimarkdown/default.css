@@ -123,7 +123,6 @@ a.anchor {
     display: block;
     padding-left: 30px;
     margin-left: -30px;
-    cursor: pointer;
     position: absolute;
     top: 0;
     left: 0;
@@ -133,6 +132,16 @@ a.anchor {
 /**********************************
  *  Header Related Formatting
  **********************************/
+div.page-header {
+    background-color: #E0E0E0;
+    padding: 2px 0 4px 15px;
+}
+
+div.page-header a {
+    text-decoration: none;
+    color: 0;
+    font-weight: bold;
+}
 
 h1,
 h2,
@@ -189,7 +198,13 @@ h2 code,
 h3 code,
 h4 code,
 h5 code,
-h6 code {
+h6 code,
+h1 span.code,
+h2 span.code,
+h3 span.code,
+h4 span.code,
+h5 span.code,
+h6 span.code {
     font-size: inherit;
 }
 
@@ -276,6 +291,7 @@ blockquote h6 a {
  **********************************/
 
 code,
+span.code,
 samp,
 var,
 span.var,
@@ -290,6 +306,7 @@ pre {
     margin: 5px 0;
 }
 
+tt,
 span.tt {
     margin: 0 2px;
     padding: 0 5px;
@@ -298,7 +315,8 @@ span.tt {
     background-color: #f8f8f8;
 }
 
-pre code {
+pre code,
+pre span.code {
     margin: 0;
     padding: 0;
     white-space: pre;
@@ -315,10 +333,12 @@ pre {
     white-space: pre;
 }
 
-code {
+code,
+span.code {
     color: #B00020;
     background-color: #f8f8f8;
     padding: 3px;
+    white-space: normal;
 }
 
 /**********************************

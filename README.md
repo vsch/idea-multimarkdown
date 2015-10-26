@@ -15,9 +15,9 @@ idea-multimarkdown
 
 2. Licensed model with a 30 day trial period which will implement parser based advanced features such as refactoring, find usages, etc. (see issue #12 for the road map). After the 30 day trial it will revert to the functionality of the free, open source model. $24 purchase of the license will give you free upgrades and maintenance for one year on the advanced features. I have to commercialize this plugin so that I can devote my full attention to its development. I feel that doing this will benefit both free and licensed versions because I will be able to concentrate my attention on delivering a quality product in the shortest amount of time.
 
-**Everyone who has generously given a tip** will get a one year license for every $20 that they have donated, plus one extra year as my show of appreciation for your support.
+**Everyone who has generously given a tip** will get a one year license for every $20 that they have donated, plus one extra year as my show of appreciation for your support. 
 
-**Updated ETA is October 29th, 2015.** I underestimated the time it was going to take to re-purpose and migrate a Laravel 4.2 based website to Laravel 5.1. This is now complete with license generation, management and PayPal integration. The next week is going to be devoted to adding licensing and free trial features into the plugin so I can finally release and updated version.
+**Updated ETA is October 29th, 2015.** I underestimated the time it was going to take to re-purpose and migrate a Laravel 4.2 based website to Laravel 5.1. This is now complete with license generation, management and PayPal integration. The next week is going to be devoted to adding licensing and free trial features into the plugin so I can finally release and updated version.   
 
 ### Version 1.1.7 Adds highlight.js syntax highlighting and wiki link refactoring/completions
 
@@ -25,14 +25,14 @@ idea-multimarkdown
 
 Wiki links are the first to get the boost to IntelliJ intelligence:
 
-* Wiki link page references are linked to the files they target. For example `[[NOTICE]]` refers to `NOTICE.md` in the same directory as the file containing the link.
+* Wiki link page references are linked to the files they target. For example `[[NOTICE]]` refers to `NOTICE.md` in the same directory as the file containing the link. 
 * Auto completion of Wiki link text part ie. `[[LinkRef|Text]]` will take the text from the linkRef and present several variations. Also any link texts that are the same on the page can be renamed by using refactor/rename operation to change all of them in one operation.
 * Refactor rename operation on a wiki link does a file rename operation with all links that refer to it also changed.
-* Moving a file within the project tree also updates the links.
-* Navigate to the file a wiki link targets in the markdown source via go to definition or line marker.
+* Moving a file within the project tree also updates the links. 
+* Navigate to the file a wiki link targets in the markdown source via go to definition or line marker. 
 * Find all wiki link references to a markdown file in the project via find usages on the file node in the project view
 * Quick fix to create a wiki markdown file for wiki links with missing files, also checks for spaces in target file name, dashes in wiki link target reference and mismatched case between link target and file name of the target.
-* Different icon <img src="src/main/resources/com/vladsch/idea/multimarkdown/multimarkdown@2x.png" width="16" height="17" alt="MultiMarkdown file Icon"> for markdown files, <img src="src/main/resources/com/vladsch/idea/multimarkdown/wikimarkdown@2x.png" width="16" height="17" alt="Wiki Page Icon"> is used for files whose ancestor directory has a `.wiki` extension. These are treated as GitHub wiki pages and will display pretty much as they do on GitHub, minus the footer and sidebar. Footer and sidebar are TBI for MultiMarkdown.
+* Different icon <img src="src/main/resources/com/vladsch/idea/multimarkdown/multimarkdown@2x.png" width="16" height="17" alt="MultiMarkdown file Icon"> for markdown files, <img src="src/main/resources/com/vladsch/idea/multimarkdown/wikimarkdown@2x.png" width="16" height="17" alt="Wiki Page Icon"> is used for files whose ancestor directory has a `.wiki` extension. These are treated as GitHub wiki pages and will display pretty much as they do on GitHub, minus the footer and sidebar. Footer and sidebar are TBI for MultiMarkdown. 
 
 * Many more changes, see the plugin version notes on the JetBrains page or in the IDE <kbd>Settings > Plugins > MultiMarkdown</kbd>
 

@@ -20,10 +20,11 @@
  */
 package com.vladsch.idea.multimarkdown.util;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.EventListener;
 
-public interface ProjectFileListListener extends EventListener {
-    // listeners should only invalidate any cached values derived from project file lists, updating these
-    // should be done as a regular derivation of these values, not in this method.
-    void projectListsUpdated();
+public interface ReferenceChangeListener extends EventListener {
+    // if name == null then all are invalidated, else just ones that matches the name
+    void referenceChanged(@Nullable String name);
 }

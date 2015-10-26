@@ -21,14 +21,13 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.SuggestedNameInfo;
 import com.intellij.refactoring.rename.PreferrableNameSuggestionProvider;
 import com.intellij.util.containers.ContainerUtil;
-import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
-import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.*;
 import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownPsiImplUtil;
 import com.vladsch.idea.multimarkdown.spellchecking.Suggestion;
 import com.vladsch.idea.multimarkdown.spellchecking.SuggestionList;
 import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import com.vladsch.idea.multimarkdown.util.FileReferenceList;
+import com.vladsch.idea.multimarkdown.util.FileReferenceListQuery;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -105,13 +104,13 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
 
             //suggestionList.add(FilePathInfo.linkRefNoAnchor(((MultiMarkdownWikiPageRef) element).getName()));
 
-            MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(element.getProject());
             MultiMarkdownFile markdownFile = (MultiMarkdownFile) element.getContainingFile();
-            FileReferenceList wikiPages = projectComponent.getFileReferenceList().query()
+            FileReferenceList wikiPages = new FileReferenceListQuery(element.getProject())
+                    .gitHubWikiRules()
                     .inSource(markdownFile)
                     .wikiPageRefs(!markdownFile.isWikiPage());
 
-            if (wikiPages.getFileReferences().length > 0) {
+            if (wikiPages.size() > 0) {
                 // add fixed up version to result
                 suggestionList.addAll(wikiPages.getAllWikiPageRefStrings());
             }
@@ -150,7 +149,7 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
         }
 
         if (wikiPageRef != null) {
-            String text = wikiPageRef.getName();
+            String text = wikiPageRef.getNameWithAnchor();
             if (text != null) {
                 FilePathInfo pathInfo = new FilePathInfo(text);
                 text = pathInfo.getFileName();

@@ -26,10 +26,7 @@ package com.vladsch.idea.multimarkdown.psi;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
-import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownCommentImpl;
-import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownWikiLinkImpl;
-import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownWikiPageRefImpl;
-import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownWikiPageTitleImpl;
+import com.vladsch.idea.multimarkdown.psi.impl.*;
 
 public interface MultiMarkdownTypes {
 
@@ -105,6 +102,8 @@ public interface MultiMarkdownTypes {
     IElementType WIKI_LINK_SEPARATOR = new MultiMarkdownTokenType("WIKI_LINK_SEPARATOR");
     IElementType WIKI_LINK_CLOSE = new MultiMarkdownTokenType("WIKI_LINK_CLOSE");
     IElementType WIKI_LINK_REF = new MultiMarkdownTokenType("WIKI_LINK_REF");
+    IElementType WIKI_LINK_REF_ANCHOR_MARKER = new MultiMarkdownTokenType("WIKI_LINK_REF_ANCHOR_MARKER");
+    IElementType WIKI_LINK_REF_ANCHOR = new MultiMarkdownTokenType("WIKI_LINK_REF_ANCHOR");
     IElementType WIKI_LINK_TITLE = new MultiMarkdownTokenType("WIKI_LINK_TITLE");
 
     IElementType COMMENT = new MultiMarkdownElementType("COMMENT");
@@ -120,6 +119,8 @@ public interface MultiMarkdownTypes {
                 return new MultiMarkdownWikiLinkImpl(node);
             } else if (type == WIKI_LINK_REF) {
                 return new MultiMarkdownWikiPageRefImpl(node);
+            } else if (type == WIKI_LINK_REF_ANCHOR) {
+                return new MultiMarkdownWikiPageRefAnchorImpl(node);
             } else if (type == WIKI_LINK_TITLE) {
                 return new MultiMarkdownWikiPageTitleImpl(node);
             }

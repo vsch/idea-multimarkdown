@@ -25,16 +25,26 @@ package com.vladsch.idea.multimarkdown.psi;
 
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNameIdentifierOwner;
 import com.intellij.util.IncorrectOperationException;
-import com.vladsch.idea.multimarkdown.language.MultiMarkdownReference;
+import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownReference;
 import org.jetbrains.annotations.NotNull;
 
-public interface MultiMarkdownNamedElement extends PsiNameIdentifierOwner {
-    final public static int REASON_FILE_RENAMED = 0;
-    final public static int REASON_FILE_MOVED = 1;
-    final public static int REASON_FILE_HAD_ANCHOR = 2;
+public interface MultiMarkdownNamedElement extends PsiNameIdentifierOwner, Navigatable {
+    int RENAME_NO_FLAGS = -1;
+
+    int RENAME_KEEP_NOTHING = 0;
+    int RENAME_KEEP_PATH = 1;
+    int RENAME_KEEP_ANCHOR = 2;
+    int RENAME_KEEP_NAME = 4;
+    int RENAME_KEEP_TITLE = 8;
+    int RENAME_KEEP_RENAMED_TITLE = 16;  //not implemented
+
+    int REASON_FILE_RENAMED = RENAME_KEEP_PATH | RENAME_KEEP_ANCHOR | RENAME_KEEP_RENAMED_TITLE | RENAME_KEEP_TITLE;
+    int REASON_FILE_MOVED = RENAME_KEEP_ANCHOR | RENAME_KEEP_TITLE;
+
     String getDisplayName();
 
     // this one will only change the name part, not the path part of the link

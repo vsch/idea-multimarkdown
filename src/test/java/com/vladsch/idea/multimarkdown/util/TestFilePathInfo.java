@@ -300,7 +300,14 @@ public class TestFilePathInfo {
                 /* 47  */ filePathInfoTestData("/pathName/with/#anchorfileName.md", "", 0),
                 /* 48  */ filePathInfoTestData("/path-Name/with/file-Name.md", "", 0),
                 /* 49  */ filePathInfoTestData("/home.wiki/file-Name-#6", "/home.wiki", 1),
-                /* 50  */ filePathInfoTestData("/home.wiki/fileName-6.md", "/home.wiki", 1)
+                /* 50  */ filePathInfoTestData("/home.wiki/fileName-6.md", "/home.wiki", 1),
+                /* 51  */ filePathInfoTestData("/another.wiki/home.wiki/fileName-6.md", "/another.wiki/home.wiki", 1),
+                /* 52  */ filePathInfoTestData("/another.wiki/test/home.wiki/fileName-6.md", "/another.wiki/test/home.wiki", 1),
+                /* 53  */ filePathInfoTestData("/wiki/fileName-6.md", "/wiki", 1),
+                /* 54  */ filePathInfoTestData("/another.wiki/wiki/fileName-6.md", "/another.wiki/wiki", 1),
+                /* 55  */ filePathInfoTestData("wiki/fileName-6.md", "wiki", 1),
+                /* 56  */ filePathInfoTestData("wiki/fileName-6.md", "wiki", 1),
+                /* 57  */ filePathInfoTestData("/home/wiki/fileName-6.md", "/home/wiki", 1)
         );
     }
 
@@ -308,7 +315,8 @@ public class TestFilePathInfo {
         Object[] result = new Object[34];
         String tmp;
         int itmp;
-        String filePathNoAnchor = (!FilenameUtils.getPath(filePath).isEmpty() ? "/" + FilenameUtils.getPath(filePath) : "") + FilePathInfo.linkRefNoAnchor(FilenameUtils.getName(filePath));
+        String pathPrefix = filePath.isEmpty() || filePath.charAt(0) != '/' ? "" : "/";
+        String filePathNoAnchor = (!FilenameUtils.getPath(filePath).isEmpty() ? pathPrefix + FilenameUtils.getPath(filePath) : "") + FilePathInfo.linkRefNoAnchor(FilenameUtils.getName(filePath));
         String anchor = FilePathInfo.linkRefAnchor(FilenameUtils.getName(filePath));
 
         /* @formatter:off */
@@ -316,21 +324,21 @@ public class TestFilePathInfo {
 /* 1: getExt, */                                result[1] = FilenameUtils.getExtension(filePathNoAnchor);
 /* 2: getExtWithDot, */                         result[2] = (itmp = (tmp = FilenameUtils.getName(filePathNoAnchor)).lastIndexOf('.')) != -1 ? tmp.substring(itmp) : "";
 /* 3: getFilePath, */                           result[3] = filePathNoAnchor;
-/* 4: getFilePathNoExt, */                      result[4] = ((tmp = FilenameUtils.getPath(filePathNoAnchor)).length() > 1 ? "/" + tmp : tmp) + FilenameUtils.getBaseName(filePathNoAnchor);
-/* 5: getPath, */                               result[5] = ((tmp = FilenameUtils.getPath(filePathNoAnchor)).length() > 1 ? "/" + tmp : tmp);
+/* 4: getFilePathNoExt, */                      result[4] = ((tmp = FilenameUtils.getPath(filePathNoAnchor)).length() > 1 ? pathPrefix + tmp : tmp) + FilenameUtils.getBaseName(filePathNoAnchor);
+/* 5: getPath, */                               result[5] = ((tmp = FilenameUtils.getPath(filePathNoAnchor)).length() > 1 ? pathPrefix + tmp : tmp);
 /* 6: getWikiHome, */                           result[6] = wikiHome;
 /* 7: getFileName, */                           result[7] = FilenameUtils.getName(filePathNoAnchor);
 /* 8: getFileNameNoExt, */                      result[8] = FilenameUtils.getBaseName(filePathNoAnchor);
 /* 9: getFilePathAsWikiRef, */                  result[9] = filePathNoAnchor.replace('-', ' ');
-/* 10: getFilePathNoExtAsWikiRef, */            result[10] = (((tmp = FilenameUtils.getPath(filePathNoAnchor)).length() > 1 ? "/" + tmp : tmp) + FilenameUtils.getBaseName(filePathNoAnchor)).replace('-', ' ');
-/* 11: getPathAsWikiRef, */                     result[11] = ((tmp = FilenameUtils.getPath(filePathNoAnchor)).equals(FilenameUtils.getName(filePathNoAnchor)) ? "" : (tmp.length() > 1 ? "/" + tmp : tmp)).replace('-', ' ');
+/* 10: getFilePathNoExtAsWikiRef, */            result[10] = (((tmp = FilenameUtils.getPath(filePathNoAnchor)).length() > 1 ? pathPrefix + tmp : tmp) + FilenameUtils.getBaseName(filePathNoAnchor)).replace('-', ' ');
+/* 11: getPathAsWikiRef, */                     result[11] = ((tmp = FilenameUtils.getPath(filePathNoAnchor)).equals(FilenameUtils.getName(filePathNoAnchor)) ? "" : (tmp.length() > 1 ? pathPrefix + tmp : tmp)).replace('-', ' ');
 /* 12: getFileNameAsWikiRef, */                 result[12] = FilenameUtils.getName(filePathNoAnchor).replace('-', ' ');
 /* 13: getFileNameNoExtAsWikiRef, */            result[13] = FilenameUtils.getBaseName(filePathNoAnchor).replace('-', ' ');
 /* 14: hasWikiPageExt, */                       result[14] = FilenameUtils.getExtension(filePathNoAnchor).equals("md");
 /* 15: containsSpaces, */                       result[15] = filePathNoAnchor.contains(" ");
 /* 16: isWikiHome, */                           result[16] = FilenameUtils.getExtension(filePathNoAnchor).equals("wiki");
-/* 17: isUnderWikiHome, */                      result[17] = (((tmp = FilenameUtils.getPath(filePathNoAnchor)).equals(FilenameUtils.getName(filePathNoAnchor)) ? "" : (tmp.length() > 1 ? "/" + tmp : tmp))+"/").contains(".wiki/");
-/* 18: pathContainsSpaces, */                   result[18] = ((tmp = FilenameUtils.getPath(filePathNoAnchor)).equals(FilenameUtils.getName(filePathNoAnchor)) ? "" : (tmp.length() > 1 ? "/" + tmp : tmp)).contains(" ");
+/* 17: isUnderWikiHome, */                      result[17] = !wikiHome.isEmpty();
+/* 18: pathContainsSpaces, */                   result[18] = ((tmp = FilenameUtils.getPath(filePathNoAnchor)).equals(FilenameUtils.getName(filePathNoAnchor)) ? "" : (tmp.length() > 1 ? pathPrefix + tmp : tmp)).contains(" ");
 /* 19: fileNameContainsSpaces, */               result[19] = FilenameUtils.getName(filePathNoAnchor).contains(" ");
 /* 20: getUpDirectoriesToWikiHome, */           result[20] = getUpDirectoriesToWikiHome;
 /* 21: containsAnchor, */                       result[21] = filePath.contains("#");
@@ -340,7 +348,7 @@ public class TestFilePathInfo {
 /* 25: getAnchorNoHash, */                      result[25] = (itmp = filePath.lastIndexOf('#')) < 0 ? "" : filePath.substring(itmp+1);
 /* 26: getFilePathWithAnchor, */                result[26] = filePath;
 /* 27: getFilePathWithAnchorAsWikiRef, */       result[27] = filePath.replace('-', ' ');
-/* 28: getFilePathWithAnchorNoExtAsWikiRef, */  result[28] = (((tmp = FilenameUtils.getPath(filePath)).length() > 1 ? "/" + tmp : tmp) + FilenameUtils.getBaseName(filePath)).replace('-', ' ');
+/* 28: getFilePathWithAnchorNoExtAsWikiRef, */  result[28] = (((tmp = FilenameUtils.getPath(filePath)).length() > 1 ? pathPrefix + tmp : tmp) + FilenameUtils.getBaseName(filePath)).replace('-', ' ');
 /* 29: getFileNameWithAnchor, */                result[29] = FilenameUtils.getName(filePath);
 /* 30: getFileNameWithAnchorAsWikiRef, */       result[30] = FilenameUtils.getName(filePath).replace('-', ' ');
 /* 31: getFileNameWithAnchorNoExtAsWikiRef, */  result[31] = FilenameUtils.getBaseName(filePath).replace('-', ' ');

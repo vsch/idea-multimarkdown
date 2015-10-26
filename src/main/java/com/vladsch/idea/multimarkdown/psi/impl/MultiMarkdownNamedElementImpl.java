@@ -28,7 +28,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiReference;
 import com.intellij.util.IncorrectOperationException;
-import com.vladsch.idea.multimarkdown.language.MultiMarkdownReference;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownVisitor;
 import org.apache.log4j.Logger;
@@ -40,8 +39,7 @@ public abstract class MultiMarkdownNamedElementImpl extends ASTWrapperPsiElement
     protected final MultiMarkdownReference reference;
 
     public MultiMarkdownNamedElementImpl(@NotNull ASTNode node) {
-        super(node);
-        reference = createReference(new TextRange(0, node.getTextLength()));
+        this(node, new TextRange(0, node.getTextLength()));
     }
 
     public MultiMarkdownNamedElementImpl(@NotNull ASTNode node, @NotNull TextRange textRange) {
@@ -90,7 +88,7 @@ public abstract class MultiMarkdownNamedElementImpl extends ASTWrapperPsiElement
 
     @Override
     public MultiMarkdownNamedElement handleContentChange(String newContent) throws IncorrectOperationException {
-        return (MultiMarkdownNamedElement)setName(newContent, REASON_FILE_RENAMED);
+        return (MultiMarkdownNamedElement) setName(newContent, REASON_FILE_RENAMED);
     }
 
     /**
@@ -105,7 +103,6 @@ public abstract class MultiMarkdownNamedElementImpl extends ASTWrapperPsiElement
     @Override
     @Nullable
     public PsiReference getReference() {
-        reference.refreshName();
         return reference;
     }
 }

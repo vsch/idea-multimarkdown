@@ -33,29 +33,36 @@ import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import org.jetbrains.annotations.NotNull;
 
+import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement.RENAME_KEEP_NOTHING;
+
 class ChangeWikiPageRefQuickFix extends BaseIntentionAction {
     public static final int MATCH_CASE_TO_FILE = 1;
     public static final int REMOVE_DASHES = 2;
+    public static final int REMOVE_SLASHES = 3;
+    public static final int REMOVE_SUBDIR = 4;
 
     private String newWikiPageRef;
     private MultiMarkdownWikiPageRef wikiPageRefElement;
     private final int alternativeMsg;
+    private final int renameFlags;
 
     ChangeWikiPageRefQuickFix(MultiMarkdownWikiPageRef wikiPageRefElement, String newWikiPageRef) {
-        this.newWikiPageRef = newWikiPageRef;
-        this.wikiPageRefElement = wikiPageRefElement;
-        this.alternativeMsg = 0;
+        this(wikiPageRefElement, newWikiPageRef, 0);
     }
 
     ChangeWikiPageRefQuickFix(MultiMarkdownWikiPageRef wikiPageRefElement, String newWikiPageRef, int alternativeMsg) {
+        this(wikiPageRefElement, newWikiPageRef, alternativeMsg, RENAME_KEEP_NOTHING);
+    }
+
+    ChangeWikiPageRefQuickFix(MultiMarkdownWikiPageRef wikiPageRefElement, String newWikiPageRef, int alternativeMsg, int renameFlags) {
         this.newWikiPageRef = newWikiPageRef;
         this.wikiPageRefElement = wikiPageRefElement;
         this.alternativeMsg = alternativeMsg;
+        this.renameFlags = renameFlags;
     }
 
     @NotNull
@@ -69,6 +76,14 @@ class ChangeWikiPageRefQuickFix extends BaseIntentionAction {
 
             case REMOVE_DASHES:
                 msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-dashes", FilePathInfo.wikiRefAsFileNameWithExt(newWikiPageRef));
+                break;
+
+            case REMOVE_SLASHES:
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-slashes", FilePathInfo.wikiRefAsFileNameWithExt(newWikiPageRef));
+                break;
+
+            case REMOVE_SUBDIR:
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-subdirs", FilePathInfo.wikiRefAsFileNameWithExt(newWikiPageRef));
                 break;
 
             default:
@@ -101,20 +116,25 @@ class ChangeWikiPageRefQuickFix extends BaseIntentionAction {
     }
 
     private void changeWikiPageRef(final Project project, final MultiMarkdownWikiPageRef wikiPageRefElement, final String fileName) {
-        new WriteCommandAction.Simple(project) {
-            @Override
-            public void run() {
-                // change the whole name
-                //wikiPageRefElement.setName(fileName, MultiMarkdownNamedElement.REASON_FILE_MOVED);
-                JavaRefactoringFactory factory = JavaRefactoringFactory.getInstance(project);
-                JavaRenameRefactoring rename = factory.createRename(wikiPageRefElement, fileName);
-                UsageInfo[] usages = rename.findUsages();
+        final MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
+        if (projectComponent != null) {
+            new WriteCommandAction.Simple(project) {
+                @Override
+                public void run() {
+                    // change the whole name
+                    //wikiPageRefElement.setName(fileName, MultiMarkdownNamedElement.REASON_FILE_MOVED);
+                    JavaRefactoringFactory factory = JavaRefactoringFactory.getInstance(project);
+                    JavaRenameRefactoring rename = factory.createRename(wikiPageRefElement, fileName);
+                    UsageInfo[] usages = rename.findUsages();
 
-                MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
-                projectComponent.setRefactoringReason(MultiMarkdownNamedElement.REASON_FILE_HAD_ANCHOR);
-                rename.doRefactoring(usages); // modified 'usages' array
-                projectComponent.setRefactoringReason(0);
-            }
-        }.execute();
+                    try {
+                        projectComponent.pushRefactoringRenameFlags(RENAME_KEEP_NOTHING);
+                        rename.doRefactoring(usages); // modified 'usages' array
+                    } finally {
+                        projectComponent.popRefactoringRenameFlags();
+                    }
+                }
+            }.execute();
+        }
     }
 }

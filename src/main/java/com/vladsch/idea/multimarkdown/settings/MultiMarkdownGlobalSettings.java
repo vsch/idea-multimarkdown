@@ -147,11 +147,17 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     static boolean isFxHtmlPreview = false;
 
     public Element getState() {
+        // vsch: hardwire github wiki links
+        githubWikiLinks.setValue(true);
         return settings.getState("MultiMarkdownSettings");
     }
 
     public void loadState(@NotNull Element element) {
+        startGroupNotifications();
         settings.loadState(element);
+        // vsch: hardwire github wiki links
+        githubWikiLinks.setValue(true);
+        endGroupNotifications();
     }
 
     public boolean isDarkHtmlPreview(int htmlTheme) {

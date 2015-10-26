@@ -715,7 +715,7 @@
                       <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.wiki-links-github.label"/>
                     </properties>
                   </component>
-                  <component id="9e709" class="javax.swing.JLabel">
+                  <component id="9e709" class="javax.swing.JLabel" binding="githubWikiLinksLabel">
                     <constraints>
                       <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>

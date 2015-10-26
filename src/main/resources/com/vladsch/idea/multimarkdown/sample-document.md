@@ -12,7 +12,7 @@ Mail Link: me@example.com
 Smart Characters: ... -- --- a's b's
 Smart quotes 'this is a quote' 
 Strikethrough: ~~strikethrough **strikethrough bold** *strikethrough italic* ***strikethrough bold italic***~~
-WikiLink: [[Page Reference and Link Text]] [[Page Reference|Link Text]]
+WikiLink: [[Link address and Link Text]]  Creole syntax: [[Link address|Link text]]  [[Link address#anchor|Link text]] GitHub syntax: [[Link text|Link address]] [[Link text|Link address#anchor]]
  
 <!-- Comment -->
 

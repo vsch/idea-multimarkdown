@@ -48,7 +48,9 @@ import java.net.URL;
  */
 public class MultiMarkdownEditorKit extends HTMLEditorKit {
 
-    /** The document. */
+    /**
+     * The document.
+     */
     private final Document document;
     protected float maxWidth;
 
@@ -84,7 +86,9 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
         return new MultiMarkdownEditorKit(document);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ViewFactory getViewFactory() {
         return new MarkdownViewFactory(document, this);
@@ -100,7 +104,9 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
      */
     private static class MarkdownViewFactory extends HTMLFactory {
 
-        /** The document. */
+        /**
+         * The document.
+         */
         private final Document document;
         private MultiMarkdownEditorKit editorKit;
 
@@ -134,7 +140,9 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
      */
     protected static class MarkdownImageView extends ImageView {
 
-        /** The document. */
+        /**
+         * The document.
+         */
         private final Document document;
         private MultiMarkdownEditorKit editorKit;
         private boolean scaled;
@@ -164,12 +172,15 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
         public URL getImageURL() {
             final String src = (String) getElement().getAttributes().getAttribute(Attribute.SRC);
             if (src != null) {
-                final VirtualFile localImage = MultiMarkdownPathResolver.resolveRelativePath(document, src);
-                try {
-                    if (localImage != null && localImage.exists())
-                        return new File(localImage.getPath()).toURI().toURL();
-                } catch (MalformedURLException e) {
-                    throw new RuntimeException(e);
+                Object link = MultiMarkdownPathResolver.resolveLink(null, document, src, false, true);
+                if (link instanceof VirtualFile) {
+                    final VirtualFile localImage = (VirtualFile) link;
+                    try {
+                        if (localImage.exists())
+                            return new File(localImage.getPath()).toURI().toURL();
+                    } catch (MalformedURLException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
             return super.getImageURL();
@@ -210,7 +221,6 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
          *
          * @param g the rendering surface to use
          * @param a the allocated region to render into
-         *
          * @see View#paint
          */
         @Override
