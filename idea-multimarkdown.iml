@@ -9,7 +9,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
       <excludeFolder url="file://$MODULE_DIR$/src/misc" />
-      <excludeFolder url="file://$MODULE_DIR$/src/test/resources/GitHubIssues" />
+      <excludeFolder url="file://$MODULE_DIR$/src/test/resources/GitHubIssues/Issue-46" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="module-library" exported="">
@@ -25,6 +25,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="jfxrt" level="project" />
     <orderEntry type="library" name="commons-io-2.4" level="project" />
-    <orderEntry type="library" name="pegdown-1.6.3" level="project" />
+    <orderEntry type="library" name="pegdown-1.6.4" level="project" />
   </component>
 </module>

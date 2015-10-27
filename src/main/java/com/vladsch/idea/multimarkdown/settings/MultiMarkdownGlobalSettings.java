@@ -38,7 +38,6 @@ import org.jetbrains.annotations.Nullable;
 import org.pegdown.Extensions;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 @State(

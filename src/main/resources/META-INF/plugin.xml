@@ -40,9 +40,13 @@
     </div>
     ]]></description>
 
-  <version>1.1.13</version>
+  <version>1.1.13.2</version>
   <idea-version since-build="133.1711"/>
   <change-notes><![CDATA[
+    <ul><h3><b>1.1.14 - Licensed Features Added.</b></h3>
+      <li>Fix not recognizing tables that have a divider and table cells that look like divider cells. (pegdown)</li>
+      <li>Fix Custom CSS was not loaded in new preview tab or html text.</li>
+    </ul>
     <ul><h3><b>1.1.13 - More GitHub integration, Bug Fixes &amp; Optimizations.</b></h3>
       <li>Fix now using FileBasedIndex to find files for link resolution. No longer need to mark wiki directories as source or resource roots</li>
       <li>Add re-targeting an invalid wiki link using quick fixes will also re-target all matching wiki refs located in the same wiki</li>
