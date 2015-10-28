@@ -74,6 +74,7 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
         componentSettings.add(new CheckBoxComponent("includesLayoutCssCheckBox", globalSettings.includesLayoutCss));
         componentSettings.add(new CheckBoxComponent("includesColorsCssCheckBox", globalSettings.includesColorsCss));
         componentSettings.add(new CheckBoxComponent("githubWikiLinksCheckBox", globalSettings.githubWikiLinks));
+        componentSettings.add(new CheckBoxComponent("footnotesCheckBox", globalSettings.footnotes));
         componentSettings.add(new SpinnerIntegerComponent("updateDelaySpinner", globalSettings.updateDelay));
         componentSettings.add(new SpinnerIntegerComponent("maxImgWidthSpinner", globalSettings.maxImgWidth));
         componentSettings.add(new SpinnerIntegerComponent("parsingTimeoutSpinner", globalSettings.parsingTimeout));

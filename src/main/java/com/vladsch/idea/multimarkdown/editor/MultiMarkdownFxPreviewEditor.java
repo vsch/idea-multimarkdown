@@ -553,6 +553,13 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         String result = "<head>\n" +
                 "";
 
+        // load custom css
+        if (MultiMarkdownGlobalSettings.getInstance().useCustomCss(true)) {
+            result += "" +
+                    "<link rel=\"stylesheet\" href=\"" + MultiMarkdownGlobalSettings.getInstance().getCssExternalForm(true) + "\">\n" +
+                    "";
+        }
+
         // load layout css
         if (!(MultiMarkdownGlobalSettings.getInstance().useCustomCss(true) && MultiMarkdownGlobalSettings.getInstance().includesLayoutCss.getValue())) {
             result += "" +

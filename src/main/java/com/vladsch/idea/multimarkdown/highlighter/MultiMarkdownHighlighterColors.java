@@ -54,6 +54,8 @@ public class MultiMarkdownHighlighterColors {
     public static final TextAttributesKey DEFINITION_LIST_ATTR_KEY = createKey("DEFINITION_LIST");
     public static final TextAttributesKey DEFINITION_TERM_ATTR_KEY = createKey("DEFINITION_TERM");
     public static final TextAttributesKey EXPLICIT_LINK_ATTR_KEY = createKey("EXPLICIT_LINK");
+    public static final TextAttributesKey FOOTNOTE_ATTR_KEY = createKey("FOOTNOTE");
+    public static final TextAttributesKey FOOTNOTE_REF_ATTR_KEY = createKey("FOOTNOTE_REF");
     public static final TextAttributesKey HEADER_LEVEL_1_ATTR_KEY = createKey("HEADER_LEVEL_1");
     public static final TextAttributesKey SETEXT_HEADER_LEVEL_1_ATTR_KEY = createKey("SETEXT_HEADER_LEVEL_1");
     public static final TextAttributesKey HEADER_LEVEL_2_ATTR_KEY = createKey("HEADER_LEVEL_2");

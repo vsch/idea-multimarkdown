@@ -644,14 +644,14 @@
             </Appearance>
             <String>PluginId</String>
         </Note>
-        <Note ID="164" FontSize="12.0" Position="1104.0,296.0" Width="83.0">
+        <Note ID="164" FontSize="12.0" Position="1104.0,299.0" Width="83.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
             <String>Agent Version</String>
         </Note>
-        <Note ID="166" FontSize="12.0" Position="1229.0,179.0" Width="50.0">
+        <Note ID="166" FontSize="12.0" Position="1230.0,188.0" Width="50.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -753,14 +753,14 @@
             <String>Type: Activation</String>
             <ConnectedNoteIDs>76</ConnectedNoteIDs>
         </Note>
-        <Note ID="184" FontSize="12.0" Position="1226.0,152.0" Width="83.0">
+        <Note ID="184" FontSize="12.0" Position="1227.0,161.0" Width="83.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
             <String>Type: License</String>
         </Note>
-        <Note ID="185" FontSize="12.0" Position="1104.0,244.0" Width="61.0">
+        <Note ID="185" FontSize="12.0" Position="1104.0,243.0" Width="61.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -780,6 +780,20 @@
                 <Border Weight="1"></Border>
             </Appearance>
             <String>Activation Expires</String>
+        </Note>
+        <Note ID="188" FontSize="12.0" Position="809.0,387.0" Width="82.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Host Instance</String>
+        </Note>
+        <Note ID="190" FontSize="12.0" Position="1230.0,215.0" Width="93.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Activation Code</String>
         </Note>
     </Notes>
     <BackgroundShapes>
@@ -856,7 +870,7 @@
             <ConnectedNoteIDs>8, 55</ConnectedNoteIDs>
             <PointsToNoteIDs>8</PointsToNoteIDs>
         </Shape>
-        <Shape ID="75" Sticky="Yes" Position="792.0,144.0" Width="146.0" Height="255.0">
+        <Shape ID="75" Sticky="Yes" Position="792.0,144.0" Width="146.0" Height="280.0">
             <Appearance>
                 <Border Weight="1"></Border>
             </Appearance>
@@ -908,14 +922,14 @@
             <ConnectedNoteIDs>158, 165</ConnectedNoteIDs>
             <PointsToNoteIDs>165</PointsToNoteIDs>
         </Shape>
-        <Shape ID="158" Sticky="Yes" Position="1093.0,144.0" Width="119.0" Height="217.0">
+        <Shape ID="158" Sticky="Yes" Position="1093.0,144.0" Width="119.0" Height="216.0">
             <Appearance>
                 <Border Weight="1"></Border>
             </Appearance>
             <ConnectedNoteIDs>8, 155</ConnectedNoteIDs>
             <PointsToNoteIDs>155</PointsToNoteIDs>
         </Shape>
-        <Shape ID="165" Sticky="Yes" Position="1221.0,144.0" Width="94.0" Height="64.0">
+        <Shape ID="165" Sticky="Yes" Position="1217.0,146.0" Width="116.0" Height="108.0">
             <Appearance>
                 <Border Weight="1"></Border>
             </Appearance>
@@ -937,8 +951,9 @@
         <Stack>120, 174</Stack>
         <Stack>129-131</Stack>
         <Stack>159-161, 185, 163-164</Stack>
+        <Stack>166, 190</Stack>
     </Stacks>
-    <AutoFit>0-1, 4, 6, 8-11, 13-14, 16, 19, 21-23, 29-32, 37-38, 46-47, 50-51, 56, 58, 60, 65, 75, 77-79, 81, 89, 91, 102, 104-105, 107-113, 116-120, 122-126, 129-131, 133-139, 141-146, 148-149, 151-154, 156-164, 166-167, 171-178, 180, 182-187</AutoFit>
+    <AutoFit>0-1, 4, 6, 8-11, 13-14, 16, 19, 21-23, 29-32, 37-38, 46-47, 50-51, 56, 58, 60, 65, 77-79, 81, 89, 91, 102, 104-105, 107-113, 116-120, 122-126, 129-131, 133-139, 141-146, 148-149, 151-154, 156-157, 159-167, 171-178, 180, 182-188, 190</AutoFit>
     <NoteStyles>
         <Style Name="Blue Bubble" ID="4B1C6936-5C1E-4B2E-8A8D-8D0C63B3C5DC" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
             <BorderThickness>1</BorderThickness>

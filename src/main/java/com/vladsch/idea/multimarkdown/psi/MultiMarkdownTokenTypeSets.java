@@ -40,6 +40,8 @@ public interface MultiMarkdownTokenTypeSets extends MultiMarkdownTypes {
     TokenSet DEFINITION_SET = TokenSet.create(DEFINITION);
     TokenSet DEFINITION_TERM_SET = TokenSet.create(DEFINITION_TERM);
     TokenSet EXPLICIT_LINK_SET = TokenSet.create(EXPLICIT_LINK);
+    TokenSet FOOTNOTE_SET = TokenSet.create(FOOTNOTE);
+    TokenSet FOOTNOTE_REF_SET = TokenSet.create(FOOTNOTE_REF);
     TokenSet HEADER_LEVEL_1_SET = TokenSet.create(HEADER_LEVEL_1);
     TokenSet SETEXT_HEADER_LEVEL_1_SET = TokenSet.create(SETEXT_HEADER_LEVEL_1);
     TokenSet HEADER_LEVEL_2_SET = TokenSet.create(HEADER_LEVEL_2);
