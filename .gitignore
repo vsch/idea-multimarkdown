@@ -20,5 +20,4 @@ idea-multimarkdown.zip
 src/main/java/com/vladsch/idea/multimarkdown/annotator/ChangeToQuickFix.java
 src/main/java/com/vladsch/idea/multimarkdown/annotator/RenameToQuickFix.java
 src/main/java/com/vladsch/idea/multimarkdown/annotator/ShowSuggestions.java
-commons-io-2.4-bin.zip
 src/test/resources/GitHubIssues/Issue-46
