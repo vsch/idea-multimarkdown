@@ -248,6 +248,14 @@ public class Settings {
             return "";
         }
 
+        @Override
+        public void setValue(String value) {
+            if (!this.value.equals(value)) {
+                this.value = value;
+                if (notifier != null) notifier.notifyListeners();
+            }
+        }
+
         public void setValue(JTextArea component) { setValue(component.getText()); }
 
         public void setValue(EditorTextField component) {

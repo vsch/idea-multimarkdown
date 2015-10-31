@@ -52,6 +52,11 @@ import java.util.ArrayList;
 public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.ProjectFileResolver {
     private static final Logger logger = org.apache.log4j.Logger.getLogger("com.vladsch.idea.multimarkdown");
     private MultiMarkdownGlobalSettingsListener globalSettingsListener;
+    private static boolean isLicensed;
+
+    public static boolean isLicensed() {
+        return isLicensed;
+    }
 
     private PluginClassLoader myClassLoader;
 
@@ -65,11 +70,6 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
     private String urlCustomFont;
     private File fileCustomFxCss;
     private String tempDirPath;
-    private boolean isLicensed;
-
-    public boolean isLicensed() {
-        return isLicensed;
-    }
 
     public String getUrlLayoutFxCss() {
         return urlLayoutFxCss;
@@ -119,7 +119,7 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
         FileReference.projectFileResolver = this;
 
         // turn off lcd rendering, will use gray
-        System.setProperty("prism.lcdtext", "false");
+        //System.setProperty("prism.lcdtext", "false");
         myClassLoader = null;
         final MultiMarkdownGlobalSettings settings = MultiMarkdownGlobalSettings.getInstance();
         getClassLoader();

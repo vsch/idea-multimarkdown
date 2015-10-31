@@ -27,12 +27,12 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.tree.IElementType;
 import com.vladsch.idea.multimarkdown.parser.MultiMarkdownLexer;
 import org.jetbrains.annotations.NotNull;
-import org.pegdown.Extensions;
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTokenTypeSets.*;
 import static com.vladsch.idea.multimarkdown.highlighter.MultiMarkdownHighlighterColors.*;
+import static org.pegdown.Extensions.*;
 
 public class MultiMarkdownSyntaxHighlighter extends SyntaxHighlighterBase {
     protected static final Map<IElementType, TextAttributesKey> ATTRIBUTES = new HashMap<IElementType, TextAttributesKey>();
@@ -56,6 +56,8 @@ public class MultiMarkdownSyntaxHighlighter extends SyntaxHighlighterBase {
         fillMap(ATTRIBUTES, DEFINITION_SET, DEFINITION_ATTR_KEY);
         fillMap(ATTRIBUTES, DEFINITION_TERM_SET, DEFINITION_TERM_ATTR_KEY);
         fillMap(ATTRIBUTES, EXPLICIT_LINK_SET, EXPLICIT_LINK_ATTR_KEY);
+        fillMap(ATTRIBUTES, FOOTNOTE_SET, FOOTNOTE_ATTR_KEY);
+        fillMap(ATTRIBUTES, FOOTNOTE_REF_SET, FOOTNOTE_REF_ATTR_KEY);
         fillMap(ATTRIBUTES, HEADER_LEVEL_1_SET, HEADER_LEVEL_1_ATTR_KEY);
         fillMap(ATTRIBUTES, SETEXT_HEADER_LEVEL_1_SET, SETEXT_HEADER_LEVEL_1_ATTR_KEY);
         fillMap(ATTRIBUTES, HEADER_LEVEL_2_SET, HEADER_LEVEL_2_ATTR_KEY);
@@ -121,7 +123,7 @@ public class MultiMarkdownSyntaxHighlighter extends SyntaxHighlighterBase {
 
     @NotNull
     public Lexer getHighlightingLexer() {
-        return forSampleDoc ? new MultiMarkdownLexer(Extensions.ALL_WITH_OPTIONALS) : new MultiMarkdownLexer();
+        return forSampleDoc ? new MultiMarkdownLexer(ALL | (ATXHEADERSPACE  | RELAXEDHRULES | TASKLISTITEMS | FOOTNOTES)) : new MultiMarkdownLexer();
     }
 
     @NotNull

@@ -74,6 +74,8 @@ public class MultiMarkdownColorSettingsPage implements ColorSettingsPage {
         addTextAttributesKey("definition-list", DEFINITION_LIST_ATTR_KEY);
         addTextAttributesKey("definition-term", DEFINITION_TERM_ATTR_KEY);
         addTextAttributesKey("explicit-link", EXPLICIT_LINK_ATTR_KEY);
+        addTextAttributesKey("footnote", FOOTNOTE_ATTR_KEY);
+        addTextAttributesKey("footnote-ref", FOOTNOTE_REF_ATTR_KEY);
         addTextAttributesKey("header-level-1", HEADER_LEVEL_1_ATTR_KEY);
         addTextAttributesKey("header-level-1-setext", SETEXT_HEADER_LEVEL_1_ATTR_KEY);
         addTextAttributesKey("header-level-2", HEADER_LEVEL_2_ATTR_KEY);

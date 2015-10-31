@@ -132,6 +132,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
     private JCheckBox includesColorsCheckBox;
     private JCheckBox githubWikiLinksCheckBox;
     private JLabel githubWikiLinksLabel;
+    private JCheckBox footnotesCheckBox;
 
     // need this so that we dont try to access components before they are created
     public
@@ -175,6 +176,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         if (persistName.equals("includesLayoutCssCheckBox")) return includesLayoutCssCheckBox;
         if (persistName.equals("includesColorsCssCheckBox")) return includesColorsCheckBox;
         if (persistName.equals("githubWikiLinksCheckBox")) return githubWikiLinksCheckBox;
+        if (persistName.equals("footnotesCheckBox")) return footnotesCheckBox;
 
         return null;
     }

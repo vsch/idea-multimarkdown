@@ -40,12 +40,14 @@
     </div>
     ]]></description>
 
-  <version>1.1.13.2</version>
+  <version>1.2.0</version>
   <idea-version since-build="133.1711"/>
   <change-notes><![CDATA[
-    <ul><h3><b>1.1.14 - Licensed Features Added.</b></h3>
+    <ul><h3><b>1.2.0 - Licensed Features Added.</b></h3>
       <li>Fix not recognizing tables that have a divider and table cells that look like divider cells. (pegdown)</li>
       <li>Fix Custom CSS was not loaded in new preview tab or html text.</li>
+      <li>Add MultiMarkdown style footnotes. The [^n] for reference and [^n]: Footnote text, for definition where n is one or more digit, letter, dash, dot or underscore.</li>
+      <li>Add licensing functionality.</li>
     </ul>
     <ul><h3><b>1.1.13 - More GitHub integration, Bug Fixes &amp; Optimizations.</b></h3>
       <li>Fix now using FileBasedIndex to find files for link resolution. No longer need to mark wiki directories as source or resource roots</li>

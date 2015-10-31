@@ -92,6 +92,8 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         abbreviationsRegEx = "";
     }
 
+    // when an exclusion is added then the parent range will not be punched out by the child
+    // default child range punches out a hole in the parent range.
     static protected void addExclusion(IElementType parent, IElementType child) {
         HashSet<IElementType> childExclusions;
         if (!overrideExclusions.containsKey(child)) {
@@ -190,6 +192,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         //addInlineExclusions(MultiMarkdownTypes.TASK_DONE_ITEM);
         addInlineExclusions(MultiMarkdownTypes.TASK_ITEM_MARKER);
         addInlineExclusions(MultiMarkdownTypes.TASK_DONE_ITEM_MARKER);
+        //addInlineExclusions(MultiMarkdownTypes.FOOTNOTE);
 
         // let all the inlines not punch through each other
         addInlineExclusions(MultiMarkdownTypes.STRIKETHROUGH_BOLDITALIC, false);
@@ -620,6 +623,17 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
 
             visitChildren(node);
         }
+
+        public void visit(FootnoteNode node) {
+            //ArrayList<Node> children = new ArrayList<Node>(1);
+            //children.add(node.getFootnote());
+            addTokenWithChildren(node, node.getFootnote().getChildren(), MultiMarkdownTypes.FOOTNOTE);
+        }
+
+        public void visit(FootnoteRefNode node) {
+            addToken(node, MultiMarkdownTypes.FOOTNOTE_REF);
+        }
+
 
         public void visit(TextNode node) {
             if (node instanceof CommentNode) {
@@ -1106,12 +1120,16 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         }
 
         protected void visitChildren(SuperNode node) {
+            visitChildren(node.getChildren());
+        }
+
+        protected void visitChildren(List<Node> children) {
             // here we combine multiple segments of TextNode and SpecialText into a single TextNode
             int startIndex = 0, endIndex = 0;
             String combinedText = null;
             Node lastTextNode = null;
 
-            for (Node child : node.getChildren()) {
+            for (Node child : children) {
                 boolean processed = false;
                 if (child.getClass() == TextNode.class || (child.getClass() == SpecialTextNode.class && child.getEndIndex() - child.getStartIndex() <= 1)) {
                     if (combinedText != null) {
@@ -1242,6 +1260,10 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         // punch out the child's range from the parent's so that we can eliminate parent's highlighting
         // on the child text
         protected void addTokenWithChildren(Node node, IElementType tokenType) {
+            addTokenWithChildren(node, node.getChildren(), tokenType);
+        }
+
+        protected void addTokenWithChildren(Node node, List<Node> children, IElementType tokenType) {
             //if (node.getEndIndex() > currentStringLength) {
             //    ((SuperNode) node).setEndIndex(currentStringLength);
             //    if (node.getStartIndex() >= node.getEndIndex()) {
@@ -1272,7 +1294,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
                 //    int tmp = 0;
                 //}
 
-                visitChildren((SuperNode) node);
+                visitChildren(children);
 
                 minStackLevel = prevMinStackLevel;
 
