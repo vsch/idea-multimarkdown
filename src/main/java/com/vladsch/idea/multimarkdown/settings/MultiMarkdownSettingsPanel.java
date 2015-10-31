@@ -42,16 +42,16 @@ import com.intellij.openapi.util.registry.RegistryValue;
 import com.intellij.ui.EditorTextField;
 import com.intellij.ui.components.JBList;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
+import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.editor.MultiMarkdownPreviewEditor;
+import com.vladsch.idea.multimarkdown.license.LicenseAgent;
+import com.vladsch.idea.multimarkdown.license.LicenseRequest;
 import org.apache.commons.codec.Charsets;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -60,12 +60,14 @@ import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 
 public class MultiMarkdownSettingsPanel implements SettingsProvider {
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownSettingsPanel.class);
+    private final MultiMarkdownGlobalSettingsListener globalSettingsListener;
 
     public JSpinner parsingTimeoutSpinner;
     public JCheckBox smartsCheckBox;
@@ -133,6 +135,13 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
     private JCheckBox githubWikiLinksCheckBox;
     private JLabel githubWikiLinksLabel;
     private JCheckBox footnotesCheckBox;
+    private JTextArea licenseTextArea;
+    private JButton trialLicenseButton;
+    private JButton fetchLicenseButton;
+    private JButton buyLicenseButton;
+    private JEditorPane licenseInfoEditorPane;
+    private JButton clearLicenseButton;
+    final private LicenseAgent agent;
 
     // need this so that we dont try to access components before they are created
     public
@@ -177,6 +186,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         if (persistName.equals("includesColorsCssCheckBox")) return includesColorsCheckBox;
         if (persistName.equals("githubWikiLinksCheckBox")) return githubWikiLinksCheckBox;
         if (persistName.equals("footnotesCheckBox")) return footnotesCheckBox;
+        if (persistName.equals("licenseTextArea")) return licenseTextArea;
 
         return null;
     }
@@ -232,6 +242,8 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
     }
 
     public MultiMarkdownSettingsPanel() {
+        this.agent = new LicenseAgent(MultiMarkdownPlugin.getInstance().getAgent());
+
         clearCustomCssButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -394,6 +406,158 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         // we don't change these
         githubWikiLinksCheckBox.setEnabled(false);
         //githubWikiLinksLabel.setVisible(false);
+
+        fetchLicenseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FetchLicenseDialog.showDialog(panel, agent);
+                licenseTextArea.setText(agent.licenseCode());
+                updateLicenceInfo(false);
+            }
+        });
+
+        if (Desktop.isDesktopSupported()) {
+            trialLicenseButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    //FetchLicenseDialog.showDialog(panel);
+                    String url = LicenseAgent.getTrialLicenseURL();
+                    try {
+                        Desktop.getDesktop().browse((URI) new URI(url));
+                    } catch (URISyntaxException ex) {
+                        // invalid URI, just log
+                        logger.info("URISyntaxException on '" + url + "'" + ex.toString());
+                    } catch (IOException ex) {
+                        logger.info("IOException on '" + url + "'" + ex.toString());
+                    }
+                }
+            });
+
+            buyLicenseButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    //FetchLicenseDialog.showDialog(panel);
+                    String url = LicenseAgent.getLicenseURL();
+                    try {
+                        Desktop.getDesktop().browse((URI) new URI(url));
+                    } catch (URISyntaxException ex) {
+                        // invalid URI, just log
+                        logger.info("URISyntaxException on '" + url + "'" + ex.toString());
+                    } catch (IOException ex) {
+                        logger.info("IOException on '" + url + "'" + ex.toString());
+                    }
+                }
+            });
+        } else {
+            trialLicenseButton.setVisible(false);
+            buyLicenseButton.setVisible(false);
+        }
+
+        clearLicenseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //FetchLicenseDialog.showDialog(panel);
+                licenseTextArea.setText("");
+                //updateLicenceInfo(false);
+            }
+        });
+
+        licenseTextArea.setVisible(false);
+        updateLicenceInfo(true);
+
+        MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
+            public void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings) {
+                agent.updateFrom(MultiMarkdownPlugin.getInstance().getAgent());
+                licenseTextArea.setText(MultiMarkdownGlobalSettings.getInstance().licenseCode.getValue());
+                updateLicenceInfo(false);
+            }
+        });
+
+        licenseTextArea.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                if (!agent.licenseCode().equals(licenseTextArea.getText().trim())) {
+                    updateLicenceInfo(true);
+                }
+            }
+            @Override
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                if (!agent.licenseCode().equals(licenseTextArea.getText().trim())) {
+                    updateLicenceInfo(true);
+                }
+            }
+            @Override
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                if (!agent.licenseCode().equals(licenseTextArea.getText().trim())) {
+                    updateLicenceInfo(true);
+                }
+            }
+        });
+    }
+
+    protected void updateLicenceInfo(boolean delayed) {
+        if (!delayed) {
+            String licenseInfoText = "";
+            boolean isValidLicense = true;
+
+            // reset to defaults
+            licenseTextArea.setVisible(true);
+            trialLicenseButton.setVisible(true);
+            fetchLicenseButton.setVisible(true);
+            buyLicenseButton.setVisible(true);
+
+            agent.setLicenseCode(licenseTextArea.getText());
+            if (agent.isValidLicense()) {
+                if (!agent.isValidActivation()) {
+                    agent.setActivationCode(null);
+
+                    // request activation
+                    LicenseRequest request = new LicenseRequest(MultiMarkdownPlugin.getProductName(), MultiMarkdownPlugin.getProductVersion());
+                    request.license_code = agent.licenseCode();
+                    if (!agent.getLicenseCode(request)) {
+                        // license is not valid
+                        isValidLicense = false;
+                    }
+                }
+            }
+
+            if (agent.isValidLicense() && isValidLicense) {
+                trialLicenseButton.setVisible(false);
+                fetchLicenseButton.setVisible(false);
+                clearLicenseButton.setVisible(true);
+
+                if (agent.isValidActivation()) {
+                    licenseTextArea.setVisible(false);
+                    int expiresIn = agent.getLicenseExpiringIn();
+                    String licenseType = MultiMarkdownBundle.message("settings.license-type-" + agent.getLicenseType());
+
+                    String days = (expiresIn < 0) ? MultiMarkdownBundle.message("settings.license-has-expired-" + agent.getLicenseType())
+                            : (expiresIn % 10 == 1 ? MultiMarkdownBundle.message("settings.license-expires-tomorrow-" + agent.getLicenseType())
+                            : MultiMarkdownBundle.message("settings.license-ends-" + agent.getLicenseType()) + " " + MultiMarkdownBundle.message("settings.license-expires-in-days", expiresIn));
+
+                    licenseInfoText += "\n\n" + MultiMarkdownBundle.message("settings.license-activated-on") + " " + agent.getActivatedOn();
+                    licenseInfoText += "\n\n" + MultiMarkdownBundle.message("settings.license-expires-" + agent.getLicenseType()) + " " + agent.getLicenseExpiration() + ",\n       " + days;
+                    if (expiresIn > 90) {
+                        buyLicenseButton.setVisible(false);
+                    }
+                }
+            } else {
+                clearLicenseButton.setVisible(!licenseTextArea.getText().trim().isEmpty());
+                if (!licenseTextArea.getText().trim().isEmpty()) {
+                    licenseInfoText += MultiMarkdownBundle.message("settings.license-invalid");
+                }
+            }
+
+            licenseInfoEditorPane.setText(licenseInfoText.trim());
+        } else {
+            final Application application = ApplicationManager.getApplication();
+            application.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    updateLicenceInfo(false);
+                }
+            }, application.getCurrentModalityState());
+        }
     }
 
     private void createUIComponents() {

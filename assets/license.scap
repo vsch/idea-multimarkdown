@@ -788,7 +788,7 @@
             </Appearance>
             <String>Host Instance</String>
         </Note>
-        <Note ID="190" FontSize="12.0" Position="1230.0,215.0" Width="93.0">
+        <Note ID="190" FontSize="12.0" Position="1230.0,216.0" Width="93.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -805,7 +805,8 @@
         </Shape>
         <Shape ID="8" Sticky="Yes" Position="969.0,487.0" Width="166.0" Height="79.0">
             <Appearance>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <ConnectedNoteIDs>10, 41-44, 69-70, 75-76, 158, 165, 168</ConnectedNoteIDs>
             <PointsToNoteIDs>10, 158</PointsToNoteIDs>
@@ -872,14 +873,16 @@
         </Shape>
         <Shape ID="75" Sticky="Yes" Position="792.0,144.0" Width="146.0" Height="280.0">
             <Appearance>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <ConnectedNoteIDs>8, 18</ConnectedNoteIDs>
             <PointsToNoteIDs>18</PointsToNoteIDs>
         </Shape>
         <Shape ID="76" Sticky="Yes" Position="954.0,144.0" Width="113.0" Height="74.0">
             <Appearance>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <ConnectedNoteIDs>8, 18, 183</ConnectedNoteIDs>
             <PointsToNoteIDs>8</PointsToNoteIDs>
@@ -917,21 +920,24 @@
         </Shape>
         <Shape ID="155" Sticky="Yes" Position="1092.0,47.0" Width="222.0" Height="55.0">
             <Appearance>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <ConnectedNoteIDs>158, 165</ConnectedNoteIDs>
             <PointsToNoteIDs>165</PointsToNoteIDs>
         </Shape>
         <Shape ID="158" Sticky="Yes" Position="1093.0,144.0" Width="119.0" Height="216.0">
             <Appearance>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <ConnectedNoteIDs>8, 155</ConnectedNoteIDs>
             <PointsToNoteIDs>155</PointsToNoteIDs>
         </Shape>
         <Shape ID="165" Sticky="Yes" Position="1217.0,146.0" Width="116.0" Height="108.0">
             <Appearance>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <ConnectedNoteIDs>8, 155</ConnectedNoteIDs>
             <PointsToNoteIDs>8</PointsToNoteIDs>
@@ -953,7 +959,7 @@
         <Stack>159-161, 185, 163-164</Stack>
         <Stack>166, 190</Stack>
     </Stacks>
-    <AutoFit>0-1, 4, 6, 8-11, 13-14, 16, 19, 21-23, 29-32, 37-38, 46-47, 50-51, 56, 58, 60, 65, 77-79, 81, 89, 91, 102, 104-105, 107-113, 116-120, 122-126, 129-131, 133-139, 141-146, 148-149, 151-154, 156-157, 159-167, 171-178, 180, 182-188, 190</AutoFit>
+    <AutoFit>0-1, 4, 6, 8-11, 13-14, 16, 19, 21-23, 29-32, 37-38, 46-47, 50-51, 56, 58, 60, 65, 77-79, 81, 89, 91, 102, 104-105, 107-113, 116-120, 122-126, 129-131, 133-139, 141-146, 148-149, 151-154, 156-157, 159-164, 166-167, 171-178, 180, 182-188, 190</AutoFit>
     <NoteStyles>
         <Style Name="Blue Bubble" ID="4B1C6936-5C1E-4B2E-8A8D-8D0C63B3C5DC" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
             <BorderThickness>1</BorderThickness>

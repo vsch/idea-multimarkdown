@@ -25,6 +25,7 @@ package com.vladsch.idea.multimarkdown.settings;
 
 import com.intellij.openapi.application.ApplicationInfo;
 import com.intellij.ui.EditorTextField;
+import org.apache.log4j.Logger;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,6 +34,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 
 public class Settings {
+    private static final Logger logger = Logger.getLogger(Settings.class);
 
     final protected ArrayList<Setting> settings = new ArrayList<Setting>(50);
     @Nullable final protected SettingsNotifier notifier;
@@ -152,6 +154,7 @@ public class Settings {
         }
 
         public void saveState(Element element) {
+            //logger.info("saving state for " + persistName);
             element.setAttribute(persistName, value.toString());
         }
 
@@ -246,6 +249,14 @@ public class Settings {
 
         @Override public String getDefaultValue() {
             return "";
+        }
+
+        @Override
+        public void setValue(String value) {
+            if (!this.value.equals(value)) {
+                this.value = value;
+                if (notifier != null) notifier.notifyListeners();
+            }
         }
 
         public void setValue(JTextArea component) { setValue(component.getText()); }

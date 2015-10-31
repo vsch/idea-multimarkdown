@@ -34,6 +34,8 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
+import com.vladsch.idea.multimarkdown.license.LicenseAgent;
+import com.vladsch.idea.multimarkdown.license.LicenseRequest;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
@@ -52,6 +54,21 @@ import java.util.ArrayList;
 public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.ProjectFileResolver {
     private static final Logger logger = org.apache.log4j.Logger.getLogger("com.vladsch.idea.multimarkdown");
     private MultiMarkdownGlobalSettingsListener globalSettingsListener;
+    private static boolean isLicensed;
+
+    @NotNull
+    public static String getProductName() {
+        return "idea-multimarkdown";
+    }
+
+    @NotNull
+    public static String getProductVersion() {
+        return "2.0.0";
+    }
+
+    public static boolean isLicensed() {
+        return isLicensed;
+    }
 
     private PluginClassLoader myClassLoader;
 
@@ -65,11 +82,7 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
     private String urlCustomFont;
     private File fileCustomFxCss;
     private String tempDirPath;
-    private boolean isLicensed;
-
-    public boolean isLicensed() {
-        return isLicensed;
-    }
+    final private LicenseAgent agent;
 
     public String getUrlLayoutFxCss() {
         return urlLayoutFxCss;
@@ -118,8 +131,10 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
 
         FileReference.projectFileResolver = this;
 
+        agent = new LicenseAgent();
+
         // turn off lcd rendering, will use gray
-        System.setProperty("prism.lcdtext", "false");
+        //System.setProperty("prism.lcdtext", "false");
         myClassLoader = null;
         final MultiMarkdownGlobalSettings settings = MultiMarkdownGlobalSettings.getInstance();
         getClassLoader();
@@ -169,9 +184,9 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
             e.printStackTrace();
         }
 
-        if (fileCustomFxCss != null) {
-            MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
-                public void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings) {
+        MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
+            public void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings) {
+                if (fileCustomFxCss != null) {
                     try {
                         // 1.8u60 caches the css by name, we have to change the name or no refresh is done
                         //updateTempCopy(fileCustomFxCss, newSettings.customFxCss.getValue());
@@ -183,8 +198,11 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
                         e.printStackTrace();
                     }
                 }
-            });
-        }
+
+                // check license information
+                loadLicenseActivation();
+            }
+        });
     }
 
     protected String createCustomFontUrl() {
@@ -280,7 +298,53 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
     }
 
     public void initComponent() {
-        // empty
+        loadLicenseActivation();
+    }
+
+    public void loadLicenseActivation() {
+        MultiMarkdownGlobalSettings globalSettings = MultiMarkdownGlobalSettings.getInstance();
+        try {
+            globalSettings.startSuspendNotifications();
+            String licenseCode = globalSettings.licenseCode.getValue();
+            String activationCode = globalSettings.activationCode.getValue();
+
+            if (!agent.licenseCode().equals(licenseCode.trim())) {
+                activationCode = "";
+            }
+
+            agent.setLicenseActivationCodes(licenseCode, activationCode);
+            if (agent.isValidLicense()) {
+                if (!agent.isValidActivation()) {
+                    agent.setActivationCode(null);
+
+                    // request activation
+                    LicenseRequest request = new LicenseRequest(getProductName(), getProductVersion());
+                    request.license_code = licenseCode;
+                    if (!agent.getLicenseCode(request)) {
+                        if (agent.isRemoveLicense()) {
+                            agent.setLicenseActivationCodes(null,null);
+                        }
+                    }
+                }
+            }
+
+            // update both to the agent's values
+            globalSettings.licenseCode.setValue(agent.licenseCode());
+            globalSettings.activationCode.setValue(agent.activationCode());
+        } finally {
+            globalSettings.endSuspendNotifications();
+        }
+
+        initLicense();
+    }
+
+    public void initLicense() {// load license information
+        if (agent.isValidLicense() && agent.isValidActivation()) {
+            isLicensed = true;
+        } else {
+            // TODO: inform of failed activation
+            isLicensed = false;
+        }
     }
 
     public void disposeComponent() {
@@ -313,6 +377,10 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
     @Override
     public VirtualFile getVirtualFile(@NotNull String sourcePath) {
         return VirtualFileManager.getInstance().findFileByUrl("file://" + sourcePath);
+    }
+
+    public LicenseAgent getAgent() {
+        return agent;
     }
 
     @Override

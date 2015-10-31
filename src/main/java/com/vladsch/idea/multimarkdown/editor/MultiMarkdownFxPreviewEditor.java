@@ -553,37 +553,42 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         String result = "<head>\n" +
                 "";
 
-        // load custom css
-        if (MultiMarkdownGlobalSettings.getInstance().useCustomCss(true)) {
-            result += "" +
-                    "<link rel=\"stylesheet\" href=\"" + MultiMarkdownGlobalSettings.getInstance().getCssExternalForm(true) + "\">\n" +
-                    "";
-        }
-
         // load layout css
-        if (!(MultiMarkdownGlobalSettings.getInstance().useCustomCss(true) && MultiMarkdownGlobalSettings.getInstance().includesLayoutCss.getValue())) {
+        final MultiMarkdownGlobalSettings globalSettings = MultiMarkdownGlobalSettings.getInstance();
+
+        if (!(globalSettings.useCustomCss(true) && globalSettings.includesLayoutCss.getValue())) {
             result += "" +
-                    "<link rel=\"stylesheet\" href=\"" + MultiMarkdownGlobalSettings.getInstance().getLayoutCssExternalForm(true) + "\">\n" +
+                    "<link rel=\"stylesheet\" href=\"" + globalSettings.getLayoutCssExternalForm(true) + "\">\n" +
                     "";
         }
 
         // load colors css
-        if (!(MultiMarkdownGlobalSettings.getInstance().useCustomCss(true) && MultiMarkdownGlobalSettings.getInstance().includesColorsCss.getValue())) {
+        if (!(globalSettings.useCustomCss(true) && globalSettings.includesColorsCss.getValue())) {
             result += "" +
-                    "<link rel=\"stylesheet\" href=\"" + MultiMarkdownGlobalSettings.getInstance().getCssExternalForm(true) + "\">\n" +
+                    "<link rel=\"stylesheet\" href=\"" + globalSettings.getCssExternalForm(true) + "\">\n" +
                     "";
         }
 
-        // load highlight js script & css
-        if (MultiMarkdownGlobalSettings.getInstance().useHighlightJs.getValue()) {
-            if (!(MultiMarkdownGlobalSettings.getInstance().useCustomCss(true) && MultiMarkdownGlobalSettings.getInstance().includesHljsCss.getValue())) {
+        // load highlight & css
+        if (globalSettings.useHighlightJs.getValue()) {
+            if (!(globalSettings.useCustomCss(true) && globalSettings.includesHljsCss.getValue())) {
                 result += "" +
-                        "<link rel=\"stylesheet\" href=\"" + MultiMarkdownGlobalSettings.getInstance().getHljsCssExternalForm(true) + "\">\n" +
+                        "<link rel=\"stylesheet\" href=\"" + globalSettings.getHljsCssExternalForm(true) + "\">\n" +
                         "";
             }
+        }
 
+        // load custom css
+        if (globalSettings.useCustomCss(true)) {
             result += "" +
-                    "<script src=\"" + MultiMarkdownGlobalSettings.getInstance().getHighlighJsExternalForm(true) + "\"></script>\n" +
+                    "<link rel=\"stylesheet\" href=\"" + globalSettings.getCssExternalForm(true) + "\">\n" +
+                    "";
+        }
+
+        // load highlight js script
+        if (globalSettings.useHighlightJs.getValue()) {
+            result += "" +
+                    "<script src=\"" + globalSettings.getHighlighJsExternalForm(true) + "\"></script>\n" +
                     "";
         }
 

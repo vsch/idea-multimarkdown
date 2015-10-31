@@ -26,5 +26,7 @@
     <orderEntry type="library" scope="PROVIDED" name="jfxrt" level="project" />
     <orderEntry type="library" name="commons-io-2.4" level="project" />
     <orderEntry type="library" name="pegdown-1.6.5" level="project" />
+    <orderEntry type="library" name="javax.json-1.0.4" level="project" />
+    <orderEntry type="library" name="commons-validator-1.4.1" level="project" />
   </component>
 </module>

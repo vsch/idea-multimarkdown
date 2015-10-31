@@ -86,6 +86,7 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
         componentSettings.add(new EditorTextFieldComponent("textCustomCss", globalSettings.customFxCss, true));
         componentSettings.add(new ComponentState("textCustomCss", globalSettings.customCssEditorState, false));
         componentSettings.add(new ComponentState("textCustomCss", globalSettings.customFxCssEditorState, true));
+        componentSettings.add(new TextAreaComponent("licenseTextArea", globalSettings.licenseCode));
     }
 
     public Runnable enableSearch(String s) {
@@ -127,7 +128,8 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
     public void apply() {
 
         runInDispatchThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 applyRaw();
             }
         }, false);
@@ -157,7 +159,8 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
 
     public void reset() {
         runInDispatchThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 resetRaw();
             }
         }, false);
@@ -236,24 +239,42 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
             this.isFxPreviewState = isFxPreviewState;
         }
 
-        @Override public boolean isChanged(EditorTextField component) {
+        @Override
+        public boolean isChanged(EditorTextField component) {
             if ((component instanceof CustomizableEditorTextField) && (isFxPreviewState == null || MultiMarkdownGlobalSettings.isFxHtmlPreview == isFxPreviewState)) {
                 return setting.isChanged(component);
             }
             return false;
         }
 
-        @Override public void setValue(EditorTextField component) {
+        @Override
+        public void setValue(EditorTextField component) {
             if ((component instanceof CustomizableEditorTextField) && (isFxPreviewState == null || MultiMarkdownGlobalSettings.isFxHtmlPreview == isFxPreviewState)) {
                 setting.setValue(component);
             }
         }
 
-        @Override public void reset(EditorTextField component) {
+        @Override
+        public void reset(EditorTextField component) {
             if ((component instanceof CustomizableEditorTextField) && isFxPreviewState == null || MultiMarkdownGlobalSettings.isFxHtmlPreview == isFxPreviewState) {
                 setting.reset(component);
             }
         }
+    }
+
+    class TextAreaComponent extends ComponentSetting<JTextArea, Settings.StringSetting> {
+        TextAreaComponent(String component, Settings.StringSetting setting) {
+            super(component, setting);
+        }
+
+        @Override
+        public boolean isChanged(JTextArea component) { return setting.isChanged(component); }
+
+        @Override
+        public void setValue(JTextArea component) { setting.setValue(component); }
+
+        @Override
+        public void reset(JTextArea component) { setting.reset(component); }
     }
 
     class ComponentState extends ComponentSetting<com.vladsch.idea.multimarkdown.settings.ComponentState, Settings.ElementSetting> {
@@ -269,20 +290,23 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
             this.isFxPreviewState = isFxPreview;
         }
 
-        @Override public boolean isChanged(com.vladsch.idea.multimarkdown.settings.ComponentState component) {
+        @Override
+        public boolean isChanged(com.vladsch.idea.multimarkdown.settings.ComponentState component) {
             if (isFxPreviewState == null || MultiMarkdownGlobalSettings.isFxHtmlPreview == isFxPreviewState) {
                 return setting.getValue() == null || component.isChanged(setting.getValue());
             }
             return false;
         }
 
-        @Override public void setValue(com.vladsch.idea.multimarkdown.settings.ComponentState component) {
+        @Override
+        public void setValue(com.vladsch.idea.multimarkdown.settings.ComponentState component) {
             if (isFxPreviewState == null || MultiMarkdownGlobalSettings.isFxHtmlPreview == isFxPreviewState) {
                 setting.setValue(component.getState(setting.persistName));
             }
         }
 
-        @Override public void reset(com.vladsch.idea.multimarkdown.settings.ComponentState component) {
+        @Override
+        public void reset(com.vladsch.idea.multimarkdown.settings.ComponentState component) {
             if (isFxPreviewState == null || MultiMarkdownGlobalSettings.isFxHtmlPreview == isFxPreviewState) {
                 if (setting.getValue() != null) component.loadState(setting.getValue());
             }
@@ -292,60 +316,78 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
     class SpinnerIntegerComponent extends ComponentSetting<JSpinner, Settings.IntegerSetting> {
         SpinnerIntegerComponent(String componentName, Settings.IntegerSetting setting) { super(componentName, setting); }
 
-        @Override public boolean isChanged(JSpinner component) { return setting.isChanged(component); }
+        @Override
+        public boolean isChanged(JSpinner component) { return setting.isChanged(component); }
 
-        @Override public void setValue(JSpinner component) { setting.setValue(component); }
+        @Override
+        public void setValue(JSpinner component) { setting.setValue(component); }
 
-        @Override public void reset(JSpinner component) { setting.reset(component); }
+        @Override
+        public void reset(JSpinner component) { setting.reset(component); }
     }
 
     class TabbedPaneIntegerComponent extends ComponentSetting<JTabbedPane, Settings.IntegerSetting> {
         TabbedPaneIntegerComponent(String componentName, Settings.IntegerSetting setting) { super(componentName, setting); }
 
-        @Override public boolean isChanged(JTabbedPane component) { return setting.isChanged(component); }
+        @Override
+        public boolean isChanged(JTabbedPane component) { return setting.isChanged(component); }
 
-        @Override public void setValue(JTabbedPane component) { setting.setValue(component); }
+        @Override
+        public void setValue(JTabbedPane component) { setting.setValue(component); }
 
-        @Override public void reset(JTabbedPane component) { setting.reset(component); }
+        @Override
+        public void reset(JTabbedPane component) { setting.reset(component); }
     }
 
     class SpinnerDoubleComponent extends ComponentSetting<JSpinner, Settings.DoubleSetting> {
         SpinnerDoubleComponent(String componentName, Settings.DoubleSetting setting) { super(componentName, setting); }
 
-        @Override public boolean isChanged(JSpinner component) { return setting.isChanged(component); }
+        @Override
+        public boolean isChanged(JSpinner component) { return setting.isChanged(component); }
 
-        @Override public void setValue(JSpinner component) { setting.setValue(component); }
+        @Override
+        public void setValue(JSpinner component) { setting.setValue(component); }
 
-        @Override public void reset(JSpinner component) { setting.reset(component); }
+        @Override
+        public void reset(JSpinner component) { setting.reset(component); }
     }
 
     class ComboBoxComponent extends ComponentSetting<JComboBox, Settings.IntegerSetting> {
         ComboBoxComponent(String componentName, Settings.IntegerSetting setting) { super(componentName, setting); }
 
-        @Override public boolean isChanged(JComboBox component) { return setting.isChanged(component); }
+        @Override
+        public boolean isChanged(JComboBox component) { return setting.isChanged(component); }
 
-        @Override public void setValue(JComboBox component) { setting.setValue(component); }
+        @Override
+        public void setValue(JComboBox component) { setting.setValue(component); }
 
-        @Override public void reset(JComboBox component) { setting.reset(component); }
+        @Override
+        public void reset(JComboBox component) { setting.reset(component); }
     }
 
     class ListComponent extends ComponentSetting<JList, Settings.IntegerSetting> {
         ListComponent(String componentName, Settings.IntegerSetting setting) { super(componentName, setting); }
 
-        @Override public boolean isChanged(JList component) { return setting.isChanged(component); }
+        @Override
+        public boolean isChanged(JList component) { return setting.isChanged(component); }
 
-        @Override public void setValue(JList component) { setting.setValue(component); }
+        @Override
+        public void setValue(JList component) { setting.setValue(component); }
 
-        @Override public void reset(JList component) { setting.reset(component); }
+        @Override
+        public void reset(JList component) { setting.reset(component); }
     }
 
     class CheckBoxComponent extends ComponentSetting<JCheckBox, Settings.BooleanSetting> {
         CheckBoxComponent(String componentName, Settings.BooleanSetting setting) { super(componentName, setting); }
 
-        @Override public boolean isChanged(JCheckBox component) { return setting.isChanged(component); }
+        @Override
+        public boolean isChanged(JCheckBox component) { return setting.isChanged(component); }
 
-        @Override public void setValue(JCheckBox component) { setting.setValue(component); }
+        @Override
+        public void setValue(JCheckBox component) { setting.setValue(component); }
 
-        @Override public void reset(JCheckBox component) { setting.reset(component); }
+        @Override
+        public void reset(JCheckBox component) { setting.reset(component); }
     }
 }
