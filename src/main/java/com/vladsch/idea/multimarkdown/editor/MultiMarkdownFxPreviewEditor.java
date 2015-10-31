@@ -635,11 +635,6 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         result += "\n</article>\n";
         result += "</div>\n";
         result += "</div>\n";
-        //if (fireBugJS != null && fireBugJS.length() > 0 && MultiMarkdownGlobalSettings.getInstance().enableFirebug.getValue()) {
-        //    result += "" +
-        //            "<script src='" + fireBugJS + "' id='FirebugLite' FirebugLite='4'/>\n" +
-        //            "";
-        //}
         result += "" +
                 "<script>hljs.initHighlightingOnLoad();</script>\n" +
                 "</body>\n";
@@ -647,23 +642,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     }
 
     public void enableDebug() {
-        //webView.getEngine().executeScript("if (!document.getElementById('FirebugLite')){E = document['createElement' + 'NS'] && document.documentElement.namespaceURI;E = E ? document['createElement' + 'NS'](E, 'script') : document['createElement']('script');E['setAttribute']('id', 'FirebugLite');E['setAttribute']('src', 'https://getfirebug.com/' + 'firebug-lite.js' + '#startOpened');E['setAttribute']('FirebugLite', '4');(document['getElementsByTagName']('head')[0] || document['getElementsByTagName']('body')[0]).appendChild(E);E = new Image;E['setAttribute']('src', 'https://getfirebug.com/' + '#startOpened');}");
-        //if (fireBugJS == null) return;
-
         try {
-            //webEngine.executeScript("if (!document.getElementById('FirebugLite')) {\n" +
-            //        "    E = document['createElement' + 'NS'] && document.documentElement.namespaceURI;\n" +
-            //        "    E = E ? document['createElement' + 'NS'](E, 'script') : document['createElement']('script');\n" +
-            //        "    E['setAttribute']('id', 'FirebugLite');\n" +
-            //        "    E['setAttribute']('src', 'https://getfirebug.com/' + 'firebug-lite.js' + '#startOpened');\n" +
-            //        //"    E['setAttribute']('src', '" + fireBugJS + "');\n" +
-            //        "    E['setAttribute']('FirebugLite', '4');\n" +
-            //        "    (document['getElementsByTagName']('head')[0] || document['getElementsByTagName']('body')[0]).appendChild(E);\n" +
-            //        "    E = new Image;\n" +
-            //        "    E['setAttribute']('src', 'https://getfirebug.com/' + '#startOpened');\n" +
-            //        //"    E['setAttribute']('src', '" + fireBugJS + "' );\n" +
-            //        "}\n");
-
             webEngine.executeScript("if (!document.getElementById('FirebugLite')) {\n" +
                     "    E = document['createElement' + 'NS'] && document.documentElement.namespaceURI;\n" +
                     "    E = E ? document['createElement' + 'NS'](E, 'script') : document['createElement']('script');\n" +

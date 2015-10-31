@@ -84,8 +84,8 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
         componentSettings.add(new ListComponent("htmlThemeList", globalSettings.htmlTheme));
         componentSettings.add(new EditorTextFieldComponent("textCustomCss", globalSettings.customCss, false));
         componentSettings.add(new EditorTextFieldComponent("textCustomCss", globalSettings.customFxCss, true));
-        componentSettings.add(new ComponentState("textCustomCss", globalSettings.customCssEditorState, false));
-        componentSettings.add(new ComponentState("textCustomCss", globalSettings.customFxCssEditorState, true));
+        componentSettings.add(new SettingsComponentState("textCustomCss", globalSettings.customCssEditorState, false));
+        componentSettings.add(new SettingsComponentState("textCustomCss", globalSettings.customFxCssEditorState, true));
         componentSettings.add(new TextAreaComponent("licenseTextArea", globalSettings.licenseCode));
     }
 
@@ -277,21 +277,21 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
         public void reset(JTextArea component) { setting.reset(component); }
     }
 
-    class ComponentState extends ComponentSetting<com.vladsch.idea.multimarkdown.settings.ComponentState, Settings.ElementSetting> {
+    class SettingsComponentState extends ComponentSetting<ComponentState, Settings.ElementSetting> {
         private final Boolean isFxPreviewState;
 
-        ComponentState(String component, Settings.ElementSetting setting) {
+        SettingsComponentState(String component, Settings.ElementSetting setting) {
             super(component, setting);
             this.isFxPreviewState = null;
         }
 
-        ComponentState(String component, Settings.ElementSetting setting, boolean isFxPreview) {
+        SettingsComponentState(String component, Settings.ElementSetting setting, boolean isFxPreview) {
             super(component, setting);
             this.isFxPreviewState = isFxPreview;
         }
 
         @Override
-        public boolean isChanged(com.vladsch.idea.multimarkdown.settings.ComponentState component) {
+        public boolean isChanged(ComponentState component) {
             if (isFxPreviewState == null || MultiMarkdownGlobalSettings.isFxHtmlPreview == isFxPreviewState) {
                 return setting.getValue() == null || component.isChanged(setting.getValue());
             }
@@ -299,14 +299,14 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
         }
 
         @Override
-        public void setValue(com.vladsch.idea.multimarkdown.settings.ComponentState component) {
+        public void setValue(ComponentState component) {
             if (isFxPreviewState == null || MultiMarkdownGlobalSettings.isFxHtmlPreview == isFxPreviewState) {
                 setting.setValue(component.getState(setting.persistName));
             }
         }
 
         @Override
-        public void reset(com.vladsch.idea.multimarkdown.settings.ComponentState component) {
+        public void reset(ComponentState component) {
             if (isFxPreviewState == null || MultiMarkdownGlobalSettings.isFxHtmlPreview == isFxPreviewState) {
                 if (setting.getValue() != null) component.loadState(setting.getValue());
             }

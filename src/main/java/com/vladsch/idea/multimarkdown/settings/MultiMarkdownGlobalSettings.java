@@ -122,7 +122,6 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     final public Settings.IntegerSetting tabbedPaneIndex = settings.IntegerSetting(0, "tabbedPaneIndex");
     final public Settings.StringSetting customCss = settings.StringSetting("", "customCss");
     final public Settings.StringSetting customFxCss = settings.StringSetting("", "customFxCss");
-    final public Settings.StringSetting activationCode = settings.StringSetting("", "activationCode");
     final public Settings.ElementSetting customCssEditorState = settings.ElementSetting(null, "customCssEditorState");
     final public Settings.ElementSetting customFxCssEditorState = settings.ElementSetting(null, "customFxCssEditorState");
     final public Settings.BooleanSetting wasShownDarkBug = settings.BooleanSetting(false, "wasShownDarkBug", 0);
@@ -138,7 +137,7 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     //final public Settings.FailedBuildSetting fxPlatformFailedBuild = settings.FailedBuildSetting("", "fxPlatformFailedBuild", true);
 
     final public Settings.StringSetting licenseCode = settings.StringSetting("", "licenseCode");
-
+    final public Settings.StringSetting activationCode = settings.StringSetting("", "activationCode");
 
     public boolean isFxHtmlPreview() {
         return isFxHtmlPreview;
