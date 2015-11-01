@@ -54,9 +54,9 @@ public class LicenseRequest {
         this.product_name = product_name;
         this.product_version = product_version;
         this.host_name = getHostName();
-        this.host_product = ApplicationInfo.getInstance().getFullVersion();
+        this.host_product = ApplicationInfo.getInstance().getBuild().asStringWithAllDetails();
         this.host_os = System.getProperty("os.name");
-        this.host_jre = System.getProperty("java.home");
+        this.host_jre = System.getProperty("java.version");
     }
 
     protected String getHostName()  {
