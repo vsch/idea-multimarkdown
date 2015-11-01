@@ -63,7 +63,7 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
 
     @NotNull
     public static String getProductVersion() {
-        return "2.0.0";
+        return "1.2.0";
     }
 
     public static boolean isLicensed() {

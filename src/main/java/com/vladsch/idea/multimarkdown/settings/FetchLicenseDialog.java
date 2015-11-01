@@ -129,7 +129,7 @@ public class FetchLicenseDialog extends DialogWrapper {
             lastLicenseError = agent.getMessage();
         }
 
-        if (!lastLicenseError.isEmpty()) {
+        if (lastLicenseError != null && !lastLicenseError.isEmpty()) {
             return new ValidationInfo(lastLicenseError);
         }
         return super.doValidate();

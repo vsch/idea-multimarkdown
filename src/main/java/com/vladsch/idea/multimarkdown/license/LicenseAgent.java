@@ -43,20 +43,20 @@ public class LicenseAgent {
     private static final Logger logger = Logger.getLogger(LicenseAgent.class);
     private static final boolean LOG_AGENT_INFO = false;
 
-    final static private String agent_signature = "f27ee50a1c6b204a75690deaa8faebe1";
+    final static private String agent_signature = "475f99b03f6ec213729d7f5d577c80aa";
     final static private String license_pub = "-----BEGIN PUBLIC KEY-----\n" +
-            "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEApV9pSKri+JPCK3/ehkGd\n" +
-            "wXFJ2KadmB/9TVa8PNNToPcpQ8SFJ3Y6G70C1nPR9OBpT/xhjK/Yvzu4nlrM7RHo\n" +
-            "W+K+45Y5GFQLksxpdybKkx6tD/SM8Hg+iBYvIbudr67MFwZ+hIh37OaBiLRML8WF\n" +
-            "L/WbI8GH/Ts92QoLAh1zrbkrPKjiv4BpDouN0JkIhJNMAwwIH/hyajYWaAhW3b0k\n" +
-            "XrUC/neYyJLb7d6pCopSiSyAFtehx4fMOU65SVdj/WoBQx5gz1YRqLCR5KpWoI65\n" +
-            "Xd/6HpmiigFDq7of/+Upc7/AQBeqFBJcLtzOLu0DOzPbk/b1hd1twpinyQ6WyuZz\n" +
-            "0EktFwt8aLOeW4A+b31Ru4UQVg+PglzV8AU/Y9eJzz272MEvgB56c6jTE4VB1S+c\n" +
-            "NEm50F2apdSh596zbs1NX0LCRCDaSj/E7shtcYXPTLPjn0i8sdgd1BLjvsIEmHV+\n" +
-            "yCbWwpHdZYc31N9Z1fbEd9ZldBS3rY+IFZwIo8EwTQlhaPneufTLmfZ+977RIxQA\n" +
-            "VYA2Q6bj5ZGUrWomM/e7iBMfNpjZgjxDrqjNC5b3PuVNn/Pg1Ln6G+5KW298qe/e\n" +
-            "hXIvUZKBe13M3VOVARheutA98Kl7UgNZKOh9hT8mYo68tBZiOfU5aM1D6Jh651kb\n" +
-            "VmlqT3Ciy42P32/Ke2fD5ScCAwEAAQ==\n" +
+            "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlnefMGqNu1Q9hcI2Rd8G\n" +
+            "xyKlXQIFyXWIkYODRrLjvEwXYw0yksgjZeIC4g+hakyQNiN+TGE/xvo3fqB0CU4A\n" +
+            "aE33Mu7jB27dt1IItcmBhJBwIhmZDc0SWNj6ywvnLeUU/NSWWbJ1SaXzPQJ2Mm5T\n" +
+            "Mr3wDFhCTp80pN4svOQmdQPFSKXwdGI+n8gJvc28vRgD8As2XxgkYsZPNjefOsla\n" +
+            "GHS8CNw6uI8Ijcf9hfX22twQZ+auYNL/vqtBEKq2jNLwoHTo68s+0JWJu2YILlIe\n" +
+            "VQzXcXZyhhAVdZrMNGhBPiXUia6YrJpqZNDZ35CE+Y6ecs9c5AG2wpFJHnic2cjZ\n" +
+            "Kh+ba83DpA3GxYa1OGMGZNaIqCjuK7A82ZPriXsoxL6YJzqSlbF/2l2x4Y3VoVTF\n" +
+            "LWKEpjvLOuDOev0CH41nzkGD4Yo5CwHPZFun/WekqUBUXtxR/uH0ThoxV93exTLc\n" +
+            "YwWC5GqVZfN38Ye7iDljIFVzxxP3unBy0FItg52407CZyH/gTB+Zm++fZJdKbZcl\n" +
+            "UFvxtACEJvdgdM30FHuQlvS53mEXOMAzpJPVZu2gRoTl8cSO3GKxaNP9dmPCzD4a\n" +
+            "gO/kVrO/c6DerwWvCJJhifKlDc6CfjM3FfWsVI2gw3WduFPJcIsLxlUqzBh95rA1\n" +
+            "R+BTr2n3DV41OK5AwtCQO40CAwEAAQ==\n" +
             "-----END PUBLIC KEY-----\n";
 
     final static private String licenseHeader = "-----BEGIN IDEA-MULTIMARKDOWN LICENSE-----";
@@ -64,8 +64,8 @@ public class LicenseAgent {
     final static private String activationHeader = "-----BEGIN IDEA-MULTIMARKDOWN ACTIVATION-----";
     final static private String activationFooter = "-----END IDEA-MULTIMARKDOWN ACTIVATION-----";
 
-    //final private String siteURL = "http://vladsch.com";
-    final static private String siteURL = "http://vladsch.dev";
+    final static private String siteURL = "https://vladsch.com";
+    //final static private String siteURL = "http://vladsch.dev";
 
     final static private String trialURL = siteURL + "/product/multimarkdown/json/trial";
     final static private String licenseURL = siteURL + "/product/multimarkdown/json/license";
