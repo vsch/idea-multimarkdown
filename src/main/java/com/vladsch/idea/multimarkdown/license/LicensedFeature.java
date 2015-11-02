@@ -14,7 +14,6 @@
  */
 package com.vladsch.idea.multimarkdown.license;
 
-import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.*;
@@ -23,7 +22,7 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @Repeatable(LicensedFeatures.class)
 public @interface LicensedFeature {
-    enum LicenseType {
+    enum Feature {
         ALL(null, 0xffffffff),
         TRIAL(LicenseAgent.LICENSE_TYPE_TRIAL, 1),
         SUBSCRIPTION(LicenseAgent.LICENSE_TYPE_SUBSCRIPTION, 2),
@@ -32,7 +31,7 @@ public @interface LicensedFeature {
         private final String type;
         private final int flags;
 
-        LicenseType(String type, int flags) {
+        Feature(String type, int flags) {
             this.type = type;
             this.flags = flags;
         }
@@ -46,5 +45,5 @@ public @interface LicensedFeature {
         }
     }
 
-    LicenseType type() default LicenseType.ALL;
+    Feature type() default Feature.ALL;
 }

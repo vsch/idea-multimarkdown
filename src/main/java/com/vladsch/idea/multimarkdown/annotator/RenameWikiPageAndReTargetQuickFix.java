@@ -89,7 +89,7 @@ class RenameWikiPageAndReTargetQuickFix extends BaseIntentionAction {
             new WriteCommandAction.Simple(project) {
                 @Override
                 public void run() {
-                    projectComponent.pushRefactoringRenameFlags(MultiMarkdownNamedElement.RENAME_KEEP_TITLE | MultiMarkdownNamedElement.RENAME_KEEP_RENAMED_TITLE);
+                    projectComponent.pushRefactoringRenameFlags(MultiMarkdownNamedElement.RENAME_KEEP_TEXT | MultiMarkdownNamedElement.RENAME_KEEP_RENAMED_TEXT);
 
                     try {
                         final JavaRefactoringFactory factory = JavaRefactoringFactory.getInstance(project);

@@ -23,9 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.crypto.NoSuchPaddingException;
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
+import javax.json.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -64,8 +62,8 @@ public class LicenseAgent {
     final static private String activationHeader = "-----BEGIN IDEA-MULTIMARKDOWN ACTIVATION-----";
     final static private String activationFooter = "-----END IDEA-MULTIMARKDOWN ACTIVATION-----";
 
-    final static private String siteURL = "https://vladsch.com";
-    //final static private String siteURL = "http://vladsch.dev";
+    //final static private String siteURL = "https://vladsch.com";
+    final static private String siteURL = "http://vladsch.dev";
 
     final static private String trialURL = siteURL + "/product/multimarkdown/json/trial";
     final static private String licenseURL = siteURL + "/product/multimarkdown/json/license";
@@ -77,6 +75,8 @@ public class LicenseAgent {
     private static final String AGENT_SIGNATURE = "agent_signature";
     private static final String LICENSE_CODE = "license_code";
     private static final String LICENSE_TYPE = "license_type";
+    private static final String LICENSE_FEATURES = "license_features";
+    private static final String LICENSE_FEATURE_LIST = "feature_list";
     private static final String ACTIVATION_CODE = "activation_code";
     private static final String ACTIVATED_ON = "activated_on";
     private static final String STATUS = "status";
@@ -90,10 +90,6 @@ public class LicenseAgent {
     public static final String LICENSE_TYPE_SUBSCRIPTION = "subscription";
     public static final String LICENSE_TYPE_LICENSE = "license";
 
-    public static final int LICENSE_FLAG_TRIAL = 1;
-    public static final int LICENSE_FLAG_SUBSCRIPTION = 2;
-    public static final int LICENSE_FLAG_LICENSE = 4;
-
     private String license_code;
     private String activation_code;
     private JsonObject activation;
@@ -102,7 +98,8 @@ public class LicenseAgent {
     private JsonObject json; // last server response
     private boolean remove_license;
     private String license_type;
-    private int licenseTypeFlags;
+    private int license_features;
+    private JsonObject feature_list;
 
     public boolean isRemoveLicense() {
         return remove_license;
@@ -162,7 +159,6 @@ public class LicenseAgent {
         return license_code != null ? license_code : "";
     }
 
-
     @Nullable
     public String getLicenseExpires() {
         return license_expires;
@@ -176,7 +172,7 @@ public class LicenseAgent {
     @NotNull
     public String getMessage() {
         String message;
-        return json != null ? ((message = json.getString(MESSAGE)) != null ? message: "")  : "";
+        return json != null ? ((message = json.getString(MESSAGE)) != null ? message : "") : "";
     }
 
     @Nullable
@@ -325,17 +321,26 @@ public class LicenseAgent {
             if (activation != null && activation.containsKey(AGENT_SIGNATURE) && activation.getString(AGENT_SIGNATURE, "").equals(agent_signature)
                     && activation.containsKey(LICENSE_EXPIRES)
                     && activation.containsKey(LICENSE_TYPE)
+                    && activation.containsKey(LICENSE_FEATURES)
+                    && activation.containsKey(LICENSE_FEATURE_LIST)
                     && activation.containsKey(PRODUCT_VERSION)
+                    && activation.getString(LICENSE_TYPE) != null
+                    && activation.getInt(LICENSE_FEATURES) != 0
                     ) {
-                license_expires = activation.getString(LICENSE_EXPIRES);
-                product_version = activation.getString(PRODUCT_VERSION);
-                license_type = activation.getString(LICENSE_TYPE);
-                if (license_type == null) license_type = "";
-                if (license_type.equals(LICENSE_TYPE_TRIAL)) licenseTypeFlags = LICENSE_FLAG_TRIAL;
-                else if (license_type.equals(LICENSE_TYPE_SUBSCRIPTION)) licenseTypeFlags = LICENSE_FLAG_SUBSCRIPTION;
-                else if (license_type.equals(LICENSE_TYPE_LICENSE)) licenseTypeFlags = LICENSE_FLAG_LICENSE;
-                else licenseTypeFlags = 0xfffffff; // unknown, make all
-                return true;
+                try {
+                    license_expires = activation.getString(LICENSE_EXPIRES);
+                    product_version = activation.getString(PRODUCT_VERSION);
+                    license_type = activation.getString(LICENSE_TYPE);
+                    license_features = activation.getInt(LICENSE_FEATURES);
+                    feature_list = activation.getJsonObject(LICENSE_FEATURE_LIST);
+                    return true;
+                } catch (JsonException ignored) {
+                    if (LOG_AGENT_INFO) logger.info("Activation JsonException " + ignored);
+                } catch (ClassCastException ignored) {
+                    if (LOG_AGENT_INFO) logger.info("Activation ClassCastException " + ignored);
+                } catch (Exception ignored) {
+                    if (LOG_AGENT_INFO) logger.info("Activation Exception " + ignored);
+                }
             }
         }
         return false;
@@ -346,8 +351,8 @@ public class LicenseAgent {
         return license_type;
     }
 
-    public int getLicenseTypeFlags() {
-        return licenseTypeFlags;
+    public int getLicenseFeatures() {
+        return license_features;
     }
 
     @NotNull

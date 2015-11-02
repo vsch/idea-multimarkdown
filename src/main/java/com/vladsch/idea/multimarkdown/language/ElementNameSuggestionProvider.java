@@ -87,7 +87,7 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
             }
 
             return suggestedNameInfo;
-        } else if (element instanceof MultiMarkdownWikiPageTitle) {
+        } else if (element instanceof MultiMarkdownWikiPageText) {
             // this is a rename on a wiki page title
             // always activate spelling suggestions for renaming wiki page refs
             // Get suggestions from the name of the pageRef text
@@ -133,12 +133,12 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
     public static SuggestionList getWikiPageTitleSuggestions(@NotNull PsiElement parent) {
         SuggestionList suggestionList = new SuggestionList(parent.getProject());
         MultiMarkdownWikiPageRef wikiPageRef = (MultiMarkdownWikiPageRef) MultiMarkdownPsiImplUtil.findChildByType(parent, MultiMarkdownTypes.WIKI_LINK_REF);
-        MultiMarkdownWikiPageTitle wikiPageTitle = (MultiMarkdownWikiPageTitle) MultiMarkdownPsiImplUtil.findChildByType(parent, MultiMarkdownTypes.WIKI_LINK_TITLE);
+        MultiMarkdownWikiPageText wikiPageText = (MultiMarkdownWikiPageText) MultiMarkdownPsiImplUtil.findChildByType(parent, MultiMarkdownTypes.WIKI_LINK_TEXT);
 
         SuggestionList originalList = new SuggestionList(parent.getProject());
 
-        if (wikiPageTitle != null) {
-            String text = wikiPageTitle.getName();
+        if (wikiPageText != null) {
+            String text = wikiPageText.getName();
             if (text != null) {
                 text = text.replace("IntellijIdeaRulezzz ", "").trim();
                 if (!text.isEmpty()) {

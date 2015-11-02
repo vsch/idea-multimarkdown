@@ -24,6 +24,8 @@ import com.intellij.lang.ASTNode;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiParser;
 import com.intellij.psi.tree.IElementType;
+import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
+import com.vladsch.idea.multimarkdown.license.LicensedFeature;
 import org.jetbrains.annotations.NotNull;
 
 import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.*;
@@ -32,14 +34,12 @@ public class MultiMarkdownParser implements PsiParser {
     public void parseLightImpl(IElementType root, PsiBuilder builder) {
         if (root == WIKI_LINK) {
             parseWikiLink(builder);
-        } else if (root == WIKI_LINK_REF) {
-            PsiBuilder.Marker wikiPageRef = builder.mark();
-            builder.advanceLexer();
-            wikiPageRef.done(WIKI_LINK_REF);
-        } else if (root == WIKI_LINK_TITLE) {
-            PsiBuilder.Marker wikiPageRef = builder.mark();
-            builder.advanceLexer();
-            wikiPageRef.done(WIKI_LINK_TITLE);
+        } else if (MultiMarkdownPlugin.isLicensed()) {
+            if (root == EXPLICIT_LINK) {
+                parseExplicitLink(builder);
+            } else {
+                parseRoot(root, builder);
+            }
         } else {
             parseRoot(root, builder);
         }
@@ -57,6 +57,7 @@ public class MultiMarkdownParser implements PsiParser {
                 builder.advanceLexer();
                 tokenMarker.done(COMMENT);
             } else if (parseWikiLink(builder)) {
+            } else if (parseExplicitLink(builder)) {
             } else {
                 builder.advanceLexer();
             }
@@ -88,10 +89,10 @@ public class MultiMarkdownParser implements PsiParser {
             }
         }
 
-        if (builder.getTokenType() == WIKI_LINK_TITLE) {
+        if (builder.getTokenType() == WIKI_LINK_TEXT) {
             PsiBuilder.Marker marker = builder.mark();
             builder.advanceLexer();
-            marker.done(WIKI_LINK_TITLE);
+            marker.done(WIKI_LINK_TEXT);
         }
 
         if (builder.getTokenType() == WIKI_LINK_SEPARATOR) {
@@ -111,10 +112,10 @@ public class MultiMarkdownParser implements PsiParser {
                 }
             }
 
-            if (builder.getTokenType() == WIKI_LINK_TITLE) {
+            if (builder.getTokenType() == WIKI_LINK_TEXT) {
                 PsiBuilder.Marker marker = builder.mark();
                 builder.advanceLexer();
-                marker.done(WIKI_LINK_TITLE);
+                marker.done(WIKI_LINK_TEXT);
             }
         }
 
@@ -123,6 +124,59 @@ public class MultiMarkdownParser implements PsiParser {
         }
 
         wikiLinkMarker.done(WIKI_LINK);
+        return true;
+    }
+
+    @LicensedFeature
+    protected boolean parseExplicitLink(PsiBuilder builder) {
+        if (builder.getTokenType() != LINK_REF_TEXT_OPEN) return false;
+
+        PsiBuilder.Marker explicitLinkMarker = builder.mark();
+        builder.advanceLexer();
+
+        if (builder.getTokenType() == LINK_REF_TEXT) {
+            PsiBuilder.Marker marker = builder.mark();
+            builder.advanceLexer();
+            marker.done(LINK_REF_TEXT);
+        }
+
+        if (builder.getTokenType() == LINK_REF_TEXT_CLOSE) {
+            builder.advanceLexer();
+        }
+
+        if (builder.getTokenType() == LINK_REF_OPEN) {
+            builder.advanceLexer();
+            if (builder.getTokenType() == LINK_REF) {
+                PsiBuilder.Marker marker = builder.mark();
+                builder.advanceLexer();
+                marker.done(LINK_REF);
+
+                if (builder.getTokenType() == LINK_REF_ANCHOR_MARKER) {
+                    builder.advanceLexer();
+                    if (builder.getTokenType() == LINK_REF_ANCHOR) {
+                        PsiBuilder.Marker anchor = builder.mark();
+                        builder.advanceLexer();
+                        anchor.done(LINK_REF_ANCHOR);
+                    }
+                }
+            }
+
+            if (builder.getTokenType() == LINK_REF_TITLE_MARKER) {
+                builder.advanceLexer();
+                PsiBuilder.Marker marker = builder.mark();
+                builder.advanceLexer();
+                marker.done(LINK_REF_TITLE);
+                if (builder.getTokenType() == LINK_REF_TITLE_MARKER) {
+                    builder.advanceLexer();
+                }
+            }
+        }
+
+        if (builder.getTokenType() == LINK_REF_CLOSE) {
+            builder.advanceLexer();
+        }
+
+        explicitLinkMarker.done(EXPLICIT_LINK);
         return true;
     }
 

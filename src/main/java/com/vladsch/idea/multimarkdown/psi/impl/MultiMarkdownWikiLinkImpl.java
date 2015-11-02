@@ -26,17 +26,16 @@ import com.intellij.psi.PsiElementVisitor;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownVisitor;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
-import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class MultiMarkdownWikiLinkImpl extends ASTWrapperPsiElement implements MultiMarkdownWikiLink {
-    public static String getElementText(@NotNull String name, @Nullable String title) {
+    public static String getElementText(@NotNull String name, @Nullable String text) {
         boolean githubWikiLinks = MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue();
 
         return  githubWikiLinks
-                ? "[[" + (title != null && title.length() > 0 && !name.equals(title) ? title + "|" : "") + name + "]]"
-                : "[[" + name + (title != null && title.length() > 0 && !name.equals(title) ? "|" + title : "") + "]]"
+                ? "[[" + (text != null && text.length() > 0 && !name.equals(text) ? text + "|" : "") + name + "]]"
+                : "[[" + name + (text != null && text.length() > 0 && !name.equals(text) ? "|" + text : "") + "]]"
                 ;
     }
 
@@ -55,8 +54,8 @@ public class MultiMarkdownWikiLinkImpl extends ASTWrapperPsiElement implements M
     }
 
     @Override
-    public String getPageTitle() {
-        return MultiMarkdownPsiImplUtil.getPageTitle(this);
+    public String getPageText() {
+        return MultiMarkdownPsiImplUtil.getPageText(this);
     }
 
     @Override

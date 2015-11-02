@@ -27,17 +27,25 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFileFactory;
 import com.vladsch.idea.multimarkdown.MultiMarkdownFileType;
+import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownExplicitLinkImpl;
 import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownWikiLinkImpl;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class MultiMarkdownElementFactory {
 
-    public static MultiMarkdownWikiLink createWikiLink(Project project, String name) {
+    public static MultiMarkdownWikiLink createWikiLink(@NotNull Project project, @NotNull String name) {
         return createWikiLink(project, name, null);
     }
 
-    public static MultiMarkdownWikiLink createWikiLink(Project project, String name, String title) {
-        final MultiMarkdownFile file = createFile(project, MultiMarkdownWikiLinkImpl.getElementText(name, title));
+    public static MultiMarkdownWikiLink createWikiLink(@NotNull Project project, @NotNull String name, @Nullable String text) {
+        final MultiMarkdownFile file = createFile(project, MultiMarkdownWikiLinkImpl.getElementText(name, text));
         return (MultiMarkdownWikiLink) file.getFirstChild();
+    }
+
+    public static MultiMarkdownExplicitLink createExplicitLink(@NotNull Project project, @NotNull String name, @Nullable String text, @Nullable String title) {
+        final MultiMarkdownFile file = createFile(project, MultiMarkdownExplicitLinkImpl.getElementText(name, text == null ? "" : name, title));
+        return (MultiMarkdownExplicitLink) file.getFirstChild();
     }
 
     public static PsiElement createCRLF(Project project) {

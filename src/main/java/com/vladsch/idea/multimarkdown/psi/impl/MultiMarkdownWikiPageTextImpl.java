@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class MultiMarkdownWikiPageTextImpl extends MultiMarkdownNamedElementImpl implements MultiMarkdownWikiPageText {
     private static final Logger logger = Logger.getLogger(MultiMarkdownWikiPageTextImpl.class);
-    protected static final String MISSING_ELEMENT_NAME_SPACE = "wiki-title::";
+    protected static final String MISSING_ELEMENT_NAME_SPACE = "wiki-text::";
 
     @NotNull
     @Override
@@ -73,6 +73,6 @@ public class MultiMarkdownWikiPageTextImpl extends MultiMarkdownNamedElementImpl
 
     @Override
     public String toString() {
-        return "WIKI_LINK_TITLE '" + getName() + "' " + super.hashCode();
+        return "WIKI_LINK_TEXT '" + getName() + "' " + super.hashCode();
     }
 }

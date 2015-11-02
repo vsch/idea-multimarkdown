@@ -29,6 +29,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.indexing.FileBasedIndex;
 import com.vladsch.idea.multimarkdown.MultiMarkdownFileType;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkRef;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 import org.apache.log4j.Logger;
 import org.intellij.images.fileTypes.ImageFileTypeManager;
@@ -263,6 +264,12 @@ public class FileReferenceListQuery {
     public FileReferenceListQuery matchWikiRef(@NotNull MultiMarkdownWikiPageRef wikiPageRef) {
         return inSource(new FileReference(wikiPageRef.getContainingFile()))
                 .matchWikiRef(wikiPageRef.getNameWithAnchor());
+    }
+
+    @NotNull
+    public FileReferenceListQuery matchLinkRef(@NotNull MultiMarkdownLinkRef linkRef) {
+        return inSource(new FileReference(linkRef.getContainingFile()))
+                .matchLinkRef(linkRef.getNameWithAnchor());
     }
 
     @NotNull

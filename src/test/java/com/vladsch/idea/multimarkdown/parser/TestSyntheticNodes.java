@@ -34,8 +34,5 @@ public class TestSyntheticNodes {
 
     @Test
     public void test_chopLead() {
-        TextNode node = testNode("[[WikiRef]]", 100);
-        SyntheticNodes nodes = new SyntheticNodes(node, WIKI_LINK_REF);
-        nodes.chopMarkers(2, WIKI_LINK_OPEN, WIKI_LINK_CLOSE);
     }
 }

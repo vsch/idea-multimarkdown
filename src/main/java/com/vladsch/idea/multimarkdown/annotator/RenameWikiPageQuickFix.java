@@ -105,7 +105,7 @@ class RenameWikiPageQuickFix extends BaseIntentionAction {
                     JavaRenameRefactoring rename = factory.createRename(psiFile, fileName);
                     UsageInfo[] usages = rename.findUsages();
                     try {
-                        projectComponent.pushRefactoringRenameFlags(alternativeMsg == RENAME_CONFLICTING_TARGET ? RENAME_KEEP_ANCHOR | RENAME_KEEP_PATH | RENAME_KEEP_TITLE : REASON_FILE_RENAMED);
+                        projectComponent.pushRefactoringRenameFlags(alternativeMsg == RENAME_CONFLICTING_TARGET ? RENAME_KEEP_ANCHOR | RENAME_KEEP_PATH | RENAME_KEEP_TEXT : REASON_FILE_RENAMED);
                         rename.doRefactoring(usages); // modified 'usages' array
                     } finally {
                         projectComponent.popRefactoringRenameFlags();

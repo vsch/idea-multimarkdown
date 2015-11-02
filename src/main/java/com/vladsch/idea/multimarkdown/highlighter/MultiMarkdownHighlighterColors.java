@@ -24,6 +24,8 @@ package com.vladsch.idea.multimarkdown.highlighter;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes;
 
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 import static com.intellij.openapi.editor.DefaultLanguageHighlighterColors.*;
 import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey;
 
@@ -70,6 +72,13 @@ public class MultiMarkdownHighlighterColors {
     public static final TextAttributesKey INLINE_HTML_ATTR_KEY = createKey("INLINE_HTML");
     public static final TextAttributesKey ITALIC_ATTR_KEY = createKey("ITALIC");
     public static final TextAttributesKey ITALIC_MARKER_ATTR_KEY = createKey("ITALIC_MARKER");
+    public static final TextAttributesKey LINK_REF_ATTR_KEY = createKey("LINK_REF", AUTO_LINK_ATTR_KEY);
+    public static final TextAttributesKey LINK_REF_TEXT_ATTR_KEY = createKey("LINK_REF_TEXT");
+    public static final TextAttributesKey LINK_REF_TITLE_ATTR_KEY = createKey("LINK_REF_TITLE");
+    public static final TextAttributesKey LINK_REF_ANCHOR_ATTR_KEY = createKey("LINK_REF_ANCHOR", AUTO_LINK_ATTR_KEY);
+    public static final TextAttributesKey LINK_REF_ANCHOR_MARKER_ATTR_KEY = createKey("LINK_REF_ANCHOR_MARKER", AUTO_LINK_ATTR_KEY);
+    public static final TextAttributesKey IMAGE_LINK_REF_ATTR_KEY = createKey("IMAGE_LINK_REF", LINK_REF_ATTR_KEY);
+    public static final TextAttributesKey IMAGE_ALT_TEXT_ATTR_KEY = createKey("IMAGE_ALT_TEXT");
     public static final TextAttributesKey LIST_ITEM_ATTR_KEY = createKey("LIST_ITEM");
     public static final TextAttributesKey MAIL_LINK_ATTR_KEY = createKey("MAIL_LINK");
     public static final TextAttributesKey ORDERED_LIST_ATTR_KEY = createKey("ORDERED_LIST");
@@ -105,6 +114,6 @@ public class MultiMarkdownHighlighterColors {
     public static final TextAttributesKey WIKI_LINK_REF_ATTR_KEY = createKey("WIKI_LINK_REF", WIKI_LINK_ATTR_KEY);
     public static final TextAttributesKey WIKI_LINK_REF_ANCHOR_ATTR_KEY = createKey("WIKI_LINK_REF_ANCHOR", WIKI_LINK_REF_ATTR_KEY);
     public static final TextAttributesKey WIKI_LINK_REF_ANCHOR_MARKER_ATTR_KEY = createKey("WIKI_LINK_REF_ANCHOR_MARKER", WIKI_LINK_ATTR_KEY);
-    public static final TextAttributesKey WIKI_LINK_TEXT_ATTR_KEY = createKey("WIKI_LINK_TITLE", WIKI_LINK_REF_ATTR_KEY);
+    public static final TextAttributesKey WIKI_LINK_TEXT_ATTR_KEY = createKey("WIKI_LINK_TEXT", WIKI_LINK_REF_ATTR_KEY);
     public static final TextAttributesKey WIKI_LINK_SEPARATOR_ATTR_KEY = createKey("WIKI_LINK_SEPARATOR", WIKI_LINK_ATTR_KEY);
 }

@@ -25,6 +25,7 @@ package com.vladsch.idea.multimarkdown.parser;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
+import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
 import org.jetbrains.annotations.NotNull;
@@ -44,11 +45,13 @@ import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.*;
 public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
     private static final Logger LOGGER = Logger.getInstance(MultiMarkdownLexParser.class);
 
-    private MultiMarkdownGlobalSettingsListener globalSettingsListener = null;
+    private MultiMarkdownGlobalSettingsListener globalSettingsListener;
+
     //private ThreadLocal<PegDownProcessor> processor = initProcessor();
     private PegDownProcessor processor = null;
     private int currentStringLength;
-    //private String currentString;
+    private String currentString;
+    private char[] currentChars;
 
     private static HashSet<IElementType> excludedTokenTypes = new HashSet<IElementType>();
     private static Map<IElementType, HashSet<IElementType>> overrideExclusions = new HashMap<IElementType, HashSet<IElementType>>();
@@ -86,6 +89,8 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         lexerTokens = null;
         rootNode = null;
         minStackLevel = 0;
+        currentString = null;
+        currentChars = null;
 
         clearStack();
 
@@ -295,13 +300,14 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
     public boolean parseMarkdown(final String source) {
         clearParsed();
         currentStringLength = source.length();
-        //currentString = source;
+        currentString = source;
+        currentChars = source.toCharArray();
 
         try {
             if (processor == null) {
                 processor = getProcessor();
             }
-            rootNode = processor.parseMarkdown(source.toCharArray());
+            rootNode = processor.parseMarkdown(currentChars);
             return true;
         } catch (Exception e) {
             LOGGER.error("Failed processing Markdown document", e);
@@ -377,14 +383,14 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
             // do all of them
             splitLexemes(lexemes, tokens, 0, Integer.MAX_VALUE);
 
-            end = lexemes.size() - 1;
-            for (int i = 0; i < end; i++) {
-                LexerToken t1 = lexemes.get(i);
-                LexerToken t2 = lexemes.get(i + 1);
-                //if (t1.compare(t2) > 0 || t1.getRange().doesOverlap(t2.getRange())) {
-                //    int tmp = 0;
-                //}
-            }
+            //end = lexemes.size() - 1;
+            //for (int i = 0; i < end; i++) {
+            //    LexerToken t1 = lexemes.get(i);
+            //    LexerToken t2 = lexemes.get(i + 1);
+            //    if (t1.compare(t2) > 0 || t1.getRange().doesOverlap(t2.getRange())) {
+            //        int tmp = 0;
+            //    }
+            //}
 
             //if (lexemes.get(end).getRange().getEnd() > currentStringLength) {
             //    int tmp = 0;
@@ -628,13 +634,12 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         public void visit(FootnoteNode node) {
             //ArrayList<Node> children = new ArrayList<Node>(1);
             //children.add(node.getFootnote());
-            addTokenWithChildren(node, node.getFootnote().getChildren(), FOOTNOTE);
+            addTokenWithChildren(node, FOOTNOTE, node.getFootnote().getChildren());
         }
 
         public void visit(FootnoteRefNode node) {
             addToken(node, FOOTNOTE_REF);
         }
-
 
         public void visit(TextNode node) {
             if (node instanceof CommentNode) {
@@ -642,7 +647,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
             } else if (node instanceof WikiPageRefNode) {
                 addToken(node, WIKI_LINK_REF);
             } else if (node instanceof WikiPageTitleNode) {
-                addToken(node, WIKI_LINK_TITLE);
+                addToken(node, WIKI_LINK_TEXT);
             } else {
                 if (abbreviations.isEmpty()) {
                     addToken(node, TEXT);
@@ -816,20 +821,99 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
             }
         }
 
+        void addTokens(SyntheticNodes nodes) {
+            for (SyntheticNodes.SyntheticNode node : nodes.getNodes()) {
+                addToken(node.getStartIndex(), node.getEndIndex(), node.getType());
+            }
+        }
+
+        void addTokensWithChildren(SyntheticNodes nodes) {
+            SyntheticNodes.SyntheticNode currentNode = nodes.currentNode();
+
+            for (SyntheticNodes.SyntheticNode node : nodes.getNodes()) {
+                if (node == currentNode) {
+                    addTokenWithChildren(node.getStartIndex(), node.getEndIndex(), node.getType(), nodes.getNode().getChildren());
+                } else {
+                    addToken(node.getStartIndex(), node.getEndIndex(), node.getType());
+                }
+            }
+        }
+
         public void visit(ExpImageNode node) {
-            addTokenWithChildren(node, IMAGE);
+            if (MultiMarkdownPlugin.isLicensed()) {
+                SyntheticNodes nodes = new SyntheticNodes(currentChars, node, IMAGE, IMAGE_ALT_TEXT, 2, IMAGE_ALT_TEXT_OPEN, 1, IMAGE_LINK_REF_CLOSE);
+
+                if (!node.title.isEmpty() && nodes.chopLastTail(node.title, IMAGE_TITLE, IMAGE_TITLE_MARKER)) {
+                    nodes.chopTail(-1, IMAGE_TITLE_MARKER);
+                }
+
+                nodes.chopLastTail(node.url, IMAGE_LINK_REF);
+
+                // now chop off lead and tail alt markers
+                if (nodes.chopTail(']', IMAGE_ALT_TEXT_CLOSE)) {
+                    nodes.next();
+                    nodes.chopTail('(', IMAGE_LINK_REF_OPEN);
+                    nodes.prev();
+                }
+
+                // need to process children with the current node
+                nodes.trimToNodeType(IMAGE_ALT_TEXT_CLOSE, IMAGE_LINK_REF_OPEN, IMAGE_LINK_REF);
+                addTokensWithChildren(nodes);
+            } else {
+                addTokenWithChildren(node, IMAGE);
+            }
         }
 
         public void visit(ExpLinkNode node) {
-            addTokenWithChildren(node, EXPLICIT_LINK);
+            if (MultiMarkdownPlugin.isLicensed()) {
+                SyntheticNodes nodes = new SyntheticNodes(currentChars, node, EXPLICIT_LINK, LINK_REF_TEXT, 1, LINK_REF_TEXT_OPEN, LINK_REF_CLOSE);
+
+                if (!node.title.isEmpty() && nodes.chopLastTail(node.title, LINK_REF_TITLE, LINK_REF_TITLE_MARKER)) {
+                    nodes.chopTail(-1, LINK_REF_TITLE_MARKER);
+                }
+
+                if (!node.url.isEmpty()) {
+                    nodes.chopLastTail(node.url, LINK_REF);
+                    nodes.next();
+                    nodes.chopLastTail('#', LINK_REF_ANCHOR_MARKER, LINK_REF_ANCHOR);
+                    nodes.prev();
+                }
+
+                // now chop off lead and tail alt markers
+                if (nodes.chopTail(']', LINK_REF_TEXT_CLOSE)) {
+                    nodes.next();
+                    nodes.chopTail('(', LINK_REF_OPEN);
+                    nodes.prev();
+                }
+
+                // need to process children with the current node
+                nodes.trimToNodeType(LINK_REF_TEXT_CLOSE, LINK_REF_OPEN, LINK_REF, LINK_REF_ANCHOR_MARKER, LINK_REF_ANCHOR);
+                // need to process children with the current node
+                addTokensWithChildren(nodes);
+            } else {
+                addTokenWithChildren(node, EXPLICIT_LINK);
+            }
         }
 
         public void visit(final RefLinkNode node) {
-            addTokenWithChildren(node, REFERENCE_LINK);
+            if (MultiMarkdownPlugin.isLicensed()) {
+                SyntheticNodes nodes = new SyntheticNodes(currentChars, node, REFERENCE_LINK);
+                addTokenWithChildren(node, REFERENCE_LINK);
+            } else {
+                addTokenWithChildren(node, REFERENCE_LINK);
+            }
         }
 
         public void visit(AutoLinkNode node) {
-            addToken(node, AUTO_LINK);
+            if (MultiMarkdownPlugin.isLicensed()) {
+                SyntheticNodes nodes = new SyntheticNodes(currentChars, node, AUTO_LINK, LINK_REF);
+                nodes.chopStart('<', AUTO_LINK);
+                nodes.chopEnd('>', AUTO_LINK);
+                nodes.chopLastTail('#', LINK_REF_ANCHOR_MARKER, LINK_REF_ANCHOR);
+                addTokens(nodes);
+            } else {
+                addToken(node, AUTO_LINK);
+            }
         }
 
         public void visit(MailLinkNode node) {
@@ -869,20 +953,14 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
             addToken(node, VERBATIM);
         }
 
-        void addTokens(SyntheticNodes nodes) {
-            for (SyntheticNodes.SyntheticNode node : nodes.getNodes()) {
-                addToken(node.getStartIndex(), node.getEndIndex(), node.getType());
-            }
-        }
-
         public void visit(WikiLinkNode node) {
-            SyntheticNodes nodes = new SyntheticNodes(node, WIKI_LINK_REF, 2, WIKI_LINK_OPEN, WIKI_LINK_CLOSE);
+            SyntheticNodes nodes = new SyntheticNodes(currentChars, node, WIKI_LINK, WIKI_LINK_REF, 2, WIKI_LINK_OPEN, WIKI_LINK_CLOSE);
 
             if (githubWikiLinks) {
-                nodes.chopLead("|", WIKI_LINK_TITLE, WIKI_LINK_SEPARATOR);
+                nodes.chopLead("|", WIKI_LINK_TEXT, WIKI_LINK_SEPARATOR);
                 nodes.chopTail("#", WIKI_LINK_REF_ANCHOR_MARKER, WIKI_LINK_REF_ANCHOR);
             } else {
-                nodes.chopTail("|", WIKI_LINK_SEPARATOR, WIKI_LINK_TITLE);
+                nodes.chopTail("|", WIKI_LINK_SEPARATOR, WIKI_LINK_TEXT);
                 nodes.chopTail("#", WIKI_LINK_REF_ANCHOR_MARKER, WIKI_LINK_REF_ANCHOR);
             }
 
@@ -1235,10 +1313,14 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         // punch out the child's range from the parent's so that we can eliminate parent's highlighting
         // on the child text
         protected void addTokenWithChildren(Node node, IElementType tokenType) {
-            addTokenWithChildren(node, node.getChildren(), tokenType);
+            addTokenWithChildren(node, tokenType, node.getChildren());
         }
 
-        protected void addTokenWithChildren(Node node, List<Node> children, IElementType tokenType) {
+        protected void addTokenWithChildren(Node node, IElementType tokenType, List<Node> children) {
+            addTokenWithChildren(node.getStartIndex(), node.getEndIndex(), tokenType, children);
+        }
+
+        protected void addTokenWithChildren(int startIndex, int endIndex, IElementType tokenType, List<Node> children) {
             //if (node.getEndIndex() > currentStringLength) {
             //    ((SuperNode) node).setEndIndex(currentStringLength);
             //    if (node.getStartIndex() >= node.getEndIndex()) {
@@ -1247,7 +1329,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
             //}
 
             int entryStackLevel = parentRanges.size();
-            Range range = new Range(node.getStartIndex(), node.getEndIndex());
+            Range range = new Range(startIndex, endIndex);
 
             //System.out.println("addTokenWithChildren " + tokenType + range);
 

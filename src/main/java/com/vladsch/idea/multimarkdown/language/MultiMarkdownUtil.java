@@ -25,15 +25,11 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.indexing.FileBasedIndex;
 import com.vladsch.idea.multimarkdown.MultiMarkdownFileType;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageTitle;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -58,9 +54,9 @@ public class MultiMarkdownUtil {
                 //        }
                 //    }
                 //
-                //    MultiMarkdownWikiPageTitle[] wikiPageTitles = PsiTreeUtil.getChildrenOfType(markdownFile, MultiMarkdownWikiPageTitle.class);
+                //    MultiMarkdownWikiPageText[] wikiPageTitles = PsiTreeUtil.getChildrenOfType(markdownFile, MultiMarkdownWikiPageText.class);
                 //    if (wikiPageTitles != null) {
-                //        for (MultiMarkdownWikiPageTitle wikiPageTitle : wikiPageTitles) {
+                //        for (MultiMarkdownWikiPageText wikiPageTitle : wikiPageTitles) {
                 //            if (name.equals(wikiPageTitle.getName())) {
                 //                if (result == null) {
                 //                    result = new ArrayList<MultiMarkdownNamedElement>();
@@ -93,9 +89,9 @@ public class MultiMarkdownUtil {
             //        }
             //    }
             //
-            //    MultiMarkdownWikiPageTitle[] wikiPageTitles = PsiTreeUtil.getChildrenOfType(markdownFile, MultiMarkdownWikiPageTitle.class);
+            //    MultiMarkdownWikiPageText[] wikiPageTitles = PsiTreeUtil.getChildrenOfType(markdownFile, MultiMarkdownWikiPageText.class);
             //    if (wikiPageTitles != null) {
-            //        for (MultiMarkdownWikiPageTitle wikiPageTitle : wikiPageTitles) {
+            //        for (MultiMarkdownWikiPageText wikiPageTitle : wikiPageTitles) {
             //            if (result == null) {
             //                result = new ArrayList<MultiMarkdownNamedElement>();
             //            }

@@ -20,6 +20,7 @@ import com.intellij.psi.PsiElementResolveResult;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.ResolveResult;
 import com.intellij.util.IncorrectOperationException;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkRef;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 import com.vladsch.idea.multimarkdown.util.FileReferenceLinkGitHubRules;
@@ -35,7 +36,7 @@ import java.util.List;
 public class MultiMarkdownReferenceLinkRef extends MultiMarkdownReference {
     private static final Logger logger = Logger.getLogger(MultiMarkdownReferenceLinkRef.class);
 
-    public MultiMarkdownReferenceLinkRef(@NotNull MultiMarkdownWikiPageRef element, @NotNull TextRange textRange) {
+    public MultiMarkdownReferenceLinkRef(@NotNull MultiMarkdownLinkRef element, @NotNull TextRange textRange) {
         super(element, textRange);
     }
 
@@ -65,9 +66,8 @@ public class MultiMarkdownReferenceLinkRef extends MultiMarkdownReference {
         if (name != null) {
 
             FileReferenceList fileReferenceList = new FileReferenceListQuery(myElement.getProject())
-                    .gitHubWikiRules()
-                    .matchWikiRef((MultiMarkdownWikiPageRef) myElement)
-                    .accessibleWikiPageRefs()
+                    .matchLinkRef((MultiMarkdownLinkRef) myElement)
+                    .all()
                     .sorted();
 
             PsiFile[] files = fileReferenceList

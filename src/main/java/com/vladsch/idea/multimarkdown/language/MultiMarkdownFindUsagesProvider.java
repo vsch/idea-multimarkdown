@@ -25,13 +25,12 @@ import com.intellij.lang.cacheBuilder.WordOccurrence;
 import com.intellij.lang.cacheBuilder.WordsScanner;
 import com.intellij.lang.findUsages.FindUsagesProvider;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.tree.TokenSet;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.parser.MultiMarkdownLexer;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageTitle;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageText;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,7 +53,7 @@ public class MultiMarkdownFindUsagesProvider implements FindUsagesProvider {
 
         if (false) {
             MultiMarkdownWordsScanner wordsScanner = new MultiMarkdownWordsScanner(new MultiMarkdownLexer(),
-                    TokenSet.create(WIKI_LINK_REF, WIKI_LINK_TITLE),
+                    TokenSet.create(WIKI_LINK_REF, WIKI_LINK_TEXT),
                     TokenSet.create(COMMENT),
                     TokenSet.EMPTY,
                     TokenSet.create(NONE), 5);
@@ -66,7 +65,7 @@ public class MultiMarkdownFindUsagesProvider implements FindUsagesProvider {
         } else {
             DefaultWordsScanner wordsScanner = new DefaultWordsScanner(new MultiMarkdownLexer(),
                     //TokenSet.create(TEXT, WIKI_LINK_REF, WIKI_LINK),
-                    TokenSet.create(WIKI_LINK_REF, WIKI_LINK_TITLE),
+                    TokenSet.create(WIKI_LINK_REF, WIKI_LINK_TEXT),
                     TokenSet.create(COMMENT),
                     TokenSet.EMPTY,
                     TokenSet.EMPTY)
@@ -98,7 +97,7 @@ public class MultiMarkdownFindUsagesProvider implements FindUsagesProvider {
     public String getType(@NotNull PsiElement element) {
         if (element instanceof MultiMarkdownWikiPageRef) {
             return MultiMarkdownBundle.message("findusages.wikilink.page-ref");
-        } else if (element instanceof MultiMarkdownWikiPageTitle) {
+        } else if (element instanceof MultiMarkdownWikiPageText) {
             return MultiMarkdownBundle.message("findusages.wikilink.page-title");
         } else {
             return "";

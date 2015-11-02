@@ -54,7 +54,7 @@ import java.util.ArrayList;
 public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.ProjectFileResolver {
     private static final Logger logger = org.apache.log4j.Logger.getLogger("com.vladsch.idea.multimarkdown");
     private MultiMarkdownGlobalSettingsListener globalSettingsListener;
-    private static int licenseType;
+    private static int license_features;
 
     @NotNull
     public static String getProductName() {
@@ -66,12 +66,16 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
         return "1.2.0";
     }
 
-    public static boolean isLicensed(int licenseTypeFlags) {
-        return (licenseType & licenseTypeFlags) != 0;
+    public static boolean areAllLicensed(int licenseFeatures) {
+        return (license_features & licenseFeatures) == licenseFeatures;
+    }
+
+    public static boolean areSomeLicensed(int licenseFeatures) {
+        return (license_features & licenseFeatures) != 0;
     }
 
     public static boolean isLicensed() {
-        return licenseType != 0;
+        return license_features != 0;
     }
 
     private PluginClassLoader myClassLoader;
@@ -143,7 +147,7 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
         final MultiMarkdownGlobalSettings settings = MultiMarkdownGlobalSettings.getInstance();
         getClassLoader();
 
-        licenseType = 0;
+        license_features = 0;
 
         // get the tmp directory location
         try {
@@ -344,9 +348,9 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
 
     public void initLicense() {// load license information
         if (agent.isValidLicense() && agent.isValidActivation()) {
-            licenseType = agent.getLicenseTypeFlags();
+            license_features = agent.getLicenseFeatures();
         } else {
-            licenseType = 0;
+            license_features = 0;
         }
     }
 

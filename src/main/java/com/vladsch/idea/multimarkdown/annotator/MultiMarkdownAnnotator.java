@@ -53,21 +53,21 @@ public class MultiMarkdownAnnotator implements Annotator {
         PsiReference wikiPageRefReference = wikiPageRef != null ? wikiPageRef.getReference() : null;
 
         if (wikiPageRefReference != null) {
-            MultiMarkdownWikiPageTitle wikiPageTitle = (MultiMarkdownWikiPageTitle) MultiMarkdownPsiImplUtil.findChildByType(element, MultiMarkdownTypes.WIKI_LINK_TITLE);
+            MultiMarkdownWikiPageText wikiPageText = (MultiMarkdownWikiPageText) MultiMarkdownPsiImplUtil.findChildByType(element, MultiMarkdownTypes.WIKI_LINK_TEXT);
 
-            if (wikiPageTitle != null && wikiPageTitle.getName() != null) {
+            if (wikiPageText != null && wikiPageText.getName() != null) {
                 // see if the link title resolves to a page
                 MultiMarkdownFile containingFile = (MultiMarkdownFile) element.getContainingFile();
 
-                if (wikiPageTitle.getName().equals(wikiPageRef.getNameWithAnchor())) {
+                if (wikiPageText.getName().equals(wikiPageRef.getNameWithAnchor())) {
                     // can get rid off the text
-                    annotator = holder.createWeakWarningAnnotation(wikiPageTitle.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.redundant-page-title"));
+                    annotator = holder.createWeakWarningAnnotation(wikiPageText.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.redundant-page-title"));
                     annotator.registerFix(new DeleteWikiPageTitleQuickFix(element));
                 } else {
                     FileReferenceList accessibleWikiPageRefs = new FileReferenceListQuery(element.getProject())
                             .wantMarkdownFiles()
                             .inSource(containingFile)
-                            .matchWikiRef(wikiPageTitle.getName())
+                            .matchWikiRef(wikiPageText.getName())
                             .accessibleWikiPageRefs();
 
                     if (accessibleWikiPageRefs.size() == 1) {
@@ -81,8 +81,8 @@ public class MultiMarkdownAnnotator implements Annotator {
 
                             annotator.registerFix(new SwapWikiPageRefTitleQuickFix(element));
                             annotator.registerFix(new DeleteWikiPageRefQuickFix(element));
-                        } else if (accessibleWikiPageRefs.get()[0].getFileNameNoExtAsWikiRef().equals(wikiPageTitle.getName())) {
-                            annotator = holder.createWeakWarningAnnotation(wikiPageTitle.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.swap-ref-title"));
+                        } else if (accessibleWikiPageRefs.get()[0].getFileNameNoExtAsWikiRef().equals(wikiPageText.getName())) {
+                            annotator = holder.createWeakWarningAnnotation(wikiPageText.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.swap-ref-title"));
                             annotator.registerFix(new DeleteWikiPageTitleQuickFix(element));
                             annotator.registerFix(new DeleteWikiPageRefQuickFix(element));
                             annotator.registerFix(new SwapWikiPageRefTitleQuickFix(element));
@@ -97,7 +97,7 @@ public class MultiMarkdownAnnotator implements Annotator {
     @Override
     public void annotate(@NotNull final PsiElement element, @NotNull AnnotationHolder holder) {
         //noinspection StatementWithEmptyBody
-        if (element instanceof MultiMarkdownWikiPageTitle) {
+        if (element instanceof MultiMarkdownWikiPageText) {
             //Annotation annotator = null;
             //MultiMarkdownWikiLink wikiLink = (MultiMarkdownWikiLink) element.getParent();
             //if (wikiLink != null) annotator = checkWikiLinkSwapRefTitle(wikiLink, holder);

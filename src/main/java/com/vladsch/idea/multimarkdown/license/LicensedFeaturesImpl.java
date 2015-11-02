@@ -35,7 +35,7 @@ public class LicensedFeaturesImpl {
 
         // load the methods labeled with annotations
         // for now no method overloading is checked, all licensed annotations for a method name form a combined set of licensing
-        // that these support. Since only LicenseType.ALL will be used for now this is not a problem. Really need to create
+        // that these support. Since only Feature.ALL will be used for now this is not a problem. Really need to create
         // a compile time processor that will wrap the function and do all processing at compile time with no runtime overhead
         List<Method> methods = ReflectionUtil.getClassDeclaredMethods(forClass);
         Map<String, ArrayList<Method>> methodMap = new HashMap<String, ArrayList<Method>>();
@@ -108,7 +108,7 @@ public class LicensedFeaturesImpl {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         String methodName = stackTraceElements[1].getMethodName();
         assert licensedFeaturesMap.containsKey(methodName) : "isLicensed called from method " + methodName + " not annotated with @Licensed";
-        return MultiMarkdownPlugin.isLicensed(licensedFeaturesMap.get(methodName));
+        return MultiMarkdownPlugin.areAllLicensed(licensedFeaturesMap.get(methodName));
     }
 
     // this really needs to be implemented in a processor so that code is generated according to types

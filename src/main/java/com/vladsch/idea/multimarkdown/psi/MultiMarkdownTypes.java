@@ -106,7 +106,27 @@ public interface MultiMarkdownTypes {
     IElementType WIKI_LINK_REF = new MultiMarkdownTokenType("WIKI_LINK_REF");
     IElementType WIKI_LINK_REF_ANCHOR_MARKER = new MultiMarkdownTokenType("WIKI_LINK_REF_ANCHOR_MARKER");
     IElementType WIKI_LINK_REF_ANCHOR = new MultiMarkdownTokenType("WIKI_LINK_REF_ANCHOR");
-    IElementType WIKI_LINK_TITLE = new MultiMarkdownTokenType("WIKI_LINK_TITLE");
+    IElementType WIKI_LINK_TEXT = new MultiMarkdownTokenType("WIKI_LINK_TEXT");
+
+    IElementType IMAGE_LINK_REF_OPEN = new MultiMarkdownTokenType("IMAGE_LINK_REF_OPEN");
+    IElementType IMAGE_LINK_REF = new MultiMarkdownTokenType("IMAGE_LINK_REF");
+    IElementType IMAGE_LINK_REF_CLOSE = new MultiMarkdownTokenType("IMAGE_LINK_REF_CLOSE");
+    IElementType IMAGE_TITLE_MARKER = new MultiMarkdownTokenType("IMAGE_TITLE_MARKER");
+    IElementType IMAGE_TITLE = new MultiMarkdownTokenType("IMAGE_TITLE");
+    IElementType IMAGE_ALT_TEXT_OPEN = new MultiMarkdownTokenType("IMAGE_ALT_TEXT_OPEN");
+    IElementType IMAGE_ALT_TEXT = new MultiMarkdownTokenType("IMAGE_ALT_TEXT");
+    IElementType IMAGE_ALT_TEXT_CLOSE = new MultiMarkdownTokenType("IMAGE_ALT_TEXT_CLOSE");
+
+    IElementType LINK_REF_OPEN = new MultiMarkdownTokenType("LINK_REF_OPEN");
+    IElementType LINK_REF = new MultiMarkdownTokenType("LINK_REF");
+    IElementType LINK_REF_CLOSE = new MultiMarkdownTokenType("LINK_REF_CLOSE");
+    IElementType LINK_REF_TEXT_OPEN = new MultiMarkdownTokenType("LINK_REF_TEXT_OPEN");
+    IElementType LINK_REF_TEXT = new MultiMarkdownTokenType("LINK_REF_TEXT");
+    IElementType LINK_REF_TEXT_CLOSE = new MultiMarkdownTokenType("LINK_REF_TEXT_CLOSE");
+    IElementType LINK_REF_TITLE_MARKER = new MultiMarkdownTokenType("LINK_REF_TITLE_MARKER");
+    IElementType LINK_REF_TITLE = new MultiMarkdownTokenType("LINK_REF_TITLE");
+    IElementType LINK_REF_ANCHOR_MARKER = new MultiMarkdownTokenType("LINK_REF_ANCHOR_MARKER");
+    IElementType LINK_REF_ANCHOR = new MultiMarkdownTokenType("LINK_REF_ANCHOR");
 
     IElementType COMMENT = new MultiMarkdownElementType("COMMENT");
     IElementType WIKI_LINK = new MultiMarkdownElementType("WIKI_LINK");
@@ -123,8 +143,18 @@ public interface MultiMarkdownTypes {
                 return new MultiMarkdownWikiPageRefImpl(node);
             } else if (type == WIKI_LINK_REF_ANCHOR) {
                 return new MultiMarkdownWikiPageRefAnchorImpl(node);
-            } else if (type == WIKI_LINK_TITLE) {
-                return new MultiMarkdownWikiPageTitleImpl(node);
+            } else if (type == WIKI_LINK_TEXT) {
+                return new MultiMarkdownWikiPageTextImpl(node);
+            } else if (type == EXPLICIT_LINK) {
+                return new MultiMarkdownExplicitLinkImpl(node);
+            } else if (type == LINK_REF) {
+                return new MultiMarkdownLinkRefImpl(node);
+            } else if (type == LINK_REF_ANCHOR) {
+                return new MultiMarkdownLinkRefAnchorImpl(node);
+            } else if (type == LINK_REF_TEXT) {
+                return new MultiMarkdownLinkRefTextImpl(node);
+            } else if (type == LINK_REF_TITLE) {
+                return new MultiMarkdownLinkRefTitleImpl(node);
             }
             throw new AssertionError("Unknown element type: " + type);
         }

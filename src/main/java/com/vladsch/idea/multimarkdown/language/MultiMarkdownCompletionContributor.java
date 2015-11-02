@@ -61,7 +61,7 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
 
                         IElementType elementType = element.getNode().getElementType();
 
-                        if (elementType == WIKI_LINK_TITLE) {
+                        if (elementType == WIKI_LINK_TEXT) {
                             PsiElement parent = element.getParent();
                             while (parent != null && !(parent instanceof MultiMarkdownWikiLink) && !(parent instanceof MultiMarkdownFile)) {
                                 parent = parent.getParent();
