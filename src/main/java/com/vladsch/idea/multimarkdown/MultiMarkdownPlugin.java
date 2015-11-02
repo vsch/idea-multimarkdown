@@ -54,7 +54,7 @@ import java.util.ArrayList;
 public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.ProjectFileResolver {
     private static final Logger logger = org.apache.log4j.Logger.getLogger("com.vladsch.idea.multimarkdown");
     private MultiMarkdownGlobalSettingsListener globalSettingsListener;
-    private static boolean isLicensed;
+    private static int licenseType;
 
     @NotNull
     public static String getProductName() {
@@ -66,8 +66,12 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
         return "1.2.0";
     }
 
+    public static boolean isLicensed(int licenseTypeFlags) {
+        return (licenseType & licenseTypeFlags) != 0;
+    }
+
     public static boolean isLicensed() {
-        return isLicensed;
+        return licenseType != 0;
     }
 
     private PluginClassLoader myClassLoader;
@@ -139,7 +143,7 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
         final MultiMarkdownGlobalSettings settings = MultiMarkdownGlobalSettings.getInstance();
         getClassLoader();
 
-        isLicensed = false;
+        licenseType = 0;
 
         // get the tmp directory location
         try {
@@ -340,10 +344,9 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
 
     public void initLicense() {// load license information
         if (agent.isValidLicense() && agent.isValidActivation()) {
-            isLicensed = true;
+            licenseType = agent.getLicenseTypeFlags();
         } else {
-            // TODO: inform of failed activation
-            isLicensed = false;
+            licenseType = 0;
         }
     }
 

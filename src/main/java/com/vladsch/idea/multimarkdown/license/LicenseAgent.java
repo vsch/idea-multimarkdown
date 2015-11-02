@@ -86,6 +86,14 @@ public class LicenseAgent {
     private static final String STATUS_ERROR = "error";
     private static final String DATE_FORMAT = "yyyy-MM-dd";
 
+    public static final String LICENSE_TYPE_TRIAL = "trial";
+    public static final String LICENSE_TYPE_SUBSCRIPTION = "subscription";
+    public static final String LICENSE_TYPE_LICENSE = "license";
+
+    public static final int LICENSE_FLAG_TRIAL = 1;
+    public static final int LICENSE_FLAG_SUBSCRIPTION = 2;
+    public static final int LICENSE_FLAG_LICENSE = 4;
+
     private String license_code;
     private String activation_code;
     private JsonObject activation;
@@ -93,6 +101,8 @@ public class LicenseAgent {
     private String product_version;
     private JsonObject json; // last server response
     private boolean remove_license;
+    private String license_type;
+    private int licenseTypeFlags;
 
     public boolean isRemoveLicense() {
         return remove_license;
@@ -319,6 +329,12 @@ public class LicenseAgent {
                     ) {
                 license_expires = activation.getString(LICENSE_EXPIRES);
                 product_version = activation.getString(PRODUCT_VERSION);
+                license_type = activation.getString(LICENSE_TYPE);
+                if (license_type == null) license_type = "";
+                if (license_type.equals(LICENSE_TYPE_TRIAL)) licenseTypeFlags = LICENSE_FLAG_TRIAL;
+                else if (license_type.equals(LICENSE_TYPE_SUBSCRIPTION)) licenseTypeFlags = LICENSE_FLAG_SUBSCRIPTION;
+                else if (license_type.equals(LICENSE_TYPE_LICENSE)) licenseTypeFlags = LICENSE_FLAG_LICENSE;
+                else licenseTypeFlags = 0xfffffff; // unknown, make all
                 return true;
             }
         }
@@ -327,10 +343,11 @@ public class LicenseAgent {
 
     @NotNull
     public String getLicenseType() {
-        if (activation != null && activation.containsKey(LICENSE_TYPE)) {
-            return activation.getString(LICENSE_TYPE);
-        }
-        return "";
+        return license_type;
+    }
+
+    public int getLicenseTypeFlags() {
+        return licenseTypeFlags;
     }
 
     @NotNull
