@@ -876,7 +876,6 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         }
 
         public void visit(WikiLinkNode node) {
-            String text = node.getText();
             SyntheticNodes nodes = new SyntheticNodes(node, WIKI_LINK_REF, 2, WIKI_LINK_OPEN, WIKI_LINK_CLOSE);
 
             if (githubWikiLinks) {
@@ -888,50 +887,6 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
             }
 
             addTokens(nodes);
-
-
-            //int pos = 0;
-            //
-            //if ((pos = text.indexOf("|")) >= 0) {
-            //    addToken(node.getStartIndex(), node.getStartIndex() + 2, WIKI_LINK_OPEN);
-            //    if (githubWikiLinks) {
-            //        int anchorPos = text.indexOf('#', pos + 1);
-            //        addToken(node.getStartIndex() + 2, node.getStartIndex() + 2 + pos, WIKI_LINK_TITLE);
-            //        addToken(node.getStartIndex() + 2 + pos, node.getStartIndex() + 2 + pos + 1, WIKI_LINK_SEPARATOR);
-            //        if (anchorPos >= 0) {
-            //            addToken(node.getStartIndex() + 2 + pos + 1, node.getStartIndex() + 2 + anchorPos, WIKI_LINK_REF);
-            //            addToken(node.getStartIndex() + 2 + anchorPos, node.getStartIndex() + 2 + anchorPos + 1, WIKI_LINK_REF_ANCHOR_MARKER);
-            //            addToken(node.getStartIndex() + 2 + anchorPos + 1, node.getEndIndex() - 2, WIKI_LINK_REF_ANCHOR);
-            //        } else {
-            //            addToken(node.getStartIndex() + 2 + pos + 1, node.getEndIndex() - 2, WIKI_LINK_REF);
-            //        }
-            //        addToken(node.getEndIndex() - 2, node.getEndIndex(), WIKI_LINK_CLOSE);
-            //    } else {
-            //        int anchorPos = text.indexOf('#');
-            //        if (anchorPos > pos) anchorPos = -1;
-            //        if (anchorPos >= 0) {
-            //            addToken(node.getStartIndex() + 2, node.getStartIndex() + 2 + anchorPos, WIKI_LINK_REF);
-            //            addToken(node.getStartIndex() + 2 + anchorPos, node.getStartIndex() + 2 + anchorPos + 1, WIKI_LINK_REF_ANCHOR_MARKER);
-            //            addToken(node.getStartIndex() + 2 + anchorPos + 1, node.getStartIndex() + 2 + pos, WIKI_LINK_REF_ANCHOR);
-            //        } else {
-            //            addToken(node.getStartIndex() + 2, node.getStartIndex() + 2 + pos, WIKI_LINK_REF);
-            //        }
-            //        addToken(node.getStartIndex() + 2 + pos, node.getStartIndex() + 2 + pos + 1, WIKI_LINK_SEPARATOR);
-            //        addToken(node.getStartIndex() + 2 + pos + 1, node.getEndIndex() - 2, WIKI_LINK_TITLE);
-            //        addToken(node.getEndIndex() - 2, node.getEndIndex(), WIKI_LINK_CLOSE);
-            //    }
-            //} else {
-            //    addToken(node.getStartIndex(), node.getStartIndex() + 2, WIKI_LINK_OPEN);
-            //    int anchorPos = text.indexOf('#');
-            //    if (anchorPos >= 0) {
-            //        addToken(node.getStartIndex() + 2, node.getStartIndex() + 2 + anchorPos, WIKI_LINK_REF);
-            //        addToken(node.getStartIndex() + 2 + anchorPos, node.getStartIndex() + 2 + anchorPos + 1, WIKI_LINK_REF_ANCHOR_MARKER);
-            //        addToken(node.getStartIndex() + 2 + anchorPos + 1, node.getEndIndex() - 2, WIKI_LINK_REF_ANCHOR);
-            //    } else {
-            //        addToken(node.getStartIndex() + 2, node.getEndIndex() - 2, WIKI_LINK_REF);
-            //    }
-            //    addToken(node.getEndIndex() - 2, node.getEndIndex(), WIKI_LINK_CLOSE);
-            //}
         }
 
         public void visit(QuotedNode node) {
