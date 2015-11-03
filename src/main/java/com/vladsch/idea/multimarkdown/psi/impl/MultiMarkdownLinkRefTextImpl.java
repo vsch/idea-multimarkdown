@@ -32,6 +32,7 @@ public class MultiMarkdownLinkRefTextImpl extends MultiMarkdownNamedElementImpl 
     public String getMissingElementNamespace() {
         String linkRef = MultiMarkdownPsiImplUtil.getLinkRef((MultiMarkdownExplicitLink) getParent());
         FilePathInfo filePathInfo = new FilePathInfo(getContainingFile().getVirtualFile());
+        if (linkRef.isEmpty()) linkRef = filePathInfo.getFilePath();
         return MISSING_ELEMENT_NAME_SPACE + (linkRef.isEmpty() ? linkRef : linkRef + "::");
     }
 

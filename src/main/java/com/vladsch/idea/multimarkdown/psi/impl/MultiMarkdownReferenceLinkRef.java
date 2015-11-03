@@ -20,6 +20,7 @@ import com.intellij.psi.PsiElementResolveResult;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.ResolveResult;
 import com.intellij.util.IncorrectOperationException;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownExplicitLink;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkRef;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
@@ -50,11 +51,11 @@ public class MultiMarkdownReferenceLinkRef extends MultiMarkdownReference {
     @Override
     public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
         // we will handle this by renaming the element to point to the new location
-        if (myElement instanceof MultiMarkdownWikiPageRef && element instanceof PsiFile) {
+        if (myElement instanceof MultiMarkdownExplicitLink && element instanceof PsiFile) {
             FileReferenceLinkGitHubRules fileReferenceLink = new FileReferenceLinkGitHubRules(myElement.getContainingFile(), ((PsiFile) element));
-            String wikiPageRef = fileReferenceLink.getWikiPageRef();
+            String linkRef = fileReferenceLink.getLinkRef();
             // this will create a new reference and loose connection to this one
-            return myElement.setName(wikiPageRef, MultiMarkdownNamedElement.REASON_FILE_RENAMED);
+            return myElement.setName(linkRef, MultiMarkdownNamedElement.REASON_FILE_RENAMED);
         }
         return super.bindToElement(element);
     }
@@ -67,6 +68,7 @@ public class MultiMarkdownReferenceLinkRef extends MultiMarkdownReference {
 
             FileReferenceList fileReferenceList = new FileReferenceListQuery(myElement.getProject())
                     .matchLinkRef((MultiMarkdownLinkRef) myElement)
+                    .wantMarkdownFiles()
                     .all()
                     .sorted();
 

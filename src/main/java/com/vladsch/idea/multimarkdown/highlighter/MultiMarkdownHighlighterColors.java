@@ -78,6 +78,7 @@ public class MultiMarkdownHighlighterColors {
     public static final TextAttributesKey LINK_REF_ANCHOR_ATTR_KEY = createKey("LINK_REF_ANCHOR", AUTO_LINK_ATTR_KEY);
     public static final TextAttributesKey LINK_REF_ANCHOR_MARKER_ATTR_KEY = createKey("LINK_REF_ANCHOR_MARKER", AUTO_LINK_ATTR_KEY);
     public static final TextAttributesKey IMAGE_LINK_REF_ATTR_KEY = createKey("IMAGE_LINK_REF", LINK_REF_ATTR_KEY);
+    public static final TextAttributesKey IMAGE_LINK_REF_TITLE_ATTR_KEY = createKey("IMAGE_LINK_REF_TITLE", LINK_REF_ATTR_KEY);
     public static final TextAttributesKey IMAGE_ALT_TEXT_ATTR_KEY = createKey("IMAGE_ALT_TEXT");
     public static final TextAttributesKey LIST_ITEM_ATTR_KEY = createKey("LIST_ITEM");
     public static final TextAttributesKey MAIL_LINK_ATTR_KEY = createKey("MAIL_LINK");

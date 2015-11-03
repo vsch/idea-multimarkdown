@@ -24,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class MultiMarkdownExplicitLinkImpl extends ASTWrapperPsiElement implements MultiMarkdownExplicitLink {
     public static String getElementText(@NotNull String name, @NotNull String text, @Nullable String title) {
-        return "[" + text + "](" + name + (title != null && title.length() > 0 ? "'" + title + "'" : "") + ")";
+        return "[" + text + "](" + name + (title != null && title.length() > 0 ? " '" + title + "'" : "") + ")\n";
     }
 
     public MultiMarkdownExplicitLinkImpl(ASTNode node) {
@@ -32,7 +32,7 @@ public class MultiMarkdownExplicitLinkImpl extends ASTWrapperPsiElement implemen
     }
 
     public void accept(@NotNull PsiElementVisitor visitor) {
-        if (visitor instanceof MultiMarkdownVisitor) ((MultiMarkdownVisitor) visitor).visitElement(this);
+        if (visitor instanceof MultiMarkdownVisitor) visitor.visitElement(this);
         else super.accept(visitor);
     }
 

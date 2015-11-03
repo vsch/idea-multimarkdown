@@ -843,8 +843,8 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
             if (MultiMarkdownPlugin.isLicensed()) {
                 SyntheticNodes nodes = new SyntheticNodes(currentChars, node, IMAGE, IMAGE_ALT_TEXT, 2, IMAGE_ALT_TEXT_OPEN, 1, IMAGE_LINK_REF_CLOSE);
 
-                if (!node.title.isEmpty() && nodes.chopLastTail(node.title, IMAGE_TITLE, IMAGE_TITLE_MARKER)) {
-                    nodes.chopTail(-1, IMAGE_TITLE_MARKER);
+                if (!node.title.isEmpty() && nodes.chopLastTail(node.title, IMAGE_LINK_REF_TITLE, IMAGE_LINK_REF_TITLE_MARKER)) {
+                    nodes.chopTail(-1, IMAGE_LINK_REF_TITLE_MARKER);
                 }
 
                 nodes.chopLastTail(node.url, IMAGE_LINK_REF);
@@ -857,7 +857,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
                 }
 
                 // need to process children with the current node
-                nodes.trimToNodeType(IMAGE_ALT_TEXT_CLOSE, IMAGE_LINK_REF_OPEN, IMAGE_LINK_REF);
+                nodes.dropWhiteSpace(IMAGE_ALT_TEXT_CLOSE, IMAGE_LINK_REF_OPEN, IMAGE_LINK_REF);
                 addTokensWithChildren(nodes);
             } else {
                 addTokenWithChildren(node, IMAGE);
@@ -887,7 +887,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
                 }
 
                 // need to process children with the current node
-                nodes.trimToNodeType(LINK_REF_TEXT_CLOSE, LINK_REF_OPEN, LINK_REF, LINK_REF_ANCHOR_MARKER, LINK_REF_ANCHOR);
+                nodes.dropWhiteSpace(LINK_REF_TEXT_CLOSE, LINK_REF_OPEN, LINK_REF, LINK_REF_ANCHOR_MARKER, LINK_REF_ANCHOR);
                 // need to process children with the current node
                 addTokensWithChildren(nodes);
             } else {

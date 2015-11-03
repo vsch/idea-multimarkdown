@@ -39,6 +39,7 @@ public class MultiMarkdownWikiPageTextImpl extends MultiMarkdownNamedElementImpl
         String pageRef = MultiMarkdownPsiImplUtil.getPageRefWithAnchor((MultiMarkdownWikiLink) getParent());
         FilePathInfo filePathInfo = new FilePathInfo(getContainingFile().getVirtualFile());
         String wikiHome = filePathInfo.getWikiHome();
+        if (pageRef.isEmpty()) pageRef = filePathInfo.getFileNameAsWikiRef();
         return MISSING_ELEMENT_NAME_SPACE + (wikiHome.isEmpty() ? wikiHome : wikiHome + "::") + (pageRef.isEmpty() ? pageRef : pageRef + "::");
     }
 

@@ -111,8 +111,8 @@ public interface MultiMarkdownTypes {
     IElementType IMAGE_LINK_REF_OPEN = new MultiMarkdownTokenType("IMAGE_LINK_REF_OPEN");
     IElementType IMAGE_LINK_REF = new MultiMarkdownTokenType("IMAGE_LINK_REF");
     IElementType IMAGE_LINK_REF_CLOSE = new MultiMarkdownTokenType("IMAGE_LINK_REF_CLOSE");
-    IElementType IMAGE_TITLE_MARKER = new MultiMarkdownTokenType("IMAGE_TITLE_MARKER");
-    IElementType IMAGE_TITLE = new MultiMarkdownTokenType("IMAGE_TITLE");
+    IElementType IMAGE_LINK_REF_TITLE_MARKER = new MultiMarkdownTokenType("IMAGE_TITLE_MARKER");
+    IElementType IMAGE_LINK_REF_TITLE = new MultiMarkdownTokenType("IMAGE_TITLE");
     IElementType IMAGE_ALT_TEXT_OPEN = new MultiMarkdownTokenType("IMAGE_ALT_TEXT_OPEN");
     IElementType IMAGE_ALT_TEXT = new MultiMarkdownTokenType("IMAGE_ALT_TEXT");
     IElementType IMAGE_ALT_TEXT_CLOSE = new MultiMarkdownTokenType("IMAGE_ALT_TEXT_CLOSE");

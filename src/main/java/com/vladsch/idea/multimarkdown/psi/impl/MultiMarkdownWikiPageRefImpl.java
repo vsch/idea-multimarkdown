@@ -101,14 +101,9 @@ public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl 
         if (projectComponent == null) return this;
 
         if (projectComponent.getRefactoringRenameFlags() != RENAME_NO_FLAGS) renameFlags = projectComponent.getRefactoringRenameFlags();
-        else if (((MultiMarkdownReferenceWikiPageRef) reference).isResolveRefMissing()) renameFlags &= ~RENAME_KEEP_ANCHOR;
+        else if (reference.isResolveRefMissing()) renameFlags &= ~RENAME_KEEP_ANCHOR;
 
-        MultiMarkdownNamedElement element = MultiMarkdownPsiImplUtil.setName(this, newName, renameFlags);
-        //logger.info("setName on " + this.toString() + " from " + oldName + " to " + element.getName());
-        //reference.notifyNamedElementChange(this, element);
-        //reference.invalidateResolveResults();
-
-        return element;
+        return MultiMarkdownPsiImplUtil.setName(this, newName, renameFlags);
     }
 
     @Override

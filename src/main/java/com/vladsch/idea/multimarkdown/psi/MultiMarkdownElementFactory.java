@@ -44,7 +44,7 @@ public class MultiMarkdownElementFactory {
     }
 
     public static MultiMarkdownExplicitLink createExplicitLink(@NotNull Project project, @NotNull String name, @Nullable String text, @Nullable String title) {
-        final MultiMarkdownFile file = createFile(project, MultiMarkdownExplicitLinkImpl.getElementText(name, text == null ? "" : name, title));
+        final MultiMarkdownFile file = createFile(project, MultiMarkdownExplicitLinkImpl.getElementText(name, text == null ? "" : text, title));
         return (MultiMarkdownExplicitLink) file.getFirstChild();
     }
 

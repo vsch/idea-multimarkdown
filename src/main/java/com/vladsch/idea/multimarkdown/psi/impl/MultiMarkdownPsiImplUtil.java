@@ -220,6 +220,18 @@ public class MultiMarkdownPsiImplUtil {
      * 
      */
 
+    @NotNull
+    public static
+    String getLinkRefWithAnchor(@Nullable MultiMarkdownExplicitLink element) {
+        ASTNode pageRefNode = element == null ? null : element.getNode().findChildByType(LINK_REF);
+        if (pageRefNode != null) {
+            ASTNode pageRefAnchorNode = element.getNode().findChildByType(LINK_REF_ANCHOR);
+            return pageRefNode.getText() + (pageRefAnchorNode == null ? "" : "#" + pageRefAnchorNode.getText());
+        } else {
+            return "";
+        }
+    }
+
     public static MultiMarkdownNamedElement setName(MultiMarkdownLinkRef element, String newName, int renameFlags) {
         ASTNode pageRefNode = element.getNode();
         String title = null;
@@ -256,16 +268,16 @@ public class MultiMarkdownPsiImplUtil {
                 }
             }
 
-            if ((renameFlags & RENAME_KEEP_TEXT) != 0) {
+            if ((renameFlags & RENAME_KEEP_TITLE) != 0) {
                 ASTNode pageRefTitleNode = element.getParent().getNode().findChildByType(LINK_REF_TITLE);
                 if (pageRefTitleNode != null) {
                     title = pageRefTitleNode.getText();
                 }
             }
 
-            MultiMarkdownExplicitLink wikiLink = MultiMarkdownElementFactory.createExplicitLink(element.getProject(), newName, text, title);
-            element.getParent().replace(wikiLink);
-            MultiMarkdownLinkRef newElement = (MultiMarkdownLinkRef) findChildByType(wikiLink, LINK_REF);
+            MultiMarkdownExplicitLink link = MultiMarkdownElementFactory.createExplicitLink(element.getProject(), newName, text, title);
+            element.getParent().replace(link);
+            MultiMarkdownLinkRef newElement = (MultiMarkdownLinkRef) findChildByType(link, LINK_REF);
             if (newElement != null) return newElement;
         }
         return element;
@@ -302,10 +314,9 @@ public class MultiMarkdownPsiImplUtil {
 
     public static MultiMarkdownNamedElement setName(MultiMarkdownLinkRefTitle element, String newName, int reason) {
         //ASTNode pageRefAnchor = element.getNode();
-        ASTNode pageTitleNode = element.getParent().getNode().findChildByType(LINK_REF_TITLE);
         ASTNode pageRefNode = element.getParent().getNode().findChildByType(LINK_REF);
         if (pageRefNode != null) {
-            MultiMarkdownExplicitLink explicitLink = MultiMarkdownElementFactory.createExplicitLink(element.getProject(), pageRefNode.getText() + "#" + newName, "text", pageTitleNode == null ? null : pageTitleNode.getText());
+            MultiMarkdownExplicitLink explicitLink = MultiMarkdownElementFactory.createExplicitLink(element.getProject(), pageRefNode.getText(), "text", newName);
             MultiMarkdownLinkRefTitle newElement = (MultiMarkdownLinkRefTitle) findChildByType(explicitLink, LINK_REF_TITLE);
             if (newElement != null) {
                 element.replace(newElement);

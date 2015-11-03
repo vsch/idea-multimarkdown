@@ -135,6 +135,7 @@ public class MultiMarkdownColorSettingsPage implements ColorSettingsPage {
             addTextAttributesKey("link-ref-anchor", LINK_REF_ANCHOR_ATTR_KEY);
             addTextAttributesKey("link-ref-anchor-marker", LINK_REF_ANCHOR_MARKER_ATTR_KEY);
             addTextAttributesKey("image-link-ref", IMAGE_LINK_REF_ATTR_KEY);
+            addTextAttributesKey("image-link-ref-title", IMAGE_LINK_REF_TITLE_ATTR_KEY);
             addTextAttributesKey("image-alt-text", IMAGE_ALT_TEXT_ATTR_KEY);
         }
     }
@@ -195,10 +196,9 @@ public class MultiMarkdownColorSettingsPage implements ColorSettingsPage {
     @NotNull
     public String getDemoText() {
         if (MultiMarkdownPlugin.isLicensed()) {
-        return SAMPLE_MARKDOWN_DOCUMENT;
+            return LICENSED_SAMPLE_MARKDOWN_DOCUMENT;
         } else {
-        return LICENSED_SAMPLE_MARKDOWN_DOCUMENT;
-
+            return SAMPLE_MARKDOWN_DOCUMENT;
         }
     }
 

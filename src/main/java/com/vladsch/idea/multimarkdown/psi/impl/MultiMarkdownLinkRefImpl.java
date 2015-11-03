@@ -20,10 +20,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownExplicitLink;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkRef;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -49,7 +48,7 @@ public class MultiMarkdownLinkRefImpl extends MultiMarkdownNamedElementImpl impl
 
     @Override
     public String getDisplayName() {
-        return getParent() instanceof MultiMarkdownWikiLink  ? ((MultiMarkdownWikiLink) getParent()).getDisplayName() : getFileName();
+        return getParent() instanceof MultiMarkdownExplicitLink ? ((MultiMarkdownExplicitLink) getParent()).getDisplayName() : getFileName();
     }
 
     @Override
@@ -59,14 +58,15 @@ public class MultiMarkdownLinkRefImpl extends MultiMarkdownNamedElementImpl impl
 
     @Override
     public String getFileNameWithAnchor() {
-        String anchorText = MultiMarkdownPsiImplUtil.getPageRefAnchor((MultiMarkdownWikiLink) getParent());
+        String anchorText = MultiMarkdownPsiImplUtil.getLinkRefAnchor((MultiMarkdownExplicitLink) getParent());
         FilePathInfo pathInfo = new FilePathInfo((getName() == null ? "" : getName()) + (anchorText.isEmpty() ? anchorText : "#" + anchorText));
         return FilePathInfo.wikiRefAsFileNameWithExt(pathInfo.getFileName()) + pathInfo.getAnchor();
     }
 
     @Override
     public String getNameWithAnchor() {
-        return MultiMarkdownPsiImplUtil.getPageRefWithAnchor((MultiMarkdownWikiLink) getParent());
+        PsiElement parent = getParent();
+        return MultiMarkdownPsiImplUtil.getLinkRefWithAnchor((MultiMarkdownExplicitLink) parent);
     }
 
     @Override
@@ -94,14 +94,9 @@ public class MultiMarkdownLinkRefImpl extends MultiMarkdownNamedElementImpl impl
         if (projectComponent == null) return this;
 
         if (projectComponent.getRefactoringRenameFlags() != RENAME_NO_FLAGS) renameFlags = projectComponent.getRefactoringRenameFlags();
-        else if (((MultiMarkdownReferenceWikiPageRef) reference).isResolveRefMissing()) renameFlags &= ~RENAME_KEEP_ANCHOR;
+        else if (reference.isResolveRefMissing()) renameFlags &= ~RENAME_KEEP_ANCHOR;
 
-        MultiMarkdownNamedElement element = MultiMarkdownPsiImplUtil.setName(this, newName, renameFlags);
-        //logger.info("setName on " + this.toString() + " from " + oldName + " to " + element.getName());
-        //reference.notifyNamedElementChange(this, element);
-        //reference.invalidateResolveResults();
-
-        return element;
+        return MultiMarkdownPsiImplUtil.setName(this, newName, renameFlags);
     }
 
     @Override
