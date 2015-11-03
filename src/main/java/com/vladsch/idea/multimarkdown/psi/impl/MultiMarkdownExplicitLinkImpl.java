@@ -17,14 +17,35 @@ package com.vladsch.idea.multimarkdown.psi.impl;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
+import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
+import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownExplicitLink;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownVisitor;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
+import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import com.vladsch.idea.multimarkdown.util.GithubRepo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class MultiMarkdownExplicitLinkImpl extends ASTWrapperPsiElement implements MultiMarkdownExplicitLink {
     public static String getElementText(@NotNull String name, @NotNull String text, @Nullable String title) {
         return "[" + text + "](" + name + (title != null && title.length() > 0 ? " '" + title + "'" : "") + ")\n";
+    }
+
+    @Override
+    @NotNull
+    public String getMissingElementNameSpace(@NotNull String prefix, boolean addLinkRef) {
+        MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(getProject());
+        FilePathInfo filePathInfo = new FilePathInfo(getContainingFile().getVirtualFile());
+        GithubRepo githubRepo = projectComponent != null ? projectComponent.getGithubRepo(filePathInfo.getPath()) : null;
+        String vcsHome = githubRepo != null ? githubRepo.getBasePath() + "::" : "";
+
+        if (addLinkRef) {
+            String pageRef = MultiMarkdownPsiImplUtil.getLinkRefWithAnchor(this);
+            if (pageRef.isEmpty()) pageRef = filePathInfo.getFileNameAsWikiRef();
+            return prefix + (vcsHome.isEmpty() ? vcsHome : vcsHome + "::") + (pageRef.isEmpty() ? pageRef : pageRef + "::");
+        }
+        return prefix + (vcsHome.isEmpty() ? vcsHome : vcsHome + "::");
     }
 
     public MultiMarkdownExplicitLinkImpl(ASTNode node) {

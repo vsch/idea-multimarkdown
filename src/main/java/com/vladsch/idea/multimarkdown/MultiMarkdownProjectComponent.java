@@ -266,6 +266,10 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         return refactoringRenameFlags;
     }
 
+    public int getRefactoringRenameFlags(int defaultFlags) {
+        return refactoringRenameFlags == MultiMarkdownNamedElement.RENAME_NO_FLAGS ? defaultFlags : refactoringRenameFlags;
+    }
+
     public void pushRefactoringRenameFlags(int refactoringReason) {
         this.refactoringRenameFlagsStack[refactoringRenameStack++] = this.refactoringRenameFlags;
         this.refactoringRenameFlags = refactoringReason;

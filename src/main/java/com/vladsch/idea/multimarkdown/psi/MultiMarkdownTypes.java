@@ -51,7 +51,6 @@ public interface MultiMarkdownTypes {
     IElementType DEFINITION = new MultiMarkdownElementType("DEFINITION");
     IElementType DEFINITION_LIST = new MultiMarkdownElementType("DEFINITION_LIST");
     IElementType DEFINITION_TERM = new MultiMarkdownElementType("DEFINITION_TERM");
-    IElementType EXPLICIT_LINK = new MultiMarkdownElementType("EXPLICIT_LINK");
     IElementType FOOTNOTE = new MultiMarkdownElementType("FOOTNOTE");
     IElementType FOOTNOTE_REF = new MultiMarkdownElementType("FOOTNOTE_REF");
     IElementType HEADER_LEVEL_1 = new MultiMarkdownTokenType("HEADER_LEVEL_1");
@@ -130,6 +129,7 @@ public interface MultiMarkdownTypes {
 
     IElementType COMMENT = new MultiMarkdownElementType("COMMENT");
     IElementType WIKI_LINK = new MultiMarkdownElementType("WIKI_LINK");
+    IElementType EXPLICIT_LINK = new MultiMarkdownElementType("EXPLICIT_LINK");
 
     class Factory {
 

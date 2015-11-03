@@ -17,8 +17,7 @@ package com.vladsch.idea.multimarkdown.psi.impl;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRefAnchor;
+import com.vladsch.idea.multimarkdown.psi.*;
 import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -30,11 +29,8 @@ public class MultiMarkdownWikiPageRefAnchorImpl extends MultiMarkdownNamedElemen
     @NotNull
     @Override
     public String getMissingElementNamespace() {
-        String pageRef = MultiMarkdownPsiImplUtil.getPageRef((MultiMarkdownWikiLink) getParent());
-        FilePathInfo filePathInfo = new FilePathInfo(getContainingFile().getVirtualFile());
-        String wikiHome = filePathInfo.getWikiHome();
-        if (pageRef.isEmpty()) pageRef = filePathInfo.getFileNameAsWikiRef();
-        return MISSING_ELEMENT_NAME_SPACE + (wikiHome.isEmpty() ? wikiHome : wikiHome + "::") + (pageRef.isEmpty() ? pageRef : pageRef + "::");
+        assert getParent() instanceof MultiMarkdownWikiLink;
+        return ((MultiMarkdownWikiLink) getParent()).getMissingElementNameSpace(MISSING_ELEMENT_NAME_SPACE, true);
     }
 
     public MultiMarkdownWikiPageRefAnchorImpl(ASTNode node) {

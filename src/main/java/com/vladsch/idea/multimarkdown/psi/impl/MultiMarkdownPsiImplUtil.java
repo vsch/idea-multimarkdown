@@ -33,160 +33,181 @@ import com.intellij.psi.tree.IElementType;
 import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
 import com.vladsch.idea.multimarkdown.psi.*;
 import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.*;
 import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement.*;
+import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.*;
 
 public class MultiMarkdownPsiImplUtil {
-    @NotNull
-    public static String getPageRef(@Nullable MultiMarkdownWikiLink element) {
-        ASTNode pageRefNode = element == null ? null : element.getNode().findChildByType(WIKI_LINK_REF);
-        if (pageRefNode != null) {
-            return pageRefNode.getText();
-        } else {
-            return "";
+    private static final Logger logger = Logger.getLogger(MultiMarkdownPsiImplUtil.class);
+
+    final public static LinkRefElementTypes WIKI_LINK_ELEMENT = new LinkRefElementTypes(WIKI_LINK, WIKI_LINK_REF, WIKI_LINK_TEXT, WIKI_LINK_REF_ANCHOR);
+    final public static LinkRefElementTypes EXPLICIT_LINK_ELEMENT = new LinkRefElementTypes(EXPLICIT_LINK, LINK_REF, LINK_REF_TEXT, LINK_REF_ANCHOR, LINK_REF_TITLE);
+
+    static class LinkRefElementTypes {
+        @NotNull public final IElementType parentType;
+        @NotNull public final IElementType linkRefType;
+        @NotNull public final IElementType textType;
+        @NotNull public final IElementType anchorType;
+        @Nullable public final IElementType titleType;
+
+        public LinkRefElementTypes(@NotNull IElementType parentType, @NotNull IElementType linkRefType, @NotNull IElementType textType, @NotNull IElementType anchorType) {
+            this(parentType, linkRefType, textType, anchorType, null);
+        }
+
+        public LinkRefElementTypes(@NotNull IElementType parentType, @NotNull IElementType linkRefType, @NotNull IElementType textType, @NotNull IElementType anchorType, @Nullable IElementType titleType) {
+            this.parentType = parentType;
+            this.linkRefType = linkRefType;
+            this.textType = textType;
+            this.anchorType = anchorType;
+            this.titleType = titleType;
         }
     }
 
-    @NotNull
-    public static
-    String getPageRefWithAnchor(@Nullable MultiMarkdownWikiLink element) {
-        ASTNode pageRefNode = element == null ? null : element.getNode().findChildByType(WIKI_LINK_REF);
-        if (pageRefNode != null) {
-            ASTNode pageRefAnchorNode = element.getNode().findChildByType(WIKI_LINK_REF_ANCHOR);
-            return pageRefNode.getText() + (pageRefAnchorNode == null ? "" : "#" + pageRefAnchorNode.getText());
-        } else {
-            return "";
-        }
-    }
-
-    @NotNull
-    public static
-    String getPageRefAnchor(@Nullable MultiMarkdownWikiLink element) {
-        ASTNode pageRefAnchorNode = element == null ? null : element.getNode().findChildByType(WIKI_LINK_REF_ANCHOR);
-        if (pageRefAnchorNode != null) {
-            return pageRefAnchorNode.getText();
-        } else {
-            return "";
-        }
-    }
-
-    @NotNull
-    public static
-    String getPageText(@Nullable MultiMarkdownWikiLink element) {
-        ASTNode pageTitleNode = element == null ? null : element.getNode().findChildByType(WIKI_LINK_TEXT);
-        if (pageTitleNode != null) {
-            return pageTitleNode.getText();
-        } else {
-            return "";
-        }
-    }
-
-    public static String getName(@Nullable MultiMarkdownWikiLink element) {
-        return getPageRef(element);
-    }
-
-    @Nullable
-    public static PsiElement findChildByType(@NotNull PsiElement parentElement, @NotNull IElementType childType) {
-        PsiElement childElement = null;
-
-        for (PsiElement child : parentElement.getChildren()) {
-            if (child.getNode().getElementType() == childType) {
-                return child;
-            }
-        }
+    public static LinkRefElementTypes getNamedElementTypes(@Nullable PsiElement element) {
+        if (element instanceof MultiMarkdownExplicitLink
+                || element instanceof MultiMarkdownLinkRef
+                || element instanceof MultiMarkdownLinkRefText
+                || element instanceof MultiMarkdownLinkRefAnchor
+                ) return EXPLICIT_LINK_ELEMENT;
+        if (element instanceof MultiMarkdownWikiLink
+                || element instanceof MultiMarkdownWikiPageRef
+                || element instanceof MultiMarkdownWikiPageText
+                || element instanceof MultiMarkdownWikiPageRefAnchor
+                ) return WIKI_LINK_ELEMENT;
         return null;
     }
 
-    public static MultiMarkdownNamedElement setName(MultiMarkdownWikiPageRef element, String newName, int renameFlags) {
-        ASTNode pageRefNode = element.getNode();
-        String title = null;
+    @NotNull
+    public static String getElementText(IElementType parentType, @Nullable PsiElement element, @Nullable IElementType elementType, @Nullable String prefix, @Nullable String suffix) {
+        PsiElement parent = element == null || elementType == null ? null : (element.getNode().getElementType() == parentType ? element : element.getParent());
+        ASTNode astNode = element == null || elementType == null ? null : parent.getNode().findChildByType(elementType);
+        if (astNode == null) return "";
+        if (suffix != null && prefix != null) return prefix + astNode.getText() + suffix;
+        if (prefix != null) return prefix + astNode.getText();
+        if (suffix != null) return astNode.getText() + suffix;
+        return astNode.getText();
+    }
 
-        if (pageRefNode != null) {
+    @NotNull
+    public static String getLinkRef(@Nullable PsiElement element) {
+        LinkRefElementTypes elementTypes = getNamedElementTypes(element);
+        return elementTypes == null ? "" : getElementText(elementTypes.parentType, element, elementTypes.linkRefType, null, null);
+    }
+
+    @NotNull
+    public static String getLinkRefWithAnchor(@Nullable PsiElement element) {
+        LinkRefElementTypes elementTypes = getNamedElementTypes(element);
+        return elementTypes == null ? "" : getElementText(elementTypes.parentType, element, elementTypes.linkRefType, null, null)
+                + getElementText(elementTypes.parentType, element, elementTypes.anchorType, "#", null);
+    }
+
+    @NotNull
+    public static String getLinkRefAnchor(@Nullable PsiElement element) {
+        LinkRefElementTypes elementTypes = getNamedElementTypes(element);
+        return elementTypes == null ? "" : getElementText(elementTypes.parentType, element, elementTypes.anchorType, null, null);
+    }
+
+    @NotNull
+    public static String getLinkRefText(@Nullable PsiElement element) {
+        LinkRefElementTypes elementTypes = getNamedElementTypes(element);
+        return elementTypes == null ? "" : getElementText(elementTypes.parentType, element, elementTypes.textType, null, null);
+    }
+
+    @NotNull
+    public static String getLinkRefTitle(@Nullable PsiElement element) {
+        LinkRefElementTypes elementTypes = getNamedElementTypes(element);
+        return elementTypes == null ? "" : getElementText(elementTypes.parentType, element, elementTypes.titleType, null, null);
+    }
+
+    public static MultiMarkdownNamedElement setName(@NotNull MultiMarkdownNamedElement element, @NotNull String newName, int renameFlags) {
+        LinkRefElementTypes elementTypes = getNamedElementTypes(element);
+        if (elementTypes == null) return element;
+
+        ASTNode pageRefNode = element.getNode();
+        if (pageRefNode == null) return element;
+
+        PsiElement parent = element.getParent();
+        String linkRef = getElementText(elementTypes.parentType, parent, elementTypes.linkRefType, null, null);
+        String title = null;
+        String text = null;
+
+        IElementType elementType = element.getNode().getElementType();
+        if (elementType == elementTypes.linkRefType) {
+            linkRef = newName;
+
             if ((renameFlags & RENAME_KEEP_PATH) != 0 && element.getText().contains("/")) {
                 // keep the old path
                 String path = new FilePathInfo(element.getText()).getPath();
                 String name = new FilePathInfo(newName).getFileName();
-                newName = path + name;
+                linkRef = path + name;
             }
 
             if ((renameFlags & RENAME_KEEP_NAME) != 0) {
                 // keep the old name
                 String path = new FilePathInfo(newName).getPath();
                 String name = new FilePathInfo(element.getText()).getFileName();
-                newName = path + name;
+                linkRef = path + name;
             }
 
             // preserve anchor
             if ((renameFlags & RENAME_KEEP_ANCHOR) != 0) {
-                String anchorText = getPageRefAnchor((MultiMarkdownWikiLink) element.getParent());
+                String anchorText = getElementText(elementTypes.parentType, parent, elementTypes.anchorType, "#", null);
                 if (!anchorText.isEmpty()) {
-                    newName = FilePathInfo.linkRefNoAnchor(newName) + "#" + anchorText;
+                    linkRef = FilePathInfo.linkRefNoAnchor(newName) + anchorText;
                 }
+            }
+
+            // preserve text
+            if ((renameFlags & RENAME_KEEP_TEXT) != 0) {
+                text = getElementText(elementTypes.parentType, parent, elementTypes.textType, null, null);
             }
 
             // preserve title
-            if ((renameFlags & RENAME_KEEP_TEXT) != 0) {
-                ASTNode pageRefTitleNode = element.getParent().getNode().findChildByType(WIKI_LINK_TEXT);
-                if (pageRefTitleNode != null) {
-                    title = pageRefTitleNode.getText();
+            if ((renameFlags & RENAME_KEEP_TITLE) != 0) {
+                title = getElementText(elementTypes.parentType, parent, elementTypes.titleType, null, null);
+            }
+        } else if (elementType == elementTypes.anchorType) {
+            linkRef += newName.isEmpty() ? newName : "#" + newName;
+        } else if (elementType == elementTypes.textType) {
+            text = newName;
+        } else if (elementType == elementTypes.titleType) {
+            title = newName;
+        } else {
+            // no such beast
+            logger.info("MultiMarkdownPsiImplUtil.setName called for unhandled element " + element);
+            return element;
+        }
+
+        PsiElement newLink = null;
+        if (elementTypes.parentType == WIKI_LINK) {
+            newLink = MultiMarkdownElementFactory.createWikiLink(element.getProject(), linkRef, text);
+        } else if (elementTypes.parentType == EXPLICIT_LINK) {
+            newLink = MultiMarkdownElementFactory.createExplicitLink(element.getProject(), linkRef, text, title);
+        }
+
+        if (newLink != null) {
+            if (elementType == elementTypes.linkRefType) {
+                //element.getParent().replace(newLink);
+                ASTNode parentAST = parent.getNode();
+                ASTNode firstChildNode = parentAST.getFirstChildNode();
+                parentAST.addChildren(newLink.getFirstChild().getNode(), null, firstChildNode);
+                parentAST.removeRange(firstChildNode, null);
+
+                MultiMarkdownNamedElement newElement = (MultiMarkdownNamedElement) findChildByType(parent, elementType);
+                if (newElement != null) return newElement;
+            } else {
+                MultiMarkdownNamedElement newElement = (MultiMarkdownNamedElement) findChildByType(newLink, elementType);
+                if (newElement != null) {
+                    element.replace(newElement);
+                    return newElement;
                 }
             }
-
-            MultiMarkdownWikiLink wikiLink = MultiMarkdownElementFactory.createWikiLink(element.getProject(), newName, title);
-            element.getParent().replace(wikiLink);
-            MultiMarkdownWikiPageRef newElement = (MultiMarkdownWikiPageRef) findChildByType(wikiLink, WIKI_LINK_REF);
-            if (newElement != null) return newElement;
         }
-        return element;
-    }
-
-    public static MultiMarkdownNamedElement setName(MultiMarkdownWikiPageText element, String newName, int reason) {
-        ASTNode pageTitleNode = element.getNode();
-        ASTNode pageRefNode = element.getParent().getNode().findChildByType(WIKI_LINK_REF);
-        if (pageTitleNode != null && pageRefNode != null) {
-            MultiMarkdownWikiLink wikiLink = MultiMarkdownElementFactory.createWikiLink(element.getProject(), pageRefNode.getText(), newName);
-            MultiMarkdownWikiPageText newElement = (MultiMarkdownWikiPageText) findChildByType(wikiLink, WIKI_LINK_TEXT);
-            if (newElement != null) {
-                element.replace(newElement);
-                return newElement;
-            }
-        }
-        return element;
-    }
-
-    public static MultiMarkdownNamedElement setName(MultiMarkdownWikiPageRefAnchor element, String newName, int reason) {
-        //ASTNode pageRefAnchor = element.getNode();
-        ASTNode pageTitleNode = element.getParent().getNode().findChildByType(WIKI_LINK_TEXT);
-        ASTNode pageRefNode = element.getParent().getNode().findChildByType(WIKI_LINK_REF);
-        if (pageRefNode != null) {
-            MultiMarkdownWikiLink wikiLink = MultiMarkdownElementFactory.createWikiLink(element.getProject(), pageRefNode.getText() + "#" + newName, pageTitleNode == null ? null : pageTitleNode.getText());
-            MultiMarkdownWikiPageRefAnchor newElement = (MultiMarkdownWikiPageRefAnchor) findChildByType(wikiLink, WIKI_LINK_REF_ANCHOR);
-            if (newElement != null) {
-                element.replace(newElement);
-                return newElement;
-            }
-        }
-        return element;
-    }
-
-    public static MultiMarkdownWikiLink swapWikiLinkRefTitle(MultiMarkdownWikiLink element) {
-        ASTNode pageTitleNode = element.getNode().findChildByType(WIKI_LINK_TEXT);
-        ASTNode pageRefNode = element.getNode().findChildByType(WIKI_LINK_REF);
-
-        if (pageRefNode != null && pageTitleNode != null) {
-            String anchorText = getPageRefAnchor((MultiMarkdownWikiLink) element.getParent());
-            if (!anchorText.isEmpty()) {
-                anchorText = "#" + anchorText;
-            }
-            MultiMarkdownWikiLink wikiLink = MultiMarkdownElementFactory.createWikiLink(element.getProject(), pageTitleNode.getText(), pageRefNode.getText() + anchorText);
-            element.replace(wikiLink);
-        }
-
         return element;
     }
 
@@ -213,127 +234,32 @@ public class MultiMarkdownPsiImplUtil {
 
         return element;
     }
-    
-    
-    /*
-     * Explicit Link Utils
-     * 
-     */
 
-    @NotNull
-    public static
-    String getLinkRefWithAnchor(@Nullable MultiMarkdownExplicitLink element) {
-        ASTNode pageRefNode = element == null ? null : element.getNode().findChildByType(LINK_REF);
-        if (pageRefNode != null) {
-            ASTNode pageRefAnchorNode = element.getNode().findChildByType(LINK_REF_ANCHOR);
-            return pageRefNode.getText() + (pageRefAnchorNode == null ? "" : "#" + pageRefAnchorNode.getText());
-        } else {
-            return "";
+    public static MultiMarkdownWikiLink swapWikiLinkRefTitle(MultiMarkdownWikiLink element) {
+        ASTNode pageTitleNode = element.getNode().findChildByType(WIKI_LINK_TEXT);
+        ASTNode pageRefNode = element.getNode().findChildByType(WIKI_LINK_REF);
+
+        if (pageRefNode != null && pageTitleNode != null) {
+            String anchorText = getElementText(WIKI_LINK, element.getParent(), WIKI_LINK_REF_ANCHOR, "#", null);
+            MultiMarkdownWikiLink wikiLink = MultiMarkdownElementFactory.createWikiLink(element.getProject(), pageTitleNode.getText(), pageRefNode.getText() + anchorText);
+            element.replace(wikiLink);
         }
-    }
 
-    public static MultiMarkdownNamedElement setName(MultiMarkdownLinkRef element, String newName, int renameFlags) {
-        ASTNode pageRefNode = element.getNode();
-        String title = null;
-        String text = null;
-
-        if (pageRefNode != null) {
-            if ((renameFlags & RENAME_KEEP_PATH) != 0 && element.getText().contains("/")) {
-                // keep the old path
-                String path = new FilePathInfo(element.getText()).getPath();
-                String name = new FilePathInfo(newName).getFileName();
-                newName = path + name;
-            }
-
-            if ((renameFlags & RENAME_KEEP_NAME) != 0) {
-                // keep the old name
-                String path = new FilePathInfo(newName).getPath();
-                String name = new FilePathInfo(element.getText()).getFileName();
-                newName = path + name;
-            }
-
-            // preserve anchor
-            if ((renameFlags & RENAME_KEEP_ANCHOR) != 0) {
-                String anchorText = getPageRefAnchor((MultiMarkdownWikiLink) element.getParent());
-                if (!anchorText.isEmpty()) {
-                    newName = FilePathInfo.linkRefNoAnchor(newName) + "#" + anchorText;
-                }
-            }
-
-            // preserve text
-            if ((renameFlags & RENAME_KEEP_TEXT) != 0) {
-                ASTNode pageRefTextNode = element.getParent().getNode().findChildByType(LINK_REF_TEXT);
-                if (pageRefTextNode != null) {
-                    text = pageRefTextNode.getText();
-                }
-            }
-
-            if ((renameFlags & RENAME_KEEP_TITLE) != 0) {
-                ASTNode pageRefTitleNode = element.getParent().getNode().findChildByType(LINK_REF_TITLE);
-                if (pageRefTitleNode != null) {
-                    title = pageRefTitleNode.getText();
-                }
-            }
-
-            MultiMarkdownExplicitLink link = MultiMarkdownElementFactory.createExplicitLink(element.getProject(), newName, text, title);
-            element.getParent().replace(link);
-            MultiMarkdownLinkRef newElement = (MultiMarkdownLinkRef) findChildByType(link, LINK_REF);
-            if (newElement != null) return newElement;
-        }
         return element;
     }
 
-    public static MultiMarkdownNamedElement setName(MultiMarkdownLinkRefText element, String newName, int reason) {
-        ASTNode pageTextNode = element.getNode();
-        ASTNode pageRefNode = element.getParent().getNode().findChildByType(LINK_REF);
-        if (pageTextNode != null && pageRefNode != null) {
-            MultiMarkdownExplicitLink explicitLink = MultiMarkdownElementFactory.createExplicitLink(element.getProject(), pageRefNode.getText(), newName, null);
-            MultiMarkdownLinkRefText newElement = (MultiMarkdownLinkRefText) findChildByType(explicitLink, LINK_REF_TEXT);
-            if (newElement != null) {
-                element.replace(newElement);
-                return newElement;
+    @Nullable
+    public static PsiElement findChildByType(@NotNull PsiElement parentElement, @NotNull IElementType childType) {
+        for (PsiElement child : parentElement.getChildren()) {
+            if (child.getNode().getElementType() == childType) {
+                return child;
             }
         }
-        return element;
+        return null;
     }
 
-    public static MultiMarkdownNamedElement setName(MultiMarkdownLinkRefAnchor element, String newName, int reason) {
-        //ASTNode pageRefAnchor = element.getNode();
-        ASTNode pageTextNode = element.getParent().getNode().findChildByType(LINK_REF_TEXT);
-        ASTNode pageRefNode = element.getParent().getNode().findChildByType(LINK_REF);
-        if (pageRefNode != null) {
-            MultiMarkdownExplicitLink explicitLink = MultiMarkdownElementFactory.createExplicitLink(element.getProject(), pageRefNode.getText() + "#" + newName, pageTextNode == null ? null : pageTextNode.getText(), null);
-            MultiMarkdownLinkRefAnchor newElement = (MultiMarkdownLinkRefAnchor) findChildByType(explicitLink, LINK_REF_ANCHOR);
-            if (newElement != null) {
-                element.replace(newElement);
-                return newElement;
-            }
-        }
-        return element;
-    }
-
-    public static MultiMarkdownNamedElement setName(MultiMarkdownLinkRefTitle element, String newName, int reason) {
-        //ASTNode pageRefAnchor = element.getNode();
-        ASTNode pageRefNode = element.getParent().getNode().findChildByType(LINK_REF);
-        if (pageRefNode != null) {
-            MultiMarkdownExplicitLink explicitLink = MultiMarkdownElementFactory.createExplicitLink(element.getProject(), pageRefNode.getText(), "text", newName);
-            MultiMarkdownLinkRefTitle newElement = (MultiMarkdownLinkRefTitle) findChildByType(explicitLink, LINK_REF_TITLE);
-            if (newElement != null) {
-                element.replace(newElement);
-                return newElement;
-            }
-        }
-        return element;
-    }
-
-
-
-    /*
-     * Common Utils
-     * 
-     */
-
-    public static Document getElementDocument(PsiElement element) {
+    @Nullable
+    public static Document getElementDocument(@NotNull PsiElement element) {
         return FileDocumentManager.getInstance().getDocument(element.getContainingFile().getVirtualFile());
     }
 
@@ -358,42 +284,6 @@ public class MultiMarkdownPsiImplUtil {
                 return MultiMarkdownIcons.FILE;
             }
         };
-    }
-
-    public static String getLinkRefText(@Nullable MultiMarkdownExplicitLink element) {
-        ASTNode pageRefNode = element == null ? null : element.getNode().findChildByType(EXPLICIT_LINK);
-        if (pageRefNode != null) {
-            return pageRefNode.getText();
-        } else {
-            return "";
-        }
-    }
-
-    public static String getLinkRef(@Nullable MultiMarkdownExplicitLink element) {
-        ASTNode pageRefNode = element == null ? null : element.getNode().findChildByType(LINK_REF);
-        if (pageRefNode != null) {
-            return pageRefNode.getText();
-        } else {
-            return "";
-        }
-    }
-
-    public static String getLinkRefAnchor(@Nullable MultiMarkdownExplicitLink element) {
-        ASTNode pageRefNode = element == null ? null : element.getNode().findChildByType(LINK_REF_ANCHOR);
-        if (pageRefNode != null) {
-            return pageRefNode.getText();
-        } else {
-            return "";
-        }
-    }
-
-    public static String getLinkRefTitle(@Nullable MultiMarkdownExplicitLink element) {
-        ASTNode pageRefNode = element == null ? null : element.getNode().findChildByType(LINK_REF_TITLE);
-        if (pageRefNode != null) {
-            return pageRefNode.getText();
-        } else {
-            return "";
-        }
     }
 }
 

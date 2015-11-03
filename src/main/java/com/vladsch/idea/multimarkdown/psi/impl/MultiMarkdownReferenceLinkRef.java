@@ -23,7 +23,7 @@ import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownExplicitLink;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkRef;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
+import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import com.vladsch.idea.multimarkdown.util.FileReferenceLinkGitHubRules;
 import com.vladsch.idea.multimarkdown.util.FileReferenceList;
 import com.vladsch.idea.multimarkdown.util.FileReferenceListQuery;
@@ -65,26 +65,29 @@ public class MultiMarkdownReferenceLinkRef extends MultiMarkdownReference {
     protected ResolveResult[] getMultiResolveResults(boolean incompleteCode) {
         String name = myElement.getName();
         if (name != null) {
+            if (!FilePathInfo.isExternalReference(name)) {
+                FileReferenceList fileReferenceList = new FileReferenceListQuery(myElement.getProject())
+                        .matchLinkRef((MultiMarkdownLinkRef) myElement)
+                        .wantMarkdownFiles()
+                        .all()
+                        .sorted();
 
-            FileReferenceList fileReferenceList = new FileReferenceListQuery(myElement.getProject())
-                    .matchLinkRef((MultiMarkdownLinkRef) myElement)
-                    .wantMarkdownFiles()
-                    .all()
-                    .sorted();
+                PsiFile[] files = fileReferenceList
+                        .getPsiFiles();
 
-            PsiFile[] files = fileReferenceList
-                    .getPsiFiles();
-
-            if (files.length > 0) {
-                removeReferenceChangeListener();
-                if (files.length == 1) {
-                    return new ResolveResult[] { new PsiElementResolveResult(files[0]) };
-                } else {
-                    List<ResolveResult> results = new ArrayList<ResolveResult>();
-                    for (PsiFile file : files) {
-                        results.add(new PsiElementResolveResult(file));
+                if (files.length > 0) {
+                    removeReferenceChangeListener();
+                    if (files.length == 1) {
+                        return new ResolveResult[] { new PsiElementResolveResult(files[0]) };
+                    } else {
+                        List<ResolveResult> results = new ArrayList<ResolveResult>();
+                        for (PsiFile file : files) {
+                            results.add(new PsiElementResolveResult(file));
+                        }
+                        return results.toArray(new ResolveResult[results.size()]);
                     }
-                    return results.toArray(new ResolveResult[results.size()]);
+                } else {
+                    return new ResolveResult[] { new PsiElementResolveResult(getMissingRefElement(name)) };
                 }
             } else {
                 return new ResolveResult[] { new PsiElementResolveResult(getMissingRefElement(name)) };

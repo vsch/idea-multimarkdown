@@ -72,7 +72,7 @@ public class MultiMarkdownFindUsagesProvider implements FindUsagesProvider {
             {
                 @Override
                 public int getVersion() {
-                    return super.getVersion()+6;
+                    return super.getVersion()+7;
                 }
             };
 

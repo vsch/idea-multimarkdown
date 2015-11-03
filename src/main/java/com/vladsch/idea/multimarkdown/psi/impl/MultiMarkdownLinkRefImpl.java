@@ -24,6 +24,7 @@ import com.vladsch.idea.multimarkdown.psi.MultiMarkdownExplicitLink;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkRef;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import com.vladsch.idea.multimarkdown.util.GithubRepo;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,7 +35,8 @@ public class MultiMarkdownLinkRefImpl extends MultiMarkdownNamedElementImpl impl
     @NotNull
     @Override
     public String getMissingElementNamespace() {
-        return MISSING_ELEMENT_NAME_SPACE;
+        assert getParent() instanceof MultiMarkdownExplicitLink;
+        return ((MultiMarkdownExplicitLink) getParent()).getMissingElementNameSpace(MISSING_ELEMENT_NAME_SPACE, false);
     }
 
     public MultiMarkdownLinkRefImpl(ASTNode node) {
@@ -53,20 +55,17 @@ public class MultiMarkdownLinkRefImpl extends MultiMarkdownNamedElementImpl impl
 
     @Override
     public String getFileName() {
-        return FilePathInfo.wikiRefAsFileNameWithExt(new FilePathInfo(getName() == null ? "" : getName()).getFileName());
+        return getName() == null ? "" : getName();
     }
 
     @Override
     public String getFileNameWithAnchor() {
-        String anchorText = MultiMarkdownPsiImplUtil.getLinkRefAnchor((MultiMarkdownExplicitLink) getParent());
-        FilePathInfo pathInfo = new FilePathInfo((getName() == null ? "" : getName()) + (anchorText.isEmpty() ? anchorText : "#" + anchorText));
-        return FilePathInfo.wikiRefAsFileNameWithExt(pathInfo.getFileName()) + pathInfo.getAnchor();
+        return getNameWithAnchor();
     }
 
     @Override
     public String getNameWithAnchor() {
-        PsiElement parent = getParent();
-        return MultiMarkdownPsiImplUtil.getLinkRefWithAnchor((MultiMarkdownExplicitLink) parent);
+        return MultiMarkdownPsiImplUtil.getLinkRefWithAnchor(getParent());
     }
 
     @Override
@@ -75,17 +74,17 @@ public class MultiMarkdownLinkRefImpl extends MultiMarkdownNamedElementImpl impl
         MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(getProject());
         if (projectComponent == null) return this;
 
-        return (MultiMarkdownNamedElement) setName(newName, projectComponent.getRefactoringRenameFlags() == RENAME_NO_FLAGS ? REASON_FILE_RENAMED : projectComponent.getRefactoringRenameFlags());
+        return (MultiMarkdownNamedElement) setName(newName, projectComponent.getRefactoringRenameFlags(REASON_FILE_RENAMED));
     }
 
     @Override
     public boolean isMemberInplaceRenameAvailable(PsiElement context) {
-        return false;//((MultiMarkdownReferenceWikiPageRef)reference).isResolveRefMissing();
+        return false;
     }
 
     @Override
     public boolean isInplaceRenameAvailable(PsiElement context) {
-        return false;//((MultiMarkdownReferenceWikiPageRef)reference).isResolveRefMissing();
+        return false;
     }
 
     @Override

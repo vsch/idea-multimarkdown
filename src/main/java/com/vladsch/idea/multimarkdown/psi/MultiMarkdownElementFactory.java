@@ -39,13 +39,16 @@ public class MultiMarkdownElementFactory {
     }
 
     public static MultiMarkdownWikiLink createWikiLink(@NotNull Project project, @NotNull String name, @Nullable String text) {
-        final MultiMarkdownFile file = createFile(project, MultiMarkdownWikiLinkImpl.getElementText(name, text));
+        String elementText = MultiMarkdownWikiLinkImpl.getElementText(name, text);
+        final MultiMarkdownFile file = createFile(project, elementText);
         return (MultiMarkdownWikiLink) file.getFirstChild();
     }
 
     public static MultiMarkdownExplicitLink createExplicitLink(@NotNull Project project, @NotNull String name, @Nullable String text, @Nullable String title) {
-        final MultiMarkdownFile file = createFile(project, MultiMarkdownExplicitLinkImpl.getElementText(name, text == null ? "" : text, title));
-        return (MultiMarkdownExplicitLink) file.getFirstChild();
+        String elementText = MultiMarkdownExplicitLinkImpl.getElementText(name, text == null ? "" : text, title);
+        final MultiMarkdownFile file = createFile(project, elementText);
+        PsiElement child = file.getFirstChild();
+        return (MultiMarkdownExplicitLink) child;
     }
 
     public static PsiElement createCRLF(Project project) {

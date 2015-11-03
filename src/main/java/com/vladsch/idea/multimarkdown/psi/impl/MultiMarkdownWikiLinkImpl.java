@@ -26,6 +26,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownVisitor;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
+import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,10 +34,24 @@ public class MultiMarkdownWikiLinkImpl extends ASTWrapperPsiElement implements M
     public static String getElementText(@NotNull String name, @Nullable String text) {
         boolean githubWikiLinks = MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue();
 
-        return  githubWikiLinks
+        return githubWikiLinks
                 ? "[[" + (text != null && text.length() > 0 && !name.equals(text) ? text + "|" : "") + name + "]]"
                 : "[[" + name + (text != null && text.length() > 0 && !name.equals(text) ? "|" + text : "") + "]]"
                 ;
+    }
+
+    @Override
+    @NotNull
+    public String getMissingElementNameSpace(@NotNull String prefix, boolean addLinkRef) {
+        FilePathInfo filePathInfo = new FilePathInfo(getContainingFile().getVirtualFile());
+        String wikiHome = filePathInfo.getWikiHome();
+
+        if (addLinkRef) {
+            String pageRef = MultiMarkdownPsiImplUtil.getLinkRefWithAnchor(this);
+            if (pageRef.isEmpty()) pageRef = filePathInfo.getFileNameAsWikiRef();
+            return prefix + (wikiHome.isEmpty() ? wikiHome : wikiHome + "::") + (pageRef.isEmpty() ? pageRef : pageRef + "::");
+        }
+        return prefix + (wikiHome.isEmpty() ? wikiHome : wikiHome + "::");
     }
 
     public MultiMarkdownWikiLinkImpl(ASTNode node) {
@@ -55,11 +70,11 @@ public class MultiMarkdownWikiLinkImpl extends ASTWrapperPsiElement implements M
 
     @Override
     public String getPageText() {
-        return MultiMarkdownPsiImplUtil.getPageText(this);
+        return MultiMarkdownPsiImplUtil.getLinkRefText(this);
     }
 
     @Override
     public String getPageRef() {
-        return MultiMarkdownPsiImplUtil.getPageRef(this);
+        return MultiMarkdownPsiImplUtil.getLinkRef(this);
     }
 }
