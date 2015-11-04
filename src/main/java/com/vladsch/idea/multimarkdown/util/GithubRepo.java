@@ -32,8 +32,8 @@ import java.util.regex.Pattern;
 /**
  *
  */
-public class GithubRepo {
-    private static final Logger logger = org.apache.log4j.Logger.getLogger(GithubRepo.class);
+public class GitHubRepo {
+    private static final Logger logger = org.apache.log4j.Logger.getLogger(GitHubRepo.class);
     final private static Pattern INI_CATEGORY = Pattern.compile("\\[\\s*(\\w+)[\\s'\"]+(\\w+)[\\s'\"]+\\]");
     final private static Pattern URL_VALUE = Pattern.compile("\\s*url\\s*=\\s*([^\\s]*)\\.git");
     final protected static String GIT_CONFIG = "config";
@@ -43,7 +43,7 @@ public class GithubRepo {
     private final boolean isWiki;
 
     @VisibleForTesting
-    protected GithubRepo(@NotNull String githubBaseUrl, @NotNull String basePath) {
+    protected GitHubRepo(@NotNull String githubBaseUrl, @NotNull String basePath) {
         this.isWiki = FilePathInfo.isWikiHome(basePath);
         this.githubBaseUrl = githubBaseUrl;
         this.basePath = basePath;
@@ -166,12 +166,12 @@ public class GithubRepo {
     }
 
     @Nullable
-    public static GithubRepo getGitHubRepo(@Nullable String path, @Nullable String basePath) {
+    public static GitHubRepo getGitHubRepo(@Nullable String path, @Nullable String basePath) {
         return getGitHubRepo(path, basePath, null);
     }
 
     @Nullable
-    public static GithubRepo getGitHubRepo(@Nullable String path, @Nullable String basePath, @Nullable String gitConfig) {
+    public static GitHubRepo getGitHubRepo(@Nullable String path, @Nullable String basePath, @Nullable String gitConfig) {
         if (path == null || basePath == null) return null;
 
         String nextPath = path;
@@ -184,7 +184,7 @@ public class GithubRepo {
                 if (gitConfigFile.exists() && gitConfigFile.isFile()) {
                     String baseUrl = githubBaseUrl(gitConfigFile);
                     if (baseUrl != null) {
-                        return new GithubRepo(baseUrl, pathInfo.getFullFilePath());
+                        return new GitHubRepo(baseUrl, pathInfo.getFullFilePath());
                     }
 
                     // this sub-module does not have a remote.

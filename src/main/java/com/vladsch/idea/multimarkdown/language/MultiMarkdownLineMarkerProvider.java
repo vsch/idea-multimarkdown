@@ -33,7 +33,9 @@ import com.intellij.util.NullableFunction;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkRef;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
+import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownReference;
 import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownReferenceWikiPageRef;
 import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import com.vladsch.idea.multimarkdown.util.FileReference;
@@ -48,14 +50,14 @@ import java.util.Collection;
 public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvider {
     @Override
     protected void collectNavigationMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
-        if (element instanceof MultiMarkdownWikiPageRef) {
+        if (element instanceof MultiMarkdownWikiPageRef || element instanceof MultiMarkdownLinkRef) {
             PsiReference psiReference = element.getReference();
             //MultiMarkdownFile[] markdownFiles = MultiMarkdownPlugin.getProjectComponent(element.getProject()).getFileReferenceList().query()
             //        .matchWikiRef((MultiMarkdownWikiPageRef) element)
             //        .accessibleWikiPageFiles()
             //        ;
 
-            ResolveResult[] results = ((MultiMarkdownReferenceWikiPageRef) psiReference) != null ? ((MultiMarkdownReferenceWikiPageRef) psiReference).multiResolve(false) : null;
+            ResolveResult[] results = psiReference != null ? ((MultiMarkdownReference) psiReference).multiResolve(false) : null;
             if (results != null && results.length > 0) {
                 final PsiFile containingFile = element.getContainingFile();
 
@@ -108,11 +110,18 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
                             @Nullable
                             @Override
                             protected String getContainerText(PsiElement element, String name) {
-                                if (showContainer && element instanceof MultiMarkdownFile && ((MultiMarkdownFile) element).isWikiPage()) {
-                                    FileReference fileReference = new FileReference((PsiFile) element);
-                                    String wikiHome = fileReference.getWikiHome();
-                                    FileReferenceLink referenceLink = new FileReferenceLink(basePath + "/dummy", wikiHome, project);
-                                    return referenceLink.getLinkRef();
+                                if (showContainer && element instanceof MultiMarkdownFile) {
+                                    if (((MultiMarkdownFile) element).isWikiPage()) {
+                                        FileReference fileReference = new FileReference((PsiFile) element);
+                                        String wikiHome = fileReference.getWikiHome();
+                                        FileReferenceLink referenceLink = new FileReferenceLink(basePath + "/dummy", wikiHome, project);
+                                        return referenceLink.getLinkRef();
+                                    } else {
+                                        FileReference fileReference = new FileReference((PsiFile) element);
+                                        String gitHubRepoPath = fileReference.getGitHubRepoPath("/");
+                                        FileReferenceLink referenceLink = new FileReferenceLink(basePath + "/dummy", gitHubRepoPath, project);
+                                        return referenceLink.getLinkRef();
+                                    }
                                 }
                                 return null;
                             }

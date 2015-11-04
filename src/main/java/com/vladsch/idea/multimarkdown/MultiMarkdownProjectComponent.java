@@ -47,7 +47,7 @@ import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
-import com.vladsch.idea.multimarkdown.util.GithubRepo;
+import com.vladsch.idea.multimarkdown.util.GitHubRepo;
 import com.vladsch.idea.multimarkdown.util.ListenerNotifier;
 import com.vladsch.idea.multimarkdown.util.ListenerNotifyDelegate;
 import com.vladsch.idea.multimarkdown.util.ReferenceChangeListener;
@@ -64,7 +64,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
     private final static int LISTENER_ADDED = 0;
     private final static int SYMBOL_REF_CHANGED = 1;
 
-    private HashMap<String, GithubRepo> gitHubRepos = null;
+    private HashMap<String, GitHubRepo> gitHubRepos = null;
 
     private Project project;
     protected MultiMarkdownGlobalSettingsListener globalSettingsListener;
@@ -281,16 +281,16 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         }
     }
 
-    public GithubRepo getGithubRepo(@Nullable String baseDirectoryPath) {
+    public GitHubRepo getGithubRepo(@Nullable String baseDirectoryPath) {
         if (baseDirectoryPath == null) baseDirectoryPath = project.getBasePath();
 
         if (gitHubRepos == null) {
-            gitHubRepos = new HashMap<String, GithubRepo>();
+            gitHubRepos = new HashMap<String, GitHubRepo>();
         }
 
         if (!gitHubRepos.containsKey(baseDirectoryPath)) {
-            GithubRepo githubRepo = GithubRepo.getGitHubRepo(baseDirectoryPath, project.getBasePath());
-            gitHubRepos.put(baseDirectoryPath, githubRepo);
+            GitHubRepo gitHubRepo = GitHubRepo.getGitHubRepo(baseDirectoryPath, project.getBasePath());
+            gitHubRepos.put(baseDirectoryPath, gitHubRepo);
         }
 
         return gitHubRepos.get(baseDirectoryPath);

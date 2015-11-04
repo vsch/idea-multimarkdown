@@ -28,6 +28,8 @@ import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.indexing.FileBasedIndex;
 import com.vladsch.idea.multimarkdown.MultiMarkdownFileType;
+import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
+import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkRef;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
@@ -64,6 +66,7 @@ public class FileReferenceListQuery {
     // don't strip # from links so that files with # can be matched
     public final static int MATCH_WITH_ANCHOR = 0x0400;
     public final static int WIKIPAGE_GITHUB_RULES = 0x0800;
+    public final static int LINK_REF_SAME_REPO = 0x1000;
 
     protected @Nullable FileReferenceList defaultFileList;
     protected int queryFlags;
@@ -263,19 +266,44 @@ public class FileReferenceListQuery {
     @NotNull
     public FileReferenceListQuery matchWikiRef(@NotNull MultiMarkdownWikiPageRef wikiPageRef) {
         return inSource(new FileReference(wikiPageRef.getContainingFile()))
-                .matchWikiRef(wikiPageRef.getNameWithAnchor());
+                .matchWikiRef((queryFlags & MATCH_WITH_ANCHOR) != 0 ? wikiPageRef.getNameWithAnchor() : wikiPageRef.getName());
     }
 
     @NotNull
     public FileReferenceListQuery matchLinkRef(@NotNull MultiMarkdownLinkRef linkRef) {
         return inSource(new FileReference(linkRef.getContainingFile()))
-                .matchLinkRef(linkRef.getNameWithAnchor());
+                .matchLinkRef((queryFlags & MATCH_WITH_ANCHOR) != 0 ? linkRef.getFileNameWithAnchor() : linkRef.getFileName());
+    }
+
+    @NotNull
+    public FileReferenceListQuery matchLinkRefNoExt(@NotNull MultiMarkdownLinkRef linkRef) {
+        return inSource(new FileReference(linkRef.getContainingFile()))
+                .matchLinkRefNoExt((queryFlags & MATCH_WITH_ANCHOR) != 0 ? linkRef.getFileNameWithAnchor() : linkRef.getFileName());
     }
 
     @NotNull
     public FileReferenceListQuery matchLinkRef(@NotNull String linkRef, boolean withExt) {
         this.matchLinkRef = (queryFlags & MATCH_WITH_ANCHOR) != 0 ? linkRef : FilePathInfo.linkRefNoAnchor(linkRef);
         queryFlags = (queryFlags & ~MATCH_TYPE_FLAGS) | (withExt ? LINK_WITH_EXT_REF : LINK_REF_NO_EXT);
+        return this;
+    }
+
+    @NotNull
+    public FileReferenceListQuery sameGitHubRepo() {
+        queryFlags |= LINK_REF_SAME_REPO;
+        return this;
+    }
+
+    @NotNull
+    public FileReferenceListQuery sameGitHubRepo(boolean sameRepo) {
+        if (sameRepo) queryFlags |= LINK_REF_SAME_REPO;
+        else queryFlags &= ~LINK_REF_SAME_REPO;
+        return this;
+    }
+
+    @NotNull
+    public FileReferenceListQuery notSameGitHubRepo() {
+        queryFlags &= ~LINK_REF_SAME_REPO;
         return this;
     }
 
@@ -304,7 +332,8 @@ public class FileReferenceListQuery {
 
     @NotNull
     public FileReferenceListQuery matchLinkRef(@NotNull String linkRef) {
-        return matchLinkRef(linkRef, true);
+        FilePathInfo pathInfo = new FilePathInfo(linkRef);
+        return matchLinkRef(linkRef, pathInfo.hasExt());
     }
 
     @NotNull
@@ -660,6 +689,18 @@ public class FileReferenceListQuery {
     @NotNull
     protected static FileReferenceList.Filter getMatchFileFilter(@NotNull final String matchPattern, final int queryFlags, @NotNull final FileReference sourceFileReference) {
         FileReferenceList.Filter filter;
+        String githubRepoPath = null;
+        MultiMarkdownProjectComponent projComponent = null;
+
+        if ((queryFlags & LINK_REF_SAME_REPO) != 0) {
+            projComponent = MultiMarkdownPlugin.getProjectComponent(sourceFileReference.getProject());
+            GitHubRepo gitHubRepo = projComponent != null ? projComponent.getGithubRepo(sourceFileReference.getPath()) : null;
+            githubRepoPath = gitHubRepo != null ? FilePathInfo.endWith(gitHubRepo.getBasePath(), '/') : null;
+        }
+
+        final String gitHubRepoPath = githubRepoPath;
+        final MultiMarkdownProjectComponent projectComponent = projComponent;
+
         switch (queryFlags & MATCH_TYPE_FLAGS) {
             case WIKIPAGE_REF:
                 if ((queryFlags & WIKIPAGE_GITHUB_RULES) != 0) {
@@ -677,8 +718,12 @@ public class FileReferenceListQuery {
                         @Override
                         public FileReference filterRef(@NotNull FileReference fileReference) {
                             FileReferenceLinkGitHubRules referenceLink = new FileReferenceLinkGitHubRules(sourceFileReference, fileReference);
-                            return equivalentWikiRef(queryFlags, ((queryFlags & MATCH_WITH_ANCHOR) != 0 ? referenceLink.getWikiPageRefWithAnchor() : referenceLink.getWikiPageRef())
-                                    , matchPattern) && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
+
+                            return true
+                                    && (gitHubRepoPath == null || fileReference.getPath().startsWith(gitHubRepoPath))
+                                    && equivalentWikiRef(queryFlags, ((queryFlags & MATCH_WITH_ANCHOR) != 0 ? referenceLink.getWikiPageRefWithAnchor() : referenceLink.getWikiPageRef()), matchPattern)
+                                    && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath()))
+                                    ? referenceLink : null;
                         }
                     };
                 } else {
@@ -696,8 +741,12 @@ public class FileReferenceListQuery {
                         @Override
                         public FileReference filterRef(@NotNull FileReference fileReference) {
                             FileReferenceLink referenceLink = new FileReferenceLink(sourceFileReference, fileReference);
-                            return equivalentWikiRef(queryFlags, ((queryFlags & MATCH_WITH_ANCHOR) != 0 ? referenceLink.getWikiPageRefWithAnchor() : referenceLink.getWikiPageRef())
-                                    , matchPattern) && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
+
+                            return true
+                                    && (gitHubRepoPath == null || fileReference.getPath().startsWith(gitHubRepoPath))
+                                    && equivalentWikiRef(queryFlags, ((queryFlags & MATCH_WITH_ANCHOR) != 0 ? referenceLink.getWikiPageRefWithAnchor() : referenceLink.getWikiPageRef()), matchPattern)
+                                    && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath()))
+                                    ? referenceLink : null;
                         }
                     };
                 }
@@ -721,7 +770,12 @@ public class FileReferenceListQuery {
                         @Override
                         public FileReference filterRef(@NotNull FileReference fileReference) {
                             FileReferenceLinkGitHubRules referenceLink = new FileReferenceLinkGitHubRules(sourceFileReference, fileReference);
-                            return equivalent(queryFlags, ((queryFlags & MATCH_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchor() : referenceLink.getLinkRef()), matchPattern) && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
+
+                            return true
+                                    && (gitHubRepoPath == null || fileReference.getPath().startsWith(gitHubRepoPath))
+                                    && equivalent(queryFlags, ((queryFlags & MATCH_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchor() : referenceLink.getLinkRef()), matchPattern)
+                                    && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath()))
+                                    ? referenceLink : null;
                         }
                     };
                 } else {
@@ -739,7 +793,12 @@ public class FileReferenceListQuery {
                         @Override
                         public FileReference filterRef(@NotNull FileReference fileReference) {
                             FileReferenceLink referenceLink = new FileReferenceLink(sourceFileReference, fileReference);
-                            return equivalent(queryFlags, ((queryFlags & MATCH_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchor() : referenceLink.getLinkRef()), matchPattern) && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
+
+                            return true
+                                    && (gitHubRepoPath == null || fileReference.getPath().startsWith(gitHubRepoPath))
+                                    && equivalent(queryFlags, ((queryFlags & MATCH_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchor() : referenceLink.getLinkRef()), matchPattern)
+                                    && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath()))
+                                    ? referenceLink : null;
                         }
                     };
                 }
@@ -761,7 +820,12 @@ public class FileReferenceListQuery {
                         @Override
                         public FileReference filterRef(@NotNull FileReference fileReference) {
                             FileReferenceLinkGitHubRules referenceLink = new FileReferenceLinkGitHubRules(sourceFileReference, fileReference);
-                            return equivalent(queryFlags, ((queryFlags & MATCH_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchorNoExt() : referenceLink.getLinkRefNoExt()), matchPattern) && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
+
+                            return true
+                                    && (gitHubRepoPath == null || fileReference.getPath().startsWith(gitHubRepoPath))
+                                    && equivalent(queryFlags, ((queryFlags & MATCH_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchorNoExt() : referenceLink.getLinkRefNoExt()), matchPattern)
+                                    && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath()))
+                                    ? referenceLink : null;
                         }
                     };
                 } else {
@@ -779,7 +843,12 @@ public class FileReferenceListQuery {
                         @Override
                         public FileReference filterRef(@NotNull FileReference fileReference) {
                             FileReferenceLink referenceLink = new FileReferenceLink(sourceFileReference, fileReference);
-                            return equivalent(queryFlags, ((queryFlags & MATCH_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchorNoExt() : referenceLink.getLinkRefNoExt()), matchPattern) && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath())) ? referenceLink : null;
+
+                            return true
+                                    && (gitHubRepoPath == null || fileReference.getPath().startsWith(gitHubRepoPath))
+                                    && equivalent(queryFlags, ((queryFlags & MATCH_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchorNoExt() : referenceLink.getLinkRefNoExt()), matchPattern)
+                                    && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath()))
+                                    ? referenceLink : null;
                         }
                     };
                 }

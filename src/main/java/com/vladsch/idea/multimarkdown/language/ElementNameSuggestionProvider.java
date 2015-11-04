@@ -91,7 +91,31 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
             // this is a rename on a wiki page title
             // always activate spelling suggestions for renaming wiki page refs
             // Get suggestions from the name of the pageRef text
-            SuggestionList suggestionList = getWikiPageTitleSuggestions(element.getParent());
+            SuggestionList suggestionList = getWikiPageTextSuggestions(element.getParent());
+            if (suggestionList.size() > 0) {
+                ContainerUtil.addAllNotNull(result, suggestionList.asList());
+                suggestedNameInfo = SuggestedNameInfo.NULL_INFO;
+            }
+            return suggestedNameInfo;
+        } else if (element instanceof MultiMarkdownLinkRef) {
+            // this is a rename on a missing link element, provide list of valid markdown files that can be reached via wikiPageRef
+            // always activate spelling suggestions for renaming wiki page refs
+            SuggestionList suggestionList = new SuggestionList(element.getProject());
+
+            //suggestionList.add(FilePathInfo.linkRefNoAnchor(((MultiMarkdownWikiPageRef) element).getName()));
+
+            MultiMarkdownFile markdownFile = (MultiMarkdownFile) element.getContainingFile();
+            FileReferenceList linkRefs = new FileReferenceListQuery(element.getProject())
+                    .gitHubWikiRules()
+                    .sameGitHubRepo()
+                    .inSource(markdownFile)
+                    .all();
+
+            if (linkRefs.size() > 0) {
+                // add fixed up version to result
+                suggestionList.addAll(linkRefs.getAllLinkRefNoExtStrings());
+            }
+
             if (suggestionList.size() > 0) {
                 ContainerUtil.addAllNotNull(result, suggestionList.asList());
                 suggestedNameInfo = SuggestedNameInfo.NULL_INFO;
@@ -130,7 +154,7 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
         return null;
     }
 
-    public static SuggestionList getWikiPageTitleSuggestions(@NotNull PsiElement parent) {
+    public static SuggestionList getWikiPageTextSuggestions(@NotNull PsiElement parent) {
         SuggestionList suggestionList = new SuggestionList(parent.getProject());
         MultiMarkdownWikiPageRef wikiPageRef = (MultiMarkdownWikiPageRef) MultiMarkdownPsiImplUtil.findChildByType(parent, MultiMarkdownTypes.WIKI_LINK_REF);
         MultiMarkdownWikiPageText wikiPageText = (MultiMarkdownWikiPageText) MultiMarkdownPsiImplUtil.findChildByType(parent, MultiMarkdownTypes.WIKI_LINK_TEXT);

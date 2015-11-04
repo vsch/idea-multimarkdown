@@ -67,6 +67,8 @@ public class MultiMarkdownReferenceLinkRef extends MultiMarkdownReference {
         if (name != null) {
             if (!FilePathInfo.isExternalReference(name)) {
                 FileReferenceList fileReferenceList = new FileReferenceListQuery(myElement.getProject())
+                        .gitHubWikiRules()
+                        .sameGitHubRepo()
                         .matchLinkRef((MultiMarkdownLinkRef) myElement)
                         .wantMarkdownFiles()
                         .all()

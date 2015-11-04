@@ -49,6 +49,12 @@ import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.*;
 
 public class MultiMarkdownCompletionContributor extends CompletionContributor {
     private static final Logger logger = Logger.getLogger(MultiMarkdownCompletionContributor.class);
+    public static final char DUMMY_IDENTIFIER = '\u001F';
+
+    @Override
+    public void beforeCompletion(@NotNull CompletionInitializationContext context) {
+        context.setDummyIdentifier(String.valueOf(DUMMY_IDENTIFIER));
+    }
 
     public MultiMarkdownCompletionContributor() {
         extend(CompletionType.BASIC,
@@ -68,12 +74,34 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
                             }
 
                             if (parent != null && parent instanceof MultiMarkdownWikiLink) {
-                                SuggestionList suggestionList = ElementNameSuggestionProvider.getWikiPageTitleSuggestions(parent);
+                                SuggestionList suggestionList = ElementNameSuggestionProvider.getWikiPageTextSuggestions(parent);
 
                                 for (String suggestion : suggestionList.asList()) {
                                     resultSet.addElement(LookupElementBuilder.create(suggestion)
                                             .withCaseSensitivity(true)
                                     );
+                                }
+                            }
+                        } else if (elementType == LINK_REF) {
+                            Document document = parameters.getEditor().getDocument();
+                            VirtualFile virtualFile = FileDocumentManager.getInstance().getFile(document);
+
+                            if (virtualFile != null) {
+                                Project fileProject = parameters.getEditor().getProject();
+                                if (fileProject != null) {
+                                    FileReferenceList linkFileReferenceList = new FileReferenceListQuery(fileProject)
+                                            .gitHubWikiRules()
+                                            .sameGitHubRepo()
+                                            .inSource(virtualFile, fileProject)
+                                            .all();
+
+                                    for (FileReference fileReference : linkFileReferenceList.get()) {
+                                        addLinkRefCompletion(resultSet, (FileReferenceLink) fileReference, true, true);
+                                    }
+
+                                    for (FileReference fileReference : linkFileReferenceList.get()) {
+                                        addLinkRefCompletion(resultSet, (FileReferenceLink) fileReference, true, false);
+                                    }
                                 }
                             }
                         } else if (elementType == WIKI_LINK_REF) {
@@ -131,6 +159,38 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
                         .withTypeText(linkRefFileName, false);
 
                 if (!isWikiPageAccessible) {
+                    // TODO: get the color from color settings
+                    lookupElementBuilder = lookupElementBuilder
+                            .withItemTextForeground(Color.RED);
+                }
+
+                resultSet.addElement(lookupElementBuilder);
+            }
+        }
+    }
+
+    protected void addLinkRefCompletion(@NotNull CompletionResultSet resultSet, FileReferenceLink fileReference, boolean noExt, boolean accessible) {
+        FileReferenceLinkGitHubRules fileReferenceGitHub = (FileReferenceLinkGitHubRules) fileReference;
+        String linkRef = noExt ? fileReferenceGitHub.getLinkRefNoExt() : fileReferenceGitHub.getLinkRef();
+        String gitHubRepoPath = fileReferenceGitHub.getSourceReference().getGitHubRepoPath("");
+        boolean isLinkAccessible = fileReferenceGitHub.getPath().startsWith(gitHubRepoPath);
+
+        if (accessible == isLinkAccessible) {
+            if (isLinkAccessible || fileReferenceGitHub.getUpDirectories() == 0) {
+                //String wikiPageShortRef = toFile.getWikiPageRef(null, WANT_WIKI_REF | ALLOW_INACCESSIBLE_WIKI_REF);
+                String linkRefFileName = gitHubRepoPath.isEmpty() || !isLinkAccessible ? fileReferenceGitHub.getLinkRef() : fileReferenceGitHub.getFilePath().substring(gitHubRepoPath.length());
+
+                //logger.info("Adding " + linkRef + " to completions");
+                LookupElementBuilder lookupElementBuilder = LookupElementBuilder.create(linkRef)
+                        //.withLookupString(wikiPageShortRef)
+                        .withCaseSensitivity(true)
+                        .withIcon(accessible && fileReferenceGitHub.isWikiPage() ? MultiMarkdownIcons.WIKI : MultiMarkdownIcons.FILE);
+
+                if (!linkRef.equals(linkRefFileName)) {
+                       lookupElementBuilder = lookupElementBuilder.withTypeText(linkRefFileName, false);
+                }
+
+                if (!isLinkAccessible) {
                     // TODO: get the color from color settings
                     lookupElementBuilder = lookupElementBuilder
                             .withItemTextForeground(Color.RED);

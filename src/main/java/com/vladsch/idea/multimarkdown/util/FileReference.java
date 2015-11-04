@@ -139,10 +139,10 @@ public class FileReference extends FilePathInfo {
 
             MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
             if (projectComponent != null) {
-                GithubRepo githubRepo = projectComponent.getGithubRepo(currentPath.getFullFilePath());
-                if (githubRepo != null) {
+                GitHubRepo gitHubRepo = projectComponent.getGithubRepo(currentPath.getFullFilePath());
+                if (gitHubRepo != null) {
                     try {
-                        String url = githubRepo.githubBaseUrl();
+                        String url = gitHubRepo.githubBaseUrl();
                         return new FilePathInfo(url).append(matchParts[matchParts.length - 1]);
                     } catch (RuntimeException ignored) {
                         logger.info("Can't resolve GitHub url", ignored);
@@ -171,10 +171,10 @@ public class FileReference extends FilePathInfo {
             FilePathInfo wikiPath = currentPath.append(currentPath.getFileName() + WIKI_HOME_EXTENTION);
             MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
             if (projectComponent != null) {
-                GithubRepo githubRepo = projectComponent.getGithubRepo(wikiPath.getFullFilePath());
-                if (githubRepo != null) {
+                GitHubRepo gitHubRepo = projectComponent.getGithubRepo(wikiPath.getFullFilePath());
+                if (gitHubRepo != null) {
                     try {
-                        String url = githubRepo.repoUrlFor("/");
+                        String url = gitHubRepo.repoUrlFor("/");
                         return new FilePathInfo(url);
                     } catch (RuntimeException ignored) {
                         logger.info("Can't resolve GitHub url", ignored);
@@ -185,11 +185,33 @@ public class FileReference extends FilePathInfo {
         }
     }
 
-    protected final MarkdownGitHubWikiExternalLinkResolver markdownGitHubWikiLinkResolver = new MarkdownGitHubWikiExternalLinkResolver(WIKI_HOME_NAME);
+    protected final MarkdownGitHubWikiExternalLinkResolver markdownGitHubWikiLinkResolver = new MarkdownGitHubWikiExternalLinkResolver(GITHUB_WIKI_HOME_DIRNAME);
     protected final MarkdownGitHubLinkResolver markdownGitHubIssuesLinkResolver = new MarkdownGitHubLinkResolver(GITHUB_ISSUES_NAME);
     protected final MarkdownGitHubLinkResolver markdownGitHubPullsLinkResolver = new MarkdownGitHubLinkResolver(GITHUB_PULLS_NAME);
     protected final MarkdownGitHubLinkResolver markdownGitHubPulseLinkResolver = new MarkdownGitHubLinkResolver(GITHUB_PULSE_NAME);
     protected final MarkdownGitHubLinkResolver markdownGitHubGraphsLinkResolver = new MarkdownGitHubLinkResolver(GITHUB_GRAPHS_NAME);
+
+    @Nullable
+    public GitHubRepo getGitHubRepo() {
+        MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
+        return projectComponent != null ? projectComponent.getGithubRepo(getPath()) : null;
+    }
+
+    @Nullable
+    public String getGitHubRepoPath() {
+        MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
+        GitHubRepo gitHubRepo = projectComponent != null ? projectComponent.getGithubRepo(getPath()) : null;
+
+        return gitHubRepo != null ? endWith(gitHubRepo.getBasePath(), '/') : null;
+    }
+
+    @NotNull
+    public String getGitHubRepoPath(@NotNull String defaultPath) {
+        MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
+        GitHubRepo gitHubRepo = projectComponent != null ? projectComponent.getGithubRepo(getPath()) : null;
+
+        return endWith(gitHubRepo != null ? gitHubRepo.getBasePath() : defaultPath, '/');
+    }
 
     @Nullable
     @Override

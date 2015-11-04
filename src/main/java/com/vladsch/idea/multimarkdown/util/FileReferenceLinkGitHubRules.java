@@ -21,10 +21,8 @@
 package com.vladsch.idea.multimarkdown.util;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vcs.FilePath;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
-import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -127,11 +125,18 @@ public class FileReferenceLinkGitHubRules extends FileReferenceLink {
         super.computeLinkRefInfo(sourceReferencePath, targetReferencePath);
         originalPrefix = pathPrefix;
 
-        if (!sourceReference.isWikiPage() && this.isUnderWikiHome() && project != null) {
-            // here we resolve using github relative rules
-            FilePathInfo adjustedInfo = resolveLinkRef(pathPrefix);
-            if (adjustedInfo != null) {
-                super.computeLinkRefInfo(sourceReferencePath, adjustedInfo.getFilePath());
+        // if the source is in the main project and target in the wiki for main project then we re-map
+        if (!sourceReference.isUnderWikiHome() && this.isUnderWikiHome() && project != null && sourceReference.getFilePath().startsWith(endWith(getProjectHome(), '/'))) {
+            // need to insert ../../wiki where wiki home directory is in the path prefix
+            FilePathInfo wikiHomeInfo = new FilePathInfo(getWikiHome());
+            String prefixSlash = endWith(wikiHomeInfo.getFileName(), '/');
+            if (pathPrefix.startsWith(prefixSlash)) {
+                pathPrefix = GITHUB_WIKI_REL_OFFSET + pathPrefix.substring(prefixSlash.length() - 1);
+            } else {
+                int pos = pathPrefix.indexOf(startWith(prefixSlash, '/'));
+                if (pos >= 0) {
+                    pathPrefix = pathPrefix.substring(0, pos + 1) + GITHUB_WIKI_REL_OFFSET + pathPrefix.substring(pos + prefixSlash.length());
+                }
             }
         }
     }

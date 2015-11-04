@@ -33,41 +33,62 @@ import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
+import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import org.jetbrains.annotations.NotNull;
 
-import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement.*;
+import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement.RENAME_KEEP_NOTHING;
 
-class RenameWikiPageQuickFix extends BaseIntentionAction {
-    public static final int RENAME_CONFLICTING_TARGET = 1;
+class ChangeLinkRefQuickFix extends BaseIntentionAction {
+    public static final int MATCH_CASE_TO_FILE = 1;
+    public static final int REMOVE_DASHES = 2;
+    public static final int REMOVE_SLASHES = 3;
+    public static final int REMOVE_SUBDIR = 4;
 
-    private String displayName;
-    private String newName;
-    private PsiFile targetFile;
+    private String newLinkRef;
+    private MultiMarkdownNamedElement linkRefElement;
     private final int alternativeMsg;
+    private final int renameFlags;
 
-    RenameWikiPageQuickFix(PsiFile targetFile, String displayName, String newName) {
-        this(targetFile, displayName, newName, 0);
+    ChangeLinkRefQuickFix(MultiMarkdownNamedElement linkRefElement, String newLinkRef) {
+        this(linkRefElement, newLinkRef, 0);
     }
 
-    RenameWikiPageQuickFix(PsiFile targetFile, String displayName, String newName, int alternativeMsg) {
-        this.displayName = displayName != null ? displayName : targetFile.getVirtualFile().getName();
-        this.newName = newName;
-        this.targetFile = targetFile;
+    ChangeLinkRefQuickFix(MultiMarkdownNamedElement linkRefElement, String newLinkRef, int alternativeMsg) {
+        this(linkRefElement, newLinkRef, alternativeMsg, RENAME_KEEP_NOTHING);
+    }
+
+    ChangeLinkRefQuickFix(MultiMarkdownNamedElement linkRefElement, String newLinkRef, int alternativeMsg, int renameFlags) {
+        this.newLinkRef = newLinkRef;
+        this.linkRefElement = linkRefElement;
         this.alternativeMsg = alternativeMsg;
+        this.renameFlags = renameFlags;
     }
 
     @NotNull
     @Override
     public String getText() {
         String msg;
-
         switch (alternativeMsg) {
-            case RENAME_CONFLICTING_TARGET:
-                msg = MultiMarkdownBundle.message("quickfix.wikilink.rename-conflicting-page", displayName, newName);
+            case MATCH_CASE_TO_FILE:
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.match-target", linkRefElement instanceof MultiMarkdownWikiPageRef ? FilePathInfo.wikiRefAsFileNameWithExt(newLinkRef) : newLinkRef);
+                break;
+
+            case REMOVE_DASHES:
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-dashes", FilePathInfo.wikiRefAsFileNameWithExt(newLinkRef));
+                break;
+
+            case REMOVE_SLASHES:
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-slashes", FilePathInfo.wikiRefAsFileNameWithExt(newLinkRef));
+                break;
+
+            case REMOVE_SUBDIR:
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-subdirs", FilePathInfo.wikiRefAsFileNameWithExt(newLinkRef));
                 break;
 
             default:
-                msg = MultiMarkdownBundle.message("quickfix.wikilink.rename-page", displayName, newName);
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.change-target", linkRefElement instanceof MultiMarkdownWikiPageRef ? FilePathInfo.wikiRefAsFileNameWithExt(newLinkRef) : newLinkRef);
                 break;
         }
 
@@ -90,22 +111,25 @@ class RenameWikiPageQuickFix extends BaseIntentionAction {
         ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
-                renameWikiFile(project, targetFile, newName);
+                changelinkRef(project, linkRefElement, newLinkRef);
             }
         });
     }
 
-    private void renameWikiFile(final Project project, final PsiFile psiFile, final String fileName) {
+    private void changelinkRef(final Project project, final MultiMarkdownNamedElement linkRefElement, final String fileName) {
         final MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
         if (projectComponent != null) {
             new WriteCommandAction.Simple(project) {
                 @Override
                 public void run() {
+                    // change the whole name
+                    //wikiPageRefElement.setName(fileName, MultiMarkdownNamedElement.REASON_FILE_MOVED);
                     JavaRefactoringFactory factory = JavaRefactoringFactory.getInstance(project);
-                    JavaRenameRefactoring rename = factory.createRename(psiFile, fileName);
+                    JavaRenameRefactoring rename = factory.createRename(linkRefElement, fileName);
                     UsageInfo[] usages = rename.findUsages();
+
                     try {
-                        projectComponent.pushRefactoringRenameFlags(alternativeMsg == RENAME_CONFLICTING_TARGET ? RENAME_KEEP_ANCHOR | RENAME_KEEP_PATH | RENAME_KEEP_TEXT : REASON_FILE_RENAMED);
+                        projectComponent.pushRefactoringRenameFlags(renameFlags);
                         rename.doRefactoring(usages); // modified 'usages' array
                     } finally {
                         projectComponent.popRefactoringRenameFlags();

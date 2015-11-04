@@ -65,7 +65,7 @@ public class MultiMarkdownFindUsagesProvider implements FindUsagesProvider {
         } else {
             DefaultWordsScanner wordsScanner = new DefaultWordsScanner(new MultiMarkdownLexer(),
                     //TokenSet.create(TEXT, WIKI_LINK_REF, WIKI_LINK),
-                    TokenSet.create(WIKI_LINK_REF, WIKI_LINK_TEXT),
+                    TokenSet.create(WIKI_LINK_REF, WIKI_LINK_TEXT, WIKI_LINK_REF_ANCHOR, LINK_REF, LINK_REF_TEXT, LINK_REF_ANCHOR, LINK_REF_TITLE),
                     TokenSet.create(COMMENT),
                     TokenSet.EMPTY,
                     TokenSet.EMPTY)

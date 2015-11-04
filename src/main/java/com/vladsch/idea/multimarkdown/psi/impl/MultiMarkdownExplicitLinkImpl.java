@@ -21,14 +21,14 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownExplicitLink;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownVisitor;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
 import com.vladsch.idea.multimarkdown.util.FilePathInfo;
-import com.vladsch.idea.multimarkdown.util.GithubRepo;
+import com.vladsch.idea.multimarkdown.util.GitHubRepo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class MultiMarkdownExplicitLinkImpl extends ASTWrapperPsiElement implements MultiMarkdownExplicitLink {
-    public static String getElementText(@NotNull String name, @NotNull String text, @Nullable String title) {
+    public static String getElementText(@NotNull String name, @Nullable String text, @Nullable String title) {
+        if (text == null || text.isEmpty()) text = new FilePathInfo(name).getFileNameNoExt();
         return "[" + text + "](" + name + (title != null && title.length() > 0 ? " '" + title + "'" : "") + ")\n";
     }
 
@@ -37,8 +37,8 @@ public class MultiMarkdownExplicitLinkImpl extends ASTWrapperPsiElement implemen
     public String getMissingElementNameSpace(@NotNull String prefix, boolean addLinkRef) {
         MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(getProject());
         FilePathInfo filePathInfo = new FilePathInfo(getContainingFile().getVirtualFile());
-        GithubRepo githubRepo = projectComponent != null ? projectComponent.getGithubRepo(filePathInfo.getPath()) : null;
-        String vcsHome = githubRepo != null ? githubRepo.getBasePath() + "::" : "";
+        GitHubRepo gitHubRepo = projectComponent != null ? projectComponent.getGithubRepo(filePathInfo.getPath()) : null;
+        String vcsHome = gitHubRepo != null ? gitHubRepo.getBasePath() + "::" : "";
 
         if (addLinkRef) {
             String pageRef = MultiMarkdownPsiImplUtil.getLinkRefWithAnchor(this);

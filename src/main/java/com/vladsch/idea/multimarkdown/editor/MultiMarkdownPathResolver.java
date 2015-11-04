@@ -40,7 +40,7 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import com.vladsch.idea.multimarkdown.util.FileReference;
-import com.vladsch.idea.multimarkdown.util.GithubRepo;
+import com.vladsch.idea.multimarkdown.util.GitHubRepo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -281,10 +281,10 @@ public class MultiMarkdownPathResolver {
             VirtualFile virtualFile = FileDocumentManager.getInstance().getFile(document);
 
             if (virtualFile != null && projectComponent.isUnderVcs(virtualFile)) {
-                GithubRepo githubRepo = projectComponent.getGithubRepo(virtualFile.getPath());
-                if (githubRepo != null) {
+                GitHubRepo gitHubRepo = projectComponent.getGithubRepo(virtualFile.getPath());
+                if (gitHubRepo != null) {
                     FilePathInfo pathInfo = new FilePathInfo(virtualFile);
-                    githubhref = githubRepo.repoUrlFor(githubRepo.getRelativePath(noExtension ? pathInfo.getFilePathNoExt() : pathInfo.getFilePath()));
+                    githubhref = gitHubRepo.repoUrlFor(gitHubRepo.getRelativePath(noExtension ? pathInfo.getFilePathNoExt() : pathInfo.getFilePath()));
                     if (githubhref != null && !FilePathInfo.isExternalReference(githubhref)) {
                         githubhref = null;
                     }
@@ -303,18 +303,18 @@ public class MultiMarkdownPathResolver {
             MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
             if (projectComponent != null) {
                 if (projectComponent.isUnderVcs((VirtualFile) resolved)) {
-                    GithubRepo githubRepo = projectComponent.getGithubRepo(pathInfo.getPath());
-                    if (githubRepo != null) {
+                    GitHubRepo gitHubRepo = projectComponent.getGithubRepo(pathInfo.getPath());
+                    if (gitHubRepo != null) {
                         String githubhref = null;
                         FilePathInfo hrefInfo = new FilePathInfo(href);
-                        if (hrefInfo.isMarkdownExt() && githubRepo.isWiki()) {
-                            githubhref = githubRepo.repoUrlFor(hrefInfo.getFilePathNoExt() + hrefInfo.getAnchor());
+                        if (hrefInfo.isMarkdownExt() && gitHubRepo.isWiki()) {
+                            githubhref = gitHubRepo.repoUrlFor(hrefInfo.getFilePathNoExt() + hrefInfo.getAnchor());
                         } else {
-                            githubhref = githubRepo.repoUrlFor(hrefInfo.getFilePathWithAnchor());
+                            githubhref = gitHubRepo.repoUrlFor(hrefInfo.getFilePathWithAnchor());
                         }
 
                         if (githubhref == null) {
-                            githubhref = githubRepo.repoUrlFor(githubRepo.getRelativePath(githubRepo.isWiki() ? pathInfo.getFilePathWithAnchorNoExt() : pathInfo.getFullFilePath()));
+                            githubhref = gitHubRepo.repoUrlFor(gitHubRepo.getRelativePath(gitHubRepo.isWiki() ? pathInfo.getFilePathWithAnchorNoExt() : pathInfo.getFullFilePath()));
                         }
 
                         if (githubhref != null && FilePathInfo.isExternalReference(githubhref)) {

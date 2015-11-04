@@ -69,6 +69,8 @@ public class TestFilePathInfo {
     private String getWithAnchorExt;
     private String getWithAnchorExtWithDot;
 
+    private String getProjectHome;
+
     /* 0:  filePath, */
     /* 1:  getExt, */
     /* 2:  getExtWithDot, */
@@ -103,6 +105,7 @@ public class TestFilePathInfo {
     /* 31: getFileNameWithAnchorNoExtAsWikiRef, */
     /* 32: getWithAnchorExt, */
     /* 33: getWithAnchorExtWithDot, */
+    /* 34: getProjectHome, */
     public TestFilePathInfo(
             String filePath,
             String getExt,
@@ -137,7 +140,8 @@ public class TestFilePathInfo {
             String getFileNameWithAnchorAsWikiRef,
             String getFileNameWithAnchorNoExtAsWikiRef,
             String getWithAnchorExt,
-            String getWithAnchorExtWithDot
+            String getWithAnchorExtWithDot,
+            String getProjectHome
     ) {
         this.filePath = filePath;
         this.filePathInfo = new FilePathInfo(filePath);
@@ -172,8 +176,9 @@ public class TestFilePathInfo {
         this.getFileNameWithAnchor = getFileNameWithAnchor;
         this.getFileNameWithAnchorAsWikiRef = getFileNameWithAnchorAsWikiRef;
         this.getFileNameWithAnchorNoExtAsWikiRef = getFileNameWithAnchorNoExtAsWikiRef;
-        this.getWithAnchorExt= getWithAnchorExt;
-        this.getWithAnchorExtWithDot= getWithAnchorExtWithDot;
+        this.getWithAnchorExt = getWithAnchorExt;
+        this.getWithAnchorExtWithDot = getWithAnchorExtWithDot;
+        this.getProjectHome = getProjectHome;
     }
 
     /* @formatter:off */
@@ -210,6 +215,7 @@ public class TestFilePathInfo {
     @Test public void test_getFileNameWithAnchorNoExtAsWikiRef() { assertEquals(getFileNameWithAnchorNoExtAsWikiRef, filePathInfo.getFileNameWithAnchorNoExtAsWikiRef()); }
     @Test public void test_getWithAnchorExt() { assertEquals(getWithAnchorExt, filePathInfo.getWithAnchorExt()); }
     @Test public void test_getWithAnchorExtWithDot() { assertEquals(getWithAnchorExtWithDot, filePathInfo.getWithAnchorExtWithDot()); }
+    @Test public void test_getProjectHome() { assertEquals(getProjectHome, filePathInfo.getProjectHome()); }
 
   /* @formatter:on */
 
@@ -247,72 +253,73 @@ public class TestFilePathInfo {
     /* 31: getFileNameWithAnchorNoExtAsWikiRef, */
     /* 32: getWithAnchorExt, */
     /* 33: getWithAnchorExtWithDot, */
+    /* 34: getProjectHome, */
     @Parameterized.Parameters(name = "{index}: filePath = {0}")
     public static Iterable<Object[]> data() {
         return Arrays.asList(
-                /*  0*/ filePathInfoTestData("file-Name", "", 0),
-                /*  1*/ filePathInfoTestData("fileName.md", "", 0),
-                /*  2*/ filePathInfoTestData("file-Name.md", "", 0),
-                /*  3*/ filePathInfoTestData("/path/with/fileName.md", "", 0),
-                /*  4*/ filePathInfoTestData("/path/with/file-Name.md", "", 0),
-                /*  5*/ filePathInfoTestData("/pathName/with/fileName.md", "", 0),
-                /*  6*/ filePathInfoTestData("/path-Name/with/file-Name.md", "", 0),
-                /*  7*/ filePathInfoTestData("/home.wiki/file-Name", "/home.wiki", 1),
-                /*  8*/ filePathInfoTestData("/home.wiki/fileName.md", "/home.wiki", 1),
-                /*  9 */ filePathInfoTestData("/home.wiki/file-Name.md", "/home.wiki", 1),
-                /* 10 */ filePathInfoTestData("/home.wiki/path/with/fileName.md", "/home.wiki", 3),
-                /* 11 */ filePathInfoTestData("/home.wiki/path/with/file-Name.md", "/home.wiki", 3),
-                /* 12 */ filePathInfoTestData("/home.wiki/pathName/with/fileName.md", "/home.wiki", 3),
-                /* 13 */ filePathInfoTestData("/is-home.wiki/file-Name", "/is-home.wiki", 1),
-                /* 14 */ filePathInfoTestData("/is-home.wiki/fileName.md", "/is-home.wiki", 1),
-                /* 15 */ filePathInfoTestData("/is-home.wiki/file-Name.md", "/is-home.wiki", 1),
-                /* 16 */ filePathInfoTestData("/is-home.wiki/path/with/fileName.md", "/is-home.wiki", 3),
-                /* 17 */ filePathInfoTestData("/is-home.wiki/path/with/file-Name.md", "/is-home.wiki", 3),
-                /* 18 */ filePathInfoTestData("/is-home.wiki/pathName/with/fileName.md", "/is-home.wiki", 3),
-                /* 19 */ filePathInfoTestData("/somepath/home.wiki/path-Name/with/file-Name.md", "/somepath/home.wiki", 3),
-                /* 20 */ filePathInfoTestData("/somepath/home.wiki/file-Name", "/somepath/home.wiki", 1),
-                /* 21 */ filePathInfoTestData("/somepath/home.wiki/fileName.md", "/somepath/home.wiki", 1),
-                /* 22 */ filePathInfoTestData("/somepath/home.wiki/file-Name.md", "/somepath/home.wiki", 1),
-                /* 23 */ filePathInfoTestData("/somepath/home.wiki/path/with/fileName.md", "/somepath/home.wiki", 3),
-                /* 24 */ filePathInfoTestData("/somepath/home.wiki/path/with/file-Name.md", "/somepath/home.wiki", 3),
-                /* 25 */ filePathInfoTestData("/somepath/home.wiki/pathName/with/fileName.md", "/somepath/home.wiki", 3),
-                /* 26 */ filePathInfoTestData("/somepath/home.wiki/path-Name/with/file-Name.md", "/somepath/home.wiki", 3),
-                /* 27 */ filePathInfoTestData("/somepath/is-home.wiki/file-Name", "/somepath/is-home.wiki", 1),
-                /* 28 */ filePathInfoTestData("/somepath/is-home.wiki/fileName.md", "/somepath/is-home.wiki", 1),
-                /* 29 */ filePathInfoTestData("/somepath/is-home.wiki/file-Name.md", "/somepath/is-home.wiki", 1),
-                /* 30 */ filePathInfoTestData("/somepath/is-home.wiki/path/with/fileName.md", "/somepath/is-home.wiki", 3),
-                /* 31 */ filePathInfoTestData("/somepath/is-home.wiki/path/with/file-Name.md", "/somepath/is-home.wiki", 3),
-                /* 32 */ filePathInfoTestData("/somepath/is-home.wiki/pathName/with/fileName.md", "/somepath/is-home.wiki", 3),
-                /* 33 */ filePathInfoTestData("/somepath/is-home.wiki/pathName/with/fileName.", "/somepath/is-home.wiki", 3),
-                /* 34 */ filePathInfoTestData("/somepath/is-home.wiki/path/file-Name.md", "/somepath/is-home.wiki", 2),
-                /* 35 */ filePathInfoTestData("/somepath/is-home.wiki/path/path2/path3/file-Name.md", "/somepath/is-home.wiki", 4),
-                /* 36  */ filePathInfoTestData("file-Name#", "", 0),
-                /* 37  */ filePathInfoTestData("file-Name#anchor", "", 0),
-                /* 38  */ filePathInfoTestData("fileName#.md", "", 0),
-                /* 39  */ filePathInfoTestData("fileName#anchor.md", "", 0),
-                /* 40  */ filePathInfoTestData("file-Name#.md", "", 0),
-                /* 41  */ filePathInfoTestData("file-Name#anchor.md", "", 0),
-                /* 42  */ filePathInfoTestData("/path/with/fileName#.md", "", 0),
-                /* 43  */ filePathInfoTestData("/path/with/fileName#anchor.md", "", 0),
-                /* 44  */ filePathInfoTestData("/path/with/file-#Name.md", "", 0),
-                /* 45  */ filePathInfoTestData("/path/with/file-#anchorName.md", "", 0),
-                /* 46  */ filePathInfoTestData("/pathName/with/#fileName.md", "", 0),
-                /* 47  */ filePathInfoTestData("/pathName/with/#anchorfileName.md", "", 0),
-                /* 48  */ filePathInfoTestData("/path-Name/with/file-Name.md", "", 0),
-                /* 49  */ filePathInfoTestData("/home.wiki/file-Name-#6", "/home.wiki", 1),
-                /* 50  */ filePathInfoTestData("/home.wiki/fileName-6.md", "/home.wiki", 1),
-                /* 51  */ filePathInfoTestData("/another.wiki/home.wiki/fileName-6.md", "/another.wiki/home.wiki", 1),
-                /* 52  */ filePathInfoTestData("/another.wiki/test/home.wiki/fileName-6.md", "/another.wiki/test/home.wiki", 1),
-                /* 53  */ filePathInfoTestData("/wiki/fileName-6.md", "/wiki", 1),
-                /* 54  */ filePathInfoTestData("/another.wiki/wiki/fileName-6.md", "/another.wiki/wiki", 1),
-                /* 55  */ filePathInfoTestData("wiki/fileName-6.md", "wiki", 1),
-                /* 56  */ filePathInfoTestData("wiki/fileName-6.md", "wiki", 1),
-                /* 57  */ filePathInfoTestData("/home/wiki/fileName-6.md", "/home/wiki", 1)
+                /*  0*/  filePathInfoTestData("file-Name", "", 0, ""),
+                /*  1*/  filePathInfoTestData("fileName.md", "", 0, ""),
+                /*  2*/  filePathInfoTestData("file-Name.md", "", 0, ""),
+                /*  3*/  filePathInfoTestData("/path/with/fileName.md", "", 0, ""),
+                /*  4*/  filePathInfoTestData("/path/with/file-Name.md", "", 0, ""),
+                /*  5*/  filePathInfoTestData("/pathName/with/fileName.md", "", 0, ""),
+                /*  6*/  filePathInfoTestData("/path-Name/with/file-Name.md", "", 0, ""),
+                /*  7*/  filePathInfoTestData("/home/home.wiki/file-Name", "/home/home.wiki", 1, "/home"),
+                /*  8*/  filePathInfoTestData("/home/home.wiki/fileName.md", "/home/home.wiki", 1, "/home"),
+                /*  9 */ filePathInfoTestData("/home/home.wiki/file-Name.md", "/home/home.wiki", 1, "/home"),
+                /* 10 */ filePathInfoTestData("/home/home.wiki/path/with/fileName.md", "/home/home.wiki", 3, "/home"),
+                /* 11 */ filePathInfoTestData("/home/home.wiki/path/with/file-Name.md", "/home/home.wiki", 3, "/home"),
+                /* 12 */ filePathInfoTestData("/home/home.wiki/pathName/with/fileName.md", "/home/home.wiki", 3, "/home"),
+                /* 13 */ filePathInfoTestData("/is-home/is-home.wiki/file-Name", "/is-home/is-home.wiki", 1, "/is-home"),
+                /* 14 */ filePathInfoTestData("/is-home/is-home.wiki/fileName.md", "/is-home/is-home.wiki", 1, "/is-home"),
+                /* 15 */ filePathInfoTestData("/is-home/is-home.wiki/file-Name.md", "/is-home/is-home.wiki", 1, "/is-home"),
+                /* 16 */ filePathInfoTestData("/is-home/is-home.wiki/path/with/fileName.md", "/is-home/is-home.wiki", 3, "/is-home"),
+                /* 17 */ filePathInfoTestData("/is-home/is-home.wiki/path/with/file-Name.md", "/is-home/is-home.wiki", 3, "/is-home"),
+                /* 18 */ filePathInfoTestData("/is-home/is-home.wiki/pathName/with/fileName.md", "/is-home/is-home.wiki", 3, "/is-home"),
+                /* 19 */ filePathInfoTestData("/somepath/home.wiki/path-Name/with/file-Name.md", "", 0, ""),
+                /* 20 */ filePathInfoTestData("/home/home.wiki/file-Name", "/home/home.wiki", 1, "/home"),
+                /* 21 */ filePathInfoTestData("/home/home.wiki/fileName.md", "/home/home.wiki", 1, "/home"),
+                /* 22 */ filePathInfoTestData("/home/home.wiki/file-Name.md", "/home/home.wiki", 1, "/home"),
+                /* 23 */ filePathInfoTestData("/home/home.wiki/path/with/fileName.md", "/home/home.wiki", 3, "/home"),
+                /* 24 */ filePathInfoTestData("/home/home.wiki/path/with/file-Name.md", "/home/home.wiki", 3, "/home"),
+                /* 25 */ filePathInfoTestData("/home/home.wiki/pathName/with/fileName.md", "/home/home.wiki", 3, "/home"),
+                /* 26 */ filePathInfoTestData("/home/home.wiki/path-Name/with/file-Name.md", "/home/home.wiki", 3, "/home"),
+                /* 27 */ filePathInfoTestData("/is-home/is-home.wiki/file-Name", "/is-home/is-home.wiki", 1, "/is-home"),
+                /* 28 */ filePathInfoTestData("/is-home/is-home.wiki/fileName.md", "/is-home/is-home.wiki", 1, "/is-home"),
+                /* 29 */ filePathInfoTestData("/is-home/is-home.wiki/file-Name.md", "/is-home/is-home.wiki", 1, "/is-home"),
+                /* 30 */ filePathInfoTestData("/is-home/is-home.wiki/path/with/fileName.md", "/is-home/is-home.wiki", 3, "/is-home"),
+                /* 31 */ filePathInfoTestData("/is-home/is-home.wiki/path/with/file-Name.md", "/is-home/is-home.wiki", 3, "/is-home"),
+                /* 32 */ filePathInfoTestData("/is-home/is-home.wiki/pathName/with/fileName.md", "/is-home/is-home.wiki", 3, "/is-home"),
+                /* 33 */ filePathInfoTestData("/is-home/is-home.wiki/pathName/with/fileName.", "/is-home/is-home.wiki", 3, "/is-home"),
+                /* 34 */ filePathInfoTestData("/is-home/is-home.wiki/path/file-Name.md", "/is-home/is-home.wiki", 2, "/is-home"),
+                /* 35 */ filePathInfoTestData("/is-home/is-home.wiki/path/path2/path3/file-Name.md", "/is-home/is-home.wiki", 4, "/is-home"),
+                /* 36  */ filePathInfoTestData("file-Name#", "", 0, ""),
+                /* 37  */ filePathInfoTestData("file-Name#anchor", "", 0, ""),
+                /* 38  */ filePathInfoTestData("fileName#.md", "", 0, ""),
+                /* 39  */ filePathInfoTestData("fileName#anchor.md", "", 0, ""),
+                /* 40  */ filePathInfoTestData("file-Name#.md", "", 0, ""),
+                /* 41  */ filePathInfoTestData("file-Name#anchor.md", "", 0, ""),
+                /* 42  */ filePathInfoTestData("/path/with/fileName#.md", "", 0, ""),
+                /* 43  */ filePathInfoTestData("/path/with/fileName#anchor.md", "", 0, ""),
+                /* 44  */ filePathInfoTestData("/path/with/file-#Name.md", "", 0, ""),
+                /* 45  */ filePathInfoTestData("/path/with/file-#anchorName.md", "", 0, ""),
+                /* 46  */ filePathInfoTestData("/pathName/with/#fileName.md", "", 0, ""),
+                /* 47  */ filePathInfoTestData("/pathName/with/#anchorfileName.md", "", 0, ""),
+                /* 48  */ filePathInfoTestData("/path-Name/with/file-Name.md", "", 0, ""),
+                /* 49  */ filePathInfoTestData("/home/home.wiki/file-Name-#6", "/home/home.wiki", 1, "/home"),
+                /* 50  */ filePathInfoTestData("/home/home.wiki/fileName-6.md", "/home/home.wiki", 1, "/home"),
+                /* 51  */ filePathInfoTestData("/another.wiki/home.wiki/fileName-6.md", "", 0, ""),
+                /* 52  */ filePathInfoTestData("/another.wiki/home/home.wiki/fileName-6.md", "/another.wiki/home/home.wiki", 1, "/another.wiki/home"),
+                /* 53  */ filePathInfoTestData("/wiki/fileName-6.md", "", 0, ""),
+                /* 54  */ filePathInfoTestData("/another.wiki/another.wiki/fileName-6.md", "", 0, ""),
+                /* 55  */ filePathInfoTestData("/funny/funny.wiki/fileName-6.md", "/funny/funny.wiki", 1, "/funny"),
+                /* 56  */ filePathInfoTestData("/funny/funny.wiki/fileName-6.md", "/funny/funny.wiki", 1, "/funny"),
+                /* 57  */ filePathInfoTestData("/home/home.wiki/fileName-6.md", "/home/home.wiki", 1, "/home")
         );
     }
 
-    private static Object[] filePathInfoTestData(String filePath, String wikiHome, int getUpDirectoriesToWikiHome) {
-        Object[] result = new Object[34];
+    private static Object[] filePathInfoTestData(String filePath, String wikiHome, int getUpDirectoriesToWikiHome, String projectHome) {
+        Object[] result = new Object[35];
         String tmp;
         int itmp;
         String pathPrefix = filePath.isEmpty() || filePath.charAt(0) != '/' ? "" : "/";
@@ -354,6 +361,7 @@ public class TestFilePathInfo {
 /* 31: getFileNameWithAnchorNoExtAsWikiRef, */  result[31] = FilenameUtils.getBaseName(filePath).replace('-', ' ');
 /* 32: getFileNameWithAnchorAsWikiRef, */       result[32] = FilenameUtils.getExtension(filePath);
 /* 33: getFileNameWithAnchorNoExtAsWikiRef, */  result[33] = (itmp = (tmp = FilenameUtils.getName(filePath)).lastIndexOf('.')) != -1 ? tmp.substring(itmp) : "";
+/* 34: getProjectHome, */                       result[34] = projectHome;
 
         /* @formatter:on */
         return result;
