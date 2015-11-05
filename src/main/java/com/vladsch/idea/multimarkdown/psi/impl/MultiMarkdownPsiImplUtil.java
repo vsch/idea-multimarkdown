@@ -280,7 +280,7 @@ public class MultiMarkdownPsiImplUtil {
         ASTNode pageRefNode = element.getNode().findChildByType(WIKI_LINK_REF);
 
         if (pageRefNode != null && pageTitleNode != null) {
-            String anchorText = getElementText(WIKI_LINK, element.getParent(), WIKI_LINK_REF_ANCHOR, "#", null);
+            String anchorText = getElementText(WIKI_LINK, element, WIKI_LINK_REF_ANCHOR, "#", null);
             MultiMarkdownWikiLink wikiLink = MultiMarkdownElementFactory.createWikiLink(element.getProject(), pageTitleNode.getText(), pageRefNode.getText() + anchorText);
             element.replace(wikiLink);
         }

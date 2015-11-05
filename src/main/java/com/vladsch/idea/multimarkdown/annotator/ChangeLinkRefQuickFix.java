@@ -45,6 +45,7 @@ class ChangeLinkRefQuickFix extends BaseIntentionAction {
     public static final int REMOVE_DASHES = 2;
     public static final int REMOVE_SLASHES = 3;
     public static final int REMOVE_SUBDIR = 4;
+    public static final int ADD_PAGE_REF = 5;
 
     private String newLinkRef;
     private MultiMarkdownNamedElement linkRefElement;
@@ -85,6 +86,11 @@ class ChangeLinkRefQuickFix extends BaseIntentionAction {
 
             case REMOVE_SUBDIR:
                 msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-subdirs", FilePathInfo.wikiRefAsFileNameWithExt(newLinkRef));
+                break;
+
+            case ADD_PAGE_REF:
+                //msg = MultiMarkdownBundle.message("quickfix.wikilink.0.add-page-ref", FilePathInfo.wikiRefAsFileNameWithExt(newLinkRef));
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.change-target", newLinkRef);
                 break;
 
             default:

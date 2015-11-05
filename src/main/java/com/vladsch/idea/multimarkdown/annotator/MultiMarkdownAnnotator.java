@@ -55,11 +55,12 @@ public class MultiMarkdownAnnotator implements Annotator {
         if (wikiPageRefReference != null) {
             MultiMarkdownWikiPageText wikiPageText = (MultiMarkdownWikiPageText) MultiMarkdownPsiImplUtil.findChildByType(element, MultiMarkdownTypes.WIKI_LINK_TEXT);
 
-            if (wikiPageText != null && wikiPageText.getName() != null) {
+            String wikiPageTextName = wikiPageText != null ? wikiPageText.getName() : null;
+            if (wikiPageTextName != null) {
                 // see if the link title resolves to a page
                 MultiMarkdownFile containingFile = (MultiMarkdownFile) element.getContainingFile();
 
-                if (wikiPageText.getName().equals(wikiPageRef.getNameWithAnchor())) {
+                if (wikiPageTextName.equals(wikiPageRef.getNameWithAnchor())) {
                     // can get rid off the text
                     annotator = holder.createWeakWarningAnnotation(wikiPageText.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.redundant-page-title"));
                     annotator.registerFix(new DeleteWikiPageTitleQuickFix(element));
@@ -67,7 +68,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                     FileReferenceList accessibleWikiPageRefs = new FileReferenceListQuery(element.getProject())
                             .wantMarkdownFiles()
                             .inSource(containingFile)
-                            .matchWikiRef(wikiPageText.getName())
+                            .matchWikiRef(wikiPageTextName)
                             .accessibleWikiPageRefs();
 
                     if (accessibleWikiPageRefs.size() == 1) {
@@ -81,12 +82,15 @@ public class MultiMarkdownAnnotator implements Annotator {
 
                             annotator.registerFix(new SwapWikiPageRefTitleQuickFix(element));
                             annotator.registerFix(new DeleteWikiPageRefQuickFix(element));
-                        } else if (accessibleWikiPageRefs.get()[0].getFileNameNoExtAsWikiRef().equals(wikiPageText.getName())) {
+                        } else if (accessibleWikiPageRefs.get()[0].getFileNameNoExtAsWikiRef().equals(wikiPageTextName)) {
                             annotator = holder.createWeakWarningAnnotation(wikiPageText.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.swap-ref-title"));
                             annotator.registerFix(new DeleteWikiPageTitleQuickFix(element));
                             annotator.registerFix(new DeleteWikiPageRefQuickFix(element));
                             annotator.registerFix(new SwapWikiPageRefTitleQuickFix(element));
                         }
+                    } else if (wikiPageTextName.contains("#")) {
+                        annotator = holder.createWeakWarningAnnotation(wikiPageText.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.swap-ref-title"));
+                        annotator.registerFix(new SwapWikiPageRefTitleQuickFix(element));
                     }
                 }
             }
@@ -107,7 +111,7 @@ public class MultiMarkdownAnnotator implements Annotator {
             MultiMarkdownFile containingFile = (MultiMarkdownFile) element.getContainingFile();
             FileReference sourceReference = new FileReference(containingFile);
 
-            if (annotator == null && !FilePathInfo.linkRefNoAnchor(pathInfo.getFileName()).isEmpty()) {
+            if (annotator == null && !pathInfo.isExternalReference() && !FilePathInfo.linkRefNoAnchor(pathInfo.getFileName()).isEmpty()) {
                 // see if it exists
 
                 FileReferenceList filesReferenceList;
@@ -137,7 +141,10 @@ public class MultiMarkdownAnnotator implements Annotator {
                         .matchLinkRef((MultiMarkdownLinkRef) element, withExt)
                         .all();
 
-                if (accessibleLinkRefs.size() != 1) {
+                if (accessibleLinkRefs.size() == 1) {
+                    // TODO: add quick fix to change to wiki from explicit link if this is a wiki page
+
+                } else {
                     boolean warningsOnly = false;
                     boolean canCreateFile = true;
                     boolean needTargetList = true;
@@ -271,27 +278,28 @@ public class MultiMarkdownAnnotator implements Annotator {
         } else if (element instanceof MultiMarkdownWikiPageRef) {
             Annotation annotator = null;
             MultiMarkdownWikiLink wikiLink = (MultiMarkdownWikiLink) element.getParent();
-            if (wikiLink != null) annotator = checkWikiLinkSwapRefTitle(wikiLink, holder);
 
             FilePathInfo pathInfo = new FilePathInfo(((MultiMarkdownWikiPageRef) element).getNameWithAnchor());
 
             // if not reversed ref and text and not just a link reference
-            if (annotator == null && !FilePathInfo.linkRefNoAnchor(pathInfo.getFileName()).isEmpty()) {
+            if (pathInfo.getFileName().isEmpty()) {
+                if (pathInfo.getFileNameWithAnchor().startsWith("#")) {
+                    annotator = holder.createErrorAnnotation(element.getTextRange(),
+                            MultiMarkdownBundle.message("annotation.wikilink.has-only-anchor"));
+
+                    FilePathInfo sourceFileInfo = new FilePathInfo(element.getContainingFile().getVirtualFile());
+                    annotator.registerFix(new ChangeLinkRefQuickFix((MultiMarkdownNamedElement) element, sourceFileInfo.getFileNameNoExtAsWikiRef() + pathInfo.getFullFilePath(), ChangeLinkRefQuickFix.ADD_PAGE_REF, RENAME_KEEP_TEXT));
+
+                    // TODO: add quick fix to change wiki to explicit link
+                }
+            } else {
+                if (wikiLink != null) annotator = checkWikiLinkSwapRefTitle(wikiLink, holder);
                 // see if it exists
                 MultiMarkdownFile containingFile = (MultiMarkdownFile) element.getContainingFile();
 
                 FileReferenceList filesReferenceList = new FileReferenceListQuery(element.getProject())
                         .keepLinkRefAnchor()
                         .wantMarkdownFiles()
-                        .all();
-
-                FileReferenceList matchedFilesReferenceList = filesReferenceList.query()
-                        .spaceDashEqual()
-                        .caseInsensitive()
-                        .keepLinkRefAnchor()
-                        .wantMarkdownFiles()
-                        .gitHubWikiRules()
-                        .matchWikiRef((MultiMarkdownWikiPageRef) element)
                         .all();
 
                 FileReferenceList accessibleWikiPageRefs = filesReferenceList.query()
@@ -303,7 +311,11 @@ public class MultiMarkdownAnnotator implements Annotator {
                 if (!containingFile.isWikiPage()) {
                     annotator = holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.github-only-on-wiki-page"));
                     annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
-                } else if (accessibleWikiPageRefs.size() != 1) {
+
+                    // TODO: add quick fix to change wiki to explicit link
+                } else if (accessibleWikiPageRefs.size() == 1) {
+                    // TODO: add quick fix to change wiki to explicit link
+                } else {
                     boolean warningsOnly = false;
                     boolean canCreateFile = true;
                     boolean needTargetList = true;
@@ -332,12 +344,22 @@ public class MultiMarkdownAnnotator implements Annotator {
                         }
                     } else {
                         // not set to right name or to an accessible name
+                        FileReferenceList matchedFilesReferenceList = filesReferenceList.query()
+                                .spaceDashEqual()
+                                .caseInsensitive()
+                                .keepLinkRefAnchor()
+                                .wantMarkdownFiles()
+                                .gitHubWikiRules()
+                                .matchWikiRef((MultiMarkdownWikiPageRef) element)
+                                .all();
+
                         FileReferenceList otherFileRefList = matchedFilesReferenceList;
 
                         if (matchedFilesReferenceList.size() > 1) {
                             // see if eliminating files out of this wiki will help
                             otherFileRefList = matchedFilesReferenceList.sameWikiHomePageRefs();
                         }
+
                         FileReference[] otherReferences = otherFileRefList.get();
 
                         if (otherReferences.length == 1) {

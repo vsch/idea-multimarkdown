@@ -62,7 +62,7 @@ public class MultiMarkdownReferenceWikiPageRef extends MultiMarkdownReference {
     @Override
     protected ResolveResult[] getMultiResolveResults(boolean incompleteCode) {
         String name = myElement.getName();
-        if (name != null) {
+        if (name != null && myElement.getContainingFile() != null && myElement.getContainingFile().getVirtualFile() != null) {
 
             FileReferenceList fileReferenceList = new FileReferenceListQuery(myElement.getProject())
                     .gitHubWikiRules()

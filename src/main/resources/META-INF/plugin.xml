@@ -46,11 +46,14 @@
     <version>1.2.0</version>
     <idea-version since-build="133.1711"/>
     <change-notes><![CDATA[
-    <ul><h3><b>1.2.0 - License Features Added</b></h3>
+    <ul><h3><b>1.2.0 - Licensed Features Added</b></h3>
       <li>Fix not recognizing tables that have a divider and table cells that look like divider cells. (pegdown)</li>
       <li>Fix Custom CSS was not loaded in new preview tab or html text.</li>
+      <li>Fix #58, wiki links with anchor references would show as unresolved.</li>
       <li>Add MultiMarkdown style footnotes. The <code>[^n]</code> for reference and <code>[^n]: Footnote text</code>, for definition where n is one or more digit, letter, dash, dot or underscore.</li>
       <li>Add licensing functionality.</li>
+      <li>Add Licensed explicit link refactoring, completion, find usages.</li>
+      <li>Add Licensed explicit image link refactoring, completion, find usages.</li>
     </ul>
     <ul><h3><b>1.1.13 - More GitHub integration, Bug Fixes &amp; Optimizations.</b></h3>
       <li>Fix now using FileBasedIndex to find files for link resolution. No longer need to mark wiki directories as source or resource roots</li>

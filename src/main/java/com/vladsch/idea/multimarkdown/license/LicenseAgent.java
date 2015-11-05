@@ -62,8 +62,8 @@ public class LicenseAgent {
     final static private String activationHeader = "-----BEGIN IDEA-MULTIMARKDOWN ACTIVATION-----";
     final static private String activationFooter = "-----END IDEA-MULTIMARKDOWN ACTIVATION-----";
 
-    //final static private String siteURL = "https://vladsch.com";
-    final static private String siteURL = "http://vladsch.dev";
+    final static private String siteURL = "https://vladsch.com";
+    //final static private String siteURL = "http://vladsch.dev";
 
     final static private String trialURL = siteURL + "/product/multimarkdown/json/trial";
     final static private String licenseURL = siteURL + "/product/multimarkdown/json/license";

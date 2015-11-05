@@ -60,7 +60,7 @@ public class MultiMarkdownReferenceLinkRef extends MultiMarkdownReference {
     @Override
     protected ResolveResult[] getMultiResolveResults(boolean incompleteCode) {
         String name = myElement.getName();
-        if (name != null) {
+        if (name != null && myElement.getContainingFile() != null && myElement.getContainingFile().getVirtualFile() != null) {
             if (!FilePathInfo.isExternalReference(name)) {
                 FileReference sourceReference = new FileReference(myElement.getContainingFile());
 

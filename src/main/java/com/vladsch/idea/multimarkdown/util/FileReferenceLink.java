@@ -41,8 +41,10 @@ public class FileReferenceLink extends FileReference {
     public static final int REASON_WIKI_PAGEREF_HAS_SLASH = 0x0100;
     public static final int REASON_WIKI_PAGEREF_HAS_FIXABLE_SLASH = 0x0200;
     public static final int REASON_WIKI_PAGEREF_HAS_SUBDIR = 0x0400;
+    public static final int REASON_WIKI_PAGEREF_HAS_ONLY_ANCHOR = 0x0800;
 
-    public static final int REASON_NOT_UNDER_SAME_REPO = 0x0800;
+    // flags are re-used for link ref reasons
+    public static final int REASON_NOT_UNDER_SAME_REPO = 0x0001;
 
     protected final @NotNull FileReference sourceReference;
     protected String pathPrefix;
@@ -243,6 +245,9 @@ public class FileReferenceLink extends FileReference {
 
         public boolean wikiRefHasSubDir() { return false; }
         public String wikiRefHasSubDirFixed() { return wikiRef; }
+
+        public boolean wikiRefHasOnlyAnchor() { return (reasons & REASON_WIKI_PAGEREF_HAS_ONLY_ANCHOR) != 0; }
+        public String wikiRefHasOnlyAnchorFixed() { return referenceLink.getFileNameNoExt() + wikiRef; }
     }
 
     @NotNull
@@ -268,6 +273,9 @@ public class FileReferenceLink extends FileReference {
         if (pathContainsAnchor()) reasons |= REASON_TARGET_PATH_HAS_ANCHOR;
         if (fileNameContainsAnchor()) reasons |= REASON_TARGET_NAME_HAS_ANCHOR;
 
+        if (wikiPageRef != null && sourceReference.getFullFilePath().equals(getFullFilePath()) && wikiPageRef.startsWith("#")) {
+            reasons |= REASON_WIKI_PAGEREF_HAS_ONLY_ANCHOR;
+        }
         return reasons;
     }
 

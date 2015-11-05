@@ -229,7 +229,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
 
                             for (MultiMarkdownFile markdownFile : markdownFiles) {
                                 if (reparseFilePsi) reparseFiles.add(markdownFile.getVirtualFile());
-                                instance.restart(markdownFile);
+                                else instance.restart(markdownFile);
                             }
 
                             if (reparseFilePsi) {
