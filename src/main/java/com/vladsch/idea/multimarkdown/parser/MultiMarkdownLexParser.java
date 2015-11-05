@@ -25,7 +25,7 @@ package com.vladsch.idea.multimarkdown.parser;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes;
+import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
 import org.jetbrains.annotations.NotNull;
@@ -36,6 +36,8 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.*;
+
 /**
  * Lexer/Parser Combination that uses pegdown behind the scenes to do the heavy lifting
  * here we just fake everything.
@@ -43,11 +45,13 @@ import java.util.regex.Pattern;
 public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
     private static final Logger LOGGER = Logger.getInstance(MultiMarkdownLexParser.class);
 
-    private MultiMarkdownGlobalSettingsListener globalSettingsListener = null;
+    private MultiMarkdownGlobalSettingsListener globalSettingsListener;
+
     //private ThreadLocal<PegDownProcessor> processor = initProcessor();
     private PegDownProcessor processor = null;
     private int currentStringLength;
-    //private String currentString;
+    private String currentString;
+    private char[] currentChars;
 
     private static HashSet<IElementType> excludedTokenTypes = new HashSet<IElementType>();
     private static Map<IElementType, HashSet<IElementType>> overrideExclusions = new HashMap<IElementType, HashSet<IElementType>>();
@@ -85,6 +89,8 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         lexerTokens = null;
         rootNode = null;
         minStackLevel = 0;
+        currentString = null;
+        currentChars = null;
 
         clearStack();
 
@@ -92,6 +98,8 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         abbreviationsRegEx = "";
     }
 
+    // when an exclusion is added then the parent range will not be punched out by the child
+    // default child range punches out a hole in the parent range.
     static protected void addExclusion(IElementType parent, IElementType child) {
         HashSet<IElementType> childExclusions;
         if (!overrideExclusions.containsKey(child)) {
@@ -109,35 +117,35 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
     }
 
     static protected void addInlineExclusions(IElementType parent, boolean addEmph) {
-        addExclusion(parent, MultiMarkdownTypes.CODE);
-        addExclusion(parent, MultiMarkdownTypes.SPECIAL_TEXT);
-        addExclusion(parent, MultiMarkdownTypes.TEXT);
+        addExclusion(parent, CODE);
+        addExclusion(parent, SPECIAL_TEXT);
+        addExclusion(parent, TEXT);
 
         if (addEmph) {
-            addExclusion(parent, MultiMarkdownTypes.BOLD);
-            addExclusion(parent, MultiMarkdownTypes.BOLD_MARKER);
-            addExclusion(parent, MultiMarkdownTypes.BOLDITALIC);
-            addExclusion(parent, MultiMarkdownTypes.ITALIC);
-            addExclusion(parent, MultiMarkdownTypes.ITALIC_MARKER);
-            addExclusion(parent, MultiMarkdownTypes.STRIKETHROUGH);
-            addExclusion(parent, MultiMarkdownTypes.STRIKETHROUGH_BOLD);
-            addExclusion(parent, MultiMarkdownTypes.STRIKETHROUGH_BOLDITALIC);
-            addExclusion(parent, MultiMarkdownTypes.STRIKETHROUGH_ITALIC);
-            addExclusion(parent, MultiMarkdownTypes.STRIKETHROUGH_MARKER);
+            addExclusion(parent, BOLD);
+            addExclusion(parent, BOLD_MARKER);
+            addExclusion(parent, BOLDITALIC);
+            addExclusion(parent, ITALIC);
+            addExclusion(parent, ITALIC_MARKER);
+            addExclusion(parent, STRIKETHROUGH);
+            addExclusion(parent, STRIKETHROUGH_BOLD);
+            addExclusion(parent, STRIKETHROUGH_BOLDITALIC);
+            addExclusion(parent, STRIKETHROUGH_ITALIC);
+            addExclusion(parent, STRIKETHROUGH_MARKER);
         }
     }
 
     static protected void addExcludeFromInlines(IElementType parent) {
-        addExclusion(MultiMarkdownTypes.BOLD, parent);
-        addExclusion(MultiMarkdownTypes.BOLD_MARKER, parent);
-        addExclusion(MultiMarkdownTypes.BOLDITALIC, parent);
-        addExclusion(MultiMarkdownTypes.ITALIC, parent);
-        addExclusion(MultiMarkdownTypes.ITALIC_MARKER, parent);
-        addExclusion(MultiMarkdownTypes.STRIKETHROUGH, parent);
-        addExclusion(MultiMarkdownTypes.STRIKETHROUGH_BOLD, parent);
-        addExclusion(MultiMarkdownTypes.STRIKETHROUGH_BOLDITALIC, parent);
-        addExclusion(MultiMarkdownTypes.STRIKETHROUGH_ITALIC, parent);
-        addExclusion(MultiMarkdownTypes.STRIKETHROUGH_MARKER, parent);
+        addExclusion(BOLD, parent);
+        addExclusion(BOLD_MARKER, parent);
+        addExclusion(BOLDITALIC, parent);
+        addExclusion(ITALIC, parent);
+        addExclusion(ITALIC_MARKER, parent);
+        addExclusion(STRIKETHROUGH, parent);
+        addExclusion(STRIKETHROUGH_BOLD, parent);
+        addExclusion(STRIKETHROUGH_BOLDITALIC, parent);
+        addExclusion(STRIKETHROUGH_ITALIC, parent);
+        addExclusion(STRIKETHROUGH_MARKER, parent);
     }
 
     static protected boolean isExcluded(IElementType parent, IElementType child) {
@@ -162,86 +170,87 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
 
     static {
 
-        addCombinationSplit(MultiMarkdownTypes.BOLDITALIC, MultiMarkdownTypes.BOLD, MultiMarkdownTypes.ITALIC);
-        addCombinationSplit(MultiMarkdownTypes.STRIKETHROUGH_BOLDITALIC, MultiMarkdownTypes.BOLDITALIC, MultiMarkdownTypes.STRIKETHROUGH);
-        addCombinationSplit(MultiMarkdownTypes.STRIKETHROUGH_BOLDITALIC, MultiMarkdownTypes.BOLD, MultiMarkdownTypes.STRIKETHROUGH_ITALIC);
-        addCombinationSplit(MultiMarkdownTypes.STRIKETHROUGH_BOLDITALIC, MultiMarkdownTypes.ITALIC, MultiMarkdownTypes.STRIKETHROUGH_BOLD);
-        addCombinationSplit(MultiMarkdownTypes.STRIKETHROUGH_BOLDITALIC, MultiMarkdownTypes.STRIKETHROUGH_ITALIC, MultiMarkdownTypes.STRIKETHROUGH_BOLD);
+        addCombinationSplit(BOLDITALIC, BOLD, ITALIC);
+        addCombinationSplit(STRIKETHROUGH_BOLDITALIC, BOLDITALIC, STRIKETHROUGH);
+        addCombinationSplit(STRIKETHROUGH_BOLDITALIC, BOLD, STRIKETHROUGH_ITALIC);
+        addCombinationSplit(STRIKETHROUGH_BOLDITALIC, ITALIC, STRIKETHROUGH_BOLD);
+        addCombinationSplit(STRIKETHROUGH_BOLDITALIC, STRIKETHROUGH_ITALIC, STRIKETHROUGH_BOLD);
 
-        addCombinationSplit(MultiMarkdownTypes.STRIKETHROUGH_BOLD, MultiMarkdownTypes.BOLD, MultiMarkdownTypes.STRIKETHROUGH);
-        addCombinationSplit(MultiMarkdownTypes.STRIKETHROUGH_ITALIC, MultiMarkdownTypes.ITALIC, MultiMarkdownTypes.STRIKETHROUGH);
+        addCombinationSplit(STRIKETHROUGH_BOLD, BOLD, STRIKETHROUGH);
+        addCombinationSplit(STRIKETHROUGH_ITALIC, ITALIC, STRIKETHROUGH);
 
         // these are not used for highlighting, only to punch out the range of their parents
-        excludedTokenTypes.add(MultiMarkdownTypes.TABLE_BODY);
-        excludedTokenTypes.add(MultiMarkdownTypes.TABLE_HEADER);
+        excludedTokenTypes.add(TABLE_BODY);
+        excludedTokenTypes.add(TABLE_HEADER);
 
-        addExclusion(MultiMarkdownTypes.ANCHOR_LINK, MultiMarkdownTypes.INLINE_HTML);
+        addExclusion(ANCHOR_LINK, INLINE_HTML);
 
         // these can affect text and should combine attributes
-        addInlineExclusions(MultiMarkdownTypes.TABLE_HEADER);
-        addInlineExclusions(MultiMarkdownTypes.TABLE_CELL_RODD_CODD);
-        addInlineExclusions(MultiMarkdownTypes.TABLE_CELL_RODD_CEVEN);
-        addInlineExclusions(MultiMarkdownTypes.TABLE_CELL_REVEN_CODD);
-        addInlineExclusions(MultiMarkdownTypes.TABLE_CELL_REVEN_CEVEN);
-        addInlineExclusions(MultiMarkdownTypes.TABLE_CAPTION);
+        addInlineExclusions(TABLE_HEADER);
+        addInlineExclusions(TABLE_CELL_RODD_CODD);
+        addInlineExclusions(TABLE_CELL_RODD_CEVEN);
+        addInlineExclusions(TABLE_CELL_REVEN_CODD);
+        addInlineExclusions(TABLE_CELL_REVEN_CEVEN);
+        addInlineExclusions(TABLE_CAPTION);
 
         // task items
-        //addInlineExclusions(MultiMarkdownTypes.TASK_ITEM);
-        //addInlineExclusions(MultiMarkdownTypes.TASK_DONE_ITEM);
-        addInlineExclusions(MultiMarkdownTypes.TASK_ITEM_MARKER);
-        addInlineExclusions(MultiMarkdownTypes.TASK_DONE_ITEM_MARKER);
+        //addInlineExclusions(TASK_ITEM);
+        //addInlineExclusions(TASK_DONE_ITEM);
+        addInlineExclusions(TASK_ITEM_MARKER);
+        addInlineExclusions(TASK_DONE_ITEM_MARKER);
+        //addInlineExclusions(FOOTNOTE);
 
         // let all the inlines not punch through each other
-        addInlineExclusions(MultiMarkdownTypes.STRIKETHROUGH_BOLDITALIC, false);
-        addExclusion(MultiMarkdownTypes.STRIKETHROUGH_BOLDITALIC, MultiMarkdownTypes.STRIKETHROUGH_BOLD);
-        addExclusion(MultiMarkdownTypes.STRIKETHROUGH_BOLDITALIC, MultiMarkdownTypes.STRIKETHROUGH_ITALIC);
-        addExclusion(MultiMarkdownTypes.STRIKETHROUGH_BOLDITALIC, MultiMarkdownTypes.STRIKETHROUGH);
-        addExclusion(MultiMarkdownTypes.STRIKETHROUGH_BOLDITALIC, MultiMarkdownTypes.BOLDITALIC);
-        addExclusion(MultiMarkdownTypes.STRIKETHROUGH_BOLDITALIC, MultiMarkdownTypes.BOLD);
-        addExclusion(MultiMarkdownTypes.STRIKETHROUGH_BOLDITALIC, MultiMarkdownTypes.ITALIC);
+        addInlineExclusions(STRIKETHROUGH_BOLDITALIC, false);
+        addExclusion(STRIKETHROUGH_BOLDITALIC, STRIKETHROUGH_BOLD);
+        addExclusion(STRIKETHROUGH_BOLDITALIC, STRIKETHROUGH_ITALIC);
+        addExclusion(STRIKETHROUGH_BOLDITALIC, STRIKETHROUGH);
+        addExclusion(STRIKETHROUGH_BOLDITALIC, BOLDITALIC);
+        addExclusion(STRIKETHROUGH_BOLDITALIC, BOLD);
+        addExclusion(STRIKETHROUGH_BOLDITALIC, ITALIC);
 
-        addInlineExclusions(MultiMarkdownTypes.STRIKETHROUGH_ITALIC, false);
-        addExclusion(MultiMarkdownTypes.STRIKETHROUGH_ITALIC, MultiMarkdownTypes.STRIKETHROUGH);
-        addExclusion(MultiMarkdownTypes.STRIKETHROUGH_ITALIC, MultiMarkdownTypes.ITALIC);
+        addInlineExclusions(STRIKETHROUGH_ITALIC, false);
+        addExclusion(STRIKETHROUGH_ITALIC, STRIKETHROUGH);
+        addExclusion(STRIKETHROUGH_ITALIC, ITALIC);
 
-        addInlineExclusions(MultiMarkdownTypes.STRIKETHROUGH_BOLD, false);
-        addExclusion(MultiMarkdownTypes.STRIKETHROUGH_BOLD, MultiMarkdownTypes.STRIKETHROUGH);
-        addExclusion(MultiMarkdownTypes.STRIKETHROUGH_BOLD, MultiMarkdownTypes.BOLD);
+        addInlineExclusions(STRIKETHROUGH_BOLD, false);
+        addExclusion(STRIKETHROUGH_BOLD, STRIKETHROUGH);
+        addExclusion(STRIKETHROUGH_BOLD, BOLD);
 
-        addInlineExclusions(MultiMarkdownTypes.STRIKETHROUGH, false);
+        addInlineExclusions(STRIKETHROUGH, false);
 
-        addInlineExclusions(MultiMarkdownTypes.BOLDITALIC, false);
-        addExclusion(MultiMarkdownTypes.BOLDITALIC, MultiMarkdownTypes.BOLD);
-        addExclusion(MultiMarkdownTypes.BOLDITALIC, MultiMarkdownTypes.ITALIC);
+        addInlineExclusions(BOLDITALIC, false);
+        addExclusion(BOLDITALIC, BOLD);
+        addExclusion(BOLDITALIC, ITALIC);
 
-        addInlineExclusions(MultiMarkdownTypes.BOLD, false);
-        addInlineExclusions(MultiMarkdownTypes.ITALIC, false);
+        addInlineExclusions(BOLD, false);
+        addInlineExclusions(ITALIC, false);
 
         // these should override text
-        addInlineExclusions(MultiMarkdownTypes.AUTO_LINK);
-        addInlineExclusions(MultiMarkdownTypes.ANCHOR_LINK);
-        addInlineExclusions(MultiMarkdownTypes.REFERENCE);
-        addInlineExclusions(MultiMarkdownTypes.REFERENCE_IMAGE);
-        addInlineExclusions(MultiMarkdownTypes.REFERENCE_LINK);
-        addInlineExclusions(MultiMarkdownTypes.EXPLICIT_LINK);
-        addInlineExclusions(MultiMarkdownTypes.IMAGE);
-        addInlineExclusions(MultiMarkdownTypes.ABBREVIATION);
-        addInlineExclusions(MultiMarkdownTypes.QUOTE);
+        addInlineExclusions(AUTO_LINK);
+        addInlineExclusions(ANCHOR_LINK);
+        addInlineExclusions(REFERENCE);
+        addInlineExclusions(REFERENCE_IMAGE);
+        addInlineExclusions(REFERENCE_LINK);
+        addInlineExclusions(EXPLICIT_LINK);
+        addInlineExclusions(IMAGE);
+        addInlineExclusions(ABBREVIATION);
+        addInlineExclusions(QUOTE);
 
-        addInlineExclusions(MultiMarkdownTypes.HEADER_LEVEL_1);
-        addInlineExclusions(MultiMarkdownTypes.HEADER_LEVEL_2);
-        addInlineExclusions(MultiMarkdownTypes.HEADER_LEVEL_3);
-        addInlineExclusions(MultiMarkdownTypes.HEADER_LEVEL_4);
-        addInlineExclusions(MultiMarkdownTypes.HEADER_LEVEL_5);
-        addInlineExclusions(MultiMarkdownTypes.HEADER_LEVEL_6);
+        addInlineExclusions(HEADER_LEVEL_1);
+        addInlineExclusions(HEADER_LEVEL_2);
+        addInlineExclusions(HEADER_LEVEL_3);
+        addInlineExclusions(HEADER_LEVEL_4);
+        addInlineExclusions(HEADER_LEVEL_5);
+        addInlineExclusions(HEADER_LEVEL_6);
 
-        addInlineExclusions(MultiMarkdownTypes.DEFINITION);
-        addInlineExclusions(MultiMarkdownTypes.DEFINITION_TERM);
+        addInlineExclusions(DEFINITION);
+        addInlineExclusions(DEFINITION_TERM);
 
         // to allow strike, bold and italics to show
         // list item is useless, should not punch out block quote, but it should punch out bullet_list
         // that way only the bullets will be left to punch out  the block quote
-        addExclusion(MultiMarkdownTypes.BLOCK_QUOTE, MultiMarkdownTypes.LIST_ITEM);
+        addExclusion(BLOCK_QUOTE, LIST_ITEM);
     }
     ///** Init/reinit thread local {@link PegDownProcessor}. */
     //private ThreadLocal<PegDownProcessor> initProcessor() {
@@ -291,13 +300,14 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
     public boolean parseMarkdown(final String source) {
         clearParsed();
         currentStringLength = source.length();
-        //currentString = source;
+        currentString = source;
+        currentChars = source.toCharArray();
 
         try {
             if (processor == null) {
                 processor = getProcessor();
             }
-            rootNode = processor.parseMarkdown(source.toCharArray());
+            rootNode = processor.parseMarkdown(currentChars);
             return true;
         } catch (Exception e) {
             LOGGER.error("Failed processing Markdown document", e);
@@ -361,7 +371,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         //if (end > currentStringLength) {
         //    int tmp = 0;
         //}
-        return new LexerToken(new Range(start, end), MultiMarkdownTypes.NONE);
+        return new LexerToken(new Range(start, end), NONE);
     }
 
     public LexerToken[] splitLexerTokens(LexerToken[] tokens) {
@@ -373,14 +383,14 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
             // do all of them
             splitLexemes(lexemes, tokens, 0, Integer.MAX_VALUE);
 
-            end = lexemes.size() - 1;
-            for (int i = 0; i < end; i++) {
-                LexerToken t1 = lexemes.get(i);
-                LexerToken t2 = lexemes.get(i + 1);
-                //if (t1.compare(t2) > 0 || t1.getRange().doesOverlap(t2.getRange())) {
-                //    int tmp = 0;
-                //}
-            }
+            //end = lexemes.size() - 1;
+            //for (int i = 0; i < end; i++) {
+            //    LexerToken t1 = lexemes.get(i);
+            //    LexerToken t2 = lexemes.get(i + 1);
+            //    if (t1.compare(t2) > 0 || t1.getRange().doesOverlap(t2.getRange())) {
+            //        int tmp = 0;
+            //    }
+            //}
 
             //if (lexemes.get(end).getRange().getEnd() > currentStringLength) {
             //    int tmp = 0;
@@ -513,7 +523,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
 
         public boolean isWhiteSpace() { return elementType == TokenType.WHITE_SPACE; }
 
-        public boolean isSkippedSpace() { return elementType == MultiMarkdownTypes.NONE; }
+        public boolean isSkippedSpace() { return elementType == NONE; }
 
         public int compare(LexerToken that) {
             int rangeCompare = this.range.compare(that.range);
@@ -621,18 +631,28 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
             visitChildren(node);
         }
 
+        public void visit(FootnoteNode node) {
+            //ArrayList<Node> children = new ArrayList<Node>(1);
+            //children.add(node.getFootnote());
+            addTokenWithChildren(node, FOOTNOTE, node.getFootnote().getChildren());
+        }
+
+        public void visit(FootnoteRefNode node) {
+            addToken(node, FOOTNOTE_REF);
+        }
+
         public void visit(TextNode node) {
             if (node instanceof CommentNode) {
-                addToken(node, MultiMarkdownTypes.COMMENT);
+                addToken(node, COMMENT);
             } else if (node instanceof WikiPageRefNode) {
-                addToken(node, MultiMarkdownTypes.WIKI_LINK_REF);
+                addToken(node, WIKI_LINK_REF);
             } else if (node instanceof WikiPageTitleNode) {
-                addToken(node, MultiMarkdownTypes.WIKI_LINK_TITLE);
+                addToken(node, WIKI_LINK_TEXT);
             } else {
                 if (abbreviations.isEmpty()) {
-                    addToken(node, MultiMarkdownTypes.TEXT);
+                    addToken(node, TEXT);
                 } else {
-                    addTextTokenWithAbbreviations(node, MultiMarkdownTypes.TEXT, MultiMarkdownTypes.ABBREVIATED_TEXT);
+                    addTextTokenWithAbbreviations(node, TEXT, ABBREVIATED_TEXT);
                 }
             }
         }
@@ -687,14 +707,14 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         public void visit(SimpleNode node) {
             switch (node.getType()) {
                 case HRule:
-                    addToken(node, MultiMarkdownTypes.HRULE);
+                    addToken(node, HRULE);
                     break;
 
                 case Apostrophe:
                 case Ellipsis:
                 case Emdash:
                 case Endash:
-                    addToken(node, MultiMarkdownTypes.SMARTS);
+                    addToken(node, SMARTS);
                     break;
 
                 case Linebreak:
@@ -716,7 +736,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         }
 
         public void visit(SpecialTextNode node) {
-            if ((node.getEndIndex() - node.getStartIndex() > 1)) addToken(node, MultiMarkdownTypes.SPECIAL_TEXT);
+            if ((node.getEndIndex() - node.getStartIndex() > 1)) addToken(node, SPECIAL_TEXT);
             else visit((TextNode) node); // so that it is handled in TextNode manner
         }
 
@@ -745,10 +765,10 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         public void visit(StrikeNode node) {
             if (!recursingStrike) {
                 recursingStrike = true;
-                splitOutMarker(node, MultiMarkdownTypes.STRIKETHROUGH_MARKER);
+                splitOutMarker(node, STRIKETHROUGH_MARKER);
                 recursingStrike = false;
             } else {
-                addTokenWithChildren(node, MultiMarkdownTypes.STRIKETHROUGH);
+                addTokenWithChildren(node, STRIKETHROUGH);
             }
         }
 
@@ -759,14 +779,14 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
          */
         public void visit(StrongEmphSuperNode node) {
             if (node.isClosed()) {
-                IElementType parentTokenType = node.isStrong() ? MultiMarkdownTypes.BOLD_MARKER : MultiMarkdownTypes.ITALIC_MARKER;
-                IElementType tokenType = node.isStrong() ? MultiMarkdownTypes.BOLD : MultiMarkdownTypes.ITALIC;
+                IElementType parentTokenType = node.isStrong() ? BOLD_MARKER : ITALIC_MARKER;
+                IElementType tokenType = node.isStrong() ? BOLD : ITALIC;
 
-                if (tokenType == MultiMarkdownTypes.BOLD && !recursingBold || tokenType == MultiMarkdownTypes.ITALIC && !recursingItalic) {
-                    if (tokenType == MultiMarkdownTypes.BOLD) recursingBold = true;
+                if (tokenType == BOLD && !recursingBold || tokenType == ITALIC && !recursingItalic) {
+                    if (tokenType == BOLD) recursingBold = true;
                     else recursingItalic = true;
                     splitOutMarker(node, parentTokenType);
-                    if (tokenType == MultiMarkdownTypes.BOLD) recursingBold = false;
+                    if (tokenType == BOLD) recursingBold = false;
                     else recursingItalic = false;
                 } else {
                     addTokenWithChildren(node, tokenType);
@@ -801,24 +821,105 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
             }
         }
 
+        void addTokens(SyntheticNodes nodes) {
+            for (SyntheticNodes.SyntheticNode node : nodes.getNodes()) {
+                addToken(node.getStartIndex(), node.getEndIndex(), node.getType());
+            }
+        }
+
+        void addTokensWithChildren(SyntheticNodes nodes) {
+            SyntheticNodes.SyntheticNode currentNode = nodes.currentNode();
+
+            for (SyntheticNodes.SyntheticNode node : nodes.getNodes()) {
+                if (node == currentNode) {
+                    addTokenWithChildren(node.getStartIndex(), node.getEndIndex(), node.getType(), nodes.getNode().getChildren());
+                } else {
+                    addToken(node.getStartIndex(), node.getEndIndex(), node.getType());
+                }
+            }
+        }
+
         public void visit(ExpImageNode node) {
-            addTokenWithChildren(node, MultiMarkdownTypes.IMAGE);
+            if (MultiMarkdownPlugin.isLicensed()) {
+                SyntheticNodes nodes = new SyntheticNodes(currentChars, node, IMAGE, IMAGE_LINK_REF_TEXT, 2, IMAGE_LINK_REF_TEXT_OPEN, 1, IMAGE_LINK_REF_CLOSE);
+
+                if (!node.title.isEmpty() && nodes.chopLastTail(node.title, IMAGE_LINK_REF_TITLE, IMAGE_LINK_REF_TITLE_MARKER)) {
+                    nodes.chopTail(-1, IMAGE_LINK_REF_TITLE_MARKER);
+                }
+
+                if (!node.url.isEmpty()) {
+                    nodes.chopLastTail(node.url, IMAGE_LINK_REF);
+                }
+
+                // now chop off lead and tail alt markers
+                if (nodes.chopTail(']', IMAGE_LINK_REF_TEXT_CLOSE)) {
+                    nodes.next();
+                    nodes.chopTail('(', IMAGE_LINK_REF_OPEN);
+                    nodes.prev();
+                }
+
+                // need to process children with the current node
+                nodes.dropWhiteSpace(IMAGE_LINK_REF_TEXT_CLOSE, IMAGE_LINK_REF_OPEN, IMAGE_LINK_REF);
+                addTokensWithChildren(nodes);
+            } else {
+                addTokenWithChildren(node, IMAGE);
+            }
         }
 
         public void visit(ExpLinkNode node) {
-            addTokenWithChildren(node, MultiMarkdownTypes.EXPLICIT_LINK);
+            if (MultiMarkdownPlugin.isLicensed()) {
+                SyntheticNodes nodes = new SyntheticNodes(currentChars, node, EXPLICIT_LINK, LINK_REF_TEXT, 1, LINK_REF_TEXT_OPEN, LINK_REF_CLOSE);
+
+                if (!node.title.isEmpty() && nodes.chopLastTail(node.title, LINK_REF_TITLE, LINK_REF_TITLE_MARKER)) {
+                    nodes.chopTail(-1, LINK_REF_TITLE_MARKER);
+                }
+
+                if (!node.url.isEmpty()) {
+                    nodes.chopLastTail(node.url, LINK_REF);
+                    nodes.next();
+                    nodes.chopLastTail('#', LINK_REF_ANCHOR_MARKER, LINK_REF_ANCHOR);
+                    nodes.prev();
+                }
+
+                // now chop off lead and tail alt markers
+                if (nodes.chopTail(']', LINK_REF_TEXT_CLOSE)) {
+                    nodes.next();
+                    nodes.chopTail('(', LINK_REF_OPEN);
+                    nodes.prev();
+                }
+
+                // need to process children with the current node
+                nodes.dropWhiteSpace(LINK_REF_TEXT_CLOSE, LINK_REF_OPEN, LINK_REF, LINK_REF_ANCHOR_MARKER, LINK_REF_ANCHOR);
+                // need to process children with the current node
+                addTokensWithChildren(nodes);
+            } else {
+                addTokenWithChildren(node, EXPLICIT_LINK);
+            }
         }
 
         public void visit(final RefLinkNode node) {
-            addTokenWithChildren(node, MultiMarkdownTypes.REFERENCE_LINK);
+            if (MultiMarkdownPlugin.isLicensed()) {
+                SyntheticNodes nodes = new SyntheticNodes(currentChars, node, REFERENCE_LINK);
+                addTokenWithChildren(node, REFERENCE_LINK);
+            } else {
+                addTokenWithChildren(node, REFERENCE_LINK);
+            }
         }
 
         public void visit(AutoLinkNode node) {
-            addToken(node, MultiMarkdownTypes.AUTO_LINK);
+            if (MultiMarkdownPlugin.isLicensed()) {
+                SyntheticNodes nodes = new SyntheticNodes(currentChars, node, AUTO_LINK, LINK_REF);
+                nodes.chopStart('<', AUTO_LINK);
+                nodes.chopEnd('>', AUTO_LINK);
+                nodes.chopLastTail('#', LINK_REF_ANCHOR_MARKER, LINK_REF_ANCHOR);
+                addTokens(nodes);
+            } else {
+                addToken(node, AUTO_LINK);
+            }
         }
 
         public void visit(MailLinkNode node) {
-            addToken(node, MultiMarkdownTypes.MAIL_LINK);
+            addToken(node, MAIL_LINK);
         }
 
         public void visit(HeaderNode node) {
@@ -826,96 +927,64 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
 
             switch (node.getLevel()) {
                 case 1:
-                    addTokenWithChildren(node, node.isSetext() ? MultiMarkdownTypes.SETEXT_HEADER_LEVEL_1 : MultiMarkdownTypes.HEADER_LEVEL_1);
+                    addTokenWithChildren(node, node.isSetext() ? SETEXT_HEADER_LEVEL_1 : HEADER_LEVEL_1);
                     break;
                 case 2:
-                    addTokenWithChildren(node, node.isSetext() ? MultiMarkdownTypes.SETEXT_HEADER_LEVEL_2 : MultiMarkdownTypes.HEADER_LEVEL_2);
+                    addTokenWithChildren(node, node.isSetext() ? SETEXT_HEADER_LEVEL_2 : HEADER_LEVEL_2);
                     break;
                 case 3:
-                    addTokenWithChildren(node, MultiMarkdownTypes.HEADER_LEVEL_3);
+                    addTokenWithChildren(node, HEADER_LEVEL_3);
                     break;
                 case 4:
-                    addTokenWithChildren(node, MultiMarkdownTypes.HEADER_LEVEL_4);
+                    addTokenWithChildren(node, HEADER_LEVEL_4);
                     break;
                 case 5:
-                    addTokenWithChildren(node, MultiMarkdownTypes.HEADER_LEVEL_5);
+                    addTokenWithChildren(node, HEADER_LEVEL_5);
                     break;
                 case 6:
-                    addTokenWithChildren(node, MultiMarkdownTypes.HEADER_LEVEL_6);
+                    addTokenWithChildren(node, HEADER_LEVEL_6);
                     break;
             }
         }
 
         public void visit(CodeNode node) {
-            addToken(node, MultiMarkdownTypes.CODE);
+            addToken(node, CODE);
         }
 
         public void visit(VerbatimNode node) {
-            addToken(node, MultiMarkdownTypes.VERBATIM);
+            addToken(node, VERBATIM);
         }
 
         public void visit(WikiLinkNode node) {
-            String text = node.getText();
-            int pos = 0;
+            SyntheticNodes nodes = new SyntheticNodes(currentChars, node, WIKI_LINK, WIKI_LINK_REF, 2, WIKI_LINK_OPEN, WIKI_LINK_CLOSE);
 
-            if ((pos = text.indexOf("|")) >= 0) {
-                addToken(node.getStartIndex(), node.getStartIndex() + 2, MultiMarkdownTypes.WIKI_LINK_OPEN);
-                if (githubWikiLinks) {
-                    int anchorPos = text.indexOf('#', pos + 1);
-                    addToken(node.getStartIndex() + 2, node.getStartIndex() + 2 + pos, MultiMarkdownTypes.WIKI_LINK_TITLE);
-                    addToken(node.getStartIndex() + 2 + pos, node.getStartIndex() + 2 + pos + 1, MultiMarkdownTypes.WIKI_LINK_SEPARATOR);
-                    if (anchorPos >= 0) {
-                        addToken(node.getStartIndex() + 2 + pos + 1, node.getStartIndex() + 2 + anchorPos, MultiMarkdownTypes.WIKI_LINK_REF);
-                        addToken(node.getStartIndex() + 2 + anchorPos, node.getStartIndex() + 2 + anchorPos + 1, MultiMarkdownTypes.WIKI_LINK_REF_ANCHOR_MARKER);
-                        addToken(node.getStartIndex() + 2 + anchorPos + 1, node.getEndIndex() - 2, MultiMarkdownTypes.WIKI_LINK_REF_ANCHOR);
-                    } else {
-                        addToken(node.getStartIndex() + 2 + pos + 1, node.getEndIndex() - 2, MultiMarkdownTypes.WIKI_LINK_REF);
-                    }
-                    addToken(node.getEndIndex() - 2, node.getEndIndex(), MultiMarkdownTypes.WIKI_LINK_CLOSE);
-                } else {
-                    int anchorPos = text.indexOf('#');
-                    if (anchorPos > pos) anchorPos = -1;
-                    if (anchorPos >= 0) {
-                        addToken(node.getStartIndex() + 2, node.getStartIndex() + 2 + anchorPos, MultiMarkdownTypes.WIKI_LINK_REF);
-                        addToken(node.getStartIndex() + 2 + anchorPos, node.getStartIndex() + 2 + anchorPos + 1, MultiMarkdownTypes.WIKI_LINK_REF_ANCHOR_MARKER);
-                        addToken(node.getStartIndex() + 2 + anchorPos + 1, node.getStartIndex() + 2 + pos, MultiMarkdownTypes.WIKI_LINK_REF_ANCHOR);
-                    } else {
-                        addToken(node.getStartIndex() + 2, node.getStartIndex() + 2 + pos, MultiMarkdownTypes.WIKI_LINK_REF);
-                    }
-                    addToken(node.getStartIndex() + 2 + pos, node.getStartIndex() + 2 + pos + 1, MultiMarkdownTypes.WIKI_LINK_SEPARATOR);
-                    addToken(node.getStartIndex() + 2 + pos + 1, node.getEndIndex() - 2, MultiMarkdownTypes.WIKI_LINK_TITLE);
-                    addToken(node.getEndIndex() - 2, node.getEndIndex(), MultiMarkdownTypes.WIKI_LINK_CLOSE);
-                }
+            if (githubWikiLinks) {
+                nodes.chopLead("|", WIKI_LINK_TEXT, WIKI_LINK_SEPARATOR);
+                nodes.chopTail("#", WIKI_LINK_REF_ANCHOR_MARKER, WIKI_LINK_REF_ANCHOR);
             } else {
-                addToken(node.getStartIndex(), node.getStartIndex() + 2, MultiMarkdownTypes.WIKI_LINK_OPEN);
-                int anchorPos = text.indexOf('#');
-                if (anchorPos >= 0) {
-                    addToken(node.getStartIndex() + 2, node.getStartIndex() + 2 + anchorPos, MultiMarkdownTypes.WIKI_LINK_REF);
-                    addToken(node.getStartIndex() + 2 + anchorPos, node.getStartIndex() + 2 + anchorPos + 1, MultiMarkdownTypes.WIKI_LINK_REF_ANCHOR_MARKER);
-                    addToken(node.getStartIndex() + 2 + anchorPos + 1, node.getEndIndex() - 2, MultiMarkdownTypes.WIKI_LINK_REF_ANCHOR);
-                } else {
-                    addToken(node.getStartIndex() + 2, node.getEndIndex() - 2, MultiMarkdownTypes.WIKI_LINK_REF);
-                }
-                addToken(node.getEndIndex() - 2, node.getEndIndex(), MultiMarkdownTypes.WIKI_LINK_CLOSE);
+                nodes.chopTail("|", WIKI_LINK_SEPARATOR, WIKI_LINK_TEXT);
+                nodes.chopTail("#", WIKI_LINK_REF_ANCHOR_MARKER, WIKI_LINK_REF_ANCHOR);
             }
+
+            addTokens(nodes);
         }
 
         public void visit(QuotedNode node) {
-            addTokenWithChildren(node, MultiMarkdownTypes.QUOTE);
+            addTokenWithChildren(node, QUOTE);
         }
 
         public void visit(BlockQuoteNode node) {
             // here some children will punch out the block quote's > because they span more than one line and know nothing
             // of indentations. So we have to punch out holes of every child's new line that starts with > and optional space
-            addTokenWithChildren(node, MultiMarkdownTypes.BLOCK_QUOTE);
+            addTokenWithChildren(node, BLOCK_QUOTE);
         }
 
         public void visit(BulletListNode node) {
-            addTokenWithChildren(node, MultiMarkdownTypes.BULLET_LIST);
+            addTokenWithChildren(node, BULLET_LIST);
         }
 
         public void visit(OrderedListNode node) {
-            addTokenWithChildren(node, MultiMarkdownTypes.ORDERED_LIST);
+            addTokenWithChildren(node, ORDERED_LIST);
         }
 
         public void visit(ListItemNode node) {
@@ -928,58 +997,58 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
                 newNode.setEndIndex(newNode.getStartIndex() + 3);
 
                 // new node is all the text following
-                addTokenWithChildren(newNode, (taskListNode.isDone() ? MultiMarkdownTypes.TASK_DONE_ITEM_MARKER : MultiMarkdownTypes.TASK_ITEM_MARKER));
-                //addTokenWithChildren(node, (taskListNode.isDone() ? MultiMarkdownTypes.TASK_DONE_ITEM : MultiMarkdownTypes.TASK_ITEM));
-                addTokenWithChildren(node, MultiMarkdownTypes.LIST_ITEM);
+                addTokenWithChildren(newNode, (taskListNode.isDone() ? TASK_DONE_ITEM_MARKER : TASK_ITEM_MARKER));
+                //addTokenWithChildren(node, (taskListNode.isDone() ? TASK_DONE_ITEM : TASK_ITEM));
+                addTokenWithChildren(node, LIST_ITEM);
             } else {
-                addTokenWithChildren(node, MultiMarkdownTypes.LIST_ITEM);
+                addTokenWithChildren(node, LIST_ITEM);
             }
         }
 
         public void visit(DefinitionListNode node) {
-            addTokenWithChildren(node, MultiMarkdownTypes.DEFINITION_LIST);
+            addTokenWithChildren(node, DEFINITION_LIST);
         }
 
         public void visit(DefinitionNode node) {
-            addTokenWithChildren(node, MultiMarkdownTypes.DEFINITION);
+            addTokenWithChildren(node, DEFINITION);
         }
 
         public void visit(DefinitionTermNode node) {
-            addTokenWithChildren(node, MultiMarkdownTypes.DEFINITION_TERM);
+            addTokenWithChildren(node, DEFINITION_TERM);
         }
 
         public void visit(TableNode node) {
             tableRows = 0;
-            addTokenWithChildren(node, MultiMarkdownTypes.TABLE);
+            addTokenWithChildren(node, TABLE);
         }
 
         public void visit(TableBodyNode node) {
-            addTokenWithChildren(node, MultiMarkdownTypes.TABLE_BODY);
+            addTokenWithChildren(node, TABLE_BODY);
         }
 
         public void visit(TableCellNode node) {
             rowColumns++;
-            addTokenWithChildren(node, (tableRows & 1) != 0 ? ((rowColumns & 1) != 0 ? MultiMarkdownTypes.TABLE_CELL_RODD_CODD : MultiMarkdownTypes.TABLE_CELL_RODD_CEVEN)
-                    : ((rowColumns & 1) != 0 ? MultiMarkdownTypes.TABLE_CELL_REVEN_CODD : MultiMarkdownTypes.TABLE_CELL_REVEN_CEVEN));
+            addTokenWithChildren(node, (tableRows & 1) != 0 ? ((rowColumns & 1) != 0 ? TABLE_CELL_RODD_CODD : TABLE_CELL_RODD_CEVEN)
+                    : ((rowColumns & 1) != 0 ? TABLE_CELL_REVEN_CODD : TABLE_CELL_REVEN_CEVEN));
         }
 
         // Not called, TableColumnNode is only used as part of TableNode.getColumns()
         public void visit(TableColumnNode node) {
-            addTokenWithChildren(node, MultiMarkdownTypes.TABLE_COLUMN);
+            addTokenWithChildren(node, TABLE_COLUMN);
         }
 
         public void visit(TableHeaderNode node) {
-            addTokenWithChildren(node, MultiMarkdownTypes.TABLE_HEADER);
+            addTokenWithChildren(node, TABLE_HEADER);
         }
 
         public void visit(TableRowNode node) {
             tableRows++;
             rowColumns = 0;
-            addTokenWithChildren(node, (tableRows & 1) != 0 ? MultiMarkdownTypes.TABLE_ROW_ODD : MultiMarkdownTypes.TABLE_ROW_EVEN);
+            addTokenWithChildren(node, (tableRows & 1) != 0 ? TABLE_ROW_ODD : TABLE_ROW_EVEN);
         }
 
         public void visit(TableCaptionNode node) {
-            addTokenWithChildren(node, MultiMarkdownTypes.TABLE_CAPTION);
+            addTokenWithChildren(node, TABLE_CAPTION);
         }
 
         abstract class NodeFactory {
@@ -1077,7 +1146,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
                 public TextNode newNode(String text) {
                     return new HtmlBlockNode(text);
                 }
-            })) addToken(node, MultiMarkdownTypes.HTML_BLOCK);
+            })) addToken(node, HTML_BLOCK);
         }
 
         public void visit(InlineHtmlNode node) {
@@ -1086,32 +1155,36 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
                 public TextNode newNode(String text) {
                     return new InlineHtmlNode(text);
                 }
-            })) addToken(node, MultiMarkdownTypes.INLINE_HTML);
+            })) addToken(node, INLINE_HTML);
         }
 
         public void visit(ReferenceNode node) {
-            addTokenWithChildren(node, MultiMarkdownTypes.REFERENCE);
+            addTokenWithChildren(node, REFERENCE);
         }
 
         public void visit(RefImageNode node) {
-            addTokenWithChildren(node, MultiMarkdownTypes.REFERENCE_IMAGE);
+            addTokenWithChildren(node, REFERENCE_IMAGE);
         }
 
         public void visit(AbbreviationNode node) {
-            addTokenWithChildren(node, MultiMarkdownTypes.ABBREVIATION);
+            addTokenWithChildren(node, ABBREVIATION);
         }
 
         public void visit(AnchorLinkNode node) {
-            addToken(node, MultiMarkdownTypes.ANCHOR_LINK);
+            addToken(node, ANCHOR_LINK);
         }
 
         protected void visitChildren(SuperNode node) {
+            visitChildren(node.getChildren());
+        }
+
+        protected void visitChildren(List<Node> children) {
             // here we combine multiple segments of TextNode and SpecialText into a single TextNode
             int startIndex = 0, endIndex = 0;
             String combinedText = null;
             Node lastTextNode = null;
 
-            for (Node child : node.getChildren()) {
+            for (Node child : children) {
                 boolean processed = false;
                 if (child.getClass() == TextNode.class || (child.getClass() == SpecialTextNode.class && child.getEndIndex() - child.getStartIndex() <= 1)) {
                     if (combinedText != null) {
@@ -1242,6 +1315,14 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         // punch out the child's range from the parent's so that we can eliminate parent's highlighting
         // on the child text
         protected void addTokenWithChildren(Node node, IElementType tokenType) {
+            addTokenWithChildren(node, tokenType, node.getChildren());
+        }
+
+        protected void addTokenWithChildren(Node node, IElementType tokenType, List<Node> children) {
+            addTokenWithChildren(node.getStartIndex(), node.getEndIndex(), tokenType, children);
+        }
+
+        protected void addTokenWithChildren(int startIndex, int endIndex, IElementType tokenType, List<Node> children) {
             //if (node.getEndIndex() > currentStringLength) {
             //    ((SuperNode) node).setEndIndex(currentStringLength);
             //    if (node.getStartIndex() >= node.getEndIndex()) {
@@ -1250,7 +1331,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
             //}
 
             int entryStackLevel = parentRanges.size();
-            Range range = new Range(node.getStartIndex(), node.getEndIndex());
+            Range range = new Range(startIndex, endIndex);
 
             //System.out.println("addTokenWithChildren " + tokenType + range);
 
@@ -1272,7 +1353,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
                 //    int tmp = 0;
                 //}
 
-                visitChildren((SuperNode) node);
+                visitChildren(children);
 
                 minStackLevel = prevMinStackLevel;
 
@@ -1324,7 +1405,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         }
 
         protected void addToken(int startIndex, int endIndex, IElementType tokenType) {
-            //if (tokenType == MultiMarkdownTypes.QUOTE) {
+            //if (tokenType == QUOTE) {
             //    int tmp = 0;
             //}
             // compensate for missing EOL at end of input causes pegdown to return a range past end of input

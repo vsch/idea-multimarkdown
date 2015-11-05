@@ -33,34 +33,35 @@ import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import org.jetbrains.annotations.NotNull;
 
-import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement.RENAME_KEEP_NOTHING;
+import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement.*;
 
-class ChangeWikiPageRefQuickFix extends BaseIntentionAction {
+class ChangeLinkRefQuickFix extends BaseIntentionAction {
     public static final int MATCH_CASE_TO_FILE = 1;
     public static final int REMOVE_DASHES = 2;
     public static final int REMOVE_SLASHES = 3;
     public static final int REMOVE_SUBDIR = 4;
 
-    private String newWikiPageRef;
-    private MultiMarkdownWikiPageRef wikiPageRefElement;
+    private String newLinkRef;
+    private MultiMarkdownNamedElement linkRefElement;
     private final int alternativeMsg;
     private final int renameFlags;
 
-    ChangeWikiPageRefQuickFix(MultiMarkdownWikiPageRef wikiPageRefElement, String newWikiPageRef) {
-        this(wikiPageRefElement, newWikiPageRef, 0);
+    ChangeLinkRefQuickFix(MultiMarkdownNamedElement linkRefElement, String newLinkRef) {
+        this(linkRefElement, newLinkRef, 0);
     }
 
-    ChangeWikiPageRefQuickFix(MultiMarkdownWikiPageRef wikiPageRefElement, String newWikiPageRef, int alternativeMsg) {
-        this(wikiPageRefElement, newWikiPageRef, alternativeMsg, RENAME_KEEP_NOTHING);
+    ChangeLinkRefQuickFix(MultiMarkdownNamedElement linkRefElement, String newLinkRef, int alternativeMsg) {
+        this(linkRefElement, newLinkRef, alternativeMsg, RENAME_KEEP_TEXT | RENAME_KEEP_RENAMED_TEXT | RENAME_KEEP_TITLE | RENAME_KEEP_ANCHOR | RENAME_KEEP_PATH);
     }
 
-    ChangeWikiPageRefQuickFix(MultiMarkdownWikiPageRef wikiPageRefElement, String newWikiPageRef, int alternativeMsg, int renameFlags) {
-        this.newWikiPageRef = newWikiPageRef;
-        this.wikiPageRefElement = wikiPageRefElement;
+    ChangeLinkRefQuickFix(MultiMarkdownNamedElement linkRefElement, String newLinkRef, int alternativeMsg, int renameFlags) {
+        this.newLinkRef = newLinkRef;
+        this.linkRefElement = linkRefElement;
         this.alternativeMsg = alternativeMsg;
         this.renameFlags = renameFlags;
     }
@@ -71,23 +72,23 @@ class ChangeWikiPageRefQuickFix extends BaseIntentionAction {
         String msg;
         switch (alternativeMsg) {
             case MATCH_CASE_TO_FILE:
-                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.match-target", FilePathInfo.wikiRefAsFileNameWithExt(newWikiPageRef));
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.match-target", linkRefElement instanceof MultiMarkdownWikiPageRef ? FilePathInfo.wikiRefAsFileNameWithExt(newLinkRef) : newLinkRef);
                 break;
 
             case REMOVE_DASHES:
-                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-dashes", FilePathInfo.wikiRefAsFileNameWithExt(newWikiPageRef));
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-dashes", FilePathInfo.wikiRefAsFileNameWithExt(newLinkRef));
                 break;
 
             case REMOVE_SLASHES:
-                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-slashes", FilePathInfo.wikiRefAsFileNameWithExt(newWikiPageRef));
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-slashes", FilePathInfo.wikiRefAsFileNameWithExt(newLinkRef));
                 break;
 
             case REMOVE_SUBDIR:
-                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-subdirs", FilePathInfo.wikiRefAsFileNameWithExt(newWikiPageRef));
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-subdirs", FilePathInfo.wikiRefAsFileNameWithExt(newLinkRef));
                 break;
 
             default:
-                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.change-target", FilePathInfo.wikiRefAsFileNameWithExt(newWikiPageRef));
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.change-target", linkRefElement instanceof MultiMarkdownWikiPageRef ? FilePathInfo.wikiRefAsFileNameWithExt(newLinkRef) : newLinkRef);
                 break;
         }
 
@@ -110,12 +111,12 @@ class ChangeWikiPageRefQuickFix extends BaseIntentionAction {
         ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
-                changeWikiPageRef(project, wikiPageRefElement, newWikiPageRef);
+                changelinkRef(project, linkRefElement, newLinkRef);
             }
         });
     }
 
-    private void changeWikiPageRef(final Project project, final MultiMarkdownWikiPageRef wikiPageRefElement, final String fileName) {
+    private void changelinkRef(final Project project, final MultiMarkdownNamedElement linkRefElement, final String fileName) {
         final MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
         if (projectComponent != null) {
             new WriteCommandAction.Simple(project) {
@@ -124,11 +125,11 @@ class ChangeWikiPageRefQuickFix extends BaseIntentionAction {
                     // change the whole name
                     //wikiPageRefElement.setName(fileName, MultiMarkdownNamedElement.REASON_FILE_MOVED);
                     JavaRefactoringFactory factory = JavaRefactoringFactory.getInstance(project);
-                    JavaRenameRefactoring rename = factory.createRename(wikiPageRefElement, fileName);
+                    JavaRenameRefactoring rename = factory.createRename(linkRefElement, fileName);
                     UsageInfo[] usages = rename.findUsages();
 
                     try {
-                        projectComponent.pushRefactoringRenameFlags(RENAME_KEEP_NOTHING);
+                        projectComponent.pushRefactoringRenameFlags(renameFlags);
                         rename.doRefactoring(usages); // modified 'usages' array
                     } finally {
                         projectComponent.popRefactoringRenameFlags();

@@ -120,14 +120,21 @@ public class FileReferenceList {
                 }
             }
 
-            Outer:
-            for (FileReference fileReference : files) {
-                for (FileReferenceList.Filter filter : filters) {
-                    if (filter == null) continue;
-                    if (!filter.filterExt(fileReference.getExt(), fileReference.getFullFilePath())) continue Outer;
-                    if (filter.isRefFilter() && (fileReference = filter.filterRef(fileReference)) == null) continue Outer;
+            for (FileReferenceList.Filter filter : filters) {
+                if (filter == null) continue;
+
+                ArrayList<FileReference> nextFiles = new ArrayList<FileReference>(files.size());
+
+                for (FileReference fileReference : files) {
+                    if (!filter.filterExt(fileReference.getExt(), fileReference.getFullFilePath())) continue;
+                    if (filter.isRefFilter() && (fileReference = filter.filterRef(fileReference)) == null) continue;
+                    nextFiles.add(fileReference);
                 }
 
+                files = nextFiles;
+            }
+
+            for (FileReference fileReference : files) {
                 add(fileReference);
             }
         }
@@ -399,6 +406,29 @@ public class FileReferenceList {
     }
 
     @NotNull
+    public FileReferenceList pathStartsWith(@NotNull String pathPrefix) {
+        final String pathPrefixSlash = FilePathInfo.endWith(pathPrefix, '/');
+
+        return filter(new Filter() {
+            @Override
+            public boolean filterExt(@NotNull String ext, String anchor) {
+                return true;
+            }
+
+            @Override
+            public boolean isRefFilter() {
+                return true;
+            }
+
+            @Nullable
+            @Override
+            public FileReference filterRef(@NotNull FileReference fileReference) {
+                return fileReference.getFullFilePath().startsWith(pathPrefixSlash) ? fileReference : null;
+            }
+        });
+    }
+
+    @NotNull
     public <T> T[] transform(@NotNull TransformFilter<T> transFilter) {
         HashSet<T> result = new HashSet<T>(fileReferences.length);
 
@@ -503,6 +533,21 @@ public class FileReferenceList {
     @NotNull
     public String[] getInaccessibleWikiPageRefStrings() {
         return transform(INACCESSIBLE_WIKIPAGE_REFS_TRANSFILTER);
+    }
+
+    @NotNull
+    public String[] getAllLinkRefStrings(boolean withExt) {
+        return transform(withExt ? ALL_LINK_REFS_WITH_EXT_TRANSFILTER : ALL_LINK_REFS_NO_EXT_TRANSFILTER);
+    }
+
+    @NotNull
+    public String[] getAllLinkRefNoExtStrings() {
+        return transform(ALL_LINK_REFS_NO_EXT_TRANSFILTER);
+    }
+
+    @NotNull
+    public String[] getAllLinkRefWithExtStrings() {
+        return transform(ALL_LINK_REFS_WITH_EXT_TRANSFILTER);
     }
 
     @NotNull
@@ -1007,6 +1052,60 @@ public class FileReferenceList {
         @Override
         public String transformRef(@NotNull FileReference fileReference) {
             return fileReference instanceof FileReferenceLink ? ((FileReferenceLink) fileReference).getWikiPageRef() : fileReference.getFileNameNoExtAsWikiRef();
+        }
+
+        @Override
+        public String[] getResult(Collection<String> result) {
+            return result.toArray(new String[result.size()]);
+        }
+    };
+
+    public static final TransformFilter<String> ALL_LINK_REFS_NO_EXT_TRANSFILTER = new TransformFilter<String>() {
+        @Override
+        public boolean filterExt(@NotNull String ext, String anchor) {
+            return FilePathInfo.isMarkdownExt(ext);
+        }
+
+        @Override
+        public boolean isRefFilter() { return false; }
+
+        @Nullable
+        @Override
+        public FileReference filterRef(@NotNull FileReference fileReference) {
+            return fileReference;
+        }
+
+        @Nullable
+        @Override
+        public String transformRef(@NotNull FileReference fileReference) {
+            return fileReference instanceof FileReferenceLink ? ((FileReferenceLink) fileReference).getLinkRef() : fileReference.getFileNameNoExt();
+        }
+
+        @Override
+        public String[] getResult(Collection<String> result) {
+            return result.toArray(new String[result.size()]);
+        }
+    };
+
+    public static final TransformFilter<String> ALL_LINK_REFS_WITH_EXT_TRANSFILTER = new TransformFilter<String>() {
+        @Override
+        public boolean filterExt(@NotNull String ext, String anchor) {
+            return true;
+        }
+
+        @Override
+        public boolean isRefFilter() { return false; }
+
+        @Nullable
+        @Override
+        public FileReference filterRef(@NotNull FileReference fileReference) {
+            return fileReference;
+        }
+
+        @Nullable
+        @Override
+        public String transformRef(@NotNull FileReference fileReference) {
+            return fileReference instanceof FileReferenceLink ? ((FileReferenceLink) fileReference).getLinkRef() : fileReference.getFileName();
         }
 
         @Override

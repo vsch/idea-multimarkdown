@@ -51,7 +51,8 @@ public interface MultiMarkdownTypes {
     IElementType DEFINITION = new MultiMarkdownElementType("DEFINITION");
     IElementType DEFINITION_LIST = new MultiMarkdownElementType("DEFINITION_LIST");
     IElementType DEFINITION_TERM = new MultiMarkdownElementType("DEFINITION_TERM");
-    IElementType EXPLICIT_LINK = new MultiMarkdownElementType("EXPLICIT_LINK");
+    IElementType FOOTNOTE = new MultiMarkdownElementType("FOOTNOTE");
+    IElementType FOOTNOTE_REF = new MultiMarkdownElementType("FOOTNOTE_REF");
     IElementType HEADER_LEVEL_1 = new MultiMarkdownTokenType("HEADER_LEVEL_1");
     IElementType SETEXT_HEADER_LEVEL_1 = new MultiMarkdownTokenType("HEADER_LEVEL_1");
     IElementType HEADER_LEVEL_2 = new MultiMarkdownTokenType("SETEXT_HEADER_LEVEL_2");
@@ -104,10 +105,31 @@ public interface MultiMarkdownTypes {
     IElementType WIKI_LINK_REF = new MultiMarkdownTokenType("WIKI_LINK_REF");
     IElementType WIKI_LINK_REF_ANCHOR_MARKER = new MultiMarkdownTokenType("WIKI_LINK_REF_ANCHOR_MARKER");
     IElementType WIKI_LINK_REF_ANCHOR = new MultiMarkdownTokenType("WIKI_LINK_REF_ANCHOR");
-    IElementType WIKI_LINK_TITLE = new MultiMarkdownTokenType("WIKI_LINK_TITLE");
+    IElementType WIKI_LINK_TEXT = new MultiMarkdownTokenType("WIKI_LINK_TEXT");
+
+    IElementType IMAGE_LINK_REF_OPEN = new MultiMarkdownTokenType("IMAGE_LINK_REF_OPEN");
+    IElementType IMAGE_LINK_REF = new MultiMarkdownTokenType("IMAGE_LINK_REF");
+    IElementType IMAGE_LINK_REF_CLOSE = new MultiMarkdownTokenType("IMAGE_LINK_REF_CLOSE");
+    IElementType IMAGE_LINK_REF_TITLE_MARKER = new MultiMarkdownTokenType("IMAGE_TITLE_MARKER");
+    IElementType IMAGE_LINK_REF_TITLE = new MultiMarkdownTokenType("IMAGE_TITLE");
+    IElementType IMAGE_LINK_REF_TEXT_OPEN = new MultiMarkdownTokenType("IMAGE_LINK_TEXT_OPEN");
+    IElementType IMAGE_LINK_REF_TEXT = new MultiMarkdownTokenType("IMAGE_LINK_TEXT");
+    IElementType IMAGE_LINK_REF_TEXT_CLOSE = new MultiMarkdownTokenType("IMAGE_LINK_TEXT_CLOSE");
+
+    IElementType LINK_REF_OPEN = new MultiMarkdownTokenType("LINK_REF_OPEN");
+    IElementType LINK_REF = new MultiMarkdownTokenType("LINK_REF");
+    IElementType LINK_REF_CLOSE = new MultiMarkdownTokenType("LINK_REF_CLOSE");
+    IElementType LINK_REF_TEXT_OPEN = new MultiMarkdownTokenType("LINK_REF_TEXT_OPEN");
+    IElementType LINK_REF_TEXT = new MultiMarkdownTokenType("LINK_REF_TEXT");
+    IElementType LINK_REF_TEXT_CLOSE = new MultiMarkdownTokenType("LINK_REF_TEXT_CLOSE");
+    IElementType LINK_REF_TITLE_MARKER = new MultiMarkdownTokenType("LINK_REF_TITLE_MARKER");
+    IElementType LINK_REF_TITLE = new MultiMarkdownTokenType("LINK_REF_TITLE");
+    IElementType LINK_REF_ANCHOR_MARKER = new MultiMarkdownTokenType("LINK_REF_ANCHOR_MARKER");
+    IElementType LINK_REF_ANCHOR = new MultiMarkdownTokenType("LINK_REF_ANCHOR");
 
     IElementType COMMENT = new MultiMarkdownElementType("COMMENT");
     IElementType WIKI_LINK = new MultiMarkdownElementType("WIKI_LINK");
+    IElementType EXPLICIT_LINK = new MultiMarkdownElementType("EXPLICIT_LINK");
 
     class Factory {
 
@@ -121,8 +143,26 @@ public interface MultiMarkdownTypes {
                 return new MultiMarkdownWikiPageRefImpl(node);
             } else if (type == WIKI_LINK_REF_ANCHOR) {
                 return new MultiMarkdownWikiPageRefAnchorImpl(node);
-            } else if (type == WIKI_LINK_TITLE) {
-                return new MultiMarkdownWikiPageTitleImpl(node);
+            } else if (type == WIKI_LINK_TEXT) {
+                return new MultiMarkdownWikiPageTextImpl(node);
+            } else if (type == EXPLICIT_LINK) {
+                return new MultiMarkdownExplicitLinkImpl(node);
+            } else if (type == LINK_REF) {
+                return new MultiMarkdownLinkRefImpl(node);
+            } else if (type == LINK_REF_ANCHOR) {
+                return new MultiMarkdownLinkRefAnchorImpl(node);
+            } else if (type == LINK_REF_TEXT) {
+                return new MultiMarkdownLinkRefTextImpl(node);
+            } else if (type == LINK_REF_TITLE) {
+                return new MultiMarkdownLinkRefTitleImpl(node);
+            } else if (type == IMAGE) {
+                return new MultiMarkdownImageLinkImpl(node);
+            } else if (type == IMAGE_LINK_REF) {
+                return new MultiMarkdownImageLinkRefImpl(node);
+            } else if (type == IMAGE_LINK_REF_TEXT) {
+                return new MultiMarkdownImageLinkRefTextImpl(node);
+            } else if (type == IMAGE_LINK_REF_TITLE) {
+                return new MultiMarkdownImageLinkRefTitleImpl(node);
             }
             throw new AssertionError("Unknown element type: " + type);
         }

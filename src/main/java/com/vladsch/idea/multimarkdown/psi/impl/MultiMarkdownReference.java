@@ -33,6 +33,7 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
     protected String resolveResultsName;
     protected final ReferenceChangeListener referenceChangeListener;
     protected boolean resolveRefIsMissing;
+    protected boolean resolveRefIsExternal;
 
     @Override
     public String toString() {
@@ -124,6 +125,10 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
 
     public boolean isResolveRefMissing() {
         return resolveRefIsMissing;
+    }
+
+    public boolean isResolveRefExternal() {
+        return resolveRefIsExternal;
     }
 
     @Nullable

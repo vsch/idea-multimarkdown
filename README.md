@@ -3,7 +3,7 @@ idea-multimarkdown
 
 **[Markdown](http://daringfireball.net/projects/markdown) language support for [IntelliJ IDEA](http://www.jetbrains.com/idea), [RubyMine](http://www.jetbrains.com/ruby), [PhpStorm](http://www.jetbrains.com/phpstorm), [WebStorm](http://www.jetbrains.com/webstorm), [PyCharm](http://www.jetbrains.com/pycharm), [AppCode](http://www.jetbrains.com/objc) and [Android Studio](http://developer.android.com/sdk/installing/studio.html).**
 
-**You can download it on the [JebBrains plugin page](https://plugins.jetbrains.com/plugin?pr=&pluginId=7896).**
+**You can download it on the [JetBrains plugin page](https://plugins.jetbrains.com/plugin?pr=&pluginId=7896).**
 
 **For any communications requiring a reply** please use the [GitHub Issues page](../../issues) for this plugin. There is no ability to reply to comments left on the [JetBrains plugin comment and rate page](https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896).
 

@@ -21,28 +21,37 @@
   ~ under the License.
   -->
 <idea-plugin version="2" url="http://github.com/vsch/idea-multimarkdown">
-  <id>com.vladsch.idea.multimarkdown</id>
-  <name>MultiMarkdown</name>
-  <category>Custom Languages</category>
-  <vendor url="http://github.com/vsch" email="vladimir.schneider@gmail.com">Vladimir Schneider</vendor>
-  <depends>com.intellij.modules.lang</depends>
+    <id>com.vladsch.idea.multimarkdown</id>
+    <name>MultiMarkdown</name>
+    <category>Custom Languages</category>
+    <vendor url="http://github.com/vsch" email="vladimir.schneider@gmail.com">Vladimir Schneider</vendor>
+    <depends>com.intellij.modules.lang</depends>
 
-  <description><![CDATA[
-    <div xmlns="http://www.w3.org/1999/html">
-      <img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_source_preview_Small.png" border="0" width="270" height="135" alt="Screenshot">
+    <description><![CDATA[
+        <div xmlns="http://www.w3.org/1999/html">
+            <img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_source_preview_Small.png"
+                    border="0" width="270" height="135" alt="Screenshot">
 
-      <p><b><a color="#30A0D8" href="http://daringfireball.net/projects/markdown">Markdown</a> language support for IntelliJ platform.</b><br>
-        With GitHub Flavoured Markdown extensions and GitHub style formatting. HTML Preview and HTML Text tabs.</p>
+            <p><b><a color="#30A0D8" href="http://daringfireball.net/projects/markdown">Markdown</a> language support for IntelliJ platform.</b><br> With GitHub Flavoured Markdown extensions and GitHub style formatting. HTML Preview and HTML Text tabs.
+            </p>
 
-      <p><b>For all feedback requiring a reply please use the <a color="#30A0D8" href="https://github.com/vsch/idea-multimarkdown/issues"><u>MultiMarkdown GitHub Issues</u></a> page.</b></p>
+            <p><b>For all feedback requiring a reply please use the <a color="#30A0D8"
+                    href="https://github.com/vsch/idea-multimarkdown/issues"><u>MultiMarkdown GitHub Issues</u></a> page.</b></p>
 
-      <p><b>Documentation: <a color="#30A0D8" href="https://github.com/vsch/idea-multimarkdown/wiki"><u>MultiMarkdown GitHub Wiki page.</u></a></b></p>
-    </div>
-    ]]></description>
+            <p><b>Documentation: <a color="#30A0D8"
+                    href="https://github.com/vsch/idea-multimarkdown/wiki"><u>MultiMarkdown GitHub Wiki page.</u></a></b></p>
+        </div>
+        ]]></description>
 
-  <version>1.1.13</version>
-  <idea-version since-build="133.1711"/>
-  <change-notes><![CDATA[
+    <version>1.2.0</version>
+    <idea-version since-build="133.1711"/>
+    <change-notes><![CDATA[
+    <ul><h3><b>1.2.0 - License Features Added</b></h3>
+      <li>Fix not recognizing tables that have a divider and table cells that look like divider cells. (pegdown)</li>
+      <li>Fix Custom CSS was not loaded in new preview tab or html text.</li>
+      <li>Add MultiMarkdown style footnotes. The <code>[^n]</code> for reference and <code>[^n]: Footnote text</code>, for definition where n is one or more digit, letter, dash, dot or underscore.</li>
+      <li>Add licensing functionality.</li>
+    </ul>
     <ul><h3><b>1.1.13 - More GitHub integration, Bug Fixes &amp; Optimizations.</b></h3>
       <li>Fix now using FileBasedIndex to find files for link resolution. No longer need to mark wiki directories as source or resource roots</li>
       <li>Add re-targeting an invalid wiki link using quick fixes will also re-target all matching wiki refs located in the same wiki</li>
@@ -350,52 +359,54 @@
     <p>&nbsp;</p>
     ]]></change-notes>
 
-  <project-components>
-  <!-- Plugin's project components -->
-    <component>
-      <implementation-class>com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent</implementation-class>
-    </component>
-  </project-components>
+    <project-components>
+        <!-- Plugin's project components -->
+        <component>
+            <implementation-class>com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent</implementation-class>
+        </component>
+    </project-components>
 
-  <application-components>
-    <!-- Add your application components here -->
-    <component>
-      <implementation-class>com.vladsch.idea.multimarkdown.MultiMarkdownPlugin</implementation-class>
-    </component>
-  </application-components>
+    <application-components>
+        <!-- Add your application components here -->
+        <component>
+            <implementation-class>com.vladsch.idea.multimarkdown.MultiMarkdownPlugin</implementation-class>
+        </component>
+    </application-components>
 
-  <extensions defaultExtensionNs="com.intellij">
-    <!--<externalAnnotator language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.annotator.MultiMarkdownAnnotator"/>-->
-    <!--<fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MultiMarkdownHtmlEditorProvider"/>-->
-    <!--<fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MultiMarkdownPreviewEditorProvider"/>-->
-    <additionalTextAttributes scheme="Darcula" file="com/vladsch/idea/multimarkdown/colorSchemes/MultiMarkdownDarcula.xml"/>
-    <additionalTextAttributes scheme="Default" file="com/vladsch/idea/multimarkdown/colorSchemes/MultiMarkdownDefault.xml"/>
-    <annotator language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.annotator.MultiMarkdownAnnotator"/>
-    <applicationConfigurable instance="com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsConfigurable"/>
-    <applicationService serviceInterface="com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings" serviceImplementation="com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings"/>
-    <codeStyleSettingsProvider implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownCodeStyleSettingsProvider"/>
-    <colorSettingsPage implementation="com.vladsch.idea.multimarkdown.highlighter.MultiMarkdownColorSettingsPage"/>
-    <completion.contributor language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownCompletionContributor"/>
-    <fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MultiMarkdownFxPreviewEditorProvider"/>
-    <fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MultiMarkdownFxHtmlEditorProvider"/>
-    <fileTypeFactory implementation="com.vladsch.idea.multimarkdown.MultiMarkdownFileTypeFactory"/>
-    <gotoSymbolContributor implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownChooseByNameContributor"/>
-    <lang.commenter language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownCommenter"/>
-    <!--<lang.documentationProvider language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.documentation.MultiMarkdownDocumentationProvider"/>-->
-    <lang.findUsagesProvider language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownFindUsagesProvider"/>
-    <lang.namesValidator language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownNamesValidator"/>
-    <lang.parserDefinition language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.parser.MultiMarkdownParserDefinition"/>
-    <lang.refactoringSupport language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownRefactoringSupportProvider"/>
-    <lang.syntaxHighlighterFactory key="MultiMarkdown" language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.highlighter.MultiMarkdownSyntaxHighlighterFactory"/>
-    <langCodeStyleSettingsProvider implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownLanguageCodeStyleSettingsProvider"/>
-    <psi.referenceContributor language="MultiMarkdown" implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownReferenceContributor"/>
-    <spellchecker.support language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.spellchecking.MultiMarkdownSpellcheckingStrategy"/>
-    <todoIndexer filetype="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.todo.MultiMarkdownTodoIndexer"/>
-    <lang.elementManipulator forClass="com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement" implementationClass="com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownNamedElementManipulator"/>
-    <fileIconProvider implementation="com.vladsch.idea.multimarkdown.MultiMarkdownFileIconProvider"/>
-    <referencesSearch implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownReferenceSearch"/>
-    <codeInsight.lineMarkerProvider language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownLineMarkerProvider"/>
-    <nameSuggestionProvider implementation="com.vladsch.idea.multimarkdown.language.ElementNameSuggestionProvider"/>
-    <!--<renameHandler implementation="com.vladsch.idea.multimarkdown.language.TestRenameHandler"/>-->
-  </extensions>
+    <!-- @formatter:off -->
+    <extensions defaultExtensionNs="com.intellij">
+        <!--<externalAnnotator language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.annotator.MultiMarkdownAnnotator"/>-->
+        <!--<fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MultiMarkdownHtmlEditorProvider"/>-->
+        <!--<fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MultiMarkdownPreviewEditorProvider"/>-->
+        <additionalTextAttributes scheme="Darcula" file="com/vladsch/idea/multimarkdown/colorSchemes/MultiMarkdownDarcula.xml"/>
+        <additionalTextAttributes scheme="Default" file="com/vladsch/idea/multimarkdown/colorSchemes/MultiMarkdownDefault.xml"/>
+        <annotator language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.annotator.MultiMarkdownAnnotator"/>
+        <applicationConfigurable instance="com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsConfigurable"/>
+        <applicationService serviceInterface="com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings" serviceImplementation="com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings"/>
+        <codeStyleSettingsProvider implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownCodeStyleSettingsProvider"/>
+        <colorSettingsPage implementation="com.vladsch.idea.multimarkdown.highlighter.MultiMarkdownColorSettingsPage"/>
+        <completion.contributor language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownCompletionContributor"/>
+        <fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MultiMarkdownFxPreviewEditorProvider"/>
+        <fileEditorProvider implementation="com.vladsch.idea.multimarkdown.editor.MultiMarkdownFxHtmlEditorProvider"/>
+        <fileTypeFactory implementation="com.vladsch.idea.multimarkdown.MultiMarkdownFileTypeFactory"/>
+        <gotoSymbolContributor implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownChooseByNameContributor"/>
+        <lang.commenter language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownCommenter"/>
+        <!--<lang.documentationProvider language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.documentation.MultiMarkdownDocumentationProvider"/>-->
+        <lang.findUsagesProvider language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownFindUsagesProvider"/>
+        <lang.namesValidator language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownNamesValidator"/>
+        <lang.parserDefinition language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.parser.MultiMarkdownParserDefinition"/>
+        <lang.refactoringSupport language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownRefactoringSupportProvider"/>
+        <lang.syntaxHighlighterFactory key="MultiMarkdown" language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.highlighter.MultiMarkdownSyntaxHighlighterFactory"/>
+        <langCodeStyleSettingsProvider implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownLanguageCodeStyleSettingsProvider"/>
+        <psi.referenceContributor language="MultiMarkdown" implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownReferenceContributor"/>
+        <spellchecker.support language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.spellchecking.MultiMarkdownSpellcheckingStrategy"/>
+        <todoIndexer filetype="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.todo.MultiMarkdownTodoIndexer"/>
+        <lang.elementManipulator forClass="com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement" implementationClass="com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownNamedElementManipulator"/>
+        <fileIconProvider implementation="com.vladsch.idea.multimarkdown.MultiMarkdownFileIconProvider"/>
+        <referencesSearch implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownReferenceSearch"/>
+        <codeInsight.lineMarkerProvider language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownLineMarkerProvider"/>
+        <nameSuggestionProvider implementation="com.vladsch.idea.multimarkdown.language.ElementNameSuggestionProvider"/>
+        <!--<renameHandler implementation="com.vladsch.idea.multimarkdown.language.TestRenameHandler"/>-->
+    </extensions>
+    <!-- @formatter:on -->
 </idea-plugin>

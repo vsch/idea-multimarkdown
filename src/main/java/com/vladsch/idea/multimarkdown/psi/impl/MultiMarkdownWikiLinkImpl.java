@@ -31,13 +31,27 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class MultiMarkdownWikiLinkImpl extends ASTWrapperPsiElement implements MultiMarkdownWikiLink {
-    public static String getElementText(@NotNull String name, @Nullable String title) {
+    public static String getElementText(@NotNull String name, @Nullable String text) {
         boolean githubWikiLinks = MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue();
 
-        return  githubWikiLinks
-                ? "[[" + (title != null && title.length() > 0 && !name.equals(title) ? title + "|" : "") + name + "]]"
-                : "[[" + name + (title != null && title.length() > 0 && !name.equals(title) ? "|" + title : "") + "]]"
+        return githubWikiLinks
+                ? "[[" + (text != null && text.length() > 0 && !name.equals(text) ? text + "|" : "") + name + "]]"
+                : "[[" + name + (text != null && text.length() > 0 && !name.equals(text) ? "|" + text : "") + "]]"
                 ;
+    }
+
+    @Override
+    @NotNull
+    public String getMissingElementNameSpace(@NotNull String prefix, boolean addLinkRef) {
+        FilePathInfo filePathInfo = new FilePathInfo(getContainingFile().getVirtualFile());
+        String wikiHome = filePathInfo.getWikiHome();
+
+        if (addLinkRef) {
+            String pageRef = MultiMarkdownPsiImplUtil.getLinkRefWithAnchor(this);
+            if (pageRef.isEmpty()) pageRef = filePathInfo.getFileNameAsWikiRef();
+            return prefix + (wikiHome.isEmpty() ? wikiHome : wikiHome + "::") + (pageRef.isEmpty() ? pageRef : pageRef + "::");
+        }
+        return prefix + (wikiHome.isEmpty() ? wikiHome : wikiHome + "::");
     }
 
     public MultiMarkdownWikiLinkImpl(ASTNode node) {
@@ -55,12 +69,12 @@ public class MultiMarkdownWikiLinkImpl extends ASTWrapperPsiElement implements M
     }
 
     @Override
-    public String getPageTitle() {
-        return MultiMarkdownPsiImplUtil.getPageTitle(this);
+    public String getPageText() {
+        return MultiMarkdownPsiImplUtil.getLinkRefText(this);
     }
 
     @Override
     public String getPageRef() {
-        return MultiMarkdownPsiImplUtil.getPageRef(this);
+        return MultiMarkdownPsiImplUtil.getLinkRef(this);
     }
 }

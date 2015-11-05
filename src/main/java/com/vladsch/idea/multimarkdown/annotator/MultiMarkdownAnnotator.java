@@ -39,7 +39,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement.RENAME_KEEP_ANCHOR;
+import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement.*;
 
 //public class MultiMarkdownAnnotator extends ExternalAnnotator<String, Set<MultiMarkdownAnnotator.HighlightableToken>> {
 public class MultiMarkdownAnnotator implements Annotator {
@@ -53,21 +53,21 @@ public class MultiMarkdownAnnotator implements Annotator {
         PsiReference wikiPageRefReference = wikiPageRef != null ? wikiPageRef.getReference() : null;
 
         if (wikiPageRefReference != null) {
-            MultiMarkdownWikiPageTitle wikiPageTitle = (MultiMarkdownWikiPageTitle) MultiMarkdownPsiImplUtil.findChildByType(element, MultiMarkdownTypes.WIKI_LINK_TITLE);
+            MultiMarkdownWikiPageText wikiPageText = (MultiMarkdownWikiPageText) MultiMarkdownPsiImplUtil.findChildByType(element, MultiMarkdownTypes.WIKI_LINK_TEXT);
 
-            if (wikiPageTitle != null && wikiPageTitle.getName() != null) {
+            if (wikiPageText != null && wikiPageText.getName() != null) {
                 // see if the link title resolves to a page
                 MultiMarkdownFile containingFile = (MultiMarkdownFile) element.getContainingFile();
 
-                if (wikiPageTitle.getName().equals(wikiPageRef.getNameWithAnchor())) {
+                if (wikiPageText.getName().equals(wikiPageRef.getNameWithAnchor())) {
                     // can get rid off the text
-                    annotator = holder.createWeakWarningAnnotation(wikiPageTitle.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.redundant-page-title"));
+                    annotator = holder.createWeakWarningAnnotation(wikiPageText.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.redundant-page-title"));
                     annotator.registerFix(new DeleteWikiPageTitleQuickFix(element));
                 } else {
                     FileReferenceList accessibleWikiPageRefs = new FileReferenceListQuery(element.getProject())
                             .wantMarkdownFiles()
                             .inSource(containingFile)
-                            .matchWikiRef(wikiPageTitle.getName())
+                            .matchWikiRef(wikiPageText.getName())
                             .accessibleWikiPageRefs();
 
                     if (accessibleWikiPageRefs.size() == 1) {
@@ -81,8 +81,8 @@ public class MultiMarkdownAnnotator implements Annotator {
 
                             annotator.registerFix(new SwapWikiPageRefTitleQuickFix(element));
                             annotator.registerFix(new DeleteWikiPageRefQuickFix(element));
-                        } else if (accessibleWikiPageRefs.get()[0].getFileNameNoExtAsWikiRef().equals(wikiPageTitle.getName())) {
-                            annotator = holder.createWeakWarningAnnotation(wikiPageTitle.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.swap-ref-title"));
+                        } else if (accessibleWikiPageRefs.get()[0].getFileNameNoExtAsWikiRef().equals(wikiPageText.getName())) {
+                            annotator = holder.createWeakWarningAnnotation(wikiPageText.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.swap-ref-title"));
                             annotator.registerFix(new DeleteWikiPageTitleQuickFix(element));
                             annotator.registerFix(new DeleteWikiPageRefQuickFix(element));
                             annotator.registerFix(new SwapWikiPageRefTitleQuickFix(element));
@@ -97,10 +97,177 @@ public class MultiMarkdownAnnotator implements Annotator {
     @Override
     public void annotate(@NotNull final PsiElement element, @NotNull AnnotationHolder holder) {
         //noinspection StatementWithEmptyBody
-        if (element instanceof MultiMarkdownWikiPageTitle) {
+        if (element instanceof MultiMarkdownWikiPageText) {
             //Annotation annotator = null;
             //MultiMarkdownWikiLink wikiLink = (MultiMarkdownWikiLink) element.getParent();
             //if (wikiLink != null) annotator = checkWikiLinkSwapRefTitle(wikiLink, holder);
+        } else if (element instanceof MultiMarkdownLinkRef) {
+            Annotation annotator = null;
+            FilePathInfo pathInfo = new FilePathInfo(((MultiMarkdownLinkRef) element).getNameWithAnchor());
+            MultiMarkdownFile containingFile = (MultiMarkdownFile) element.getContainingFile();
+            FileReference sourceReference = new FileReference(containingFile);
+
+            if (annotator == null && !FilePathInfo.linkRefNoAnchor(pathInfo.getFileName()).isEmpty()) {
+                // see if it exists
+
+                FileReferenceList filesReferenceList;
+                boolean withExt = false;
+                FileReferenceListQuery filesReferenceListQuery;
+
+                if (element instanceof MultiMarkdownImageLinkRef) {
+                    withExt = true;
+                    filesReferenceList = new FileReferenceListQuery(element.getProject())
+                            .keepLinkRefAnchor()
+                            .wantImageFiles()
+                            .all();
+                    filesReferenceListQuery = filesReferenceList.query().wantImageFiles();
+                } else {
+                    filesReferenceList = new FileReferenceListQuery(element.getProject())
+                            .keepLinkRefAnchor()
+                            .wantMarkdownFiles()
+                            .all();
+                    filesReferenceListQuery = filesReferenceList.query().wantMarkdownFiles();
+                    withExt = pathInfo.hasExt();
+                }
+
+                FileReferenceList accessibleLinkRefs = new FileReferenceListQuery(filesReferenceListQuery)
+                        .caseSensitive() // we want to catch mismatches
+                        .gitHubWikiRules()
+                        .sameGitHubRepo()
+                        .matchLinkRef((MultiMarkdownLinkRef) element, withExt)
+                        .all();
+
+                if (accessibleLinkRefs.size() != 1) {
+                    boolean warningsOnly = false;
+                    boolean canCreateFile = true;
+                    boolean needTargetList = true;
+                    HashSet<String> alreadyOffered = new HashSet<String>();
+                    FileReference elementFileReference = new FileReference(element.getContainingFile());
+                    String gitHubRepoPath = elementFileReference.getGitHubRepoPath();
+
+                    // now set to right name or to an accessible name
+                    FileReferenceList matchedFilesReferenceList = new FileReferenceListQuery(filesReferenceListQuery)
+                            .caseInsensitive()
+                            .keepLinkRefAnchor()
+                            .gitHubWikiRules()
+                            .matchLinkRef((MultiMarkdownLinkRef) element, withExt)
+                            .all();
+
+                    FileReferenceList otherFileRefList = matchedFilesReferenceList;
+
+                    if (matchedFilesReferenceList.size() > 1 && gitHubRepoPath != null) {
+                        // see if eliminating files out of this list
+                        otherFileRefList = matchedFilesReferenceList.pathStartsWith(gitHubRepoPath);
+                    }
+
+                    FileReference[] otherReferences = otherFileRefList.get();
+
+                    if (otherReferences.length != 1) {
+                        if (sourceReference.resolveExternalLinkRef(((MultiMarkdownLinkRef) element).getFileName(), false, false) != null) {
+                            annotator = holder.createInfoAnnotation(element.getTextRange(),
+                                    MultiMarkdownBundle.message("annotation.link.resolves-to-external"));
+                        }
+                    } else {
+
+                        FileReferenceLinkGitHubRules referenceLink = (FileReferenceLinkGitHubRules) otherReferences[0];
+                        FileReferenceLink.InaccessibleLinkRefReasons reasons = referenceLink.inaccessibleLinkRefReasons(((MultiMarkdownLinkRef) element).getName());
+                        warningsOnly = true;
+
+                        if (reasons.caseMismatch()) {
+                            needTargetList = false;
+                            annotator = holder.createWarningAnnotation(element.getTextRange(),
+                                    MultiMarkdownBundle.message("annotation.wikilink.case-mismatch"));
+
+                            if (!alreadyOffered.contains(reasons.caseMismatchLinkRefFixed())) {
+                                annotator.registerFix(new ChangeLinkRefQuickFix((MultiMarkdownNamedElement) element, reasons.caseMismatchLinkRefFixed(), ChangeLinkRefQuickFix.MATCH_CASE_TO_FILE));
+                                alreadyOffered.add(reasons.caseMismatchLinkRefFixed());
+                            }
+
+                            annotator.registerFix(new RenameFileQuickFix(referenceLink.getPsiFile(), null, reasons.caseMismatchFileNameFixed()));
+                        }
+
+                        if (reasons.targetNotInSameRepoHome()) {
+                            warningsOnly = false;
+                            // can offer to move the file, just add the logic
+                            annotator = holder.createErrorAnnotation(element.getTextRange(),
+                                    MultiMarkdownBundle.message("annotation.link.unreachable-link-reference-not-in-same-repo"));
+
+                            annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
+                        }
+
+                        if (reasons.targetNameHasAnchor()) {
+                            needTargetList = false;
+                            warningsOnly = false;
+                            annotator = holder.createErrorAnnotation(element.getTextRange(),
+                                    MultiMarkdownBundle.message("annotation.wikilink.file-anchor"));
+
+                            annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
+
+                            if (referenceLink.canRenameFileTo(reasons.targetNameHasAnchorFixed())) {
+                                annotator.registerFix(new RenameFileAndReTargetQuickFix(referenceLink.getPsiFileWithAnchor(), reasons.targetNameHasAnchorFixed(), (MultiMarkdownNamedElement) element, RENAME_KEEP_PATH | RENAME_KEEP_TEXT | RENAME_KEEP_RENAMED_TEXT | RENAME_KEEP_TITLE));
+                            }
+                        }
+
+                        if (reasons.targetPathHasAnchor()) {
+                            needTargetList = false;
+                            canCreateFile = false;
+                            warningsOnly = false;
+                            annotator = holder.createErrorAnnotation(element.getTextRange(),
+                                    MultiMarkdownBundle.message("annotation.wikilink.path-anchor"));
+
+                            annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
+
+                            // TODO: create quick fix to remove anchors from all directories in the path
+                            //if (canRenameFile(referenceLink.getVirtualFile(), reasons.targetNameHasAnchorFixed())) {
+                            //    annotator.registerFix(new RenameFileQuickFix(referenceLink.getVirtualFile(), reasons.targetNameHasAnchorFixed()));
+                            //}
+                        }
+                    }
+
+                    if (!warningsOnly) {
+                        // offer to create the file and
+                        if (annotator == null) {
+                            // creation fix
+                            annotator = holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.unresolved-link-reference"));
+                            annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
+                        }
+
+                        if (canCreateFile) {
+                            String fileName = ((MultiMarkdownLinkRef) element).getFileName();
+                            FileReference thisFile = new FileReference(element.getContainingFile());
+                            FileReference newFile = new FileReference(thisFile.getPath() + fileName, element.getProject());
+                            if (newFile.canCreateFile()) {
+                                annotator.registerFix(new CreateFileQuickFix(fileName));
+                            }
+                        }
+
+                        // get all accessibles
+                        if (filesReferenceList.size() != 0 && needTargetList) {
+                                /*
+                                 *   have a file but it is not accessible we can:
+                                 *   1. rename the link to another accessible file?
+                                 */
+                            FileReferenceList linkRefs = filesReferenceList.query().gitHubWikiRules().inSource(containingFile).sameGitHubRepo().all();
+
+                            FileReference[] references = linkRefs.get();
+                            Arrays.sort(references);
+
+                            for (FileReference fileReference : references) {
+                                FileReferenceLink linkRef = (FileReferenceLink) fileReference;
+
+                                if (!alreadyOffered.contains(linkRef.getLinkRef())) {
+                                    annotator.registerFix(new ChangeLinkRefQuickFix((MultiMarkdownNamedElement) element, linkRef.getLinkRef(), 0, RENAME_KEEP_ANCHOR));
+                                    alreadyOffered.add(linkRef.getLinkRef());
+                                    // TODO: make max quick fix wikilink targets a config item
+                                    if (alreadyOffered.size() >= 15) break;
+                                }
+                            }
+                        }
+
+                        annotator.setNeedsUpdateOnTyping(true);
+                    }
+                }
+            }
         } else if (element instanceof MultiMarkdownWikiPageRef) {
             Annotation annotator = null;
             MultiMarkdownWikiLink wikiLink = (MultiMarkdownWikiLink) element.getParent();
@@ -160,7 +327,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                             }
 
                             if (!linkRef.equals(newName) && !referenceLink.getFileName().equals(newName) && referenceLink.canRenameFileTo(newName)) {
-                                annotator.registerFix(new RenameWikiPageQuickFix(referenceLink.getPsiFile(), linkRef, newName, RenameWikiPageQuickFix.RENAME_CONFLICTING_TARGET));
+                                annotator.registerFix(new RenameFileQuickFix(referenceLink.getPsiFile(), linkRef, newName, RenameFileQuickFix.RENAME_CONFLICTING_TARGET));
                             }
                         }
                     } else {
@@ -184,11 +351,11 @@ public class MultiMarkdownAnnotator implements Annotator {
                                         MultiMarkdownBundle.message("annotation.wikilink.case-mismatch"));
 
                                 if (!alreadyOffered.contains(reasons.caseMismatchWikiRefFixed())) {
-                                    annotator.registerFix(new ChangeWikiPageRefQuickFix((MultiMarkdownWikiPageRef) element, reasons.caseMismatchWikiRefFixed(), ChangeWikiPageRefQuickFix.MATCH_CASE_TO_FILE));
+                                    annotator.registerFix(new ChangeLinkRefQuickFix((MultiMarkdownNamedElement) element, reasons.caseMismatchWikiRefFixed(), ChangeLinkRefQuickFix.MATCH_CASE_TO_FILE));
                                     alreadyOffered.add(reasons.caseMismatchWikiRefFixed());
                                 }
 
-                                annotator.registerFix(new RenameWikiPageQuickFix(referenceLink.getPsiFile(), null, reasons.caseMismatchFileNameFixed()));
+                                annotator.registerFix(new RenameFileQuickFix(referenceLink.getPsiFile(), null, reasons.caseMismatchFileNameFixed()));
                             }
 
                             if (reasons.targetNotInWikiHome() || reasons.targetNotInSameWikiHome()) {
@@ -210,13 +377,13 @@ public class MultiMarkdownAnnotator implements Annotator {
 
                                 if (reasons.wikiRefHasFixableSlash()) {
                                     if (!alreadyOffered.contains(reasons.wikiRefHasSlashFixed())) {
-                                        annotator.registerFix(new ChangeWikiPageRefQuickFix((MultiMarkdownWikiPageRef) element, reasons.wikiRefHasSlashFixed(), ChangeWikiPageRefQuickFix.REMOVE_SLASHES, RENAME_KEEP_ANCHOR));
+                                        annotator.registerFix(new ChangeLinkRefQuickFix((MultiMarkdownNamedElement) element, reasons.wikiRefHasSlashFixed(), ChangeLinkRefQuickFix.REMOVE_SLASHES, RENAME_KEEP_ANCHOR));
                                         alreadyOffered.add(reasons.wikiRefHasSlashFixed());
                                     }
                                 }
                                 if (reasons.wikiRefHasSubDir()) {
                                     if (!alreadyOffered.contains(reasons.wikiRefHasSubDirFixed())) {
-                                        annotator.registerFix(new ChangeWikiPageRefQuickFix((MultiMarkdownWikiPageRef) element, reasons.wikiRefHasSubDirFixed(), ChangeWikiPageRefQuickFix.REMOVE_SUBDIR, RENAME_KEEP_ANCHOR));
+                                        annotator.registerFix(new ChangeLinkRefQuickFix((MultiMarkdownNamedElement) element, reasons.wikiRefHasSubDirFixed(), ChangeLinkRefQuickFix.REMOVE_SUBDIR, RENAME_KEEP_ANCHOR));
                                         alreadyOffered.add(reasons.wikiRefHasSubDirFixed());
                                     }
                                 }
@@ -231,7 +398,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                                 annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
 
                                 if (referenceLink.canRenameFileTo(reasons.targetNameHasSpacedFixed())) {
-                                    annotator.registerFix(new RenameWikiPageQuickFix(referenceLink.getPsiFile(), null, reasons.targetNameHasSpacedFixed()));
+                                    annotator.registerFix(new RenameFileQuickFix(referenceLink.getPsiFile(), null, reasons.targetNameHasSpacedFixed()));
                                 }
                             }
 
@@ -244,9 +411,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                                 annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
 
                                 if (referenceLink.canRenameFileTo(reasons.targetNameHasAnchorFixed())) {
-                                    FileReference targetReference = new FileReference(referenceLink.getPath() + reasons.targetNameHasAnchorFixed(), element.getProject());
-                                    FileReferenceLink re_targetedLink = new FileReferenceLink(containingFile, targetReference);
-                                    annotator.registerFix(new RenameWikiPageAndReTargetQuickFix(referenceLink.getPsiFileWithAnchor(), reasons.targetNameHasAnchorFixed(), (MultiMarkdownWikiPageRef) element, re_targetedLink.getWikiPageRef()));
+                                    annotator.registerFix(new RenameFileAndReTargetQuickFix(referenceLink.getPsiFileWithAnchor(), reasons.targetNameHasAnchorFixed(), (MultiMarkdownNamedElement) element, RENAME_KEEP_TEXT | RENAME_KEEP_RENAMED_TEXT | RENAME_KEEP_TITLE));
                                 }
                             } else if (reasons.targetNotWikiPageExt()) {
                                 // can offer to move the file, just add the logic
@@ -257,7 +422,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                                 annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
 
                                 if (referenceLink.canRenameFileTo(reasons.targetNotWikiPageExtFixed())) {
-                                    annotator.registerFix(new RenameWikiPageQuickFix(referenceLink.getPsiFile(), null, reasons.targetNotWikiPageExtFixed()));
+                                    annotator.registerFix(new RenameFileQuickFix(referenceLink.getPsiFile(), null, reasons.targetNotWikiPageExtFixed()));
                                 }
                             }
 
@@ -272,7 +437,7 @@ public class MultiMarkdownAnnotator implements Annotator {
 
                                 // TODO: create quick fix to remove anchors from all directories in the path
                                 //if (canRenameFile(referenceLink.getVirtualFile(), reasons.targetNameHasAnchorFixed())) {
-                                //    annotator.registerFix(new RenameWikiPageQuickFix(referenceLink.getVirtualFile(), reasons.targetNameHasAnchorFixed()));
+                                //    annotator.registerFix(new RenameFileQuickFix(referenceLink.getVirtualFile(), reasons.targetNameHasAnchorFixed()));
                                 //}
                             }
 
@@ -285,7 +450,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                                         MultiMarkdownBundle.message("annotation.wikilink.link-dashes"));
 
                                 if (!alreadyOffered.contains(reasons.wikiRefHasDashesFixed())) {
-                                    annotator.registerFix(new ChangeWikiPageRefQuickFix((MultiMarkdownWikiPageRef) element, reasons.wikiRefHasDashesFixed(), ChangeWikiPageRefQuickFix.REMOVE_DASHES));
+                                    annotator.registerFix(new ChangeLinkRefQuickFix((MultiMarkdownNamedElement) element, reasons.wikiRefHasDashesFixed(), ChangeLinkRefQuickFix.REMOVE_DASHES));
                                     alreadyOffered.add(reasons.wikiRefHasDashesFixed());
                                 }
                             }
@@ -296,7 +461,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                         // offer to create the file and
                         if (annotator == null) {
                             // creation fix
-                            annotator = holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.unresolved-page-reference"));
+                            annotator = holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.unresolved-link-reference"));
                             annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
                         }
 
@@ -305,7 +470,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                             FileReference thisFile = new FileReference(element.getContainingFile());
                             FileReference newFile = new FileReference(thisFile.getPath() + fileName, element.getProject());
                             if (newFile.canCreateFile()) {
-                                annotator.registerFix(new CreateWikiPageQuickFix(fileName));
+                                annotator.registerFix(new CreateFileQuickFix(fileName));
                             }
                         }
 
@@ -324,7 +489,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                                 FileReferenceLink wikiPageRef = (FileReferenceLink) fileReference;
 
                                 if (wikiPageRef.getUpDirectories() <= wikiPageRef.getUpDirectoriesToWikiHome() && !alreadyOffered.contains(wikiPageRef.getWikiPageRef())) {
-                                    annotator.registerFix(new ChangeWikiPageRefQuickFix((MultiMarkdownWikiPageRef) element, wikiPageRef.getWikiPageRef(), 0, RENAME_KEEP_ANCHOR));
+                                    annotator.registerFix(new ChangeLinkRefQuickFix((MultiMarkdownNamedElement) element, wikiPageRef.getWikiPageRef(), 0, RENAME_KEEP_ANCHOR));
                                     alreadyOffered.add(wikiPageRef.getWikiPageRef());
                                     // TODO: make max quick fix wikilink targets a config item
                                     if (alreadyOffered.size() >= 15) break;

@@ -25,13 +25,10 @@ import com.intellij.lang.cacheBuilder.WordOccurrence;
 import com.intellij.lang.cacheBuilder.WordsScanner;
 import com.intellij.lang.findUsages.FindUsagesProvider;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.tree.TokenSet;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.parser.MultiMarkdownLexer;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageTitle;
+import com.vladsch.idea.multimarkdown.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,7 +51,7 @@ public class MultiMarkdownFindUsagesProvider implements FindUsagesProvider {
 
         if (false) {
             MultiMarkdownWordsScanner wordsScanner = new MultiMarkdownWordsScanner(new MultiMarkdownLexer(),
-                    TokenSet.create(WIKI_LINK_REF, WIKI_LINK_TITLE),
+                    TokenSet.create(WIKI_LINK_REF, WIKI_LINK_TEXT),
                     TokenSet.create(COMMENT),
                     TokenSet.EMPTY,
                     TokenSet.create(NONE), 5);
@@ -66,14 +63,14 @@ public class MultiMarkdownFindUsagesProvider implements FindUsagesProvider {
         } else {
             DefaultWordsScanner wordsScanner = new DefaultWordsScanner(new MultiMarkdownLexer(),
                     //TokenSet.create(TEXT, WIKI_LINK_REF, WIKI_LINK),
-                    TokenSet.create(WIKI_LINK_REF, WIKI_LINK_TITLE),
+                    TokenSet.create(WIKI_LINK_REF, WIKI_LINK_TEXT, WIKI_LINK_REF_ANCHOR, LINK_REF, LINK_REF_TEXT, LINK_REF_ANCHOR, LINK_REF_TITLE),
                     TokenSet.create(COMMENT),
                     TokenSet.EMPTY,
                     TokenSet.EMPTY)
             {
                 @Override
                 public int getVersion() {
-                    return super.getVersion()+6;
+                    return super.getVersion()+7;
                 }
             };
 
@@ -98,8 +95,22 @@ public class MultiMarkdownFindUsagesProvider implements FindUsagesProvider {
     public String getType(@NotNull PsiElement element) {
         if (element instanceof MultiMarkdownWikiPageRef) {
             return MultiMarkdownBundle.message("findusages.wikilink.page-ref");
-        } else if (element instanceof MultiMarkdownWikiPageTitle) {
+        } else if (element instanceof MultiMarkdownWikiPageText) {
             return MultiMarkdownBundle.message("findusages.wikilink.page-title");
+        } else if (element instanceof MultiMarkdownImageLinkRef) {
+            return MultiMarkdownBundle.message("findusages.image.link-ref");
+        } else if (element instanceof MultiMarkdownImageLinkRefText) {
+            return MultiMarkdownBundle.message("findusages.image.link-ref-text");
+        } else if (element instanceof MultiMarkdownImageLinkRefTitle) {
+            return MultiMarkdownBundle.message("findusages.image.link-ref-title");
+        } else if (element instanceof MultiMarkdownLinkRef) {
+            return MultiMarkdownBundle.message("findusages.explicit.link-ref");
+        } else if (element instanceof MultiMarkdownLinkRefText) {
+            return MultiMarkdownBundle.message("findusages.explicit.link-ref-text");
+        } else if (element instanceof MultiMarkdownLinkRefAnchor) {
+            return MultiMarkdownBundle.message("findusages.explicit.link-ref-anchor");
+        } else if (element instanceof MultiMarkdownLinkRefTitle) {
+            return MultiMarkdownBundle.message("findusages.explicit.link-ref-title");
         } else {
             return "";
         }

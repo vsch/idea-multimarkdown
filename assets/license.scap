@@ -159,7 +159,8 @@
         <Note ID="41" FontSize="12.0" Position="744.0,451.0" Width="125.0">
             <Appearance>
                 <Alignment>Left</Alignment>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <String>Activation Request</String>
             <ConnectedNoteIDs>8, 39</ConnectedNoteIDs>
@@ -168,7 +169,8 @@
         <Note ID="42" FontSize="12.0" Position="744.0,479.0" Width="125.0">
             <Appearance>
                 <Alignment>Left</Alignment>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <String>Activation</String>
             <ConnectedNoteIDs>8, 39</ConnectedNoteIDs>
@@ -177,7 +179,8 @@
         <Note ID="43" FontSize="12.0" Position="744.0,507.0" Width="125.0">
             <Appearance>
                 <Alignment>Left</Alignment>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <String>Licence Request</String>
             <ConnectedNoteIDs>8, 39</ConnectedNoteIDs>
@@ -186,7 +189,8 @@
         <Note ID="44" FontSize="12.0" Position="744.0,535.0" Width="125.0">
             <Appearance>
                 <Alignment>Left</Alignment>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <String>License</String>
             <ConnectedNoteIDs>8, 39</ConnectedNoteIDs>
@@ -644,14 +648,14 @@
             </Appearance>
             <String>PluginId</String>
         </Note>
-        <Note ID="164" FontSize="12.0" Position="1104.0,296.0" Width="83.0">
+        <Note ID="164" FontSize="12.0" Position="1104.0,299.0" Width="83.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
             <String>Agent Version</String>
         </Note>
-        <Note ID="166" FontSize="12.0" Position="1229.0,179.0" Width="50.0">
+        <Note ID="166" FontSize="12.0" Position="1230.0,188.0" Width="50.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -668,7 +672,8 @@
         <Note ID="168" FontSize="12.0" Position="744.0,563.0" Width="125.0">
             <Appearance>
                 <Alignment>Left</Alignment>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <String>Remove License</String>
             <ConnectedNoteIDs>8, 39</ConnectedNoteIDs>
@@ -753,14 +758,14 @@
             <String>Type: Activation</String>
             <ConnectedNoteIDs>76</ConnectedNoteIDs>
         </Note>
-        <Note ID="184" FontSize="12.0" Position="1226.0,152.0" Width="83.0">
+        <Note ID="184" FontSize="12.0" Position="1227.0,161.0" Width="83.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
             </Appearance>
             <String>Type: License</String>
         </Note>
-        <Note ID="185" FontSize="12.0" Position="1104.0,244.0" Width="61.0">
+        <Note ID="185" FontSize="12.0" Position="1104.0,243.0" Width="61.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -781,17 +786,33 @@
             </Appearance>
             <String>Activation Expires</String>
         </Note>
+        <Note ID="188" FontSize="12.0" Position="809.0,387.0" Width="82.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Host Instance</String>
+        </Note>
+        <Note ID="190" FontSize="12.0" Position="1230.0,216.0" Width="93.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>Activation Code</String>
+        </Note>
     </Notes>
     <BackgroundShapes>
         <Shape ID="4" Sticky="Yes" Position="47.0,482.0" Width="102.0" Height="89.0">
             <Appearance>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <ConnectedNoteIDs>89</ConnectedNoteIDs>
         </Shape>
         <Shape ID="8" Sticky="Yes" Position="969.0,487.0" Width="166.0" Height="79.0">
             <Appearance>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <ConnectedNoteIDs>10, 41-44, 69-70, 75-76, 158, 165, 168</ConnectedNoteIDs>
             <PointsToNoteIDs>10, 158</PointsToNoteIDs>
@@ -814,21 +835,24 @@
         </Shape>
         <Shape ID="36" Sticky="Yes" Position="198.0,257.0" Width="209.0" Height="120.0">
             <Appearance>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <ConnectedNoteIDs>89</ConnectedNoteIDs>
             <PointsToNoteIDs>89</PointsToNoteIDs>
         </Shape>
         <Shape ID="39" Sticky="Yes" Position="429.0,472.0" Width="212.0" Height="137.0">
             <Appearance>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <ConnectedNoteIDs>41-44, 49, 85, 89, 168</ConnectedNoteIDs>
             <PointsToNoteIDs>89</PointsToNoteIDs>
         </Shape>
         <Shape ID="49" Sticky="Yes" Position="584.0,227.0" Width="118.0" Height="193.0">
             <Appearance>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <ConnectedNoteIDs>39</ConnectedNoteIDs>
         </Shape>
@@ -856,29 +880,33 @@
             <ConnectedNoteIDs>8, 55</ConnectedNoteIDs>
             <PointsToNoteIDs>8</PointsToNoteIDs>
         </Shape>
-        <Shape ID="75" Sticky="Yes" Position="792.0,144.0" Width="146.0" Height="255.0">
+        <Shape ID="75" Sticky="Yes" Position="792.0,144.0" Width="146.0" Height="280.0">
             <Appearance>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <ConnectedNoteIDs>8, 18</ConnectedNoteIDs>
             <PointsToNoteIDs>18</PointsToNoteIDs>
         </Shape>
         <Shape ID="76" Sticky="Yes" Position="954.0,144.0" Width="113.0" Height="74.0">
             <Appearance>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <ConnectedNoteIDs>8, 18, 183</ConnectedNoteIDs>
             <PointsToNoteIDs>8</PointsToNoteIDs>
         </Shape>
         <Shape ID="85" Sticky="Yes" Position="427.0,186.0" Width="135.0" Height="231.0">
             <Appearance>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <ConnectedNoteIDs>39</ConnectedNoteIDs>
         </Shape>
         <Shape ID="89" Sticky="Yes" Position="205.0,486.0" Width="195.0" Height="82.0">
             <Appearance>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <ConnectedNoteIDs>4, 36, 39</ConnectedNoteIDs>
             <PointsToNoteIDs>36, 39</PointsToNoteIDs>
@@ -903,21 +931,24 @@
         </Shape>
         <Shape ID="155" Sticky="Yes" Position="1092.0,47.0" Width="222.0" Height="55.0">
             <Appearance>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <ConnectedNoteIDs>158, 165</ConnectedNoteIDs>
             <PointsToNoteIDs>165</PointsToNoteIDs>
         </Shape>
-        <Shape ID="158" Sticky="Yes" Position="1093.0,144.0" Width="119.0" Height="217.0">
+        <Shape ID="158" Sticky="Yes" Position="1093.0,144.0" Width="119.0" Height="216.0">
             <Appearance>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <ConnectedNoteIDs>8, 155</ConnectedNoteIDs>
             <PointsToNoteIDs>155</PointsToNoteIDs>
         </Shape>
-        <Shape ID="165" Sticky="Yes" Position="1221.0,144.0" Width="94.0" Height="64.0">
+        <Shape ID="165" Sticky="Yes" Position="1217.0,146.0" Width="116.0" Height="108.0">
             <Appearance>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <ConnectedNoteIDs>8, 155</ConnectedNoteIDs>
             <PointsToNoteIDs>8</PointsToNoteIDs>
@@ -937,8 +968,9 @@
         <Stack>120, 174</Stack>
         <Stack>129-131</Stack>
         <Stack>159-161, 185, 163-164</Stack>
+        <Stack>166, 190</Stack>
     </Stacks>
-    <AutoFit>0-1, 4, 6, 8-11, 13-14, 16, 19, 21-23, 29-32, 37-38, 46-47, 50-51, 56, 58, 60, 65, 75, 77-79, 81, 89, 91, 102, 104-105, 107-113, 116-120, 122-126, 129-131, 133-139, 141-146, 148-149, 151-154, 156-164, 166-167, 171-178, 180, 182-187</AutoFit>
+    <AutoFit>0-1, 4, 6, 8-11, 13-14, 16, 19, 21-23, 29-32, 37-38, 46-47, 50-51, 56, 58, 60, 65, 77-79, 81, 89, 91, 102, 104-105, 107-113, 116-120, 122-126, 129-131, 133-139, 141-146, 148-149, 151-154, 156-157, 159-164, 166-167, 171-178, 180, 182-188, 190</AutoFit>
     <NoteStyles>
         <Style Name="Blue Bubble" ID="4B1C6936-5C1E-4B2E-8A8D-8D0C63B3C5DC" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
             <BorderThickness>1</BorderThickness>

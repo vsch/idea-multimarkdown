@@ -28,8 +28,9 @@ import com.intellij.openapi.options.colors.AttributesDescriptor;
 import com.intellij.openapi.options.colors.ColorDescriptor;
 import com.intellij.openapi.options.colors.ColorSettingsPage;
 import com.intellij.openapi.util.io.FileUtil;
-import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
+import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
+import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -45,12 +46,14 @@ import static com.vladsch.idea.multimarkdown.highlighter.MultiMarkdownHighlighte
 public class MultiMarkdownColorSettingsPage implements ColorSettingsPage {
     private final static Logger LOGGER = Logger.getInstance(MultiMarkdownColorSettingsPage.class.getName());
 
-    protected static final ColorDescriptor[] EMPTY_COLOR_DESCRIPTOR_ARRAY = new ColorDescriptor[]{};
+    protected static final ColorDescriptor[] EMPTY_COLOR_DESCRIPTOR_ARRAY = new ColorDescriptor[] { };
 
     @NonNls
     protected static final String SAMPLE_MARKDOWN_DOCUMENT_PATH = "/com/vladsch/idea/multimarkdown/sample-document.md";
+    protected static final String LICENSED_SAMPLE_MARKDOWN_DOCUMENT_PATH = "/com/vladsch/idea/multimarkdown/licensed-sample-document.md";
 
-    protected static final String SAMPLE_MARKDOWN_DOCUMENT = loadSampleMarkdownDocument();
+    protected static final String SAMPLE_MARKDOWN_DOCUMENT = loadSampleMarkdownDocument(SAMPLE_MARKDOWN_DOCUMENT_PATH);
+    protected static final String LICENSED_SAMPLE_MARKDOWN_DOCUMENT = loadSampleMarkdownDocument(LICENSED_SAMPLE_MARKDOWN_DOCUMENT_PATH);
 
     protected static final List<AttributesDescriptor> attributeDescriptors = new LinkedList<AttributesDescriptor>();
 
@@ -74,6 +77,8 @@ public class MultiMarkdownColorSettingsPage implements ColorSettingsPage {
         addTextAttributesKey("definition-list", DEFINITION_LIST_ATTR_KEY);
         addTextAttributesKey("definition-term", DEFINITION_TERM_ATTR_KEY);
         addTextAttributesKey("explicit-link", EXPLICIT_LINK_ATTR_KEY);
+        addTextAttributesKey("footnote", FOOTNOTE_ATTR_KEY);
+        addTextAttributesKey("footnote-ref", FOOTNOTE_REF_ATTR_KEY);
         addTextAttributesKey("header-level-1", HEADER_LEVEL_1_ATTR_KEY);
         addTextAttributesKey("header-level-1-setext", SETEXT_HEADER_LEVEL_1_ATTR_KEY);
         addTextAttributesKey("header-level-2", HEADER_LEVEL_2_ATTR_KEY);
@@ -121,18 +126,30 @@ public class MultiMarkdownColorSettingsPage implements ColorSettingsPage {
         addTextAttributesKey("wiki-link-ref-anchor", WIKI_LINK_REF_ANCHOR_ATTR_KEY);
         addTextAttributesKey("wiki-link-ref-anchor-marker", WIKI_LINK_REF_ANCHOR_MARKER_ATTR_KEY);
         addTextAttributesKey("wiki-link-text", WIKI_LINK_TEXT_ATTR_KEY);
+
+        // licensed features
+        if (MultiMarkdownPlugin.isLicensed()) {
+            addTextAttributesKey("link-ref", LINK_REF_ATTR_KEY);
+            addTextAttributesKey("link-ref-text", LINK_REF_TEXT_ATTR_KEY);
+            addTextAttributesKey("link-ref-title", LINK_REF_TITLE_ATTR_KEY);
+            addTextAttributesKey("link-ref-anchor", LINK_REF_ANCHOR_ATTR_KEY);
+            addTextAttributesKey("link-ref-anchor-marker", LINK_REF_ANCHOR_MARKER_ATTR_KEY);
+            addTextAttributesKey("image-link-ref", IMAGE_LINK_REF_ATTR_KEY);
+            addTextAttributesKey("image-link-ref-title", IMAGE_LINK_REF_TITLE_ATTR_KEY);
+            addTextAttributesKey("image-alt-text", IMAGE_ALT_TEXT_ATTR_KEY);
+        }
     }
 
     /**
      * Get the mapping from special tag names surrounding the regions to be highlighted in the preview text to text
      * attribute keys used to highlight the regions.
-     *
+     * <p/>
      * If some elements need to be highlighted in
      * the preview text which are not highlighted by the syntax highlighter, they need to be
      * surrounded by XML-like tags, for example: <code>&lt;class&gt;MyClass&lt;/class&gt;</code>.
      * The mapping between the names of the tags and the text attribute keys used for highlighting
      * is defined by the {@link #getAdditionalHighlightingTagToDescriptorMap()} method.
-     *
+     * <p/>
      * Returns the mapping from special tag names surrounding the regions to be highlighted
      * in the preview text (see {@link #getDemoText()}) to text attribute keys used to
      * highlight the regions.
@@ -178,7 +195,11 @@ public class MultiMarkdownColorSettingsPage implements ColorSettingsPage {
     @NonNls
     @NotNull
     public String getDemoText() {
-        return SAMPLE_MARKDOWN_DOCUMENT;
+        if (MultiMarkdownPlugin.isLicensed()) {
+            return LICENSED_SAMPLE_MARKDOWN_DOCUMENT;
+        } else {
+            return SAMPLE_MARKDOWN_DOCUMENT;
+        }
     }
 
     /**
@@ -220,9 +241,9 @@ public class MultiMarkdownColorSettingsPage implements ColorSettingsPage {
      * @see #SAMPLE_MARKDOWN_DOCUMENT_PATH
      * @see #SAMPLE_MARKDOWN_DOCUMENT
      */
-    protected static String loadSampleMarkdownDocument() {
+    protected static String loadSampleMarkdownDocument(String path) {
         try {
-            return FileUtil.loadTextAndClose(new InputStreamReader(MultiMarkdownColorSettingsPage.class.getResourceAsStream(SAMPLE_MARKDOWN_DOCUMENT_PATH)));
+            return FileUtil.loadTextAndClose(new InputStreamReader(MultiMarkdownColorSettingsPage.class.getResourceAsStream(path)));
         } catch (Exception e) {
             LOGGER.error("Failed loading sample Markdown document", e);
         }

@@ -38,7 +38,6 @@ import org.jetbrains.annotations.Nullable;
 import org.pegdown.Extensions;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 @State(
@@ -114,6 +113,7 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     final public Settings.BooleanSetting includesHljsCss = settings.BooleanSetting(false, "includesHljsCss", 0);
     final public Settings.BooleanSetting includesLayoutCss = settings.BooleanSetting(false, "includesLayoutCss", 0);
     final public Settings.BooleanSetting includesColorsCss = settings.BooleanSetting(true, "includesColorsCss", 0);
+    final public Settings.BooleanSetting footnotes = settings.BooleanSetting(false, "footnotes", Extensions.FOOTNOTES);
     final public Settings.IntegerSetting htmlTheme = settings.IntegerSetting(HTML_THEME_UI, "htmlTheme");
     final public Settings.IntegerSetting maxImgWidth = settings.IntegerSetting(900, "maxImgWidth");
     final public Settings.IntegerSetting parsingTimeout = settings.IntegerSetting(10000, "parsingTimeout");
@@ -135,6 +135,9 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     final public Settings.FailedBuildSetting lightParserFailedBuild = settings.FailedBuildSetting("", "lightParserFailedBuild");
     final public Settings.FailedBuildSetting fxPreviewFailedBuild = settings.FailedBuildSetting("", "fxPreviewFailedBuild", true);
     //final public Settings.FailedBuildSetting fxPlatformFailedBuild = settings.FailedBuildSetting("", "fxPlatformFailedBuild", true);
+
+    final public Settings.StringSetting licenseCode = settings.StringSetting("", "licenseCode");
+    final public Settings.StringSetting activationCode = settings.StringSetting("", "activationCode");
 
     public boolean isFxHtmlPreview() {
         return isFxHtmlPreview;

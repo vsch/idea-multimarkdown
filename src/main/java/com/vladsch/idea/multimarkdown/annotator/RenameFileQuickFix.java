@@ -37,7 +37,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement.*;
 
-class RenameWikiPageQuickFix extends BaseIntentionAction {
+class RenameFileQuickFix extends BaseIntentionAction {
     public static final int RENAME_CONFLICTING_TARGET = 1;
 
     private String displayName;
@@ -45,11 +45,11 @@ class RenameWikiPageQuickFix extends BaseIntentionAction {
     private PsiFile targetFile;
     private final int alternativeMsg;
 
-    RenameWikiPageQuickFix(PsiFile targetFile, String displayName, String newName) {
+    RenameFileQuickFix(PsiFile targetFile, String displayName, String newName) {
         this(targetFile, displayName, newName, 0);
     }
 
-    RenameWikiPageQuickFix(PsiFile targetFile, String displayName, String newName, int alternativeMsg) {
+    RenameFileQuickFix(PsiFile targetFile, String displayName, String newName, int alternativeMsg) {
         this.displayName = displayName != null ? displayName : targetFile.getVirtualFile().getName();
         this.newName = newName;
         this.targetFile = targetFile;
@@ -105,7 +105,7 @@ class RenameWikiPageQuickFix extends BaseIntentionAction {
                     JavaRenameRefactoring rename = factory.createRename(psiFile, fileName);
                     UsageInfo[] usages = rename.findUsages();
                     try {
-                        projectComponent.pushRefactoringRenameFlags(alternativeMsg == RENAME_CONFLICTING_TARGET ? RENAME_KEEP_ANCHOR | RENAME_KEEP_PATH | RENAME_KEEP_TITLE : REASON_FILE_RENAMED);
+                        projectComponent.pushRefactoringRenameFlags(alternativeMsg == RENAME_CONFLICTING_TARGET ? RENAME_KEEP_ANCHOR | RENAME_KEEP_PATH | RENAME_KEEP_TEXT : REASON_FILE_RENAMED);
                         rename.doRefactoring(usages); // modified 'usages' array
                     } finally {
                         projectComponent.popRefactoringRenameFlags();

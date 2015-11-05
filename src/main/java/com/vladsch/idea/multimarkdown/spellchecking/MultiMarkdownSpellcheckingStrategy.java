@@ -24,15 +24,14 @@ package com.vladsch.idea.multimarkdown.spellchecking;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.TokenType;
+import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.spellchecker.quickfixes.SpellCheckerQuickFix;
 import com.intellij.spellchecker.tokenizer.SpellcheckingStrategy;
 import com.intellij.spellchecker.tokenizer.Tokenizer;
 import com.vladsch.idea.multimarkdown.parser.MultiMarkdownParserDefinition;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownElementType;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownTokenType;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,7 +45,7 @@ import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.*;
  */
 public class MultiMarkdownSpellcheckingStrategy extends SpellcheckingStrategy {
     private static final Logger logger = Logger.getLogger(MultiMarkdownSpellcheckingStrategy.class);
-    private static TokenSet NO_SPELL_CHECK_SET = TokenSet.create(
+    final public static TokenSet NO_SPELL_CHECK_SET = TokenSet.create(
             MultiMarkdownParserDefinition.MULTIMARKDOWN_FILE,
             NONE,
             TokenType.WHITE_SPACE,
@@ -115,41 +114,56 @@ public class MultiMarkdownSpellcheckingStrategy extends SpellcheckingStrategy {
             //WIKI_LINK_REF,
             //WIKI_LINK_TITLE,
             //COMMENT,
-            WIKI_LINK
+            WIKI_LINK,
+            LINK_REF_OPEN, LINK_REF_CLOSE, LINK_REF,
+            LINK_REF_TEXT_OPEN, LINK_REF_TEXT_CLOSE,
+            LINK_REF_TITLE_MARKER,
+            IMAGE_LINK_REF_OPEN, IMAGE_LINK_REF_CLOSE, IMAGE_LINK_REF,
+            IMAGE_LINK_REF_TITLE_MARKER
+    );
+
+    // these are spellchecked by the parent element
+    final public static TokenSet NO_SPELL_LEAF_SET = TokenSet.create(
+            LINK_REF, LINK_REF_TEXT, LINK_REF_TITLE,
+            WIKI_LINK_REF, WIKI_LINK_TEXT,
+            IMAGE_LINK_REF, IMAGE_LINK_REF_TEXT
     );
 
     protected static Tokenizer IDENTIFIER_TOKENIZER = new MultiMarkdownIdentifierTokenizer();
 
-    @NotNull @Override
+    @NotNull
+    @Override
     public Tokenizer getTokenizer(PsiElement element) {
-        if (element.getNode().getElementType() instanceof MultiMarkdownTokenType) {
+        IElementType elementType = element.getNode().getElementType();
+
+        if (elementType instanceof MultiMarkdownTokenType) {
+            if (NO_SPELL_CHECK_SET.contains(elementType)) {
+                //logger.info("empty tokenizer for " + element.toString());
+                return EMPTY_TOKENIZER;
+            }
+
+            // here we can return custom tokenizers if needed
+            //logger.info("text tokenizer for " + element.toString());
             if (element instanceof MultiMarkdownNamedElement) {
                 //logger.info("identifier tokenizer for " + element.toString());
                 return IDENTIFIER_TOKENIZER;
             }
 
-            if (NO_SPELL_CHECK_SET.contains(element.getNode().getElementType())) {
-                //logger.info("empty tokenizer for " + element.toString());
-                return EMPTY_TOKENIZER;
-            }
-            // here we can return custom tokenizers if needed
+            // this is to prevent two spelling errors for every occurence but these are rename and change to so we'll keep them
+            //if (NO_SPELL_LEAF_SET.contains(elementType)) {
+            //    return EMPTY_TOKENIZER;
+            //}
 
-            //logger.info("text tokenizer for " + element.toString());
             return TEXT_TOKENIZER;
         }
         return super.getTokenizer(element);
     }
 
     @Override
-    public SpellCheckerQuickFix[] getRegularFixes(PsiElement element,
-            int offset,
-            @NotNull TextRange textRange,
-            boolean useRename,
-            String wordWithTypo) {
-
+    public SpellCheckerQuickFix[] getRegularFixes(PsiElement element, int offset, @NotNull TextRange textRange, boolean useRename, String wordWithTypo) {
         SpellCheckerQuickFix[] fixes = getDefaultRegularFixes(useRename, wordWithTypo);
 
-        if (element instanceof MultiMarkdownWikiPageRef && useRename) {
+        if (element instanceof MultiMarkdownNamedElement && useRename) {
             fixes[0] = new TypoRenameToQuickFix(wordWithTypo);
         }
 

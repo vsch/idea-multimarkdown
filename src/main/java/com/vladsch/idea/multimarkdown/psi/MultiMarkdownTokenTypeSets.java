@@ -39,7 +39,9 @@ public interface MultiMarkdownTokenTypeSets extends MultiMarkdownTypes {
     TokenSet DEFINITION_LIST_SET = TokenSet.create(DEFINITION_LIST);
     TokenSet DEFINITION_SET = TokenSet.create(DEFINITION);
     TokenSet DEFINITION_TERM_SET = TokenSet.create(DEFINITION_TERM);
-    TokenSet EXPLICIT_LINK_SET = TokenSet.create(EXPLICIT_LINK);
+    TokenSet EXPLICIT_LINK_SET = TokenSet.create(EXPLICIT_LINK, LINK_REF_TEXT_OPEN, LINK_REF_TEXT_CLOSE, LINK_REF_OPEN, LINK_REF_CLOSE, LINK_REF_TITLE_MARKER);
+    TokenSet FOOTNOTE_SET = TokenSet.create(FOOTNOTE);
+    TokenSet FOOTNOTE_REF_SET = TokenSet.create(FOOTNOTE_REF);
     TokenSet HEADER_LEVEL_1_SET = TokenSet.create(HEADER_LEVEL_1);
     TokenSet SETEXT_HEADER_LEVEL_1_SET = TokenSet.create(SETEXT_HEADER_LEVEL_1);
     TokenSet HEADER_LEVEL_2_SET = TokenSet.create(HEADER_LEVEL_2);
@@ -50,10 +52,18 @@ public interface MultiMarkdownTokenTypeSets extends MultiMarkdownTypes {
     TokenSet HEADER_LEVEL_6_SET = TokenSet.create(HEADER_LEVEL_6);
     TokenSet HRULE_SET = TokenSet.create(HRULE);
     TokenSet HTML_BLOCK_SET = TokenSet.create(HTML_BLOCK);
-    TokenSet IMAGE_SET = TokenSet.create(IMAGE);
+    TokenSet IMAGE_SET = TokenSet.create(IMAGE, IMAGE_LINK_REF_CLOSE, IMAGE_LINK_REF_OPEN, IMAGE_LINK_REF_TEXT_OPEN, IMAGE_LINK_REF_TEXT_CLOSE, IMAGE_LINK_REF_TITLE_MARKER);
     TokenSet INLINE_HTML_SET = TokenSet.create(INLINE_HTML);
     TokenSet ITALIC_MARKER_SET = TokenSet.create(ITALIC_MARKER);
     TokenSet ITALIC_SET = TokenSet.create(ITALIC);
+    TokenSet IMAGE_LINK_REF_SET = TokenSet.create(IMAGE_LINK_REF);
+    TokenSet IMAGE_LINK_REF_TITLE_SET = TokenSet.create(IMAGE_LINK_REF_TITLE);
+    TokenSet IMAGE_ALT_TEXT_SET = TokenSet.create(IMAGE_LINK_REF_TEXT);
+    TokenSet LINK_REF_SET = TokenSet.create(LINK_REF);
+    TokenSet LINK_REF_TEXT_SET = TokenSet.create(LINK_REF_TEXT);
+    TokenSet LINK_REF_TITLE_SET = TokenSet.create(LINK_REF_TITLE);
+    TokenSet LINK_REF_ANCHOR_SET = TokenSet.create(LINK_REF_ANCHOR);
+    TokenSet LINK_REF_ANCHOR_MARKER_SET = TokenSet.create(LINK_REF_ANCHOR_MARKER);
     TokenSet LIST_ITEM_SET = TokenSet.create(LIST_ITEM);
     TokenSet MAIL_LINK_SET = TokenSet.create(MAIL_LINK);
     TokenSet ORDERED_LIST_SET = TokenSet.create(ORDERED_LIST);
@@ -90,5 +100,5 @@ public interface MultiMarkdownTokenTypeSets extends MultiMarkdownTypes {
     TokenSet WIKI_LINK_REF_SET = TokenSet.create(WIKI_LINK_REF);
     TokenSet WIKI_LINK_REF_ANCHOR_MARKER_SET = TokenSet.create(WIKI_LINK_REF_ANCHOR_MARKER);
     TokenSet WIKI_LINK_REF_ANCHOR_SET = TokenSet.create(WIKI_LINK_REF_ANCHOR);
-    TokenSet WIKI_LINK_TEXT_SET = TokenSet.create(WIKI_LINK_TITLE);
+    TokenSet WIKI_LINK_TEXT_SET = TokenSet.create(WIKI_LINK_TEXT);
 }
