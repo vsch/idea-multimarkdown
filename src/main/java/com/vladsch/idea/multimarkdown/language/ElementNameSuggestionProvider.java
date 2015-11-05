@@ -23,6 +23,7 @@ import com.intellij.refactoring.rename.PreferrableNameSuggestionProvider;
 import com.intellij.util.containers.ContainerUtil;
 import com.vladsch.idea.multimarkdown.psi.*;
 import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownPsiImplUtil;
+import com.vladsch.idea.multimarkdown.spellchecking.MultiMarkdownIdentifierTokenizer;
 import com.vladsch.idea.multimarkdown.spellchecking.Suggestion;
 import com.vladsch.idea.multimarkdown.spellchecking.SuggestionList;
 import com.vladsch.idea.multimarkdown.util.FilePathInfo;
@@ -144,6 +145,31 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
                 suggestedNameInfo = SuggestedNameInfo.NULL_INFO;
             }
             return suggestedNameInfo;
+        } else {
+            // this is a rename on an element
+            // only activate spelling suggestions if spell check activated
+            if (!selfActivated) {
+                SuggestionList uncheckedSuggestionList = new SuggestionList(element.getProject());
+                final StringBuilder text = new StringBuilder(element.getTextLength());
+                MultiMarkdownIdentifierTokenizer tokenizer = new MultiMarkdownIdentifierTokenizer();
+                Suggestion.Param<Boolean> param = new Suggestion.Param<Boolean>(Suggestion.Fixer.NEEDS_SPELLING_FIXER, true);
+
+                tokenizer.tokenizeSpellingSuggestions((MultiMarkdownNamedElement) element, new MultiMarkdownIdentifierTokenizer.SpellCheckConsumer() {
+                    @Override
+                    public void consume(String word, boolean spellCheck) {
+                        text.append(word);
+                    }
+                });
+
+                uncheckedSuggestionList.add(text.toString(), param);
+
+                SuggestionList suggestionList = uncheckedSuggestionList.batchFixers(SuggestSpelling);
+                if (suggestionList.size() > 0) {
+                    ContainerUtil.addAllNotNull(result, suggestionList.asList());
+                    suggestedNameInfo = SuggestedNameInfo.NULL_INFO;
+                }
+                return suggestedNameInfo;
+            }
         }
 
         // false alarm, go back to sleep
@@ -164,7 +190,7 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
         if (wikiPageText != null) {
             String text = wikiPageText.getName();
             if (text != null) {
-                text = text.replace("IntellijIdeaRulezzz ", "").trim();
+                text = text.replace(MultiMarkdownCompletionContributor.DUMMY_IDENTIFIER, "").trim();
                 if (!text.isEmpty()) {
                     originalList.add(text);
                     suggestionList.add(originalList);
@@ -182,11 +208,9 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
                     originalList.add(FilePathInfo.linkRefNoAnchor(text));
                     originalList.add(FilePathInfo.linkRefNoAnchor(text) + ": " + FilePathInfo.linkRefAnchorNoHash(text));
 
-                    SuggestionList anchoredList = new SuggestionList(originalList.getProject())
-                            .add(FilePathInfo.linkRefNoAnchor(text));
+                    SuggestionList anchoredList = new SuggestionList(originalList.getProject()).add(FilePathInfo.linkRefNoAnchor(text));
 
-                    SuggestionList anchorList = new SuggestionList(originalList.getProject())
-                            .add(FilePathInfo.linkRefAnchorNoHash(text));
+                    SuggestionList anchorList = new SuggestionList(originalList.getProject()).add(FilePathInfo.linkRefAnchorNoHash(text));
 
                     anchoredList.add(anchoredList.sequenceFixers(SuggestCleanSpacedWords, SuggestCapSpacedWords));
                     anchorList.add(anchorList.sequenceFixers(SuggestCleanSpacedWords, SuggestCapSpacedWords));
@@ -214,15 +238,79 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
             }
         }
 
-        suggestionList = originalList
-                .add(suggestionList.chainFixers(SuggestCleanSpacedWords, SuggestSpelling)
-                        , suggestionList.sequenceFixers(
-                                SuggestCleanSpacedWords, SuggestCapSpacedWords, SuggestLowerSpacedWords
-                                //, SuggestCleanDashedWords, SuggestCapDashedWords
-                                //, SuggestCleanSplicedWords, SuggestCapSplicedWords
-                        )
+        suggestionList = originalList.add(suggestionList.chainFixers(SuggestCleanSpacedWords, SuggestSpelling)
+                , suggestionList.sequenceFixers(
+                        SuggestCleanSpacedWords, SuggestCapSpacedWords, SuggestLowerSpacedWords
+                        //, SuggestCleanDashedWords, SuggestCapDashedWords
+                        //, SuggestCleanSplicedWords, SuggestCapSplicedWords
                 )
-        ;
+        );
+
+        return suggestionList;
+    }
+
+    public static SuggestionList getLinkRefTextSuggestions(@NotNull PsiElement parent, boolean spellCheck) {
+        SuggestionList suggestionList = new SuggestionList(parent.getProject());
+        String linkRef = MultiMarkdownPsiImplUtil.getLinkRef(parent);
+        String linkRefText = MultiMarkdownPsiImplUtil.getLinkRefText(parent);
+        String linkRefAnchor = MultiMarkdownPsiImplUtil.getLinkRefAnchor(parent);
+
+        SuggestionList originalList = new SuggestionList(parent.getProject());
+
+        if (!linkRefText.isEmpty()) {
+            String text = linkRefText;
+            text = text.replace(MultiMarkdownCompletionContributor.DUMMY_IDENTIFIER, "").trim();
+            if (!text.isEmpty()) {
+                originalList.add(text);
+                suggestionList.add(originalList);
+            }
+        }
+
+        if (!linkRef.isEmpty()) {
+            String text = linkRef;
+            FilePathInfo pathInfo = new FilePathInfo(text);
+            text = pathInfo.getFileNameNoExt();
+
+            if (!FilePathInfo.linkRefAnchor(text).isEmpty()) {
+                originalList.add(FilePathInfo.linkRefNoAnchor(text));
+                originalList.add(FilePathInfo.linkRefNoAnchor(text) + ": " + FilePathInfo.linkRefAnchorNoHash(text));
+
+                SuggestionList anchoredList = new SuggestionList(originalList.getProject()).add(FilePathInfo.linkRefNoAnchor(text));
+
+                SuggestionList anchorList = new SuggestionList(originalList.getProject()).add(FilePathInfo.linkRefAnchorNoHash(text));
+
+                anchoredList.add(anchoredList.sequenceFixers(SuggestCleanSpacedWords, SuggestCapSpacedWords));
+                anchorList.add(anchorList.sequenceFixers(SuggestCleanSpacedWords, SuggestCapSpacedWords));
+
+                SuggestionList suggestions = new SuggestionList(originalList.getProject()).add(": ");
+
+                suggestions = suggestions.wrapPermuteFixedAligned(anchoredList, anchorList, SuggestCleanSpacedWords, SuggestCapSpacedWords);
+
+                originalList.add(suggestions);
+
+                //if (anchoredList.size() == 1 || anchorList.size() == 1) {
+                //    originalList.add(anchorList.prefixPermute(anchoredList.suffix(": ")));
+                //} else {
+                //    originalList.add(anchorList.prefixAlign(anchoredList.suffix(": ")));
+                //}
+            }
+
+            suggestionList.add(FilePathInfo.linkRefNoAnchor(text));
+            suggestionList.add(text);
+
+            // add with path parts, to 2 directories above
+            String parentDir = (pathInfo = new FilePathInfo(pathInfo.getPath())).getFilePath();
+            suggestionList.add(parentDir + " " + FilePathInfo.linkRefNoAnchor(text));
+            suggestionList.add(parentDir + " " + text);
+        }
+
+        suggestionList = originalList.add(suggestionList.chainFixers(SuggestCleanSpacedWords, spellCheck ? SuggestSpelling : null)
+                , suggestionList.sequenceFixers(
+                        SuggestCleanSpacedWords, SuggestCapSpacedWords, SuggestLowerSpacedWords
+                        //, SuggestCleanDashedWords, SuggestCapDashedWords
+                        //, SuggestCleanSplicedWords, SuggestCapSplicedWords
+                )
+        );
 
         return suggestionList;
     }

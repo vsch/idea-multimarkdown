@@ -31,6 +31,7 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownFileType;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownImageLinkRef;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkRef;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 import org.apache.log4j.Logger;
@@ -132,7 +133,7 @@ public class FileReferenceListQuery {
     }
 
     @NotNull
-    public FileReferenceList detDefaultFileList(FileReferenceList.Filter... filters) {
+    public FileReferenceList getDefaultFileList(FileReferenceList.Filter... filters) {
         if (defaultFileList == null) {
             // build it from project and query flags
             return getProjectFileType(project, queryFlags, filters);
@@ -276,6 +277,18 @@ public class FileReferenceListQuery {
     }
 
     @NotNull
+    public FileReferenceListQuery matchLinkRef(@NotNull MultiMarkdownLinkRef linkRef, boolean withExt) {
+        return inSource(new FileReference(linkRef.getContainingFile()))
+                .matchLinkRef((queryFlags & MATCH_WITH_ANCHOR) != 0 ? linkRef.getFileNameWithAnchor() : linkRef.getFileName(), withExt);
+    }
+
+    @NotNull
+    public FileReferenceListQuery matchLinkRef(@NotNull MultiMarkdownImageLinkRef linkRef) {
+        return inSource(new FileReference(linkRef.getContainingFile()))
+                .matchLinkRef((queryFlags & MATCH_WITH_ANCHOR) != 0 ? linkRef.getFileNameWithAnchor() : linkRef.getFileName(), true);
+    }
+
+    @NotNull
     public FileReferenceListQuery matchLinkRefNoExt(@NotNull MultiMarkdownLinkRef linkRef) {
         return inSource(new FileReference(linkRef.getContainingFile()))
                 .matchLinkRefNoExt((queryFlags & MATCH_WITH_ANCHOR) != 0 ? linkRef.getFileNameWithAnchor() : linkRef.getFileName());
@@ -333,7 +346,7 @@ public class FileReferenceListQuery {
     @NotNull
     public FileReferenceListQuery matchLinkRef(@NotNull String linkRef) {
         FilePathInfo pathInfo = new FilePathInfo(linkRef);
-        return matchLinkRef(linkRef, pathInfo.hasExt());
+        return matchLinkRef(linkRef, (queryFlags & MATCH_WITH_ANCHOR) != 0 ? pathInfo.hasWithAnchorExt() : pathInfo.hasExt());
     }
 
     @NotNull
@@ -398,7 +411,7 @@ public class FileReferenceListQuery {
         if (!haveQueryFilter && queryFilter != null) filters[filterIndex++] = queryFilter;
 
         if (iMax > 0) System.arraycopy(postFilters, 0, filters, filterIndex, iMax);
-        return (fileList == null) ? detDefaultFileList(filters) : new FileReferenceList(filters, fileList);
+        return (fileList == null) ? getDefaultFileList(filters) : new FileReferenceList(filters, fileList);
     }
 
     protected static FileReferenceList.Filter getFileTypeFilter(int queryFlags) {

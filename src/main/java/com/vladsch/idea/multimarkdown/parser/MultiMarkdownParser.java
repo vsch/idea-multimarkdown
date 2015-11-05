@@ -37,6 +37,8 @@ public class MultiMarkdownParser implements PsiParser {
         } else if (MultiMarkdownPlugin.isLicensed()) {
             if (root == EXPLICIT_LINK) {
                 parseExplicitLink(builder);
+            } else if (root == IMAGE) {
+                parseImageLink(builder);
             } else {
                 parseRoot(root, builder);
             }
@@ -59,6 +61,7 @@ public class MultiMarkdownParser implements PsiParser {
                 // @Inspection()
             } else if (!parseWikiLink(builder)
                     && !parseExplicitLink(builder)
+                    && !parseImageLink(builder)
                     ) {
                 builder.advanceLexer();
             }
@@ -167,6 +170,45 @@ public class MultiMarkdownParser implements PsiParser {
         }
 
         explicitLinkMarker.done(EXPLICIT_LINK);
+        return true;
+    }
+
+    @LicensedFeature
+    protected boolean parseImageLink(PsiBuilder builder) {
+        if (!MultiMarkdownPlugin.isLicensed()) return false;
+        if (builder.getTokenType() != IMAGE_LINK_REF_TEXT_OPEN) return false;
+
+        PsiBuilder.Marker explicitLinkMarker = builder.mark();
+        builder.advanceLexer();
+
+        PsiBuilder.Marker marker = builder.mark();
+        while (builder.getTokenType() != IMAGE_LINK_REF_TEXT_CLOSE) builder.advanceLexer();
+        marker.done(IMAGE_LINK_REF_TEXT);
+
+        if (builder.getTokenType() == IMAGE_LINK_REF_TEXT_CLOSE) {
+            builder.advanceLexer();
+        }
+
+        if (builder.getTokenType() == IMAGE_LINK_REF_OPEN) {
+            builder.advanceLexer();
+            PsiBuilder.Marker link = builder.mark();
+            if (builder.getTokenType() == IMAGE_LINK_REF) builder.advanceLexer();
+            link.done(IMAGE_LINK_REF);
+
+            if (builder.getTokenType() == IMAGE_LINK_REF_TITLE_MARKER) {
+                builder.advanceLexer();
+                PsiBuilder.Marker title = builder.mark();
+                while (builder.getTokenType() != IMAGE_LINK_REF_TITLE_MARKER) builder.advanceLexer();
+                title.done(IMAGE_LINK_REF_TITLE);
+                if (builder.getTokenType() == IMAGE_LINK_REF_TITLE_MARKER) builder.advanceLexer();
+            }
+        }
+
+        if (builder.getTokenType() == IMAGE_LINK_REF_CLOSE) {
+            builder.advanceLexer();
+        }
+
+        explicitLinkMarker.done(IMAGE);
         return true;
     }
 

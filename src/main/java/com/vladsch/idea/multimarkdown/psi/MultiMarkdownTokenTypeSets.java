@@ -52,13 +52,13 @@ public interface MultiMarkdownTokenTypeSets extends MultiMarkdownTypes {
     TokenSet HEADER_LEVEL_6_SET = TokenSet.create(HEADER_LEVEL_6);
     TokenSet HRULE_SET = TokenSet.create(HRULE);
     TokenSet HTML_BLOCK_SET = TokenSet.create(HTML_BLOCK);
-    TokenSet IMAGE_SET = TokenSet.create(IMAGE, IMAGE_LINK_REF_CLOSE, IMAGE_LINK_REF_OPEN, IMAGE_ALT_TEXT_OPEN, IMAGE_ALT_TEXT_CLOSE, IMAGE_LINK_REF_TITLE_MARKER);
+    TokenSet IMAGE_SET = TokenSet.create(IMAGE, IMAGE_LINK_REF_CLOSE, IMAGE_LINK_REF_OPEN, IMAGE_LINK_REF_TEXT_OPEN, IMAGE_LINK_REF_TEXT_CLOSE, IMAGE_LINK_REF_TITLE_MARKER);
     TokenSet INLINE_HTML_SET = TokenSet.create(INLINE_HTML);
     TokenSet ITALIC_MARKER_SET = TokenSet.create(ITALIC_MARKER);
     TokenSet ITALIC_SET = TokenSet.create(ITALIC);
     TokenSet IMAGE_LINK_REF_SET = TokenSet.create(IMAGE_LINK_REF);
     TokenSet IMAGE_LINK_REF_TITLE_SET = TokenSet.create(IMAGE_LINK_REF_TITLE);
-    TokenSet IMAGE_ALT_TEXT_SET = TokenSet.create(IMAGE_ALT_TEXT);
+    TokenSet IMAGE_ALT_TEXT_SET = TokenSet.create(IMAGE_LINK_REF_TEXT);
     TokenSet LINK_REF_SET = TokenSet.create(LINK_REF);
     TokenSet LINK_REF_TEXT_SET = TokenSet.create(LINK_REF_TEXT);
     TokenSet LINK_REF_TITLE_SET = TokenSet.create(LINK_REF_TITLE);

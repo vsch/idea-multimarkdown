@@ -38,7 +38,7 @@ import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import org.jetbrains.annotations.NotNull;
 
-import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement.RENAME_KEEP_NOTHING;
+import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement.*;
 
 class ChangeLinkRefQuickFix extends BaseIntentionAction {
     public static final int MATCH_CASE_TO_FILE = 1;
@@ -56,7 +56,7 @@ class ChangeLinkRefQuickFix extends BaseIntentionAction {
     }
 
     ChangeLinkRefQuickFix(MultiMarkdownNamedElement linkRefElement, String newLinkRef, int alternativeMsg) {
-        this(linkRefElement, newLinkRef, alternativeMsg, RENAME_KEEP_NOTHING);
+        this(linkRefElement, newLinkRef, alternativeMsg, RENAME_KEEP_TEXT | RENAME_KEEP_RENAMED_TEXT | RENAME_KEEP_TITLE | RENAME_KEEP_ANCHOR | RENAME_KEEP_PATH);
     }
 
     ChangeLinkRefQuickFix(MultiMarkdownNamedElement linkRefElement, String newLinkRef, int alternativeMsg, int renameFlags) {

@@ -36,7 +36,6 @@ import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkRef;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownReference;
-import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownReferenceWikiPageRef;
 import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import com.vladsch.idea.multimarkdown.util.FileReference;
 import com.vladsch.idea.multimarkdown.util.FileReferenceLink;
@@ -75,13 +74,16 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
                 String lastWikiHome = null;
 
                 if (results.length > 0) {
-                    ArrayList<MultiMarkdownFile> markdownTargets = new ArrayList<MultiMarkdownFile>();
+                    ArrayList<PsiFile> markdownTargets = new ArrayList<PsiFile>();
                     Icon icon = null;
                     for (ResolveResult resolveResult : results) {
-                        if (resolveResult.getElement() instanceof MultiMarkdownFile && resolveResult.getElement() != containingFile) {
-                            MultiMarkdownFile file = (MultiMarkdownFile) resolveResult.getElement();
+                        if (resolveResult.getElement() instanceof PsiFile && resolveResult.getElement() != containingFile) {
+                            PsiFile file = (PsiFile) resolveResult.getElement();
+
                             if (icon == null) {
-                                icon = file.isWikiPage() ? MultiMarkdownIcons.WIKI : MultiMarkdownIcons.FILE;
+                                // TODO: use standard icon that IDE uses
+                                icon = file.getIcon(0);
+                                //icon = MultiMarkdownIcons.GITHUB;
                             }
 
                             FilePathInfo pathInfo = new FilePathInfo(file.getVirtualFile());
@@ -122,6 +124,11 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
                                         FileReferenceLink referenceLink = new FileReferenceLink(basePath + "/dummy", gitHubRepoPath, project);
                                         return referenceLink.getLinkRef();
                                     }
+                                } else if (showContainer && element instanceof PsiFile) {
+                                    FileReference fileReference = new FileReference((PsiFile) element);
+                                    String gitHubRepoPath = fileReference.getGitHubRepoPath("/");
+                                    FileReferenceLink referenceLink = new FileReferenceLink(basePath + "/dummy", gitHubRepoPath, project);
+                                    return referenceLink.getLinkRef();
                                 }
                                 return null;
                             }
@@ -143,6 +150,18 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
                         result.add(builder.createLineMarkerInfo(element));
                     }
                 }
+                //} else if (element instanceof MultiMarkdownLinkRef) {
+                //    // need to add navigation icons to go to github links
+                //    PsiReference reference = element.getReference();
+                //
+                //    if (reference instanceof MultiMarkdownReferenceLinkRef && ((MultiMarkdownReferenceLinkRef) reference).isResolveRefExternal()) {
+                //        NavigationGutterIconBuilder<PsiElement> builder =
+                //                NavigationGutterIconBuilder.create(MultiMarkdownIcons.GITHUB)
+                //                        .setTargets(element)
+                //                        .setTooltipText(MultiMarkdownBundle.message("linemarker.navigate-to"));
+                //
+                //        result.add(builder.createLineMarkerInfo(element));
+                //    }
             }
         }
     }

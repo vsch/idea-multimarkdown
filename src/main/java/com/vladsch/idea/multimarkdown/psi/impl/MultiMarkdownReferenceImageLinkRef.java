@@ -15,12 +15,10 @@
 package com.vladsch.idea.multimarkdown.psi.impl;
 
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementResolveResult;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.ResolveResult;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkRef;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownImageLinkRef;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.util.*;
 import org.apache.log4j.Logger;
@@ -30,10 +28,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultiMarkdownReferenceLinkRef extends MultiMarkdownReference {
-    private static final Logger logger = Logger.getLogger(MultiMarkdownReferenceLinkRef.class);
+public class MultiMarkdownReferenceImageLinkRef extends MultiMarkdownReference {
+    private static final Logger logger = Logger.getLogger(MultiMarkdownReferenceImageLinkRef.class);
 
-    public MultiMarkdownReferenceLinkRef(@NotNull MultiMarkdownLinkRef element, @NotNull TextRange textRange) {
+    public MultiMarkdownReferenceImageLinkRef(@NotNull MultiMarkdownImageLinkRef element, @NotNull TextRange textRange) {
         super(element, textRange);
     }
 
@@ -47,7 +45,7 @@ public class MultiMarkdownReferenceLinkRef extends MultiMarkdownReference {
     @Override
     public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
         // we will handle this by renaming the element to point to the new location
-        if (myElement instanceof MultiMarkdownLinkRef && element instanceof PsiFile) {
+        if (myElement instanceof MultiMarkdownImageLinkRef && element instanceof PsiFile) {
             FileReferenceLinkGitHubRules fileReferenceLink = new FileReferenceLinkGitHubRules(myElement.getContainingFile(), ((PsiFile) element));
             String linkRef = fileReferenceLink.getLinkRef();
             // this will create a new reference and loose connection to this one
@@ -67,23 +65,29 @@ public class MultiMarkdownReferenceLinkRef extends MultiMarkdownReference {
                 FileReferenceList fileReferenceList = new FileReferenceListQuery(myElement.getProject())
                         .gitHubWikiRules()
                         .sameGitHubRepo()
-                        .matchLinkRef((MultiMarkdownLinkRef) myElement)
-                        .wantMarkdownFiles()
+                        .matchLinkRef((MultiMarkdownImageLinkRef) myElement)
+                        .wantImageFiles()
                         .all()
                         .sorted();
 
-                PsiFile[] files = fileReferenceList
-                        .getPsiFiles();
+                VirtualFile[] files = fileReferenceList
+                        .getVirtualFiles();
 
                 if (files.length > 0) {
                     resolveRefIsExternal = false;
                     removeReferenceChangeListener();
                     if (files.length == 1) {
-                        return new ResolveResult[] { new PsiElementResolveResult(files[0]) };
+                        PsiFile psiFile = PsiManager.getInstance(myElement.getProject()).findFile(files[0]);
+                        if (psiFile != null) {
+                            return new ResolveResult[] { new PsiElementResolveResult(psiFile) };
+                        }
                     } else {
                         List<ResolveResult> results = new ArrayList<ResolveResult>();
-                        for (PsiFile file : files) {
-                            results.add(new PsiElementResolveResult(file));
+                        for (VirtualFile file : files) {
+                            PsiFile psiFile = PsiManager.getInstance(myElement.getProject()).findFile(file);
+                            if (psiFile != null) {
+                            results.add(new PsiElementResolveResult(psiFile));
+                            }
                         }
                         return results.toArray(new ResolveResult[results.size()]);
                     }

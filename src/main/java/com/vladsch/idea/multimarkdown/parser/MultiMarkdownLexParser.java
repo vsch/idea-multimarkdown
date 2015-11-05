@@ -841,23 +841,25 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
 
         public void visit(ExpImageNode node) {
             if (MultiMarkdownPlugin.isLicensed()) {
-                SyntheticNodes nodes = new SyntheticNodes(currentChars, node, IMAGE, IMAGE_ALT_TEXT, 2, IMAGE_ALT_TEXT_OPEN, 1, IMAGE_LINK_REF_CLOSE);
+                SyntheticNodes nodes = new SyntheticNodes(currentChars, node, IMAGE, IMAGE_LINK_REF_TEXT, 2, IMAGE_LINK_REF_TEXT_OPEN, 1, IMAGE_LINK_REF_CLOSE);
 
                 if (!node.title.isEmpty() && nodes.chopLastTail(node.title, IMAGE_LINK_REF_TITLE, IMAGE_LINK_REF_TITLE_MARKER)) {
                     nodes.chopTail(-1, IMAGE_LINK_REF_TITLE_MARKER);
                 }
 
-                nodes.chopLastTail(node.url, IMAGE_LINK_REF);
+                if (!node.url.isEmpty()) {
+                    nodes.chopLastTail(node.url, IMAGE_LINK_REF);
+                }
 
                 // now chop off lead and tail alt markers
-                if (nodes.chopTail(']', IMAGE_ALT_TEXT_CLOSE)) {
+                if (nodes.chopTail(']', IMAGE_LINK_REF_TEXT_CLOSE)) {
                     nodes.next();
                     nodes.chopTail('(', IMAGE_LINK_REF_OPEN);
                     nodes.prev();
                 }
 
                 // need to process children with the current node
-                nodes.dropWhiteSpace(IMAGE_ALT_TEXT_CLOSE, IMAGE_LINK_REF_OPEN, IMAGE_LINK_REF);
+                nodes.dropWhiteSpace(IMAGE_LINK_REF_TEXT_CLOSE, IMAGE_LINK_REF_OPEN, IMAGE_LINK_REF);
                 addTokensWithChildren(nodes);
             } else {
                 addTokenWithChildren(node, IMAGE);

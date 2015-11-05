@@ -24,6 +24,7 @@ package com.vladsch.idea.multimarkdown;
 import com.intellij.ProjectTopics;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.DumbService;
@@ -39,6 +40,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.refactoring.listeners.RefactoringEventData;
 import com.intellij.refactoring.listeners.RefactoringEventListener;
+import com.intellij.util.FileContentUtil;
 import com.intellij.util.containers.HashMap;
 import com.intellij.util.containers.HashSet;
 import com.intellij.util.messages.MessageBus;
@@ -56,7 +58,9 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualFileListener, ListenerNotifyDelegate<ReferenceChangeListener> {
     private static final Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownProjectComponent.class);
@@ -183,6 +187,10 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
     }
 
     protected void reparseMarkdown() {
+        reparseMarkdown(false);
+    }
+
+    protected void reparseMarkdown(final boolean reparseFilePsi) {
         if (!project.isDisposed()) {
             if (DumbService.isDumb(project)) {
                 needReparseOnDumbModeExit = true;
@@ -213,8 +221,25 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
                             clearNamespaces();
 
                             DaemonCodeAnalyzer instance = DaemonCodeAnalyzer.getInstance(project);
+                            List<VirtualFile> reparseFiles = null;
+
+                            if (reparseFilePsi) {
+                                reparseFiles = new ArrayList<VirtualFile>(markdownFiles.size());
+                            }
+
                             for (MultiMarkdownFile markdownFile : markdownFiles) {
+                                if (reparseFilePsi) reparseFiles.add(markdownFile.getVirtualFile());
                                 instance.restart(markdownFile);
+                            }
+
+                            if (reparseFilePsi) {
+                                final List<VirtualFile> finalReparseFiles = reparseFiles;
+                                ApplicationManager.getApplication().invokeLater(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        FileContentUtil.reparseFiles(finalReparseFiles);
+                                    }
+                                }, ModalityState.NON_MODAL);
                             }
 
                             //FileReferenceList fileList = new FileReferenceListQuery(project).all();
@@ -302,7 +327,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         // Listen to settings changes
         MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
             public void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings) {
-                reparseMarkdown();
+                reparseMarkdown(true);
             }
         });
 
@@ -360,7 +385,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         String id = status.getId();
         boolean fileStatus = status.equals(FileStatus.DELETED) || status.equals(FileStatus.ADDED) || status.equals(FileStatus.UNKNOWN) || status.equals(FileStatus.IGNORED)
                 || id.startsWith("IGNORE");
-        logger.info("isUnderVcs " + (!fileStatus) + " for file " + virtualFile + " status " + status);
+        //logger.info("isUnderVcs " + (!fileStatus) + " for file " + virtualFile + " status " + status);
         return !fileStatus;
     }
 

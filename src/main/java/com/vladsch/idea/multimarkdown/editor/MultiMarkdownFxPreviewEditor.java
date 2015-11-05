@@ -70,7 +70,10 @@ import netscape.javascript.JSObject;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pegdown.*;
+import org.pegdown.LinkRenderer;
+import org.pegdown.ParsingTimeoutException;
+import org.pegdown.PegDownProcessor;
+import org.pegdown.ToHtmlSerializer;
 import org.pegdown.ast.RootNode;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -129,9 +132,9 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
      * The {@link PegDownProcessor} used for building the document AST.
      */
     //private ThreadLocal<PegDownProcessor> processor = initProcessor();
-	private PegDownProcessor processor = null;
+    private PegDownProcessor processor = null;
 
-	protected boolean isActive = false;
+    protected boolean isActive = false;
 
     protected boolean isRawHtml = false;
 
@@ -187,7 +190,6 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     //        }
     //    };
     //}
-
     @NotNull
     private static PegDownProcessor getProcessor() {
         return new PegDownProcessor(MultiMarkdownGlobalSettings.getInstance().getExtensionsValue() /*& ~Extensions.TASKLISTITEMS*/, getParsingTimeout());
@@ -456,17 +458,20 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                         //VirtualFile parent = file == null ? null : file.getParent();
                         //final VirtualFile localImage = parent == null ? null : parent.findFileByRelativePath(src);
                         //final VirtualFile localImage = MultiMarkdownPathResolver.resolveRelativePath(document, src);
-                        final VirtualFile localImage = (VirtualFile) MultiMarkdownPathResolver.resolveLink(project, document, src, false, true);
-                        if (localImage != null && localImage.exists()) {
-                            try {
-                                imgNode.setSrc(String.valueOf(new File(localImage.getPath()).toURI().toURL()));
-                            } catch (MalformedURLException e) {
-                                logger.info("[" + instance + "] " + "MalformedURLException" + localImage.getPath());
-                            }
-                        } else {
-                            String href = MultiMarkdownPathResolver.resolveExternalReference(project, document, src);
-                            if (href != null) {
-                                imgNode.setSrc(href);
+                        Object resolveLink = MultiMarkdownPathResolver.resolveLink(project, document, src, false, true);
+                        if (resolveLink != null && resolveLink instanceof VirtualFile) {
+                            final VirtualFile localImage = (VirtualFile) resolveLink;
+                            if (localImage.exists()) {
+                                try {
+                                    imgNode.setSrc(String.valueOf(new File(localImage.getPath()).toURI().toURL()));
+                                } catch (MalformedURLException e) {
+                                    logger.info("[" + instance + "] " + "MalformedURLException" + localImage.getPath());
+                                }
+                            } else {
+                                String href = MultiMarkdownPathResolver.resolveExternalReference(project, document, src);
+                                if (href != null) {
+                                    imgNode.setSrc(href);
+                                }
                             }
                         }
                     }

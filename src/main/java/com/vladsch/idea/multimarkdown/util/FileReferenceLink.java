@@ -323,7 +323,7 @@ public class FileReferenceLink extends FileReference {
         String sourceGitHubRepoPath = sourceReference.getGitHubRepoPath();
 
         if (targetGitHubRepoPath != null || sourceGitHubRepoPath != null) {
-            if (!isUnderWikiHome()) {
+            if (isUnderWikiHome()) {
                 if (targetGitHubRepoPath == null || sourceGitHubRepoPath == null || !targetGitHubRepoPath.startsWith(sourceGitHubRepoPath))
                     reasons |= REASON_NOT_UNDER_SAME_REPO;
             } else {
@@ -366,7 +366,7 @@ public class FileReferenceLink extends FileReference {
             downDirectories++;
         }
 
-        wikiAccessible = getLinkRef().indexOf(' ') < 0 && hasWikiPageExt() && getWikiHome().startsWith(sourceReference.getWikiHome()) && !containsAnchor();
+        wikiAccessible = getLinkRef().indexOf(' ') < 0 && hasWikiPageExt() && getWikiHome().equals(sourceReference.getWikiHome()) && !containsAnchor();
     }
 
     public int reflinkCompareTo(@NotNull FileReferenceLink o) {

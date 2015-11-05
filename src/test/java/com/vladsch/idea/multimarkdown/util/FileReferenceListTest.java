@@ -22,8 +22,6 @@ package com.vladsch.idea.multimarkdown.util;
 
 import junit.framework.TestCase;
 
-import java.util.Collection;
-
 public class FileReferenceListTest extends TestCase {
     FileReferenceList fileReferenceList = null;
 
@@ -95,7 +93,8 @@ public class FileReferenceListTest extends TestCase {
                     "/Users/vlad/src/MarkdownTest/untitled/test/test.wiki/sample-document.md",
                     "/Users/vlad/src/MarkdownTest/untitled/test/test.wiki/sampledocument.md",
                     "/Users/vlad/src/MarkdownTest/untitled/test.wiki",
-                    "/Users/vlad/src/MarkdownTest/untitled/untitled.iml"
+                    "/Users/vlad/src/MarkdownTest/untitled/untitled.iml",
+                    "/Users/vlad/src/MarkdownTest/untitled/test/test.wiki/sampledocument.md#withAnchor"
             };
 
     public static FileReferenceList loadFileList() {
@@ -105,7 +104,12 @@ public class FileReferenceListTest extends TestCase {
             FileReference fileReference = new FileReference(filePath);
             String ext = fileReference.getExt();
 
-            builder.add(fileReference);
+            if (fileReference.hasPureAnchor()) {
+                // pure anchor
+                builder.add(new FileReference(fileReference.getFilePath()));
+            } else {
+                builder.add(fileReference);
+            }
         }
 
         return new FileReferenceList(builder);
@@ -114,5 +118,4 @@ public class FileReferenceListTest extends TestCase {
     public void setUp() throws Exception {
         fileReferenceList = loadFileList();
     }
-
 }

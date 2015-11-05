@@ -38,7 +38,18 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     public static final String[] IMAGE_EXTENSIONS = { "png", "jpg", "jpeg", "gif", };
     public static final String[] MARKDOWN_EXTENSIONS = MultiMarkdownFileTypeFactory.EXTENSIONS;
     public static final String[] WIKI_PAGE_EXTENSIONS = { MultiMarkdownFileTypeFactory.DEFAULT_EXTENSION };
-    public static final String GITHUB_WIKI_REL_OFFSET = "../../wiki";
+
+    public static final String GITHUB_WIKI_REL_OFFSET = "../../";
+
+    public static final String[] GITHUB_LINKS = {
+            GITHUB_WIKI_HOME_DIRNAME,
+            GITHUB_ISSUES_NAME,
+            GITHUB_GRAPHS_NAME,
+            GITHUB_PULSE_NAME,
+            GITHUB_PULLS_NAME,
+    };
+
+    public static final String GITHUB_WIKI_REL_HOME = GITHUB_WIKI_REL_OFFSET + GITHUB_WIKI_HOME_DIRNAME;
 
     private final int projHomeEnd;
     private final int wikiHomeEnd;
@@ -121,6 +132,14 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
         return fileNameContainsAnchor() && withAnchorNameEnd + 1 < filePath.length() ? filePath.substring(withAnchorNameEnd + 1) : getExt();
     }
 
+    final public boolean hasWithAnchorExt() {
+        return fileNameContainsAnchor() && withAnchorNameEnd + 1 < filePath.length();
+    }
+
+    final public boolean hasPureAnchor() {
+        return fileNameContainsAnchor() && (withAnchorNameEnd == nameEnd || withAnchorNameEnd + 1 >= filePath.length());
+    }
+
     @NotNull
     final public String getWithAnchorExtWithDot() {
         return fileNameContainsAnchor() && withAnchorNameEnd < filePath.length() ? filePath.substring(withAnchorNameEnd) : getExtWithDot();
@@ -134,6 +153,10 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     @NotNull
     final public String getAnchor() {
         return anchorStart < filePath.length() ? filePath.substring(anchorStart) : "";
+    }
+
+    public boolean hasAnchor() {
+        return anchorStart < filePath.length();
     }
 
     final public boolean isImageExt() {

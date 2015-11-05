@@ -92,7 +92,7 @@ public class MultiMarkdownPathResolver {
 
         if (file != null) {
             FileReference documentFileReference = new FileReference(file.getPath(), project);
-            resolvedTarget = documentFileReference.resolveExternalLinkRef(target);
+            resolvedTarget = documentFileReference.resolveExternalLinkRef(target, true, false);
         }
         return resolvedTarget == null ? null : resolvedTarget.getFilePathWithAnchor();
     }

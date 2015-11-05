@@ -28,6 +28,7 @@ import org.junit.runners.Parameterized;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 @RunWith(value = Parameterized.class)
 public class TestFilePathInfo {
@@ -70,6 +71,7 @@ public class TestFilePathInfo {
     private String getWithAnchorExtWithDot;
 
     private String getProjectHome;
+    private boolean hasWithAnchorExt;
 
     /* 0:  filePath, */
     /* 1:  getExt, */
@@ -106,6 +108,7 @@ public class TestFilePathInfo {
     /* 32: getWithAnchorExt, */
     /* 33: getWithAnchorExtWithDot, */
     /* 34: getProjectHome, */
+    /* 35: hasWithAnchorExt, */
     public TestFilePathInfo(
             String filePath,
             String getExt,
@@ -141,7 +144,8 @@ public class TestFilePathInfo {
             String getFileNameWithAnchorNoExtAsWikiRef,
             String getWithAnchorExt,
             String getWithAnchorExtWithDot,
-            String getProjectHome
+            String getProjectHome,
+            boolean hasWithAnchorExt
     ) {
         this.filePath = filePath;
         this.filePathInfo = new FilePathInfo(filePath);
@@ -179,6 +183,7 @@ public class TestFilePathInfo {
         this.getWithAnchorExt = getWithAnchorExt;
         this.getWithAnchorExtWithDot = getWithAnchorExtWithDot;
         this.getProjectHome = getProjectHome;
+        this.hasWithAnchorExt = hasWithAnchorExt;
     }
 
     /* @formatter:off */
@@ -216,6 +221,7 @@ public class TestFilePathInfo {
     @Test public void test_getWithAnchorExt() { assertEquals(getWithAnchorExt, filePathInfo.getWithAnchorExt()); }
     @Test public void test_getWithAnchorExtWithDot() { assertEquals(getWithAnchorExtWithDot, filePathInfo.getWithAnchorExtWithDot()); }
     @Test public void test_getProjectHome() { assertEquals(getProjectHome, filePathInfo.getProjectHome()); }
+    @Test public void test_hasWithAnchorExt() { assertEquals(hasWithAnchorExt, filePathInfo.hasWithAnchorExt()); }
 
   /* @formatter:on */
 
@@ -295,16 +301,16 @@ public class TestFilePathInfo {
                 /* 35 */ filePathInfoTestData("/is-home/is-home.wiki/path/path2/path3/file-Name.md", "/is-home/is-home.wiki", 4, "/is-home"),
                 /* 36  */ filePathInfoTestData("file-Name#", "", 0, ""),
                 /* 37  */ filePathInfoTestData("file-Name#anchor", "", 0, ""),
-                /* 38  */ filePathInfoTestData("fileName#.md", "", 0, ""),
-                /* 39  */ filePathInfoTestData("fileName#anchor.md", "", 0, ""),
-                /* 40  */ filePathInfoTestData("file-Name#.md", "", 0, ""),
-                /* 41  */ filePathInfoTestData("file-Name#anchor.md", "", 0, ""),
-                /* 42  */ filePathInfoTestData("/path/with/fileName#.md", "", 0, ""),
-                /* 43  */ filePathInfoTestData("/path/with/fileName#anchor.md", "", 0, ""),
-                /* 44  */ filePathInfoTestData("/path/with/file-#Name.md", "", 0, ""),
-                /* 45  */ filePathInfoTestData("/path/with/file-#anchorName.md", "", 0, ""),
-                /* 46  */ filePathInfoTestData("/pathName/with/#fileName.md", "", 0, ""),
-                /* 47  */ filePathInfoTestData("/pathName/with/#anchorfileName.md", "", 0, ""),
+                /* 38  */ filePathInfoTestData("fileName#.md", "", 0, "", true),
+                /* 39  */ filePathInfoTestData("fileName#anchor.md", "", 0, "", true),
+                /* 40  */ filePathInfoTestData("file-Name#.md", "", 0, "", true),
+                /* 41  */ filePathInfoTestData("file-Name#anchor.md", "", 0, "", true),
+                /* 42  */ filePathInfoTestData("/path/with/fileName#.md", "", 0, "", true),
+                /* 43  */ filePathInfoTestData("/path/with/fileName#anchor.md", "", 0, "", true),
+                /* 44  */ filePathInfoTestData("/path/with/file-#Name.md", "", 0, "", true),
+                /* 45  */ filePathInfoTestData("/path/with/file-#anchorName.md", "", 0, "", true),
+                /* 46  */ filePathInfoTestData("/pathName/with/#fileName.md", "", 0, "", true),
+                /* 47  */ filePathInfoTestData("/pathName/with/#anchorfileName.md", "", 0, "", true),
                 /* 48  */ filePathInfoTestData("/path-Name/with/file-Name.md", "", 0, ""),
                 /* 49  */ filePathInfoTestData("/home/home.wiki/file-Name-#6", "/home/home.wiki", 1, "/home"),
                 /* 50  */ filePathInfoTestData("/home/home.wiki/fileName-6.md", "/home/home.wiki", 1, "/home"),
@@ -314,12 +320,19 @@ public class TestFilePathInfo {
                 /* 54  */ filePathInfoTestData("/another.wiki/another.wiki/fileName-6.md", "", 0, ""),
                 /* 55  */ filePathInfoTestData("/funny/funny.wiki/fileName-6.md", "/funny/funny.wiki", 1, "/funny"),
                 /* 56  */ filePathInfoTestData("/funny/funny.wiki/fileName-6.md", "/funny/funny.wiki", 1, "/funny"),
-                /* 57  */ filePathInfoTestData("/home/home.wiki/fileName-6.md", "/home/home.wiki", 1, "/home")
+                /* 57  */ filePathInfoTestData("/home/home.wiki/fileName-6.md", "/home/home.wiki", 1, "/home"),
+                /* 58  */ filePathInfoTestData("/home/home.wiki/fileName-6.md#test", "/home/home.wiki", 1, "/home", true),
+                /* 59  */ filePathInfoTestData("/home/home.wiki/fileName-6.md#test.md", "/home/home.wiki", 1, "/home", true),
+                /* 60  */ filePathInfoTestData("/home/home.wiki/fileName-6#test.md", "/home/home.wiki", 1, "/home", true)
         );
     }
 
     private static Object[] filePathInfoTestData(String filePath, String wikiHome, int getUpDirectoriesToWikiHome, String projectHome) {
-        Object[] result = new Object[35];
+        return filePathInfoTestData(filePath, wikiHome, getUpDirectoriesToWikiHome, projectHome, false);
+    }
+
+    private static Object[] filePathInfoTestData(String filePath, String wikiHome, int getUpDirectoriesToWikiHome, String projectHome, boolean hasWithAnchorExt) {
+        Object[] result = new Object[36];
         String tmp;
         int itmp;
         String pathPrefix = filePath.isEmpty() || filePath.charAt(0) != '/' ? "" : "/";
@@ -362,6 +375,7 @@ public class TestFilePathInfo {
 /* 32: getFileNameWithAnchorAsWikiRef, */       result[32] = FilenameUtils.getExtension(filePath);
 /* 33: getFileNameWithAnchorNoExtAsWikiRef, */  result[33] = (itmp = (tmp = FilenameUtils.getName(filePath)).lastIndexOf('.')) != -1 ? tmp.substring(itmp) : "";
 /* 34: getProjectHome, */                       result[34] = projectHome;
+/* 34: hasWithAnchorExt, */                     result[35] = hasWithAnchorExt;
 
         /* @formatter:on */
         return result;

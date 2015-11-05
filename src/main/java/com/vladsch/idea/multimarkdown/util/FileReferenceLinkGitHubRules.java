@@ -131,11 +131,11 @@ public class FileReferenceLinkGitHubRules extends FileReferenceLink {
             FilePathInfo wikiHomeInfo = new FilePathInfo(getWikiHome());
             String prefixSlash = endWith(wikiHomeInfo.getFileName(), '/');
             if (pathPrefix.startsWith(prefixSlash)) {
-                pathPrefix = GITHUB_WIKI_REL_OFFSET + pathPrefix.substring(prefixSlash.length() - 1);
+                pathPrefix = GITHUB_WIKI_REL_HOME + pathPrefix.substring(prefixSlash.length() - 1);
             } else {
                 int pos = pathPrefix.indexOf(startWith(prefixSlash, '/'));
                 if (pos >= 0) {
-                    pathPrefix = pathPrefix.substring(0, pos + 1) + GITHUB_WIKI_REL_OFFSET + pathPrefix.substring(pos + prefixSlash.length());
+                    pathPrefix = pathPrefix.substring(0, pos + 1) + GITHUB_WIKI_REL_HOME + pathPrefix.substring(pos + prefixSlash.length());
                 }
             }
         }

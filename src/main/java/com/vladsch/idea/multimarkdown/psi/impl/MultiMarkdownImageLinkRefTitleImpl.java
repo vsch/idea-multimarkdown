@@ -17,23 +17,23 @@ package com.vladsch.idea.multimarkdown.psi.impl;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownExplicitLink;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkRefTitle;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownImageLink;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownImageLinkRefTitle;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-public class MultiMarkdownLinkRefTitleImpl extends MultiMarkdownNamedElementImpl implements MultiMarkdownLinkRefTitle {
-    private static final Logger logger = Logger.getLogger(MultiMarkdownLinkRefTitleImpl.class);
-    protected static final String MISSING_ELEMENT_NAME_SPACE = "link-title::";
+public class MultiMarkdownImageLinkRefTitleImpl extends MultiMarkdownNamedElementImpl implements MultiMarkdownImageLinkRefTitle {
+    private static final Logger logger = Logger.getLogger(MultiMarkdownImageLinkRefTitleImpl.class);
+    protected static final String MISSING_ELEMENT_NAME_SPACE = "image-title::";
 
     @NotNull
     @Override
     public String getMissingElementNamespace() {
-        assert getParent() instanceof MultiMarkdownExplicitLink;
-        return ((MultiMarkdownExplicitLink) getParent()).getMissingElementNameSpace(MISSING_ELEMENT_NAME_SPACE, true);
+        assert getParent() instanceof MultiMarkdownImageLink;
+        return ((MultiMarkdownImageLink) getParent()).getMissingElementNameSpace(MISSING_ELEMENT_NAME_SPACE, true);
     }
 
-    public MultiMarkdownLinkRefTitleImpl(ASTNode node) {
+    public MultiMarkdownImageLinkRefTitleImpl(ASTNode node) {
         super(node);
     }
 
@@ -44,7 +44,7 @@ public class MultiMarkdownLinkRefTitleImpl extends MultiMarkdownNamedElementImpl
 
     @Override
     public String getDisplayName() {
-        return getParent() instanceof MultiMarkdownExplicitLink ? ((MultiMarkdownExplicitLink) getParent()).getDisplayName() : getName();
+        return getParent() instanceof MultiMarkdownImageLink ? ((MultiMarkdownImageLink) getParent()).getDisplayName() : getName();
     }
 
     @Override
@@ -64,6 +64,6 @@ public class MultiMarkdownLinkRefTitleImpl extends MultiMarkdownNamedElementImpl
 
     @Override
     public String toString() {
-        return "LINK_REF_TITLE '" + getName() + "' " + super.hashCode();
+        return "IMAGE_LINK_REF_TITLE '" + getName() + "' " + super.hashCode();
     }
 }

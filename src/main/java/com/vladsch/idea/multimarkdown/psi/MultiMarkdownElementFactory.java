@@ -28,6 +28,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFileFactory;
 import com.vladsch.idea.multimarkdown.MultiMarkdownFileType;
 import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownExplicitLinkImpl;
+import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownImageLinkImpl;
 import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownWikiLinkImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -49,6 +50,13 @@ public class MultiMarkdownElementFactory {
         final MultiMarkdownFile file = createFile(project, elementText);
         PsiElement child = file.getFirstChild();
         return (MultiMarkdownExplicitLink) child;
+    }
+
+    public static MultiMarkdownImageLink createImageLink(@NotNull Project project, @NotNull String name, @Nullable String text, @Nullable String title) {
+        String elementText = MultiMarkdownImageLinkImpl.getElementText(name, text == null ? "" : text, title);
+        final MultiMarkdownFile file = createFile(project, elementText);
+        PsiElement child = file.getFirstChild();
+        return (MultiMarkdownImageLink) child;
     }
 
     public static PsiElement createCRLF(Project project) {

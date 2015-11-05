@@ -39,7 +39,6 @@ public class FileReference extends FilePathInfo {
     }
 
     public static ProjectFileResolver projectFileResolver = null;
-
     protected final Project project;
     protected VirtualFile virtualFile;
 
@@ -222,18 +221,13 @@ public class FileReference extends FilePathInfo {
 
     @Nullable
     protected FileReference resolveExternalLinkRef(@Nullable String linkRef, boolean withAnchor, LinkRefResolver... linkRefResolvers) {
-        FilePathInfo resolvedPathInfo = super.resolveLinkRef(linkRef, true, withAnchor, appendResolvers(linkRefResolvers, markdownGitHubIssuesLinkResolver, markdownGitHubWikiLinkResolver, markdownGitHubPullsLinkResolver, markdownGitHubPulseLinkResolver, markdownGitHubGraphsLinkResolver));
-        return resolvedPathInfo != null ? new FileReference(resolvedPathInfo, this.project) : null;
+        FilePathInfo resolvedPathInfo = super.resolveLinkRef(linkRef, true, withAnchor, appendResolvers(linkRefResolvers, markdownGitHubIssuesLinkResolver, markdownGitHubPullsLinkResolver, markdownGitHubPulseLinkResolver, markdownGitHubGraphsLinkResolver));
+        return resolvedPathInfo != null && resolvedPathInfo.isExternalReference() ? new FileReference(resolvedPathInfo, this.project) : null;
     }
 
     @Nullable
-    public FileReference resolveExternalLinkRef(@Nullable String linkRef, boolean withAnchor) {
-        return resolveExternalLinkRef(linkRef, withAnchor, (LinkRefResolver) null);
-    }
-
-    @Nullable
-    public FileReference resolveExternalLinkRef(@Nullable String linkRef) {
-        return resolveExternalLinkRef(linkRef, false, (LinkRefResolver) null);
+    public FileReference resolveExternalLinkRef(@Nullable String linkRef, boolean resolveWikiLinks, boolean withAnchor) {
+        return resolveExternalLinkRef(linkRef, withAnchor, resolveWikiLinks ? markdownGitHubWikiLinkResolver : (LinkRefResolver) null);
     }
 
     @NotNull

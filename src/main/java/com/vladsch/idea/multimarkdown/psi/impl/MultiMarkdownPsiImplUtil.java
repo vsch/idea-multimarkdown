@@ -44,34 +44,47 @@ import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.*;
 
 public class MultiMarkdownPsiImplUtil {
     private static final Logger logger = Logger.getLogger(MultiMarkdownPsiImplUtil.class);
+    final protected static int EXTENSION_STRIP = 1;
+    final protected static int EXTENSION_KEEP = 2;
+    final protected static int EXTENSION_AS_IS = 3;
+    final protected static int EXTENSION_USE = 4;
 
-    final public static LinkRefElementTypes WIKI_LINK_ELEMENT = new LinkRefElementTypes(WIKI_LINK, WIKI_LINK_REF, WIKI_LINK_TEXT, WIKI_LINK_REF_ANCHOR);
-    final public static LinkRefElementTypes EXPLICIT_LINK_ELEMENT = new LinkRefElementTypes(EXPLICIT_LINK, LINK_REF, LINK_REF_TEXT, LINK_REF_ANCHOR, LINK_REF_TITLE);
+    final public static LinkRefElementTypes WIKI_LINK_ELEMENT = new LinkRefElementTypes(WIKI_LINK, WIKI_LINK_REF, WIKI_LINK_TEXT, WIKI_LINK_REF_ANCHOR, EXTENSION_STRIP);
+    final public static LinkRefElementTypes EXPLICIT_LINK_ELEMENT = new LinkRefElementTypes(EXPLICIT_LINK, LINK_REF, LINK_REF_TEXT, LINK_REF_ANCHOR, LINK_REF_TITLE, EXTENSION_AS_IS);
+    final public static LinkRefElementTypes IMAGE_LINK_ELEMENT = new LinkRefElementTypes(IMAGE, IMAGE_LINK_REF, IMAGE_LINK_REF_TEXT, null, IMAGE_LINK_REF_TITLE, EXTENSION_USE);
 
     static class LinkRefElementTypes {
         @NotNull public final IElementType parentType;
         @NotNull public final IElementType linkRefType;
         @NotNull public final IElementType textType;
-        @NotNull public final IElementType anchorType;
+        @Nullable public final IElementType anchorType;
         @Nullable public final IElementType titleType;
+        public final int extensionFlags;
 
-        public LinkRefElementTypes(@NotNull IElementType parentType, @NotNull IElementType linkRefType, @NotNull IElementType textType, @NotNull IElementType anchorType) {
-            this(parentType, linkRefType, textType, anchorType, null);
+        public LinkRefElementTypes(@NotNull IElementType parentType, @NotNull IElementType linkRefType, @NotNull IElementType textType, @Nullable IElementType anchorType, int extensionFlags) {
+            this(parentType, linkRefType, textType, anchorType, null, extensionFlags);
         }
 
-        public LinkRefElementTypes(@NotNull IElementType parentType, @NotNull IElementType linkRefType, @NotNull IElementType textType, @NotNull IElementType anchorType, @Nullable IElementType titleType) {
+        public LinkRefElementTypes(@NotNull IElementType parentType, @NotNull IElementType linkRefType, @NotNull IElementType textType, @Nullable IElementType anchorType, @Nullable IElementType titleType, int extensionFlags) {
             this.parentType = parentType;
             this.linkRefType = linkRefType;
             this.textType = textType;
             this.anchorType = anchorType;
             this.titleType = titleType;
+            this.extensionFlags = extensionFlags;
         }
     }
 
     public static LinkRefElementTypes getNamedElementTypes(@Nullable PsiElement element) {
+        if (element instanceof MultiMarkdownImageLink
+                || element instanceof MultiMarkdownImageLinkRef
+                || element instanceof MultiMarkdownImageLinkRefText
+                || element instanceof MultiMarkdownImageLinkRefTitle
+                ) return IMAGE_LINK_ELEMENT;
         if (element instanceof MultiMarkdownExplicitLink
                 || element instanceof MultiMarkdownLinkRef
                 || element instanceof MultiMarkdownLinkRefText
+                || element instanceof MultiMarkdownLinkRefTitle
                 || element instanceof MultiMarkdownLinkRefAnchor
                 ) return EXPLICIT_LINK_ELEMENT;
         if (element instanceof MultiMarkdownWikiLink
@@ -137,8 +150,33 @@ public class MultiMarkdownPsiImplUtil {
         String text = null;
 
         IElementType elementType = element.getNode().getElementType();
+
         if (elementType == elementTypes.linkRefType) {
-            linkRef = newName;
+            if (elementTypes.extensionFlags != 0) {
+                FilePathInfo linkRefInfo = new FilePathInfo(linkRef);
+                FilePathInfo newNameInfo = new FilePathInfo(newName);
+
+                switch (elementTypes.extensionFlags) {
+                    case EXTENSION_KEEP:
+                        linkRef = newNameInfo.getFilePathWithAnchorNoExt() + linkRefInfo.getExt();
+                        break;
+
+                    case EXTENSION_STRIP:
+                        linkRef = newNameInfo.getFilePathWithAnchorNoExt();
+                        break;
+
+                    case EXTENSION_AS_IS:
+                        linkRef = linkRefInfo.hasExt() ? newNameInfo.getFilePathWithAnchor() : newNameInfo.getFilePathWithAnchorNoExt();
+                        break;
+
+                    case EXTENSION_USE:
+                    default:
+                        linkRef = newName;
+                        break;
+                }
+            } else {
+                linkRef = newName;
+            }
 
             if ((renameFlags & RENAME_KEEP_PATH) != 0 && element.getText().contains("/")) {
                 // keep the old path
@@ -155,7 +193,7 @@ public class MultiMarkdownPsiImplUtil {
             }
 
             // preserve anchor
-            if ((renameFlags & RENAME_KEEP_ANCHOR) != 0) {
+            if ((renameFlags & RENAME_KEEP_ANCHOR) != 0 && elementTypes.anchorType != null) {
                 String anchorText = getElementText(elementTypes.parentType, parent, elementTypes.anchorType, "#", null);
                 if (!anchorText.isEmpty()) {
                     linkRef = FilePathInfo.linkRefNoAnchor(newName) + anchorText;
@@ -186,6 +224,8 @@ public class MultiMarkdownPsiImplUtil {
         PsiElement newLink = null;
         if (elementTypes.parentType == WIKI_LINK) {
             newLink = MultiMarkdownElementFactory.createWikiLink(element.getProject(), linkRef, text);
+        } else if (elementTypes.parentType == IMAGE) {
+            newLink = MultiMarkdownElementFactory.createImageLink(element.getProject(), linkRef, text, title);
         } else if (elementTypes.parentType == EXPLICIT_LINK) {
             newLink = MultiMarkdownElementFactory.createExplicitLink(element.getProject(), linkRef, text, title);
         }

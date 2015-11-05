@@ -39,7 +39,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement.RENAME_KEEP_ANCHOR;
+import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement.*;
 
 //public class MultiMarkdownAnnotator extends ExternalAnnotator<String, Set<MultiMarkdownAnnotator.HighlightableToken>> {
 public class MultiMarkdownAnnotator implements Annotator {
@@ -103,41 +103,38 @@ public class MultiMarkdownAnnotator implements Annotator {
             //if (wikiLink != null) annotator = checkWikiLinkSwapRefTitle(wikiLink, holder);
         } else if (element instanceof MultiMarkdownLinkRef) {
             Annotation annotator = null;
-            MultiMarkdownExplicitLink link = (MultiMarkdownExplicitLink) element.getParent();
-
             FilePathInfo pathInfo = new FilePathInfo(((MultiMarkdownLinkRef) element).getNameWithAnchor());
+            MultiMarkdownFile containingFile = (MultiMarkdownFile) element.getContainingFile();
+            FileReference sourceReference = new FileReference(containingFile);
 
-            // if not reversed ref and text and not just a link reference
             if (annotator == null && !FilePathInfo.linkRefNoAnchor(pathInfo.getFileName()).isEmpty()) {
                 // see if it exists
-                MultiMarkdownFile containingFile = (MultiMarkdownFile) element.getContainingFile();
 
-                FileReferenceList filesReferenceList = new FileReferenceListQuery(element.getProject())
-                        .keepLinkRefAnchor()
-                        .wantMarkdownFiles()
-                        .all();
+                FileReferenceList filesReferenceList;
+                boolean withExt = false;
+                FileReferenceListQuery filesReferenceListQuery;
 
-                //FileReferenceList anchoredFilesReferenceList = filesReferenceList.query()
-                //        .caseInsensitive()
-                //        .keepLinkRefAnchor()
-                //        .wantMarkdownFiles()
-                //        .gitHubWikiRules()
-                //        .matchLinkRef((MultiMarkdownLinkRef) element)
-                //        .all();
+                if (element instanceof MultiMarkdownImageLinkRef) {
+                    withExt = true;
+                    filesReferenceList = new FileReferenceListQuery(element.getProject())
+                            .keepLinkRefAnchor()
+                            .wantImageFiles()
+                            .all();
+                    filesReferenceListQuery = filesReferenceList.query().wantImageFiles();
+                } else {
+                    filesReferenceList = new FileReferenceListQuery(element.getProject())
+                            .keepLinkRefAnchor()
+                            .wantMarkdownFiles()
+                            .all();
+                    filesReferenceListQuery = filesReferenceList.query().wantMarkdownFiles();
+                    withExt = pathInfo.hasExt();
+                }
 
-                FileReferenceList matchedFilesReferenceList = filesReferenceList.query()
-                        .caseInsensitive()
-                        .wantMarkdownFiles()
-                        //.keepLinkRefAnchor()
-                        .gitHubWikiRules()
-                        .matchLinkRef((MultiMarkdownLinkRef) element)
-                        .all();
-
-                FileReferenceList accessibleLinkRefs = filesReferenceList.query()
+                FileReferenceList accessibleLinkRefs = new FileReferenceListQuery(filesReferenceListQuery)
                         .caseSensitive() // we want to catch mismatches
                         .gitHubWikiRules()
                         .sameGitHubRepo()
-                        .matchLinkRef((MultiMarkdownLinkRef) element)
+                        .matchLinkRef((MultiMarkdownLinkRef) element, withExt)
                         .all();
 
                 if (accessibleLinkRefs.size() != 1) {
@@ -148,7 +145,14 @@ public class MultiMarkdownAnnotator implements Annotator {
                     FileReference elementFileReference = new FileReference(element.getContainingFile());
                     String gitHubRepoPath = elementFileReference.getGitHubRepoPath();
 
-                    // not set to right name or to an accessible name
+                    // now set to right name or to an accessible name
+                    FileReferenceList matchedFilesReferenceList = new FileReferenceListQuery(filesReferenceListQuery)
+                            .caseInsensitive()
+                            .keepLinkRefAnchor()
+                            .gitHubWikiRules()
+                            .matchLinkRef((MultiMarkdownLinkRef) element, withExt)
+                            .all();
+
                     FileReferenceList otherFileRefList = matchedFilesReferenceList;
 
                     if (matchedFilesReferenceList.size() > 1 && gitHubRepoPath != null) {
@@ -158,7 +162,13 @@ public class MultiMarkdownAnnotator implements Annotator {
 
                     FileReference[] otherReferences = otherFileRefList.get();
 
-                    if (otherReferences.length == 1) {
+                    if (otherReferences.length != 1) {
+                        if (sourceReference.resolveExternalLinkRef(((MultiMarkdownLinkRef) element).getFileName(), false, false) != null) {
+                            annotator = holder.createInfoAnnotation(element.getTextRange(),
+                                    MultiMarkdownBundle.message("annotation.link.resolves-to-external"));
+                        }
+                    } else {
+
                         FileReferenceLinkGitHubRules referenceLink = (FileReferenceLinkGitHubRules) otherReferences[0];
                         FileReferenceLink.InaccessibleLinkRefReasons reasons = referenceLink.inaccessibleLinkRefReasons(((MultiMarkdownLinkRef) element).getName());
                         warningsOnly = true;
@@ -194,9 +204,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                             annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
 
                             if (referenceLink.canRenameFileTo(reasons.targetNameHasAnchorFixed())) {
-                                FileReference targetReference = new FileReference(referenceLink.getPath() + reasons.targetNameHasAnchorFixed(), element.getProject());
-                                FileReferenceLink re_targetedLink = new FileReferenceLink(containingFile, targetReference);
-                                annotator.registerFix(new RenameFileAndReTargetQuickFix(referenceLink.getPsiFileWithAnchor(), reasons.targetNameHasAnchorFixed(), (MultiMarkdownNamedElement) element, re_targetedLink.getWikiPageRef()));
+                                annotator.registerFix(new RenameFileAndReTargetQuickFix(referenceLink.getPsiFileWithAnchor(), reasons.targetNameHasAnchorFixed(), (MultiMarkdownNamedElement) element, RENAME_KEEP_PATH | RENAME_KEEP_TEXT | RENAME_KEEP_RENAMED_TEXT | RENAME_KEEP_TITLE));
                             }
                         }
 
@@ -235,10 +243,10 @@ public class MultiMarkdownAnnotator implements Annotator {
 
                         // get all accessibles
                         if (filesReferenceList.size() != 0 && needTargetList) {
-                            /*
-                             *   have a file but it is not accessible we can:
-                             *   1. rename the link to another accessible file?
-                             */
+                                /*
+                                 *   have a file but it is not accessible we can:
+                                 *   1. rename the link to another accessible file?
+                                 */
                             FileReferenceList linkRefs = filesReferenceList.query().gitHubWikiRules().inSource(containingFile).sameGitHubRepo().all();
 
                             FileReference[] references = linkRefs.get();
@@ -403,9 +411,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                                 annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
 
                                 if (referenceLink.canRenameFileTo(reasons.targetNameHasAnchorFixed())) {
-                                    FileReference targetReference = new FileReference(referenceLink.getPath() + reasons.targetNameHasAnchorFixed(), element.getProject());
-                                    FileReferenceLink re_targetedLink = new FileReferenceLink(containingFile, targetReference);
-                                    annotator.registerFix(new RenameFileAndReTargetQuickFix(referenceLink.getPsiFileWithAnchor(), reasons.targetNameHasAnchorFixed(), (MultiMarkdownNamedElement) element, re_targetedLink.getWikiPageRef()));
+                                    annotator.registerFix(new RenameFileAndReTargetQuickFix(referenceLink.getPsiFileWithAnchor(), reasons.targetNameHasAnchorFixed(), (MultiMarkdownNamedElement) element, RENAME_KEEP_TEXT | RENAME_KEEP_RENAMED_TEXT | RENAME_KEEP_TITLE));
                                 }
                             } else if (reasons.targetNotWikiPageExt()) {
                                 // can offer to move the file, just add the logic

@@ -24,19 +24,12 @@
 package com.vladsch.idea.multimarkdown;
 
 import com.intellij.openapi.util.IconLoader;
-import com.intellij.util.ui.UIUtil;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.awt.image.WritableRaster;
-import java.io.IOException;
-import java.net.URL;
 
 public class MultiMarkdownIcons {
-    public static final Icon FILE = IconLoader.getIcon("/com/vladsch/idea/multimarkdown/multimarkdown.png");
+    public static final Icon FILE = IconLoader.getIcon("/com/vladsch/idea/multimarkdown/wikimarkdown.png");
     public static final Icon WIKI = IconLoader.getIcon("/com/vladsch/idea/multimarkdown/wikimarkdown.png");
     public static final Icon QUICK_FIX = IconLoader.getIcon("/com/vladsch/idea/multimarkdown/markdownfix.png");
+    public static final Icon GITHUB = IconLoader.getIcon("/com/vladsch/idea/multimarkdown/githublink.png");
 }

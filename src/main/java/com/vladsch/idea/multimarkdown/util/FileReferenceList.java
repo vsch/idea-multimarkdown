@@ -120,14 +120,21 @@ public class FileReferenceList {
                 }
             }
 
-            Outer:
-            for (FileReference fileReference : files) {
-                for (FileReferenceList.Filter filter : filters) {
-                    if (filter == null) continue;
-                    if (!filter.filterExt(fileReference.getExt(), fileReference.getFullFilePath())) continue Outer;
-                    if (filter.isRefFilter() && (fileReference = filter.filterRef(fileReference)) == null) continue Outer;
+            for (FileReferenceList.Filter filter : filters) {
+                if (filter == null) continue;
+
+                ArrayList<FileReference> nextFiles = new ArrayList<FileReference>(files.size());
+
+                for (FileReference fileReference : files) {
+                    if (!filter.filterExt(fileReference.getExt(), fileReference.getFullFilePath())) continue;
+                    if (filter.isRefFilter() && (fileReference = filter.filterRef(fileReference)) == null) continue;
+                    nextFiles.add(fileReference);
                 }
 
+                files = nextFiles;
+            }
+
+            for (FileReference fileReference : files) {
                 add(fileReference);
             }
         }
