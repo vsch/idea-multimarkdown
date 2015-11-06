@@ -159,7 +159,7 @@ public class MultiMarkdownParser implements PsiParser {
             if (builder.getTokenType() == LINK_REF_TITLE_MARKER) {
                 builder.advanceLexer();
                 PsiBuilder.Marker title = builder.mark();
-                while (builder.getTokenType() != LINK_REF_TITLE_MARKER) builder.advanceLexer();
+                while (builder.getTokenType() != LINK_REF_TITLE_MARKER && builder.getTokenType() != LINK_REF_CLOSE) builder.advanceLexer();
                 title.done(LINK_REF_TITLE);
                 if (builder.getTokenType() == LINK_REF_TITLE_MARKER) builder.advanceLexer();
             }
@@ -198,7 +198,7 @@ public class MultiMarkdownParser implements PsiParser {
             if (builder.getTokenType() == IMAGE_LINK_REF_TITLE_MARKER) {
                 builder.advanceLexer();
                 PsiBuilder.Marker title = builder.mark();
-                while (builder.getTokenType() != IMAGE_LINK_REF_TITLE_MARKER) builder.advanceLexer();
+                while (builder.getTokenType() != IMAGE_LINK_REF_TITLE_MARKER && builder.getTokenType() != IMAGE_LINK_REF_CLOSE) builder.advanceLexer();
                 title.done(IMAGE_LINK_REF_TITLE);
                 if (builder.getTokenType() == IMAGE_LINK_REF_TITLE_MARKER) builder.advanceLexer();
             }

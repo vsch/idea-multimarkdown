@@ -75,6 +75,7 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
         componentSettings.add(new CheckBoxComponent("includesColorsCssCheckBox", globalSettings.includesColorsCss));
         componentSettings.add(new CheckBoxComponent("githubWikiLinksCheckBox", globalSettings.githubWikiLinks));
         componentSettings.add(new CheckBoxComponent("footnotesCheckBox", globalSettings.footnotes));
+        componentSettings.add(new CheckBoxComponent("tocCheckBox", globalSettings.toc));
         componentSettings.add(new SpinnerIntegerComponent("updateDelaySpinner", globalSettings.updateDelay));
         componentSettings.add(new SpinnerIntegerComponent("maxImgWidthSpinner", globalSettings.maxImgWidth));
         componentSettings.add(new SpinnerIntegerComponent("parsingTimeoutSpinner", globalSettings.parsingTimeout));
@@ -142,6 +143,7 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
         for (ComponentSetting componentSetting : componentSettings) {
             componentSetting.setValue();
         }
+
         // vsch: hardwire github wiki links
         globalSettings.githubWikiLinks.setValue(true);
         globalSettings.endGroupNotifications();

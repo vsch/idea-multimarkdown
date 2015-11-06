@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.annotation.*;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD, ElementType.TYPE, ElementType.FIELD })
 @Repeatable(LicensedFeatures.class)
 public @interface LicensedFeature {
     enum Feature {

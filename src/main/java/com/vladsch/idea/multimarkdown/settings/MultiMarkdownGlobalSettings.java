@@ -30,6 +30,7 @@ import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.ui.UIUtil;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
+import com.vladsch.idea.multimarkdown.license.LicensedFeature;
 import org.apache.commons.codec.Charsets;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
@@ -105,6 +106,7 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     final public Settings.BooleanSetting suppressInlineHTML = settings.BooleanSetting(false, "suppressInlineHTML", Extensions.SUPPRESS_INLINE_HTML);
     final public Settings.BooleanSetting tables = settings.BooleanSetting(true, "tables", Extensions.TABLES);
     final public Settings.BooleanSetting taskLists = settings.BooleanSetting(true, "taskLists", Extensions.TASKLISTITEMS);
+    final public Settings.BooleanSetting toc = settings.BooleanSetting(false, "toc", Extensions.TOC, true);
     final public Settings.BooleanSetting wikiLinks = settings.BooleanSetting(true, "wikiLinks", Extensions.WIKILINKS);
     final public Settings.BooleanSetting todoComments = settings.BooleanSetting(false, "todoComments", 0);
     final public Settings.BooleanSetting useCustomCss = settings.BooleanSetting(false, "useCustomCss", 0);
@@ -126,6 +128,7 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     final public Settings.ElementSetting customFxCssEditorState = settings.ElementSetting(null, "customFxCssEditorState");
     final public Settings.BooleanSetting wasShownDarkBug = settings.BooleanSetting(false, "wasShownDarkBug", 0);
     final public Settings.BooleanSetting useOldPreview = settings.BooleanSetting(false, "useOldPreview", 0);
+
 
     // TODO: add this option to pegdown
     final public Settings.BooleanSetting githubWikiLinks = settings.BooleanSetting(true, "githubWikiLinks", 0);
@@ -299,7 +302,7 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     }
 
     public int getExtensionsValue() {
-        return settings.getExtensionsValue() | Extensions.EXTANCHORLINKS;
+        return settings.getExtensionsValue() | Extensions.INTELLIJ_DUMMY_IDENTIFIER | Extensions.EXTANCHORLINKS;
     }
 
     public void addListener(@NotNull final SettingsListener<MultiMarkdownGlobalSettings> listener) {

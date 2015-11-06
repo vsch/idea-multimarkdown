@@ -46,6 +46,7 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.editor.MultiMarkdownPreviewEditor;
 import com.vladsch.idea.multimarkdown.license.LicenseAgent;
 import com.vladsch.idea.multimarkdown.license.LicenseRequest;
+import com.vladsch.idea.multimarkdown.license.LicensedFeature;
 import org.apache.commons.codec.Charsets;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -143,6 +144,10 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
     private JButton clearLicenseButton;
     final private LicenseAgent agent;
 
+    @LicensedFeature
+    private JCheckBox tocCheckBox;
+    private JLabel tocLabel;
+
     // need this so that we dont try to access components before they are created
     public
     @Nullable
@@ -187,6 +192,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         if (persistName.equals("githubWikiLinksCheckBox")) return githubWikiLinksCheckBox;
         if (persistName.equals("footnotesCheckBox")) return footnotesCheckBox;
         if (persistName.equals("licenseTextArea")) return licenseTextArea;
+        if (persistName.equals("tocCheckBox")) return tocCheckBox;
 
         return null;
     }
@@ -493,12 +499,25 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
                 }
             }
         });
+
+        // TODO: fix pegdown TOC extension and enable it here
+        tocCheckBox.setVisible(false);
+        tocLabel.setVisible(false);
+    }
+
+    protected void updateLicencedFeatures(boolean isLicensed) {
+        if (!isLicensed) {
+            tocCheckBox.setSelected(false);
+        }
+
+        tocCheckBox.setEnabled(isLicensed);
     }
 
     protected void updateLicenceInfo(boolean delayed) {
         if (!delayed) {
             String licenseInfoText = "";
             boolean isValidLicense = true;
+            boolean isLicensed = false;
 
             // reset to defaults
             licenseTextArea.setVisible(true);
@@ -532,7 +551,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
                     String licenseType = MultiMarkdownBundle.message("settings.license-type-" + agent.getLicenseType());
 
                     String days = (expiresIn < 0) ? MultiMarkdownBundle.message("settings.license-has-expired-" + agent.getLicenseType())
-                            : (expiresIn % 10 == 1 ? MultiMarkdownBundle.message("settings.license-expires-tomorrow-" + agent.getLicenseType())
+                            : (expiresIn == 1 ? MultiMarkdownBundle.message("settings.license-expires-tomorrow-" + agent.getLicenseType())
                             : MultiMarkdownBundle.message("settings.license-ends-" + agent.getLicenseType()) + " " + MultiMarkdownBundle.message("settings.license-expires-in-days", expiresIn));
 
                     licenseInfoText += "\n\n" + MultiMarkdownBundle.message("settings.license-activated-on") + " " + agent.getActivatedOn();
@@ -540,6 +559,8 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
                     if (expiresIn > 90) {
                         buyLicenseButton.setVisible(false);
                     }
+
+                    isLicensed = expiresIn >= 0;
                 }
             } else {
                 clearLicenseButton.setVisible(!licenseTextArea.getText().trim().isEmpty());
@@ -549,6 +570,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
             }
 
             licenseInfoEditorPane.setText(licenseInfoText.trim());
+            updateLicencedFeatures(isLicensed);
         } else {
             final Application application = ApplicationManager.getApplication();
             application.invokeLater(new Runnable() {

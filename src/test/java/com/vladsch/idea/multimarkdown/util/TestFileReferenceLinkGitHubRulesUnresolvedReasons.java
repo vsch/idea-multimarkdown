@@ -49,7 +49,6 @@ public class TestFileReferenceLinkGitHubRulesUnresolvedReasons {
 
     @Before
     public void setUp() throws Exception {
-        FileReferenceLink.projectFileResolver = null;
     }
 
     private final FileReferenceLinkGitHubRules fileReferenceLink;

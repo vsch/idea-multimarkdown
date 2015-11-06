@@ -15,8 +15,10 @@
 package com.vladsch.idea.multimarkdown.psi.impl;
 
 import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementResolveResult;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.ResolveResult;
 import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownImageLinkRef;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
@@ -70,24 +72,17 @@ public class MultiMarkdownReferenceImageLinkRef extends MultiMarkdownReference {
                         .all()
                         .sorted();
 
-                VirtualFile[] files = fileReferenceList
-                        .getVirtualFiles();
+                PsiFile[] psiFiles = fileReferenceList.getPsiFiles();
 
-                if (files.length > 0) {
+                if (psiFiles.length > 0) {
                     resolveRefIsExternal = false;
                     removeReferenceChangeListener();
-                    if (files.length == 1) {
-                        PsiFile psiFile = PsiManager.getInstance(myElement.getProject()).findFile(files[0]);
-                        if (psiFile != null) {
-                            return new ResolveResult[] { new PsiElementResolveResult(psiFile) };
-                        }
+                    if (psiFiles.length == 1) {
+                        return new ResolveResult[] { new PsiElementResolveResult(psiFiles[0]) };
                     } else {
                         List<ResolveResult> results = new ArrayList<ResolveResult>();
-                        for (VirtualFile file : files) {
-                            PsiFile psiFile = PsiManager.getInstance(myElement.getProject()).findFile(file);
-                            if (psiFile != null) {
+                        for (PsiFile psiFile : psiFiles) {
                             results.add(new PsiElementResolveResult(psiFile));
-                            }
                         }
                         return results.toArray(new ResolveResult[results.size()]);
                     }

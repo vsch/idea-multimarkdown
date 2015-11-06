@@ -45,6 +45,7 @@ public class FileReferenceLink extends FileReference {
 
     // flags are re-used for link ref reasons
     public static final int REASON_NOT_UNDER_SAME_REPO = 0x0001;
+    public static final int REASON_MISSING_EXTENSION = 0x0002;
 
     protected final @NotNull FileReference sourceReference;
     protected String pathPrefix;

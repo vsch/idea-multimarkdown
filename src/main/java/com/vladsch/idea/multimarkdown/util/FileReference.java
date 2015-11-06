@@ -22,7 +22,9 @@ package com.vladsch.idea.multimarkdown.util;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
@@ -33,12 +35,6 @@ import org.jetbrains.annotations.Nullable;
 public class FileReference extends FilePathInfo {
     private static final Logger logger = Logger.getLogger(FileReference.class);
 
-    public interface ProjectFileResolver {
-        VirtualFile getVirtualFile(@NotNull String sourcePath);
-        PsiFile getPsiFile(@NotNull VirtualFile file, @NotNull Project project);
-    }
-
-    public static ProjectFileResolver projectFileResolver = null;
     protected final Project project;
     protected VirtualFile virtualFile;
 
@@ -293,12 +289,12 @@ public class FileReference extends FilePathInfo {
 
     @Nullable
     public static VirtualFile getVirtualFile(@NotNull String sourcePath) {
-        return projectFileResolver == null ? null : projectFileResolver.getVirtualFile(sourcePath);
+        return VirtualFileManager.getInstance().findFileByUrl("file://" + sourcePath);
     }
 
     @Nullable
     public static PsiFile getPsiFile(@NotNull VirtualFile file, @NotNull Project project) {
-        return projectFileResolver == null ? null : projectFileResolver.getPsiFile(file, project);
+        return PsiManager.getInstance(project).findFile(file);
     }
 
     @Override

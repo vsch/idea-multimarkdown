@@ -29,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
 public class MultiMarkdownExplicitLinkImpl extends ASTWrapperPsiElement implements MultiMarkdownExplicitLink {
     public static String getElementText(@NotNull String name, @Nullable String text, @Nullable String title) {
         if (text == null || text.isEmpty()) text = new FilePathInfo(name).getFileNameNoExt();
-        return "[" + text + "](" + name + (title != null && title.length() > 0 ? " '" + title + "'" : "") + ")\n";
+        return "[" + text + "](" + name + (title != null && title.length() > 0 ? " '" + title + "'" : "") + ")";
     }
 
     @Override

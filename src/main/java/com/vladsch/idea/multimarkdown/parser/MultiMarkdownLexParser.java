@@ -601,6 +601,11 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
             }
         }
 
+        @Override
+        public void visit(TocNode node) {
+
+        }
+
         public void visit(RootNode node) {
             for (AbbreviationNode abbrNode : node.getAbbreviations()) {
                 ParserNodeInfo abbrNodeInfo = new ParserNodeInfo();
@@ -888,8 +893,10 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
                     nodes.prev();
                 }
 
+                //nodes.validateAllContiguous();
                 // need to process children with the current node
                 nodes.dropWhiteSpace(LINK_REF_TEXT_CLOSE, LINK_REF_OPEN, LINK_REF, LINK_REF_ANCHOR_MARKER, LINK_REF_ANCHOR);
+
                 // need to process children with the current node
                 addTokensWithChildren(nodes);
             } else {

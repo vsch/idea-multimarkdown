@@ -51,7 +51,7 @@ import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.ProjectFileResolver {
+public class MultiMarkdownPlugin implements ApplicationComponent {
     private static final Logger logger = org.apache.log4j.Logger.getLogger("com.vladsch.idea.multimarkdown");
     private MultiMarkdownGlobalSettingsListener globalSettingsListener;
     private static int license_features;
@@ -136,8 +136,6 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
         logger.addAppender(appender);
         logger.setAdditivity(false);
         logger.setLevel(Level.INFO);
-
-        FileReference.projectFileResolver = this;
 
         agent = new LicenseAgent();
 
@@ -381,21 +379,8 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
         return project.getComponent(MultiMarkdownProjectComponent.class);
     }
 
-    @Override
-    public VirtualFile getVirtualFile(@NotNull String sourcePath) {
-        return VirtualFileManager.getInstance().findFileByUrl("file://" + sourcePath);
-    }
-
     public LicenseAgent getAgent() {
         return agent;
     }
 
-    @Override
-    public PsiFile getPsiFile(@NotNull VirtualFile file, @NotNull Project project) {
-        PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
-        if (psiFile != null && psiFile instanceof MultiMarkdownFile) {
-            return psiFile;
-        }
-        return null;
-    }
 }

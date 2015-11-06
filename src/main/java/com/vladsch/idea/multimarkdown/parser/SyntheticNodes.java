@@ -17,12 +17,15 @@ package com.vladsch.idea.multimarkdown.parser;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.text.CharArrayCharSequence;
 import com.intellij.util.text.CharArrayUtil;
+import org.apache.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 import org.pegdown.ast.Node;
 
 import java.util.ArrayList;
 
 public class SyntheticNodes {
+    private static final Logger logger = Logger.getLogger(SyntheticNodes.class);
+
     private static final char[] WHITE_SPACE = new char[] { ' ', '\t' };
     final protected Node node;
     final protected char[] fullText;
@@ -87,6 +90,18 @@ public class SyntheticNodes {
         syntheticNodes.add(new SyntheticNode(nodeStart + lenOpen, nodeEnd - lenClose, type));
         syntheticNodes.add(new SyntheticNode(nodeEnd - lenClose, nodeEnd, closeType));
         current = 1;
+    }
+
+    public void validateAllContiguous() {
+        int start = nodeStart;
+
+        for (SyntheticNode node : syntheticNodes) {
+            assert node.startIndex == start : "synthetic node should start " + start +", instead " + node.startIndex;
+            logger.info("validating synth node " + node);
+            start = node.endIndex;
+        }
+
+        assert start == nodeEnd : "last synthetic node ended " + start + " instead of " + nodeEnd;
     }
 
     public class SyntheticNode {
@@ -202,7 +217,7 @@ public class SyntheticNodes {
         @Override
         public String toString() {
             CharArrayCharSequence nodeText = new CharArrayCharSequence(fullText, startIndex, endIndex);
-            return "[" + startIndex + "," + endIndex + ") " + nodeText;
+            return type + "[" + startIndex + "," + endIndex + ") " + nodeText;
         }
 
         public int trimLead(int startOffs, char... pattern) {

@@ -25,6 +25,7 @@ package com.vladsch.idea.multimarkdown.settings;
 
 import com.intellij.openapi.application.ApplicationInfo;
 import com.intellij.ui.EditorTextField;
+import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
@@ -49,6 +50,10 @@ public class Settings {
 
     public BooleanSetting BooleanSetting(Boolean initialValue, String persistName, int flags) {
         return new BooleanSetting(initialValue, persistName, flags);
+    }
+
+    public BooleanSetting BooleanSetting(Boolean initialValue, String persistName, int flags, boolean isLicensedFeature) {
+        return new BooleanSetting(initialValue, persistName, flags, isLicensedFeature);
     }
 
     public ElementSetting ElementSetting(Element initialValue, String persistName) {
@@ -128,34 +133,51 @@ public class Settings {
     }
 
     public abstract class Setting<T> {
-
-        protected T value;
+        private T value;
+        final protected T initialValue;
+        final protected boolean isLicensedFeature;
 
         protected String persistName;
 
         public Setting(T initialValue, String persistName) {
-            value = initialValue;
+            this(initialValue, persistName, false);
+        }
+
+        public Setting(T initialValue, String persistName, boolean isLicensedFeature) {
+            this.initialValue = initialValue;
+            this.value = initialValue;
             this.persistName = persistName;
+            this.isLicensedFeature = isLicensedFeature;
             settings.add(this);
         }
 
-        public T getValue() { return value; }
+        public T getValue() { return (!isLicensedFeature || MultiMarkdownPlugin.isLicensed()) ? value : initialValue; }
 
         public void setValue(T value) {
-            if (this.value != value) {
-                this.value = value;
-                if (notifier != null) notifier.notifyListeners();
+            if (!isLicensedFeature || MultiMarkdownPlugin.isLicensed()) {
+                if (!isEqual(value)) {
+                    this.value = value;
+                    if (notifier != null) notifier.notifyListeners();
+                }
             }
         }
 
+        public boolean isEqual(T value) {
+            return this.value == value;
+        }
+
         public void loadState(Element element) {
-            String value = element.getAttributeValue(persistName);
-            if (value != null) setValue(fromString(value));
+            if (!isLicensedFeature || MultiMarkdownPlugin.isLicensed()) {
+                String value = element.getAttributeValue(persistName);
+                if (value != null) setValue(fromString(value));
+            }
         }
 
         public void saveState(Element element) {
-            //logger.info("saving state for " + persistName);
-            element.setAttribute(persistName, value.toString());
+            if (!isLicensedFeature || MultiMarkdownPlugin.isLicensed()) {
+                //logger.info("saving state for " + persistName);
+                element.setAttribute(persistName, value.toString());
+            }
         }
 
         public int getExtensionValue() {
@@ -173,90 +195,99 @@ public class Settings {
 
         public IntegerSetting(Integer initialValue, String persistName) { super(initialValue, persistName); }
 
-        @Override public Integer fromString(String value) { return Integer.parseInt(value); }
+        @Override
+        public Integer fromString(String value) { return Integer.parseInt(value); }
 
-        @Override public Integer getDefaultValue() { return 0; }
+        @Override
+        public Integer getDefaultValue() { return 0; }
 
         public void setValue(JSpinner component) { setValue((Integer) component.getValue()); }
 
-        public void reset(JSpinner component) { component.setValue(value); }
+        public void reset(JSpinner component) { component.setValue(getValue()); }
 
-        public boolean isChanged(JSpinner component) { return !value.equals((Integer) component.getValue()); }
+        public boolean isChanged(JSpinner component) { return !getValue().equals((Integer) component.getValue()); }
 
         public void setValue(JComboBox component) { setValue((Integer) component.getSelectedIndex()); }
 
-        public void reset(JComboBox component) { component.setSelectedIndex(value); }
+        public void reset(JComboBox component) { component.setSelectedIndex(getValue()); }
 
-        public boolean isChanged(JComboBox component) { return !value.equals((Integer) component.getSelectedIndex()); }
+        public boolean isChanged(JComboBox component) { return !getValue().equals((Integer) component.getSelectedIndex()); }
 
         public void setValue(JTabbedPane component) { setValue((Integer) component.getSelectedIndex()); }
 
-        public void reset(JTabbedPane component) { component.setSelectedIndex(value); }
+        public void reset(JTabbedPane component) { component.setSelectedIndex(getValue()); }
 
-        public boolean isChanged(JTabbedPane component) { return !value.equals((Integer) component.getSelectedIndex()); }
+        public boolean isChanged(JTabbedPane component) { return !getValue().equals((Integer) component.getSelectedIndex()); }
 
         public void setValue(JList component) { setValue((Integer) component.getSelectedIndex()); }
 
-        public void reset(JList component) { component.setSelectedIndex(value); }
+        public void reset(JList component) { component.setSelectedIndex(getValue()); }
 
-        public boolean isChanged(JList component) { return !value.equals((Integer) component.getSelectedIndex()); }
+        public boolean isChanged(JList component) { return !getValue().equals((Integer) component.getSelectedIndex()); }
     }
 
     public class DoubleSetting extends Setting<Double> {
 
         public DoubleSetting(Double initialValue, String persistName) { super(initialValue, persistName); }
 
-        @Override public Double fromString(String value) { return Double.parseDouble(value); }
+        @Override
+        public Double fromString(String text) { return Double.parseDouble(text); }
 
-        @Override public Double getDefaultValue() { return 0.0; }
+        @Override
+        public Double getDefaultValue() { return 0.0; }
 
         public void setValue(JSpinner component) { setValue((Double) component.getValue()); }
 
-        public void reset(JSpinner component) { component.setValue(value); }
+        public void reset(JSpinner component) { component.setValue(getValue()); }
 
-        public boolean isChanged(JSpinner component) { return !value.equals((Double) component.getValue()); }
+        public boolean isChanged(JSpinner component) { return !getValue().equals((Double) component.getValue()); }
     }
 
     public class BooleanSetting extends Setting<Boolean> {
-
-        protected int flags;
+        final protected int flags;
 
         public BooleanSetting(Boolean initialValue, String persistName, int flags) {
             super(initialValue, persistName);
             this.flags = flags;
         }
 
-        @Override public Boolean fromString(String value) { return Boolean.parseBoolean(value); }
+        public BooleanSetting(Boolean initialValue, String persistName, int flags, boolean isLicensedFeature) {
+            super(initialValue, persistName, isLicensedFeature);
+            this.flags = flags;
+        }
 
-        @Override public Boolean getDefaultValue() { return false; }
+        @Override
+        public Boolean fromString(String text) { return Boolean.parseBoolean(text); }
 
-        @Override public int getExtensionValue() { return value ? flags : 0; }
+        @Override
+        public Boolean getDefaultValue() { return false; }
+
+        @Override
+        public int getExtensionValue() { return getValue() ? flags : 0; }
 
         public void setValue(JCheckBox component) { setValue(component.isSelected()); }
 
-        public void reset(JCheckBox component) { component.setSelected(value); }
+        public void reset(JCheckBox component) { component.setSelected(getValue()); }
 
-        public boolean isChanged(JCheckBox component) { return !value.equals((Boolean) component.isSelected()); }
+        public boolean isChanged(JCheckBox component) { return !getValue().equals((Boolean) component.isSelected()); }
     }
 
     public class StringSetting extends Setting<String> {
-
         public StringSetting(String initialValue, String persistName) { super(initialValue, persistName); }
 
-        @Override public String fromString(String value) {
-            return value;
+        @Override
+        public String fromString(String text) {
+            return text;
         }
 
-        @Override public String getDefaultValue() {
+        @Override
+        public String getDefaultValue() {
             return "";
         }
 
         @Override
-        public void setValue(String value) {
-            if (!this.value.equals(value)) {
-                this.value = value;
-                if (notifier != null) notifier.notifyListeners();
-            }
+        public boolean isEqual(String text) {
+            return getValue().equals(text);
         }
 
         public void setValue(JTextArea component) { setValue(component.getText()); }
@@ -265,15 +296,15 @@ public class Settings {
             setValue(component.getText());
         }
 
-        public void reset(JTextArea component) { component.setText(value); }
+        public void reset(JTextArea component) { component.setText(getValue()); }
 
         public void reset(EditorTextField component) {
-            component.setText(value);
+            component.setText(getValue());
         }
 
-        public boolean isChanged(JTextArea component) { return !value.equals(component.getText()); }
+        public boolean isChanged(JTextArea component) { return !getValue().equals(component.getText()); }
 
-        public boolean isChanged(EditorTextField component) { return !value.equals(component.getText()); }
+        public boolean isChanged(EditorTextField component) { return !getValue().equals(component.getText()); }
     }
 
     public class FailedBuildSetting extends StringSetting {
@@ -296,13 +327,13 @@ public class Settings {
 
         public boolean isFailedBuild() {
             String ideaBuild = currentBuild();
-            return value != null && value.equals(ideaBuild);
+            return getValue() != null && getValue().equals(ideaBuild);
         }
 
         public <T> T runBuild(FailedBuildRunnable<T> runnable) {
             String ideaBuild = currentBuild();
 
-            if (value == null || !value.equals(ideaBuild)) {
+            if (getValue() == null || !getValue().equals(ideaBuild)) {
                 try {
                     return runnable.runCanFail();
                 } catch (Throwable e) {
@@ -320,13 +351,14 @@ public class Settings {
         }
 
         @Override
-        public void setValue(Element value) {
-            super.setValue(value != null ? value.clone() : null);
+        public void setValue(Element element) {
+            super.setValue(element != null ? element.clone() : null);
         }
+        @Override
+        public Element fromString(String text) { return null; }
 
-        @Override public Element fromString(String value) { return null; }
-
-        @Override public Element getDefaultValue() { return null; }
+        @Override
+        public Element getDefaultValue() { return null; }
 
         @Override
         public void loadState(@NotNull Element element) {
@@ -336,8 +368,8 @@ public class Settings {
 
         @Override
         public void saveState(@NotNull Element element) {
-            if (value != null) {
-                element.addContent(value.clone());
+            if (getValue() != null) {
+                element.addContent(getValue().clone());
             }
         }
 
@@ -346,11 +378,11 @@ public class Settings {
         }
 
         public void reset(@NotNull ComponentState component) {
-            component.loadState(value);
+            component.loadState(getValue());
         }
 
         public boolean isChanged(@NotNull ComponentState component) {
-            return value == null || component.isChanged(value);
+            return getValue() == null || component.isChanged(getValue());
         }
     }
 }

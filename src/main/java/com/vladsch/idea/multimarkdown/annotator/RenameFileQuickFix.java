@@ -34,6 +34,7 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement.*;
 
@@ -45,11 +46,11 @@ class RenameFileQuickFix extends BaseIntentionAction {
     private PsiFile targetFile;
     private final int alternativeMsg;
 
-    RenameFileQuickFix(PsiFile targetFile, String displayName, String newName) {
+    RenameFileQuickFix(@NotNull PsiFile targetFile, @Nullable String displayName, @NotNull String newName) {
         this(targetFile, displayName, newName, 0);
     }
 
-    RenameFileQuickFix(PsiFile targetFile, String displayName, String newName, int alternativeMsg) {
+    RenameFileQuickFix(@NotNull PsiFile targetFile, @Nullable String displayName, @NotNull String newName, int alternativeMsg) {
         this.displayName = displayName != null ? displayName : targetFile.getVirtualFile().getName();
         this.newName = newName;
         this.targetFile = targetFile;

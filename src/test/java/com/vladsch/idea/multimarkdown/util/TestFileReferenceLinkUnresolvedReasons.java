@@ -49,7 +49,6 @@ public class TestFileReferenceLinkUnresolvedReasons {
 
     @Before
     public void setUp() throws Exception {
-        FileReferenceLink.projectFileResolver = null;
     }
 
     private final FileReferenceLink fileReferenceLink;
