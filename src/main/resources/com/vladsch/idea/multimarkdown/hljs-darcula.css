@@ -6,12 +6,8 @@ modified for idea darcula (c) Vladimir Schneider <vladimir.schneider@gmail.com>
 */
 
 .hljs {
-  display: block;
-  overflow-x: auto;
-  padding: 0.5em;
   color: #bababa;
   background: transparent;
-  -webkit-text-size-adjust: none;
 }
 
 .hljs-comment,

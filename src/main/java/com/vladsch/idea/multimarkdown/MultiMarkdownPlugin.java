@@ -25,21 +25,23 @@ package com.vladsch.idea.multimarkdown;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
+import com.intellij.ide.plugins.IdeaPluginDescriptor;
+import com.intellij.ide.plugins.PluginManager;
 import com.intellij.ide.plugins.cl.PluginClassLoader;
+import com.intellij.notification.*;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ex.ApplicationEx;
+import com.intellij.openapi.application.ex.ApplicationManagerEx;
 import com.intellij.openapi.components.ApplicationComponent;
+import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
+import com.intellij.xml.util.XmlStringUtil;
+import com.vladsch.idea.multimarkdown.editor.MultiMarkdownPathResolver;
 import com.vladsch.idea.multimarkdown.license.LicenseAgent;
 import com.vladsch.idea.multimarkdown.license.LicenseRequest;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
-import com.vladsch.idea.multimarkdown.util.FileReference;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -47,6 +49,7 @@ import org.apache.log4j.PatternLayout;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.event.HyperlinkEvent;
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
@@ -63,7 +66,14 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
 
     @NotNull
     public static String getProductVersion() {
-        return "1.2.0";
+        PluginId pluginId = PluginId.findId("com.vladsch.idea.multimarkdown");
+        if (pluginId != null) {
+            IdeaPluginDescriptor pluginDescriptor = PluginManager.getPlugin(pluginId);
+            if (pluginDescriptor != null) {
+                return pluginDescriptor.getVersion();
+            }
+        }
+        return "1.2.x";
     }
 
     public static boolean areAllLicensed(int licenseFeatures) {
@@ -328,7 +338,7 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
                     request.license_code = licenseCode;
                     if (!agent.getLicenseCode(request)) {
                         if (agent.isRemoveLicense()) {
-                            agent.setLicenseActivationCodes(null,null);
+                            agent.setLicenseActivationCodes(null, null);
                         }
                     }
                 }
@@ -344,11 +354,42 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
         initLicense();
     }
 
+    public static void notifyLicensedUpdate(@Nullable Project project, final boolean showOnce) {
+        final MultiMarkdownGlobalSettings settings = MultiMarkdownGlobalSettings.getInstance();
+
+        if (!showOnce || !settings.wasShownLicensedAvailable.getValue()) {
+            // notify the user that a new licensed version is available
+            if (showOnce) settings.wasShownLicensedAvailable.setValue(true);
+            final ApplicationEx app = ApplicationManagerEx.getApplicationEx();
+
+            NotificationGroup issueNotificationGroup = new NotificationGroup(MultiMarkdownGlobalSettings.NOTIFICATION_GROUP_UPDATE, NotificationDisplayType.STICKY_BALLOON, true, null);
+
+            final String href = (showOnce ? "http://vladsch.com" : "http://vladsch.dev") + "/product/multimarkdown/specials";
+            String title = MultiMarkdownBundle.message("plugin.updated.notification.title", getProductName());
+            final String action = MultiMarkdownBundle.message("plugin.updated.notification.action");
+            String message = MultiMarkdownBundle.message("plugin.updated.notification.message", action, href);
+            NotificationListener listener = new NotificationListener() {
+                @Override
+                public void hyperlinkUpdate(@NotNull Notification notification, @NotNull HyperlinkEvent event) {
+                    //notification.expire();
+                    MultiMarkdownPathResolver.openLink(href);
+                }
+            };
+
+            issueNotificationGroup.createNotification(title, XmlStringUtil.wrapInHtml(message), NotificationType.INFORMATION, listener).notify(project);
+        }
+    }
+
     public void initLicense() {// load license information
+        boolean showOnce = false;
+
         if (agent.isValidLicense() && agent.isValidActivation()) {
             license_features = agent.getLicenseFeatures();
+            if (showOnce) MultiMarkdownGlobalSettings.getInstance().wasShownLicensedAvailable.setValue(true);
+            else notifyLicensedUpdate(null, showOnce);
         } else {
             license_features = 0;
+            notifyLicensedUpdate(null, showOnce);
         }
     }
 
@@ -382,5 +423,4 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
     public LicenseAgent getAgent() {
         return agent;
     }
-
 }

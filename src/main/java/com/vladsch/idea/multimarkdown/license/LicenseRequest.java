@@ -20,7 +20,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 public class LicenseRequest {
-    private static String host_system_name;
+    //private static String host_system_name;
 
     final public String product_name;
     final public String product_version;
@@ -50,50 +50,55 @@ public class LicenseRequest {
         return json.toString();
     }
 
+    public static String getHostProduct() {
+        //return ApplicationInfo.getInstance().getBuild().asStringWithAllDetails() + " test";
+        return ApplicationInfo.getInstance().getBuild().asStringWithAllDetails();
+    }
+
     public LicenseRequest(String product_name, String product_version) {
         this.product_name = product_name;
         this.product_version = product_version;
         this.host_name = getHostName();
-        this.host_product = ApplicationInfo.getInstance().getBuild().asStringWithAllDetails();
+        this.host_product = getHostProduct();
         this.host_os = System.getProperty("os.name");
         this.host_jre = System.getProperty("java.version");
     }
 
-    protected String getHostName()  {
-        if (host_system_name != null) {
-            return host_system_name;
-        }
+    public static String getHostName() {
+        //if (host_system_name != null) {
+        //    return host_system_name;
+        //}
 
         // try InetAddress.LocalHost first;
         //      NOTE -- InetAddress.getLocalHost().getHostName() will not work in certain environments.
+        String host = null;
+
         try {
             String result = InetAddress.getLocalHost().getHostName();
             if (result != null && !result.isEmpty()) {
-                return result;
+                host = result;
             }
         } catch (UnknownHostException e) {
             // failed;  try alternate means.
         }
 
         // try environment properties.
-        //
-        String host = System.getenv("COMPUTERNAME");
-        if (host != null) {
-            host_system_name = host;
-            return host;
-        }
+        if (host == null) {
+            host = System.getenv("COMPUTERNAME");
 
-        host = System.getenv("HOSTNAME");
-        if (host != null) {
-            host_system_name = host;
-            return host;
+            if (host == null) {
+                host = System.getenv("HOSTNAME");
+                if (host == null) {
+                    host = "undetermined";
+                }
+            }
         }
 
         // undetermined.
-        host_system_name = "undetermined";
-        return host_system_name;
+        //host_system_name = host;
+        //return host + "_test";
+        return host;
     }
-
 
     public boolean hasLicenseCode() {
         return license_code != null && !license_code.isEmpty();

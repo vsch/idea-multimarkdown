@@ -558,19 +558,19 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         String result = "<head>\n" +
                 "";
 
-        // load layout css
         final MultiMarkdownGlobalSettings globalSettings = MultiMarkdownGlobalSettings.getInstance();
-
-        if (!(globalSettings.useCustomCss(true) && globalSettings.includesLayoutCss.getValue())) {
-            result += "" +
-                    "<link rel=\"stylesheet\" href=\"" + globalSettings.getLayoutCssExternalForm(true) + "\">\n" +
-                    "";
-        }
 
         // load colors css
         if (!(globalSettings.useCustomCss(true) && globalSettings.includesColorsCss.getValue())) {
             result += "" +
-                    "<link rel=\"stylesheet\" href=\"" + globalSettings.getCssExternalForm(true) + "\">\n" +
+                    "<link rel=\"stylesheet\" href=\"" + globalSettings.getColorsCssExternalForm(true) + "\">\n" +
+                    "";
+        }
+
+        // load layout css
+        if (!(globalSettings.useCustomCss(true) && globalSettings.includesLayoutCss.getValue())) {
+            result += "" +
+                    "<link rel=\"stylesheet\" href=\"" + globalSettings.getLayoutCssExternalForm(true) + "\">\n" +
                     "";
         }
 
@@ -586,7 +586,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         // load custom css
         if (globalSettings.useCustomCss(true)) {
             result += "" +
-                    "<link rel=\"stylesheet\" href=\"" + globalSettings.getCssExternalForm(true) + "\">\n" +
+                    "<link rel=\"stylesheet\" href=\"" + globalSettings.getCustomCssExternalForm(true) + "\">\n" +
                     "";
         }
 

@@ -319,6 +319,21 @@ public class MultiMarkdownPsiImplUtil {
         return element;
     }
 
+    public static boolean isWikiLinkEquivalent(MultiMarkdownLinkRef element) {
+        String text = getElementText(EXPLICIT_LINK, element, LINK_REF_TEXT, null, null);
+        String linkRefTitle = getElementText(EXPLICIT_LINK, element, LINK_REF_TITLE, null, null);
+        String wikiLinkRef = null;
+
+        PsiReference reference = element.getReference();
+        PsiElement psiFile = reference == null ? null : reference.resolve();
+
+        if (psiFile != null && psiFile instanceof MultiMarkdownFile) {
+            FileReferenceLinkGitHubRules fileReferenceLink = new FileReferenceLinkGitHubRules(element.getContainingFile(), (PsiFile) psiFile);
+            wikiLinkRef = fileReferenceLink.getWikiPageRef();
+        }
+        return wikiLinkRef != null && linkRefTitle.isEmpty();
+    }
+
     @NotNull
     public static PsiElement changeToExplicitLink(MultiMarkdownWikiLink element) {
         String text = getElementText(WIKI_LINK, element, WIKI_LINK_TEXT, null, null);

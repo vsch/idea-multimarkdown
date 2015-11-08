@@ -46,14 +46,19 @@
     <version>1.2.0</version>
     <idea-version since-build="133.1711"/>
     <change-notes><![CDATA[
-    <ul><h3><b>1.2.0 - Licensed Features Added</b></h3>
-      <li>Fix not recognizing tables that have a divider and table cells that look like divider cells. (pegdown)</li>
-      <li>Fix Custom CSS was not loaded in new preview tab or html text.</li>
-      <li>Fix #58, wiki links with anchor references would show as unresolved.</li>
-      <li>Add MultiMarkdown style footnotes. The <code>[^n]</code> for reference and <code>[^n]: Footnote text</code>, for definition where n is one or more digit, letter, dash, dot or underscore.</li>
-      <li>Add licensing functionality.</li>
-      <li>Add Licensed explicit link refactoring, completion, find usages.</li>
-      <li>Add Licensed explicit image link refactoring, completion, find usages.</li>
+    <ul><h3><b>1.2.0 - Bug Fixes and Enhancements</b></h3>
+      <h4>Basic Edition</h4>
+      <li>Fix: not recognizing tables that have a divider and table cells that look like divider cells. (pegdown)</li>
+      <li>Fix: Custom CSS was not loaded in new preview tab or html text.</li>
+      <li>Fix: verbatim first line in task list item was cutting off first character if highlight.js option was selected.</li>
+      <li>Fix: #58, wiki links with anchor references would show as unresolved.</li>
+      <li>Add: MultiMarkdown style footnotes. The <code>[^n]</code> for reference and <code>[^n]: Footnote text</code>, for definition where n is one or more digit, letter, dash, dot or underscore.</li>
+      <h4>Enhanced Edition</h4>
+      <li>Add: Explicit link completions, refactoring, annotation for errors and quick fixes.</li>
+      <li>Add: Image link completions, refactoring, annotation for errors and quick fixes.</li>
+      <li>Add: GitHub Issues, Pull requests, Graphs and Pulse link references available in link completions.</li>
+      <li>Add: Intention action to change wiki link to explicit link.</li>
+      <li>Add: Explicit and Image links are GitHub wiki aware.</li>
     </ul>
     <ul><h3><b>1.1.13 - More GitHub integration, Bug Fixes &amp; Optimizations.</b></h3>
       <li>Fix now using FileBasedIndex to find files for link resolution. No longer need to mark wiki directories as source or resource roots</li>

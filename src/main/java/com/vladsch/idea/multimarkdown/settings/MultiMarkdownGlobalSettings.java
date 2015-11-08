@@ -30,7 +30,6 @@ import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.ui.UIUtil;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
-import com.vladsch.idea.multimarkdown.license.LicensedFeature;
 import org.apache.commons.codec.Charsets;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
@@ -62,9 +61,13 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     public static final String PREVIEW_FX_HIGHLIGHT_JS = "/com/vladsch/idea/multimarkdown/highlight.pack.js";
 
     public static final String NOTIFICATION_GROUP_ISSUES = "MultiMarkdown Alerts";
+    public static final String NOTIFICATION_GROUP_UPDATE = "MultiMarkdown Update";
 
-    /** A set of listeners to this object state changes. */
-    @Override public void dispose() {
+    /**
+     * A set of listeners to this object state changes.
+     */
+    @Override
+    public void dispose() {
 
     }
 
@@ -74,7 +77,8 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     public MultiMarkdownGlobalSettings() {
         // register to settings change on behalf of our listeners. If the UI changes and htmlTheme is Application UI then notify them
         UISettings.getInstance().addUISettingsListener(new UISettingsListener() {
-            @Override public void uiSettingsChanged(UISettings source) {
+            @Override
+            public void uiSettingsChanged(UISettings source) {
                 if (htmlTheme.getValue() == HTML_THEME_UI) {
                     notifier.notifyListeners();
                 }
@@ -126,9 +130,11 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     final public Settings.StringSetting customFxCss = settings.StringSetting("", "customFxCss");
     final public Settings.ElementSetting customCssEditorState = settings.ElementSetting(null, "customCssEditorState");
     final public Settings.ElementSetting customFxCssEditorState = settings.ElementSetting(null, "customFxCssEditorState");
-    final public Settings.BooleanSetting wasShownDarkBug = settings.BooleanSetting(false, "wasShownDarkBug", 0);
     final public Settings.BooleanSetting useOldPreview = settings.BooleanSetting(false, "useOldPreview", 0);
 
+    // notifications that are only shown once
+    final public Settings.BooleanSetting wasShownDarkBug = settings.BooleanSetting(false, "wasShownDarkBug", 0);
+    final public Settings.BooleanSetting wasShownLicensedAvailable = settings.BooleanSetting(false, "wasShownLicensedAvailable", 0);
 
     // TODO: add this option to pegdown
     final public Settings.BooleanSetting githubWikiLinks = settings.BooleanSetting(true, "githubWikiLinks", 0);
@@ -179,31 +185,41 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
         return UIUtil.isUnderDarcula();
     }
 
-    public @NotNull String getCssExternalForm(boolean isFxHtmlPreview) {
-        if (useCustomCss(isFxHtmlPreview)) {
-            String url = MultiMarkdownPlugin.getInstance().getUrlCustomFxCss();
-            if (url != null) return url;
-        }
+    public
+    @NotNull
+    String getCustomCssExternalForm(boolean isFxHtmlPreview) {
+        String url = MultiMarkdownPlugin.getInstance().getUrlCustomFxCss();
+        if (url != null) return url;
+        return getColorsCssExternalForm(isFxHtmlPreview);
+    }
+
+    @NotNull
+    public String getColorsCssExternalForm(boolean isFxHtmlPreview) {
         return isDarkHtmlPreview() ? MultiMarkdownPlugin.getInstance().getUrlDarculaFxCss() : MultiMarkdownPlugin.getInstance().getUrlDefaultFxCss();
     }
 
-    public @NotNull String getHljsCssExternalForm(boolean isFxHtmlPreview) {
+    @NotNull
+    public String getHljsCssExternalForm(boolean isFxHtmlPreview) {
         return isDarkHtmlPreview() ? MultiMarkdownPlugin.getInstance().getUrlHljsDarculaFxCss() : MultiMarkdownPlugin.getInstance().getUrlHljsDefaultFxCss();
     }
 
-    public @NotNull String getLayoutCssExternalForm(boolean isFxHtmlPreview) {
+    @NotNull
+    public String getLayoutCssExternalForm(boolean isFxHtmlPreview) {
         return MultiMarkdownPlugin.getInstance().getUrlLayoutFxCss();
     }
 
-    public @NotNull String getHighlighJsExternalForm(boolean isFxHtmlPreview) {
+    @NotNull
+    public String getHighlighJsExternalForm(boolean isFxHtmlPreview) {
         return MultiMarkdownPlugin.getInstance().getUrlHighlightJs();
     }
 
-    public @Nullable String getUrlCustomFont() {
+    @Nullable
+    public String getUrlCustomFont() {
         return MultiMarkdownPlugin.getInstance().getUrlCustomFont();
     }
 
-    public @NotNull String getCssFilePath(int htmlTheme, boolean isFxHtmlPreview) {
+    @NotNull
+    public String getCssFilePath(int htmlTheme, boolean isFxHtmlPreview) {
         if (isFxHtmlPreview) {
             return isDarkHtmlPreview(htmlTheme) ? PREVIEW_FX_STYLESHEET_DARK : PREVIEW_FX_STYLESHEET_LIGHT;
         } else {
@@ -211,7 +227,8 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
         }
     }
 
-    public @Nullable String getLayoutCssFilePath(boolean isFxHtmlPreview) {
+    @Nullable
+    public String getLayoutCssFilePath(boolean isFxHtmlPreview) {
         if (isFxHtmlPreview) {
             return PREVIEW_FX_STYLESHEET_LAYOUT;
         } else {
@@ -219,7 +236,8 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
         }
     }
 
-    public @Nullable String getHljsCssFilePath(int htmlTheme, boolean isFxHtmlPreview) {
+    @Nullable
+    public String getHljsCssFilePath(int htmlTheme, boolean isFxHtmlPreview) {
         if (isFxHtmlPreview) {
             return isDarkHtmlPreview(htmlTheme) ? PREVIEW_FX_HLJS_STYLESHEET_DARK : PREVIEW_FX_HLJS_STYLESHEET_LIGHT;
         } else {
@@ -227,16 +245,19 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
         }
     }
 
-    public @NotNull java.net.URL getCssFileURL(int htmlTheme, boolean isFxHtmlPreview) {
+    @NotNull
+    public java.net.URL getCssFileURL(int htmlTheme, boolean isFxHtmlPreview) {
         return MultiMarkdownGlobalSettings.class.getResource(getCssFilePath(htmlTheme, isFxHtmlPreview));
     }
 
-    public @Nullable java.net.URL getLayoutCssFileURL() {
+    @Nullable
+    public java.net.URL getLayoutCssFileURL() {
         String layoutCssFilePath = getLayoutCssFilePath(isFxHtmlPreview);
         return layoutCssFilePath == null ? null : MultiMarkdownGlobalSettings.class.getResource(layoutCssFilePath);
     }
 
-    public @Nullable java.net.URL getHljsCssFileURL(int htmlTheme, boolean isFxHtmlPreview) {
+    @Nullable
+    public java.net.URL getHljsCssFileURL(int htmlTheme, boolean isFxHtmlPreview) {
         String hljsCssFilePath = getHljsCssFilePath(htmlTheme, isFxHtmlPreview);
         return hljsCssFilePath == null ? null : MultiMarkdownGlobalSettings.class.getResource(hljsCssFilePath);
     }
@@ -245,7 +266,8 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     //    return MultiMarkdownGlobalSettings.class.getResource("/src/firebug-lite.js");
     //}
 
-    public @NotNull String getCssFileText(int htmlTheme, boolean isFxHtmlPreview) {
+    @NotNull
+    public String getCssFileText(int htmlTheme, boolean isFxHtmlPreview) {
         String htmlText = "";
         try {
             htmlText = Resources.toString(getCssFileURL(htmlTheme, isFxHtmlPreview), Charsets.UTF_8);
@@ -255,7 +277,8 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
         return htmlText;
     }
 
-    public @NotNull String getLayoutCssFileText() {
+    @NotNull
+    public String getLayoutCssFileText() {
         String htmlText = "";
         try {
             URL layoutCssFileURL = getLayoutCssFileURL();
@@ -266,7 +289,8 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
         return htmlText;
     }
 
-    public @NotNull String getHljsCssFileText(int htmlTheme, boolean isFxHtmlPreview) {
+    @NotNull
+    public String getHljsCssFileText(int htmlTheme, boolean isFxHtmlPreview) {
         String htmlText = "";
         try {
             URL hljsCssFileURL = getHljsCssFileURL(htmlTheme, isFxHtmlPreview);
@@ -281,19 +305,23 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
         return htmlText;
     }
 
-    public @NotNull String getCssFilePath(boolean isFxHtmlPreview) {
+    @NotNull
+    public String getCssFilePath(boolean isFxHtmlPreview) {
         return getCssFilePath(htmlTheme.getValue(), isFxHtmlPreview);
     }
 
-    public @NotNull java.net.URL getCssFileURL(boolean isFxHtmlPreview) {
+    @NotNull
+    public java.net.URL getCssFileURL(boolean isFxHtmlPreview) {
         return getCssFileURL(htmlTheme.getValue(), isFxHtmlPreview);
     }
 
-    public @NotNull String getCssFileText(boolean isFxHtmlPreview) {
+    @NotNull
+    public String getCssFileText(boolean isFxHtmlPreview) {
         return getCssFileText(htmlTheme.getValue(), isFxHtmlPreview);
     }
 
-    public @NotNull String getCssText(boolean isFxHtmlPreview) {
+    @NotNull
+    public String getCssText(boolean isFxHtmlPreview) {
         return useCustomCss(isFxHtmlPreview) ? (isFxHtmlPreview ? customFxCss.getValue() : customCss.getValue()) : getCssFileText(htmlTheme.getValue(), isFxHtmlPreview);
     }
 

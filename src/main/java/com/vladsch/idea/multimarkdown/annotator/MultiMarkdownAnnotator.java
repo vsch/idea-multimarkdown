@@ -47,6 +47,11 @@ import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement.*;
 public class MultiMarkdownAnnotator implements Annotator {
     private static final Logger LOGGER = Logger.getInstance(MultiMarkdownAnnotator.class);
 
+    protected static final int ANNOTATION_INFO = 0;
+    protected static final int ANNOTATION_WEAK_WARNING = 1;
+    protected static final int ANNOTATION_WARNING = 2;
+    protected static final int ANNOTATION_ERROR = 3;
+
     @Override
     public void annotate(@NotNull final PsiElement element, @NotNull AnnotationHolder holder) {
         //noinspection StatementWithEmptyBody
@@ -60,28 +65,70 @@ public class MultiMarkdownAnnotator implements Annotator {
             //MultiMarkdownWikiLink wikiLink = (MultiMarkdownWikiLink) element.getParent();
             //if (wikiLink != null) annotator = checkWikiLinkSwapRefTitle(wikiLink, holder);
         } else if (element instanceof MultiMarkdownLinkRef) {
-            if (MultiMarkdownPlugin.isLicensed()) {
-                FilePathInfo pathInfo = new FilePathInfo(element.getContainingFile().getVirtualFile());
-                if (pathInfo.isWikiPage()) {
-                    MultiMarkdownExplicitLink explicitLink = (MultiMarkdownExplicitLink) element.getParent();
-                    if (state.addingAlreadyOffered(TYPE_CHANGE_WIKI_LINK_QUICK_FIX_TO_EXPLICIT_LINK)) {
-                        state.annotator = state.holder.createInfoAnnotation(explicitLink.getTextRange(), MultiMarkdownBundle.message("annotation.link.change-to-wikilink"));
-                        state.annotator.registerFix(new ChangeExplicitLinkToWikiLinkQuickFix(explicitLink));
-                    }
-                }
-
-                annotateLinkRef((MultiMarkdownLinkRef) element, state);
-            }
+            addChangeExplicitLinkToWikiLink(element, state, ANNOTATION_INFO);
         } else if (element instanceof MultiMarkdownWikiPageRef) {
-            if (MultiMarkdownPlugin.isLicensed()) {
-                MultiMarkdownWikiLink wikiLink = (MultiMarkdownWikiLink) element.getParent();
-                if (state.addingAlreadyOffered(TYPE_CHANGE_WIKI_LINK_QUICK_FIX_TO_EXPLICIT_LINK)) {
-                    state.annotator = state.holder.createInfoAnnotation(wikiLink.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.change-to-linkref"));
-                    state.annotator.registerFix(new ChangeWikiLinkToExplicitLinkQuickFix(wikiLink));
-                }
-            }
+            addChangeWikiLinkToExplicitLink(element, state, ANNOTATION_INFO);
 
             annotateWikiLinkRef((MultiMarkdownWikiPageRef) element, state);
+        }
+    }
+    protected void addChangeWikiLinkToExplicitLink(@NotNull PsiElement element, AnnotationState state, int type) {
+        if (MultiMarkdownPlugin.isLicensed()) {
+            MultiMarkdownWikiLink wikiLink = (MultiMarkdownWikiLink) element.getParent();
+            if (state.addingAlreadyOffered(TYPE_CHANGE_WIKI_LINK_QUICK_FIX_TO_EXPLICIT_LINK)) {
+                switch (type) {
+                    case ANNOTATION_WEAK_WARNING:
+                        state.annotator = state.holder.createWeakWarningAnnotation(wikiLink.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.change-to-linkref"));
+                        break;
+
+                    case ANNOTATION_WARNING:
+                        state.annotator = state.holder.createWarningAnnotation(wikiLink.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.change-to-linkref"));
+                        break;
+
+                    case ANNOTATION_ERROR:
+                        state.annotator = state.holder.createWarningAnnotation(wikiLink.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.change-to-linkref"));
+                        break;
+
+                    case ANNOTATION_INFO:
+                    default:
+                        state.annotator = state.holder.createInfoAnnotation(wikiLink.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.change-to-linkref"));
+                        break;
+                }
+
+                state.annotator.registerFix(new ChangeWikiLinkToExplicitLinkQuickFix(wikiLink));
+            }
+        }
+    }
+    protected void addChangeExplicitLinkToWikiLink(@NotNull PsiElement element, AnnotationState state, int type) {
+        if (MultiMarkdownPlugin.isLicensed()) {
+            FilePathInfo pathInfo = new FilePathInfo(element.getContainingFile().getVirtualFile());
+            if (pathInfo.isWikiPage()) {
+                MultiMarkdownExplicitLink explicitLink = (MultiMarkdownExplicitLink) element.getParent();
+                if (state.addingAlreadyOffered(TYPE_CHANGE_WIKI_LINK_QUICK_FIX_TO_EXPLICIT_LINK)) {
+                    switch (type) {
+                        case ANNOTATION_WEAK_WARNING:
+                            state.annotator = state.holder.createWeakWarningAnnotation(explicitLink.getTextRange(), MultiMarkdownBundle.message("annotation.link.change-to-wikilink"));
+                            break;
+
+                        case ANNOTATION_WARNING:
+                            state.annotator = state.holder.createWarningAnnotation(explicitLink.getTextRange(), MultiMarkdownBundle.message("annotation.link.change-to-wikilink"));
+                            break;
+
+                        case ANNOTATION_ERROR:
+                            state.annotator = state.holder.createErrorAnnotation(explicitLink.getTextRange(), MultiMarkdownBundle.message("annotation.link.change-to-wikilink"));
+                            break;
+
+                        case ANNOTATION_INFO:
+                        default:
+                            state.annotator = state.holder.createInfoAnnotation(explicitLink.getTextRange(), MultiMarkdownBundle.message("annotation.link.change-to-wikilink"));
+                            break;
+                    }
+
+                    state.annotator.registerFix(new ChangeExplicitLinkToWikiLinkQuickFix(explicitLink));
+                }
+            }
+
+            annotateLinkRef((MultiMarkdownLinkRef) element, state);
         }
     }
 
@@ -127,7 +174,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                             }
                         } else if (accessibleWikiPageRefs.get()[0].getFileNameNoExtAsWikiRef().equals(wikiPageTextName)) {
                             if (state.alreadyOfferedTypes(TYPE_DELETE_WIKI_PAGE_TITLE_QUICK_FIX, TYPE_DELETE_WIKI_PAGE_REF_QUICK_FIX, TYPE_SWAP_WIKI_PAGE_REF_TITLE_QUICK_FIX)) {
-                                state.annotator = state.holder.createWeakWarningAnnotation(wikiPageText.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.swap-ref-title"));
+                                state.annotator = state.holder.createInfoAnnotation(wikiPageText.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.swap-ref-title"));
                                 if (state.addingAlreadyOffered(TYPE_DELETE_WIKI_PAGE_TITLE_QUICK_FIX)) state.annotator.registerFix(new DeleteWikiPageTitleQuickFix(element));
                                 if (state.addingAlreadyOffered(TYPE_DELETE_WIKI_PAGE_REF_QUICK_FIX)) state.annotator.registerFix(new DeleteWikiPageRefQuickFix(element));
                                 if (state.addingAlreadyOffered(TYPE_SWAP_WIKI_PAGE_REF_TITLE_QUICK_FIX)) state.annotator.registerFix(new SwapWikiPageRefTitleQuickFix(element));
@@ -135,7 +182,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                         }
                     } else if (wikiPageTextName.contains("#")) {
                         if (state.addingAlreadyOffered(TYPE_SWAP_WIKI_PAGE_REF_TITLE_QUICK_FIX)) {
-                            state.annotator = state.holder.createWeakWarningAnnotation(wikiPageText.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.swap-ref-title"));
+                            state.annotator = state.holder.createInfoAnnotation(wikiPageText.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.swap-ref-title"));
                             state.annotator.registerFix(new SwapWikiPageRefTitleQuickFix(element));
                         }
                     }
@@ -183,8 +230,10 @@ public class MultiMarkdownAnnotator implements Annotator {
                     .all();
 
             if (accessibleLinkRefs.size() == 1) {
-                // TODO: add quick fix to change to wiki from explicit link if this is a wiki page
-
+                // add quick fix to change wiki to explicit link
+                if (containingFile.isWikiPage() && MultiMarkdownPsiImplUtil.isWikiLinkEquivalent(element)) {
+                    addChangeWikiLinkToExplicitLink(element, state, ANNOTATION_WEAK_WARNING);
+                }
             } else {
                 FileReference elementFileReference = new FileReference(element.getContainingFile());
                 String gitHubRepoPath = elementFileReference.getGitHubRepoPath();
@@ -335,7 +384,10 @@ public class MultiMarkdownAnnotator implements Annotator {
                     state.annotator.registerFix(new ChangeLinkRefQuickFix(element, newLinkRef, ChangeLinkRefQuickFix.ADD_PAGE_REF, RENAME_KEEP_TEXT));
                 }
 
-                // TODO: add quick fix to change wiki to explicit link
+                // add quick fix to change wiki to explicit link
+                if (state.addingAlreadyOffered(TYPE_CHANGE_WIKI_LINK_QUICK_FIX_TO_EXPLICIT_LINK)) {
+                    state.annotator.registerFix(new ChangeWikiLinkToExplicitLinkQuickFix(wikiLink));
+                }
             }
         } else {
             if (wikiLink != null) checkWikiLinkSwapRefTitle(wikiLink, state);
@@ -358,9 +410,12 @@ public class MultiMarkdownAnnotator implements Annotator {
                 state.annotator = state.holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.github-only-on-wiki-page"));
                 state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
 
-                // TODO: add quick fix to change wiki to explicit link
+                // add quick fix to change wiki to explicit link
+                if (state.addingAlreadyOffered(TYPE_CHANGE_WIKI_LINK_QUICK_FIX_TO_EXPLICIT_LINK)) {
+                    state.annotator.registerFix(new ChangeWikiLinkToExplicitLinkQuickFix(wikiLink));
+                }
             } else if (accessibleWikiPageRefs.size() == 1) {
-                // TODO: add quick fix to change wiki to explicit link
+                // add quick fix to change wiki to explicit link
             } else {
                 if (accessibleWikiPageRefs.size() > 1) {
                     state.warningsOnly = false;
@@ -488,6 +543,11 @@ public class MultiMarkdownAnnotator implements Annotator {
                                 if (psiFile != null && state.addingAlreadyOffered(TYPE_RENAME_FILE_QUICK_FIX, referenceLink.getFullFilePath(), reasons.targetNotWikiPageExtFixed())) {
                                     state.annotator.registerFix(new RenameFileQuickFix(psiFile, null, reasons.targetNotWikiPageExtFixed()));
                                 }
+                            }
+
+                            // add quick fix to change wiki to explicit link
+                            if (state.addingAlreadyOffered(TYPE_CHANGE_WIKI_LINK_QUICK_FIX_TO_EXPLICIT_LINK)) {
+                                state.annotator.registerFix(new ChangeWikiLinkToExplicitLinkQuickFix(wikiLink));
                             }
                         }
 

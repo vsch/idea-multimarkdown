@@ -274,6 +274,23 @@ public class MultiMarkdownPathResolver {
     }
 
     @Nullable
+    public static Object openLink(@NotNull String href) {
+        if (Desktop.isDesktopSupported()) {
+            try {
+                Object foundFile = new URI(href);
+                Desktop.getDesktop().browse((URI) foundFile);
+                return foundFile;
+            } catch (URISyntaxException ex) {
+                // invalid URI, just log
+                logger.info("URISyntaxException on '" + href + "'" + ex.toString());
+            } catch (IOException ex) {
+                logger.info("IOException on '" + href + "'" + ex.toString());
+            }
+        }
+        return null;
+    }
+
+    @Nullable
     public static String getGitHubDocumentURL(@NotNull Project project, @NotNull Document document, boolean noExtension) {
         MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
         String githubhref = null;

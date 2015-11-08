@@ -78,6 +78,8 @@ public class LicenseAgent {
     private static final String LICENSE_FEATURES = "license_features";
     private static final String LICENSE_FEATURE_LIST = "feature_list";
     private static final String ACTIVATION_CODE = "activation_code";
+    private static final String HOST_PRODUCT = "host_product";
+    private static final String HOST_NAME = "host_name";
     private static final String ACTIVATED_ON = "activated_on";
     private static final String STATUS = "status";
     private static final String MESSAGE = "message";
@@ -100,6 +102,23 @@ public class LicenseAgent {
     private String license_type;
     private int license_features;
     private JsonObject feature_list;
+
+    public LicenseAgent(LicenseAgent other) {
+        updateFrom(other);
+    }
+
+    public void updateFrom(LicenseAgent other) {
+        this.license_code = other.license_code;
+        this.activation_code = other.activation_code;
+        this.activation = other.activation;
+        this.license_expires = other.license_expires;
+        this.product_version = other.product_version;
+        this.json = other.json;
+        this.remove_license = other.remove_license;
+        this.license_type = other.license_type;
+        this.license_features = other.license_features;
+        this.feature_list = other.feature_list;
+    }
 
     public boolean isRemoveLicense() {
         return remove_license;
@@ -192,20 +211,6 @@ public class LicenseAgent {
 
     public LicenseAgent() {
 
-    }
-
-    public LicenseAgent(LicenseAgent other) {
-        updateFrom(other);
-    }
-
-    public void updateFrom(LicenseAgent other) {
-        this.license_code = other.license_code;
-        this.activation_code = other.activation_code;
-        this.activation = other.activation;
-        this.license_expires = other.license_expires;
-        this.product_version = other.product_version;
-        this.json = other.json;
-        this.remove_license = other.remove_license;
     }
 
     public boolean getLicenseCode(LicenseRequest licenseRequest) {
@@ -324,6 +329,8 @@ public class LicenseAgent {
                     && activation.containsKey(LICENSE_FEATURES)
                     && activation.containsKey(LICENSE_FEATURE_LIST)
                     && activation.containsKey(PRODUCT_VERSION)
+                    && activation.containsKey(HOST_NAME)
+                    && activation.containsKey(HOST_PRODUCT)
                     && activation.getString(LICENSE_TYPE) != null
                     && activation.getInt(LICENSE_FEATURES) != 0
                     ) {
@@ -364,6 +371,22 @@ public class LicenseAgent {
     }
 
     @NotNull
+    public String getHostName() {
+        if (activation != null && activation.containsKey(HOST_NAME)) {
+            return activation.getString(HOST_NAME);
+        }
+        return "";
+    }
+
+    @NotNull
+    public String getHostProduct() {
+        if (activation != null && activation.containsKey(HOST_PRODUCT)) {
+            return activation.getString(HOST_PRODUCT);
+        }
+        return "";
+    }
+
+    @NotNull
     public String getActivatedOn() {
         if (activation != null && activation.containsKey(ACTIVATED_ON)) {
             return activation.getString(ACTIVATED_ON);
@@ -390,7 +413,10 @@ public class LicenseAgent {
     public boolean isActivationExpired() {
         // see if the activation has expired
         if (activation != null) {
-            if (product_version == null || !product_version.equals(MultiMarkdownPlugin.getProductVersion())) {
+            if (product_version == null || !product_version.equals(MultiMarkdownPlugin.getProductVersion())
+                    || !getHostName().equals(LicenseRequest.getHostName())
+                    || !getHostProduct().equals(LicenseRequest.getHostProduct())
+                    ) {
                 return true;
             }
 
