@@ -1,7 +1,6 @@
 package com.vladsch.idea.multimarkdown.language;
 
 import com.intellij.application.options.IndentOptionsEditor;
-import com.intellij.application.options.SmartIndentOptionsEditor;
 import com.intellij.lang.Language;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.io.FileUtil;
@@ -9,7 +8,6 @@ import com.intellij.psi.codeStyle.CodeStyleSettingsCustomizable;
 import com.intellij.psi.codeStyle.LanguageCodeStyleSettingsProvider;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownLanguage;
-import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,11 +39,7 @@ public class MultiMarkdownLanguageCodeStyleSettingsProvider extends LanguageCode
 
     @Nullable
     public IndentOptionsEditor getIndentOptionsEditor() {
-        if (MultiMarkdownPlugin.getInstance().isLicensed()) {
-            return new SmartIndentOptionsEditor();
-        } else {
-            return new IndentOptionsEditor();
-        }
+        return new IndentOptionsEditor();
     }
 
     @Override

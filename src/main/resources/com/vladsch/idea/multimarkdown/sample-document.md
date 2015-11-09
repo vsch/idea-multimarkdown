@@ -1,6 +1,7 @@
 *[ABBR]: Abbreviated Text
 Abbreviated Text: ABBR
-Auto link: <http://example.com> Inline `code` 
+Auto link: <http://example.com> 
+Inline `code` 
 Bold Italic Text: ***bold italic*** and ***normal text
 Bold: **bold**, ***bold italic***, and **normal text
 Escaped Character: \* \_ \` \& \[ \] \< \> \! \# \\ \" \' \. \- \( \) \{ \} \: \| \~
@@ -9,7 +10,7 @@ Footnote Reference[^1]
 Italic Text: *italic* and this one is not *italic
 Image: ![My image](http://www.foo.bar/image.png) 
 Inline HTML: <b>bold</b>
-Mail Link: me@example.com
+Mail Link: <me@example.com>
 Smart Characters: ... -- --- a's b's
 Smart quotes 'this is a quote' 
 Strikethrough: ~~strikethrough **strikethrough bold** *strikethrough italic* ***strikethrough bold italic***~~

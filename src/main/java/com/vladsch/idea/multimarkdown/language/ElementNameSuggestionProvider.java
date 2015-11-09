@@ -87,11 +87,11 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
             }
 
             return suggestedNameInfo;
-        } else if (element instanceof MultiMarkdownWikiPageTitle) {
+        } else if (element instanceof MultiMarkdownWikiPageText) {
             // this is a rename on a wiki page title
             // always activate spelling suggestions for renaming wiki page refs
             // Get suggestions from the name of the pageRef text
-            SuggestionList suggestionList = getWikiPageTitleSuggestions(element.getParent());
+            SuggestionList suggestionList = getWikiPageTextSuggestions(element.getParent());
             if (suggestionList.size() > 0) {
                 ContainerUtil.addAllNotNull(result, suggestionList.asList());
                 suggestedNameInfo = SuggestedNameInfo.NULL_INFO;
@@ -130,17 +130,17 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
         return null;
     }
 
-    public static SuggestionList getWikiPageTitleSuggestions(@NotNull PsiElement parent) {
+    public static SuggestionList getWikiPageTextSuggestions(@NotNull PsiElement parent) {
         SuggestionList suggestionList = new SuggestionList(parent.getProject());
         MultiMarkdownWikiPageRef wikiPageRef = (MultiMarkdownWikiPageRef) MultiMarkdownPsiImplUtil.findChildByType(parent, MultiMarkdownTypes.WIKI_LINK_REF);
-        MultiMarkdownWikiPageTitle wikiPageTitle = (MultiMarkdownWikiPageTitle) MultiMarkdownPsiImplUtil.findChildByType(parent, MultiMarkdownTypes.WIKI_LINK_TITLE);
+        MultiMarkdownWikiPageText wikiPageText = (MultiMarkdownWikiPageText) MultiMarkdownPsiImplUtil.findChildByType(parent, MultiMarkdownTypes.WIKI_LINK_TEXT);
 
         SuggestionList originalList = new SuggestionList(parent.getProject());
 
-        if (wikiPageTitle != null) {
-            String text = wikiPageTitle.getName();
+        if (wikiPageText != null) {
+            String text = wikiPageText.getName();
             if (text != null) {
-                text = text.replace("IntellijIdeaRulezzz ", "").trim();
+                text = text.replace(MultiMarkdownCompletionContributor.DUMMY_IDENTIFIER, "").trim();
                 if (!text.isEmpty()) {
                     originalList.add(text);
                     suggestionList.add(originalList);
@@ -158,11 +158,9 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
                     originalList.add(FilePathInfo.linkRefNoAnchor(text));
                     originalList.add(FilePathInfo.linkRefNoAnchor(text) + ": " + FilePathInfo.linkRefAnchorNoHash(text));
 
-                    SuggestionList anchoredList = new SuggestionList(originalList.getProject())
-                            .add(FilePathInfo.linkRefNoAnchor(text));
+                    SuggestionList anchoredList = new SuggestionList(originalList.getProject()).add(FilePathInfo.linkRefNoAnchor(text));
 
-                    SuggestionList anchorList = new SuggestionList(originalList.getProject())
-                            .add(FilePathInfo.linkRefAnchorNoHash(text));
+                    SuggestionList anchorList = new SuggestionList(originalList.getProject()).add(FilePathInfo.linkRefAnchorNoHash(text));
 
                     anchoredList.add(anchoredList.sequenceFixers(SuggestCleanSpacedWords, SuggestCapSpacedWords));
                     anchorList.add(anchorList.sequenceFixers(SuggestCleanSpacedWords, SuggestCapSpacedWords));
@@ -190,15 +188,14 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
             }
         }
 
-        suggestionList = originalList
-                .add(suggestionList.chainFixers(SuggestCleanSpacedWords, SuggestSpelling)
-                        , suggestionList.sequenceFixers(
-                                SuggestCleanSpacedWords, SuggestCapSpacedWords, SuggestLowerSpacedWords
-                                //, SuggestCleanDashedWords, SuggestCapDashedWords
-                                //, SuggestCleanSplicedWords, SuggestCapSplicedWords
-                        )
+        suggestionList = originalList.add(suggestionList.chainFixers(SuggestCleanSpacedWords, SuggestSpelling)
+                , suggestionList.sequenceFixers(
+                        SuggestCleanSpacedWords, SuggestCapSpacedWords, SuggestLowerSpacedWords
+                        //, SuggestCleanDashedWords, SuggestCapDashedWords
+                        //, SuggestCleanSplicedWords, SuggestCapSplicedWords
                 )
-        ;
+        );
+
 
         return suggestionList;
     }

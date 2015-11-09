@@ -28,14 +28,13 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.ProcessingContext;
+import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
 import com.vladsch.idea.multimarkdown.MultiMarkdownLanguage;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
+import com.vladsch.idea.multimarkdown.psi.*;
 import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownPsiImplUtil;
 import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownReferenceWikiPageRef;
 import com.vladsch.idea.multimarkdown.spellchecking.SuggestionList;
@@ -49,26 +48,37 @@ import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.*;
 
 public class MultiMarkdownCompletionContributor extends CompletionContributor {
     private static final Logger logger = Logger.getLogger(MultiMarkdownCompletionContributor.class);
+    public static final String DUMMY_IDENTIFIER = "\u001F";
+
+    @Override
+    public void beforeCompletion(@NotNull CompletionInitializationContext context) {
+        context.setDummyIdentifier(DUMMY_IDENTIFIER);
+    }
 
     public MultiMarkdownCompletionContributor() {
         extend(CompletionType.BASIC,
                 PlatformPatterns.psiElement(PsiElement.class).withLanguage(MultiMarkdownLanguage.INSTANCE),
                 new CompletionProvider<CompletionParameters>() {
                     public void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet resultSet) {
-                        PsiElement element = parameters.getPosition();
+                        PsiElement elementPos = parameters.getPosition();
                         int offset = parameters.getOffset();
                         //logger.info("Completion for " + element + " at pos " + String.valueOf(offset));
 
+                        PsiElement element = elementPos;
+                        while (element instanceof LeafPsiElement) {
+                            element = element.getParent();
+                        }
+
                         IElementType elementType = element.getNode().getElementType();
 
-                        if (elementType == WIKI_LINK_TITLE) {
+                        if (elementType == WIKI_LINK_TEXT) {
                             PsiElement parent = element.getParent();
                             while (parent != null && !(parent instanceof MultiMarkdownWikiLink) && !(parent instanceof MultiMarkdownFile)) {
                                 parent = parent.getParent();
                             }
 
                             if (parent != null && parent instanceof MultiMarkdownWikiLink) {
-                                SuggestionList suggestionList = ElementNameSuggestionProvider.getWikiPageTitleSuggestions(parent);
+                                SuggestionList suggestionList = ElementNameSuggestionProvider.getWikiPageTextSuggestions(parent);
 
                                 for (String suggestion : suggestionList.asList()) {
                                     resultSet.addElement(LookupElementBuilder.create(suggestion)

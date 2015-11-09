@@ -32,14 +32,6 @@ public class MultiMarkdownParser implements PsiParser {
     public void parseLightImpl(IElementType root, PsiBuilder builder) {
         if (root == WIKI_LINK) {
             parseWikiLink(builder);
-        } else if (root == WIKI_LINK_REF) {
-            PsiBuilder.Marker wikiPageRef = builder.mark();
-            builder.advanceLexer();
-            wikiPageRef.done(WIKI_LINK_REF);
-        } else if (root == WIKI_LINK_TITLE) {
-            PsiBuilder.Marker wikiPageRef = builder.mark();
-            builder.advanceLexer();
-            wikiPageRef.done(WIKI_LINK_TITLE);
         } else {
             parseRoot(root, builder);
         }
@@ -73,48 +65,44 @@ public class MultiMarkdownParser implements PsiParser {
         builder.advanceLexer();
 
         // creole syntax ref then title, github syntax either ref or title comes first
-        if (builder.getTokenType() == WIKI_LINK_REF) {
+        if (builder.getTokenType() == WIKI_LINK_REF || builder.getTokenType() == WIKI_LINK_REF_ANCHOR_MARKER) {
             PsiBuilder.Marker marker = builder.mark();
-            builder.advanceLexer();
+            if (builder.getTokenType() == WIKI_LINK_REF) builder.advanceLexer();
             marker.done(WIKI_LINK_REF);
 
             if (builder.getTokenType() == WIKI_LINK_REF_ANCHOR_MARKER) {
                 builder.advanceLexer();
-                if (builder.getTokenType() == WIKI_LINK_REF_ANCHOR) {
-                    PsiBuilder.Marker anchor = builder.mark();
-                    builder.advanceLexer();
-                    anchor.done(WIKI_LINK_REF_ANCHOR);
-                }
+                PsiBuilder.Marker anchor = builder.mark();
+                if (builder.getTokenType() == WIKI_LINK_REF_ANCHOR) builder.advanceLexer();
+                anchor.done(WIKI_LINK_REF_ANCHOR);
             }
         }
 
-        if (builder.getTokenType() == WIKI_LINK_TITLE) {
+        if (builder.getTokenType() == WIKI_LINK_TEXT) {
             PsiBuilder.Marker marker = builder.mark();
             builder.advanceLexer();
-            marker.done(WIKI_LINK_TITLE);
+            marker.done(WIKI_LINK_TEXT);
         }
 
         if (builder.getTokenType() == WIKI_LINK_SEPARATOR) {
             builder.advanceLexer();
-            if (builder.getTokenType() == WIKI_LINK_REF) {
-                PsiBuilder.Marker marker = builder.mark();
-                builder.advanceLexer();
-                marker.done(WIKI_LINK_REF);
 
+            if (builder.getTokenType() == WIKI_LINK_REF || builder.getTokenType() == WIKI_LINK_REF_ANCHOR_MARKER) {
+                PsiBuilder.Marker marker = builder.mark();
+                if (builder.getTokenType() == WIKI_LINK_REF) builder.advanceLexer();
+                marker.done(WIKI_LINK_REF);
                 if (builder.getTokenType() == WIKI_LINK_REF_ANCHOR_MARKER) {
                     builder.advanceLexer();
-                    if (builder.getTokenType() == WIKI_LINK_REF_ANCHOR) {
-                        PsiBuilder.Marker anchor = builder.mark();
-                        builder.advanceLexer();
-                        anchor.done(WIKI_LINK_REF_ANCHOR);
-                    }
+                    PsiBuilder.Marker anchor = builder.mark();
+                    if (builder.getTokenType() == WIKI_LINK_REF_ANCHOR) builder.advanceLexer();
+                    anchor.done(WIKI_LINK_REF_ANCHOR);
                 }
             }
 
-            if (builder.getTokenType() == WIKI_LINK_TITLE) {
+            if (builder.getTokenType() == WIKI_LINK_TEXT) {
                 PsiBuilder.Marker marker = builder.mark();
                 builder.advanceLexer();
-                marker.done(WIKI_LINK_TITLE);
+                marker.done(WIKI_LINK_TEXT);
             }
         }
 

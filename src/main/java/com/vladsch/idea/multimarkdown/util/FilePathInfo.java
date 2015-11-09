@@ -30,7 +30,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     private static final Logger logger = org.apache.log4j.Logger.getLogger(FilePathInfo.class);
     public static final String WIKI_PAGE_EXTENSION = ".md";
     public static final String WIKI_HOME_EXTENTION = ".wiki";
-    public static final String WIKI_HOME_NAME = "wiki";
+    public static final String GITHUB_WIKI_HOME_DIRNAME = "wiki";
     public static final String GITHUB_ISSUES_NAME = "issues";
     public static final String GITHUB_GRAPHS_NAME = "graphs";
     public static final String GITHUB_PULSE_NAME = "pulse";
@@ -39,6 +39,19 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     public static final String[] MARKDOWN_EXTENSIONS = MultiMarkdownFileTypeFactory.EXTENSIONS;
     public static final String[] WIKI_PAGE_EXTENSIONS = { MultiMarkdownFileTypeFactory.DEFAULT_EXTENSION };
 
+    public static final String GITHUB_WIKI_REL_OFFSET = "../../";
+
+    public static final String[] GITHUB_LINKS = {
+            GITHUB_WIKI_HOME_DIRNAME,
+            GITHUB_ISSUES_NAME,
+            GITHUB_GRAPHS_NAME,
+            GITHUB_PULSE_NAME,
+            GITHUB_PULLS_NAME,
+    };
+
+    public static final String GITHUB_WIKI_REL_HOME = GITHUB_WIKI_REL_OFFSET + GITHUB_WIKI_HOME_DIRNAME;
+
+    private final int projHomeEnd;
     private final int wikiHomeEnd;
     private final int nameStart;
     private final int nameEnd;
@@ -55,11 +68,33 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
         int lastSep;
         this.nameStart = (lastSep = filePath.lastIndexOf('/')) < 0 ? 0 : (lastSep == filePath.length() - 1 ? lastSep : lastSep + 1);
 
-        int ghWikiHomeEnd = (ghWikiHomeEnd = filePath.lastIndexOf(WIKI_HOME_NAME + "/", nameStart)) >= nameStart || ghWikiHomeEnd < 0 || (ghWikiHomeEnd > 0 && filePath.charAt(ghWikiHomeEnd - 1) != '/') ? 0 : ghWikiHomeEnd + WIKI_HOME_NAME.length();
+        // github wiki home will be like ..../dirname/dirname.wiki
+        int wikiHomeEnd = (wikiHomeEnd = filePath.lastIndexOf(WIKI_HOME_EXTENTION + "/", nameStart)) >= nameStart || wikiHomeEnd < 0 ? 0 : wikiHomeEnd;
+        int projHomeEnd = 0;
+        if (wikiHomeEnd > 0) {
+            int wikiDirNameStart = filePath.lastIndexOf('/', wikiHomeEnd);
+            if (wikiDirNameStart > 1) {
+                String wikiDirName = filePath.substring(wikiDirNameStart + 1, wikiHomeEnd);
+                // now previous to start has to be the same directory
+                int mainProjDirStart = filePath.lastIndexOf('/', wikiDirNameStart - 1);
+                if (mainProjDirStart >= 0) {
+                    String mainProjDirName = filePath.substring(mainProjDirStart + 1, wikiDirNameStart);
+                    if (mainProjDirName.equals(wikiDirName)) {
+                        projHomeEnd = wikiDirNameStart;
+                        wikiHomeEnd += WIKI_HOME_EXTENTION.length();
+                    } else {
+                        wikiHomeEnd = 0;
+                    }
+                } else {
+                    wikiHomeEnd = 0;
+                }
+            } else {
+                wikiHomeEnd = 0;
+            }
+        }
 
-        int wikiHomeEnd = (wikiHomeEnd = filePath.lastIndexOf(WIKI_HOME_EXTENTION + "/", nameStart)) >= nameStart || wikiHomeEnd < 0 ? 0 : wikiHomeEnd + WIKI_HOME_EXTENTION.length();
-
-        this.wikiHomeEnd = wikiHomeEnd > ghWikiHomeEnd ? wikiHomeEnd : ghWikiHomeEnd;
+        this.wikiHomeEnd = wikiHomeEnd;
+        this.projHomeEnd = projHomeEnd;
 
         // if file name ends in . then it has no extension and the . is part of its name.
         int extStart;
@@ -73,6 +108,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     }
 
     public FilePathInfo(@NotNull FilePathInfo other) {
+        this.projHomeEnd = other.projHomeEnd;
         this.wikiHomeEnd = other.wikiHomeEnd;
         this.nameStart = other.nameStart;
         this.nameEnd = other.nameEnd;
@@ -96,6 +132,14 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
         return fileNameContainsAnchor() && withAnchorNameEnd + 1 < filePath.length() ? filePath.substring(withAnchorNameEnd + 1) : getExt();
     }
 
+    final public boolean hasWithAnchorExt() {
+        return fileNameContainsAnchor() && withAnchorNameEnd + 1 < filePath.length();
+    }
+
+    final public boolean hasPureAnchor() {
+        return fileNameContainsAnchor() && (withAnchorNameEnd == nameEnd || withAnchorNameEnd + 1 >= filePath.length());
+    }
+
     @NotNull
     final public String getWithAnchorExtWithDot() {
         return fileNameContainsAnchor() && withAnchorNameEnd < filePath.length() ? filePath.substring(withAnchorNameEnd) : getExtWithDot();
@@ -109,6 +153,10 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     @NotNull
     final public String getAnchor() {
         return anchorStart < filePath.length() ? filePath.substring(anchorStart) : "";
+    }
+
+    public boolean hasAnchor() {
+        return anchorStart < filePath.length();
     }
 
     final public boolean isImageExt() {
@@ -161,7 +209,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     }
 
     final public boolean isWikiHome() {
-        return filePath.endsWith(WIKI_HOME_EXTENTION) || getFileName().equals(WIKI_HOME_NAME);
+        return filePath.endsWith(WIKI_HOME_EXTENTION) || getFileName().equals(GITHUB_WIKI_HOME_DIRNAME);
     }
 
     @NotNull
@@ -207,8 +255,17 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
         return wikiHomeEnd <= 0 ? "" : filePath.substring(0, wikiHomeEnd);
     }
 
+    @NotNull
+    final public String getProjectHome() {
+        return projHomeEnd <= 0 ? "" : filePath.substring(0, projHomeEnd);
+    }
+
     public String getLinkRefFromWikiHome() {
         return wikiHomeEnd <= 0 ? filePath : filePath.substring(wikiHomeEnd + 1);
+    }
+
+    public String getLinkRefFromProjectHome() {
+        return projHomeEnd <= 0 ? filePath : filePath.substring(projHomeEnd + 1);
     }
 
     final public int getUpDirectoriesToWikiHome() {
@@ -362,7 +419,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
 
     protected static class WikiPageWikiHomeLinkResolver extends FilePathInfo.LinkRefResolver {
         public WikiPageWikiHomeLinkResolver() {
-            super("..", WIKI_HOME_NAME);
+            super("..", GITHUB_WIKI_HOME_DIRNAME);
         }
 
         @Override
@@ -381,7 +438,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
 
     protected static class MarkdownWikiHomeLinkResolver extends FilePathInfo.LinkRefResolver {
         public MarkdownWikiHomeLinkResolver() {
-            super("..", "..", WIKI_HOME_NAME);
+            super("..", "..", GITHUB_WIKI_HOME_DIRNAME);
         }
 
         @Override

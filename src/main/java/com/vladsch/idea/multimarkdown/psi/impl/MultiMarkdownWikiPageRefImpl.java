@@ -40,9 +40,8 @@ public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl 
     @NotNull
     @Override
     public String getMissingElementNamespace() {
-        FilePathInfo filePathInfo = new FilePathInfo(getContainingFile().getVirtualFile());
-        String wikiHome = filePathInfo.getWikiHome();
-        return MISSING_ELEMENT_NAME_SPACE + (wikiHome.isEmpty() ? wikiHome : wikiHome + "::");
+        assert getParent() instanceof MultiMarkdownWikiLink;
+        return ((MultiMarkdownWikiLink) getParent()).getMissingElementNameSpace(MISSING_ELEMENT_NAME_SPACE, false);
     }
 
     public MultiMarkdownWikiPageRefImpl(ASTNode node) {
@@ -66,14 +65,14 @@ public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl 
 
     @Override
     public String getFileNameWithAnchor() {
-        String anchorText = MultiMarkdownPsiImplUtil.getPageRefAnchor((MultiMarkdownWikiLink) getParent());
+        String anchorText = MultiMarkdownPsiImplUtil.getLinkRefAnchor(getParent());
         FilePathInfo pathInfo = new FilePathInfo((getName() == null ? "" : getName()) + (anchorText.isEmpty() ? anchorText : "#" + anchorText));
         return FilePathInfo.wikiRefAsFileNameWithExt(pathInfo.getFileName()) + pathInfo.getAnchor();
     }
 
     @Override
     public String getNameWithAnchor() {
-        return MultiMarkdownPsiImplUtil.getPageRefWithAnchor((MultiMarkdownWikiLink) getParent());
+        return MultiMarkdownPsiImplUtil.getLinkRefWithAnchor(getParent());
     }
 
     @Override
@@ -82,17 +81,17 @@ public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl 
         MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(getProject());
         if (projectComponent == null) return this;
 
-        return (MultiMarkdownNamedElement) setName(newName, projectComponent.getRefactoringRenameFlags() == RENAME_NO_FLAGS ? REASON_FILE_RENAMED : projectComponent.getRefactoringRenameFlags());
+        return (MultiMarkdownNamedElement) setName(newName, projectComponent.getRefactoringRenameFlags(REASON_FILE_RENAMED));
     }
 
     @Override
     public boolean isMemberInplaceRenameAvailable(PsiElement context) {
-        return false;//((MultiMarkdownReferenceWikiPageRef)reference).isResolveRefMissing();
+        return false;
     }
 
     @Override
     public boolean isInplaceRenameAvailable(PsiElement context) {
-        return false;//((MultiMarkdownReferenceWikiPageRef)reference).isResolveRefMissing();
+        return false;
     }
 
     @Override
@@ -101,14 +100,9 @@ public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl 
         if (projectComponent == null) return this;
 
         if (projectComponent.getRefactoringRenameFlags() != RENAME_NO_FLAGS) renameFlags = projectComponent.getRefactoringRenameFlags();
-        else if (((MultiMarkdownReferenceWikiPageRef) reference).isResolveRefMissing()) renameFlags &= ~RENAME_KEEP_ANCHOR;
+        else if (reference.isResolveRefMissing()) renameFlags &= ~RENAME_KEEP_ANCHOR;
 
-        MultiMarkdownNamedElement element = MultiMarkdownPsiImplUtil.setName(this, newName, renameFlags);
-        //logger.info("setName on " + this.toString() + " from " + oldName + " to " + element.getName());
-        //reference.notifyNamedElementChange(this, element);
-        //reference.invalidateResolveResults();
-
-        return element;
+        return MultiMarkdownPsiImplUtil.setName(this, newName, renameFlags);
     }
 
     @Override

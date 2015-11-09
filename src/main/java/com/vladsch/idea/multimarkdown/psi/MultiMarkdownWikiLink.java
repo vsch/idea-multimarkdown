@@ -22,10 +22,12 @@ package com.vladsch.idea.multimarkdown.psi;
 
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
+import org.jetbrains.annotations.NotNull;
 
 public interface MultiMarkdownWikiLink extends PsiElement {
-    String getPageTitle();
+    String getPageText();
     String getPageRef();
     ItemPresentation getPresentation();
     String getDisplayName();
+    @NotNull String getMissingElementNameSpace(@NotNull String prefix, boolean addLinkRef);
 }

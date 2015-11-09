@@ -24,25 +24,23 @@ import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageTitle;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageText;
 import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-public class MultiMarkdownWikiPageTitleImpl extends MultiMarkdownNamedElementImpl implements MultiMarkdownWikiPageTitle {
-    private static final Logger logger = Logger.getLogger(MultiMarkdownWikiPageTitleImpl.class);
-    protected static final String MISSING_ELEMENT_NAME_SPACE = "wiki-title::";
+public class MultiMarkdownWikiPageTextImpl extends MultiMarkdownNamedElementImpl implements MultiMarkdownWikiPageText {
+    private static final Logger logger = Logger.getLogger(MultiMarkdownWikiPageTextImpl.class);
+    protected static final String MISSING_ELEMENT_NAME_SPACE = "wiki-text::";
 
     @NotNull
     @Override
     public String getMissingElementNamespace() {
-        String pageRef = MultiMarkdownPsiImplUtil.getPageRefWithAnchor((MultiMarkdownWikiLink) getParent());
-        FilePathInfo filePathInfo = new FilePathInfo(getContainingFile().getVirtualFile());
-        String wikiHome = filePathInfo.getWikiHome();
-        return MISSING_ELEMENT_NAME_SPACE + (wikiHome.isEmpty() ? wikiHome : wikiHome + "::") + (pageRef.isEmpty() ? pageRef : pageRef + "::");
+        assert getParent() instanceof MultiMarkdownWikiLink;
+        return ((MultiMarkdownWikiLink) getParent()).getMissingElementNameSpace(MISSING_ELEMENT_NAME_SPACE, true);
     }
 
-    public MultiMarkdownWikiPageTitleImpl(ASTNode node) {
+    public MultiMarkdownWikiPageTextImpl(ASTNode node) {
         super(node);
     }
 
@@ -73,6 +71,6 @@ public class MultiMarkdownWikiPageTitleImpl extends MultiMarkdownNamedElementImp
 
     @Override
     public String toString() {
-        return "WIKI_LINK_TITLE '" + getName() + "' " + super.hashCode();
+        return "WIKI_LINK_TEXT '" + getName() + "' " + super.hashCode();
     }
 }

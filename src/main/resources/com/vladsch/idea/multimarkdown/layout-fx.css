@@ -85,6 +85,14 @@ THE SOFTWARE.
     position: relative;
 }
 
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  text-indent: 0;
+  -webkit-text-size-adjust: none;
+}
+
 a {
     background-color: transparent;
 }

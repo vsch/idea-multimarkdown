@@ -35,7 +35,7 @@ public class MultiMarkdownFileIconProvider implements FileIconProvider {
     @Nullable @Override
     public Icon getIcon(@NotNull VirtualFile file, @Iconable.IconFlags int flags, @Nullable Project project) {
         if (MultiMarkdownPreviewEditorProvider.accept(file)) {
-            return new FilePathInfo(file).isWikiPage() ? MultiMarkdownIcons.WIKI : MultiMarkdownIcons.FILE;
+            return (new FilePathInfo(file).isWikiPage() ? MultiMarkdownIcons.WIKI : MultiMarkdownIcons.FILE);
         }
         return null;
     }

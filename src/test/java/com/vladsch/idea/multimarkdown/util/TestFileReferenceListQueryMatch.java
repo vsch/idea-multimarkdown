@@ -28,6 +28,7 @@ import org.junit.runners.Parameterized;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import static com.vladsch.idea.multimarkdown.TestUtils.compareUnorderedLists;
 
@@ -45,16 +46,24 @@ public class TestFileReferenceListQueryMatch extends FileReferenceListTest {
     private final FileReference[] linkRefMatches;
     private final String linkRefNoExt;
     private final FileReference[] linkRefNoExtMatches;
+    private final String linkRefNoAnchor;
+    private final FileReference[] linkRefNoAnchorMatches;
+    private final String linkRefNoAnchorNoExt;
+    private final FileReference[] linkRefNoAnchorNoExtMatches;
     private final String wikiRef;
     private final FileReference[] wikiRefMatches;
 
-    public TestFileReferenceListQueryMatch(String linkRef, FileReference[] linkRefMatches, String linkRefNoExt, FileReference[] linkRefNoExtMatches, String wikiRef, FileReference[] wikiRefMatches) {
+    public TestFileReferenceListQueryMatch(String linkRef, FileReference[] linkRefMatches, String linkRefNoExt, FileReference[] linkRefNoExtMatches, String wikiRef, FileReference[] wikiRefMatches,String linkRefNoAnchor, FileReference[] linkRefNoAnchorMatches, String linkRefNoAnchorNoExt, FileReference[] linkRefNoAnchorNoExtMatches) {
         this.linkRef = linkRef;
         this.linkRefMatches = linkRefMatches;
         this.linkRefNoExt = linkRefNoExt;
         this.linkRefNoExtMatches = linkRefNoExtMatches;
         this.wikiRef = wikiRef;
         this.wikiRefMatches = wikiRefMatches;
+        this.linkRefNoAnchor = linkRefNoAnchor;
+        this.linkRefNoAnchorMatches = linkRefNoAnchorMatches;
+        this.linkRefNoAnchorNoExt = linkRefNoAnchorNoExt;
+        this.linkRefNoAnchorNoExtMatches = linkRefNoAnchorNoExtMatches;
     }
 
     @Parameterized.Parameters(name = "{index}: linkRef {0} linkRefNoExt {2} wikiRef {4}")
@@ -67,45 +76,67 @@ public class TestFileReferenceListQueryMatch extends FileReferenceListTest {
                 .wantMarkdownFiles()
                 .all();
 
-        HashMap<String, ArrayList<FileReference>> linkRefs = new HashMap<String, ArrayList<FileReference>>();
-        HashMap<String, ArrayList<FileReference>> linkRefsNoExt = new HashMap<String, ArrayList<FileReference>>();
-        HashMap<String, ArrayList<FileReference>> wikiRefs = new HashMap<String, ArrayList<FileReference>>();
+        HashMap<String, HashMap<String, FileReference>> linkRefs = new HashMap<String, HashMap<String, FileReference>>();
+        HashMap<String, HashMap<String, FileReference>> linkRefsNoAnchor = new HashMap<String, HashMap<String, FileReference>>();
+        HashMap<String, HashMap<String, FileReference>> linkRefsNoExt = new HashMap<String, HashMap<String, FileReference>>();
+        HashMap<String, HashMap<String, FileReference>> linkRefsNoAnchorNoExt = new HashMap<String, HashMap<String, FileReference>>();
+        HashMap<String, HashMap<String, FileReference>> wikiRefs = new HashMap<String, HashMap<String, FileReference>>();
 
         for (String filePath : filePaths) {
-            FileReference fileReference = new FileReference(filePath);
+            FilePathInfo filePathInfo = new FilePathInfo(filePath);
+            FileReference fileReference = new FileReference(filePathInfo.hasPureAnchor() ? filePathInfo.getFilePath() : filePath);
+
             if (fileReference.isMarkdownExt()) {
                 String linkRef = fileReference.getFileNameWithAnchor();
                 if (!linkRefs.containsKey(linkRef)) {
-                    linkRefs.put(linkRef, new ArrayList<FileReference>());
+                    linkRefs.put(linkRef, new HashMap<String, FileReference>());
                 }
-                linkRefs.get(linkRef).add(fileReference);
+                linkRefs.get(linkRef).put(fileReference.getFullFilePath(), fileReference);
 
-                String linkRefNoExt = fileReference.getFileNameNoExt();
-                if (!linkRefsNoExt.containsKey(linkRefNoExt)) {
-                    linkRefsNoExt.put(linkRefNoExt, new ArrayList<FileReference>());
+                String linkRefNoAnchor = fileReference.getFileName();
+                if (!linkRefsNoAnchor.containsKey(linkRefNoAnchor)) {
+                    linkRefsNoAnchor.put(linkRefNoAnchor, new HashMap<String, FileReference>());
                 }
-                linkRefsNoExt.get(linkRefNoExt).add(fileReference);
+                linkRefsNoAnchor.get(linkRefNoAnchor).put(fileReference.getFullFilePath(), fileReference);
+
+                String linkRefNoExt = fileReference.getFileNameNoExt() + fileReference.getAnchor();
+                if (!linkRefsNoExt.containsKey(linkRefNoExt)) {
+                    linkRefsNoExt.put(linkRefNoExt, new HashMap<String, FileReference>());
+                }
+                linkRefsNoExt.get(linkRefNoExt).put(fileReference.getFullFilePath(), fileReference);
+
+                String linkRefNoAnchorNoExt = fileReference.getFileNameNoExt();
+                if (!linkRefsNoAnchorNoExt.containsKey(linkRefNoAnchorNoExt)) {
+                    linkRefsNoAnchorNoExt.put(linkRefNoAnchorNoExt, new HashMap<String, FileReference>());
+                }
+                linkRefsNoAnchorNoExt.get(linkRefNoAnchorNoExt).put(fileReference.getFullFilePath(), fileReference);
 
                 String wikiRef = fileReference.getFileNameNoExtAsWikiRef();
                 if (!wikiRefs.containsKey(wikiRef)) {
-                    wikiRefs.put(wikiRef, new ArrayList<FileReference>());
+                    wikiRefs.put(wikiRef, new HashMap<String, FileReference>());
                 }
-                wikiRefs.get(wikiRef).add(fileReference);
+                wikiRefs.get(wikiRef).put(fileReference.getFullFilePath(), fileReference);
             }
         }
 
         for (String linkRef : linkRefs.keySet()) {
-            Object[] data = new Object[6];
-            String linkRefNoExt = new FilePathInfo(linkRef).getFilePathNoExt();
+            Object[] data = new Object[10];
+            String linkRefNoAnchor = new FilePathInfo(linkRef).getFilePath();
+            String linkRefNoExt = new FilePathInfo(linkRef).getFilePathWithAnchorNoExt();
+            String linkRefNoAnchorNoExt = new FilePathInfo(linkRef).getFilePathNoExt();
             String wikiRef = FilePathInfo.asWikiRef(linkRefNoExt);
 
 
             data[0] = linkRef;
-            data[1] = linkRefs.get(linkRef).toArray(EMPTY);
+            data[1] = linkRefs.get(linkRef).values().toArray(EMPTY);
             data[2] = linkRefNoExt;
-            data[3] = !linkRefsNoExt.containsKey(linkRefNoExt) ? EMPTY : linkRefsNoExt.get(linkRefNoExt).toArray(EMPTY);
+            data[3] = !linkRefsNoExt.containsKey(linkRefNoExt) ? EMPTY : linkRefsNoExt.get(linkRefNoExt).values().toArray(EMPTY);
             data[4] = wikiRef;
-            data[5] = !wikiRefs.containsKey(wikiRef) ? EMPTY : wikiRefs.get(wikiRef).toArray(EMPTY);
+            data[5] = !wikiRefs.containsKey(wikiRef) ? EMPTY : wikiRefs.get(wikiRef).values().toArray(EMPTY);
+            data[6] = linkRefNoAnchor;
+            data[7] = linkRefsNoAnchor.get(linkRefNoAnchor).values().toArray(EMPTY);
+            data[8] = linkRefNoAnchorNoExt;
+            data[9] = linkRefsNoAnchorNoExt.get(linkRefNoAnchorNoExt).values().toArray(EMPTY);
             results.add(data);
         }
         return results;
@@ -113,44 +144,44 @@ public class TestFileReferenceListQueryMatch extends FileReferenceListTest {
 
     @Test
     public void test_01_Match_LinkRef() throws Exception {
-        FileReferenceListQuery fileReferenceListQuery = fileReferenceList.query().wantMarkdownFiles().matchLinkRef(linkRef);
+        FileReferenceListQuery fileReferenceListQuery = fileReferenceList.query().wantMarkdownFiles().matchLinkRef(linkRefNoAnchor);
         FileReferenceList refs = fileReferenceListQuery.all();
-        compareUnorderedLists(null, (linkRef.indexOf('#') >= 0) ? EMPTY  : linkRefMatches, refs);
+        compareUnorderedLists(null, linkRefNoAnchorMatches, refs);
     }
 
     @Test
     public void test_02_Match_DotLinkRef() throws Exception {
         FileReferenceListQuery fileReferenceListQuery = fileReferenceList.query().wantMarkdownFiles().matchLinkRef("./" + linkRef);
         FileReferenceList refs = fileReferenceListQuery.all();
-        compareUnorderedLists(null, (linkRef.indexOf('#') >= 0) ? EMPTY  : linkRefMatches, refs);
+        compareUnorderedLists(null, linkRefMatches, refs);
     }
 
     @Test
     public void test_03_Match_LinkRefNoExt() throws Exception {
         FileReferenceListQuery fileReferenceListQuery = fileReferenceList.query().wantMarkdownFiles().matchLinkRefNoExt(linkRefNoExt);
         FileReferenceList refs = fileReferenceListQuery.all();
-        compareUnorderedLists(null, (linkRef.indexOf('#') >= 0) ? EMPTY  : linkRefNoExtMatches, refs);
+        compareUnorderedLists(null, linkRefNoExtMatches, refs);
     }
 
     @Test
     public void test_04_Match_DotLinkRefNoExt() throws Exception {
         FileReferenceListQuery fileReferenceListQuery = fileReferenceList.query().wantMarkdownFiles().matchLinkRefNoExt("./" + linkRefNoExt);
         FileReferenceList refs = fileReferenceListQuery.all();
-        compareUnorderedLists(null, (linkRef.indexOf('#') >= 0) ? EMPTY  : linkRefNoExtMatches, refs);
+        compareUnorderedLists(null, linkRefNoExtMatches, refs);
     }
 
     @Test
     public void test_05_Match_WikiPageRef() throws Exception {
         FileReferenceListQuery fileReferenceListQuery = fileReferenceList.query().wantMarkdownFiles().matchWikiRef(wikiRef);
         FileReferenceList refs = fileReferenceListQuery.allWikiPageRefs();
-        compareUnorderedLists(null, (linkRef.indexOf('#') >= 0) ? EMPTY  : wikiRefMatches, refs);
+        compareUnorderedLists(null, wikiRefMatches, refs);
     }
 
     @Test
     public void test_06_Match_DotWikiPageRef() throws Exception {
         FileReferenceListQuery fileReferenceListQuery = fileReferenceList.query().wantMarkdownFiles().matchWikiRef("./" + wikiRef);
         FileReferenceList refs = fileReferenceListQuery.allWikiPageRefs();
-        compareUnorderedLists(null, (linkRef.indexOf('#') >= 0) ? EMPTY  : wikiRefMatches, refs);
+        compareUnorderedLists(null, wikiRefMatches, refs);
     }
 
     @Test
@@ -158,6 +189,15 @@ public class TestFileReferenceListQueryMatch extends FileReferenceListTest {
         FileReferenceListQuery fileReferenceListQuery = fileReferenceList.query().wantMarkdownFiles().keepLinkRefAnchor().matchLinkRef(linkRef);
         FileReferenceList refs = fileReferenceListQuery.all();
         compareUnorderedLists(null, linkRefMatches, refs);
+    }
+
+    @Test
+    public void test_07_Match_LinkRefAnchorNoAnchor() throws Exception {
+        FileReferenceListQuery fileReferenceListQuery = fileReferenceList.query().wantMarkdownFiles().keepLinkRefAnchor();
+        FileReferenceList refs = fileReferenceListQuery.all();
+        String linkRefNoAnchor = new FilePathInfo(linkRef).getFileName();
+        FileReferenceList refs1 = refs.query().matchLinkRef(linkRefNoAnchor).all();
+        compareUnorderedLists(null, linkRefMatches, refs1);
     }
 
     @Test

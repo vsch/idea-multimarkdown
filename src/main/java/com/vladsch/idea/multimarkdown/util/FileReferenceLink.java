@@ -30,21 +30,27 @@ import org.jetbrains.annotations.Nullable;
 public class FileReferenceLink extends FileReference {
     private static final Logger logger = org.apache.log4j.Logger.getLogger(FileReferenceLink.class);
 
-    public static final int REASON_TARGET_HAS_SPACES = 1;
-    public static final int REASON_CASE_MISMATCH = 2;
-    public static final int REASON_WIKI_PAGEREF_HAS_DASHES = 4;
-    public static final int REASON_NOT_UNDER_WIKI_HOME = 8;
-    public static final int REASON_TARGET_NOT_WIKI_PAGE_EXT = 16;
-    public static final int REASON_NOT_UNDER_SOURCE_WIKI_HOME = 32;
-    public static final int REASON_TARGET_NAME_HAS_ANCHOR = 64;
-    public static final int REASON_TARGET_PATH_HAS_ANCHOR = 128;
-    public static final int REASON_WIKI_PAGEREF_HAS_SLASH = 256;
-    public static final int REASON_WIKI_PAGEREF_HAS_FIXABLE_SLASH = 512;
-    public static final int REASON_WIKI_PAGEREF_HAS_SUBDIR = 1024;
+    public static final int REASON_TARGET_HAS_SPACES = 0x0001;
+    public static final int REASON_CASE_MISMATCH = 0x0002;
+    public static final int REASON_WIKI_PAGEREF_HAS_DASHES = 0x0004;
+    public static final int REASON_NOT_UNDER_WIKI_HOME = 0x0008;
+    public static final int REASON_TARGET_NOT_WIKI_PAGE_EXT = 0x0010;
+    public static final int REASON_NOT_UNDER_SOURCE_WIKI_HOME = 0x0020;
+    public static final int REASON_TARGET_NAME_HAS_ANCHOR = 0x0040;
+    public static final int REASON_TARGET_PATH_HAS_ANCHOR = 0x0080;
+    public static final int REASON_WIKI_PAGEREF_HAS_SLASH = 0x0100;
+    public static final int REASON_WIKI_PAGEREF_HAS_FIXABLE_SLASH = 0x0200;
+    public static final int REASON_WIKI_PAGEREF_HAS_SUBDIR = 0x0400;
+    public static final int REASON_WIKI_PAGEREF_HAS_ONLY_ANCHOR = 0x0800;
+
+    // flags are re-used for link ref reasons
+    public static final int REASON_NOT_UNDER_SAME_REPO = 0x0001;
+    public static final int REASON_MISSING_EXTENSION = 0x0002;
 
     protected final @NotNull FileReference sourceReference;
     protected String pathPrefix;
     protected boolean wikiAccessible;
+    protected boolean linkAccessible;
     protected int upDirectories;
     protected int downDirectories;
 
@@ -193,6 +199,11 @@ public class FileReferenceLink extends FileReference {
         return equivalentWikiRef(true, false, getWikiPageRef(), wikiRef);
     }
 
+    // return true if the given string is a linkRef of this link reference
+    public boolean isLinkRef(@NotNull String linkRef) {
+        return equivalent(true, false, getLinkRef(), linkRef);
+    }
+
     public static class InaccessibleWikiPageReasons {
         final int reasons;
         final String wikiRef;
@@ -235,6 +246,9 @@ public class FileReferenceLink extends FileReference {
 
         public boolean wikiRefHasSubDir() { return false; }
         public String wikiRefHasSubDirFixed() { return wikiRef; }
+
+        public boolean wikiRefHasOnlyAnchor() { return (reasons & REASON_WIKI_PAGEREF_HAS_ONLY_ANCHOR) != 0; }
+        public String wikiRefHasOnlyAnchorFixed() { return referenceLink.getFileNameNoExt() + wikiRef; }
     }
 
     @NotNull
@@ -255,6 +269,76 @@ public class FileReferenceLink extends FileReference {
             else if (!getWikiHome().startsWith(sourceReference.getWikiHome())) reasons |= REASON_NOT_UNDER_SOURCE_WIKI_HOME;
 
             if (!hasWikiPageExt()) reasons |= REASON_TARGET_NOT_WIKI_PAGE_EXT;
+        }
+
+        if (pathContainsAnchor()) reasons |= REASON_TARGET_PATH_HAS_ANCHOR;
+        if (fileNameContainsAnchor()) reasons |= REASON_TARGET_NAME_HAS_ANCHOR;
+
+        if (wikiPageRef != null && sourceReference.getFullFilePath().equals(getFullFilePath()) && wikiPageRef.startsWith("#")) {
+            reasons |= REASON_WIKI_PAGEREF_HAS_ONLY_ANCHOR;
+        }
+        return reasons;
+    }
+
+    public static class InaccessibleLinkRefReasons {
+        final int reasons;
+        final String linkRef;
+        final FileReferenceLink referenceLink;
+
+        InaccessibleLinkRefReasons(int reasons, String linkRef, FileReferenceLink referenceLink) {
+            this.reasons = reasons;
+            this.linkRef = linkRef;
+            this.referenceLink = referenceLink;
+        }
+
+        public boolean caseMismatch() { return (reasons & REASON_CASE_MISMATCH) != 0; }
+        public String caseMismatchLinkRefFixed() { return referenceLink.getLinkRefNoExt(); }
+        public String caseMismatchFileNameFixed() { return new FilePathInfo(linkRef).getFileNameNoExt(); }
+
+        public boolean targetNotInSameRepoHome() { return (reasons & REASON_NOT_UNDER_SAME_REPO) != 0; }
+        public String targetNotInSameRepoHomeFixed() { return referenceLink.getSourceReference().getPath() + referenceLink.getFileName(); }
+
+        public boolean targetNameHasAnchor() { return (reasons & REASON_TARGET_NAME_HAS_ANCHOR) != 0; }
+        public String targetNameHasAnchorFixed() { return referenceLink.getFileNameWithAnchor().replace("#", ""); }
+
+        public boolean targetPathHasAnchor() { return (reasons & REASON_TARGET_PATH_HAS_ANCHOR) != 0; }
+    }
+
+    @NotNull
+    public InaccessibleLinkRefReasons inaccessibleLinkRefReasons(@Nullable String linkRef) {
+        return new InaccessibleLinkRefReasons(computeLinkRefReasonsFlags(linkRef), linkRef, this);
+    }
+
+    protected int computeLinkRefReasonsFlags(@Nullable String linkRef) {
+        int reasons = 0;
+
+        if (linkRefHasSpaces()) reasons |= REASON_TARGET_HAS_SPACES;
+
+        if (linkRef != null) {
+            FilePathInfo linkRefInfo = new FilePathInfo(linkRef);
+
+            if (linkRefInfo.hasExt()) {
+                if (linkRef.equalsIgnoreCase(this.getLinkRef()) && !linkRef.equals(this.getLinkRef())) {
+                    reasons |= REASON_CASE_MISMATCH;
+                }
+            } else {
+                if (linkRef.equalsIgnoreCase(this.getLinkRefNoExt()) && !linkRef.equals(this.getLinkRefNoExt())) {
+                    reasons |= REASON_CASE_MISMATCH;
+                }
+            }
+        }
+
+        String targetGitHubRepoPath = getGitHubRepoPath();
+        String sourceGitHubRepoPath = sourceReference.getGitHubRepoPath();
+
+        if (targetGitHubRepoPath != null || sourceGitHubRepoPath != null) {
+            if (isUnderWikiHome()) {
+                if (targetGitHubRepoPath == null || sourceGitHubRepoPath == null || !targetGitHubRepoPath.startsWith(sourceGitHubRepoPath))
+                    reasons |= REASON_NOT_UNDER_SAME_REPO;
+            } else {
+                if (targetGitHubRepoPath == null || sourceGitHubRepoPath == null || !sourceGitHubRepoPath.startsWith(targetGitHubRepoPath))
+                    reasons |= REASON_NOT_UNDER_SAME_REPO;
+            }
         }
 
         if (pathContainsAnchor()) reasons |= REASON_TARGET_PATH_HAS_ANCHOR;
@@ -291,7 +375,7 @@ public class FileReferenceLink extends FileReference {
             downDirectories++;
         }
 
-        wikiAccessible = getLinkRef().indexOf(' ') < 0 && hasWikiPageExt() && getWikiHome().startsWith(sourceReference.getWikiHome()) && !containsAnchor();
+        wikiAccessible = getLinkRef().indexOf(' ') < 0 && hasWikiPageExt() && getWikiHome().equals(sourceReference.getWikiHome()) && !containsAnchor();
     }
 
     public int reflinkCompareTo(@NotNull FileReferenceLink o) {

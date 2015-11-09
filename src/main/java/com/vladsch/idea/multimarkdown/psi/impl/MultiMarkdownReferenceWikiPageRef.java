@@ -53,7 +53,7 @@ public class MultiMarkdownReferenceWikiPageRef extends MultiMarkdownReference {
             FileReferenceLinkGitHubRules fileReferenceLink = new FileReferenceLinkGitHubRules(myElement.getContainingFile(), ((PsiFile) element));
             String wikiPageRef = fileReferenceLink.getWikiPageRef();
             // this will create a new reference and loose connection to this one
-            return myElement.setName(wikiPageRef, MultiMarkdownNamedElement.REASON_FILE_RENAMED);
+            return myElement.setName(wikiPageRef, MultiMarkdownNamedElement.REASON_FILE_MOVED);
         }
         return super.bindToElement(element);
     }
@@ -62,7 +62,7 @@ public class MultiMarkdownReferenceWikiPageRef extends MultiMarkdownReference {
     @Override
     protected ResolveResult[] getMultiResolveResults(boolean incompleteCode) {
         String name = myElement.getName();
-        if (name != null) {
+        if (name != null && myElement.getContainingFile() != null && myElement.getContainingFile().getVirtualFile() != null) {
 
             FileReferenceList fileReferenceList = new FileReferenceListQuery(myElement.getProject())
                     .gitHubWikiRules()

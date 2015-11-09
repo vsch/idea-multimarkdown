@@ -28,6 +28,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class MultiMarkdownLexer extends Lexer {
+    private static final Logger logger = Logger.getLogger(MultiMarkdownLexer.class);
+
     protected MultiMarkdownLexParser lexParser = null;
     protected int startOffset = 0;
     protected int endOffset = 0;
@@ -36,7 +38,6 @@ public class MultiMarkdownLexer extends Lexer {
     protected CharSequence buffer = null;
     protected MultiMarkdownLexParser.LexerToken lexerToken = null;
     protected MultiMarkdownLexParser.LexerToken[] lexerTokens = null;
-    protected Logger logger;
 
     public MultiMarkdownLexParser getLexParser() {
         return lexParser;
@@ -68,7 +69,7 @@ public class MultiMarkdownLexer extends Lexer {
     @Override
     public void start(@NotNull CharSequence buffer, int startOffset, int endOffset, int initialState) {
         //logger = MultiMarkdownPlugin.getInstance().getLogger();
-        //logger.info("LexStart("+String.valueOf(startOffset) + ", " + String.valueOf(endOffset) + ", " + String.valueOf(initialState) + " for " + this.toString() + " from " + Thread.currentThread().toString());
+        //logger.info("LexStart(" + String.valueOf(startOffset) + ", " + String.valueOf(endOffset) + ", " + String.valueOf(initialState) + " for " + this.toString() + " from " + Thread.currentThread().toString());
         //logStackTrace();
 
         this.buffer = buffer;
@@ -84,7 +85,7 @@ public class MultiMarkdownLexer extends Lexer {
         }
 
         lexerToken = null;
-        //System.out.format("start lexer buffer end %d, start %d, end %d, state %d\n", buffer.length(), startOffset, endOffset, initialState);
+        //logger.info(String.format("start lexer buffer end %d, start %d, end %d, state %d", buffer.length(), startOffset, endOffset, initialState));
 
         // prime the lexeme stream, if the first is white space we need to start with that
         if (lexerTokens != null && lexerTokens.length > 0) {
@@ -94,7 +95,6 @@ public class MultiMarkdownLexer extends Lexer {
             } else {
                 lexemeIndex++;
             }
-
         }
 
         if (lexerToken == null) {
@@ -168,7 +168,7 @@ public class MultiMarkdownLexer extends Lexer {
             currentOffset = endOffset;
         }
 
-        //System.out.print("advanced to " + currentOffset + " (" + (lexerToken == null ? "null" : lexerToken.toString()) + ")\n");
+        //logger.info("advanced to " + currentOffset + " (" + (lexerToken == null ? "null" : lexerToken.toString()) + ")");
     }
 
     class MarkdownLexerPosition implements LexerPosition {

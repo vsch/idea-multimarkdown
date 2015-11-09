@@ -35,10 +35,10 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-class CreateWikiPageQuickFix extends BaseIntentionAction {
+class CreateFileQuickFix extends BaseIntentionAction {
     private String name;
 
-    CreateWikiPageQuickFix(String name) {
+    CreateFileQuickFix(String name) {
         this.name = name;
     }
 

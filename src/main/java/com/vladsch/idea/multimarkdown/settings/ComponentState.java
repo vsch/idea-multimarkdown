@@ -27,11 +27,8 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 
 public interface ComponentState extends SettingsProvider {
-    public Element getState(String elementName);
-
-    public void loadState(@NotNull Element element);
-
-    public boolean isChanged(@NotNull Element element);
-
-    public boolean haveSavedState();
+    Element getState(String elementName);
+    void loadState(@NotNull Element element);
+    boolean isChanged(@NotNull Element element);
+    boolean haveSavedState();
 }

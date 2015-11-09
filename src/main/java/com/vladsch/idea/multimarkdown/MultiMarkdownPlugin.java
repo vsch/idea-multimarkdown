@@ -34,10 +34,8 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
-import com.vladsch.idea.multimarkdown.util.FileReference;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -49,14 +47,9 @@ import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.ProjectFileResolver {
+public class MultiMarkdownPlugin implements ApplicationComponent {
     private static final Logger logger = org.apache.log4j.Logger.getLogger("com.vladsch.idea.multimarkdown");
     private MultiMarkdownGlobalSettingsListener globalSettingsListener;
-    private static boolean isLicensed;
-
-    public static boolean isLicensed() {
-        return isLicensed;
-    }
 
     private PluginClassLoader myClassLoader;
 
@@ -116,15 +109,11 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
         logger.setAdditivity(false);
         logger.setLevel(Level.INFO);
 
-        FileReference.projectFileResolver = this;
-
         // turn off lcd rendering, will use gray
         //System.setProperty("prism.lcdtext", "false");
         myClassLoader = null;
         final MultiMarkdownGlobalSettings settings = MultiMarkdownGlobalSettings.getInstance();
         getClassLoader();
-
-        isLicensed = false;
 
         // get the tmp directory location
         try {
@@ -310,17 +299,4 @@ public class MultiMarkdownPlugin implements ApplicationComponent, FileReference.
         return project.getComponent(MultiMarkdownProjectComponent.class);
     }
 
-    @Override
-    public VirtualFile getVirtualFile(@NotNull String sourcePath) {
-        return VirtualFileManager.getInstance().findFileByUrl("file://" + sourcePath);
-    }
-
-    @Override
-    public PsiFile getPsiFile(@NotNull VirtualFile file, @NotNull Project project) {
-        PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
-        if (psiFile != null && psiFile instanceof MultiMarkdownFile) {
-            return psiFile;
-        }
-        return null;
-    }
 }
