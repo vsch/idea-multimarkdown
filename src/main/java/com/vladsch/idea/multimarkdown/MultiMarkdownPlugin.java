@@ -216,7 +216,7 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
                 }
 
                 // check license information
-                loadLicenseActivation();
+                loadLicenseActivation(false);
             }
         });
     }
@@ -314,10 +314,10 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
     }
 
     public void initComponent() {
-        loadLicenseActivation();
+        loadLicenseActivation(true);
     }
 
-    public void loadLicenseActivation() {
+    public void loadLicenseActivation(boolean init) {
         MultiMarkdownGlobalSettings globalSettings = MultiMarkdownGlobalSettings.getInstance();
         try {
             globalSettings.startSuspendNotifications();
@@ -351,7 +351,7 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
             globalSettings.endSuspendNotifications();
         }
 
-        initLicense();
+        initLicense(init);
     }
 
     public static void notifyLicensedUpdate(@Nullable Project project, final boolean showOnce) {
@@ -380,13 +380,15 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
         }
     }
 
-    public void initLicense() {// load license information
-        boolean showOnce = false;
+    public void initLicense(boolean init) {// load license information
+        boolean showOnce = true;
 
         if (agent.isValidLicense() && agent.isValidActivation()) {
             license_features = agent.getLicenseFeatures();
-            if (showOnce) MultiMarkdownGlobalSettings.getInstance().wasShownLicensedAvailable.setValue(true);
-            else notifyLicensedUpdate(null, showOnce);
+            if (init) {
+                if (showOnce) MultiMarkdownGlobalSettings.getInstance().wasShownLicensedAvailable.setValue(true);
+                else notifyLicensedUpdate(null, showOnce);
+            }
         } else {
             license_features = 0;
             notifyLicensedUpdate(null, showOnce);

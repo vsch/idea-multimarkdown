@@ -269,39 +269,41 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
         if (!linkRef.isEmpty()) {
             String text = linkRef;
             FilePathInfo pathInfo = new FilePathInfo(text);
-            text = pathInfo.getFileNameNoExt();
+            if (!pathInfo.isExternalReference()) {
+                text = pathInfo.getFileNameNoExt();
 
-            if (!FilePathInfo.linkRefAnchor(text).isEmpty()) {
-                originalList.add(FilePathInfo.linkRefNoAnchor(text));
-                originalList.add(FilePathInfo.linkRefNoAnchor(text) + ": " + FilePathInfo.linkRefAnchorNoHash(text));
+                if (!FilePathInfo.linkRefAnchor(text).isEmpty()) {
+                    originalList.add(FilePathInfo.linkRefNoAnchor(text));
+                    originalList.add(FilePathInfo.linkRefNoAnchor(text) + ": " + FilePathInfo.linkRefAnchorNoHash(text));
 
-                SuggestionList anchoredList = new SuggestionList(originalList.getProject()).add(FilePathInfo.linkRefNoAnchor(text));
+                    SuggestionList anchoredList = new SuggestionList(originalList.getProject()).add(FilePathInfo.linkRefNoAnchor(text));
 
-                SuggestionList anchorList = new SuggestionList(originalList.getProject()).add(FilePathInfo.linkRefAnchorNoHash(text));
+                    SuggestionList anchorList = new SuggestionList(originalList.getProject()).add(FilePathInfo.linkRefAnchorNoHash(text));
 
-                anchoredList.add(anchoredList.sequenceFixers(SuggestCleanSpacedWords, SuggestCapSpacedWords));
-                anchorList.add(anchorList.sequenceFixers(SuggestCleanSpacedWords, SuggestCapSpacedWords));
+                    anchoredList.add(anchoredList.sequenceFixers(SuggestCleanSpacedWords, SuggestCapSpacedWords));
+                    anchorList.add(anchorList.sequenceFixers(SuggestCleanSpacedWords, SuggestCapSpacedWords));
 
-                SuggestionList suggestions = new SuggestionList(originalList.getProject()).add(": ");
+                    SuggestionList suggestions = new SuggestionList(originalList.getProject()).add(": ");
 
-                suggestions = suggestions.wrapPermuteFixedAligned(anchoredList, anchorList, SuggestCleanSpacedWords, SuggestCapSpacedWords);
+                    suggestions = suggestions.wrapPermuteFixedAligned(anchoredList, anchorList, SuggestCleanSpacedWords, SuggestCapSpacedWords);
 
-                originalList.add(suggestions);
+                    originalList.add(suggestions);
 
-                //if (anchoredList.size() == 1 || anchorList.size() == 1) {
-                //    originalList.add(anchorList.prefixPermute(anchoredList.suffix(": ")));
-                //} else {
-                //    originalList.add(anchorList.prefixAlign(anchoredList.suffix(": ")));
-                //}
+                    //if (anchoredList.size() == 1 || anchorList.size() == 1) {
+                    //    originalList.add(anchorList.prefixPermute(anchoredList.suffix(": ")));
+                    //} else {
+                    //    originalList.add(anchorList.prefixAlign(anchoredList.suffix(": ")));
+                    //}
+                }
+
+                suggestionList.add(FilePathInfo.linkRefNoAnchor(text));
+                suggestionList.add(text);
+
+                // add with path parts, to 2 directories above
+                String parentDir = (pathInfo = new FilePathInfo(pathInfo.getPath())).getFilePath();
+                suggestionList.add(parentDir + " " + FilePathInfo.linkRefNoAnchor(text));
+                suggestionList.add(parentDir + " " + text);
             }
-
-            suggestionList.add(FilePathInfo.linkRefNoAnchor(text));
-            suggestionList.add(text);
-
-            // add with path parts, to 2 directories above
-            String parentDir = (pathInfo = new FilePathInfo(pathInfo.getPath())).getFilePath();
-            suggestionList.add(parentDir + " " + FilePathInfo.linkRefNoAnchor(text));
-            suggestionList.add(parentDir + " " + text);
         }
 
         suggestionList = originalList.add(suggestionList.chainFixers(SuggestCleanSpacedWords, spellCheck ? SuggestSpelling : null)
