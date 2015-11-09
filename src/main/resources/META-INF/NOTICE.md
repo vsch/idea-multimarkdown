@@ -19,6 +19,10 @@ This product is based on or uses the following copyrighted materials released un
         Copyright (c) 2006, Ivan Sagalaev, <https://github.com/isagalaev/highlight.js>  
         <https://github.com/isagalaev/highlight.js/blob/master/LICENSE>                 
           
+    *   includes asm-all-4.1.jar  
+        Copyright (c) 2012 France Télécom, All rights reserved.  
+        <http://asm.ow2.org/asmdex-license.html>    
+        
     *   parts based on https://github.com/sindresorhus/github-markdown-css  
         Copyright (c) 2014-2015 Sindre Sorhus <http://sindresorhus.com>  
         <https://opensource.org/licenses/MIT>                 
