@@ -391,7 +391,9 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
             }
         } else {
             license_features = 0;
-            notifyLicensedUpdate(null, showOnce);
+            if (init) {
+                notifyLicensedUpdate(null, showOnce);
+            }
         }
     }
 

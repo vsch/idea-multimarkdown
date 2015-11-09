@@ -38,7 +38,6 @@ public class MultiMarkdownLexer extends Lexer {
     protected CharSequence buffer = null;
     protected MultiMarkdownLexParser.LexerToken lexerToken = null;
     protected MultiMarkdownLexParser.LexerToken[] lexerTokens = null;
-    //protected Logger logger;
 
     public MultiMarkdownLexParser getLexParser() {
         return lexParser;
