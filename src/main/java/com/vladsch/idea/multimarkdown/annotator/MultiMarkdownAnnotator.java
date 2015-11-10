@@ -66,6 +66,8 @@ public class MultiMarkdownAnnotator implements Annotator {
             //if (wikiLink != null) annotator = checkWikiLinkSwapRefTitle(wikiLink, holder);
         } else if (element instanceof MultiMarkdownLinkRef) {
             addChangeExplicitLinkToWikiLink(element, state, ANNOTATION_INFO);
+
+            annotateLinkRef((MultiMarkdownLinkRef) element, state);
         } else if (element instanceof MultiMarkdownWikiPageRef) {
             addChangeWikiLinkToExplicitLink(element, state, ANNOTATION_INFO);
 
@@ -99,6 +101,7 @@ public class MultiMarkdownAnnotator implements Annotator {
             }
         }
     }
+
     protected void addChangeExplicitLinkToWikiLink(@NotNull PsiElement element, AnnotationState state, int type) {
         if (MultiMarkdownPlugin.isLicensed()) {
             FilePathInfo pathInfo = new FilePathInfo(element.getContainingFile().getVirtualFile());
@@ -127,8 +130,6 @@ public class MultiMarkdownAnnotator implements Annotator {
                     state.annotator.registerFix(new ChangeExplicitLinkToWikiLinkQuickFix(explicitLink));
                 }
             }
-
-            annotateLinkRef((MultiMarkdownLinkRef) element, state);
         }
     }
 
@@ -232,7 +233,7 @@ public class MultiMarkdownAnnotator implements Annotator {
             if (accessibleLinkRefs.size() == 1) {
                 // add quick fix to change wiki to explicit link
                 if (containingFile.isWikiPage() && MultiMarkdownPsiImplUtil.isWikiLinkEquivalent(element)) {
-                    addChangeWikiLinkToExplicitLink(element, state, ANNOTATION_WEAK_WARNING);
+                    addChangeExplicitLinkToWikiLink(element, state, ANNOTATION_WEAK_WARNING);
                 }
             } else {
                 FileReference elementFileReference = new FileReference(element.getContainingFile());

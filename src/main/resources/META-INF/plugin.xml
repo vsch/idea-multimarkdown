@@ -43,9 +43,17 @@
         </div>
         ]]></description>
 
-    <version>1.2.0</version>
+    <version>1.2.1</version>
     <idea-version since-build="133.1711"/>
     <change-notes><![CDATA[
+    <ul><h3><b>1.2.1 - Bug Fixes and Enhancements</b></h3><br>
+      <h4>Basic Edition</h4>
+      <li>Fix: </li>
+      <li>Add: </li>
+      <h4>Enhanced Edition</h4>
+      <li>Fix: </li>
+      <li>Add: </li>
+    </ul>
     <ul><h3><b>1.2.0 - Bug Fixes and Enhancements</b></h3>
       <h4>Basic Edition</h4>
       <li>Fix: not recognizing tables that have a divider and table cells that look like divider cells. (pegdown)</li>
