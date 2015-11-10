@@ -135,7 +135,6 @@ public class MultiMarkdownAnnotator implements Annotator {
 
     protected void checkWikiLinkSwapRefTitle(@NotNull MultiMarkdownWikiLink element, @NotNull AnnotationState state) {
         // see if need to swap link ref and link text
-
         MultiMarkdownWikiPageRef wikiPageRef = (MultiMarkdownWikiPageRef) MultiMarkdownPsiImplUtil.findChildByType(element, MultiMarkdownTypes.WIKI_LINK_REF);
         PsiReference wikiPageRefReference = wikiPageRef != null ? wikiPageRef.getReference() : null;
 
@@ -416,7 +415,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                     state.annotator.registerFix(new ChangeWikiLinkToExplicitLinkQuickFix(wikiLink));
                 }
             } else if (accessibleWikiPageRefs.size() == 1) {
-                // add quick fix to change wiki to explicit link
+                // empty
             } else {
                 if (accessibleWikiPageRefs.size() > 1) {
                     state.warningsOnly = false;

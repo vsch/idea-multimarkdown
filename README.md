@@ -13,7 +13,7 @@ idea-multimarkdown
 
 1. Free and open source for the basic functionality. 
 
-2. Licensed version with enhanced refactoring and code completion functionality. 30-day free trial licenses are available in plugin settings and on the site [idea-multimarkdown](http://vladsch.com/product/multimarkdown) 
+2. Licensed version with enhanced refactoring and code completion functionality. 30-day free trial licenses are available in plugin preferences and from [idea-multimarkdown](http://vladsch.com/product/multimarkdown) 
 
 
 The Background
