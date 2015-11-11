@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ThreadSafeMirrorCache<C> {
     protected C cache;
-    protected ThreadSafeCacheListener<ThreadSafeMirrorCache<C>> mainCacheListener;
+    protected ThreadSafeMainCache.CacheUpdateListener<ThreadSafeMirrorCache<C>> mainCacheListener;
 
     public @NotNull C getCache() {
         return cache;
@@ -38,7 +38,7 @@ public class ThreadSafeMirrorCache<C> {
     public ThreadSafeMirrorCache(final @NotNull ThreadSafeMainCache<C> mainCache) {
         cache = mainCache.getNewCache();
 
-        mainCache.addListener(mainCacheListener = new ThreadSafeCacheListener<ThreadSafeMirrorCache<C>>() {
+        mainCache.addListener(mainCacheListener = new ThreadSafeMainCache.CacheUpdateListener<ThreadSafeMirrorCache<C>>() {
             @Override
             public void updateCache(ThreadSafeMirrorCache<C> updatedCache) {
                 cache = updatedCache.getCache();

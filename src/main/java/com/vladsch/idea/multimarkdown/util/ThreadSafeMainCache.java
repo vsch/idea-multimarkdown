@@ -22,18 +22,18 @@ package com.vladsch.idea.multimarkdown.util;
 
 import org.jetbrains.annotations.NotNull;
 
-public class ThreadSafeMainCache<C> extends ThreadSafeMirrorCache<C> implements ListenerNotifyDelegate<ThreadSafeCacheListener<ThreadSafeMirrorCache<C>>> {
+public class ThreadSafeMainCache<C> extends ThreadSafeMirrorCache<C> {
     private static final int LISTENER_ADDED = 1;
     private static final int LISTS_UPDATED = 2;
     private static final int UPDATE_DONE = 3;
 
-    private ThreadSafeCacheUpdater<C> cacheFactory;
+    private CacheProvider<C> cacheFactory;
 
     private boolean isListLoaded = false;
     private boolean isListLoading = false;
-    private ListenerNotifier<ThreadSafeCacheListener<ThreadSafeMirrorCache<C>>> notifier = new ListenerNotifier<ThreadSafeCacheListener<ThreadSafeMirrorCache<C>>>(this);
+    private ListenerNotifier<CacheUpdateListener<ThreadSafeMirrorCache<C>>> notifier = new ListenerNotifier<CacheUpdateListener<ThreadSafeMirrorCache<C>>>();
 
-    public ThreadSafeMainCache(ThreadSafeCacheUpdater<C> cacheFactory) {
+    public ThreadSafeMainCache(CacheProvider<C> cacheFactory) {
         super(cacheFactory.newCache());
         this.cacheFactory = cacheFactory;
     }
@@ -46,49 +46,45 @@ public class ThreadSafeMainCache<C> extends ThreadSafeMirrorCache<C> implements 
         return isListLoaded && !isListLoading;
     }
 
-    public void addListener(@NotNull ThreadSafeCacheListener<ThreadSafeMirrorCache<C>> listener) {
+    public void addListener(@NotNull CacheUpdateListener<ThreadSafeMirrorCache<C>> listener) {
         // used only during addListener processing
-        notifier.addListener(listener, LISTENER_ADDED);
-    }
+        final ThreadSafeMainCache<C> thizz = this;
 
-    @Override
-    public void notify(ThreadSafeCacheListener<ThreadSafeMirrorCache<C>> listener, Object... params) {
-        if (params.length == 1) {
-            switch ((Integer) params[0]) {
-                case LISTENER_ADDED:
-                    if (cacheIsCurrent()) {
-                        listener.updateCache(this);
-                    }
-                    break;
-
-                case  LISTS_UPDATED:
-                    listener.updateCache(this);
-                    break;
-
-                case UPDATE_DONE:
-                    listener.updateDone();
-                    break;
-
-                default:
-                    break;
+        notifier.addListener(listener, new ListenerNotifier.RunnableNotifier<CacheUpdateListener<ThreadSafeMirrorCache<C>>>() {
+            @Override
+            public boolean notify(CacheUpdateListener<ThreadSafeMirrorCache<C>> listener) {
+                if (cacheIsCurrent()) {
+                    listener.updateCache(thizz);
+                }
+                return false;
             }
-        }
+        });
     }
 
-    public void removeListener(@NotNull ThreadSafeCacheListener<ThreadSafeMirrorCache<C>> listener) {
+    public void removeListener(@NotNull CacheUpdateListener<ThreadSafeMirrorCache<C>> listener) {
         notifier.removeListener(listener);
     }
 
     public void notifyListeners() {
-        notifier.notifyListeners(LISTS_UPDATED);
+        final ThreadSafeMainCache<C> thizz = this;
+
+        notifier.notifyListeners(new ListenerNotifier.RunnableNotifier<CacheUpdateListener<ThreadSafeMirrorCache<C>>>() {
+            @Override
+            public boolean notify(CacheUpdateListener<ThreadSafeMirrorCache<C>> listener) {
+                listener.updateCache(thizz);
+                return false;
+            }
+        });
     }
 
     public void notifyUpdateDone() {
-        notifier.notifyListeners(UPDATE_DONE);
-    }
-
-    public interface CacheUpdater<C> {
-        void cacheUpdated(@NotNull C newCache);
+        notifier.notifyListeners(new ListenerNotifier.RunnableNotifier<CacheUpdateListener<ThreadSafeMirrorCache<C>>>() {
+            @Override
+            public boolean notify(CacheUpdateListener<ThreadSafeMirrorCache<C>> listener) {
+                listener.updateDone();
+                return false;
+            }
+        });
     }
 
     public void updateCache(final Object... params) {
@@ -104,7 +100,7 @@ public class ThreadSafeMainCache<C> extends ThreadSafeMirrorCache<C> implements 
         if (!alreadyLoading) {
             final ThreadSafeMainCache<C> mainCache = this;
 
-            cacheFactory.updateCache(new CacheUpdater<C>() {
+            cacheFactory.updateCache(new UpdateDoneListener<C>() {
                 @Override
                 public void cacheUpdated(@NotNull C newCache) {
 
@@ -118,12 +114,64 @@ public class ThreadSafeMainCache<C> extends ThreadSafeMirrorCache<C> implements 
                         mainCache.notifyListeners();
                     }
 
-                    // now the can use the data it is consistent accross all threads
+                    // now the can use the data it is consistent across all threads
                     mainCache.notifyUpdateDone();
 
-                    cacheFactory.afterCacheUpdate();
+                    cacheFactory.afterCacheUpdate(params);
                 }
             }, params);
         }
     }
+
+    public static interface CacheUpdateListener<C> {
+        // use the new cached data
+        void updateCache(C updatedCache);
+
+        // all listeners have been updated
+        void updateDone();
+    }
+
+    public interface UpdateDoneListener<C> {
+        void cacheUpdated(@NotNull C newCache);
+    }
+
+    static interface CacheProvider<C> {
+        C newCache();
+
+        /**
+         * called to build a new cache and invoke notifyWhenDone.cacheUpdated() with the new cache to be propagated
+         * to all listeners
+         *
+         * @param notifyWhenDone
+         * @param params
+         */
+        void updateCache(final UpdateDoneListener<C> notifyWhenDone, final Object... params);
+
+        /**
+         * called from within the notifyWhenDone.cacheUpdated() method.
+         * <p/>
+         * called right before starting notifications to mirror listeners, already in synchronized section with
+         * the main cache updated and reporting isCacheCurrent() true.
+         * <p/>
+         * so new listeners will be blocked until all existing ones are notified, can do a remove() on the
+         * ThreadLocal<> of the cache, so that all threads clear old cache and will be forced to load the new
+         * one.
+         * <p/>
+         * When unblocked, the new listeners will load the new cache and continue
+         *
+         * @param params what was passed to the updateCache() method
+         */
+        void beforeCacheUpdate(final java.lang.Object... params);
+
+        /**
+         * called from within the notifyWhenDone.cacheUpdated() method.
+         * <p/>
+         * called right after all mirror listeners have been notified of the update and from outside the
+         * synchronized section can now do whatever notifications are needed that access the cache
+         *
+         * @param params
+         */
+        void afterCacheUpdate(final java.lang.Object... params);
+    }
+
 }

@@ -20,59 +20,58 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-public class MarkdownExtensionsPanel {
-    private JPanel mainPanel;
-    private JCheckBox definitionsCheckBox;
-    private JCheckBox tablesCheckBox;
-    private JCheckBox autoLinksCheckBox;
-    private JCheckBox hardWrapsCheckBox;
-    private JCheckBox quotesCheckBox;
-    private JCheckBox smartsCheckBox;
+public class MarkdownExtensionsPanel extends SettingsPanelImpl {
     private JCheckBox abbreviationsCheckBox;
-    private JCheckBox wikiLinksCheckBox;
-    private JCheckBox strikethroughCheckBox;
-    private JCheckBox taskListsCheckBox;
-    private JCheckBox headerSpaceCheckBox;
-    private JCheckBox suppressInlineHTMLCheckBox;
-    private JCheckBox suppressHTMLBlocksCheckBox;
-    private JCheckBox fencedCodeBlocksCheckBox;
     private JCheckBox anchorLinksCheckBox;
-    private JCheckBox forceListParaCheckBox;
-    private JCheckBox relaxedHRulesCheckBox;
-    private JCheckBox githubWikiLinksCheckBox;
-    private JLabel githubWikiLinksLabel;
+    private JCheckBox autoLinksCheckBox;
+    private JCheckBox definitionsCheckBox;
+    private JCheckBox fencedCodeBlocksCheckBox;
     private JCheckBox footnotesCheckBox;
+    private JCheckBox forceListParaCheckBox;
+    private JCheckBox githubWikiLinksCheckBox;
+    private JCheckBox hardWrapsCheckBox;
+    private JCheckBox headerSpaceCheckBox;
+    private JCheckBox quotesCheckBox;
+    private JCheckBox relaxedHRulesCheckBox;
+    private JCheckBox smartsCheckBox;
+    private JCheckBox strikethroughCheckBox;
+    private JCheckBox suppressHTMLBlocksCheckBox;
+    private JCheckBox suppressInlineHTMLCheckBox;
+    private JCheckBox tablesCheckBox;
+    private JCheckBox taskListsCheckBox;
+    private JCheckBox wikiLinksCheckBox;
+    private JLabel githubWikiLinksLabel;
+    private JPanel mainPanel;
 
     @LicensedFeature
     private JCheckBox tocCheckBox;
     private JLabel tocLabel;
 
     // need this so that we don't try to access components before they are created
-    public
     @Nullable
-    Object getComponent(@NotNull String persistName) {
-        if (persistName.equals("smartsCheckBox")) return smartsCheckBox;
-        if (persistName.equals("quotesCheckBox")) return quotesCheckBox;
+    public Object getComponent(@NotNull String persistName) {
         if (persistName.equals("abbreviationsCheckBox")) return abbreviationsCheckBox;
-        if (persistName.equals("hardWrapsCheckBox")) return hardWrapsCheckBox;
+        if (persistName.equals("anchorLinksCheckBox")) return anchorLinksCheckBox;
         if (persistName.equals("autoLinksCheckBox")) return autoLinksCheckBox;
-        if (persistName.equals("wikiLinksCheckBox")) return wikiLinksCheckBox;
-        if (persistName.equals("tablesCheckBox")) return tablesCheckBox;
         if (persistName.equals("definitionsCheckBox")) return definitionsCheckBox;
         if (persistName.equals("fencedCodeBlocksCheckBox")) return fencedCodeBlocksCheckBox;
+        if (persistName.equals("footnotesCheckBox")) return footnotesCheckBox;
+        if (persistName.equals("footnotesCheckBox")) return footnotesCheckBox;
+        if (persistName.equals("forceListParaCheckBox")) return forceListParaCheckBox;
+        if (persistName.equals("githubWikiLinksCheckBox")) return githubWikiLinksCheckBox;
+        if (persistName.equals("githubWikiLinksCheckBox")) return githubWikiLinksCheckBox;
+        if (persistName.equals("hardWrapsCheckBox")) return hardWrapsCheckBox;
+        if (persistName.equals("headerSpaceCheckBox")) return headerSpaceCheckBox;
+        if (persistName.equals("quotesCheckBox")) return quotesCheckBox;
+        if (persistName.equals("relaxedHRulesCheckBox")) return relaxedHRulesCheckBox;
+        if (persistName.equals("smartsCheckBox")) return smartsCheckBox;
+        if (persistName.equals("strikethroughCheckBox")) return strikethroughCheckBox;
         if (persistName.equals("suppressHTMLBlocksCheckBox")) return suppressHTMLBlocksCheckBox;
         if (persistName.equals("suppressInlineHTMLCheckBox")) return suppressInlineHTMLCheckBox;
-        if (persistName.equals("strikethroughCheckBox")) return strikethroughCheckBox;
+        if (persistName.equals("tablesCheckBox")) return tablesCheckBox;
         if (persistName.equals("taskListsCheckBox")) return taskListsCheckBox;
-        if (persistName.equals("headerSpaceCheckBox")) return headerSpaceCheckBox;
-        if (persistName.equals("anchorLinksCheckBox")) return anchorLinksCheckBox;
-        if (persistName.equals("forceListParaCheckBox")) return forceListParaCheckBox;
-        if (persistName.equals("relaxedHRulesCheckBox")) return relaxedHRulesCheckBox;
-        if (persistName.equals("githubWikiLinksCheckBox")) return githubWikiLinksCheckBox;
-        if (persistName.equals("footnotesCheckBox")) return footnotesCheckBox;
-        if (persistName.equals("githubWikiLinksCheckBox")) return githubWikiLinksCheckBox;
-        if (persistName.equals("footnotesCheckBox")) return footnotesCheckBox;
         if (persistName.equals("tocCheckBox")) return tocCheckBox;
+        if (persistName.equals("wikiLinksCheckBox")) return wikiLinksCheckBox;
 
         return null;
     }
@@ -91,12 +90,9 @@ public class MarkdownExtensionsPanel {
         tocLabel.setVisible(false);
     }
 
-    protected void updateLicencedFeatures(boolean isLicensed) {
-        if (!isLicensed) {
-            tocCheckBox.setSelected(false);
-        }
-
+    @Override
+    public void updateLicensedControls(boolean isLicensed) {
+        if (!isLicensed) tocCheckBox.setSelected(false);
         tocCheckBox.setEnabled(isLicensed);
     }
-
 }

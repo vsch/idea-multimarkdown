@@ -88,7 +88,7 @@ public class Settings {
         return element;
     }
 
-    public Element getState(String name, SettingsProvider provider) {
+    public Element getState(String name, ComponentProvider provider) {
         final Element element = new Element(name);
         for (Setting setting : settings) {
             String value = (String) provider.getComponent(setting.persistName);
@@ -109,13 +109,13 @@ public class Settings {
         if (notifier != null) notifier.endGroupNotifications();
     }
 
-    public boolean isChanged(@NotNull Element element, @NotNull SettingsProvider settingsProvider) {
+    public boolean isChanged(@NotNull Element element, @NotNull ComponentProvider componentProvider) {
         for (Settings.Setting setting : settings) {
             if (setting instanceof ElementSetting) {
                 ((ElementSetting) setting).isChanged(element);
             } else {
                 String storedValue = element.getAttributeValue(setting.persistName);
-                String currentValue = (String) settingsProvider.getComponent(setting.persistName);
+                String currentValue = (String) componentProvider.getComponent(setting.persistName);
                 if ((storedValue == null) != (currentValue == null)
                         || (storedValue != null && currentValue != null
                         && !setting.fromString(currentValue).equals(setting.fromString(storedValue)))) return true;

@@ -34,7 +34,6 @@ import java.util.ArrayList;
 
 public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfigurable {
     protected MultiMarkdownGlobalSettings globalSettings;
-
     protected MultiMarkdownSettingsPanel settingsPanel;
 
     @NotNull

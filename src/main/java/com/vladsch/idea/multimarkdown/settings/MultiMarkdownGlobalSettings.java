@@ -30,6 +30,7 @@ import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.ui.UIUtil;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
+import com.vladsch.idea.multimarkdown.util.ListenerNotifier;
 import org.apache.commons.codec.Charsets;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
@@ -71,7 +72,7 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
 
     }
 
-    protected final SettingsNotifierImpl<MultiMarkdownGlobalSettings> notifier = new SettingsNotifierImpl<MultiMarkdownGlobalSettings>(this);
+    protected final SettingsNotifier<MultiMarkdownGlobalSettings> notifier = new SettingsNotifier<MultiMarkdownGlobalSettings>(this);
     protected final Settings settings = new Settings(notifier);
 
     public MultiMarkdownGlobalSettings() {
@@ -80,7 +81,13 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
             @Override
             public void uiSettingsChanged(UISettings source) {
                 if (htmlTheme.getValue() == HTML_THEME_UI) {
-                    notifier.notifyListeners();
+                    notifier.notifyListeners(new ListenerNotifier.RunnableNotifier<SettingsListener<MultiMarkdownGlobalSettings>>() {
+                        @Override
+                        public boolean notify(SettingsListener<MultiMarkdownGlobalSettings> listener) {
+                            listener.handleSettingsChanged(MultiMarkdownGlobalSettings.this);
+                            return false;
+                        }
+                    });
                 }
             }
         }, this);

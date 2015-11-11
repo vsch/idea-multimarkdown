@@ -38,13 +38,13 @@ public class SettingHandlers<M> extends Settings {
         super(notifier);
     }
 
-    public Element getState(@Nullable M model, String elementName, SettingsProvider settingsProvider) {
+    public Element getState(@Nullable M model, String elementName, ComponentProvider componentProvider) {
         if (model != null) {
             for (GroupHandler<M> handler : handlers) {
                 handler.saveModelValue(model);
             }
         }
-        return super.getState(elementName, settingsProvider);
+        return super.getState(elementName, componentProvider);
     }
 
     public void loadState(@Nullable M model, @NotNull Element element) {

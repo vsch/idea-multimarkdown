@@ -21,53 +21,64 @@
 package com.vladsch.idea.multimarkdown.util;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
 import java.util.HashSet;
 
 public class ListenerNotifier<L> {
     final protected HashSet<WeakReference<L>> listeners = new HashSet<WeakReference<L>>();
-    protected final WeakReference<ListenerNotifyDelegate<L>> updateDelegate;
-
-    public Object getListeners() {
+    public HashSet<WeakReference<L>> getListeners() {
         return listeners;
     }
 
-    public ListenerNotifier(@NotNull ListenerNotifyDelegate<L> updateDelegate) {
-        this.updateDelegate = new WeakReference<ListenerNotifyDelegate<L>>(updateDelegate);
+    public interface RunnableNotifier<L> {
+        boolean notify(L listener);
     }
 
-    public void addListener(@NotNull final L listener, Object... params) {
+    public ListenerNotifier() {
+
+    }
+
+    public void addListener(@NotNull final L listener) {
+        addListener(listener, null);
+    }
+
+    public void addListener(@NotNull final L listener, @Nullable RunnableNotifier<L> runnableNotifier) {
         synchronized (listeners) {
             removeListener(listener);
             listeners.add(new WeakReference<L>(listener));
 
             // the delegate should check for necessary conditions for listener update
-            ListenerNotifyDelegate<L> notifyDelegate = updateDelegate.get();
-            if (notifyDelegate != null) notifyDelegate.notify(listener, params);
+            if (runnableNotifier != null) runnableNotifier.notify(listener);
         }
     }
 
     public void removeListener(@NotNull final L listener) {
+        removeListener(listener, null);
+    }
+
+    public void removeListener(@NotNull final L listener, @Nullable RunnableNotifier<L> runnableNotifier) {
         synchronized (listeners) {
             WeakReference[] listenerList = listeners.toArray(new WeakReference[listeners.size()]);
 
-            for (final WeakReference listenerRef : listenerList) {
+            for (WeakReference listenerRef : listenerList) {
                 if (listenerRef.get() == null || listenerRef.get() == listener) {
                     listeners.remove(listenerRef);
                 }
             }
+
+            if (runnableNotifier != null) notifyListeners(runnableNotifier);
         }
     }
 
-    public void notifyListeners(Object... params) {
+    public void notifyListeners(@NotNull RunnableNotifier<L> runnableNotifier) {
         synchronized (listeners) {
-            ListenerNotifyDelegate<L> notifyDelegate = updateDelegate.get();
-            if (notifyDelegate != null) {
-                L listener;
-                for (final WeakReference<L> listenerRef : listeners) {
-                    if ((listener = listenerRef.get()) != null) notifyDelegate.notify(listener, params);
-                }
+            WeakReference[] listenerList = listeners.toArray(new WeakReference[listeners.size()]);
+
+            L listener;
+            for (WeakReference listenerRef : listenerList) {
+                if ((listener = (L) listenerRef.get()) != null && runnableNotifier.notify(listener)) break;
             }
         }
     }

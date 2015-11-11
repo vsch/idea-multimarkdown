@@ -26,7 +26,7 @@ package com.vladsch.idea.multimarkdown.settings;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 
-public interface ComponentState extends SettingsProvider {
+public interface ComponentState extends ComponentProvider {
     Element getState(String elementName);
     void loadState(@NotNull Element element);
     boolean isChanged(@NotNull Element element);

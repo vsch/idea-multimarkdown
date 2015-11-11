@@ -18,6 +18,7 @@ import com.google.common.io.Resources;
 import com.vladsch.idea.multimarkdown.editor.MultiMarkdownPreviewEditor;
 import org.apache.commons.codec.Charsets;
 import org.apache.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
@@ -27,17 +28,20 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-public class NoticePanel {
+public class NoticePanel extends SettingsPanelImpl {
     private static final Logger logger = Logger.getLogger(NoticePanel.class);
 
     private JEditorPane noticesEditorPane;
     private JPanel mainPanel;
 
-    public JComponent getComponent()
-    {
+    public JComponent getComponent() {
         return mainPanel;
     }
 
+    @Override
+    public Object getComponent(@NotNull String componentName) {
+        return null;
+    }
 
     public NoticePanel() {
         String htmlText = "";
@@ -50,30 +54,7 @@ public class NoticePanel {
         MultiMarkdownPreviewEditor.setStyleSheet(noticesEditorPane);
         noticesEditorPane.setText(htmlText);
 
-        HyperlinkListener listener = new HyperlinkListener() {
-            @Override
-            public void hyperlinkUpdate(HyperlinkEvent e) {
-                if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
-                    URL href = e.getURL();
-                    if (href != null) {
-                        if (Desktop.isDesktopSupported()) {
-                            try {
-                                Desktop.getDesktop().browse(href.toURI());
-                            } catch (URISyntaxException ex) {
-                                // invalid URI, just log
-                                logger.error("URISyntaxException on '" + href.toString() + "'" + ex.toString());
-                            } catch (IOException ex) {
-                                logger.error("IOException on '" + href.toString() + "'" + ex.toString());
-                            }
-                        }
-                    }
-                }
-            }
-        };
-
         //tippingJarEditorPane.addHyperlinkListener(listener);
-        noticesEditorPane.addHyperlinkListener(listener);
-
+        noticesEditorPane.addHyperlinkListener(getHyperLinkListenerBrowseUrl());
     }
-
 }

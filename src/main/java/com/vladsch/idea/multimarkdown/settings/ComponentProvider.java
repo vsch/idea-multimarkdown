@@ -17,9 +17,15 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
+ *
+ * This file is based on the IntelliJ SimplePlugin tutorial
+ *
  */
-package com.vladsch.idea.multimarkdown.util;
+package com.vladsch.idea.multimarkdown.settings;
 
-public interface ListenerNotifyDelegate<L> {
-    void notify(L listener, Object... params);
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+public interface ComponentProvider {
+    @Nullable Object getComponent(@NotNull String persistName);
 }

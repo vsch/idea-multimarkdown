@@ -16,8 +16,6 @@ package com.vladsch.idea.multimarkdown.settings;
 
 import com.intellij.ide.highlighter.HighlighterFactory;
 import com.intellij.lang.Language;
-import com.intellij.openapi.application.Application;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.EditorSettings;
 import com.intellij.openapi.editor.event.DocumentAdapter;
@@ -43,20 +41,20 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 
-public class CssOptionsPanel {
-    private JPanel mainPanel;
+public class CssOptionsPanel extends SettingsPanelImpl {
     private EditorTextField textCustomCss;
-    private JComboBox htmlThemeComboBox;
-    private JButton focusEditorButton;
-    private JCheckBox useCustomCssCheckBox;
     private JButton btnLoadDefault;
     private JButton clearCustomCssButton;
-    private JList htmlThemeList;
-    private JCheckBox useHighlightJsCheckBox;
+    private JButton focusEditorButton;
+    private JCheckBox includesColorsCheckBox;
     private JCheckBox includesHljsCssCheckBox;
     private JCheckBox includesLayoutCssCheckBox;
-    private JCheckBox includesColorsCheckBox;
+    private JCheckBox useCustomCssCheckBox;
+    private JCheckBox useHighlightJsCheckBox;
+    private JComponent htmlThemeComboBox;
+    private JList htmlThemeList;
     private JPanel customCssPanel;
+    private JPanel mainPanel;
 
     public JComponent getComponent() {
         return mainPanel;
@@ -66,30 +64,25 @@ public class CssOptionsPanel {
     public
     @Nullable
     Object getComponent(@NotNull String persistName) {
+        //if (persistName.equals("htmlThemeComboBox")) return htmlThemeComboBox;
+        if (persistName.equals("btnLoadDefault")) return btnLoadDefault;
+        if (persistName.equals("clearCustomCssButton")) return clearCustomCssButton;
+        if (persistName.equals("htmlThemeList")) return htmlThemeList;
+        if (persistName.equals("includesHljsCssCheckBox")) return includesHljsCssCheckBox;
+        if (persistName.equals("includesLayoutCssCheckBox")) return includesLayoutCssCheckBox;
         if (persistName.equals("textCustomCss")) return textCustomCss;
-
+        if (persistName.equals("useCustomCssCheckBox")) return useCustomCssCheckBox;
+        if (persistName.equals("useHighlightJsCheckBox")) return useHighlightJsCheckBox;
+        if (persistName.equals(HAVE_CUSTOM_CSS_BOOLEAN)) return textCustomCss.getText().trim().length() > 0;
+        if (persistName.equals(HAVE_CUSTOMIZABLE_EDITOR)) return haveCustomizableEditor ? textCustomCss : null;
         return null;
     }
 
-    protected boolean useCustomCSSOriginalState;
     protected boolean haveCustomizableEditor;
+    final protected MultiMarkdownGlobalSettings settings;
 
-    protected void updateCustomCssControls() {
-        final Application application = ApplicationManager.getApplication();
-        if (haveCustomizableEditor && !((CustomizableEditorTextField) textCustomCss).isPendingTextUpdate()) {
-            updateRawCustomCssControls();
-        } else {
-            application.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    updateRawCustomCssControls();
-                }
-            }, application.getCurrentModalityState());
-        }
-    }
-
-    private void updateRawCustomCssControls() {
-        boolean haveCustomCss = textCustomCss.getText().trim().length() > 0;
+    @Override
+    public void updateCustomCssControls(boolean haveCustomCss) {
         useCustomCssCheckBox.setEnabled(haveCustomCss);
         clearCustomCssButton.setEnabled(haveCustomCss);
         if (!haveCustomCss) useCustomCssCheckBox.setSelected(false);
@@ -98,24 +91,20 @@ public class CssOptionsPanel {
             focusEditorButton.setEnabled(((CustomizableEditorTextField) textCustomCss).haveSavedState());
     }
 
-    private void updateUseOldPreviewControls(boolean useNewPreview) {
-        // boolean useNewPreview = !useOldPreviewCheckBox.isSelected();
-        // enableFirebugCheckBox.setEnabled(useNewPreview);
-        // enableFirebugLabel.setEnabled(useNewPreview);
+    @Override
+    public void updateUseOldPreviewControls(boolean useNewPreview) {
         useHighlightJsCheckBox.setEnabled(useNewPreview);
         includesLayoutCssCheckBox.setEnabled(useNewPreview);
         includesColorsCheckBox.setEnabled(useNewPreview);
-        // pageZoomSpinner.setEnabled(useNewPreview);
-        // pageZoomLabel.setEnabled(useNewPreview);
-        // maxImgWidthSpinner.setEnabled(!useNewPreview);
-        // maxImgWidthLabel.setEnabled(!useNewPreview);
 
         btnLoadDefault.setEnabled(!useNewPreview || includesColorsCheckBox.isSelected() || includesHljsCssCheckBox.isSelected() || includesLayoutCssCheckBox.isSelected());
 
-        updateCustomCssControls();
+        notifyUpdateCustomCssControls();
     }
 
     public CssOptionsPanel() {
+        settings = MultiMarkdownGlobalSettings.getInstance();
+
         clearCustomCssButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -126,20 +115,11 @@ public class CssOptionsPanel {
         btnLoadDefault.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //String cssFileText = MultiMarkdownGlobalSettings.getInstance().getCssFileText(htmlThemeComboBox.getSelectedIndex());
-                //String base64Css = Base64.encodeBase64URLSafeString(MultiMarkdownGlobalSettings.getInstance().getCssText().getBytes(Charset.forName("utf-8")));
-                //String cssText = new String(Base64.decodeBase64(base64Css), Charset.forName("utf-8"));
-                MultiMarkdownGlobalSettings settings = MultiMarkdownGlobalSettings.getInstance();
-                textCustomCss.setText((useOldPreviewCheckBox.isSelected() ? settings.getCssFileText(htmlThemeList.getSelectedIndex(), false)
-
+                textCustomCss.setText(isUseOldPreview() ? settings.getCssFileText(htmlThemeList.getSelectedIndex(), false)
                         : (includesColorsCheckBox.isSelected() ? settings.getCssFileText(htmlThemeList.getSelectedIndex(), true) : "") +
-
-                        (includesLayoutCssCheckBox.isSelected()
-                                ? settings.getLayoutCssFileText() : "") +
-
-                        (includesHljsCssCheckBox.isSelected() && useHighlightJsCheckBox.isSelected()
-                                ? settings.getHljsCssFileText(htmlThemeList.getSelectedIndex(), true) : "")
-                ));
+                        (includesLayoutCssCheckBox.isSelected() ? settings.getLayoutCssFileText() : "") +
+                        (includesHljsCssCheckBox.isSelected() && useHighlightJsCheckBox.isSelected() ? settings.getHljsCssFileText(htmlThemeList.getSelectedIndex(), true) : "")
+                );
             }
         });
 
@@ -153,19 +133,20 @@ public class CssOptionsPanel {
         ItemListener itemListener1 = new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                updateCustomCssControls();
+                notifyUpdateCustomCssControls();
             }
         };
+
         useCustomCssCheckBox.addItemListener(itemListener1);
         useHighlightJsCheckBox.addItemListener(itemListener1);
 
         ItemListener itemListener = new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                updateUseOldPreviewControls();
+                notifyUpdateUseOldPreviewControls(isUseOldPreview());
             }
         };
-        //useOldPreviewCheckBox.addItemListener(itemListener);
+
         includesColorsCheckBox.addItemListener(itemListener);
         includesHljsCssCheckBox.addItemListener(itemListener);
         includesLayoutCssCheckBox.addItemListener(itemListener);
@@ -173,7 +154,7 @@ public class CssOptionsPanel {
             @Override
             public void documentChanged(DocumentEvent e) {
                 super.documentChanged(e);
-                updateCustomCssControls();
+                notifyUpdateCustomCssControls();
             }
         });
     }

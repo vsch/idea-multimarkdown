@@ -31,7 +31,6 @@ import com.intellij.openapi.vcs.FileStatusManager;
 import com.intellij.openapi.vcs.ProjectLevelVcsManager;
 import com.intellij.openapi.vcs.VcsListener;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.refactoring.listeners.RefactoringEventData;
@@ -46,7 +45,6 @@ import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
 import com.vladsch.idea.multimarkdown.util.GitHubRepo;
 import com.vladsch.idea.multimarkdown.util.ListenerNotifier;
-import com.vladsch.idea.multimarkdown.util.ListenerNotifyDelegate;
 import com.vladsch.idea.multimarkdown.util.ReferenceChangeListener;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NonNls;
@@ -55,7 +53,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
-public class MultiMarkdownProjectComponent implements ProjectComponent, ListenerNotifyDelegate<ReferenceChangeListener> {
+public class MultiMarkdownProjectComponent implements ProjectComponent {
     private static final Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownProjectComponent.class);
 
     private final static int LISTENER_ADDED = 0;
@@ -73,13 +71,13 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, Listener
     protected boolean needReparsePsiOnDumbModeExit = false;
 
     private final HashMap<String, ElementNamespace> elementNamespaces = new HashMap<String, ElementNamespace>();
-    private final ListenerNotifier<ReferenceChangeListener> allNamespacesNotifier = new ListenerNotifier<ReferenceChangeListener>(this);
+    private final ListenerNotifier<ReferenceChangeListener> allNamespacesNotifier = new ListenerNotifier<ReferenceChangeListener>();
     private boolean needAllSpacesNotification;
 
     private class ElementNamespace {
         final String namespace;
         final HashMap<String, MultiMarkdownNamedElement> symbolTable = new HashMap<String, MultiMarkdownNamedElement>();
-        final ListenerNotifier<ReferenceChangeListener> notifier = new ListenerNotifier<ReferenceChangeListener>(MultiMarkdownProjectComponent.this);
+        final ListenerNotifier<ReferenceChangeListener> notifier = new ListenerNotifier<ReferenceChangeListener>();
         final HashMap<MultiMarkdownNamedElement, String> rootElements = new HashMap<MultiMarkdownNamedElement, String>();
 
         public ElementNamespace(String namespace) {
@@ -126,7 +124,14 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, Listener
             if (oldName != null) {
                 // do the notifications that the reference symbol for oldName has changed
                 if (log) logger.info("notifiying listeners of " + namespace + " ref changed to '" + oldName + "'");
-                notifier.notifyListeners(SYMBOL_REF_CHANGED, oldName);
+                final String finalOldName = oldName;
+                notifier.notifyListeners(new ListenerNotifier.RunnableNotifier<ReferenceChangeListener>() {
+                    @Override
+                    public boolean notify(ReferenceChangeListener listener) {
+                        listener.referenceChanged(finalOldName);
+                        return false;
+                    }
+                });
                 needAllSpacesNotification = true;
             }
 
@@ -134,11 +139,17 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, Listener
         }
 
         void notifyRefsInvalidated() {
-            notifier.notifyListeners(SYMBOL_REF_CHANGED);
+            notifier.notifyListeners(new ListenerNotifier.RunnableNotifier<ReferenceChangeListener>() {
+                @Override
+                public boolean notify(ReferenceChangeListener listener) {
+                    listener.referenceChanged(null);
+                    return false;
+                }
+            });
         }
 
         void addListener(ReferenceChangeListener listener) {
-            notifier.addListener(listener, LISTENER_ADDED);
+            notifier.addListener(listener);
         }
 
         public void removeListener(ReferenceChangeListener listener) {
@@ -147,7 +158,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, Listener
     }
 
     @NotNull
-    public MultiMarkdownNamedElement getMissingLinkElement(@NotNull final MultiMarkdownNamedElement element, @NotNull final String namespace, @NotNull String name) {
+    public MultiMarkdownNamedElement getMissingLinkElement(@NotNull final MultiMarkdownNamedElement element, @NotNull final String namespace, @NotNull final String name) {
         ElementNamespace elementNamespace;
         synchronized (elementNamespaces) {
             if (!elementNamespaces.containsKey(namespace)) {
@@ -158,26 +169,16 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, Listener
         }
 
         MultiMarkdownNamedElement symbol = elementNamespace.getSymbol(element, name);
-        if (needAllSpacesNotification) allNamespacesNotifier.notifyListeners(MultiMarkdownProjectComponent.SYMBOL_REF_CHANGED);
-        return symbol;
-    }
 
-    @Override
-    public void notify(com.vladsch.idea.multimarkdown.util.ReferenceChangeListener listener, Object... params) {
-        if (params.length >= 1) {
-            String name = params.length > 1 ? (String) params[1] : null;
-            switch ((Integer) params[0]) {
-                case LISTENER_ADDED:
-                    break;
-
-                case SYMBOL_REF_CHANGED:
-                    listener.referenceChanged(name);
-                    break;
-
-                default:
-                    break;
+        if (needAllSpacesNotification) allNamespacesNotifier.notifyListeners(new ListenerNotifier.RunnableNotifier<ReferenceChangeListener>() {
+            @Override
+            public boolean notify(ReferenceChangeListener listener) {
+                listener.referenceChanged(name);
+                return false;
             }
-        }
+        });
+
+        return symbol;
     }
 
     protected void reparseMarkdown() {
@@ -224,7 +225,13 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, Listener
         for (ElementNamespace elementNamespace : elementNamespaces.values()) {
             elementNamespace.notifyRefsInvalidated();
         }
-        allNamespacesNotifier.notifyListeners(SYMBOL_REF_CHANGED);
+        allNamespacesNotifier.notifyListeners(new ListenerNotifier.RunnableNotifier<ReferenceChangeListener>() {
+            @Override
+            public boolean notify(ReferenceChangeListener listener) {
+                listener.referenceChanged(null);
+                return false;
+            }
+        });
         elementNamespaces.clear();
     }
 
@@ -249,7 +256,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, Listener
     }
 
     public void addListener(@NotNull ReferenceChangeListener listener) {
-        allNamespacesNotifier.addListener(listener, LISTENER_ADDED);
+        allNamespacesNotifier.addListener(listener);
     }
 
     public void removeListener(@NotNull ReferenceChangeListener listener) {
