@@ -148,7 +148,7 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
     private JCheckBox tocCheckBox;
     private JLabel tocLabel;
 
-    // need this so that we dont try to access components before they are created
+    // need this so that we don't try to access components before they are created
     public
     @Nullable
     Object getComponent(@NotNull String persistName) {

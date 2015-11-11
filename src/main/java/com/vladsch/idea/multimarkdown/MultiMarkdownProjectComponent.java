@@ -21,28 +21,23 @@
 
 package com.vladsch.idea.multimarkdown;
 
-import com.intellij.ProjectTopics;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ModuleRootAdapter;
-import com.intellij.openapi.roots.ModuleRootEvent;
 import com.intellij.openapi.vcs.FileStatus;
 import com.intellij.openapi.vcs.FileStatusManager;
 import com.intellij.openapi.vcs.ProjectLevelVcsManager;
 import com.intellij.openapi.vcs.VcsListener;
-import com.intellij.openapi.vfs.*;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.refactoring.listeners.RefactoringEventData;
 import com.intellij.refactoring.listeners.RefactoringEventListener;
 import com.intellij.util.FileContentUtil;
 import com.intellij.util.containers.HashMap;
-import com.intellij.util.containers.HashSet;
 import com.intellij.util.messages.MessageBus;
 import com.intellij.util.messages.MessageBusConnection;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
@@ -59,10 +54,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
-public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualFileListener, ListenerNotifyDelegate<ReferenceChangeListener> {
+public class MultiMarkdownProjectComponent implements ProjectComponent, ListenerNotifyDelegate<ReferenceChangeListener> {
     private static final Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownProjectComponent.class);
 
     private final static int LISTENER_ADDED = 0;
@@ -77,6 +70,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
     protected int[] refactoringRenameFlagsStack = new int[10];
     protected int refactoringRenameStack = 0;
     protected boolean needReparseOnDumbModeExit = false;
+    protected boolean needReparsePsiOnDumbModeExit = false;
 
     private final HashMap<String, ElementNamespace> elementNamespaces = new HashMap<String, ElementNamespace>();
     private final ListenerNotifier<ReferenceChangeListener> allNamespacesNotifier = new ListenerNotifier<ReferenceChangeListener>(this);
@@ -194,63 +188,38 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         if (!project.isDisposed()) {
             if (DumbService.isDumb(project)) {
                 needReparseOnDumbModeExit = true;
+                needReparsePsiOnDumbModeExit = reparseFilePsi;
                 return;
             }
 
-            ApplicationManager.getApplication().executeOnPooledThread(new Runnable() {
-                @Override
-                public void run() {
-                    ApplicationManager.getApplication().runReadAction(new Runnable() {
-                        @Override
-                        public void run() {
-                            Collection<MultiMarkdownFile> markdownFiles;
-                            HashSet<MultiMarkdownFile> markdownFileHash = new HashSet<MultiMarkdownFile>();
+            // reparse all open markdown editors
+            VirtualFile[] files = FileEditorManager.getInstance(project).getOpenFiles();
 
-                            // reparse all open markdown editors
-                            VirtualFile[] files = FileEditorManager.getInstance(project).getOpenFiles();
-                            PsiManager psiManager = PsiManager.getInstance(project);
+            clearNamespaces();
 
-                            for (VirtualFile file : files) {
-                                PsiFile psiFile = psiManager.findFile(file);
-                                if (psiFile != null && psiFile instanceof MultiMarkdownFile) {
-                                    markdownFileHash.add((MultiMarkdownFile) psiFile);
-                                }
-                            }
-                            markdownFiles = markdownFileHash;
+            PsiManager psiManager = PsiManager.getInstance(project);
+            if (reparseFilePsi) {
+                ArrayList<VirtualFile> fileList = new ArrayList<VirtualFile>(files.length);
 
-                            clearNamespaces();
-
-                            DaemonCodeAnalyzer instance = DaemonCodeAnalyzer.getInstance(project);
-                            List<VirtualFile> reparseFiles = null;
-
-                            if (reparseFilePsi) {
-                                reparseFiles = new ArrayList<VirtualFile>(markdownFiles.size());
-                            }
-
-                            for (MultiMarkdownFile markdownFile : markdownFiles) {
-                                if (reparseFilePsi) reparseFiles.add(markdownFile.getVirtualFile());
-                                else instance.restart(markdownFile);
-                            }
-
-                            if (reparseFilePsi) {
-                                final List<VirtualFile> finalReparseFiles = reparseFiles;
-                                ApplicationManager.getApplication().invokeLater(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        FileContentUtil.reparseFiles(finalReparseFiles);
-                                    }
-                                }, ModalityState.NON_MODAL);
-                            }
-
-                            //FileReferenceList fileList = new FileReferenceListQuery(project).all();
-                            //int[] counts = fileList.countByFilter(FileReferenceList.IMAGE_FILE_FILTER, FileReferenceList.MARKDOWN_FILE_FILTER, FileReferenceList.WIKIPAGE_FILE_FILTER);
-                            //logger.info(String.format("Updated file list: projectRefs[%d],  imageRefs[%d],  markdownRefs[%d], wikiRefs[%d]", fileList.size(), counts[0], counts[1], counts[2]));
-                        }
-                    });
+                for (VirtualFile file : files) {
+                    PsiFile psiFile = psiManager.findFile(file);
+                    if (psiFile != null && psiFile instanceof MultiMarkdownFile) {
+                        fileList.add(file);
+                    }
                 }
-            });
+                FileContentUtil.reparseFiles(fileList);
+            } else {
+                DaemonCodeAnalyzer instance = DaemonCodeAnalyzer.getInstance(project);
+                for (VirtualFile file : files) {
+                    PsiFile psiFile = psiManager.findFile(file);
+                    if (psiFile != null && psiFile instanceof MultiMarkdownFile) {
+                        instance.restart(psiFile);
+                    }
+                }
+            }
         }
     }
+
     private void clearNamespaces() {
         for (ElementNamespace elementNamespace : elementNamespaces.values()) {
             elementNamespace.notifyRefsInvalidated();
@@ -342,8 +311,10 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
                 if (project.isDisposed()) return;
 
                 if (needReparseOnDumbModeExit) {
+                    final boolean reparseFilePsi = needReparsePsiOnDumbModeExit;
                     needReparseOnDumbModeExit = false;
-                    reparseMarkdown();
+                    needReparsePsiOnDumbModeExit = false;
+                    reparseMarkdown(reparseFilePsi);
                 }
             }
         });
@@ -358,14 +329,11 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
             @Override
             public void refactoringDone(@NotNull String refactoringId, @Nullable RefactoringEventData afterData) {
                 //logger.info("refactoring done on " + this.hashCode());
-                //notifyMissingLinks(ALL_NAMESPACES);
-                //logger.info("refactoring done on " + this.hashCode());
             }
 
             @Override
             public void conflictsDetected(@NotNull String refactoringId, @NotNull RefactoringEventData conflictsData) {
                 //logger.info("refactoring conflicts on " + this.hashCode());
-                //notifyMissingLinks(ALL_NAMESPACES);
             }
 
             @Override
@@ -389,76 +357,8 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         return !fileStatus;
     }
 
-    // TODO: detect extension change in a file and attach our editors if possible
-    @Override
-    public void propertyChanged(@NotNull VirtualFilePropertyEvent event) {
-        reparseMarkdown();
-    }
-
-    @Override
-    public void contentsChanged(@NotNull VirtualFileEvent event) {
-        //reparseMarkdown();
-    }
-
-    @Override
-    public void fileCreated(@NotNull VirtualFileEvent event) {
-        reparseMarkdown();
-    }
-
-    @Override
-    public void fileDeleted(@NotNull VirtualFileEvent event) {
-        reparseMarkdown();
-    }
-
-    @Override
-    public void fileMoved(@NotNull VirtualFileMoveEvent event) {
-        reparseMarkdown();
-    }
-
-    @Override
-    public void fileCopied(@NotNull VirtualFileCopyEvent event) {
-        reparseMarkdown();
-    }
-
-    @Override
-    public void beforePropertyChange(@NotNull VirtualFilePropertyEvent event) {
-        String s = event.getPropertyName();
-        //int tmp = 0;
-    }
-
-    @Override
-    public void beforeContentsChange(@NotNull VirtualFileEvent event) {
-        //int tmp = 0;
-    }
-
-    // return the files this name from inFile can refer to, wikiPagesOnly is set if the name is a wiki link
-    // name could be a wiki page ref or a link -
-    // search type could be markdownFileRefs, wikiFiles, imageFileRefs
-
-    @Override
-    public void beforeFileDeletion(@NotNull VirtualFileEvent event) {
-        //int tmp = 0;
-    }
-
-    @Override
-    public void beforeFileMovement(@NotNull VirtualFileMoveEvent event) {
-        //int tmp = 0;
-    }
-
     public void projectOpened() {
-        // TODO: is this still needed?
-        VirtualFileManager.getInstance().addVirtualFileListener(this);
-        boolean initialized = project.isInitialized();
-
         final MessageBus messageBus = project.getMessageBus();
-
-        // TODO: is this still needed?
-        messageBus.connect().subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
-            public void rootsChanged(ModuleRootEvent event) {
-                if (project.isDisposed()) return;
-                reparseMarkdown();
-            }
-        });
 
         messageBus.connect().subscribe(ProjectLevelVcsManager.VCS_CONFIGURATION_CHANGED, new VcsListener() {
             @Override
@@ -476,7 +376,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
     }
 
     public void projectClosed() {
-        VirtualFileManager.getInstance().removeVirtualFileListener(this);
+
     }
 
     @NonNls
@@ -486,30 +386,10 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
     }
 
     public void initComponent() {
-        // get the file list updated
-        //StartupManager.getInstance(project).registerPostStartupActivity(new Runnable() {
-        //    public void run() {
-        //        /* initialization code */
-        //        mainFileList.updateCache();
-        //    }
-        //});
-        //int tmp = 0;
-        //MessageBusConnection connect = project.getMessageBus().connect();
-        //connect.subscribe(ProjectLifecycleListener.TOPIC, new ProjectLifecycleListener() {
-        //    @Override public void projectComponentsInitialized(Project aProject) {
-        //        if (aProject == project) mainFileList.loadList(project);
-        //    }
-        //
-        //    @Override public void beforeProjectLoaded(@NotNull Project project) {
-        //
-        //    }
-        //
-        //    @Override public void afterProjectClosed(@NotNull Project project) {
-        //
-        //    }
-        //});
+
     }
 
     public void disposeComponent() {
+
     }
 }

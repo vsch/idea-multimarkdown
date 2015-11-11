@@ -67,16 +67,12 @@ class ChangeWikiLinkToExplicitLinkQuickFix extends BaseIntentionAction {
         new WriteCommandAction.Simple(project) {
             @Override
             public void run() {
-                // change the whole name
+                // change the element using text, until I can figure out why any operations on ExplicitLinks cause exceptions.
                 //MultiMarkdownPsiImplUtil.changeToExplicitLink(wikiLinkElement);
                 final Document document = editor.getDocument();
                 String text = MultiMarkdownPsiImplUtil.getExplicitLinkTextFromWikiLink(wikiLinkElement);
                 int pos = wikiLinkElement.getTextOffset();
-                wikiLinkElement.delete();
-                document.insertString(pos, text);
-                //PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(document);
-                //PsiDocumentManager.getInstance(project).commitDocument(document);
-                //editor.getCaretModel().getPrimaryCaret().moveToOffset(document.getTextLength());
+                document.replaceString(pos, pos + wikiLinkElement.getTextLength(), text);
             }
         }.execute();
     }

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.vladsch.idea.multimarkdown.settings.CssOptionsPanel">
+  <grid id="27dc6" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="20" y="20" width="500" height="400"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <grid id="d04ba" binding="customCssPanel" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="5" right="5"/>
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <opaque value="false"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <grid id="1d6e8" layout-manager="GridLayoutManager" row-count="11" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <preferred-size width="177" height="87"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-1118482"/>
+              <enabled value="true"/>
+              <opaque value="false"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <vspacer id="117e2">
+                <constraints>
+                  <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
+              <component id="ad9e3" class="javax.swing.JComboBox" binding="htmlThemeComboBox" custom-create="true">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="177" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <requestFocusEnabled value="true"/>
+                  <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.custom-css-style.description"/>
+                </properties>
+              </component>
+              <component id="7ee05" class="javax.swing.JButton" binding="focusEditorButton" default-binding="true">
+                <constraints>
+                  <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.focus-editor.label"/>
+                  <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.focus-editor.description"/>
+                </properties>
+              </component>
+              <component id="c478b" class="javax.swing.JCheckBox" binding="useCustomCssCheckBox">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.use-custom-css.label"/>
+                  <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.use-custom-css.description"/>
+                </properties>
+              </component>
+              <component id="2be04" class="javax.swing.JButton" binding="btnLoadDefault">
+                <constraints>
+                  <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.custom-css-load.label"/>
+                  <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.custom-css-load.description"/>
+                </properties>
+              </component>
+              <component id="b4f4f" class="javax.swing.JButton" binding="clearCustomCssButton">
+                <constraints>
+                  <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.custom-css-reset.label"/>
+                </properties>
+              </component>
+              <component id="21388" class="javax.swing.JList" binding="htmlThemeList" custom-create="true">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                    <preferred-size width="177" height="75"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <selectionMode value="0"/>
+                  <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.custom-css-style.description"/>
+                </properties>
+              </component>
+              <component id="68747" class="javax.swing.JCheckBox" binding="useHighlightJsCheckBox">
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.use-highlight-js.label"/>
+                  <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.use-highlight-js.description"/>
+                </properties>
+              </component>
+              <component id="f618c" class="javax.swing.JCheckBox" binding="includesHljsCssCheckBox">
+                <constraints>
+                  <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.css-includes-hljs.label"/>
+                  <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.css-includes-hljs.description"/>
+                </properties>
+              </component>
+              <component id="e4d23" class="javax.swing.JCheckBox" binding="includesLayoutCssCheckBox">
+                <constraints>
+                  <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.css-includes-layout.label"/>
+                  <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.css-includes-layout.description"/>
+                </properties>
+              </component>
+              <component id="d9d71" class="javax.swing.JCheckBox" binding="includesColorsCheckBox">
+                <constraints>
+                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.css-includes-colors.label"/>
+                  <toolTipText resource-bundle="com/vladsch/idea/multimarkdown/localization/strings" key="settings.css-includes-colors.description"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <component id="7f18d" class="com.vladsch.idea.multimarkdown.settings.CustomizableEditorTextField" binding="textCustomCss" custom-create="true">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <minimum-size width="100" height="100"/>
+                <preferred-size width="100" height="200"/>
+              </grid>
+            </constraints>
+            <properties>
+              <focusCycleRoot value="true"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+    </children>
+  </grid>
+</form>

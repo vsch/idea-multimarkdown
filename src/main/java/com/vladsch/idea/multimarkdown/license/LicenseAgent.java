@@ -16,14 +16,17 @@ package com.vladsch.idea.multimarkdown.license;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.util.net.HttpConfigurable;
-import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.crypto.NoSuchPaddingException;
-import javax.json.*;
+import javax.json.Json;
+import javax.json.JsonException;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -310,7 +313,7 @@ public class LicenseAgent {
 
                         if (activationJson != null) {
                             byte[] bytes = activationJson.getBytes("UTF-8");
-                            InputStream stream = new ByteInputStream(bytes, bytes.length);
+                            InputStream stream = new ByteArrayInputStream(bytes);
                             JsonReader jsonReader = Json.createReader(stream);
                             activation = jsonReader.readObject();
                         }
