@@ -133,7 +133,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     }
 
     final public boolean hasWithAnchorExt() {
-        return fileNameContainsAnchor() && withAnchorNameEnd + 1 < filePath.length();
+        return withAnchorNameEnd + 1 < filePath.length();
     }
 
     final public boolean hasPureAnchor() {

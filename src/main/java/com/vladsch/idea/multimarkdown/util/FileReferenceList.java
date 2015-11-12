@@ -43,6 +43,11 @@ public class FileReferenceList {
         FileReference filterRef(@NotNull FileReference fileReference);
     }
 
+    @Override
+    public String toString() {
+        return "FileReferenceList: ["+fileReferences.length+"]" + (fileReferences.length > 0 ? fileReferences[0].toString() : "");
+    }
+
     public interface TransformFilter<T> extends Filter {
         @Nullable
         T transformRef(@NotNull FileReference fileReference);
@@ -603,8 +608,10 @@ public class FileReferenceList {
 
         @Override
         public FileReference filterRef(@NotNull FileReference fileReference) {
-            return fileReference instanceof FileReferenceLink
-                    && fileReference.getWikiHome().equals(((FileReferenceLink) fileReference).getSourceReference().getWikiHome()) ? fileReference : null;
+            boolean b = fileReference instanceof FileReferenceLink;
+            String targetWikiHome = fileReference.getWikiHome();
+            String sourceWikiHome = b ? ((FileReferenceLink) fileReference).getSourceReference().getWikiHome() : "";
+            return b && targetWikiHome.equals(sourceWikiHome) ? fileReference : null;
         }
     };
 

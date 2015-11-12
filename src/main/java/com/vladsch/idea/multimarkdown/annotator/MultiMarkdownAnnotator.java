@@ -369,6 +369,8 @@ public class MultiMarkdownAnnotator implements Annotator {
                             .keepLinkRefAnchor()
                             .wantMarkdownFiles()
                             .gitHubWikiRules()
+                            .ignoreWikiRefExtension()
+                            .inSource(containingFile)
                             .matchWikiRef(element)
                             .all();
 
@@ -386,7 +388,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                         state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
                     } else {
                         FileReferenceLinkGitHubRules referenceLink = (FileReferenceLinkGitHubRules) otherReferences[0];
-                        FileReferenceLink.InaccessibleWikiPageReasons reasons = referenceLink.inaccessibleWikiPageRefReasons(element.getName());
+                        FileReferenceLink.InaccessibleWikiPageReasons reasons = referenceLink.inaccessibleWikiPageRefReasons(MultiMarkdownPsiImplUtil.getLinkRefWithAnchor(element));
                         state.warningsOnly = true;
 
                         PsiFile psiFile = referenceLink.getPsiFile();
@@ -489,6 +491,18 @@ public class MultiMarkdownAnnotator implements Annotator {
                                 state.annotator.registerFix(new ChangeLinkRefQuickFix(element, reasons.wikiRefHasDashesFixed(), ChangeLinkRefQuickFix.REMOVE_DASHES));
                             }
                         }
+
+                        if (reasons.wikiRefHasExt()) {
+                            state.needTargetList = false;
+                            state.warningsOnly = false;
+                            state.canCreateFile = false;
+                            state.annotator = state.holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.link-ext"));
+                            state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
+
+                            if (state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, reasons.wikiRefHasExtFixed())) {
+                                state.annotator.registerFix(new ChangeLinkRefQuickFix(element, reasons.wikiRefHasExtFixed(), ChangeLinkRefQuickFix.REMOVE_EXT));
+                            }
+                        }
                     }
                 }
 
@@ -543,7 +557,7 @@ public class MultiMarkdownAnnotator implements Annotator {
     protected void annotateChangeWikiLinkToExplicitLink(@NotNull PsiElement element, AnnotationState state, int type) {
         if (MultiMarkdownPlugin.isLicensed()) {
             MultiMarkdownWikiLink wikiLink = (MultiMarkdownWikiLink) element.getParent();
-            annotateChangeLinkType(wikiLink, state, TYPE_CHANGE_WIKI_LINK_QUICK_FIX_TO_EXPLICIT_LINK, type, new ChangeWikiLinkToExplicitLinkQuickFix(wikiLink),"annotation.wikilink.change-to-linkref");
+            annotateChangeLinkType(wikiLink, state, TYPE_CHANGE_WIKI_LINK_QUICK_FIX_TO_EXPLICIT_LINK, type, new ChangeWikiLinkToExplicitLinkQuickFix(wikiLink), "annotation.wikilink.change-to-linkref");
         }
     }
 
@@ -553,7 +567,7 @@ public class MultiMarkdownAnnotator implements Annotator {
             FilePathInfo pathInfo = new FilePathInfo(element.getContainingFile().getVirtualFile());
             if (pathInfo.isWikiPage()) {
                 MultiMarkdownExplicitLink explicitLink = (MultiMarkdownExplicitLink) element.getParent();
-                annotateChangeLinkType(explicitLink, state, TYPE_CHANGE_EXPLICIT_LINK_TO_WIKI_LINK_QUICK_FIX, type, new ChangeExplicitLinkToWikiLinkQuickFix(explicitLink),"annotation.link.change-to-wikilink");
+                annotateChangeLinkType(explicitLink, state, TYPE_CHANGE_EXPLICIT_LINK_TO_WIKI_LINK_QUICK_FIX, type, new ChangeExplicitLinkToWikiLinkQuickFix(explicitLink), "annotation.link.change-to-wikilink");
             }
         }
     }

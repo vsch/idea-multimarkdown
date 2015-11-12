@@ -25,7 +25,9 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiReference;
 import com.intellij.refactoring.JavaRefactoringFactory;
 import com.intellij.refactoring.JavaRenameRefactoring;
 import com.intellij.usageView.UsageInfo;
@@ -46,6 +48,7 @@ class ChangeLinkRefQuickFix extends BaseIntentionAction {
     public static final int REMOVE_SLASHES = 3;
     public static final int REMOVE_SUBDIR = 4;
     public static final int ADD_PAGE_REF = 5;
+    public static final int REMOVE_EXT = 6;
 
     private String newLinkRef;
     private MultiMarkdownNamedElement linkRefElement;
@@ -86,6 +89,10 @@ class ChangeLinkRefQuickFix extends BaseIntentionAction {
 
             case REMOVE_SUBDIR:
                 msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-subdirs", FilePathInfo.wikiRefAsFileNameWithExt(newLinkRef));
+                break;
+
+            case REMOVE_EXT:
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-ext", FilePathInfo.wikiRefAsFileNameWithExt(newLinkRef));
                 break;
 
             case ADD_PAGE_REF:
@@ -130,8 +137,15 @@ class ChangeLinkRefQuickFix extends BaseIntentionAction {
                 public void run() {
                     // change the whole name
                     //wikiPageRefElement.setName(fileName, MultiMarkdownNamedElement.REASON_FILE_MOVED);
+                    PsiReference reference = linkRefElement.getReference();
+                    PsiElement rootElement = reference == null ? null : (MultiMarkdownNamedElement) reference.resolve();
+
+                    if (!(rootElement instanceof MultiMarkdownNamedElement)) {
+                        rootElement = linkRefElement;
+                    }
+
                     JavaRefactoringFactory factory = JavaRefactoringFactory.getInstance(project);
-                    JavaRenameRefactoring rename = factory.createRename(linkRefElement, fileName);
+                    JavaRenameRefactoring rename = factory.createRename(rootElement, fileName);
                     UsageInfo[] usages = rename.findUsages();
 
                     try {

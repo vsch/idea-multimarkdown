@@ -28,6 +28,7 @@ import org.junit.runners.Suite;
         TestFilePathInfoAsWikiRef.class,
         TestFilePathInfoEndsWithWikiRef.class,
         TestFilePathInfo.class,
+        TestFilePathInfoIndividial.class,
         TestFilePathInfoResolveLinkRef.class,
         TestFileReferenceLink.class,
         TestFileReferenceLinkGitHubRules.class,

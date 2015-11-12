@@ -202,7 +202,10 @@ public class TestFileReferenceListQueryMatch extends FileReferenceListTest {
 
     @Test
     public void test_08_Match_DotLinkRefAnchor() throws Exception {
-        FileReferenceListQuery fileReferenceListQuery = fileReferenceList.query().wantMarkdownFiles().keepLinkRefAnchor().matchLinkRef("./" + linkRef);
+        FileReferenceListQuery fileReferenceListQuery = fileReferenceList.query()
+                .wantMarkdownFiles()
+                .keepLinkRefAnchor()
+                .matchLinkRef("./" + linkRef);
         FileReferenceList refs = fileReferenceListQuery.all();
         compareUnorderedLists(null, linkRefMatches, refs);
     }

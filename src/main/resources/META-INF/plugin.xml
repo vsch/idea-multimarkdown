@@ -43,14 +43,17 @@
         </div>
         ]]></description>
 
-    <version>1.2.1</version>
+    <version>1.2.1.1</version>
     <idea-version since-build="133.1711"/>
     <change-notes><![CDATA[
-    <ul><h3><b>1.2.1 - Bug Fixes and Enhancements</b></h3><br>
+    <ul><h3><b>1.2.1.1 - Bug Fixes and Enhancements</b></h3><br>
       <h4>Basic Edition</h4>
-      <li>Fix #60: use another class for string to input stream conversion that is universally support across os types.</li>
       <h4>Enhanced Edition</h4>
-      <li>Fix buy license button in settings navigated to the get trial license page instead of the buy license page.</li>
+          <li>Fix #60: use another class for string to input stream conversion that is universally support across os types.</li>
+          <li>Fix: buy license button in settings navigated to the get trial license page instead of the buy license page.</li>
+          <li>Fix #64: Explicit link annotation had WikiLink cast causing CastClassException.</li>
+          <li>Fix #63: Unresolved links were not always highlighted as error</li>
+          <li>Fix #62: Plugin exhausted thread resources if a lot of projects were open</li>
     </ul>
     <ul><h3><b>1.2.0 - Bug Fixes and Enhancements</b></h3>
       <h4>Basic Edition</h4>

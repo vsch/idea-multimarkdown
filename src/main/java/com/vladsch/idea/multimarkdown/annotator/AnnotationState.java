@@ -129,7 +129,7 @@ public class AnnotationState {
         else if (idList.length == 1) id = idList[0];
         else id = implode("|", idList);
 
-        return !alreadyOfferedIds(type, id);
+        return alreadyOfferedIds(type, id);
     }
 
     public void addAlreadyOffered(@NotNull String type, @NotNull String id) {

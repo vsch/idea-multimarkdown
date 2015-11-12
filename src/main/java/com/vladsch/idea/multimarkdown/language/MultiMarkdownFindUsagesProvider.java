@@ -97,6 +97,8 @@ public class MultiMarkdownFindUsagesProvider implements FindUsagesProvider {
             return MultiMarkdownBundle.message("findusages.wikilink.page-ref");
         } else if (element instanceof MultiMarkdownWikiPageText) {
             return MultiMarkdownBundle.message("findusages.wikilink.page-title");
+        } else if (element instanceof MultiMarkdownWikiPageRefAnchor) {
+            return MultiMarkdownBundle.message("findusages.wikilink.page-anchor");
         } else if (element instanceof MultiMarkdownImageLinkRef) {
             return MultiMarkdownBundle.message("findusages.image.link-ref");
         } else if (element instanceof MultiMarkdownImageLinkRefText) {
@@ -120,8 +122,7 @@ public class MultiMarkdownFindUsagesProvider implements FindUsagesProvider {
     @Override
     public String getDescriptiveName(@NotNull PsiElement element) {
         if (element instanceof MultiMarkdownNamedElement) {
-            String name = ((MultiMarkdownNamedElement) element).getName();
-            return name != null ? name : "";
+            return ((MultiMarkdownNamedElement) element).getDisplayName();
         } else {
             return "";
         }
@@ -131,8 +132,7 @@ public class MultiMarkdownFindUsagesProvider implements FindUsagesProvider {
     @Override
     public String getNodeText(@NotNull PsiElement element, boolean useFullName) {
         if (element instanceof MultiMarkdownNamedElement) {
-            String name = ((MultiMarkdownNamedElement) element).getName();
-            return (name == null ? "" : name);
+            return "";
         } else {
             return "";
         }

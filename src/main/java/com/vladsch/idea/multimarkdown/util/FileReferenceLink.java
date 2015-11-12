@@ -42,6 +42,7 @@ public class FileReferenceLink extends FileReference {
     public static final int REASON_WIKI_PAGEREF_HAS_FIXABLE_SLASH = 0x0200;
     public static final int REASON_WIKI_PAGEREF_HAS_SUBDIR = 0x0400;
     public static final int REASON_WIKI_PAGEREF_HAS_ONLY_ANCHOR = 0x0800;
+    public static final int REASON_WIKI_PAGEREF_HAS_EXT = 0x1000;
 
     // flags are re-used for link ref reasons
     public static final int REASON_NOT_UNDER_SAME_REPO = 0x0001;
@@ -247,6 +248,9 @@ public class FileReferenceLink extends FileReference {
         public boolean wikiRefHasSubDir() { return false; }
         public String wikiRefHasSubDirFixed() { return wikiRef; }
 
+        public boolean wikiRefHasExt() { return (reasons & REASON_WIKI_PAGEREF_HAS_EXT) != 0; }
+        public String wikiRefHasExtFixed() { return referenceLink.getWikiPageRef(); }
+
         public boolean wikiRefHasOnlyAnchor() { return (reasons & REASON_WIKI_PAGEREF_HAS_ONLY_ANCHOR) != 0; }
         public String wikiRefHasOnlyAnchorFixed() { return referenceLink.getFileNameNoExt() + wikiRef; }
     }
@@ -276,6 +280,12 @@ public class FileReferenceLink extends FileReference {
 
         if (wikiPageRef != null && sourceReference.getFullFilePath().equals(getFullFilePath()) && wikiPageRef.startsWith("#")) {
             reasons |= REASON_WIKI_PAGEREF_HAS_ONLY_ANCHOR;
+        }
+
+        FilePathInfo wikiRefInfo = new FilePathInfo(wikiPageRef);
+
+        if (isWikiPageExt(wikiRefInfo.getWithAnchorExt())) {
+            reasons |= REASON_WIKI_PAGEREF_HAS_EXT;
         }
         return reasons;
     }

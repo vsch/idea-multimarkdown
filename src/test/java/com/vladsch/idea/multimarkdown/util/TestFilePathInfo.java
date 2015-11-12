@@ -375,7 +375,8 @@ public class TestFilePathInfo {
 /* 32: getFileNameWithAnchorAsWikiRef, */       result[32] = FilenameUtils.getExtension(filePath);
 /* 33: getFileNameWithAnchorNoExtAsWikiRef, */  result[33] = (itmp = (tmp = FilenameUtils.getName(filePath)).lastIndexOf('.')) != -1 ? tmp.substring(itmp) : "";
 /* 34: getProjectHome, */                       result[34] = projectHome;
-/* 34: hasWithAnchorExt, */                     result[35] = hasWithAnchorExt;
+/* 34: hasWithAnchorExt, */                     result[35] = ((String)result[24]).isEmpty() ? !((String)result[1]).isEmpty() : hasWithAnchorExt;
+
 
         /* @formatter:on */
         return result;
