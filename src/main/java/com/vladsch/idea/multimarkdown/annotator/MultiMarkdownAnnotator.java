@@ -92,7 +92,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                 if (wikiPageTextName.equals(wikiPageRef.getNameWithAnchor())) {
                     // can get rid off the text
                     if (state.addingAlreadyOffered(TYPE_DELETE_WIKI_PAGE_TITLE_QUICK_FIX)) {
-                        state.annotator = state.holder.createWeakWarningAnnotation(wikiPageText.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.redundant-page-title"));
+                        state.createWeakWarningAnnotation(wikiPageText.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.redundant-page-title"));
                         state.annotator.registerFix(new DeleteWikiPageTitleQuickFix(element));
                     }
                 } else {
@@ -105,7 +105,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                     if (accessibleWikiPageRefs.size() == 1) {
                         if (((MultiMarkdownReferenceWikiPageRef) wikiPageRefReference).isResolveRefMissing()) {
                             if (!state.alreadyOfferedTypes(TYPE_SWAP_WIKI_PAGE_REF_TITLE_QUICK_FIX, TYPE_DELETE_WIKI_PAGE_REF_QUICK_FIX)) {
-                                state.annotator = state.holder.createErrorAnnotation(element.getTextRange(),
+                                state.createErrorAnnotation(element.getTextRange(),
                                         MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue()
                                                 ? MultiMarkdownBundle.message("annotation.wikilink.ref-title-github")
                                                 : MultiMarkdownBundle.message("annotation.wikilink.ref-title-swapped"));
@@ -117,7 +117,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                             }
                         } else if (accessibleWikiPageRefs.get()[0].getFileNameNoExtAsWikiRef().equals(wikiPageTextName)) {
                             if (state.alreadyOfferedTypes(TYPE_DELETE_WIKI_PAGE_TITLE_QUICK_FIX, TYPE_DELETE_WIKI_PAGE_REF_QUICK_FIX, TYPE_SWAP_WIKI_PAGE_REF_TITLE_QUICK_FIX)) {
-                                state.annotator = state.holder.createInfoAnnotation(wikiPageText.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.swap-ref-title"));
+                                state.createInfoAnnotation(wikiPageText.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.swap-ref-title"));
                                 if (state.addingAlreadyOffered(TYPE_DELETE_WIKI_PAGE_TITLE_QUICK_FIX)) state.annotator.registerFix(new DeleteWikiPageTitleQuickFix(element));
                                 if (state.addingAlreadyOffered(TYPE_DELETE_WIKI_PAGE_REF_QUICK_FIX)) state.annotator.registerFix(new DeleteWikiPageRefQuickFix(element));
                                 if (state.addingAlreadyOffered(TYPE_SWAP_WIKI_PAGE_REF_TITLE_QUICK_FIX)) state.annotator.registerFix(new SwapWikiPageRefTitleQuickFix(element));
@@ -126,7 +126,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                         // TODO: when we can validate existence of anchors add it to the condition below
                     } else if (wikiPageTextName.startsWith("#")) {
                         if (state.addingAlreadyOffered(TYPE_SWAP_WIKI_PAGE_REF_TITLE_QUICK_FIX)) {
-                            state.annotator = state.holder.createInfoAnnotation(wikiPageText.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.swap-ref-title"));
+                            state.createInfoAnnotation(wikiPageText.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.swap-ref-title"));
                             state.annotator.registerFix(new SwapWikiPageRefTitleQuickFix(element));
                         }
                     }
@@ -197,7 +197,7 @@ public class MultiMarkdownAnnotator implements Annotator {
             } else if (accessibleLinkRefs.size() > 1 && useGitHubWikiPageRules) {
                 state.warningsOnly = false;
                 state.canCreateFile = false;
-                state.annotator = state.holder.createWarningAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.multiple-targets-match"));
+                state.createWarningAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.multiple-targets-match"));
 
                 //state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
                 FileReference[] sorted = accessibleLinkRefs.getSorted(1);
@@ -247,9 +247,9 @@ public class MultiMarkdownAnnotator implements Annotator {
 
                 if (otherReferences.length != 1) {
                     if (sourceReference.resolveExternalLinkRef(element.getFileName(), false, false) != null) {
-                        state.annotator = state.holder.createInfoAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.link.resolves-to-external"));
+                        state.createInfoAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.link.resolves-to-external"));
                     } else {
-                        state.annotator = state.holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.unresolved-link-reference"));
+                        state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.unresolved-link-reference"));
                         state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
                     }
                 } else {
@@ -263,7 +263,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                                 || !state.alreadyOfferedId(TYPE_RENAME_FILE_QUICK_FIX, referenceLink.getFullFilePath(), reasons.caseMismatchFileNameFixed())) {
 
                             state.needTargetList = false;
-                            state.annotator = state.holder.createWarningAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.case-mismatch"));
+                            state.createWarningAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.case-mismatch"));
 
                             if (state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, reasons.caseMismatchLinkRefFixed())) {
                                 state.annotator.registerFix(new ChangeLinkRefQuickFix(element, reasons.caseMismatchLinkRefFixed(), ChangeLinkRefQuickFix.MATCH_CASE_TO_FILE));
@@ -277,7 +277,7 @@ public class MultiMarkdownAnnotator implements Annotator {
 
                     if (!haveExt && withExt) {
                         state.needTargetList = false;
-                        state.annotator = state.holder.createWarningAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.image.missing-extension"));
+                        state.createWarningAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.image.missing-extension"));
                         state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
 
                         if (state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, referenceLink.getLinkRef())) {
@@ -289,7 +289,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                         if (reasons.targetNotInWikiHome() || reasons.targetNotInSameWikiHome()) {
                             state.warningsOnly = false;
                             // can offer to move the file, just add the logic
-                            state.annotator = state.holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.unreachable-page-reference-not-in-wiki-home"));
+                            state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.unreachable-page-reference-not-in-wiki-home"));
                             state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
                         }
 
@@ -297,7 +297,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                             state.warningsOnly = false;
                             state.canCreateFile = false;
                             // can offer to move the file, just add the logic
-                            state.annotator = state.holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.link.linkref-has-slash"));
+                            state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.link.linkref-has-slash"));
                             state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
 
                             if (reasons.linkRefHasFixableSlash()) {
@@ -316,7 +316,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                         if (reasons.targetNotInSameRepoHome()) {
                             state.warningsOnly = false;
                             // can offer to move the file, just add the logic
-                            state.annotator = state.holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.link.unreachable-link-reference-not-in-same-repo"));
+                            state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.link.unreachable-link-reference-not-in-same-repo"));
                             state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
                         }
                     }
@@ -326,7 +326,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                         state.warningsOnly = false;
                         String fixedName = reasons.targetNameHasAnchorFixed();
 
-                        state.annotator = state.holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.file-anchor"));
+                        state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.file-anchor"));
                         state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
 
                         if (referenceLink.canRenameFileTo(fixedName)) {
@@ -392,7 +392,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                 String newLinkRef = sourceFileInfo.getFileNameNoExtAsWikiRef() + pathInfo.getFullFilePath();
 
                 if (state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, newLinkRef)) {
-                    state.annotator = state.holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.has-only-anchor"));
+                    state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.has-only-anchor"));
                     state.annotator.registerFix(new ChangeLinkRefQuickFix(element, newLinkRef, ChangeLinkRefQuickFix.ADD_PAGE_REF, RENAME_KEEP_TEXT));
                 }
 
@@ -416,7 +416,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                     .accessibleWikiPageRefs();
 
             if (!containingFile.isWikiPage()) {
-                state.annotator = state.holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.github-only-on-wiki-page"));
+                state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.github-only-on-wiki-page"));
                 state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
                 offerWikiToExplicitQuickFix(wikiLink, state);
             } else if (accessibleWikiPageRefs.size() == 1) {
@@ -425,7 +425,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                 if (accessibleWikiPageRefs.size() > 1) {
                     state.warningsOnly = false;
                     state.canCreateFile = false;
-                    state.annotator = state.holder.createWarningAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.multiple-targets-match"));
+                    state.createWarningAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.multiple-targets-match"));
 
                     //state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
                     FileReference[] sorted = accessibleWikiPageRefs.getSorted(1);
@@ -469,7 +469,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                     FileReference[] otherReferences = otherFileRefList.get();
 
                     if (otherReferences.length != 1) {
-                        state.annotator = state.holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.unresolved-link-reference"));
+                        state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.unresolved-link-reference"));
                         state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
                     } else {
                         FileReferenceLinkGitHubRules referenceLink = (FileReferenceLinkGitHubRules) otherReferences[0];
@@ -478,11 +478,12 @@ public class MultiMarkdownAnnotator implements Annotator {
 
                         PsiFile psiFile = referenceLink.getPsiFile();
                         if (reasons.caseMismatch()) {
+                            state.canCreateFile = false;
 
                             if (!state.alreadyOfferedId(TYPE_CHANGE_LINK_REF_QUICK_FIX, reasons.caseMismatchWikiRefFixed())
                                     || !state.alreadyOfferedId(TYPE_RENAME_FILE_QUICK_FIX, referenceLink.getFullFilePath(), reasons.caseMismatchFileNameFixed())) {
                                 state.needTargetList = false;
-                                state.annotator = state.holder.createWarningAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.case-mismatch"));
+                                state.createWarningAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.case-mismatch"));
 
                                 if (state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, reasons.caseMismatchWikiRefFixed())) {
                                     state.annotator.registerFix(new ChangeLinkRefQuickFix(element, reasons.caseMismatchWikiRefFixed(), ChangeLinkRefQuickFix.MATCH_CASE_TO_FILE));
@@ -497,7 +498,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                         if (reasons.targetNotInWikiHome() || reasons.targetNotInSameWikiHome()) {
                             state.warningsOnly = false;
                             // can offer to move the file, just add the logic
-                            state.annotator = state.holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.unreachable-page-reference-not-in-wiki-home"));
+                            state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.unreachable-page-reference-not-in-wiki-home"));
                             state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
                         }
 
@@ -505,7 +506,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                             state.warningsOnly = false;
                             state.canCreateFile = false;
                             // can offer to move the file, just add the logic
-                            state.annotator = state.holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.linkref-has-slash"));
+                            state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.linkref-has-slash"));
                             state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
 
                             if (reasons.wikiRefHasFixableSlash()) {
@@ -524,7 +525,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                         if (reasons.targetNameHasSpaces()) {
                             state.needTargetList = false;
                             state.warningsOnly = false;
-                            state.annotator = state.holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.file-spaces"));
+                            state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.file-spaces"));
                             state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
 
                             if (referenceLink.canRenameFileTo(reasons.targetNameHasSpacedFixed())) {
@@ -537,7 +538,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                         if (reasons.targetNameHasAnchor()) {
                             state.needTargetList = false;
                             state.warningsOnly = false;
-                            state.annotator = state.holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.file-anchor"));
+                            state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.file-anchor"));
                             state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
 
                             if (referenceLink.canRenameFileTo(reasons.targetNameHasAnchorFixed())) {
@@ -550,7 +551,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                         if (!reasons.targetNameHasAnchor() && reasons.targetNotWikiPageExt()) {
                             // can offer to move the file, just add the logic
                             state.warningsOnly = false;
-                            state.annotator = state.holder.createWeakWarningAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.target-not-wiki-page-ext"));
+                            state.createWeakWarningAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.target-not-wiki-page-ext"));
                             //state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
 
                             if (referenceLink.canRenameFileTo(reasons.targetNotWikiPageExtFixed())) {
@@ -571,7 +572,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                             state.needTargetList = false;
                             state.warningsOnly = false;
                             state.canCreateFile = false;
-                            state.annotator = state.holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.link-dashes"));
+                            state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.link-dashes"));
 
                             if (state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, reasons.wikiRefHasDashesFixed())) {
                                 state.annotator.registerFix(new ChangeLinkRefQuickFix(element, reasons.wikiRefHasDashesFixed(), ChangeLinkRefQuickFix.REMOVE_DASHES));
@@ -582,7 +583,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                             state.needTargetList = false;
                             state.warningsOnly = false;
                             state.canCreateFile = false;
-                            state.annotator = state.holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.link-ext"));
+                            state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.link-ext"));
                             state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
 
                             if (state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, reasons.wikiRefHasExtFixed())) {
@@ -616,8 +617,6 @@ public class MultiMarkdownAnnotator implements Annotator {
                             }
                         }
                     }
-
-                    state.annotator.setNeedsUpdateOnTyping(true);
                 }
             }
         }
@@ -662,20 +661,20 @@ public class MultiMarkdownAnnotator implements Annotator {
         if (type != ANNOTATION_INFO && state.addingAlreadyOffered(quickFixType)) {
             switch (type) {
                 case ANNOTATION_WEAK_WARNING:
-                    state.annotator = state.holder.createWeakWarningAnnotation(element.getTextRange(), MultiMarkdownBundle.message(messageKey));
+                    state.createWeakWarningAnnotation(element.getTextRange(), MultiMarkdownBundle.message(messageKey));
                     break;
 
                 case ANNOTATION_WARNING:
-                    state.annotator = state.holder.createWarningAnnotation(element.getTextRange(), MultiMarkdownBundle.message(messageKey));
+                    state.createWarningAnnotation(element.getTextRange(), MultiMarkdownBundle.message(messageKey));
                     break;
 
                 case ANNOTATION_ERROR:
-                    state.annotator = state.holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message(messageKey));
+                    state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message(messageKey));
                     break;
 
                 //case ANNOTATION_INFO:
                 default:
-                    state.annotator = state.holder.createInfoAnnotation(element.getTextRange(), MultiMarkdownBundle.message(messageKey));
+                    state.createInfoAnnotation(element.getTextRange(), MultiMarkdownBundle.message(messageKey));
                     break;
             }
 
@@ -687,7 +686,7 @@ public class MultiMarkdownAnnotator implements Annotator {
         if (state.canCreateFile) {
             if (state.annotator == null) {
                 // creation fix
-                state.annotator = state.holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.unresolved-link-reference"));
+                state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.unresolved-link-reference"));
                 state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
             }
 
@@ -703,7 +702,7 @@ public class MultiMarkdownAnnotator implements Annotator {
         state.needTargetList = false;
         state.canCreateFile = false;
         state.warningsOnly = false;
-        state.annotator = state.holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.path-anchor"));
+        state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.path-anchor"));
         state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
 
         // TODO: create quick fix to remove anchors from all directories in the path

@@ -68,7 +68,7 @@ class RenameFileAndReTargetQuickFix extends BaseIntentionAction {
     @Override
     public String getText() {
         FilePathInfo filePathInfo = new FilePathInfo(targetFile.getVirtualFile().getPath());
-        return MultiMarkdownBundle.message("quickfix.wikilink.rename-page", filePathInfo.getFileNameWithAnchor(), name);
+        return MultiMarkdownBundle.message("quickfix.wikilink.rename-page-retarget", filePathInfo.getFileNameWithAnchor(), name);
     }
 
     @NotNull

@@ -14,9 +14,15 @@
  */
 package com.vladsch.idea.multimarkdown.annotator;
 
+import com.intellij.lang.ASTNode;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
+import com.intellij.lang.annotation.AnnotationSession;
+import com.intellij.lang.annotation.HighlightSeverity;
+import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -154,4 +160,79 @@ public class AnnotationState {
     public int getAlreadyOfferedSize(String type) {
         return !alreadyOffered.containsKey(type) ? 0 : alreadyOffered.get(type).size();
     }
+
+    // delegated to holder
+    public Annotation createErrorAnnotation(@NotNull PsiElement element, @Nullable String s) {
+        annotator = holder.createErrorAnnotation(element, s);
+        annotator.setNeedsUpdateOnTyping(true);
+        return annotator;
+    }
+    public Annotation createErrorAnnotation(@NotNull ASTNode node, @Nullable String s) {
+        annotator = holder.createErrorAnnotation(node, s);
+        annotator.setNeedsUpdateOnTyping(true);
+        return annotator;
+    }
+    public Annotation createErrorAnnotation(@NotNull TextRange range, @Nullable String s) {
+        annotator = holder.createErrorAnnotation(range, s);
+        annotator.setNeedsUpdateOnTyping(true);
+        return annotator;
+    }
+    public Annotation createWarningAnnotation(@NotNull PsiElement element, @Nullable String s) {
+        annotator = holder.createWarningAnnotation(element, s);
+        annotator.setNeedsUpdateOnTyping(true);
+        return annotator;
+    }
+    public Annotation createWarningAnnotation(@NotNull ASTNode node, @Nullable String s) {
+        annotator = holder.createWarningAnnotation(node, s);
+        annotator.setNeedsUpdateOnTyping(true);
+        return annotator;
+    }
+    public Annotation createWarningAnnotation(@NotNull TextRange range, @Nullable String s) {
+        annotator = holder.createWarningAnnotation(range, s);
+        annotator.setNeedsUpdateOnTyping(true);
+        return annotator;
+    }
+    public Annotation createWeakWarningAnnotation(@NotNull PsiElement element, @Nullable String s) {
+        annotator = holder.createWeakWarningAnnotation(element, s);
+        annotator.setNeedsUpdateOnTyping(true);
+        return annotator;
+    }
+    public Annotation createWeakWarningAnnotation(@NotNull ASTNode node, @Nullable String s) {
+        annotator = holder.createWeakWarningAnnotation(node, s);
+        annotator.setNeedsUpdateOnTyping(true);
+        return annotator;
+    }
+    public Annotation createWeakWarningAnnotation(@NotNull TextRange range, @Nullable String s) {
+        annotator = holder.createWeakWarningAnnotation(range, s);
+        annotator.setNeedsUpdateOnTyping(true);
+        return annotator;
+    }
+    public Annotation createInfoAnnotation(@NotNull PsiElement element, @Nullable String s) {
+        annotator = holder.createInfoAnnotation(element, s);
+        annotator.setNeedsUpdateOnTyping(true);
+        return annotator;
+    }
+    public Annotation createInfoAnnotation(@NotNull ASTNode node, @Nullable String s) {
+        annotator = holder.createInfoAnnotation(node, s);
+        annotator.setNeedsUpdateOnTyping(true);
+        return annotator;
+    }
+    public Annotation createInfoAnnotation(@NotNull TextRange range, @Nullable String s) {
+        annotator = holder.createInfoAnnotation(range, s);
+        annotator.setNeedsUpdateOnTyping(true);
+        return annotator;
+    }
+    public Annotation createAnnotation(@NotNull HighlightSeverity severity, @NotNull TextRange range, @Nullable String s) {
+        annotator = holder.createAnnotation(severity, range, s);
+        annotator.setNeedsUpdateOnTyping(true);
+        return annotator;
+    }
+    public Annotation createAnnotation(@NotNull HighlightSeverity severity, @NotNull TextRange range, @Nullable String s, @Nullable String s1) {
+        annotator = holder.createAnnotation(severity, range, s, s1);
+        annotator.setNeedsUpdateOnTyping(true);
+        return annotator;
+    }
+    @NotNull
+    public AnnotationSession getCurrentAnnotationSession() {return holder.getCurrentAnnotationSession();}
+    public boolean isBatchMode() {return holder.isBatchMode();}
 }

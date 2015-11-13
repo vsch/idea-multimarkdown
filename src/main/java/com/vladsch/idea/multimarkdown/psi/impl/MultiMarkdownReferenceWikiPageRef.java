@@ -66,6 +66,7 @@ public class MultiMarkdownReferenceWikiPageRef extends MultiMarkdownReference {
 
             FileReferenceList fileReferenceList = new FileReferenceListQuery(myElement.getProject())
                     .gitHubWikiRules()
+                    .spaceDashEqual()
                     .matchWikiRef((MultiMarkdownWikiPageRef) myElement)
                     .accessibleWikiPageRefs()
                     .sorted();
