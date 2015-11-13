@@ -298,7 +298,7 @@ public class MultiMarkdownPathResolver {
             VirtualFile virtualFile = FileDocumentManager.getInstance().getFile(document);
 
             if (virtualFile != null && projectComponent.isUnderVcs(virtualFile)) {
-                GitHubRepo gitHubRepo = projectComponent.getGithubRepo(virtualFile.getPath());
+                GitHubRepo gitHubRepo = projectComponent.getGitHubRepo(virtualFile.getPath());
                 if (gitHubRepo != null) {
                     FilePathInfo pathInfo = new FilePathInfo(virtualFile);
                     githubhref = gitHubRepo.repoUrlFor(gitHubRepo.getRelativePath(noExtension ? pathInfo.getFilePathNoExt() : pathInfo.getFilePath()));
@@ -320,7 +320,7 @@ public class MultiMarkdownPathResolver {
             MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
             if (projectComponent != null) {
                 if (projectComponent.isUnderVcs((VirtualFile) resolved)) {
-                    GitHubRepo gitHubRepo = projectComponent.getGithubRepo(pathInfo.getPath());
+                    GitHubRepo gitHubRepo = projectComponent.getGitHubRepo(pathInfo.getPath());
                     if (gitHubRepo != null) {
                         String githubhref = null;
                         FilePathInfo hrefInfo = new FilePathInfo(href);

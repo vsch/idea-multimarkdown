@@ -760,7 +760,7 @@ public class FileReferenceListQuery {
 
         if ((queryFlags & LINK_REF_SAME_REPO) != 0) {
             projComponent = MultiMarkdownPlugin.getProjectComponent(sourceFileReference.getProject());
-            GitHubRepo gitHubRepo = projComponent != null ? projComponent.getGithubRepo(sourceFileReference.getPath()) : null;
+            GitHubRepo gitHubRepo = projComponent != null ? projComponent.getGitHubRepo(sourceFileReference.getPath()) : null;
             githubRepoPath = gitHubRepo != null ? FilePathInfo.endWith(gitHubRepo.getBasePath(), '/') : null;
         }
 

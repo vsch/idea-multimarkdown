@@ -37,7 +37,7 @@ public class MultiMarkdownImageLinkImpl extends ASTWrapperPsiElement implements 
     public String getMissingElementNameSpace(@NotNull String prefix, boolean addLinkRef) {
         MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(getProject());
         FilePathInfo filePathInfo = new FilePathInfo(getContainingFile().getVirtualFile());
-        GitHubRepo gitHubRepo = projectComponent != null ? projectComponent.getGithubRepo(filePathInfo.getPath()) : null;
+        GitHubRepo gitHubRepo = projectComponent != null ? projectComponent.getGitHubRepo(filePathInfo.getPath()) : null;
         String vcsHome = gitHubRepo != null ? gitHubRepo.getBasePath() + "::" : "";
 
         if (addLinkRef) {

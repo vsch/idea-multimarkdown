@@ -134,7 +134,7 @@ public class FileReference extends FilePathInfo {
 
             MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
             if (projectComponent != null) {
-                GitHubRepo gitHubRepo = projectComponent.getGithubRepo(currentPath.getFullFilePath());
+                GitHubRepo gitHubRepo = projectComponent.getGitHubRepo(currentPath.getFullFilePath());
                 if (gitHubRepo != null) {
                     try {
                         String url = gitHubRepo.githubBaseUrl();
@@ -166,7 +166,7 @@ public class FileReference extends FilePathInfo {
             FilePathInfo wikiPath = currentPath.append(currentPath.getFileName() + WIKI_HOME_EXTENTION);
             MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
             if (projectComponent != null) {
-                GitHubRepo gitHubRepo = projectComponent.getGithubRepo(wikiPath.getFullFilePath());
+                GitHubRepo gitHubRepo = projectComponent.getGitHubRepo(wikiPath.getFullFilePath());
                 if (gitHubRepo != null) {
                     try {
                         String url = gitHubRepo.repoUrlFor("/");
@@ -189,13 +189,13 @@ public class FileReference extends FilePathInfo {
     @Nullable
     public GitHubRepo getGitHubRepo() {
         MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
-        return projectComponent != null ? projectComponent.getGithubRepo(getPath()) : null;
+        return projectComponent != null ? projectComponent.getGitHubRepo(getPath()) : null;
     }
 
     @Nullable
     public String getGitHubRepoPath() {
         MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
-        GitHubRepo gitHubRepo = projectComponent != null ? projectComponent.getGithubRepo(getPath()) : null;
+        GitHubRepo gitHubRepo = projectComponent != null ? projectComponent.getGitHubRepo(getPath()) : null;
 
         return gitHubRepo != null ? endWith(gitHubRepo.getBasePath(), '/') : null;
     }
@@ -203,7 +203,7 @@ public class FileReference extends FilePathInfo {
     @NotNull
     public String getGitHubRepoPath(@NotNull String defaultPath) {
         MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
-        GitHubRepo gitHubRepo = projectComponent != null ? projectComponent.getGithubRepo(getPath()) : null;
+        GitHubRepo gitHubRepo = projectComponent != null ? projectComponent.getGitHubRepo(getPath()) : null;
 
         return endWith(gitHubRepo != null ? gitHubRepo.getBasePath() : defaultPath, '/');
     }
