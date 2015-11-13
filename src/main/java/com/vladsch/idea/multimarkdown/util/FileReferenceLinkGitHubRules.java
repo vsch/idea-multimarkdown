@@ -113,6 +113,62 @@ public class FileReferenceLinkGitHubRules extends FileReferenceLink {
         return super.computeWikiPageRefReasonsFlags(wikiPageRef);
     }
 
+    public static class InaccessibleGitHubLinkRefReasons extends InaccessibleLinkRefReasons {
+        InaccessibleGitHubLinkRefReasons(int reasons, String wikiRef, FileReferenceLinkGitHubRules referenceLink) {
+            super(reasons, wikiRef, referenceLink);
+        }
+
+        @Override
+        public boolean linkRefHasSlash() { return (reasons & REASON_WIKI_PAGEREF_HAS_SLASH) != 0; }
+
+        @Override
+        public boolean linkRefHasFixableSlash() { return (reasons & REASON_WIKI_PAGEREF_HAS_FIXABLE_SLASH) != 0; }
+
+        @Override
+        public String linkRefHasSlashFixed() { return linkRef.replace("/", ""); }
+
+        @Override
+        public boolean linkRefHasSubDir() { return (reasons & REASON_WIKI_PAGEREF_HAS_SUBDIR) != 0; }
+
+        @Override
+        public String linkRefHasSubDirFixed() { return new FilePathInfo(linkRef).getFileNameWithAnchor(); }
+    }
+
+    @NotNull
+    @Override
+    public InaccessibleLinkRefReasons inaccessibleLinkRefReasons(@Nullable String linkRef) {
+        int reasons = computeLinkRefReasonsFlags(linkRef);
+
+        if (linkRef != null) {
+            if (sourceReference.isWikiPage()) {
+                if (!isUnderWikiHome()) reasons |= REASON_NOT_UNDER_WIKI_HOME;
+                else if (!getWikiHome().startsWith(sourceReference.getWikiHome())) reasons |= REASON_NOT_UNDER_SOURCE_WIKI_HOME;
+
+                if (!hasWikiPageExt()) reasons |= REASON_TARGET_NOT_WIKI_PAGE_EXT;
+            }
+
+            if (linkRef.contains("/")) {
+                // see if it would resolve to the target without it
+                FilePathInfo linkRefInfo = new FilePathInfo(linkRef);
+
+                if (equivalent(false, false, getLinkRef(), linkRefInfo.getFileNameWithAnchor())) {
+                    reasons |= REASON_WIKI_PAGEREF_HAS_SUBDIR;
+                } else if (equivalent(false, false, getWikiPageRef(), linkRef.replace("/", ""))) {
+                    reasons |= REASON_WIKI_PAGEREF_HAS_FIXABLE_SLASH;
+                } else {
+                    reasons |= REASON_WIKI_PAGEREF_HAS_SLASH;
+                }
+            }
+        }
+        return new InaccessibleGitHubLinkRefReasons(reasons, linkRef, this);
+    }
+
+    @Override
+    protected int computeLinkRefReasonsFlags(@Nullable String linkRef) {
+        // add our own
+        return super.computeWikiPageRefReasonsFlags(linkRef);
+    }
+
     @Override
     public int compareTo(FilePathInfo o) {
         int itmp;

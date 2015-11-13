@@ -148,7 +148,9 @@ public class MultiMarkdownAnnotator implements Annotator {
             FileReferenceList filesReferenceList;
             boolean haveExt = pathInfo.hasExt();
             boolean withExt = false;
+            boolean useGitHubWikiPageRules = false;
             FileReferenceListQuery filesReferenceListQuery;
+            FileReferenceListQuery accessibleFilesReferenceListQuery;
 
             if (element instanceof MultiMarkdownImageLinkRef) {
                 withExt = true;
@@ -156,17 +158,33 @@ public class MultiMarkdownAnnotator implements Annotator {
                         .keepLinkRefAnchor()
                         .wantImageFiles()
                         .all();
-                filesReferenceListQuery = filesReferenceList.query().wantImageFiles();
+
+                accessibleFilesReferenceListQuery = filesReferenceListQuery = filesReferenceList.query().wantImageFiles();
             } else {
                 filesReferenceList = new FileReferenceListQuery(element.getProject())
                         .keepLinkRefAnchor()
                         .wantMarkdownFiles()
                         .all();
-                filesReferenceListQuery = filesReferenceList.query().wantMarkdownFiles();
-                withExt = haveExt;
+
+                if (sourceReference.isWikiPage()) {
+                    // different resolution rules for these
+                    accessibleFilesReferenceListQuery = filesReferenceList.query()
+                            .wantMarkdownFiles();
+
+                    filesReferenceListQuery = new FileReferenceListQuery(accessibleFilesReferenceListQuery)
+                            .wantMarkdownFiles()
+                            .ignoreLinkRefExtension()
+                            .linkRefIgnoreSubDirs();
+
+                    withExt = false;
+                    useGitHubWikiPageRules = true;
+                } else {
+                    accessibleFilesReferenceListQuery = filesReferenceListQuery = filesReferenceList.query().wantMarkdownFiles();
+                    withExt = haveExt;
+                }
             }
 
-            FileReferenceList accessibleLinkRefs = new FileReferenceListQuery(filesReferenceListQuery)
+            FileReferenceList accessibleLinkRefs = new FileReferenceListQuery(accessibleFilesReferenceListQuery)
                     .caseSensitive() // we want to catch mismatches
                     .gitHubWikiRules()
                     .sameGitHubRepo()
@@ -176,6 +194,30 @@ public class MultiMarkdownAnnotator implements Annotator {
             if (accessibleLinkRefs.size() == 1) {
                 // add quick fix to change wiki to explicit link
                 offerExplicitToWikiQuickFix(element, state);
+            } else if (accessibleLinkRefs.size() > 1 && useGitHubWikiPageRules) {
+                state.warningsOnly = false;
+                state.canCreateFile = false;
+                state.annotator = state.holder.createWarningAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.multiple-targets-match"));
+
+                //state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
+                FileReference[] sorted = accessibleLinkRefs.getSorted(1);
+
+                for (FileReference referenceLink : sorted) {
+                    String linkRef = referenceLink.getLinkRefFromWikiHome();
+                    String newName = linkRef.replace('/', '-');
+
+                    if (!linkRef.contains("/")) {
+                        // it is in wiki home, prefix with home-
+                        newName = "home-" + newName;
+                    }
+
+                    if (!linkRef.equals(newName) && !referenceLink.getFileName().equals(newName) && referenceLink.canRenameFileTo(newName)) {
+                        PsiFile psiFile = referenceLink.getPsiFile();
+                        if (psiFile != null && state.addingAlreadyOffered(TYPE_RENAME_FILE_QUICK_FIX, referenceLink.getFullFilePath(), newName)) {
+                            state.annotator.registerFix(new RenameFileQuickFix(psiFile, linkRef, newName, RenameFileQuickFix.RENAME_CONFLICTING_TARGET));
+                        }
+                    }
+                }
             } else {
                 FileReference elementFileReference = new FileReference(element.getContainingFile());
                 String gitHubRepoPath = elementFileReference.getGitHubRepoPath();
@@ -190,9 +232,15 @@ public class MultiMarkdownAnnotator implements Annotator {
 
                 FileReferenceList otherFileRefList = matchedFilesReferenceList;
 
-                if (matchedFilesReferenceList.size() > 1 && gitHubRepoPath != null) {
+                if (matchedFilesReferenceList.size() > 1) {
                     // see if eliminating files out of this list
-                    otherFileRefList = matchedFilesReferenceList.pathStartsWith(gitHubRepoPath);
+                    if (useGitHubWikiPageRules) {
+                        // need to keep the top one from the sorted list
+                        FileReference[] sorted = matchedFilesReferenceList.getSorted(1);
+                        otherFileRefList = new FileReferenceList(sorted);
+                    } else if (gitHubRepoPath != null){
+                        otherFileRefList = matchedFilesReferenceList.pathStartsWith(gitHubRepoPath);
+                    }
                 }
 
                 FileReference[] otherReferences = otherFileRefList.get();
@@ -237,11 +285,40 @@ public class MultiMarkdownAnnotator implements Annotator {
                         }
                     }
 
-                    if (reasons.targetNotInSameRepoHome()) {
-                        state.warningsOnly = false;
-                        // can offer to move the file, just add the logic
-                        state.annotator = state.holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.link.unreachable-link-reference-not-in-same-repo"));
-                        state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
+                    if (useGitHubWikiPageRules) {
+                        if (reasons.targetNotInWikiHome() || reasons.targetNotInSameWikiHome()) {
+                            state.warningsOnly = false;
+                            // can offer to move the file, just add the logic
+                            state.annotator = state.holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.unreachable-page-reference-not-in-wiki-home"));
+                            state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
+                        }
+
+                        if (reasons.linkRefHasSlash() || reasons.linkRefHasFixableSlash() || reasons.linkRefHasSubDir()) {
+                            state.warningsOnly = false;
+                            state.canCreateFile = false;
+                            // can offer to move the file, just add the logic
+                            state.annotator = state.holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.link.linkref-has-slash"));
+                            state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
+
+                            if (reasons.linkRefHasFixableSlash()) {
+                                if (state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, reasons.linkRefHasSlashFixed())) {
+                                    state.annotator.registerFix(new ChangeLinkRefQuickFix(element, reasons.linkRefHasSlashFixed(), ChangeLinkRefQuickFix.REMOVE_SLASHES, RENAME_KEEP_ANCHOR));
+                                }
+                            }
+
+                            if (reasons.linkRefHasSubDir()) {
+                                if (state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, reasons.linkRefHasSubDirFixed())) {
+                                    state.annotator.registerFix(new ChangeLinkRefQuickFix(element, reasons.linkRefHasSubDirFixed(), ChangeLinkRefQuickFix.REMOVE_SUBDIR, RENAME_KEEP_ANCHOR));
+                                }
+                            }
+                        }
+                    } else {
+                        if (reasons.targetNotInSameRepoHome()) {
+                            state.warningsOnly = false;
+                            // can offer to move the file, just add the logic
+                            state.annotator = state.holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.link.unreachable-link-reference-not-in-same-repo"));
+                            state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
+                        }
                     }
 
                     if (reasons.targetNameHasAnchor()) {
@@ -274,16 +351,23 @@ public class MultiMarkdownAnnotator implements Annotator {
                          *   have a file but it is not accessible we can:
                          *   1. rename the link to another accessible file?
                          */
-                        FileReferenceList linkRefs = filesReferenceList.query().gitHubWikiRules().inSource(containingFile).sameGitHubRepo().all();
+                        FileReferenceListQuery linkRefQuery = filesReferenceList.query().gitHubWikiRules().inSource(containingFile).sameGitHubRepo();
+                        FileReferenceList linkRefs = linkRefQuery.all();
 
                         FileReference[] references = linkRefs.get();
                         Arrays.sort(references);
 
                         for (FileReference fileReference : references) {
-                            FileReferenceLink linkRef = (FileReferenceLink) fileReference;
+                            FileReferenceLink fileRefLink = (FileReferenceLink) fileReference;
 
-                            if (state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, linkRef.getLinkRef())) {
-                                state.annotator.registerFix(new ChangeLinkRefQuickFix(element, linkRef.getLinkRef(), 0, RENAME_KEEP_ANCHOR));
+                            String linkRef = fileRefLink.getLinkRef();
+
+                            if (useGitHubWikiPageRules) {
+                                linkRef = FilePathInfo.removeStart(linkRef, fileRefLink.getPathPrefix());
+                            }
+
+                            if (state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, linkRef)) {
+                                state.annotator.registerFix(new ChangeLinkRefQuickFix(element, linkRef, 0, RENAME_KEEP_ANCHOR));
                                 // TODO: make max quick fix wikilink targets a config item
                                 if (state.getAlreadyOfferedSize(TYPE_CHANGE_LINK_REF_QUICK_FIX) >= 15) break;
                             }
@@ -369,7 +453,8 @@ public class MultiMarkdownAnnotator implements Annotator {
                             .keepLinkRefAnchor()
                             .wantMarkdownFiles()
                             .gitHubWikiRules()
-                            .ignoreWikiRefExtension()
+                            .linkRefIgnoreSubDirs()
+                            .ignoreLinkRefExtension()
                             .inSource(containingFile)
                             .matchWikiRef(element)
                             .all();
@@ -418,8 +503,9 @@ public class MultiMarkdownAnnotator implements Annotator {
 
                         if (reasons.wikiRefHasSlash() || reasons.wikiRefHasFixableSlash() || reasons.wikiRefHasSubDir()) {
                             state.warningsOnly = false;
+                            state.canCreateFile = false;
                             // can offer to move the file, just add the logic
-                            state.annotator = state.holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.wiki-ref-has-slash"));
+                            state.annotator = state.holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.linkref-has-slash"));
                             state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
 
                             if (reasons.wikiRefHasFixableSlash()) {
@@ -464,8 +550,8 @@ public class MultiMarkdownAnnotator implements Annotator {
                         if (!reasons.targetNameHasAnchor() && reasons.targetNotWikiPageExt()) {
                             // can offer to move the file, just add the logic
                             state.warningsOnly = false;
-                            state.annotator = state.holder.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.target-not-wiki-page-ext"));
-                            state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
+                            state.annotator = state.holder.createWeakWarningAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.target-not-wiki-page-ext"));
+                            //state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
 
                             if (referenceLink.canRenameFileTo(reasons.targetNotWikiPageExtFixed())) {
                                 if (psiFile != null && state.addingAlreadyOffered(TYPE_RENAME_FILE_QUICK_FIX, referenceLink.getFullFilePath(), reasons.targetNotWikiPageExtFixed())) {

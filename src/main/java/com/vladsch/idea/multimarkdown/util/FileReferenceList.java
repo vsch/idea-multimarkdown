@@ -45,7 +45,7 @@ public class FileReferenceList {
 
     @Override
     public String toString() {
-        return "FileReferenceList: ["+fileReferences.length+"]" + (fileReferences.length > 0 ? fileReferences[0].toString() : "");
+        return "FileReferenceList: [" + fileReferences.length + "]" + (fileReferences.length > 0 ? fileReferences[0].toString() : "");
     }
 
     public interface TransformFilter<T> extends Filter {
@@ -435,31 +435,21 @@ public class FileReferenceList {
 
     @NotNull
     public <T> T[] transform(@NotNull TransformFilter<T> transFilter) {
-        HashSet<T> result = new HashSet<T>(fileReferences.length);
+        ArrayList<T> result = new ArrayList<T>(fileReferences.length);
 
         for (FileReference fileReference : fileReferences) {
-            int extIndex = -1;
+            FileReference addReference = fileReference;
+            if (addReference == null) continue;
 
-            for (String ext : extensions) {
-                extIndex++;
-
-                if (!transFilter.filterExt(ext, "")) continue;
-
-                for (int extFileIndex : extensionFileRefIndices[extIndex]) {
-                    FileReference addReference = fileReferences[extFileIndex];
-                    if (addReference == null) continue;
-
-                    if (transFilter.isRefFilter()) {
-                        addReference = transFilter.filterRef(addReference);
-                        if (addReference == null) continue;
-                    }
-
-                    T transformed = transFilter.transformRef(addReference);
-                    if (transformed == null) continue;
-
-                    result.add(transformed);
-                }
+            if (transFilter.isRefFilter()) {
+                addReference = transFilter.filterRef(addReference);
+                if (addReference == null) continue;
             }
+
+            T transformed = transFilter.transformRef(addReference);
+            if (transformed == null) continue;
+
+            result.add(transformed);
         }
 
         return transFilter.getResult(result);

@@ -44,9 +44,9 @@ public class FileReferenceLink extends FileReference {
     public static final int REASON_WIKI_PAGEREF_HAS_ONLY_ANCHOR = 0x0800;
     public static final int REASON_WIKI_PAGEREF_HAS_EXT = 0x1000;
 
-    // flags are re-used for link ref reasons
-    public static final int REASON_NOT_UNDER_SAME_REPO = 0x0001;
-    public static final int REASON_MISSING_EXTENSION = 0x0002;
+    // flags cannot be reused, linkrefs under wiki home have similar errors as wiki links
+    public static final int REASON_NOT_UNDER_SAME_REPO = 0x0001000;
+    public static final int REASON_MISSING_EXTENSION = 0x0002000;
 
     protected final @NotNull FileReference sourceReference;
     protected String pathPrefix;
@@ -241,7 +241,7 @@ public class FileReferenceLink extends FileReference {
 
         public boolean targetPathHasAnchor() { return (reasons & REASON_TARGET_PATH_HAS_ANCHOR) != 0; }
 
-        public boolean wikiRefHasSlash() { return false; }
+        public boolean wikiRefHasSlash() { return (reasons & REASON_WIKI_PAGEREF_HAS_SLASH) != 0; }
         public boolean wikiRefHasFixableSlash() { return (reasons & REASON_WIKI_PAGEREF_HAS_FIXABLE_SLASH) != 0; }
         public String wikiRefHasSlashFixed() { return wikiRef; }
 
@@ -308,10 +308,23 @@ public class FileReferenceLink extends FileReference {
         public boolean targetNotInSameRepoHome() { return (reasons & REASON_NOT_UNDER_SAME_REPO) != 0; }
         public String targetNotInSameRepoHomeFixed() { return referenceLink.getSourceReference().getPath() + referenceLink.getFileName(); }
 
+        public boolean targetNotInWikiHome() { return (reasons & REASON_NOT_UNDER_WIKI_HOME) != 0; }
+        public String targetNotInWikiHomeFixed() { return referenceLink.getSourceReference().getPath() + referenceLink.getFileName(); }
+
+        public boolean targetNotInSameWikiHome() { return (reasons & REASON_NOT_UNDER_SOURCE_WIKI_HOME) != 0; }
+        public String targetNotInSameWikiHomeFixed() { return referenceLink.getSourceReference().getPath() + referenceLink.getFileName(); }
+
         public boolean targetNameHasAnchor() { return (reasons & REASON_TARGET_NAME_HAS_ANCHOR) != 0; }
         public String targetNameHasAnchorFixed() { return referenceLink.getFileNameWithAnchor().replace("#", ""); }
 
         public boolean targetPathHasAnchor() { return (reasons & REASON_TARGET_PATH_HAS_ANCHOR) != 0; }
+
+        // GitHub rules
+        public boolean linkRefHasSlash() { return false; }
+        public boolean linkRefHasFixableSlash() { return false; }
+        public String linkRefHasSlashFixed() { return linkRef; }
+        public boolean linkRefHasSubDir() { return false; }
+        public String linkRefHasSubDirFixed() { return linkRef; }
     }
 
     @NotNull

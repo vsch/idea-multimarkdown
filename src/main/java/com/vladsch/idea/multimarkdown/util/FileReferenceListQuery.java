@@ -69,7 +69,8 @@ public class FileReferenceListQuery {
     public final static int MATCH_WITH_ANCHOR = 0x0400;
     public final static int WIKIPAGE_GITHUB_RULES = 0x0800;
     public final static int LINK_REF_SAME_REPO = 0x1000;
-    public final static int WIKI_REF_IGNORE_EXT = 0x2000;
+    public final static int LINK_REF_IGNORE_EXT = 0x2000;
+    public final static int MATCH_IGNORE_SUBDIRS = 0x4000;
 
     protected @Nullable FileReferenceList defaultFileList;
     protected int queryFlags;
@@ -232,13 +233,24 @@ public class FileReferenceListQuery {
     }
 
     @NotNull
-    public FileReferenceListQuery ignoreWikiRefExtension() {
-        return ignoreWikiRefExtension(true);
+    public FileReferenceListQuery linkRefIgnoreSubDirs() {
+        return linkRefIgnoreSubDirs(true);
     }
 
     @NotNull
-    public FileReferenceListQuery ignoreWikiRefExtension(boolean gitHubRules) {
-        queryFlags = (queryFlags & ~WIKI_REF_IGNORE_EXT) | (gitHubRules ? WIKI_REF_IGNORE_EXT : 0);
+    public FileReferenceListQuery linkRefIgnoreSubDirs(boolean gitHubRules) {
+        queryFlags = (queryFlags & ~MATCH_IGNORE_SUBDIRS) | (gitHubRules ? MATCH_IGNORE_SUBDIRS : 0);
+        return this;
+    }
+
+    @NotNull
+    public FileReferenceListQuery ignoreLinkRefExtension() {
+        return ignoreLinkRefExtension(true);
+    }
+
+    @NotNull
+    public FileReferenceListQuery ignoreLinkRefExtension(boolean gitHubRules) {
+        queryFlags = (queryFlags & ~LINK_REF_IGNORE_EXT) | (gitHubRules ? LINK_REF_IGNORE_EXT : 0);
         return this;
     }
 
@@ -268,7 +280,11 @@ public class FileReferenceListQuery {
         if (wikiRef != null) {
             if ((queryFlags & WIKIPAGE_GITHUB_RULES) != 0) {
                 FilePathInfo pathInfo = new FilePathInfo(wikiRef);
-                this.matchLinkRef = (queryFlags & MATCH_WITH_ANCHOR) != 0 ? pathInfo.getFileNameWithAnchor() : pathInfo.getFileName();
+                if ((queryFlags & MATCH_IGNORE_SUBDIRS) != 0) {
+                    this.matchLinkRef = (queryFlags & MATCH_WITH_ANCHOR) != 0 ? pathInfo.getFileNameWithAnchor() : pathInfo.getFileName();
+                } else {
+                    this.matchLinkRef = (queryFlags & MATCH_WITH_ANCHOR) != 0 ? pathInfo.getFilePathWithAnchor() : pathInfo.getFilePath();
+                }
             } else {
                 this.matchLinkRef = (queryFlags & MATCH_WITH_ANCHOR) != 0 ? wikiRef : FilePathInfo.linkRefNoAnchor(wikiRef);
             }
@@ -309,17 +325,12 @@ public class FileReferenceListQuery {
 
     @NotNull
     public FileReferenceListQuery matchLinkRef(@NotNull String linkRef, boolean withExt) {
-        //String cleanLinkRef = linkRef.replace("/./", "/");
-        //if (cleanLinkRef.startsWith("./")) {
-        //    cleanLinkRef = cleanLinkRef.substring(2);
-        //}
-        //
-        this.matchLinkRef = (queryFlags & MATCH_WITH_ANCHOR) != 0 ? linkRef : FilePathInfo.linkRefNoAnchor(linkRef);
-
-        if (linkRef.contains("/./")) {
-
+        if ((queryFlags & MATCH_IGNORE_SUBDIRS) != 0) {
+            FilePathInfo linkRefInfo = new FilePathInfo(linkRef);
+            this.matchLinkRef = (queryFlags & MATCH_WITH_ANCHOR) != 0 ? linkRefInfo.getFileNameWithAnchor() : linkRefInfo.getFileNameNoExt();
+        } else {
+            this.matchLinkRef = (queryFlags & MATCH_WITH_ANCHOR) != 0 ? linkRef : FilePathInfo.linkRefNoAnchor(linkRef);
         }
-
         queryFlags = (queryFlags & ~MATCH_TYPE_FLAGS) | (withExt ? LINK_WITH_EXT_REF : LINK_REF_NO_EXT);
         return this;
     }
@@ -655,18 +666,18 @@ public class FileReferenceListQuery {
     @NotNull
     protected static FileReferenceList.Filter getMatchAnyFileFilter(@NotNull final String matchPattern, final int queryFlags) {
         FileReferenceList.Filter filter;
+        String matchPatternNoExt = null;
+
+        if ((queryFlags & LINK_REF_IGNORE_EXT) != 0) {
+            FilePathInfo pathInfo = new FilePathInfo(matchPattern);
+            matchPatternNoExt = (queryFlags & MATCH_WITH_ANCHOR) != 0 ? pathInfo.getFilePathWithAnchorNoExt() : pathInfo.getFilePathNoExt();
+            if (matchPattern.equals(matchPatternNoExt)) matchPatternNoExt = null;
+        }
+
+        final String finalMatchPatternNoExt = matchPatternNoExt;
 
         switch (queryFlags & MATCH_TYPE_FLAGS) {
             case WIKIPAGE_REF:
-                String matchPatternNoExt = null;
-
-                if ((queryFlags & WIKI_REF_IGNORE_EXT) != 0) {
-                    FilePathInfo pathInfo = new FilePathInfo(matchPattern);
-                    matchPatternNoExt = (queryFlags & MATCH_WITH_ANCHOR) != 0 ? pathInfo.getFilePathWithAnchorNoExt() : pathInfo.getFilePathNoExt();
-                    if (matchPattern.equals(matchPatternNoExt)) matchPatternNoExt = null;
-                }
-
-                final String finalMatchPatternNoExt = matchPatternNoExt;
                 filter = new FileReferenceList.Filter() {
                     @Override
                     public boolean filterExt(@NotNull String ext, String anchor) {
@@ -704,8 +715,11 @@ public class FileReferenceListQuery {
 
                     @Override
                     public FileReference filterRef(@NotNull FileReference fileReference) {
-                        // TODO: add MATCH_LINK_WITH_ANCHOR condition
-                        return equivalent(queryFlags, fileReference.getFileName(), matchPattern) ? fileReference : null;
+                        String targetRef = (queryFlags & MATCH_WITH_ANCHOR) != 0 ? fileReference.getFileNameWithAnchor() : fileReference.getFileName();
+
+                        return equivalent(queryFlags, targetRef, matchPattern)
+                                ? fileReference :
+                                null;
                     }
                 };
                 break;
@@ -725,9 +739,12 @@ public class FileReferenceListQuery {
 
                     @Override
                     public FileReference filterRef(@NotNull FileReference fileReference) {
-                        String fileNameNoExt = fileReference.getFileNameNoExt();
-                        // TODO: add MATCH_LINK_WITH_ANCHOR condition
-                        return equivalent(queryFlags, fileNameNoExt, matchPattern) ? fileReference : null;
+                        String targetRef = (queryFlags & MATCH_WITH_ANCHOR) != 0 ? fileReference.getFileNameWithAnchorNoExt() : fileReference.getFileNameNoExt();
+
+                        return equivalent(queryFlags, targetRef, matchPattern)
+                                || (finalMatchPatternNoExt != null && equivalent(queryFlags, targetRef, finalMatchPatternNoExt))
+                                ? fileReference :
+                                null;
                     }
                 };
                 break;
@@ -749,7 +766,7 @@ public class FileReferenceListQuery {
 
         String matchPatternNoExt = null;
 
-        if ((queryFlags & WIKI_REF_IGNORE_EXT) != 0) {
+        if ((queryFlags & LINK_REF_IGNORE_EXT) != 0) {
             FilePathInfo pathInfo = new FilePathInfo(matchPattern);
             matchPatternNoExt = (queryFlags & MATCH_WITH_ANCHOR) != 0 ? pathInfo.getFilePathWithAnchorNoExt() : pathInfo.getFilePathNoExt();
             if (matchPattern.equals(matchPatternNoExt)) matchPatternNoExt = null;
@@ -830,9 +847,15 @@ public class FileReferenceListQuery {
                         @Override
                         public FileReference filterRef(@NotNull FileReference fileReference) {
                             FileReferenceLinkGitHubRules referenceLink = new FileReferenceLinkGitHubRules(sourceFileReference, fileReference);
+                            String targetRef = (queryFlags & MATCH_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchor() : referenceLink.getLinkRef();
+
+                            if (sourceFileReference.isWikiPage() && (queryFlags & FILE_TYPE_FLAGS) == MARKDOWN_FILE) {
+                                // strip off prefix from targetRef, wikiPages resolve without them
+                                targetRef = FilePathInfo.removeStart(targetRef, referenceLink.getPathPrefix());
+                            }
 
                             return (gitHubRepoPath == null || fileReference.getPath().startsWith(gitHubRepoPath))
-                                    && equivalent(queryFlags, ((queryFlags & MATCH_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchor() : referenceLink.getLinkRef()), matchPattern)
+                                    && equivalent(queryFlags, targetRef, matchPattern)
                                     && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath()))
                                     ? referenceLink : null;
                         }
@@ -878,9 +901,16 @@ public class FileReferenceListQuery {
                         @Override
                         public FileReference filterRef(@NotNull FileReference fileReference) {
                             FileReferenceLinkGitHubRules referenceLink = new FileReferenceLinkGitHubRules(sourceFileReference, fileReference);
+                            String targetRef = (queryFlags & MATCH_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchorNoExt() : referenceLink.getLinkRefNoExt();
+
+                            if (sourceFileReference.isWikiPage() && (queryFlags & FILE_TYPE_FLAGS) == MARKDOWN_FILE) {
+                                // strip off prefix from targetRef
+                                targetRef = FilePathInfo.removeStart(targetRef, referenceLink.getPathPrefix());
+                            }
 
                             return (gitHubRepoPath == null || fileReference.getPath().startsWith(gitHubRepoPath))
-                                    && equivalent(queryFlags, ((queryFlags & MATCH_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchorNoExt() : referenceLink.getLinkRefNoExt()), matchPattern)
+                                    && (equivalent(queryFlags, targetRef, matchPattern)
+                                    || (finalMatchPatternNoExt != null && equivalent(queryFlags, targetRef, finalMatchPatternNoExt)))
                                     && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath()))
                                     ? referenceLink : null;
                         }
@@ -900,9 +930,11 @@ public class FileReferenceListQuery {
                         @Override
                         public FileReference filterRef(@NotNull FileReference fileReference) {
                             FileReferenceLink referenceLink = new FileReferenceLink(sourceFileReference, fileReference);
+                            String targetRef = (queryFlags & MATCH_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchorNoExt() : referenceLink.getLinkRefNoExt();
 
                             return (gitHubRepoPath == null || fileReference.getPath().startsWith(gitHubRepoPath))
-                                    && equivalent(queryFlags, ((queryFlags & MATCH_WITH_ANCHOR) != 0 ? referenceLink.getLinkRefWithAnchorNoExt() : referenceLink.getLinkRefNoExt()), matchPattern)
+                                    && (equivalent(queryFlags, targetRef, matchPattern)
+                                    || (finalMatchPatternNoExt != null && equivalent(queryFlags, targetRef, finalMatchPatternNoExt)))
                                     && ((queryFlags & EXCLUDE_SOURCE) == 0 || !fileReference.getFilePath().equals(sourceFileReference.getFilePath()))
                                     ? referenceLink : null;
                         }

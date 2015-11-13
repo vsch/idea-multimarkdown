@@ -37,7 +37,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     public static final String GITHUB_PULLS_NAME = "pulls";
     public static final String[] IMAGE_EXTENSIONS = { "png", "jpg", "jpeg", "gif", };
     public static final String[] MARKDOWN_EXTENSIONS = MultiMarkdownFileTypeFactory.EXTENSIONS;
-    public static final String[] WIKI_PAGE_EXTENSIONS = { MultiMarkdownFileTypeFactory.DEFAULT_EXTENSION };
+    public static final String[] WIKI_PAGE_EXTENSIONS = MultiMarkdownFileTypeFactory.EXTENSIONS;//{ MultiMarkdownFileTypeFactory.DEFAULT_EXTENSION };
 
     public static final String GITHUB_WIKI_REL_OFFSET = "../../";
 
@@ -548,7 +548,16 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
      */
 
     public static boolean isWikiHome(String path) {
-        return path != null && path.endsWith(WIKI_HOME_EXTENTION);
+        return path != null && endsWith(path, WIKI_HOME_EXTENTION);
+    }
+
+    public static boolean endsWith(String haystack, String... needles) {
+        for (String needle : needles) {
+            if (haystack.endsWith(needle)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static boolean isExternalReference(@Nullable String href) {

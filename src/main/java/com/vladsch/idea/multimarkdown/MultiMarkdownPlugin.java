@@ -295,8 +295,8 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
             File file = new File(fileName);
             if (!file.exists()) {
                 //logger.warn("JavaFX library jfxrt.jar not found in the provided jre: " + javaHome + ", version " + javaVersion);
-                logger.warn("JavaFX library jfxrt.jar not found in the provided jre: " + javaHome + ", version " + javaVersion);
-                logger.warn("MultiMarkdown HTML Preview will use a more limited implementation.");
+                logger.info("JavaFX library jfxrt.jar not found in the provided jre: " + javaHome + ", version " + javaVersion);
+                logger.info("MultiMarkdown HTML Preview will use JEditorPane with HTMLEditorKit for rendering instead of JavaFX WebView.");
                 MultiMarkdownGlobalSettings.getInstance().useOldPreview.setValue(true);
                 //} else if (!file.exists() || "1.8.0_u51".compareTo(javaVersion.substring(0, Math.min(javaVersion.length(), "1.8.0_u51".length()))) < 0) {
                 //    logger.warn("JavaFX library jfxrt.jar was found in the current jre: " + javaHome + ", but version " + javaVersion + " is not supported, max version is 1.8.0_u51");

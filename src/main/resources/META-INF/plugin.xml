@@ -29,21 +29,21 @@
 
     <description><![CDATA[
         <div xmlns="http://www.w3.org/1999/html">
-            <img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_source_preview_Small.png"
-                    border="0" width="270" height="135" alt="Screenshot">
+            <img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_source_preview_Small.png" border="0" width="270" height="135"
+                    alt="Screenshot">
 
-            <p><b><a color="#30A0D8" href="http://daringfireball.net/projects/markdown">Markdown</a> language support for IntelliJ platform.</b><br> With GitHub Flavoured Markdown extensions and GitHub style formatting. HTML Preview and HTML Text tabs.
+            <p><b><a color="#30A0D8"
+                    href="http://daringfireball.net/projects/markdown">Markdown</a> language support for IntelliJ platform.</b><br> With GitHub Flavoured Markdown extensions and GitHub style formatting. HTML Preview and HTML Text tabs.
             </p>
 
             <p><b>For all feedback requiring a reply please use the <a color="#30A0D8"
                     href="https://github.com/vsch/idea-multimarkdown/issues"><u>MultiMarkdown GitHub Issues</u></a> page.</b></p>
 
-            <p><b>Documentation: <a color="#30A0D8"
-                    href="https://github.com/vsch/idea-multimarkdown/wiki"><u>MultiMarkdown GitHub Wiki page.</u></a></b></p>
+            <p><b>Documentation: <a color="#30A0D8" href="https://github.com/vsch/idea-multimarkdown/wiki"><u>MultiMarkdown GitHub Wiki page.</u></a></b></p>
         </div>
         ]]></description>
 
-    <version>1.2.1.1</version>
+    <version>1.2.1.2</version>
     <idea-version since-build="133.1711"/>
     <change-notes><![CDATA[
     <ul><h3><b>1.2.1.1 - Bug Fixes and Enhancements</b></h3><br>
@@ -54,6 +54,18 @@
           <li>Fix #64: Explicit link annotation had WikiLink cast causing CastClassException.</li>
           <li>Fix #63: Unresolved links were not always highlighted as error</li>
           <li>Fix #62: Plugin exhausted thread resources if a lot of projects were open</li>
+    </ul>
+    <ul><h3><b>1.2.1.1 - Bug Fixes and Enhancements</b></h3><br>
+        <h4>Basic Edition</h4>
+        <li>Fix #62: Plugin exhausted thread resources if a lot of projects were open</li>
+        <li>Add annotation if wiki link ends in .md, with quick fix to remove .md extension</li>
+        <li>Fix: buy license button in settings navigated to the get trial license page instead of the buy license page.</li>
+        <li>Fix #60: use another class for string to input stream conversion that is universally support across os types.</li>
+        <li>Fix #63: Unresolved links were not always highlighted as error</li>
+        <li>Add a change to quick fix on an unresolved link will apply the same change to all links that match the link being modified.</li>
+
+        <h4>Enhanced Edition</h4>
+        <li>Fix #64: Explicit link annotation had WikiLink cast causing CastClassException.</li>
     </ul>
     <ul><h3><b>1.2.0 - Bug Fixes and Enhancements</b></h3>
       <h4>Basic Edition</h4>
