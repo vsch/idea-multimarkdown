@@ -240,9 +240,11 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     }
 
     protected void updateLinkRenderer() {
-        int options = MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue() ? MultiMarkdownLinkRenderer.GITHUB_WIKI_LINK_FORMAT : 0;
-        linkRendererModified = new MultiMarkdownFxLinkRenderer(project, document, "absent", options);
-        linkRendererNormal = new MultiMarkdownFxLinkRenderer(options);
+        // RELEASE: add link validation option
+        int options = 0;
+        if (MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue()) options |= MultiMarkdownLinkRenderer.GITHUB_WIKI_LINK_FORMAT;
+        linkRendererModified = new MultiMarkdownLinkRenderer(project, document, "absent", options | MultiMarkdownLinkRenderer.VALIDATE_LINKS);
+        linkRendererNormal = new MultiMarkdownLinkRenderer(options);
     }
 
     /**
@@ -454,11 +456,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                     String src = imgNode.getSrc();
                     if (!src.startsWith("http://") && !src.startsWith("https://") && !src.startsWith("ftp://") && !src.startsWith("file://")) {
                         // relative to document, change it to absolute file://
-                        //VirtualFile file = FileDocumentManager.getInstance().getFile(document);
-                        //VirtualFile parent = file == null ? null : file.getParent();
-                        //final VirtualFile localImage = parent == null ? null : parent.findFileByRelativePath(src);
-                        //final VirtualFile localImage = MultiMarkdownPathResolver.resolveRelativePath(document, src);
-                        Object resolveLink = MultiMarkdownPathResolver.resolveLink(project, document, src, false, true);
+                        Object resolveLink = MultiMarkdownPathResolver.resolveImageLink(project, document, src);
                         if (resolveLink != null && resolveLink instanceof VirtualFile) {
                             final VirtualFile localImage = (VirtualFile) resolveLink;
                             if (localImage.exists()) {

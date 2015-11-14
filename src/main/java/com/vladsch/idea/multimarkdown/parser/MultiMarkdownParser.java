@@ -27,6 +27,7 @@ import com.intellij.psi.tree.IElementType;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.license.LicensedFeature;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.*;
 
@@ -48,12 +49,14 @@ public class MultiMarkdownParser implements PsiParser {
     }
 
     protected boolean parseRoot(IElementType root, PsiBuilder builder) {
-        // we need the pegdown references
-        //MultiMarkdownLexParser lexParser = ((MultiMarkdownLexer) ((PsiBuilderImpl) builder).getLexer()).getLexParser();
-
         PsiBuilder.Marker rootMarker = builder.mark();
-        //Lexer lexer = ((PsiBuilderImpl) builder).getLexer();
-        while (!builder.eof()) {
+        parseUntil(null, builder);
+        rootMarker.done(root);
+        return true;
+    }
+
+    protected boolean parseUntil(@Nullable IElementType untilElement, PsiBuilder builder) {
+        while (!builder.eof() && builder.getTokenType() != untilElement) {
             if (builder.getTokenType() == COMMENT) {
                 PsiBuilder.Marker tokenMarker = builder.mark();
                 builder.advanceLexer();
@@ -66,8 +69,6 @@ public class MultiMarkdownParser implements PsiParser {
                 builder.advanceLexer();
             }
         }
-
-        rootMarker.done(root);
         return true;
     }
 
@@ -136,7 +137,7 @@ public class MultiMarkdownParser implements PsiParser {
         builder.advanceLexer();
 
         PsiBuilder.Marker marker = builder.mark();
-        while (builder.getTokenType() != LINK_REF_TEXT_CLOSE) builder.advanceLexer();
+        parseUntil(LINK_REF_TEXT_CLOSE, builder);
         marker.done(LINK_REF_TEXT);
 
         if (builder.getTokenType() == LINK_REF_TEXT_CLOSE) {
@@ -159,7 +160,7 @@ public class MultiMarkdownParser implements PsiParser {
             if (builder.getTokenType() == LINK_REF_TITLE_MARKER) {
                 builder.advanceLexer();
                 PsiBuilder.Marker title = builder.mark();
-                while (builder.getTokenType() != LINK_REF_TITLE_MARKER && builder.getTokenType() != LINK_REF_CLOSE) builder.advanceLexer();
+                while (!builder.eof() && builder.getTokenType() != LINK_REF_TITLE_MARKER && builder.getTokenType() != LINK_REF_CLOSE) builder.advanceLexer();
                 title.done(LINK_REF_TITLE);
                 if (builder.getTokenType() == LINK_REF_TITLE_MARKER) builder.advanceLexer();
             }
@@ -182,7 +183,7 @@ public class MultiMarkdownParser implements PsiParser {
         builder.advanceLexer();
 
         PsiBuilder.Marker marker = builder.mark();
-        while (builder.getTokenType() != IMAGE_LINK_REF_TEXT_CLOSE) builder.advanceLexer();
+        while (!builder.eof() && builder.getTokenType() != IMAGE_LINK_REF_TEXT_CLOSE) builder.advanceLexer();
         marker.done(IMAGE_LINK_REF_TEXT);
 
         if (builder.getTokenType() == IMAGE_LINK_REF_TEXT_CLOSE) {
@@ -198,7 +199,7 @@ public class MultiMarkdownParser implements PsiParser {
             if (builder.getTokenType() == IMAGE_LINK_REF_TITLE_MARKER) {
                 builder.advanceLexer();
                 PsiBuilder.Marker title = builder.mark();
-                while (builder.getTokenType() != IMAGE_LINK_REF_TITLE_MARKER && builder.getTokenType() != IMAGE_LINK_REF_CLOSE) builder.advanceLexer();
+                while (!builder.eof() && builder.getTokenType() != IMAGE_LINK_REF_TITLE_MARKER && builder.getTokenType() != IMAGE_LINK_REF_CLOSE) builder.advanceLexer();
                 title.done(IMAGE_LINK_REF_TITLE);
                 if (builder.getTokenType() == IMAGE_LINK_REF_TITLE_MARKER) builder.advanceLexer();
             }

@@ -20,8 +20,10 @@ import com.intellij.util.text.CharArrayUtil;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 import org.pegdown.ast.Node;
+import org.pegdown.ast.SuperNode;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SyntheticNodes {
     private static final Logger logger = Logger.getLogger(SyntheticNodes.class);
@@ -42,6 +44,12 @@ public class SyntheticNodes {
 
     public Node getNode() {
         return node;
+    }
+
+    @Override
+    public String toString() {
+        CharArrayCharSequence nodeText = new CharArrayCharSequence(fullText, nodeStart, nodeEnd);
+        return nodeType + "[" + nodeStart + "," + nodeEnd + ") " + nodeText;
     }
 
     public SyntheticNodes(char[] fullText, Node node, IElementType type) {
@@ -96,12 +104,15 @@ public class SyntheticNodes {
         int start = nodeStart;
 
         for (SyntheticNode node : syntheticNodes) {
-            assert node.startIndex == start : "synthetic node should start " + start +", instead " + node.startIndex;
+            assert node.startIndex == start : "synthetic node should start " + start + ", instead " + node.startIndex;
             logger.info("validating synth node " + node);
             start = node.endIndex;
         }
 
         assert start == nodeEnd : "last synthetic node ended " + start + " instead of " + nodeEnd;
+    }
+    public void setCurrent(int current) {
+        this.current = current;
     }
 
     public class SyntheticNode {
@@ -522,6 +533,37 @@ public class SyntheticNodes {
         return false;
     }
 
+    enum ChildLocationType {
+        ANY, LEAD, TAIL
+    }
+
+    boolean chopChildren(ChildLocationType locationType, IElementType type) {
+        List<Node> children = node.getChildren();
+        if (children.size() == 0) return false;
+
+        if (children.get(0) instanceof SuperNode) {
+            children = children.get(0).getChildren();
+            if (children.size() == 0) return false;
+        }
+
+        SyntheticNode oldNode = syntheticNodes.get(current);
+        int endIndex = children.get(children.size() - 1).getEndIndex();
+        int startIndex = children.get(0).getStartIndex();
+
+        if ((locationType == ChildLocationType.ANY || locationType == ChildLocationType.LEAD) && startIndex == oldNode.startIndex && endIndex <= oldNode.endIndex) {
+            SyntheticNode newPart = oldNode.chopTail(endIndex, type);
+            syntheticNodes.add(current + 1, newPart);
+            return true;
+        } else if ((locationType == ChildLocationType.ANY || locationType == ChildLocationType.TAIL) && startIndex >= oldNode.startIndex && endIndex == oldNode.endIndex) {
+            SyntheticNode newPart = oldNode.chopLead(startIndex, type);
+            syntheticNodes.add(current, newPart);
+            current++;
+            return true;
+        }
+
+        return false;
+    }
+
     boolean chopLastLead(String pattern, IElementType type, IElementType patternType) {
         SyntheticNode oldNode = syntheticNodes.get(current);
         int pos = oldNode.lastIndexOf(pattern);
@@ -800,7 +842,7 @@ public class SyntheticNodes {
 
                 newNode = node.trimTail();
                 if (newNode != null) {
-                    syntheticNodes.add(current+1, newNode);
+                    syntheticNodes.add(current + 1, newNode);
                     i++;
                 }
             }

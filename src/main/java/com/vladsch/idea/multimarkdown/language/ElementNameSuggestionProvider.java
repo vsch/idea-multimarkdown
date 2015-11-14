@@ -254,6 +254,7 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
         String linkRef = MultiMarkdownPsiImplUtil.getLinkRef(parent);
         String linkRefText = MultiMarkdownPsiImplUtil.getLinkRefText(parent);
         String linkRefAnchor = MultiMarkdownPsiImplUtil.getLinkRefAnchor(parent);
+        String originalText = null;
 
         SuggestionList originalList = new SuggestionList(parent.getProject());
 
@@ -261,6 +262,7 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
             String text = linkRefText;
             text = text.replace(MultiMarkdownCompletionContributor.DUMMY_IDENTIFIER, "").trim();
             if (!text.isEmpty()) {
+                originalText = text;
                 originalList.add(text);
                 suggestionList.add(originalList);
             }
@@ -314,6 +316,6 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
                 )
         );
 
-        return suggestionList;
+        return suggestionList.size() == 1 && suggestionList.get(0).equals(originalText) ? SuggestionList.EMPTY_LIST :  suggestionList;
     }
 }

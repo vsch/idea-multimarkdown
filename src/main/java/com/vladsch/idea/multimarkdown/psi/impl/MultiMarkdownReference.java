@@ -20,6 +20,7 @@ import com.intellij.refactoring.rename.BindablePsiReference;
 import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownElementType;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.util.ReferenceChangeListener;
 import org.apache.log4j.Logger;
@@ -168,6 +169,12 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
         String name = myElement.getName();
         if (name != null) {
             // these are always missing but we create references by namespace and name of the element in the project so they can be renamed as a group
+            // skip complex ones that contain other parsable elements
+            PsiElement[] children = getElement().getChildren();
+            for (PsiElement child : children) {
+                if (child.getNode().getElementType() instanceof MultiMarkdownElementType) return EMPTY_RESULTS;
+            }
+
             MultiMarkdownNamedElement missingLinkElement = getMissingRefElement(name);
             return new ResolveResult[] { new PsiElementResolveResult(missingLinkElement) };
         }

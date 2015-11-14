@@ -31,6 +31,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     public static final String WIKI_PAGE_EXTENSION = ".md";
     public static final String WIKI_HOME_EXTENTION = ".wiki";
     public static final String GITHUB_WIKI_HOME_DIRNAME = "wiki";
+    public static final String GITHUB_WIKI_HOME_FILENAME = "Home";
     public static final String GITHUB_ISSUES_NAME = "issues";
     public static final String GITHUB_GRAPHS_NAME = "graphs";
     public static final String GITHUB_PULSE_NAME = "pulse";
@@ -172,7 +173,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     }
 
     final public boolean hasWikiPageExt() {
-        return getFilePath().endsWith(WIKI_PAGE_EXTENSION);
+        return isWikiPageExt(getExt());
     }
 
     @NotNull
@@ -208,7 +209,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
         return filePath.indexOf('#') >= 0;
     }
 
-    final public boolean isWikiHome() {
+    final public boolean isWikiHomeDir() {
         return filePath.endsWith(WIKI_HOME_EXTENTION) || getFileName().equals(GITHUB_WIKI_HOME_DIRNAME);
     }
 
@@ -248,6 +249,10 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
 
     final public boolean isWikiPage() {
         return isUnderWikiHome() && isWikiPageExt(getExt());
+    }
+
+    public boolean isWikiPageHome() {
+        return isWikiPage() && GITHUB_WIKI_HOME_FILENAME.equals(getFileNameNoExt());
     }
 
     @NotNull
@@ -382,6 +387,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
         }
         return new FilePathInfo(path.toString());
     }
+
     public boolean isExternalReference() {
         return isExternalReference(filePath);
     }
@@ -424,7 +430,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
 
         @Override
         boolean isMatched(FilePathInfo currentPath, String[] linkRefParts, int part) {
-            return currentPath.isWikiHome() && super.isMatched(currentPath, linkRefParts, part);
+            return currentPath.isWikiHomeDir() && super.isMatched(currentPath, linkRefParts, part);
         }
 
         @Override
@@ -443,7 +449,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
 
         @Override
         boolean isMatched(FilePathInfo currentPath, String[] linkRefParts, int part) {
-            return !currentPath.isWikiHome() && super.isMatched(currentPath, linkRefParts, part);
+            return !currentPath.isWikiHomeDir() && super.isMatched(currentPath, linkRefParts, part);
         }
 
         @Override
@@ -499,7 +505,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
             }
         }
         if (convertLinkRefs) {
-            if (pathInfo != null && pathInfo.isWikiHome()) {
+            if (pathInfo != null && pathInfo.isWikiHomeDir()) {
                 pathInfo = new FileReference(pathInfo.append("Home"));
             }
         }
@@ -547,7 +553,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
      *
      */
 
-    public static boolean isWikiHome(String path) {
+    public static boolean isWikiHomeDir(String path) {
         return path != null && endsWith(path, WIKI_HOME_EXTENTION);
     }
 
@@ -562,6 +568,10 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
 
     public static boolean isExternalReference(@Nullable String href) {
         return href == null || href.startsWith("http://") || href.startsWith("ftp://") || href.startsWith("https://") || href.startsWith("mailto:");
+    }
+
+    public static boolean isAbsoluteReference(@Nullable String href) {
+        return href == null || href.startsWith("file://") || href.startsWith("/")  || href.startsWith("#") || isExternalReference(href);
     }
 
     public static boolean isExtInList(boolean caseSensitive, @NotNull String ext, String... extList) {

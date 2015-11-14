@@ -278,7 +278,7 @@ public class FileReferenceList {
         extensionFileRefIndices = builder.getExtensionFileReferences();
     }
 
-    public FileReferenceList(@NotNull Filter[] filters, @NotNull FileReference[]... fileReferencesArray) {
+    public FileReferenceList(boolean firstMatchOnly, @NotNull Filter[] filters, @NotNull FileReference[]... fileReferencesArray) {
         Builder builder = new Builder();
 
         for (FileReference[] fileReferences : fileReferencesArray) {
@@ -297,6 +297,7 @@ public class FileReferenceList {
                 }
 
                 builder.add(fileReference);
+                if (firstMatchOnly) break;
             }
         }
 
@@ -306,7 +307,7 @@ public class FileReferenceList {
     }
 
     // this is a union and filter constructor
-    public FileReferenceList(@NotNull Filter[] filters, FileReferenceList... fileReferenceLists) {
+    public FileReferenceList(boolean firstMatchOnly, @NotNull Filter[] filters, FileReferenceList... fileReferenceLists) {
         Builder builder = new Builder();
 
         for (FileReferenceList fileReferenceList : fileReferenceLists) {
@@ -333,6 +334,7 @@ public class FileReferenceList {
                     }
 
                     builder.add(addReference);
+                    if (firstMatchOnly) break;
                 }
             }
         }
@@ -347,11 +349,15 @@ public class FileReferenceList {
     }
 
     public FileReferenceList(@NotNull Filter[] filters, @NotNull FileReference... fileReferences) {
-        this(filters, new FileReference[][] { fileReferences });
+        this(false, filters, new FileReference[][] { fileReferences });
     }
 
     public FileReferenceList(@NotNull FileReferenceList other, Filter... filters) {
         this(filters, other.fileReferences);
+    }
+
+    public FileReferenceList(boolean firstMatchOnly, @NotNull FileReferenceList other, Filter... filters) {
+        this(firstMatchOnly, filters, other.fileReferences);
     }
 
     public FileReferenceList(@NotNull FileReferenceList other) {
@@ -378,6 +384,11 @@ public class FileReferenceList {
     @NotNull
     public FileReferenceList filter(Filter... filters) {
         return new FileReferenceList(this, filters);
+    }
+
+    @NotNull
+    public FileReferenceList filter(boolean firstMatchOnly, Filter... filters) {
+        return new FileReferenceList(firstMatchOnly, this, filters);
     }
 
     @NotNull

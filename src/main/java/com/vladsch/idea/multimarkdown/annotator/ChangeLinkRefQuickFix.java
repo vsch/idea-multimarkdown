@@ -138,7 +138,7 @@ class ChangeLinkRefQuickFix extends BaseIntentionAction {
                     // change the whole name
                     //wikiPageRefElement.setName(fileName, MultiMarkdownNamedElement.REASON_FILE_MOVED);
                     PsiReference reference = linkRefElement.getReference();
-                    PsiElement rootElement = reference == null ? null : (MultiMarkdownNamedElement) reference.resolve();
+                    PsiElement rootElement = reference == null ? null : reference.resolve();
 
                     if (!(rootElement instanceof MultiMarkdownNamedElement)) {
                         rootElement = linkRefElement;

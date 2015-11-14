@@ -172,7 +172,7 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
         public URL getImageURL() {
             final String src = (String) getElement().getAttributes().getAttribute(Attribute.SRC);
             if (src != null) {
-                Object link = MultiMarkdownPathResolver.resolveLink(null, document, src, false, true);
+                Object link = MultiMarkdownPathResolver.resolveImageLink(null, document, src);
                 if (link instanceof VirtualFile) {
                     final VirtualFile localImage = (VirtualFile) link;
                     try {

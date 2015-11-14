@@ -59,7 +59,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent {
     private final static int LISTENER_ADDED = 0;
     private final static int SYMBOL_REF_CHANGED = 1;
 
-    private ConcurrentHashMap<String, GitHubRepo> gitHubRepos = null;
+    private ConcurrentHashMap<String, Object> gitHubRepos = null;
 
     private Project project;
     protected MultiMarkdownGlobalSettingsListener globalSettingsListener;
@@ -292,17 +292,19 @@ public class MultiMarkdownProjectComponent implements ProjectComponent {
 
     public GitHubRepo getGitHubRepo(@Nullable String baseDirectoryPath) {
         if (baseDirectoryPath == null) baseDirectoryPath = project.getBasePath();
+        if (baseDirectoryPath == null) return null;
 
         if (gitHubRepos == null) {
-            gitHubRepos = new ConcurrentHashMap<String, GitHubRepo>();
+            gitHubRepos = new ConcurrentHashMap<String, Object>();
         }
 
         if (!gitHubRepos.containsKey(baseDirectoryPath)) {
             GitHubRepo gitHubRepo = GitHubRepo.getGitHubRepo(baseDirectoryPath, project.getBasePath());
-            gitHubRepos.put(baseDirectoryPath, gitHubRepo);
+            gitHubRepos.put(baseDirectoryPath, gitHubRepo != null ? gitHubRepo : new Object());
         }
 
-        return gitHubRepos.get(baseDirectoryPath);
+        Object object = gitHubRepos.get(baseDirectoryPath);
+        return object instanceof GitHubRepo ? (GitHubRepo) object : null;
     }
 
     public MultiMarkdownProjectComponent(final Project project) {

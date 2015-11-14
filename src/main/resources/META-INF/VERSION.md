@@ -1,11 +1,17 @@
 ### 1.2.1.2 - Bug Fixes and Enhancements
 
 #### Basic Edition & Enhanced
+- Change link coloring for preview for now disabled. It slows down preview refresh even with as little as a few dozen relative links on the page.
 - Fix wiki link with multiple matched targets would not resolve according to sort order 
 - Fix wiki link with multiple matched targets would show quick fix to rename unreachable targets
 - Fix wiki links with subdirectory references did not show annotation popup or quick fix to remove directory 
+- Fix link resolution did not work if non-default Markdown extension was used on Wiki pages  
+- Fix link resolution in preview to match the rules for markdown source
+- Fix closed to to task list items with capital x `- [X]` would not render correctly in the WevView preview.
 
 #### Enhanced Edition
+
+- Fix link resolution was not always consistent with GitHub  
 
 ### 1.2.1.1 - Bug Fixes and Enhancements
 

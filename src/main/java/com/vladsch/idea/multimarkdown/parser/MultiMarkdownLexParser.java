@@ -875,6 +875,12 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
             if (MultiMarkdownPlugin.isLicensed()) {
                 SyntheticNodes nodes = new SyntheticNodes(currentChars, node, EXPLICIT_LINK, LINK_REF_TEXT, 1, LINK_REF_TEXT_OPEN, LINK_REF_CLOSE);
 
+                // now chop off lead child nodes
+                int childNode = nodes.current();
+                if (nodes.chopChildren(SyntheticNodes.ChildLocationType.LEAD, LINK_REF_TEXT_CLOSE)) nodes.next();
+
+                if (nodes.chopTail('(', LINK_REF_OPEN)) nodes.next();
+
                 if (!node.title.isEmpty() && nodes.chopLastTail(node.title, LINK_REF_TITLE, LINK_REF_TITLE_MARKER)) {
                     nodes.chopTail(-1, LINK_REF_TITLE_MARKER);
                 }
@@ -883,14 +889,6 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
                     nodes.chopLastTail(node.url, LINK_REF);
                     nodes.next();
                     nodes.chopLastTail('#', LINK_REF_ANCHOR_MARKER, LINK_REF_ANCHOR);
-                    nodes.prev();
-                }
-
-                // now chop off lead and tail alt markers
-                if (nodes.chopTail(']', LINK_REF_TEXT_CLOSE)) {
-                    nodes.next();
-                    nodes.chopTail('(', LINK_REF_OPEN);
-                    nodes.prev();
                 }
 
                 //nodes.validateAllContiguous();
@@ -898,6 +896,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
                 nodes.dropWhiteSpace(LINK_REF_TEXT_CLOSE, LINK_REF_OPEN, LINK_REF, LINK_REF_ANCHOR_MARKER, LINK_REF_ANCHOR);
 
                 // need to process children with the current node
+                nodes.setCurrent(childNode);
                 addTokensWithChildren(nodes);
             } else {
                 addTokenWithChildren(node, EXPLICIT_LINK);

@@ -215,8 +215,10 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
     }
 
     protected void updateLinkRenderer() {
-        int options = MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue() ? MultiMarkdownLinkRenderer.GITHUB_WIKI_LINK_FORMAT : 0;
-        linkRendererModified = new MultiMarkdownLinkRenderer(project, document, "absent", options);
+        // RELEASE: add link validation option
+        int options = 0;
+        if (MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue()) options |= MultiMarkdownLinkRenderer.GITHUB_WIKI_LINK_FORMAT;
+        linkRendererModified = new MultiMarkdownLinkRenderer(project, document, "absent", options | MultiMarkdownLinkRenderer.VALIDATE_LINKS);
         linkRendererNormal = new MultiMarkdownLinkRenderer(options);
     }
 
@@ -345,7 +347,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         boolean taskLists = isTaskLists();
 
         if (taskLists) {
-            regex += "|<li class=\"task-list-item\">\\n*\\s*<p>|<li class=\"task-list-item\">|<li>\\[x\\]\\s*|<li>\\[ \\]\\s*|<li>\\n*\\s*<p>\\[x\\]\\s*|<li>\\n*\\s*<p>\\[ \\]\\s*";
+            regex += "|<li class=\"task-list-item\">\\n*\\s*<p>|<li class=\"task-list-item\">|<li>\\[(?:x|X)\\]\\s*|<li>\\[ \\]\\s*|<li>\\n*\\s*<p>\\[x\\]\\s*|<li>\\n*\\s*<p>\\[ \\]\\s*";
         }
         regex += regexTail;
         regex += ")";
@@ -402,6 +404,8 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
             } else {
                 found = found.trim();
                 if (taskLists && found.equals("<li>[x]")) {
+                    result += "<li class=\"dtask\">";
+                } else if (taskLists && found.equals("<li>[X]")) {
                     result += "<li class=\"dtask\">";
                 } else if (taskLists && found.equals("<li>[ ]")) {
                     result += "<li class=\"dtask\">";

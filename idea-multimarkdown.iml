@@ -11,7 +11,7 @@
       <excludeFolder url="file://$MODULE_DIR$/src/misc" />
       <excludeFolder url="file://$MODULE_DIR$/src/test/resources/GitHubIssues/Issue-46" />
     </content>
-    <orderEntry type="jdk" jdkName="IntelliJ IDEA IU-143.382.35" jdkType="IDEA JDK" />
+    <orderEntry type="jdk" jdkName="IntelliJ IDEA IU-143.747.6 jdk 1.8.51" jdkType="IDEA JDK" />
     <orderEntry type="module-library" exported="">
       <library name="lib">
         <CLASSES>

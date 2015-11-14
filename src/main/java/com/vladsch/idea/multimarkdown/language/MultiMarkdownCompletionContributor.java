@@ -88,11 +88,18 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
                             }
                         } else if (elementType == IMAGE_LINK_REF_TEXT || elementType == LINK_REF_TEXT) {
                             PsiElement parent = element.getParent();
-                            while (parent != null && !(parent instanceof MultiMarkdownExplicitLink)) {
+
+                            while (parent != null && !(parent.getNode().getElementType() instanceof MultiMarkdownElementType)) {
                                 parent = parent.getParent();
                             }
 
                             if (parent != null) {
+                                // skip suggestion for complex elements
+                                PsiElement[] children = element.getChildren();
+                                for (PsiElement child : children) {
+                                    if (child.getNode().getElementType() instanceof MultiMarkdownElementType) return;
+                                }
+
                                 SuggestionList suggestionList = ElementNameSuggestionProvider.getLinkRefTextSuggestions(parent, false);
 
                                 for (String suggestion : suggestionList.asList()) {

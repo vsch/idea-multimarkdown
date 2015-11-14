@@ -24,8 +24,10 @@
 package com.vladsch.idea.multimarkdown.editor;
 
 import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
-import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.vladsch.idea.multimarkdown.util.*;
 import org.pegdown.LinkRenderer;
 import org.pegdown.ast.*;
 
@@ -36,26 +38,22 @@ import static org.pegdown.FastEncoder.obfuscate;
 
 public class MultiMarkdownLinkRenderer extends LinkRenderer {
     final public static int GITHUB_WIKI_LINK_FORMAT = 1;
+    final public static int VALIDATE_LINKS = 2;
 
     final protected Project project;
     final protected Document document;
     final protected String missingTargetClass;
     final protected int options;
+    final protected GitHubRepo gitHubRepo;
+    final protected FileReference documentFileReference;
+    final protected FileReferenceList fileReferenceList;
 
     public MultiMarkdownLinkRenderer() {
-        super();
-        project = null;
-        document = null;
-        missingTargetClass = null;
-        options = 0;
+        this(0);
     }
 
     public MultiMarkdownLinkRenderer(int options) {
-        super();
-        project = null;
-        document = null;
-        missingTargetClass = null;
-        this.options = options;
+        this(null, null, null, options);
     }
 
     public MultiMarkdownLinkRenderer(Project project, Document document, String missingTargetClass, int options) {
@@ -63,18 +61,35 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
         this.project = project;
         this.document = document;
         this.missingTargetClass = missingTargetClass;
+
+        if ((options & VALIDATE_LINKS) != 0) {
+            VirtualFile file = document == null ? null : FileDocumentManager.getInstance().getFile(document);
+            this.documentFileReference = file == null ? null : new FileReference(file.getPath(), project);
+            this.gitHubRepo = this.documentFileReference == null ? null : documentFileReference.getGitHubRepo();
+            this.fileReferenceList = this.documentFileReference == null ? null : new FileReferenceListQuery(project)
+                    .gitHubWikiRules()
+                    .sameGitHubRepo()
+                    .inSource(this.documentFileReference)
+                    .wantMarkdownFiles()
+                    .all();
+
+            if (this.fileReferenceList == null) options &= ~VALIDATE_LINKS;
+        } else {
+            this.documentFileReference = null;
+            this.gitHubRepo = null;
+            this.fileReferenceList = null;
+        }
+
         this.options = options;
     }
 
     // TODO: need to implement this using ProjectComponent methods so that we don't need
     // to go into areas that may have threading issues.
     public Rendering checkTarget(Rendering rendering) {
-        if (project != null && document != null && missingTargetClass != null) {
-            if (!FilePathInfo.isExternalReference(rendering.href)) {
-                if (!rendering.href.startsWith("#")) {
-                    if (!MultiMarkdownPathResolver.canResolveLink(project, document, rendering.href, true)) {
-                        rendering.withAttribute("class", missingTargetClass);
-                    }
+        if ((options & VALIDATE_LINKS) != 0 && project != null && document != null && missingTargetClass != null) {
+            if (!FilePathInfo.isAbsoluteReference(rendering.href)) {
+                if (!MultiMarkdownPathResolver.canResolveRelativeLink(fileReferenceList, documentFileReference, gitHubRepo, rendering.href, false)) {
+                    rendering.withAttribute("class", missingTargetClass);
                 }
             }
         }
@@ -148,9 +163,7 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
                 url = url.substring(0, pos);
             }
 
-            //vsch: need our own extension for the file
-            url = ((url.isEmpty()) ? "" : ("./" + URLEncoder.encode(url.replace(' ', '-'), "UTF-8") + ".md")) + suffix;
-            //url = ((url.isEmpty()) ? "" : ("./" + URLEncoder.encode(url.replace(' ', '-'), "UTF-8"))) + suffix;
+            url = ((url.isEmpty()) ? "" : ("./" + URLEncoder.encode(url.replace(' ', '-'), "UTF-8"))) + suffix;
             return checkTarget(new Rendering(url, text));
         } catch (UnsupportedEncodingException e) {
             throw new IllegalStateException();

@@ -89,7 +89,7 @@ public class TestFilePathInfo {
     /* 13: getFileNameNoExtAsWikiRef, */
     /* 14: hasWikiPageExt, */
     /* 15: containsSpaces, */
-    /* 16: isWikiHome, */
+    /* 16: isWikiHomeDir, */
     /* 17: isUnderWikiHome, */
     /* 18: pathContainsSpaces, */
     /* 19: fileNameContainsSpaces, */
@@ -193,7 +193,7 @@ public class TestFilePathInfo {
     @Test public void test_getFilePath() { assertEquals(getFilePath, filePathInfo.getFilePath());}
     @Test public void test_getFilePathAsWikiRef() { assertEquals(getFilePathAsWikiRef, filePathInfo.getFilePathAsWikiRef()); }
     @Test public void test_containsSpaces() { assertEquals(containsSpaces, filePathInfo.containsSpaces()); }
-    @Test public void test_isWikiHome() { assertEquals(isWikiHome, filePathInfo.isWikiHome()); }
+    @Test public void test_isWikiHome() { assertEquals(isWikiHome, filePathInfo.isWikiHomeDir()); }
     @Test public void test_getFilePathNoExt() { assertEquals(getFilePathNoExt, filePathInfo.getFilePathNoExt()); }
     @Test public void test_getFilePathNoExtAsWikiRef() { assertEquals(getFilePathNoExtAsWikiRef, filePathInfo.getFilePathNoExtAsWikiRef()); }
     @Test public void test_getPath() { assertEquals(getPath, filePathInfo.getPath()); }
@@ -241,7 +241,7 @@ public class TestFilePathInfo {
     /* 13: getFileNameNoExtAsWikiRef, */
     /* 14: hasWikiPageExt, */
     /* 15: containsSpaces, */
-    /* 16: isWikiHome, */
+    /* 16: isWikiHomeDir, */
     /* 17: isUnderWikiHome, */
     /* 18: pathContainsSpaces, */
     /* 19: fileNameContainsSpaces, */
@@ -356,7 +356,7 @@ public class TestFilePathInfo {
 /* 13: getFileNameNoExtAsWikiRef, */            result[13] = FilenameUtils.getBaseName(filePathNoAnchor).replace('-', ' ');
 /* 14: hasWikiPageExt, */                       result[14] = FilenameUtils.getExtension(filePathNoAnchor).equals("md");
 /* 15: containsSpaces, */                       result[15] = filePathNoAnchor.contains(" ");
-/* 16: isWikiHome, */                           result[16] = FilenameUtils.getExtension(filePathNoAnchor).equals("wiki");
+/* 16: isWikiHomeDir, */                           result[16] = FilenameUtils.getExtension(filePathNoAnchor).equals("wiki");
 /* 17: isUnderWikiHome, */                      result[17] = !wikiHome.isEmpty();
 /* 18: pathContainsSpaces, */                   result[18] = ((tmp = FilenameUtils.getPath(filePathNoAnchor)).equals(FilenameUtils.getName(filePathNoAnchor)) ? "" : (tmp.length() > 1 ? pathPrefix + tmp : tmp)).contains(" ");
 /* 19: fileNameContainsSpaces, */               result[19] = FilenameUtils.getName(filePathNoAnchor).contains(" ");

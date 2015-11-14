@@ -153,13 +153,13 @@ public class MultiMarkdownAnnotator implements Annotator {
             FileReferenceListQuery accessibleFilesReferenceListQuery;
 
             if (element instanceof MultiMarkdownImageLinkRef) {
-                withExt = true;
                 filesReferenceList = new FileReferenceListQuery(element.getProject())
                         .keepLinkRefAnchor()
                         .wantImageFiles()
                         .all();
 
                 accessibleFilesReferenceListQuery = filesReferenceListQuery = filesReferenceList.query().wantImageFiles();
+                withExt = true;
             } else {
                 filesReferenceList = new FileReferenceListQuery(element.getProject())
                         .keepLinkRefAnchor()
@@ -179,8 +179,14 @@ public class MultiMarkdownAnnotator implements Annotator {
                     withExt = false;
                     useGitHubWikiPageRules = true;
                 } else {
-                    accessibleFilesReferenceListQuery = filesReferenceListQuery = filesReferenceList.query().wantMarkdownFiles();
-                    withExt = haveExt;
+                    accessibleFilesReferenceListQuery = filesReferenceList.query()
+                            .wantMarkdownFiles();
+
+                    filesReferenceListQuery = new FileReferenceListQuery(accessibleFilesReferenceListQuery)
+                            .wantMarkdownFiles()
+                            .ignoreLinkRefExtension();
+
+                    withExt = true;
                 }
             }
 
@@ -191,7 +197,20 @@ public class MultiMarkdownAnnotator implements Annotator {
                     .matchLinkRef(element, withExt)
                     .all();
 
+            boolean hadPerfectMatch = false;
             if (accessibleLinkRefs.size() == 1) {
+                // see if problem with extension or case sensitivity
+                FileReferenceLink fileReferenceLink = (FileReferenceLink) accessibleLinkRefs.getAt(0);
+
+                if (fileReferenceLink.isWikiPage() || sourceReference.isWikiPage()) {
+                    // case not significant
+                    hadPerfectMatch = !haveExt;
+                } else {
+                    hadPerfectMatch = haveExt && fileReferenceLink.getLinkRef().equals(pathInfo.getFilePath());
+                }
+            }
+
+            if (hadPerfectMatch) {
                 // add quick fix to change wiki to explicit link
                 offerExplicitToWikiQuickFix(element, state);
             } else if (accessibleLinkRefs.size() > 1 && useGitHubWikiPageRules) {
@@ -219,7 +238,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                     }
                 }
             } else {
-                FileReference elementFileReference = new FileReference(element.getContainingFile());
+                FileReference elementFileReference = new FileReference(containingFile);
                 String gitHubRepoPath = elementFileReference.getGitHubRepoPath();
 
                 // now set to right name or to an accessible name
@@ -238,7 +257,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                         // need to keep the top one from the sorted list
                         FileReference[] sorted = matchedFilesReferenceList.getSorted(1);
                         otherFileRefList = new FileReferenceList(sorted);
-                    } else if (gitHubRepoPath != null){
+                    } else if (gitHubRepoPath != null) {
                         otherFileRefList = matchedFilesReferenceList.pathStartsWith(gitHubRepoPath);
                     }
                 }
@@ -266,22 +285,33 @@ public class MultiMarkdownAnnotator implements Annotator {
                             state.createWarningAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.case-mismatch"));
 
                             if (state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, reasons.caseMismatchLinkRefFixed())) {
-                                state.annotator.registerFix(new ChangeLinkRefQuickFix(element, reasons.caseMismatchLinkRefFixed(), ChangeLinkRefQuickFix.MATCH_CASE_TO_FILE));
+                                state.annotator.registerFix(new ChangeLinkRefQuickFix(element, reasons.caseMismatchLinkRefFixed(), ChangeLinkRefQuickFix.MATCH_CASE_TO_FILE, REASON_FILE_MOVED));
                             }
 
-                            if (psiFile != null && state.addingAlreadyOffered(TYPE_RENAME_FILE_QUICK_FIX, referenceLink.getFullFilePath(), reasons.caseMismatchFileNameFixed())) {
+                            if (psiFile != null && reasons.caseMismatchInFileName() && state.addingAlreadyOffered(TYPE_RENAME_FILE_QUICK_FIX, referenceLink.getFullFilePath(), reasons.caseMismatchFileNameFixed())) {
                                 state.annotator.registerFix(new RenameFileQuickFix(psiFile, null, reasons.caseMismatchFileNameFixed()));
                             }
                         }
                     }
 
-                    if (!haveExt && withExt) {
+                    if (!referenceLink.isWikiPage() && !haveExt && withExt) {
                         state.needTargetList = false;
-                        state.createWarningAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.image.missing-extension"));
+                        state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.link.missing-extension"));
                         state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
 
                         if (state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, referenceLink.getLinkRef())) {
                             state.annotator.registerFix(new ChangeLinkRefQuickFix(element, referenceLink.getLinkRef()));
+                        }
+                    }
+
+                    if (haveExt && (referenceLink.isWikiPage() || sourceReference.isWikiPage())) {
+                        // cannot have extensions
+                        state.needTargetList = false;
+                        state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.link.target-wikipage-with-extension"));
+                        state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
+
+                        if (state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, referenceLink.getLinkRefNoExt())) {
+                            state.annotator.registerFix(new ChangeLinkRefQuickFix(element, referenceLink.getLinkRefNoExt()));
                         }
                     }
 

@@ -44,7 +44,7 @@ public class GitHubRepo {
 
     @VisibleForTesting
     protected GitHubRepo(@NotNull String githubBaseUrl, @NotNull String basePath) {
-        this.isWiki = FilePathInfo.isWikiHome(basePath);
+        this.isWiki = FilePathInfo.isWikiHomeDir(basePath);
         this.githubBaseUrl = githubBaseUrl;
         this.basePath = basePath;
     }
@@ -146,7 +146,7 @@ public class GitHubRepo {
                             .replaceAll(":", "/");
 
                     FilePathInfo baseUrlInfo = new FilePathInfo(baseUrl);
-                    if (baseUrlInfo.isWikiHome()) {
+                    if (baseUrlInfo.isWikiHomeDir()) {
                         baseUrl = baseUrlInfo.getFilePathNoExt();
                     }
                     break;

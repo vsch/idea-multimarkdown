@@ -166,7 +166,7 @@ public class FileReferenceLinkGitHubRules extends FileReferenceLink {
     @Override
     protected int computeLinkRefReasonsFlags(@Nullable String linkRef) {
         // add our own
-        return super.computeWikiPageRefReasonsFlags(linkRef);
+        return super.computeLinkRefReasonsFlags(linkRef);
     }
 
     @Override

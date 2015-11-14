@@ -16,7 +16,9 @@ package com.vladsch.idea.multimarkdown.psi.impl;
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiFile;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownImageLink;
@@ -36,7 +38,9 @@ public class MultiMarkdownImageLinkImpl extends ASTWrapperPsiElement implements 
     @NotNull
     public String getMissingElementNameSpace(@NotNull String prefix, boolean addLinkRef) {
         MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(getProject());
-        FilePathInfo filePathInfo = new FilePathInfo(getContainingFile().getVirtualFile());
+        PsiFile psiFile = getContainingFile();
+        VirtualFile virtualFile = psiFile.getOriginalFile() != null ? psiFile.getOriginalFile().getVirtualFile() : psiFile.getVirtualFile();
+        FilePathInfo filePathInfo = new FilePathInfo(virtualFile);
         GitHubRepo gitHubRepo = projectComponent != null ? projectComponent.getGitHubRepo(filePathInfo.getPath()) : null;
         String vcsHome = gitHubRepo != null ? gitHubRepo.getBasePath() + "::" : "";
 

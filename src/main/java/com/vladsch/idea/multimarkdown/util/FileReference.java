@@ -124,7 +124,7 @@ public class FileReference extends FilePathInfo {
 
         @Override
         boolean isMatched(FilePathInfo currentPath, String[] linkRefParts, int part) {
-            return project != null && !currentPath.isWikiHome() && super.isMatched(currentPath, linkRefParts, part);
+            return project != null && !currentPath.isWikiHomeDir() && super.isMatched(currentPath, linkRefParts, part);
         }
 
         @Override
@@ -155,7 +155,7 @@ public class FileReference extends FilePathInfo {
 
         @Override
         boolean isMatched(FilePathInfo currentPath, String[] linkRefParts, int part) {
-            return project != null && !currentPath.isWikiHome() && super.isMatched(currentPath, linkRefParts, part);
+            return project != null && !currentPath.isWikiHomeDir() && super.isMatched(currentPath, linkRefParts, part);
         }
 
         @Override
