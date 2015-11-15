@@ -89,7 +89,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent {
             boolean log = false;
             MultiMarkdownNamedElement refElement = element;
 
-            synchronized (this) {
+            //synchronized (this) {
                 if (rootElements.containsKey(element)) {
                     if (!rootElements.get(element).equals(name)) {
                         // root element's name changed, inform listeners that they need to remap references
@@ -119,7 +119,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent {
                         assert refElement != element;
                     }
                 }
-            }
+            //}
 
             if (oldName != null) {
                 // do the notifications that the reference symbol for oldName has changed
@@ -166,14 +166,14 @@ public class MultiMarkdownProjectComponent implements ProjectComponent {
         ElementNamespace elementNamespace;
         MultiMarkdownNamedElement symbol;
 
-        synchronized (elementNamespaces) {
+        //synchronized (elementNamespaces) {
             if (!elementNamespaces.containsKey(namespace)) {
                 elementNamespaces.put(namespace, elementNamespace = new ElementNamespace(namespace));
             } else {
                 elementNamespace = elementNamespaces.get(namespace);
             }
             symbol = elementNamespace.getSymbol(element, name);
-        }
+        //}
 
         if (needAllSpacesNotification) allNamespacesNotifier.notifyListeners(new ListenerNotifier.RunnableNotifier<ReferenceChangeListener>() {
             @Override
@@ -187,9 +187,9 @@ public class MultiMarkdownProjectComponent implements ProjectComponent {
     }
 
     private void clearNamespaces() {
-        synchronized (elementNamespaces) {
+        //synchronized (elementNamespaces) {
             elementNamespaces.clear();
-        }
+        //}
 
         for (ElementNamespace elementNamespace : elementNamespaces.values()) {
             elementNamespace.notifyRefsInvalidated();
@@ -246,13 +246,13 @@ public class MultiMarkdownProjectComponent implements ProjectComponent {
     public void addListener(@NotNull String namespace, @NotNull ReferenceChangeListener listener) {
         ElementNamespace elementNamespace;
 
-        synchronized (elementNamespaces) {
+        //synchronized (elementNamespaces) {
             if (!elementNamespaces.containsKey(namespace)) {
                 elementNamespaces.put(namespace, elementNamespace = new ElementNamespace(namespace));
             } else {
                 elementNamespace = elementNamespaces.get(namespace);
             }
-        }
+        //}
 
         elementNamespace.addListener(listener);
     }

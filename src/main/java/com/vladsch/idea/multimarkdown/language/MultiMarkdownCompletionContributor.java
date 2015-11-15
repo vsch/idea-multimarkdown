@@ -123,11 +123,11 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
                                             .all();
 
                                     for (FileReference fileReference : linkFileReferenceList.get()) {
-                                        addLinkRefCompletion(resultSet, (FileReferenceLink) fileReference, false, true, false);
+                                        addLinkRefCompletion(resultSet, (FileReferenceLink) fileReference, false, true);
                                     }
 
                                     for (FileReference fileReference : linkFileReferenceList.get()) {
-                                        addLinkRefCompletion(resultSet, (FileReferenceLink) fileReference, false, false, false);
+                                        addLinkRefCompletion(resultSet, (FileReferenceLink) fileReference, false, false);
                                     }
                                 }
                             }
@@ -146,13 +146,12 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
 
                                     // add standard github parts
                                     FileReference sourceReference = new FileReference(virtualFile, fileProject);
-                                    boolean noPathPrefix = sourceReference.isWikiPage();
 
                                     for (FileReference fileReference : linkFileReferenceList.get()) {
-                                        addLinkRefCompletion(resultSet, (FileReferenceLink) fileReference, true, true, noPathPrefix);
+                                        addLinkRefCompletion(resultSet, (FileReferenceLink) fileReference, true, true);
                                     }
 
-                                    if (!noPathPrefix) {
+                                    if (!sourceReference.isWikiPage()) {
                                         for (String gitHubLink : FilePathInfo.GITHUB_LINKS) {
                                             FileReferenceLink newRefLink = new FileReferenceLink(sourceReference.getFullFilePath(), sourceReference.getGitHubRepoPath() + FilePathInfo.GITHUB_WIKI_REL_OFFSET + gitHubLink, fileProject);
 
@@ -167,7 +166,7 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
                                     }
 
                                     for (FileReference fileReference : linkFileReferenceList.get()) {
-                                        addLinkRefCompletion(resultSet, (FileReferenceLink) fileReference, true, false, noPathPrefix);
+                                        addLinkRefCompletion(resultSet, (FileReferenceLink) fileReference, true, false);
                                     }
                                 }
                             }
@@ -236,13 +235,13 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
         }
     }
 
-    protected void addLinkRefCompletion(@NotNull CompletionResultSet resultSet, FileReferenceLink fileReference, boolean noExt, boolean accessible, boolean noPathPrefix) {
+    protected void addLinkRefCompletion(@NotNull CompletionResultSet resultSet, FileReferenceLink fileReference, boolean noExt, boolean accessible) {
         FileReferenceLinkGitHubRules fileReferenceGitHub = (FileReferenceLinkGitHubRules) fileReference;
         String linkRef = noExt ? fileReferenceGitHub.getLinkRefNoExt() : fileReferenceGitHub.getLinkRef();
         String gitHubRepoPath = fileReferenceGitHub.getSourceReference().getGitHubRepoPath("");
         boolean isLinkAccessible = fileReferenceGitHub.getPath().startsWith(gitHubRepoPath);
 
-        if (noPathPrefix) {
+        if (fileReference.isWikiPage() || fileReference.getSourceReference().isWikiPage()) {
             linkRef = FilePathInfo.removeStart(linkRef, fileReferenceGitHub.getPathPrefix());
         }
 

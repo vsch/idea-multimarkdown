@@ -318,8 +318,9 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         String regex = "(<table>|<thead>|<tbody>|<tr>|<hr/>|<del>|</del>|</p>|<kbd>|</kbd>|<var>|</var>";//|<code>|</code>";
         String result = "";
 
+        // RELEASE: see why only wiki documents have a link to github in the header
         if (isWikiDocument) {
-            String gitHubHref = MultiMarkdownPathResolver.getGitHubDocumentURL(project, document, isWikiDocument);
+            String gitHubHref = MultiMarkdownPathResolver.getGitHubDocumentURL(project, document, true);
             String gitHubClose = "";
             if (gitHubHref == null) {
                 gitHubHref = "";
@@ -506,7 +507,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
     protected void setStyleSheet() {
         if (isRawHtml) return;
 
-        MultiMarkdownEditorKit htmlKit = new MultiMarkdownEditorKit(document);
+        MultiMarkdownEditorKit htmlKit = new MultiMarkdownEditorKit(document, project);
 
         final StyleSheet style = new MultiMarkdownStyleSheet();
 

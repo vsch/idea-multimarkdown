@@ -81,38 +81,38 @@ public class FileReference extends FilePathInfo {
         this.virtualFile = other.virtualFile;
     }
 
-    @Nullable
     @Override
+    @Nullable
     public FileReference resolveLinkRef(@Nullable String linkRef, boolean convertGitHubWikiHome) {
         return resolveLinkRef(linkRef, convertGitHubWikiHome, false);
     }
 
-    @Nullable
     @Override
+    @Nullable
     public FileReference resolveLinkRefWithAnchor(@Nullable String linkRef, boolean convertGitHubWikiHome) {
         return resolveLinkRef(linkRef, convertGitHubWikiHome, true);
     }
 
-    @Nullable
     @Override
+    @Nullable
     public FileReference resolveLinkRef(@Nullable String linkRef) {
         return resolveLinkRef(linkRef, false, false);
     }
 
-    @Nullable
     @Override
+    @Nullable
     public FileReference resolveLinkRefWithAnchor(@Nullable String linkRef) {
         return resolveLinkRef(linkRef, false, true);
     }
 
-    @Nullable
     @Override
+    @Nullable
     public FileReference resolveLinkRefToWikiPage(@Nullable String linkRef) {
         return resolveLinkRef(linkRef, true, false);
     }
 
-    @Nullable
     @Override
+    @Nullable
     public FileReference resolveLinkRefWithAnchorToWikiPage(@Nullable String linkRef) {
         return resolveLinkRef(linkRef, true, true);
     }
@@ -137,7 +137,7 @@ public class FileReference extends FilePathInfo {
                 GitHubRepo gitHubRepo = projectComponent.getGitHubRepo(currentPath.getFullFilePath());
                 if (gitHubRepo != null) {
                     try {
-                        String url = gitHubRepo.githubBaseUrl();
+                        String url = gitHubRepo.gitHubBaseUrl();
                         return new FilePathInfo(url).append(matchParts[matchParts.length - 1]);
                     } catch (RuntimeException ignored) {
                         logger.info("Can't resolve GitHub url", ignored);
@@ -216,14 +216,14 @@ public class FileReference extends FilePathInfo {
     }
 
     @Nullable
-    protected FileReference resolveExternalLinkRef(@Nullable String linkRef, boolean withAnchor, LinkRefResolver... linkRefResolvers) {
+    protected FileReference resolveExternalLinkRefNoWiki(@Nullable String linkRef, boolean withAnchor, LinkRefResolver... linkRefResolvers) {
         FilePathInfo resolvedPathInfo = super.resolveLinkRef(linkRef, true, withAnchor, appendResolvers(linkRefResolvers, markdownGitHubIssuesLinkResolver, markdownGitHubPullsLinkResolver, markdownGitHubPulseLinkResolver, markdownGitHubGraphsLinkResolver));
         return resolvedPathInfo != null && resolvedPathInfo.isExternalReference() ? new FileReference(resolvedPathInfo, this.project) : null;
     }
 
     @Nullable
     public FileReference resolveExternalLinkRef(@Nullable String linkRef, boolean resolveWikiLinks, boolean withAnchor) {
-        return resolveExternalLinkRef(linkRef, withAnchor, resolveWikiLinks ? markdownGitHubWikiLinkResolver : (LinkRefResolver) null);
+        return resolveExternalLinkRefNoWiki(linkRef, withAnchor, resolveWikiLinks ? markdownGitHubWikiLinkResolver : (LinkRefResolver) null);
     }
 
     @NotNull
@@ -241,11 +241,27 @@ public class FileReference extends FilePathInfo {
     }
 
     @Nullable
-    public VirtualFile getVirtualFile() {
+    public VirtualFile getVirtualFile(String... tryExtensions) {
         if (virtualFile == null) {
             virtualFile = FileReference.getVirtualFile(getFilePath());
+            if (virtualFile == null && !hasExt()) {
+                for (String ext : tryExtensions) {
+                    virtualFile = FileReference.getVirtualFile(getFilePath() + "." + ext);
+                    if (virtualFile != null) break;
+                }
+            }
         }
-        return virtualFile != null && virtualFile.getPath().equals(getFilePath()) ? virtualFile : null;
+
+        boolean haveMatch = virtualFile != null && virtualFile.getPath().equals(getFilePath());
+
+        if (!haveMatch && virtualFile != null) {
+            for (String ext : tryExtensions) {
+                haveMatch = virtualFile.getPath().equals(getFilePath() + "." + ext);
+                if (haveMatch) break;
+            }
+        }
+
+        return haveMatch ? virtualFile : null;
     }
 
     @Nullable

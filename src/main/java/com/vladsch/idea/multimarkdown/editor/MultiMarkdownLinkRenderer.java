@@ -96,6 +96,17 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
         return rendering;
     }
 
+    public Rendering checkTargetImage(Rendering rendering) {
+        if ((options & VALIDATE_LINKS) != 0 && project != null && document != null && missingTargetClass != null) {
+            if (!FilePathInfo.isAbsoluteReference(rendering.href)) {
+                if (!MultiMarkdownPathResolver.canResolveRelativeImageLink(fileReferenceList, documentFileReference, gitHubRepo, rendering.href, false)) {
+                    rendering.withAttribute("class", missingTargetClass);
+                }
+            }
+        }
+        return rendering;
+    }
+
     @Override
     public Rendering render(AnchorLinkNode node) {
         return checkTarget(super.render(node));
@@ -113,7 +124,7 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
 
     @Override
     public Rendering render(ExpImageNode node, String text) {
-        return checkTarget(super.render(node, text));
+        return checkTargetImage(super.render(node, text));
     }
 
     @Override
@@ -123,7 +134,7 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
 
     @Override
     public Rendering render(RefImageNode node, String url, String title, String alt) {
-        return checkTarget(super.render(node, url, title, alt));
+        return checkTargetImage(super.render(node, url, title, alt));
     }
 
     @Override

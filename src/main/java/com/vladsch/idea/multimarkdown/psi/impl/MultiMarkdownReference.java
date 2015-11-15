@@ -49,22 +49,14 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
         referenceChangeListener = new ReferenceChangeListener() {
             @Override
             public void referenceChanged(@Nullable String name) {
-                synchronized (thizz) {
+                //synchronized (thizz) {
                     if (resolveResultsName != null && (name == null || resolveResultsName.equals(name))) {
-                        invalidateResolveResults();
+                        resolveResults = null;
+                        resolveResultsName = null;
                     }
-                }
+                //}
             }
         };
-    }
-
-    protected void invalidateResolveResults() {
-        synchronized (this) {
-            //logger.info("invalidateResolveResults on " + this.toString());
-            resolveResults = null;
-            resolveResultsName = null;
-            //logger.info("Invalidated resolve results" + " for " + myElement);
-        }
     }
 
     protected void removeReferenceChangeListener() {
@@ -85,7 +77,11 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
             if (projectComponent != null) {
                 String namespace = myElement.getMissingElementNamespace();
 
-                MultiMarkdownNamedElement referencedElement = projectComponent.getMissingLinkElement(myElement, namespace, name);
+                MultiMarkdownNamedElement referencedElement;
+
+                //synchronized (this) {
+                    referencedElement = projectComponent.getMissingLinkElement(myElement, namespace, name);
+                //}
 
                 if (!resolveRefIsMissing) {
                     projectComponent.addListener(namespace, referenceChangeListener);
@@ -101,14 +97,14 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
     @NotNull
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
-        synchronized (this) {
+        //synchronized (this) {
             if (resolveResults == null || resolveResultsName == null || !resolveResultsName.equals(getElement().getName())) {
                 resolveResultsName = getElement().getName();
                 if (resolveResultsName == null) resolveResultsName = "";
                 setRangeInElement(new TextRange(0, resolveResultsName.length()));
                 resolveResults = getMultiResolveResults(incompleteCode);
             }
-        }
+        //}
         return resolveResults;
     }
 

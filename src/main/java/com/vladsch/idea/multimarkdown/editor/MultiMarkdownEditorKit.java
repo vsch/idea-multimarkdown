@@ -22,6 +22,7 @@
 package com.vladsch.idea.multimarkdown.editor;
 
 import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
@@ -52,6 +53,7 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
      * The document.
      */
     private final Document document;
+    private final Project project;
     protected float maxWidth;
 
     protected MultiMarkdownGlobalSettingsListener globalSettingsListener;
@@ -65,8 +67,9 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
      *
      * @param document the document
      */
-    public MultiMarkdownEditorKit(@NotNull Document document) {
+    public MultiMarkdownEditorKit(@NotNull Document document, @NotNull Project project) {
         this.document = document;
+        this.project = project;
         maxWidth = MultiMarkdownGlobalSettings.getInstance().maxImgWidth.getValue();
 
         MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
@@ -83,7 +86,7 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
      */
     @Override
     public Object clone() {
-        return new MultiMarkdownEditorKit(document);
+        return new MultiMarkdownEditorKit(document, project);
     }
 
     /**
@@ -91,7 +94,7 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
      */
     @Override
     public ViewFactory getViewFactory() {
-        return new MarkdownViewFactory(document, this);
+        return new MarkdownViewFactory(document, project, this);
     }
 
     /**
@@ -108,6 +111,7 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
          * The document.
          */
         private final Document document;
+        private final Project project;
         private MultiMarkdownEditorKit editorKit;
 
         /**
@@ -115,8 +119,9 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
          *
          * @param document the document
          */
-        private MarkdownViewFactory(Document document, MultiMarkdownEditorKit editorKit) {
+        private MarkdownViewFactory(Document document, Project project,  MultiMarkdownEditorKit editorKit) {
             this.document = document;
+            this.project = project;
             this.editorKit = editorKit;
         }
 
@@ -125,7 +130,7 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
         @Override
         public View create(Element elem) {
             if (HTML.Tag.IMG.equals(elem.getAttributes().getAttribute(StyleConstants.NameAttribute))) {
-                return new MarkdownImageView(document, elem, editorKit);
+                return new MarkdownImageView(document, project, elem, editorKit);
             }
             return super.create(elem);
         }
@@ -144,6 +149,7 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
          * The document.
          */
         private final Document document;
+        private final Project project;
         private MultiMarkdownEditorKit editorKit;
         private boolean scaled;
 
@@ -153,11 +159,12 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
          * @param document the document
          * @param elem     the element to create a view for
          */
-        private MarkdownImageView(@NotNull Document document, @NotNull Element elem, @NotNull MultiMarkdownEditorKit editorKit) {
+        private MarkdownImageView(@NotNull Document document, @NotNull Project project, @NotNull Element elem, @NotNull MultiMarkdownEditorKit editorKit) {
             super(elem);
 
             scaled = false;
             this.document = document;
+            this.project = project;
             this.editorKit = editorKit;
         }
 
@@ -172,7 +179,7 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
         public URL getImageURL() {
             final String src = (String) getElement().getAttributes().getAttribute(Attribute.SRC);
             if (src != null) {
-                Object link = MultiMarkdownPathResolver.resolveImageLink(null, document, src);
+                Object link = MultiMarkdownPathResolver.resolveLocalLink(project, document, src, false);
                 if (link instanceof VirtualFile) {
                     final VirtualFile localImage = (VirtualFile) link;
                     try {
