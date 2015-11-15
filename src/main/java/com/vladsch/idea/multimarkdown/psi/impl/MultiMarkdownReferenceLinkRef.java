@@ -67,6 +67,7 @@ public class MultiMarkdownReferenceLinkRef extends MultiMarkdownReference {
                 FileReferenceList fileReferenceList = new FileReferenceListQuery(myElement.getProject())
                         .gitHubWikiRules()
                         .sameGitHubRepo()
+                        .linkRefIgnoreSubDirs()
                         .matchLinkRef((MultiMarkdownLinkRef) myElement)
                         .wantMarkdownFiles()
                         .all()

@@ -456,7 +456,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                     String src = imgNode.getSrc();
                     if (!src.startsWith("http://") && !src.startsWith("https://") && !src.startsWith("ftp://") && !src.startsWith("file://")) {
                         // relative to document, change it to absolute file://
-                        Object resolveLink = MultiMarkdownPathResolver.resolveImageLink(project, document, src);
+                        Object resolveLink = MultiMarkdownPathResolver.resolveLocalLink(project, document, src, false);
                         if (resolveLink != null && resolveLink instanceof VirtualFile) {
                             final VirtualFile localImage = (VirtualFile) resolveLink;
                             if (localImage.exists()) {

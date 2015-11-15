@@ -38,14 +38,14 @@ public class GitHubRepo {
     final private static Pattern URL_VALUE = Pattern.compile("\\s*url\\s*=\\s*([^\\s]*)\\.git");
     final protected static String GIT_CONFIG = "config";
 
-    protected final String githubBaseUrl;
-    private final String basePath;
+    @NotNull protected final String gitHubBaseUrl;
+    @NotNull private final String basePath;
     private final boolean isWiki;
 
     @VisibleForTesting
-    protected GitHubRepo(@NotNull String githubBaseUrl, @NotNull String basePath) {
+    protected GitHubRepo(@NotNull String gitHubBaseUrl, @NotNull String basePath) {
         this.isWiki = FilePathInfo.isWikiHomeDir(basePath);
-        this.githubBaseUrl = githubBaseUrl;
+        this.gitHubBaseUrl = gitHubBaseUrl;
         this.basePath = basePath;
     }
 
@@ -53,6 +53,7 @@ public class GitHubRepo {
         return isWiki;
     }
 
+    @NotNull
     public String getBasePath() {
         return basePath;
     }
@@ -74,11 +75,12 @@ public class GitHubRepo {
             relativeFilePath = FilePathInfo.removeStart(relativeFilePath, "../../wiki");
         }
 
-        return FilePathInfo.endWith(githubBaseUrl(), '/') + (isWiki() ? "wiki/" : "blob/master/") + FilePathInfo.removeStart(relativeFilePath, "./") + (line != null ? "#L" + line : "");
+        return FilePathInfo.endWith(gitHubBaseUrl(), '/') + (isWiki() ? "wiki/" : "blob/master/") + FilePathInfo.removeStart(relativeFilePath, "./") + (line != null ? "#L" + line : "");
     }
 
-    public String githubBaseUrl() {
-        return githubBaseUrl;
+    @NotNull
+    public String gitHubBaseUrl() {
+        return gitHubBaseUrl;
     }
 
     @Nullable
@@ -97,7 +99,7 @@ public class GitHubRepo {
                         // gitdir: ../.git/modules/laravel-translation-manager.isWiki
                         if (line.startsWith("gitdir:")) {
                             line = line.substring("gitdir:".length()).trim();
-                            FilePathInfo configInfo = filePathInfo.resolveLinkRef(line, false);
+                            FilePathInfo configInfo = filePathInfo.resolveLinkRef(line, false, false);
                             if (configInfo != null) {
                                 gitPath = configInfo.getFullFilePath();
                             }
@@ -123,7 +125,7 @@ public class GitHubRepo {
     }
 
     @Nullable
-    protected static String githubBaseUrl(@NotNull File gitConfigFile) {
+    protected static String gitHubBaseUrl(@NotNull File gitConfigFile) {
         String baseUrl = null;
 
         BufferedReader reader = null;
@@ -182,7 +184,7 @@ public class GitHubRepo {
             if (gitPath != null) {
                 File gitConfigFile = new File(gitPath, gitConfig != null ? gitConfig : GIT_CONFIG);
                 if (gitConfigFile.exists() && gitConfigFile.isFile()) {
-                    String baseUrl = githubBaseUrl(gitConfigFile);
+                    String baseUrl = gitHubBaseUrl(gitConfigFile);
                     if (baseUrl != null) {
                         return new GitHubRepo(baseUrl, pathInfo.getFullFilePath());
                     }
