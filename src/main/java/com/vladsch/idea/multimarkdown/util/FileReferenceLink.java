@@ -477,5 +477,6 @@ public class FileReferenceLink extends FileReference {
                 "downDirectories  = " + downDirectories + ", " +
                 "";
     }
+
 }
 

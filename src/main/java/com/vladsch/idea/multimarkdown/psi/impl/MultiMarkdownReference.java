@@ -49,12 +49,10 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
         referenceChangeListener = new ReferenceChangeListener() {
             @Override
             public void referenceChanged(@Nullable String name) {
-                //synchronized (thizz) {
-                    if (resolveResultsName != null && (name == null || resolveResultsName.equals(name))) {
-                        resolveResults = null;
-                        resolveResultsName = null;
-                    }
-                //}
+                if (resolveResultsName != null && (name == null || resolveResultsName.equals(name))) {
+                    resolveResults = null;
+                    resolveResultsName = null;
+                }
             }
         };
     }
@@ -79,9 +77,7 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
 
                 MultiMarkdownNamedElement referencedElement;
 
-                //synchronized (this) {
-                    referencedElement = projectComponent.getMissingLinkElement(myElement, namespace, name);
-                //}
+                referencedElement = projectComponent.getMissingLinkElement(myElement, namespace, name);
 
                 if (!resolveRefIsMissing) {
                     projectComponent.addListener(namespace, referenceChangeListener);
@@ -97,14 +93,12 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
     @NotNull
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
-        //synchronized (this) {
-            if (resolveResults == null || resolveResultsName == null || !resolveResultsName.equals(getElement().getName())) {
-                resolveResultsName = getElement().getName();
-                if (resolveResultsName == null) resolveResultsName = "";
-                setRangeInElement(new TextRange(0, resolveResultsName.length()));
-                resolveResults = getMultiResolveResults(incompleteCode);
-            }
-        //}
+        if (resolveResults == null || resolveResultsName == null || !resolveResultsName.equals(getElement().getName())) {
+            resolveResultsName = getElement().getName();
+            if (resolveResultsName == null) resolveResultsName = "";
+            setRangeInElement(new TextRange(0, resolveResultsName.length()));
+            resolveResults = getMultiResolveResults(incompleteCode);
+        }
         return resolveResults;
     }
 
@@ -113,7 +107,7 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
         // we will handle this by renaming the element to point to the new location
         if (element.getClass() == myElement.getClass()) {
             String name = ((MultiMarkdownNamedElement) element).getName();
-            // this will create a new reference and loose connection to this one
+            // this will create a new reference and lose connection to this one
             // logger.info("rebinding " + myElement + " to " + element);
             if (name != null) return myElement.setName(name, MultiMarkdownNamedElement.REASON_FILE_MOVED);
         }

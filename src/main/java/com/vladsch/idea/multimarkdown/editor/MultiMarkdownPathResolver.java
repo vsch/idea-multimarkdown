@@ -78,23 +78,57 @@ public class MultiMarkdownPathResolver {
         return false;
     }
 
-    public static boolean canResolveRelativeLink(@NotNull FileReferenceList fileReferenceList, @NotNull FileReference documentFileReference, @Nullable GitHubRepo gitHubRepo, @NotNull String target, boolean isWikiLink, boolean resolveExternal) {
+    public static boolean canResolveRelativeLink(@Nullable FileReferenceList fileReferenceList, @NotNull FileReference documentFileReference, @Nullable GitHubRepo gitHubRepo, @NotNull String target, boolean isWikiLink, boolean resolveExternal) {
         // need to resolve using same code as links
-        FilePathInfo targetInfo = new FilePathInfo(target);
-        FileReferenceList fileList = fileReferenceList.query()
-                .gitHubWikiRules()
-                .wantMarkdownFiles()
-                .inSource(documentFileReference)
-                .ignoreLinkRefExtension(!(targetInfo.hasWithAnchorExtWithDot() && !targetInfo.hasWithAnchorWikiPageExt()))
-                .matchLinkRef(targetInfo.getFileName())
-                .first()
-                .postMatchFilter(targetInfo, isWikiLink, null, null);
+        if (target.startsWith("./")) target = target.substring(2);
+
+        FilePathInfo linkRefInfo = new FilePathInfo(target);
+        FileReferenceList fileList;
+
+        if (fileReferenceList == null && documentFileReference.getProject() == null) return false;
+
+        if (isWikiLink) {
+            fileList = (fileReferenceList != null ? new FileReferenceListQuery(fileReferenceList): new FileReferenceListQuery(documentFileReference.getProject()))
+                    .caseInsensitive()
+                    .gitHubWikiRules()
+                    .ignoreLinkRefExtension(!(linkRefInfo.hasWithAnchorExtWithDot() && linkRefInfo.hasWithAnchorWikiPageExt()))
+                    .keepLinkRefAnchor()
+                    .linkRefIgnoreSubDirs()
+                    .spaceDashEqual()
+                    .wantMarkdownFiles()
+                    .inSource(documentFileReference)
+                    .matchWikiRef(linkRefInfo.getFileNameWithAnchorAsWikiRef())
+                    .all()
+                    .postMatchFilter(linkRefInfo.getFileNameWithAnchorAsWikiRef(), true)
+                    .sorted();
+        } else {
+            fileList = (fileReferenceList != null ? new FileReferenceListQuery(fileReferenceList): new FileReferenceListQuery(documentFileReference.getProject()))
+                    .caseInsensitive()
+                    .gitHubWikiRules()
+                    .keepLinkRefAnchor()
+                    .linkRefIgnoreSubDirs()
+                    .sameGitHubRepo()
+                    .wantMarkdownFiles()
+                    .inSource(documentFileReference)
+                    .matchLinkRef(linkRefInfo.getFilePathWithAnchorNoExt(), false)
+                    .all()
+                    .postMatchFilter(linkRefInfo.getFullFilePath(), false)
+                    .sorted();
+        }
 
         // can just compare if it is the same instance, if not then it was resolved
-        //if (fileList.size() > 0 && resolveRelativeLink(fileList.getAt(0), documentFileReference, gitHubRepo, targetInfo) != targetInfo) return true;
+        //if (fileList.size() > 0 && resolveRelativeLink(fileList.getAt(0), documentFileReference, gitHubRepo, linkRefInfo) != linkRefInfo) return true;
+        if (!isWikiLink && linkRefInfo.hasAnchor()) {
+            // see if any targets have # then if we have anchor then does not resolve
+            for (FileReference fileReference : fileList.getFileReferences()) {
+                if (fileReference.hasAnchor()) {
+                    return false;
+                }
+            }
+        }
         if (fileList.size() > 0) return true;
 
-        target = targetInfo.getFullFilePath();
+        target = linkRefInfo.getFullFilePath();
 
         if (FilePathInfo.endsWith(target, FilePathInfo.GITHUB_LINKS)) {
             FileReference resolvedTarget = documentFileReference.resolveLinkRef(target, false);

@@ -48,13 +48,13 @@ import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.*;
 public class MultiMarkdownPsiImplUtil {
     private static final Logger logger = Logger.getLogger(MultiMarkdownPsiImplUtil.class);
     final protected static int EXTENSION_STRIP = 1;
-    final protected static int EXTENSION_KEEP = 2;
-    final protected static int EXTENSION_AS_IS = 3;
-    final protected static int EXTENSION_USE = 4;
+    final protected static int EXTENSION_KEEP_OLD = 2;
+    final protected static int EXTENSION_USE_NEW_IF_OLD_HAS = 3;
+    final protected static int EXTENSION_USE_NEW = 4;
 
     final public static LinkRefElementTypes WIKI_LINK_ELEMENT = new LinkRefElementTypes(WIKI_LINK, WIKI_LINK_REF, WIKI_LINK_TEXT, WIKI_LINK_REF_ANCHOR, EXTENSION_STRIP);
-    final public static LinkRefElementTypes EXPLICIT_LINK_ELEMENT = new LinkRefElementTypes(EXPLICIT_LINK, LINK_REF, LINK_REF_TEXT, LINK_REF_ANCHOR, LINK_REF_TITLE, EXTENSION_AS_IS);
-    final public static LinkRefElementTypes IMAGE_LINK_ELEMENT = new LinkRefElementTypes(IMAGE, IMAGE_LINK_REF, IMAGE_LINK_REF_TEXT, null, IMAGE_LINK_REF_TITLE, EXTENSION_USE);
+    final public static LinkRefElementTypes EXPLICIT_LINK_ELEMENT = new LinkRefElementTypes(EXPLICIT_LINK, LINK_REF, LINK_REF_TEXT, LINK_REF_ANCHOR, LINK_REF_TITLE, EXTENSION_USE_NEW_IF_OLD_HAS);
+    final public static LinkRefElementTypes IMAGE_LINK_ELEMENT = new LinkRefElementTypes(IMAGE, IMAGE_LINK_REF, IMAGE_LINK_REF_TEXT, null, IMAGE_LINK_REF_TITLE, EXTENSION_USE_NEW);
 
     static class LinkRefElementTypes {
         @NotNull public final IElementType parentType;
@@ -158,11 +158,11 @@ public class MultiMarkdownPsiImplUtil {
         IElementType elementType = element.getNode().getElementType();
 
         if (elementType == elementTypes.linkRefType) {
-            if (elementTypes.extensionFlags != 0) {
+            if (elementTypes.extensionFlags != 0 && (renameFlags & RENAME_ELEMENT_HANDLES_EXT) != 0) {
                 FilePathInfo linkRefInfo = new FilePathInfo(linkRef);
 
                 switch (elementTypes.extensionFlags) {
-                    case EXTENSION_KEEP:
+                    case EXTENSION_KEEP_OLD:
                         linkRef = newNameInfo.getFilePathWithAnchorNoExt() + linkRefInfo.getExt();
                         break;
 
@@ -170,11 +170,11 @@ public class MultiMarkdownPsiImplUtil {
                         linkRef = newNameInfo.getFilePathWithAnchorNoExt();
                         break;
 
-                    case EXTENSION_AS_IS:
+                    case EXTENSION_USE_NEW_IF_OLD_HAS:
                         linkRef = linkRefInfo.hasExt() ? newNameInfo.getFilePathWithAnchor() : newNameInfo.getFilePathWithAnchorNoExt();
                         break;
 
-                    case EXTENSION_USE:
+                    case EXTENSION_USE_NEW:
                     default:
                         linkRef = newNameInfo.getFilePath();
                         break;
@@ -229,7 +229,7 @@ public class MultiMarkdownPsiImplUtil {
         } else if (elementTypes.parentType == IMAGE) {
             newLink = MultiMarkdownElementFactory.createImageLink(element.getProject(), linkRef, text, title);
         } else if (elementTypes.parentType == EXPLICIT_LINK) {
-            newLink = MultiMarkdownElementFactory.createExplicitLink(element.getProject(), linkRef, anchor, text, title);
+            newLink = MultiMarkdownElementFactory.createExplicitLink(element.getProject(), linkRef, text, anchor, title);
         }
 
         if (newLink != null) {

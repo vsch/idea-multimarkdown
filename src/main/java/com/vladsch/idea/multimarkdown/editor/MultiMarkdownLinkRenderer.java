@@ -46,7 +46,7 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
     final protected int options;
     final protected GitHubRepo gitHubRepo;
     final protected FileReference documentFileReference;
-    final protected FileReferenceList fileReferenceList;
+    //final protected FileReferenceList fileReferenceList;
 
     public MultiMarkdownLinkRenderer() {
         this(0);
@@ -66,18 +66,19 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
             VirtualFile file = document == null ? null : FileDocumentManager.getInstance().getFile(document);
             this.documentFileReference = file == null ? null : new FileReference(file.getPath(), project);
             this.gitHubRepo = this.documentFileReference == null ? null : documentFileReference.getGitHubRepo();
-            this.fileReferenceList = this.documentFileReference == null ? null : new FileReferenceListQuery(project)
-                    .gitHubWikiRules()
-                    .sameGitHubRepo()
-                    .inSource(this.documentFileReference)
-                    .wantMarkdownFiles()
-                    .all();
-
-            if (this.fileReferenceList == null) options &= ~VALIDATE_LINKS;
+            //this.fileReferenceList = this.documentFileReference == null ? null : new FileReferenceListQuery(project)
+            //        .gitHubWikiRules()
+            //        .sameGitHubRepo()
+            //        .wantMarkdownFiles()
+            //        .keepLinkRefAnchor()
+            //        .inSource(this.documentFileReference)
+            //        .all();
+            //
+            //if (this.fileReferenceList == null) options &= ~VALIDATE_LINKS;
         } else {
             this.documentFileReference = null;
             this.gitHubRepo = null;
-            this.fileReferenceList = null;
+            //this.fileReferenceList = null;
         }
 
         this.options = options;
@@ -86,7 +87,7 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
     public Rendering checkWikiLinkTarget(Rendering rendering) {
         if ((options & VALIDATE_LINKS) != 0 && project != null && document != null && missingTargetClass != null) {
             if (!FilePathInfo.isAbsoluteReference(rendering.href)) {
-                if (!MultiMarkdownPathResolver.canResolveRelativeLink(fileReferenceList, documentFileReference, gitHubRepo, rendering.href, true, false)) {
+                if (!MultiMarkdownPathResolver.canResolveRelativeLink(null, documentFileReference, gitHubRepo, rendering.href, true, false)) {
                     rendering.withAttribute("class", missingTargetClass);
                 }
             }
@@ -98,7 +99,7 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
         // RELEASE: comment out this code.
         if ((options & VALIDATE_LINKS) != 0 && project != null && document != null && missingTargetClass != null) {
             if (!FilePathInfo.isAbsoluteReference(rendering.href)) {
-                if (!MultiMarkdownPathResolver.canResolveRelativeLink(fileReferenceList, documentFileReference, gitHubRepo, rendering.href, false, false)) {
+                if (!MultiMarkdownPathResolver.canResolveRelativeLink(null, documentFileReference, gitHubRepo, rendering.href, false, false)) {
                     rendering.withAttribute("class", missingTargetClass);
                 }
             }
@@ -107,6 +108,7 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
     }
 
     public Rendering checkTargetImage(Rendering rendering) {
+        // This will not work. No Images in fileReferenceList only markdown files
         //if ((options & VALIDATE_LINKS) != 0 && project != null && document != null && missingTargetClass != null) {
         //    if (!FilePathInfo.isAbsoluteReference(rendering.href)) {
         //        if (!MultiMarkdownPathResolver.canResolveRelativeImageLink(fileReferenceList, documentFileReference, gitHubRepo, rendering.href, false)) {

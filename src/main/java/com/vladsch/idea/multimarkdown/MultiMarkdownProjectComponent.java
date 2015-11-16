@@ -92,37 +92,38 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
             boolean log = false;
             MultiMarkdownNamedElement refElement = element;
 
-            //synchronized (this) {
-                if (rootElements.containsKey(element)) {
-                    if (!rootElements.get(element).equals(name)) {
-                        // root element's name changed, inform listeners that they need to remap references
-                        oldName = rootElements.get(element);
-                        if (log) logger.info("root element " + element + " renamed from '" + oldName + "' to '" + name + "'");
-                        symbolTable.remove(oldName);
-                        if (!symbolTable.containsKey(name)) {
-                            // still root element but under a new name
-                            symbolTable.put(name, element);
-                            rootElements.put(element, name);
-                            if (log) logger.info(" old root " + element + " now under new name");
-                        } else {
-                            // no longer root element
-                            rootElements.remove(element);
-                            refElement = symbolTable.get(name);
-                            if (log) logger.info("removed old root element " + element + " now referencing " + refElement);
-                        }
-                    }
-                } else {
+            if (rootElements.containsKey(element)) {
+                if (!rootElements.get(element).equals(name)) {
+                    // root element's name changed, inform listeners that they need to remap references
+                    oldName = rootElements.get(element);
+                    if (log) logger.info("root element " + element + " renamed from '" + oldName + "' to '" + name + "'");
+                    symbolTable.remove(oldName);
                     if (!symbolTable.containsKey(name)) {
-                        // new root element
+                        // still root element but under a new name
                         symbolTable.put(name, element);
                         rootElements.put(element, name);
-                        //logger.info("new root for " + namespace + " element " + element);
+                        if (log) logger.info(" old root " + element + " now under new name");
                     } else {
+                        // no longer root element
+                        rootElements.remove(element);
                         refElement = symbolTable.get(name);
-                        assert refElement != element;
+                        if (log) logger.info("removed old root element " + element + " now referencing " + refElement);
                     }
                 }
-            //}
+            } else {
+                if (!symbolTable.containsKey(name)) {
+                    // new root element
+                    symbolTable.put(name, element);
+                    rootElements.put(element, name);
+                    //logger.info("new root for " + namespace + " element " + element);
+                } else {
+                    refElement = symbolTable.get(name);
+                    if (refElement == element) {
+                        rootElements.put(element, name);
+                        logger.info(namespace + name + "not in rootElements but is root in namespace");
+                    }
+                }
+            }
 
             if (oldName != null) {
                 // do the notifications that the reference symbol for oldName has changed
@@ -139,7 +140,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
                 // TODO: validate that this is not needed, a change of a linkref will cause linkrefs referencing
                 // to be invalidated but will not invalidate any other elements that depend on the linkref,
                 // like its text and anchor siblings
-                needAllSpacesNotification = true;
+                //needAllSpacesNotification = true;
             }
 
             return refElement;
@@ -169,14 +170,12 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         ElementNamespace elementNamespace;
         MultiMarkdownNamedElement symbol;
 
-        //synchronized (elementNamespaces) {
-            if (!elementNamespaces.containsKey(namespace)) {
-                elementNamespaces.put(namespace, elementNamespace = new ElementNamespace(namespace));
-            } else {
-                elementNamespace = elementNamespaces.get(namespace);
-            }
-            symbol = elementNamespace.getSymbol(element, name);
-        //}
+        if (!elementNamespaces.containsKey(namespace)) {
+            elementNamespaces.put(namespace, elementNamespace = new ElementNamespace(namespace));
+        } else {
+            elementNamespace = elementNamespaces.get(namespace);
+        }
+        symbol = elementNamespace.getSymbol(element, name);
 
         if (needAllSpacesNotification) allNamespacesNotifier.notifyListeners(new ListenerNotifier.RunnableNotifier<ReferenceChangeListener>() {
             @Override
@@ -190,13 +189,12 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
     }
 
     private void clearNamespaces() {
-        //synchronized (elementNamespaces) {
-            elementNamespaces.clear();
-        //}
+        elementNamespaces.clear();
 
         for (ElementNamespace elementNamespace : elementNamespaces.values()) {
             elementNamespace.notifyRefsInvalidated();
         }
+
         allNamespacesNotifier.notifyListeners(new ListenerNotifier.RunnableNotifier<ReferenceChangeListener>() {
             @Override
             public boolean notify(ReferenceChangeListener listener) {
@@ -249,13 +247,11 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
     public void addListener(@NotNull String namespace, @NotNull ReferenceChangeListener listener) {
         ElementNamespace elementNamespace;
 
-        //synchronized (elementNamespaces) {
-            if (!elementNamespaces.containsKey(namespace)) {
-                elementNamespaces.put(namespace, elementNamespace = new ElementNamespace(namespace));
-            } else {
-                elementNamespace = elementNamespaces.get(namespace);
-            }
-        //}
+        if (!elementNamespaces.containsKey(namespace)) {
+            elementNamespaces.put(namespace, elementNamespace = new ElementNamespace(namespace));
+        } else {
+            elementNamespace = elementNamespaces.get(namespace);
+        }
 
         elementNamespace.addListener(listener);
     }

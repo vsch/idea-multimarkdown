@@ -79,7 +79,7 @@ public class MultiMarkdownReferenceWikiPageRef extends MultiMarkdownReference {
                     .inSource(myElement.getContainingFile())
                     .matchWikiRef(linkRefInfo.getFileNameWithAnchorAsWikiRef())
                     .all()
-                    .postMatchFilter(linkRefInfo.getFileNameWithAnchorAsWikiRef(), true, linkRefInfo.hasWithAnchorExtWithDot() && linkRefInfo.hasWithAnchorWikiPageExt())
+                    .postMatchFilter(linkRefInfo.getFileNameWithAnchorAsWikiRef(), true)
                     .sorted();
 
             PsiFile[] files = fileReferenceList

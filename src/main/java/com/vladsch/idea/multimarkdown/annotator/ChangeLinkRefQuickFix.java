@@ -49,6 +49,7 @@ class ChangeLinkRefQuickFix extends BaseIntentionAction {
     public static final int REMOVE_SUBDIR = 4;
     public static final int ADD_PAGE_REF = 5;
     public static final int REMOVE_EXT = 6;
+    public static final int URL_ENCODE_ANCHOR = 7;
 
     private String newLinkRef;
     private MultiMarkdownNamedElement linkRefElement;
@@ -100,6 +101,11 @@ class ChangeLinkRefQuickFix extends BaseIntentionAction {
             case ADD_PAGE_REF:
                 //msg = MultiMarkdownBundle.message("quickfix.wikilink.0.add-page-ref", FilePathInfo.wikiRefAsFileNameWithExt(newLinkRef));
                 msg = MultiMarkdownBundle.message("quickfix.wikilink.0.change-target", newLinkRef);
+                break;
+
+            case URL_ENCODE_ANCHOR:
+                //msg = MultiMarkdownBundle.message("quickfix.wikilink.0.add-page-ref", FilePathInfo.wikiRefAsFileNameWithExt(newLinkRef));
+                msg = MultiMarkdownBundle.message("quickfix.link.0.url-encode-anchor", newLinkRef);
                 break;
 
             default:

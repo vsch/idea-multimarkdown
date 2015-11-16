@@ -49,24 +49,26 @@ public class FileReferenceList {
 
     final protected static PostMatchFilter postMatchFilter = new PostMatchFilter() {
         @Override
-        public FileReferenceList match(@NotNull FileReferenceList fileReferenceList, @NotNull FilePathInfo linkRefInfo, boolean isWikiLink, @Nullable Boolean caseSensitive, @Nullable Boolean keepWikiExt) {
+        public FileReferenceList match(@NotNull FileReferenceList fileReferenceList, @NotNull FilePathInfo linkRefInfo, boolean isWikiLink, @Nullable Boolean caseSensitive, @Nullable Boolean keepExt) {
             ArrayList<FileReference> newList = new ArrayList<FileReference>();
 
             FilePathInfo fixedLinkRefInfo = linkRefInfo.getFullFilePath().contains("%23") ? new FilePathInfo(linkRefInfo.getFilePath().replace("%23", "#")) : linkRefInfo;
 
-            boolean haveSubDir = !fixedLinkRefInfo.getPath().isEmpty();
-            String linkRef = fixedLinkRefInfo.getFilePath();
+            String linkRefSubDir = FilePathInfo.removeEnd(fixedLinkRefInfo.getPath(), '/');
+            boolean isWikiSubDir = linkRefSubDir.endsWith(FilePathInfo.GITHUB_WIKI_REL_HOME) || FilePathInfo.removeEnd(fixedLinkRefInfo.getFullFilePath(), '/').endsWith(FilePathInfo.GITHUB_WIKI_REL_HOME);
+            boolean haveSubDir = !linkRefSubDir.isEmpty();
             String linkRefWithAnchor = fixedLinkRefInfo.getFilePathWithAnchor();
-            boolean doKeepWikiExt = keepWikiExt != null && keepWikiExt || keepWikiExt == null && fixedLinkRefInfo.hasWithAnchorExtWithDot() && !fixedLinkRefInfo.hasWithAnchorWikiPageExt();
-            boolean doKeepLinkRefExt = keepWikiExt != null && keepWikiExt || keepWikiExt == null && fixedLinkRefInfo.hasWithAnchorExtWithDot();
+            boolean doKeepWikiExt = keepExt != null && keepExt || keepExt == null && fixedLinkRefInfo.hasWithAnchorExtWithDot() && !fixedLinkRefInfo.hasWithAnchorWikiPageExt();
+            boolean doKeepLinkRefExt = keepExt != null && keepExt || keepExt == null && fixedLinkRefInfo.hasWithAnchorExtWithDot();
 
-            // always ignore space/dash differences, let the query handle that
+            String linkRef = fixedLinkRefInfo.getFilePath();
+            String linkRefExt = doKeepLinkRefExt ? linkRef : fixedLinkRefInfo.getFilePathNoExt();
+            String linkRefWithAnchorExt = doKeepLinkRefExt ? fixedLinkRefInfo.getFilePathWithAnchor() : fixedLinkRefInfo.getFilePathWithAnchorNoExt();
 
             // TODO: in the new patterned matched queries this has to be handled in the post match filter since queries are always ignoring dashes
-            String linkRefExt = doKeepLinkRefExt ? fixedLinkRefInfo.getFilePath() : fixedLinkRefInfo.getFilePathNoExt();
-            String linkRefWithAnchorExt = doKeepLinkRefExt ? fixedLinkRefInfo.getFilePathWithAnchorNoExt() : fixedLinkRefInfo.getFilePathWithAnchorNoExt();
+            // always ignore space/dash differences, let the query handle that
 
-            String wikiLinkRefExt = doKeepWikiExt ? fixedLinkRefInfo.getFilePath().replace('-', ' ') : fixedLinkRefInfo.getFilePathNoExt().replace('-', ' ');
+            String wikiLinkRefExt = doKeepWikiExt ? linkRef.replace('-', ' ') : fixedLinkRefInfo.getFilePathNoExt().replace('-', ' ');
             String wikiLinkRefWithAnchorExt = doKeepWikiExt ? fixedLinkRefInfo.getFilePathWithAnchor().replace('-', ' ') : fixedLinkRefInfo.getFilePathWithAnchorNoExt().replace('-', ' ');
 
             for (FileReference linkTarget : fileReferenceList.get()) {
@@ -78,12 +80,13 @@ public class FileReferenceList {
                 FileReferenceLink fileReferenceLink = (FileReferenceLink) linkTarget;
 
                 if (!fileReferenceLink.isWikiPage()) {
-                    String ref = fileReferenceLink.getLinkRefWithAnchor();
+                    // default is don't keep extension for non-wikis
+                    String ref = keepExt == null || keepExt ? fileReferenceLink.getLinkRefWithAnchor() : fileReferenceLink.getLinkRefWithAnchorNoExt();
 
                     // default case sensitive
-                    if ((caseSensitive != null && !caseSensitive) && (ref.equalsIgnoreCase(linkRef) || ref.equalsIgnoreCase(linkRefWithAnchor))) {
+                    if ((caseSensitive == null || caseSensitive) && (ref.equals(linkRefExt) || ref.equals(linkRefWithAnchorExt))) {
                         newList.add(fileReferenceLink);
-                    } else if ((caseSensitive == null || caseSensitive) && (ref.equals(linkRef) || ref.equals(linkRefWithAnchor))) {
+                    } else if ((caseSensitive != null && !caseSensitive) && (ref.equalsIgnoreCase(linkRefExt) || ref.equalsIgnoreCase(linkRefWithAnchorExt))) {
                         newList.add(fileReferenceLink);
                     }
                 } else {
@@ -101,19 +104,39 @@ public class FileReferenceList {
                     } else {
                         // Here we may need the source to know if the wikipage is accessible with no subdir prefix or needs one
                         // if extension is given then it will resolve to raw text not markdown and subdirectories must be specified
-                        if (!haveSubDir || doKeepLinkRefExt) {
+                        // here we need to test for either doKeepLineRefExt or !haveSubDir or the sub dir in link ref is a GitHub wiki home dir otherwise the link won't resolve on GitHub
+                        if (!haveSubDir || doKeepLinkRefExt || isWikiSubDir) {
                             String ref;
 
-                            if (fileReferenceLink.getSourceReference().isWikiPage()) {
-                                ref = doKeepLinkRefExt ? fileReferenceLink.getNoPrefixLinkRefWithAnchor() : fileReferenceLink.getNoPrefixLinkRefWithAnchorNoExt();
+                            if (fileReferenceLink.getSourceReference().isWikiPage() && (!haveSubDir && !doKeepLinkRefExt)) {
+                                ref = fileReferenceLink.getNoPrefixLinkRefWithAnchorNoExt();
                             } else {
-                                ref = doKeepLinkRefExt ? fileReferenceLink.getLinkRefWithAnchor() : fileReferenceLink.getLinkRefWithAnchorNoExt();
+                                if (haveSubDir && !doKeepLinkRefExt) {
+                                    // need to remove sub directory between wiki home prefix and the file name, since file is referenced with no extension it resolved by name only
+                                    String refName = fileReferenceLink.getFileNameWithAnchorNoExt();
+                                    ref = fileReferenceLink.getLinkRefWithAnchorNoExt();
+
+                                    while (!ref.endsWith("/" + FilePathInfo.GITHUB_WIKI_HOME_DIRNAME + "/")) {
+                                        int pos = ref.lastIndexOf('/', ref.length()-2);
+                                        if (pos <= 0) break;
+                                        ref = ref.substring(0, pos + 1);
+                                    }
+                                    ref += refName;
+                                } else {
+                                    ref = doKeepLinkRefExt ? fileReferenceLink.getLinkRefWithAnchor() : fileReferenceLink.getLinkRefWithAnchorNoExt();
+                                }
                             }
 
                             if (caseSensitive != null && caseSensitive && (ref.equals(linkRefExt) || ref.equals(linkRefWithAnchorExt))) {
                                 newList.add(fileReferenceLink);
                             } else if ((caseSensitive == null || !caseSensitive) && (ref.equalsIgnoreCase(linkRefExt) || ref.equalsIgnoreCase(linkRefWithAnchorExt))) {
                                 newList.add(fileReferenceLink);
+                            } else if (fileReferenceLink.isWikiPageHome()) {
+                                if (caseSensitive != null && caseSensitive && (ref.equals(linkRefExt) || ref.equals(FilePathInfo.endWith(linkRefWithAnchorExt, '/') + FilePathInfo.GITHUB_WIKI_HOME_FILENAME))) {
+                                    newList.add(fileReferenceLink);
+                                } else if ((caseSensitive == null || !caseSensitive) && (ref.equalsIgnoreCase(linkRefExt) || ref.equalsIgnoreCase(FilePathInfo.endWith(linkRefWithAnchorExt, '/') + FilePathInfo.GITHUB_WIKI_HOME_FILENAME))) {
+                                    newList.add(fileReferenceLink);
+                                }
                             }
                         }
                     }
@@ -279,6 +302,10 @@ public class FileReferenceList {
                 fileReferences.add(fileReference);
             }
         }
+    }
+
+    public FileReference[] getFileReferences() {
+        return fileReferences;
     }
 
     protected final FileReference[] fileReferences;

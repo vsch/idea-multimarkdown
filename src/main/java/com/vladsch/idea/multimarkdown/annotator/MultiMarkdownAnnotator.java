@@ -59,6 +59,7 @@ public class MultiMarkdownAnnotator implements Annotator {
         AnnotationState state = new AnnotationState(holder);
 
         if (false) {
+            return;
         } else if (element instanceof MultiMarkdownWikiLink) {
         } else if (element instanceof MultiMarkdownExplicitLink) {
         } else if (element instanceof MultiMarkdownWikiPageText) {
@@ -120,13 +121,13 @@ public class MultiMarkdownAnnotator implements Annotator {
             }
 
             FileReferenceList accessibleLinkRefs = new FileReferenceListQuery(accessibleFilesReferenceListQuery)
-                    .caseSensitive() // we want to catch mismatches
+                    .caseInsensitive() // we want to catch mismatches but we'll do it in postMatching based on target
                     .gitHubWikiRules()
-                    .sameGitHubRepo()
                     .keepLinkRefAnchor()
-                    .inSource(containingFile)
                     .linkRefIgnoreSubDirs()
-                    .matchLinkRef(withExt ? linkRefInfo.getFullFilePath() : linkRefInfo.getFilePathWithAnchorNoExt(), withExt)
+                    .sameGitHubRepo()
+                    .inSource(containingFile)
+                    .matchLinkRef(linkRefInfo.getFilePathWithAnchorNoExt())
                     .all()
                     .postMatchFilter(linkRefInfo, false, true);
 
@@ -273,10 +274,12 @@ public class MultiMarkdownAnnotator implements Annotator {
                         state.needTargetList = false;
                         String fixedName = reasons.targetNameHasAnchorFixed();
 
-                        if (targetRefLink.isWikiPage()) {
-                            state.createWarningAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.link.wikipage-anchor"));
-                        } else {
-                            state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.link.file-anchor"));
+                        state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.link.file-anchor"));
+
+                        String fixedLinkRef = linkRefInfo.getFullFilePath().replace("#", "%23");
+
+                        if (state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, fixedLinkRef)) {
+                            state.annotator.registerFix(new ChangeLinkRefQuickFix(element, fixedLinkRef, ChangeLinkRefQuickFix.URL_ENCODE_ANCHOR, RENAME_KEEP_TEXT | RENAME_KEEP_RENAMED_TEXT | RENAME_KEEP_TITLE));
                         }
 
                         if (targetRefLink.canRenameFileTo(fixedName)) {
@@ -288,6 +291,11 @@ public class MultiMarkdownAnnotator implements Annotator {
 
                     if (reasons.targetPathHasAnchor()) {
                         annotateTargetPathHasAnchor(element, state);
+                        String fixedLinkRef = linkRefInfo.getFullFilePath().replace("#", "%23");
+
+                        if (state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, fixedLinkRef)) {
+                            state.annotator.registerFix(new ChangeLinkRefQuickFix(element, fixedLinkRef, ChangeLinkRefQuickFix.URL_ENCODE_ANCHOR, RENAME_KEEP_TEXT | RENAME_KEEP_RENAMED_TEXT | RENAME_KEEP_TITLE));
+                        }
                     }
                 }
 
@@ -353,7 +361,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                             .ignoreLinkRefExtension(linkRefInfo.hasWikiPageExt())
                             .matchWikiRef(wikiPageTextName)
                             .accessibleWikiPageRefs()
-                            .postMatchFilter(linkRefInfo,true, false, null);
+                            .postMatchFilter(linkRefInfo, true, false, null);
 
                     if (accessibleWikiPageRefs.size() == 1) {
                         if (((MultiMarkdownReferenceWikiPageRef) wikiPageRefReference).isResolveRefMissing()) {
