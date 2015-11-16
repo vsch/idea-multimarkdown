@@ -94,7 +94,7 @@ public class MultiMarkdownFile extends PsiFileBase {
     @Nullable
     private static Key<String> getOverrideStripTrailingSpacesKey() {
         final String apiVersion = ApplicationInfo.getInstance().getApiVersion();
-        final Pattern apiVersionPattern = Pattern.compile("^[A-Z]+-(\\d+\\.\\d+)$");
+        final Pattern apiVersionPattern = Pattern.compile("^[A-Z]*-(\\d+\\..*)$");
         final Matcher matcher = apiVersionPattern.matcher(apiVersion);
 
         if (!matcher.matches()) {

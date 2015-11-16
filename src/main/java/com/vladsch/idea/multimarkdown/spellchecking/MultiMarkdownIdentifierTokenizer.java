@@ -65,7 +65,7 @@ public class MultiMarkdownIdentifierTokenizer extends Tokenizer<MultiMarkdownNam
         void consume(String word, boolean spellCheck);
     }
 
-    // used during spell check corrections to create variations that preserve non-specll checkable text
+    // used during spell check corrections to create variations that preserve non-spell checkable text
     public void tokenizeSpellingSuggestions(@NotNull MultiMarkdownNamedElement element, SpellCheckConsumer consumer) {
         // extract a range of spell checkable elements, leave out any leading/trailing non-checkable
         // and any non-checkable in the middle replace with spaces

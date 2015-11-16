@@ -246,17 +246,17 @@ public class FileReference extends FilePathInfo {
             virtualFile = FileReference.getVirtualFile(getFilePath());
             if (virtualFile == null && !hasExt()) {
                 for (String ext : tryExtensions) {
-                    virtualFile = FileReference.getVirtualFile(getFilePath() + "." + ext);
+                    virtualFile = FileReference.getVirtualFile(getFilePathWithAnchor() + "." + ext);
                     if (virtualFile != null) break;
                 }
             }
         }
 
-        boolean haveMatch = virtualFile != null && virtualFile.getPath().equals(getFilePath());
+        boolean haveMatch = virtualFile != null && virtualFile.getPath().equals(getFilePathWithAnchor());
 
         if (!haveMatch && virtualFile != null) {
             for (String ext : tryExtensions) {
-                haveMatch = virtualFile.getPath().equals(getFilePath() + "." + ext);
+                haveMatch = virtualFile.getPath().equals(getFilePathWithAnchor() + "." + ext);
                 if (haveMatch) break;
             }
         }

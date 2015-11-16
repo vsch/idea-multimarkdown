@@ -151,9 +151,9 @@ public class FileReferenceLinkGitHubRules extends FileReferenceLink {
                 // see if it would resolve to the target without it
                 FilePathInfo linkRefInfo = new FilePathInfo(linkRef);
 
-                if (equivalent(false, false, getLinkRef(), linkRefInfo.getFileNameWithAnchor())) {
+                if (equivalent(false, false, getNoPrefixLinkRefNoExt(), linkRefInfo.getFileNameWithAnchor()) || equivalent(false, false, getNoPrefixLinkRef(), linkRefInfo.getFileNameWithAnchor())) {
                     reasons |= REASON_WIKI_PAGEREF_HAS_SUBDIR;
-                } else if (equivalent(false, false, getWikiPageRef(), linkRef.replace("/", ""))) {
+                } else if (equivalent(false, false, getNoPrefixLinkRefNoExt(), linkRef.replace("/", "")) || equivalent(false, false, getNoPrefixLinkRef(), linkRef.replace("/", ""))) {
                     reasons |= REASON_WIKI_PAGEREF_HAS_FIXABLE_SLASH;
                 } else {
                     reasons |= REASON_WIKI_PAGEREF_HAS_SLASH;

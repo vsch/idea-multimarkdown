@@ -19,8 +19,11 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
 import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.license.LicensedFeature;
@@ -70,7 +73,9 @@ class ChangeWikiLinkToExplicitLinkQuickFix extends BaseIntentionAction {
                 // change the element using text, until I can figure out why any operations on ExplicitLinks cause exceptions.
                 //MultiMarkdownPsiImplUtil.changeToExplicitLink(wikiLinkElement);
                 final Document document = editor.getDocument();
-                String text = MultiMarkdownPsiImplUtil.getExplicitLinkTextFromWikiLink(wikiLinkElement);
+                VirtualFile virtualFile = FileDocumentManager.getInstance().getFile(document);
+                PsiFile psiFile = virtualFile == null ? null : PsiManager.getInstance(project).findFile(virtualFile);
+                String text = MultiMarkdownPsiImplUtil.getTextForChangeToExplicitLink(wikiLinkElement, psiFile);
                 int pos = wikiLinkElement.getTextOffset();
                 document.replaceString(pos, pos + wikiLinkElement.getTextLength(), text);
             }

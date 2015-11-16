@@ -128,6 +128,14 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
         return nameEnd < anchorStart ? filePath.substring(nameEnd, anchorStart) : "";
     }
 
+    public boolean hasExt() {
+        return nameEnd + 1 < anchorStart;
+    }
+
+    public boolean hasExtWithDot() {
+        return nameEnd < anchorStart;
+    }
+
     @NotNull
     final public String getWithAnchorExt() {
         return fileNameContainsAnchor() && withAnchorNameEnd + 1 < filePath.length() ? filePath.substring(withAnchorNameEnd + 1) : getExt();
@@ -144,6 +152,10 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     @NotNull
     final public String getWithAnchorExtWithDot() {
         return fileNameContainsAnchor() && withAnchorNameEnd < filePath.length() ? filePath.substring(withAnchorNameEnd) : getExtWithDot();
+    }
+
+    final public boolean hasWithAnchorExtWithDot() {
+        return (fileNameContainsAnchor() && withAnchorNameEnd < filePath.length()) || hasExtWithDot();
     }
 
     @NotNull
@@ -168,12 +180,12 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
         return isMarkdownExt(getExt());
     }
 
-    public boolean hasExt() {
-        return nameEnd + 1 < anchorStart;
-    }
-
     final public boolean hasWikiPageExt() {
         return isWikiPageExt(getExt());
+    }
+
+    final public boolean hasWithAnchorWikiPageExt() {
+        return isWikiPageExt(getWithAnchorExt());
     }
 
     @NotNull
@@ -248,7 +260,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     }
 
     final public boolean isWikiPage() {
-        return isUnderWikiHome() && isWikiPageExt(getExt());
+        return isUnderWikiHome() && isWikiPageExt(getWithAnchorExt());
     }
 
     public boolean isWikiPageHome() {

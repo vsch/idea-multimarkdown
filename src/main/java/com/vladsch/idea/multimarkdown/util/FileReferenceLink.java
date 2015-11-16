@@ -294,8 +294,7 @@ public class FileReferenceLink extends FileReference {
 
         if (sourceReference.isWikiPage()) {
             if (!isUnderWikiHome()) reasons |= REASON_NOT_UNDER_WIKI_HOME;
-            else if (!getWikiHome().startsWith(sourceReference.getWikiHome())) reasons |= REASON_NOT_UNDER_SOURCE_WIKI_HOME;
-
+            if (!getWikiHome().startsWith(sourceReference.getWikiHome())) reasons |= REASON_NOT_UNDER_SOURCE_WIKI_HOME;
             if (!hasWikiPageExt()) reasons |= REASON_TARGET_NOT_WIKI_PAGE_EXT;
         }
 
@@ -430,7 +429,7 @@ public class FileReferenceLink extends FileReference {
             downDirectories++;
         }
 
-        wikiAccessible = getLinkRef().indexOf(' ') < 0 && hasWikiPageExt() && getWikiHome().equals(sourceReference.getWikiHome()) && !containsAnchor();
+        wikiAccessible = getLinkRef().indexOf(' ') < 0 && hasWikiPageExt() && !getWikiHome().isEmpty() && getWikiHome().equals(sourceReference.getWikiHome()) && !containsAnchor();
     }
 
     public int reflinkCompareTo(@NotNull FileReferenceLink o) {

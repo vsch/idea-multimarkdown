@@ -22,14 +22,35 @@ package com.vladsch.idea.multimarkdown.language;
 
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
+import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
 import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder;
 import com.intellij.ide.util.PsiElementListCellRenderer;
+import com.intellij.navigation.ColoredItemPresentation;
+import com.intellij.navigation.ItemPresentation;
+import com.intellij.navigation.NavigationItem;
+import com.intellij.openapi.editor.colors.EditorColorsManager;
+import com.intellij.openapi.editor.colors.TextAttributesKey;
+import com.intellij.openapi.editor.markup.EffectType;
+import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Iconable;
+import com.intellij.openapi.vcs.FileStatus;
+import com.intellij.openapi.vcs.FileStatusManager;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.problems.WolfTheProblemSolver;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveResult;
+import com.intellij.ui.ColoredListCellRenderer;
+import com.intellij.ui.FileColorManager;
+import com.intellij.ui.JBColor;
+import com.intellij.ui.SimpleTextAttributes;
+import com.intellij.ui.speedSearch.SpeedSearchUtil;
+import com.intellij.util.IconUtil;
 import com.intellij.util.NullableFunction;
+import com.intellij.util.text.Matcher;
+import com.intellij.util.ui.UIUtil;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
@@ -43,10 +64,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static com.vladsch.idea.multimarkdown.highlighter.MultiMarkdownHighlighterColors.WIKI_LINK_ATTR_KEY;
+
 public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvider {
+
     @Override
     protected void collectNavigationMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
         if (element instanceof MultiMarkdownWikiPageRef || element instanceof MultiMarkdownLinkRef) {
@@ -74,7 +99,7 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
                 String lastWikiHome = null;
 
                 if (results.length > 0) {
-                    ArrayList<PsiFile> markdownTargets = new ArrayList<PsiFile>();
+                    final ArrayList<PsiFile> markdownTargets = new ArrayList<PsiFile>();
                     Icon icon = null;
                     for (ResolveResult resolveResult : results) {
                         if (resolveResult.getElement() instanceof PsiFile && resolveResult.getElement() != containingFile) {
@@ -98,7 +123,9 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
 
                     if (markdownTargets.size() > 0) {
                         final boolean showContainer = showWikiHome;
-                        PsiElementListCellRenderer cellRenderer = new PsiElementListCellRenderer() {
+
+                        PsiElementListCellRenderer cellRenderer = new PsiElementListCellRenderer<PsiElement>() {
+
                             @Override
                             public String getElementText(PsiElement element) {
                                 if (element instanceof MultiMarkdownFile) {
@@ -107,6 +134,12 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
                                 }
 
                                 return "<unknown>";
+                            }
+
+                            protected Icon getIcon(PsiElement element) {
+                                boolean firstItem = element == markdownTargets.get(0);
+                                boolean isWikiPage = element instanceof MultiMarkdownFile && ((MultiMarkdownFile) element).isWikiPage();
+                                return firstItem ? element.getIcon(0) : (isWikiPage ? MultiMarkdownIcons.HIDDEN_WIKI : MultiMarkdownIcons.HIDDEN_FILE);
                             }
 
                             @Nullable
@@ -132,9 +165,10 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
                                 }
                                 return null;
                             }
+
                             @Override
                             protected int getIconFlags() {
-                                return 0;
+                                return Iconable.ICON_FLAG_READ_STATUS;
                             }
                         };
 

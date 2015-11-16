@@ -63,14 +63,21 @@ public class MultiMarkdownReferenceLinkRef extends MultiMarkdownReference {
         if (name != null && myElement.getContainingFile() != null && myElement.getContainingFile().getVirtualFile() != null) {
             if (!FilePathInfo.isExternalReference(name)) {
                 FileReference sourceReference = new FileReference(myElement.getContainingFile());
+                String anchor = MultiMarkdownPsiImplUtil.getLinkRefAnchor(myElement);
+                FilePathInfo linkRefInfo = new FilePathInfo(name + (!anchor.isEmpty() ? "#" + anchor : ""));
+                boolean haveExt = linkRefInfo.hasWithAnchorExtWithDot() && !linkRefInfo.hasWithAnchorWikiPageExt();
 
                 FileReferenceList fileReferenceList = new FileReferenceListQuery(myElement.getProject())
+                        .caseInsensitive()
                         .gitHubWikiRules()
-                        .sameGitHubRepo()
+                        .keepLinkRefAnchor()
                         .linkRefIgnoreSubDirs()
-                        .matchLinkRef((MultiMarkdownLinkRef) myElement)
+                        .sameGitHubRepo()
                         .wantMarkdownFiles()
+                        .inSource(sourceReference)
+                        .matchLinkRef(linkRefInfo.getFullFilePath(), false)
                         .all()
+                        .postMatchFilter(linkRefInfo.getFullFilePath(), false, false)
                         .sorted();
 
                 PsiFile[] files = fileReferenceList

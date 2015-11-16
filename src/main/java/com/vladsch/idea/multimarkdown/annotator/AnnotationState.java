@@ -14,6 +14,7 @@
  */
 package com.vladsch.idea.multimarkdown.annotator;
 
+import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
@@ -163,18 +164,16 @@ public class AnnotationState {
 
     // delegated to holder
     public Annotation createErrorAnnotation(@NotNull PsiElement element, @Nullable String s) {
-        annotator = holder.createErrorAnnotation(element, s);
-        annotator.setNeedsUpdateOnTyping(true);
-        return annotator;
+        return createErrorAnnotation(element.getNode(), s);
     }
     public Annotation createErrorAnnotation(@NotNull ASTNode node, @Nullable String s) {
-        annotator = holder.createErrorAnnotation(node, s);
-        annotator.setNeedsUpdateOnTyping(true);
-        return annotator;
+        return createErrorAnnotation(node.getTextRange(), s);
     }
     public Annotation createErrorAnnotation(@NotNull TextRange range, @Nullable String s) {
         annotator = holder.createErrorAnnotation(range, s);
+        annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
         annotator.setNeedsUpdateOnTyping(true);
+        warningsOnly = false;
         return annotator;
     }
     public Annotation createWarningAnnotation(@NotNull PsiElement element, @Nullable String s) {

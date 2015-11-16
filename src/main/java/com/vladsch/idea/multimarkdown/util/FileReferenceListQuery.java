@@ -72,7 +72,6 @@ public class FileReferenceListQuery {
     public final static int LINK_REF_IGNORE_EXT = 0x2000;
     public final static int MATCH_IGNORE_SUBDIRS = 0x4000;
     public final static int WANT_FIRST_MATCH = 0x8000;
-    public final static int LINK_REF_IGNORE_SUBDIRS = 0x10000;
 
     protected @Nullable FileReferenceList defaultFileList;
     protected int queryFlags;
@@ -269,7 +268,7 @@ public class FileReferenceListQuery {
 
     @NotNull
     public FileReferenceListQuery ignoreLinkRefSubDirs(boolean ignoreSubDirs) {
-        queryFlags = (queryFlags & ~LINK_REF_IGNORE_SUBDIRS) | (ignoreSubDirs ? LINK_REF_IGNORE_EXT : 0);
+        queryFlags = (queryFlags & ~MATCH_IGNORE_SUBDIRS) | (ignoreSubDirs ? LINK_REF_IGNORE_EXT : 0);
         return this;
     }
 
@@ -344,6 +343,12 @@ public class FileReferenceListQuery {
 
     @NotNull
     public FileReferenceListQuery matchLinkRef(@NotNull String linkRef, boolean withExt) {
+        // it has url encoded #, then remove actual anchor
+        if (linkRef.contains("%23")){
+            FilePathInfo linkRefInfo = new FilePathInfo(linkRef);
+            linkRef = linkRefInfo.getFilePath().replace("%23","#");
+        }
+
         if ((queryFlags & MATCH_IGNORE_SUBDIRS) != 0) {
             FilePathInfo linkRefInfo = new FilePathInfo(linkRef);
             this.matchLinkRef = (queryFlags & MATCH_WITH_ANCHOR) != 0 ? linkRefInfo.getFileNameWithAnchor() : linkRefInfo.getFileNameNoExt();
@@ -807,7 +812,7 @@ public class FileReferenceListQuery {
             if (matchPattern.equals(matchPatternNoExt)) matchPatternNoExt = null;
         }
 
-        if ((queryFlags & LINK_REF_IGNORE_SUBDIRS) != 0) {
+        if ((queryFlags & MATCH_IGNORE_SUBDIRS) != 0) {
             matchPatternNoSubDir = (queryFlags & MATCH_WITH_ANCHOR) != 0 ? pathInfo.getFileNameWithAnchor() : pathInfo.getFileName();
             if (matchPattern.equals(matchPatternNoSubDir)) matchPatternNoSubDir = null;
         }

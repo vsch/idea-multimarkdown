@@ -22,6 +22,7 @@ import com.intellij.psi.ResolveResult;
 import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
+import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import com.vladsch.idea.multimarkdown.util.FileReferenceLinkGitHubRules;
 import com.vladsch.idea.multimarkdown.util.FileReferenceList;
 import com.vladsch.idea.multimarkdown.util.FileReferenceListQuery;
@@ -64,11 +65,21 @@ public class MultiMarkdownReferenceWikiPageRef extends MultiMarkdownReference {
         String name = myElement.getName();
         if (name != null && myElement.getContainingFile() != null && myElement.getContainingFile().getVirtualFile() != null) {
 
+            String anchor = MultiMarkdownPsiImplUtil.getLinkRefAnchor(myElement);
+            FilePathInfo linkRefInfo = new FilePathInfo(name + (!anchor.isEmpty() ? "#" + anchor : ""));
+
             FileReferenceList fileReferenceList = new FileReferenceListQuery(myElement.getProject())
+                    .caseInsensitive()
                     .gitHubWikiRules()
+                    .ignoreLinkRefExtension(!(linkRefInfo.hasWithAnchorExtWithDot() && linkRefInfo.hasWithAnchorWikiPageExt()))
+                    .keepLinkRefAnchor()
+                    .linkRefIgnoreSubDirs()
                     .spaceDashEqual()
-                    .matchWikiRef((MultiMarkdownWikiPageRef) myElement)
-                    .accessibleWikiPageRefs()
+                    .wantMarkdownFiles()
+                    .inSource(myElement.getContainingFile())
+                    .matchWikiRef(linkRefInfo.getFileNameWithAnchorAsWikiRef())
+                    .all()
+                    .postMatchFilter(linkRefInfo.getFileNameWithAnchorAsWikiRef(), true, linkRefInfo.hasWithAnchorExtWithDot() && linkRefInfo.hasWithAnchorWikiPageExt())
                     .sorted();
 
             PsiFile[] files = fileReferenceList

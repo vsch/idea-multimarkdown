@@ -45,8 +45,8 @@ public class MultiMarkdownElementFactory {
         return (MultiMarkdownWikiLink) file.getFirstChild();
     }
 
-    public static MultiMarkdownExplicitLink createExplicitLink(@NotNull Project project, @NotNull String name, @Nullable String text, @Nullable String title) {
-        String elementText = MultiMarkdownExplicitLinkImpl.getElementText(name, text == null ? "" : text, title);
+    public static MultiMarkdownExplicitLink createExplicitLink(@NotNull Project project, @NotNull String name, @Nullable String text, @Nullable String anchor, @Nullable String title) {
+        String elementText = MultiMarkdownExplicitLinkImpl.getElementText(name, text == null ? "" : text, anchor, title);
         final MultiMarkdownFile file = createFile(project, elementText);
         PsiElement child = file.getFirstChild();
         return (MultiMarkdownExplicitLink) child;

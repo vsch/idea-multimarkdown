@@ -55,6 +55,8 @@ class ChangeLinkRefQuickFix extends BaseIntentionAction {
     private final int alternativeMsg;
     private final int renameFlags;
 
+    // TODO: allow having a more descripting target name than just the link so that the extension and subdirectory are passed too
+    // just pass the file name instead of the link text
     ChangeLinkRefQuickFix(MultiMarkdownNamedElement linkRefElement, String newLinkRef) {
         this(linkRefElement, newLinkRef, 0);
     }

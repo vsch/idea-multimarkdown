@@ -43,6 +43,117 @@ public class FileReferenceList {
         FileReference filterRef(@NotNull FileReference fileReference);
     }
 
+    interface PostMatchFilter {
+        FileReferenceList match(@NotNull FileReferenceList fileReferenceList, @NotNull FilePathInfo linkRefInfo, boolean isWikiLink, @Nullable Boolean caseSensitive, @Nullable Boolean keepWikiExt);
+    }
+
+    final protected static PostMatchFilter postMatchFilter = new PostMatchFilter() {
+        @Override
+        public FileReferenceList match(@NotNull FileReferenceList fileReferenceList, @NotNull FilePathInfo linkRefInfo, boolean isWikiLink, @Nullable Boolean caseSensitive, @Nullable Boolean keepWikiExt) {
+            ArrayList<FileReference> newList = new ArrayList<FileReference>();
+
+            FilePathInfo fixedLinkRefInfo = linkRefInfo.getFullFilePath().contains("%23") ? new FilePathInfo(linkRefInfo.getFilePath().replace("%23", "#")) : linkRefInfo;
+
+            boolean haveSubDir = !fixedLinkRefInfo.getPath().isEmpty();
+            String linkRef = fixedLinkRefInfo.getFilePath();
+            String linkRefWithAnchor = fixedLinkRefInfo.getFilePathWithAnchor();
+            boolean doKeepWikiExt = keepWikiExt != null && keepWikiExt || keepWikiExt == null && fixedLinkRefInfo.hasWithAnchorExtWithDot() && !fixedLinkRefInfo.hasWithAnchorWikiPageExt();
+            boolean doKeepLinkRefExt = keepWikiExt != null && keepWikiExt || keepWikiExt == null && fixedLinkRefInfo.hasWithAnchorExtWithDot();
+
+            // always ignore space/dash differences, let the query handle that
+
+            // TODO: in the new patterned matched queries this has to be handled in the post match filter since queries are always ignoring dashes
+            String linkRefExt = doKeepLinkRefExt ? fixedLinkRefInfo.getFilePath() : fixedLinkRefInfo.getFilePathNoExt();
+            String linkRefWithAnchorExt = doKeepLinkRefExt ? fixedLinkRefInfo.getFilePathWithAnchorNoExt() : fixedLinkRefInfo.getFilePathWithAnchorNoExt();
+
+            String wikiLinkRefExt = doKeepWikiExt ? fixedLinkRefInfo.getFilePath().replace('-', ' ') : fixedLinkRefInfo.getFilePathNoExt().replace('-', ' ');
+            String wikiLinkRefWithAnchorExt = doKeepWikiExt ? fixedLinkRefInfo.getFilePathWithAnchor().replace('-', ' ') : fixedLinkRefInfo.getFilePathWithAnchorNoExt().replace('-', ' ');
+
+            for (FileReference linkTarget : fileReferenceList.get()) {
+                if (!(linkTarget instanceof FileReferenceLink || linkTarget instanceof FileReferenceLinkGitHubRules)) {
+                    int tmp = 0;
+                }
+                assert (linkTarget instanceof FileReferenceLink || linkTarget instanceof FileReferenceLinkGitHubRules);
+
+                FileReferenceLink fileReferenceLink = (FileReferenceLink) linkTarget;
+
+                if (!fileReferenceLink.isWikiPage()) {
+                    String ref = fileReferenceLink.getLinkRefWithAnchor();
+
+                    // default case sensitive
+                    if ((caseSensitive != null && !caseSensitive) && (ref.equalsIgnoreCase(linkRef) || ref.equalsIgnoreCase(linkRefWithAnchor))) {
+                        newList.add(fileReferenceLink);
+                    } else if ((caseSensitive == null || caseSensitive) && (ref.equals(linkRef) || ref.equals(linkRefWithAnchor))) {
+                        newList.add(fileReferenceLink);
+                    }
+                } else {
+                    // default not case sensitive
+                    if (isWikiLink) {
+                        if (!haveSubDir) {
+                            String wikiLinkRef = fileReferenceLink.getWikiPageRefWithAnchor();
+
+                            if (caseSensitive != null && caseSensitive && (wikiLinkRef.equals(wikiLinkRefExt) || wikiLinkRef.equals(wikiLinkRefWithAnchorExt))) {
+                                newList.add(fileReferenceLink);
+                            } else if ((caseSensitive == null || !caseSensitive) && (wikiLinkRef.equalsIgnoreCase(wikiLinkRefExt) || wikiLinkRef.equalsIgnoreCase(wikiLinkRefWithAnchorExt))) {
+                                newList.add(fileReferenceLink);
+                            }
+                        }
+                    } else {
+                        // Here we may need the source to know if the wikipage is accessible with no subdir prefix or needs one
+                        // if extension is given then it will resolve to raw text not markdown and subdirectories must be specified
+                        if (!haveSubDir || doKeepLinkRefExt) {
+                            String ref;
+
+                            if (fileReferenceLink.getSourceReference().isWikiPage()) {
+                                ref = doKeepLinkRefExt ? fileReferenceLink.getNoPrefixLinkRefWithAnchor() : fileReferenceLink.getNoPrefixLinkRefWithAnchorNoExt();
+                            } else {
+                                ref = doKeepLinkRefExt ? fileReferenceLink.getLinkRefWithAnchor() : fileReferenceLink.getLinkRefWithAnchorNoExt();
+                            }
+
+                            if (caseSensitive != null && caseSensitive && (ref.equals(linkRefExt) || ref.equals(linkRefWithAnchorExt))) {
+                                newList.add(fileReferenceLink);
+                            } else if ((caseSensitive == null || !caseSensitive) && (ref.equalsIgnoreCase(linkRefExt) || ref.equalsIgnoreCase(linkRefWithAnchorExt))) {
+                                newList.add(fileReferenceLink);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return newList.size() != fileReferenceList.size() ? new FileReferenceList(newList) : fileReferenceList;
+        }
+    };
+
+    @NotNull
+    public FileReferenceList postMatchFilter(@NotNull FilePathInfo linkRefInfo, boolean isWikiLink, @Nullable Boolean caseSensitive, @Nullable Boolean keepWikiExt) {
+        return postMatchFilter.match(this, linkRefInfo, isWikiLink, caseSensitive, keepWikiExt);
+    }
+
+    @NotNull
+    public FileReferenceList postMatchFilter(@NotNull String linkRefInfo, boolean isWikiLink, @Nullable Boolean caseSensitive, @Nullable Boolean keepWikiExt) {
+        return postMatchFilter(new FilePathInfo(linkRefInfo), isWikiLink, caseSensitive, keepWikiExt);
+    }
+
+    @NotNull
+    public FileReferenceList postMatchFilter(@NotNull FilePathInfo linkRefInfo, boolean isWikiLink, @Nullable Boolean caseSensitive) {
+        return postMatchFilter(new FilePathInfo(linkRefInfo), isWikiLink, caseSensitive, null);
+    }
+
+    @NotNull
+    public FileReferenceList postMatchFilter(@NotNull String linkRefInfo, boolean isWikiLink, @Nullable Boolean caseSensitive) {
+        return postMatchFilter(new FilePathInfo(linkRefInfo), isWikiLink, caseSensitive, null);
+    }
+
+    @NotNull
+    public FileReferenceList postMatchFilter(@NotNull FilePathInfo linkRefInfo, boolean isWikiLink) {
+        return postMatchFilter(new FilePathInfo(linkRefInfo), isWikiLink, null, null);
+    }
+
+    @NotNull
+    public FileReferenceList postMatchFilter(@NotNull String linkRefInfo, boolean isWikiLink) {
+        return postMatchFilter(new FilePathInfo(linkRefInfo), isWikiLink, null, null);
+    }
+
     @Override
     public String toString() {
         return "FileReferenceList: [" + fileReferences.length + "]" + (fileReferences.length > 0 ? fileReferences[0].toString() : "");

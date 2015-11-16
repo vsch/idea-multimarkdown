@@ -21,16 +21,19 @@
 
 package com.vladsch.idea.multimarkdown;
 
+import com.intellij.ProjectTopics;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ModuleRootAdapter;
+import com.intellij.openapi.roots.ModuleRootEvent;
 import com.intellij.openapi.vcs.FileStatus;
 import com.intellij.openapi.vcs.FileStatusManager;
 import com.intellij.openapi.vcs.ProjectLevelVcsManager;
 import com.intellij.openapi.vcs.VcsListener;
-import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.*;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.refactoring.listeners.RefactoringEventData;
@@ -53,7 +56,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MultiMarkdownProjectComponent implements ProjectComponent {
+public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualFileListener {
     private static final Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownProjectComponent.class);
 
     private final static int LISTENER_ADDED = 0;
@@ -375,7 +378,17 @@ public class MultiMarkdownProjectComponent implements ProjectComponent {
     }
 
     public void projectOpened() {
+        VirtualFileManager.getInstance().addVirtualFileListener(this);
+        boolean initialized = project.isInitialized();
+
         final MessageBus messageBus = project.getMessageBus();
+
+        messageBus.connect().subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
+            public void rootsChanged(ModuleRootEvent event) {
+                if (project.isDisposed()) return;
+                reparseMarkdown();
+            }
+        });
 
         messageBus.connect().subscribe(ProjectLevelVcsManager.VCS_CONFIGURATION_CHANGED, new VcsListener() {
             @Override
@@ -393,7 +406,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent {
     }
 
     public void projectClosed() {
-
+        VirtualFileManager.getInstance().removeVirtualFileListener(this);
     }
 
     @NonNls
@@ -408,5 +421,68 @@ public class MultiMarkdownProjectComponent implements ProjectComponent {
 
     public void disposeComponent() {
 
+    }
+
+    protected void updateHighlighters() {
+        // project files have changed so we need to update the lists and then reparse for link validation
+        // We get a call back when all have been updated.
+        if (project.isDisposed()) return;
+        reparseMarkdown();
+    }
+
+    // TODO: detect extension change in a file and attach our editors if possible
+    @Override
+    public void propertyChanged(@NotNull VirtualFilePropertyEvent event) {
+        updateHighlighters();
+    }
+
+    @Override
+    public void contentsChanged(@NotNull VirtualFileEvent event) {
+        //updateHighlighters();
+    }
+
+    @Override
+    public void fileCreated(@NotNull VirtualFileEvent event) {
+        updateHighlighters();
+    }
+
+    @Override
+    public void fileDeleted(@NotNull VirtualFileEvent event) {
+        updateHighlighters();
+    }
+
+    @Override
+    public void fileMoved(@NotNull VirtualFileMoveEvent event) {
+        updateHighlighters();
+    }
+
+    @Override
+    public void fileCopied(@NotNull VirtualFileCopyEvent event) {
+        updateHighlighters();
+    }
+
+    @Override
+    public void beforePropertyChange(@NotNull VirtualFilePropertyEvent event) {
+        //String s = event.getPropertyName();
+        //int tmp = 0;
+    }
+
+    @Override
+    public void beforeContentsChange(@NotNull VirtualFileEvent event) {
+        //int tmp = 0;
+    }
+
+    // return the files this name from inFile can refer to, wikiPagesOnly is set if the name is a wiki link
+    // name could be a wiki page ref or a link -
+    // search type could be markdownFileRefs, wikiFiles, imageFileRefs
+
+    @Override
+    public void beforeFileDeletion(@NotNull VirtualFileEvent event) {
+        //int tmp = 0;
+    }
+
+    @Override
+    public void beforeFileMovement(@NotNull VirtualFileMoveEvent event) {
+        //int tmp = 0;
     }
 }

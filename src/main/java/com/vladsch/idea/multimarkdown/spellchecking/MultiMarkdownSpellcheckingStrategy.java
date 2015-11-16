@@ -30,6 +30,7 @@ import com.intellij.spellchecker.quickfixes.SpellCheckerQuickFix;
 import com.intellij.spellchecker.tokenizer.SpellcheckingStrategy;
 import com.intellij.spellchecker.tokenizer.Tokenizer;
 import com.vladsch.idea.multimarkdown.parser.MultiMarkdownParserDefinition;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownElementType;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownTokenType;
 import org.apache.log4j.Logger;
@@ -122,13 +123,6 @@ public class MultiMarkdownSpellcheckingStrategy extends SpellcheckingStrategy {
             IMAGE_LINK_REF_TITLE_MARKER
     );
 
-    // these are spellchecked by the parent element
-    final public static TokenSet NO_SPELL_LEAF_SET = TokenSet.create(
-            LINK_REF, LINK_REF_TEXT, LINK_REF_TITLE,
-            WIKI_LINK_REF, WIKI_LINK_TEXT,
-            IMAGE_LINK_REF, IMAGE_LINK_REF_TEXT
-    );
-
     protected static Tokenizer IDENTIFIER_TOKENIZER = new MultiMarkdownIdentifierTokenizer();
 
     @NotNull
@@ -136,7 +130,7 @@ public class MultiMarkdownSpellcheckingStrategy extends SpellcheckingStrategy {
     public Tokenizer getTokenizer(PsiElement element) {
         IElementType elementType = element.getNode().getElementType();
 
-        if (elementType instanceof MultiMarkdownTokenType) {
+        if (elementType instanceof MultiMarkdownTokenType || elementType instanceof MultiMarkdownElementType) {
             if (NO_SPELL_CHECK_SET.contains(elementType)) {
                 //logger.info("empty tokenizer for " + element.toString());
                 return EMPTY_TOKENIZER;

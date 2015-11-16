@@ -83,12 +83,22 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
         this.options = options;
     }
 
-    // TODO: need to implement this using ProjectComponent methods so that we don't need
-    // to go into areas that may have threading issues.
-    public Rendering checkTarget(Rendering rendering) {
+    public Rendering checkWikiLinkTarget(Rendering rendering) {
         if ((options & VALIDATE_LINKS) != 0 && project != null && document != null && missingTargetClass != null) {
             if (!FilePathInfo.isAbsoluteReference(rendering.href)) {
-                if (!MultiMarkdownPathResolver.canResolveRelativeLink(fileReferenceList, documentFileReference, gitHubRepo, rendering.href, false)) {
+                if (!MultiMarkdownPathResolver.canResolveRelativeLink(fileReferenceList, documentFileReference, gitHubRepo, rendering.href, true, false)) {
+                    rendering.withAttribute("class", missingTargetClass);
+                }
+            }
+        }
+        return rendering;
+    }
+
+    public Rendering checkTarget(Rendering rendering) {
+        // RELEASE: comment out this code.
+        if ((options & VALIDATE_LINKS) != 0 && project != null && document != null && missingTargetClass != null) {
+            if (!FilePathInfo.isAbsoluteReference(rendering.href)) {
+                if (!MultiMarkdownPathResolver.canResolveRelativeLink(fileReferenceList, documentFileReference, gitHubRepo, rendering.href, false, false)) {
                     rendering.withAttribute("class", missingTargetClass);
                 }
             }
@@ -97,19 +107,19 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
     }
 
     public Rendering checkTargetImage(Rendering rendering) {
-        if ((options & VALIDATE_LINKS) != 0 && project != null && document != null && missingTargetClass != null) {
-            if (!FilePathInfo.isAbsoluteReference(rendering.href)) {
-                if (!MultiMarkdownPathResolver.canResolveRelativeImageLink(fileReferenceList, documentFileReference, gitHubRepo, rendering.href, false)) {
-                    rendering.withAttribute("class", missingTargetClass);
-                }
-            }
-        }
+        //if ((options & VALIDATE_LINKS) != 0 && project != null && document != null && missingTargetClass != null) {
+        //    if (!FilePathInfo.isAbsoluteReference(rendering.href)) {
+        //        if (!MultiMarkdownPathResolver.canResolveRelativeImageLink(fileReferenceList, documentFileReference, gitHubRepo, rendering.href, false)) {
+        //            rendering.withAttribute("class", missingTargetClass);
+        //        }
+        //    }
+        //}
         return rendering;
     }
 
     @Override
     public Rendering render(AnchorLinkNode node) {
-        return checkTarget(super.render(node));
+        return super.render(node);
     }
 
     @Override
@@ -175,7 +185,7 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
             }
 
             url = ((url.isEmpty()) ? "" : ("./" + URLEncoder.encode(url.replace(' ', '-'), "UTF-8"))) + suffix;
-            return checkTarget(new Rendering(url, text));
+            return checkWikiLinkTarget(new Rendering(url, text));
         } catch (UnsupportedEncodingException e) {
             throw new IllegalStateException();
         }

@@ -73,22 +73,26 @@ public class MultiMarkdownPathResolver {
                 .first();
 
         // can just compare if it is the same instance, if not then it was resolved
-        if (fileList.size() > 0 && resolveRelativeLink(fileList.getAt(0), documentFileReference, gitHubRepo, targetInfo) != targetInfo) return true;
+        //if (fileList.size() > 0 && resolveRelativeLink(fileList.getAt(0), documentFileReference, gitHubRepo, targetInfo) != targetInfo) return true;
+        if (fileList.size() > 0) return true;
         return false;
     }
 
-    public static boolean canResolveRelativeLink(@NotNull FileReferenceList fileReferenceList, @NotNull FileReference documentFileReference, @Nullable GitHubRepo gitHubRepo, @NotNull String target, boolean resolveExternal) {
+    public static boolean canResolveRelativeLink(@NotNull FileReferenceList fileReferenceList, @NotNull FileReference documentFileReference, @Nullable GitHubRepo gitHubRepo, @NotNull String target, boolean isWikiLink, boolean resolveExternal) {
         // need to resolve using same code as links
         FilePathInfo targetInfo = new FilePathInfo(target);
         FileReferenceList fileList = fileReferenceList.query()
                 .gitHubWikiRules()
                 .wantMarkdownFiles()
                 .inSource(documentFileReference)
-                .matchLinkRefNoExt(targetInfo.getFilePathNoExt())
-                .first();
+                .ignoreLinkRefExtension(!(targetInfo.hasWithAnchorExtWithDot() && !targetInfo.hasWithAnchorWikiPageExt()))
+                .matchLinkRef(targetInfo.getFileName())
+                .first()
+                .postMatchFilter(targetInfo, isWikiLink, null, null);
 
         // can just compare if it is the same instance, if not then it was resolved
-        if (fileList.size() > 0 && resolveRelativeLink(fileList.getAt(0), documentFileReference, gitHubRepo, targetInfo) != targetInfo) return true;
+        //if (fileList.size() > 0 && resolveRelativeLink(fileList.getAt(0), documentFileReference, gitHubRepo, targetInfo) != targetInfo) return true;
+        if (fileList.size() > 0) return true;
 
         target = targetInfo.getFullFilePath();
 
@@ -104,7 +108,7 @@ public class MultiMarkdownPathResolver {
 
     @NotNull
     public static FilePathInfo resolveRelativeLink(@NotNull FileReference targetFileReference, @NotNull FileReference documentFileReference, @Nullable GitHubRepo gitHubRepo, @NotNull FilePathInfo targetInfo) {
-        boolean wantExt = !documentFileReference.isWikiPage();
+        boolean wantExt = !targetFileReference.isWikiPage();
         String newTarget = null;
         FileReferenceLink fileReferenceLink;
         if (gitHubRepo != null) {
