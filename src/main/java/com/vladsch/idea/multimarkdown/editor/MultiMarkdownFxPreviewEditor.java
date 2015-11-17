@@ -240,7 +240,6 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     }
 
     protected void updateLinkRenderer() {
-        // RELEASE: add link validation option
         int options = 0;
         if (MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue()) options |= MultiMarkdownLinkRenderer.GITHUB_WIKI_LINK_FORMAT;
         linkRendererModified = new MultiMarkdownLinkRenderer(project, document, "absent", options | MultiMarkdownLinkRenderer.VALIDATE_LINKS);

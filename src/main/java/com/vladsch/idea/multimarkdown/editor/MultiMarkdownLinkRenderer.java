@@ -27,6 +27,7 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import com.vladsch.idea.multimarkdown.util.FileReference;
 import com.vladsch.idea.multimarkdown.util.GitHubRepo;
@@ -49,7 +50,6 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
     final protected int options;
     final protected GitHubRepo gitHubRepo;
     final protected FileReference documentFileReference;
-    //final protected FileReferenceList fileReferenceList;
 
     public MultiMarkdownLinkRenderer() {
         this(0);
@@ -69,19 +69,9 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
             VirtualFile file = document == null ? null : FileDocumentManager.getInstance().getFile(document);
             this.documentFileReference = file == null ? null : new FileReference(file.getPath(), project);
             this.gitHubRepo = this.documentFileReference == null ? null : documentFileReference.getGitHubRepo();
-            //this.fileReferenceList = this.documentFileReference == null ? null : new FileReferenceListQuery(project)
-            //        .gitHubWikiRules()
-            //        .sameGitHubRepo()
-            //        .wantMarkdownFiles()
-            //        .keepLinkRefAnchor()
-            //        .inSource(this.documentFileReference)
-            //        .all();
-            //
-            //if (this.fileReferenceList == null) options &= ~VALIDATE_LINKS;
         } else {
             this.documentFileReference = null;
             this.gitHubRepo = null;
-            //this.fileReferenceList = null;
         }
 
         this.options = options;
@@ -91,7 +81,7 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
     @Nullable
     public String getLinkTarget(@NotNull String url, boolean isWikiLink) {
         if (project != null && document != null) {
-            FileReference targetLinkRef = MultiMarkdownPathResolver.resolveRelativeLink(null, documentFileReference, gitHubRepo, url, isWikiLink, true);
+            FileReference targetLinkRef = MultiMarkdownPathResolver.resolveRelativeLink(null, documentFileReference, gitHubRepo, url, isWikiLink, isWikiLink || MultiMarkdownPlugin.isLicensed());
             if (targetLinkRef != null) {
                 if (targetLinkRef.isURI()) return targetLinkRef.getFullFilePath();
                 return "file://" + targetLinkRef.getFullFilePath();
@@ -101,26 +91,10 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
     }
 
     public Rendering checkTarget(Rendering rendering) {
-        // RELEASE: comment out this code.
-        if ((options & VALIDATE_LINKS) != 0 && project != null && document != null) {
-            if (!FilePathInfo.isAbsoluteReference(rendering.href)) {
-                if (!MultiMarkdownPathResolver.canResolveRelativeLink(null, documentFileReference, gitHubRepo, rendering.href, false, false)) {
-                    rendering.withAttribute("class", missingTargetClass);
-                }
-            }
-        }
         return rendering;
     }
 
     public Rendering checkTargetImage(Rendering rendering) {
-        // This will not work. No Images in fileReferenceList only markdown files
-        //if ((options & VALIDATE_LINKS) != 0 && project != null && document != null && missingTargetClass != null) {
-        //    if (!FilePathInfo.isAbsoluteReference(rendering.href)) {
-        //        if (!MultiMarkdownPathResolver.canResolveRelativeImageLink(fileReferenceList, documentFileReference, gitHubRepo, rendering.href, false)) {
-        //            rendering.withAttribute("class", missingTargetClass);
-        //        }
-        //    }
-        //}
         return rendering;
     }
 
@@ -138,7 +112,7 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
     public Rendering render(ExpLinkNode node, String text) {
         String href = getLinkTarget(node.url, false);
         Rendering rendering = new Rendering(href == null ? "#" : href, text);
-        if (href == null) rendering.withAttribute("class", missingTargetClass);
+        if (href == null && MultiMarkdownPlugin.isLicensed()) rendering.withAttribute("class", missingTargetClass);
         if (!StringUtils.isEmpty(node.title)) rendering.withAttribute("title", encode(node.title));
         return rendering;
     }

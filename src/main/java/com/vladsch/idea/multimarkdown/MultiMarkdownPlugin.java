@@ -66,12 +66,16 @@ public class MultiMarkdownPlugin implements ApplicationComponent {
 
     @NotNull
     public static String getProductVersion() {
-        PluginId pluginId = PluginId.findId("com.vladsch.idea.multimarkdown");
-        if (pluginId != null) {
-            IdeaPluginDescriptor pluginDescriptor = PluginManager.getPlugin(pluginId);
-            if (pluginDescriptor != null) {
-                return pluginDescriptor.getVersion();
+        try {
+            PluginId pluginId = PluginId.findId("com.vladsch.idea.multimarkdown");
+            if (pluginId != null) {
+                IdeaPluginDescriptor pluginDescriptor = PluginManager.getPlugin(pluginId);
+                if (pluginDescriptor != null) {
+                    return pluginDescriptor.getVersion();
+                }
             }
+        } catch (NoSuchMethodError ignored) {
+            logger.info("PluginId.findId() method not supported in this product version.");
         }
         return "1.2.x";
     }

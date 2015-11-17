@@ -215,7 +215,6 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
     }
 
     protected void updateLinkRenderer() {
-        // RELEASE: add link validation option
         int options = 0;
         if (MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue()) options |= MultiMarkdownLinkRenderer.GITHUB_WIKI_LINK_FORMAT;
         linkRendererModified = new MultiMarkdownLinkRenderer(project, document, "absent", options | MultiMarkdownLinkRenderer.VALIDATE_LINKS);
@@ -319,24 +318,22 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         String result = "";
 
         // RELEASE: see why only wiki documents have a link to github in the header
+        String gitHubHref = MultiMarkdownPathResolver.getGitHubDocumentURL(project, document, !isWikiDocument);
+        String gitHubClose = "";
+        if (gitHubHref == null) {
+            gitHubHref = "";
+        } else {
+            gitHubHref = "<a href=\"" + gitHubHref + "\" name=\"wikipage\" id=\"wikipage\">";
+            gitHubClose = "</a>";
+        }
         if (isWikiDocument) {
-            String gitHubHref = MultiMarkdownPathResolver.getGitHubDocumentURL(project, document, false);
-            String gitHubClose = "";
-            if (gitHubHref == null) {
-                gitHubHref = "";
-            } else {
-                gitHubHref = "<a href=\"" + gitHubHref + "\" name=\"wikipage\" id=\"wikipage\">";
-                gitHubClose = "</a>";
-            }
-
             result += "<body class=\"multimarkdown-wiki-preview\">\n<div class=\"content\">\n";
             result += "" +
                     "<h1 class=\"first-child\">" + gitHubHref + escapeHtml(file == null ? "" : file.getNameWithoutExtension().replace('-', ' ')) + gitHubClose + "</h1>\n" +
                     "";
         } else {
-            String fileName = escapeHtml(file == null ? "" : file.getName());
             result += "<body class=\"multimarkdown-preview\">\n<div class=\"content\">\n" +
-                    "<div class=\"page-header\"><a href=\"" + fileName + "\">" + fileName + "</a></div>\n" +
+                    "<div class=\"page-header\">" + gitHubHref + escapeHtml(file == null ? "" : file.getName().replace('-', ' ')) + gitHubClose +"</div>\n" +
                     "<div class=\"hr\"></div>\n" +
                     "";
             // for now nothing

@@ -36,6 +36,9 @@
                     href="http://daringfireball.net/projects/markdown">Markdown</a> language support for IntelliJ platform.</b><br> With GitHub Flavoured Markdown extensions and GitHub style formatting. HTML Preview and HTML Text tabs.
             </p>
 
+            <p><b>Plugin website: <a color="#30A0D8"
+                    href="http://vladsch.com/product/multimarkdown"><u>idea-multimarkdown Enhanced Edition</u></a></b></p>
+
             <p><b>For all feedback requiring a reply please use the <a color="#30A0D8"
                     href="https://github.com/vsch/idea-multimarkdown/issues"><u>MultiMarkdown GitHub Issues</u></a> page.</b></p>
 
@@ -43,38 +46,44 @@
         </div>
         ]]></description>
 
-    <version>1.2.1.2</version>
+    <version>1.2.2</version>
     <idea-version since-build="133.1711"/>
     <change-notes><![CDATA[
-    <ul><h3><b>1.2.1.1 - Bug Fixes and Enhancements</b></h3><br>
-      <h4>Basic Edition</h4>
-      <h4>Enhanced Edition</h4>
-          <li>Fix #60: use another class for string to input stream conversion that is universally support across os types.</li>
-          <li>Fix: buy license button in settings navigated to the get trial license page instead of the buy license page.</li>
-          <li>Fix #64: Explicit link annotation had WikiLink cast causing CastClassException.</li>
-          <li>Fix #63: Unresolved links were not always highlighted as error</li>
-          <li>Fix #62: Plugin exhausted thread resources if a lot of projects were open</li>
-    </ul>
-    <ul><h3><b>1.2.1.1 - Bug Fixes and Enhancements</b></h3><br>
-        <h4>Basic Edition</h4>
-        <li>Fix #62: Plugin exhausted thread resources if a lot of projects were open</li>
-        <li>Add annotation if wiki link ends in .md, with quick fix to remove .md extension</li>
-        <li>Fix: buy license button in settings navigated to the get trial license page instead of the buy license page.</li>
-        <li>Fix #60: use another class for string to input stream conversion that is universally support across os types.</li>
-        <li>Fix #63: Unresolved links were not always highlighted as error</li>
-        <li>Add a change to quick fix on an unresolved link will apply the same change to all links that match the link being modified.</li>
-
-        <h4>Enhanced Edition</h4>
-        <li>Fix #64: Explicit link annotation had WikiLink cast causing CastClassException.</li>
+    <ul>
+      <h3>1.2.2 - Bug Fixes and Enhancements</h3>
+      <h4><b>Basic Edition &amp; Enhanced</b></h4>
+      <li>Add a change to quick fix on an unresolved link will apply the same change to all links that match the link being modified.</li>
+      <li>Add annotation if wiki link ends in .md, with quick fix to remove .md extension</li>
+      <li>Fix #60: fix plugin failing to initialize on some systems.</li>
+      <li>Fix #62: Plugin exhausted thread resources if a lot of projects were open</li>
+      <li>Fix #63: Unresolved links were not always highlighted as error</li>
+      <li>Fix #65: threading issues causing slow preview update and other intermittent errors.</li>
+      <li>Fix #67: change message for not finding javafx from warning to info.</li>
+      <li>Fix #70: closed to to task list items with capital x <code>- [X]</code> would not render correctly in the WevView preview.</li>
+      <li>Fix link resolution did not work if non-default Markdown extension was used on Wiki pages</li>
+      <li>Fix link resolution in preview to match the rules for markdown source</li>
+      <li>Fix wiki link with multiple matched targets would not resolve according to sort order</li>
+      <li>Fix wiki link with multiple matched targets would show quick fix to rename unreachable targets</li>
+      <li>Fix wiki links with subdirectory references did not show annotation popup or quick fix to remove directory</li>
+      <li>Fix buy license button in settings navigated to the get trial license page instead of the full license page.</li>
+      <h4><b>Enhanced Edition</b></h4>
+      <li>Add validation for relative links accessing wiki raw content by using the Wiki page link with extension.</li>
+      <li>Add validation of all explicit relative links from the main repository to wiki files.</li>
+      <li>Add warning when a file is a target of a link but is not on GitHub.</li>
+      <li>Fix #64: class cast exception in explicit link.</li>
+      <li>Fix link errors in source, preview and click actions are now in agreement</li>
+      <li>Fix link resolution was not always consistent with GitHub</li>
+      <li>Fix license registration failing in version 133.1711 for lack of methods in some classes.</li>
+      <li>Fix intention to change wiki link to explicit and vice-versa.</li>
     </ul>
     <ul><h3><b>1.2.0 - Bug Fixes and Enhancements</b></h3>
-      <h4>Basic Edition</h4>
+      <h4><b>Basic Edition &amp; Enhanced</b></h4>
       <li>Fix: not recognizing tables that have a divider and table cells that look like divider cells. (pegdown)</li>
       <li>Fix: Custom CSS was not loaded in new preview tab or html text.</li>
       <li>Fix: verbatim first line in task list item was cutting off first character if highlight.js option was selected.</li>
       <li>Fix: #58, wiki links with anchor references would show as unresolved.</li>
       <li>Add: MultiMarkdown style footnotes. The <code>[^n]</code> for reference and <code>[^n]: Footnote text</code>, for definition where n is one or more digit, letter, dash, dot or underscore.</li>
-      <h4>Enhanced Edition</h4>
+      <h4><b>Enhanced Edition</b></h4>
       <li>Add: Explicit link completions, refactoring, annotation for errors and quick fixes.</li>
       <li>Add: Image link completions, refactoring, annotation for errors and quick fixes.</li>
       <li>Add: GitHub Issues, Pull requests, Graphs and Pulse link references available in link completions.</li>
@@ -122,7 +131,7 @@
       <li>Add quick fixes that rename files now do project wide refactoring on related links.</li>
       <li>Add quick fixes that change a link target because it is unresolved now do refactor rename for links that have the same text in the file.</li>
       <li>Add option in settings for GitHub wiki link syntax [[Link text|Link address]], vs Creole syntax: [[Link address|Link text]].</li>
-      <li>Add inspection and quick fix when wiki link text and address are reversed, link text is redundant, or link text is also a resovable page..</li>
+      <li>Add inspection and quick fix when wiki link text and address are reversed, link text is redundant, or link text is also a resolvable page.</li>
     </ul>
     <ul><h3><b>1.1.11 - Bug Fixes.</b></h3>
       <li>Fix intermittent project is disposed assertion failure on closing app.</li>

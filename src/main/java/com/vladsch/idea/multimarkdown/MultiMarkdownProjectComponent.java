@@ -209,6 +209,8 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
     }
 
     protected void reparseMarkdown(final boolean reparseFilePsi) {
+        boolean log = false;
+
         if (!project.isDisposed()) {
             if (DumbService.isDumb(project)) {
                 needReparseOnDumbModeExit = true;
@@ -231,8 +233,11 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
                         fileList.add(file);
                     }
                 }
+                if (log) logger.info("reparse file psi start");
                 FileContentUtil.reparseFiles(fileList);
+                if (log) logger.info("reparse file psi end");
             } else {
+                if (log) logger.info("reparse open file start");
                 DaemonCodeAnalyzer instance = DaemonCodeAnalyzer.getInstance(project);
                 for (VirtualFile file : files) {
                     PsiFile psiFile = psiManager.findFile(file);
@@ -240,6 +245,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
                         instance.restart(psiFile);
                     }
                 }
+                if (log) logger.info("reparse open file end");
             }
         }
     }

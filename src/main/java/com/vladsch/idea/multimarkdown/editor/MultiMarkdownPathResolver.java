@@ -68,8 +68,11 @@ public class MultiMarkdownPathResolver {
 
     @Nullable
     public static FileReference resolveRelativeLink(@Nullable FileReferenceList fileReferenceList, @NotNull FileReference documentFileReference, @Nullable GitHubRepo gitHubRepo, @NotNull String target, boolean isWikiLink, boolean resolveExternal) {
+
         // need to resolve using same code as links
         if (target.startsWith("./")) target = target.substring(2);
+
+        if (FilePathInfo.isAbsoluteReference(target)) return new FileReference(target);
 
         FilePathInfo linkRefInfo = new FilePathInfo(target);
         FileReferenceList fileList;

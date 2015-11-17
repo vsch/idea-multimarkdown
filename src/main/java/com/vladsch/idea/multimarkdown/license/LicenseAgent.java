@@ -405,7 +405,7 @@ public class LicenseAgent {
                 String expires = activation.getString(LICENSE_EXPIRES);
                 Date expiration = df.parse(expires);
                 Date today = new Date();
-                int days = (int) Math.floorDiv(expiration.getTime() - today.getTime(), (1000 * 60 * 60 * 24));
+                int days = (int) Math.floor((expiration.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
                 return days + 1;
             } catch (ParseException ignored) {
             }

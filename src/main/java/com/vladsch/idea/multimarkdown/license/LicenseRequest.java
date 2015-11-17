@@ -15,12 +15,14 @@
 package com.vladsch.idea.multimarkdown.license;
 
 import com.intellij.openapi.application.ApplicationInfo;
+import org.apache.log4j.Logger;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 public class LicenseRequest {
     //private static String host_system_name;
+    private static final Logger logger = Logger.getLogger(LicenseRequest.class);
 
     final public String product_name;
     final public String product_version;
@@ -50,11 +52,41 @@ public class LicenseRequest {
         return json.toString();
     }
 
-    public static String getHostProduct() {
-        //return ApplicationInfo.getInstance().getBuild().asStringWithAllDetails() + " test";
-        return ApplicationInfo.getInstance().getBuild().asStringWithAllDetails();
-    }
+    //interface RunnableTest {
+    //    String result();
+    //}
+    //
+    //public static void TestMethods(String name, RunnableTest canFail) {
+    //    String result = "";
+    //
+    //    try {
+    //        result = canFail.result();
+    //    } catch (NoSuchMethodError ignored) {
+    //        result = "NoSuchMethodError";
+    //    }
+    //    logger.info("getBuild()."+ name + " = " + ;
+    //}
+    //
+    //    try {
+    //        return ApplicationInfo.getInstance().getBuild().asStringWithAllDetails();
+    //    } catch (NoSuchMethodError ignored) {
+    //
+    //    }
+    //}
 
+    public static String getHostProduct() {
+        try {
+            return ApplicationInfo.getInstance().getBuild().asStringWithAllDetails();
+        } catch (NoSuchMethodError ignored) {
+
+        }
+        try {
+            return ApplicationInfo.getInstance().getBuild().asString();
+        } catch (NoSuchMethodError ignored) {
+
+        }
+        return "<unknown>";
+    }
     public LicenseRequest(String product_name, String product_version) {
         this.product_name = product_name;
         this.product_version = product_version;

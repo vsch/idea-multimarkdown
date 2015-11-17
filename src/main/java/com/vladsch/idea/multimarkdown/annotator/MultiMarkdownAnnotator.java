@@ -177,7 +177,8 @@ public class MultiMarkdownAnnotator implements Annotator {
                         .postMatchFilter(linkRefInfo, false, false);
 
                 FileReferenceList otherFileRefList = matchedFilesReferenceList;
-                targetRefLink = otherFileRefList.size() > 0 ? (FileReferenceLinkGitHubRules) otherFileRefList.getAt(0) : null;
+
+                if (otherFileRefList.size() > 0) targetRefLink = (FileReferenceLinkGitHubRules) otherFileRefList.getAt(0);
 
                 if (otherFileRefList.size() > 1) {
                     assert targetRefLink != null;
@@ -299,11 +300,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                     }
                 }
 
-                if (state.warningsOnly) {
-                    if (targetRefLink != null && targetRefLink.isUnderVcs()) {
-                        state.createWarningAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.not-vcs-target"));
-                    }
-                } else {
+                if (!state.warningsOnly) {
                     registerCreateFileFix(element.getFileName(), element, state);
 
                     // get all accessible
@@ -332,6 +329,12 @@ public class MultiMarkdownAnnotator implements Annotator {
                     }
 
                     state.annotator.setNeedsUpdateOnTyping(true);
+                }
+            }
+
+            if (state.warningsOnly) {
+                if (targetRefLink != null && !targetRefLink.isUnderVcs()) {
+                    state.createWarningAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.not-vcs-target"));
                 }
             }
         }
@@ -491,6 +494,8 @@ public class MultiMarkdownAnnotator implements Annotator {
 
                     FileReference[] otherReferences = otherFileRefList.get();
 
+                    if (otherReferences.length > 0) targetRefLink = (FileReferenceLinkGitHubRules) otherReferences[0];
+
                     if (otherReferences.length != 1) {
                         assert otherReferences.length == 0 : "Should not happen, multiple matches and link unresolved";
                         state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.unresolved-link-reference"));
@@ -602,7 +607,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                 }
 
                 if (state.warningsOnly) {
-                    if (targetRefLink != null && targetRefLink.isUnderVcs()) {
+                    if (targetRefLink != null && MultiMarkdownPlugin.isLicensed() && !targetRefLink.isUnderVcs()) {
                         state.createWarningAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.link.not-vcs-target"));
                     }
                 } else {
