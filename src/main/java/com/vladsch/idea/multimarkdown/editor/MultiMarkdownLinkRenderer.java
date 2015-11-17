@@ -27,13 +27,16 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.vladsch.idea.multimarkdown.util.*;
+import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import com.vladsch.idea.multimarkdown.util.FileReference;
+import com.vladsch.idea.multimarkdown.util.GitHubRepo;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.parboiled.common.StringUtils;
 import org.pegdown.LinkRenderer;
 import org.pegdown.ast.*;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
+import static org.pegdown.FastEncoder.encode;
 import static org.pegdown.FastEncoder.obfuscate;
 
 public class MultiMarkdownLinkRenderer extends LinkRenderer {
@@ -42,7 +45,7 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
 
     final protected Project project;
     final protected Document document;
-    final protected String missingTargetClass;
+    @NotNull final protected String missingTargetClass;
     final protected int options;
     final protected GitHubRepo gitHubRepo;
     final protected FileReference documentFileReference;
@@ -60,7 +63,7 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
         super();
         this.project = project;
         this.document = document;
-        this.missingTargetClass = missingTargetClass;
+        this.missingTargetClass = missingTargetClass == null ? "absent" : missingTargetClass;
 
         if ((options & VALIDATE_LINKS) != 0) {
             VirtualFile file = document == null ? null : FileDocumentManager.getInstance().getFile(document);
@@ -84,20 +87,22 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
         this.options = options;
     }
 
-    public Rendering checkWikiLinkTarget(Rendering rendering) {
-        if ((options & VALIDATE_LINKS) != 0 && project != null && document != null && missingTargetClass != null) {
-            if (!FilePathInfo.isAbsoluteReference(rendering.href)) {
-                if (!MultiMarkdownPathResolver.canResolveRelativeLink(null, documentFileReference, gitHubRepo, rendering.href, true, false)) {
-                    rendering.withAttribute("class", missingTargetClass);
-                }
+    // return null if does not resolve
+    @Nullable
+    public String getLinkTarget(@NotNull String url, boolean isWikiLink) {
+        if (project != null && document != null) {
+            FileReference targetLinkRef = MultiMarkdownPathResolver.resolveRelativeLink(null, documentFileReference, gitHubRepo, url, isWikiLink, true);
+            if (targetLinkRef != null) {
+                if (targetLinkRef.isURI()) return targetLinkRef.getFullFilePath();
+                return "file://" + targetLinkRef.getFullFilePath();
             }
         }
-        return rendering;
+        return null;
     }
 
     public Rendering checkTarget(Rendering rendering) {
         // RELEASE: comment out this code.
-        if ((options & VALIDATE_LINKS) != 0 && project != null && document != null && missingTargetClass != null) {
+        if ((options & VALIDATE_LINKS) != 0 && project != null && document != null) {
             if (!FilePathInfo.isAbsoluteReference(rendering.href)) {
                 if (!MultiMarkdownPathResolver.canResolveRelativeLink(null, documentFileReference, gitHubRepo, rendering.href, false, false)) {
                     rendering.withAttribute("class", missingTargetClass);
@@ -131,7 +136,11 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
 
     @Override
     public Rendering render(ExpLinkNode node, String text) {
-        return checkTarget(super.render(node, text));
+        String href = getLinkTarget(node.url, false);
+        Rendering rendering = new Rendering(href == null ? "#" : href, text);
+        if (href == null) rendering.withAttribute("class", missingTargetClass);
+        if (!StringUtils.isEmpty(node.title)) rendering.withAttribute("title", encode(node.title));
+        return rendering;
     }
 
     @Override
@@ -157,39 +166,30 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
 
     @Override
     public Rendering render(WikiLinkNode node) {
-        if (project == null || document == null || missingTargetClass == null) {
-            return checkTarget(super.render(node));
-        }
-        try {
-            int pos;
-            String text = node.getText();
-            String url = text;
+        if (project == null || document == null) return checkTarget(super.render(node));
 
-            if ((options & GITHUB_WIKI_LINK_FORMAT) != 0) {
-                // vsch: #202 handle WikiLinks a la GitHub alternative format [[text|page]]
-                if ((pos = text.indexOf("|")) >= 0) {
-                    url = text.substring(pos + 1);
-                    text = text.substring(0, pos);
-                }
-            } else {
-                // vsch: #182 handle WikiLinks alternative format [[page|text]]
-                if ((pos = text.indexOf("|")) >= 0) {
-                    url = text.substring(0, pos);
-                    text = text.substring(pos + 1);
-                }
+        int pos;
+        String text = node.getText();
+        String url = text;
+
+        if ((options & GITHUB_WIKI_LINK_FORMAT) != 0) {
+            // vsch: #202 handle WikiLinks a la GitHub alternative format [[text|page]]
+            if ((pos = text.indexOf("|")) >= 0) {
+                url = text.substring(pos + 1);
+                text = text.substring(0, pos);
             }
-
-            // vsch: #200 WikiLinks can have anchor # refs
-            String suffix = "";
-            if ((pos = url.indexOf("#")) >= 0) {
-                suffix = url.substring(pos);
-                url = url.substring(0, pos);
+        } else {
+            // vsch: #182 handle WikiLinks alternative format [[page|text]]
+            if ((pos = text.indexOf("|")) >= 0) {
+                url = text.substring(0, pos);
+                text = text.substring(pos + 1);
             }
-
-            url = ((url.isEmpty()) ? "" : ("./" + URLEncoder.encode(url.replace(' ', '-'), "UTF-8"))).replace("#", "%23") + suffix;
-            return checkWikiLinkTarget(new Rendering(url, text));
-        } catch (UnsupportedEncodingException e) {
-            throw new IllegalStateException();
         }
+
+        // vsch: #200 WikiLinks can have anchor # refs
+        String href = getLinkTarget(url, true);
+        Rendering rendering = new Rendering(href == null ? "#" : href, text);
+        if (href == null) rendering.withAttribute("class", missingTargetClass);
+        return rendering;
     }
 }

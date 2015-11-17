@@ -26,6 +26,9 @@ import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 public class FilePathInfo implements Comparable<FilePathInfo> {
     private static final Logger logger = org.apache.log4j.Logger.getLogger(FilePathInfo.class);
     public static final String WIKI_PAGE_EXTENSION = ".md";
@@ -51,6 +54,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     };
 
     public static final String GITHUB_WIKI_REL_HOME = GITHUB_WIKI_REL_OFFSET + GITHUB_WIKI_HOME_DIRNAME;
+    public static final String EMPTY_STRING = "";
 
     private final int projHomeEnd;
     private final int wikiHomeEnd;
@@ -120,12 +124,12 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
 
     @NotNull
     final public String getExt() {
-        return nameEnd + 1 < anchorStart ? filePath.substring(nameEnd + 1, anchorStart) : "";
+        return nameEnd + 1 < anchorStart ? filePath.substring(nameEnd + 1, anchorStart) : EMPTY_STRING;
     }
 
     @NotNull
     final public String getExtWithDot() {
-        return nameEnd < anchorStart ? filePath.substring(nameEnd, anchorStart) : "";
+        return nameEnd < anchorStart ? filePath.substring(nameEnd, anchorStart) : EMPTY_STRING;
     }
 
     public boolean hasExt() {
@@ -160,12 +164,12 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
 
     @NotNull
     final public String getAnchorNoHash() {
-        return anchorStart + 1 < filePath.length() ? filePath.substring(anchorStart + 1) : "";
+        return anchorStart + 1 < filePath.length() ? filePath.substring(anchorStart + 1) : EMPTY_STRING;
     }
 
     @NotNull
     final public String getAnchor() {
-        return anchorStart < filePath.length() ? filePath.substring(anchorStart) : "";
+        return anchorStart < filePath.length() ? filePath.substring(anchorStart) : EMPTY_STRING;
     }
 
     public boolean hasAnchor() {
@@ -247,7 +251,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
 
     @NotNull
     final public String getPath() {
-        return nameStart == 0 ? "" : filePath.substring(0, nameStart);
+        return nameStart == 0 ? EMPTY_STRING : filePath.substring(0, nameStart);
     }
 
     @NotNull
@@ -269,12 +273,12 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
 
     @NotNull
     final public String getWikiHome() {
-        return wikiHomeEnd <= 0 ? "" : filePath.substring(0, wikiHomeEnd);
+        return wikiHomeEnd <= 0 ? EMPTY_STRING : filePath.substring(0, wikiHomeEnd);
     }
 
     @NotNull
     final public String getProjectHome() {
-        return projHomeEnd <= 0 ? "" : filePath.substring(0, projHomeEnd);
+        return projHomeEnd <= 0 ? EMPTY_STRING : filePath.substring(0, projHomeEnd);
     }
 
     public String getLinkRefFromWikiHome() {
@@ -367,12 +371,12 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     }
 
     public String innerString() {
-        return "" +
+        return EMPTY_STRING +
                 "wikiHomeEnd = " + wikiHomeEnd + ", " +
                 "nameStart = " + nameStart + ", " +
                 "nameEnd = " + nameEnd + ", " +
                 "filePath = " + "'" + filePath + "', " +
-                "";
+                EMPTY_STRING;
     }
 
     public boolean isEmpty() {
@@ -402,6 +406,10 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
 
     public boolean isExternalReference() {
         return isExternalReference(filePath);
+    }
+
+    public boolean isURI() {
+        return isURI(filePath);
     }
 
     public boolean isAbsoluteReference() {
@@ -560,7 +568,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
 
     @NotNull
     public FilePathInfo withExt(@Nullable String ext) {
-        return new FilePathInfo(getFilePathNoExt() + (ext != null && !ext.isEmpty() ? startWith(ext, '.') : "") + getAnchor());
+        return new FilePathInfo(getFilePathNoExt() + (ext != null && !ext.isEmpty() ? startWith(ext, '.') : EMPTY_STRING) + getAnchor());
     }
 
     /*
@@ -586,8 +594,11 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
         return href == null || href.startsWith("http://") || href.startsWith("ftp://") || href.startsWith("https://") || href.startsWith("mailto:");
     }
 
+    public static boolean isURI(@Nullable String href) {
+        return href == null || href.startsWith("file://") || isExternalReference(href);
+    }
     public static boolean isAbsoluteReference(@Nullable String href) {
-        return href == null || href.startsWith("file://") || href.startsWith("/")  || href.startsWith("#") || isExternalReference(href);
+        return href == null || href.startsWith("/") || href.startsWith("#") || isURI(href);
     }
 
     public static boolean isExtInList(boolean caseSensitive, @NotNull String ext, String... extList) {
@@ -605,6 +616,17 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     @NotNull
     public static String asFileRef(@NotNull String filePath) {
         return filePath.replace(' ', '-');
+    }
+
+    @NotNull
+    public static String asLinkRefURL(@NotNull String filePath) {
+        try {
+            FilePathInfo pathInfo = new FilePathInfo(filePath);
+            return pathInfo.getPath().replace("#", "%23") + URLEncoder.encode(pathInfo.getFileNameWithAnchor(), "UTF-8").replace("#", "%23");
+        } catch (UnsupportedEncodingException e) {
+            logger.info("UnsupportedEncoding", e);
+            return filePath.replace("#", "%23");
+        }
     }
 
     protected static boolean compare(boolean forWikiRef, boolean caseSensitive, boolean spaceDashEquivalent, int i, int iMax, @NotNull String fileRef, int fileRefOffs, @NotNull String linkRef, int linkRefOffs) {
@@ -694,7 +716,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
                 linkRef = linkRef.substring(0, pos);
             }
         }
-        return linkRef == null ? "" : linkRef;
+        return linkRef == null ? EMPTY_STRING : linkRef;
     }
 
     // TEST: needs a test
@@ -706,10 +728,10 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
             if ((pos = linkRef.indexOf("#")) >= 0) {
                 linkRef = linkRef.substring(pos);
             } else {
-                linkRef = "";
+                linkRef = EMPTY_STRING;
             }
         }
-        return linkRef == null ? "" : linkRef;
+        return linkRef == null ? EMPTY_STRING : linkRef;
     }
 
     // TEST: needs a test
@@ -740,7 +762,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     }
 
     public static String wikiRefAsFileName(String name, boolean addExtension) {
-        return name.replace(' ', '-') + (addExtension ? WIKI_PAGE_EXTENSION : "");
+        return name.replace(' ', '-') + (addExtension ? WIKI_PAGE_EXTENSION : EMPTY_STRING);
     }
 
     public static String wikiRefAsFileNameNoExt(String name) {
@@ -751,50 +773,61 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
         return wikiRefAsFileName(name, true);
     }
 
+    @NotNull
+    public static String Empty(@Nullable String dir) {
+        return dir == null ? EMPTY_STRING : dir;
+    }
+
     // TEST: needs a test
+    @NotNull
     public static String endWith(@Nullable String dir, char c) {
         if (dir != null && !dir.isEmpty() && dir.charAt(dir.length() - 1) != c) {
             return dir + c;
         }
-        return dir;
+        return Empty(dir);
     }
 
     // TEST: needs a test
+    @NotNull
     public static String removeEnd(@Nullable String dir, char c) {
         if (dir != null && !dir.isEmpty() && dir.charAt(dir.length() - 1) == c) {
             return dir.substring(0, dir.length() - 1);
         }
-        return dir;
+        return Empty(dir);
     }
 
+    @NotNull
     public static String removeEnd(@Nullable String dir, String c) {
         if ((dir != null) && (!dir.isEmpty() && dir.endsWith(c))) {
             return dir.substring(0, dir.length() - c.length());
         }
-        return dir;
+        return Empty(dir);
     }
 
     // TEST: needs a test
+    @NotNull
     public static String startWith(@Nullable String dir, char c) {
         if (dir != null && !dir.isEmpty() && dir.charAt(0) != c) {
             return c + dir;
         }
-        return dir;
+        return Empty(dir);
     }
 
     // TEST: needs a test
+    @NotNull
     public static String removeStart(@Nullable String dir, char c) {
         if (dir != null && !dir.isEmpty() && dir.charAt(0) == c) {
             return dir.substring(1);
         }
-        return dir;
+        return Empty(dir);
     }
 
+    @NotNull
     public static String removeStart(@Nullable String dir, String c) {
         if (dir != null && !dir.isEmpty() && dir.startsWith(c)) {
             return dir.substring(c.length());
         }
-        return dir;
+        return Empty(dir);
     }
 
     // TEST: needs a test

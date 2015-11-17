@@ -299,7 +299,11 @@ public class MultiMarkdownAnnotator implements Annotator {
                     }
                 }
 
-                if (!state.warningsOnly) {
+                if (state.warningsOnly) {
+                    if (targetRefLink != null && targetRefLink.isUnderVcs()) {
+                        state.createWarningAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.not-vcs-target"));
+                    }
+                } else {
                     registerCreateFileFix(element.getFileName(), element, state);
 
                     // get all accessible
@@ -439,8 +443,8 @@ public class MultiMarkdownAnnotator implements Annotator {
             if (!containingFile.isWikiPage()) {
                 state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.github-only-on-wiki-page"));
                 offerWikiToExplicitQuickFix(wikiLink, state);
-            } else if (accessibleWikiPageRefs.size() == 1 && !targetRefLink.hasAnchor()) {
-                // empty
+                //} else if (accessibleWikiPageRefs.size() == 1 && !targetRefLink.hasAnchor()) {
+                //    // empty
             } else {
                 if (accessibleWikiPageRefs.size() > 1) {
                     state.canCreateFile = false;
@@ -597,7 +601,11 @@ public class MultiMarkdownAnnotator implements Annotator {
                     }
                 }
 
-                if (!state.warningsOnly) {
+                if (state.warningsOnly) {
+                    if (targetRefLink != null && targetRefLink.isUnderVcs()) {
+                        state.createWarningAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.link.not-vcs-target"));
+                    }
+                } else {
                     registerCreateFileFix(element.getFileName(), element, state);
 
                     // get all accessible

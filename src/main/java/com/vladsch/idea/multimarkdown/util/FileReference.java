@@ -209,6 +209,22 @@ public class FileReference extends FilePathInfo {
         return gitHubRepo != null ? endWith(gitHubRepo.getBasePath(), '/') : null;
     }
 
+    @Nullable
+    public String getGitHubFileURL(boolean withExtension, @Nullable String anchor) {
+        MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
+
+        if (projectComponent != null) {
+            if (getVirtualFile() != null && projectComponent.isUnderVcs(virtualFile)) {
+                GitHubRepo gitHubRepo = projectComponent.getGitHubRepo(virtualFile.getPath());
+                if (gitHubRepo != null) {
+                    String relativePath = gitHubRepo.getRelativePath(withExtension ? getFilePathWithAnchor() : getFilePathWithAnchorNoExt());
+                    return relativePath == null ? null : gitHubRepo.repoUrlFor(relativePath, anchor);
+                }
+            }
+        }
+        return null;
+    }
+
     @NotNull
     public String getGitHubRepoPath(@NotNull String defaultPath) {
         MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);

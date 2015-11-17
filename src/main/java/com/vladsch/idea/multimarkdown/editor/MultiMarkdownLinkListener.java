@@ -89,10 +89,10 @@ public class MultiMarkdownLinkListener implements HyperlinkListener {
                 if (e.getDescription().startsWith("#")) {
                     editor.scrollToReference(e.getDescription().substring(1));
                 } else {
-                    launchExternalLink(project, document, e.getDescription());
+                    launchExternalLink(project, e.getDescription());
                 }
             } else {
-                launchExternalLink(project, document, e.getDescription());
+                launchExternalLink(project, e.getDescription());
             }
         }
     }

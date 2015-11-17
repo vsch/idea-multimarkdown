@@ -82,8 +82,8 @@ public class GitHubRepo {
             relativeFilePath = FilePathInfo.removeStart(relativeFilePath, "../../wiki");
         }
 
-        String url = FilePathInfo.endWith(gitHubBaseUrl(), '/') + (isWiki() ? "wiki/" : "blob/master/") + FilePathInfo.removeStart(relativeFilePath, "./") + FilePathInfo.endWith(anchor, '#');
-        return url.replace("#","%23");
+        String url = FilePathInfo.endWith(gitHubBaseUrl(), '/') + (isWiki() ? "wiki/" : "blob/master/") + FilePathInfo.asLinkRefURL(FilePathInfo.removeStart(relativeFilePath, "./")) + FilePathInfo.startWith(anchor, '#');
+        return url;
     }
 
     @NotNull

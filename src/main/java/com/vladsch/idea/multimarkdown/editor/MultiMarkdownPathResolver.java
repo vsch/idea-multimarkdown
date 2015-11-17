@@ -112,19 +112,23 @@ public class MultiMarkdownPathResolver {
                 return fileReference;
             }
 
-            String anchor = fileReference.isLinkRefAnchorPartOfName(linkRefInfo) ? "" : linkRefInfo.getAnchor();
-            String gitHubLink = getGitHubFileURL(fileReference.getVirtualFile(), documentFileReference.getProject(), !fileReference.isWikiPage(), anchor);
+            boolean anchorPartOfName = fileReference.isLinkRefAnchorPartOfName(linkRefInfo);
+            String anchor = anchorPartOfName ? "" : linkRefInfo.getAnchor();
+            boolean withExt = !fileReference.isWikiPage() || (!anchorPartOfName ? linkRefInfo.hasExt() : linkRefInfo.hasWithAnchorExt());
+
+            String gitHubLink = fileReference.getGitHubFileURL(withExt, anchor);
+
+            // does not resolve on GitHub
+            if (gitHubLink != null && !isWikiLink && anchorPartOfName) return null;
+
             return gitHubLink == null ? fileReference : new FileReference(gitHubLink);
         }
 
         target = linkRefInfo.getFullFilePath();
 
         if (FilePathInfo.endsWith(target, FilePathInfo.GITHUB_LINKS)) {
-            FileReference resolvedTarget = documentFileReference.resolveLinkRef(target, false);
-            //if (resolvedTarget != null && (resolvedTarget.isExternalReference() || resolvedTarget.getVirtualFile() != null)) return true;
-            if (resolvedTarget != null) return resolvedTarget;
-            resolvedTarget = documentFileReference.resolveExternalLinkRef(target, true, false);
-            if (resolvedTarget != null) return resolvedTarget;
+            FileReference resolvedTarget = documentFileReference.resolveExternalLinkRef(target, true, false);
+            return resolvedTarget;
         }
         return null;
     }
@@ -276,69 +280,27 @@ public class MultiMarkdownPathResolver {
         return null;
     }
 
-    public static void launchExternalLink(@NotNull final Project project, @NotNull Document document, @NotNull final String originalHref) {
-        String href = null;
-
-        try {
-            href = URLDecoder.decode(originalHref, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            logger.info("UnsupportedEncodingException on launchExternalLink", e);
-        }
-
-        if (href == null) return;
-
-        FileReference resolvedTarget = new FileReference(href);
-        VirtualFile documentFile = FileDocumentManager.getInstance().getFile(document);
-        FileReference documentFileReference = documentFile == null ? null : new FileReference(documentFile.getPath(), project);
-        GitHubRepo gitHubRepo = documentFileReference == null ? null : documentFileReference.getGitHubRepo();
-
-        if (!resolvedTarget.isAbsoluteReference() && documentFileReference != null) {
-            resolvedTarget = resolveRelativeLink(null, documentFileReference, gitHubRepo, href, false, true);
-            if (resolvedTarget == null) {
-                // we don't know which links are wiki's so have to try with dashes replaced by spaces in the name
-                FilePathInfo hrefDashInfo = new FilePathInfo(href);
-                String hrefSpaceDash = hrefDashInfo.getPath() + hrefDashInfo.getFileNameNoExt().replace('-', ' ') + hrefDashInfo.getWithAnchorExtWithDot();
-                resolvedTarget = resolveRelativeLink(null, documentFileReference, gitHubRepo, hrefSpaceDash, false, true);
-                if (resolvedTarget == null) return;
-            }
-        }
-
-        final VirtualFile targetFile = resolvedTarget.getVirtualFile();
-        final FilePathInfo hrefInfo = new FilePathInfo(href);
-
-        if (resolvedTarget.isExternalReference()) {
-            openLink(resolvedTarget.getFullFilePath());
-        } else if (!resolvedTarget.isAbsoluteReference()) {
-            // can resolve, let see if we need to map it to github
-            // if it is under git source code control map it to remote
-            if (resolvedTarget instanceof FileReferenceLinkGitHubRules) {
-                gitHubRepo = resolvedTarget.getGitHubRepo();
-                if (gitHubRepo != null && resolvedTarget.isUnderVcs()) {
-                    FileReferenceLink targetFileRefLink = (FileReferenceLink) resolvedTarget;
-                    boolean noSubDirs = resolvedTarget.isWikiPage() && !resolvedTarget.hasExt();
-                    boolean appendAnchor = !targetFileRefLink.isLinkRefAnchorPartOfName(hrefInfo);
-                    String gitHubHref = gitHubRepo.repoUrlFor(noSubDirs ? (hrefInfo.hasWithAnchorExt() ? targetFileRefLink.getNoPrefixLinkRefWithAnchor() : targetFileRefLink.getNoPrefixLinkRefWithAnchorNoExt()) : (hrefInfo.hasWithAnchorExt() ? targetFileRefLink.getLinkRefWithAnchor() : targetFileRefLink.getLinkRefWithAnchorNoExt())) + (appendAnchor ? hrefInfo.getAnchor() : "");
-                    if (FilePathInfo.isExternalReference(gitHubHref)) {
-                        openLink(gitHubHref);
-                        return;
-                    }
+    public static void launchExternalLink(@NotNull final Project project, @NotNull final String href) {
+        if (FilePathInfo.isExternalReference(href)) {
+            openLink(href);
+        } else if (href.startsWith("file://")) {
+            try {
+                URL target = new URL(href);
+                VirtualFileSystem virtualFileSystem = VirtualFileManager.getInstance().getFileSystem(target.getProtocol());
+                final VirtualFile virtualFile = virtualFileSystem == null ? null : virtualFileSystem.findFileByPath(target.getFile());
+                // open local file
+                if (virtualFile != null) {
+                    ApplicationManager.getApplication().invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            FileEditorManager.getInstance(project).openFile(virtualFile, true, true);
+                            // TODO: see if we can resolve the #hashSuffix in the file
+                            //logger.info("got hash suffixed href: " + href + "#" + hashSuffix);
+                        }
+                    });
                 }
+            } catch (MalformedURLException ignored) {
             }
-        }
-
-        // open local file
-        if (targetFile != null) {
-            ApplicationManager.getApplication().invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    FileEditorManager.getInstance(project).openFile(targetFile, true, true);
-
-                    if (hrefInfo.hasAnchor()) {
-                        // TODO: see if we can resolve the #hashSuffix in the file
-                        //logger.info("got hash suffixed href: " + href + "#" + hashSuffix);
-                    }
-                }
-            });
         }
     }
 

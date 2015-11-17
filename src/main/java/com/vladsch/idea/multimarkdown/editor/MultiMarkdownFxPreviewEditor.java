@@ -428,7 +428,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                             }
                         }
                     } else {
-                        MultiMarkdownPathResolver.launchExternalLink(project, document, href);
+                        MultiMarkdownPathResolver.launchExternalLink(project, href);
                     }
                 }
             };
