@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ScappleDocument Version="1.1" ID="8D6894A4-1F66-4B7F-B744-EC41F07D0F47">
+    <Notes>
+        <Note ID="0" FontSize="12.0" Position="73.0,158.0" Width="83.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.747881 0.366532 0.542813</Border>
+                <Fill>0.918452 0.807302 0.863467</Fill>
+            </Appearance>
+            <String>linkRef: String</String>
+        </Note>
+        <Note ID="2" FontSize="12.0" Position="73.0,130.0" Width="83.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.747881 0.366532 0.542813</Border>
+                <Fill>0.918452 0.807302 0.863467</Fill>
+            </Appearance>
+            <String>anchor: String</String>
+        </Note>
+        <Note ID="4" FontSize="12.0" Position="264.0,324.0" Width="315.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>getMismatchReasons(FileReference) : MismatchReasons</String>
+        </Note>
+        <Note ID="5" FontSize="12.0" Position="279.0,74.0" Width="201.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.331867 0.609932 0.356197</Border>
+                <Fill>0.790123 0.882327 0.80198</Fill>
+            </Appearance>
+            <String>availableMatches: FileReferenceList</String>
+        </Note>
+        <Note ID="6" FontSize="12.0" Position="276.0,131.957031" Width="148.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.331867 0.609932 0.356197</Border>
+                <Fill>0.790123 0.882327 0.80198</Fill>
+            </Appearance>
+            <String>bestMatch: LinkReference</String>
+        </Note>
+        <Note ID="8" FontSize="12.0" Position="305.0,399.0" Width="242.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>getRemoteURL(branchOrTag = null) : String</String>
+        </Note>
+        <Note ID="9" FontSize="12.0" Position="305.0,425.0" Width="231.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>HasRemote(branchOrTag = null): boolean</String>
+        </Note>
+        <Note ID="10" FontSize="12.0" Position="305.0,451.0" Width="223.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>NoRemoteReasons(branchOrTag = null)</String>
+        </Note>
+        <Note ID="15" FontSize="12.0" Position="305.0,497.0" Width="176.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>IsRemoteURL(String) : boolean</String>
+        </Note>
+        <Note ID="16" FontSize="12.0" Position="305.0,525.0" Width="228.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>getLocalReference(String) : LinkResolver</String>
+        </Note>
+        <Note ID="17" FontSize="12.0" Position="73.0,102.0" Width="113.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.747881 0.366532 0.542813</Border>
+                <Fill>0.918452 0.807302 0.863467</Fill>
+            </Appearance>
+            <String>branchOrTag:String</String>
+        </Note>
+        <Note ID="18" FontSize="12.0" Position="33.0,47.0" Width="78.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1" Style="Square"></Border>
+            </Appearance>
+            <String>LinkResolver</String>
+        </Note>
+        <Note ID="20" FontSize="12.0" Position="624.0,26.0" Width="86.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1" Style="Square"></Border>
+            </Appearance>
+            <String>LinkReference</String>
+        </Note>
+        <Note ID="21" FontSize="12.0" Position="664.0,51.0" Width="199.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.747881 0.366532 0.542813</Border>
+                <Fill>0.918452 0.807302 0.863467</Fill>
+            </Appearance>
+            <String>targetFileReference : FileReference</String>
+        </Note>
+        <Note ID="23" FontSize="12.0" Position="664.0,77.0" Width="153.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.747881 0.366532 0.542813</Border>
+                <Fill>0.918452 0.807302 0.863467</Fill>
+            </Appearance>
+            <String>linkResolver : LinkResolver</String>
+        </Note>
+        <Note ID="24" FontSize="12.0" Position="265.0,296.0" Width="230.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>getLinkTo(FileReference) : LinkReference</String>
+        </Note>
+        <Note ID="30" FontSize="12.0" Position="263.0,372.0" Width="208.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.331867 0.609932 0.356197</Border>
+                <Fill>0.790123 0.882327 0.80198</Fill>
+            </Appearance>
+            <String>gitHubRepo : GitHubRepo</String>
+        </Note>
+        <Note ID="33" FontSize="12.0" Position="73.0,74.0" Width="167.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.747881 0.366532 0.542813</Border>
+                <Fill>0.918452 0.807302 0.863467</Fill>
+            </Appearance>
+            <String>containingFile : FileReference</String>
+        </Note>
+        <Note ID="36" FontSize="12.0" Position="918.0,48.0" Width="107.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.331867 0.609932 0.356197</Border>
+                <Fill>0.790123 0.882327 0.80198</Fill>
+            </Appearance>
+            <String>getLinkRef : String</String>
+        </Note>
+        <Note ID="37" FontSize="12.0" Position="918.0,75.0" Width="130.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.331867 0.609932 0.356197</Border>
+                <Fill>0.790123 0.882327 0.80198</Fill>
+            </Appearance>
+            <String>getWikiLinkRef : String</String>
+        </Note>
+        <Note ID="38" FontSize="12.0" Position="918.0,101.0" Width="126.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.331867 0.609932 0.356197</Border>
+                <Fill>0.790123 0.882327 0.80198</Fill>
+            </Appearance>
+            <String>hasWikiLInk : boolean</String>
+        </Note>
+        <Note ID="40" FontSize="12.0" Position="918.0,127.0" Width="233.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.331867 0.609932 0.356197</Border>
+                <Fill>0.790123 0.882327 0.80198</Fill>
+            </Appearance>
+            <String>getMismatchReasons : MismatchReasons</String>
+        </Note>
+        <Note ID="41" FontSize="12.0" Position="40.0,307.0" Width="31.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1" Style="Jagged">0.747881 0.366532 0.542813</Border>
+                <Fill>0.918452 0.807302 0.863467</Fill>
+            </Appearance>
+            <String>final</String>
+        </Note>
+        <Note ID="42" FontSize="12.0" Position="38.0,345.0" Width="135.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1" Style="Jagged">0.331867 0.609932 0.356197</Border>
+                <Fill>0.790123 0.882327 0.80198</Fill>
+            </Appearance>
+            <String>cached computed value</String>
+        </Note>
+        <Note ID="43" FontSize="12.0" Position="82.0,547.0" Width="134.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>hasVirtualFile : boolean</String>
+        </Note>
+        <Note ID="44" FontSize="12.0" Position="49.0,518.0" Width="141.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.331867 0.609932 0.356197</Border>
+                <Fill>0.790123 0.882327 0.80198</Fill>
+            </Appearance>
+            <String>getVirtualFile : VirtualFile</String>
+        </Note>
+        <Note ID="45" FontSize="12.0" Position="42.0,588.0" Width="107.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>getPsiFile : PsiFile</String>
+        </Note>
+        <Note ID="46" FontSize="12.0" Position="81.0,619.0" Width="117.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>hasPsiFile : boolean</String>
+        </Note>
+        <Note ID="48" FontSize="12.0" Position="27.0,481.0" Width="83.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1" Style="Square">0.477193 0.557066 0.76433</Border>
+                <Fill>0.840969 0.866828 0.925903</Fill>
+            </Appearance>
+            <String>FileReference</String>
+        </Note>
+        <Note ID="49" FontSize="12.0" Position="803.0,211.0" Width="107.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1" Style="Square"></Border>
+            </Appearance>
+            <String>MismatchReasons</String>
+        </Note>
+        <Note ID="50" FontSize="12.0" Position="830.0,244.0" Width="229.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.747881 0.366532 0.542813</Border>
+                <Fill>0.918452 0.807302 0.863467</Fill>
+            </Appearance>
+            <String>reasons : Map&lt;String, MismatchReason&gt;</String>
+        </Note>
+        <Note ID="51" FontSize="12.0" Position="817.0,472.0" Width="101.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1" Style="Square"></Border>
+            </Appearance>
+            <String>MismatchReason</String>
+        </Note>
+        <Note ID="52" FontSize="12.0" Position="846.0,503.0" Width="59.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.747881 0.366532 0.542813</Border>
+                <Fill>0.918452 0.807302 0.863467</Fill>
+            </Appearance>
+            <String>id : String</String>
+        </Note>
+        <Note ID="53" FontSize="12.0" Position="846.0,531.0" Width="145.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.747881 0.366532 0.542813</Border>
+                <Fill>0.918452 0.807302 0.863467</Fill>
+            </Appearance>
+            <String>severity : ReasonSeverity</String>
+        </Note>
+        <Note ID="54" FontSize="12.0" Position="828.0,274.0" Width="120.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.747881 0.366532 0.542813</Border>
+                <Fill>0.918452 0.807302 0.863467</Fill>
+            </Appearance>
+            <String>haveErrors : boolean</String>
+        </Note>
+        <Note ID="55" FontSize="12.0" Position="829.0,303.0" Width="137.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.747881 0.366532 0.542813</Border>
+                <Fill>0.918452 0.807302 0.863467</Fill>
+            </Appearance>
+            <String>haveWarnings : boolean</String>
+        </Note>
+        <Note ID="57" FontSize="12.0" Position="845.0,558.0" Width="116.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.747881 0.366532 0.542813</Border>
+                <Fill>0.918452 0.807302 0.863467</Fill>
+            </Appearance>
+            <String>linkRefFixed : String</String>
+        </Note>
+        <Note ID="58" FontSize="12.0" Position="845.0,586.0" Width="140.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.747881 0.366532 0.542813</Border>
+                <Fill>0.918452 0.807302 0.863467</Fill>
+            </Appearance>
+            <String>wikiLinkRefFixed : String</String>
+        </Note>
+        <Note ID="59" FontSize="12.0" Position="844.0,612.0" Width="95.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.747881 0.366532 0.542813</Border>
+                <Fill>0.918452 0.807302 0.863467</Fill>
+            </Appearance>
+            <String>fileFixed : String</String>
+        </Note>
+        <Note ID="60" FontSize="12.0" Position="1021.0,276.0" Width="158.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>contains(id:String) : boolean</String>
+        </Note>
+        <Note ID="61" FontSize="12.0" Position="1021.0,302.0" Width="180.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>get(id:String) : MismatchReason</String>
+        </Note>
+        <Note ID="62" FontSize="12.0" Position="829.0,329.0" Width="168.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.747881 0.366532 0.542813</Border>
+                <Fill>0.918452 0.807302 0.863467</Fill>
+            </Appearance>
+            <String>haveWeakWarnings : boolean</String>
+        </Note>
+        <Note ID="63" FontSize="12.0" Position="37.0,389.0" Width="89.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1" Style="Jagged">0.477193 0.557066 0.76433</Border>
+                <Fill>0.840969 0.866828 0.925903</Fill>
+            </Appearance>
+            <String>reused existing</String>
+        </Note>
+        <Note ID="64" FontSize="12.0" Position="272.0,167.0" Width="158.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.331867 0.609932 0.356197</Border>
+                <Fill>0.790123 0.882327 0.80198</Fill>
+            </Appearance>
+            <String>canResolveLocally: boolean</String>
+        </Note>
+        <Note ID="65" FontSize="12.0" Position="271.0,194.0" Width="171.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.331867 0.609932 0.356197</Border>
+                <Fill>0.790123 0.882327 0.80198</Fill>
+            </Appearance>
+            <String>canResolveRemotely: boolean</String>
+        </Note>
+        <Note ID="66" FontSize="12.0" Position="269.0,237.0" Width="59.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>isRemote</String>
+        </Note>
+        <Note ID="67" FontSize="12.0" Position="268.0,267.0" Width="61.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>isExternal</String>
+        </Note>
+        <Note ID="68" FontSize="12.0" Position="279.0,103.0" Width="183.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.331867 0.609932 0.356197</Border>
+                <Fill>0.790123 0.882327 0.80198</Fill>
+            </Appearance>
+            <String>exactMatches: FileReferenceList</String>
+        </Note>
+    </Notes>
+    <BackgroundShapes></BackgroundShapes>
+    <Stacks>
+        <Stack>2, 0</Stack>
+        <Stack>5, 68</Stack>
+        <Stack>8-10</Stack>
+        <Stack>15-16</Stack>
+        <Stack>21, 23</Stack>
+        <Stack>33, 17</Stack>
+        <Stack>36-38, 40</Stack>
+        <Stack>52-53</Stack>
+        <Stack>55, 62</Stack>
+        <Stack>57-58</Stack>
+        <Stack>60-61</Stack>
+    </Stacks>
+    <AutoFit>0, 2, 4-6, 8-10, 15-18, 20-21, 23-24, 33, 36-38, 40-46, 48-55, 57-68</AutoFit>
+    <NoteStyles>
+        <Style Name="Title Text" ID="26CD7242-6012-4B10-A0C3-3F37A221CF16" AffectFontStyle="Yes" AffectAlignment="Yes" AffectTextColor="No" AffectNoteBody="No" AffectFade="No">
+            <FontSize>28.0</FontSize>
+            <IsBold>Yes</IsBold>
+        </Style>
+        <Style Name="Red Text" ID="6BC43031-D690-4624-BEF3-76DB36EF9E62" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="Yes" AffectNoteBody="No" AffectFade="No">
+            <TextColor>1.0 0.0 0.0</TextColor>
+        </Style>
+        <Style Name="Brown Bubble" ID="61681A2F-EBF9-450B-9814-34A71ADA8EBC" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.290055 0.1523 0.182215</BorderColor>
+            <FillColor>0.940019 0.892907 0.779716</FillColor>
+        </Style>
+        <Style Name="Yellow Bubble" ID="D5C3FEE7-76D4-421E-A190-458690909109" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.756763 0.785592 0.373258</BorderColor>
+            <FillColor>0.906773 0.910625 0.634363</FillColor>
+        </Style>
+        <Style Name="Green Bubble" ID="DB845A25-26FC-45E6-BA80-08E1F5C66FA3" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.331867 0.609932 0.356197</BorderColor>
+            <FillColor>0.790123 0.882327 0.80198</FillColor>
+        </Style>
+        <Style Name="Blue Bubble" ID="4B1C6936-5C1E-4B2E-8A8D-8D0C63B3C5DC" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.477193 0.557066 0.76433</BorderColor>
+            <FillColor>0.840969 0.866828 0.925903</FillColor>
+        </Style>
+        <Style Name="Pink Bubble" ID="541392A8-4383-4B83-8186-D8D309185EF4" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.747881 0.366532 0.542813</BorderColor>
+            <FillColor>0.918452 0.807302 0.863467</FillColor>
+        </Style>
+    </NoteStyles>
+    <UISettings>
+        <BackgroundColor>0.999737 0.986332 0.931298</BackgroundColor>
+        <DefaultFont>Helvetica</DefaultFont>
+        <DefaultTextColor>0.0 0.0 0.0</DefaultTextColor>
+    </UISettings>
+    <PrintSettings PaperSize="612.0,792.0" LeftMargin="72.0" RightMargin="72.0" TopMargin="90.0" BottomMargin="90.0" PaperType="na-letter" Orientation="Portrait" HorizontalPagination="Clip" VerticalPagination="Auto" ScaleFactor="1.0" HorizontallyCentered="Yes" VerticallyCentered="Yes" Collates="Yes" PagesAcross="1" PagesDown="1"></PrintSettings>
+</ScappleDocument>
