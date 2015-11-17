@@ -1,3 +1,11 @@
+### 1.2.3 - Bug Fixes and Enhancements
+
+#### Basic Edition & Enhanced
+
+
+#### Enhanced Edition
+
+
 ### 1.2.2 - Bug Fixes and Enhancements
 
 #### Basic Edition & Enhanced
