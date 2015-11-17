@@ -18,6 +18,7 @@
 package com.vladsch.idea.multimarkdown.util;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.intellij.openapi.vfs.VirtualFile;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -70,12 +71,19 @@ public class GitHubRepo {
         return repoUrlFor(relativeFilePath, null);
     }
 
-    public String repoUrlFor(String relativeFilePath, Integer line) {
+    public String repoUrlFor(@NotNull VirtualFile virtualFile, boolean withExtension, @Nullable String anchor) {
+        FilePathInfo pathInfo = new FilePathInfo(virtualFile);
+        String relativePath = getRelativePath(withExtension ? pathInfo.getFilePathWithAnchor() : pathInfo.getFilePathWithAnchorNoExt());
+        return relativePath == null ? null : repoUrlFor(relativePath, anchor);
+    }
+
+    public String repoUrlFor(@NotNull String relativeFilePath, @Nullable String anchor) {
         if (isWiki()) {
             relativeFilePath = FilePathInfo.removeStart(relativeFilePath, "../../wiki");
         }
 
-        return FilePathInfo.endWith(gitHubBaseUrl(), '/') + (isWiki() ? "wiki/" : "blob/master/") + FilePathInfo.removeStart(relativeFilePath, "./") + (line != null ? "#L" + line : "");
+        String url = FilePathInfo.endWith(gitHubBaseUrl(), '/') + (isWiki() ? "wiki/" : "blob/master/") + FilePathInfo.removeStart(relativeFilePath, "./") + FilePathInfo.endWith(anchor, '#');
+        return url.replace("#","%23");
     }
 
     @NotNull

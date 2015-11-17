@@ -181,12 +181,12 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
 
             // vsch: #200 WikiLinks can have anchor # refs
             String suffix = "";
-            if ((pos = url.lastIndexOf("#")) >= 0) {
+            if ((pos = url.indexOf("#")) >= 0) {
                 suffix = url.substring(pos);
                 url = url.substring(0, pos);
             }
 
-            url = ((url.isEmpty()) ? "" : ("./" + URLEncoder.encode(url.replace(' ', '-'), "UTF-8"))) + suffix;
+            url = ((url.isEmpty()) ? "" : ("./" + URLEncoder.encode(url.replace(' ', '-'), "UTF-8"))).replace("#", "%23") + suffix;
             return checkWikiLinkTarget(new Rendering(url, text));
         } catch (UnsupportedEncodingException e) {
             throw new IllegalStateException();

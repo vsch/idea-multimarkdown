@@ -117,6 +117,10 @@ public class FileReference extends FilePathInfo {
         return resolveLinkRef(linkRef, true, true);
     }
 
+    public boolean isLinkRefAnchorPartOfName(FilePathInfo linkRefInfo) {
+        return hasAnchor() && (linkRefInfo.hasWithAnchorExt() ? getFileNameWithAnchor() : getFileNameWithAnchorNoExt()).equalsIgnoreCase(linkRefInfo.getFileNameWithAnchor());
+    }
+
     protected class MarkdownGitHubLinkResolver extends FilePathInfo.LinkRefResolver {
         MarkdownGitHubLinkResolver(@NotNull String lastPart) {
             super("..", "..", lastPart);
@@ -190,6 +194,11 @@ public class FileReference extends FilePathInfo {
     public GitHubRepo getGitHubRepo() {
         MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
         return projectComponent != null ? projectComponent.getGitHubRepo(getPath()) : null;
+    }
+
+    public boolean isUnderVcs() {
+        MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
+        return projectComponent != null && projectComponent.isUnderVcs(getVirtualFile());
     }
 
     @Nullable

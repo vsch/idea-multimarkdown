@@ -320,7 +320,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
 
         // RELEASE: see why only wiki documents have a link to github in the header
         if (isWikiDocument) {
-            String gitHubHref = MultiMarkdownPathResolver.getGitHubDocumentURL(project, document, true);
+            String gitHubHref = MultiMarkdownPathResolver.getGitHubDocumentURL(project, document, false);
             String gitHubClose = "";
             if (gitHubHref == null) {
                 gitHubHref = "";

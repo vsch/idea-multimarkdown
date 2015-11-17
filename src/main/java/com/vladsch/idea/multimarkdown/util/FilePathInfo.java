@@ -404,6 +404,10 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
         return isExternalReference(filePath);
     }
 
+    public boolean isAbsoluteReference() {
+        return isExternalReference(filePath);
+    }
+
     protected abstract static class LinkRefResolver {
         protected final String[] matchParts;
 
@@ -749,7 +753,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
 
     // TEST: needs a test
     public static String endWith(@Nullable String dir, char c) {
-        if (dir != null && (dir.isEmpty() || dir.charAt(dir.length() - 1) != c)) {
+        if (dir != null && !dir.isEmpty() && dir.charAt(dir.length() - 1) != c) {
             return dir + c;
         }
         return dir;
@@ -757,14 +761,14 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
 
     // TEST: needs a test
     public static String removeEnd(@Nullable String dir, char c) {
-        if (dir != null && (!dir.isEmpty() && dir.charAt(dir.length() - 1) == c)) {
+        if (dir != null && !dir.isEmpty() && dir.charAt(dir.length() - 1) == c) {
             return dir.substring(0, dir.length() - 1);
         }
         return dir;
     }
 
     public static String removeEnd(@Nullable String dir, String c) {
-        if (dir != null && (!dir.isEmpty() && dir.endsWith(c))) {
+        if ((dir != null) && (!dir.isEmpty() && dir.endsWith(c))) {
             return dir.substring(0, dir.length() - c.length());
         }
         return dir;
@@ -772,7 +776,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
 
     // TEST: needs a test
     public static String startWith(@Nullable String dir, char c) {
-        if (dir != null && (dir.isEmpty() || dir.charAt(0) != c)) {
+        if (dir != null && !dir.isEmpty() && dir.charAt(0) != c) {
             return c + dir;
         }
         return dir;
@@ -780,14 +784,14 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
 
     // TEST: needs a test
     public static String removeStart(@Nullable String dir, char c) {
-        if (dir != null && (!dir.isEmpty() && dir.charAt(0) == c)) {
+        if (dir != null && !dir.isEmpty() && dir.charAt(0) == c) {
             return dir.substring(1);
         }
         return dir;
     }
 
     public static String removeStart(@Nullable String dir, String c) {
-        if (dir != null && (!dir.isEmpty() && dir.startsWith(c))) {
+        if (dir != null && !dir.isEmpty() && dir.startsWith(c)) {
             return dir.substring(c.length());
         }
         return dir;

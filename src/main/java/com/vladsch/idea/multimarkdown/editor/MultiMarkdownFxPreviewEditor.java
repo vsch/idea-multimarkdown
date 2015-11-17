@@ -601,7 +601,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                 "<body>\n" +
                 "";
 
-        String gitHubHref = MultiMarkdownPathResolver.getGitHubDocumentURL(project, document, isWikiDocument);
+        String gitHubHref = MultiMarkdownPathResolver.getGitHubDocumentURL(project, document, !isWikiDocument);
         String gitHubClose = "";
         if (isWikiDocument) {
             if (gitHubHref == null) {
