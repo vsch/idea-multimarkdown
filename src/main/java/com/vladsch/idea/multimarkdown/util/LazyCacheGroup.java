@@ -14,23 +14,22 @@
  */
 package com.vladsch.idea.multimarkdown.util;
 
-public class WormValueCache<T> {
-    protected T value;
-    protected Loader<T> valueLoader;
+import java.util.ArrayList;
 
-    interface Loader<T> {
-        T load();
+public class LazyCacheGroup {
+    protected final ArrayList<LazyCachedValue> cachedValues = new ArrayList<LazyCachedValue>();
+
+    public LazyCacheGroup() {
+
     }
 
-    public WormValueCache(Loader<T> valueLoader) {
-        this.valueLoader = valueLoader;
+    public void add(LazyCachedValue cachedValue) {
+        cachedValues.add(cachedValue);
     }
 
-    public T get() {
-        if (valueLoader != null) {
-            value = valueLoader.load();
-            valueLoader = null;
+    public void invalidate() {
+        for (LazyCachedValue cachedValue : cachedValues) {
+            cachedValue.invalidate();
         }
-        return value;
     }
 }

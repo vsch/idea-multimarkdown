@@ -91,14 +91,14 @@ public class LinkResolver {
     @Nullable private Boolean canResolveLocally;
     @Nullable private Boolean canResolveRemotely;
 
-    @NotNull private WormValueCache<LinkReference> bestMatch = new WormValueCache<LinkReference>(new WormValueCache.Loader<LinkReference>() {
+    @NotNull private LazyCachedValue<LinkReference> bestMatch = new LazyCachedValue<LinkReference>(new LazyCachedValue.Loader<LinkReference>() {
         @Override
         public LinkReference load() {
             return loadBestMatch();
         }
     });
 
-    @NotNull private final WormValueCache<GitHubRepo> gitHubRepo = new WormValueCache<GitHubRepo>(new WormValueCache.Loader<GitHubRepo>() {
+    @NotNull private final LazyCachedValue<GitHubRepo> gitHubRepo = new LazyCachedValue<GitHubRepo>(new LazyCachedValue.Loader<GitHubRepo>() {
         @Override
         public GitHubRepo load() {
             return loadGitHubRepo();

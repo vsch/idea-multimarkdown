@@ -37,7 +37,7 @@ public class MismatchReason {
     @NotNull public final String fixedLinkRef;
     @NotNull public final String fixedWikiRef;
     @NotNull public final String fixedFilePath;
-    @NotNull public final WormValueCache<FilePathInfo> fixedFilePathInfo = new WormValueCache<FilePathInfo>(new WormValueCache.Loader<FilePathInfo>() {
+    @NotNull public final LazyCachedValue<FilePathInfo> fixedFilePathInfo = new LazyCachedValue<FilePathInfo>(new LazyCachedValue.Loader<FilePathInfo>() {
         @Override
         public FilePathInfo load() {
             return new FilePathInfo(fixedFilePath);
