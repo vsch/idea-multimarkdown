@@ -294,7 +294,7 @@ public class FileReferenceLink extends FileReference {
 
         if (sourceReference.isWikiPage()) {
             if (!isUnderWikiHome()) reasons |= REASON_NOT_UNDER_WIKI_HOME;
-            if (!getWikiHome().startsWith(sourceReference.getWikiHome())) reasons |= REASON_NOT_UNDER_SOURCE_WIKI_HOME;
+            else if (!getWikiHome().startsWith(sourceReference.getWikiHome())) reasons |= REASON_NOT_UNDER_SOURCE_WIKI_HOME;
             if (!hasWikiPageExt()) reasons |= REASON_TARGET_NOT_WIKI_PAGE_EXT;
         }
 

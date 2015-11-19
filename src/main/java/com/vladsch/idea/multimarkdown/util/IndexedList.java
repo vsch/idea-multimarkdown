@@ -22,22 +22,22 @@ import java.util.function.Consumer;
 // fast filtering of elements based on elemKey
 // main use to get files whose names match
 // this is an ordered list with hash map access by key
-public abstract class FastList<K, T> {
+public abstract class IndexedList<K, T> {
     final protected ArrayList<T> list;
     final protected Map<K, ArrayList<Integer>> map;
 
-    public FastList() {
+    public IndexedList() {
         this.list = new ArrayList<T>();
         this.map = new HashMap<K, ArrayList<Integer>>();
     }
 
-    public FastList(Collection<? extends T> list) {
+    public IndexedList(Collection<? extends T> list) {
         this.list = new ArrayList<T>(list.size());
         this.map = new HashMap<K, ArrayList<Integer>>();
         addAll(list);
     }
 
-    public FastList(T... list) {
+    public IndexedList(T... list) {
         this.list = new ArrayList<T>(list.length);
         this.map = new HashMap<K, ArrayList<Integer>>();
         addAll(list);
@@ -87,18 +87,18 @@ public abstract class FastList<K, T> {
         map.get(key).add(index);
     }
 
-    public void addTo(@NotNull FastList<K, T> fastList, K... keys) {
+    public void addTo(@NotNull IndexedList<K, T> indexedList, K... keys) {
         for (K key : keys) {
             if (map.containsKey(key)) {
-                fastList.addAll(key, this.list, map.get(key));
+                indexedList.addAll(key, this.list, map.get(key));
             }
         }
     }
 
-    public void addTo(@NotNull FastList<K, T> fastList, Collection<? extends K> keys) {
+    public void addTo(@NotNull IndexedList<K, T> indexedList, Collection<? extends K> keys) {
         for (K key : keys) {
             if (map.containsKey(key)) {
-                fastList.addAll(key, this.list, map.get(key));
+                indexedList.addAll(key, this.list, map.get(key));
             }
         }
     }

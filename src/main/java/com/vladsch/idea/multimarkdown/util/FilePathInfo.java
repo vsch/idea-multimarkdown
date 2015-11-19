@@ -69,6 +69,8 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
             filePath = filePath.substring(0, filePath.length() - 1);
         }
 
+        filePath = removeDotDirectory(filePath);
+
         this.filePath = filePath;
         int lastSep;
         this.nameStart = (lastSep = filePath.lastIndexOf('/')) < 0 ? 0 : (lastSep == filePath.length() - 1 ? lastSep : lastSep + 1);
@@ -388,7 +390,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     }
 
     public boolean isRelative() {
-        return filePath.isEmpty() || filePath.charAt(0) != '/';
+        return filePath.isEmpty() || !isAbsoluteReference();
     }
 
     public FilePathInfo append(String... parts) {
@@ -413,7 +415,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     }
 
     public boolean isAbsoluteReference() {
-        return isExternalReference(filePath);
+        return isAbsoluteReference(filePath);
     }
 
     protected abstract static class LinkRefResolver {
@@ -568,7 +570,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
 
     @NotNull
     public FilePathInfo withExt(@Nullable String ext) {
-        return new FilePathInfo(getFilePathNoExt() + (ext != null && !ext.isEmpty() ? startWith(ext, '.') : EMPTY_STRING) + getAnchor());
+        return ext != null && !getExt().equals(ext) && !getFullFilePath().isEmpty() ? new FilePathInfo(getFilePathNoExt() + startWith(removeEnd(removeStart(ext, '.'), '.'), '.') + getAnchor()) : this;
     }
 
     /*

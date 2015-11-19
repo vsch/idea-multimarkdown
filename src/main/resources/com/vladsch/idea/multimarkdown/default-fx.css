@@ -32,14 +32,16 @@ THE SOFTWARE.
 
 .markdown-body,
 .wiki-body {
-    font-family: Arial, Helvetica, "Helvetica Neue", "Segoe UI", freesans, sans-serif;
+    /*font-family: Helvetica, Arial, freesans, sans-serif;*/
+    /*font-family: Arial, Helvetica, "Helvetica Neue", "Segoe UI", freesans, sans-serif;*/
+    font-family: Helvetica, Arial, "Helvetica Neue", "Segoe UI", freesans, sans-serif;
     font-size: 16px;
     line-height: 1.6;
 }
 
 body {
    background-color: #ffffff;
-    color: #000;
+    color: #333;
 }
 
 .boxed-group>h3, .boxed-group .heading {

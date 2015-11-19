@@ -2,6 +2,7 @@
 
 #### Basic Edition & Enhanced
 
+- Change: default JavaFX preview font order to have Helvetica before Arial, cleaner text rendering. 
 
 #### Enhanced Edition
 

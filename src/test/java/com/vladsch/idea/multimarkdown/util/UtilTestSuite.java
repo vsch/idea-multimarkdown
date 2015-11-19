@@ -27,6 +27,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         TestFilePathInfoAsWikiRef.class,
         TestFilePathInfoEndsWithWikiRef.class,
+        TestPathInfo.class,
         TestFilePathInfo.class,
         TestFilePathInfoIndividial.class,
         TestFilePathInfoResolveLinkRef.class,
