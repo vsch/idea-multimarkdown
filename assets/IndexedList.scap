@@ -27,8 +27,8 @@
                 <Border Weight="1"></Border>
             </Appearance>
             <String>FileReference</String>
-            <ConnectedNoteIDs>5, 17, 23</ConnectedNoteIDs>
-            <PointsToNoteIDs>23</PointsToNoteIDs>
+            <ConnectedNoteIDs>17, 23</ConnectedNoteIDs>
+            <PointsToNoteIDs>23, 25</PointsToNoteIDs>
         </Note>
         <Note ID="3" FontSize="12.0" Position="187.0,175.0" Width="72.0">
             <Appearance>
@@ -36,8 +36,7 @@
                 <Border Weight="1"></Border>
             </Appearance>
             <String>WikiRefLink</String>
-            <ConnectedNoteIDs>4, 13</ConnectedNoteIDs>
-            <PointsToNoteIDs>13</PointsToNoteIDs>
+            <ConnectedNoteIDs>4</ConnectedNoteIDs>
         </Note>
         <Note ID="4" FontSize="12.0" Position="187.0,137.0" Width="69.0">
             <Appearance>
@@ -45,17 +44,8 @@
                 <Border Weight="1"></Border>
             </Appearance>
             <String>FileLinkRef</String>
-            <ConnectedNoteIDs>0, 3, 13</ConnectedNoteIDs>
-            <PointsToNoteIDs>13</PointsToNoteIDs>
-        </Note>
-        <Note ID="5" FontSize="12.0" Position="492.0,135.0" Width="105.0">
-            <Appearance>
-                <Alignment>Left</Alignment>
-                <Border Weight="1"></Border>
-            </Appearance>
-            <String>FileReferenceLink</String>
-            <ConnectedNoteIDs>2, 13, 24</ConnectedNoteIDs>
-            <PointsToNoteIDs>13, 24</PointsToNoteIDs>
+            <ConnectedNoteIDs>0, 3, 13, 26-27</ConnectedNoteIDs>
+            <PointsToNoteIDs>13, 26-27</PointsToNoteIDs>
         </Note>
         <Note ID="6" FontSize="12.0" Position="71.0,116.0" Width="65.0">
             <Appearance>
@@ -97,17 +87,18 @@
                 <Border Weight="1" Style="Square"></Border>
             </Appearance>
             <String>LinkResolver</String>
-            <ConnectedNoteIDs>3-5, 7, 22</ConnectedNoteIDs>
+            <ConnectedNoteIDs>4, 7, 22, 28</ConnectedNoteIDs>
+            <PointsToNoteIDs>28</PointsToNoteIDs>
         </Note>
-        <Note ID="14" FontSize="12.0" Position="424.0,19.0" Width="33.0">
+        <Note ID="14" FontSize="12.0" Position="424.0,19.0" Width="87.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1" Style="Square"></Border>
             </Appearance>
-            <String>Path</String>
+            <String>fullPath: String</String>
             <ConnectedNoteIDs>1</ConnectedNoteIDs>
         </Note>
-        <Note ID="15" FontSize="12.0" Position="219.0,63.0" Width="47.0">
+        <Note ID="15" FontSize="12.0" Position="219.0,76.0" Width="47.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1" Style="Square"></Border>
@@ -163,7 +154,7 @@
             </Appearance>
             <String>abstract</String>
         </Note>
-        <Note ID="22" FontSize="12.0" Position="138.0,218.0" Width="126.0">
+        <Note ID="22" FontSize="12.0" Position="82.0,218.0" Width="126.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -180,17 +171,36 @@
             <String>VirtualFile</String>
             <ConnectedNoteIDs>2</ConnectedNoteIDs>
         </Note>
-        <Note ID="24" FontSize="12.0" Position="641.0,129.0" Width="100.0">
+        <Note ID="26" FontSize="12.0" Position="315.0,163.0" Width="121.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1" Style="Square"></Border>
             </Appearance>
-            <String>sourceFile : FileReference</String>
-            <ConnectedNoteIDs>5</ConnectedNoteIDs>
+            <String>target: FileReference</String>
+            <ConnectedNoteIDs>4</ConnectedNoteIDs>
+        </Note>
+        <Note ID="27" FontSize="12.0" Position="315.0,136.0" Width="126.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1" Style="Square"></Border>
+            </Appearance>
+            <String>source: FileReference</String>
+            <ConnectedNoteIDs>4</ConnectedNoteIDs>
+        </Note>
+        <Note ID="28" FontSize="12.0" Position="730.0,235.0" Width="46.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1" Style="Square"></Border>
+            </Appearance>
+            <String>Project</String>
+            <ConnectedNoteIDs>13</ConnectedNoteIDs>
         </Note>
     </Notes>
     <BackgroundShapes></BackgroundShapes>
-    <AutoFit>0-8, 12-21, 23</AutoFit>
+    <Stacks>
+        <Stack>27, 26</Stack>
+    </Stacks>
+    <AutoFit>0-4, 6-8, 12-21, 23, 26-28</AutoFit>
     <NoteStyles>
         <Style Name="Blue Bubble" ID="4B1C6936-5C1E-4B2E-8A8D-8D0C63B3C5DC" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
             <BorderThickness>1</BorderThickness>
