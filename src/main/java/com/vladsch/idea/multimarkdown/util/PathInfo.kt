@@ -18,7 +18,6 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownFileTypeFactory
 import org.apache.log4j.Logger
 
 class PathInfo : Comparable<PathInfo> {
-
     private val nameStart: Int
     private val nameEnd: Int
     private val fullPath: String
@@ -26,7 +25,7 @@ class PathInfo : Comparable<PathInfo> {
     constructor(fullPath: String) {
         this.fullPath = removeDotDirectory(fullPath).removeSuffix("/").removeSuffix(".")
         val lastSep = fullPath.lastIndexOf('/')
-        this.nameStart = if (lastSep < 0) 0 else if (lastSep < fullPath.lastIndex) lastSep+1 else lastSep
+        this.nameStart = if (lastSep < 0) 0 else if (lastSep < fullPath.lastIndex) lastSep + 1 else lastSep
 
         val extStart = fullPath.lastIndexOf('.')
         this.nameEnd = if (extStart <= nameStart) this.fullPath.length else extStart
@@ -37,6 +36,9 @@ class PathInfo : Comparable<PathInfo> {
         this.nameEnd = other.nameEnd
         this.fullPath = other.fullPath
     }
+
+    override fun compareTo(other: PathInfo): Int = fullPath.compareTo(other.fullPath)
+    override fun toString(): String = fullPath
 
     val ext: String
         get() = if (nameEnd + 1 >= fullPath.length) EMPTY_STRING else fullPath.substring(nameEnd + 1, fullPath.length)
@@ -62,7 +64,7 @@ class PathInfo : Comparable<PathInfo> {
         get() = if (nameEnd >= fullPath.length) fullPath else fullPath.substring(0, nameEnd)
 
     val path: String
-        get() = if (nameStart == 0) EMPTY_STRING else if (nameStart == fullPath.length) fullPath else fullPath.substring(0, nameStart)
+        get() = if (nameStart == 0) EMPTY_STRING else fullPath.substring(0, nameStart)
 
     val fileName: String
         get() = if (nameStart == 0) fullPath else fullPath.substring(nameStart, fullPath.length)
@@ -95,11 +97,7 @@ class PathInfo : Comparable<PathInfo> {
     fun fileNameContainsAnchor(): Boolean = fileNameContains('#')
 
     val fileNameNoExt: String
-        get() = if (nameStart == 0 && nameEnd>=fullPath.length) fullPath else fullPath.substring(nameStart, nameEnd)
-
-    override fun compareTo(other: PathInfo): Int = fullPath.compareTo(other.fullPath)
-
-    override fun toString(): String = fullPath
+        get() = if (nameStart == 0 && nameEnd >= fullPath.length) fullPath else fullPath.substring(nameStart, nameEnd)
 
     val isEmpty: Boolean
         get() = fullPath.isEmpty()
@@ -125,32 +123,21 @@ class PathInfo : Comparable<PathInfo> {
     companion object {
         private val logger = Logger.getLogger(PathInfo::class.java)
 
-        @JvmStatic val EMPTY_STRING = ""
+        @JvmStatic public val EMPTY_STRING = ""
 
-        @JvmStatic val IMAGE_EXTENSIONS = arrayOf("png", "jpg", "jpeg", "gif")
-        @JvmStatic val MARKDOWN_EXTENSIONS = MultiMarkdownFileTypeFactory.EXTENSIONS
-        @JvmStatic val WIKI_PAGE_EXTENSIONS = MultiMarkdownFileTypeFactory.EXTENSIONS
+        @JvmStatic public val IMAGE_EXTENSIONS = arrayOf("png", "jpg", "jpeg", "gif")
+        @JvmStatic public val MARKDOWN_EXTENSIONS = MultiMarkdownFileTypeFactory.EXTENSIONS
+        @JvmStatic public val WIKI_PAGE_EXTENSIONS = MultiMarkdownFileTypeFactory.EXTENSIONS
 
-        @JvmStatic val EXTERNAL_PREFIXES = arrayOf("http://", "ftp://", "https://", "mailto:")
-        @JvmStatic val URI_PREFIXES = arrayOf("file://", *EXTERNAL_PREFIXES)
-        @JvmStatic val ABSOLUTE_PREFIXES = arrayOf("/", *URI_PREFIXES)
-        @JvmStatic val RELATIVE_PREFIXES = arrayOf("#")
+        @JvmStatic public val EXTERNAL_PREFIXES = arrayOf("http://", "ftp://", "https://", "mailto:")
+        @JvmStatic public val URI_PREFIXES = arrayOf("file://", *EXTERNAL_PREFIXES)
+        @JvmStatic public val ABSOLUTE_PREFIXES = arrayOf("/", *URI_PREFIXES)
+        @JvmStatic public val RELATIVE_PREFIXES = arrayOf("#")
 
-        @JvmStatic fun isRelative(fullPath: String?): Boolean {
-            return fullPath == null || fullPath.startsWith(*RELATIVE_PREFIXES) || !isAbsolute(fullPath)
-        }
-
-        @JvmStatic fun isExternal(href: String?): Boolean {
-            return href != null && href.startsWith(*EXTERNAL_PREFIXES)
-        }
-
-        @JvmStatic fun isURI(href: String?): Boolean {
-            return href != null && href.startsWith(*URI_PREFIXES)
-        }
-
-        @JvmStatic fun isAbsolute(href: String?): Boolean {
-            return href != null && href.startsWith(*ABSOLUTE_PREFIXES)
-        }
+        @JvmStatic public fun isRelative(fullPath: String?): Boolean = fullPath == null || fullPath.startsWith(*RELATIVE_PREFIXES) || !isAbsolute(fullPath)
+        @JvmStatic public fun isExternal(href: String?): Boolean = href != null && href.startsWith(*EXTERNAL_PREFIXES)
+        @JvmStatic public fun isURI(href: String?): Boolean = href != null && href.startsWith(*URI_PREFIXES)
+        @JvmStatic public fun isAbsolute(href: String?): Boolean = href != null && href.startsWith(*ABSOLUTE_PREFIXES)
 
         @JvmStatic fun append(fullPath: String?, vararg parts: String): PathInfo {
             var path: String = fullPath.orEmpty()
@@ -164,25 +151,16 @@ class PathInfo : Comparable<PathInfo> {
             return PathInfo(path)
         }
 
-        @JvmStatic fun isExtIn(ext: String, ignoreCase: Boolean = true, vararg extList: String): Boolean {
+        @JvmStatic public fun isExtIn(ext: String, ignoreCase: Boolean = true, vararg extList: String): Boolean {
             for (listExt in extList) {
                 if (listExt.equals(ext, ignoreCase)) return true
             }
             return false
         }
 
-        @JvmStatic fun isImageExt(ext: String, ignoreCase: Boolean = true): Boolean {
-            return isExtIn(ext, ignoreCase, *IMAGE_EXTENSIONS)
-        }
-
-        @JvmStatic fun isMarkdownExt(ext: String, ignoreCase: Boolean = true): Boolean {
-            return isExtIn(ext, ignoreCase, *MARKDOWN_EXTENSIONS)
-        }
-
-        @JvmStatic fun isWikiPageExt(ext: String, ignoreCase: Boolean = true): Boolean {
-            return isExtIn(ext, ignoreCase, *WIKI_PAGE_EXTENSIONS)
-        }
-
-        @JvmStatic fun removeDotDirectory(path: String?): String = path.orEmpty().replace("/./", "/").removePrefix("./")
+        @JvmStatic public fun isImageExt(ext: String, ignoreCase: Boolean = true): Boolean = isExtIn(ext, ignoreCase, *IMAGE_EXTENSIONS)
+        @JvmStatic public fun isMarkdownExt(ext: String, ignoreCase: Boolean = true): Boolean = isExtIn(ext, ignoreCase, *MARKDOWN_EXTENSIONS)
+        @JvmStatic public fun isWikiPageExt(ext: String, ignoreCase: Boolean = true): Boolean = isExtIn(ext, ignoreCase, *WIKI_PAGE_EXTENSIONS)
+        @JvmStatic public fun removeDotDirectory(path: String?): String = path.orEmpty().replace("/./", "/").removePrefix("./")
     }
 }
