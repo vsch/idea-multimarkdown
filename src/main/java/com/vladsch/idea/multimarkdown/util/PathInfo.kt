@@ -85,7 +85,6 @@ class PathInfo : Comparable<PathInfo> {
         return contains('#')
     }
 
-
     fun pathContains(c: Char, ignoreCase: Boolean = false): Boolean = path.contains(c, ignoreCase)
     fun pathContains(c: String, ignoreCase: Boolean = false): Boolean = path.contains(c, ignoreCase)
     fun pathContainsSpaces(): Boolean = pathContains(' ')
