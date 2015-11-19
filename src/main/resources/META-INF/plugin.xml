@@ -50,8 +50,9 @@
     <idea-version since-build="133.1711"/>
     <change-notes><![CDATA[
     <ul>
-      <h3>1.2.3 - Bug Fixes and Enhancements</h3>
+      <h3>1.2.2.1 - Bug Fixes and Enhancements</h3>
       <h4><b>Basic Edition &amp; Enhanced</b></h4>
+      <li>Fix #73: self referencing links with 'Show Modified' not selected do not generate correct HTML.</li>
       <h4><b>Enhanced Edition</b></h4>
     </ul>
     <ul>

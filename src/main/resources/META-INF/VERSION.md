@@ -3,9 +3,9 @@
 #### Basic Edition & Enhanced
 
 - Change: default JavaFX preview font order to have Helvetica before Arial, cleaner text rendering. 
+- Fix #73: self referencing links with 'Show Modified' not selected do not generate correct HTML.
 
 #### Enhanced Edition
-
 
 ### 1.2.2 - Bug Fixes and Enhancements
 
