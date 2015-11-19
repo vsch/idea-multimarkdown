@@ -1,10 +1,9 @@
-### 1.2.3 - Bug Fixes and Enhancements
+### 1.2.2.1 - Bug Fixes and Enhancements
 
 #### Basic Edition & Enhanced
-
+- Fix #73: self referencing links with 'Show Modified' not selected do not generate correct HTML.
 
 #### Enhanced Edition
-
 
 ### 1.2.2 - Bug Fixes and Enhancements
 

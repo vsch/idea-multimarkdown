@@ -388,7 +388,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     }
 
     public boolean isRelative() {
-        return filePath.isEmpty() || filePath.charAt(0) != '/';
+        return filePath.isEmpty() || (filePath.charAt(0) != '/' && !isAbsoluteReference());
     }
 
     public FilePathInfo append(String... parts) {
