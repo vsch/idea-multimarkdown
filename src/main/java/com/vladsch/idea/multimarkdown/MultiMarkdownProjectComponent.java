@@ -304,7 +304,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         }
 
         if (!gitHubRepos.containsKey(baseDirectoryPath)) {
-            GitHubRepo gitHubRepo = GitHubRepo.getGitHubRepo(baseDirectoryPath, project.getBasePath());
+            GitHubRepo gitHubRepo = GitHubRepo.getGitHubRepo(this, baseDirectoryPath, project.getBasePath());
             gitHubRepos.put(baseDirectoryPath, gitHubRepo != null ? gitHubRepo : new Object());
         }
 

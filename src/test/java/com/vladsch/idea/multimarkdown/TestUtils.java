@@ -24,9 +24,14 @@ import com.vladsch.idea.multimarkdown.spellchecking.Suggestion;
 import com.vladsch.idea.multimarkdown.spellchecking.SuggestionList;
 import com.vladsch.idea.multimarkdown.util.FileReference;
 import com.vladsch.idea.multimarkdown.util.FileReferenceList;
+import com.vladsch.idea.multimarkdown.util.PathInfo;
+import com.vladsch.idea.multimarkdown.util.PathInfoList;
 import org.junit.internal.ArrayComparisonFailure;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.logging.StreamHandler;
 
 import static org.junit.Assert.*;
 
@@ -61,6 +66,22 @@ public class TestUtils {
 
     public static void compareOrderedLists(String message, FileReferenceList expected, FileReferenceList actual) {
         new OrderedFileReferenceComparison().arrayEquals(null, expected.get(), actual.get());
+    }
+
+    public static void compareOrderedLists(String message, ArrayList<PathInfo> expected, PathInfoList actual) {
+        new OrderedPathInfoComparison().arrayEquals(null, expected.toArray(), actual.toArray());
+    }
+
+    public static void compareUnorderedLists(String message, ArrayList<PathInfo> expected, PathInfoList actual) {
+        new UnorderedPathInfoComparison().arrayEquals(null, expected.toArray(), actual.toArray());
+    }
+
+    public static void compareOrderedLists(String message, ArrayList<String> expected, Set<String> actual) {
+        new OrderedPathInfoComparison().arrayEquals(null, expected.toArray(), actual.toArray());
+    }
+
+    public static void compareUnorderedLists(String message, ArrayList<String> expected, Set<String> actual) {
+        new UnorderedPathInfoComparison().arrayEquals(null, expected.toArray(), actual.toArray());
     }
 
     public static void compareOrderedLists(String message, FileReferenceList.Builder expected, FileReferenceList actual) {
@@ -143,7 +164,7 @@ public class TestUtils {
         return className + "<" + valueString + ">";
     }
 
-    public static class OrderedFileReferenceComparison extends TypedComparisonCriteria<FileReference> {
+    public static class OrderedFileReferenceComparison extends OrderedComparisonCriteria<FileReference> {
         @Override
         protected boolean elementsAreEqual(FileReference o1, FileReference o2) {
             return o1.compareTo(o2) == 0;
@@ -152,6 +173,31 @@ public class TestUtils {
         @Override
         protected void assertElementsAreEqual(FileReference o1, FileReference o2) {
             if (o1.compareTo(o2) != 0) failNotEquals("FileReferences not equal", o1, o2);
+        }
+    }
+
+    public static class OrderedPathInfoComparison extends OrderedComparisonCriteria<PathInfo> {
+        @Override
+        protected boolean elementsAreEqual(PathInfo o1, PathInfo o2) {
+            return o1.compareTo(o2) == 0;
+        }
+
+        @Override
+        protected void assertElementsAreEqual(PathInfo o1, PathInfo o2) {
+            if (o1.compareTo(o2) != 0) failNotEquals("PathInfo not equal", o1, o2);
+        }
+    }
+
+
+    public static class UnorderedPathInfoComparison extends UnorderedComparisonCriteria<PathInfo> {
+        @Override
+        protected boolean elementsAreEqual(PathInfo o1, PathInfo o2) {
+            return o1.compareTo(o2) == 0;
+        }
+
+        @Override
+        protected void assertElementsAreEqual(PathInfo o1, PathInfo o2) {
+            if (o1.compareTo(o2) != 0) failNotEquals("PathInfo not equal", o1, o2);
         }
     }
 
@@ -167,7 +213,7 @@ public class TestUtils {
         }
     }
 
-    public static class OrderedStringComparison extends TypedComparisonCriteria<String> {
+    public static class OrderedStringComparison extends OrderedComparisonCriteria<String> {
         @Override
         protected boolean elementsAreEqual(String o1, String o2) {
             return o1.compareTo(o2) == 0;
@@ -191,7 +237,7 @@ public class TestUtils {
         }
     }
 
-    public static class OrderedSuggestionComparison extends TypedComparisonCriteria<Suggestion> {
+    public static class OrderedSuggestionComparison extends OrderedComparisonCriteria<Suggestion> {
         @Override
         protected boolean elementsAreEqual(Suggestion o1, Suggestion o2) {
             if (!o1.getText().equals(o2.getText())) return false;
@@ -245,7 +291,7 @@ public class TestUtils {
         }
     }
 
-    public static class OrderedSuggestionParamComparison extends com.vladsch.idea.multimarkdown.TypedComparisonCriteria<Suggestion.Param> {
+    public static class OrderedSuggestionParamComparison extends OrderedComparisonCriteria<Suggestion.Param> {
         @Override
         protected boolean elementsAreEqual(Suggestion.Param o1, Suggestion.Param o2) {
             return o1.key.equals(o2.key) && o1.value.equals(o2.value);

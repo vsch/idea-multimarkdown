@@ -18,7 +18,9 @@
 package com.vladsch.idea.multimarkdown.util;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -39,12 +41,14 @@ public class GitHubRepo {
     final private static Pattern URL_VALUE = Pattern.compile("\\s*url\\s*=\\s*([^\\s]*)\\.git");
     final protected static String GIT_CONFIG = "config";
 
+    @NotNull protected final MultiMarkdownProjectComponent projectComponent;
     @NotNull protected final String gitHubBaseUrl;
     @NotNull private final String basePath;
     private final boolean isWiki;
 
     @VisibleForTesting
-    protected GitHubRepo(@NotNull String gitHubBaseUrl, @NotNull String basePath) {
+    protected GitHubRepo(@NotNull MultiMarkdownProjectComponent projectComponent, @NotNull String gitHubBaseUrl, @NotNull String basePath) {
+        this.projectComponent = projectComponent;
         this.isWiki = FilePathInfo.isWikiHomeDir(basePath);
         this.gitHubBaseUrl = gitHubBaseUrl;
         this.basePath = basePath;
@@ -175,12 +179,12 @@ public class GitHubRepo {
     }
 
     @Nullable
-    public static GitHubRepo getGitHubRepo(@Nullable String path, @Nullable String basePath) {
-        return getGitHubRepo(path, basePath, null);
+    public static GitHubRepo getGitHubRepo(@NotNull MultiMarkdownProjectComponent projectComponent, @Nullable String path, @Nullable String basePath) {
+        return getGitHubRepo(projectComponent, path, basePath, null);
     }
 
     @Nullable
-    public static GitHubRepo getGitHubRepo(@Nullable String path, @Nullable String basePath, @Nullable String gitConfig) {
+    public static GitHubRepo getGitHubRepo(@NotNull MultiMarkdownProjectComponent projectComponent, @Nullable String path, @Nullable String basePath, @Nullable String gitConfig) {
         if (path == null || basePath == null) return null;
 
         String nextPath = path;
@@ -193,7 +197,7 @@ public class GitHubRepo {
                 if (gitConfigFile.exists() && gitConfigFile.isFile()) {
                     String baseUrl = gitHubBaseUrl(gitConfigFile);
                     if (baseUrl != null) {
-                        return new GitHubRepo(baseUrl, pathInfo.getFullFilePath());
+                        return new GitHubRepo(projectComponent, baseUrl, pathInfo.getFullFilePath());
                     }
 
                     // this sub-module does not have a remote.
@@ -206,4 +210,5 @@ public class GitHubRepo {
 
         return null;
     }
+
 }

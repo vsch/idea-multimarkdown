@@ -167,7 +167,7 @@ public class FileReference extends FilePathInfo {
             // if this is not a wiki home and what comes next is ../../wiki then we can replace is a subdirectory with current dir name with .wiki added
             assert project != null;
 
-            FilePathInfo wikiPath = currentPath.append(currentPath.getFileName() + WIKI_HOME_EXTENTION);
+            FilePathInfo wikiPath = currentPath.append(currentPath.getFileName() + WIKI_HOME_EXTENSION);
             MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
             if (projectComponent != null) {
                 GitHubRepo gitHubRepo = projectComponent.getGitHubRepo(wikiPath.getFullFilePath());

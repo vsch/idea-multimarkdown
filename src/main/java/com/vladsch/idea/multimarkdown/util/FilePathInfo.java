@@ -32,7 +32,7 @@ import java.net.URLEncoder;
 public class FilePathInfo implements Comparable<FilePathInfo> {
     private static final Logger logger = org.apache.log4j.Logger.getLogger(FilePathInfo.class);
     public static final String WIKI_PAGE_EXTENSION = ".md";
-    public static final String WIKI_HOME_EXTENTION = ".wiki";
+    public static final String WIKI_HOME_EXTENSION = ".wiki";
     public static final String GITHUB_WIKI_HOME_DIRNAME = "wiki";
     public static final String GITHUB_WIKI_HOME_FILENAME = "Home";
     public static final String GITHUB_ISSUES_NAME = "issues";
@@ -76,7 +76,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
         this.nameStart = (lastSep = filePath.lastIndexOf('/')) < 0 ? 0 : (lastSep == filePath.length() - 1 ? lastSep : lastSep + 1);
 
         // github wiki home will be like ..../dirname/dirname.wiki
-        int wikiHomeEnd = (wikiHomeEnd = filePath.lastIndexOf(WIKI_HOME_EXTENTION + "/", nameStart)) >= nameStart || wikiHomeEnd < 0 ? 0 : wikiHomeEnd;
+        int wikiHomeEnd = (wikiHomeEnd = filePath.lastIndexOf(WIKI_HOME_EXTENSION + "/", nameStart)) >= nameStart || wikiHomeEnd < 0 ? 0 : wikiHomeEnd;
         int projHomeEnd = 0;
         if (wikiHomeEnd > 0) {
             int wikiDirNameStart = filePath.lastIndexOf('/', wikiHomeEnd);
@@ -88,7 +88,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
                     String mainProjDirName = filePath.substring(mainProjDirStart + 1, wikiDirNameStart);
                     if (mainProjDirName.equals(wikiDirName)) {
                         projHomeEnd = wikiDirNameStart;
-                        wikiHomeEnd += WIKI_HOME_EXTENTION.length();
+                        wikiHomeEnd += WIKI_HOME_EXTENSION.length();
                     } else {
                         wikiHomeEnd = 0;
                     }
@@ -228,7 +228,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
     }
 
     final public boolean isWikiHomeDir() {
-        return filePath.endsWith(WIKI_HOME_EXTENTION) || getFileName().equals(GITHUB_WIKI_HOME_DIRNAME);
+        return filePath.endsWith(WIKI_HOME_EXTENSION) || getFileName().equals(GITHUB_WIKI_HOME_DIRNAME);
     }
 
     @NotNull
@@ -481,7 +481,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
         @Override
         FilePathInfo computePath(FilePathInfo currentPath) {
             // if this is not a wiki home and what comes next is ../../wiki then we can replace is a subdirectory with current dir name with .wiki added
-            return currentPath.append(currentPath.getFileName() + WIKI_HOME_EXTENTION);
+            return currentPath.append(currentPath.getFileName() + WIKI_HOME_EXTENSION);
         }
     }
 
@@ -580,7 +580,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
      */
 
     public static boolean isWikiHomeDir(String path) {
-        return path != null && endsWith(path, WIKI_HOME_EXTENTION);
+        return path != null && endsWith(path, WIKI_HOME_EXTENSION);
     }
 
     public static boolean endsWith(String haystack, String... needles) {
