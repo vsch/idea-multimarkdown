@@ -25,6 +25,7 @@ import com.vladsch.idea.multimarkdown.spellchecking.SuggestionList;
 import com.vladsch.idea.multimarkdown.util.FileReference;
 import com.vladsch.idea.multimarkdown.util.FileReferenceList;
 import com.vladsch.idea.multimarkdown.util.LinkInfo;
+import org.apache.http.annotation.Immutable;
 import org.junit.internal.ArrayComparisonFailure;
 
 import java.util.ArrayList;
@@ -78,6 +79,15 @@ public class TestUtils {
         new OrderedPathInfoComparison().arrayEquals(null, expected.toArray(), actual.toArray());
     }
 
+    //public static void compareOrderedLists(String message, String[] expected, List<LinkInfo> actual) {
+    //    String[] actualStrings = new String[actual.size()];
+    //    int i = 0;
+    //    for (LinkInfo linkInfo : actual) {
+    //        actualStrings[i] = linkInfo.getFilePath();
+    //    }
+    //    new OrderedStringComparison().arrayEquals(null, expected, actualStrings);
+    //}
+
     public static void compareUnorderedLists(String message, ArrayList<String> expected, Set<String> actual) {
         new UnorderedPathInfoComparison().arrayEquals(null, expected.toArray(), actual.toArray());
     }
@@ -94,7 +104,7 @@ public class TestUtils {
         new OrderedSuggestionComparison().arrayEquals(null, expected, actual.getSuggestions().toArray(new Suggestion[actual.size()]));
     }
 
-    public static void compareOrderedLists(String message, List<Suggestion>expected, SuggestionList actual) {
+    public static void compareOrderedLists(String message, List<Suggestion> expected, SuggestionList actual) {
         new OrderedSuggestionComparison().arrayEquals(null, expected.toArray(new Suggestion[expected.size()]), actual.getSuggestions().toArray(new Suggestion[actual.size()]));
     }
 

@@ -14,7 +14,7 @@
  */
 package com.vladsch.idea.multimarkdown.util
 
-object  PathInfoListData {
+object MarkdownTestData {
     val filePaths = arrayOf(
             "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/SubDirectory/File-In-Subdirectory.md",
             "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/SubDirectory/In-Name.md",

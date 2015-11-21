@@ -73,14 +73,16 @@ public abstract class UnorderedComparisonCriteria<T> extends TypedComparisonCrit
                     try {
                         this.arrayEquals(message, expected, actual);
                     } catch (ArrayComparisonFailure var10) {
-                        var10.addDimension(i);
-                        throw var10;
+                        //var10.addDimension(i);
+                        //throw var10;
+                        throw new ComparisonFailure(header + "array differed first at element [" + i + "]\nExpected :"+expected+"\nActual   :"+actual,  arrayAsString(expecteds), arrayAsString(actuals));
                     }
                 } else {
                     try {
                         this.assertElementsEqual(expected, actual);
                     } catch (AssertionError var11) {
-                        throw new ArrayComparisonFailure(header, var11, i);
+                        //throw new ArrayComparisonFailure(header, var11, i);
+                        throw new ComparisonFailure(header + "array differed first at element [" + i + "]\nExpected :"+expected+"\nActual   :"+actual,  arrayAsString(expecteds), arrayAsString(actuals));
                     }
                 }
             }

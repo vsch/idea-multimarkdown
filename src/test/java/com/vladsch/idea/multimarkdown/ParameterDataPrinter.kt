@@ -14,6 +14,8 @@
  */
 package com.vladsch.idea.multimarkdown
 
+import java.lang.reflect.Constructor
+
 fun dataColText(col: Any?, padStart: Int = 0, padEnd: Int = 0): String {
     val text: String
     if (col == null) text = "null";
@@ -29,6 +31,7 @@ fun dataColText(col: Any?, padStart: Int = 0, padEnd: Int = 0): String {
             }
             is Boolean -> text = col.toString()
             is Int -> text = col.toString()
+            is kotlin.reflect.KCallable<*> -> text = "::" + col.toString().substringAfterLast('.')
             else -> text = "\"$col\"";
         }
     }

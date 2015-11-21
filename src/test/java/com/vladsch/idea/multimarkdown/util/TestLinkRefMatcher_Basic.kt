@@ -24,7 +24,7 @@ import kotlin.test.assertEquals
 import com.vladsch.idea.multimarkdown.TestUtils.*
 
 @RunWith(value = Parameterized::class)
-class TestLinkRefMatcher constructor(val fullPath: String) {
+class TestLinkRefMatcher_Basic constructor(val fullPath: String) {
 
     @Test fun test_linkRefMatcher() {
         val linkInfo = FileRef(fullPath)
@@ -140,7 +140,7 @@ class TestLinkRefMatcher constructor(val fullPath: String) {
                 /* @formatter:on */
             } else {
                 val data = ArrayList<Array<Any?>>()
-                for (elem in PathInfoListData.filePaths.toArrayList()) {
+                for (elem in MarkdownTestData.filePaths.toArrayList()) {
                     data.add(arrayOf(elem))
                 }
 

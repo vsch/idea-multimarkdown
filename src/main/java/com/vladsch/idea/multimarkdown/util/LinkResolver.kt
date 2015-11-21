@@ -29,9 +29,10 @@ abstract class LinkResolver(val project: Project?, val containingFile: FileRef) 
         fun wantAll(options: Int, flags: Int): Boolean = (options and flags == flags)
     }
 
-    abstract fun resolve(linkRef: LinkRef, options: Int = 0, inList: List<FileRef>? = null): LinkInfo?;
-    abstract fun isResolved(linkRef: LinkRef, options: Int = 0, inList: List<FileRef>? = null): Boolean;
-    abstract fun multiResolve(linkRef: LinkRef, options: Int = 0, inList: List<FileRef>? = null): List<LinkInfo>;
-    abstract fun isResolvedTo(linkRef: LinkRef, targetRef: FileRef, options: Int = 0): Boolean;
-    abstract fun analyze(linkRef: LinkRef, targetRef: FileRef): MismatchReasons;
+    abstract fun resolve(linkRef: LinkRef, options: Int = 0, inList: List<FileRef>? = null): LinkInfo?
+    abstract fun isResolved(linkRef: LinkRef, options: Int = 0, inList: List<FileRef>? = null): Boolean
+    abstract fun multiResolve(linkRef: LinkRef, options: Int = 0, inList: List<FileRef>? = null): List<LinkInfo>
+    abstract fun isResolvedTo(linkRef: LinkRef, targetRef: FileRef, options: Int = 0): Boolean
+    abstract fun analyze(linkRef: LinkRef, targetRef: FileRef): MismatchReasons
+    abstract fun linkAddress(linkRef: LinkRef, targetRef: FileRef):String
 }

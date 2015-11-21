@@ -30,7 +30,7 @@ class TestLinkRefMatcher_MultiSub {
         val matchText = linkRefMatcher.patternText()
         val regex = linkRefMatcher.patternRegex()
 
-        for (path in PathInfoListData.filePaths) {
+        for (path in MarkdownTestData.filePaths) {
             if (path.matches(regex)) {
                 list.add(path)
             }
@@ -53,7 +53,7 @@ class TestLinkRefMatcher_MultiSub {
         val matchText = linkRefMatcher.patternText()
         val regex = linkRefMatcher.patternRegex()
 
-        for (path in PathInfoListData.filePaths) {
+        for (path in MarkdownTestData.filePaths) {
             if (path.matches(regex)) {
                 list.add(path)
             }
@@ -81,7 +81,7 @@ class TestLinkRefMatcher_MultiSub {
         val matchText = linkRefMatcher.patternText()
         val regex = linkRefMatcher.patternRegex()
 
-        for (path in PathInfoListData.filePaths) {
+        for (path in MarkdownTestData.filePaths) {
             if (path.matches(regex)) {
                 list.add(path)
             }
@@ -114,7 +114,7 @@ class TestLinkRefMatcher_MultiSub {
         val matchText = linkRefMatcher.patternText()
         val regex = linkRefMatcher.patternRegex()
 
-        for (path in PathInfoListData.filePaths) {
+        for (path in MarkdownTestData.filePaths) {
             if (path.matches(regex)) {
                 list.add(path)
             }
@@ -147,7 +147,7 @@ class TestLinkRefMatcher_MultiSub {
         val matchText = linkRefMatcher.patternText()
         val regex = linkRefMatcher.patternRegex()
 
-        for (path in PathInfoListData.filePaths) {
+        for (path in MarkdownTestData.filePaths) {
             if (path.matches(regex)) {
                 list.add(path)
             }
@@ -170,7 +170,7 @@ class TestLinkRefMatcher_MultiSub {
         val matchText = linkRefMatcher.patternText()
         val regex = linkRefMatcher.patternRegex()
 
-        for (path in PathInfoListData.filePaths) {
+        for (path in MarkdownTestData.filePaths) {
             if (path.matches(regex)) {
                 list.add(path)
             }
@@ -190,7 +190,7 @@ class TestLinkRefMatcher_MultiSub {
         val matchText = linkRefMatcher.patternText()
         val regex = linkRefMatcher.patternRegex()
 
-        for (path in PathInfoListData.filePaths) {
+        for (path in MarkdownTestData.filePaths) {
             if (path.matches(regex)) {
                 list.add(path)
             }
@@ -210,7 +210,7 @@ class TestLinkRefMatcher_MultiSub {
         val matchText = linkRefMatcher.patternText()
         val regex = linkRefMatcher.patternRegex()
 
-        for (path in PathInfoListData.filePaths) {
+        for (path in MarkdownTestData.filePaths) {
             if (path.matches(regex)) {
                 list.add(path)
             }
@@ -231,7 +231,7 @@ class TestLinkRefMatcher_MultiSub {
         val matchText = linkRefMatcher.patternText()
         val regex = linkRefMatcher.patternRegex()
 
-        for (path in PathInfoListData.filePaths) {
+        for (path in MarkdownTestData.filePaths) {
             if (path.matches(regex)) {
                 list.add(path)
             }
@@ -251,7 +251,7 @@ class TestLinkRefMatcher_MultiSub {
         val matchText = linkRefMatcher.patternText()
         val regex = linkRefMatcher.patternRegex()
 
-        for (path in PathInfoListData.filePaths) {
+        for (path in MarkdownTestData.filePaths) {
             if (path.matches(regex)) {
                 list.add(path)
             }
@@ -275,7 +275,7 @@ class TestLinkRefMatcher_MultiSub {
         val regex = linkRefMatcher.patternRegex()
         var bestMatch = ""
 
-        for (path in PathInfoListData.filePaths) {
+        for (path in MarkdownTestData.filePaths) {
             if (path.matches(regex)) {
                 if (bestMatch.isEmpty() || bestMatch > path) bestMatch = path;
             }
@@ -297,7 +297,7 @@ class TestLinkRefMatcher_MultiSub {
         val matchText = linkRefMatcher.patternText()
         val regex = linkRefMatcher.patternRegex()
 
-        for (path in PathInfoListData.filePaths) {
+        for (path in MarkdownTestData.filePaths) {
             if (path.matches(regex)) {
                 list.add(path)
             }
@@ -319,7 +319,7 @@ class TestLinkRefMatcher_MultiSub {
         val regexWiki = linkRefMatcher.patternRegex(true)
         val regex = linkRefMatcher.patternRegex(false)
 
-        for (path in PathInfoListData.filePaths) {
+        for (path in MarkdownTestData.filePaths) {
             val pathInfo = FileRef(path)
             if (path.matches(if (pathInfo.isWikiPage) regexWiki else regex)) {
                 list.add(path)

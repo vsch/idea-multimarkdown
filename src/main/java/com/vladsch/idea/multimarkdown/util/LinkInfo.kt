@@ -129,6 +129,8 @@ open class LinkInfo(fullPath: String) : Comparable<LinkInfo> {
 
     fun withExt(ext: String?): LinkInfo = if (ext == null || isEmpty || this.ext == ext) this else LinkInfo(filePathNoExt + ext.startWith('.'))
     fun append(vararg parts: String): LinkInfo = LinkInfo.append(fullPath, *parts)
+    fun append(parts: Collection<String>): LinkInfo = LinkInfo.append(fullPath, parts)
+    fun append(parts: Sequence<String>): LinkInfo = LinkInfo.append(fullPath, parts)
 
     companion object {
         private val logger = Logger.getLogger(LinkInfo::class.java)
@@ -165,6 +167,14 @@ open class LinkInfo(fullPath: String) : Comparable<LinkInfo> {
         @JvmStatic fun isAbsolute(fullPath: String?): Boolean = fullPath != null && fullPath.startsWith(*ABSOLUTE_PREFIXES)
 
         @JvmStatic fun append(fullPath: String?, vararg parts: String): LinkInfo {
+            return append(fullPath, parts.asSequence());
+        }
+
+        @JvmStatic fun append(fullPath: String?, parts: Collection<String>): LinkInfo {
+           return append(fullPath, parts.asSequence())
+        }
+
+        @JvmStatic fun append(fullPath: String?, parts: Sequence<String>): LinkInfo {
             var path: String = cleanFullPath(fullPath)
 
             for (part in parts) {

@@ -69,3 +69,33 @@ fun String?.startsWith(ignoreCase: Boolean, vararg needles: String): Boolean {
     }
     return false
 }
+
+fun String?.count(char: Char, startIndex: Int = 0, endIndex: Int = Int.MAX_VALUE): Int {
+    if (this == null) return 0
+
+    var count = 0
+    var pos = startIndex
+    val lastIndex = Math.min(length, endIndex)
+    while (pos >= 0 && pos <= lastIndex) {
+        pos = indexOf(char, pos)
+        if (pos < 0) break
+        count++
+        pos++
+    }
+    return count
+}
+
+fun String?.count(char: String, startIndex: Int = 0, endIndex: Int = Int.MAX_VALUE): Int {
+    if (this == null) return 0
+
+    var count = 0
+    var pos = startIndex
+    val lastIndex = Math.min(length, endIndex)
+    while (pos >= 0 && pos <= lastIndex) {
+        pos = indexOf(char, pos)
+        if (pos < 0) break
+        count++
+        pos++
+    }
+    return count
+}

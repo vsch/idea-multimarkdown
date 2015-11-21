@@ -21,7 +21,6 @@ import com.intellij.util.indexing.FileBasedIndex
 import com.vladsch.idea.multimarkdown.MultiMarkdownFileType
 import org.intellij.images.fileTypes.ImageFileTypeManager
 import java.util.*
-import java.util.regex.Pattern
 import kotlin.text.Regex
 
 
@@ -49,7 +48,12 @@ class GitHubLinkResolver(project: Project?, containingFile: FileRef) : LinkResol
 
     override fun analyze(linkRef: LinkRef, targetRef: FileRef): MismatchReasons {
         assert(linkRef.containingFile == containingFile, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
-        return Context(this, linkRef).analyze()
+        return Context(this, linkRef).analyze(targetRef)
+    }
+
+    override fun linkAddress(linkRef: LinkRef, targetRef: FileRef): String {
+        assert(linkRef.containingFile == containingFile, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
+        return Context(this, linkRef).linkAddress(targetRef)
     }
 }
 
@@ -86,17 +90,20 @@ private class Context(val resolver: GitHubLinkResolver, val linkRef: LinkRef, va
         var targetRef: LinkInfo = linkRef
 
         if (!linkRef.isAbsolute) {
-            // TODO: resolve the relative link as per requested options
-            var resolvedRef: LinkInfo? = null
+            // resolve the relative link as per requested options
+            if (linkRef is WikiLinkRef && !LinkResolver.wantLooseMatch(options) && linkRef.hasExt) return null  // wiki links don't resolve with extensions
 
-            targetRef = resolvedRef as LinkInfo
+            val linkRefMatcher = LinkRefMatcher(linkRef, project?.basePath, LinkResolver.wantLooseMatch(options) || linkRef.isEmpty)
+            val matches = getMatchedFiles(linkRefMatcher.patternRegex(), inList)
+            var resolvedRef = (if (matches.size > 0) matches[0] else null) ?: return null
+            targetRef = resolvedRef
         }
 
         if (targetRef.isAbsolute) {
             return when {
                 targetRef.isExternal -> if (LinkResolver.wantExternal(options)) targetRef else null
                 targetRef.isLocal && targetRef.isURI && targetRef is UrlLinkRef -> if (!LinkResolver.wantLocal(options) || project == null) null else targetRef.virtualFileRef(project)
-                else -> null
+                else -> targetRef
             }
         }
 
@@ -104,11 +111,12 @@ private class Context(val resolver: GitHubLinkResolver, val linkRef: LinkRef, va
     }
 
     fun multiResolve(): List<LinkInfo> {
+        if (linkRef is WikiLinkRef && !LinkResolver.wantLooseMatch(options) && linkRef.hasExt) return ArrayList()  // wiki links don't resolve with extensions
         val linkRefMatcher = LinkRefMatcher(linkRef, project?.basePath, LinkResolver.wantLooseMatch(options) || linkRef.isEmpty)
         return getMatchedFiles(linkRefMatcher.patternRegex(), inList)
     }
 
-    fun analyze(): MismatchReasons {
+    fun analyze(targetRef: FileRef): MismatchReasons {
         throw UnsupportedOperationException()
     }
 
@@ -137,19 +145,58 @@ private class Context(val resolver: GitHubLinkResolver, val linkRef: LinkRef, va
                 val project: Project = resolver.project
                 FileBasedIndex.getInstance().getFilesWithKey(FilenameIndex.NAME, targetFileTypes, { file ->
                     if (file.path.matches(matchPattern)) {
-                        matches.add(VirtualFileRef(file, project))
+                        if (LinkResolver.wantLocal(options)) matches.add(VirtualFileRef(file, project))
+                        if (LinkResolver.wantExternal(options)) {
+                            // TODO: try to resolve external reference
+                            //matches.add(VirtualFileRef(file, project))
+                        }
                     }
                     true
                 }, GlobalSearchScope.projectScope(project))
             }
         } else {
             for (fileRef in fromList) {
-                if (fileRef.filePath.matches(matchPattern)) {
-                    matches.add(fileRef)
+                // TODO: here we can have both local and external we skip external???
+                if (fileRef.isLocal) {
+                    if (fileRef.filePath.matches(matchPattern)) {
+                        if (LinkResolver.wantLocal(options)) matches.add(fileRef)
+                        if (LinkResolver.wantExternal(options)) {
+                            // TODO: try to resolve external reference
+                            matches.add(fileRef)
+                        }
+                    }
                 }
             }
         }
+        if (linkRef is WikiLinkRef) matches.sort { self, other -> self.compareTo(other) }
         return matches
+    }
+
+    fun relativePath(targetRef: FileRef): String {
+        var lastSlash = -1
+        val containingFilePath = linkRef.containingFile.path.endWith('/')
+        val iMax = Math.max(containingFilePath.length, targetRef.path.length)
+        for (i in  0..iMax) {
+            if (containingFilePath[i] != targetRef.filePath[i]) break
+            if (containingFilePath[i] == '/') lastSlash = i
+        }
+
+        // for every dir in containingFilePath after lastSlash add ../ as the prefix
+        var prefix = "../".repeat(containingFilePath.count('/', lastSlash+1))
+        prefix += targetRef.path.substring(lastSlash+1)
+        return prefix
+    }
+
+    fun linkAddress(targetRef: FileRef): String {
+        if (linkRef is WikiLinkRef || (targetRef.isWikiPage && !linkRef.hasExt)) {
+            return if (linkRef is WikiLinkRef) targetRef.fileNameNoExt.replace('-', ' ') else targetRef.fileNameNoExt.replace(" ", "%20")
+        } else {
+            if (targetRef.isWikiPage) {
+                return if (!linkRef.hasExt) targetRef.fileNameNoExt.replace(" ", "%20") else relativePath(targetRef).replace(" ", "%20")
+            } else {
+                return relativePath(targetRef).replace(" ", "%20")
+            }
+        }
     }
 
 }

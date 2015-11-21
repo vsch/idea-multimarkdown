@@ -61,7 +61,7 @@ class LinkRefMatcher(val linkRef: LinkRef, projectBasePath: String? = null, val 
         val suffix = if (isOptional) "\\E)?" else "\\E"
         val prefix = if (isOptional) "(?:\\Q" else "\\Q"
         return when {
-            linkRef is WikiLinkRef -> prefix + pathText.replace("-| ", "\\E(?:-| )\\Q") + suffix
+            linkRef is WikiLinkRef -> prefix + pathText.replace("-| ".toRegex(), "\\\\E(?:-| )\\\\Q") + suffix
             else -> prefix + pathText.replace("%23", "#") + suffix
         }
     }
@@ -84,7 +84,7 @@ class LinkRefMatcher(val linkRef: LinkRef, projectBasePath: String? = null, val 
             // spaces match - and spaces, all subdirectories under Wiki Home match, only WIKI targets accepted, no case sensitivity
             val filenamePattern = matchPathText(linkRef.fileNameNoExt, emptyMatchesAll = true)
             val anchorPattern = matchPathText(linkRef.anchorText, isOptional = true)
-            val extensionPattern = extensionPattern(looseMatch)
+            val extensionPattern = extensionPattern(true) + "?"
 
             pattern = "^" + matchPathText(linkRef.containingFile.wikiDir.endWith('/')) + subDirPattern + filenamePattern + anchorPattern + extensionPattern + "$"
         } else {
