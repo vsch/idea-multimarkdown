@@ -21,22 +21,22 @@
 package com.vladsch.idea.multimarkdown.util
 
 fun String?.endWith(suffix: Char, ignoreCase: Boolean = false): String {
-    if (this != null && isNotEmpty() && !endsWith(suffix, ignoreCase)) return plus(suffix)
+    if (this != null && !isEmpty() && !endsWith(suffix, ignoreCase)) return plus(suffix)
     return orEmpty()
 }
 
 fun String?.endWith(suffix: String, ignoreCase: Boolean = false): String {
-    if (this != null && isNotEmpty() && suffix.isNotEmpty() && !endsWith(suffix, ignoreCase)) return plus(suffix)
+    if (this != null && !isEmpty() && suffix.isNotEmpty() && !endsWith(suffix, ignoreCase)) return plus(suffix)
     return orEmpty()
 }
 
 fun String?.startWith(prefix: Char, ignoreCase: Boolean = false): String {
-    if (this != null && isNotEmpty() && !startsWith(prefix, ignoreCase)) return prefix.plus(this.orEmpty())
+    if (this != null && !isEmpty() && !startsWith(prefix, ignoreCase)) return prefix.plus(this.orEmpty())
     return orEmpty()
 }
 
 fun String?.startWith(prefix: String, ignoreCase: Boolean = false): String {
-    if (this != null && isNotEmpty() && prefix.isNotEmpty() && !startsWith(prefix, ignoreCase)) return prefix.plus(this)
+    if (this != null && !isEmpty() && prefix.isNotEmpty() && !startsWith(prefix, ignoreCase)) return prefix.plus(this)
     return orEmpty()
 }
 

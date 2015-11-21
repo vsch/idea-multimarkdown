@@ -21,18 +21,18 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
 @RunWith(value = Parameterized::class)
-class TestPathInfo_WikiRepo constructor(val fullPath: String
-                                        , val isUnderWikiDir: Boolean
-                                        , val isWikiPage: Boolean
-                                        , val isWikiHomePage: Boolean
-                                        , val wikiDir: String
-                                        , val mainRepoDir: String
-                                        , val pathFromWikiDir: String
-                                        , val pathFromMainRepoDir: String
-                                        , val upDirectoriesToWikiHome: Int
+class TestFileInfo constructor(val fullPath: String
+                               , val isUnderWikiDir: Boolean
+                               , val isWikiPage: Boolean
+                               , val isWikiHomePage: Boolean
+                               , val wikiDir: String
+                               , val mainRepoDir: String
+                               , val pathFromWikiDir: String
+                               , val pathFromMainRepoDir: String
+                               , val upDirectoriesToWikiHome: Int
 ) {
 
-    val pathInfo = PathInfo(fullPath);
+    val pathInfo = FileRef(fullPath);
 
     /* @formatter:off */
     @Test fun test_isUnderWikiDir() { assertEquals(isUnderWikiDir, pathInfo.isUnderWikiDir) }
@@ -77,10 +77,10 @@ class TestPathInfo_WikiRepo constructor(val fullPath: String
                 /* 17 */arrayOf<Any?>("/home/home.wiki/path/with/file-Name.md"                   , true            , true        , false           , "/home/home.wiki"      , "/home"      , "path/with/file-Name.md"                                  , "home.wiki/path/with/file-Name.md"                        , 3                        ),
                 /* 18 */arrayOf<Any?>("/home/home.wiki/pathName/with/fileName.md"                , true            , true        , false           , "/home/home.wiki"      , "/home"      , "pathName/with/fileName.md"                               , "home.wiki/pathName/with/fileName.md"                     , 3                        ),
                 /* 19 */arrayOf<Any?>("/home/home.wiki/path-Name/with/file-Name.md"              , true            , true        , false           , "/home/home.wiki"      , "/home"      , "path-Name/with/file-Name.md"                             , "home.wiki/path-Name/with/file-Name.md"                   , 3                        ),
-                /* 20 */arrayOf<Any?>("/is-home/is-home.wiki/file-Name"                          , true            , false       , false           , "/is-home/is-home.wiki", "/is-home"   , "file-Name"                                               , "is-home.wiki/file-Name"                                  , 1                        ),
-                /* 21 */arrayOf<Any?>("/is-home/is-home.wiki/fileName.md"                        , true            , true        , false           , "/is-home/is-home.wiki", "/is-home"   , "fileName.md"                                             , "is-home.wiki/fileName.md"                                , 1                        ),
-                /* 22 */arrayOf<Any?>("/is-home/is-home.wiki/file-Name.md"                       , true            , true        , false           , "/is-home/is-home.wiki", "/is-home"   , "file-Name.md"                                            , "is-home.wiki/file-Name.md"                               , 1                        ),
-                /* 23 */arrayOf<Any?>("/is-home/is-home.wiki/path/with/fileName.md"              , true            , true        , false           , "/is-home/is-home.wiki", "/is-home"   , "path/with/fileName.md"                                   , "is-home.wiki/path/with/fileName.md"                      , 3                        ),
+                /* 20 */arrayOf<Any?>("/./is-home/is-home.wiki/file-Name"                        , true            , false       , false           , "/is-home/is-home.wiki", "/is-home"   , "file-Name"                                               , "is-home.wiki/file-Name"                                  , 1                        ),
+                /* 21 */arrayOf<Any?>("/./is-home/is-home.wiki/fileName.md"                      , true            , true        , false           , "/is-home/is-home.wiki", "/is-home"   , "fileName.md"                                             , "is-home.wiki/fileName.md"                                , 1                        ),
+                /* 22 */arrayOf<Any?>("/./is-home/is-home.wiki/file-Name.md"                     , true            , true        , false           , "/is-home/is-home.wiki", "/is-home"   , "file-Name.md"                                            , "is-home.wiki/file-Name.md"                               , 1                        ),
+                /* 23 */arrayOf<Any?>("/./is-home/is-home.wiki/path/with/fileName.md"            , true            , true        , false           , "/is-home/is-home.wiki", "/is-home"   , "path/with/fileName.md"                                   , "is-home.wiki/path/with/fileName.md"                      , 3                        ),
                 /* 24 */arrayOf<Any?>("/is-home/is-home.wiki/path/with/file-Name.md"             , true            , true        , false           , "/is-home/is-home.wiki", "/is-home"   , "path/with/file-Name.md"                                  , "is-home.wiki/path/with/file-Name.md"                     , 3                        ),
                 /* 25 */arrayOf<Any?>("/is-home/is-home.wiki/pathName/with/fileName.md"          , true            , true        , false           , "/is-home/is-home.wiki", "/is-home"   , "pathName/with/fileName.md"                               , "is-home.wiki/pathName/with/fileName.md"                  , 3                        ),
                 /* 26 */arrayOf<Any?>("/is-home/is-home.wiki/pathName/with/fileName"             , true            , false       , false           , "/is-home/is-home.wiki", "/is-home"   , "pathName/with/fileName"                                  , "is-home.wiki/pathName/with/fileName"                     , 3                        ),

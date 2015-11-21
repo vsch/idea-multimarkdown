@@ -14,7 +14,11 @@
  */
 package com.vladsch.idea.multimarkdown.util
 
-open class LinkRef(fullPath: String, val anchor: String?) : PathInfo(fullPath) {
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.vfs.VirtualFileManager
+
+open class LinkRef(val containingFile: FileRef, fullPath: String, anchorTxt: String?) : LinkInfo(fullPath) {
+    val anchor: String? = anchorTxt?.removePrefix("#")
     val hasAnchor: Boolean
         get() = anchor != null
 
@@ -24,46 +28,42 @@ open class LinkRef(fullPath: String, val anchor: String?) : PathInfo(fullPath) {
     override val isEmpty: Boolean
         get() = fullPath.isEmpty() && !hasAnchor
 
-    val isDoNothing: Boolean
+    val isDoNothingAnchor: Boolean
         get() = isSelfAnchor && (anchor.isNullOrEmpty())
 
     val anchorText: String
         get() = if (anchor == null) EMPTY_STRING else "#" + anchor
 
-    open val filePathWithAnchor: String
+    val filePathWithAnchor: String
         get() = super.filePath + anchorText
 
-    open val filePathNoExtWithAnchor: String
+    val filePathNoExtWithAnchor: String
         get() = super.filePathNoExt + anchorText
 
     override val isRelative: Boolean
         get() = !isSelfAnchor && isRelative(fullPath)
 
+    override val isLocal: Boolean
+        get() = isSelfAnchor || isLocal(fullPath)
+
     override val isAbsolute: Boolean
         get() = isSelfAnchor || isAbsolute(fullPath)
 
+    override fun toString(): String = filePathWithAnchor
+
     open val linkExtensions: Array<String>
         get() {
-            when (ext) {
-                in IMAGE_EXTENSIONS -> return IMAGE_EXTENSIONS
-                in MARKDOWN_EXTENSIONS -> return MARKDOWN_EXTENSIONS
+            when {
+                ext in IMAGE_EXTENSIONS -> return IMAGE_EXTENSIONS
+                ext.isEmpty(), ext in MARKDOWN_EXTENSIONS -> return MARKDOWN_EXTENSIONS
                 else -> return arrayOf(ext)
             }
         }
 
     companion object {
-        @JvmStatic fun parseLinkRef(fullPath: String): LinkRef {
+        @JvmStatic fun parseLinkRef(containingFile: FileRef, fullPath: String, linkRefType: (containingFile: FileRef, linkRef: String, anchor: String?) -> LinkRef = ::FileLinkRef): LinkRef {
             var linkRef = fullPath;
-            var protocol: String? = null
             var anchor: String? = null;
-
-            for (uri in PathInfo.URI_PREFIXES) {
-                if (linkRef.startsWith(uri)) {
-                    protocol = uri
-                    linkRef = if (uri.length == linkRef.length) EMPTY_STRING else linkRef.substring(uri.length)
-                    break;
-                }
-            }
 
             var anchorPos = linkRef.indexOf('#')
             if (anchorPos >= 0) {
@@ -71,61 +71,39 @@ open class LinkRef(fullPath: String, val anchor: String?) : PathInfo(fullPath) {
                 linkRef = if (anchorPos == 0) EMPTY_STRING else linkRef.substring(0, anchorPos)
             }
 
-            return if (protocol != null) UrlLinkRef(protocol.orEmpty(), linkRef, anchor) else LinkRef(linkRef, anchor)
+            return if (isURI(linkRef) && !isLocal(linkRef)) UrlLinkRef(containingFile, linkRef, anchor)
+            else linkRefType(containingFile, linkRef, anchor)
         }
     }
 }
 
-open class UrlLinkRef(val protocol: String, fullPath: String, anchor: String?) : LinkRef(fullPath, anchor) {
-    override val filePathWithAnchor: String
-        get() = protocol + super.filePathWithAnchor
-
-    override val filePathNoExtWithAnchor: String
-        get() = protocol + super.filePathNoExtWithAnchor
-
-    override val filePath: String
-        get() = protocol + super.filePath
-
-    override val filePathNoExt: String
-        get() = protocol + super.filePathNoExt
-
+open class UrlLinkRef(containingFile: FileRef, fullPath: String, anchor: String?) : LinkRef(containingFile, fullPath, anchor) {
     override val isAbsolute: Boolean
         get() = true
 
     override val isRelative: Boolean
         get() = false
 
-    override val isExternal: Boolean
-        get() = protocol in PathInfo.EXTERNAL_PREFIXES
-
     override val isURI: Boolean
         get() = true
-}
 
-open class FileLinkRef(val containingFile: FileInfo, fullPath: String, anchor: String?) : LinkRef(fullPath, anchor) {
-
-    val preMatchPattern: String by lazy { getMatchPattern(true) }
-    val matchPattern: String by lazy { getMatchPattern(false) }
-
-
-    open fun getMatchPattern(preMatch: Boolean): String {
+    open fun virtualFileRef(project: Project): VirtualFileRef? {
+        val virtualFile = if (isLocal) null else VirtualFileManager.getInstance().findFileByUrl(fullPath)
+        return if (virtualFile == null) null else VirtualFileRef(virtualFile, project);
     }
 }
 
-open class WikiLinkRef(containingFile: FileInfo, fullPath: String, anchor: String?) : FileLinkRef(containingFile, fullPath, anchor) {
+open class FileLinkRef(containingFile: FileRef, fullPath: String, anchor: String?) : LinkRef(containingFile, fullPath, anchor) {
+
+}
+
+open class WikiLinkRef(containingFile: FileRef, fullPath: String, anchor: String?) : FileLinkRef(containingFile, fullPath, anchor) {
     override val linkExtensions: Array<String>
         get() = WIKI_PAGE_EXTENSIONS
-
-    override fun getMatchPattern(preMatch: Boolean): String {
-    }
 }
 
-open class ImageLinkRef(containingFile: FileInfo, fullPath: String, anchor: String?) : FileLinkRef(containingFile, fullPath, anchor) {
+open class ImageLinkRef(containingFile: FileRef, fullPath: String, anchor: String?) : FileLinkRef(containingFile, fullPath, anchor) {
     override val linkExtensions: Array<String>
         get() = IMAGE_EXTENSIONS
-
-    override fun getMatchPattern(preMatch: Boolean): String {
-    }
-
 }
 

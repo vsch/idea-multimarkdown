@@ -35,8 +35,10 @@ import org.junit.runners.Suite;
         TestFileReferenceLinkGitHubRulesUnresolvedReasons.class,
         TestFileReferenceList.class,
         TestPathInfo.class,
-        TestPathInfo_WikiRepo.class,
-        TestLinkRef.class
+        TestFileInfo.class,
+        TestLinkRef.class,
+        TestLinkRefMatcher.class,
+        TestLinkRefMatcher_MultiSub.class
 })
 public class UtilTestSuite {
 }

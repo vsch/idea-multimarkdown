@@ -24,12 +24,10 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownFileTypeFactory
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin
 import org.apache.log4j.Logger
 
-open class PathInfo(fullPath: String) : Comparable<PathInfo> {
+open class LinkInfo(fullPath: String) : Comparable<LinkInfo> {
     protected val fullPath: String
     protected val nameStart: Int
     protected val nameEnd: Int
-    protected val mainRepoDirEnd: Int
-    protected val wikiHomeDirEnd: Int
 
     init {
         var cleanPath = cleanFullPath(fullPath)
@@ -39,81 +37,26 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
 
         val extStart = cleanPath.lastIndexOf('.')
         this.nameEnd = if (extStart <= nameStart) cleanPath.length else extStart
-
-        // gitHub wiki home will be like ..../dirname/dirname.wiki
-        var wikiHomeEnd = cleanPath.lastIndexOf(WIKI_HOME_EXTENSION + "/", nameStart)
-
-        if (wikiHomeEnd >= nameStart || wikiHomeEnd < 0) wikiHomeEnd = 0
-        var projHomeEnd = 0
-
-        if (wikiHomeEnd > 0) {
-            val wikiDirNameStart = cleanPath.lastIndexOf('/', wikiHomeEnd)
-            if (wikiDirNameStart > 1) {
-                val wikiDirName = cleanPath.substring(wikiDirNameStart + 1, wikiHomeEnd)
-                // now previous to start has to be the same directory
-                val mainProjDirStart = cleanPath.lastIndexOf('/', wikiDirNameStart - 1)
-                if (mainProjDirStart >= 0) {
-                    val mainProjDirName = cleanPath.substring(mainProjDirStart + 1, wikiDirNameStart)
-                    if (mainProjDirName == wikiDirName) {
-                        projHomeEnd = wikiDirNameStart
-                        wikiHomeEnd += WIKI_HOME_EXTENSION.length
-                    } else {
-                        wikiHomeEnd = 0
-                    }
-                } else {
-                    wikiHomeEnd = 0
-                }
-            } else {
-                wikiHomeEnd = 0
-            }
-        }
-
         this.fullPath = cleanPath
-
-        this.wikiHomeDirEnd = wikiHomeEnd
-        this.mainRepoDirEnd = projHomeEnd
     }
 
-    val isUnderWikiDir: Boolean
-        get() = wikiHomeDirEnd > 0
-
-    val isWikiPage: Boolean
-        get() = isUnderWikiDir && isWikiPageExt
-
-    val isWikiHomePage: Boolean
-        get() = isWikiPage && WIKI_HOME_FILENAME == fileNameNoExt
-
-    val wikiDir: String
-        get() = if (wikiHomeDirEnd <= 0) EMPTY_STRING else filePath.substring(0, wikiHomeDirEnd)
-
-    val mainRepoDir: String
-        get() = if (mainRepoDirEnd <= 0) EMPTY_STRING else filePath.substring(0, mainRepoDirEnd)
-
-    val pathFromWikiDir: String
-        get() = if (wikiHomeDirEnd <= 0) filePath else filePath.substring(wikiHomeDirEnd + 1)
-
-    val pathFromMainRepoDir: String
-        get() = if (mainRepoDirEnd <= 0) filePath else filePath.substring(mainRepoDirEnd + 1)
-
-    val upDirectoriesToWikiHome: Int by lazy {
-        if (wikiHomeDirEnd <= 0 || wikiHomeDirEnd == filePath.length) 0
-        else {
-            var pos = wikiHomeDirEnd
-            var upDirs = 0
-            while (pos < filePath.length) {
-                pos = filePath.indexOf('/', pos)
-                if (pos < 0) break;
-
-                upDirs++
-                pos++
-            }
-
-            upDirs
-        }
-    }
-
-    override fun compareTo(other: PathInfo): Int = fullPath.compareTo(other.fullPath)
+    override fun compareTo(other: LinkInfo): Int = fullPath.compareTo(other.fullPath)
     override fun toString(): String = fullPath
+
+    val filePath: String
+        get() = fullPath
+
+    val filePathNoExt: String
+        get() = if (nameEnd >= fullPath.length) fullPath else fullPath.substring(0, nameEnd)
+
+    val path: String
+        get() = if (nameStart == 0) EMPTY_STRING else fullPath.substring(0, nameStart)
+
+    val fileName: String
+        get() = if (nameStart == 0) fullPath else fullPath.substring(nameStart, fullPath.length)
+
+    val fileNameNoExt: String
+        get() = if (nameStart == 0 && nameEnd >= fullPath.length) fullPath else fullPath.substring(nameStart, nameEnd)
 
     val ext: String
         get() = if (nameEnd + 1 >= fullPath.length) EMPTY_STRING else fullPath.substring(nameEnd + 1, fullPath.length)
@@ -131,18 +74,6 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
 
     val isWikiPageExt: Boolean
         get() = isWikiPageExt(ext)
-
-    open val filePath: String
-        get() = fullPath
-
-    open val filePathNoExt: String
-        get() = if (nameEnd >= fullPath.length) fullPath else fullPath.substring(0, nameEnd)
-
-    val path: String
-        get() = if (nameStart == 0) EMPTY_STRING else fullPath.substring(0, nameStart)
-
-    val fileName: String
-        get() = if (nameStart == 0) fullPath else fullPath.substring(nameStart, fullPath.length)
 
     fun contains(c: Char, ignoreCase: Boolean = false): Boolean {
         return fullPath.contains(c, ignoreCase)
@@ -170,32 +101,37 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
     fun fileNameContainsSpaces(): Boolean = fileNameContains(' ')
     fun fileNameContainsAnchor(): Boolean = fileNameContains('#')
 
-    val fileNameNoExt: String
-        get() = if (nameStart == 0 && nameEnd >= fullPath.length) fullPath else fullPath.substring(nameStart, nameEnd)
-
     open val isEmpty: Boolean
         get() = fullPath.isEmpty()
 
     val isRoot: Boolean
         get() = fullPath == "/"
 
+    // these ones need resolving to absolute reference
     open val isRelative: Boolean
         get() = isRelative(fullPath)
 
+    // these ones resolve to local references, if they resolve
+    open val isLocal: Boolean
+        get() = isLocal(fullPath)
+
+    // these ones resolve to external references, if they resolve
     open val isExternal: Boolean
         get() = isExternal(fullPath)
 
+    // these ones are URI prefixed
     open val isURI: Boolean
         get() = isURI(fullPath)
 
+    // these ones are not relative, ie don't need resolving
     open val isAbsolute: Boolean
         get() = isAbsolute(fullPath)
 
-    fun withExt(ext: String?): PathInfo = if (ext == null || isEmpty || this.ext == ext) this else PathInfo(filePathNoExt + ext.startWith('.'))
-    fun append(vararg parts: String): PathInfo = PathInfo.append(fullPath, *parts)
+    fun withExt(ext: String?): LinkInfo = if (ext == null || isEmpty || this.ext == ext) this else LinkInfo(filePathNoExt + ext.startWith('.'))
+    fun append(vararg parts: String): LinkInfo = LinkInfo.append(fullPath, *parts)
 
     companion object {
-        private val logger = Logger.getLogger(PathInfo::class.java)
+        private val logger = Logger.getLogger(LinkInfo::class.java)
 
         @JvmStatic val EMPTY_STRING = ""
 
@@ -209,15 +145,26 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
 
         @JvmStatic val EXTERNAL_PREFIXES = arrayOf("http://", "ftp://", "https://", "mailto:")
         @JvmStatic val URI_PREFIXES = arrayOf("file://", *EXTERNAL_PREFIXES)
+        @JvmStatic val RELATIVE_PREFIXES = arrayOf<String>()
+        @JvmStatic val LOCAL_PREFIXES = arrayOf("file:", "/", *RELATIVE_PREFIXES)
         @JvmStatic val ABSOLUTE_PREFIXES = arrayOf("/", *URI_PREFIXES)
-        @JvmStatic val RELATIVE_PREFIXES = arrayOf("#")
 
-        @JvmStatic fun isRelative(fullPath: String?): Boolean = fullPath == null || fullPath.startsWith(*RELATIVE_PREFIXES) || !isAbsolute(fullPath)
-        @JvmStatic fun isExternal(href: String?): Boolean = href != null && href.startsWith(*EXTERNAL_PREFIXES)
-        @JvmStatic fun isURI(href: String?): Boolean = href != null && href.startsWith(*URI_PREFIXES)
-        @JvmStatic fun isAbsolute(href: String?): Boolean = href != null && href.startsWith(*ABSOLUTE_PREFIXES)
+        // true if needs resolving to absolute reference
+        @JvmStatic fun isRelative(fullPath: String?): Boolean = fullPath != null && !isAbsolute(fullPath)
 
-        @JvmStatic fun append(fullPath: String?, vararg parts: String): PathInfo {
+        // true if resolves to external
+        @JvmStatic fun isExternal(fullPath: String?): Boolean = fullPath != null && fullPath.startsWith(*EXTERNAL_PREFIXES)
+
+        // true if resolves to local, if it resolves
+        @JvmStatic fun isLocal(fullPath: String?): Boolean = fullPath != null && (fullPath.startsWith(*LOCAL_PREFIXES) || isRelative(fullPath))
+
+        // true if it is a URI
+        @JvmStatic fun isURI(fullPath: String?): Boolean = fullPath != null && fullPath.startsWith(*URI_PREFIXES)
+
+        // true if it is already an absolute ref, no need to resolve relative, just see if it maps
+        @JvmStatic fun isAbsolute(fullPath: String?): Boolean = fullPath != null && fullPath.startsWith(*ABSOLUTE_PREFIXES)
+
+        @JvmStatic fun append(fullPath: String?, vararg parts: String): LinkInfo {
             var path: String = cleanFullPath(fullPath)
 
             for (part in parts) {
@@ -226,14 +173,14 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
 
                 if (cleanPart !in arrayOf("", ".")) {
                     if (cleanPart == "..") {
-                        path = PathInfo(path).path.removeSuffix("/")
+                        path = LinkInfo(path).path.removeSuffix("/")
                     } else {
                         if (path.isEmpty() || !path.endsWith('/')) path += '/'
                         path += cleanPart
                     }
                 }
             }
-            return PathInfo(path)
+            return LinkInfo(path)
         }
 
         @JvmStatic fun isExtIn(ext: String, ignoreCase: Boolean = true, vararg extList: String): Boolean {
@@ -253,37 +200,6 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
             if (!cleanPath.endsWith("//")) cleanPath = cleanPath.removeSuffix("/")
             return cleanPath.removeSuffix(".")
         }
-    }
-}
-
-open class FileInfo(val virtualFile: VirtualFile, val project: Project) : PathInfo(virtualFile.path) {
-
-    constructor(psiFile: PsiFile) : this(psiFile.virtualFile, psiFile.project)
-
-    val psiFile: PsiFile? by lazy { PsiManager.getInstance(project).findFile(virtualFile) }
-
-    val exists: Boolean
-        get() = virtualFile.exists()
-
-    val gitHubRepo: GitHubRepo? by lazy {
-        MultiMarkdownPlugin.getProjectComponent(project)?.getGitHubRepo(path)
-    }
-
-    val isUnderVcs: Boolean
-        get() {
-            val status = FileStatusManager.getInstance(project).getStatus(virtualFile)
-            val id = status.id
-            val fileStatus = status == FileStatus.DELETED || status == FileStatus.ADDED || status == FileStatus.UNKNOWN || status == FileStatus.IGNORED || id.startsWith("IGNORE")
-            return !fileStatus
-        }
-
-    val gitHubRepoPath: String?
-        get() = gitHubRepo?.basePath
-}
-
-open class PathInfoList : IndexedList<String, PathInfo>() {
-    override fun elemKey(item: PathInfo): String {
-        return item.fileNameNoExt.toLowerCase();
     }
 }
 

@@ -24,14 +24,12 @@ import com.vladsch.idea.multimarkdown.spellchecking.Suggestion;
 import com.vladsch.idea.multimarkdown.spellchecking.SuggestionList;
 import com.vladsch.idea.multimarkdown.util.FileReference;
 import com.vladsch.idea.multimarkdown.util.FileReferenceList;
-import com.vladsch.idea.multimarkdown.util.PathInfo;
-import com.vladsch.idea.multimarkdown.util.PathInfoList;
+import com.vladsch.idea.multimarkdown.util.LinkInfo;
 import org.junit.internal.ArrayComparisonFailure;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.StreamHandler;
 
 import static org.junit.Assert.*;
 
@@ -68,13 +66,13 @@ public class TestUtils {
         new OrderedFileReferenceComparison().arrayEquals(null, expected.get(), actual.get());
     }
 
-    public static void compareOrderedLists(String message, ArrayList<PathInfo> expected, PathInfoList actual) {
-        new OrderedPathInfoComparison().arrayEquals(null, expected.toArray(), actual.toArray());
-    }
-
-    public static void compareUnorderedLists(String message, ArrayList<PathInfo> expected, PathInfoList actual) {
-        new UnorderedPathInfoComparison().arrayEquals(null, expected.toArray(), actual.toArray());
-    }
+    //public static void compareOrderedLists(String message, ArrayList<LinkInfo> expected, PathInfoList actual) {
+    //    new OrderedPathInfoComparison().arrayEquals(null, expected.toArray(), actual.toArray());
+    //}
+    //
+    //public static void compareUnorderedLists(String message, ArrayList<LinkInfo> expected, PathInfoList actual) {
+    //    new UnorderedPathInfoComparison().arrayEquals(null, expected.toArray(), actual.toArray());
+    //}
 
     public static void compareOrderedLists(String message, ArrayList<String> expected, Set<String> actual) {
         new OrderedPathInfoComparison().arrayEquals(null, expected.toArray(), actual.toArray());
@@ -109,7 +107,7 @@ public class TestUtils {
     }
 
     public static void compareOrderedLists(String message, List<String>expected, List<String> actual) {
-        new OrderedStringComparison().arrayEquals(null, expected.toArray(new String[expected.size()]), actual.toArray(new String[actual.size()]));
+        new OrderedStringComparison().arrayEquals(message, expected.toArray(new String[expected.size()]), actual.toArray(new String[actual.size()]));
     }
 
     public static void compareOrderedLists(String message, SuggestionList expected, SuggestionList actual) {
@@ -144,7 +142,34 @@ public class TestUtils {
         compareOrderedLists((String) null, suggestions, suggestionList);
     }
 
+
+    public static void assertEqualsMessage(String message, Object expected, Object actual) {
+        if ((expected == null && actual != null) || (expected != null && !expected.equals(actual))) {
+            failNotEquals(message, expected, actual);
+        }
+    }
+
+    public static void assertEqualsMessage(String message, boolean expected, boolean actual) {
+        if (expected != actual) {
+            failNotEquals(message, expected, actual);
+        }
+    }
+
+    public static void assertEqualsMessage(String message, int expected, int actual) {
+        if (expected != actual) {
+            failNotEquals(message, expected, actual);
+        }
+    }
+
     public static void failNotEquals(String message, Object expected, Object actual) {
+        fail(format(message, expected, actual));
+    }
+
+    public static void failNotEquals(String message, boolean expected, boolean actual) {
+        fail(format(message, expected, actual));
+    }
+
+    public static void failNotEquals(String message, int expected, int actual) {
         fail(format(message, expected, actual));
     }
 
@@ -176,27 +201,27 @@ public class TestUtils {
         }
     }
 
-    public static class OrderedPathInfoComparison extends OrderedComparisonCriteria<PathInfo> {
+    public static class OrderedPathInfoComparison extends OrderedComparisonCriteria<LinkInfo> {
         @Override
-        protected boolean elementsAreEqual(PathInfo o1, PathInfo o2) {
+        protected boolean elementsAreEqual(LinkInfo o1, LinkInfo o2) {
             return o1.compareTo(o2) == 0;
         }
 
         @Override
-        protected void assertElementsAreEqual(PathInfo o1, PathInfo o2) {
+        protected void assertElementsAreEqual(LinkInfo o1, LinkInfo o2) {
             if (o1.compareTo(o2) != 0) failNotEquals("PathInfo not equal", o1, o2);
         }
     }
 
 
-    public static class UnorderedPathInfoComparison extends UnorderedComparisonCriteria<PathInfo> {
+    public static class UnorderedPathInfoComparison extends UnorderedComparisonCriteria<LinkInfo> {
         @Override
-        protected boolean elementsAreEqual(PathInfo o1, PathInfo o2) {
+        protected boolean elementsAreEqual(LinkInfo o1, LinkInfo o2) {
             return o1.compareTo(o2) == 0;
         }
 
         @Override
-        protected void assertElementsAreEqual(PathInfo o1, PathInfo o2) {
+        protected void assertElementsAreEqual(LinkInfo o1, LinkInfo o2) {
             if (o1.compareTo(o2) != 0) failNotEquals("PathInfo not equal", o1, o2);
         }
     }
