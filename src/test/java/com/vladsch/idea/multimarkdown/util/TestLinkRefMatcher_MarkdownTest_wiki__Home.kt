@@ -22,18 +22,17 @@ import org.junit.runners.Parameterized
 import java.util.*
 
 @RunWith(value = Parameterized::class)
-class TestLinkRefMatcher_WikiLinks constructor(val fullPath: String
-                                               , val linkRefType: (containingFile: FileRef, linkRef: String, anchor: String?) -> LinkRef
-                                               , val linkText: String
-                                               , val linkAddress: String
-                                               , val linkAnchor: String?
-                                               , val linkTitle: String?
-                                               , resolvesLocalRel: String?
-                                               , resolvesExternalRel: String?
-                                               , val linkAddressText: String?
-                                               , multiResolvePartial: Array<String>
+class TestLinkRefMatcher_MarkdownTest_wiki__Home constructor(val fullPath: String
+                                                             , val linkRefType: (containingFile: FileRef, linkRef: String, anchor: String?) -> LinkRef
+                                                             , val linkText: String
+                                                             , val linkAddress: String
+                                                             , val linkAnchor: String?
+                                                             , val linkTitle: String?
+                                                             , resolvesLocalRel: String?
+                                                             , resolvesExternalRel: String?
+                                                             , val linkAddressText: String?
+                                                             , multiResolvePartial: Array<String>
 ) {
-
     val projectBasePath = "/Users/vlad/src/MarkdownTest/"
     val wikiBasePath = "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki"
 
@@ -46,7 +45,7 @@ class TestLinkRefMatcher_WikiLinks constructor(val fullPath: String
     val multiResolve: Array<String>
     val localLinkRef = resolvesLocalRel
     val externalLinkRef = resolvesExternalRel
-    val skipTest = linkRefType != ::WikiLinkRef
+    val skipTest = PathInfo(linkAddress).isURI
 
     init {
         val fullPathInfo = PathInfo(fullPath)
@@ -79,13 +78,13 @@ class TestLinkRefMatcher_WikiLinks constructor(val fullPath: String
     @Test fun test_ResolveExternal() {
         if (skipTest) return
         val localRef = resolver.resolve(linkRef, LinkResolver.ONLY_REMOTE, fileList)
-        assertEqualsMessage("External does not match", resolvesLocal, localRef?.filePath)
+        assertEqualsMessage("External does not match", resolvesExternal, localRef?.filePath)
     }
 
     @Test fun test_LocalLinkAddress() {
         if (skipTest) return
         val localRef = resolver.resolve(linkRef, LinkResolver.ONLY_LOCAL, fileList) as? FileRef
-        val localRefAddress = if (localRef != null) resolver.linkAddress(linkRef, localRef, false, null) else null
+        val localRefAddress = if (localRef != null) resolver.linkAddress(linkRef, localRef, linkRef !is WikiLinkRef && (linkRef.hasExt || (linkRef.hasAnchor && linkAnchor?.contains('.') ?: false)), null) else null
         assertEqualsMessage("Local link address does not match", this.linkAddressText, localRefAddress)
     }
 
@@ -102,7 +101,7 @@ class TestLinkRefMatcher_WikiLinks constructor(val fullPath: String
     companion object {
         @Parameterized.Parameters(name = "{index}: filePath = {0}, linkRef = {3}, linkAnchor = {4}")
         @JvmStatic
-        public fun data(): Collection<Array<Any?>> {
+        fun data(): Collection<Array<Any?>> {
             return MarkdownTest__MarkdownTest_wiki__Home_md.data()
         }
     }
