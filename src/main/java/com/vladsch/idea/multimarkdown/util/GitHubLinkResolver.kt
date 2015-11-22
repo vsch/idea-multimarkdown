@@ -173,7 +173,7 @@ class GitHubLinkResolver(project: Project?, containingFile: FileRef, basePath:St
                     }
                 }
             }
-            if (linkRef is WikiLinkRef && matches.size > 1) matches.sort { self, other -> self.compareTo(other) }
+            if (linkRef !is ImageLinkRef && matches.size > 1) matches.sort { self, other -> self.compareTo(other) }
             return matches
         }
 
@@ -181,8 +181,8 @@ class GitHubLinkResolver(project: Project?, containingFile: FileRef, basePath:St
             var filePathInfo: PathInfo
 
             if (fileRef.isUnderWikiDir) {
-                if (useWikiPageActualLocation) filePathInfo = fileRef
-                else if (fileRef.isWikiHomePage && isSourceRef) filePathInfo = PathInfo.append(fileRef.wikiDir, "..")
+                if (useWikiPageActualLocation && !isSourceRef) filePathInfo = PathInfo(fileRef.path)
+                else if (fileRef.isWikiHomePage && isSourceRef && linkRef is ImageLinkRef) filePathInfo = PathInfo.append(fileRef.wikiDir, "..")
                 else filePathInfo = PathInfo(fileRef.wikiDir)
             } else {
                 filePathInfo = PathInfo.append(fileRef.path, "blob", branchOrTag ?: "master")
@@ -191,20 +191,19 @@ class GitHubLinkResolver(project: Project?, containingFile: FileRef, basePath:St
         }
 
         override fun relativePath(targetRef: FileRef, withExtForWikiPage: Boolean, branchOrTag: String?): String {
-            val containingPathInfo = logicalRemotePath(linkRef.containingFile, false, true, branchOrTag)
-            val targetPathInfo = logicalRemotePath(targetRef, withExtForWikiPage, false, branchOrTag)
-            val containingFilePath = containingPathInfo.filePath.endWith('/')
+            val containingFilePath = logicalRemotePath(linkRef.containingFile, false, true, branchOrTag).filePath.endWith('/')
+            val targetFilePath = logicalRemotePath(targetRef, withExtForWikiPage, false, branchOrTag).filePath.endWith('/')
             var lastSlash = -1
 
-            val iMax = Math.min(containingFilePath.length, targetPathInfo.path.length)-1
+            val iMax = Math.min(containingFilePath.length, targetFilePath.length)-1
             for (i in  0..iMax) {
-                if (containingFilePath[i] != targetPathInfo.filePath[i]) break
+                if (containingFilePath[i] != targetFilePath[i]) break
                 if (containingFilePath[i] == '/') lastSlash = i
             }
 
             // for every dir in containingFilePath after lastSlash add ../ as the prefix
             var prefix = "../".repeat(containingFilePath.count('/', lastSlash + 1))
-            prefix += targetPathInfo.path.substring(lastSlash + 1)
+            prefix += targetFilePath.substring(lastSlash + 1)
             return prefix
         }
 

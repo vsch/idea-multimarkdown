@@ -20,6 +20,9 @@
  */
 package com.vladsch.idea.multimarkdown.util
 
+import java.io.UnsupportedEncodingException
+import java.net.URLDecoder
+
 fun String?.endWith(suffix: Char, ignoreCase: Boolean = false): String {
     if (this != null && !isEmpty() && !endsWith(suffix, ignoreCase)) return plus(suffix)
     return orEmpty()
@@ -99,3 +102,13 @@ fun String?.count(char: String, startIndex: Int = 0, endIndex: Int = Int.MAX_VAL
     }
     return count
 }
+
+fun String?.urlDecode(charSet:String? = null):String {
+    try {
+        return URLDecoder.decode(this, charSet?:"UTF-8")
+    } catch (e: UnsupportedEncodingException) {
+        //e.printStackTrace()
+        return orEmpty().replace("%23", "#").replace("%20", " ")
+    }
+}
+

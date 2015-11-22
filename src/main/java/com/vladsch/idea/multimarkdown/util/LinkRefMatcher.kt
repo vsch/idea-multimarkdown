@@ -14,6 +14,8 @@
  */
 package com.vladsch.idea.multimarkdown.util
 
+import java.io.UnsupportedEncodingException
+import java.net.URLDecoder
 import kotlin.text.Regex
 import kotlin.text.RegexOption
 
@@ -66,7 +68,7 @@ class LinkRefMatcher(val linkRef: LinkRef, projectBasePath: String? = null, val 
         val prefix = if (isOptional) "(?:\\Q" else "\\Q"
         return when {
             linkRef is WikiLinkRef -> prefix + pathText.replace("-| ".toRegex(), "\\\\E(?:-| )\\\\Q") + suffix
-            else -> prefix + pathText.replace("%23", "#") + suffix
+            else -> prefix + pathText.urlDecode() + suffix
         }
     }
 
@@ -95,7 +97,9 @@ class LinkRefMatcher(val linkRef: LinkRef, projectBasePath: String? = null, val 
             // going below the projectBasePath is not supported for now.
 
             // if the page is a wiki home page then it will be treated as if it is located in the projectBasePath so that its relative links resolve correctly
-            // if it is a wiki but no the main page then its prefix is not changed
+            // however, this must be done for image links but is optional for non-image explicit links which resolve if the page was under the wiki directory
+            // if it is a wiki but not the main page or not image link then its prefix is not changed
+
             var repoPrefixPath = projectBasePath.endWith('/') + "blob/master/"
             var wikiPrefixPath = projectBasePath.endWith('/') + "wiki/"
             var prefixPath: String
@@ -106,7 +110,8 @@ class LinkRefMatcher(val linkRef: LinkRef, projectBasePath: String? = null, val 
                 // with one exception for the Home page which is logically located in the main repo directory and wiki/ is aliased to it
 
                 // 2. any file with extension, all files are located relative to their physical location under the wiki repo
-                var filePrefixPath = if (linkRef.containingFile.isWikiHomePage && !linkRef.hasExt) PathInfo.append(wikiPrefixPath, "..").filePath else wikiPrefixPath
+
+                var filePrefixPath = if (linkRef.containingFile.isWikiHomePage && linkRef is ImageLinkRef) PathInfo.append(wikiPrefixPath, "..").filePath else wikiPrefixPath
                 prefixPath = PathInfo.append(filePrefixPath, linkRef.path.split('/')).filePath.endWith('/')
             } else {
                 // main repo
@@ -151,8 +156,8 @@ class LinkRefMatcher(val linkRef: LinkRef, projectBasePath: String? = null, val 
             var anchorPattern = ""
 
             if (wikiPages) {
-                if (looseMatch) anchorPattern = matchPathText(linkRef.anchorText, true)
-                extensionPattern = extensionPattern (useDefaultExt = looseMatch, addAnchorExt = looseMatch, isOptional = looseMatch)
+                anchorPattern = matchPathText(linkRef.anchorText, true)
+                extensionPattern = extensionPattern (useDefaultExt = true, addAnchorExt = true, isOptional = true)
             } else {
                 // prefix is the file's directory plus any path in the link itself, loose match will search down into the tree, but not up
                 // also looseMatch is not particular about extension as long as there is one that is an image extension
