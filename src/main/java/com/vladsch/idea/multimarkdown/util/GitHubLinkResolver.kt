@@ -34,9 +34,9 @@ class GitHubLinkResolver(project: Project?, containingFile: FileRef, basePath: S
         return ContextImpl(this, linkRef.containingFile, 0, null, branchOrTag).relativePath(linkRef, targetRef, withExtForWikiPage)
     }
 
-    override fun isResolvedTo(linkRef: LinkRef, targetRef: FileRef, options: Int): Boolean {
+    override fun isResolvedTo(linkRef: LinkRef, targetRef: FileRef, branchOrTag: String?): Boolean {
         assert(linkRef.containingFile == containingFile, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
-        return ContextImpl(this, linkRef.containingFile, options).isResolvedTo(linkRef, targetRef)
+        return ContextImpl(this, linkRef.containingFile, 0, null, branchOrTag).isResolvedTo(linkRef, targetRef)
     }
 
     override fun resolve(linkRef: LinkRef, options: Int, inList: List<FileRef>?): PathInfo? {
@@ -68,8 +68,9 @@ class GitHubLinkResolver(project: Project?, containingFile: FileRef, basePath: S
         val project: Project? = resolver.project
         val projectBasePath = resolver.projectBasePath
 
-        override fun isResolvedTo(linkRef: LinkRef, targetRef: FileRef, options: Int): Boolean {
-            throw UnsupportedOperationException()
+        override fun isResolvedTo(linkRef: LinkRef, targetRef: FileRef, branchOrTag: String?): Boolean {
+            val linkRefText = relativePath(linkRef, targetRef, !(linkRef is WikiLinkRef || targetRef.isWikiPage && !linkRef.hasExt), branchOrTag)
+            return linkRef.filePath.equals(linkRefText, ignoreCase = true)
         }
 
         override fun resolve(linkRef: LinkRef, options: Int): PathInfo? {
