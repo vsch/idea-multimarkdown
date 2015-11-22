@@ -116,8 +116,8 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
         get() = isLocal(fullPath)
 
     // these ones resolve to external references, if they resolve
-    open val isExternal: Boolean
-        get() = isExternal(fullPath)
+    open val isRemote: Boolean
+        get() = isRemote(fullPath)
 
     // these ones are URI prefixed
     open val isURI: Boolean
@@ -155,7 +155,7 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
         @JvmStatic fun isRelative(fullPath: String?): Boolean = fullPath != null && !isAbsolute(fullPath)
 
         // true if resolves to external
-        @JvmStatic fun isExternal(fullPath: String?): Boolean = fullPath != null && fullPath.startsWith(*EXTERNAL_PREFIXES)
+        @JvmStatic fun isRemote(fullPath: String?): Boolean = fullPath != null && fullPath.startsWith(*EXTERNAL_PREFIXES)
 
         // true if resolves to local, if it resolves
         @JvmStatic fun isLocal(fullPath: String?): Boolean = fullPath != null && (fullPath.startsWith(*LOCAL_PREFIXES) || isRelative(fullPath))

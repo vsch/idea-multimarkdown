@@ -72,7 +72,7 @@ class TestLinkRefMatcher_FileLinks constructor(val fullPath: String
     }
 
     @Test fun test_ResolveExternal() {
-        val localRef = resolver.resolve(linkRef, LinkResolver.ONLY_EXTERNAL, fileList)
+        val localRef = resolver.resolve(linkRef, LinkResolver.ONLY_REMOTE, fileList)
         assertEqualsMessage("External does not match", resolvesLocal, localRef?.filePath)
     }
 

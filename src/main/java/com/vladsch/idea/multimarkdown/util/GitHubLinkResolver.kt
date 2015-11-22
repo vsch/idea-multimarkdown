@@ -24,62 +24,59 @@ import java.util.*
 import kotlin.text.Regex
 
 
-class GitHubLinkResolver(project: Project?, containingFile: FileRef, basePath:String? = null) : LinkResolver(project, containingFile) {
-
-    val projectBasePath:String = project?.basePath ?: basePath ?: ""
-
-    override fun context(linkRef: LinkRef, options: Int, inList: List<FileRef>?): ContextImpl {
-        return ContextImpl(this, linkRef, options)
+class GitHubLinkResolver(project: Project?, containingFile: FileRef, basePath: String? = null) : LinkResolver(project, containingFile, basePath) {
+    override fun context(containingFile: FileRef, options: Int, inList: List<FileRef>?, branchOrTag: String?): ContextImpl {
+        return ContextImpl(this, containingFile, options, inList, branchOrTag)
     }
 
     override fun relativePath(linkRef: LinkRef, targetRef: FileRef, withExtForWikiPage: Boolean, branchOrTag: String?): String {
         assert(linkRef.containingFile == containingFile, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
-        return ContextImpl(this, linkRef).relativePath(targetRef, withExtForWikiPage, branchOrTag)
+        return ContextImpl(this, linkRef.containingFile, 0, null, branchOrTag).relativePath(linkRef, targetRef, withExtForWikiPage)
     }
 
     override fun isResolvedTo(linkRef: LinkRef, targetRef: FileRef, options: Int): Boolean {
         assert(linkRef.containingFile == containingFile, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
-        return ContextImpl(this, linkRef, options).isResolvedTo(targetRef)
+        return ContextImpl(this, linkRef.containingFile, options).isResolvedTo(linkRef, targetRef)
     }
 
     override fun resolve(linkRef: LinkRef, options: Int, inList: List<FileRef>?): PathInfo? {
         assert(linkRef.containingFile == containingFile, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
-        return ContextImpl(this, linkRef, options, inList).resolve()
+        return ContextImpl(this, linkRef.containingFile, options, inList).resolve(linkRef)
     }
 
     override fun multiResolve(linkRef: LinkRef, options: Int, inList: List<FileRef>?): List<PathInfo> {
         assert(linkRef.containingFile == containingFile, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
-        return ContextImpl(this, linkRef, options, inList).multiResolve()
+        return ContextImpl(this, linkRef.containingFile, options, inList).multiResolve(linkRef)
     }
 
     override fun isResolved(linkRef: LinkRef, options: Int, inList: List<FileRef>?): Boolean {
         assert(linkRef.containingFile == containingFile, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
-        return ContextImpl(this, linkRef, options, inList).resolve() != null
+        return ContextImpl(this, linkRef.containingFile, options, inList).resolve(linkRef) != null
     }
 
     override fun analyze(linkRef: LinkRef, targetRef: FileRef): MismatchReasons {
         assert(linkRef.containingFile == containingFile, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
-        return ContextImpl(this, linkRef).analyze(targetRef)
+        return ContextImpl(this, linkRef.containingFile).analyze(linkRef, targetRef)
     }
 
     override fun linkAddress(linkRef: LinkRef, targetRef: FileRef, withExtForWikiPage: Boolean, branchOrTag: String?): String {
         assert(linkRef.containingFile == containingFile, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
-        return ContextImpl(this, linkRef).linkAddress(targetRef, withExtForWikiPage, branchOrTag)
+        return ContextImpl(this, linkRef.containingFile).linkAddress(linkRef, targetRef, withExtForWikiPage, branchOrTag)
     }
 
-    class ContextImpl(resolver: GitHubLinkResolver, linkRef: LinkRef, options: Int = 0, inList: List<FileRef>? = null) : LinkResolver.Context(resolver, linkRef, options, inList) {
+    class ContextImpl(resolver: GitHubLinkResolver, containingFile: FileRef, options: Int = 0, inList: List<FileRef>? = null, branchOrTag: String? = null) : LinkResolver.Context(resolver, containingFile, options, inList, branchOrTag) {
         val project: Project? = resolver.project
         val projectBasePath = resolver.projectBasePath
 
-        override fun isResolvedTo(targetRef: FileRef, options: Int): Boolean {
+        override fun isResolvedTo(linkRef: LinkRef, targetRef: FileRef, options: Int): Boolean {
             throw UnsupportedOperationException()
         }
 
-        override fun resolve(options: Int): PathInfo? {
+        override fun resolve(linkRef: LinkRef, options: Int): PathInfo? {
             // TODO: if only want external, then can try to resolve external links to local file refs if they map, for that need to parse the
             // UrlLinkRef's file path and have GitHubRepo reverse the href to local path
 
-            if (linkRef.isExternal) return if (wantExternal(options)) linkRef else null
+            if (linkRef.isRemote) return if (wantRemote(options)) linkRef else null
 
             if (linkRef.isSelfAnchor) {
                 if (wantLocal(options)) return linkRef.containingFile
@@ -91,7 +88,7 @@ class GitHubLinkResolver(project: Project?, containingFile: FileRef, basePath:St
                         val withExt = !virtualFileRef.isWikiPage && virtualFileRef.hasExt
                         val gitHubRepoHref = virtualFileRef.gitHubRepo?.repoUrlFor(virtualFileRef.virtualFile, withExt, linkRef.anchor)
 
-                        assert(gitHubRepoHref == null || PathInfo.isExternal(gitHubRepoHref), { "Expected external href, got $gitHubRepoHref" })
+                        assert(gitHubRepoHref == null || PathInfo.isRemote(gitHubRepoHref), { "Expected external href, got $gitHubRepoHref" })
                         if (gitHubRepoHref != null) return LinkRef.parseLinkRef(linkRef.containingFile, gitHubRepoHref)
                     }
                 }
@@ -105,14 +102,14 @@ class GitHubLinkResolver(project: Project?, containingFile: FileRef, basePath:St
                 if (linkRef is WikiLinkRef && !wantLooseMatch(options) && linkRef.hasExt) return null  // wiki links don't resolve with extensions
 
                 val linkRefMatcher = LinkRefMatcher(linkRef, projectBasePath, wantLooseMatch(options) || linkRef.isEmpty)
-                val matches = getMatchedFiles(linkRefMatcher.patternRegex(), options, inList)
+                val matches = getMatchedFiles(linkRef, linkRefMatcher.patternRegex(), options, inList)
                 var resolvedRef = (if (matches.size > 0) matches[0] else null) ?: return null
                 targetRef = resolvedRef
             }
 
             if (targetRef.isAbsolute) {
                 return when {
-                    targetRef.isExternal -> if (wantExternal(options)) targetRef else null
+                    targetRef.isRemote -> if (wantRemote(options)) targetRef else null
                     targetRef.isLocal && targetRef.isURI && targetRef is UrlLinkRef -> if (!wantLocal(options) || project == null) null else targetRef.virtualFileRef(project)
                     else -> targetRef
                 }
@@ -121,17 +118,17 @@ class GitHubLinkResolver(project: Project?, containingFile: FileRef, basePath:St
             return null
         }
 
-        override fun multiResolve(options: Int): List<PathInfo> {
+        override fun multiResolve(linkRef: LinkRef, options: Int): List<PathInfo> {
             if (linkRef is WikiLinkRef && !wantLooseMatch(options) && linkRef.hasExt) return ArrayList()  // wiki links don't resolve with extensions
             val linkRefMatcher = LinkRefMatcher(linkRef, projectBasePath, wantLooseMatch(options) || linkRef.isEmpty)
-            return getMatchedFiles(linkRefMatcher.patternRegex(), options, inList)
+            return getMatchedFiles(linkRef, linkRefMatcher.patternRegex(), options, inList)
         }
 
-        override fun analyze(targetRef: FileRef): MismatchReasons {
+        override fun analyze(linkRef: LinkRef, targetRef: FileRef): MismatchReasons {
             throw UnsupportedOperationException()
         }
 
-        protected fun getTargetFileTypes(): HashSet<String> {
+        protected fun getTargetFileTypes(linkRef: LinkRef): HashSet<String> {
             var targetFileType = when {
                 linkRef is WikiLinkRef, linkRef is FileLinkRef && (!linkRef.hasExt || linkRef.isMarkdownExt) -> MultiMarkdownFileType.INSTANCE.toString()
                 linkRef is ImageLinkRef, linkRef is FileLinkRef && (linkRef.isImageExt) -> ImageFileTypeManager.getInstance().imageFileType.toString()
@@ -144,14 +141,14 @@ class GitHubLinkResolver(project: Project?, containingFile: FileRef, basePath:St
             return typeSet
         }
 
-        fun getMatchedFiles(matchPattern: Regex?, options: Int = this.options, fromList: List<FileRef>?): List<FileRef> {
+        fun getMatchedFiles(linkRef: LinkRef, matchPattern: Regex?, options: Int = this.options, fromList: List<FileRef>?): List<FileRef> {
             // process the files that match the pattern and put them in the list
             val matches = ArrayList<FileRef>()
 
             if (matchPattern == null) return matches
 
             if (fromList == null) {
-                val targetFileTypes = getTargetFileTypes()
+                val targetFileTypes = getTargetFileTypes(linkRef)
                 if (targetFileTypes.isEmpty() || resolver.project == null) {
                     return ArrayList(0)
                 } else {
@@ -177,12 +174,12 @@ class GitHubLinkResolver(project: Project?, containingFile: FileRef, basePath:St
             return matches
         }
 
-        fun logicalRemotePath(fileRef: FileRef, useWikiPageActualLocation: Boolean, isSourceRef: Boolean, branchOrTag: String?): PathInfo {
+        fun logicalRemotePath(fileRef: FileRef, useWikiPageActualLocation: Boolean, isSourceRef: Boolean, isImageLinkRef: Boolean, branchOrTag: String?): PathInfo {
             var filePathInfo: PathInfo
 
             if (fileRef.isUnderWikiDir) {
                 if (useWikiPageActualLocation && !isSourceRef) filePathInfo = PathInfo(fileRef.path)
-                else if (fileRef.isWikiHomePage && isSourceRef && linkRef is ImageLinkRef) filePathInfo = PathInfo.append(fileRef.wikiDir, "..")
+                else if (fileRef.isWikiHomePage && isSourceRef && isImageLinkRef) filePathInfo = PathInfo.append(fileRef.wikiDir, "..")
                 else filePathInfo = PathInfo(fileRef.wikiDir)
             } else {
                 filePathInfo = PathInfo.append(fileRef.path, "blob", branchOrTag ?: "master")
@@ -190,12 +187,12 @@ class GitHubLinkResolver(project: Project?, containingFile: FileRef, basePath:St
             return filePathInfo
         }
 
-        override fun relativePath(targetRef: FileRef, withExtForWikiPage: Boolean, branchOrTag: String?): String {
-            val containingFilePath = logicalRemotePath(linkRef.containingFile, false, true, branchOrTag).filePath.endWith('/')
-            val targetFilePath = logicalRemotePath(targetRef, withExtForWikiPage, false, branchOrTag).filePath.endWith('/')
+        override fun relativePath(linkRef: LinkRef, targetRef: FileRef, withExtForWikiPage: Boolean, branchOrTag: String?): String {
+            val containingFilePath = logicalRemotePath(containingFile, false, true, linkRef is ImageLinkRef, branchOrTag).filePath.endWith('/')
+            val targetFilePath = logicalRemotePath(targetRef, withExtForWikiPage, false, linkRef is ImageLinkRef, branchOrTag).filePath.endWith('/')
             var lastSlash = -1
 
-            val iMax = Math.min(containingFilePath.length, targetFilePath.length)-1
+            val iMax = Math.min(containingFilePath.length, targetFilePath.length) - 1
             for (i in  0..iMax) {
                 if (containingFilePath[i] != targetFilePath[i]) break
                 if (containingFilePath[i] == '/') lastSlash = i
@@ -207,8 +204,8 @@ class GitHubLinkResolver(project: Project?, containingFile: FileRef, basePath:St
             return prefix
         }
 
-        override fun linkAddress(targetRef: FileRef, withExtForWikiPage: Boolean, branchOrTag: String?): String {
-            val prefix = relativePath(targetRef, withExtForWikiPage, branchOrTag)
+        override fun linkAddress(linkRef: LinkRef, targetRef: FileRef, withExtForWikiPage: Boolean, branchOrTag: String?): String {
+            val prefix = relativePath(linkRef, targetRef, withExtForWikiPage, branchOrTag)
 
             if (linkRef is WikiLinkRef) {
                 return prefix.endWith('/') + targetRef.fileNameNoExt.replace('-', ' ')

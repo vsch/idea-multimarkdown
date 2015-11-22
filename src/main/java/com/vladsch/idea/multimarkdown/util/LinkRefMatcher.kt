@@ -148,6 +148,7 @@ class LinkRefMatcher(val linkRef: LinkRef, projectBasePath: String? = null, val 
 
                 // looking for GitHub Links, linkRef name should be one of the GitHub link directories, without wiki since that is taken care of separately
                 // already projectBasePath
+                // TODO: implement resolution to hard-coded links so that no extra code needs to be handled
                 gitHubLinks = true
             }
 
