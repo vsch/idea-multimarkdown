@@ -38,7 +38,7 @@ class TestPathInfo constructor(val fullPath: String
                                , val addWithExt: String?
                                , val addAppend: Array<String>) {
 
-    val pathInfo = LinkInfo(fullPath);
+    val pathInfo = PathInfo(fullPath);
 
     /* @formatter:off */
     @Test fun test_ext() { assertEquals(getExt, pathInfo.ext) }

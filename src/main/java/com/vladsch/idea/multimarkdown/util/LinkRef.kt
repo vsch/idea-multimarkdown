@@ -17,7 +17,7 @@ package com.vladsch.idea.multimarkdown.util
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFileManager
 
-open class LinkRef(val containingFile: FileRef, fullPath: String, anchorTxt: String?) : LinkInfo(fullPath) {
+open class LinkRef(val containingFile: FileRef, fullPath: String, anchorTxt: String?) : PathInfo(fullPath) {
     val anchor: String? = anchorTxt?.removePrefix("#")
     val hasAnchor: Boolean
         get() = anchor != null

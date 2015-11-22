@@ -14,23 +14,24 @@
  */
 package com.vladsch.idea.multimarkdown.util
 
-import java.util.regex.Pattern
 import kotlin.text.Regex
 import kotlin.text.RegexOption
 
 class LinkRefMatcher(val linkRef: LinkRef, projectBasePath: String? = null, val wantLooseMatch: Boolean = false) {
 
-    val projectBasePath = LinkInfo.cleanFullPath(projectBasePath)
+    val projectBasePath = PathInfo.cleanFullPath(projectBasePath)
     val subDirPattern = "(?:.+/)?"
 
-    var needLooseMatchForWiki = false
+    private fun matchExt(ext: String?): String {
+        return matchPathText(ext.startWith('.'))
+    }
 
-    protected fun extensionPattern(wantLooseMatch: Boolean): String {
-        val typeExtensions = linkRef.linkExtensions
+    protected fun extensionPattern(useDefaultExt: Boolean, addAnchorExt:Boolean, isOptional: Boolean): String {
+        val typeExtensions = if (useDefaultExt) linkRef.linkExtensions else arrayOf()
         var hadExtension = false
         var extensionPattern = ""
         var linkRefExt = if (!linkRef.hasExt) "" else if (linkRef !is WikiLinkRef) linkRef.ext.replace("%23", "#") else linkRef.ext
-        val anchorPattern = if ((wantLooseMatch || linkRef is WikiLinkRef) && linkRef.hasAnchor) matchPathText(linkRef.anchorText, true) else ""
+        val anchorPattern = if (addAnchorExt && linkRef.hasAnchor) matchPathText(linkRef.anchorText, true) else ""
 
         for (ext in typeExtensions) {
             if (!extensionPattern.isEmpty()) extensionPattern += "|"
@@ -50,7 +51,10 @@ class LinkRefMatcher(val linkRef: LinkRef, projectBasePath: String? = null, val 
             extensionPattern += anchorPattern
         }
 
-        if (!extensionPattern.isEmpty()) extensionPattern = "(?:$extensionPattern)"
+        if (extensionPattern.isNotEmpty()) {
+            extensionPattern = "(?:$extensionPattern)"
+            if (isOptional) extensionPattern + "?"
+        }
 
         return extensionPattern
     }
@@ -66,16 +70,14 @@ class LinkRefMatcher(val linkRef: LinkRef, projectBasePath: String? = null, val 
         }
     }
 
-    fun pattern(looseMatch: Boolean = wantLooseMatch): Pattern {
-        return Pattern.compile(patternText(looseMatch), Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE)
+    fun patternRegex(looseMatch: Boolean = wantLooseMatch): Regex? {
+        return patternText(looseMatch)?.toRegex(RegexOption.IGNORE_CASE)
     }
 
-    fun patternRegex(looseMatch: Boolean = wantLooseMatch): Regex {
-        return patternText(looseMatch).toRegex(RegexOption.IGNORE_CASE)
-    }
-
-    fun patternText(looseMatch: Boolean = wantLooseMatch): String {
+    fun patternText(looseMatch: Boolean = wantLooseMatch): String? {
         // return a regex that will match most loosely a file path to be used by this link
+        assert(projectBasePath.isNotEmpty(), { "projectBasePath cannot be empty" })
+
         val pattern: String
 
         // we always match subdirectories for markdown and wiki's, even for exact match since if the destination is a wiki page then no directories will be used
@@ -84,41 +86,83 @@ class LinkRefMatcher(val linkRef: LinkRef, projectBasePath: String? = null, val 
             // spaces match - and spaces, all subdirectories under Wiki Home match, only WIKI targets accepted, no case sensitivity
             val filenamePattern = matchPathText(linkRef.fileNameNoExt, emptyMatchesAll = true)
             val anchorPattern = matchPathText(linkRef.anchorText, isOptional = true)
-            val extensionPattern = extensionPattern(true) + "?"
+            val extensionPattern = extensionPattern(useDefaultExt = true, addAnchorExt = true, isOptional = true)
 
             pattern = "^" + matchPathText(linkRef.containingFile.wikiDir.endWith('/')) + subDirPattern + filenamePattern + anchorPattern + extensionPattern + "$"
         } else {
-            // this is all other links, no space dash equivalence, %23 in link matches # in file, files under project or gitHubRepoHome will be matched
-            // extension pattern is optional added to a list of all extensions for the targetType, with zero or none matching
-            // anchor is an optional pattern right after the name so extensions follow, all subdirectories between project or repo home are optional
-            // matching is not case sensitive even for exact match because the final could be a wiki page
+            // it is assumed that if there is a wiki directory then it is a sub dir of the projectBasePath with the same name and .wiki appended
+            // so if we encounter projectBasePath/wiki will will change it to projectBasePath/projectBasePathName.wiki
+            // going below the projectBasePath is not supported for now.
 
-            // project base, if none then file path
-            var prefixPath = if (linkRef is ImageLinkRef) "" else projectBasePath ?: linkRef.containingFile.path
-            var subDirPattern = if (!looseMatch) linkRef.path else subDirPattern
-            val filenamePattern = "\\Q" + linkRef.fileNameNoExt + "\\E"
-            val anchorPattern = if (looseMatch && linkRef.hasAnchor) matchPathText(linkRef.anchorText, true) else ""
-            var extensionPattern =
-                    // TODO: take the linkRef filePath and append it to containingFile.filePath and see if you are in a wiki or in the repo
-                    // based on that we can make a decision of what the destination file will be!!! If it is a wiki then wiki rules will apply
-                    // not case sensitive, either with or without an extension, otherwise case sensitive and needs extension
+            // if the page is a wiki home page then it will be treated as if it is located in the projectBasePath so that its relative links resolve correctly
+            // if it is a wiki but no the main page then its prefix is not changed
+            var repoPrefixPath = projectBasePath.endWith('/') + "blob/master/"
+            var wikiPrefixPath = projectBasePath.endWith('/') + "wiki/"
+            var prefixPath: String
 
-                    // TODO: the best way to resolve the links is to take the path relative to the file's GitHub URL, then map the resulting URL back to
-                    // local file system. That way the mapping will be done to Wiki and from Wiki, but also between repositories on GitHub
-                    if (linkRef is FileLinkRef && ((!looseMatch && !linkRef.containingFile.isWikiPage) || linkRef.hasExt && !linkRef.isMarkdownExt)) {
-                        needLooseMatchForWiki = linkRef.isMarkdownExt && !linkRef.path.isEmpty()
-                        matchExt(linkRef.ext)
-                    } else {
-                        extensionPattern(looseMatch) + "?"
-                    }
+            if (linkRef.containingFile.isWikiPage) {
+                // wiki repo, files here can be accessed in two ways:
+                // 1. markdown without extension, all files are logically located in the root of the wiki regardless of their physical location in the repo and will be rendered to HTML,
+                // with one exception for the Home page which is logically located in the main repo directory and wiki/ is aliased to it
 
-            pattern = "^" + matchPathText(prefixPath.endWith('/')) + subDirPattern + filenamePattern + anchorPattern + extensionPattern + "$"
+                // 2. any file with extension, all files are located relative to their physical location under the wiki repo
+                var filePrefixPath = if (linkRef.containingFile.isWikiHomePage && !linkRef.hasExt) PathInfo.append(wikiPrefixPath, "..").filePath else wikiPrefixPath
+                prefixPath = PathInfo.append(filePrefixPath, linkRef.path.split('/')).filePath.endWith('/')
+            } else {
+                // main repo
+
+                // files in the main repo are logically two dirs down blob/branchOrTag/fileName..., files in the repo require no backing out, wiki, pulls, issues, ... do
+                // to figure out whether the link is trying for GitHub specifics located at the repo root we will normalize the linkRef path from projectBasePath/blob/master/
+                // if after normalization we still have that prefix then the link is not going for Wiki or GitHub specifics and we can just search normal files and remap
+                // them later
+
+                // if the prefix changes to projectBasePath/wiki then we will search for Wiki pages ignoring subdirectories if the link has no extension and keep subdirectories
+                // if the link has an extension because in the latter case it will map to a raw markdown or image in the wiki repo
+                prefixPath = PathInfo.append(repoPrefixPath, linkRef.path.split('/')).filePath.endWith('/')
+            }
+
+            var wikiPages = false
+            var gitHubLinks = false
+
+            if (prefixPath.endWith('/').startsWith(wikiPrefixPath)) {
+                // not going for main repo or links, linking a file in the Wiki Repo
+                // if not image and no extension then will match markdown files, ie. WikiPages
+                wikiPages = linkRef !is ImageLinkRef && !linkRef.hasExt
+
+                // change it to our physical wiki directory which is right after our project base with same name and .wiki extension
+                var pathInfo = PathInfo(projectBasePath)
+
+                prefixPath = pathInfo.append(pathInfo.fileNameNoExt + PathInfo.WIKI_HOME_EXTENSION).filePath.endWith('/') + prefixPath.substring(wikiPrefixPath.length)
+            } else if (prefixPath.startsWith(repoPrefixPath)) {
+                // linking to files in the main repo
+                prefixPath = projectBasePath.endWith('/') + prefixPath.substring(repoPrefixPath.length)
+            } else {
+                // if in the main project directory then can link to issues, pulls, etc
+                // otherwise somewhere before the main repo or in between and nothing will be found
+                if (!prefixPath.endWith('/').equals(projectBasePath.endWith('/'), looseMatch)) return null
+
+                // looking for GitHub Links, linkRef name should be one of the GitHub link directories, without wiki since that is taken care of separately
+                // already projectBasePath
+                gitHubLinks = true
+            }
+
+            val filenamePattern = matchPathText(linkRef.fileNameNoExt)
+            var extensionPattern = ""
+            var anchorPattern = ""
+
+            if (wikiPages) {
+                if (looseMatch) anchorPattern = matchPathText(linkRef.anchorText, true)
+                extensionPattern = extensionPattern (useDefaultExt = looseMatch, addAnchorExt = looseMatch, isOptional = looseMatch)
+            } else {
+                // prefix is the file's directory plus any path in the link itself, loose match will search down into the tree, but not up
+                // also looseMatch is not particular about extension as long as there is one that is an image extension
+                // the file name has to match, no anchor option is used
+                if (looseMatch || linkRef.hasExt) extensionPattern = extensionPattern(useDefaultExt = looseMatch, addAnchorExt = false, isOptional = false)
+            }
+
+            pattern = "^" + matchPathText(prefixPath.endWith('/')) + (if (wikiPages) subDirPattern else "") + filenamePattern + anchorPattern + extensionPattern + "$"
         }
 
         return pattern
-    }
-
-    private fun matchExt(ext: String?): String {
-        return matchPathText(ext.startWith('.'))
     }
 }

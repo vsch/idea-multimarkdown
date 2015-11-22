@@ -23,7 +23,7 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin
 
-open class FileRef(fullPath: String) : LinkInfo(fullPath) {
+open class FileRef(fullPath: String) : PathInfo(fullPath) {
     protected val mainRepoDirEnd: Int
     protected val wikiHomeDirEnd: Int
 

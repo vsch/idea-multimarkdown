@@ -190,7 +190,7 @@ class TestLinkRef constructor(val fullPath: String
                     pathInfo.filePath.isEmpty() && pathInfo.hasAnchor(),
                     pathInfo.isEmpty,
                     pathInfo.fullFilePath.equals("#"),
-                    if (pathInfo.hasAnchor()) pathInfo.anchor else LinkInfo.EMPTY_STRING,
+                    if (pathInfo.hasAnchor()) pathInfo.anchor else PathInfo.EMPTY_STRING,
                     pathInfo.isRelative,
                     pathInfo.isAbsoluteReference,
                     pathInfo.isExternalReference,

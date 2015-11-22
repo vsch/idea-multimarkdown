@@ -24,8 +24,7 @@ import com.vladsch.idea.multimarkdown.spellchecking.Suggestion;
 import com.vladsch.idea.multimarkdown.spellchecking.SuggestionList;
 import com.vladsch.idea.multimarkdown.util.FileReference;
 import com.vladsch.idea.multimarkdown.util.FileReferenceList;
-import com.vladsch.idea.multimarkdown.util.LinkInfo;
-import org.apache.http.annotation.Immutable;
+import com.vladsch.idea.multimarkdown.util.PathInfo;
 import org.junit.internal.ArrayComparisonFailure;
 
 import java.util.ArrayList;
@@ -211,27 +210,27 @@ public class TestUtils {
         }
     }
 
-    public static class OrderedPathInfoComparison extends OrderedComparisonCriteria<LinkInfo> {
+    public static class OrderedPathInfoComparison extends OrderedComparisonCriteria<PathInfo> {
         @Override
-        protected boolean elementsAreEqual(LinkInfo o1, LinkInfo o2) {
+        protected boolean elementsAreEqual(PathInfo o1, PathInfo o2) {
             return o1.compareTo(o2) == 0;
         }
 
         @Override
-        protected void assertElementsAreEqual(LinkInfo o1, LinkInfo o2) {
+        protected void assertElementsAreEqual(PathInfo o1, PathInfo o2) {
             if (o1.compareTo(o2) != 0) failNotEquals("PathInfo not equal", o1, o2);
         }
     }
 
 
-    public static class UnorderedPathInfoComparison extends UnorderedComparisonCriteria<LinkInfo> {
+    public static class UnorderedPathInfoComparison extends UnorderedComparisonCriteria<PathInfo> {
         @Override
-        protected boolean elementsAreEqual(LinkInfo o1, LinkInfo o2) {
+        protected boolean elementsAreEqual(PathInfo o1, PathInfo o2) {
             return o1.compareTo(o2) == 0;
         }
 
         @Override
-        protected void assertElementsAreEqual(LinkInfo o1, LinkInfo o2) {
+        protected void assertElementsAreEqual(PathInfo o1, PathInfo o2) {
             if (o1.compareTo(o2) != 0) failNotEquals("PathInfo not equal", o1, o2);
         }
     }

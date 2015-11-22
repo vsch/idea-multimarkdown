@@ -37,9 +37,8 @@ import org.junit.runners.Suite;
         TestPathInfo.class,
         TestFileInfo.class,
         TestLinkRef.class,
-        TestLinkRefMatcher_Basic.class,
         TestLinkRefMatcher_MultiSub.class,
-        TestLinkRefMatcher_Links.class
+        TestLinkRefMatcher_FileLinks.class
 })
 public class UtilTestSuite {
 }

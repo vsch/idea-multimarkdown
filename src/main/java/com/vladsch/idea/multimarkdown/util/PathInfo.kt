@@ -24,7 +24,7 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownFileTypeFactory
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin
 import org.apache.log4j.Logger
 
-open class LinkInfo(fullPath: String) : Comparable<LinkInfo> {
+open class PathInfo(fullPath: String) : Comparable<PathInfo> {
     protected val fullPath: String
     protected val nameStart: Int
     protected val nameEnd: Int
@@ -40,7 +40,7 @@ open class LinkInfo(fullPath: String) : Comparable<LinkInfo> {
         this.fullPath = cleanPath
     }
 
-    override fun compareTo(other: LinkInfo): Int = fullPath.compareTo(other.fullPath)
+    override fun compareTo(other: PathInfo): Int = fullPath.compareTo(other.fullPath)
     override fun toString(): String = fullPath
 
     val filePath: String
@@ -127,13 +127,13 @@ open class LinkInfo(fullPath: String) : Comparable<LinkInfo> {
     open val isAbsolute: Boolean
         get() = isAbsolute(fullPath)
 
-    fun withExt(ext: String?): LinkInfo = if (ext == null || isEmpty || this.ext == ext) this else LinkInfo(filePathNoExt + ext.startWith('.'))
-    fun append(vararg parts: String): LinkInfo = LinkInfo.append(fullPath, *parts)
-    fun append(parts: Collection<String>): LinkInfo = LinkInfo.append(fullPath, parts)
-    fun append(parts: Sequence<String>): LinkInfo = LinkInfo.append(fullPath, parts)
+    fun withExt(ext: String?): PathInfo = if (ext == null || isEmpty || this.ext == ext) this else PathInfo(filePathNoExt + ext.startWith('.'))
+    fun append(vararg parts: String): PathInfo = PathInfo.append(fullPath, *parts)
+    fun append(parts: Collection<String>): PathInfo = PathInfo.append(fullPath, parts)
+    fun append(parts: Sequence<String>): PathInfo = PathInfo.append(fullPath, parts)
 
     companion object {
-        private val logger = Logger.getLogger(LinkInfo::class.java)
+        private val logger = Logger.getLogger(PathInfo::class.java)
 
         @JvmStatic val EMPTY_STRING = ""
 
@@ -166,15 +166,15 @@ open class LinkInfo(fullPath: String) : Comparable<LinkInfo> {
         // true if it is already an absolute ref, no need to resolve relative, just see if it maps
         @JvmStatic fun isAbsolute(fullPath: String?): Boolean = fullPath != null && fullPath.startsWith(*ABSOLUTE_PREFIXES)
 
-        @JvmStatic fun append(fullPath: String?, vararg parts: String): LinkInfo {
+        @JvmStatic fun append(fullPath: String?, vararg parts: String): PathInfo {
             return append(fullPath, parts.asSequence());
         }
 
-        @JvmStatic fun append(fullPath: String?, parts: Collection<String>): LinkInfo {
+        @JvmStatic fun append(fullPath: String?, parts: Collection<String>): PathInfo {
            return append(fullPath, parts.asSequence())
         }
 
-        @JvmStatic fun append(fullPath: String?, parts: Sequence<String>): LinkInfo {
+        @JvmStatic fun append(fullPath: String?, parts: Sequence<String>): PathInfo {
             var path: String = cleanFullPath(fullPath)
 
             for (part in parts) {
@@ -183,14 +183,14 @@ open class LinkInfo(fullPath: String) : Comparable<LinkInfo> {
 
                 if (cleanPart !in arrayOf("", ".")) {
                     if (cleanPart == "..") {
-                        path = LinkInfo(path).path.removeSuffix("/")
+                        path = PathInfo(path).path.removeSuffix("/")
                     } else {
                         if (path.isEmpty() || !path.endsWith('/')) path += '/'
                         path += cleanPart
                     }
                 }
             }
-            return LinkInfo(path)
+            return PathInfo(path)
         }
 
         @JvmStatic fun isExtIn(ext: String, ignoreCase: Boolean = true, vararg extList: String): Boolean {
