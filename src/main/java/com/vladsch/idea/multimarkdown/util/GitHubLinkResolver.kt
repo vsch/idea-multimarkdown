@@ -191,18 +191,7 @@ class GitHubLinkResolver(project: Project?, containingFile: FileRef, basePath: S
         override fun relativePath(linkRef: LinkRef, targetRef: FileRef, withExtForWikiPage: Boolean, branchOrTag: String?): String {
             val containingFilePath = logicalRemotePath(containingFile, false, true, linkRef is ImageLinkRef, branchOrTag).filePath.endWith('/')
             val targetFilePath = logicalRemotePath(targetRef, withExtForWikiPage, false, linkRef is ImageLinkRef, branchOrTag).filePath.endWith('/')
-            var lastSlash = -1
-
-            val iMax = Math.min(containingFilePath.length, targetFilePath.length) - 1
-            for (i in  0..iMax) {
-                if (containingFilePath[i] != targetFilePath[i]) break
-                if (containingFilePath[i] == '/') lastSlash = i
-            }
-
-            // for every dir in containingFilePath after lastSlash add ../ as the prefix
-            var prefix = "../".repeat(containingFilePath.count('/', lastSlash + 1))
-            prefix += targetFilePath.substring(lastSlash + 1)
-            return prefix
+            return PathInfo.relativePath(containingFilePath, targetFilePath, true)
         }
 
         override fun linkAddress(linkRef: LinkRef, targetRef: FileRef, withExtForWikiPage: Boolean, branchOrTag: String?): String {

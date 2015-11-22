@@ -14,14 +14,7 @@
  */
 package com.vladsch.idea.multimarkdown.util
 
-import com.intellij.openapi.project.Project
-import com.intellij.openapi.vcs.FileStatus
-import com.intellij.openapi.vcs.FileStatusManager
-import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiManager
 import com.vladsch.idea.multimarkdown.MultiMarkdownFileTypeFactory
-import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin
 import org.apache.log4j.Logger
 
 open class PathInfo(fullPath: String) : Comparable<PathInfo> {
@@ -171,7 +164,7 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
         }
 
         @JvmStatic fun append(fullPath: String?, parts: Collection<String>): PathInfo {
-           return append(fullPath, parts.asSequence())
+            return append(fullPath, parts.asSequence())
         }
 
         @JvmStatic fun append(fullPath: String?, parts: Sequence<String>): PathInfo {
@@ -209,6 +202,26 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
             var cleanPath = removeDotDirectory(fullPath)
             if (!cleanPath.endsWith("//")) cleanPath = cleanPath.removeSuffix("/")
             return cleanPath.removeSuffix(".")
+        }
+
+        @JvmStatic fun relativePath(fromPath: String, toPath: String, withPrefix: Boolean = true): String {
+            var lastSlash = -1
+            val iMax = Math.min(fromPath.length, toPath.length) - 1
+            for (i in  0..iMax) {
+                if (fromPath[i] != toPath[i]) break
+                if (fromPath[i] == '/') lastSlash = i
+            }
+
+            // for every dir in containingFilePath after lastSlash add ../ as the prefix
+            if (withPrefix) {
+
+                var prefix = "../".repeat(fromPath.count('/', lastSlash + 1))
+                prefix += toPath.substring(lastSlash + 1)
+                return prefix
+            } else {
+
+                return toPath.substring(lastSlash + 1)
+            }
         }
     }
 }

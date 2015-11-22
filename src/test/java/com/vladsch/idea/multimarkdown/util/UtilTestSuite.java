@@ -37,6 +37,7 @@ import org.junit.runners.Suite;
         TestPathInfo.class,
         TestFileInfo.class,
         TestLinkRef.class,
+        TestLinkRefMatcher_WikiLinks.class,
         TestLinkRefMatcher_MultiSub.class,
         TestLinkRefMatcher_FileLinks.class
 })
