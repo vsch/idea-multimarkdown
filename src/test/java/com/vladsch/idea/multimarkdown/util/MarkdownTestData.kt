@@ -34,6 +34,10 @@ object MarkdownTestData : LinkResolver.ProjectResolver {
     override val project: Project?
         get() = null
 
+    override fun vcsProjectRepoUrlBase(): String? {
+        return "/Users/vlad/src/MarkdownTest"
+    }
+
     override fun vcsRepoBase(fileRef: FileRef): String? {
         if (fileRef.filePath.startsWith("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/")) return "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki"
         else if (fileRef.filePath.startsWith("/Users/vlad/src/MarkdownTest/")) return "/Users/vlad/src/MarkdownTest"

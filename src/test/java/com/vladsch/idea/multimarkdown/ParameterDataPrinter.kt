@@ -57,6 +57,8 @@ fun printData(data: Collection<Array<Any?>>, header: Array<String>): Unit {
     }
 
     System.out.println("            return arrayListOf<Array<Any?>>(")
+    // remove last column width, we don't padd the last column
+    colWidths[colWidths.lastIndex] = 0
 
     var rowText = "";
     for (i in header.indices) {

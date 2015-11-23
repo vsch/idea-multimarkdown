@@ -16,7 +16,9 @@ package com.vladsch.idea.multimarkdown.util
 
 import com.vladsch.idea.multimarkdown.printData
 import org.junit.Assert.*
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.ExpectedException
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
@@ -34,14 +36,31 @@ class TestFileInfo constructor(val fullPath: String
 
     val pathInfo = FileRef(fullPath);
 
+    @Rule
+    @JvmField public var thrown = ExpectedException.none()
+
     /* @formatter:off */
     @Test fun test_isUnderWikiDir() { assertEquals(isUnderWikiDir, pathInfo.isUnderWikiDir) }
     @Test fun test_isWikiPage() { assertEquals(isWikiPage, pathInfo.isWikiPage) }
     @Test fun test_isWikiHomePage() { assertEquals(isWikiHomePage, pathInfo.isWikiHomePage) }
     @Test fun test_wikiDir() { assertEquals(wikiDir, pathInfo.wikiDir) }
-    @Test fun test_mainRepoDir() { assertEquals(mainRepoDir, pathInfo.mainRepoDir) }
-    @Test fun test_pathFromWikiDir() { assertEquals(pathFromWikiDir, pathInfo.pathFromWikiDir) }
-    @Test fun test_pathFromMainRepoDir() { assertEquals(pathFromMainRepoDir, pathInfo.pathFromMainRepoDir) }
+    @Test fun test_mainRepoDir() {
+        if (!isUnderWikiDir) {
+//            thrown.expect(AssertionError::class.java)
+//            thrown.expectMessage("mainRepo related values are only valid if isUnderWikiDir is true")
+            //assertEquals(pathFromMainRepoDir, pathInfo.filePathFromMainRepoDir)
+        }
+        else assertEquals(mainRepoDir, pathInfo.mainRepoDir)
+    }
+    @Test fun test_filePathFromWikiDir() { assertEquals(pathFromWikiDir, pathInfo.filePathFromWikiDir) }
+    @Test fun test_filePathFromMainRepoDir() {
+        if (!isUnderWikiDir) {
+//            thrown.expect(AssertionError::class.java)
+//            thrown.expectMessage("mainRepo related values are only valid if isUnderWikiDir is true")
+            //assertEquals(pathFromMainRepoDir, pathInfo.filePathFromMainRepoDir)
+        }
+        else assertEquals(pathFromMainRepoDir, pathInfo.filePathFromMainRepoDir)
+    }
     @Test fun test_upDirectoriesToWikiHome() { assertEquals(upDirectoriesToWikiHome, pathInfo.upDirectoriesToWikiHome) }
     /* @formatter:on */
 

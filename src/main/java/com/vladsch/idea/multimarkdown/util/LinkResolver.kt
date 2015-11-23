@@ -28,6 +28,7 @@ abstract class LinkResolver(val containingFile: FileRef, val projectResolver: Li
 
         fun isUnderVcs(fileRef:FileRef):Boolean
         fun vcsRepoUrlBase(fileRef: FileRef):String?
+        fun vcsProjectRepoUrlBase():String?
         fun vcsRepoBase(fileRef: FileRef):String?
         fun repoUrlFor(fileRef:FileRef, withExt:Boolean, anchor:String?): String?
         fun projectFileList(): List<FileRef>?
@@ -50,7 +51,7 @@ abstract class LinkResolver(val containingFile: FileRef, val projectResolver: Li
     abstract class Context(val resolver: LinkResolver, val containingFile: FileRef, val options: Int = 0, val inList: List<FileRef>? = null, val branchOrTag: String?) {
         abstract fun analyze(linkRef: LinkRef, targetRef: FileRef): MismatchReasons
         abstract fun isResolvedTo(linkRef: LinkRef, targetRef: FileRef, branchOrTag: String? = null): Boolean
-        abstract fun linkAddress(linkRef: LinkRef, targetRef: FileRef, withExtForWikiPage: Boolean, branchOrTag: String? = this.branchOrTag): String
+        abstract fun linkAddress(linkRef: LinkRef, targetRef: PathInfo, withExtForWikiPage: Boolean, branchOrTag: String? = this.branchOrTag): String
         abstract fun multiResolve(linkRef: LinkRef, options: Int = this.options): List<PathInfo>
         abstract fun relativePath(linkRef: LinkRef, targetRef: FileRef, withExtForWikiPage: Boolean, branchOrTag: String? = this.branchOrTag): String
         abstract fun resolve(linkRef: LinkRef, options: Int = this.options): PathInfo?
@@ -67,7 +68,7 @@ abstract class LinkResolver(val containingFile: FileRef, val projectResolver: Li
     abstract fun context(containingFile: FileRef, options: Int = 0, inList: List<FileRef>? = null, branchOrTag: String? = null): Context
     abstract fun isResolved(linkRef: LinkRef, options: Int = 0, inList: List<FileRef>? = null): Boolean
     abstract fun isResolvedTo(linkRef: LinkRef, targetRef: FileRef, branchOrTag: String? = null): Boolean
-    abstract fun linkAddress(linkRef: LinkRef, targetRef: FileRef, withExtForWikiPage: Boolean, branchOrTag: String? = null): String
+    abstract fun linkAddress(linkRef: LinkRef, targetRef: PathInfo, withExtForWikiPage: Boolean, branchOrTag: String? = null): String
     abstract fun multiResolve(linkRef: LinkRef, options: Int = 0, inList: List<FileRef>? = null): List<PathInfo>
     abstract fun relativePath(linkRef: LinkRef, targetRef: FileRef, withExtForWikiPage: Boolean, branchOrTag: String? = null): String
     abstract fun resolve(linkRef: LinkRef, options: Int = 0, inList: List<FileRef>? = null): PathInfo?

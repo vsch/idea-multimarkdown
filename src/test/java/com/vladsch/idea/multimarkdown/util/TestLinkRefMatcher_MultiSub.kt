@@ -26,7 +26,7 @@ class TestLinkRefMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.md")
         val linkRef = FileLinkRef(linkInfo, linkInfo.fileNameNoExt, null)
 
-        val linkRefMatcher = LinkRefMatcher(linkRef, projectBasePath, true)
+        val linkRefMatcher = GitHubLinkRefMatcher(linkRef, projectBasePath, true)
 
         val list = ArrayList<String>()
         val matchText = linkRefMatcher.patternText()
@@ -51,7 +51,7 @@ class TestLinkRefMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/Multiple-Match.md")
         val linkRef = FileLinkRef(linkInfo, linkInfo.fileName, null)
 
-        val linkRefMatcher = LinkRefMatcher(linkRef, projectBasePath, true)
+        val linkRefMatcher = GitHubLinkRefMatcher(linkRef, projectBasePath, true)
 
         val list = ArrayList<String>()
         val matchText = linkRefMatcher.patternText()
@@ -66,6 +66,11 @@ class TestLinkRefMatcher_MultiSub {
         }
 
         compareOrderedLists("$matchText does not match\n${linkInfo.filePath}\n", arrayListOf<String>(
+                "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/SubDirectory/Multiple-Match.md",
+                "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.markdown",
+                "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.md",
+                "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.mkd",
+                "/Users/vlad/src/MarkdownTest/SubDirectory/Multiple-Match.md",
                 "/Users/vlad/src/MarkdownTest/Multiple-Match.markdown",
                 "/Users/vlad/src/MarkdownTest/Multiple-Match.md",
                 "/Users/vlad/src/MarkdownTest/Multiple-Match.mkd"
@@ -76,7 +81,7 @@ class TestLinkRefMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/single-link-test.md")
         val linkRef = FileLinkRef(linkInfo, "Readme.md", null)
 
-        val linkRefMatcher = LinkRefMatcher(linkRef, projectBasePath, true)
+        val linkRefMatcher = GitHubLinkRefMatcher(linkRef, projectBasePath, true)
 
         val list = ArrayList<String>()
         val matchText = linkRefMatcher.patternText()
@@ -91,7 +96,19 @@ class TestLinkRefMatcher_MultiSub {
         }
 
         compareOrderedLists("$matchText does not match\n${linkInfo.filePath}\n", arrayListOf<String>(
-                "/Users/vlad/src/MarkdownTest/Readme.md"
+                "/Users/vlad/src/MarkdownTest/untitled/README.md",
+                "/Users/vlad/src/MarkdownTest/Readme.md",
+                "/Users/vlad/src/MarkdownTest/GitHubIssues/Issue-46/webbeheer_package/bower_components/bootstrap-datepicker/README.md",
+                "/Users/vlad/src/MarkdownTest/GitHubIssues/Issue-46/webbeheer_package/bower_components/bootstrap-datepicker/tests/README.md",
+                "/Users/vlad/src/MarkdownTest/GitHubIssues/Issue-46/webbeheer_package/bower_components/cropper/README.md",
+                "/Users/vlad/src/MarkdownTest/GitHubIssues/Issue-46/webbeheer_package/bower_components/eonasdan-bootstrap-datetimepicker/README.md",
+                "/Users/vlad/src/MarkdownTest/GitHubIssues/Issue-46/webbeheer_package/bower_components/autoNumeric/readme.md",
+                "/Users/vlad/src/MarkdownTest/GitHubIssues/Issue-46/webbeheer_package/bower_components/bootstrap-modal/README.md",
+                "/Users/vlad/src/MarkdownTest/GitHubIssues/Issue-46/webbeheer_package/bower_components/autoNumeric/autoNumeric-2.0/readme.md",
+                "/Users/vlad/src/MarkdownTest/GitHubIssues/Issue-46/webbeheer_package/bower_components/bootstrap/README.md",
+                "/Users/vlad/src/MarkdownTest/GitHubIssues/Issue-46/webbeheer_package/bower_components/bootstrap-datepicker/docs/README.md",
+                "/Users/vlad/src/MarkdownTest/GitHubIssues/Issue-46/webbeheer_package/bower_components/bootstrap-daterangepicker/README.md",
+                "/Users/vlad/src/MarkdownTest/GitHubIssues/Issue-46/webbeheer_package/bower_components/bootstrap-sass/README.md"
         ), list)
     }
 
@@ -99,7 +116,7 @@ class TestLinkRefMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/single-link-test.md")
         val linkRef = FileLinkRef(linkInfo, "Readme", null)
 
-        val linkRefMatcher = LinkRefMatcher(linkRef, projectBasePath, true)
+        val linkRefMatcher = GitHubLinkRefMatcher(linkRef, projectBasePath, true)
 
         val list = ArrayList<String>()
         val matchText = linkRefMatcher.patternText()
@@ -114,7 +131,19 @@ class TestLinkRefMatcher_MultiSub {
         }
 
         compareOrderedLists("$matchText does not match\n${linkInfo.filePath}\n", arrayListOf<String>(
-                "/Users/vlad/src/MarkdownTest/Readme.md"
+                "/Users/vlad/src/MarkdownTest/untitled/README.md",
+                "/Users/vlad/src/MarkdownTest/Readme.md",
+                "/Users/vlad/src/MarkdownTest/GitHubIssues/Issue-46/webbeheer_package/bower_components/bootstrap-datepicker/README.md",
+                "/Users/vlad/src/MarkdownTest/GitHubIssues/Issue-46/webbeheer_package/bower_components/bootstrap-datepicker/tests/README.md",
+                "/Users/vlad/src/MarkdownTest/GitHubIssues/Issue-46/webbeheer_package/bower_components/cropper/README.md",
+                "/Users/vlad/src/MarkdownTest/GitHubIssues/Issue-46/webbeheer_package/bower_components/eonasdan-bootstrap-datetimepicker/README.md",
+                "/Users/vlad/src/MarkdownTest/GitHubIssues/Issue-46/webbeheer_package/bower_components/autoNumeric/readme.md",
+                "/Users/vlad/src/MarkdownTest/GitHubIssues/Issue-46/webbeheer_package/bower_components/bootstrap-modal/README.md",
+                "/Users/vlad/src/MarkdownTest/GitHubIssues/Issue-46/webbeheer_package/bower_components/autoNumeric/autoNumeric-2.0/readme.md",
+                "/Users/vlad/src/MarkdownTest/GitHubIssues/Issue-46/webbeheer_package/bower_components/bootstrap/README.md",
+                "/Users/vlad/src/MarkdownTest/GitHubIssues/Issue-46/webbeheer_package/bower_components/bootstrap-datepicker/docs/README.md",
+                "/Users/vlad/src/MarkdownTest/GitHubIssues/Issue-46/webbeheer_package/bower_components/bootstrap-daterangepicker/README.md",
+                "/Users/vlad/src/MarkdownTest/GitHubIssues/Issue-46/webbeheer_package/bower_components/bootstrap-sass/README.md"
         ), list)
     }
 
@@ -122,7 +151,7 @@ class TestLinkRefMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.md")
         val linkRef = LinkRef.parseLinkRef(linkInfo, linkInfo.fileName, ::WikiLinkRef)
 
-        val linkRefMatcher = LinkRefMatcher(linkRef, projectBasePath, true)
+        val linkRefMatcher = GitHubLinkRefMatcher(linkRef, projectBasePath, true)
 
         val list = ArrayList<String>()
         val matchText = linkRefMatcher.patternText()
@@ -148,7 +177,7 @@ class TestLinkRefMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/SubDirectory/NestedFile.md")
         val linkRef = FileLinkRef(linkInfo, "SubDirectory/NestedFile.md", null)
 
-        val linkRefMatcher = LinkRefMatcher(linkRef, projectBasePath, true)
+        val linkRefMatcher = GitHubLinkRefMatcher(linkRef, projectBasePath, true)
 
         val list = ArrayList<String>()
         val matchText = linkRefMatcher.patternText()
@@ -171,7 +200,7 @@ class TestLinkRefMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/Multiple-Match.mkd")
         val linkRef = FileLinkRef(linkInfo, linkInfo.fileName, null)
 
-        val linkRefMatcher = LinkRefMatcher(linkRef, projectBasePath, false)
+        val linkRefMatcher = GitHubLinkRefMatcher(linkRef, projectBasePath, false)
 
         val list = ArrayList<String>()
         val matchText = linkRefMatcher.patternText()
@@ -194,7 +223,7 @@ class TestLinkRefMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/single-link-test.md")
         val linkRef = FileLinkRef(linkInfo, "Readme.md", null)
 
-        val linkRefMatcher = LinkRefMatcher(linkRef, projectBasePath, false)
+        val linkRefMatcher = GitHubLinkRefMatcher(linkRef, projectBasePath, false)
 
         val list = ArrayList<String>()
         val matchText = linkRefMatcher.patternText()
@@ -217,7 +246,7 @@ class TestLinkRefMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/single-link-test.md")
         val linkRef = FileLinkRef(linkInfo, "Readme", null)
 
-        val linkRefMatcher = LinkRefMatcher(linkRef, projectBasePath, false)
+        val linkRefMatcher = GitHubLinkRefMatcher(linkRef, projectBasePath, false)
 
         val list = ArrayList<String>()
         val matchText = linkRefMatcher.patternText()
@@ -239,7 +268,7 @@ class TestLinkRefMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.md")
         val linkRef = LinkRef.parseLinkRef(linkInfo, linkInfo.fileName, ::WikiLinkRef)
 
-        val linkRefMatcher = LinkRefMatcher(linkRef, projectBasePath, false)
+        val linkRefMatcher = GitHubLinkRefMatcher(linkRef, projectBasePath, false)
 
         val list = ArrayList<String>()
         val matchText = linkRefMatcher.patternText()
@@ -265,7 +294,7 @@ class TestLinkRefMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.md")
         val linkRef = LinkRef.parseLinkRef(linkInfo, linkInfo.fileNameNoExt, ::WikiLinkRef)
 
-        val linkRefMatcher = LinkRefMatcher(linkRef, projectBasePath, false)
+        val linkRefMatcher = GitHubLinkRefMatcher(linkRef, projectBasePath, false)
 
         val list = ArrayList<String>()
         val matchText = linkRefMatcher.patternText()
@@ -275,7 +304,7 @@ class TestLinkRefMatcher_MultiSub {
         if (regex != null) {
             for (path in MarkdownTestData.filePaths) {
                 if (path.matches(regex)) {
-                if (bestMatch.isEmpty() || bestMatch > path) bestMatch = path;
+                    if (bestMatch.isEmpty() || bestMatch > path) bestMatch = path;
                 }
             }
         }
@@ -291,7 +320,7 @@ class TestLinkRefMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/SubDirectory/NestedFile.md")
         val linkRef = FileLinkRef(linkInfo, "SubDirectory/NestedFile.md", null)
 
-        val linkRefMatcher = LinkRefMatcher(linkRef, projectBasePath, false)
+        val linkRefMatcher = GitHubLinkRefMatcher(linkRef, projectBasePath, false)
 
         val list = ArrayList<String>()
         val matchText = linkRefMatcher.patternText()
@@ -314,7 +343,7 @@ class TestLinkRefMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/Multiple-Match.md")
         val linkRef = FileLinkRef(linkInfo, "SubDirectory/Multiple-Match.md", null)
 
-        val linkRefMatcher = LinkRefMatcher(linkRef, projectBasePath, false)
+        val linkRefMatcher = GitHubLinkRefMatcher(linkRef, projectBasePath, false)
 
         val list = ArrayList<String>()
         val matchText = linkRefMatcher.patternText(false)
@@ -324,8 +353,8 @@ class TestLinkRefMatcher_MultiSub {
 
         if (regex != null && regexWiki != null) {
             for (path in MarkdownTestData.filePaths) {
-            val pathInfo = FileRef(path)
-            if (path.matches(if (pathInfo.isWikiPage) regexWiki else regex)) {
+                val pathInfo = FileRef(path)
+                if (path.matches(if (pathInfo.isWikiPage) regexWiki else regex)) {
                     list.add(path)
                 }
             }

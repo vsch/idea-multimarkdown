@@ -344,11 +344,19 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         return gitHubRepo == null ? null : gitHubRepo.getBasePath();
     }
 
+
     @NotNull
     @Override
     public String getProjectBasePath() {
         String basePath = project.getBasePath();
         return basePath != null ? basePath : "";
+    }
+
+    @Nullable
+    @Override
+    public String vcsProjectRepoUrlBase() {
+        GitHubRepo gitHubRepo = getGitHubRepo(project.getBasePath());
+        return gitHubRepo == null ? null : gitHubRepo.getBasePath();
     }
 
     @Nullable

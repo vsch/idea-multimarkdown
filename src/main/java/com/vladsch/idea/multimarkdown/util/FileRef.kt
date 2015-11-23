@@ -74,13 +74,28 @@ open class FileRef(fullPath: String) : PathInfo(fullPath) {
         get() = if (wikiHomeDirEnd <= 0) EMPTY_STRING else fullPath.substring(0, wikiHomeDirEnd)
 
     val mainRepoDir: String
-        get() = if (mainRepoDirEnd <= 0) EMPTY_STRING else fullPath.substring(0, mainRepoDirEnd)
+        get() {
+            assert(isUnderWikiDir, {"mainRepo related values are only valid if isUnderWikiDir is true"})
+            return if (mainRepoDirEnd <= 0) EMPTY_STRING else fullPath.substring(0, mainRepoDirEnd)
+        }
 
-    val pathFromWikiDir: String
+    val filePathFromWikiDir: String
         get() = if (wikiHomeDirEnd <= 0) fullPath else fullPath.substring(wikiHomeDirEnd + 1)
 
+    val filePathFromMainRepoDir: String
+        get() {
+            assert(isUnderWikiDir, {"mainRepo related values are only valid if isUnderWikiDir is true"})
+            return if (mainRepoDirEnd <= 0) fullPath else fullPath.substring(mainRepoDirEnd + 1)
+        }
+
+    val pathFromWikiDir: String
+        get() = if (wikiHomeDirEnd <= 0) path else fullPath.substring(wikiHomeDirEnd + 1, nameStart)
+
     val pathFromMainRepoDir: String
-        get() = if (mainRepoDirEnd <= 0) fullPath else fullPath.substring(mainRepoDirEnd + 1)
+        get() {
+            assert(isUnderWikiDir, {"mainRepo related values are only valid if isUnderWikiDir is true"})
+            return if (mainRepoDirEnd <= 0) path else fullPath.substring(mainRepoDirEnd + 1, nameStart)
+        }
 
     val upDirectoriesToWikiHome: Int by lazy {
         if (wikiHomeDirEnd <= 0 || wikiHomeDirEnd == fullPath.length) 0
@@ -99,7 +114,7 @@ open class FileRef(fullPath: String) : PathInfo(fullPath) {
         }
     }
 
-    open fun virtualFileRef(project: Project): VirtualFileRef?  {
+    open fun virtualFileRef(project: Project): VirtualFileRef? {
         val virtualFile = VirtualFileManager.getInstance().findFileByUrl("" + fullPath)
         return if (virtualFile == null) null else VirtualFileRef(virtualFile, project);
     }

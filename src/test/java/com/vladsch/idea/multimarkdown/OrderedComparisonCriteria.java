@@ -58,22 +58,6 @@ public abstract class OrderedComparisonCriteria<T> extends TypedComparisonCriter
         return expected != null && expected.getClass().isArray();
     }
 
-    private String arrayAsString(Object expecteds) {
-        StringBuilder builder = new StringBuilder(100);
-
-        builder.append(expecteds.toString());
-        builder.append("[\n");
-        for (int i = 0; i < Array.getLength(expecteds); i++) {
-            Object elem = Array.get(expecteds,i);
-            builder.append("  ");
-            builder.append(elem == null ? "null" : elem.toString());
-            builder.append('\n');
-        }
-        builder.append("]\n");
-
-        return builder.toString();
-    }
-
     private int assertArraysAreSameLength(Object expecteds, Object actuals, String header) {
         if (expecteds == null) {
             Assert.fail(header + "expected array was null");
@@ -86,7 +70,7 @@ public abstract class OrderedComparisonCriteria<T> extends TypedComparisonCriter
         int actualsLength = Array.getLength(actuals);
         int expectedsLength = Array.getLength(expecteds);
         if (actualsLength != expectedsLength) {
-            throw new ComparisonFailure(header + "array lengths differed, expected.length=" + expectedsLength + " actual.length=" + actualsLength,  arrayAsString(expecteds), arrayAsString(actuals));
+            throw new ComparisonFailure(header + "array lengths differed, expected.length=" + expectedsLength + " actual.length=" + actualsLength,  TestUtils.arrayAsString(expecteds), TestUtils.arrayAsString(actuals));
         }
 
         return expectedsLength;

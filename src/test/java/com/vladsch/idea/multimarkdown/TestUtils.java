@@ -27,6 +27,7 @@ import com.vladsch.idea.multimarkdown.util.FileReferenceList;
 import com.vladsch.idea.multimarkdown.util.PathInfo;
 import org.junit.internal.ArrayComparisonFailure;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -115,7 +116,7 @@ public class TestUtils {
         new OrderedStringComparison().arrayEquals(null, expected, actual.toArray(new String[actual.size()]));
     }
 
-    public static void compareOrderedLists(String message, List<String>expected, List<String> actual) {
+    public static void compareOrderedLists(String message, List<String> expected, List<String> actual) {
         new OrderedStringComparison().arrayEquals(message, expected.toArray(new String[expected.size()]), actual.toArray(new String[actual.size()]));
     }
 
@@ -139,7 +140,7 @@ public class TestUtils {
         new UnorderedSuggestionComparison().arrayEquals(null, expected, actual.getSuggestions().toArray(new Suggestion[actual.size()]));
     }
 
-    public static void compareUnorderedLists(String message, List<Suggestion>expected, SuggestionList actual) {
+    public static void compareUnorderedLists(String message, List<Suggestion> expected, SuggestionList actual) {
         new UnorderedSuggestionComparison().arrayEquals(null, expected.toArray(new Suggestion[expected.size()]), actual.getSuggestions().toArray(new Suggestion[actual.size()]));
     }
 
@@ -150,7 +151,6 @@ public class TestUtils {
     public static void assertSuggestionListHasSuggestions(SuggestionList suggestionList, Suggestion... suggestions) {
         compareOrderedLists((String) null, suggestions, suggestionList);
     }
-
 
     public static void assertEqualsMessage(String message, Object expected, Object actual) {
         if ((expected == null && actual != null) || (expected != null && !expected.equals(actual))) {
@@ -221,7 +221,6 @@ public class TestUtils {
             if (o1.compareTo(o2) != 0) failNotEquals("PathInfo not equal", o1, o2);
         }
     }
-
 
     public static class UnorderedPathInfoComparison extends UnorderedComparisonCriteria<PathInfo> {
         @Override
@@ -335,5 +334,25 @@ public class TestUtils {
         protected void assertElementsAreEqual(Suggestion.Param o1, Suggestion.Param o2) {
             if (!elementsAreEqual(o1, o2)) failNotEquals("Suggestion.Param not equal", o1, o2);
         }
+    }
+
+    public static String arrayAsString(Object expecteds) {
+        StringBuilder builder = new StringBuilder(100);
+
+        builder.append(expecteds.toString());
+        builder.append("[\n");
+        int length = Array.getLength(expecteds);
+        for (int i = 0; i < length; i++) {
+            Object elem = Array.get(expecteds, i);
+            builder.append("  ");
+            if (elem == null) builder.append("null");
+            else if (elem instanceof String) builder.append("\"").append(elem.toString().replace("\"", "\\\"")).append("\"");
+            else builder.append(elem.toString());
+            if (i+1 < length) builder.append(',');
+            builder.append('\n');
+        }
+        builder.append("]\n");
+
+        return builder.toString();
     }
 }

@@ -34,11 +34,14 @@ import org.junit.runners.Suite;
         TestFileReferenceLinkGitHubRules.class,
         TestFileReferenceLinkGitHubRulesUnresolvedReasons.class,
         TestFileReferenceList.class,
+
         TestPathInfo.class,
         TestFileInfo.class,
         TestLinkRef.class,
         TestLinkRefMatcher_MultiSub.class,
-        TestLinkRefMatcher_MarkdownTest_wiki__Home.class
+        TestLinkRefMatcher_MarkdownTest_wiki__Home.class,
+        TestLinkRefMatcher_MarkdownTest_wiki__normal_file.class,
+        TestLinkRefMatcher_MarkdownTest__Readme.class
 })
 public class UtilTestSuite {
 }
