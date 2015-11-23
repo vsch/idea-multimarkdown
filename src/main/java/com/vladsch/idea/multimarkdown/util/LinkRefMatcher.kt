@@ -111,7 +111,8 @@ class LinkRefMatcher(val linkRef: LinkRef, projectBasePath: String? = null, val 
 
                 // 2. any file with extension, all files are located relative to their physical location under the wiki repo
 
-                if (linkRef.containingFile.isWikiHomePage && linkRef is ImageLinkRef) {
+                // TODO: factor out this kind of logic into the GitHubLinkResolver it is really specific to GitHub wikis
+                if (linkRef.containingFile.isWikiHomePage && (linkRef is ImageLinkRef || (linkRef.hasExt && !linkRef.isMarkdownExt && linkRef.path.startsWith("wiki/")))) {
                     // if the link winds up in the same directory as the homePageWikiPrefixPath, without the wiki prefix then it will not resolve
                     prefixPath = PathInfo.append(homePageWikiPrefixPath, linkRef.path.split('/')).filePath.endWith('/')
                 }
