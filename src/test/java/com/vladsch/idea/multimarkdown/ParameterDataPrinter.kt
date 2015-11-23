@@ -77,7 +77,7 @@ fun printData(data: Collection<Array<Any?>>, header: Array<String>): Unit {
             rowText += dataColText(col, padEnd = colWidths[i])
         }
         if (rowIndex > 0) System.out.print(",\n")
-        System.out.print("                /* ${rowIndex.toString().padStart(rowPad)} */arrayOf<Any?>($rowText)")
+        System.out.print("                /* ${rowIndex.toString().padStart(rowPad)} */arrayOf<Any?>($rowText) /* ${rowIndex.toString().padStart(rowPad)} */")
         rowIndex++
     }
 
