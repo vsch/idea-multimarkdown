@@ -91,6 +91,7 @@ object MarkdownTestData : LinkResolver.ProjectResolver {
             "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/single-link-test.md",
             "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Space In Name.md",
             "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Test.kt",
+            "/Users/vlad/src/MarkdownTest/MarkdownTest.wikiSubDirectory//Test.kt",
             "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/SubDirectory/Sub-Test.kt",
             "/Users/vlad/src/MarkdownTest/Test.kt",
             "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/vcs-image.png",

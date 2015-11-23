@@ -42,7 +42,7 @@ class TestLinkRefMatcher_MarkdownTest_wiki__Home constructor(val fullPath: Strin
     val multiResolve: Array<String>
     val localLinkRef = resolvesLocalRel
     val externalLinkRef = resolvesExternalRel
-    val skipTest = linkRef is UrlLinkRef || (linkRef !is ImageLinkRef && linkRef.hasExt && !linkRef.isMarkdownExt)
+    val skipTest = linkRef is UrlLinkRef// || (linkRef !is ImageLinkRef && linkRef.hasExt && !linkRef.isMarkdownExt)
 
     init {
         val fullPathInfo = PathInfo(fullPath)
