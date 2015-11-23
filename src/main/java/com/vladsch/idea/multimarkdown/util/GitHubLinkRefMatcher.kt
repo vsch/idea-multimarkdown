@@ -42,7 +42,7 @@ class GitHubLinkRefMatcher(val linkRef: LinkRef, projectBasePath: String? = null
             }
         }
 
-        if (!hadExtension && linkRef.hasExt && linkRef !is WikiLinkRef) {
+        if (!hadExtension && linkRef.hasExt) {
             if (!extensionPattern.isEmpty()) extensionPattern += "|"
             extensionPattern += matchExt(linkRef.ext)
         }
@@ -89,9 +89,9 @@ class GitHubLinkRefMatcher(val linkRef: LinkRef, projectBasePath: String? = null
 
             val filenamePattern = matchPathText(linkRef.fileNameNoExt, emptyMatchesAll = true)
             val anchorPattern = matchPathText(linkRef.anchorText, isOptional = true)
-            val extensionPattern = extensionPattern(useDefaultExt = true, addAnchorExt = true, isOptional = true)
+            val extensionPattern = extensionPattern(useDefaultExt = looseMatch || !linkRef.hasExt, addAnchorExt = true, isOptional = true)
 
-            pattern = "^" + matchPathText(linkRef.containingFile.wikiDir.endWith('/')) + subDirPattern + filenamePattern + anchorPattern + extensionPattern + "$"
+            pattern = "^" + matchPathText(linkRef.containingFile.wikiDir.endWith('/')) + (if (looseMatch || !linkRef.hasExt) subDirPattern else "") + filenamePattern + anchorPattern + extensionPattern + "$"
         } else {
             // it is assumed that if there is a wiki directory then it is a sub dir of the projectBasePath with the same name and .wiki appended
             // so if we encounter projectBasePath/wiki will will change it to projectBasePath/projectBasePathName.wiki

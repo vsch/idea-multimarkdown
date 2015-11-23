@@ -264,9 +264,9 @@ class TestLinkRefMatcher_MultiSub {
         ), list)
     }
 
-    @Test fun test_WikiLinkRefMatcher_SubDirMultiExact() {
+    @Test fun test_WikiLinkRefMatcher_SubDirMultiExactNoExt() {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.md")
-        val linkRef = LinkRef.parseLinkRef(linkInfo, linkInfo.fileName, ::WikiLinkRef)
+        val linkRef = LinkRef.parseLinkRef(linkInfo, linkInfo.fileNameNoExt, ::WikiLinkRef)
 
         val linkRefMatcher = GitHubLinkRefMatcher(linkRef, projectBasePath, false)
 
@@ -287,6 +287,29 @@ class TestLinkRefMatcher_MultiSub {
                 "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.markdown",
                 "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.md",
                 "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.mkd"
+        ), list)
+    }
+
+    @Test fun test_WikiLinkRefMatcher_SubDirMultiExactWithExt() {
+        val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.md")
+        val linkRef = LinkRef.parseLinkRef(linkInfo, linkInfo.fileName, ::WikiLinkRef)
+
+        val linkRefMatcher = GitHubLinkRefMatcher(linkRef, projectBasePath, false)
+
+        val list = ArrayList<String>()
+        val matchText = linkRefMatcher.patternText()
+        val regex = linkRefMatcher.patternRegex()
+
+        if (regex != null) {
+            for (path in MarkdownTestData.filePaths) {
+                if (path.matches(regex)) {
+                    list.add(path)
+                }
+            }
+        }
+
+        compareOrderedLists("$matchText does not match\n${linkInfo.filePath}\n", arrayListOf<String>(
+                "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.md"
         ), list)
     }
 

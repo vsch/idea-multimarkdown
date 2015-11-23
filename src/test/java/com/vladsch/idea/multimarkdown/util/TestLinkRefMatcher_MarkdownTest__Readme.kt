@@ -82,7 +82,7 @@ class TestLinkRefMatcher_MarkdownTest__Readme constructor(val fullPath: String
     @Test fun test_LocalLinkAddress() {
         if (skipTest) return
         val localRef = resolver.resolve(linkRef, LinkResolver.ONLY_LOCAL, fileList) as? FileRef
-        val localRefAddress = if (localRef != null) resolver.linkAddress(linkRef, localRef, linkRef !is WikiLinkRef && (linkRef.hasExt || (linkRef.hasAnchor && linkAnchor?.contains('.') ?: false)), null) else null
+        val localRefAddress = if (localRef != null) resolver.linkAddress(linkRef, localRef, (linkRef.hasExt || (linkRef.hasAnchor && linkAnchor?.contains('.') ?: false)), null) else null
         assertEqualsMessage("Local link address does not match", this.linkAddressText, localRefAddress)
     }
 

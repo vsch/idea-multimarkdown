@@ -100,8 +100,6 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
 
             if (!linkRef.isAbsolute) {
                 // resolve the relative link as per requested options
-                if (linkRef is WikiLinkRef && !wantLooseMatch(options) && linkRef.hasExt) return null  // wiki links don't resolve with extensions
-
                 val linkRefMatcher = GitHubLinkRefMatcher(linkRef, projectBasePath, wantLooseMatch(options) || linkRef.isEmpty)
                 val matches = getMatchedRefs(linkRef, linkRefMatcher, options, inList)
                 var resolvedRef = (if (matches.size > 0) matches[0] else null) ?: return null
@@ -258,7 +256,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                 var prefix = relativePath(linkRef, targetRef, withExtForWikiPage, branchOrTag)
 
                 if (linkRef is WikiLinkRef) {
-                    return prefix.endWith('/') + targetRef.fileNameNoExt.replace('-', ' ')
+                    return prefix.endWith('/') + (if (withExtForWikiPage) targetRef.fileName else targetRef.fileNameNoExt).replace('-', ' ')
                 } else {
                     if (prefix.isNotEmpty() && targetRef.isUnderWikiDir) {
                         // if the prefix starts with the wiki dir change it to the generic wiki used in links
