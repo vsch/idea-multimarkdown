@@ -26,7 +26,7 @@ class MarkdownTest__Readme_md {
         @JvmStatic
         fun data(): Collection<Array<Any?>> {
 
-            val cleanData = true
+            val cleanData = false
             val data = arrayListOf<Array<Any?>>(
                 /* @formatter:off */
                 /*      arrayOf<Any?>("fullPath"                              , "linkType"    , "linkText"                         , "linkRef"                                                                , "linkAnchor" , "linkTitle", "resolvesLocal"                                           , "resolvesRemote"                                      , "linkAddress"                                      , "remoteAddress"  , "multiResolve") */
