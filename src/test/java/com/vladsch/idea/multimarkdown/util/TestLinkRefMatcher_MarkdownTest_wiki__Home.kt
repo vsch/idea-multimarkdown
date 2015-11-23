@@ -33,19 +33,16 @@ class TestLinkRefMatcher_MarkdownTest_wiki__Home constructor(val fullPath: Strin
                                                              , val linkAddressText: String?
                                                              , multiResolvePartial: Array<String>
 ) {
-    val projectBasePath = "/Users/vlad/src/MarkdownTest/"
-    val wikiBasePath = "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki"
-
     val resolvesLocal: String?
     val resolvesExternal: String?
     val filePathInfo = FileRef(fullPath)
-    val resolver = GitHubLinkResolver(null, filePathInfo, projectBasePath)
+    val resolver = GitHubLinkResolver(MarkdownTestData, filePathInfo)
     val linkRef = LinkRef.parseLinkRef(filePathInfo, linkAddress + linkAnchor.startWith('#'), linkRefType)
     val fileList = ArrayList<FileRef>(MarkdownTestData.filePaths.size)
     val multiResolve: Array<String>
     val localLinkRef = resolvesLocalRel
     val externalLinkRef = resolvesExternalRel
-    val skipTest = PathInfo(linkAddress).isURI
+    val skipTest = linkRef is UrlLinkRef || (linkRef !is ImageLinkRef && linkRef.hasExt && !linkRef.isMarkdownExt)
 
     init {
         val fullPathInfo = PathInfo(fullPath)

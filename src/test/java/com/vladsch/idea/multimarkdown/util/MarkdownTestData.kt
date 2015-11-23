@@ -14,7 +14,63 @@
  */
 package com.vladsch.idea.multimarkdown.util
 
-object MarkdownTestData {
+import com.intellij.openapi.project.Project
+import java.util.*
+
+object MarkdownTestData : LinkResolver.ProjectResolver {
+    override fun isUnderVcs(fileRef: FileRef): Boolean {
+        return fileRef.filePath !in nonVcsFiles
+    }
+
+    override fun vcsRepoUrlBase(fileRef: FileRef): String? {
+        if (fileRef.filePath.startsWith("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/")) return "https://github.com/vsch/MarkdownTest/wiki"
+        else if (fileRef.filePath.startsWith("/Users/vlad/src/MarkdownTest/")) return "https://github.com/vsch/MarkdownTest"
+        else return null
+    }
+
+    override val projectBasePath: String
+        get() = "/Users/vlad/src/MarkdownTest"
+
+    override val project: Project?
+        get() = null
+
+    override fun vcsRepoBase(fileRef: FileRef): String? {
+        if (fileRef.filePath.startsWith("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/")) return "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki"
+        else if (fileRef.filePath.startsWith("/Users/vlad/src/MarkdownTest/")) return "/Users/vlad/src/MarkdownTest"
+        else return null
+    }
+
+    override fun repoUrlFor(fileRef: FileRef, withExt: Boolean, anchor: String?): String? {
+        if (isUnderVcs(fileRef)) {
+            val repoBase = vcsRepoBase(fileRef)
+            val vcsRepoUrlBase = vcsRepoUrlBase(fileRef)
+            if (repoBase != null && vcsRepoUrlBase != null) {
+                return vcsRepoUrlBase.endWith('/') + PathInfo.relativePath(repoBase, fileRef.filePathNoExt) + (if (withExt) fileRef.ext.startWith('.')) + anchor.startWith('#')
+            }
+        }
+        return null;
+    }
+
+    override fun projectFileList(): List<FileRef>? {
+        return fileList
+    }
+
+    val fileList: List<FileRef> by lazy {
+        val fileList = ArrayList<FileRef>()
+        for (path in filePaths) {
+            fileList.add(FileRef(path))
+        }
+        fileList
+    }
+
+    val nonVcsFiles = arrayOf(
+            "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/non-vcs-image.png",
+            "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Non-Vcs-Page.md",
+            "/Users/vlad/src/MarkdownTest/SubDirectory/sub-dir-non-vcs-image.png",
+            "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/SubDirectory/sub-dir-non-vcs-image.png",
+            "/Users/vlad/src/MarkdownTest/non-vcs-image.png"
+    )
+
     val filePaths = arrayOf(
             "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/SubDirectory/File-In-Subdirectory.md",
             "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/SubDirectory/In-Name.md",
@@ -34,7 +90,6 @@ object MarkdownTestData {
             "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Not-Wiki-Ext-2.markdown",
             "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/single-link-test.md",
             "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Space In Name.md",
-            "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/vcs-image.png",
             "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/vcs-image.png",
             "/Users/vlad/src/MarkdownTest/SubDirectory/NestedFile.md",
             "/Users/vlad/src/MarkdownTest/SubDirectory/NestedFile#5.md",
@@ -89,6 +144,5 @@ object MarkdownTestData {
             "/Users/vlad/src/MarkdownTest/GitHubIssues/Issue-46/webbeheer_package/bower_components/bootstrap-daterangepicker/README.md",
             "/Users/vlad/src/MarkdownTest/GitHubIssues/Issue-46/webbeheer_package/bower_components/bootstrap-sass/README.md"
     )
-
 }
 

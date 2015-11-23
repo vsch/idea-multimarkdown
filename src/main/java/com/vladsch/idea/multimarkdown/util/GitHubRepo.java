@@ -71,13 +71,21 @@ public class GitHubRepo {
         return null;
     }
 
+    @NotNull
     public String repoUrlFor(String relativeFilePath) {
         return repoUrlFor(relativeFilePath, null);
     }
 
+    @Nullable
     public String repoUrlFor(@NotNull VirtualFile virtualFile, boolean withExtension, @Nullable String anchor) {
         FilePathInfo pathInfo = new FilePathInfo(virtualFile);
         String relativePath = getRelativePath(withExtension ? pathInfo.getFilePathWithAnchor() : pathInfo.getFilePathWithAnchorNoExt());
+        return relativePath == null ? null : repoUrlFor(relativePath, anchor);
+    }
+
+    @Nullable
+    public String repoUrlFor(@NotNull FileRef fileRef, boolean withExtension, @Nullable String anchor) {
+        String relativePath = getRelativePath(withExtension ? fileRef.getFilePath() : fileRef.getFilePathNoExt());
         return relativePath == null ? null : repoUrlFor(relativePath, anchor);
     }
 

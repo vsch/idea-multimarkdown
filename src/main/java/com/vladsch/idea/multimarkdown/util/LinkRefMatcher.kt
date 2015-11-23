@@ -14,8 +14,6 @@
  */
 package com.vladsch.idea.multimarkdown.util
 
-import java.io.UnsupportedEncodingException
-import java.net.URLDecoder
 import kotlin.text.Regex
 import kotlin.text.RegexOption
 
@@ -28,7 +26,7 @@ class LinkRefMatcher(val linkRef: LinkRef, projectBasePath: String? = null, val 
         return matchPathText(ext.startWith('.'))
     }
 
-    protected fun extensionPattern(useDefaultExt: Boolean, addAnchorExt:Boolean, isOptional: Boolean): String {
+    protected fun extensionPattern(useDefaultExt: Boolean, addAnchorExt: Boolean, isOptional: Boolean): String {
         val typeExtensions = if (useDefaultExt) linkRef.linkExtensions else arrayOf()
         var hadExtension = false
         var extensionPattern = ""
@@ -101,8 +99,10 @@ class LinkRefMatcher(val linkRef: LinkRef, projectBasePath: String? = null, val 
             // if it is a wiki but not the main page or not image link then its prefix is not changed
 
             var repoPrefixPath = projectBasePath.endWith('/') + "blob/master/"
+            var repoPrefixPathPattern = ("^\\Q" + projectBasePath.endWith('/') + "blob/\\E[^/]+\\Q/\\E").toRegex()
             var wikiPrefixPath = projectBasePath.endWith('/') + "wiki/"
             var prefixPath: String
+            var homePageWikiPrefixPath = projectBasePath.endWith('/')
 
             if (linkRef.containingFile.isWikiPage) {
                 // wiki repo, files here can be accessed in two ways:
@@ -111,8 +111,11 @@ class LinkRefMatcher(val linkRef: LinkRef, projectBasePath: String? = null, val 
 
                 // 2. any file with extension, all files are located relative to their physical location under the wiki repo
 
-                var filePrefixPath = if (linkRef.containingFile.isWikiHomePage && linkRef is ImageLinkRef) PathInfo.append(wikiPrefixPath, "..").filePath else wikiPrefixPath
-                prefixPath = PathInfo.append(filePrefixPath, linkRef.path.split('/')).filePath.endWith('/')
+                if (linkRef.containingFile.isWikiHomePage && linkRef is ImageLinkRef) {
+                    // if the link winds up in the same directory as the homePageWikiPrefixPath, without the wiki prefix then it will not resolve
+                    prefixPath = PathInfo.append(homePageWikiPrefixPath, linkRef.path.split('/')).filePath.endWith('/')
+                }
+                else prefixPath = PathInfo.append(wikiPrefixPath, linkRef.path.split('/')).filePath.endWith('/')
             } else {
                 // main repo
 
@@ -129,18 +132,30 @@ class LinkRefMatcher(val linkRef: LinkRef, projectBasePath: String? = null, val 
             var wikiPages = false
             var gitHubLinks = false
 
-            if (prefixPath.endWith('/').startsWith(wikiPrefixPath)) {
+            assert(prefixPath.endsWith('/'))
+
+            if (prefixPath.startsWith(wikiPrefixPath)) {
                 // not going for main repo or links, linking a file in the Wiki Repo
                 // if not image and no extension then will match markdown files, ie. WikiPages
                 wikiPages = linkRef !is ImageLinkRef && !linkRef.hasExt
 
+                if (wikiPages && !looseMatch) {
+                    // if there is a subdirectory in the link ref then it should not match anything, unless looseMatch is on
+                    if (linkRef.path.isNotEmpty()) return null
+                }
+
                 // change it to our physical wiki directory which is right after our project base with same name and .wiki extension
                 var pathInfo = PathInfo(projectBasePath)
 
+                // add subdirectories if not wiki page type search, ie. not image or link has extension
                 prefixPath = pathInfo.append(pathInfo.fileNameNoExt + PathInfo.WIKI_HOME_EXTENSION).filePath.endWith('/') + prefixPath.substring(wikiPrefixPath.length)
             } else if (prefixPath.startsWith(repoPrefixPath)) {
-                // linking to files in the main repo
+                // linking to files in the main repo, in the master branch
                 prefixPath = projectBasePath.endWith('/') + prefixPath.substring(repoPrefixPath.length)
+            } else if (prefixPath.matches(repoPrefixPathPattern)) {
+                // linking to files in the main repo, under some existing or non-existing branch or tag
+                val match = repoPrefixPathPattern.find(prefixPath)
+                if (match != null) prefixPath = projectBasePath.endWith('/') + prefixPath.substring(match.range.end + 1)
             } else {
                 // if in the main project directory then can link to issues, pulls, etc
                 // otherwise somewhere before the main repo or in between and nothing will be found
@@ -149,6 +164,7 @@ class LinkRefMatcher(val linkRef: LinkRef, projectBasePath: String? = null, val 
                 // looking for GitHub Links, linkRef name should be one of the GitHub link directories, without wiki since that is taken care of separately
                 // already projectBasePath
                 // TODO: implement resolution to hard-coded links so that no extra code needs to be handled
+                if (linkRef.fileName !in GitHubLinkResolver.GITHUB_LINKS) return null
                 gitHubLinks = true
             }
 

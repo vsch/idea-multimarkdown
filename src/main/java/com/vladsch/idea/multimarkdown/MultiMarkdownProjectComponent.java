@@ -45,18 +45,17 @@ import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
-import com.vladsch.idea.multimarkdown.util.GitHubRepo;
-import com.vladsch.idea.multimarkdown.util.ListenerNotifier;
-import com.vladsch.idea.multimarkdown.util.ReferenceChangeListener;
+import com.vladsch.idea.multimarkdown.util.*;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualFileListener {
+public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualFileListener, LinkResolver.ProjectResolver {
     private static final Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownProjectComponent.class);
 
     private final static int LISTENER_ADDED = 0;
@@ -312,6 +311,59 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         return object instanceof GitHubRepo ? (GitHubRepo) object : null;
     }
 
+    public boolean isUnderVcs(VirtualFile virtualFile) {
+        FileStatus status = FileStatusManager.getInstance(project).getStatus(virtualFile);
+        String id = status.getId();
+        boolean fileStatus = status.equals(FileStatus.DELETED) || status.equals(FileStatus.ADDED) || status.equals(FileStatus.UNKNOWN) || status.equals(FileStatus.IGNORED)
+                || id.startsWith("IGNORE");
+        //logger.info("isUnderVcs " + (!fileStatus) + " for file " + virtualFile + " status " + status);
+        return !fileStatus;
+    }
+
+    @Override
+    public boolean isUnderVcs(@NotNull FileRef fileRef) {
+        if (fileRef instanceof VirtualFileRef) {
+            return isUnderVcs(((VirtualFileRef) fileRef).getVirtualFile());
+        }
+
+        VirtualFileRef virtualFileRef = fileRef.virtualFileRef(project);
+        return virtualFileRef != null && isUnderVcs(virtualFileRef.getVirtualFile());
+    }
+
+    @Nullable
+    @Override
+    public String vcsRepoUrlBase(@NotNull FileRef fileRef) {
+        GitHubRepo gitHubRepo = getGitHubRepo(fileRef.getPath());
+        return gitHubRepo == null ? null : gitHubRepo.gitHubBaseUrl();
+    }
+
+    @Nullable
+    @Override
+    public String vcsRepoBase(@NotNull FileRef fileRef) {
+        GitHubRepo gitHubRepo = getGitHubRepo(fileRef.getPath());
+        return gitHubRepo == null ? null : gitHubRepo.getBasePath();
+    }
+
+    @NotNull
+    @Override
+    public String getProjectBasePath() {
+        String basePath = project.getBasePath();
+        return basePath != null ? basePath : "";
+    }
+
+    @Nullable
+    @Override
+    public String repoUrlFor(@NotNull FileRef fileRef, boolean withExt, @Nullable String anchor) {
+        GitHubRepo gitHubRepo = getGitHubRepo(fileRef.getPath());
+        return gitHubRepo == null ? null : gitHubRepo.repoUrlFor(fileRef, withExt, anchor);
+    }
+
+    @Nullable
+    @Override
+    public List<FileRef> projectFileList() {
+        return null;
+    }
+
     public MultiMarkdownProjectComponent(final Project project) {
         this.project = project;
 
@@ -368,15 +420,6 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
 
     public Project getProject() {
         return project;
-    }
-
-    public boolean isUnderVcs(VirtualFile virtualFile) {
-        FileStatus status = FileStatusManager.getInstance(project).getStatus(virtualFile);
-        String id = status.getId();
-        boolean fileStatus = status.equals(FileStatus.DELETED) || status.equals(FileStatus.ADDED) || status.equals(FileStatus.UNKNOWN) || status.equals(FileStatus.IGNORED)
-                || id.startsWith("IGNORE");
-        //logger.info("isUnderVcs " + (!fileStatus) + " for file " + virtualFile + " status " + status);
-        return !fileStatus;
     }
 
     public void projectOpened() {
