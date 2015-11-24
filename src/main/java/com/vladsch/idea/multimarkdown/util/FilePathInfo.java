@@ -496,6 +496,7 @@ public class FilePathInfo implements Comparable<FilePathInfo> {
 
         if (!withAnchor) {
             cleanLinkRef = new FilePathInfo(linkRef).getFilePath();
+            if (cleanLinkRef.isEmpty()) return null;
         }
 
         if (cleanLinkRef.charAt(0) == '/') return new FilePathInfo(cleanLinkRef);

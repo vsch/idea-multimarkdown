@@ -31,7 +31,7 @@ class GitHubLinkRefMatcher(val linkRef: LinkRef, projectBasePath: String? = null
         val typeExtensions = if (useDefaultExt) linkRef.linkExtensions else arrayOf()
         var hadExtension = false
         var extensionPattern = ""
-        var linkRefExt = if (!linkRef.hasExt) "" else if (linkRef !is WikiLinkRef) linkRef.ext.replace("%23", "#") else linkRef.ext
+        var linkRefExt = if (!linkRef.hasExt) "" else linkRef.linkToFile(linkRef.ext)
         val anchorPattern = if (addAnchorExt && linkRef.hasAnchor) matchPathText(linkRef.anchorText, true) else ""
 
         for (ext in typeExtensions) {

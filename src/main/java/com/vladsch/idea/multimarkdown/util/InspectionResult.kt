@@ -14,7 +14,11 @@
  */
 package com.vladsch.idea.multimarkdown.util
 
+enum class Severity private constructor(val value: Int) {
+    INFO(0), WEAK_WARNING(1), WARNING(2), ERROR(3)
+}
 
-class FileListQuery {
+class InspectionResult(val id: String, val severity: Severity, val fixedLink: String? = null, val fixedFilePath: String? = null) {
 
+    constructor(mismatch: InspectionResult, fixedLink: String? = null, fixedFilePath: String? = null) : this(mismatch.id, mismatch.severity, fixedLink, fixedFilePath)
 }

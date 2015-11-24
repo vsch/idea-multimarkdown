@@ -1,5 +1,3 @@
-
-
 /*
  * Copyright (c) 2015-2015 Vladimir Schneider <vladimir.schneider@gmail.com>, all rights reserved.
  *
@@ -25,10 +23,9 @@ class MarkdownTest__MarkdownTest_wiki__Home_md {
         //@Parameterized.Parameters(name = "{index}: filePath = {0}, linkRef = {3}, linkAnchor = {4}")
         @JvmStatic
         fun data(): Collection<Array<Any?>> {
-
             val cleanData = false
             val data = arrayListOf<Array<Any?>>(
-                /* @formatter:off */
+                    /* @formatter:off */
                 /*      arrayOf<Any?>("fullPath"                                              , "linkType"    , "linkText"              , "linkRef"                                    , "linkAnchor", "linkTitle", "resolvesLocal"                         , "resolvesExternal"                    , "linkAddress"                                , "multiResolve") */
                 /*  0 */arrayOf<Any?>("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md", ::WikiLinkRef , ""                      , "Missing File"                               , null        , null       , null                                    , null                                  , null                                         , arrayOf<String>()) /*  0 */,
                 /*  1 */arrayOf<Any?>("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md", ::WikiLinkRef , ""                      , "normal file"                                , null        , null       , "normal-file.md"                        , "normal-file.md"                      , "normal file"                                , arrayOf<String>()) /*  1 */,
@@ -102,13 +99,44 @@ class MarkdownTest__MarkdownTest_wiki__Home_md {
                 /* 69 */arrayOf<Any?>("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md", ::ImageLinkRef, "non vcs image"         , "wiki/non-vcs-image.png"                     , null        , null       , "non-vcs-image.png"                     , null                                  , "wiki/non-vcs-image.png"                     , arrayOf<String>()) /* 69 */,
                 /* 70 */arrayOf<Any?>("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md", ::ImageLinkRef, "sub dir non vcs image" , "wiki/SubDirectory/sub-dir-non-vcs-image.png", null        , null       , "SubDirectory/sub-dir-non-vcs-image.png", null                                  , "wiki/SubDirectory/sub-dir-non-vcs-image.png", arrayOf<String>()) /* 70 */,
                 /* 71 */arrayOf<Any?>("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md", ::WikiLinkRef , "only anchor"           , ""                                           , "anchor"    , null       , null                                    , null                                  , null                                         , arrayOf<String>("Home.md")) /* 71 */,
-                /* 72 */arrayOf<Any?>("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md", ::WikiLinkRef , "only anchor fixed"     , "Home"                                       , "anchor"    , null       , "Home.md"                               , "Home.md"                             , "Home#anchor"                                , arrayOf<String>("Home.md")) /* 72 */
+                /* 72 */arrayOf<Any?>("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md", ::WikiLinkRef , "only anchor fixed"     , "Home"                                       , "anchor"    , null       , "Home.md"                               , "Home.md"                             , "Home#anchor"                                , arrayOf<String>("Home.md")) /* 72 */,
+                /* 73 */arrayOf<Any?>("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md", ::FileLinkRef , "Space In Name"         , "Space%20In%20Name"                          , null        , null       , "Space In Name.md"                      , "Space In Name.md"                    , "Space%20In%20Name"                          , arrayOf<String>()) /* 73 */
                 /* @formatter:on */
             )
 
             if (cleanData) {
                 val header = arrayOf(
                         "fullPath",
+                        "linkType",
+                        "linkText",
+                        "linkRef",
+                        "linkAnchor",
+                        "linkTitle",
+                        "resolvesLocal",
+                        "resolvesExternal",
+                        "linkAddress",
+                        "multiResolve"
+                )
+
+                printData(data, header)
+            }
+            return data
+        }
+
+        @JvmStatic
+        fun mismatchInfo(): Collection<Array<Any?>> {
+            val cleanData = false
+            val data = arrayListOf<Array<Any?>>(
+                /* @formatter:off */
+                /*      arrayOf<Any?>("fullPath"                                              , "linkType"    , "linkText"              , "linkRef"                                    , "linkAnchor", "linkTitle", "resolvesLocal"                         , "resolvesExternal"                    , "linkAddress"                                , "multiResolve") */
+                /*  0 */arrayOf<Any?>("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md", ::WikiLinkRef , ""                      , "Missing File"                               , null        , null       , null                                    , null                                  , null                                         , arrayOf<String>()) /*  0 */,
+                /*  1 */arrayOf<Any?>("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md", ::WikiLinkRef , ""                      , "normal file"                                , null        , null       , "normal-file.md"                        , "normal-file.md"                      , "normal file"                                , arrayOf<String>()) /*  1 */
+                /* @formatter:on */
+            )
+
+            if (cleanData) {
+                val header = arrayOf(
+                        "dataRow",
                         "linkType",
                         "linkText",
                         "linkRef",

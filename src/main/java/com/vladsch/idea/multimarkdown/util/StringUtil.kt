@@ -22,6 +22,7 @@ package com.vladsch.idea.multimarkdown.util
 
 import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
+import java.net.URLEncoder
 
 fun String?.endWith(suffix: Char, ignoreCase: Boolean = false): String {
     if (this != null && !isEmpty() && !endsWith(suffix, ignoreCase)) return plus(suffix)
@@ -112,3 +113,28 @@ fun String?.urlDecode(charSet:String? = null):String {
     }
 }
 
+fun String?.urlEncode(charSet:String? = null):String {
+    try {
+        return URLEncoder.encode(this, charSet?:"UTF-8")
+    } catch (e: UnsupportedEncodingException) {
+        //e.printStackTrace()
+        return orEmpty().replace("%23", "#").replace("%20", " ")
+    }
+}
+
+fun String?.ifEmpty(vararg args:String?):String {
+    if (this != null && !this.isEmpty()) return this
+    for (arg in args) {
+        if (arg != null && !arg.isEmpty()) return arg
+    }
+    return ""
+}
+
+fun String?.ifEmpty(vararg args:() -> String?):String {
+    if (this != null && !this.isEmpty()) return this
+    for (arg in args) {
+        val alt = arg()
+        if (alt != null && !alt.isEmpty()) return alt
+    }
+    return ""
+}

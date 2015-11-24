@@ -15,10 +15,8 @@
 package com.vladsch.idea.multimarkdown.util
 
 import com.intellij.openapi.project.Project
-import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin
-import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent
 
-abstract class LinkResolver(val containingFile: FileRef, val projectResolver: LinkResolver.ProjectResolver) {
+abstract class LinkResolver(val projectResolver: LinkResolver.ProjectResolver, val containingFile: FileRef, val branchOrTag: String?) {
     val projectBasePath = projectResolver.projectBasePath
     val project = projectResolver.project
 
@@ -48,24 +46,7 @@ abstract class LinkResolver(val containingFile: FileRef, val projectResolver: Li
         fun wantAll(options: Int, flags: Int): Boolean = (options and flags == flags)
     }
 
-    abstract class Context(val resolver: LinkResolver, val containingFile: FileRef, val options: Int = 0, val inList: List<FileRef>? = null, val branchOrTag: String?) {
-        abstract fun analyze(linkRef: LinkRef, targetRef: FileRef): MismatchReasons
-        abstract fun isResolvedTo(linkRef: LinkRef, targetRef: FileRef, branchOrTag: String? = null): Boolean
-        abstract fun linkAddress(linkRef: LinkRef, targetRef: PathInfo, withExtForWikiPage: Boolean, branchOrTag: String? = this.branchOrTag, anchor: String? = null): String
-        abstract fun multiResolve(linkRef: LinkRef, options: Int = this.options): List<PathInfo>
-        abstract fun relativePath(linkRef: LinkRef, targetRef: FileRef, withExtForWikiPage: Boolean, branchOrTag: String? = this.branchOrTag): String
-        abstract fun resolve(linkRef: LinkRef, options: Int = this.options): PathInfo?
-
-        fun wantLocal(options: Int): Boolean = LinkResolver.wantLocal(options)
-        fun wantRemote(options: Int): Boolean = LinkResolver.wantRemote(options)
-        fun wantRemoteUrl(options: Int): Boolean = LinkResolver.wantRemoteUrl(options)
-        fun wantLooseMatch(options: Int): Boolean = LinkResolver.wantLooseMatch(options)
-        fun wantSome(flags: Int, options: Int): Boolean = LinkResolver.wantSome(flags, options)
-        fun wantAll(flags: Int, options: Int): Boolean = LinkResolver.wantAll(flags, options)
-    }
-
-    abstract fun analyze(linkRef: LinkRef, targetRef: FileRef): MismatchReasons
-    abstract fun context(containingFile: FileRef, options: Int = 0, inList: List<FileRef>? = null, branchOrTag: String? = null): Context
+    abstract fun inspect(linkRef: LinkRef, targetRef: FileRef): List<InspectionResult>
     abstract fun isResolved(linkRef: LinkRef, options: Int = 0, inList: List<FileRef>? = null): Boolean
     abstract fun isResolvedTo(linkRef: LinkRef, targetRef: FileRef, branchOrTag: String? = null): Boolean
     abstract fun linkAddress(linkRef: LinkRef, targetRef: PathInfo, withExtForWikiPage: Boolean, branchOrTag: String? = null, anchor: String? = null): String

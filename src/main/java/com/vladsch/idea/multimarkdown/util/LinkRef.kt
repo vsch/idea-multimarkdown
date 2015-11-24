@@ -60,6 +60,12 @@ open class LinkRef(val containingFile: FileRef, fullPath: String, anchorTxt: Str
             }
         }
 
+    // convert file name to link, usually url encode
+    open fun fileToLink(linkAddress: String): String = linkAddress
+
+    // convert link to file name, usually url decode
+    open fun linkToFile(linkAddress: String): String = linkAddress
+
     companion object {
         @JvmStatic fun parseLinkRef(containingFile: FileRef, fullPath: String, linkRefType: (containingFile: FileRef, linkRef: String, anchor: String?) -> LinkRef = ::FileLinkRef): LinkRef {
             var linkRef = fullPath;
@@ -74,10 +80,29 @@ open class LinkRef(val containingFile: FileRef, fullPath: String, anchorTxt: Str
             return if (isURI(linkRef) && !isLocal(linkRef)) UrlLinkRef(containingFile, linkRef, anchor)
             else linkRefType(containingFile, linkRef, anchor)
         }
+
+        @JvmStatic fun encodeLink(linkAddress: String, charMap: Map<String, String>): String {
+            var result = linkAddress
+            for (pair in charMap) {
+                result = result.replace(pair.key, pair.value)
+            }
+            return result
+        }
+
+        @JvmStatic fun decodeLink(linkAddress: String, charMap: Map<String, String>): String {
+            var result = linkAddress
+            for (pair in charMap) {
+                result = result.replace(pair.value, pair.key)
+            }
+            return result
+        }
     }
 }
 
 open class UrlLinkRef(containingFile: FileRef, fullPath: String, anchor: String?) : LinkRef(containingFile, fullPath, anchor) {
+    override val linkExtensions: Array<String>
+        get() = Array(0, { "" })
+
     override val isAbsolute: Boolean
         get() = true
 
@@ -93,13 +118,50 @@ open class UrlLinkRef(containingFile: FileRef, fullPath: String, anchor: String?
     }
 }
 
+// this is a generic file link
 open class FileLinkRef(containingFile: FileRef, fullPath: String, anchor: String?) : LinkRef(containingFile, fullPath, anchor) {
+    // convert file name to link, usually url encode
+    override  fun fileToLink(linkAddress: String): String = convertFileToLink(linkAddress)
 
+    // convert link to file name, usually url decode
+    override  fun linkToFile(linkAddress: String): String = convertLinkToFile(linkAddress)
+
+    companion object {
+        @JvmStatic @JvmField
+        val fileToLinkMap = mapOf<String, String>(
+                Pair(" ", "%20"),
+                Pair("#", "%23"),
+                Pair("&", "%26"),
+                Pair("?", "%3F")
+        )
+
+        // convert file name to link, usually url encode
+        @JvmStatic fun convertFileToLink(linkAddress: String): String = LinkRef.encodeLink(linkAddress, fileToLinkMap)
+
+        // convert link to file name, usually url decode
+        @JvmStatic fun convertLinkToFile(linkAddress: String): String = LinkRef.decodeLink(linkAddress, fileToLinkMap)
+
+    }
 }
 
+// this is a [[]] style link ref
 open class WikiLinkRef(containingFile: FileRef, fullPath: String, anchor: String?) : FileLinkRef(containingFile, fullPath, anchor) {
     override val linkExtensions: Array<String>
         get() = WIKI_PAGE_EXTENSIONS
+
+    // convert file name to link, usually url encode
+    override fun fileToLink(linkAddress: String): String = linkAddress.replace('-', ' ')
+
+    // convert link to file name, usually url decode
+    override fun linkToFile(linkAddress: String): String = linkAddress.replace(' ', '-')
+
+    companion object {
+        // convert file name to link, usually url encode
+        @JvmStatic fun convertFileToLink(linkAddress: String): String = linkAddress.replace('-', ' ')
+
+        // convert link to file name, usually url decode
+        @JvmStatic fun convertLinkToFile(linkAddress: String): String = linkAddress.replace(' ', '-')
+    }
 }
 
 open class ImageLinkRef(containingFile: FileRef, fullPath: String, anchor: String?) : FileLinkRef(containingFile, fullPath, anchor) {
