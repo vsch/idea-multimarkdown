@@ -119,7 +119,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
 
         val matchPattern = linkRefMatcher.patternText(wantLooseMatch(options)) ?: return matches
 
-        val wikiMatch = matchPattern.toRegex(RegexOption.IGNORE_CASE)
+        val wikiMatch = if (wantLooseMatch(options) || !linkRef.hasExt || linkRef is WikiLinkRef) matchPattern.toRegex(RegexOption.IGNORE_CASE) else matchPattern.toRegex()
         val linkMatch = if (wantLooseMatch(options)) wikiMatch else matchPattern.toRegex()
 
         if (!linkRefMatcher.gitHubLinks) {

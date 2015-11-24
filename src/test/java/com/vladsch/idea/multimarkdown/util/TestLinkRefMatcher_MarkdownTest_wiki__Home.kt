@@ -38,6 +38,7 @@ class TestLinkRefMatcher_MarkdownTest_wiki__Home constructor(val fullPath: Strin
     val filePathInfo = FileRef(fullPath)
     val resolver = GitHubLinkResolver(MarkdownTestData, filePathInfo)
     val linkRef = LinkRef.parseLinkRef(filePathInfo, linkAddress + linkAnchor.startWith('#'), linkRefType)
+    val linkRefNoExt = LinkRef.parseLinkRef(filePathInfo, linkRef.filePathNoExt + linkAnchor.startWith('#'), linkRefType)
     val fileList = ArrayList<FileRef>(MarkdownTestData.filePaths.size)
     val multiResolve: Array<String>
     val localLinkRef = resolvesLocalRel

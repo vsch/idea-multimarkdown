@@ -39,6 +39,7 @@ class TestLinkRefMatcher_MarkdownTest__Readme constructor(val fullPath: String
     val filePathInfo = FileRef(fullPath)
     val resolver = GitHubLinkResolver(MarkdownTestData, filePathInfo)
     val linkRef = LinkRef.parseLinkRef(filePathInfo, linkAddress + linkAnchor.startWith('#'), linkRefType)
+    val linkRefNoExt = LinkRef.parseLinkRef(filePathInfo, linkRef.filePathNoExt + linkAnchor.startWith('#'), linkRefType)
     val fileList = ArrayList<FileRef>(MarkdownTestData.filePaths.size)
     val multiResolve: Array<String>
     val localLinkRef = resolvesLocalRel
@@ -96,6 +97,7 @@ class TestLinkRefMatcher_MarkdownTest__Readme constructor(val fullPath: String
 
     @Test fun test_MultiResolve() {
         if (skipTest) return
+//        val localRefs = resolver.multiResolve(if (linkRef is WikiLinkRef) linkRef else linkRefNoExt, LinkResolver.ONLY_LOCAL or LinkResolver.LOOSE_MATCH, fileList)
         val localRefs = resolver.multiResolve(linkRef, LinkResolver.ONLY_LOCAL or LinkResolver.LOOSE_MATCH, fileList)
         val actuals = Array<String>(localRefs.size, { "" })
         for (i in localRefs.indices) {
