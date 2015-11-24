@@ -25,6 +25,12 @@ import kotlin.text.RegexOption
 
 
 class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containingFile: FileRef) : LinkResolver(containingFile, projectResolver) {
+
+    class GitHubMismatchReason internal constructor(id: String, severity: MismatchReason.Severity, fixedLink: String? = null, fixedFilePath: String? = null) : MismatchReason(id,severity, fixedLink, fixedFilePath) {
+
+        internal constructor(mismatch:MismatchReason, fixedLink: String? = null, fixedFilePath: String? = null) : this(mismatch.id, mismatch.severity, fixedLink, fixedFilePath)
+    }
+
     companion object {
         @JvmStatic val GITHUB_WIKI_HOME_DIRNAME = "wiki"
         @JvmStatic val GITHUB_WIKI_HOME_FILENAME = "Home"
@@ -34,6 +40,20 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
         @JvmStatic val GITHUB_PULLS_NAME = "pulls"
 
         @JvmStatic val GITHUB_LINKS = arrayOf(GITHUB_WIKI_HOME_DIRNAME, GITHUB_ISSUES_NAME, GITHUB_GRAPHS_NAME, GITHUB_PULSE_NAME, GITHUB_PULLS_NAME)
+
+        val GITHUB_REASON_NON_VCS_FILE = GitHubMismatchReason("NON_VCS_FILE", MismatchReason.Severity.WARNING)
+        val GITHUB_REASON_WIKI_LINK_HAS_EXT = GitHubMismatchReason("WIKI_LINK_HAS_EXT", MismatchReason.Severity.WARNING)
+        val GITHUB_REASON_WIKI_LINK_HAS_WRONG_EXT = GitHubMismatchReason("WIKI_LINK_HAS_WRONG_EXT", MismatchReason.Severity.ERROR)
+        val GITHUB_REASON_WIKI_LINK_CANNOT_HAVE_EXT = GitHubMismatchReason("WIKI_LINK_CANNOT_HAVE_EXT", MismatchReason.Severity.ERROR)
+        val GITHUB_REASON_WIKI_LINK_TARGET_HAS_ANCHOR = GitHubMismatchReason("WIKI_LINK_TARGET_HAS_ANCHOR", MismatchReason.Severity.WARNING)
+        val GITHUB_REASON_WIKI_FILE_HAS_ANCHOR_LINK_ANCHOR = GitHubMismatchReason("WIKI_FILE_HAS_ANCHOR_LINK_ANCHOR", MismatchReason.Severity.ERROR)
+        val GITHUB_REASON_WIKI_HAS_SUBDIR = GitHubMismatchReason("WIKI_HAS_SUBDIR", MismatchReason.Severity.ERROR)
+        val GITHUB_REASON_WIKI_FILE_HAS_SPACE = GitHubMismatchReason("WIKI_FILE_HAS_SPACE", MismatchReason.Severity.WEAK_WARNING)
+        val GITHUB_REASON_WIKI_LINK_HAS_DASH = GitHubMismatchReason("WIKI_LINK_HAS_DASH", MismatchReason.Severity.WEAK_WARNING)
+        val GITHUB_REASON_WIKI_CASE_MISMATCH = GitHubMismatchReason("WIKI_CASE_MISMATCH", MismatchReason.Severity.WEAK_WARNING)
+        val GITHUB_REASON_WIKI_MULTIPLE_MATCH = GitHubMismatchReason("WIKI_MULTIPLE_MATCH", MismatchReason.Severity.WARNING)
+        val GITHUB_REASON_WIKI_LINK_TO_RAW = GitHubMismatchReason("WIKI_LINK_TO_RAW", MismatchReason.Severity.WARNING)
+        val GITHUB_REASON_LINK_TARGET_HAS_ANCHOR = GitHubMismatchReason("LINK_TARGET_HAS_ANCHOR", MismatchReason.Severity.ERROR)
     }
 
     override fun context(containingFile: FileRef, options: Int, inList: List<FileRef>?, branchOrTag: String?): ContextImpl {
@@ -80,6 +100,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
         val projectBasePath = resolver.projectBasePath
         val project: Project? = resolver.project
 
+        // TEST: this needs tests to make sure it works
         override fun isResolvedTo(linkRef: LinkRef, targetRef: FileRef, branchOrTag: String?): Boolean {
             val linkRefText = relativePath(linkRef, targetRef, !(linkRef is WikiLinkRef || targetRef.isWikiPage && !linkRef.hasExt), branchOrTag)
             return linkRef.filePath.equals(linkRefText, ignoreCase = true)
@@ -265,18 +286,8 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                         else if (!containingFile.isUnderWikiDir && prefix.startsWith("../../" + wikiDirName)) prefix = "../../wiki/" + prefix.substring(("../../" + wikiDirName).length)
                     }
 
-                    val selfRef =
-                            if ((targetRef.isWikiPage && withExtForWikiPage) || (!targetRef.isWikiPage && linkRef.hasExt)) linkRef.containingFile.filePathNoExt.equals(targetRef.filePathNoExt)
-                            else linkRef.containingFile.filePath.equals(targetRef.filePath)
-
-                    val anchorUsedInMatch = linkRef.hasAnchor && (!linkRef.fileName.replace("%23", "#").equals(targetRef.fileName) && targetRef.fileName.endsWith(linkRef.anchorText)
-                            || !linkRef.fileNameNoExt.replace("%23", "#").equals(targetRef.fileNameNoExt) && targetRef.fileNameNoExt.endsWith(linkRef.anchorText))
-
-                    val anchor =
-                            if (anchorUsedInMatch)
-                                (if (selfRef) "#" else "")
-                            else
-                                (if (selfRef) "#" + linkRef.anchor.orEmpty() else linkRef.anchorText)
+                    val selfRef = isSelfRef(linkRef, targetRef, withExtForWikiPage)
+                    val anchor = optimizedLinkAnchor(linkRef, targetRef, withExtForWikiPage)
 
                     if (targetRef.isWikiPage) {
                         if (selfRef) return anchor
@@ -336,6 +347,30 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                 }
             }
             return ""
+        }
+
+        fun optimizedLinkAnchor(linkRef: LinkRef, targetRef: FileRef, withExtForWikiPage: Boolean): String {
+            val anchorUsedInMatch = wasAnchorUsedInMatch(linkRef, targetRef)
+            val selfRef = isSelfRef(linkRef, targetRef, withExtForWikiPage)
+
+            return if (anchorUsedInMatch)
+                (if (selfRef) "#" else "")
+            else
+                (if (selfRef) "#" + linkRef.anchor.orEmpty() else linkRef.anchorText)
+        }
+
+        fun isSelfRef(linkRef: LinkRef, targetRef: FileRef, withExtForWikiPage: Boolean): Boolean {
+            return if ((targetRef.isWikiPage && withExtForWikiPage) || (!targetRef.isWikiPage && linkRef.hasExt)) linkRef.containingFile.filePathNoExt.equals(targetRef.filePathNoExt)
+            else linkRef.containingFile.filePath.equals(targetRef.filePath)
+        }
+
+        fun wasAnchorUsedInMatch(linkRef: LinkRef, targetRef: PathInfo): Boolean {
+            return linkRef.hasAnchor && (!linkRef.fileName.replace("%23", "#").equals(targetRef.fileName) && targetRef.fileName.endsWith(linkRef.anchorText)
+                    || !linkRef.fileNameNoExt.replace("%23", "#").equals(targetRef.fileNameNoExt) && targetRef.fileNameNoExt.endsWith(linkRef.anchorText))
+        }
+
+        fun equivalentWikiLinkRef(fileName: String, wikiLinkAddress: String): Boolean {
+            return fileName.replace(' ', '-').equals(wikiLinkAddress.replace(' ', '-'), true)
         }
     }
 }

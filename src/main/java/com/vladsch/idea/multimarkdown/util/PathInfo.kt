@@ -60,13 +60,13 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
     fun isExtIn(ignoreCase: Boolean = true, vararg extList: String): Boolean = isExtIn(ext, ignoreCase, *extList)
 
     val isImageExt: Boolean
-        get() = isImageExt(ext)
+        get() = hasExt && isImageExt(ext)
 
     val isMarkdownExt: Boolean
-        get() = isMarkdownExt(ext)
+        get() = hasExt && isMarkdownExt(ext)
 
     val isWikiPageExt: Boolean
-        get() = isWikiPageExt(ext)
+        get() = hasExt && isWikiPageExt(ext)
 
     fun contains(c: Char, ignoreCase: Boolean = false): Boolean {
         return fullPath.contains(c, ignoreCase)

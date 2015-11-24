@@ -16,13 +16,15 @@ package com.vladsch.idea.multimarkdown.util
 
 import java.util.*
 
-class MismatchReason protected constructor(val id: String, val severity: MismatchReason.Severity, fixedLink: String? = null, fixedFilePath: String? = null) {
+abstract class MismatchReason protected constructor(val id: String, val severity: MismatchReason.Severity, fixedLink: String? = null, fixedFilePath: String? = null) {
     enum class Severity private constructor(val value: Int) {
         INFO(0), WEAK_WARNING(1), WARNING(2), ERROR(3)
     }
 
     val fixedLink: String?
     val fixedFilePath: String?
+
+    protected constructor(mismatch:MismatchReason, fixedLink: String? = null, fixedFilePath: String? = null) : this(mismatch.id, mismatch.severity, fixedLink, fixedFilePath)
 
     val fixedLinkRef: FileRef? by lazy {
         when {
