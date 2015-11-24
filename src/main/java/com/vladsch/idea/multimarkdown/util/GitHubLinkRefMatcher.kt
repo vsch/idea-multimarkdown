@@ -85,9 +85,9 @@ class GitHubLinkRefMatcher(val linkRef: LinkRef, projectBasePath: String? = null
         // image target types have no pattern subdirectories but use exact type
         if (linkRef is WikiLinkRef) {
             // spaces match - and spaces, all subdirectories under Wiki Home match, only WIKI targets accepted, no case sensitivity
-            if (!looseMatch && (!linkRef.path.isEmpty() || !linkRef.containingFile.isWikiPage)) return null
+            if (!looseMatch && (linkRef.filePath.isEmpty() || !linkRef.path.isEmpty() || !linkRef.containingFile.isWikiPage)) return null
 
-            val filenamePattern = matchPathText(linkRef.fileNameNoExt, emptyMatchesAll = true)
+            val filenamePattern = matchPathText(if (!linkRef.filePath.isEmpty()) linkRef.fileNameNoExt else if (!linkRef.hasAnchor) "" else linkRef.containingFile.fileNameNoExt, emptyMatchesAll = !linkRef.hasAnchor)
             val anchorPattern = matchPathText(linkRef.anchorText, isOptional = true)
             val extensionPattern = extensionPattern(useDefaultExt = looseMatch || !linkRef.hasExt, addAnchorExt = true, isOptional = true)
 

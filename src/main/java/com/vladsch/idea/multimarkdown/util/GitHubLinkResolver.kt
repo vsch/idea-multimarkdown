@@ -90,7 +90,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
         return ContextImpl(this, linkRef.containingFile).analyze(linkRef, targetRef)
     }
 
-    override fun linkAddress(linkRef: LinkRef, targetRef: PathInfo, withExtForWikiPage: Boolean, branchOrTag: String?): String {
+    override fun linkAddress(linkRef: LinkRef, targetRef: PathInfo, withExtForWikiPage: Boolean, branchOrTag: String?, anchor: String?): String {
         assert(linkRef.containingFile == containingFile, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
         return ContextImpl(this, linkRef.containingFile).linkAddress(linkRef, targetRef, withExtForWikiPage, branchOrTag)
     }
@@ -113,6 +113,9 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
             if (linkRef.isRemote) return if (wantRemote(options)) linkRef else null
 
             if (linkRef.isSelfAnchor) {
+                if (linkRef is WikiLinkRef && linkRef.filePath.isEmpty()) {
+                    if (!wantLooseMatch(options)) return null
+                }
                 if (wantLocal(options) || projectResolver.isUnderVcs(linkRef.containingFile)) return linkRef.containingFile
                 return null
             }
@@ -272,12 +275,12 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
             return PathInfo.relativePath(containingFilePath, targetFilePath, withPrefix = true)
         }
 
-        override fun linkAddress(linkRef: LinkRef, targetRef: PathInfo, withExtForWikiPage: Boolean, branchOrTag: String?): String {
+        override fun linkAddress(linkRef: LinkRef, targetRef: PathInfo, withExtForWikiPage: Boolean, branchOrTag: String?, anchor: String?): String {
             if (targetRef is FileRef) {
                 var prefix = relativePath(linkRef, targetRef, withExtForWikiPage, branchOrTag)
 
                 if (linkRef is WikiLinkRef) {
-                    return prefix.endWith('/') + (if (withExtForWikiPage) targetRef.fileName else targetRef.fileNameNoExt).replace('-', ' ')
+                    return prefix.endWith('/') + (if (withExtForWikiPage) targetRef.fileName else targetRef.fileNameNoExt).replace('-', ' ') + (anchor ?: if (wasAnchorUsedInMatch(linkRef, targetRef)) "" else linkRef.anchor).startWith("#")
                 } else {
                     if (prefix.isNotEmpty() && targetRef.isUnderWikiDir) {
                         // if the prefix starts with the wiki dir change it to the generic wiki used in links
