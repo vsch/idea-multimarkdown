@@ -14,6 +14,17 @@
  */
 package com.vladsch.idea.multimarkdown.psi;
 
-public interface MultiMarkdownLinkRefText extends MultiMarkdownNamedElement {
+import com.intellij.navigation.ItemPresentation;
+import com.intellij.psi.PsiElement;
+import org.jetbrains.annotations.NotNull;
 
+public interface MultiMarkdownLinkElement extends PsiElement {
+    String getLinkRef();
+    String getLinkAnchor();
+    String getLinkText();
+    String getLinkTitle();
+    ItemPresentation getPresentation();
+    String getDisplayName();
+
+    @NotNull String getMissingElementNameSpace(@NotNull String prefix, boolean addLinkRef);
 }

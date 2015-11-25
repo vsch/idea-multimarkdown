@@ -24,13 +24,12 @@ import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageText;
-import com.vladsch.idea.multimarkdown.util.PathInfo;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLinkText;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-public class MultiMarkdownWikiPageTextImpl extends MultiMarkdownNamedElementImpl implements MultiMarkdownWikiPageText {
-    private static final Logger logger = Logger.getLogger(MultiMarkdownWikiPageTextImpl.class);
+public class MultiMarkdownWikiLinkTextImpl extends MultiMarkdownNamedElementImpl implements MultiMarkdownWikiLinkText {
+    private static final Logger logger = Logger.getLogger(MultiMarkdownWikiLinkTextImpl.class);
     protected static final String MISSING_ELEMENT_NAME_SPACE = "wiki-text::";
 
     @NotNull
@@ -40,7 +39,7 @@ public class MultiMarkdownWikiPageTextImpl extends MultiMarkdownNamedElementImpl
         return ((MultiMarkdownWikiLink) getParent()).getMissingElementNameSpace(MISSING_ELEMENT_NAME_SPACE, true);
     }
 
-    public MultiMarkdownWikiPageTextImpl(ASTNode node) {
+    public MultiMarkdownWikiLinkTextImpl(ASTNode node) {
         super(node);
     }
 

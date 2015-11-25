@@ -14,6 +14,8 @@
  */
 package com.vladsch.idea.multimarkdown.util
 
+import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.psi.PsiFile
 import com.vladsch.idea.multimarkdown.MultiMarkdownFileTypeFactory
 import org.apache.log4j.Logger
 import java.net.URLEncoder
@@ -22,6 +24,9 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
     protected val fullPath: String
     protected val nameStart: Int
     protected val nameEnd: Int
+
+    constructor(virtualFile:VirtualFile) : this(virtualFile.path)
+    constructor(psiFile: PsiFile) : this(psiFile.virtualFile.path)
 
     init {
         var cleanPath = cleanFullPath(fullPath)
@@ -88,13 +93,17 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
         return contains('#')
     }
 
-    fun pathContains(c: Char, ignoreCase: Boolean = false): Boolean = path.contains(c, ignoreCase)
-    fun pathContains(c: String, ignoreCase: Boolean = false): Boolean = path.contains(c, ignoreCase)
+    fun pathContains(c: Char): Boolean = path.contains(c, false)
+    fun pathContains(c: Char, ignoreCase: Boolean ): Boolean = path.contains(c, ignoreCase)
+    fun pathContains(c: String): Boolean = path.contains(c, false)
+    fun pathContains(c: String, ignoreCase: Boolean): Boolean = path.contains(c, ignoreCase)
     fun pathContainsSpaces(): Boolean = pathContains(' ')
     fun pathContainsAnchor(): Boolean = pathContains('#')
 
-    fun fileNameContains(c: Char, ignoreCase: Boolean = false): Boolean = fileName.contains(c, ignoreCase)
-    fun fileNameContains(c: String, ignoreCase: Boolean = false): Boolean = fileName.contains(c, ignoreCase)
+    fun fileNameContains(c: Char): Boolean = fileName.contains(c, false)
+    fun fileNameContains(c: Char, ignoreCase: Boolean): Boolean = fileName.contains(c, ignoreCase)
+    fun fileNameContains(c: String): Boolean = fileName.contains(c, false)
+    fun fileNameContains(c: String, ignoreCase: Boolean): Boolean = fileName.contains(c, ignoreCase)
     fun fileNameContainsSpaces(): Boolean = fileNameContains(' ')
     fun fileNameContainsAnchor(): Boolean = fileNameContains('#')
 
@@ -124,7 +133,7 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
     open val isAbsolute: Boolean
         get() = isAbsolute(fullPath)
 
-    fun withExt(ext: String?): PathInfo = if (ext == null || isEmpty || this.ext == ext) this else PathInfo(filePathNoExt + ext.startWith('.'))
+    fun withExt(ext: String?): PathInfo = if (ext == null || ext.isEmpty() || this.ext == ext) this else PathInfo(filePathNoExt + ext.startWith('.'))
     open fun append(vararg parts: String): PathInfo = PathInfo.appendParts(fullPath, *parts, construct = ::PathInfo)
     open fun append(parts: Collection<String>): PathInfo = PathInfo.appendParts(fullPath, parts, construct = ::PathInfo)
     open fun append(parts: Sequence<String>): PathInfo = PathInfo.appendParts(fullPath, parts, construct = ::PathInfo)
@@ -162,6 +171,18 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
 
         // true if it is already an absolute ref, no need to resolve relative, just see if it maps
         @JvmStatic fun isAbsolute(fullPath: String?): Boolean = fullPath != null && fullPath.startsWith(*ABSOLUTE_PREFIXES)
+
+        @JvmStatic fun appendParts(fullPath: String?, vararg parts: String): PathInfo {
+            return appendParts(fullPath, parts.asSequence(), ::PathInfo);
+        }
+
+        @JvmStatic fun appendParts(fullPath: String?, parts: Collection<String>): PathInfo {
+            return appendParts(fullPath, parts.asSequence(), ::PathInfo)
+        }
+
+        @JvmStatic fun appendParts(fullPath: String?, parts: Sequence<String>): PathInfo {
+            return appendParts(fullPath, parts, ::PathInfo)
+        }
 
         @JvmStatic fun <T:PathInfo> appendParts(fullPath: String?, vararg parts: String, construct: (fullPath:String) -> T): T {
             return appendParts(fullPath, parts.asSequence(), construct);

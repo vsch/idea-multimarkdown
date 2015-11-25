@@ -18,13 +18,6 @@ import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
-public interface MultiMarkdownExplicitLink extends PsiElement {
-    String getTitle();
-    String getText();
-    String getLinkRef();
-    String getLinkRefAnchor();
-    ItemPresentation getPresentation();
-    String getDisplayName();
-    @NotNull
-    String getMissingElementNameSpace(@NotNull String prefix, boolean addLinkRef);
+public interface MultiMarkdownExplicitLink extends MultiMarkdownLinkElement {
+
 }

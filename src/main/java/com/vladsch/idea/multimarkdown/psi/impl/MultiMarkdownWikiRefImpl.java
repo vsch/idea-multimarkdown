@@ -28,13 +28,16 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLinkRef;
 import com.vladsch.idea.multimarkdown.util.PathInfo;
+import com.vladsch.idea.multimarkdown.util.StringUtilKt;
+import com.vladsch.idea.multimarkdown.util.WikiLinkRef;
+import kotlin.StringsKt;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl implements MultiMarkdownWikiPageRef {
-    private static final Logger logger = Logger.getLogger(MultiMarkdownWikiPageRefImpl.class);
+public class MultiMarkdownWikiRefImpl extends MultiMarkdownNamedElementImpl implements MultiMarkdownWikiLinkRef {
+    private static final Logger logger = Logger.getLogger(MultiMarkdownWikiRefImpl.class);
     protected static final String MISSING_ELEMENT_NAME_SPACE = "wiki-ref::";
 
     @NotNull
@@ -44,7 +47,7 @@ public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl 
         return ((MultiMarkdownWikiLink) getParent()).getMissingElementNameSpace(MISSING_ELEMENT_NAME_SPACE, false);
     }
 
-    public MultiMarkdownWikiPageRefImpl(ASTNode node) {
+    public MultiMarkdownWikiRefImpl(ASTNode node) {
         super(node);
     }
 
@@ -60,14 +63,13 @@ public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl 
 
     @Override
     public String getFileName() {
-        return PathInfo.wikiRefAsFileNameWithExt(new PathInfo(getName() == null ? "" : getName()).getFileName());
+        return WikiLinkRef.convertLinkToFile(new PathInfo(getName() == null ? "" : getName()).withExt(PathInfo.WIKI_PAGE_EXTENSION).getFilePath());
     }
 
     @Override
     public String getFileNameWithAnchor() {
         String anchorText = MultiMarkdownPsiImplUtil.getLinkAnchor(getParent());
-        PathInfo pathInfo = new PathInfo((getName() == null ? "" : getName()) + (anchorText.isEmpty() ? anchorText : "#" + anchorText));
-        return PathInfo.wikiRefAsFileNameWithExt(pathInfo.getFileName()) + pathInfo.getAnchor();
+        return getFileName() + StringUtilKt.startWith(anchorText, '#');
     }
 
     @Override
@@ -77,10 +79,10 @@ public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl 
 
     @Override
     public MultiMarkdownNamedElement handleContentChange(String newContent) throws IncorrectOperationException {
-        String newName = new PathInfo(newContent).getFileNameNoExtAsWikiRef();
         MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(getProject());
         if (projectComponent == null) return this;
 
+        String newName = new PathInfo(newContent).getFileNameNoExtAsWikiRef();
         return (MultiMarkdownNamedElement) setName(newName, projectComponent.getRefactoringRenameFlags(REASON_FILE_RENAMED));
     }
 

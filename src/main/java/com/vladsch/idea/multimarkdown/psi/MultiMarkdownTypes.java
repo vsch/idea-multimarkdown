@@ -144,21 +144,21 @@ public interface MultiMarkdownTypes {
             } else if (type == WIKI_LINK) {
                 return new MultiMarkdownWikiLinkImpl(node);
             } else if (type == WIKI_LINK_REF) {
-                return new MultiMarkdownWikiPageRefImpl(node);
+                return new MultiMarkdownWikiRefImpl(node);
             } else if (type == WIKI_LINK_REF_ANCHOR) {
-                return new MultiMarkdownWikiPageRefAnchorImpl(node);
+                return new MultiMarkdownWikiLinkAnchorImpl(node);
             } else if (type == WIKI_LINK_TEXT) {
-                return new MultiMarkdownWikiPageTextImpl(node);
+                return new MultiMarkdownWikiLinkTextImpl(node);
             } else if (type == EXPLICIT_LINK) {
                 return new MultiMarkdownExplicitLinkImpl(node);
             } else if (type == LINK_REF) {
                 return new MultiMarkdownLinkRefImpl(node);
             } else if (type == LINK_REF_ANCHOR) {
-                return new MultiMarkdownLinkRefAnchorImpl(node);
+                return new MultiMarkdownLinkAnchorImpl(node);
             } else if (type == LINK_REF_TEXT) {
-                return new MultiMarkdownLinkRefTextImpl(node);
+                return new MultiMarkdownLinkTextImpl(node);
             } else if (type == LINK_REF_TITLE) {
-                return new MultiMarkdownLinkRefTitleImpl(node);
+                return new MultiMarkdownLinkTitleImpl(node);
             } else if (type == IMAGE) {
                 return new MultiMarkdownImageLinkImpl(node);
             } else if (type == IMAGE_LINK_REF) {

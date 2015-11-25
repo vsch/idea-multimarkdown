@@ -322,12 +322,12 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
 
     @Override
     public boolean isUnderVcs(@NotNull FileRef fileRef) {
-        if (fileRef instanceof VirtualFileRef) {
-            return isUnderVcs(((VirtualFileRef) fileRef).getVirtualFile());
+        if (fileRef instanceof ProjectFileRef) {
+            return isUnderVcs(((ProjectFileRef) fileRef).getVirtualFile());
         }
 
-        VirtualFileRef virtualFileRef = fileRef.virtualFileRef(project);
-        return virtualFileRef != null && isUnderVcs(virtualFileRef.getVirtualFile());
+        ProjectFileRef projectFileRef = fileRef.virtualFileRef(project);
+        return projectFileRef != null && isUnderVcs(projectFileRef.getVirtualFile());
     }
 
     @Nullable

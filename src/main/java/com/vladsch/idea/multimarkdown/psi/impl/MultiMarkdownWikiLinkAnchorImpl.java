@@ -17,24 +17,22 @@ package com.vladsch.idea.multimarkdown.psi.impl;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownExplicitLink;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkRefAnchor;
-import com.vladsch.idea.multimarkdown.util.PathInfo;
+import com.vladsch.idea.multimarkdown.psi.*;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-public class MultiMarkdownLinkRefAnchorImpl extends MultiMarkdownNamedElementImpl implements MultiMarkdownLinkRefAnchor {
-    private static final Logger logger = Logger.getLogger(MultiMarkdownLinkRefAnchorImpl.class);
-    protected static final String MISSING_ELEMENT_NAME_SPACE = "link-anchor::";
+public class MultiMarkdownWikiLinkAnchorImpl extends MultiMarkdownNamedElementImpl implements MultiMarkdownWikiLinkAnchor {
+    private static final Logger logger = Logger.getLogger(MultiMarkdownWikiLinkAnchorImpl.class);
+    protected static final String MISSING_ELEMENT_NAME_SPACE = "wiki-anchor::";
 
     @NotNull
     @Override
     public String getMissingElementNamespace() {
-        assert getParent() instanceof MultiMarkdownExplicitLink;
-        return ((MultiMarkdownExplicitLink) getParent()).getMissingElementNameSpace(MISSING_ELEMENT_NAME_SPACE, true);
+        assert getParent() instanceof MultiMarkdownWikiLink;
+        return ((MultiMarkdownWikiLink) getParent()).getMissingElementNameSpace(MISSING_ELEMENT_NAME_SPACE, true);
     }
 
-    public MultiMarkdownLinkRefAnchorImpl(ASTNode node) {
+    public MultiMarkdownWikiLinkAnchorImpl(ASTNode node) {
         super(node);
     }
 
@@ -45,7 +43,7 @@ public class MultiMarkdownLinkRefAnchorImpl extends MultiMarkdownNamedElementImp
 
     @Override
     public String getDisplayName() {
-        return getParent() instanceof MultiMarkdownExplicitLink  ? ((MultiMarkdownExplicitLink) getParent()).getDisplayName() : getName();
+        return getParent() instanceof MultiMarkdownWikiLink  ? ((MultiMarkdownWikiLink) getParent()).getDisplayName() : getName();
     }
 
     @Override
@@ -65,6 +63,6 @@ public class MultiMarkdownLinkRefAnchorImpl extends MultiMarkdownNamedElementImp
 
     @Override
     public String toString() {
-        return "LINK_REF_ANCHOR '" + getName() + "' " + super.hashCode();
+        return "WIKI_LINK_REF_ANCHOR '" + getName() + "' " + super.hashCode();
     }
 }

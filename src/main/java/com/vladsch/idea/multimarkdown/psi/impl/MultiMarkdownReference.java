@@ -21,11 +21,16 @@ import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownElementType;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkRef;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
-import com.vladsch.idea.multimarkdown.util.ReferenceChangeListener;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
+import com.vladsch.idea.multimarkdown.util.*;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedElement> implements PsiPolyVariantReference, BindablePsiReference {
     private static final Logger logger = Logger.getLogger(MultiMarkdownReference.class);
@@ -105,7 +110,16 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
     @Override
     public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
         // we will handle this by renaming the element to point to the new location
-        if (element.getClass() == myElement.getClass()) {
+        if (myElement instanceof MultiMarkdownWikiLink || myElement instanceof MultiMarkdownLinkRef) {
+            if (element instanceof PsiFile) {
+                LinkRef linkRef = MultiMarkdownPsiImplUtil.getLinkRef(myElement);
+                if (linkRef != null) {
+                    String linkRefText = new GitHubLinkResolver(myElement).linkAddress(linkRef, new FileRef((PsiFile) element), null, null, null);
+                    // this will create a new reference and loose connection to this one
+                    return myElement.setName(linkRefText, MultiMarkdownNamedElement.REASON_BIND_TO_FILE);
+                }
+            }
+        } else if (element.getClass() == myElement.getClass()) {
             String name = ((MultiMarkdownNamedElement) element).getName();
             // this will create a new reference and lose connection to this one
             // logger.info("rebinding " + myElement + " to " + element);
@@ -158,15 +172,44 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
     protected ResolveResult[] getMultiResolveResults(boolean incompleteCode) {
         String name = myElement.getName();
         if (name != null) {
-            // these are always missing but we create references by namespace and name of the element in the project so they can be renamed as a group
-            // skip complex ones that contain other parsable elements
-            PsiElement[] children = getElement().getChildren();
-            for (PsiElement child : children) {
-                if (child.getNode().getElementType() instanceof MultiMarkdownElementType) return EMPTY_RESULTS;
-            }
+            if (myElement instanceof MultiMarkdownWikiLink || myElement instanceof MultiMarkdownLinkRef) {
+                if (myElement.getContainingFile() != null && myElement.getContainingFile().getVirtualFile() != null) {
 
-            MultiMarkdownNamedElement missingLinkElement = getMissingRefElement(name);
-            return new ResolveResult[] { new PsiElementResolveResult(missingLinkElement) };
+                    LinkRef linkRef = MultiMarkdownPsiImplUtil.getLinkRef(myElement);
+                    if (linkRef != null) {
+                        GitHubLinkResolver resolver = new GitHubLinkResolver(myElement);
+                        List<PathInfo> pathInfos = resolver.multiResolve(linkRef, LinkResolver.LOOSE_MATCH, null);
+
+                        if (pathInfos.size() > 0) {
+                            List<ResolveResult> results = new ArrayList<ResolveResult>();
+                            for (PathInfo pathInfo : pathInfos) {
+                                if (pathInfo instanceof ProjectFileRef) {
+                                    PsiFile psiFile = ((ProjectFileRef) pathInfo).getPsiFile();
+                                    if (psiFile != null) {
+                                        results.add(new PsiElementResolveResult(psiFile));
+                                    }
+                                }
+                            }
+
+                            if (results.size() > 0) {
+                                removeReferenceChangeListener();
+                                return results.toArray(new ResolveResult[results.size()]);
+                            }
+                        }
+                        return new ResolveResult[] { new PsiElementResolveResult(getMissingRefElement(name)) };
+                    }
+                }
+            } else {
+                // these are always missing but we create references by namespace and name of the element in the project so they can be renamed as a group
+                // skip complex ones that contain other parsable elements
+                PsiElement[] children = getElement().getChildren();
+                for (PsiElement child : children) {
+                    if (child.getNode().getElementType() instanceof MultiMarkdownElementType) return EMPTY_RESULTS;
+                }
+
+                MultiMarkdownNamedElement missingLinkElement = getMissingRefElement(name);
+                return new ResolveResult[] { new PsiElementResolveResult(missingLinkElement) };
+            }
         }
 
         return EMPTY_RESULTS;

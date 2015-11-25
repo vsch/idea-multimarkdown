@@ -63,7 +63,7 @@ public class MultiMarkdownAnnotator implements Annotator {
         if (false) {
         } else if (element instanceof MultiMarkdownWikiLink) {
         } else if (element instanceof MultiMarkdownExplicitLink) {
-        } else if (element instanceof MultiMarkdownWikiPageText) {
+        } else if (element instanceof MultiMarkdownWikiLinkText) {
             //Annotation annotator = null;
             //MultiMarkdownWikiLink wikiLink = (MultiMarkdownWikiLink) element.getParent();
             //if (wikiLink != null) annotator = checkWikiLinkSwapRefTitle(wikiLink, holder);
@@ -71,10 +71,10 @@ public class MultiMarkdownAnnotator implements Annotator {
             annotateChangeExplicitLinkToWikiLink(element, state, ANNOTATION_WEAK_WARNING);
 
             annotateLinkRef((MultiMarkdownLinkRef) element, state);
-        } else if (element instanceof MultiMarkdownWikiPageRef) {
+        } else if (element instanceof MultiMarkdownWikiLinkRef) {
             annotateChangeWikiLinkToExplicitLink(element, state, ANNOTATION_WEAK_WARNING);
 
-            annotateWikiLinkRef((MultiMarkdownWikiPageRef) element, state);
+            annotateWikiLinkRef((MultiMarkdownWikiLinkRef) element, state);
         }
     }
 
@@ -343,11 +343,11 @@ public class MultiMarkdownAnnotator implements Annotator {
 
     protected void checkWikiLinkSwapRefTitle(@NotNull MultiMarkdownWikiLink element, @NotNull AnnotationState state) {
         // see if need to swap link ref and link text
-        MultiMarkdownWikiPageRef wikiPageRef = (MultiMarkdownWikiPageRef) MultiMarkdownPsiImplUtil.findChildByType(element, MultiMarkdownTypes.WIKI_LINK_REF);
+        MultiMarkdownWikiLinkRef wikiPageRef = (MultiMarkdownWikiLinkRef) MultiMarkdownPsiImplUtil.findChildByType(element, MultiMarkdownTypes.WIKI_LINK_REF);
         PsiReference wikiPageRefReference = wikiPageRef != null ? wikiPageRef.getReference() : null;
 
         if (wikiPageRefReference != null) {
-            MultiMarkdownWikiPageText wikiPageText = (MultiMarkdownWikiPageText) MultiMarkdownPsiImplUtil.findChildByType(element, MultiMarkdownTypes.WIKI_LINK_TEXT);
+            MultiMarkdownWikiLinkText wikiPageText = (MultiMarkdownWikiLinkText) MultiMarkdownPsiImplUtil.findChildByType(element, MultiMarkdownTypes.WIKI_LINK_TEXT);
 
             String wikiPageTextName = wikiPageText != null ? wikiPageText.getName() : null;
             if (wikiPageTextName != null) {
@@ -404,7 +404,7 @@ public class MultiMarkdownAnnotator implements Annotator {
         }
     }
 
-    public void annotateWikiLinkRef(MultiMarkdownWikiPageRef element, AnnotationState state) {
+    public void annotateWikiLinkRef(MultiMarkdownWikiLinkRef element, AnnotationState state) {
         MultiMarkdownWikiLink wikiLink = (MultiMarkdownWikiLink) element.getParent();
 
         PathInfo linkRefInfo = new PathInfo(element.getNameWithAnchor());

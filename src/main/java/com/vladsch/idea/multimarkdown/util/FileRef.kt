@@ -24,13 +24,14 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin
 
-open class FileRef(fullPath: String) : PathInfo(fullPath) {
+open class FileRef(fullPath: String, private val _virtualFile: VirtualFile?) : PathInfo(fullPath) {
     protected val mainRepoDirEnd: Int
     protected val wikiHomeDirEnd: Int
 
-    constructor(virtualFile: VirtualFile) : this(virtualFile.path)
+    constructor(virtualFile: VirtualFile) : this(virtualFile.path, virtualFile)
     constructor(psiFile: PsiFile) : this(psiFile.virtualFile)
     constructor(psiElement: PsiElement) : this(psiElement.containingFile)
+    constructor(fullPath: String) : this(fullPath, null)
 
     init {
         // gitHub wiki home will be like ..../dirname/dirname.wiki
@@ -78,12 +79,12 @@ open class FileRef(fullPath: String) : PathInfo(fullPath) {
     val wikiDir: String
         get() = if (wikiHomeDirEnd <= 0) EMPTY_STRING else fullPath.substring(0, wikiHomeDirEnd)
 
-//    val isWikiDir: Boolean
-//        get() {
-//            if (wikiHomeDirEnd > 0 || !fileName.endsWith(WIKI_HOME_EXTENSION)) return false
-//            // gitHub wiki home will be like ..../dirname/dirname.wiki
-//            return PathInfo(path).fileName == fileNameNoExt
-//        }
+    //    val isWikiDir: Boolean
+    //        get() {
+    //            if (wikiHomeDirEnd > 0 || !fileName.endsWith(WIKI_HOME_EXTENSION)) return false
+    //            // gitHub wiki home will be like ..../dirname/dirname.wiki
+    //            return PathInfo(path).fileName == fileNameNoExt
+    //        }
 
     val mainRepoDir: String
         get() {
@@ -130,20 +131,23 @@ open class FileRef(fullPath: String) : PathInfo(fullPath) {
     override fun append(parts: Collection<String>): FileRef = PathInfo.appendParts(fullPath, parts, ::FileRef)
     override fun append(parts: Sequence<String>): FileRef = PathInfo.appendParts(fullPath, parts, ::FileRef)
 
-    open fun virtualFileRef(project: Project): VirtualFileRef? {
-        val virtualFile = VirtualFileManager.getInstance().findFileByUrl("" + fullPath)
-        return if (virtualFile == null) null else VirtualFileRef(virtualFile, project);
+    val virtualFile by lazy { _virtualFile ?: VirtualFileManager.getInstance().findFileByUrl("file:" + fullPath) }
+
+    val exists: Boolean
+        get() = virtualFile?.exists() as Boolean
+
+    open fun virtualFileRef(project: Project): ProjectFileRef? {
+        val myVirtualFile = virtualFile
+        return if (myVirtualFile == null) null else ProjectFileRef(myVirtualFile, project);
     }
 }
 
-open class VirtualFileRef(val virtualFile: VirtualFile, val project: Project) : FileRef(virtualFile.path) {
+open class ProjectFileRef(virtualFile: VirtualFile, val project: Project, private val _psiFile:PsiFile?) : FileRef(virtualFile.path, virtualFile) {
 
-    constructor(psiFile: PsiFile) : this(psiFile.virtualFile, psiFile.project)
+    constructor(psiFile: PsiFile) : this(psiFile.virtualFile, psiFile.project, psiFile)
+    constructor(virtualFile: VirtualFile, project: Project) : this(virtualFile, project, null)
 
-    val psiFile: PsiFile? by lazy { PsiManager.getInstance(project).findFile(virtualFile) }
-
-    val exists: Boolean
-        get() = virtualFile.exists()
+    val psiFile: PsiFile? by lazy { _psiFile ?: PsiManager.getInstance(project).findFile(virtualFile) }
 
     // TODO: change this to resolve to the repo type for this particular file
     val gitHubRepo: GitHubRepo? by lazy {
@@ -152,7 +156,8 @@ open class VirtualFileRef(val virtualFile: VirtualFile, val project: Project) : 
 
     val isUnderVcs: Boolean
         get() {
-            val status = FileStatusManager.getInstance(project).getStatus(virtualFile)
+            val myVirtualFile = virtualFile ?: return false
+            val status = FileStatusManager.getInstance(project).getStatus(myVirtualFile)
             val id = status.id
             val fileStatus = status == FileStatus.DELETED || status == FileStatus.ADDED || status == FileStatus.UNKNOWN || status == FileStatus.IGNORED || id.startsWith("IGNORE")
             return !fileStatus
@@ -161,6 +166,6 @@ open class VirtualFileRef(val virtualFile: VirtualFile, val project: Project) : 
     val gitHubRepoPath: String?
         get() = gitHubRepo?.basePath
 
-    override fun virtualFileRef(project: Project): VirtualFileRef? = this
+    override fun virtualFileRef(project: Project): ProjectFileRef? = this
 }
 

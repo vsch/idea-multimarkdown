@@ -22,40 +22,20 @@ package com.vladsch.idea.multimarkdown.language;
 
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
-import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
 import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder;
 import com.intellij.ide.util.PsiElementListCellRenderer;
-import com.intellij.navigation.ColoredItemPresentation;
-import com.intellij.navigation.ItemPresentation;
-import com.intellij.navigation.NavigationItem;
-import com.intellij.openapi.editor.colors.EditorColorsManager;
-import com.intellij.openapi.editor.colors.TextAttributesKey;
-import com.intellij.openapi.editor.markup.EffectType;
-import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Iconable;
-import com.intellij.openapi.vcs.FileStatus;
-import com.intellij.openapi.vcs.FileStatusManager;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.problems.WolfTheProblemSolver;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveResult;
-import com.intellij.ui.ColoredListCellRenderer;
-import com.intellij.ui.FileColorManager;
-import com.intellij.ui.JBColor;
-import com.intellij.ui.SimpleTextAttributes;
-import com.intellij.ui.speedSearch.SpeedSearchUtil;
-import com.intellij.util.IconUtil;
 import com.intellij.util.NullableFunction;
-import com.intellij.util.text.Matcher;
-import com.intellij.util.ui.UIUtil;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkRef;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLinkRef;
 import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownReference;
 import com.vladsch.idea.multimarkdown.util.PathInfo;
 import com.vladsch.idea.multimarkdown.util.FileReference;
@@ -64,20 +44,17 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
-
-import static com.vladsch.idea.multimarkdown.highlighter.MultiMarkdownHighlighterColors.WIKI_LINK_ATTR_KEY;
 
 public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
     @Override
     protected void collectNavigationMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
-        if (element instanceof MultiMarkdownWikiPageRef || element instanceof MultiMarkdownLinkRef) {
+        if (element instanceof MultiMarkdownWikiLinkRef || element instanceof MultiMarkdownLinkRef) {
             PsiReference psiReference = element.getReference();
             //MultiMarkdownFile[] markdownFiles = MultiMarkdownPlugin.getProjectComponent(element.getProject()).getFileReferenceList().query()
-            //        .matchWikiRef((MultiMarkdownWikiPageRef) element)
+            //        .matchWikiRef((MultiMarkdownWikiLinkRef) element)
             //        .accessibleWikiPageFiles()
             //        ;
 

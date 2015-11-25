@@ -88,7 +88,7 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
             }
 
             return suggestedNameInfo;
-        } else if (element instanceof MultiMarkdownWikiPageText) {
+        } else if (element instanceof MultiMarkdownWikiLinkText) {
             // this is a rename on a wiki page title
             // always activate spelling suggestions for renaming wiki page refs
             // Get suggestions from the name of the pageRef text
@@ -103,7 +103,7 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
             // always activate spelling suggestions for renaming wiki page refs
             SuggestionList suggestionList = new SuggestionList(element.getProject());
 
-            //suggestionList.add(PathInfo.linkRefNoAnchor(((MultiMarkdownWikiPageRef) element).getName()));
+            //suggestionList.add(PathInfo.linkRefNoAnchor(((MultiMarkdownWikiLinkRef) element).getName()));
 
             MultiMarkdownFile markdownFile = (MultiMarkdownFile) element.getContainingFile();
             FileReferenceList linkRefs = new FileReferenceListQuery(element.getProject())
@@ -122,12 +122,12 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
                 suggestedNameInfo = SuggestedNameInfo.NULL_INFO;
             }
             return suggestedNameInfo;
-        } else if (element instanceof MultiMarkdownWikiPageRef) {
+        } else if (element instanceof MultiMarkdownWikiLinkRef) {
             // this is a rename on a missing link element, provide list of valid markdown files that can be reached via wikiPageRef
             // always activate spelling suggestions for renaming wiki page refs
             SuggestionList suggestionList = new SuggestionList(element.getProject());
 
-            //suggestionList.add(PathInfo.linkRefNoAnchor(((MultiMarkdownWikiPageRef) element).getName()));
+            //suggestionList.add(PathInfo.linkRefNoAnchor(((MultiMarkdownWikiLinkRef) element).getName()));
 
             MultiMarkdownFile markdownFile = (MultiMarkdownFile) element.getContainingFile();
             FileReferenceList wikiPages = new FileReferenceListQuery(element.getProject())
@@ -182,8 +182,8 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
 
     public static SuggestionList getWikiPageTextSuggestions(@NotNull PsiElement parent) {
         SuggestionList suggestionList = new SuggestionList(parent.getProject());
-        MultiMarkdownWikiPageRef wikiPageRef = (MultiMarkdownWikiPageRef) MultiMarkdownPsiImplUtil.findChildByType(parent, MultiMarkdownTypes.WIKI_LINK_REF);
-        MultiMarkdownWikiPageText wikiPageText = (MultiMarkdownWikiPageText) MultiMarkdownPsiImplUtil.findChildByType(parent, MultiMarkdownTypes.WIKI_LINK_TEXT);
+        MultiMarkdownWikiLinkRef wikiPageRef = (MultiMarkdownWikiLinkRef) MultiMarkdownPsiImplUtil.findChildByType(parent, MultiMarkdownTypes.WIKI_LINK_REF);
+        MultiMarkdownWikiLinkText wikiPageText = (MultiMarkdownWikiLinkText) MultiMarkdownPsiImplUtil.findChildByType(parent, MultiMarkdownTypes.WIKI_LINK_TEXT);
 
         SuggestionList originalList = new SuggestionList(parent.getProject());
 

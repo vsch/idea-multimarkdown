@@ -28,7 +28,6 @@ import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.util.Processor;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 import com.vladsch.idea.multimarkdown.util.PathInfo;
 import org.jetbrains.annotations.NotNull;
 
@@ -47,9 +46,9 @@ public class MultiMarkdownReferenceSearch extends QueryExecutorBase<PsiReference
             PathInfo pathInfo = new PathInfo(((MultiMarkdownFile) refElement).getVirtualFile());
             text = pathInfo.getFileNameNoExtAsWikiRef();
             //text2 = pathInfo.getFileNameNoExt();
-        //} else if (refElement instanceof MultiMarkdownWikiPageRef) {
-        //    text = ((MultiMarkdownWikiPageRef) refElement).getName();
-        //    //text2 = ((MultiMarkdownWikiPageRef) refElement).getNameWithAnchor();
+        //} else if (refElement instanceof MultiMarkdownWikiLinkRef) {
+        //    text = ((MultiMarkdownWikiLinkRef) refElement).getName();
+        //    //text2 = ((MultiMarkdownWikiLinkRef) refElement).getNameWithAnchor();
         }
         if (StringUtil.isNotEmpty(text)) {
             final SearchScope searchScope = p.getEffectiveSearchScope();

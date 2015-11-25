@@ -20,65 +20,28 @@
  */
 package com.vladsch.idea.multimarkdown.psi.impl;
 
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiFile;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownVisitor;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
-import com.vladsch.idea.multimarkdown.util.PathInfo;
+import com.vladsch.idea.multimarkdown.util.StringUtilKt;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class MultiMarkdownWikiLinkImpl extends ASTWrapperPsiElement implements MultiMarkdownWikiLink {
-    public static String getElementText(@NotNull String name, @Nullable String text) {
+public class MultiMarkdownWikiLinkImpl extends MultiMarkdownLinkElementImpl implements MultiMarkdownWikiLink {
+    public static String getElementText(@NotNull String linkRefWithAnchor, @Nullable String linkText) {
         boolean githubWikiLinks = MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue();
 
         return githubWikiLinks
-                ? "[[" + (text != null && text.length() > 0 && !name.equals(text) ? text + "|" : "") + name + "]]"
-                : "[[" + name + (text != null && text.length() > 0 && !name.equals(text) ? "|" + text : "") + "]]"
+                ? "[[" + (linkText != null && linkText.length() > 0 && !linkRefWithAnchor.equals(linkText) ? linkText + "|" : "") + linkRefWithAnchor + "]]"
+                : "[[" + linkRefWithAnchor + (linkText != null && linkText.length() > 0 && !linkRefWithAnchor.equals(linkText) ? "|" + linkText : "") + "]]"
                 ;
     }
 
-    @Override
-    @NotNull
-    public String getMissingElementNameSpace(@NotNull String prefix, boolean addLinkRef) {
-        PsiFile psiFile = getContainingFile();
-        VirtualFile virtualFile = psiFile.getOriginalFile() != null ? psiFile.getOriginalFile().getVirtualFile() : psiFile.getVirtualFile();
-        PathInfo filePathInfo = new PathInfo(virtualFile);
-        String wikiHome = filePathInfo.getWikiHome();
-
-        if (addLinkRef) {
-            String pageRef = MultiMarkdownPsiImplUtil.getLinkRefTextWithAnchor(this);
-            if (pageRef.isEmpty()) pageRef = filePathInfo.getFileNameAsWikiRef();
-            return prefix + (wikiHome.isEmpty() ? wikiHome : wikiHome + "::") + (pageRef.isEmpty() ? pageRef : pageRef + "::");
-        }
-        return prefix + (wikiHome.isEmpty() ? wikiHome : wikiHome + "::");
+    public static String getElementText(@NotNull String linkRef, @Nullable String linkText, @Nullable String anchor) {
+        return getElementText(linkRef + StringUtilKt.startWith(anchor, '#'), linkText);
     }
 
     public MultiMarkdownWikiLinkImpl(ASTNode node) {
         super(node);
-    }
-
-    public void accept(@NotNull PsiElementVisitor visitor) {
-        if (visitor instanceof MultiMarkdownVisitor) ((MultiMarkdownVisitor) visitor).visitElement(this);
-        else super.accept(visitor);
-    }
-
-    @Override
-    public String getDisplayName() {
-        return getText();
-    }
-
-    @Override
-    public String getPageText() {
-        return MultiMarkdownPsiImplUtil.getLinkText(this);
-    }
-
-    @Override
-    public String getPageRef() {
-        return MultiMarkdownPsiImplUtil.getLinkRefText(this);
     }
 }

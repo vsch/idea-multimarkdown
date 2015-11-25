@@ -93,25 +93,25 @@ public class MultiMarkdownFindUsagesProvider implements FindUsagesProvider {
     @NotNull
     @Override
     public String getType(@NotNull PsiElement element) {
-        if (element instanceof MultiMarkdownWikiPageRef) {
+        if (element instanceof MultiMarkdownWikiLinkRef) {
             return MultiMarkdownBundle.message("findusages.wikilink.page-ref");
-        } else if (element instanceof MultiMarkdownWikiPageText) {
+        } else if (element instanceof MultiMarkdownWikiLinkText) {
             return MultiMarkdownBundle.message("findusages.wikilink.page-title");
-        } else if (element instanceof MultiMarkdownWikiPageRefAnchor) {
+        } else if (element instanceof MultiMarkdownWikiLinkAnchor) {
             return MultiMarkdownBundle.message("findusages.wikilink.page-anchor");
         } else if (element instanceof MultiMarkdownImageLinkRef) {
             return MultiMarkdownBundle.message("findusages.image.link-ref");
-        } else if (element instanceof MultiMarkdownImageLinkRefText) {
+        } else if (element instanceof MultiMarkdownImageLinkText) {
             return MultiMarkdownBundle.message("findusages.image.link-ref-text");
-        } else if (element instanceof MultiMarkdownImageLinkRefTitle) {
+        } else if (element instanceof MultiMarkdownImageLinkTitle) {
             return MultiMarkdownBundle.message("findusages.image.link-ref-title");
         } else if (element instanceof MultiMarkdownLinkRef) {
             return MultiMarkdownBundle.message("findusages.explicit.link-ref");
-        } else if (element instanceof MultiMarkdownLinkRefText) {
+        } else if (element instanceof MultiMarkdownLinkText) {
             return MultiMarkdownBundle.message("findusages.explicit.link-ref-text");
-        } else if (element instanceof MultiMarkdownLinkRefAnchor) {
+        } else if (element instanceof MultiMarkdownLinkAnchor) {
             return MultiMarkdownBundle.message("findusages.explicit.link-ref-anchor");
-        } else if (element instanceof MultiMarkdownLinkRefTitle) {
+        } else if (element instanceof MultiMarkdownLinkTitle) {
             return MultiMarkdownBundle.message("findusages.explicit.link-ref-title");
         } else {
             return "";

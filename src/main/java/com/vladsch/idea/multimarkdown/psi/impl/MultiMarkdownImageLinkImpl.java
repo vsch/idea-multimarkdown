@@ -14,75 +14,24 @@
  */
 package com.vladsch.idea.multimarkdown.psi.impl;
 
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiFile;
-import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
-import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownExplicitLink;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownImageLink;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownVisitor;
 import com.vladsch.idea.multimarkdown.util.PathInfo;
-import com.vladsch.idea.multimarkdown.util.GitHubRepo;
+import com.vladsch.idea.multimarkdown.util.StringUtilKt;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class MultiMarkdownImageLinkImpl extends ASTWrapperPsiElement implements MultiMarkdownImageLink {
-    public static String getElementText(@NotNull String name, @Nullable String text, @Nullable String title) {
-        if (text == null || text.isEmpty()) text = new PathInfo(name).getFileNameNoExt();
-        return "![" + text + "](" + name + (title != null && title.length() > 0 ? " '" + title + "'" : "") + ")\n";
+public class MultiMarkdownImageLinkImpl extends MultiMarkdownLinkElementImpl implements MultiMarkdownImageLink {
+    public static String getElementText(@NotNull String linkRefWithAnchor, @Nullable String linkText, @Nullable String linkTitle) {
+        return "!" + MultiMarkdownExplicitLinkImpl.getElementText(linkRefWithAnchor, linkText, linkTitle);
     }
 
-    @Override
-    @NotNull
-    public String getMissingElementNameSpace(@NotNull String prefix, boolean addLinkRef) {
-        MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(getProject());
-        PsiFile psiFile = getContainingFile();
-        VirtualFile virtualFile = psiFile.getOriginalFile() != null ? psiFile.getOriginalFile().getVirtualFile() : psiFile.getVirtualFile();
-        PathInfo filePathInfo = new PathInfo(virtualFile);
-        GitHubRepo gitHubRepo = projectComponent != null ? projectComponent.getGitHubRepo(filePathInfo.getPath()) : null;
-        String vcsHome = gitHubRepo != null ? gitHubRepo.getBasePath() + "::" : "";
-
-        if (addLinkRef) {
-            String pageRef = MultiMarkdownPsiImplUtil.getLinkRefTextWithAnchor(this);
-            if (pageRef.isEmpty()) pageRef = filePathInfo.getFileNameAsWikiRef();
-            return prefix + (vcsHome.isEmpty() ? vcsHome : vcsHome + "::") + (pageRef.isEmpty() ? pageRef : pageRef + "::");
-        }
-        return prefix + (vcsHome.isEmpty() ? vcsHome : vcsHome + "::");
+    public static String getElementText(@NotNull String linkRef, @Nullable String linkText, @Nullable String linkAnchor, @Nullable String linkTitle) {
+        return getElementText(linkRef + StringUtilKt.startWith(linkAnchor, '#'), linkText, linkTitle);
     }
 
     public MultiMarkdownImageLinkImpl(ASTNode node) {
         super(node);
-    }
-
-    public void accept(@NotNull PsiElementVisitor visitor) {
-        if (visitor instanceof MultiMarkdownVisitor) visitor.visitElement(this);
-        else super.accept(visitor);
-    }
-
-    @Override
-    public String getDisplayName() {
-        return getText();
-    }
-
-    @Override
-    public String getText() {
-        return MultiMarkdownPsiImplUtil.getLinkText(this);
-    }
-
-    @Override
-    public String getLinkRef() {
-        return MultiMarkdownPsiImplUtil.getLinkRefText(this);
-    }
-
-    @Override
-    public String getTitle() {
-        return MultiMarkdownPsiImplUtil.getLinkTitle(this);
-    }
-
-    @Override
-    public String getLinkRefAnchor() {
-        return MultiMarkdownPsiImplUtil.getLinkAnchor(this);
     }
 }

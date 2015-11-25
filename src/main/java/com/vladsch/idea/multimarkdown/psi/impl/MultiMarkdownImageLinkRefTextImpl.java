@@ -18,11 +18,11 @@ import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownImageLink;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownImageLinkRefText;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownImageLinkText;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-public class MultiMarkdownImageLinkRefTextImpl extends MultiMarkdownNamedElementImpl implements MultiMarkdownImageLinkRefText {
+public class MultiMarkdownImageLinkRefTextImpl extends MultiMarkdownNamedElementImpl implements MultiMarkdownImageLinkText {
     private static final Logger logger = Logger.getLogger(MultiMarkdownImageLinkRefTextImpl.class);
     protected static final String MISSING_ELEMENT_NAME_SPACE = "image-text::";
 

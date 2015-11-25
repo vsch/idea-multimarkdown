@@ -16,19 +16,17 @@ package com.vladsch.idea.multimarkdown.psi.impl;
 
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementResolveResult;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.ResolveResult;
 import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkRef;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
-import com.vladsch.idea.multimarkdown.util.*;
+import com.vladsch.idea.multimarkdown.util.FileRef;
+import com.vladsch.idea.multimarkdown.util.GitHubLinkResolver;
+import com.vladsch.idea.multimarkdown.util.LinkRef;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MultiMarkdownReferenceLinkRef extends MultiMarkdownReference {
     private static final Logger logger = Logger.getLogger(MultiMarkdownReferenceLinkRef.class);
@@ -48,63 +46,13 @@ public class MultiMarkdownReferenceLinkRef extends MultiMarkdownReference {
     public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
         // we will handle this by renaming the element to point to the new location
         if (myElement instanceof MultiMarkdownLinkRef && element instanceof PsiFile) {
-            FileReferenceLinkGitHubRules fileReferenceLink = new FileReferenceLinkGitHubRules(myElement.getContainingFile(), ((PsiFile) element));
-            String linkRef = fileReferenceLink.getLinkRef();
-            // this will create a new reference and loose connection to this one
-            return myElement.setName(linkRef, MultiMarkdownNamedElement.REASON_FILE_MOVED);
-        }
-        return super.bindToElement(element);
-    }
-
-    @NotNull
-    @Override
-    protected ResolveResult[] getMultiResolveResults(boolean incompleteCode) {
-        String name = myElement.getName();
-        if (name != null && myElement.getContainingFile() != null && myElement.getContainingFile().getVirtualFile() != null) {
-            if (!PathInfo.isExternalReference(name)) {
-                FileReference sourceReference = new FileReference(myElement.getContainingFile());
-                String anchor = MultiMarkdownPsiImplUtil.getLinkAnchor(myElement);
-                PathInfo linkRefInfo = new PathInfo(name + (!anchor.isEmpty() ? "#" + anchor : ""));
-
-                FileReferenceList fileReferenceList = new FileReferenceListQuery(myElement.getProject())
-                        .caseInsensitive()
-                        .gitHubWikiRules()
-                        .keepLinkRefAnchor()
-                        .linkRefIgnoreSubDirs()
-                        .sameGitHubRepo()
-                        .wantMarkdownFiles()
-                        .inSource(sourceReference)
-                        .matchLinkRef(linkRefInfo.getFileNameWithAnchorNoExt(), false)
-                        .all();
-
-                fileReferenceList = fileReferenceList
-                        .postMatchFilter(linkRefInfo.getFilePath(), false, false)
-                        .sorted();
-
-                PsiFile[] files = fileReferenceList
-                        .getPsiFiles();
-
-                if (files.length > 0) {
-                    resolveRefIsExternal = false;
-                    removeReferenceChangeListener();
-                    if (files.length == 1) {
-                        return new ResolveResult[] { new PsiElementResolveResult(files[0]) };
-                    } else {
-                        List<ResolveResult> results = new ArrayList<ResolveResult>();
-                        for (PsiFile file : files) {
-                            results.add(new PsiElementResolveResult(file));
-                        }
-                        return results.toArray(new ResolveResult[results.size()]);
-                    }
-                } else if (sourceReference.resolveExternalLinkRef(name, false, false) != null) {
-                    resolveRefIsExternal = true;
-                } else {
-                    resolveRefIsExternal = false;
-                    return new ResolveResult[] { new PsiElementResolveResult(getMissingRefElement(name)) };
-                }
+            LinkRef linkRef = MultiMarkdownPsiImplUtil.getLinkRef(myElement);
+            if (linkRef != null) {
+                String linkRefText = new GitHubLinkResolver(myElement).linkAddress(linkRef, new FileRef((PsiFile) element), null, null, null);
+                // this will create a new reference and loose connection to this one
+                return myElement.setName(linkRefText,  MultiMarkdownNamedElement.REASON_BIND_TO_FILE);
             }
         }
-
-        return EMPTY_RESULTS;
+        return super.bindToElement(element);
     }
 }

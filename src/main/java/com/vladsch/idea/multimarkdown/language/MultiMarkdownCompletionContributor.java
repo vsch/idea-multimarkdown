@@ -193,7 +193,7 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
                                 }
                             }
                         } else if (elementType == WIKI_LINK_REF_ANCHOR) {
-                            MultiMarkdownWikiPageRef pageRef = (MultiMarkdownWikiPageRef) MultiMarkdownPsiImplUtil.findChildByType(element.getParent(), MultiMarkdownTypes.WIKI_LINK_REF);
+                            MultiMarkdownWikiLinkRef pageRef = (MultiMarkdownWikiLinkRef) MultiMarkdownPsiImplUtil.findChildByType(element.getParent(), MultiMarkdownTypes.WIKI_LINK_REF);
                             MultiMarkdownReferenceWikiPageRef pageRefRef = pageRef == null ? null : (MultiMarkdownReferenceWikiPageRef) pageRef.getReference();
                             if (pageRefRef != null && !pageRefRef.isResolveRefMissing()) {
                                 MultiMarkdownFile markdownFile = (MultiMarkdownFile) pageRefRef.resolve();

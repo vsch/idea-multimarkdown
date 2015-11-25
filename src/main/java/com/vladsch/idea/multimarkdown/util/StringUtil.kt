@@ -24,22 +24,70 @@ import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
 import java.net.URLEncoder
 
-fun String?.endWith(suffix: Char, ignoreCase: Boolean = false): String {
+fun String?.wrapWith(prefixSuffix: Char): String {
+    return wrapWith(prefixSuffix, prefixSuffix)
+}
+
+fun String?.wrapWith(prefixSuffix: Char, ignoreCase: Boolean): String {
+    return wrapWith(prefixSuffix, prefixSuffix, ignoreCase)
+}
+
+fun String?.wrapWith(prefix: Char, suffix: Char): String {
+    return startWith(prefix, false).endWith(suffix, false)
+}
+
+fun String?.wrapWith(prefix: Char, suffix: Char, ignoreCase: Boolean): String {
+    return startWith(prefix, ignoreCase).endWith(suffix, ignoreCase)
+}
+
+fun String?.wrapWith(prefixSuffix: String): String {
+    return wrapWith(prefixSuffix, prefixSuffix)
+}
+
+fun String?.wrapWith(prefixSuffix: String, ignoreCase: Boolean): String {
+    return wrapWith(prefixSuffix, prefixSuffix, ignoreCase)
+}
+
+fun String?.wrapWith(prefix: String, suffix: String): String {
+    return startWith(prefix, false).endWith(suffix, false)
+}
+
+fun String?.wrapWith(prefix: String, suffix: String, ignoreCase: Boolean): String {
+    return startWith(prefix, ignoreCase).endWith(suffix, ignoreCase)
+}
+
+fun String?.endWith(suffix: Char): String {
+    return endWith(suffix, false)
+}
+
+fun String?.endWith(suffix: Char, ignoreCase: Boolean): String {
     if (this != null && !isEmpty() && !endsWith(suffix, ignoreCase)) return plus(suffix)
     return orEmpty()
 }
 
-fun String?.endWith(suffix: String, ignoreCase: Boolean = false): String {
+fun String?.endWith(suffix: String): String {
+    return endWith(suffix, false)
+}
+
+fun String?.endWith(suffix: String, ignoreCase: Boolean): String {
     if (this != null && !isEmpty() && suffix.isNotEmpty() && !endsWith(suffix, ignoreCase)) return plus(suffix)
     return orEmpty()
 }
 
-fun String?.startWith(prefix: Char, ignoreCase: Boolean = false): String {
+fun String?.startWith(prefix: Char): String {
+    return startWith(prefix, false)
+}
+
+fun String?.startWith(prefix: Char, ignoreCase: Boolean): String {
     if (this != null && !isEmpty() && !startsWith(prefix, ignoreCase)) return prefix.plus(this.orEmpty())
     return orEmpty()
 }
 
-fun String?.startWith(prefix: String, ignoreCase: Boolean = false): String {
+fun String?.startWith(prefix: String): String {
+    return startWith(prefix, false)
+}
+
+fun String?.startWith(prefix: String, ignoreCase: Boolean): String {
     if (this != null && !isEmpty() && prefix.isNotEmpty() && !startsWith(prefix, ignoreCase)) return prefix.plus(this)
     return orEmpty()
 }
@@ -104,25 +152,25 @@ fun String?.count(char: String, startIndex: Int = 0, endIndex: Int = Int.MAX_VAL
     return count
 }
 
-fun String?.urlDecode(charSet:String? = null):String {
+fun String?.urlDecode(charSet: String? = null): String {
     try {
-        return URLDecoder.decode(this, charSet?:"UTF-8")
+        return URLDecoder.decode(this, charSet ?: "UTF-8")
     } catch (e: UnsupportedEncodingException) {
         //e.printStackTrace()
         return orEmpty().replace("%23", "#").replace("%20", " ")
     }
 }
 
-fun String?.urlEncode(charSet:String? = null):String {
+fun String?.urlEncode(charSet: String? = null): String {
     try {
-        return URLEncoder.encode(this, charSet?:"UTF-8")
+        return URLEncoder.encode(this, charSet ?: "UTF-8")
     } catch (e: UnsupportedEncodingException) {
         //e.printStackTrace()
         return orEmpty().replace("%23", "#").replace("%20", " ")
     }
 }
 
-fun String?.ifEmpty(vararg args:String?):String {
+fun String?.ifEmpty(vararg args: String?): String {
     if (this != null && !this.isEmpty()) return this
     for (arg in args) {
         if (arg != null && !arg.isEmpty()) return arg
@@ -130,7 +178,7 @@ fun String?.ifEmpty(vararg args:String?):String {
     return ""
 }
 
-fun String?.ifEmpty(vararg args:() -> String?):String {
+fun String?.ifEmpty(vararg args: () -> String?): String {
     if (this != null && !this.isEmpty()) return this
     for (arg in args) {
         val alt = arg()
@@ -139,14 +187,14 @@ fun String?.ifEmpty(vararg args:() -> String?):String {
     return ""
 }
 
-fun String?.removeStart(prefix: Char):String {
+fun String?.removeStart(prefix: Char): String {
     if (this != null) {
         return removePrefix(prefix.toString())
     }
     return ""
 }
 
-fun String?.removeStart(prefix: String):String {
+fun String?.removeStart(prefix: String): String {
     if (this != null) {
         return removePrefix(prefix)
     }

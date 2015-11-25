@@ -14,6 +14,6 @@
  */
 package com.vladsch.idea.multimarkdown.psi;
 
-public interface MultiMarkdownWikiPageRefAnchor extends MultiMarkdownNamedElement {
+public interface MultiMarkdownImageLinkTitle extends MultiMarkdownLinkTitle {
 
 }

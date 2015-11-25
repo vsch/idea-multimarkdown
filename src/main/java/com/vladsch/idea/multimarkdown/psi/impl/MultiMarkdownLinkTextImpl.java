@@ -18,13 +18,13 @@ import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownExplicitLink;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkRefTitle;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkText;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-public class MultiMarkdownLinkRefTitleImpl extends MultiMarkdownNamedElementImpl implements MultiMarkdownLinkRefTitle {
-    private static final Logger logger = Logger.getLogger(MultiMarkdownLinkRefTitleImpl.class);
-    protected static final String MISSING_ELEMENT_NAME_SPACE = "link-title::";
+public class MultiMarkdownLinkTextImpl extends MultiMarkdownNamedElementImpl implements MultiMarkdownLinkText {
+    private static final Logger logger = Logger.getLogger(MultiMarkdownLinkTextImpl.class);
+    protected static final String MISSING_ELEMENT_NAME_SPACE = "link-text::";
 
     @NotNull
     @Override
@@ -33,18 +33,18 @@ public class MultiMarkdownLinkRefTitleImpl extends MultiMarkdownNamedElementImpl
         return ((MultiMarkdownExplicitLink) getParent()).getMissingElementNameSpace(MISSING_ELEMENT_NAME_SPACE, true);
     }
 
-    public MultiMarkdownLinkRefTitleImpl(ASTNode node) {
+    public MultiMarkdownLinkTextImpl(ASTNode node) {
         super(node);
     }
 
     @Override
     public MultiMarkdownReference createReference(@NotNull TextRange textRange) {
-        return new MultiMarkdownReference(this, textRange);
+        return  new MultiMarkdownReference(this, textRange);
     }
 
     @Override
     public String getDisplayName() {
-        return getParent() instanceof MultiMarkdownExplicitLink ? ((MultiMarkdownExplicitLink) getParent()).getDisplayName() : getName();
+        return getParent() instanceof MultiMarkdownExplicitLink  ? ((MultiMarkdownExplicitLink) getParent()).getDisplayName() : getName();
     }
 
     @Override
@@ -64,6 +64,6 @@ public class MultiMarkdownLinkRefTitleImpl extends MultiMarkdownNamedElementImpl
 
     @Override
     public String toString() {
-        return "LINK_REF_TITLE '" + getName() + "' " + super.hashCode();
+        return "LINK_REF_TEXT '" + getName() + "' " + super.hashCode();
     }
 }

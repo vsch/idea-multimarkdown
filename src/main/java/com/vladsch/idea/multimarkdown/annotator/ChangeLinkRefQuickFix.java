@@ -36,7 +36,7 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLinkRef;
 import com.vladsch.idea.multimarkdown.util.PathInfo;
 import org.jetbrains.annotations.NotNull;
 
@@ -79,7 +79,7 @@ class ChangeLinkRefQuickFix extends BaseIntentionAction {
         String msg;
         switch (alternativeMsg) {
             case MATCH_CASE_TO_FILE:
-                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.match-target", linkRefElement instanceof MultiMarkdownWikiPageRef ? PathInfo.wikiRefAsFileNameWithExt(newLinkRef) : newLinkRef);
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.match-target", linkRefElement instanceof MultiMarkdownWikiLinkRef ? PathInfo.wikiRefAsFileNameWithExt(newLinkRef) : newLinkRef);
                 break;
 
             case REMOVE_DASHES:
@@ -109,7 +109,7 @@ class ChangeLinkRefQuickFix extends BaseIntentionAction {
                 break;
 
             default:
-                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.change-target", linkRefElement instanceof MultiMarkdownWikiPageRef ? PathInfo.wikiRefAsFileNameWithExt(newLinkRef) : newLinkRef);
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.change-target", linkRefElement instanceof MultiMarkdownWikiLinkRef ? PathInfo.wikiRefAsFileNameWithExt(newLinkRef) : newLinkRef);
                 break;
         }
 

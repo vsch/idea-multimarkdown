@@ -26,7 +26,7 @@ import com.intellij.psi.codeStyle.NameUtil;
 import com.intellij.spellchecker.SpellCheckerManager;
 import com.vladsch.idea.multimarkdown.util.FileRef;
 import com.vladsch.idea.multimarkdown.util.PathInfo;
-import com.vladsch.idea.multimarkdown.util.VirtualFileRef;
+import com.vladsch.idea.multimarkdown.util.ProjectFileRef;
 import com.vladsch.idea.multimarkdown.util.WikiLinkRef;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -137,8 +137,8 @@ public class SuggestionFixers {
             if (project != null && suggestion.hasParam(FILE_PATH)) {
                 FileRef fileReference = new FileRef(suggestion.stringParam(FILE_PATH));
                 FileRef renamedFileReference = fileReference.append("..", text);
-                VirtualFileRef virtualFileRef = renamedFileReference.virtualFileRef(project);
-                if (virtualFileRef == null || virtualFileRef.getExists()) return;
+                ProjectFileRef projectFileRef = renamedFileReference.virtualFileRef(project);
+                if (projectFileRef == null || projectFileRef.getExists()) return;
             }
             addSuggestion(suggestion);
         }

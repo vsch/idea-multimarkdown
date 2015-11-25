@@ -148,7 +148,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                     }
                 } else {
                     FileBasedIndex.getInstance().getFilesWithKey(FilenameIndex.NAME, targetFileTypes, { file ->
-                        val virtualFileRef = VirtualFileRef(file, project)
+                        val virtualFileRef = ProjectFileRef(file, project)
                         if (virtualFileRef.filePath.matches(if (virtualFileRef.isWikiPage) wikiMatch else linkMatch)) {
                             matches.add(virtualFileRef)
                         }

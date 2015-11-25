@@ -37,7 +37,7 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownImageLinkRef;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkRef;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLinkRef;
 import com.vladsch.idea.multimarkdown.util.PathInfo;
 import com.vladsch.idea.multimarkdown.util.FileReference;
 import com.vladsch.idea.multimarkdown.util.FileReferenceLinkGitHubRules;
@@ -119,7 +119,7 @@ class RenameFileAndReTargetQuickFix extends BaseIntentionAction {
                         if (reference != null && (rootElement = (MultiMarkdownNamedElement) reference.resolve()) != null) {
                             String linkRename = newFileInfo.getFileName();
                             String oldLinkName = rootElement.getName();
-                            if (linkRefElement instanceof MultiMarkdownWikiPageRef) {
+                            if (linkRefElement instanceof MultiMarkdownWikiLinkRef) {
                                 linkRename = newFileInfo.getFileNameAsWikiRef();
                             } else if (linkRefElement instanceof MultiMarkdownImageLinkRef) {
                                 withExt = true;
@@ -138,7 +138,7 @@ class RenameFileAndReTargetQuickFix extends BaseIntentionAction {
                             String gitHubRepoPath = new FileReference(linkRefElement.getContainingFile()).getGitHubRepoPath();
 
                             // see if all the usages will resolve to this file if not then leave them out
-                            if (linkRefElement instanceof MultiMarkdownWikiPageRef) {
+                            if (linkRefElement instanceof MultiMarkdownWikiLinkRef) {
                                 for (UsageInfo usageInfo : linkRefUsages) {
                                     PsiFile sourceFile = usageInfo.getFile();
                                     if (sourceFile != null) {

@@ -128,9 +128,9 @@ open class UrlLinkRef(containingFile: FileRef, fullPath: String, anchor: String?
     override val isURI: Boolean
         get() = true
 
-    open fun virtualFileRef(project: Project): VirtualFileRef? {
+    open fun virtualFileRef(project: Project): ProjectFileRef? {
         val virtualFile = if (isLocal) null else VirtualFileManager.getInstance().findFileByUrl(fullPath)
-        return if (virtualFile == null) null else VirtualFileRef(virtualFile, project);
+        return if (virtualFile == null) null else ProjectFileRef(virtualFile, project);
     }
 }
 
@@ -157,6 +157,7 @@ open class FileLinkRef(containingFile: FileRef, fullPath: String, anchor: String
         // convert link to file name, usually url decode
         @JvmStatic fun convertLinkToFile(linkAddress: String): String = LinkRef.decodeLink(linkAddress, fileToLinkMap)
 
+        // CAUTION: just copies link address without figuring out whether it will resolve as is
         @JvmStatic fun from(fileLinkRef: FileLinkRef): FileLinkRef? {
             return when (fileLinkRef) {
                 is ImageLinkRef ->
@@ -187,6 +188,7 @@ open class WikiLinkRef(containingFile: FileRef, fullPath: String, anchor: String
         // convert link to file name, usually url decode
         @JvmStatic fun convertLinkToFile(linkAddress: String): String = linkAddress.replace(' ', '-')
 
+        // CAUTION: just copies link address without figuring out whether it will resolve as is
         @JvmStatic fun from(fileLinkRef: FileLinkRef): WikiLinkRef? {
             return when (fileLinkRef) {
                 is ImageLinkRef -> null
@@ -203,6 +205,7 @@ open class ImageLinkRef(containingFile: FileRef, fullPath: String, anchor: Strin
     override val linkExtensions: Array<String>
         get() = IMAGE_EXTENSIONS
 
+    // CAUTION: just copies link address without figuring out whether it will resolve as is
     companion object {
         @JvmStatic fun from(fileLinkRef: FileLinkRef): FileLinkRef? {
             return when (fileLinkRef) {
