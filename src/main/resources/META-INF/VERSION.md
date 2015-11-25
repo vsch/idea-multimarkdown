@@ -4,8 +4,13 @@
 
 - Change: default JavaFX preview font order to have Helvetica before Arial, cleaner text rendering. 
 - Fix #73: self referencing links with 'Show Modified' not selected do not generate correct HTML.
+- Change: update JavaFX preview to new GitHub style, wider pages.
+- Add: inspections when wiki pages are linked with file extension, they will display raw text not rendered HTML
+- Fix: anchor links markdown extension was always enabled when 'Use Old Preview' was selected, regardless of preferences settings
 
 #### Enhanced Edition
+
+- Change: new implementation of file link resolving logic handles the full set of GitHub idiosyncrasies for relative links, file extensions and case sensitivity.
 
 ### 1.2.2 - Bug Fixes and Enhancements
 
@@ -37,3 +42,4 @@
 - Fix license registration failing in version 133.1711 for lack of methods in some classes.  
 - Fix intention to change wiki link to explicit and vice-versa. 
 
+                 

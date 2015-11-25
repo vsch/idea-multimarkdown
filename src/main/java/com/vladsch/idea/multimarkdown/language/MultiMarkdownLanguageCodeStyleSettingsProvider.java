@@ -41,7 +41,7 @@ public class MultiMarkdownLanguageCodeStyleSettingsProvider extends LanguageCode
 
     @Nullable
     public IndentOptionsEditor getIndentOptionsEditor() {
-        if (MultiMarkdownPlugin.getInstance().isLicensed()) {
+        if (MultiMarkdownPlugin.isLicensed()) {
             return new SmartIndentOptionsEditor();
         } else {
             return new IndentOptionsEditor();

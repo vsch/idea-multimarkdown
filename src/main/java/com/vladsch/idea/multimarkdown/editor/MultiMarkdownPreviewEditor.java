@@ -167,7 +167,8 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
     //}
     @NotNull
     private static PegDownProcessor getProcessor() {
-        return new PegDownProcessor((MultiMarkdownGlobalSettings.getInstance().getExtensionsValue() & ~Extensions.TASKLISTITEMS) | Extensions.EXTANCHORLINKS_WRAP, getParsingTimeout());
+        int options = MultiMarkdownGlobalSettings.getInstance().getExtensionsValue();
+        return new PegDownProcessor((options & ~Extensions.TASKLISTITEMS) | ((options & Extensions.EXTANCHORLINKS) != 0 ? Extensions.EXTANCHORLINKS_WRAP : 0), getParsingTimeout());
     }
 
     /**

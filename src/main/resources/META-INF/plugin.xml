@@ -31,29 +31,28 @@
         <div xmlns="http://www.w3.org/1999/html">
             <img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_source_preview_Small.png" border="0" width="270" height="135"
                     alt="Screenshot">
-
             <p><b><a color="#30A0D8"
                     href="http://daringfireball.net/projects/markdown">Markdown</a> language support for IntelliJ platform.</b><br> With GitHub Flavoured Markdown extensions and GitHub style formatting. HTML Preview and HTML Text tabs.
             </p>
-
-            <p><b>Plugin website: <a color="#30A0D8"
-                    href="http://vladsch.com/product/multimarkdown"><u>idea-multimarkdown Enhanced Edition</u></a></b></p>
-
+            <p><b>Plugin website: <a color="#30A0D8" href="http://vladsch.com/product/multimarkdown"><u>idea-multimarkdown Enhanced Edition</u></a></b></p>
             <p><b>For all feedback requiring a reply please use the <a color="#30A0D8"
                     href="https://github.com/vsch/idea-multimarkdown/issues"><u>MultiMarkdown GitHub Issues</u></a> page.</b></p>
-
             <p><b>Documentation: <a color="#30A0D8" href="https://github.com/vsch/idea-multimarkdown/wiki"><u>MultiMarkdown GitHub Wiki page.</u></a></b></p>
         </div>
         ]]></description>
 
-    <version>1.2.2.1</version>
+    <version>1.2.2.2</version>
     <idea-version since-build="133.1711"/>
     <change-notes><![CDATA[
     <ul>
-      <h3>1.2.2.1 - Bug Fixes and Enhancements</h3>
-      <h4><b>Basic Edition &amp; Enhanced</b></h4>
-      <li>Fix #73: self referencing links with 'Show Modified' not selected do not generate correct HTML.</li>
-      <h4><b>Enhanced Edition</b></h4>
+        <h3>1.2.3 - Bug Fixes and Enhancements</h3>
+        <h4><strong>Basic Edition &amp; Enhanced</strong></h4>
+          <li>Change: default JavaFX preview font order to have Helvetica before Arial, cleaner text rendering.</li>
+          <li>Fix #73: self referencing links with 'Show Modified' not selected do not generate correct HTML.</li>
+          <li>Change: update JavaFX preview to new GitHub style, wider pages.</li>
+          <li>Add: inspections when wiki pages are linked with file extension, they will display raw text not rendered HTML</li>
+        <h4><strong>Enhanced Edition</strong></h4>
+          <li>Change: new implementation of file link resolving logic handles the full set of GitHub idiosyncrasies for relative links, file extensions and case sensitivity.</li>
     </ul>
     <ul>
       <h3>1.2.2 - Bug Fixes and Enhancements</h3>
