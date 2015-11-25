@@ -501,7 +501,7 @@ dl,
 table,
 pre {
     margin-bottom: 16px;
-    margin-top: 0px;
+    margin-top: 0;
 }
 
 ul,

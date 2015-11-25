@@ -62,7 +62,7 @@ public class MultiMarkdownImageLinkRefImpl extends MultiMarkdownNamedElementImpl
 
     @Override
     public String getNameWithAnchor() {
-        return MultiMarkdownPsiImplUtil.getLinkRefWithAnchor(getParent());
+        return MultiMarkdownPsiImplUtil.getLinkRefTextWithAnchor(getParent());
     }
 
     @Override

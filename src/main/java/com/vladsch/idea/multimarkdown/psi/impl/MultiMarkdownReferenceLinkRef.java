@@ -63,7 +63,7 @@ public class MultiMarkdownReferenceLinkRef extends MultiMarkdownReference {
         if (name != null && myElement.getContainingFile() != null && myElement.getContainingFile().getVirtualFile() != null) {
             if (!PathInfo.isExternalReference(name)) {
                 FileReference sourceReference = new FileReference(myElement.getContainingFile());
-                String anchor = MultiMarkdownPsiImplUtil.getLinkRefAnchor(myElement);
+                String anchor = MultiMarkdownPsiImplUtil.getLinkAnchor(myElement);
                 PathInfo linkRefInfo = new PathInfo(name + (!anchor.isEmpty() ? "#" + anchor : ""));
 
                 FileReferenceList fileReferenceList = new FileReferenceListQuery(myElement.getProject())

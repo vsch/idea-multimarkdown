@@ -53,13 +53,14 @@ public class MultiMarkdownAnnotator implements Annotator {
     protected static final int ANNOTATION_WARNING = 2;
     protected static final int ANNOTATION_ERROR = 3;
 
+    @SuppressWarnings("ConstantIfStatement,StatementWithEmptyBody")
     @Override
     public void annotate(@NotNull final PsiElement element, @NotNull AnnotationHolder holder) {
         //noinspection StatementWithEmptyBody
         AnnotationState state = new AnnotationState(holder);
 
+        //noinspection ConstantIfStatement,StatementWithEmptyBody
         if (false) {
-            return;
         } else if (element instanceof MultiMarkdownWikiLink) {
         } else if (element instanceof MultiMarkdownExplicitLink) {
         } else if (element instanceof MultiMarkdownWikiPageText) {
@@ -501,7 +502,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                         state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.unresolved-link-reference"));
                     } else {
                         FileReferenceLinkGitHubRules referenceLink = (FileReferenceLinkGitHubRules) otherReferences[0];
-                        FileReferenceLink.InaccessibleWikiPageReasons reasons = referenceLink.inaccessibleWikiPageRefReasons(MultiMarkdownPsiImplUtil.getLinkRefWithAnchor(element));
+                        FileReferenceLink.InaccessibleWikiPageReasons reasons = referenceLink.inaccessibleWikiPageRefReasons(MultiMarkdownPsiImplUtil.getLinkRefTextWithAnchor(element));
 
                         PsiFile psiFile = referenceLink.getPsiFile();
                         if (reasons.caseMismatch()) {

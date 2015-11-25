@@ -51,7 +51,7 @@ public class MultiMarkdownWikiLinkImpl extends ASTWrapperPsiElement implements M
         String wikiHome = filePathInfo.getWikiHome();
 
         if (addLinkRef) {
-            String pageRef = MultiMarkdownPsiImplUtil.getLinkRefWithAnchor(this);
+            String pageRef = MultiMarkdownPsiImplUtil.getLinkRefTextWithAnchor(this);
             if (pageRef.isEmpty()) pageRef = filePathInfo.getFileNameAsWikiRef();
             return prefix + (wikiHome.isEmpty() ? wikiHome : wikiHome + "::") + (pageRef.isEmpty() ? pageRef : pageRef + "::");
         }
@@ -74,11 +74,11 @@ public class MultiMarkdownWikiLinkImpl extends ASTWrapperPsiElement implements M
 
     @Override
     public String getPageText() {
-        return MultiMarkdownPsiImplUtil.getLinkRefText(this);
+        return MultiMarkdownPsiImplUtil.getLinkText(this);
     }
 
     @Override
     public String getPageRef() {
-        return MultiMarkdownPsiImplUtil.getLinkRef(this);
+        return MultiMarkdownPsiImplUtil.getLinkRefText(this);
     }
 }

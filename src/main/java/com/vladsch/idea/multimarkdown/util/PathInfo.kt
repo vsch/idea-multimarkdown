@@ -16,6 +16,7 @@ package com.vladsch.idea.multimarkdown.util
 
 import com.vladsch.idea.multimarkdown.MultiMarkdownFileTypeFactory
 import org.apache.log4j.Logger
+import java.net.URLEncoder
 
 open class PathInfo(fullPath: String) : Comparable<PathInfo> {
     protected val fullPath: String
@@ -53,6 +54,9 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
 
     val ext: String
         get() = if (nameEnd + 1 >= fullPath.length) EMPTY_STRING else fullPath.substring(nameEnd + 1, fullPath.length)
+
+    val extWithDot: String
+        get() = if (nameEnd >= fullPath.length) EMPTY_STRING else fullPath.substring(nameEnd, fullPath.length)
 
     val hasExt: Boolean
         get() = nameEnd + 1 < fullPath.length
@@ -121,9 +125,9 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
         get() = isAbsolute(fullPath)
 
     fun withExt(ext: String?): PathInfo = if (ext == null || isEmpty || this.ext == ext) this else PathInfo(filePathNoExt + ext.startWith('.'))
-    fun append(vararg parts: String): PathInfo = PathInfo.appendParts(fullPath, *parts)
-    fun append(parts: Collection<String>): PathInfo = PathInfo.appendParts(fullPath, parts)
-    fun append(parts: Sequence<String>): PathInfo = PathInfo.appendParts(fullPath, parts)
+    open fun append(vararg parts: String): PathInfo = PathInfo.appendParts(fullPath, *parts, construct = ::PathInfo)
+    open fun append(parts: Collection<String>): PathInfo = PathInfo.appendParts(fullPath, parts, construct = ::PathInfo)
+    open fun append(parts: Sequence<String>): PathInfo = PathInfo.appendParts(fullPath, parts, construct = ::PathInfo)
 
     companion object {
         private val logger = Logger.getLogger(PathInfo::class.java)
@@ -159,15 +163,15 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
         // true if it is already an absolute ref, no need to resolve relative, just see if it maps
         @JvmStatic fun isAbsolute(fullPath: String?): Boolean = fullPath != null && fullPath.startsWith(*ABSOLUTE_PREFIXES)
 
-        @JvmStatic fun appendParts(fullPath: String?, vararg parts: String): PathInfo {
-            return appendParts(fullPath, parts.asSequence());
+        @JvmStatic fun <T:PathInfo> appendParts(fullPath: String?, vararg parts: String, construct: (fullPath:String) -> T): T {
+            return appendParts(fullPath, parts.asSequence(), construct);
         }
 
-        @JvmStatic fun appendParts(fullPath: String?, parts: Collection<String>): PathInfo {
-            return appendParts(fullPath, parts.asSequence())
+        @JvmStatic fun <T:PathInfo> appendParts(fullPath: String?, parts: Collection<String>, construct: (fullPath:String) -> T): T {
+            return appendParts(fullPath, parts.asSequence(), construct)
         }
 
-        @JvmStatic fun appendParts(fullPath: String?, parts: Sequence<String>): PathInfo {
+        @JvmStatic fun <T:PathInfo> appendParts(fullPath: String?, parts: Sequence<String>, construct: (fullPath:String) -> T): T {
             var path: String = cleanFullPath(fullPath)
 
             for (part in parts) {
@@ -183,7 +187,7 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
                     }
                 }
             }
-            return PathInfo(path)
+            return construct(path) as T
         }
 
         @JvmStatic fun isExtIn(ext: String, ignoreCase: Boolean = true, vararg extList: String): Boolean {
@@ -202,6 +206,11 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
             var cleanPath = removeDotDirectory(fullPath)
             if (!cleanPath.endsWith("//")) cleanPath = cleanPath.removeSuffix("/")
             return cleanPath.removeSuffix(".")
+        }
+
+        @JvmStatic fun urlEncodeFilePath(fullPath: String): String {
+            val pathInfo = PathInfo(fullPath)
+            return pathInfo.path.replace("#", "%23") + URLEncoder.encode(pathInfo.fileName, "UTF-8").replace("#", "%23")
         }
 
         @JvmStatic fun relativePath(fromPath: String, toPath: String, withPrefix: Boolean = true): String {

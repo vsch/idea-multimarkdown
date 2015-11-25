@@ -155,8 +155,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         if (!overrideExclusions.containsKey(child)) return false;
 
         childExclusions = overrideExclusions.get(child);
-        if (!childExclusions.contains(parent)) return false;
-        return true;
+        return childExclusions.contains(parent);
     }
 
     static protected void addCombinationSplit(IElementType resultingType, IElementType elementType1, IElementType elementType2) {

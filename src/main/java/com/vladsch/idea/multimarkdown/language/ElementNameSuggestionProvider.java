@@ -251,9 +251,9 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
 
     public static SuggestionList getLinkRefTextSuggestions(@NotNull PsiElement parent, boolean spellCheck) {
         SuggestionList suggestionList = new SuggestionList(parent.getProject());
-        String linkRef = MultiMarkdownPsiImplUtil.getLinkRef(parent);
-        String linkRefText = MultiMarkdownPsiImplUtil.getLinkRefText(parent);
-        String linkRefAnchor = MultiMarkdownPsiImplUtil.getLinkRefAnchor(parent);
+        String linkRef = MultiMarkdownPsiImplUtil.getLinkRefText(parent);
+        String linkRefText = MultiMarkdownPsiImplUtil.getLinkText(parent);
+        String linkRefAnchor = MultiMarkdownPsiImplUtil.getLinkAnchor(parent);
         String originalText = null;
 
         SuggestionList originalList = new SuggestionList(parent.getProject());

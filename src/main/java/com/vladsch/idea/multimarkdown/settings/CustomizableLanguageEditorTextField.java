@@ -41,7 +41,7 @@ public class CustomizableLanguageEditorTextField extends EditorTextField {
     }
 
     public interface EditorCustomizationListener extends CustomizableEditorTextField.EditorCustomizationListener {
-        };
+        }
 
     CustomizableEditorTextField.EditorCustomizationListener  listener = null;
 

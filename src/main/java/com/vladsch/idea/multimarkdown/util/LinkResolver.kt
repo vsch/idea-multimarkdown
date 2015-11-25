@@ -33,11 +33,11 @@ abstract class LinkResolver(val projectResolver: LinkResolver.ProjectResolver, v
     }
 
     companion object {
-        val ONLY_LOCAL = 1          // file ref that has local resolve
-        val ONLY_REMOTE = 2         // file ref that has remote resolve
-        val LOOSE_MATCH = 4         // inexact match for error detection
-        val REMOTE_URL = 8          // remote URL for file on repo website
-        val LOCAL_OR_REMOTE = ONLY_LOCAL or ONLY_REMOTE          // remote URL for file on repo website
+        @JvmField val ONLY_LOCAL = 1          // file ref that has local resolve
+        @JvmField val ONLY_REMOTE = 2         // file ref that has remote resolve
+        @JvmField val LOOSE_MATCH = 4         // inexact match for error detection
+        @JvmField val REMOTE_URL = 8          // remote URL for file on repo website
+        @JvmField val LOCAL_OR_REMOTE = ONLY_LOCAL or ONLY_REMOTE          // remote URL for file on repo website
 
         fun wantLocal(options: Int): Boolean = (options and ONLY_REMOTE == 0) || (options and ONLY_LOCAL != 0)
         fun wantRemote(options: Int): Boolean = (options and ONLY_LOCAL == 0) || (options and ONLY_REMOTE != 0)
@@ -50,7 +50,7 @@ abstract class LinkResolver(val projectResolver: LinkResolver.ProjectResolver, v
     abstract fun inspect(linkRef: LinkRef, targetRef: FileRef): List<InspectionResult>
     abstract fun isResolved(linkRef: LinkRef, options: Int = 0, inList: List<FileRef>? = null): Boolean
     abstract fun isResolvedTo(linkRef: LinkRef, targetRef: FileRef, branchOrTag: String? = null): Boolean
-    abstract fun linkAddress(linkRef: LinkRef, targetRef: PathInfo, withExtForWikiPage: Boolean, branchOrTag: String? = null, anchor: String? = null): String
+    abstract fun linkAddress(linkRef: LinkRef, targetRef: PathInfo, withExtForWikiPage: Boolean? = null, branchOrTag: String? = null, anchor: String? = null): String
     abstract fun multiResolve(linkRef: LinkRef, options: Int = 0, inList: List<FileRef>? = null): List<PathInfo>
     abstract fun relativePath(linkRef: LinkRef, targetRef: FileRef, withExtForWikiPage: Boolean, branchOrTag: String? = null): String
     abstract fun resolve(linkRef: LinkRef, options: Int = 0, inList: List<FileRef>? = null): PathInfo?

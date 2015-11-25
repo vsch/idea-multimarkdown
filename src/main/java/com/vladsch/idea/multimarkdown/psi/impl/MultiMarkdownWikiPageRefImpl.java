@@ -65,14 +65,14 @@ public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl 
 
     @Override
     public String getFileNameWithAnchor() {
-        String anchorText = MultiMarkdownPsiImplUtil.getLinkRefAnchor(getParent());
+        String anchorText = MultiMarkdownPsiImplUtil.getLinkAnchor(getParent());
         PathInfo pathInfo = new PathInfo((getName() == null ? "" : getName()) + (anchorText.isEmpty() ? anchorText : "#" + anchorText));
         return PathInfo.wikiRefAsFileNameWithExt(pathInfo.getFileName()) + pathInfo.getAnchor();
     }
 
     @Override
     public String getNameWithAnchor() {
-        return MultiMarkdownPsiImplUtil.getLinkRefWithAnchor(getParent());
+        return MultiMarkdownPsiImplUtil.getLinkRefTextWithAnchor(getParent());
     }
 
     @Override

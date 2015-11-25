@@ -33,9 +33,7 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.tree.IElementType;
 import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
 import com.vladsch.idea.multimarkdown.psi.*;
-import com.vladsch.idea.multimarkdown.util.PathInfo;
-import com.vladsch.idea.multimarkdown.util.FileReferenceLink;
-import com.vladsch.idea.multimarkdown.util.FileReferenceLinkGitHubRules;
+import com.vladsch.idea.multimarkdown.util.*;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -109,33 +107,53 @@ public class MultiMarkdownPsiImplUtil {
         return astNode.getText();
     }
 
+    @Nullable
+    public static LinkRef getLinkRef(@Nullable PsiElement element) {
+        LinkRefElementTypes elementTypes = getNamedElementTypes(element);
+        if (elementTypes != null) {
+            return getLinkRef(elementTypes, element);
+        }
+        return null;
+    }
+
     @NotNull
-    public static String getLinkRef(@Nullable PsiElement element) {
+    public static LinkRef getLinkRef(@NotNull LinkRefElementTypes elementTypes, @NotNull PsiElement element) {
+        if (elementTypes.parentType == WIKI_LINK) {
+            return LinkRef.parseWikiLinkRef(new FileRef(element), getLinkRefTextWithAnchor(element));
+        } else if (elementTypes.parentType == IMAGE || elementTypes.parentType == REFERENCE_IMAGE) {
+            return LinkRef.parseImageLinkRef(new FileRef(element), getLinkRefTextWithAnchor(element));
+        } else {
+            return LinkRef.parseFileLinkRef(new FileRef(element), getLinkRefTextWithAnchor(element));
+        }
+    }
+
+    @NotNull
+    public static String getLinkRefText(@Nullable PsiElement element) {
         LinkRefElementTypes elementTypes = getNamedElementTypes(element);
         return elementTypes == null ? "" : getElementText(elementTypes.parentType, element, elementTypes.linkRefType, null, null);
     }
 
     @NotNull
-    public static String getLinkRefWithAnchor(@Nullable PsiElement element) {
+    public static String getLinkRefTextWithAnchor(@Nullable PsiElement element) {
         LinkRefElementTypes elementTypes = getNamedElementTypes(element);
         return elementTypes == null ? "" : getElementText(elementTypes.parentType, element, elementTypes.linkRefType, null, null)
                 + getElementText(elementTypes.parentType, element, elementTypes.anchorType, "#", null);
     }
 
     @NotNull
-    public static String getLinkRefAnchor(@Nullable PsiElement element) {
+    public static String getLinkAnchor(@Nullable PsiElement element) {
         LinkRefElementTypes elementTypes = getNamedElementTypes(element);
         return elementTypes == null ? "" : getElementText(elementTypes.parentType, element, elementTypes.anchorType, null, null);
     }
 
     @NotNull
-    public static String getLinkRefText(@Nullable PsiElement element) {
+    public static String getLinkText(@Nullable PsiElement element) {
         LinkRefElementTypes elementTypes = getNamedElementTypes(element);
         return elementTypes == null ? "" : getElementText(elementTypes.parentType, element, elementTypes.textType, null, null);
     }
 
     @NotNull
-    public static String getLinkRefTitle(@Nullable PsiElement element) {
+    public static String getLinkTitle(@Nullable PsiElement element) {
         LinkRefElementTypes elementTypes = getNamedElementTypes(element);
         return elementTypes == null ? "" : getElementText(elementTypes.parentType, element, elementTypes.titleType, null, null);
     }
@@ -147,7 +165,7 @@ public class MultiMarkdownPsiImplUtil {
         ASTNode pageRefNode = element.getNode();
         if (pageRefNode == null) return element;
 
-        PathInfo newNameInfo = new PathInfo(newName);
+        LinkRef newNameInfo = LinkRef.parseLinkRef(new FileRef(element.getContainingFile().getVirtualFile().getPath()), newName);
 
         PsiElement parent = element.getParent();
         String linkRef = getElementText(elementTypes.parentType, parent, elementTypes.linkRefType, null, null);
@@ -163,15 +181,15 @@ public class MultiMarkdownPsiImplUtil {
 
                 switch (elementTypes.extensionFlags) {
                     case EXTENSION_KEEP_OLD:
-                        linkRef = newNameInfo.getFilePathWithAnchorNoExt() + linkRefInfo.getExt();
+                        linkRef = newNameInfo.getFilePathNoExt() + linkRefInfo.getExtWithDot();
                         break;
 
                     case EXTENSION_STRIP:
-                        linkRef = newNameInfo.getFilePathWithAnchorNoExt();
+                        linkRef = newNameInfo.getFilePathNoExt();
                         break;
 
                     case EXTENSION_USE_NEW_IF_OLD_HAS:
-                        linkRef = linkRefInfo.hasExt() ? newNameInfo.getFilePathWithAnchor() : newNameInfo.getFilePathWithAnchorNoExt();
+                        linkRef = linkRefInfo.getHasExt() ? newNameInfo.getFilePath() : newNameInfo.getFilePathNoExt();
                         break;
 
                     case EXTENSION_USE_NEW:
@@ -294,25 +312,26 @@ public class MultiMarkdownPsiImplUtil {
     public static PsiElement changeToWikiLink(PsiElement element) {
         LinkRefElementTypes elementTypes = getNamedElementTypes(element);
         if (elementTypes != null) {
-            String text = getElementText(elementTypes.parentType, element, elementTypes.textType, null, null);
-            String linkRef = getElementText(elementTypes.parentType, element, elementTypes.linkRefType, null, null);
-            String linkRefAnchor = getElementText(elementTypes.parentType, element, elementTypes.anchorType, "#", null);
-            String wikiLinkRef;
+            String linkText = getElementText(elementTypes.parentType, element, elementTypes.textType, null, null);
+            LinkRef linkRef = getLinkRef(elementTypes, element);
+            WikiLinkRef wikiLinkRef;
 
             PsiReference reference = element.getReference();
             PsiElement psiFile = reference == null ? null : reference.resolve();
 
+
+            wikiLinkRef = WikiLinkRef.from(linkRef);
+
             if (psiFile != null && psiFile instanceof MultiMarkdownFile) {
-                FileReferenceLinkGitHubRules fileReferenceLink = new FileReferenceLinkGitHubRules(element.getContainingFile(), (PsiFile) psiFile);
-                wikiLinkRef = fileReferenceLink.getWikiPageRef();
-            } else {
-                PathInfo pathInfo = new PathInfo(linkRef.isEmpty() ? element.getContainingFile().getName() : linkRef);
-                wikiLinkRef = pathInfo.getFileNameNoExtAsWikiRef().replace("%23","#");
+                //GitHubLinkResolver linkResolver = new FileReferenceLinkGitHubRules(element.getContainingFile(), (PsiFile) psiFile);
+                wikiLinkRef = new GitHubLinkResolver(element).wikiLinkAddress(new FileRef(psiFile), false, null, linkRefAnchor);
+            } else  {
+                wikiLinkRef += linkRef.getAnchorText();
             }
 
-            if (text.equals(wikiLinkRef)) text = null;
+            if ((linkText + (linkRefAnchor.isEmpty() ? linkRefAnchor : "#" + linkRefAnchor)).equals(wikiLinkRef)) linkText = null;
 
-            MultiMarkdownWikiLink otherLink = MultiMarkdownElementFactory.createWikiLink(element.getProject(), wikiLinkRef + linkRefAnchor, text);
+            MultiMarkdownWikiLink otherLink = MultiMarkdownElementFactory.createWikiLink(element.getProject(), wikiLinkRef, linkText);
             if (otherLink != null) {
                 element.replace(otherLink);
                 return otherLink;
@@ -334,8 +353,7 @@ public class MultiMarkdownPsiImplUtil {
             PsiElement psiFile = reference == null ? null : reference.resolve();
 
             if (psiFile != null && psiFile instanceof MultiMarkdownFile) {
-                FileReferenceLinkGitHubRules fileReferenceLink = new FileReferenceLinkGitHubRules(element.getContainingFile(), (PsiFile) psiFile);
-                wikiLinkRef = fileReferenceLink.getWikiPageRef();
+                wikiLinkRef = new GitHubLinkResolver(element).wikiLinkAddress(new FileRef(psiFile), false, null, linkRefAnchor);
             }
             return wikiLinkRef != null && linkRefTitle.isEmpty() && !(linkRef.contains("%23") && !linkRefAnchor.isEmpty());
         }
@@ -345,9 +363,12 @@ public class MultiMarkdownPsiImplUtil {
     @NotNull
     public static PsiElement changeToExplicitLink(PsiElement element, @Nullable PsiFile containingFile) {
         LinkRefElementTypes elementTypes = getNamedElementTypes(element);
-        if (elementTypes != null && !(element.getContainingFile() == null && containingFile == null)) {
+
+        if (containingFile == null) containingFile = element.getContainingFile();
+
+        if (elementTypes != null && containingFile != null) {
             String text = getElementText(elementTypes.parentType, element, elementTypes.textType, null, null);
-            String wikiLinkRef = getElementText(elementTypes.parentType, element, elementTypes.linkRefType, null, null);
+            String linkRefText = getElementText(elementTypes.parentType, element, elementTypes.linkRefType, null, null);
             String linkRefAnchor = getElementText(elementTypes.parentType, element, elementTypes.anchorType, "#", null);
             String linkRefTitle = getElementText(elementTypes.parentType, element, elementTypes.titleType, null, null);
             String linkRef;
@@ -357,18 +378,20 @@ public class MultiMarkdownPsiImplUtil {
             PsiElement psiFile = reference == null ? null : reference.resolve();
 
             if (psiFile != null && psiFile instanceof MultiMarkdownFile) {
-                FileReferenceLink fileReferenceLink = new FileReferenceLink(containingFile != null ? containingFile : element.getContainingFile(), (PsiFile) psiFile);
-                linkRef = fileReferenceLink.isWikiPage() ? fileReferenceLink.getNoPrefixLinkRefWithAnchorNoExt() : fileReferenceLink.getLinkRef();
-                if (linkRef.contains("#")) linkRefAnchor = "";
+                FileRef targetRef = new FileRef((PsiFile) psiFile);
+                PathInfo linkRefInfo = new PathInfo(linkRefText);
+                FileLinkRef fileLinkRef = new GitHubLinkResolver(containingFile).fileLinkRef(targetRef, linkRefInfo.getHasExt(), null, linkRefAnchor);
+                linkRef = fileLinkRef.getFilePath();
+                linkRefAnchor = fileLinkRef.getAnchor();
                 if (text.isEmpty()) {
-                    text = fileReferenceLink.getWikiPageRefWithAnchor();
+                    text = WikiLinkRef.convertFileToLink(FileLinkRef.convertLinkToFile(fileLinkRef.getFilePathNoExt()));
                 }
             } else {
-                linkRef = elementTypes == WIKI_LINK_ELEMENT ?  PathInfo.wikiRefAsFileNameNoExt(wikiLinkRef) : wikiLinkRef;
+                linkRef = elementTypes == WIKI_LINK_ELEMENT ? WikiLinkRef.convertLinkToFile(linkRefText) : linkRefText;
 
                 if (text.isEmpty()) {
                     // TODO: use suggestion for default text
-                    text = elementTypes == WIKI_LINK_ELEMENT ? wikiLinkRef + linkRefAnchor : wikiLinkRef;
+                    text = elementTypes == WIKI_LINK_ELEMENT ? linkRefText + linkRefAnchor : linkRefText;
                 }
             }
 
@@ -382,14 +405,15 @@ public class MultiMarkdownPsiImplUtil {
         return element;
     }
 
-
-
     @NotNull
     public static String getTextForChangeToExplicitLink(PsiElement element, @Nullable PsiFile containingFile) {
         LinkRefElementTypes elementTypes = getNamedElementTypes(element);
-        if (elementTypes != null && !(element.getContainingFile() == null && containingFile == null)) {
+
+        if (containingFile == null) containingFile = element.getContainingFile();
+
+        if (elementTypes != null && containingFile != null) {
             String text = getElementText(elementTypes.parentType, element, elementTypes.textType, null, null);
-            String wikiLinkRef = getElementText(elementTypes.parentType, element, elementTypes.linkRefType, null, null);
+            String linkRefText = getElementText(elementTypes.parentType, element, elementTypes.linkRefType, null, null);
             String linkRefAnchor = getElementText(elementTypes.parentType, element, elementTypes.anchorType, "#", null);
             String linkRefTitle = getElementText(elementTypes.parentType, element, elementTypes.titleType, null, null);
             String linkRef;
@@ -399,21 +423,22 @@ public class MultiMarkdownPsiImplUtil {
             PsiElement psiFile = reference == null ? null : reference.resolve();
 
             if (psiFile != null && psiFile instanceof MultiMarkdownFile) {
-                FileReferenceLink fileReferenceLink = new FileReferenceLink(containingFile != null ? containingFile : element.getContainingFile(), (PsiFile) psiFile);
-                linkRef = fileReferenceLink.isWikiPage() ? fileReferenceLink.getNoPrefixLinkRefWithAnchorNoExt() : fileReferenceLink.getLinkRef();
-                if (linkRef.contains("#")) linkRefAnchor = "";
+                FileRef targetRef = new FileRef((PsiFile) psiFile);
+                PathInfo linkRefInfo = new PathInfo(linkRefText);
+                FileLinkRef fileLinkRef = new GitHubLinkResolver(containingFile).fileLinkRef(targetRef, linkRefInfo.getHasExt(), null, linkRefAnchor);
+                linkRef = fileLinkRef.getFilePath();
+                linkRefAnchor = fileLinkRef.getAnchor();
                 if (text.isEmpty()) {
-                    text = fileReferenceLink.getWikiPageRefWithAnchor();
+                    text = WikiLinkRef.convertFileToLink(FileLinkRef.convertLinkToFile(fileLinkRef.getFilePathNoExt()));
                 }
             } else {
-                linkRef = elementTypes == WIKI_LINK_ELEMENT ?  PathInfo.wikiRefAsFileNameNoExt(wikiLinkRef) : wikiLinkRef;
+                linkRef = elementTypes == WIKI_LINK_ELEMENT ? WikiLinkRef.convertLinkToFile(linkRefText) : linkRefText;
 
                 if (text.isEmpty()) {
                     // TODO: use suggestion for default text
-                    text = elementTypes == WIKI_LINK_ELEMENT ? wikiLinkRef + linkRefAnchor : wikiLinkRef;
+                    text = elementTypes == WIKI_LINK_ELEMENT ? linkRefText + linkRefAnchor : linkRefText;
                 }
             }
-
 
             //MultiMarkdownExplicitLink otherLink = MultiMarkdownElementFactory.createExplicitLink(element.getProject(), linkRef + linkRefAnchor, text, null);
             //if (otherLink != null) {

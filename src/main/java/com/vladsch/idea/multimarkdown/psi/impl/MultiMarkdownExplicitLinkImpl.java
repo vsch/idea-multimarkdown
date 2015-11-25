@@ -45,7 +45,7 @@ public class MultiMarkdownExplicitLinkImpl extends ASTWrapperPsiElement implemen
         String vcsHome = gitHubRepo != null ? gitHubRepo.getBasePath() + "::" : "";
 
         if (addLinkRef) {
-            String pageRef = MultiMarkdownPsiImplUtil.getLinkRefWithAnchor(this);
+            String pageRef = MultiMarkdownPsiImplUtil.getLinkRefTextWithAnchor(this);
             if (pageRef.isEmpty()) pageRef = filePathInfo.getFileNameAsWikiRef();
             return prefix + (vcsHome.isEmpty() ? vcsHome : vcsHome + "::") + (pageRef.isEmpty() ? pageRef : pageRef + "::");
         }
@@ -68,21 +68,21 @@ public class MultiMarkdownExplicitLinkImpl extends ASTWrapperPsiElement implemen
 
     @Override
     public String getText() {
-        return MultiMarkdownPsiImplUtil.getLinkRefText(this);
+        return MultiMarkdownPsiImplUtil.getLinkText(this);
     }
 
     @Override
     public String getLinkRef() {
-        return MultiMarkdownPsiImplUtil.getLinkRef(this);
+        return MultiMarkdownPsiImplUtil.getLinkRefText(this);
     }
 
     @Override
     public String getTitle() {
-        return MultiMarkdownPsiImplUtil.getLinkRefTitle(this);
+        return MultiMarkdownPsiImplUtil.getLinkTitle(this);
     }
 
     @Override
     public String getLinkRefAnchor() {
-        return MultiMarkdownPsiImplUtil.getLinkRefAnchor(this);
+        return MultiMarkdownPsiImplUtil.getLinkAnchor(this);
     }
 }

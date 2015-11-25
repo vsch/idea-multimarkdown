@@ -93,7 +93,7 @@ public class GitHubRepo {
             relativeFilePath = StringUtilKt.removeStart(relativeFilePath, "../../wiki");
         }
 
-        return StringUtilKt.endWith(gitHubBaseUrl(), '/', false) + (isWiki() ? "wiki/" : "blob/master/") + PathInfo.asLinkRefURL(StringUtilKt.removeStart(relativeFilePath, "./")) + StringUtilKt.startWith(anchor, '#', false);
+        return StringUtilKt.endWith(gitHubBaseUrl(), '/', false) + (isWiki() ? "wiki/" : "blob/master/") + PathInfo.urlEncodeFilePath(StringUtilKt.removeStart(relativeFilePath, "./")) + StringUtilKt.startWith(anchor, '#', false);
     }
 
     @NotNull
@@ -163,8 +163,8 @@ public class GitHubRepo {
                             .replaceAll("git://|git@|https://", "")
                             .replaceAll(":", "/");
 
-                    FileRef baseUrlInfo = new FileRef(baseUrl);
-                    if (baseUrlInfo.isWikiDir()) {
+                    if (baseUrl.endsWith(PathInfo.WIKI_HOME_EXTENSION)) {
+                        FileRef baseUrlInfo = new FileRef(baseUrl);
                         baseUrl = baseUrlInfo.getFilePathNoExt();
                     }
                     break;

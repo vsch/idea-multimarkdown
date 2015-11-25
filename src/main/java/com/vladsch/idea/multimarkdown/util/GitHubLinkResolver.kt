@@ -14,10 +14,14 @@
  */
 package com.vladsch.idea.multimarkdown.util
 
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiField
+import com.intellij.psi.PsiFile
 import com.intellij.psi.search.FilenameIndex
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.util.indexing.FileBasedIndex
 import com.vladsch.idea.multimarkdown.MultiMarkdownFileType
+import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin
 import org.intellij.images.fileTypes.ImageFileTypeManager
 import java.util.*
 import kotlin.text.RegexOption
@@ -35,6 +39,9 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
 
         @JvmStatic val GITHUB_LINKS = arrayOf(GITHUB_WIKI_HOME_DIRNAME, GITHUB_ISSUES_NAME, GITHUB_GRAPHS_NAME, GITHUB_PULSE_NAME, GITHUB_PULLS_NAME)
     }
+
+    constructor(psiFile: PsiFile) : this(MultiMarkdownPlugin.getProjectComponent(psiFile.project)!!, FileRef(psiFile.virtualFile.path))
+    constructor(psiElement: PsiElement) : this(psiElement.containingFile)
 
     internal val linkInspector: GitHubLinkInspector by lazy { GitHubLinkInspector(this) }
 
@@ -209,7 +216,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
 
         if (fileRef.isUnderWikiDir) {
             if (useWikiPageActualLocation && !isSourceRef) filePathInfo = PathInfo(fileRef.path)
-            else if (fileRef.isWikiHomePage && isSourceRef && isImageLinkRef) filePathInfo = PathInfo.appendParts(fileRef.wikiDir, "..")
+            else if (fileRef.isWikiHomePage && isSourceRef && isImageLinkRef) filePathInfo = PathInfo.appendParts(fullPath = fileRef.wikiDir, parts = "..")
             else filePathInfo = PathInfo(fileRef.wikiDir)
         } else {
             filePathInfo = PathInfo(projectBasePath.endWith('/') + "blob/" + (branchOrTag ?: "master").endWith('/') + PathInfo.relativePath(projectBasePath.endWith('/'), fileRef.path, withPrefix = false))
@@ -224,8 +231,36 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
         return PathInfo.relativePath(containingFilePath, targetFilePath, withPrefix = true)
     }
 
-    override fun linkAddress(linkRef: LinkRef, targetRef: PathInfo, withExtForWikiPage: Boolean, branchOrTag: String?, anchor: String?): String {
+    fun wikiLinkAddress(targetRef: PathInfo, withExtForWikiPage: Boolean? = null, branchOrTag: String?, anchor: String?):String {
+        val linkRef = WikiLinkRef(containingFile, targetRef.fileNameNoExt, anchor);
+        return linkAddress(linkRef, targetRef, withExtForWikiPage, branchOrTag, anchor)
+    }
+
+    fun fileLinkAddress(targetRef: PathInfo, withExtForWikiPage: Boolean? = null, branchOrTag: String?, anchor: String?):String {
+        val linkRef = FileLinkRef(containingFile, targetRef.fileNameNoExt, anchor);
+        return linkAddress(linkRef, targetRef, withExtForWikiPage, branchOrTag, anchor)
+    }
+
+    fun imageLinkAddress(targetRef: PathInfo, withExtForWikiPage: Boolean? = null, branchOrTag: String?, anchor: String?):String {
+        val linkRef = ImageLinkRef(containingFile, targetRef.fileNameNoExt, anchor);
+        return linkAddress(linkRef, targetRef, withExtForWikiPage, branchOrTag, anchor)
+    }
+
+    fun wikiLinkRef(targetRef: PathInfo, withExtForWikiPage: Boolean? = null, branchOrTag: String?, anchor: String?):WikiLinkRef {
+        return LinkRef.parseLinkRef(containingFile, wikiLinkAddress(targetRef, withExtForWikiPage, branchOrTag, anchor), ::WikiLinkRef) as WikiLinkRef
+    }
+
+    fun fileLinkRef(targetRef: PathInfo, withExtForWikiPage: Boolean? = null, branchOrTag: String?, anchor: String?):FileLinkRef {
+        return LinkRef.parseLinkRef(containingFile, fileLinkAddress(targetRef, withExtForWikiPage, branchOrTag, anchor), ::FileLinkRef) as FileLinkRef
+    }
+
+    fun imageLinkRef(targetRef: PathInfo, withExtForWikiPage: Boolean? = null, branchOrTag: String?, anchor: String?):ImageLinkRef {
+        return LinkRef.parseLinkRef(containingFile, imageLinkAddress(targetRef, withExtForWikiPage, branchOrTag, anchor), ::ImageLinkRef) as ImageLinkRef
+    }
+
+    override fun linkAddress(linkRef: LinkRef, targetRef: PathInfo, withExtForWikiPage: Boolean?, branchOrTag: String?, anchor: String?): String {
         assert(linkRef.containingFile == containingFile, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
+        val withExtForWikiPage = withExtForWikiPage ?: linkRef.hasExt
 
         if (targetRef is FileRef) {
             var prefix = relativePath(linkRef, targetRef, withExtForWikiPage, branchOrTag)

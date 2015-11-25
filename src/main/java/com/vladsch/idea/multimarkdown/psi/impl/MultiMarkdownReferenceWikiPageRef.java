@@ -22,10 +22,7 @@ import com.intellij.psi.ResolveResult;
 import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
-import com.vladsch.idea.multimarkdown.util.PathInfo;
-import com.vladsch.idea.multimarkdown.util.FileReferenceLinkGitHubRules;
-import com.vladsch.idea.multimarkdown.util.FileReferenceList;
-import com.vladsch.idea.multimarkdown.util.FileReferenceListQuery;
+import com.vladsch.idea.multimarkdown.util.*;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -51,10 +48,12 @@ public class MultiMarkdownReferenceWikiPageRef extends MultiMarkdownReference {
     public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
         // we will handle this by renaming the element to point to the new location
         if (myElement instanceof MultiMarkdownWikiPageRef && element instanceof PsiFile) {
-            FileReferenceLinkGitHubRules fileReferenceLink = new FileReferenceLinkGitHubRules(myElement.getContainingFile(), ((PsiFile) element));
-            String wikiPageRef = fileReferenceLink.getWikiPageRef();
-            // this will create a new reference and loose connection to this one
-            return myElement.setName(wikiPageRef, MultiMarkdownNamedElement.REASON_FILE_MOVED);
+            LinkRef linkRef = MultiMarkdownPsiImplUtil.getLinkRef(myElement);
+            if (linkRef != null) {
+                String linkRefText = new GitHubLinkResolver(myElement).linkAddress(linkRef, new FileRef((PsiFile) element), null, null, null);
+                // this will create a new reference and loose connection to this one
+                return myElement.setName(linkRefText, MultiMarkdownNamedElement.RENAME_KEEP_TEXT | MultiMarkdownNamedElement.RENAME_KEEP_RENAMED_TEXT);
+            }
         }
         return super.bindToElement(element);
     }
@@ -65,38 +64,27 @@ public class MultiMarkdownReferenceWikiPageRef extends MultiMarkdownReference {
         String name = myElement.getName();
         if (name != null && myElement.getContainingFile() != null && myElement.getContainingFile().getVirtualFile() != null) {
 
-            String anchor = MultiMarkdownPsiImplUtil.getLinkRefAnchor(myElement);
-            PathInfo linkRefInfo = new PathInfo(name + (!anchor.isEmpty() ? "#" + anchor : ""));
+            LinkRef linkRef = MultiMarkdownPsiImplUtil.getLinkRef(myElement);
+            if (linkRef != null) {
+                GitHubLinkResolver resolver = new GitHubLinkResolver(myElement);
+                List<PathInfo> pathInfos = resolver.multiResolve(linkRef, LinkResolver.LOOSE_MATCH, null);
 
-            FileReferenceList fileReferenceList = new FileReferenceListQuery(myElement.getProject())
-                    .caseInsensitive()
-                    .gitHubWikiRules()
-                    .ignoreLinkRefExtension(!(linkRefInfo.hasWithAnchorExtWithDot() && linkRefInfo.hasWithAnchorWikiPageExt()))
-                    .keepLinkRefAnchor()
-                    .linkRefIgnoreSubDirs()
-                    .spaceDashEqual()
-                    .wantMarkdownFiles()
-                    .inSource(myElement.getContainingFile())
-                    .matchWikiRef(linkRefInfo.getFileNameWithAnchorAsWikiRef())
-                    .all()
-                    .postMatchFilter(linkRefInfo.getFileNameWithAnchorAsWikiRef(), true)
-                    .sorted();
-
-            PsiFile[] files = fileReferenceList
-                    .getPsiFiles();
-
-            if (files.length > 0) {
-                removeReferenceChangeListener();
-                if (files.length == 1) {
-                    return new ResolveResult[] { new PsiElementResolveResult(files[0]) };
-                } else {
+                if (pathInfos.size() > 0) {
                     List<ResolveResult> results = new ArrayList<ResolveResult>();
-                    for (PsiFile file : files) {
-                        results.add(new PsiElementResolveResult(file));
+                    for (PathInfo pathInfo : pathInfos) {
+                        if (pathInfo instanceof VirtualFileRef) {
+                            PsiFile psiFile = ((VirtualFileRef) pathInfo).getPsiFile();
+                            if (psiFile != null) {
+                                results.add(new PsiElementResolveResult(psiFile));
+                            }
+                        }
                     }
-                    return results.toArray(new ResolveResult[results.size()]);
+
+                    if (results.size() > 0) {
+                        removeReferenceChangeListener();
+                        return results.toArray(new ResolveResult[results.size()]);
+                    }
                 }
-            } else {
                 return new ResolveResult[] { new PsiElementResolveResult(getMissingRefElement(name)) };
             }
         }

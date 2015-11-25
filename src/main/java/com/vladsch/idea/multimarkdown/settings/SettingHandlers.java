@@ -109,19 +109,19 @@ public class SettingHandlers<M> extends Settings {
 
     public interface GroupHandler<M> {
         // this sets the actual value of the model from the settings
-        public void loadModelValue(@Nullable M model);
+        void loadModelValue(@Nullable M model);
 
         // this puts the model's values in settings
-        public void saveModelValue(@Nullable M model);
+        void saveModelValue(@Nullable M model);
 
         // this test to see if the saved values are valid
-        public boolean isSettingValid(@Nullable M model);
+        boolean isSettingValid(@Nullable M model);
 
         // this returns individual values of the settings in string form
         @Nullable String getModelValue(@NotNull M model, int index);
 
         // this is used to iterate settings of this group
-        public @Nullable Settings.Setting getSetting(int index);
+        @Nullable Settings.Setting getSetting(int index);
     }
 
     private class GroupHandlerImpl<M> implements GroupHandler<M> {

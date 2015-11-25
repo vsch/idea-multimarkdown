@@ -84,6 +84,7 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
      *
      * @return a new {@link MultiMarkdownEditorKit} instance
      */
+    @SuppressWarnings("CloneDoesntCallSuperClone")
     @Override
     public Object clone() {
         return new MultiMarkdownEditorKit(document, project);

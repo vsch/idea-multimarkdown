@@ -19,6 +19,7 @@ import com.intellij.openapi.vcs.FileStatus
 import com.intellij.openapi.vcs.FileStatusManager
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.VirtualFileManager
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin
@@ -26,6 +27,10 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin
 open class FileRef(fullPath: String) : PathInfo(fullPath) {
     protected val mainRepoDirEnd: Int
     protected val wikiHomeDirEnd: Int
+
+    constructor(virtualFile: VirtualFile) : this(virtualFile.path)
+    constructor(psiFile: PsiFile) : this(psiFile.virtualFile)
+    constructor(psiElement: PsiElement) : this(psiElement.containingFile)
 
     init {
         // gitHub wiki home will be like ..../dirname/dirname.wiki
@@ -73,12 +78,12 @@ open class FileRef(fullPath: String) : PathInfo(fullPath) {
     val wikiDir: String
         get() = if (wikiHomeDirEnd <= 0) EMPTY_STRING else fullPath.substring(0, wikiHomeDirEnd)
 
-    val isWikiDir: Boolean
-        get() {
-            if (wikiHomeDirEnd > 0 || !fileName.endsWith(WIKI_HOME_EXTENSION)) return false
-            // gitHub wiki home will be like ..../dirname/dirname.wiki
-            return PathInfo(path).fileName == fileNameNoExt
-        }
+//    val isWikiDir: Boolean
+//        get() {
+//            if (wikiHomeDirEnd > 0 || !fileName.endsWith(WIKI_HOME_EXTENSION)) return false
+//            // gitHub wiki home will be like ..../dirname/dirname.wiki
+//            return PathInfo(path).fileName == fileNameNoExt
+//        }
 
     val mainRepoDir: String
         get() {
@@ -120,6 +125,10 @@ open class FileRef(fullPath: String) : PathInfo(fullPath) {
             upDirs
         }
     }
+
+    override fun append(vararg parts: String): FileRef = PathInfo.appendParts(fullPath, *parts, construct = ::FileRef)
+    override fun append(parts: Collection<String>): FileRef = PathInfo.appendParts(fullPath, parts, ::FileRef)
+    override fun append(parts: Sequence<String>): FileRef = PathInfo.appendParts(fullPath, parts, ::FileRef)
 
     open fun virtualFileRef(project: Project): VirtualFileRef? {
         val virtualFile = VirtualFileManager.getInstance().findFileByUrl("" + fullPath)
