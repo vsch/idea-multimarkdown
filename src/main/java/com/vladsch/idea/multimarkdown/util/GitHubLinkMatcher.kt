@@ -118,9 +118,9 @@ class GitHubLinkMatcher(val linkRef: LinkRef, projectBasePath: String? = null, v
                 // TODO: factor out this kind of logic into the GitHubLinkResolver it is really specific to GitHub wikis
                 if (linkRef.containingFile.isWikiHomePage && (linkRef is ImageLinkRef || (linkRef.hasExt && /*!linkRef.isMarkdownExt &&*/ linkRef.path.startsWith("wiki/")))) {
                     // if the link winds up in the same directory as the homePageWikiPrefixPath, without the wiki prefix then it will not resolve
-                    prefixPath = PathInfo.append(homePageWikiPrefixPath, linkRef.path.split('/')).filePath.endWith('/')
+                    prefixPath = PathInfo.appendParts(homePageWikiPrefixPath, linkRef.path.split('/')).filePath.endWith('/')
                 } else {
-                    prefixPath = PathInfo.append(wikiPrefixPath, linkRef.path.split('/')).filePath.endWith('/')
+                    prefixPath = PathInfo.appendParts(wikiPrefixPath, linkRef.path.split('/')).filePath.endWith('/')
                     if (looseMatch) {
                         // correct for unnecessary wiki/
                         if (prefixPath.startsWith(wikiPrefixPath + "wiki/")) {
@@ -138,7 +138,7 @@ class GitHubLinkMatcher(val linkRef: LinkRef, projectBasePath: String? = null, v
 
                 // if the prefix changes to projectBasePath/wiki then we will search for Wiki pages ignoring subdirectories if the link has no extension and keep subdirectories
                 // if the link has an extension because in the latter case it will map to a raw markdown or image in the wiki repo
-                prefixPath = PathInfo.append(repoPrefixPath, linkRef.path.split('/')).filePath.endWith('/')
+                prefixPath = PathInfo.appendParts(repoPrefixPath, linkRef.path.split('/')).filePath.endWith('/')
 
                 // if the file name is wiki then put back the wiki
                 if (prefixPath.equals(projectBasePath.endWith('/')) && linkRef.fileNameNoExt.equals("wiki", ignoreCase = looseMatch)) {

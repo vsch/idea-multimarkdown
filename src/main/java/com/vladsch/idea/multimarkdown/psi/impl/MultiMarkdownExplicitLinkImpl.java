@@ -23,14 +23,14 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownExplicitLink;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownVisitor;
-import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import com.vladsch.idea.multimarkdown.util.PathInfo;
 import com.vladsch.idea.multimarkdown.util.GitHubRepo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class MultiMarkdownExplicitLinkImpl extends ASTWrapperPsiElement implements MultiMarkdownExplicitLink {
     public static String getElementText(@NotNull String name, @Nullable String text, @Nullable String anchor, @Nullable String title) {
-        if (text == null || text.isEmpty()) text = new FilePathInfo(name).getFileNameNoExt();
+        if (text == null || text.isEmpty()) text = new PathInfo(name).getFileNameNoExt();
         return "[" + text + "](" + name.replace("#","%23") + (anchor != null ? anchor : "") + (title != null && title.length() > 0 ? " '" + title + "'" : "") + ")";
     }
 
@@ -40,7 +40,7 @@ public class MultiMarkdownExplicitLinkImpl extends ASTWrapperPsiElement implemen
         MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(getProject());
         PsiFile psiFile = getContainingFile();
         VirtualFile virtualFile = psiFile.getOriginalFile() != null ? psiFile.getOriginalFile().getVirtualFile() : psiFile.getVirtualFile();
-        FilePathInfo filePathInfo = new FilePathInfo(virtualFile);
+        PathInfo filePathInfo = new PathInfo(virtualFile);
         GitHubRepo gitHubRepo = projectComponent != null ? projectComponent.getGitHubRepo(filePathInfo.getPath()) : null;
         String vcsHome = gitHubRepo != null ? gitHubRepo.getBasePath() + "::" : "";
 

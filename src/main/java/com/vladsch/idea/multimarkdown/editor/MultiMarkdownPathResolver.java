@@ -72,9 +72,9 @@ public class MultiMarkdownPathResolver {
         // need to resolve using same code as links
         if (target.startsWith("./")) target = target.substring(2);
 
-        if (FilePathInfo.isAbsoluteReference(target)) return new FileReference(target);
+        if (PathInfo.isAbsoluteReference(target)) return new FileReference(target);
 
-        FilePathInfo linkRefInfo = new FilePathInfo(target);
+        PathInfo linkRefInfo = new PathInfo(target);
         FileReferenceList fileList;
 
         if (fileReferenceList == null && documentFileReference.getProject() == null) return null;
@@ -104,7 +104,7 @@ public class MultiMarkdownPathResolver {
                     .inSource(documentFileReference)
                     .matchLinkRef(linkRefInfo.getFilePathWithAnchorNoExt(), false)
                     .all()
-                    .postMatchFilter(linkRefInfo.getFullFilePath(), false)
+                    .postMatchFilter(linkRefInfo.getFilePath(), false)
                     .sorted();
         }
 
@@ -127,9 +127,9 @@ public class MultiMarkdownPathResolver {
             return gitHubLink == null ? fileReference : new FileReference(gitHubLink);
         }
 
-        target = linkRefInfo.getFullFilePath();
+        target = linkRefInfo.getFilePath();
 
-        if (FilePathInfo.endsWith(target, FilePathInfo.GITHUB_LINKS)) {
+        if (PathInfo.endsWith(target, PathInfo.GITHUB_LINKS)) {
             FileReference resolvedTarget = documentFileReference.resolveExternalLinkRef(target, true, false);
             return resolvedTarget;
         }
@@ -169,7 +169,7 @@ public class MultiMarkdownPathResolver {
 
     public static boolean isWikiDocument(@NotNull final Document document) {
         VirtualFile file = FileDocumentManager.getInstance().getFile(document);
-        return file != null && new FilePathInfo(file).isWikiPage();
+        return file != null && new PathInfo(file).isWikiPage();
     }
 
     public static Object resolveLocalLink(@NotNull final Project project, @NotNull final Document document, @NotNull String hrefEnc, final boolean withExternal) {
@@ -190,7 +190,7 @@ public class MultiMarkdownPathResolver {
 
         final String href = hrefDec;
 
-        if (!FilePathInfo.isExternalReference(href)) {
+        if (!PathInfo.isExternalReference(href)) {
             final Object[] foundFile = { null };
             final Runnable runnable = new Runnable() {
                 @Override
@@ -219,13 +219,13 @@ public class MultiMarkdownPathResolver {
                                 if (virtualTarget == null && resolvedTarget != null) {
                                     // resolve with local wiki links, try standard markdown extensions
                                     resolvedTarget = documentFileReference.resolveLinkRef(href, true);
-                                    virtualTarget = resolvedTarget == null || resolvedTarget.isExternalReference() ? null : resolvedTarget.getVirtualFile(FilePathInfo.WIKI_PAGE_EXTENSIONS);
+                                    virtualTarget = resolvedTarget == null || resolvedTarget.isExternalReference() ? null : resolvedTarget.getVirtualFile(PathInfo.WIKI_PAGE_EXTENSIONS);
 
                                     if (virtualTarget == null && resolvedTarget != null && withExternal) {
                                         // resolve with external wiki local links
                                         resolvedTarget = documentFileReference.resolveExternalLinkRef(href, true, false);
                                         if (resolvedTarget != null && resolvedTarget.isExternalReference()) {
-                                            foundFile[0] = resolvedTarget.getFullFilePath();
+                                            foundFile[0] = resolvedTarget.getFilePath();
                                             return;
                                         }
                                     }
@@ -284,7 +284,7 @@ public class MultiMarkdownPathResolver {
     }
 
     public static void launchExternalLink(@NotNull final Project project, @NotNull final String href) {
-        if (FilePathInfo.isExternalReference(href)) {
+        if (PathInfo.isExternalReference(href)) {
             openLink(href);
         } else if (href.startsWith("file://")) {
             try {

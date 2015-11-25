@@ -57,7 +57,7 @@ import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkRef;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownReference;
-import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import com.vladsch.idea.multimarkdown.util.PathInfo;
 import com.vladsch.idea.multimarkdown.util.FileReference;
 import com.vladsch.idea.multimarkdown.util.FileReferenceLink;
 import org.jetbrains.annotations.NotNull;
@@ -111,7 +111,7 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
                                 //icon = MultiMarkdownIcons.GITHUB;
                             }
 
-                            FilePathInfo pathInfo = new FilePathInfo(file.getVirtualFile());
+                            PathInfo pathInfo = new PathInfo(file.getVirtualFile());
                             if (lastWikiHome == null) {
                                 lastWikiHome = pathInfo.getWikiHome();
                             } else if (!showWikiHome && !lastWikiHome.equals(pathInfo.getWikiHome())) {

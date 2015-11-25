@@ -61,10 +61,10 @@ public class MultiMarkdownReferenceLinkRef extends MultiMarkdownReference {
     protected ResolveResult[] getMultiResolveResults(boolean incompleteCode) {
         String name = myElement.getName();
         if (name != null && myElement.getContainingFile() != null && myElement.getContainingFile().getVirtualFile() != null) {
-            if (!FilePathInfo.isExternalReference(name)) {
+            if (!PathInfo.isExternalReference(name)) {
                 FileReference sourceReference = new FileReference(myElement.getContainingFile());
                 String anchor = MultiMarkdownPsiImplUtil.getLinkRefAnchor(myElement);
-                FilePathInfo linkRefInfo = new FilePathInfo(name + (!anchor.isEmpty() ? "#" + anchor : ""));
+                PathInfo linkRefInfo = new PathInfo(name + (!anchor.isEmpty() ? "#" + anchor : ""));
 
                 FileReferenceList fileReferenceList = new FileReferenceListQuery(myElement.getProject())
                         .caseInsensitive()
@@ -78,7 +78,7 @@ public class MultiMarkdownReferenceLinkRef extends MultiMarkdownReference {
                         .all();
 
                 fileReferenceList = fileReferenceList
-                        .postMatchFilter(linkRefInfo.getFullFilePath(), false, false)
+                        .postMatchFilter(linkRefInfo.getFilePath(), false, false)
                         .sorted();
 
                 PsiFile[] files = fileReferenceList

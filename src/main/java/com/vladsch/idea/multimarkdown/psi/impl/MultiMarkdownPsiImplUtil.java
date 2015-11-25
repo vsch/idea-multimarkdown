@@ -33,7 +33,7 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.tree.IElementType;
 import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
 import com.vladsch.idea.multimarkdown.psi.*;
-import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import com.vladsch.idea.multimarkdown.util.PathInfo;
 import com.vladsch.idea.multimarkdown.util.FileReferenceLink;
 import com.vladsch.idea.multimarkdown.util.FileReferenceLinkGitHubRules;
 import org.apache.log4j.Logger;
@@ -147,7 +147,7 @@ public class MultiMarkdownPsiImplUtil {
         ASTNode pageRefNode = element.getNode();
         if (pageRefNode == null) return element;
 
-        FilePathInfo newNameInfo = new FilePathInfo(newName);
+        PathInfo newNameInfo = new PathInfo(newName);
 
         PsiElement parent = element.getParent();
         String linkRef = getElementText(elementTypes.parentType, parent, elementTypes.linkRefType, null, null);
@@ -159,7 +159,7 @@ public class MultiMarkdownPsiImplUtil {
 
         if (elementType == elementTypes.linkRefType) {
             if (elementTypes.extensionFlags != 0 && (renameFlags & RENAME_ELEMENT_HANDLES_EXT) != 0) {
-                FilePathInfo linkRefInfo = new FilePathInfo(linkRef);
+                PathInfo linkRefInfo = new PathInfo(linkRef);
 
                 switch (elementTypes.extensionFlags) {
                     case EXTENSION_KEEP_OLD:
@@ -185,15 +185,15 @@ public class MultiMarkdownPsiImplUtil {
 
             if ((renameFlags & RENAME_KEEP_PATH) != 0 && element.getText().contains("/")) {
                 // keep the old path
-                String path = new FilePathInfo(element.getText()).getPath();
-                String name = new FilePathInfo(newName).getFileName();
+                String path = new PathInfo(element.getText()).getPath();
+                String name = new PathInfo(newName).getFileName();
                 linkRef = path + name;
             }
 
             if ((renameFlags & RENAME_KEEP_NAME) != 0) {
                 // keep the old name
-                String path = new FilePathInfo(newName).getPath();
-                String name = new FilePathInfo(element.getText()).getFileName();
+                String path = new PathInfo(newName).getPath();
+                String name = new PathInfo(element.getText()).getFileName();
                 linkRef = path + name;
             }
 
@@ -306,7 +306,7 @@ public class MultiMarkdownPsiImplUtil {
                 FileReferenceLinkGitHubRules fileReferenceLink = new FileReferenceLinkGitHubRules(element.getContainingFile(), (PsiFile) psiFile);
                 wikiLinkRef = fileReferenceLink.getWikiPageRef();
             } else {
-                FilePathInfo pathInfo = new FilePathInfo(linkRef.isEmpty() ? element.getContainingFile().getName() : linkRef);
+                PathInfo pathInfo = new PathInfo(linkRef.isEmpty() ? element.getContainingFile().getName() : linkRef);
                 wikiLinkRef = pathInfo.getFileNameNoExtAsWikiRef().replace("%23","#");
             }
 
@@ -364,7 +364,7 @@ public class MultiMarkdownPsiImplUtil {
                     text = fileReferenceLink.getWikiPageRefWithAnchor();
                 }
             } else {
-                linkRef = elementTypes == WIKI_LINK_ELEMENT ?  FilePathInfo.wikiRefAsFileNameNoExt(wikiLinkRef) : wikiLinkRef;
+                linkRef = elementTypes == WIKI_LINK_ELEMENT ?  PathInfo.wikiRefAsFileNameNoExt(wikiLinkRef) : wikiLinkRef;
 
                 if (text.isEmpty()) {
                     // TODO: use suggestion for default text
@@ -406,7 +406,7 @@ public class MultiMarkdownPsiImplUtil {
                     text = fileReferenceLink.getWikiPageRefWithAnchor();
                 }
             } else {
-                linkRef = elementTypes == WIKI_LINK_ELEMENT ?  FilePathInfo.wikiRefAsFileNameNoExt(wikiLinkRef) : wikiLinkRef;
+                linkRef = elementTypes == WIKI_LINK_ELEMENT ?  PathInfo.wikiRefAsFileNameNoExt(wikiLinkRef) : wikiLinkRef;
 
                 if (text.isEmpty()) {
                     // TODO: use suggestion for default text

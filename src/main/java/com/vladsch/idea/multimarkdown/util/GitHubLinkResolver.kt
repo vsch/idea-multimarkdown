@@ -209,7 +209,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
 
         if (fileRef.isUnderWikiDir) {
             if (useWikiPageActualLocation && !isSourceRef) filePathInfo = PathInfo(fileRef.path)
-            else if (fileRef.isWikiHomePage && isSourceRef && isImageLinkRef) filePathInfo = PathInfo.append(fileRef.wikiDir, "..")
+            else if (fileRef.isWikiHomePage && isSourceRef && isImageLinkRef) filePathInfo = PathInfo.appendParts(fileRef.wikiDir, "..")
             else filePathInfo = PathInfo(fileRef.wikiDir)
         } else {
             filePathInfo = PathInfo(projectBasePath.endWith('/') + "blob/" + (branchOrTag ?: "master").endWith('/') + PathInfo.relativePath(projectBasePath.endWith('/'), fileRef.path, withPrefix = false))

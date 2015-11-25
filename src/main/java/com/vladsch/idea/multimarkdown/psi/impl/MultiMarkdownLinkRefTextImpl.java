@@ -19,7 +19,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownExplicitLink;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkRefText;
-import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import com.vladsch.idea.multimarkdown.util.PathInfo;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 

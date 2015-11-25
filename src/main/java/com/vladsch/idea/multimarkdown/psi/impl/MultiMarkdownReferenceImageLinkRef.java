@@ -61,7 +61,7 @@ public class MultiMarkdownReferenceImageLinkRef extends MultiMarkdownReference {
     protected ResolveResult[] getMultiResolveResults(boolean incompleteCode) {
         String name = myElement.getName();
         if (name != null) {
-            if (!FilePathInfo.isExternalReference(name)) {
+            if (!PathInfo.isExternalReference(name)) {
                 FileReference sourceReference = new FileReference(myElement.getContainingFile());
 
                 FileReferenceList fileReferenceList = new FileReferenceListQuery(myElement.getProject())

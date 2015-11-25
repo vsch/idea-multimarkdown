@@ -138,3 +138,17 @@ fun String?.ifEmpty(vararg args:() -> String?):String {
     }
     return ""
 }
+
+fun String?.removeStart(prefix: Char):String {
+    if (this != null) {
+        return removePrefix(prefix.toString())
+    }
+    return ""
+}
+
+fun String?.removeStart(prefix: String):String {
+    if (this != null) {
+        return removePrefix(prefix)
+    }
+    return ""
+}

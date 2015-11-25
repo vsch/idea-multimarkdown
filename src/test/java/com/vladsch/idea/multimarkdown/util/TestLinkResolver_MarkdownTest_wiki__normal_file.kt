@@ -47,7 +47,7 @@ class TestLinkResolver_MarkdownTest_wiki__normal_file constructor(val rowId:Int,
     val skipTest = linkRef is UrlLinkRef// || (linkRef !is ImageLinkRef && linkRef.hasExt && !linkRef.isMarkdownExt)
 
     fun resolveRelativePath(filePath:String?):PathInfo? {
-        return if (filePath == null) null else PathInfo.append(filePathInfo.path, filePath.splitToSequence("/"))
+        return if (filePath == null) null else PathInfo.appendParts(filePathInfo.path, filePath.splitToSequence("/"))
     }
 
     init {
@@ -116,7 +116,7 @@ class TestLinkResolver_MarkdownTest_wiki__normal_file constructor(val rowId:Int,
 
     companion object {
             fun resolveRelativePath(filePathInfo: PathInfo, filePath:String?):PathInfo? {
-                return if (filePath == null) null else PathInfo.append(filePathInfo.path, filePath.splitToSequence("/"))
+                return if (filePath == null) null else PathInfo.appendParts(filePathInfo.path, filePath.splitToSequence("/"))
             }
 
         @Parameterized.Parameters(name = "{index}: filePath = {0}, linkRef = {3}, linkAnchor = {4}")

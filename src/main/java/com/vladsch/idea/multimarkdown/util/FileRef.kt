@@ -73,9 +73,16 @@ open class FileRef(fullPath: String) : PathInfo(fullPath) {
     val wikiDir: String
         get() = if (wikiHomeDirEnd <= 0) EMPTY_STRING else fullPath.substring(0, wikiHomeDirEnd)
 
+    val isWikiDir: Boolean
+        get() {
+            if (wikiHomeDirEnd > 0 || !fileName.endsWith(WIKI_HOME_EXTENSION)) return false
+            // gitHub wiki home will be like ..../dirname/dirname.wiki
+            return PathInfo(path).fileName == fileNameNoExt
+        }
+
     val mainRepoDir: String
         get() {
-            assert(isUnderWikiDir, {"mainRepo related values are only valid if isUnderWikiDir is true"})
+            assert(isUnderWikiDir, { "mainRepo related values are only valid if isUnderWikiDir is true" })
             return if (mainRepoDirEnd <= 0) EMPTY_STRING else fullPath.substring(0, mainRepoDirEnd)
         }
 
@@ -84,7 +91,7 @@ open class FileRef(fullPath: String) : PathInfo(fullPath) {
 
     val filePathFromMainRepoDir: String
         get() {
-            assert(isUnderWikiDir, {"mainRepo related values are only valid if isUnderWikiDir is true"})
+            assert(isUnderWikiDir, { "mainRepo related values are only valid if isUnderWikiDir is true" })
             return if (mainRepoDirEnd <= 0) fullPath else fullPath.substring(mainRepoDirEnd + 1)
         }
 
@@ -93,7 +100,7 @@ open class FileRef(fullPath: String) : PathInfo(fullPath) {
 
     val pathFromMainRepoDir: String
         get() {
-            assert(isUnderWikiDir, {"mainRepo related values are only valid if isUnderWikiDir is true"})
+            assert(isUnderWikiDir, { "mainRepo related values are only valid if isUnderWikiDir is true" })
             return if (mainRepoDirEnd <= 0) path else fullPath.substring(mainRepoDirEnd + 1, nameStart)
         }
 

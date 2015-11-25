@@ -37,7 +37,7 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
-import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import com.vladsch.idea.multimarkdown.util.PathInfo;
 import org.jetbrains.annotations.NotNull;
 
 import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement.*;
@@ -79,37 +79,37 @@ class ChangeLinkRefQuickFix extends BaseIntentionAction {
         String msg;
         switch (alternativeMsg) {
             case MATCH_CASE_TO_FILE:
-                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.match-target", linkRefElement instanceof MultiMarkdownWikiPageRef ? FilePathInfo.wikiRefAsFileNameWithExt(newLinkRef) : newLinkRef);
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.match-target", linkRefElement instanceof MultiMarkdownWikiPageRef ? PathInfo.wikiRefAsFileNameWithExt(newLinkRef) : newLinkRef);
                 break;
 
             case REMOVE_DASHES:
-                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-dashes", FilePathInfo.wikiRefAsFileNameWithExt(newLinkRef));
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-dashes", PathInfo.wikiRefAsFileNameWithExt(newLinkRef));
                 break;
 
             case REMOVE_SLASHES:
-                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-slashes", FilePathInfo.wikiRefAsFileNameWithExt(newLinkRef));
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-slashes", PathInfo.wikiRefAsFileNameWithExt(newLinkRef));
                 break;
 
             case REMOVE_SUBDIR:
-                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-subdirs", FilePathInfo.wikiRefAsFileNameWithExt(newLinkRef));
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-subdirs", PathInfo.wikiRefAsFileNameWithExt(newLinkRef));
                 break;
 
             case REMOVE_EXT:
-                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-ext", FilePathInfo.wikiRefAsFileNameWithExt(newLinkRef));
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-ext", PathInfo.wikiRefAsFileNameWithExt(newLinkRef));
                 break;
 
             case ADD_PAGE_REF:
-                //msg = MultiMarkdownBundle.message("quickfix.wikilink.0.add-page-ref", FilePathInfo.wikiRefAsFileNameWithExt(newLinkRef));
+                //msg = MultiMarkdownBundle.message("quickfix.wikilink.0.add-page-ref", PathInfo.wikiRefAsFileNameWithExt(newLinkRef));
                 msg = MultiMarkdownBundle.message("quickfix.wikilink.0.change-target", newLinkRef);
                 break;
 
             case URL_ENCODE_ANCHOR:
-                //msg = MultiMarkdownBundle.message("quickfix.wikilink.0.add-page-ref", FilePathInfo.wikiRefAsFileNameWithExt(newLinkRef));
+                //msg = MultiMarkdownBundle.message("quickfix.wikilink.0.add-page-ref", PathInfo.wikiRefAsFileNameWithExt(newLinkRef));
                 msg = MultiMarkdownBundle.message("quickfix.link.0.url-encode-anchor", newLinkRef);
                 break;
 
             default:
-                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.change-target", linkRefElement instanceof MultiMarkdownWikiPageRef ? FilePathInfo.wikiRefAsFileNameWithExt(newLinkRef) : newLinkRef);
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.change-target", linkRefElement instanceof MultiMarkdownWikiPageRef ? PathInfo.wikiRefAsFileNameWithExt(newLinkRef) : newLinkRef);
                 break;
         }
 

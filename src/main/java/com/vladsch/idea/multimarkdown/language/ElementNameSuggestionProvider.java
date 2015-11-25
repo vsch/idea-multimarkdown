@@ -26,7 +26,7 @@ import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownPsiImplUtil;
 import com.vladsch.idea.multimarkdown.spellchecking.MultiMarkdownIdentifierTokenizer;
 import com.vladsch.idea.multimarkdown.spellchecking.Suggestion;
 import com.vladsch.idea.multimarkdown.spellchecking.SuggestionList;
-import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import com.vladsch.idea.multimarkdown.util.PathInfo;
 import com.vladsch.idea.multimarkdown.util.FileReferenceList;
 import com.vladsch.idea.multimarkdown.util.FileReferenceListQuery;
 import org.jetbrains.annotations.NotNull;
@@ -68,7 +68,7 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
             // this is a rename of a file on a link ref pointing to a valid file
             SuggestionList suggestionList = new SuggestionList(element.getProject());
 
-            FilePathInfo filePathInfo = new FilePathInfo(((MultiMarkdownFile) element).getVirtualFile().getPath());
+            PathInfo filePathInfo = new PathInfo(((MultiMarkdownFile) element).getVirtualFile().getPath());
 
             suggestionList = suggestionList
                     .add(filePathInfo.getFileNameNoExtAsWikiRef(), new Suggestion.Param<String>(Suggestion.Fixer.FILE_PATH, filePathInfo.getFilePath()))
@@ -103,7 +103,7 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
             // always activate spelling suggestions for renaming wiki page refs
             SuggestionList suggestionList = new SuggestionList(element.getProject());
 
-            //suggestionList.add(FilePathInfo.linkRefNoAnchor(((MultiMarkdownWikiPageRef) element).getName()));
+            //suggestionList.add(PathInfo.linkRefNoAnchor(((MultiMarkdownWikiPageRef) element).getName()));
 
             MultiMarkdownFile markdownFile = (MultiMarkdownFile) element.getContainingFile();
             FileReferenceList linkRefs = new FileReferenceListQuery(element.getProject())
@@ -127,7 +127,7 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
             // always activate spelling suggestions for renaming wiki page refs
             SuggestionList suggestionList = new SuggestionList(element.getProject());
 
-            //suggestionList.add(FilePathInfo.linkRefNoAnchor(((MultiMarkdownWikiPageRef) element).getName()));
+            //suggestionList.add(PathInfo.linkRefNoAnchor(((MultiMarkdownWikiPageRef) element).getName()));
 
             MultiMarkdownFile markdownFile = (MultiMarkdownFile) element.getContainingFile();
             FileReferenceList wikiPages = new FileReferenceListQuery(element.getProject())
@@ -201,16 +201,16 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
         if (wikiPageRef != null) {
             String text = wikiPageRef.getNameWithAnchor();
             if (text != null) {
-                FilePathInfo pathInfo = new FilePathInfo(text);
+                PathInfo pathInfo = new PathInfo(text);
                 text = pathInfo.getFileName();
 
-                if (!FilePathInfo.linkRefAnchor(text).isEmpty()) {
-                    originalList.add(FilePathInfo.linkRefNoAnchor(text));
-                    originalList.add(FilePathInfo.linkRefNoAnchor(text) + ": " + FilePathInfo.linkRefAnchorNoHash(text));
+                if (!PathInfo.linkRefAnchor(text).isEmpty()) {
+                    originalList.add(PathInfo.linkRefNoAnchor(text));
+                    originalList.add(PathInfo.linkRefNoAnchor(text) + ": " + PathInfo.linkRefAnchorNoHash(text));
 
-                    SuggestionList anchoredList = new SuggestionList(originalList.getProject()).add(FilePathInfo.linkRefNoAnchor(text));
+                    SuggestionList anchoredList = new SuggestionList(originalList.getProject()).add(PathInfo.linkRefNoAnchor(text));
 
-                    SuggestionList anchorList = new SuggestionList(originalList.getProject()).add(FilePathInfo.linkRefAnchorNoHash(text));
+                    SuggestionList anchorList = new SuggestionList(originalList.getProject()).add(PathInfo.linkRefAnchorNoHash(text));
 
                     anchoredList.add(anchoredList.sequenceFixers(SuggestCleanSpacedWords, SuggestCapSpacedWords));
                     anchorList.add(anchorList.sequenceFixers(SuggestCleanSpacedWords, SuggestCapSpacedWords));
@@ -228,12 +228,12 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
                     //}
                 }
 
-                suggestionList.add(FilePathInfo.linkRefNoAnchor(text));
+                suggestionList.add(PathInfo.linkRefNoAnchor(text));
                 suggestionList.add(text);
 
                 // add with path parts, to 2 directories above
-                String parentDir = (pathInfo = new FilePathInfo(pathInfo.getPath())).getFilePath();
-                suggestionList.add(parentDir + FilePathInfo.linkRefNoAnchor(text));
+                String parentDir = (pathInfo = new PathInfo(pathInfo.getPath())).getFilePath();
+                suggestionList.add(parentDir + PathInfo.linkRefNoAnchor(text));
                 suggestionList.add(parentDir + text);
             }
         }
@@ -270,17 +270,17 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
 
         if (!linkRef.isEmpty()) {
             String text = linkRef;
-            FilePathInfo pathInfo = new FilePathInfo(text);
+            PathInfo pathInfo = new PathInfo(text);
             if (!pathInfo.isExternalReference()) {
                 text = pathInfo.getFileNameNoExt();
 
-                if (!FilePathInfo.linkRefAnchor(text).isEmpty()) {
-                    originalList.add(FilePathInfo.linkRefNoAnchor(text));
-                    originalList.add(FilePathInfo.linkRefNoAnchor(text) + ": " + FilePathInfo.linkRefAnchorNoHash(text));
+                if (!PathInfo.linkRefAnchor(text).isEmpty()) {
+                    originalList.add(PathInfo.linkRefNoAnchor(text));
+                    originalList.add(PathInfo.linkRefNoAnchor(text) + ": " + PathInfo.linkRefAnchorNoHash(text));
 
-                    SuggestionList anchoredList = new SuggestionList(originalList.getProject()).add(FilePathInfo.linkRefNoAnchor(text));
+                    SuggestionList anchoredList = new SuggestionList(originalList.getProject()).add(PathInfo.linkRefNoAnchor(text));
 
-                    SuggestionList anchorList = new SuggestionList(originalList.getProject()).add(FilePathInfo.linkRefAnchorNoHash(text));
+                    SuggestionList anchorList = new SuggestionList(originalList.getProject()).add(PathInfo.linkRefAnchorNoHash(text));
 
                     anchoredList.add(anchoredList.sequenceFixers(SuggestCleanSpacedWords, SuggestCapSpacedWords));
                     anchorList.add(anchorList.sequenceFixers(SuggestCleanSpacedWords, SuggestCapSpacedWords));
@@ -298,12 +298,12 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
                     //}
                 }
 
-                suggestionList.add(FilePathInfo.linkRefNoAnchor(text));
+                suggestionList.add(PathInfo.linkRefNoAnchor(text));
                 suggestionList.add(text);
 
                 // add with path parts, to 2 directories above
-                String parentDir = (pathInfo = new FilePathInfo(pathInfo.getPath())).getFilePath();
-                suggestionList.add(parentDir + " " + FilePathInfo.linkRefNoAnchor(text));
+                String parentDir = (pathInfo = new PathInfo(pathInfo.getPath())).getFilePath();
+                suggestionList.add(parentDir + " " + PathInfo.linkRefNoAnchor(text));
                 suggestionList.add(parentDir + " " + text);
             }
         }

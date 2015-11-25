@@ -29,7 +29,7 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
-import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import com.vladsch.idea.multimarkdown.util.PathInfo;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
@@ -60,14 +60,14 @@ public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl 
 
     @Override
     public String getFileName() {
-        return FilePathInfo.wikiRefAsFileNameWithExt(new FilePathInfo(getName() == null ? "" : getName()).getFileName());
+        return PathInfo.wikiRefAsFileNameWithExt(new PathInfo(getName() == null ? "" : getName()).getFileName());
     }
 
     @Override
     public String getFileNameWithAnchor() {
         String anchorText = MultiMarkdownPsiImplUtil.getLinkRefAnchor(getParent());
-        FilePathInfo pathInfo = new FilePathInfo((getName() == null ? "" : getName()) + (anchorText.isEmpty() ? anchorText : "#" + anchorText));
-        return FilePathInfo.wikiRefAsFileNameWithExt(pathInfo.getFileName()) + pathInfo.getAnchor();
+        PathInfo pathInfo = new PathInfo((getName() == null ? "" : getName()) + (anchorText.isEmpty() ? anchorText : "#" + anchorText));
+        return PathInfo.wikiRefAsFileNameWithExt(pathInfo.getFileName()) + pathInfo.getAnchor();
     }
 
     @Override
@@ -77,7 +77,7 @@ public class MultiMarkdownWikiPageRefImpl extends MultiMarkdownNamedElementImpl 
 
     @Override
     public MultiMarkdownNamedElement handleContentChange(String newContent) throws IncorrectOperationException {
-        String newName = new FilePathInfo(newContent).getFileNameNoExtAsWikiRef();
+        String newName = new PathInfo(newContent).getFileNameNoExtAsWikiRef();
         MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(getProject());
         if (projectComponent == null) return this;
 

@@ -152,8 +152,8 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
                                     }
 
                                     if (!sourceReference.isWikiPage()) {
-                                        for (String gitHubLink : FilePathInfo.GITHUB_LINKS) {
-                                            FileReferenceLink newRefLink = new FileReferenceLink(sourceReference.getFullFilePath(), sourceReference.getGitHubRepoPath() + FilePathInfo.GITHUB_WIKI_REL_OFFSET + gitHubLink, fileProject);
+                                        for (String gitHubLink : PathInfo.GITHUB_LINKS) {
+                                            FileReferenceLink newRefLink = new FileReferenceLink(sourceReference.getFilePath(), sourceReference.getGitHubRepoPath() + PathInfo.GITHUB_WIKI_REL_OFFSET + gitHubLink, fileProject);
 
                                             LookupElementBuilder lookupElementBuilder = LookupElementBuilder.create(newRefLink.getLinkRef())
                                                     //.withLookupString(wikiPageShortRef)
@@ -242,7 +242,7 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
         boolean isLinkAccessible = fileReferenceGitHub.getPath().startsWith(gitHubRepoPath);
 
         if (fileReference.isWikiPage() || fileReference.getSourceReference().isWikiPage()) {
-            linkRef = FilePathInfo.removeStart(linkRef, fileReferenceGitHub.getPathPrefix());
+            linkRef = StringUtilKt.removeStart(linkRef, fileReferenceGitHub.getPathPrefix());
         }
 
         if (accessible == isLinkAccessible) {

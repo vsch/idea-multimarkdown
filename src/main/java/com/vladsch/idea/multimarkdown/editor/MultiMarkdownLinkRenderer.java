@@ -83,8 +83,8 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
             if (project != null && document != null) {
                 FileReference targetLinkRef = MultiMarkdownPathResolver.resolveRelativeLink(null, documentFileReference, gitHubRepo, url, isWikiLink, isWikiLink || MultiMarkdownPlugin.isLicensed());
                 if (targetLinkRef != null) {
-                    if (targetLinkRef.isURI() || targetLinkRef.isRelative()) return targetLinkRef.getFullFilePath();
-                    return "file://" + targetLinkRef.getFullFilePath();
+                    if (targetLinkRef.isURI() || targetLinkRef.isRelative()) return targetLinkRef.getFilePath();
+                    return "file://" + targetLinkRef.getFilePath();
                 }
             }
             return null;

@@ -24,7 +24,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.codeStyle.NameUtil;
 import com.intellij.spellchecker.SpellCheckerManager;
-import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import com.vladsch.idea.multimarkdown.util.PathInfo;
 import com.vladsch.idea.multimarkdown.util.FileReference;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -96,7 +96,7 @@ public class SuggestionFixers {
     public static class WikiRefAsFilNameWithExtFixer extends FixerBase {
         @Override
         public void makeSuggestions(@NotNull String text, @NotNull Suggestion suggestion, Project project) {
-            String fileName = FilePathInfo.wikiRefAsFileNameWithExt(new FilePathInfo(text).getFileNameNoExt());
+            String fileName = PathInfo.wikiRefAsFileNameWithExt(new PathInfo(text).getFileNameNoExt());
             addSuggestion(fileName);
         }
     }
@@ -143,8 +143,8 @@ public class SuggestionFixers {
     public static class FileNameWithExtFixer extends FixerBase {
         @Override
         public void makeSuggestions(@NotNull String text, @NotNull Suggestion suggestion, Project project) {
-            String wikiRef = new FilePathInfo(text).getFileNameNoExt();
-            addSuggestion(wikiRef + FilePathInfo.WIKI_PAGE_EXTENSION);
+            String wikiRef = new PathInfo(text).getFileNameNoExt();
+            addSuggestion(wikiRef + PathInfo.WIKI_PAGE_EXTENSION);
         }
     }
 

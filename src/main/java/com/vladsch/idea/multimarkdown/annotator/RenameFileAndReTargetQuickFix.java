@@ -38,7 +38,7 @@ import com.vladsch.idea.multimarkdown.psi.MultiMarkdownImageLinkRef;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkRef;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
-import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import com.vladsch.idea.multimarkdown.util.PathInfo;
 import com.vladsch.idea.multimarkdown.util.FileReference;
 import com.vladsch.idea.multimarkdown.util.FileReferenceLinkGitHubRules;
 import org.jetbrains.annotations.NotNull;
@@ -67,7 +67,7 @@ class RenameFileAndReTargetQuickFix extends BaseIntentionAction {
     @NotNull
     @Override
     public String getText() {
-        FilePathInfo filePathInfo = new FilePathInfo(targetFile.getVirtualFile().getPath());
+        PathInfo filePathInfo = new PathInfo(targetFile.getVirtualFile().getPath());
         return MultiMarkdownBundle.message("quickfix.wikilink.rename-page-retarget", filePathInfo.getFileNameWithAnchor(), name);
     }
 
@@ -109,7 +109,7 @@ class RenameFileAndReTargetQuickFix extends BaseIntentionAction {
                         // now get list of links to retarget, get the root element for all of these
                         PsiReference reference = linkRefElement.getReference();
                         MultiMarkdownNamedElement rootElement;
-                        FilePathInfo newFileInfo = new FilePathInfo(fileName);
+                        PathInfo newFileInfo = new PathInfo(fileName);
                         HashSet<UsageInfo> realUsages = null;
                         JavaRenameRefactoring renameLinkRef = null;
                         UsageInfo[] linkRefUsages = null;
@@ -126,10 +126,10 @@ class RenameFileAndReTargetQuickFix extends BaseIntentionAction {
                                 withAnchor = false;
                             } else if (linkRefElement instanceof MultiMarkdownLinkRef) {
                                 MultiMarkdownLinkRef linkRefElem = (MultiMarkdownLinkRef) linkRefElement;
-                                FilePathInfo renameElementInfo = new FilePathInfo((withAnchor ? linkRefElem.getFileNameWithAnchor() : linkRefElem.getFileName()));
+                                PathInfo renameElementInfo = new PathInfo((withAnchor ? linkRefElem.getFileNameWithAnchor() : linkRefElem.getFileName()));
                                 withExt = withAnchor ? renameElementInfo.hasWithAnchorExt() : renameElementInfo.hasExt();
                                 linkRename = withExt ? newFileInfo.getFileName() : newFileInfo.getFileNameNoExt();
-                                oldLinkName = withExt ? renameElementInfo.getFullFilePath() : renameElementInfo.getFilePathWithAnchorNoExt();
+                                oldLinkName = withExt ? renameElementInfo.getFilePath() : renameElementInfo.getFilePathWithAnchorNoExt();
                             }
 
                             renameLinkRef = (JavaRenameRefactoring) factory.createRename(rootElement, linkRename, true, true);
@@ -144,7 +144,7 @@ class RenameFileAndReTargetQuickFix extends BaseIntentionAction {
                                     if (sourceFile != null) {
                                         FileReferenceLinkGitHubRules fileReferenceLink = new FileReferenceLinkGitHubRules(sourceFile, psiFile);
                                         String pageRef = withAnchor ? fileReferenceLink.getWikiPageRefWithAnchor() : fileReferenceLink.getWikiPageRef();
-                                        if (fileReferenceLink.getSourceReference().isWikiPage() && fileReferenceLink.isWikiAccessible() && FilePathInfo.equivalentWikiRef(true, true, pageRef, oldLinkName)) {
+                                        if (fileReferenceLink.getSourceReference().isWikiPage() && fileReferenceLink.isWikiAccessible() && PathInfo.equivalentWikiRef(true, true, pageRef, oldLinkName)) {
                                             // this one's a keeper
                                             realUsages.add(usageInfo);
                                         }
@@ -158,7 +158,7 @@ class RenameFileAndReTargetQuickFix extends BaseIntentionAction {
                                         if (gitHubRepoPath == null || fileReferenceLink.getSourceReference().getGitHubRepoPath("").startsWith(gitHubRepoPath)) {
                                             String linkRef = withAnchor ? (withExt ? fileReferenceLink.getLinkRefWithAnchor() : fileReferenceLink.getLinkRefWithAnchorNoExt())
                                                     : (withExt ? fileReferenceLink.getLinkRef() : fileReferenceLink.getLinkRefNoExt());
-                                            if (FilePathInfo.equivalent(true, false, linkRef, oldLinkName)) {
+                                            if (PathInfo.equivalent(true, false, linkRef, oldLinkName)) {
                                                 // this one's a keeper
                                                 realUsages.add(usageInfo);
                                             }

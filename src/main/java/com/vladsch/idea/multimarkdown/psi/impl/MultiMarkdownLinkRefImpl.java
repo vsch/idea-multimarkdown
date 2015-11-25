@@ -23,7 +23,7 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownExplicitLink;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkRef;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
-import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import com.vladsch.idea.multimarkdown.util.PathInfo;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
@@ -69,7 +69,7 @@ public class MultiMarkdownLinkRefImpl extends MultiMarkdownNamedElementImpl impl
 
     @Override
     public MultiMarkdownNamedElement handleContentChange(String newContent) throws IncorrectOperationException {
-        String newName = new FilePathInfo(newContent).getFileNameNoExtAsWikiRef();
+        String newName = new PathInfo(newContent).getFileNameNoExtAsWikiRef();
         MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(getProject());
         if (projectComponent == null) return this;
 

@@ -25,7 +25,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Iconable;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.vladsch.idea.multimarkdown.editor.MultiMarkdownPreviewEditorProvider;
-import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import com.vladsch.idea.multimarkdown.util.FileRef;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,7 +35,7 @@ public class MultiMarkdownFileIconProvider implements FileIconProvider {
     @Nullable @Override
     public Icon getIcon(@NotNull VirtualFile file, @Iconable.IconFlags int flags, @Nullable Project project) {
         if (MultiMarkdownPreviewEditorProvider.accept(file)) {
-            return (new FilePathInfo(file).isWikiPage() ? MultiMarkdownIcons.WIKI : MultiMarkdownIcons.FILE);
+            return (new FileRef(file.getPath()).isWikiPage() ? MultiMarkdownIcons.WIKI : MultiMarkdownIcons.FILE);
         }
         return null;
     }

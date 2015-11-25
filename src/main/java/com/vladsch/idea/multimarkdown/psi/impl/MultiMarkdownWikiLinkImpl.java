@@ -28,7 +28,7 @@ import com.intellij.psi.PsiFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownVisitor;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
-import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import com.vladsch.idea.multimarkdown.util.PathInfo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,7 +47,7 @@ public class MultiMarkdownWikiLinkImpl extends ASTWrapperPsiElement implements M
     public String getMissingElementNameSpace(@NotNull String prefix, boolean addLinkRef) {
         PsiFile psiFile = getContainingFile();
         VirtualFile virtualFile = psiFile.getOriginalFile() != null ? psiFile.getOriginalFile().getVirtualFile() : psiFile.getVirtualFile();
-        FilePathInfo filePathInfo = new FilePathInfo(virtualFile);
+        PathInfo filePathInfo = new PathInfo(virtualFile);
         String wikiHome = filePathInfo.getWikiHome();
 
         if (addLinkRef) {

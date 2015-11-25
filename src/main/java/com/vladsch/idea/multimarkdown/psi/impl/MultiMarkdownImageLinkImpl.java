@@ -23,14 +23,14 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownImageLink;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownVisitor;
-import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import com.vladsch.idea.multimarkdown.util.PathInfo;
 import com.vladsch.idea.multimarkdown.util.GitHubRepo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class MultiMarkdownImageLinkImpl extends ASTWrapperPsiElement implements MultiMarkdownImageLink {
     public static String getElementText(@NotNull String name, @Nullable String text, @Nullable String title) {
-        if (text == null || text.isEmpty()) text = new FilePathInfo(name).getFileNameNoExt();
+        if (text == null || text.isEmpty()) text = new PathInfo(name).getFileNameNoExt();
         return "![" + text + "](" + name + (title != null && title.length() > 0 ? " '" + title + "'" : "") + ")\n";
     }
 
@@ -40,7 +40,7 @@ public class MultiMarkdownImageLinkImpl extends ASTWrapperPsiElement implements 
         MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(getProject());
         PsiFile psiFile = getContainingFile();
         VirtualFile virtualFile = psiFile.getOriginalFile() != null ? psiFile.getOriginalFile().getVirtualFile() : psiFile.getVirtualFile();
-        FilePathInfo filePathInfo = new FilePathInfo(virtualFile);
+        PathInfo filePathInfo = new PathInfo(virtualFile);
         GitHubRepo gitHubRepo = projectComponent != null ? projectComponent.getGitHubRepo(filePathInfo.getPath()) : null;
         String vcsHome = gitHubRepo != null ? gitHubRepo.getBasePath() + "::" : "";
 

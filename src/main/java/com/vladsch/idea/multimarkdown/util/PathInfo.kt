@@ -121,28 +121,28 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
         get() = isAbsolute(fullPath)
 
     fun withExt(ext: String?): PathInfo = if (ext == null || isEmpty || this.ext == ext) this else PathInfo(filePathNoExt + ext.startWith('.'))
-    fun append(vararg parts: String): PathInfo = PathInfo.append(fullPath, *parts)
-    fun append(parts: Collection<String>): PathInfo = PathInfo.append(fullPath, parts)
-    fun append(parts: Sequence<String>): PathInfo = PathInfo.append(fullPath, parts)
+    fun append(vararg parts: String): PathInfo = PathInfo.appendParts(fullPath, *parts)
+    fun append(parts: Collection<String>): PathInfo = PathInfo.appendParts(fullPath, parts)
+    fun append(parts: Sequence<String>): PathInfo = PathInfo.appendParts(fullPath, parts)
 
     companion object {
         private val logger = Logger.getLogger(PathInfo::class.java)
 
-        @JvmStatic val EMPTY_STRING = ""
+        @JvmStatic @JvmField val EMPTY_STRING = ""
 
-        @JvmStatic val WIKI_PAGE_EXTENSION = ".md"
-        @JvmStatic val WIKI_HOME_EXTENSION = ".wiki"
-        @JvmStatic val WIKI_HOME_FILENAME = "Home"
+        @JvmStatic @JvmField val WIKI_PAGE_EXTENSION = ".md"
+        @JvmStatic @JvmField val WIKI_HOME_EXTENSION = ".wiki"
+        @JvmStatic @JvmField val WIKI_HOME_FILENAME = "Home"
 
-        @JvmStatic val IMAGE_EXTENSIONS = arrayOf("png", "jpg", "jpeg", "gif")
-        @JvmStatic val MARKDOWN_EXTENSIONS = MultiMarkdownFileTypeFactory.EXTENSIONS
-        @JvmStatic val WIKI_PAGE_EXTENSIONS = MultiMarkdownFileTypeFactory.EXTENSIONS
+        @JvmStatic @JvmField val IMAGE_EXTENSIONS = arrayOf("png", "jpg", "jpeg", "gif")
+        @JvmStatic @JvmField val MARKDOWN_EXTENSIONS = MultiMarkdownFileTypeFactory.EXTENSIONS
+        @JvmStatic @JvmField val WIKI_PAGE_EXTENSIONS = MultiMarkdownFileTypeFactory.EXTENSIONS
 
-        @JvmStatic val EXTERNAL_PREFIXES = arrayOf("http://", "ftp://", "https://", "mailto:")
-        @JvmStatic val URI_PREFIXES = arrayOf("file://", *EXTERNAL_PREFIXES)
-        @JvmStatic val RELATIVE_PREFIXES = arrayOf<String>()
-        @JvmStatic val LOCAL_PREFIXES = arrayOf("file:", "/", *RELATIVE_PREFIXES)
-        @JvmStatic val ABSOLUTE_PREFIXES = arrayOf("/", *URI_PREFIXES)
+        @JvmStatic @JvmField val EXTERNAL_PREFIXES = arrayOf("http://", "ftp://", "https://", "mailto:")
+        @JvmStatic @JvmField val URI_PREFIXES = arrayOf("file://", *EXTERNAL_PREFIXES)
+        @JvmStatic @JvmField val RELATIVE_PREFIXES = arrayOf<String>()
+        @JvmStatic @JvmField val LOCAL_PREFIXES = arrayOf("file:", "/", *RELATIVE_PREFIXES)
+        @JvmStatic @JvmField val ABSOLUTE_PREFIXES = arrayOf("/", *URI_PREFIXES)
 
         // true if needs resolving to absolute reference
         @JvmStatic fun isRelative(fullPath: String?): Boolean = fullPath != null && !isAbsolute(fullPath)
@@ -159,15 +159,15 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
         // true if it is already an absolute ref, no need to resolve relative, just see if it maps
         @JvmStatic fun isAbsolute(fullPath: String?): Boolean = fullPath != null && fullPath.startsWith(*ABSOLUTE_PREFIXES)
 
-        @JvmStatic fun append(fullPath: String?, vararg parts: String): PathInfo {
-            return append(fullPath, parts.asSequence());
+        @JvmStatic fun appendParts(fullPath: String?, vararg parts: String): PathInfo {
+            return appendParts(fullPath, parts.asSequence());
         }
 
-        @JvmStatic fun append(fullPath: String?, parts: Collection<String>): PathInfo {
-            return append(fullPath, parts.asSequence())
+        @JvmStatic fun appendParts(fullPath: String?, parts: Collection<String>): PathInfo {
+            return appendParts(fullPath, parts.asSequence())
         }
 
-        @JvmStatic fun append(fullPath: String?, parts: Sequence<String>): PathInfo {
+        @JvmStatic fun appendParts(fullPath: String?, parts: Sequence<String>): PathInfo {
             var path: String = cleanFullPath(fullPath)
 
             for (part in parts) {

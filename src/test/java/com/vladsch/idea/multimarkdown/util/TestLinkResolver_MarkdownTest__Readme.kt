@@ -48,7 +48,7 @@ class TestLinkResolver_MarkdownTest__Readme constructor(val rowId:Int, val fullP
     val skipTest = linkRef is UrlLinkRef// || (linkRef !is ImageLinkRef && linkRef.hasExt && !linkRef.isMarkdownExt)
 
     fun resolveRelativePath(filePath:String?):PathInfo? {
-        return if (filePath == null) null else if (filePath.startsWith("http://", "https://")) PathInfo(filePath) else PathInfo.append(filePathInfo.path, filePath.splitToSequence("/"))
+        return if (filePath == null) null else if (filePath.startsWith("http://", "https://")) PathInfo(filePath) else PathInfo.appendParts(filePathInfo.path, filePath.splitToSequence("/"))
     }
 
     init {
@@ -126,7 +126,7 @@ class TestLinkResolver_MarkdownTest__Readme constructor(val rowId:Int, val fullP
 
     companion object {
             fun resolveRelativePath(filePathInfo: PathInfo, filePath:String?):PathInfo? {
-                return if (filePath == null) null else PathInfo.append(filePathInfo.path, filePath.splitToSequence("/"))
+                return if (filePath == null) null else PathInfo.appendParts(filePathInfo.path, filePath.splitToSequence("/"))
             }
 
         @Parameterized.Parameters(name = "{index}: filePath = {0}, linkRef = {3}, linkAnchor = {4}")

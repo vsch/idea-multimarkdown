@@ -22,7 +22,7 @@ import com.intellij.psi.ResolveResult;
 import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
-import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import com.vladsch.idea.multimarkdown.util.PathInfo;
 import com.vladsch.idea.multimarkdown.util.FileReferenceLinkGitHubRules;
 import com.vladsch.idea.multimarkdown.util.FileReferenceList;
 import com.vladsch.idea.multimarkdown.util.FileReferenceListQuery;
@@ -66,7 +66,7 @@ public class MultiMarkdownReferenceWikiPageRef extends MultiMarkdownReference {
         if (name != null && myElement.getContainingFile() != null && myElement.getContainingFile().getVirtualFile() != null) {
 
             String anchor = MultiMarkdownPsiImplUtil.getLinkRefAnchor(myElement);
-            FilePathInfo linkRefInfo = new FilePathInfo(name + (!anchor.isEmpty() ? "#" + anchor : ""));
+            PathInfo linkRefInfo = new PathInfo(name + (!anchor.isEmpty() ? "#" + anchor : ""));
 
             FileReferenceList fileReferenceList = new FileReferenceListQuery(myElement.getProject())
                     .caseInsensitive()

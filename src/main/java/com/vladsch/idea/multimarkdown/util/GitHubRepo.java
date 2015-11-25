@@ -18,7 +18,6 @@
 package com.vladsch.idea.multimarkdown.util;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import org.apache.log4j.Logger;
@@ -49,7 +48,7 @@ public class GitHubRepo {
     @VisibleForTesting
     protected GitHubRepo(@NotNull MultiMarkdownProjectComponent projectComponent, @NotNull String gitHubBaseUrl, @NotNull String basePath) {
         this.projectComponent = projectComponent;
-        this.isWiki = FilePathInfo.isWikiHomeDir(basePath);
+        this.isWiki = new FileRef(basePath).isUnderWikiDir();
         this.gitHubBaseUrl = gitHubBaseUrl;
         this.basePath = basePath;
     }
@@ -66,7 +65,7 @@ public class GitHubRepo {
     @Nullable
     public String getRelativePath(@Nullable String path) {
         if (path != null && path.startsWith(basePath)) {
-            return FilePathInfo.removeStart(path.substring(basePath.length()), '/');
+            return StringUtilKt.removeStart(path.substring(basePath.length()), '/');
         }
         return null;
     }
@@ -78,8 +77,8 @@ public class GitHubRepo {
 
     @Nullable
     public String repoUrlFor(@NotNull VirtualFile virtualFile, boolean withExtension, @Nullable String anchor) {
-        FilePathInfo pathInfo = new FilePathInfo(virtualFile);
-        String relativePath = getRelativePath(withExtension ? pathInfo.getFilePathWithAnchor() : pathInfo.getFilePathWithAnchorNoExt());
+        PathInfo pathInfo = new PathInfo(virtualFile.getPath());
+        String relativePath = getRelativePath(withExtension ? pathInfo.getFilePath() : pathInfo.getFilePathNoExt());
         return relativePath == null ? null : repoUrlFor(relativePath, anchor);
     }
 
@@ -91,10 +90,10 @@ public class GitHubRepo {
 
     public String repoUrlFor(@NotNull String relativeFilePath, @Nullable String anchor) {
         if (isWiki()) {
-            relativeFilePath = FilePathInfo.removeStart(relativeFilePath, "../../wiki");
+            relativeFilePath = StringUtilKt.removeStart(relativeFilePath, "../../wiki");
         }
 
-        return FilePathInfo.endWith(gitHubBaseUrl(), '/') + (isWiki() ? "wiki/" : "blob/master/") + FilePathInfo.asLinkRefURL(FilePathInfo.removeStart(relativeFilePath, "./")) + FilePathInfo.startWith(anchor, '#');
+        return StringUtilKt.endWith(gitHubBaseUrl(), '/', false) + (isWiki() ? "wiki/" : "blob/master/") + PathInfo.asLinkRefURL(StringUtilKt.removeStart(relativeFilePath, "./")) + StringUtilKt.startWith(anchor, '#', false);
     }
 
     @NotNull
@@ -104,8 +103,8 @@ public class GitHubRepo {
 
     @Nullable
     protected static String getGitPath(@NotNull String filePath) {
-        FilePathInfo filePathInfo = new FilePathInfo(filePath).append(".git");
-        File gitFile = new File(filePathInfo.getFullFilePath());
+        PathInfo filePathInfo = new PathInfo(filePath).append(".git");
+        File gitFile = new File(filePathInfo.getFilePath());
         String gitPath = null;
 
         if (gitFile.exists()) {
@@ -118,11 +117,9 @@ public class GitHubRepo {
                         // gitdir: ../.git/modules/laravel-translation-manager.isWiki
                         if (line.startsWith("gitdir:")) {
                             line = line.substring("gitdir:".length()).trim();
-                            FilePathInfo configInfo = filePathInfo.resolveLinkRef(line, false, false);
-                            if (configInfo != null) {
-                                gitPath = configInfo.getFullFilePath();
-                            }
-
+                            PathInfo lineInfo = new PathInfo(line);
+                            PathInfo configInfo = lineInfo.isRelative() ? filePathInfo.append(line.split("/")) : lineInfo;
+                            gitPath = configInfo.getFilePath();
                             break;
                         }
                     }
@@ -137,7 +134,7 @@ public class GitHubRepo {
                     }
                 }
             } else {
-                return filePathInfo.getFullFilePath();
+                return filePathInfo.getFilePath();
             }
         }
         return gitPath;
@@ -166,8 +163,8 @@ public class GitHubRepo {
                             .replaceAll("git://|git@|https://", "")
                             .replaceAll(":", "/");
 
-                    FilePathInfo baseUrlInfo = new FilePathInfo(baseUrl);
-                    if (baseUrlInfo.isWikiHomeDir()) {
+                    FileRef baseUrlInfo = new FileRef(baseUrl);
+                    if (baseUrlInfo.isWikiDir()) {
                         baseUrl = baseUrlInfo.getFilePathNoExt();
                     }
                     break;
@@ -197,15 +194,15 @@ public class GitHubRepo {
 
         String nextPath = path;
         do {
-            FilePathInfo pathInfo = new FilePathInfo(nextPath);
+            PathInfo pathInfo = new PathInfo(nextPath);
 
-            String gitPath = getGitPath(pathInfo.getFullFilePath());
+            String gitPath = getGitPath(pathInfo.getFilePath());
             if (gitPath != null) {
                 File gitConfigFile = new File(gitPath, gitConfig != null ? gitConfig : GIT_CONFIG);
                 if (gitConfigFile.exists() && gitConfigFile.isFile()) {
                     String baseUrl = gitHubBaseUrl(gitConfigFile);
                     if (baseUrl != null) {
-                        return new GitHubRepo(projectComponent, baseUrl, pathInfo.getFullFilePath());
+                        return new GitHubRepo(projectComponent, baseUrl, pathInfo.getFilePath());
                     }
 
                     // this sub-module does not have a remote.
@@ -218,5 +215,4 @@ public class GitHubRepo {
 
         return null;
     }
-
 }
