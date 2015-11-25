@@ -22,21 +22,21 @@ import org.junit.runners.Parameterized
 
 @RunWith(value = Parameterized::class)
 class TestLinkRef constructor(val fullPath: String
-                              , val hasAnchor : Boolean
-                              , val isSelfAnchor : Boolean
-                              , val isEmpty : Boolean
-                              , val isDoNothing : Boolean
+                              , val hasAnchor: Boolean
+                              , val isSelfAnchor: Boolean
+                              , val isEmpty: Boolean
+                              , val isDoNothing: Boolean
                               , val anchorText: String
-                              , val isRelative : Boolean
-                              , val isAbsolute : Boolean
-                              , val isExternal : Boolean
-                              , val filePath : String
-                              , val filePathNoExt : String
-                              , val filePathWithAnchor : String
-                              , val filePathNoExtWithAnchor : String
+                              , val isRelative: Boolean
+                              , val isAbsolute: Boolean
+                              , val isExternal: Boolean
+                              , val filePath: String
+                              , val filePathNoExt: String
+                              , val filePathWithAnchor: String
+                              , val filePathNoExtWithAnchor: String
 ) {
 
-    val linkRef = LinkRef.parseLinkRef(FileRef(""), fullPath, {containingFile, fullPath, anchor-> LinkRef(containingFile, fullPath, anchor) });
+    val linkRef = LinkRef.parseLinkRef(FileRef(""), fullPath, { containingFile, fullPath, anchor -> LinkRef(containingFile, fullPath, anchor) });
 
     /* @formatter:off */
     @Test fun test_hasAnchor() { Assert.assertEquals(hasAnchor, linkRef.hasAnchor) }
@@ -58,13 +58,10 @@ class TestLinkRef constructor(val fullPath: String
         @Parameterized.Parameters(name = "{index}: filePath = {0}")
         @JvmStatic
         public fun data(): Collection<Array<Any?>> {
-            val genData = false
+            val cleanData = false
             //            val test = TestPathInfo("", "", "", "", "", "", "", false, true, false, false, false, "", "", null, arrayOf<String>())
-            if (!genData) {
-                //val test = TestPathInfo_WikiRepo("/home/home.wiki/file-Name", true, false, false, "/home/home.wiki", "/home", "file-Name", "home.wiki/file-Name", 1);
-                //                return arrayListOf()
-                /* @formatter:off */
-            return arrayListOf<Array<Any?>>(
+            var data = arrayListOf<Array<Any?>>(
+                    /* @formatter:off */
                 /*      arrayOf<Any?>("fullPath"                                      , "hasAnchor", "isSelfAnchor", "isEmpty", "isDoNothing", "anchorText" , "isRelative", "isAbsolute", "isExternal", "filePath"                             , "filePathNoExt"                     , "filePathWithAnchor"                                , "filePathNoExtWithAnchor"                       ) */
                 /*  0 */arrayOf<Any?>(""                                              , false      , false         , true     , false        , ""           , true        , false       , false       , ""                                     , ""                                  , ""                                                  , ""                                              ),
                 /*  1 */arrayOf<Any?>("#"                                             , true       , true          , false    , true         , "#"          , false       , true        , false       , ""                                     , ""                                  , "#"                                                 , "#"                                             ),
@@ -107,52 +104,10 @@ class TestLinkRef constructor(val fullPath: String
                 /* 38 */arrayOf<Any?>("http://test.com/absDir/fileName#anchor.ext"    , true       , false         , false    , false        , "#anchor.ext", false       , true        , true        , "http://test.com/absDir/fileName"      , "http://test.com/absDir/fileName"   , "http://test.com/absDir/fileName#anchor.ext"        , "http://test.com/absDir/fileName#anchor.ext"    ),
                 /* 39 */arrayOf<Any?>("http://test.com/absDir/fileName.ext#anchor"    , true       , false         , false    , false        , "#anchor"    , false       , true        , true        , "http://test.com/absDir/fileName.ext"  , "http://test.com/absDir/fileName"   , "http://test.com/absDir/fileName.ext#anchor"        , "http://test.com/absDir/fileName#anchor"        ),
                 /* 40 */arrayOf<Any?>("http://test.com/absDir/fileName.ext#anchor.ext", true       , false         , false    , false        , "#anchor.ext", false       , true        , true        , "http://test.com/absDir/fileName.ext"  , "http://test.com/absDir/fileName"   , "http://test.com/absDir/fileName.ext#anchor.ext"    , "http://test.com/absDir/fileName#anchor.ext"    )
-            )
                 /* @formatter:on */
-            } else {
-                val data = arrayListOf(
-                        pathInfoTestData(""),
-                        pathInfoTestData("#"),
-                        pathInfoTestData("#anchor"),
-                        pathInfoTestData("#anchor.ext"),
-                        pathInfoTestData("fileName#anchor"),
-                        pathInfoTestData("fileName#anchor.ext"),
-                        pathInfoTestData("fileName.ext#anchor"),
-                        pathInfoTestData("fileName.ext#anchor.ext"),
-                        pathInfoTestData("../../wiki/Home"),
-                        pathInfoTestData("../../wiki/Home#"),
-                        pathInfoTestData("../../wiki/Home#anchor"),
-                        pathInfoTestData("relDir/fileName"),
-                        pathInfoTestData("relDir/fileName#"),
-                        pathInfoTestData("relDir/fileName#anchor"),
-                        pathInfoTestData("relDir/fileName#anchor.ext"),
-                        pathInfoTestData("relDir/fileName.ext#anchor"),
-                        pathInfoTestData("relDir/fileName.ext#anchor.ext"),
-                        pathInfoTestData("/absDir/fileName"),
-                        pathInfoTestData("/absDir/fileName#"),
-                        pathInfoTestData("/absDir/fileName#anchor"),
-                        pathInfoTestData("/absDir/fileName#anchor.ext"),
-                        pathInfoTestData("/absDir/fileName.ext#anchor"),
-                        pathInfoTestData("/absDir/fileName.ext#anchor.ext"),
-                        pathInfoTestData("file:/absDir/fileName"),
-                        pathInfoTestData("file:/absDir/fileName#"),
-                        pathInfoTestData("file:/absDir/fileName#anchor"),
-                        pathInfoTestData("file:/absDir/fileName#anchor.ext"),
-                        pathInfoTestData("file:/absDir/fileName.ext#anchor"),
-                        pathInfoTestData("file:/absDir/fileName.ext#anchor.ext"),
-                        pathInfoTestData("file:///absDir/fileName"),
-                        pathInfoTestData("file:///absDir/fileName#"),
-                        pathInfoTestData("file:///absDir/fileName#anchor"),
-                        pathInfoTestData("file:///absDir/fileName#anchor.ext"),
-                        pathInfoTestData("file:///absDir/fileName.ext#anchor"),
-                        pathInfoTestData("file:///absDir/fileName.ext#anchor.ext"),
-                        pathInfoTestData("http://test.com/absDir/fileName"),
-                        pathInfoTestData("http://test.com/absDir/fileName#"),
-                        pathInfoTestData("http://test.com/absDir/fileName#anchor"),
-                        pathInfoTestData("http://test.com/absDir/fileName#anchor.ext"),
-                        pathInfoTestData("http://test.com/absDir/fileName.ext#anchor"),
-                        pathInfoTestData("http://test.com/absDir/fileName.ext#anchor.ext")
-                )
+            )
+
+            if (cleanData) {
                 val header = arrayOf(
                         "fullPath",
                         "hasAnchor",
@@ -170,35 +125,8 @@ class TestLinkRef constructor(val fullPath: String
                 )
 
                 printData(data, header)
-                return data
             }
-        }
-
-        // fullFilePath
-        // hasAnchor
-        // isSelfAnchor
-        // isEmpty
-        // isDoNothing
-        // anchor
-
-        fun pathInfoTestData(path: String): Array<Any?> {
-            val pathInfo: FilePathInfo = FilePathInfo(FilePathInfo.removeEnd(path, "."))
-
-            return arrayOf<Any?>(
-                    pathInfo.fullFilePath,
-                    pathInfo.hasAnchor(),
-                    pathInfo.filePath.isEmpty() && pathInfo.hasAnchor(),
-                    pathInfo.isEmpty,
-                    pathInfo.fullFilePath.equals("#"),
-                    if (pathInfo.hasAnchor()) pathInfo.anchor else PathInfo.EMPTY_STRING,
-                    pathInfo.isRelative,
-                    pathInfo.isAbsoluteReference,
-                    pathInfo.isExternalReference,
-                    pathInfo.filePath,
-                    pathInfo.filePathNoExt,
-                    pathInfo.filePathWithAnchor,
-                    pathInfo.filePathWithAnchorNoExt
-            );
+            return data
         }
     }
 }

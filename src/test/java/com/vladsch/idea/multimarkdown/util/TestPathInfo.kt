@@ -60,12 +60,10 @@ class TestPathInfo constructor(val fullPath: String
         @Parameterized.Parameters(name = "{index}: filePath = {0}")
         @JvmStatic
         public fun data(): Collection<Array<Any?>> {
-            val genData = false
+            val cleanData = false
             //            val test = TestPathInfo("", "", "", "", "", "", "", false, true, false, false, false, "", "", null, arrayOf<String>())
-            if (!genData) {
-                //                return arrayListOf()
+            val data = arrayListOf<Array<Any?>>(
                 /* @formatter:off */
-            return arrayListOf<Array<Any?>>(
                 /*      arrayOf<Any?>("fullPath"                     , "ext", "filePath"                     , "filePathNoExt"            , "path"             , "fileName"            , "fileNameNoExt"   , "hasExt", "isRelative", "isExternal", "isURI", "isAbsolute", "withExt"                      , "append"                                , "addWithExt", "addAppend"                                              ) */
                 /*  0 */arrayOf<Any?>(""                             , ""   , ""                             , ""                         , ""                 , ""                    , ""                , false   , true        , false       , false  , false       , ""                             , ""                                      , null        , arrayOf<String>()                                        ),
                 /*  1 */arrayOf<Any?>(".ext"                         , ""   , ".ext"                         , ".ext"                     , ""                 , ".ext"                , ".ext"            , false   , true        , false       , false  , false       , ".ext"                         , ".ext"                                  , null        , arrayOf<String>()                                        ),
@@ -158,125 +156,10 @@ class TestPathInfo constructor(val fullPath: String
                 /* 88 */arrayOf<Any?>("/Dir1/Dir2/Dir3/Dir4"         , ""   , "/Dir1/Dir2/Dir3/Dir4"         , "/Dir1/Dir2/Dir3/Dir4"     , "/Dir1/Dir2/Dir3/" , "Dir4"                , "Dir4"            , false   , false       , false       , false  , true        , "/Dir1/Dir2/Dir3/Dir4"         , "/Dir1/Dir2a"                           , null        , arrayOf<String>("..", "..", "..", "Dir2a")               ),
                 /* 90 */arrayOf<Any?>("/Dir1/Dir2/Dir3/Dir4"         , ""   , "/Dir1/Dir2/Dir3/Dir4"         , "/Dir1/Dir2/Dir3/Dir4"     , "/Dir1/Dir2/Dir3/" , "Dir4"                , "Dir4"            , false   , false       , false       , false  , true        , "/Dir1/Dir2/Dir3/Dir4"         , "/Dir1a"                                , null        , arrayOf<String>("..", "..", "..", "..", "Dir1a")         ),
                 /* 91 */arrayOf<Any?>("/Dir1/Dir2/Dir3/Dir4"         , ""   , "/Dir1/Dir2/Dir3/Dir4"         , "/Dir1/Dir2/Dir3/Dir4"     , "/Dir1/Dir2/Dir3/" , "Dir4"                , "Dir4"            , false   , false       , false       , false  , true        , "/Dir1/Dir2/Dir3/Dir4"         , "/Dir1b"                                , null        , arrayOf<String>("..", "..", "..", "..", "..", "Dir1b")   )
-            )
                 /* @formatter:on */
-            } else {
-                val data = arrayListOf(
-                        /* 00 */  pathInfoTestData(".", null),
-                        /* 01 */  pathInfoTestData(".ext", null),
+            )
 
-                        /* 02 */  pathInfoTestData("fileName", null),
-                        /* 03 */  pathInfoTestData("fileName.", null),
-                        /* 04 */  pathInfoTestData("fileName.ext", null),
-
-                        /* 05 */  pathInfoTestData("./fileName", null),
-                        /* 06 */  pathInfoTestData("./SubDir1/fileName", null),
-                        /* 07 */  pathInfoTestData("./SubDir1.sub/fileName", null),
-                        /* 08 */  pathInfoTestData("./SubDir1/SubDir2/fileName", null),
-                        /* 09 */  pathInfoTestData("././SubDir1/fileName", null),
-
-                        /* 10 */  pathInfoTestData("./fileName.", null),
-                        /* 11 */  pathInfoTestData("./SubDir1/fileName.", null),
-                        /* 12 */  pathInfoTestData("./SubDir1.sub/fileName.", null),
-                        /* 13 */  pathInfoTestData("./SubDir1/SubDir2/fileName.", null),
-                        /* 14 */  pathInfoTestData("././SubDir1/fileName.", null),
-
-                        /* 15 */  pathInfoTestData("./fileName.ext", null),
-                        /* 16 */  pathInfoTestData("./SubDir1/fileName.ext", null),
-                        /* 17 */  pathInfoTestData("./SubDir1.sub/fileName.ext", null),
-                        /* 18 */  pathInfoTestData("./SubDir1/SubDir2/fileName.ext", null),
-                        /* 19 */  pathInfoTestData("././SubDir1/fileName.ext", null),
-
-                        /* 20 */  pathInfoTestData("/fileName", null),
-                        /* 21 */  pathInfoTestData("/SubDir1/fileName", null),
-                        /* 22 */  pathInfoTestData("/SubDir1.sub/fileName", null),
-                        /* 23 */  pathInfoTestData("/SubDir1/SubDir2/fileName", null),
-                        /* 24 */  pathInfoTestData("/./SubDir1/fileName", null),
-
-                        /* 25 */  pathInfoTestData("/fileName.", null),
-                        /* 26 */  pathInfoTestData("/SubDir1/fileName.", null),
-                        /* 27 */  pathInfoTestData("/SubDir1.sub/fileName.", null),
-                        /* 28 */  pathInfoTestData("/SubDir1/SubDir2/fileName.", null),
-                        /* 29 */  pathInfoTestData("/./SubDir1/fileName.", null),
-
-                        /* 30 */  pathInfoTestData("/fileName.ext", null),
-                        /* 31 */  pathInfoTestData("/SubDir1/fileName.ext", null),
-                        /* 32 */  pathInfoTestData("/SubDir1.sub/fileName.ext", null),
-                        /* 33 */  pathInfoTestData("/SubDir1/SubDir2/fileName.ext", null),
-                        /* 34 */  pathInfoTestData("/./SubDir1/fileName.ext", null),
-
-                        /* 35 */  pathInfoTestData("http://fileName", null),
-                        /* 36 */  pathInfoTestData("https://fileName", null),
-                        /* 37 */  pathInfoTestData("ftp://fileName", null),
-                        /* 38 */  pathInfoTestData("file://fileName", null),
-                        /* 39 */  pathInfoTestData("mailto:test@test.com", null),
-
-                        /* 40 */  pathInfoTestData(".", ""),
-                        /* 41 */  pathInfoTestData(".ext", ""),
-                        /* 42 */  pathInfoTestData("fileName", ""),
-                        /* 43 */  pathInfoTestData("fileName.", ""),
-                        /* 44 */  pathInfoTestData("fileName.ext", ""),
-
-                        /* 45 */  pathInfoTestData(".", "."),
-                        /* 46 */  pathInfoTestData(".ext", "."),
-                        /* 47 */  pathInfoTestData("fileName", "."),
-                        /* 48 */  pathInfoTestData("fileName.", "."),
-                        /* 49 */  pathInfoTestData("fileName.ext", "."),
-
-                        /* 50 */  pathInfoTestData(".", ".ext"),
-                        /* 51 */  pathInfoTestData(".ext", ".ext"),
-                        /* 52 */  pathInfoTestData("fileName", ".ext"),
-                        /* 53 */  pathInfoTestData("fileName.", ".ext"),
-                        /* 54 */  pathInfoTestData("fileName.ext", ".ext"),
-
-                        /* 55 */  pathInfoTestData(".", ".ext2"),
-                        /* 56 */  pathInfoTestData(".ext", ".ext2"),
-                        /* 57 */  pathInfoTestData("fileName", ".ext2"),
-                        /* 58 */  pathInfoTestData("fileName.", ".ext2"),
-                        /* 59 */  pathInfoTestData("fileName.ext", ".ext2"),
-
-                        /* 60 */  pathInfoTestData("", null, ""),
-                        /* 61 */  pathInfoTestData("", null, "."),
-                        /* 62 */  pathInfoTestData("", null, "./"),
-                        /* 63 */  pathInfoTestData("", null, "/./"),
-                        /* 64 */  pathInfoTestData("", null, "SubDir1"),
-                        /* 65 */  pathInfoTestData("", null, "/SubDir1"),
-                        /* 66 */  pathInfoTestData("", null, "SubDir1/"),
-                        /* 67 */  pathInfoTestData("", null, "/SubDir1/"),
-                        /* 68 */  pathInfoTestData("", null, "/SubDir1/", "/SubDir2/"),
-
-                        /* 69 */  pathInfoTestData("", null, ".SubDir1"),
-                        /* 70 */  pathInfoTestData("", null, "/.SubDir1"),
-                        /* 71 */  pathInfoTestData("", null, ".SubDir1/"),
-                        /* 72 */  pathInfoTestData("", null, "/.SubDir1/"),
-                        /* 73 */  pathInfoTestData("", null, "/.SubDir1/", "/SubDir2/"),
-
-                        /* 74 */  pathInfoTestData("", null, "SubDir1."),
-                        /* 75 */  pathInfoTestData("", null, "/SubDir1."),
-                        /* 76 */  pathInfoTestData("", null, "SubDir1./"),
-                        /* 77 */  pathInfoTestData("", null, "/SubDir1./"),
-                        /* 78 */  pathInfoTestData("", null, "/SubDir1./", "/SubDir2/"),
-
-                        /* 79 */  pathInfoTestData("", null, ".SubDir1."),
-                        /* 80 */  pathInfoTestData("", null, "/.SubDir1."),
-                        /* 81 */  pathInfoTestData("", null, ".SubDir1./"),
-                        /* 82 */  pathInfoTestData("", null, "/.SubDir1./"),
-                        /* 83 */  pathInfoTestData("", null, "/.SubDir1./", "/SubDir2/"),
-
-                        /* 84 */  pathInfoTestData("../Dir1/", null, ""),
-                        /* 85 */  pathInfoTestData("../Dir1/", null, "."),
-                        /* 86 */  pathInfoTestData("../Dir1/", null, "./"),
-                        /* 87 */  pathInfoTestData("../Dir1/", null, "/./"),
-                        /* 88 */  pathInfoTestData("../Dir1/", null, "SubDir1"),
-                        /* 89 */  pathInfoTestData("../Dir1/", null, "/SubDir1"),
-                        /* 90 */  pathInfoTestData("../Dir1/", null, "SubDir1/"),
-                        /* 91 */  pathInfoTestData("../Dir1/", null, "/SubDir1/"),
-                        /* 92 */  pathInfoTestData("../Dir1/", null, "/SubDir1/", "/SubDir2/"),
-                        /* 93 */  pathInfoTestData("../Dir1/", null, "/SubDir1/", "/SubDir2/", "fileName"),
-                        /* 94 */  pathInfoTestData("../Dir1/", null, "/SubDir1/", "/SubDir2/", "fileName."),
-                        /* 95 */  pathInfoTestData("../Dir1/", null, "/SubDir1/", "/SubDir2/", "fileName.ext")
-
-                )
+            if (cleanData) {
                 val header = arrayOf(
                         "fullPath",
                         "ext",
@@ -299,44 +182,7 @@ class TestPathInfo constructor(val fullPath: String
                 printData(data, header)
                 return data
             }
-        }
-
-        // fullFilePath
-        // ext
-        // filePath
-        // filePathNoExt
-        // path
-        // fileName
-        // fileNameNoExt
-        // hasExt
-        // isRelative
-        // isExternal
-        // isURI
-        // isAbsolute
-        // withExt
-        // append
-
-        fun pathInfoTestData(path: String, withExt: String?, vararg append: String): Array<Any?> {
-            val pathInfo: FilePathInfo = FilePathInfo(FilePathInfo.removeEnd(path, "."))
-
-            return arrayOf<Any?>(
-                    pathInfo.fullFilePath,
-                    pathInfo.ext,
-                    pathInfo.filePath,
-                    pathInfo.filePathNoExt,
-                    pathInfo.path,
-                    pathInfo.fileName,
-                    pathInfo.fileNameNoExt,
-                    pathInfo.hasExt(),
-                    pathInfo.isRelative,
-                    pathInfo.isExternalReference,
-                    pathInfo.isURI,
-                    pathInfo.isAbsoluteReference,
-                    if (pathInfo.fullFilePath.isEmpty()) "" else pathInfo.withExt(withExt).fullFilePath,
-                    pathInfo.append(*append).fullFilePath
-                    , withExt
-                    , append
-            );
+            return data
         }
     }
 }

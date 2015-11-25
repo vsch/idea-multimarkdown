@@ -68,13 +68,10 @@ class TestFileInfo constructor(val fullPath: String
         @Parameterized.Parameters(name = "{index}: filePath = {0}")
         @JvmStatic
         public fun data(): Collection<Array<Any?>> {
-            val genData = false
+            val cleanData = false
             //            val test = TestPathInfo("", "", "", "", "", "", "", false, true, false, false, false, "", "", null, arrayOf<String>())
-            if (!genData) {
-                //val test = TestPathInfo_WikiRepo("/home/home.wiki/file-Name", true, false, false, "/home/home.wiki", "/home", "file-Name", "home.wiki/file-Name", 1);
-                //                return arrayListOf()
-                /* @formatter:off */
-            return arrayListOf<Array<Any?>>(
+            val data = arrayListOf<Array<Any?>>(
+                    /* @formatter:off */
                 /*      arrayOf<Any?>("fullPath"                                                 , "isUnderWikiDir", "isWikiPage", "isWikiHomePage", "wikiDir"              , "mainRepoDir", "pathFromWikiDir"                                         , "pathFromMainRepoDir"                                     , "upDirectoriesToWikiHome") */
                 /*  0 */arrayOf<Any?>("/home/home.wiki/file-Name"                                , true            , false       , false           , "/home/home.wiki"      , "/home"      , "file-Name"                                               , "home.wiki/file-Name"                                     , 1                        ),
                 /*  1 */arrayOf<Any?>("/home/home.wiki/fileName.md"                              , true            , true        , false           , "/home/home.wiki"      , "/home"      , "fileName.md"                                             , "home.wiki/fileName.md"                                   , 1                        ),
@@ -112,47 +109,10 @@ class TestFileInfo constructor(val fullPath: String
                 /* 33 */arrayOf<Any?>("/is-home/is-home.wiki/Home.md"                            , true            , true        , true            , "/is-home/is-home.wiki", "/is-home"   , "Home.md"                                                 , "is-home.wiki/Home.md"                                    , 1                        ),
                 /* 34 */arrayOf<Any?>("/is-home/is-home.wiki/Home.mkd"                           , true            , true        , true            , "/is-home/is-home.wiki", "/is-home"   , "Home.mkd"                                                , "is-home.wiki/Home.mkd"                                   , 1                        ),
                 /* 35 */arrayOf<Any?>("/is-home/is-home.wiki/Home.markdown"                      , true            , true        , true            , "/is-home/is-home.wiki", "/is-home"   , "Home.markdown"                                           , "is-home.wiki/Home.markdown"                              , 1                        )
-            )
                 /* @formatter:on */
-            } else {
-                val data = arrayListOf(
-                        pathInfoTestData("/home/home.wiki/file-Name"),
-                        pathInfoTestData("/home/home.wiki/fileName.md"),
-                        pathInfoTestData("/home/home.wiki/file-Name.md"),
-                        pathInfoTestData("/home/home.wiki/path/with/fileName.md"),
-                        pathInfoTestData("/home/home.wiki/path/with/file-Name.md"),
-                        pathInfoTestData("/home/home.wiki/pathName/with/fileName.md"),
-                        pathInfoTestData("/is-home/is-home.wiki/file-Name"),
-                        pathInfoTestData("/is-home/is-home.wiki/fileName.md"),
-                        pathInfoTestData("/is-home/is-home.wiki/file-Name.md"),
-                        pathInfoTestData("/is-home/is-home.wiki/path/with/fileName.md"),
-                        pathInfoTestData("/is-home/is-home.wiki/path/with/file-Name.md"),
-                        pathInfoTestData("/is-home/is-home.wiki/pathName/with/fileName.md"),
-                        pathInfoTestData("/somepath/home.wiki/path-Name/with/file-Name.md"),
-                        pathInfoTestData("/home/home.wiki/file-Name"),
-                        pathInfoTestData("/home/home.wiki/fileName.md"),
-                        pathInfoTestData("/home/home.wiki/file-Name.md"),
-                        pathInfoTestData("/home/home.wiki/path/with/fileName.md"),
-                        pathInfoTestData("/home/home.wiki/path/with/file-Name.md"),
-                        pathInfoTestData("/home/home.wiki/pathName/with/fileName.md"),
-                        pathInfoTestData("/home/home.wiki/path-Name/with/file-Name.md"),
-                        pathInfoTestData("/is-home/is-home.wiki/file-Name"),
-                        pathInfoTestData("/is-home/is-home.wiki/fileName.md"),
-                        pathInfoTestData("/is-home/is-home.wiki/file-Name.md"),
-                        pathInfoTestData("/is-home/is-home.wiki/path/with/fileName.md"),
-                        pathInfoTestData("/is-home/is-home.wiki/path/with/file-Name.md"),
-                        pathInfoTestData("/is-home/is-home.wiki/pathName/with/fileName.md"),
-                        pathInfoTestData("/is-home/is-home.wiki/pathName/with/fileName."),
-                        pathInfoTestData("/is-home/is-home.wiki/path/file-Name.md"),
-                        pathInfoTestData("/is-home/is-home.wiki/path/path2/path3/file-Name.md"),
-                        pathInfoTestData("/is-home/is-home.wiki/path/path2/path3/file-Name.mkd"),
-                        pathInfoTestData("/is-home/is-home.wiki/path/path2/path3/file-Name.markdown"),
-                        pathInfoTestData("/is-hom/is-home.wiki/path/path2/path3/file-Name.markdown"),
-                        pathInfoTestData("/is-home/home/path/path2/path3/file-Name.markdown"),
-                        pathInfoTestData("/is-home/is-home.wiki/Home.md"),
-                        pathInfoTestData("/is-home/is-home.wiki/Home.mkd"),
-                        pathInfoTestData("/is-home/is-home.wiki/Home.markdown")
-                )
+            )
+
+            if (cleanData) {
                 val header = arrayOf(
                         "fullPath",
                         "isUnderWikiDir",
@@ -164,37 +124,9 @@ class TestFileInfo constructor(val fullPath: String
                         "pathFromMainRepoDir",
                         "upDirectoriesToWikiHome"
                 )
-
                 printData(data, header)
-                return data
             }
-        }
-
-        // fullFilePath
-        // isUnderWikiDir
-        // isWikiPage
-        // isWikiHomePage
-        // isWikiDir
-        // wikiDir
-        // mainRepoDir
-        // pathFromWikiDir
-        // pathFromMainRepoDir
-        // upDirectoriesToWikiHome
-
-        fun pathInfoTestData(path: String): Array<Any?> {
-            val pathInfo: FilePathInfo = FilePathInfo(FilePathInfo.removeEnd(path, "."))
-
-            return arrayOf<Any?>(
-                    pathInfo.fullFilePath,
-                    pathInfo.isUnderWikiHome,
-                    pathInfo.isWikiPage,
-                    pathInfo.isWikiPageHome,
-                    pathInfo.wikiHome,
-                    pathInfo.projectHome,
-                    pathInfo.linkRefFromWikiHome,
-                    pathInfo.linkRefFromProjectHome,
-                    pathInfo.upDirectoriesToWikiHome
-            );
+            return data
         }
     }
 }

@@ -25,16 +25,6 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestFilePathInfoAsWikiRef.class,
-        TestFilePathInfoEndsWithWikiRef.class,
-        TestFilePathInfo.class,
-        TestFilePathInfoIndividial.class,
-        TestFilePathInfoResolveLinkRef.class,
-        TestFileReferenceLink.class,
-        TestFileReferenceLinkGitHubRules.class,
-        TestFileReferenceLinkGitHubRulesUnresolvedReasons.class,
-        TestFileReferenceList.class,
-
         TestPathInfo.class,
         TestFileInfo.class,
         TestLinkRef.class,
