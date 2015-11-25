@@ -15,6 +15,7 @@
 package com.vladsch.idea.multimarkdown.util
 
 import com.vladsch.idea.multimarkdown.printData
+import com.vladsch.idea.multimarkdown.util.GitHubLinkInspector.*
 
 // Auto-generated test data from: /Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md
 
@@ -134,24 +135,55 @@ class MarkdownTest__MarkdownTest_wiki__Home_md {
             val cleanData = false
             val data = arrayListOf<Array<Any?>>(
                 /* @formatter:off */
-                /*      arrayOf<Any?>("fullPath"                                              , "linkType"    , "linkText"              , "linkRef"                                    , "linkAnchor", "linkTitle", "resolvesLocal"                         , "resolvesExternal"                    , "linkAddress"                                , "multiResolve") */
-                /*  0 */arrayOf<Any?>("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md", ::WikiLinkRef , ""                      , "Missing File"                               , null        , null       , null                                    , null                                  , null                                         , arrayOf<String>()) /*  0 */,
-                /*  1 */arrayOf<Any?>("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md", ::WikiLinkRef , ""                      , "normal file"                                , null        , null       , "normal-file.md"                        , "normal-file.md"                      , "normal file"                                , arrayOf<String>()) /*  1 */
+                /*      arrayOf<Any?>("dataRow", "inspectionResult"             , "severity"           , "fixedLinkRef"                 , "fixedFilePath") */
+                /*  0 */arrayOf<Any?>( 2       , "TARGET_NOT_UNDER_VCS"         , Severity.WARNING     , null                           , null) /*  0 */,
+                /*  1 */arrayOf<Any?>( 6       , "LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "normal file"                  , null) /*  1 */,
+                /*  2 */arrayOf<Any?>( 7       , "LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "normal file"                  , null) /* 21 */,
+                /*  3 */arrayOf<Any?>( 7       , "LINK_TARGETS_WIKI_HAS_BAD_EXT", Severity.ERROR       , "normal file.md"               , null) /* 22 */,
+                /*  4 */arrayOf<Any?>( 8       , "LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "normal file"                  , null) /* 23 */,
+                /*  5 */arrayOf<Any?>( 8       , "LINK_TARGETS_WIKI_HAS_BAD_EXT", Severity.ERROR       , "normal file.md"               , null) /* 24 */,
+                /*  6 */arrayOf<Any?>(12       , "TARGET_NAME_HAS_ANCHOR"       , Severity.WARNING     , null                           , "anchor-in-name5.md") /*  2 */,
+                /*  7 */arrayOf<Any?>(14       , "TARGET_HAS_SPACES"            , Severity.WEAK_WARNING, null                           , "Space-In-Name.md") /*  3 */,
+                /*  8 */arrayOf<Any?>(15       , "TARGET_HAS_SPACES"            , Severity.WEAK_WARNING, null                           , "Space-In-Name.md") /*  4 */,
+                /*  9 */arrayOf<Any?>(16       , "CASE_MISMATCH"                , Severity.WARNING     , "normal file"                  , "Normal-File.md") /*  5 */,
+                /* 10 */arrayOf<Any?>(17       , "WIKI_LINK_HAS_DASHES"         , Severity.WEAK_WARNING, "normal file"                  , null) /*  6 */,
+                /* 11 */arrayOf<Any?>(18       , "CASE_MISMATCH"                , Severity.WARNING     , "normal file"                  , "Normal-File.md") /*  7 */,
+                /* 12 */arrayOf<Any?>(18       , "WIKI_LINK_HAS_DASHES"         , Severity.WEAK_WARNING, "Normal File"                  , null) /*  8 */,
+                /* 13 */arrayOf<Any?>(19       , "LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "In Name"                      , null) /* 25 */,
+                /* 14 */arrayOf<Any?>(20       , "WIKI_LINK_HAS_SUBDIR"         , Severity.ERROR       , "In Name"                      , null) /* 26 */,
+                /* 15 */arrayOf<Any?>(21       , "LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "In Name"                      , null) /* 27 */,
+                /* 16 */arrayOf<Any?>(21       , "WIKI_LINK_HAS_SLASH"          , Severity.ERROR       , "SubDirectory/In Name.md"      , null) /* 28 */,
+                /* 17 */arrayOf<Any?>(29       , "CASE_MISMATCH"                , Severity.WARNING     , "normal file"                  , "Normal-File.md") /*  9 */,
+                /* 18 */arrayOf<Any?>(37       , "LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "normal-file"                  , null) /* 10 */,
+                /* 19 */arrayOf<Any?>(44       , "LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "normal-file#33"               , null) /* 11 */,
+                /* 20 */arrayOf<Any?>(46       , "TARGET_NAME_HAS_ANCHOR"       , Severity.WARNING     , null                           , "anchor-in-name5.md") /* 12 */,
+                /* 21 */arrayOf<Any?>(47       , "TARGET_NAME_HAS_ANCHOR"       , Severity.WARNING     , null                           , "anchor-in-name5.md") /* 13 */,
+                /* 22 */arrayOf<Any?>(47       , "LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "anchor-in-name%235"           , null) /* 14 */,
+                /* 23 */arrayOf<Any?>(48       , "TARGET_NAME_HAS_ANCHOR"       , Severity.WARNING     , null                           , "anchor-in-name5.md") /* 29 */,
+                /* 24 */arrayOf<Any?>(49       , "TARGET_NAME_HAS_ANCHOR"       , Severity.WARNING     , null                           , "anchor-in-name5.md") /* 30 */,
+                /* 25 */arrayOf<Any?>(55       , "LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "In-Name"                      , null) /* 31 */,
+                /* 26 */arrayOf<Any?>(57       , "LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "In-Name"                      , null) /* 15 */,
+                /* 27 */arrayOf<Any?>(64       , "CASE_MISMATCH"                , Severity.ERROR       , "../blob/master/NonWikiFile.md", "../nonwikiFile.md") /* 32 */,
+                /* 28 */arrayOf<Any?>(69       , "TARGET_NOT_UNDER_VCS"         , Severity.WARNING     , null                           , null) /* 16 */,
+                /* 29 */arrayOf<Any?>(70       , "TARGET_NOT_UNDER_VCS"         , Severity.WARNING     , null                           , null) /* 17 */,
+                /* 30 */arrayOf<Any?>(71       , "WIKI_LINK_HAS_ONLY_ANCHOR"    , Severity.ERROR       , "Home#anchor"                  , null) /* 18 */,
+                /* 31 */arrayOf<Any?>(73       , "TARGET_HAS_SPACES"            , Severity.WARNING     , null                           , "Space-In-Name.md") /* 33 */,
+                /* 32 */arrayOf<Any?>(74       , "CASE_MISMATCH"                , Severity.ERROR       , "Test.kt"                      , "test.kt") /* 34 */,
+                /* 33 */arrayOf<Any?>(76       , "LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "normal-file"                  , null) /* 19 */,
+                /* 34 */arrayOf<Any?>(77       , "LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "normal-file"                  , null) /* 35 */,
+                /* 35 */arrayOf<Any?>(78       , "CASE_MISMATCH"                , Severity.ERROR       , "normal-file"                  , "Normal-File.md") /* 20 */,
+                /* 36 */arrayOf<Any?>(79       , "CASE_MISMATCH"                , Severity.ERROR       , "normal-file.md"               , "Normal-File.md") /* 36 */,
+                /* 37 */arrayOf<Any?>(79       , "LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "normal-file"                  , null) /* 37 */
                 /* @formatter:on */
             )
 
             if (cleanData) {
                 val header = arrayOf(
                         "dataRow",
-                        "linkType",
-                        "linkText",
-                        "linkRef",
-                        "linkAnchor",
-                        "linkTitle",
-                        "resolvesLocal",
-                        "resolvesExternal",
-                        "linkAddress",
-                        "multiResolve"
+                        "inspectionResult",
+                        "severity",
+                        "fixedLinkRef",
+                        "fixedFilePath"
                 )
 
                 printData(data, header)

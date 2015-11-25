@@ -24,6 +24,7 @@ import com.vladsch.idea.multimarkdown.spellchecking.Suggestion;
 import com.vladsch.idea.multimarkdown.spellchecking.SuggestionList;
 import com.vladsch.idea.multimarkdown.util.FileReference;
 import com.vladsch.idea.multimarkdown.util.FileReferenceList;
+import com.vladsch.idea.multimarkdown.util.InspectionResult;
 import com.vladsch.idea.multimarkdown.util.PathInfo;
 import org.junit.internal.ArrayComparisonFailure;
 
@@ -148,6 +149,16 @@ public class TestUtils {
         new UnorderedSuggestionComparison().arrayEquals(null, expected.getSuggestions().toArray(new Suggestion[expected.size()]), actual.getSuggestions().toArray(new Suggestion[actual.size()]));
     }
 
+
+    public static void compareOrderedLists(String message, ArrayList<InspectionResult> expected, List<InspectionResult> actual) {
+        new OrderedInspectionComparison().arrayEquals(message, expected.toArray(new InspectionResult[expected.size()]), actual.toArray(new InspectionResult[actual.size()]));
+    }
+
+    public static void compareUnorderedLists(String message, ArrayList<InspectionResult> expected, List<InspectionResult> actual) {
+        new UnorderedInspectionComparison().arrayEquals(message, expected.toArray(new InspectionResult[expected.size()]), actual.toArray(new InspectionResult[actual.size()]));
+    }
+
+
     public static void assertSuggestionListHasSuggestions(SuggestionList suggestionList, Suggestion... suggestions) {
         compareOrderedLists((String) null, suggestions, suggestionList);
     }
@@ -230,6 +241,30 @@ public class TestUtils {
 
         @Override
         protected void assertElementsAreEqual(PathInfo o1, PathInfo o2) {
+            if (o1.compareTo(o2) != 0) failNotEquals("PathInfo not equal", o1, o2);
+        }
+    }
+
+    public static class OrderedInspectionComparison extends OrderedComparisonCriteria<InspectionResult> {
+        @Override
+        protected boolean elementsAreEqual(InspectionResult o1, InspectionResult o2) {
+            return o1.compareTo(o2) == 0;
+        }
+
+        @Override
+        protected void assertElementsAreEqual(InspectionResult o1, InspectionResult o2) {
+            if (o1.compareTo(o2) != 0) failNotEquals("PathInfo not equal", o1, o2);
+        }
+    }
+
+    public static class UnorderedInspectionComparison extends UnorderedComparisonCriteria<InspectionResult> {
+        @Override
+        protected boolean elementsAreEqual(InspectionResult o1, InspectionResult o2) {
+            return o1.compareTo(o2) == 0;
+        }
+
+        @Override
+        protected void assertElementsAreEqual(InspectionResult o1, InspectionResult o2) {
             if (o1.compareTo(o2) != 0) failNotEquals("PathInfo not equal", o1, o2);
         }
     }

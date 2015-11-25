@@ -22,17 +22,18 @@ import org.junit.runners.Parameterized
 import java.util.*
 
 @RunWith(value = Parameterized::class)
-class TestLinkRefMatcher_MarkdownTest__Readme constructor(val fullPath: String
-                                                             , val linkRefType: (containingFile: FileRef, linkRef: String, anchor: String?) -> LinkRef
-                                                             , val linkText: String
-                                                             , val linkAddress: String
-                                                             , val linkAnchor: String?
-                                                             , val linkTitle: String?
-                                                             , resolvesLocalRel: String?
-                                                             , resolvesExternalRel: String?
-                                                             , val linkAddressText: String?
-                                                             , val remoteAddressText: String?
-                                                             , multiResolvePartial: Array<String>
+class TestLinkResolver_MarkdownTest__Readme constructor(val rowId:Int, val fullPath: String
+                                                        , val linkRefType: (containingFile: FileRef, linkRef: String, anchor: String?) -> LinkRef
+                                                        , val linkText: String
+                                                        , val linkAddress: String
+                                                        , val linkAnchor: String?
+                                                        , val linkTitle: String?
+                                                        , resolvesLocalRel: String?
+                                                        , resolvesExternalRel: String?
+                                                        , val linkAddressText: String?
+                                                        , val remoteAddressText: String?
+                                                        , multiResolvePartial: Array<String>
+                                                        , val inspectionResults: ArrayList<InspectionResult>?
 ) {
     val resolvesLocal: String?
     val resolvesExternal: String?
@@ -46,18 +47,20 @@ class TestLinkRefMatcher_MarkdownTest__Readme constructor(val fullPath: String
     val externalLinkRef = resolvesExternalRel
     val skipTest = linkRef is UrlLinkRef// || (linkRef !is ImageLinkRef && linkRef.hasExt && !linkRef.isMarkdownExt)
 
+    fun resolveRelativePath(filePath:String?):PathInfo? {
+        return if (filePath == null) null else if (filePath.startsWith("http://", "https://")) PathInfo(filePath) else PathInfo.append(filePathInfo.path, filePath.splitToSequence("/"))
+    }
+
     init {
-        val fullPathInfo = PathInfo(fullPath)
-        val filePathInfo = PathInfo(fullPathInfo.path)
-        resolvesLocal = if (resolvesLocalRel == null) null else filePathInfo.append(resolvesLocalRel.splitToSequence("/")).filePath
-        resolvesExternal = if (resolvesExternalRel == null) null else if (resolvesExternalRel.startsWith("http://", "https://")) resolvesExternalRel else filePathInfo.append(resolvesExternalRel.splitToSequence("/")).filePath
+        resolvesLocal = resolveRelativePath(resolvesLocalRel)?.filePath
+        resolvesExternal = resolveRelativePath(resolvesExternalRel)?.filePath
 
         var multiResolveAbs = ArrayList<String>()
 
         if (multiResolvePartial.size == 0 && resolvesLocal != null) multiResolveAbs.add(resolvesLocal)
 
         for (path in multiResolvePartial) {
-            multiResolveAbs.add(filePathInfo.append(path.splitToSequence("/")).filePath)
+            multiResolveAbs.add(resolveRelativePath(path)?.filePath.orEmpty())
         }
 
         multiResolve = multiResolveAbs.toArray(Array(0, { "" }))
@@ -106,11 +109,52 @@ class TestLinkRefMatcher_MarkdownTest__Readme constructor(val fullPath: String
         compareOrderedLists("MultiResolve does not match", multiResolve, actuals)
     }
 
+    @Test fun test_InspectionResults() {
+        if (skipTest || this.inspectionResults == null) return
+        val targetRef = resolver.resolve(linkRef, LinkResolver.LOOSE_MATCH, fileList) as? FileRef
+        if (targetRef != null) {
+            val inspectionResults = resolver.inspect(linkRef, targetRef)
+            if (this.inspectionResults.size < inspectionResults.size) {
+                for (inspection in inspectionResults) {
+                    println(inspection.toArrayOfTestString(rowId, filePathInfo.path))
+                }
+            }
+
+            compareUnorderedLists("InspectionResults do not match", this.inspectionResults, inspectionResults)
+        }
+    }
+
     companion object {
+            fun resolveRelativePath(filePathInfo: PathInfo, filePath:String?):PathInfo? {
+                return if (filePath == null) null else PathInfo.append(filePathInfo.path, filePath.splitToSequence("/"))
+            }
+
         @Parameterized.Parameters(name = "{index}: filePath = {0}, linkRef = {3}, linkAnchor = {4}")
         @JvmStatic
         fun data(): Collection<Array<Any?>> {
-            return MarkdownTest__Readme_md.data()
+            val data = MarkdownTest__Readme_md.data()
+            val inspectionData = MarkdownTest__Readme_md.mismatchInfo()
+            val amendedData = ArrayList<Array<Any?>>()
+
+            var i = 0
+            for (row in data) {
+                val amendedRow = Array<Any?>(row.size+2,{null})
+                val inspections = ArrayList<InspectionResult>()
+                val filePathInfo = PathInfo(row[0] as String)
+                for (inspectionRow in inspectionData) {
+                    if (inspectionRow[0] == i) {
+                        inspections.add(InspectionResult(inspectionRow[1] as String, inspectionRow[2] as Severity, inspectionRow[3] as String?, resolveRelativePath(filePathInfo, inspectionRow[4] as String?)?.filePath))
+                    }
+                }
+
+                System.arraycopy(row, 0, amendedRow, 1, row.size)
+                amendedRow[0] = i
+                amendedRow[row.size+1] = inspections
+                amendedData.add(amendedRow)
+                i++
+            }
+
+            return amendedData
         }
     }
 }

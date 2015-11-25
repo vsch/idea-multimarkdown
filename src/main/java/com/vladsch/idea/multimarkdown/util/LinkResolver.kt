@@ -37,6 +37,7 @@ abstract class LinkResolver(val projectResolver: LinkResolver.ProjectResolver, v
         val ONLY_REMOTE = 2         // file ref that has remote resolve
         val LOOSE_MATCH = 4         // inexact match for error detection
         val REMOTE_URL = 8          // remote URL for file on repo website
+        val LOCAL_OR_REMOTE = ONLY_LOCAL or ONLY_REMOTE          // remote URL for file on repo website
 
         fun wantLocal(options: Int): Boolean = (options and ONLY_REMOTE == 0) || (options and ONLY_LOCAL != 0)
         fun wantRemote(options: Int): Boolean = (options and ONLY_LOCAL == 0) || (options and ONLY_REMOTE != 0)

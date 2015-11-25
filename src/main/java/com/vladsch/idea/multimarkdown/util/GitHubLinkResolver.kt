@@ -69,7 +69,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
 
         if (!linkRef.isAbsolute) {
             // resolve the relative link as per requested options
-            val linkRefMatcher = GitHubLinkRefMatcher(linkRef, projectBasePath, wantLooseMatch(options) || linkRef.isEmpty)
+            val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, wantLooseMatch(options) || linkRef.isEmpty)
             val matches = getMatchedRefs(linkRef, linkRefMatcher, options, inList)
             var resolvedRef = (if (matches.size > 0) matches[0] else null) ?: return null
             targetRef = resolvedRef
@@ -91,7 +91,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
         assert(linkRef.containingFile == containingFile, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
 
         if (linkRef is WikiLinkRef && !wantLooseMatch(options) && linkRef.hasExt) return ArrayList()  // wiki links don't resolve with extensions
-        val linkRefMatcher = GitHubLinkRefMatcher(linkRef, projectBasePath, wantLooseMatch(options) || linkRef.isEmpty)
+        val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, wantLooseMatch(options) || linkRef.isEmpty)
         return getMatchedRefs(linkRef, linkRefMatcher, options, inList)
     }
 
@@ -113,16 +113,16 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
         return typeSet
     }
 
-    fun getMatchedRefs(linkRef: LinkRef, linkRefMatcher: GitHubLinkRefMatcher, options: Int, fromList: List<PathInfo>?): List<PathInfo> {
+    fun getMatchedRefs(linkRef: LinkRef, linkMatcher: GitHubLinkMatcher, options: Int, fromList: List<PathInfo>?): List<PathInfo> {
         // process the files that match the pattern and put them in the list
         var matches = ArrayList<PathInfo>()
 
-        val matchPattern = linkRefMatcher.patternText(wantLooseMatch(options)) ?: return matches
+        val matchPattern = linkMatcher.patternText(wantLooseMatch(options)) ?: return matches
 
         val wikiMatch = if (wantLooseMatch(options) || !linkRef.hasExt || linkRef is WikiLinkRef) matchPattern.toRegex(RegexOption.IGNORE_CASE) else matchPattern.toRegex()
         val linkMatch = if (wantLooseMatch(options)) wikiMatch else matchPattern.toRegex()
 
-        if (!linkRefMatcher.gitHubLinks) {
+        if (!linkMatcher.gitHubLinks) {
             if (fromList == null) {
                 val targetFileTypes = getTargetFileTypes(linkRef)
                 if (targetFileTypes.isEmpty() || project == null) {

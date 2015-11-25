@@ -128,5 +128,63 @@ class MarkdownTest__MarkdownTest_wiki__normal_file_md {
             }
             return data
         }
+
+        @JvmStatic
+        fun mismatchInfo(): Collection<Array<Any?>> {
+            val cleanData = false
+            val data = arrayListOf<Array<Any?>>(
+                /* @formatter:off */
+                /*      arrayOf<Any?>("dataRow", "inspectionResult"             , "severity"           , "fixedLinkRef"                 , "fixedFilePath") */
+                /*  0 */arrayOf<Any?>(2        , "TARGET_NOT_UNDER_VCS"         , Severity.WARNING     , null                           , null) /*  0 */,
+                /*  1 */arrayOf<Any?>(6        , "LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "normal file"                  , null) /*  1 */,
+                /*  2 */arrayOf<Any?>(7        , "LINK_TARGETS_WIKI_HAS_BAD_EXT", Severity.ERROR       , "normal file.md"               , null) /*  2 */,
+                /*  3 */arrayOf<Any?>(7        , "LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "normal file"                  , null) /*  3 */,
+                /*  4 */arrayOf<Any?>(8        , "LINK_TARGETS_WIKI_HAS_BAD_EXT", Severity.ERROR       , "normal file.md"               , null) /*  4 */,
+                /*  5 */arrayOf<Any?>(8        , "LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "normal file"                  , null) /*  5 */,
+                /*  6 */arrayOf<Any?>(12       , "TARGET_NAME_HAS_ANCHOR"       , Severity.WARNING     , null                           , "anchor-in-name5.md") /*  6 */,
+                /*  7 */arrayOf<Any?>(14       , "TARGET_HAS_SPACES"            , Severity.WEAK_WARNING, null                           , "Space-In-Name.md") /*  7 */,
+                /*  8 */arrayOf<Any?>(15       , "TARGET_HAS_SPACES"            , Severity.WEAK_WARNING, null                           , "Space-In-Name.md") /*  8 */,
+                /*  9 */arrayOf<Any?>(16       , "CASE_MISMATCH"                , Severity.WARNING     , "normal file"                  , "Normal-File.md") /*  9 */,
+                /* 10 */arrayOf<Any?>(17       , "WIKI_LINK_HAS_DASHES"         , Severity.WEAK_WARNING, "normal file"                  , null) /* 10 */,
+                /* 11 */arrayOf<Any?>(18       , "CASE_MISMATCH"                , Severity.WARNING     , "normal file"                  , "Normal-File.md") /* 11 */,
+                /* 12 */arrayOf<Any?>(18       , "WIKI_LINK_HAS_DASHES"         , Severity.WEAK_WARNING, "Normal File"                  , null) /* 12 */,
+                /* 13 */arrayOf<Any?>(19       , "LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "In Name"                      , null) /* 13 */,
+                /* 14 */arrayOf<Any?>(20       , "WIKI_LINK_HAS_SUBDIR"         , Severity.ERROR       , "In Name"                      , null) /* 14 */,
+                /* 15 */arrayOf<Any?>(21       , "LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "In Name"                      , null) /* 15 */,
+                /* 16 */arrayOf<Any?>(21       , "WIKI_LINK_HAS_SLASH"          , Severity.ERROR       , "SubDirectory/In Name.md"      , null) /* 16 */,
+                /* 17 */arrayOf<Any?>(29       , "CASE_MISMATCH"                , Severity.WARNING     , "normal file"                  , "Normal-File.md") /* 17 */,
+                /* 18 */arrayOf<Any?>(37       , "LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "#"                            , null) /* 18 */,
+                /* 19 */arrayOf<Any?>(44       , "LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "#33"                          , null) /* 19 */,
+                /* 20 */arrayOf<Any?>(46       , "TARGET_NAME_HAS_ANCHOR"       , Severity.WARNING     , null                           , "anchor-in-name5.md") /* 20 */,
+                /* 21 */arrayOf<Any?>(47       , "LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "anchor-in-name%235"           , null) /* 21 */,
+                /* 22 */arrayOf<Any?>(47       , "TARGET_NAME_HAS_ANCHOR"       , Severity.WARNING     , null                           , "anchor-in-name5.md") /* 22 */,
+                /* 23 */arrayOf<Any?>(48       , "TARGET_NAME_HAS_ANCHOR"       , Severity.WARNING     , null                           , "anchor-in-name5.md") /* 23 */,
+                /* 24 */arrayOf<Any?>(49       , "TARGET_NAME_HAS_ANCHOR"       , Severity.WARNING     , null                           , "anchor-in-name5.md") /* 24 */,
+                /* 25 */arrayOf<Any?>(55       , "LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "In-Name"                      , null) /* 25 */,
+                /* 26 */arrayOf<Any?>(57       , "LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "In-Name"                      , null) /* 26 */,
+                /* 27 */arrayOf<Any?>(64       , "CASE_MISMATCH"                , Severity.ERROR       , "../blob/master/NonWikiFile.md", "../nonwikiFile.md") /* 27 */,
+                /* 28 */arrayOf<Any?>(69       , "TARGET_NOT_UNDER_VCS"         , Severity.WARNING     , null                           , null) /* 28 */,
+                /* 29 */arrayOf<Any?>(70       , "TARGET_NOT_UNDER_VCS"         , Severity.WARNING     , null                           , null) /* 29 */,
+                /* 30 */arrayOf<Any?>(71       , "WIKI_LINK_HAS_ONLY_ANCHOR"    , Severity.ERROR       , "normal file#anchor"           , null) /* 30 */,
+                /* 31 */arrayOf<Any?>(72       , "WIKI_LINK_HAS_DASHES"         , Severity.WEAK_WARNING, "normal file"                  , null) /* 31 */,
+                /* 32 */arrayOf<Any?>(73       , "TARGET_HAS_SPACES"            , Severity.WARNING     , null                           , "Space-In-Name.md") /* 32 */,
+                /* 33 */arrayOf<Any?>(74       , "CASE_MISMATCH"                , Severity.ERROR       , "Test.kt"                      , "test.kt") /* 33 */,
+                /* 34 */arrayOf<Any?>(76       , "LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "#"                            , null) /* 34 */
+                /* @formatter:on */
+            )
+
+            if (cleanData) {
+                val header = arrayOf(
+                        "dataRow",
+                        "inspectionResult",
+                        "severity",
+                        "fixedLinkRef",
+                        "fixedFilePath"
+                )
+
+                printData(data, header)
+            }
+            return data
+        }
     }
 }

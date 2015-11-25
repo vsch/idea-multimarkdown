@@ -16,47 +16,23 @@ package com.vladsch.idea.multimarkdown.util
 
 import java.util.*
 
-internal class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
+class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
     companion object {
-        @JvmStatic val REASON_TARGET_HAS_SPACES = 1
-        @JvmStatic val REASON_CASE_MISMATCH = 2
-        @JvmStatic val REASON_WIKI_PAGEREF_HAS_DASHES = 4
-        @JvmStatic val REASON_NOT_UNDER_WIKI_HOME = 8
-        @JvmStatic val REASON_TARGET_NOT_WIKI_PAGE_EXT = 16
-        @JvmStatic val REASON_NOT_UNDER_SOURCE_WIKI_HOME = 32
-        @JvmStatic val REASON_TARGET_NAME_HAS_ANCHOR = 64
-        @JvmStatic val REASON_TARGET_PATH_HAS_ANCHOR = 128
-        @JvmStatic val REASON_WIKI_PAGEREF_HAS_SLASH = 256
-        @JvmStatic val REASON_WIKI_PAGEREF_HAS_FIXABLE_SLASH = 512
-        @JvmStatic val REASON_WIKI_PAGEREF_HAS_SUBDIR = 1024
-        @JvmStatic val REASON_WIKI_PAGEREF_HAS_ONLY_ANCHOR = 2048
-        @JvmStatic val REASON_WIKI_PAGEREF_HAS_EXT = 4096
-
-        // flags cannot be reused, linkRefs under wiki home have similar errors as wiki links
-        @JvmStatic val REASON_NOT_UNDER_SAME_REPO = 4096
-        @JvmStatic val REASON_MISSING_EXTENSION = 8192
-        @JvmStatic val REASON_CASE_MISMATCH_IN_FILENAME = 16384
-        @JvmStatic val REASON_WANT_NO_EXTENSION = 32768
-
         @JvmStatic val ID_TARGET_HAS_SPACES = "TARGET_HAS_SPACES"
         @JvmStatic val ID_CASE_MISMATCH = "CASE_MISMATCH"
-        @JvmStatic val ID_WIKI_LINK_HAS_DASHES = "INSPECT_WIKI_PAGEREF_HAS_DASHES"
+        @JvmStatic val ID_WIKI_LINK_HAS_DASHES = "WIKI_LINK_HAS_DASHES"
         @JvmStatic val ID_NOT_UNDER_WIKI_HOME = "NOT_UNDER_WIKI_HOME"
         @JvmStatic val ID_TARGET_NOT_WIKI_PAGE_EXT = "TARGET_NOT_WIKI_PAGE_EXT"
         @JvmStatic val ID_NOT_UNDER_SOURCE_WIKI_HOME = "NOT_UNDER_SOURCE_WIKI_HOME"
         @JvmStatic val ID_TARGET_NAME_HAS_ANCHOR = "TARGET_NAME_HAS_ANCHOR"
         @JvmStatic val ID_TARGET_PATH_HAS_ANCHOR = "TARGET_PATH_HAS_ANCHOR"
-        @JvmStatic val ID_WIKI_LINK_HAS_SLASH = "INSPECT_WIKI_PAGEREF_HAS_SLASH"
-        @JvmStatic val ID_WIKI_LINK_HAS_SUBDIR = "INSPECT_WIKI_PAGEREF_HAS_SUBDIR"
-        @JvmStatic val ID_WIKI_LINK_HAS_ONLY_ANCHOR = "INSPECT_WIKI_PAGEREF_HAS_ONLY_ANCHOR"
-        @JvmStatic val ID_LINK_TARGET_WIKI_HAS_EXT = "INSPECT_WIKI_PAGEREF_HAS_EXT"
-
-        // flags cannot be reused, linkRefs under wiki home have similar errors as wiki links
+        @JvmStatic val ID_WIKI_LINK_HAS_SLASH = "WIKI_LINK_HAS_SLASH"
+        @JvmStatic val ID_WIKI_LINK_HAS_SUBDIR = "WIKI_LINK_HAS_SUBDIR"
+        @JvmStatic val ID_WIKI_LINK_HAS_ONLY_ANCHOR = "WIKI_LINK_HAS_ONLY_ANCHOR"
+        @JvmStatic val ID_LINK_TARGETS_WIKI_HAS_EXT = "LINK_TARGETS_WIKI_HAS_EXT"
+        @JvmStatic val ID_LINK_TARGETS_WIKI_HAS_BAD_EXT = "LINK_TARGETS_WIKI_HAS_BAD_EXT"
         @JvmStatic val ID_NOT_UNDER_SAME_REPO = "NOT_UNDER_SAME_REPO"
-        @JvmStatic val ID_MISSING_EXTENSION = "MISSING_EXTENSION"
-        @JvmStatic val ID_CASE_MISMATCH_IN_FILENAME = "CASE_MISMATCH_IN_FILENAME"
-        @JvmStatic val ID_WANT_NO_EXTENSION = "WANT_NO_EXTENSION"
-
+        @JvmStatic val ID_TARGET_NOT_UNDER_VCS = "TARGET_NOT_UNDER_VCS"
     }
 
     internal class Context(val resolver: GitHubLinkResolver, val linkRef: LinkRef, val targetRef: FileRef) {
@@ -66,9 +42,13 @@ internal class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
             resolver.linkAddress(linkRef, targetRef, linkRef.hasExt)
         }
 
+        val linkAddressNoExt: String by lazy() {
+            resolver.linkAddress(linkRef, targetRef, false)
+        }
+
         fun INSPECT_LINK_TARGET_HAS_SPACES() {
             if (targetRef.containsSpaces()) {
-                val severity = if (linkRef is WikiLinkRef) Severity.WARNING else Severity.ERROR
+                val severity = if (linkRef is WikiLinkRef) Severity.WEAK_WARNING else Severity.WARNING
                 results.add(InspectionResult(ID_TARGET_HAS_SPACES, severity, null, targetRef.filePath.replace(' ', '-')))
             }
         }
@@ -76,14 +56,11 @@ internal class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
         fun INSPECT_LINK_CASE_MISMATCH() {
             if (linkRef is WikiLinkRef) {
                 if (resolver.equalLinks(linkRef.filePath, linkAddress, ignoreCase = true) && !resolver.equalLinks(linkRef.filePath, linkAddress, ignoreCase = false)) {
-                    val severity = if (linkRef is WikiLinkRef) Severity.WARNING else Severity.ERROR
-                    results.add(InspectionResult(ID_CASE_MISMATCH, severity, linkAddress, targetRef.path.endWith('/') + linkRef.linkToFile(linkRef.fileName)))
+                    results.add(InspectionResult(ID_CASE_MISMATCH, Severity.WARNING, linkAddress, targetRef.path.endWith('/') + linkRef.linkToFile(linkRef.fileNameNoExt) + targetRef.ext.startWith('.')))
                 }
-
             } else {
                 if (linkRef.filePath.equals(linkAddress, ignoreCase = true) && !linkRef.filePath.equals(linkAddress, ignoreCase = false)) {
-                    val severity = if (linkRef is WikiLinkRef) Severity.WARNING else Severity.ERROR
-                    results.add(InspectionResult(ID_CASE_MISMATCH, severity, linkAddress, targetRef.path.endWith('/') + linkRef.linkToFile(linkRef.fileName)))
+                    results.add(InspectionResult(ID_CASE_MISMATCH, Severity.ERROR, linkAddress, targetRef.path.endWith('/') + linkRef.linkToFile(linkRef.fileNameNoExt) + linkRef.ext.ifEmpty(targetRef.ext).startWith('.')))
                 }
             }
         }
@@ -98,24 +75,31 @@ internal class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
             }
         }
 
-        fun INSPECT_LINK_TARGET_WIKI_HAS_EXT() {
+        fun INSPECT_LINK_TARGETS_WIKI_HAS_EXT() {
             // wiki links with extensions only resolve to files in the main wiki directory and then they resolve to raw unprocessed source
             // explicit links to wiki pages with extension have to specify the full directory path to resolve, again to raw
             // no extension links
             if (targetRef.isWikiPage) {
-                if (linkRef.anchor != null && PathInfo(linkRef.anchor).isWikiPageExt) {
+                val anchorInfo = PathInfo(linkRef.anchor.orEmpty())
+                if (linkRef.anchor != null && anchorInfo.isWikiPageExt) {
                     if (resolver.wasAnchorUsedInMatch(linkRef, targetRef)) {
                         // resolves to raw
-                        results.add(InspectionResult(ID_LINK_TARGET_WIKI_HAS_EXT, Severity.WARNING, linkAddress, null))
+                        results.add(InspectionResult(ID_LINK_TARGETS_WIKI_HAS_EXT, Severity.WARNING, linkAddressNoExt, null))
+                        if (anchorInfo.ext != targetRef.ext) {
+                            results.add(InspectionResult(ID_LINK_TARGETS_WIKI_HAS_BAD_EXT, Severity.ERROR, linkAddress, null))
+                        }
                     }
                 } else if (linkRef.isWikiPageExt && !resolver.wasAnchorUsedInMatch(linkRef, targetRef)) {
                     // resolves to raw
-                    results.add(InspectionResult(ID_LINK_TARGET_WIKI_HAS_EXT, Severity.WARNING, linkAddress, null))
+                    results.add(InspectionResult(ID_LINK_TARGETS_WIKI_HAS_EXT, Severity.WARNING, linkAddressNoExt, null))
+                    if (linkRef.ext != targetRef.ext) {
+                        results.add(InspectionResult(ID_LINK_TARGETS_WIKI_HAS_BAD_EXT, Severity.ERROR, linkAddress, null))
+                    }
                 }
             }
         }
 
-        fun INSPECT_RELATIVE_LINK_REPO() {
+        fun INSPECT_LINK_REPO() {
             if (linkRef !is WikiLinkRef && linkRef.isRelative) {
                 val targetGitHubRepoPath = resolver.projectResolver.vcsRepoBase(targetRef)
                 val sourceGitHubRepoPath = resolver.projectResolver.vcsRepoBase(linkRef.containingFile)
@@ -132,7 +116,13 @@ internal class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
             }
         }
 
-        fun INSPECT_WIKI_INSPECT_LINK_HAS_DASHES() {
+        fun INSPECT_LINK_TARGET_VCS() {
+            if (!resolver.projectResolver.isUnderVcs(targetRef)) {
+                results.add(InspectionResult(ID_TARGET_NOT_UNDER_VCS, Severity.WARNING, null, null))
+            }
+        }
+
+        fun INSPECT_WIKI_LINK_HAS_DASHES() {
             assert (linkRef is WikiLinkRef)
             if (linkRef.filePath.indexOf('-') >= 0) {
                 results.add(InspectionResult(ID_WIKI_LINK_HAS_DASHES, Severity.WEAK_WARNING, linkRef.filePath.replace('-', ' '), null))
@@ -157,9 +147,9 @@ internal class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
             }
         }
 
-        fun INSPECT_WIKI_LINK_HAS_ONLY_ANCHOR() {
+        fun INSPECT_WIKI_LINK_ONLY_HAS_ANCHOR() {
             assert(linkRef is WikiLinkRef)
-            if (linkRef.containingFile.filePath == targetRef.filePath && linkRef.filePath.startsWith("#")) {
+            if (linkRef.filePath.isEmpty() && linkRef.anchor != null) {
                 results.add(InspectionResult(ID_WIKI_LINK_HAS_ONLY_ANCHOR, Severity.ERROR, linkAddress, null))
             }
         }
@@ -184,14 +174,15 @@ internal class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
         context.INSPECT_LINK_TARGET_HAS_SPACES()
         context.INSPECT_LINK_CASE_MISMATCH()
         context.INSPECT_LINK_TARGET_HAS_ANCHOR()
-        context.INSPECT_LINK_TARGET_WIKI_HAS_EXT()
-        context.INSPECT_RELATIVE_LINK_REPO()
+        context.INSPECT_LINK_TARGETS_WIKI_HAS_EXT()
+        context.INSPECT_LINK_REPO()
+        context.INSPECT_LINK_TARGET_VCS()
 
         if (linkRef is WikiLinkRef) {
-            context.INSPECT_WIKI_INSPECT_LINK_HAS_DASHES()
+            context.INSPECT_WIKI_LINK_HAS_DASHES()
             context.INSPECT_WIKI_TARGET_HOME()
             context.INSPECT_WIKI_TARGET_PAGE_EXT()
-            context.INSPECT_WIKI_LINK_HAS_ONLY_ANCHOR()
+            context.INSPECT_WIKI_LINK_ONLY_HAS_ANCHOR()
             context.INSPECT_WIKI_LINK_HAS_SLASH()
         }
 

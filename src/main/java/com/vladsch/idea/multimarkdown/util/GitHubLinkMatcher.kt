@@ -17,7 +17,7 @@ package com.vladsch.idea.multimarkdown.util
 import kotlin.text.Regex
 import kotlin.text.RegexOption
 
-class GitHubLinkRefMatcher(val linkRef: LinkRef, projectBasePath: String? = null, val wantLooseMatch: Boolean = false) {
+class GitHubLinkMatcher(val linkRef: LinkRef, projectBasePath: String? = null, val wantLooseMatch: Boolean = false) {
 
     val projectBasePath = PathInfo.cleanFullPath(projectBasePath)
     val subDirPattern = "(?:.+/)?"

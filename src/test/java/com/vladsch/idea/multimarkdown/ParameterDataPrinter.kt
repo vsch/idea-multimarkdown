@@ -14,6 +14,7 @@
  */
 package com.vladsch.idea.multimarkdown
 
+import com.vladsch.idea.multimarkdown.util.Severity
 import java.lang.reflect.Constructor
 
 fun dataColText(col: Any?, padStart: Int = 0, padEnd: Int = 0): String {
@@ -30,6 +31,7 @@ fun dataColText(col: Any?, padStart: Int = 0, padEnd: Int = 0): String {
                 text = "arrayOf<String>($colText)";
             }
             is Boolean -> text = col.toString()
+            is Severity -> text = "Severity."+col.toString()
             is Int -> text = col.toString()
             is kotlin.reflect.KCallable<*> -> text = "::" + col.toString().substringAfterLast('.')
             else -> text = "\"$col\"";
@@ -40,6 +42,8 @@ fun dataColText(col: Any?, padStart: Int = 0, padEnd: Int = 0): String {
 }
 
 fun printData(data: Collection<Array<Any?>>, header: Array<String>): Unit {
+    if (data.size == 0) return
+
     var colWidths = Array<Int>(data.last().size, { 0 });
 
     for (i in header.indices) {
