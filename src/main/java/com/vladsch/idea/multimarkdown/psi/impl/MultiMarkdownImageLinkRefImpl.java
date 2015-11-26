@@ -53,7 +53,7 @@ public class MultiMarkdownImageLinkRefImpl extends MultiMarkdownNamedElementImpl
 
     @Override
     public String getFileName() {
-        return getName() == null ? "" : getName();
+        return getText() == null ? "" : getText();
     }
 
     @Override

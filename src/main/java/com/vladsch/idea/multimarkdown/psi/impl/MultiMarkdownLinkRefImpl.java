@@ -54,7 +54,7 @@ public class MultiMarkdownLinkRefImpl extends MultiMarkdownNamedElementImpl impl
 
     @Override
     public String getFileName() {
-        return getName() == null ? "" : getName();
+        return new PathInfo(getText() == null ? "" : getText()).withExt(PathInfo.WIKI_PAGE_EXTENSION).getFilePath();
     }
 
     @Override

@@ -54,7 +54,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
     override fun isResolvedTo(linkRef: LinkRef, targetRef: FileRef, withExtForWikiPage: Boolean?, branchOrTag: String?): Boolean {
         assert(linkRef.containingFile == containingFile, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
         val linkRefText = linkAddress(linkRef, targetRef, withExtForWikiPage, branchOrTag)
-        return linkRef.filePath.equals(linkRefText, ignoreCase = true)
+        return linkRef.filePath.equals(linkRefText, ignoreCase = targetRef.isWikiPage && !linkRef.hasExt)
     }
 
     override fun isResolved(linkRef: LinkRef, options: Int, inList: List<PathInfo>?): Boolean {

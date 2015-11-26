@@ -21,6 +21,7 @@
  */
 package com.vladsch.idea.multimarkdown.annotator;
 
+import com.intellij.codeInsight.editorActions.PasteHandler;
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.lang.annotation.AnnotationHolder;
@@ -706,11 +707,12 @@ public class MultiMarkdownAnnotator implements Annotator {
                 state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.unresolved-link-reference"));
             }
 
-            FileReference thisFile = new FileReference(element.getContainingFile());
-            FileReference newFile = new FileReference(thisFile.getPath() + fileName, element.getProject());
-            if (newFile.canCreateFile()) {
-                state.annotator.registerFix(new CreateFileQuickFix(fileName));
-            }
+            PathInfo thisFile = new FileRef(element.getContainingFile());
+            PathInfo newFile = PathInfo.appendParts(thisFile.getPath(), fileName.split("/"));
+
+            //if (newFile.canCreateFile()) {
+                state.annotator.registerFix(new CreateFileQuickFix(newFile.getFilePath(), fileName));
+            //}
         }
     }
 

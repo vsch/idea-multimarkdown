@@ -23,10 +23,8 @@ package com.vladsch.idea.multimarkdown.psi.impl;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLinkRef;
 import com.vladsch.idea.multimarkdown.util.PathInfo;
@@ -35,8 +33,8 @@ import com.vladsch.idea.multimarkdown.util.WikiLinkRef;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-public class MultiMarkdownWikiRefImpl extends MultiMarkdownNamedElementImpl implements MultiMarkdownWikiLinkRef {
-    private static final Logger logger = Logger.getLogger(MultiMarkdownWikiRefImpl.class);
+public class MultiMarkdownWikiLinkRefImpl extends MultiMarkdownNamedElementImpl implements MultiMarkdownWikiLinkRef {
+    private static final Logger logger = Logger.getLogger(MultiMarkdownWikiLinkRefImpl.class);
     protected static final String MISSING_ELEMENT_NAME_SPACE = "wiki-ref::";
 
     @NotNull
@@ -46,7 +44,7 @@ public class MultiMarkdownWikiRefImpl extends MultiMarkdownNamedElementImpl impl
         return ((MultiMarkdownWikiLink) getParent()).getMissingElementNameSpace(MISSING_ELEMENT_NAME_SPACE, false);
     }
 
-    public MultiMarkdownWikiRefImpl(ASTNode node) {
+    public MultiMarkdownWikiLinkRefImpl(ASTNode node) {
         super(node);
     }
 
@@ -62,7 +60,7 @@ public class MultiMarkdownWikiRefImpl extends MultiMarkdownNamedElementImpl impl
 
     @Override
     public String getFileName() {
-        return WikiLinkRef.convertLinkToFile(new PathInfo(getName() == null ? "" : getName()).withExt(PathInfo.WIKI_PAGE_EXTENSION).getFilePath());
+        return WikiLinkRef.convertLinkToFile(new PathInfo(getText() == null ? "" : getText()).withExt(PathInfo.WIKI_PAGE_EXTENSION).getFilePath());
     }
 
     @Override

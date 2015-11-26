@@ -26,7 +26,6 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiReference;
 import com.intellij.refactoring.JavaRefactoringFactory;
 import com.intellij.refactoring.JavaRenameRefactoring;
 import com.intellij.usageView.UsageInfo;
@@ -34,31 +33,24 @@ import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownImageLinkRef;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkRef;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLinkRef;
-import com.vladsch.idea.multimarkdown.util.PathInfo;
-import com.vladsch.idea.multimarkdown.util.FileReference;
-import com.vladsch.idea.multimarkdown.util.FileReferenceLinkGitHubRules;
+import com.vladsch.idea.multimarkdown.util.*;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.HashSet;
 
 import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement.*;
 
 class RenameFileAndReTargetQuickFix extends BaseIntentionAction {
-    private String name;
+    private String newFileName;
     private PsiFile targetFile;
     private MultiMarkdownNamedElement linkRefElement;
     private int renameFlags;
 
-    RenameFileAndReTargetQuickFix(PsiFile targetFile, String newName, MultiMarkdownNamedElement linkRefElement) {
-        this(targetFile, newName, linkRefElement, RENAME_KEEP_TEXT | RENAME_KEEP_RENAMED_TEXT | RENAME_KEEP_ANCHOR | RENAME_KEEP_TITLE);
+    RenameFileAndReTargetQuickFix(PsiFile targetFile, String newFileName, MultiMarkdownNamedElement linkRefElement) {
+        this(targetFile, newFileName, linkRefElement, RENAME_KEEP_TEXT | RENAME_KEEP_RENAMED_TEXT | RENAME_KEEP_ANCHOR | RENAME_KEEP_TITLE);
     }
 
-    RenameFileAndReTargetQuickFix(PsiFile targetFile, String newName, MultiMarkdownNamedElement linkRefElement, int renameFlags) {
-        this.name = newName;
+    RenameFileAndReTargetQuickFix(PsiFile targetFile, String newFileName, MultiMarkdownNamedElement linkRefElement, int renameFlags) {
+        this.newFileName = newFileName;
         this.targetFile = targetFile;
         this.linkRefElement = linkRefElement;
         this.renameFlags = renameFlags;
@@ -68,7 +60,7 @@ class RenameFileAndReTargetQuickFix extends BaseIntentionAction {
     @Override
     public String getText() {
         PathInfo filePathInfo = new PathInfo(targetFile.getVirtualFile().getPath());
-        return MultiMarkdownBundle.message("quickfix.wikilink.rename-page-retarget", filePathInfo.getFileNameWithAnchor(), name);
+        return MultiMarkdownBundle.message("quickfix.wikilink.rename-page-retarget", filePathInfo.getFileName(), newFileName);
     }
 
     @NotNull
@@ -87,12 +79,12 @@ class RenameFileAndReTargetQuickFix extends BaseIntentionAction {
         ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
-                renameFile(project, targetFile, name, linkRefElement);
+                renameFileAndReTarget(project, targetFile, newFileName, renameFlags);
             }
         });
     }
 
-    private void renameFile(final Project project, final PsiFile psiFile, final String fileName, final MultiMarkdownNamedElement linkRefElement) {
+    private static void renameFileAndReTarget(final Project project, final PsiFile targetFile, final String newFileName, final int renameFlags) {
         final MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
         if (projectComponent != null) {
             new WriteCommandAction.Simple(project) {
@@ -102,78 +94,10 @@ class RenameFileAndReTargetQuickFix extends BaseIntentionAction {
 
                     try {
                         final JavaRefactoringFactory factory = JavaRefactoringFactory.getInstance(project);
-                        JavaRenameRefactoring rename = (JavaRenameRefactoring) factory.createRename(psiFile, fileName, true, true);
 
+                        // RELEASE: make sure the change of not searching comments works
+                        JavaRenameRefactoring rename = (JavaRenameRefactoring) factory.createRename(targetFile, newFileName, false, true);
                         UsageInfo[] usages = rename.findUsages();
-
-                        // now get list of links to retarget, get the root element for all of these
-                        PsiReference reference = linkRefElement.getReference();
-                        MultiMarkdownNamedElement rootElement;
-                        PathInfo newFileInfo = new PathInfo(fileName);
-                        HashSet<UsageInfo> realUsages = null;
-                        JavaRenameRefactoring renameLinkRef = null;
-                        UsageInfo[] linkRefUsages = null;
-                        boolean withAnchor = (renameFlags & RENAME_KEEP_ANCHOR) == 0;
-                        boolean withExt = false;
-
-                        if (reference != null && (rootElement = (MultiMarkdownNamedElement) reference.resolve()) != null) {
-                            String linkRename = newFileInfo.getFileName();
-                            String oldLinkName = rootElement.getName();
-                            if (linkRefElement instanceof MultiMarkdownWikiLinkRef) {
-                                linkRename = newFileInfo.getFileNameAsWikiRef();
-                            } else if (linkRefElement instanceof MultiMarkdownImageLinkRef) {
-                                withExt = true;
-                                withAnchor = false;
-                            } else if (linkRefElement instanceof MultiMarkdownLinkRef) {
-                                MultiMarkdownLinkRef linkRefElem = (MultiMarkdownLinkRef) linkRefElement;
-                                PathInfo renameElementInfo = new PathInfo((withAnchor ? linkRefElem.getFileNameWithAnchor() : linkRefElem.getFileName()));
-                                withExt = withAnchor ? renameElementInfo.hasWithAnchorExt() : renameElementInfo.hasExt();
-                                linkRename = withExt ? newFileInfo.getFileName() : newFileInfo.getFileNameNoExt();
-                                oldLinkName = withExt ? renameElementInfo.getFilePath() : renameElementInfo.getFilePathWithAnchorNoExt();
-                            }
-
-                            renameLinkRef = (JavaRenameRefactoring) factory.createRename(rootElement, linkRename, true, true);
-                            linkRefUsages = renameLinkRef.findUsages();
-                            realUsages = new HashSet<UsageInfo>(linkRefUsages.length);
-                            String gitHubRepoPath = new FileReference(linkRefElement.getContainingFile()).getGitHubRepoPath();
-
-                            // see if all the usages will resolve to this file if not then leave them out
-                            if (linkRefElement instanceof MultiMarkdownWikiLinkRef) {
-                                for (UsageInfo usageInfo : linkRefUsages) {
-                                    PsiFile sourceFile = usageInfo.getFile();
-                                    if (sourceFile != null) {
-                                        FileReferenceLinkGitHubRules fileReferenceLink = new FileReferenceLinkGitHubRules(sourceFile, psiFile);
-                                        String pageRef = withAnchor ? fileReferenceLink.getWikiPageRefWithAnchor() : fileReferenceLink.getWikiPageRef();
-                                        if (fileReferenceLink.getSourceReference().isWikiPage() && fileReferenceLink.isWikiAccessible() && PathInfo.equivalentWikiRef(true, true, pageRef, oldLinkName)) {
-                                            // this one's a keeper
-                                            realUsages.add(usageInfo);
-                                        }
-                                    }
-                                }
-                            } else if (linkRefElement instanceof MultiMarkdownLinkRef) {
-                                for (UsageInfo usageInfo : linkRefUsages) {
-                                    PsiFile sourceFile = usageInfo.getFile();
-                                    if (sourceFile != null) {
-                                        FileReferenceLinkGitHubRules fileReferenceLink = new FileReferenceLinkGitHubRules(sourceFile, psiFile);
-                                        if (gitHubRepoPath == null || fileReferenceLink.getSourceReference().getGitHubRepoPath("").startsWith(gitHubRepoPath)) {
-                                            String linkRef = withAnchor ? (withExt ? fileReferenceLink.getLinkRefWithAnchor() : fileReferenceLink.getLinkRefWithAnchorNoExt())
-                                                    : (withExt ? fileReferenceLink.getLinkRef() : fileReferenceLink.getLinkRefNoExt());
-                                            if (PathInfo.equivalent(true, false, linkRef, oldLinkName)) {
-                                                // this one's a keeper
-                                                realUsages.add(usageInfo);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        // now do refactoring of links
-                        if (realUsages != null && realUsages.size() > 0) {
-                            renameLinkRef.doRefactoring(realUsages.size() == linkRefUsages.length ? linkRefUsages : realUsages.toArray(new UsageInfo[realUsages.size()]));
-                        }
-
-                        // then the file
                         rename.doRefactoring(usages);
                     } finally {
                         projectComponent.popRefactoringRenameFlags();

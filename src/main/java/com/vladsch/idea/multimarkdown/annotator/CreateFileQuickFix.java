@@ -29,23 +29,26 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
-import com.vladsch.idea.multimarkdown.util.FileReference;
+import com.vladsch.idea.multimarkdown.util.FileRef;
+import com.vladsch.idea.multimarkdown.util.PathInfo;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 
 class CreateFileQuickFix extends BaseIntentionAction {
-    private String name;
+    private String filePath;
+    private String displayPath;
 
-    CreateFileQuickFix(String name) {
-        this.name = name;
+    CreateFileQuickFix(@NotNull String filePath, @Nullable String displayFilePath) {
+        this.filePath = filePath;
+        this.displayPath = displayFilePath != null ? displayFilePath : filePath;
     }
 
     @NotNull
     @Override
     public String getText() {
-        return MultiMarkdownBundle.message("quickfix.wikilink.create-page", name);
+        return MultiMarkdownBundle.message("quickfix.wikilink.create-page", displayPath);
     }
 
     @NotNull
@@ -60,23 +63,22 @@ class CreateFileQuickFix extends BaseIntentionAction {
     }
 
     @Override
-    public void invoke(@NotNull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+    public void invoke(@NotNull final Project project, final Editor editor, final PsiFile psiFile) throws IncorrectOperationException {
         ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
-                createWikiFile(project, file, name);
+                createWikiFile(project, editor, psiFile, filePath );
             }
         });
     }
 
-    private void createWikiFile(final Project project, final PsiFile file, final String fileName) {
+    private void createWikiFile(final Project project, Editor editor, final PsiFile psiFile, final String filePath) {
         new WriteCommandAction.Simple(project) {
             @Override
             public void run() {
                 //FileEditorManager.getInstance().openFile();
-                FileReference thisFile = new FileReference(file);
-                FileReference newFile = new FileReference(thisFile.getPath() + fileName, project);
-                VirtualFile parentDir = newFile.getVirtualParent();
+                FileRef newFile = new FileRef(filePath);
+                VirtualFile parentDir = new PathInfo(newFile.getPath()).virtualFile();
                 if (parentDir != null) {
                     try {
                         VirtualFile quickFixFile = parentDir.createChildData(this.getClass().toString(), newFile.getFileName());

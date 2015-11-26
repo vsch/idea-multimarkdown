@@ -53,7 +53,7 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
-import com.vladsch.idea.multimarkdown.util.ReferenceChangeListener;
+import com.vladsch.idea.multimarkdown.util.*;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -147,6 +147,8 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     protected boolean htmlWorkerRunning;
 
     protected String fireBugJS;
+    private final VirtualFile containingFile;
+    private GitHubLinkResolver resolver;
 
     public static boolean isShowModified() {
         return MultiMarkdownGlobalSettings.getInstance().showHtmlTextAsModified.getValue();
@@ -255,6 +257,8 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         this.document = doc;
         this.project = project;
         this.isWikiDocument = isWikiDocument(document);
+        containingFile = FileDocumentManager.getInstance().getFile(document);
+        resolver = containingFile == null ? null : new GitHubLinkResolver(containingFile, project);
 
         // Listen to the document modifications.
         this.document.addDocumentListener(new DocumentAdapter() {
@@ -453,9 +457,14 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                     String src = imgNode.getSrc();
                     if (!src.startsWith("http://") && !src.startsWith("https://") && !src.startsWith("ftp://") && !src.startsWith("file://")) {
                         // relative to document, change it to absolute file://
-                        String resolvedLink = MultiMarkdownPathResolver.resolveImageURL(project, document, src);
-                        if (resolvedLink != null) {
-                            imgNode.setSrc(resolvedLink);
+                        if (!project.isDisposed() && containingFile != null && resolver != null) {
+                            ImageLinkRef linkRef = new ImageLinkRef(new FileRef(containingFile), src, null);
+                            PathInfo resolvedTarget = resolver.resolve(linkRef, LinkResolver.ONLY_URI, null);
+
+                            assert resolvedTarget == null || resolvedTarget instanceof LinkRef && linkRef.isURI() : "Expected URI LinkRef, got " + linkRef;
+                            if (resolvedTarget != null) {
+                                imgNode.setSrc(resolvedTarget.getFilePath());
+                            }
                         }
                     }
                 }

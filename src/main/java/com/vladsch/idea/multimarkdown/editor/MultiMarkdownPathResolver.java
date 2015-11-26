@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2011-2014 Julien Nicoulaud <julien.nicoulaud@gmail.com>
  * Copyright (c) 2015 Vladimir Schneider <vladimir.schneider@gmail.com>
  *
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -25,15 +24,10 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.vfs.VirtualFileSystem;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.search.GlobalSearchScope;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.util.*;
@@ -42,67 +36,21 @@ import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.*;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 public class MultiMarkdownPathResolver {
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownPathResolver.class);
 
-    /**
-     * Not to be instantiated.
-     */
     private MultiMarkdownPathResolver() {
-        // no op
-    }
 
-    /**
-     * Interprets <var>target</var> as a class reference.
-     *
-     * @param project the project to look for files in
-     * @param target  from which a VirtualFile is sought
-     * @return VirtualFile or null
-     */
-    public static VirtualFile resolveClassReference(@NotNull final Project project, @NotNull final String target) {
-        try {
-            if (!DumbService.isDumb(project)) {
-                return ApplicationManager.getApplication().runReadAction(new Computable<VirtualFile>() {
-                    @Override
-                    public VirtualFile compute() {
-                        try {
-                            final PsiClass classpathResource = JavaPsiFacade.getInstance(project).findClass(target, GlobalSearchScope.projectScope(project));
-                            if (classpathResource != null) {
-                                return classpathResource.getContainingFile().getVirtualFile();
-                            }
-                        } catch (NoClassDefFoundError ignored) {
-                            // API might not be available on all IntelliJ platform IDEs
-                        }
-                        return null;
-                    }
-                });
-            }
-        } catch (NoClassDefFoundError ignored) {
-
-        }
-        return null;
     }
 
     public static boolean isWikiDocument(@NotNull final Document document) {
         VirtualFile file = FileDocumentManager.getInstance().getFile(document);
         return file != null && new FileRef(file).isWikiPage();
-    }
-
-    @Nullable
-    public static String resolveImageURL(@NotNull final Project project, @NotNull final Document document, @NotNull String href) {
-        if (project.isDisposed()) return null;
-
-        VirtualFile containingFile = FileDocumentManager.getInstance().getFile(document);
-        if (containingFile == null) return null;
-
-        GitHubLinkResolver resolver = new GitHubLinkResolver(containingFile, project);
-        ImageLinkRef linkRef = new ImageLinkRef(new FileRef(containingFile), href, null);
-        PathInfo resolvedTarget = resolver.resolve(linkRef, LinkResolver.ONLY_URI, null);
-        assert resolvedTarget == null || resolvedTarget instanceof LinkRef && linkRef.isURI():"Expected URI LinkRef, got " + linkRef;
-        return resolvedTarget == null ? null : resolvedTarget.getFilePath();
     }
 
     public static void openLink(@NotNull String href) {

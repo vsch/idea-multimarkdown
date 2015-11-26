@@ -144,7 +144,7 @@ public interface MultiMarkdownTypes {
             } else if (type == WIKI_LINK) {
                 return new MultiMarkdownWikiLinkImpl(node);
             } else if (type == WIKI_LINK_REF) {
-                return new MultiMarkdownWikiRefImpl(node);
+                return new MultiMarkdownWikiLinkRefImpl(node);
             } else if (type == WIKI_LINK_REF_ANCHOR) {
                 return new MultiMarkdownWikiLinkAnchorImpl(node);
             } else if (type == WIKI_LINK_TEXT) {

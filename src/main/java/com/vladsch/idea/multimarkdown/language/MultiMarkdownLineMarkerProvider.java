@@ -59,6 +59,7 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
             //        .accessibleWikiPageFiles()
             //        ;
 
+            // incompleteCode in our case means looseMatch criteria, otherwise precise match as per repo rules
             ResolveResult[] results = psiReference != null ? ((MultiMarkdownReference) psiReference).multiResolve(false) : null;
             if (results != null && results.length > 0) {
                 final PsiFile containingFile = element.getContainingFile();

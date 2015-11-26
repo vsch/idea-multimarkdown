@@ -142,8 +142,12 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
     open fun append(parts: Sequence<String>): PathInfo = PathInfo.appendParts(fullPath, parts, construct = ::PathInfo)
 
     open fun projectFileRef(project: Project): ProjectFileRef? {
-        val virtualFile = if (isAbsolute && isLocal) null else VirtualFileManager.getInstance().findFileByUrl(fullPath)
+        val virtualFile = if (!isAbsolute || !isLocal) null else VirtualFileManager.getInstance().findFileByUrl(fullPath)
         return if (virtualFile == null) null else ProjectFileRef(virtualFile, project);
+    }
+
+    open fun virtualFile(): VirtualFile? {
+        return if (!isAbsolute || !isLocal) null else VirtualFileManager.getInstance().findFileByUrl(fullPath)
     }
 
     companion object {
