@@ -61,18 +61,14 @@ open class LinkRef(val containingFile: FileRef, fullPath: String, anchorTxt: Str
         }
 
     // convert file name to link, usually url encode
-    open fun fileToLink(linkAddress: String): String = linkAddress
+    open fun fileToLink(linkAddress: String): String = convertFileToLink(linkAddress)
 
     // convert link to file name, usually url decode
-    open fun linkToFile(linkAddress: String): String = linkAddress
+    open fun linkToFile(linkAddress: String): String = convertLinkToFile(linkAddress)
 
     companion object {
         @JvmStatic fun parseLinkRef(containingFile: FileRef, fullPath: String): LinkRef {
-            return parseLinkRef(containingFile, fullPath, ::FileLinkRef)
-        }
-
-        @JvmStatic fun parseFileLinkRef(containingFile: FileRef, fullPath: String): LinkRef {
-            return parseLinkRef(containingFile, fullPath, ::FileLinkRef)
+            return parseLinkRef(containingFile, fullPath, ::LinkRef)
         }
 
         @JvmStatic fun parseWikiLinkRef(containingFile: FileRef, fullPath: String): LinkRef {
@@ -84,7 +80,7 @@ open class LinkRef(val containingFile: FileRef, fullPath: String, anchorTxt: Str
         }
 
         @JvmStatic fun <T : LinkRef> parseLinkRef(containingFile: FileRef, fullPath: String, linkRefType: (containingFile: FileRef, linkRef: String, anchor: String?) -> T): LinkRef {
-            var linkRef = fullPath;
+            var linkRef = PathInfo.cleanFullPath(fullPath);
             var anchor: String? = null;
 
             var anchorPos = linkRef.indexOf('#')
@@ -93,8 +89,7 @@ open class LinkRef(val containingFile: FileRef, fullPath: String, anchorTxt: Str
                 linkRef = if (anchorPos == 0) EMPTY_STRING else linkRef.substring(0, anchorPos)
             }
 
-            return if (isURI(linkRef) && !isLocal(linkRef)) UrlLinkRef(containingFile, linkRef, anchor)
-            else linkRefType(containingFile, linkRef, anchor)
+            return linkRefType(containingFile, linkRef, anchor)
         }
 
         @JvmStatic fun encodeLink(linkAddress: String, charMap: Map<String, String>): String {
@@ -112,37 +107,7 @@ open class LinkRef(val containingFile: FileRef, fullPath: String, anchorTxt: Str
             }
             return result
         }
-    }
-}
 
-open class UrlLinkRef(containingFile: FileRef, fullPath: String, anchor: String?) : LinkRef(containingFile, fullPath, anchor) {
-    override val linkExtensions: Array<String>
-        get() = Array(0, { "" })
-
-    override val isAbsolute: Boolean
-        get() = true
-
-    override val isRelative: Boolean
-        get() = false
-
-    override val isURI: Boolean
-        get() = true
-
-    open fun virtualFileRef(project: Project): ProjectFileRef? {
-        val virtualFile = if (isLocal) null else VirtualFileManager.getInstance().findFileByUrl(fullPath)
-        return if (virtualFile == null) null else ProjectFileRef(virtualFile, project);
-    }
-}
-
-// this is a generic file link
-open class FileLinkRef(containingFile: FileRef, fullPath: String, anchor: String?) : LinkRef(containingFile, fullPath, anchor) {
-    // convert file name to link, usually url encode
-    override fun fileToLink(linkAddress: String): String = convertFileToLink(linkAddress)
-
-    // convert link to file name, usually url decode
-    override fun linkToFile(linkAddress: String): String = convertLinkToFile(linkAddress)
-
-    companion object {
         @JvmStatic @JvmField
         val fileToLinkMap = mapOf<String, String>(
                 Pair(" ", "%20"),
@@ -158,20 +123,20 @@ open class FileLinkRef(containingFile: FileRef, fullPath: String, anchor: String
         @JvmStatic fun convertLinkToFile(linkAddress: String): String = LinkRef.decodeLink(linkAddress, fileToLinkMap)
 
         // CAUTION: just copies link address without figuring out whether it will resolve as is
-        @JvmStatic fun from(fileLinkRef: FileLinkRef): FileLinkRef? {
-            return when (fileLinkRef) {
+        @JvmStatic fun from(linkRef: LinkRef): LinkRef? {
+            return when (linkRef) {
                 is ImageLinkRef ->
-                    FileLinkRef(fileLinkRef.containingFile, if (fileLinkRef.filePath.isEmpty()) fileLinkRef.containingFile.fileNameNoExt else fileLinkRef.fileName, fileLinkRef.anchor)
+                    LinkRef(linkRef.containingFile, if (linkRef.filePath.isEmpty()) linkRef.containingFile.fileNameNoExt else linkRef.fileName, linkRef.anchor)
                 is WikiLinkRef ->
-                    FileLinkRef(fileLinkRef.containingFile, if (fileLinkRef.filePath.isEmpty()) fileLinkRef.containingFile.fileNameNoExt else WikiLinkRef.convertLinkToFile(fileLinkRef.fileName), fileLinkRef.anchor)
-                else -> fileLinkRef
+                    LinkRef(linkRef.containingFile, if (linkRef.filePath.isEmpty()) linkRef.containingFile.fileNameNoExt else WikiLinkRef.convertLinkToFile(linkRef.fileName), linkRef.anchor)
+                else -> linkRef
             }
         }
     }
 }
 
 // this is a [[]] style link ref
-open class WikiLinkRef(containingFile: FileRef, fullPath: String, anchor: String?) : FileLinkRef(containingFile, fullPath, anchor) {
+open class WikiLinkRef(containingFile: FileRef, fullPath: String, anchor: String?) : LinkRef(containingFile, fullPath, anchor) {
     override val linkExtensions: Array<String>
         get() = WIKI_PAGE_EXTENSIONS
 
@@ -189,31 +154,31 @@ open class WikiLinkRef(containingFile: FileRef, fullPath: String, anchor: String
         @JvmStatic fun convertLinkToFile(linkAddress: String): String = linkAddress.replace(' ', '-')
 
         // CAUTION: just copies link address without figuring out whether it will resolve as is
-        @JvmStatic fun from(fileLinkRef: FileLinkRef): WikiLinkRef? {
-            return when (fileLinkRef) {
+        @JvmStatic fun from(linkRef: LinkRef): WikiLinkRef? {
+            return when (linkRef) {
                 is ImageLinkRef -> null
-                is WikiLinkRef -> fileLinkRef
+                is WikiLinkRef -> linkRef
                 else -> {
-                    WikiLinkRef(fileLinkRef.containingFile, convertFileToLink(if (fileLinkRef.filePath.isEmpty()) fileLinkRef.containingFile.fileNameNoExt else fileLinkRef.fileName), fileLinkRef.anchor)
+                    WikiLinkRef(linkRef.containingFile, convertFileToLink(if (linkRef.filePath.isEmpty()) linkRef.containingFile.fileNameNoExt else linkRef.fileName), linkRef.anchor)
                 }
             }
         }
     }
 }
 
-open class ImageLinkRef(containingFile: FileRef, fullPath: String, anchor: String?) : FileLinkRef(containingFile, fullPath, anchor) {
+open class ImageLinkRef(containingFile: FileRef, fullPath: String, anchor: String?) : LinkRef(containingFile, fullPath, anchor) {
     override val linkExtensions: Array<String>
         get() = IMAGE_EXTENSIONS
 
     // CAUTION: just copies link address without figuring out whether it will resolve as is
     companion object {
-        @JvmStatic fun from(fileLinkRef: FileLinkRef): FileLinkRef? {
-            return when (fileLinkRef) {
-                is ImageLinkRef -> fileLinkRef
+        @JvmStatic fun from(linkRef: LinkRef): LinkRef? {
+            return when (linkRef) {
+                is ImageLinkRef -> linkRef
                 is WikiLinkRef -> null
                 else ->
                     // TODO: add validation for type of file and extension and return null when it is not possible to convert
-                    ImageLinkRef(fileLinkRef.containingFile, if (fileLinkRef.filePath.isEmpty()) fileLinkRef.containingFile.fileName else fileLinkRef.fileName, fileLinkRef.anchor)
+                    ImageLinkRef(linkRef.containingFile, if (linkRef.filePath.isEmpty()) linkRef.containingFile.fileName else linkRef.fileName, linkRef.anchor)
             }
         }
     }

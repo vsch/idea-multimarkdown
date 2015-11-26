@@ -55,76 +55,6 @@ public class MultiMarkdownPathResolver {
         // no op
     }
 
-    @Nullable
-    public static FileReference resolveRelativeLink(@Nullable FileReferenceList fileReferenceList, @NotNull FileReference documentFileReference, @Nullable GitHubRepo gitHubRepo, @NotNull String target, boolean isWikiLink, boolean resolveExternal) {
-
-        // need to resolve using same code as links
-        if (target.startsWith("./")) target = target.substring(2);
-
-        if (PathInfo.isAbsoluteReference(target)) return new FileReference(target);
-
-        PathInfo linkRefInfo = new PathInfo(target);
-        FileReferenceList fileList;
-
-        if (fileReferenceList == null && documentFileReference.getProject() == null) return null;
-
-        if (isWikiLink) {
-            fileList = (fileReferenceList != null ? new FileReferenceListQuery(fileReferenceList) : new FileReferenceListQuery(documentFileReference.getProject()))
-                    .caseInsensitive()
-                    .gitHubWikiRules()
-                    .ignoreLinkRefExtension(!(linkRefInfo.hasWithAnchorExtWithDot() && linkRefInfo.hasWithAnchorWikiPageExt()))
-                    .keepLinkRefAnchor()
-                    .linkRefIgnoreSubDirs()
-                    .spaceDashEqual()
-                    .wantMarkdownFiles()
-                    .inSource(documentFileReference)
-                    .matchWikiRef(linkRefInfo.getFileNameWithAnchorAsWikiRef())
-                    .all()
-                    .postMatchFilter(linkRefInfo.getFileNameWithAnchorAsWikiRef(), true)
-                    .sorted();
-        } else {
-            fileList = (fileReferenceList != null ? new FileReferenceListQuery(fileReferenceList) : new FileReferenceListQuery(documentFileReference.getProject()))
-                    .caseInsensitive()
-                    .gitHubWikiRules()
-                    .keepLinkRefAnchor()
-                    .linkRefIgnoreSubDirs()
-                    .sameGitHubRepo()
-                    .wantMarkdownFiles()
-                    .inSource(documentFileReference)
-                    .matchLinkRef(linkRefInfo.getFilePathWithAnchorNoExt(), false)
-                    .all()
-                    .postMatchFilter(linkRefInfo.getFilePath(), false)
-                    .sorted();
-        }
-
-        if (fileList.size() > 0) {
-            // see if can get github href
-            FileReference fileReference = fileList.getAt(0);
-            if (!resolveExternal) {
-                return fileReference;
-            }
-
-            boolean anchorPartOfName = fileReference.isLinkRefAnchorPartOfName(linkRefInfo);
-            String anchor = anchorPartOfName ? "" : linkRefInfo.getAnchor();
-            boolean withExt = !fileReference.isWikiPage() || (!anchorPartOfName ? linkRefInfo.hasExt() : linkRefInfo.hasWithAnchorExt());
-
-            String gitHubLink = fileReference.getGitHubFileURL(withExt, anchor);
-
-            // does not resolve on GitHub
-            if (gitHubLink != null && !isWikiLink && anchorPartOfName) return null;
-
-            return gitHubLink == null ? fileReference : new FileReference(gitHubLink);
-        }
-
-        target = linkRefInfo.getFilePath();
-
-        if (PathInfo.endsWith(target, PathInfo.GITHUB_LINKS)) {
-            FileReference resolvedTarget = documentFileReference.resolveExternalLinkRef(target, true, false);
-            return resolvedTarget;
-        }
-        return null;
-    }
-
     /**
      * Interprets <var>target</var> as a class reference.
      *
@@ -161,80 +91,18 @@ public class MultiMarkdownPathResolver {
         return file != null && new FileRef(file).isWikiPage();
     }
 
-    public static Object resolveLocalLink(@NotNull final Project project, @NotNull final Document document, @NotNull String hrefEnc, final boolean withExternal) {
+    @Nullable
+    public static String resolveImageURL(@NotNull final Project project, @NotNull final Document document, @NotNull String href) {
         if (project.isDisposed()) return null;
 
-        String hrefDec = hrefEnc;
-        try {
-            hrefDec = URLDecoder.decode(hrefEnc, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return null;
-        }
+        VirtualFile containingFile = FileDocumentManager.getInstance().getFile(document);
+        if (containingFile == null) return null;
 
-        int posHash;
-        if ((posHash = hrefDec.indexOf('#')) > 0) {
-            hrefDec = hrefDec.substring(0, posHash);
-        }
-
-        final String href = hrefDec;
-
-        if (!PathInfo.isExternalReference(href)) {
-            final Object[] foundFile = { null };
-            final Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    VirtualFile virtualTarget = null;
-
-                    if (href.startsWith("file:")) {
-                        try {
-                            URL target = new URL(href);
-                            VirtualFileSystem virtualFileSystem = VirtualFileManager.getInstance().getFileSystem(target.getProtocol());
-                            virtualTarget = virtualFileSystem == null ? null : virtualFileSystem.findFileByPath(target.getFile());
-                        } catch (MalformedURLException ignored) {
-                        }
-                    }
-
-                    if ((virtualTarget == null || !virtualTarget.exists())) {
-                        VirtualFile file = FileDocumentManager.getInstance().getFile(document);
-                        if (file != null) {
-                            FileReference documentFileReference = new FileReference(file.getPath(), project);
-                            VirtualFile parent = file.getParent();
-                            if (parent != null) {
-                                // resolve without wiki links
-                                FileReference resolvedTarget = documentFileReference.resolveLinkRef(href, false);
-                                virtualTarget = resolvedTarget == null || resolvedTarget.isExternalReference() ? null : resolvedTarget.getVirtualFile();
-
-                                if (virtualTarget == null && resolvedTarget != null) {
-                                    // resolve with local wiki links, try standard markdown extensions
-                                    resolvedTarget = documentFileReference.resolveLinkRef(href, true);
-                                    virtualTarget = resolvedTarget == null || resolvedTarget.isExternalReference() ? null : resolvedTarget.getVirtualFile(PathInfo.WIKI_PAGE_EXTENSIONS);
-
-                                    if (virtualTarget == null && resolvedTarget != null && withExternal) {
-                                        // resolve with external wiki local links
-                                        resolvedTarget = documentFileReference.resolveExternalLinkRef(href, true, false);
-                                        if (resolvedTarget != null && resolvedTarget.isExternalReference()) {
-                                            foundFile[0] = resolvedTarget.getFilePath();
-                                            return;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    foundFile[0] = virtualTarget;
-                }
-            };
-
-            // RELEASE: make sure this works on older versions
-            //Application application = ApplicationManager.getApplication();
-            //application.runReadAction(runnable);
-            runnable.run();
-            return foundFile[0];
-        }
-
-        return null;
+        GitHubLinkResolver resolver = new GitHubLinkResolver(containingFile, project);
+        ImageLinkRef linkRef = new ImageLinkRef(new FileRef(containingFile), href, null);
+        PathInfo resolvedTarget = resolver.resolve(linkRef, LinkResolver.ONLY_URI, null);
+        assert resolvedTarget == null || resolvedTarget instanceof LinkRef && linkRef.isURI():"Expected URI LinkRef, got " + linkRef;
+        return resolvedTarget == null ? null : resolvedTarget.getFilePath();
     }
 
     public static void openLink(@NotNull String href) {
@@ -273,7 +141,7 @@ public class MultiMarkdownPathResolver {
     }
 
     public static void launchExternalLink(@NotNull final Project project, @NotNull final String href) {
-        if (PathInfo.isExternalReference(href)) {
+        if (PathInfo.isExternal(href)) {
             openLink(href);
         } else if (href.startsWith("file://")) {
             try {
@@ -294,26 +162,5 @@ public class MultiMarkdownPathResolver {
             } catch (MalformedURLException ignored) {
             }
         }
-    }
-
-    /**
-     * Interprets <var>target</var> as a path relative to the given document.
-     *
-     * @param document the document
-     * @param target   relative path from which a VirtualFile is sought
-     * @return VirtualFile or null
-     */
-    @Nullable
-    public static String resolveExternalReference(@NotNull Project project, @NotNull Document document, @NotNull String target) {
-        FileReference resolvedTarget = null;
-        VirtualFile file = FileDocumentManager.getInstance().getFile(document);
-
-        if (file != null) {
-            FileReference documentFileReference = new FileReference(file.getPath(), project);
-
-            // include wiki links in resolution
-            resolvedTarget = documentFileReference.resolveExternalLinkRef(target, true, false);
-        }
-        return resolvedTarget == null ? null : resolvedTarget.getFilePathWithAnchor();
     }
 }

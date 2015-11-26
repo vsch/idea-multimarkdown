@@ -124,7 +124,7 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
                                     } else if (elementType == WIKI_LINK_REF) {
                                         linkRef = new WikiLinkRef(containingFile, "", null);
                                     } else {
-                                        linkRef = new FileLinkRef(containingFile, "", null);
+                                        linkRef = new LinkRef(containingFile, "", null);
                                     }
 
                                     GitHubLinkResolver resolver = new GitHubLinkResolver(containingFile);

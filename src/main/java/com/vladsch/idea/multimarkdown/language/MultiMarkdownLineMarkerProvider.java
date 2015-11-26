@@ -67,7 +67,7 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
                     @Nullable
                     @Override
                     public String fun(PsiElement element) {
-                        return new GitHubLinkResolver(containingFile).fileLinkAddress(new FileRef((PsiFile) element), null, null, null);
+                        return new GitHubLinkResolver(containingFile).linkAddress(new FileRef((PsiFile) element), null, null, null);
                     }
                 };
 
@@ -107,7 +107,7 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
                             @Override
                             public String getElementText(PsiElement element) {
                                 if (element instanceof MultiMarkdownFile) {
-                                    return new GitHubLinkResolver(containingFile).fileLinkAddress(new FileRef((PsiFile) element), null, null, null);
+                                    return new GitHubLinkResolver(containingFile).linkAddress(new FileRef((PsiFile) element), null, null, null);
                                 }
 
                                 return "<unknown>";

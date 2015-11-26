@@ -100,7 +100,7 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
             // always activate spelling suggestions for renaming wiki page refs
             SuggestionList suggestionList = new SuggestionList(element.getProject());
             FileRef fileRef = new FileRef(element.getContainingFile());
-            LinkRef linkRef = new FileLinkRef(fileRef, "", null);
+            LinkRef linkRef = new LinkRef(fileRef, "", null);
 
             GitHubLinkResolver resolver = new GitHubLinkResolver(element.getContainingFile());
             List<PathInfo> linkRefs = resolver.multiResolve(linkRef, LinkResolver.LOOSE_MATCH, null);

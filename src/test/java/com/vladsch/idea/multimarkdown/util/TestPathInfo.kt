@@ -49,7 +49,7 @@ class TestPathInfo constructor(val fullPath: String
     @Test fun test_fileNameNoExt() { assertEquals(getFileNameNoExt, pathInfo.fileNameNoExt) }
     @Test fun test_hasExt() { assertEquals(getHasExt, pathInfo.hasExt) }
     @Test fun test_isRelative() { assertEquals(isRelative, pathInfo.isRelative) }
-    @Test fun test_isExternal() { assertEquals(isExternal, pathInfo.isRemote) }
+    @Test fun test_isExternal() { assertEquals(isExternal, pathInfo.isExternal) }
     @Test fun test_isURI() { assertEquals(isURI, pathInfo.isURI) }
     @Test fun test_isAbsolute() { assertEquals(isAbsolute, pathInfo.isAbsolute) }
     @Test fun test_withExt() { assertEquals(withExt, pathInfo.withExt(addWithExt).toString()) }

@@ -120,7 +120,7 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
          *
          * @param document the document
          */
-        private MarkdownViewFactory(Document document, Project project,  MultiMarkdownEditorKit editorKit) {
+        private MarkdownViewFactory(Document document, Project project, MultiMarkdownEditorKit editorKit) {
             this.document = document;
             this.project = project;
             this.editorKit = editorKit;
@@ -180,14 +180,12 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
         public URL getImageURL() {
             final String src = (String) getElement().getAttributes().getAttribute(Attribute.SRC);
             if (src != null) {
-                Object link = MultiMarkdownPathResolver.resolveLocalLink(project, document, src, false);
-                if (link instanceof VirtualFile) {
-                    final VirtualFile localImage = (VirtualFile) link;
+                String href = MultiMarkdownPathResolver.resolveImageURL(project, document, src);
+                if (href != null) {
                     try {
-                        if (localImage.exists())
-                            return new File(localImage.getPath()).toURI().toURL();
+                        return new URL(href);
                     } catch (MalformedURLException e) {
-                        throw new RuntimeException(e);
+                        e.printStackTrace();
                     }
                 }
             }

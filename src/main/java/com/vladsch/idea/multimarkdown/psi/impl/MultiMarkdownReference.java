@@ -98,13 +98,17 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
     @NotNull
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
-        if (resolveResults == null || resolveResultsName == null || !resolveResultsName.equals(getElement().getName())) {
-            resolveResultsName = getElement().getName();
-            if (resolveResultsName == null) resolveResultsName = "";
-            setRangeInElement(new TextRange(0, resolveResultsName.length()));
-            resolveResults = getMultiResolveResults(incompleteCode);
+        if (incompleteCode) {
+            return getMultiResolveResults(true);
+        } else {
+            if (resolveResults == null || resolveResultsName == null || !resolveResultsName.equals(getElement().getName())) {
+                resolveResultsName = getElement().getName();
+                if (resolveResultsName == null) resolveResultsName = "";
+                setRangeInElement(new TextRange(0, resolveResultsName.length()));
+                resolveResults = getMultiResolveResults(false);
+            }
+            return resolveResults;
         }
-        return resolveResults;
     }
 
     @Override
@@ -140,7 +144,7 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
     @Override
     public PsiElement resolve() {
         ResolveResult[] resolveResults = multiResolve(false);
-        return resolveResults.length == 1 ? resolveResults[0].getElement() : null;
+        return resolveResults.length > 0 ? resolveResults[0].getElement() : null;
     }
 
     @NotNull
@@ -178,7 +182,7 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
                     LinkRef linkRef = MultiMarkdownPsiImplUtil.getLinkRef(myElement);
                     if (linkRef != null) {
                         GitHubLinkResolver resolver = new GitHubLinkResolver(myElement);
-                        List<PathInfo> pathInfos = resolver.multiResolve(linkRef, LinkResolver.LOOSE_MATCH, null);
+                        List<PathInfo> pathInfos = resolver.multiResolve(linkRef, LinkResolver.ONLY_LOCAL | (incompleteCode ? LinkResolver.LOOSE_MATCH : 0), null);
 
                         if (pathInfos.size() > 0) {
                             List<ResolveResult> results = new ArrayList<ResolveResult>();

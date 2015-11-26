@@ -84,8 +84,6 @@ import org.w3c.dom.events.EventTarget;
 import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.net.MalformedURLException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -455,21 +453,9 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                     String src = imgNode.getSrc();
                     if (!src.startsWith("http://") && !src.startsWith("https://") && !src.startsWith("ftp://") && !src.startsWith("file://")) {
                         // relative to document, change it to absolute file://
-                        Object resolveLink = MultiMarkdownPathResolver.resolveLocalLink(project, document, src, false);
-                        if (resolveLink != null && resolveLink instanceof VirtualFile) {
-                            final VirtualFile localImage = (VirtualFile) resolveLink;
-                            if (localImage.exists()) {
-                                try {
-                                    imgNode.setSrc(String.valueOf(new File(localImage.getPath()).toURI().toURL()));
-                                } catch (MalformedURLException e) {
-                                    logger.info("[" + instance + "] " + "MalformedURLException" + localImage.getPath());
-                                }
-                            } else {
-                                String href = MultiMarkdownPathResolver.resolveExternalReference(project, document, src);
-                                if (href != null) {
-                                    imgNode.setSrc(href);
-                                }
-                            }
+                        String resolvedLink = MultiMarkdownPathResolver.resolveImageURL(project, document, src);
+                        if (resolvedLink != null) {
+                            imgNode.setSrc(resolvedLink);
                         }
                     }
                 }

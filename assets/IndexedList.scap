@@ -8,16 +8,16 @@
                 <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <String>LinkRef</String>
-            <ConnectedNoteIDs>1, 4, 6, 15, 31</ConnectedNoteIDs>
+            <ConnectedNoteIDs>1, 3, 15, 30-31</ConnectedNoteIDs>
             <PointsToNoteIDs>15, 31</PointsToNoteIDs>
         </Note>
-        <Note ID="1" FontSize="12.0" Position="320.0,18.0" Width="51.0">
+        <Note ID="1" FontSize="12.0" Position="320.0,18.0" Width="53.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1">0.756763 0.785592 0.373258</Border>
                 <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
-            <String>LinkInfo</String>
+            <String>PathInfo</String>
             <ConnectedNoteIDs>0, 14, 31</ConnectedNoteIDs>
             <PointsToNoteIDs>14</PointsToNoteIDs>
         </Note>
@@ -31,38 +31,20 @@
             <ConnectedNoteIDs>23, 29, 31</ConnectedNoteIDs>
             <PointsToNoteIDs>23, 29</PointsToNoteIDs>
         </Note>
-        <Note ID="3" FontSize="12.0" Position="226.0,169.0" Width="72.0">
+        <Note ID="3" FontSize="12.0" Position="149.0,120.0" Width="72.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1">0.756763 0.785592 0.373258</Border>
                 <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <String>WikiLinkRef</String>
-            <ConnectedNoteIDs>4</ConnectedNoteIDs>
-        </Note>
-        <Note ID="4" FontSize="12.0" Position="177.0,116.0" Width="69.0">
-            <Appearance>
-                <Alignment>Left</Alignment>
-                <Border Weight="1">0.756763 0.785592 0.373258</Border>
-                <Fill>0.906773 0.910625 0.634363</Fill>
-            </Appearance>
-            <String>FileLinkRef</String>
-            <ConnectedNoteIDs>0, 3, 30</ConnectedNoteIDs>
-        </Note>
-        <Note ID="6" FontSize="12.0" Position="71.0,116.0" Width="65.0">
-            <Appearance>
-                <Alignment>Left</Alignment>
-                <Border Weight="1">0.756763 0.785592 0.373258</Border>
-                <Fill>0.906773 0.910625 0.634363</Fill>
-            </Appearance>
-            <String>UrlLinkRef</String>
             <ConnectedNoteIDs>0</ConnectedNoteIDs>
-            <PointsToNoteIDs>16</PointsToNoteIDs>
         </Note>
         <Note ID="13" FontSize="12.0" Position="448.0,230.0" Width="78.0">
             <Appearance>
                 <Alignment>Left</Alignment>
-                <Border Weight="1"></Border>
+                <Border Weight="1">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <String>LinkResolver</String>
             <ConnectedNoteIDs>28</ConnectedNoteIDs>
@@ -140,14 +122,14 @@
             <String>Project</String>
             <ConnectedNoteIDs>2</ConnectedNoteIDs>
         </Note>
-        <Note ID="30" FontSize="12.0" Position="139.0,168.0" Width="83.0">
+        <Note ID="30" FontSize="12.0" Position="62.0,119.0" Width="83.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1">0.756763 0.785592 0.373258</Border>
                 <Fill>0.906773 0.910625 0.634363</Fill>
             </Appearance>
             <String>ImageLinkRef</String>
-            <ConnectedNoteIDs>4</ConnectedNoteIDs>
+            <ConnectedNoteIDs>0</ConnectedNoteIDs>
         </Note>
         <Note ID="31" FontSize="12.0" Position="417.0,67.0" Width="47.0">
             <Appearance>
@@ -160,7 +142,7 @@
         </Note>
     </Notes>
     <BackgroundShapes></BackgroundShapes>
-    <AutoFit>0-4, 6, 13-15, 18-21, 23, 28-31</AutoFit>
+    <AutoFit>0-3, 13-15, 18-21, 23, 28-31</AutoFit>
     <NoteStyles>
         <Style Name="Blue Bubble" ID="4B1C6936-5C1E-4B2E-8A8D-8D0C63B3C5DC" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
             <BorderThickness>1</BorderThickness>

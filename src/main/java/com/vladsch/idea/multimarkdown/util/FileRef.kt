@@ -136,7 +136,7 @@ open class FileRef(fullPath: String, private val _virtualFile: VirtualFile?) : P
     val exists: Boolean
         get() = virtualFile?.exists() as Boolean
 
-    open fun projectFileRef(project: Project): ProjectFileRef? {
+    override fun projectFileRef(project: Project): ProjectFileRef? {
         val myVirtualFile = virtualFile
         return if (myVirtualFile == null) null else ProjectFileRef(myVirtualFile, project);
     }

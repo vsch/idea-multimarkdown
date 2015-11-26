@@ -47,7 +47,7 @@ class TestLinkRef constructor(val fullPath: String
     @Test fun test_anchorText() { Assert.assertEquals(anchorText, linkRef.anchorText) }
     @Test fun test_isRelative() { Assert.assertEquals(isRelative, linkRef.isRelative) }
     @Test fun test_isAbsolute() { Assert.assertEquals(isAbsolute, linkRef.isAbsolute) }
-    @Test fun test_isExternal() { Assert.assertEquals(isExternal, linkRef.isRemote) }
+    @Test fun test_isExternal() { Assert.assertEquals(isExternal, linkRef.isExternal) }
     @Test fun test_filePath() { Assert.assertEquals(filePath, linkRef.filePath) }
     @Test fun test_filePathNoExt() { Assert.assertEquals(filePathNoExt, linkRef.filePathNoExt) }
     @Test fun test_filePathWithAnchor() { Assert.assertEquals(filePathWithAnchor, linkRef.filePathWithAnchor) }

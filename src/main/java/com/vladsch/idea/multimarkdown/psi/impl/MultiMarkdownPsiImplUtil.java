@@ -122,7 +122,7 @@ public class MultiMarkdownPsiImplUtil {
         } else if (elementTypes.parentType == IMAGE || elementTypes.parentType == REFERENCE_IMAGE) {
             return LinkRef.parseImageLinkRef(new FileRef(element), getLinkRefTextWithAnchor(element));
         } else {
-            return LinkRef.parseFileLinkRef(new FileRef(element), getLinkRefTextWithAnchor(element));
+            return LinkRef.parseLinkRef(new FileRef(element), getLinkRefTextWithAnchor(element));
         }
     }
 
@@ -314,8 +314,8 @@ public class MultiMarkdownPsiImplUtil {
             String linkText = getElementText(elementTypes.parentType, element, elementTypes.textType, null, null);
             LinkRef sourceLinkRef = getLinkRef(elementTypes, element);
 
-            if (sourceLinkRef instanceof FileLinkRef) {
-                FileLinkRef linkRef = WikiLinkRef.from((FileLinkRef) sourceLinkRef);
+            if (sourceLinkRef instanceof LinkRef) {
+                LinkRef linkRef = WikiLinkRef.from((LinkRef) sourceLinkRef);
 
                 if (linkRef != null) {
                     if (linkText.equals(linkRef.getFilePath())) linkText = null;
@@ -337,8 +337,8 @@ public class MultiMarkdownPsiImplUtil {
             String linkRefTitle = getElementText(elementTypes.parentType, element, elementTypes.titleType, null, null);
             if (linkRefTitle.isEmpty()) {
                 LinkRef sourceLinkRef = getLinkRef(elementTypes, element);
-                if (sourceLinkRef instanceof FileLinkRef) {
-                    FileLinkRef linkRef = WikiLinkRef.from((FileLinkRef) sourceLinkRef);
+                if (sourceLinkRef instanceof LinkRef) {
+                    LinkRef linkRef = WikiLinkRef.from((LinkRef) sourceLinkRef);
 
                     if (linkRef != null) {
                         return !(sourceLinkRef.pathContains("%23") && sourceLinkRef.getHasAnchor());
@@ -374,8 +374,8 @@ public class MultiMarkdownPsiImplUtil {
             LinkRef sourceLinkRef = getLinkRef(elementTypes, element);
             String linkRefTitle = getElementText(elementTypes.parentType, element, elementTypes.titleType, null, null);
 
-            if (sourceLinkRef instanceof FileLinkRef) {
-                FileLinkRef linkRef = FileLinkRef.from((FileLinkRef) sourceLinkRef);
+            if (sourceLinkRef instanceof LinkRef) {
+                LinkRef linkRef = LinkRef.from((LinkRef) sourceLinkRef);
 
                 if (linkRef != null) {
                     if (linkText.isEmpty()) {
