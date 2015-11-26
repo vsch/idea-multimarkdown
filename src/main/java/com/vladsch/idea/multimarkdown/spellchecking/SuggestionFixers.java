@@ -137,7 +137,7 @@ public class SuggestionFixers {
             if (project != null && suggestion.hasParam(FILE_PATH)) {
                 FileRef fileReference = new FileRef(suggestion.stringParam(FILE_PATH));
                 FileRef renamedFileReference = fileReference.append("..", text);
-                ProjectFileRef projectFileRef = renamedFileReference.virtualFileRef(project);
+                ProjectFileRef projectFileRef = renamedFileReference.projectFileRef(project);
                 if (projectFileRef == null || projectFileRef.getExists()) return;
             }
             addSuggestion(suggestion);

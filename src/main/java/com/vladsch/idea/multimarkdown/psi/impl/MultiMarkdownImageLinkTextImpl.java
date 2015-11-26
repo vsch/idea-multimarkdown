@@ -22,8 +22,8 @@ import com.vladsch.idea.multimarkdown.psi.MultiMarkdownImageLinkText;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-public class MultiMarkdownImageLinkRefTextImpl extends MultiMarkdownNamedElementImpl implements MultiMarkdownImageLinkText {
-    private static final Logger logger = Logger.getLogger(MultiMarkdownImageLinkRefTextImpl.class);
+public class MultiMarkdownImageLinkTextImpl extends MultiMarkdownNamedElementImpl implements MultiMarkdownImageLinkText {
+    private static final Logger logger = Logger.getLogger(MultiMarkdownImageLinkTextImpl.class);
     protected static final String MISSING_ELEMENT_NAME_SPACE = "image-text::";
 
     @NotNull
@@ -33,7 +33,7 @@ public class MultiMarkdownImageLinkRefTextImpl extends MultiMarkdownNamedElement
         return ((MultiMarkdownImageLink) getParent()).getMissingElementNameSpace(MISSING_ELEMENT_NAME_SPACE, true);
     }
 
-    public MultiMarkdownImageLinkRefTextImpl(ASTNode node) {
+    public MultiMarkdownImageLinkTextImpl(ASTNode node) {
         super(node);
     }
 

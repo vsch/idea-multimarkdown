@@ -32,7 +32,6 @@ import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLinkRef;
 import com.vladsch.idea.multimarkdown.util.PathInfo;
 import com.vladsch.idea.multimarkdown.util.StringUtilKt;
 import com.vladsch.idea.multimarkdown.util.WikiLinkRef;
-import kotlin.StringsKt;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
@@ -53,7 +52,7 @@ public class MultiMarkdownWikiRefImpl extends MultiMarkdownNamedElementImpl impl
 
     @Override
     public MultiMarkdownReference createReference(@NotNull TextRange textRange) {
-        return new MultiMarkdownReferenceWikiPageRef(this, textRange);
+        return new MultiMarkdownReferenceWikiLinkRef(this, textRange);
     }
 
     @Override
@@ -75,15 +74,6 @@ public class MultiMarkdownWikiRefImpl extends MultiMarkdownNamedElementImpl impl
     @Override
     public String getNameWithAnchor() {
         return MultiMarkdownPsiImplUtil.getLinkRefTextWithAnchor(getParent());
-    }
-
-    @Override
-    public MultiMarkdownNamedElement handleContentChange(String newContent) throws IncorrectOperationException {
-        MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(getProject());
-        if (projectComponent == null) return this;
-
-        String newName = new PathInfo(newContent).getFileNameNoExtAsWikiRef();
-        return (MultiMarkdownNamedElement) setName(newName, projectComponent.getRefactoringRenameFlags(REASON_FILE_RENAMED));
     }
 
     @Override

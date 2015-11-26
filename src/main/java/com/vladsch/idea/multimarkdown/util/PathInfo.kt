@@ -25,7 +25,8 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
     protected val nameStart: Int
     protected val nameEnd: Int
 
-    constructor(virtualFile:VirtualFile) : this(virtualFile.path)
+    constructor(virtualFile: VirtualFile) : this(virtualFile.path)
+
     constructor(psiFile: PsiFile) : this(psiFile.virtualFile.path)
 
     init {
@@ -94,7 +95,7 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
     }
 
     fun pathContains(c: Char): Boolean = path.contains(c, false)
-    fun pathContains(c: Char, ignoreCase: Boolean ): Boolean = path.contains(c, ignoreCase)
+    fun pathContains(c: Char, ignoreCase: Boolean): Boolean = path.contains(c, ignoreCase)
     fun pathContains(c: String): Boolean = path.contains(c, false)
     fun pathContains(c: String, ignoreCase: Boolean): Boolean = path.contains(c, ignoreCase)
     fun pathContainsSpaces(): Boolean = pathContains(' ')
@@ -184,15 +185,15 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
             return appendParts(fullPath, parts, ::PathInfo)
         }
 
-        @JvmStatic fun <T:PathInfo> appendParts(fullPath: String?, vararg parts: String, construct: (fullPath:String) -> T): T {
+        @JvmStatic fun <T : PathInfo> appendParts(fullPath: String?, vararg parts: String, construct: (fullPath: String) -> T): T {
             return appendParts(fullPath, parts.asSequence(), construct);
         }
 
-        @JvmStatic fun <T:PathInfo> appendParts(fullPath: String?, parts: Collection<String>, construct: (fullPath:String) -> T): T {
+        @JvmStatic fun <T : PathInfo> appendParts(fullPath: String?, parts: Collection<String>, construct: (fullPath: String) -> T): T {
             return appendParts(fullPath, parts.asSequence(), construct)
         }
 
-        @JvmStatic fun <T:PathInfo> appendParts(fullPath: String?, parts: Sequence<String>, construct: (fullPath:String) -> T): T {
+        @JvmStatic fun <T : PathInfo> appendParts(fullPath: String?, parts: Sequence<String>, construct: (fullPath: String) -> T): T {
             var path: String = cleanFullPath(fullPath)
 
             for (part in parts) {
@@ -252,6 +253,16 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
 
                 return toPath.substring(lastSlash + 1)
             }
+        }
+
+        @JvmStatic fun fileNames(pathInfos: List<PathInfo>): Array<String> {
+            val list = pathInfos.map { pathInfo -> pathInfo.fileName }
+            return list.toTypedArray()
+        }
+
+        @JvmStatic fun fileNamesNoExt(pathInfos: List<PathInfo>): Array<String> {
+            val list = pathInfos.map { pathInfo -> pathInfo.fileNameNoExt }
+            return list.toTypedArray()
         }
     }
 }

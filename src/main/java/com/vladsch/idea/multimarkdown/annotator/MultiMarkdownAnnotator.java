@@ -34,7 +34,7 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.license.LicensedFeature;
 import com.vladsch.idea.multimarkdown.psi.*;
 import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownPsiImplUtil;
-import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownReferenceWikiPageRef;
+import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownReferenceWikiLinkRef;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.util.*;
 import org.jetbrains.annotations.NotNull;
@@ -372,7 +372,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                             .postMatchFilter(linkRefInfo, true, false, null);
 
                     if (accessibleWikiPageRefs.size() == 1) {
-                        if (((MultiMarkdownReferenceWikiPageRef) wikiPageRefReference).isResolveRefMissing()) {
+                        if (((MultiMarkdownReferenceWikiLinkRef) wikiPageRefReference).isResolveRefMissing()) {
                             if (!state.alreadyOfferedTypes(TYPE_SWAP_WIKI_PAGE_REF_TITLE_QUICK_FIX, TYPE_DELETE_WIKI_PAGE_REF_QUICK_FIX)) {
                                 state.createErrorAnnotation(element.getTextRange(),
                                         MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue()

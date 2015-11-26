@@ -164,9 +164,9 @@ public interface MultiMarkdownTypes {
             } else if (type == IMAGE_LINK_REF) {
                 return new MultiMarkdownImageLinkRefImpl(node);
             } else if (type == IMAGE_LINK_REF_TEXT) {
-                return new MultiMarkdownImageLinkRefTextImpl(node);
+                return new MultiMarkdownImageLinkTextImpl(node);
             } else if (type == IMAGE_LINK_REF_TITLE) {
-                return new MultiMarkdownImageLinkRefTitleImpl(node);
+                return new MultiMarkdownImageLinkTitleImpl(node);
             }
             throw new AssertionError("Unknown element type: " + type);
         }

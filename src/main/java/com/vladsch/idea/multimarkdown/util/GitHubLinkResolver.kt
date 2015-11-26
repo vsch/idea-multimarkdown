@@ -14,6 +14,9 @@
  */
 package com.vladsch.idea.multimarkdown.util
 
+import com.intellij.mock.Mock
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiField
 import com.intellij.psi.PsiFile
@@ -30,16 +33,18 @@ import kotlin.text.RegexOption
 class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containingFile: FileRef, branchOrTag: String? = null) : LinkResolver(projectResolver, containingFile, branchOrTag) {
 
     companion object {
-        @JvmStatic val GITHUB_WIKI_HOME_DIRNAME = "wiki"
-        @JvmStatic val GITHUB_WIKI_HOME_FILENAME = "Home"
-        @JvmStatic val GITHUB_ISSUES_NAME = "issues"
-        @JvmStatic val GITHUB_GRAPHS_NAME = "graphs"
-        @JvmStatic val GITHUB_PULSE_NAME = "pulse"
-        @JvmStatic val GITHUB_PULLS_NAME = "pulls"
+        @JvmStatic @JvmField val GITHUB_WIKI_HOME_DIRNAME = "wiki"
+        @JvmStatic @JvmField val GITHUB_WIKI_HOME_FILENAME = "Home"
+        @JvmStatic @JvmField val GITHUB_ISSUES_NAME = "issues"
+        @JvmStatic @JvmField val GITHUB_GRAPHS_NAME = "graphs"
+        @JvmStatic @JvmField val GITHUB_PULSE_NAME = "pulse"
+        @JvmStatic @JvmField val GITHUB_PULLS_NAME = "pulls"
 
-        @JvmStatic val GITHUB_LINKS = arrayOf(GITHUB_WIKI_HOME_DIRNAME, GITHUB_ISSUES_NAME, GITHUB_GRAPHS_NAME, GITHUB_PULSE_NAME, GITHUB_PULLS_NAME)
+        @JvmStatic @JvmField val GITHUB_LINKS = arrayOf(GITHUB_WIKI_HOME_DIRNAME, GITHUB_ISSUES_NAME, GITHUB_GRAPHS_NAME, GITHUB_PULSE_NAME, GITHUB_PULLS_NAME)
     }
 
+    constructor(virtualFile: VirtualFile, project: Project) : this(MultiMarkdownPlugin.getProjectComponent(project)!!, FileRef(virtualFile.path))
+    constructor(projectFileRef: ProjectFileRef) : this(MultiMarkdownPlugin.getProjectComponent(projectFileRef.project)!!, projectFileRef)
     constructor(psiFile: PsiFile) : this(MultiMarkdownPlugin.getProjectComponent(psiFile.project)!!, FileRef(psiFile.virtualFile.path))
     constructor(psiElement: PsiElement) : this(psiElement.containingFile)
 

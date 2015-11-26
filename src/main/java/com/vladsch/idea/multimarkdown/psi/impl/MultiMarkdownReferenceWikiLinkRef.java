@@ -28,10 +28,10 @@ import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class MultiMarkdownReferenceWikiPageRef extends MultiMarkdownReference {
-    private static final Logger logger = Logger.getLogger(MultiMarkdownReferenceWikiPageRef.class);
+public class MultiMarkdownReferenceWikiLinkRef extends MultiMarkdownReference {
+    private static final Logger logger = Logger.getLogger(MultiMarkdownReferenceWikiLinkRef.class);
 
-    public MultiMarkdownReferenceWikiPageRef(@NotNull MultiMarkdownWikiLinkRef element, @NotNull TextRange textRange) {
+    public MultiMarkdownReferenceWikiLinkRef(@NotNull MultiMarkdownWikiLinkRef element, @NotNull TextRange textRange) {
         super(element, textRange);
     }
 

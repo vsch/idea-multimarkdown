@@ -67,15 +67,6 @@ public class MultiMarkdownImageLinkRefImpl extends MultiMarkdownNamedElementImpl
     }
 
     @Override
-    public MultiMarkdownNamedElement handleContentChange(String newContent) throws IncorrectOperationException {
-        String newName = WikiLinkRef.convertFileToLink(new PathInfo(newContent).getFileNameNoExt());
-        MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(getProject());
-        if (projectComponent == null) return this;
-
-        return (MultiMarkdownNamedElement) setName(newName, projectComponent.getRefactoringRenameFlags(REASON_FILE_RENAMED));
-    }
-
-    @Override
     public boolean isMemberInplaceRenameAvailable(PsiElement context) {
         return false;
     }

@@ -22,8 +22,6 @@ package com.vladsch.idea.multimarkdown;
 
 import com.vladsch.idea.multimarkdown.spellchecking.Suggestion;
 import com.vladsch.idea.multimarkdown.spellchecking.SuggestionList;
-import com.vladsch.idea.multimarkdown.util.FileReference;
-import com.vladsch.idea.multimarkdown.util.FileReferenceList;
 import com.vladsch.idea.multimarkdown.util.InspectionResult;
 import com.vladsch.idea.multimarkdown.util.PathInfo;
 import org.junit.internal.ArrayComparisonFailure;
@@ -64,41 +62,12 @@ public class TestUtils {
         }
     }
 
-    public static void compareOrderedLists(String message, FileReferenceList expected, FileReferenceList actual) {
-        new OrderedFileReferenceComparison().arrayEquals(null, expected.get(), actual.get());
-    }
-
-    //public static void compareOrderedLists(String message, ArrayList<LinkInfo> expected, PathInfoList actual) {
-    //    new OrderedPathInfoComparison().arrayEquals(null, expected.toArray(), actual.toArray());
-    //}
-    //
-    //public static void compareUnorderedLists(String message, ArrayList<LinkInfo> expected, PathInfoList actual) {
-    //    new UnorderedPathInfoComparison().arrayEquals(null, expected.toArray(), actual.toArray());
-    //}
-
     public static void compareOrderedLists(String message, ArrayList<String> expected, Set<String> actual) {
         new OrderedPathInfoComparison().arrayEquals(null, expected.toArray(), actual.toArray());
     }
 
-    //public static void compareOrderedLists(String message, String[] expected, List<LinkInfo> actual) {
-    //    String[] actualStrings = new String[actual.size()];
-    //    int i = 0;
-    //    for (LinkInfo linkInfo : actual) {
-    //        actualStrings[i] = linkInfo.getFilePath();
-    //    }
-    //    new OrderedStringComparison().arrayEquals(null, expected, actualStrings);
-    //}
-
     public static void compareUnorderedLists(String message, ArrayList<String> expected, Set<String> actual) {
         new UnorderedPathInfoComparison().arrayEquals(null, expected.toArray(), actual.toArray());
-    }
-
-    public static void compareOrderedLists(String message, FileReferenceList.Builder expected, FileReferenceList actual) {
-        new OrderedFileReferenceComparison().arrayEquals(null, expected.getFileReferences(), actual.get());
-    }
-
-    public static void compareOrderedLists(String message, FileReference[] expected, FileReferenceList actual) {
-        new OrderedFileReferenceComparison().arrayEquals(null, expected, actual.get());
     }
 
     public static void compareOrderedLists(String message, Suggestion[] expected, SuggestionList actual) {
@@ -123,18 +92,6 @@ public class TestUtils {
 
     public static void compareOrderedLists(String message, SuggestionList expected, SuggestionList actual) {
         new OrderedSuggestionComparison().arrayEquals(null, expected.getSuggestions().toArray(new Suggestion[expected.size()]), actual.getSuggestions().toArray(new Suggestion[actual.size()]));
-    }
-
-    public static void compareUnorderedLists(String message, FileReferenceList expected, FileReferenceList actual) {
-        new UnorderedFileReferenceComparison().arrayEquals(null, expected.get(), actual.get());
-    }
-
-    public static void compareUnorderedLists(String message, FileReferenceList.Builder expected, FileReferenceList actual) {
-        new UnorderedFileReferenceComparison().arrayEquals(null, expected.getFileReferences(), actual.get());
-    }
-
-    public static void compareUnorderedLists(String message, FileReference[] expected, FileReferenceList actual) {
-        new UnorderedFileReferenceComparison().arrayEquals(null, expected, actual.get());
     }
 
     public static void compareUnorderedLists(String message, Suggestion[] expected, SuggestionList actual) {
@@ -209,18 +166,6 @@ public class TestUtils {
         return className + "<" + valueString + ">";
     }
 
-    public static class OrderedFileReferenceComparison extends OrderedComparisonCriteria<FileReference> {
-        @Override
-        protected boolean elementsAreEqual(FileReference o1, FileReference o2) {
-            return o1.compareTo(o2) == 0;
-        }
-
-        @Override
-        protected void assertElementsAreEqual(FileReference o1, FileReference o2) {
-            if (o1.compareTo(o2) != 0) failNotEquals("FileReferences not equal", o1, o2);
-        }
-    }
-
     public static class OrderedPathInfoComparison extends OrderedComparisonCriteria<PathInfo> {
         @Override
         protected boolean elementsAreEqual(PathInfo o1, PathInfo o2) {
@@ -266,18 +211,6 @@ public class TestUtils {
         @Override
         protected void assertElementsAreEqual(InspectionResult o1, InspectionResult o2) {
             if (o1.compareTo(o2) != 0) failNotEquals("PathInfo not equal", o1, o2);
-        }
-    }
-
-    public static class UnorderedFileReferenceComparison extends UnorderedComparisonCriteria<FileReference> {
-        @Override
-        protected boolean elementsAreEqual(FileReference o1, FileReference o2) {
-            return o1.compareTo(o2) == 0;
-        }
-
-        @Override
-        protected void assertElementsAreEqual(FileReference o1, FileReference o2) {
-            if (o1.compareTo(o2) != 0) failNotEquals("FileReferences not equal", o1, o2);
         }
     }
 

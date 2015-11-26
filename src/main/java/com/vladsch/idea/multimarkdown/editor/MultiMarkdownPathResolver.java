@@ -45,13 +45,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.*;
 
-/**
- * Static utilities for resolving resources paths.
- *
- * @author Roger Grantham (https://github.com/grantham)
- * @author Julien Nicoulaud <julien.nicoulaud@gmail.com>
- * @since 0.8
- */
 public class MultiMarkdownPathResolver {
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownPathResolver.class);
 
@@ -60,10 +53,6 @@ public class MultiMarkdownPathResolver {
      */
     private MultiMarkdownPathResolver() {
         // no op
-    }
-
-    public static boolean canResolveRelativeLink(@Nullable FileReferenceList fileReferenceList, @NotNull FileReference documentFileReference, @Nullable GitHubRepo gitHubRepo, @NotNull String target, boolean isWikiLink, boolean resolveExternal) {
-        return resolveRelativeLink(fileReferenceList, documentFileReference, gitHubRepo, target, isWikiLink, resolveExternal) != null;
     }
 
     @Nullable
@@ -169,7 +158,7 @@ public class MultiMarkdownPathResolver {
 
     public static boolean isWikiDocument(@NotNull final Document document) {
         VirtualFile file = FileDocumentManager.getInstance().getFile(document);
-        return file != null && new PathInfo(file).isWikiPage();
+        return file != null && new FileRef(file).isWikiPage();
     }
 
     public static Object resolveLocalLink(@NotNull final Project project, @NotNull final Document document, @NotNull String hrefEnc, final boolean withExternal) {
