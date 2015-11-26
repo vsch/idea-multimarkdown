@@ -22,6 +22,7 @@ import com.intellij.lang.annotation.AnnotationSession;
 import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
+import com.vladsch.idea.multimarkdown.util.Severity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -221,16 +222,50 @@ public class AnnotationState {
         annotator.setNeedsUpdateOnTyping(true);
         return annotator;
     }
+
     public Annotation createAnnotation(@NotNull HighlightSeverity severity, @NotNull TextRange range, @Nullable String s) {
         annotator = holder.createAnnotation(severity, range, s);
         annotator.setNeedsUpdateOnTyping(true);
         return annotator;
     }
+
     public Annotation createAnnotation(@NotNull HighlightSeverity severity, @NotNull TextRange range, @Nullable String s, @Nullable String s1) {
         annotator = holder.createAnnotation(severity, range, s, s1);
         annotator.setNeedsUpdateOnTyping(true);
         return annotator;
     }
+
+    public static HighlightSeverity mapSeverity(@NotNull Severity severity) {
+        HighlightSeverity highlightSeverity;
+        switch (severity) {
+            case INFO:
+                highlightSeverity = HighlightSeverity.INFORMATION;
+                break;
+            case WEAK_WARNING:
+                highlightSeverity = HighlightSeverity.WEAK_WARNING;
+                break;
+            case WARNING:
+                highlightSeverity = HighlightSeverity.WARNING;
+                break;
+            case ERROR:
+                highlightSeverity = HighlightSeverity.ERROR;
+                break;
+            default:
+                highlightSeverity = HighlightSeverity.ERROR;
+                break;
+        }
+
+        return highlightSeverity;
+    }
+
+    public Annotation createAnnotation(@NotNull Severity severity, @NotNull TextRange range, @Nullable String s) {
+        return createAnnotation(mapSeverity(severity), range, s);
+    }
+
+    public Annotation createAnnotation(@NotNull Severity severity, @NotNull TextRange range, @Nullable String s, @Nullable String s1) {
+        return createAnnotation(mapSeverity(severity), range, s, s1);
+    }
+
     @NotNull
     public AnnotationSession getCurrentAnnotationSession() {return holder.getCurrentAnnotationSession();}
     public boolean isBatchMode() {return holder.isBatchMode();}

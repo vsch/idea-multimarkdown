@@ -18,21 +18,25 @@ import java.util.*
 
 class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
     companion object {
-        @JvmStatic val ID_TARGET_HAS_SPACES = "TARGET_HAS_SPACES"
-        @JvmStatic val ID_CASE_MISMATCH = "CASE_MISMATCH"
-        @JvmStatic val ID_WIKI_LINK_HAS_DASHES = "WIKI_LINK_HAS_DASHES"
-        @JvmStatic val ID_NOT_UNDER_WIKI_HOME = "NOT_UNDER_WIKI_HOME"
-        @JvmStatic val ID_TARGET_NOT_WIKI_PAGE_EXT = "TARGET_NOT_WIKI_PAGE_EXT"
-        @JvmStatic val ID_NOT_UNDER_SOURCE_WIKI_HOME = "NOT_UNDER_SOURCE_WIKI_HOME"
-        @JvmStatic val ID_TARGET_NAME_HAS_ANCHOR = "TARGET_NAME_HAS_ANCHOR"
-        @JvmStatic val ID_TARGET_PATH_HAS_ANCHOR = "TARGET_PATH_HAS_ANCHOR"
-        @JvmStatic val ID_WIKI_LINK_HAS_SLASH = "WIKI_LINK_HAS_SLASH"
-        @JvmStatic val ID_WIKI_LINK_HAS_SUBDIR = "WIKI_LINK_HAS_SUBDIR"
-        @JvmStatic val ID_WIKI_LINK_HAS_ONLY_ANCHOR = "WIKI_LINK_HAS_ONLY_ANCHOR"
-        @JvmStatic val ID_LINK_TARGETS_WIKI_HAS_EXT = "LINK_TARGETS_WIKI_HAS_EXT"
-        @JvmStatic val ID_LINK_TARGETS_WIKI_HAS_BAD_EXT = "LINK_TARGETS_WIKI_HAS_BAD_EXT"
-        @JvmStatic val ID_NOT_UNDER_SAME_REPO = "NOT_UNDER_SAME_REPO"
-        @JvmStatic val ID_TARGET_NOT_UNDER_VCS = "TARGET_NOT_UNDER_VCS"
+        @JvmStatic @JvmField val ID_TARGET_HAS_SPACES = "TARGET_HAS_SPACES"
+        @JvmStatic @JvmField val ID_CASE_MISMATCH = "CASE_MISMATCH"
+        @JvmStatic @JvmField val ID_WIKI_LINK_HAS_DASHES = "WIKI_LINK_HAS_DASHES"
+        @JvmStatic @JvmField val ID_NOT_UNDER_WIKI_HOME = "NOT_UNDER_WIKI_HOME"
+        @JvmStatic @JvmField val ID_TARGET_NOT_WIKI_PAGE_EXT = "TARGET_NOT_WIKI_PAGE_EXT"
+        @JvmStatic @JvmField val ID_NOT_UNDER_SOURCE_WIKI_HOME = "NOT_UNDER_SOURCE_WIKI_HOME"
+        @JvmStatic @JvmField val ID_TARGET_NAME_HAS_ANCHOR = "TARGET_NAME_HAS_ANCHOR"
+        @JvmStatic @JvmField val ID_TARGET_PATH_HAS_ANCHOR = "TARGET_PATH_HAS_ANCHOR"
+        @JvmStatic @JvmField val ID_WIKI_LINK_HAS_SLASH = "WIKI_LINK_HAS_SLASH"
+        @JvmStatic @JvmField val ID_WIKI_LINK_HAS_SUBDIR = "WIKI_LINK_HAS_SUBDIR"
+        @JvmStatic @JvmField val ID_WIKI_LINK_HAS_ONLY_ANCHOR = "WIKI_LINK_HAS_ONLY_ANCHOR"
+        @JvmStatic @JvmField val ID_LINK_TARGETS_WIKI_HAS_EXT = "LINK_TARGETS_WIKI_HAS_EXT"
+        @JvmStatic @JvmField val ID_LINK_TARGETS_WIKI_HAS_BAD_EXT = "LINK_TARGETS_WIKI_HAS_BAD_EXT"
+        @JvmStatic @JvmField val ID_NOT_UNDER_SAME_REPO = "NOT_UNDER_SAME_REPO"
+        @JvmStatic @JvmField val ID_TARGET_NOT_UNDER_VCS = "TARGET_NOT_UNDER_VCS"
+        @JvmStatic @JvmField val ID_LINK_NEEDS_EXT = "LINK_NEEDS_EXT"
+        @JvmStatic @JvmField val ID_LINK_HAS_BAD_EXT = "LINK_HAS_BAD_EXT"
+        @JvmStatic @JvmField val ID_LINK_TARGET_NEEDS_EXT = "LINK_TARGET_NEEDS_EXT"
+        @JvmStatic @JvmField val ID_LINK_TARGET_HAS_BAD_EXT = "LINK_TARGET_HAS_BAD_EXT"
     }
 
     internal class Context(val resolver: GitHubLinkResolver, val linkRef: LinkRef, val targetRef: FileRef) {
@@ -60,7 +64,28 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
                 }
             } else {
                 if (linkRef.filePath.equals(linkAddress, ignoreCase = true) && !linkRef.filePath.equals(linkAddress, ignoreCase = false)) {
-                    results.add(InspectionResult(ID_CASE_MISMATCH, Severity.ERROR, linkAddress, targetRef.path.endWith('/') + linkRef.linkToFile(linkRef.fileNameNoExt) + linkRef.ext.ifEmpty(targetRef.ext).startWith('.')))
+                    val fixedPath = targetRef.path.endWith('/') + linkRef.linkToFile(linkRef.fileNameNoExt) + linkRef.ext.ifEmpty(targetRef.ext).startWith('.')
+                    val fixedPathInfo = PathInfo(fixedPath)
+                    // caution: no fixed file name provided if the case mismatch is in the path not the file name
+                    // test: no fixed file name provided if the case mismatch is in the path not the file name
+                    results.add(InspectionResult(ID_CASE_MISMATCH, Severity.ERROR, linkAddress, if (linkRef.path == fixedPathInfo.path) fixedPath else null))
+                }
+            }
+        }
+
+        // test: link and link target extension inspection
+        fun INSPECT_LINK_TARGET_EXT() {
+            if (linkRef is ImageLinkRef ) {
+                if (!linkRef.hasExt) {
+                    results.add(InspectionResult(ID_LINK_NEEDS_EXT, Severity.ERROR, linkAddress, null))
+                }
+
+                if (linkRef.ext != targetRef.ext) {
+                    results.add(InspectionResult(ID_LINK_HAS_BAD_EXT, Severity.ERROR, linkAddress, null))
+                }
+
+                if (!targetRef.hasExt || !targetRef.isImageExt) {
+                    results.add(InspectionResult(if (!linkRef.hasExt) ID_LINK_TARGET_NEEDS_EXT else ID_LINK_TARGET_HAS_BAD_EXT, Severity.WARNING, null, targetRef.path.endWith('/') + linkRef.linkToFile(linkRef.fileNameNoExt) + targetRef.ext.startWith('.')))
                 }
             }
         }
@@ -177,6 +202,7 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
         context.INSPECT_LINK_TARGETS_WIKI_HAS_EXT()
         context.INSPECT_LINK_REPO()
         context.INSPECT_LINK_TARGET_VCS()
+        context.INSPECT_LINK_TARGET_EXT()
 
         if (linkRef is WikiLinkRef) {
             context.INSPECT_WIKI_LINK_HAS_DASHES()

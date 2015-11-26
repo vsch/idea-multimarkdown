@@ -146,8 +146,14 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
         return if (virtualFile == null) null else ProjectFileRef(virtualFile, project);
     }
 
-    open fun virtualFile(): VirtualFile? {
-        return if (!isAbsolute || !isLocal) null else VirtualFileManager.getInstance().findFileByUrl(fullPath)
+    open val virtualFile by lazy {
+        if (!isAbsolute || !isLocal) null else VirtualFileManager.getInstance().findFileByUrl(fullPath)
+    }
+
+    fun canRenameFileTo(newName:String) :Boolean {
+        val newPathInfo = append("..", *newName.split("/").toTypedArray())
+        val virtualFile = newPathInfo.virtualFile
+        return this.virtualFile != null && (this.virtualFile as VirtualFile).exists() && virtualFile != null && !virtualFile.exists() && virtualFile.parent != null
     }
 
     companion object {
