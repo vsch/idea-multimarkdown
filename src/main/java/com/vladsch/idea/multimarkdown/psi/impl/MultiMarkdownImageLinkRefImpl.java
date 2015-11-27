@@ -33,7 +33,7 @@ public class MultiMarkdownImageLinkRefImpl extends MultiMarkdownNamedElementImpl
     @NotNull
     @Override
     public String getMissingElementNamespace() {
-        assert getParent() instanceof MultiMarkdownExplicitLink;
+        assert getParent() instanceof MultiMarkdownImageLink;
         return ((MultiMarkdownImageLink) getParent()).getMissingElementNameSpace(MISSING_ELEMENT_NAME_SPACE, false);
     }
 

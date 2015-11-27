@@ -52,18 +52,18 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
 
     // TEST: this needs tests to make sure it works
     override fun isResolvedTo(linkRef: LinkRef, targetRef: FileRef, withExtForWikiPage: Boolean?, branchOrTag: String?): Boolean {
-        assert(linkRef.containingFile == containingFile, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
+        assert(linkRef.containingFile.compareTo(containingFile) == 0, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
         val linkRefText = linkAddress(linkRef, targetRef, withExtForWikiPage, branchOrTag)
         return linkRef.filePath.equals(linkRefText, ignoreCase = targetRef.isWikiPage && !linkRef.hasExt)
     }
 
     override fun isResolved(linkRef: LinkRef, options: Int, inList: List<PathInfo>?): Boolean {
-        assert(linkRef.containingFile == containingFile, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
+        assert(linkRef.containingFile.compareTo(containingFile) == 0, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
         return resolve(linkRef, options, inList) != null
     }
 
     override fun resolve(linkRef: LinkRef, options: Int, inList: List<PathInfo>?): PathInfo? {
-        assert(linkRef.containingFile == containingFile, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
+        assert(linkRef.containingFile.compareTo(containingFile) == 0, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
         // TODO: if only want local, then can try to resolve external links to local file refs if they map, for that need to parse the
         // LinkRef's URL file path and remove the repoPrefix for non-Wiki and wikiRepoPrefix for wiki files, then prefix the result with the corresponding basePath
         var targetRef: PathInfo = linkRef
@@ -87,7 +87,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
     }
 
     override fun multiResolve(linkRef: LinkRef, options: Int, inList: List<PathInfo>?): List<PathInfo> {
-        assert(linkRef.containingFile == containingFile, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
+        assert(linkRef.containingFile.compareTo(containingFile) == 0, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
 
         if (linkRef is WikiLinkRef && !wantLooseMatch(options) && linkRef.hasExt) return ArrayList()  // wiki links don't resolve with extensions
         val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, wantLooseMatch(options) || linkRef.isEmpty)
@@ -95,7 +95,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
     }
 
     override fun inspect(linkRef: LinkRef, targetRef: FileRef): List<InspectionResult> {
-        assert(linkRef.containingFile == containingFile, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
+        assert(linkRef.containingFile.compareTo(containingFile) == 0, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
         return linkInspector.inspect(linkRef, targetRef)
     }
 
@@ -242,7 +242,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
     }
 
     override fun relativePath(linkRef: LinkRef, targetRef: FileRef, withExtForWikiPage: Boolean, branchOrTag: String?): String {
-        assert(linkRef.containingFile == containingFile, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
+        assert(linkRef.containingFile.compareTo(containingFile) == 0, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
         val containingFilePath = logicalRemotePath(containingFile, useWikiPageActualLocation = false, isSourceRef = true, isImageLinkRef = linkRef is ImageLinkRef, branchOrTag = branchOrTag).filePath.endWith('/')
         val targetFilePath = logicalRemotePath(targetRef, useWikiPageActualLocation = withExtForWikiPage, isSourceRef = false, isImageLinkRef = linkRef is ImageLinkRef, branchOrTag = branchOrTag).filePath.endWith('/')
         return PathInfo.relativePath(containingFilePath, targetFilePath, withPrefix = true)
@@ -285,7 +285,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
 
     @Suppress("NAME_SHADOWING")
     override fun linkAddress(linkRef: LinkRef, targetRef: PathInfo, withExtForWikiPage: Boolean?, branchOrTag: String?, anchor: String?): String {
-        assert(linkRef.containingFile == containingFile, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
+        assert(linkRef.containingFile.compareTo(containingFile) == 0, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
         val withExtForWikiPage = withExtForWikiPage ?: linkRef.hasExt
 
         if (targetRef is FileRef) {
