@@ -20,8 +20,6 @@
  */
 package com.vladsch.idea.multimarkdown.psi;
 
-public interface MultiMarkdownWikiLinkRef extends MultiMarkdownNamedElement {
-    String getNameWithAnchor();
-    String getFileName();
-    String getFileNameWithAnchor();
+public interface MultiMarkdownWikiLinkRef extends MultiMarkdownLinkRefElement {
+
 }

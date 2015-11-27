@@ -14,8 +14,8 @@
  */
 package com.vladsch.idea.multimarkdown.psi;
 
-import org.jetbrains.annotations.NotNull;
-
-public interface MultiMarkdownLinkRef extends MultiMarkdownLinkRefElement {
-
+public interface MultiMarkdownLinkRefElement extends MultiMarkdownNamedElement {
+    String getNameWithAnchor();
+    String getFileName();
+    String getFileNameWithAnchor();
 }

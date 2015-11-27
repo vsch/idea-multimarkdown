@@ -78,7 +78,7 @@ class CreateFileQuickFix extends BaseIntentionAction {
             public void run() {
                 //FileEditorManager.getInstance().openFile();
                 FileRef newFile = new FileRef(filePath);
-                VirtualFile parentDir = new PathInfo(newFile.getPath()).virtualFile();
+                VirtualFile parentDir = new PathInfo(newFile.getPath()).getVirtualFile();
                 if (parentDir != null) {
                     try {
                         VirtualFile quickFixFile = parentDir.createChildData(this.getClass().toString(), newFile.getFileName());

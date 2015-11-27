@@ -45,7 +45,7 @@ class TestLinkResolver_MarkdownTest__Readme constructor(val rowId:Int, val fullP
     val multiResolve: Array<String>
     val localLinkRef = resolvesLocalRel
     val externalLinkRef = resolvesExternalRel
-    val skipTest = linkRef is UrlLinkRef// || (linkRef !is ImageLinkRef && linkRef.hasExt && !linkRef.isMarkdownExt)
+    val skipTest = linkRef.isExternal
 
     fun resolveRelativePath(filePath:String?):PathInfo? {
         return if (filePath == null) null else if (filePath.startsWith("http://", "https://")) PathInfo(filePath) else PathInfo.appendParts(filePathInfo.path, filePath.splitToSequence("/"))

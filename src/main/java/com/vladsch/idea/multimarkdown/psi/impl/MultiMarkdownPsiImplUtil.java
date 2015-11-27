@@ -53,7 +53,7 @@ public class MultiMarkdownPsiImplUtil {
     final public static LinkRefElementTypes EXPLICIT_LINK_ELEMENT = new LinkRefElementTypes(EXPLICIT_LINK, LINK_REF, LINK_REF_TEXT, LINK_REF_ANCHOR, LINK_REF_TITLE, EXTENSION_USE_NEW_IF_OLD_HAS);
     final public static LinkRefElementTypes IMAGE_LINK_ELEMENT = new LinkRefElementTypes(IMAGE, IMAGE_LINK_REF, IMAGE_LINK_REF_TEXT, null, IMAGE_LINK_REF_TITLE, EXTENSION_USE_NEW);
 
-    static class LinkRefElementTypes {
+    public static class LinkRefElementTypes {
         @NotNull public final IElementType parentType;
         @NotNull public final IElementType linkRefType;
         @NotNull public final IElementType textType;

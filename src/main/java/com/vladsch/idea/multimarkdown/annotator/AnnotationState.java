@@ -22,12 +22,14 @@ import com.intellij.lang.annotation.AnnotationSession;
 import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
+import com.vladsch.idea.multimarkdown.util.InspectionResult;
 import com.vladsch.idea.multimarkdown.util.Severity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 public class AnnotationState {
     final public static String TYPE_CHANGE_LINK_REF_QUICK_FIX = "ChangeLinkRefQuickFix";

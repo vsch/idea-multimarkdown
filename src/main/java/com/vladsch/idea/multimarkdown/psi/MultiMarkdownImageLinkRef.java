@@ -15,4 +15,5 @@
 package com.vladsch.idea.multimarkdown.psi;
 
 public interface MultiMarkdownImageLinkRef extends MultiMarkdownLinkRef {
+
 }

@@ -14,6 +14,12 @@
  */
 package com.vladsch.idea.multimarkdown.util
 
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLinkRef
+import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLinkText
+import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownPsiImplUtil
+import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownReferenceWikiLinkRef
 import java.util.*
 
 class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
@@ -37,6 +43,12 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
         @JvmStatic @JvmField val ID_LINK_HAS_BAD_EXT = "LINK_HAS_BAD_EXT"
         @JvmStatic @JvmField val ID_LINK_TARGET_NEEDS_EXT = "LINK_TARGET_NEEDS_EXT"
         @JvmStatic @JvmField val ID_LINK_TARGET_HAS_BAD_EXT = "LINK_TARGET_HAS_BAD_EXT"
+
+        // TODO: implment these inspections
+        @JvmStatic @JvmField val ID_WIKI_LINK_HAS_REDUNDANT_TEXT = "WIKI_LINK_HAS_REDUNDANT_TEXT"
+        @JvmStatic @JvmField val ID_WIKI_LINK_HAS_ADDRESS_TEXT_SWAPPED = "WIKI_LINK_HAS_ADDRESS_TEXT_SWAPPED"
+        @JvmStatic @JvmField val ID_WIKI_LINK_TEXT_MATCHES_ANOTHER_TARGET = "WIKI_LINK_TEXT_MATCHES_ANOTHER_TARGET"
+        @JvmStatic @JvmField val ID_WIKI_LINK_TEXT_MATCHES_SELF_REF = "TEXT_MATCHES_SELF_REF"
     }
 
     internal class Context(val resolver: GitHubLinkResolver, val linkRef: LinkRef, val targetRef: FileRef) {
@@ -165,10 +177,11 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
             }
         }
 
+        // test: wiki link target has non-markdown extension
         fun INSPECT_WIKI_TARGET_PAGE_EXT() {
             assert(linkRef is WikiLinkRef)
-            if (!targetRef.isWikiPageExt) {
-                results.add(InspectionResult(ID_TARGET_NOT_WIKI_PAGE_EXT, Severity.ERROR, null, targetRef.filePathNoExt + PathInfo.WIKI_PAGE_EXTENSION.startWith('.')))
+            if (!linkRef.hasExt && !targetRef.isWikiPageExt) {
+                results.add(InspectionResult(ID_TARGET_NOT_WIKI_PAGE_EXT, Severity.ERROR, linkAddress, targetRef.filePathNoExt + PathInfo.WIKI_PAGE_EXTENSION.startWith('.')))
             }
         }
 
@@ -189,6 +202,68 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
                     results.add(InspectionResult(ID_WIKI_LINK_HAS_SLASH, Severity.ERROR, linkAddress, null))
                 }
             }
+        }
+
+        fun INSPECT_WIKI_LINK_TEXT_ADDRESS_SWAP() {
+//            assert(linkRef is WikiLinkRef)
+//            // see if need to swap link ref and link text
+//
+//            val wikiPageRef = MultiMarkdownPsiImplUtil.findChildByType(element, MultiMarkdownTypes.WIKI_LINK_REF) as MultiMarkdownWikiLinkRef?
+//            val wikiPageRefReference = wikiPageRef?.reference
+//
+//            if (wikiPageRefReference != null) {
+//                val wikiPageText = MultiMarkdownPsiImplUtil.findChildByType(element, MultiMarkdownTypes.WIKI_LINK_TEXT) as MultiMarkdownWikiLinkText?
+//
+//                val wikiPageTextName = wikiPageText?.name
+//                if (wikiPageTextName != null) {
+//                    // see if the link title resolves to a page
+//                    val containingFile = element.containingFile as MultiMarkdownFile
+//
+//                    if (wikiPageTextName == wikiPageRef!!.nameWithAnchor) {
+//                        // can get rid off the text
+//                        //if (state.addingAlreadyOffered(TYPE_DELETE_WIKI_PAGE_TITLE_QUICK_FIX)) {
+//                        //    state.createWeakWarningAnnotation(wikiPageText.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.redundant-page-title"));
+//                        //    state.annotator.registerFix(new DeleteWikiPageTitleQuickFix(element));
+//                        //}
+//                        //ID_WIKI_LINK_HAS_REDUNDANT_TEXT
+//                    } else {
+//                        val linkRefInfo = PathInfo(wikiPageTextName)
+//                        val accessibleWikiPageRefs = FileReferenceListQuery(element.project).wantMarkdownFiles().gitHubWikiRules().inSource(containingFile).ignoreLinkRefExtension(linkRefInfo.hasWikiPageExt()).matchWikiRef(wikiPageTextName).accessibleWikiPageRefs().postMatchFilter(linkRefInfo, true, false, null)
+//
+//                        if (accessibleWikiPageRefs.size() === 1) {
+//                            if ((wikiPageRefReference as MultiMarkdownReferenceWikiLinkRef?).isResolveRefMissing()) {
+//                                //ID_WIKI_LINK_HAS_ADDRESS_TEXT_SWAPPED
+//                                //if (!state.alreadyOfferedTypes(TYPE_SWAP_WIKI_PAGE_REF_TITLE_QUICK_FIX, TYPE_DELETE_WIKI_PAGE_REF_QUICK_FIX)) {
+//                                //    state.createErrorAnnotation(element.getTextRange(),
+//                                //            MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue()
+//                                //                    ? MultiMarkdownBundle.message("annotation.wikilink.ref-title-github")
+//                                //                    : MultiMarkdownBundle.message("annotation.wikilink.ref-title-swapped"));
+//                                //
+//                                //    state.annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
+//                                //
+//                                //    if (state.addingAlreadyOffered(TYPE_SWAP_WIKI_PAGE_REF_TITLE_QUICK_FIX)) state.annotator.registerFix(new SwapWikiPageRefTitleQuickFix(element));
+//                                //    if (state.addingAlreadyOffered(TYPE_DELETE_WIKI_PAGE_REF_QUICK_FIX)) state.annotator.registerFix(new DeleteWikiPageRefQuickFix(element));
+//                                //}
+//                            } else if (accessibleWikiPageRefs.get()[0].getFileNameNoExtAsWikiRef().equals(wikiPageTextName)) {
+//                                //ID_WIKI_LINK_TEXT_MATCHES_ANOTHER_TARGET
+//                                //if (state.alreadyOfferedTypes(TYPE_DELETE_WIKI_PAGE_TITLE_QUICK_FIX, TYPE_DELETE_WIKI_PAGE_REF_QUICK_FIX, TYPE_SWAP_WIKI_PAGE_REF_TITLE_QUICK_FIX)) {
+//                                //    state.createInfoAnnotation(wikiPageText.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.swap-ref-title"));
+//                                //    if (state.addingAlreadyOffered(TYPE_DELETE_WIKI_PAGE_TITLE_QUICK_FIX)) state.annotator.registerFix(new DeleteWikiPageTitleQuickFix(element));
+//                                //    if (state.addingAlreadyOffered(TYPE_DELETE_WIKI_PAGE_REF_QUICK_FIX)) state.annotator.registerFix(new DeleteWikiPageRefQuickFix(element));
+//                                //    if (state.addingAlreadyOffered(TYPE_SWAP_WIKI_PAGE_REF_TITLE_QUICK_FIX)) state.annotator.registerFix(new SwapWikiPageRefTitleQuickFix(element));
+//                                //}
+//                            }
+//                            // TODO: when we can validate existence of anchors add it to the condition below
+//                        } else if (wikiPageTextName.startsWith("#")) {
+//                            ////ID_WIKI_LINK_TEXT_MATCHES_SELF_REF
+//                            //if (state.addingAlreadyOffered(TYPE_SWAP_WIKI_PAGE_REF_TITLE_QUICK_FIX)) {
+//                            //    state.createInfoAnnotation(wikiPageText.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.swap-ref-title"));
+//                            //    state.annotator.registerFix(new SwapWikiPageRefTitleQuickFix(element));
+//                            //}
+//                        }
+//                    }
+//                }
+//            }
         }
     }
 

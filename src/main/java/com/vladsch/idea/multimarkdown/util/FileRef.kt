@@ -131,7 +131,7 @@ open class FileRef(fullPath: String, private val _virtualFile: VirtualFile?) : P
     override fun append(parts: Collection<String>): FileRef = PathInfo.appendParts(fullPath, parts, ::FileRef)
     override fun append(parts: Sequence<String>): FileRef = PathInfo.appendParts(fullPath, parts, ::FileRef)
 
-    val virtualFile by lazy { _virtualFile ?: VirtualFileManager.getInstance().findFileByUrl("file:" + fullPath) }
+    override val virtualFile by lazy { _virtualFile ?: VirtualFileManager.getInstance().findFileByUrl("file:" + fullPath) }
 
     val exists: Boolean
         get() = virtualFile?.exists() as Boolean

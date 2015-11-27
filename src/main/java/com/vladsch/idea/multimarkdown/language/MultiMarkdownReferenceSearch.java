@@ -29,6 +29,7 @@ import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.util.Processor;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.util.PathInfo;
+import com.vladsch.idea.multimarkdown.util.WikiLinkRef;
 import org.jetbrains.annotations.NotNull;
 
 public class MultiMarkdownReferenceSearch extends QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters> {
@@ -44,7 +45,7 @@ public class MultiMarkdownReferenceSearch extends QueryExecutorBase<PsiReference
         String text2 = null;
         if (refElement instanceof MultiMarkdownFile && ((MultiMarkdownFile) refElement).isWikiPage()) {
             PathInfo pathInfo = new PathInfo(((MultiMarkdownFile) refElement).getVirtualFile());
-            text = pathInfo.getFileNameNoExtAsWikiRef();
+            text = WikiLinkRef.convertFileToLink(pathInfo.getFileNameNoExt());
             //text2 = pathInfo.getFileNameNoExt();
         //} else if (refElement instanceof MultiMarkdownWikiLinkRef) {
         //    text = ((MultiMarkdownWikiLinkRef) refElement).getName();

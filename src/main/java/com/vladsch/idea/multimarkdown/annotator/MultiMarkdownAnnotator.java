@@ -28,11 +28,14 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiNamedElement;
+import com.intellij.psi.PsiReference;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.license.LicensedFeature;
 import com.vladsch.idea.multimarkdown.psi.*;
 import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownPsiImplUtil;
+import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownReferenceWikiLinkRef;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.util.*;
 import org.jetbrains.annotations.NotNull;
@@ -64,7 +67,10 @@ public class MultiMarkdownAnnotator implements Annotator {
         } else if (element instanceof MultiMarkdownLinkRefElement) {
             // TODO: implement inspections and move these annotation to info type inspections
             if (element instanceof MultiMarkdownLinkRef) annotateChangeExplicitLinkToWikiLink(element, state, Severity.WEAK_WARNING);
-            else if (element instanceof MultiMarkdownWikiLinkRef) annotateChangeWikiLinkToExplicitLink(element, state, Severity.WEAK_WARNING);
+            else if (element instanceof MultiMarkdownWikiLinkRef) {
+                checkWikiLinkSwapRefTitle((MultiMarkdownWikiLink) element.getParent(), state);
+                annotateChangeWikiLinkToExplicitLink(element, state, Severity.WEAK_WARNING);
+            }
 
             annotateLinkRef((MultiMarkdownLinkRefElement) element, state);
         }
@@ -306,7 +312,6 @@ public class MultiMarkdownAnnotator implements Annotator {
 
                         assert parentElement instanceof MultiMarkdownWikiLink;
                         if (element instanceof MultiMarkdownWikiLinkRef) offerWikiToExplicitQuickFix((MultiMarkdownWikiLink) parentElement, state);
-
                     } else if (reason.isA(ID_TARGET_NAME_HAS_ANCHOR) || reason.isA(ID_TARGET_PATH_HAS_ANCHOR)) {
                         state.needTargetList = false;
                         state.createAnnotation(reason.getSeverity(), element.getTextRange(), MultiMarkdownBundle.message("annotation.link.file-anchor"));
@@ -390,6 +395,68 @@ public class MultiMarkdownAnnotator implements Annotator {
                     }
 
                     state.annotator.setNeedsUpdateOnTyping(true);
+                }
+            }
+        }
+    }
+
+    protected void checkWikiLinkSwapRefTitle(@NotNull MultiMarkdownWikiLink element, @NotNull AnnotationState state) {
+        // see if need to swap link ref and link text
+        MultiMarkdownPsiImplUtil.LinkRefElementTypes elementTypes = MultiMarkdownPsiImplUtil.getNamedElementTypes(element);
+
+        if (elementTypes == null || elementTypes != MultiMarkdownPsiImplUtil.WIKI_LINK_ELEMENT) return;
+
+        LinkRef linkRefInfo = MultiMarkdownPsiImplUtil.getLinkRef(elementTypes, element);
+        PsiNamedElement textElement = (PsiNamedElement) MultiMarkdownPsiImplUtil.findChildByType(element, elementTypes.textType);
+        MultiMarkdownLinkRefElement linkRefElement = (MultiMarkdownLinkRefElement) MultiMarkdownPsiImplUtil.findChildByType(element, elementTypes.linkRefType);
+
+        PsiReference reference = linkRefElement != null ? linkRefElement.getReference() : null;
+
+        if (reference != null) {
+            String wikiPageTextName = textElement != null ? textElement.getName() : null;
+            if (wikiPageTextName != null) {
+                // see if the link text resolves to a page
+
+                if (wikiPageTextName.equals(linkRefElement.getNameWithAnchor())) {
+                    // can get rid off the text
+                    if (state.addingAlreadyOffered(TYPE_DELETE_WIKI_PAGE_TITLE_QUICK_FIX)) {
+                        state.createWeakWarningAnnotation(textElement.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.redundant-page-title"));
+                        state.annotator.registerFix(new DeleteWikiPageTitleQuickFix(element));
+                    }
+                } else {
+                    Project project = element.getProject();
+                    ProjectFileRef containingFile = new ProjectFileRef(element.getContainingFile());
+                    GitHubLinkResolver resolver = new GitHubLinkResolver(element.getContainingFile());
+                    List<PathInfo> targetRefs = resolver.multiResolve(linkRefInfo, LinkResolver.ANY, null);
+                    PathInfo targetInfo = targetRefs.size() > 0 ? targetRefs.get(0) : null;
+
+                    if (targetRefs.size() > 0 && targetInfo != null) {
+                        // have a resolve target
+                        if (((MultiMarkdownReferenceWikiLinkRef) reference).isResolveRefMissing()) {
+                            if (!state.alreadyOfferedTypes(TYPE_SWAP_WIKI_PAGE_REF_TITLE_QUICK_FIX, TYPE_DELETE_WIKI_PAGE_REF_QUICK_FIX)) {
+                                state.createErrorAnnotation(element.getTextRange(),
+                                        MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue()
+                                                ? MultiMarkdownBundle.message("annotation.wikilink.ref-title-github")
+                                                : MultiMarkdownBundle.message("annotation.wikilink.ref-title-swapped"));
+
+                                if (state.addingAlreadyOffered(TYPE_SWAP_WIKI_PAGE_REF_TITLE_QUICK_FIX)) state.annotator.registerFix(new SwapWikiPageRefTitleQuickFix(element));
+                                if (state.addingAlreadyOffered(TYPE_DELETE_WIKI_PAGE_REF_QUICK_FIX)) state.annotator.registerFix(new DeleteWikiPageRefQuickFix(element));
+                            }
+                        } else if (WikiLinkRef.convertFileToLink(targetInfo.getFileNameNoExt()).equals(wikiPageTextName)) {
+                            if (state.alreadyOfferedTypes(TYPE_DELETE_WIKI_PAGE_TITLE_QUICK_FIX, TYPE_DELETE_WIKI_PAGE_REF_QUICK_FIX, TYPE_SWAP_WIKI_PAGE_REF_TITLE_QUICK_FIX)) {
+                                state.createInfoAnnotation(textElement.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.swap-ref-title"));
+                                if (state.addingAlreadyOffered(TYPE_DELETE_WIKI_PAGE_TITLE_QUICK_FIX)) state.annotator.registerFix(new DeleteWikiPageTitleQuickFix(element));
+                                if (state.addingAlreadyOffered(TYPE_DELETE_WIKI_PAGE_REF_QUICK_FIX)) state.annotator.registerFix(new DeleteWikiPageRefQuickFix(element));
+                                if (state.addingAlreadyOffered(TYPE_SWAP_WIKI_PAGE_REF_TITLE_QUICK_FIX)) state.annotator.registerFix(new SwapWikiPageRefTitleQuickFix(element));
+                            }
+                        }
+                        // TODO: when we can validate existence of anchors add it to the condition below
+                    } else if (wikiPageTextName.startsWith("#")) {
+                        if (state.addingAlreadyOffered(TYPE_SWAP_WIKI_PAGE_REF_TITLE_QUICK_FIX)) {
+                            state.createInfoAnnotation(textElement.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.swap-ref-title"));
+                            state.annotator.registerFix(new SwapWikiPageRefTitleQuickFix(element));
+                        }
+                    }
                 }
             }
         }
