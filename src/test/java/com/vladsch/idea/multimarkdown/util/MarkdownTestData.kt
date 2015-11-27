@@ -49,7 +49,7 @@ object MarkdownTestData : LinkResolver.ProjectResolver {
             val repoBase = vcsRepoBase(fileRef)
             val vcsRepoUrlBase = vcsRepoUrlBase(fileRef)
             if (repoBase != null && vcsRepoUrlBase != null) {
-                return vcsRepoUrlBase.endWith('/') + PathInfo.relativePath(repoBase, fileRef.filePathNoExt) + (if (withExt) fileRef.ext.startWith('.')) + anchor.startWith('#')
+                return vcsRepoUrlBase.endWith('/') + PathInfo.relativePath(repoBase, fileRef.filePathNoExt) + (if (withExt) fileRef.ext.startWith('.') else "") + anchor.startWith('#')
             }
         }
         return null;

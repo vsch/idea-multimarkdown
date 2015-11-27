@@ -79,7 +79,7 @@ class TestLinkResolver_MarkdownTest__Readme constructor(val rowId:Int, val fullP
 
     @Test fun test_ResolveExternal() {
         if (skipTest) return
-        val localRef = resolver.resolve(linkRef, LinkResolver.ONLY_REMOTE, fileList)
+        val localRef = resolver.resolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI, fileList)
         assertEqualsMessage("External does not match", resolvesExternal, localRef?.filePath)
     }
 
@@ -93,7 +93,7 @@ class TestLinkResolver_MarkdownTest__Readme constructor(val rowId:Int, val fullP
     @Test fun test_RemoteLinkAddress() {
         if (skipTest) return
         val localRef = resolver.resolve(linkRef, LinkResolver.ONLY_LOCAL, fileList) as? FileRef
-        val remoteRef = resolver.resolve(linkRef, LinkResolver.ONLY_REMOTE, fileList) as? PathInfo
+        val remoteRef = resolver.resolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI, fileList) as? PathInfo
         val remoteRefAddress = if (localRef == null && remoteRef != null) resolver.linkAddress(linkRef, remoteRef, linkRef !is WikiLinkRef && (linkRef.hasExt || (linkRef.hasAnchor && linkAnchor?.contains('.') ?: false)), null) else null
         assertEqualsMessage("Remote based link address does not match", this.remoteAddressText, remoteRefAddress)
     }
@@ -129,7 +129,7 @@ class TestLinkResolver_MarkdownTest__Readme constructor(val rowId:Int, val fullP
                 return if (filePath == null) null else PathInfo.appendParts(filePathInfo.path, filePath.splitToSequence("/"))
             }
 
-        @Parameterized.Parameters(name = "{index}: filePath = {0}, linkRef = {3}, linkAnchor = {4}")
+        @Parameterized.Parameters(name = "{index}: filePath = {1}, linkRef = {4}, linkAnchor = {5}")
         @JvmStatic
         fun data(): Collection<Array<Any?>> {
             val data = MarkdownTest__Readme_md.data()

@@ -77,10 +77,10 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
             } else {
                 if (linkRef.filePath.equals(linkAddress, ignoreCase = true) && !linkRef.filePath.equals(linkAddress, ignoreCase = false)) {
                     val fixedPath = targetRef.path.endWith('/') + linkRef.linkToFile(linkRef.fileNameNoExt) + linkRef.ext.ifEmpty(targetRef.ext).startWith('.')
-                    val fixedPathInfo = PathInfo(fixedPath)
+                    val fixedLinkRef = FileRef(linkAddress)
                     // caution: no fixed file name provided if the case mismatch is in the path not the file name
                     // test: no fixed file name provided if the case mismatch is in the path not the file name
-                    results.add(InspectionResult(ID_CASE_MISMATCH, Severity.ERROR, linkAddress, if (linkRef.path == fixedPathInfo.path) fixedPath else null))
+                    results.add(InspectionResult(ID_CASE_MISMATCH, Severity.ERROR, linkAddress, if (linkRef.path == fixedLinkRef.path) fixedPath else null))
                 }
             }
         }

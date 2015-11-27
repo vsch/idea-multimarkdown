@@ -119,7 +119,7 @@ class TestLinkResolver_MarkdownTest_wiki__Home constructor(val rowId:Int, val fu
                 return if (filePath == null) null else PathInfo.appendParts(filePathInfo.path, filePath.splitToSequence("/"))
             }
 
-        @Parameterized.Parameters(name = "{index}: filePath = {0}, linkRef = {3}, linkAnchor = {4}")
+        @Parameterized.Parameters(name = "{index}: filePath = {1}, linkRef = {4}, linkAnchor = {5}")
         @JvmStatic
         fun data(): Collection<Array<Any?>> {
             val data = MarkdownTest__MarkdownTest_wiki__Home_md.data()

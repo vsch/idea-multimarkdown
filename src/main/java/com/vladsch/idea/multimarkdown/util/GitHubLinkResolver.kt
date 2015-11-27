@@ -118,7 +118,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                 if (projectResolver.isUnderVcs(targetRef)) {
                     // remote available
                     if (wantOnlyURI(options)) {
-                        val remoteUrl = projectResolver.repoUrlFor(targetRef, linkRef.hasExt, linkRef.anchor)
+                        val remoteUrl = projectResolver.repoUrlFor(targetRef, if (linkRef.filePath.isEmpty()) !targetRef.isWikiPage || linkRef.hasExt else linkRef.hasExt, linkRef.anchor)
                         if (remoteUrl != null) {
                             val urlRef = LinkRef.parseLinkRef(linkRef.containingFile, remoteUrl)
                             assert(urlRef.isExternal, { "expected to get URL, instead got $urlRef" })
@@ -131,10 +131,10 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                     // local only, if URL only, we need to convert to URI file:// type
                     if (wantOnlyURI(options)) return LinkRef(containingFile, "file://" + targetRef.filePath, null)
                 }
+            } else {
+                // local, remote or URL
+                return targetRef
             }
-
-            // local, remote or URL
-            return targetRef
         } else {
             if (!wantOnlyURI(options) && targetRef.isLocal) {
                 // must be a file:// type, we convert it to a projectFileType if we have a project and just a path if we do not
@@ -211,7 +211,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
             }
         }
 
-        if (wantRemote(options) && wantURI(options)) {
+        if (linkMatcher.gitHubLinks || wantRemote(options) && wantURI(options)) {
             // add the fixed links for GitHub if they match
             val remoteUrl = projectResolver.vcsRepoUrlBase(linkRef.containingFile)
             if (remoteUrl != null) {

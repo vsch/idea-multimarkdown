@@ -136,7 +136,7 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
     open val isAbsolute: Boolean
         get() = isAbsolute(fullPath)
 
-    fun withExt(ext: String?): PathInfo = if (ext == null || ext.isEmpty() || this.ext == ext) this else PathInfo(filePathNoExt + ext.startWith('.'))
+    fun withExt(ext: String?): PathInfo = if (ext == null || isEmpty || this.ext == ext.removePrefix(".")) this else PathInfo(filePathNoExt + ext.startWith('.'))
     open fun append(vararg parts: String): PathInfo = PathInfo.appendParts(fullPath, *parts, construct = ::PathInfo)
     open fun append(parts: Collection<String>): PathInfo = PathInfo.appendParts(fullPath, parts, construct = ::PathInfo)
     open fun append(parts: Sequence<String>): PathInfo = PathInfo.appendParts(fullPath, parts, construct = ::PathInfo)
@@ -280,6 +280,18 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
         @JvmStatic fun fileNamesNoExt(pathInfos: List<PathInfo>): Array<String> {
             val list = pathInfos.map { pathInfo -> pathInfo.fileNameNoExt }
             return list.toTypedArray()
+        }
+
+        @JvmStatic fun removeDotDirectoriesPrefix(path: String?): String {
+            if (path == null) return EMPTY_STRING
+            var pos = 0
+            var outPath = path
+            while (true) {
+                if (outPath.startsWith("../")) outPath = outPath.removeStart("../")
+                else if (outPath.startsWith("./")) outPath = outPath.removeStart("./")
+                else break
+            }
+            return cleanFullPath(outPath)
         }
     }
 }
