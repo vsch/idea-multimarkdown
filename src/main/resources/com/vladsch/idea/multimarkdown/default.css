@@ -102,6 +102,16 @@ body.multimarkdown-wiki-preview {
     color: #222222;
 }
 
+img.local-only {
+    border: 2px solid #b0a803;
+}
+
+img.absent {
+    border: 2px solid #B00020;
+    color: #B00020;
+    font-weight: bold;
+}
+
 /**********************************
  *  Anchor Related Formatting
  **********************************/
@@ -117,6 +127,10 @@ a.mail-link {
 
 a.absent {
     color: #B00020;
+}
+
+a.local-only {
+    color: #be8000;
 }
 
 a.anchor {
@@ -356,15 +370,15 @@ body table {
 
 table tr th {
     font-weight: bold;
-    border: 1px solid #d4d4d4;
     border-width: 0 1px 0 1px;
+    border: solid #d4d4d4;
     margin: 0;
     padding: 6px 13px;
 }
 
 table tr td {
-    border: 1px solid #dddddd;
     border-width: 0 1px 0 1px;
+    border: solid #dddddd;
     margin: 0;
     padding: 6px 13px;
 }

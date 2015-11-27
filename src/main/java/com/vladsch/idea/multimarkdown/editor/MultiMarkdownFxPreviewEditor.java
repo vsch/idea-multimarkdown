@@ -47,7 +47,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.UserDataHolderBase;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.sun.webkit.dom.HTMLImageElementImpl;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
@@ -242,7 +241,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     protected void updateLinkRenderer() {
         int options = 0;
         if (MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue()) options |= MultiMarkdownLinkRenderer.GITHUB_WIKI_LINK_FORMAT;
-        linkRendererModified = new MultiMarkdownLinkRenderer(project, document, "absent", options | MultiMarkdownLinkRenderer.VALIDATE_LINKS);
+        linkRendererModified = new MultiMarkdownLinkRenderer(project, document, "absent", null, options | MultiMarkdownLinkRenderer.VALIDATE_LINKS);
         linkRendererNormal = new MultiMarkdownLinkRenderer(options);
     }
 
@@ -762,10 +761,10 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                     htmlSerializer.setFlag(MultiMarkdownToHtmlSerializer.NO_WIKI_LINKS);
                 }
 
-                return htmlSerializer.toHtml(astRoot);
+                return htmlSerializer.toHtml(astRoot).replace("<br/>", "<br/>\n");
             } else {
 
-                return new ToHtmlSerializer(linkRendererNormal).toHtml(astRoot);
+                return new ToHtmlSerializer(linkRendererNormal).toHtml(astRoot).replace("<br/>", "<br/>\n");
             }
         }
     }

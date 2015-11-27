@@ -106,7 +106,7 @@ class ChangeLinkRefQuickFix extends BaseIntentionAction {
 
             case ADD_PAGE_REF:
                 //msg = MultiMarkdownBundle.message("quickfix.wikilink.0.add-page-ref", PathInfo.wikiRefAsFileNameWithExt(newLinkRef));
-                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.change-target", newLinkRefInfo);
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.add-page-ref", newLinkRefInfo);
                 break;
 
             case URL_ENCODE_ANCHOR:

@@ -88,7 +88,7 @@ public class MultiMarkdownAnnotator implements Annotator {
         //noinspection StatementWithEmptyBody
         if (linkRefInfo.isExternal()) {
             //state.createInfoAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.link.resolves-to-external"));
-        } else if (!linkRefInfo.getFilePath().isEmpty()) {
+        } else /*if (!linkRefInfo.getFilePath().isEmpty())*/ {
             Project project = element.getProject();
             ProjectFileRef containingFile = new ProjectFileRef(element.getContainingFile());
             GitHubLinkResolver resolver = new GitHubLinkResolver(element.getContainingFile());
@@ -302,7 +302,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                         }
                     } else if (reason.isA(ID_WIKI_LINK_HAS_ONLY_ANCHOR)) {
                         if (fixedLink != null && state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, fixedLink)) {
-                            state.createAnnotation(reason.getSeverity(), element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.has-only-anchor"));
+                            state.createAnnotation(reason.getSeverity(), parentElement.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.has-only-anchor"));
                             state.annotator.registerFix(new ChangeLinkRefQuickFix(element, fixedLink, ChangeLinkRefQuickFix.ADD_PAGE_REF, RENAME_KEEP_TEXT));
                         }
 
@@ -501,7 +501,7 @@ public class MultiMarkdownAnnotator implements Annotator {
     }
 
     protected void registerCreateFileFix(@NotNull String fileName, @NotNull MultiMarkdownNamedElement element, @NotNull AnnotationState state) {
-        if (state.canCreateFile) {
+        if (state.canCreateFile && !fileName.isEmpty()) {
             if (state.annotator == null) {
                 // creation fix
                 state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.unresolved-link-reference"));

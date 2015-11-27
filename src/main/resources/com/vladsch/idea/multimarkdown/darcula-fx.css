@@ -59,6 +59,16 @@ body {
     border: none;
 }
 
+img.local-only {
+    border: 2px solid #c9c55e;
+}
+
+img.absent {
+    border: 2px solid #C34E7B;
+    color: #C34E7B;
+    font-weight: bold;
+}
+
 a {
     color: #185BAE;
 }
@@ -69,6 +79,10 @@ a.mail-link {
 
 a.absent {
     color: #C34E7B;
+}
+
+a.local-only {
+    color: #be8000;
 }
 
 a.page-anchor {

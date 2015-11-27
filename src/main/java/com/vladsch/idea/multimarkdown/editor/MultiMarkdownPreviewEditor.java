@@ -218,7 +218,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
     protected void updateLinkRenderer() {
         int options = 0;
         if (MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue()) options |= MultiMarkdownLinkRenderer.GITHUB_WIKI_LINK_FORMAT;
-        linkRendererModified = new MultiMarkdownLinkRenderer(project, document, "absent", options | MultiMarkdownLinkRenderer.VALIDATE_LINKS);
+        linkRendererModified = new MultiMarkdownLinkRenderer(project, document, "absent", null, options | MultiMarkdownLinkRenderer.VALIDATE_LINKS);
         linkRendererNormal = new MultiMarkdownLinkRenderer(options);
     }
 
@@ -316,7 +316,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         // scan for <table>, </table>, <tr>, </tr> and other tags we modify, this could be done with a custom plugin to pegdown but
         // then it would be more trouble to get un-modified HTML.
         String regex = "(<table>|<thead>|<tbody>|<tr>|<hr/>|<del>|</del>|</p>|<kbd>|</kbd>|<var>|</var>";//|<code>|</code>";
-        String result = "";
+        StringBuilder result = new StringBuilder(html.length() + (html.length() >> 2));
 
         // RELEASE: see why only wiki documents have a link to github in the header
         String gitHubHref = MultiMarkdownPathResolver.getGitHubDocumentURL(project, document, !isWikiDocument);
@@ -328,15 +328,20 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
             gitHubClose = "</a>";
         }
         if (isWikiDocument) {
-            result += "<body class=\"multimarkdown-wiki-preview\">\n<div class=\"content\">\n";
-            result += "" +
-                    "<h1 class=\"first-child\">" + gitHubHref + escapeHtml(file == null ? "" : file.getNameWithoutExtension().replace('-', ' ')) + gitHubClose + "</h1>\n" +
-                    "";
+            result.append("<body class=\"multimarkdown-wiki-preview\">\n<div class=\"content\">\n");
+            result.append("" + "<h1 class=\"first-child\">")
+                    .append(gitHubHref)
+                    .append(escapeHtml(file == null ? "" : file.getNameWithoutExtension().replace('-', ' ')))
+                    .append(gitHubClose).append("</h1>\n")
+                    .append("");
         } else {
-            result += "<body class=\"multimarkdown-preview\">\n<div class=\"content\">\n" +
-                    "<div class=\"page-header\">" + gitHubHref + escapeHtml(file == null ? "" : file.getName().replace('-', ' ')) + gitHubClose +"</div>\n" +
-                    "<div class=\"hr\"></div>\n" +
-                    "";
+            result.append("<body class=\"multimarkdown-preview\">\n<div class=\"content\">\n" + "<div class=\"page-header\">")
+                    .append(gitHubHref)
+                    .append(escapeHtml(file == null ? "" : file.getName().replace('-', ' ')))
+                    .append(gitHubClose)
+                    .append("</div>\n")
+                    .append("<div class=\"hr\"></div>\n")
+                    .append("");
             // for now nothing
             regex += "|<h1>";
         }
@@ -346,7 +351,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         boolean taskLists = isTaskLists();
 
         if (taskLists) {
-            regex += "|<li class=\"task-list-item\">\\n*\\s*<p>|<li class=\"task-list-item\">|<li>\\[(?:x|X)\\]\\s*|<li>\\[ \\]\\s*|<li>\\n*\\s*<p>\\[x\\]\\s*|<li>\\n*\\s*<p>\\[ \\]\\s*";
+            regex += "|<li class=\"task-list-item\">\\n*\\s*<p>|<br\\s*/?>|<li class=\"task-list-item\">|<li>\\[(?:x|X)\\]\\s*|<li>\\[ \\]\\s*|<li>\\n*\\s*<p>\\[x\\]\\s*|<li>\\n*\\s*<p>\\[ \\]\\s*";
         }
         regex += regexTail;
         regex += ")";
@@ -362,54 +367,56 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         while (m.find()) {
             String found = m.group();
             if (lastPos < m.start(0)) {
-                result += html.substring(lastPos, m.start(0));
+                result.append(html.substring(lastPos, m.start(0)));
             }
 
             if (found.equals("</p>")) {
-                result += found;
+                result.append(found);
+            } else if (found.startsWith("<br")) {
+                result.append("<br/>\n");
             } else if (found.equals("<table>")) {
                 rowCount = 0;
-                result += found;
+                result.append(found);
             } else if (found.equals("<thead>")) {
-                result += found;
+                result.append(found);
             } else if (found.equals("<tbody>")) {
-                result += found;
+                result.append(found);
             } else if (found.equals("/>")) {
-                result += ">";
+                result.append(">");
             } else if (found.equals("<tr>")) {
                 rowCount++;
-                result += "<tr class=\"" + (rowCount == 1 ? "first-child" : (rowCount & 1) != 0 ? "odd-child" : "even-child") + "\">";
+                result.append("<tr class=\"").append(rowCount == 1 ? "first-child" : (rowCount & 1) != 0 ? "odd-child" : "even-child").append("\">");
             } else if (found.equals("<hr/>")) {
-                result += "<div class=\"hr\">&nbsp;</div>";
+                result.append("<div class=\"hr\">&nbsp;</div>");
             } else if (found.equals("<h1>")) {
-                result += firstChildH1 ? "<h1 class=\"first-child\">" : "<h1>";
+                result.append(firstChildH1 ? "<h1 class=\"first-child\">" : "<h1>");
                 firstChildH1 = false;
             } else if (found.equals("<del>")) {
-                result += "<span class=\"del\">";
+                result.append("<span class=\"del\">");
             } else if (found.equals("</del>")) {
-                result += "</span>";
+                result.append("</span>");
             } else if (found.equals("<kbd>")) {
-                result += "<span class=\"kbd\">";
+                result.append("<span class=\"kbd\">");
             } else if (found.equals("</kbd>")) {
-                result += "</span>";
+                result.append("</span>");
             } else if (found.equals("<code>")) {
-                result += "<span class=\"code\">";
+                result.append("<span class=\"code\">");
             } else if (found.equals("</code>")) {
-                result += "</span>";
+                result.append("</span>");
             } else if (found.equals("<var>")) {
-                result += "<span class=\"var\">";
+                result.append("<span class=\"var\">");
             } else if (found.equals("</var>")) {
-                result += "</span>";
+                result.append("</span>");
             } else {
                 found = found.trim();
                 if (taskLists && found.equals("<li>[x]")) {
-                    result += "<li class=\"dtask\">";
+                    result.append("<li class=\"dtask\">");
                 } else if (taskLists && found.equals("<li>[X]")) {
-                    result += "<li class=\"dtask\">";
+                    result.append("<li class=\"dtask\">");
                 } else if (taskLists && found.equals("<li>[ ]")) {
-                    result += "<li class=\"dtask\">";
+                    result.append("<li class=\"dtask\">");
                 } else if (taskLists && found.equals("<li class=\"task-list-item\">")) {
-                    result += "<li class=\"taski\">";
+                    result.append("<li class=\"taski\">");
                 } else {
                     // here we have <li>\n*\s*<p>, need to strip out \n*\s* so we can match them easier
                     String foundWithP = found;
@@ -417,15 +424,15 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
                     found = foundWithP.replaceAll("<li class=\"task-list-item\">\\n*\\s*<p>", "<li class=\"task\"><p>");
                     found = found.trim();
                     if (found.equals("<li><p>")) {
-                        result += "<li class=\"p\"><p class=\"p\">";
+                        result.append("<li class=\"p\"><p class=\"p\">");
                     } else if (taskLists && found.equals("<li><p>[x]")) {
-                        result += "<li class=\"dtaskp\"><p class=\"p\">";
+                        result.append("<li class=\"dtaskp\"><p class=\"p\">");
                     } else if (taskLists && found.equals("<li><p>[ ]")) {
-                        result += "<li class=\"dtaskp\"><p class=\"p\">";
+                        result.append("<li class=\"dtaskp\"><p class=\"p\">");
                     } else if (taskLists && found.equals("<li class=\"task-list-item\"><p>")) {
-                        result += "<li class=\"taskp\"><p class=\"p\">";
+                        result.append("<li class=\"taskp\"><p class=\"p\">");
                     } else {
-                        result += found;
+                        result.append(found);
                     }
                 }
             }
@@ -434,11 +441,11 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         }
 
         if (lastPos < html.length()) {
-            result += html.substring(lastPos);
+            result.append(html.substring(lastPos));
         }
 
-        result += "\n</div>\n</body>\n";
-        return result;
+        result.append("\n</div>\n</body>\n");
+        return result.toString();
     }
 
     protected void delayedHtmlPreviewUpdate(final boolean fullKit) {
@@ -486,15 +493,15 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         return false;
     }
 
-    protected MultiMarkdownFxPreviewEditor findCounterpart() {
+    protected MultiMarkdownPreviewEditor findCounterpart() {
         // here we can find our HTML Text counterpart and update its HTML at the same time. but it is better to keep it separate for now
         VirtualFile file = FileDocumentManager.getInstance().getFile(document);
         if (file != null) {
             FileEditorManager manager = FileEditorManager.getInstance(project);
             FileEditor[] editors = manager.getEditors(file);
             for (FileEditor editor : editors) {
-                if (editor != this && editor instanceof MultiMarkdownFxPreviewEditor) {
-                    return (MultiMarkdownFxPreviewEditor) editor;
+                if (editor != this && editor instanceof MultiMarkdownPreviewEditor) {
+                    return (MultiMarkdownPreviewEditor) editor;
                 }
             }
         }
@@ -505,7 +512,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
     protected void setStyleSheet() {
         if (isRawHtml) return;
 
-        MultiMarkdownEditorKit htmlKit = new MultiMarkdownEditorKit(document, project);
+        MultiMarkdownEditorKit htmlKit = new MultiMarkdownEditorKit();
 
         final StyleSheet style = new MultiMarkdownStyleSheet();
 
@@ -580,8 +587,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
 
                 return htmlSerializer.toHtml(astRoot);
             } else {
-
-                return new ToHtmlSerializer(linkRendererNormal).toHtml(astRoot);
+                return new ToHtmlSerializer(linkRendererNormal).toHtml(astRoot).replace("<br/>", "<br/>\n");
             }
         }
     }

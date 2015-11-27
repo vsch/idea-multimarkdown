@@ -21,23 +21,16 @@
  */
 package com.vladsch.idea.multimarkdown.editor;
 
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
-import com.vladsch.idea.multimarkdown.util.*;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.text.html.HTML;
-import javax.swing.text.html.HTML.Attribute;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.ImageView;
 import java.awt.*;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -53,13 +46,9 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
     /**
      * The document.
      */
-    private final Document document;
-    private final Project project;
     protected float maxWidth;
 
     protected MultiMarkdownGlobalSettingsListener globalSettingsListener;
-    private GitHubLinkResolver resolver;
-    private VirtualFile containingFile;
 
     public void setMaxWidth(float maxWidth) { this.maxWidth = maxWidth; }
 
@@ -68,14 +57,8 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
     /**
      * Build a new instance of {@link MultiMarkdownEditorKit}.
      *
-     * @param document the document
      */
-    public MultiMarkdownEditorKit(@NotNull Document document, @NotNull Project project) {
-        this.document = document;
-        this.project = project;
-        this.resolver = new GitHubLinkResolver(containingFile, project);
-        this.containingFile = FileDocumentManager.getInstance().getFile(document);
-
+    public MultiMarkdownEditorKit() {
         maxWidth = MultiMarkdownGlobalSettings.getInstance().maxImgWidth.getValue();
 
         MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
@@ -93,7 +76,7 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
     @SuppressWarnings("CloneDoesntCallSuperClone")
     @Override
     public Object clone() {
-        return new MultiMarkdownEditorKit(document, project);
+        return new MultiMarkdownEditorKit();
     }
 
     /**
@@ -157,26 +140,6 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
          */
         @Override
         public URL getImageURL() {
-            final String src = (String) getElement().getAttributes().getAttribute(Attribute.SRC);
-            if (src != null) {
-
-                if (!editorKit.project.isDisposed()) {
-                    if (editorKit.containingFile != null) {
-                        ImageLinkRef linkRef = new ImageLinkRef(new FileRef(editorKit.containingFile), src, null, null);
-                        PathInfo resolvedTarget = editorKit.resolver.resolve(linkRef, LinkResolver.ONLY_URI, null);
-
-                        assert resolvedTarget == null || resolvedTarget instanceof LinkRef && linkRef.isURI() : "Expected URI LinkRef, got " + linkRef;
-
-                        if (resolvedTarget != null) {
-                            try {
-                                return new URL(resolvedTarget.getFilePath());
-                            } catch (MalformedURLException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                }
-            }
             return super.getImageURL();
         }
 

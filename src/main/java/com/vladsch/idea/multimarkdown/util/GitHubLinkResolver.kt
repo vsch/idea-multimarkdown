@@ -36,14 +36,16 @@ import kotlin.text.RegexOption
 class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containingFile: FileRef, branchOrTag: String? = null) : LinkResolver(projectResolver, containingFile, branchOrTag) {
 
     companion object {
-        @JvmStatic @JvmField val GITHUB_ISSUES_NAME = "issues"
+        @JvmStatic @JvmField val GITHUB_FORK_NAME = "fork"
         @JvmStatic @JvmField val GITHUB_GRAPHS_NAME = "graphs"
+        @JvmStatic @JvmField val GITHUB_ISSUES_NAME = "issues"
         @JvmStatic @JvmField val GITHUB_PULLS_NAME = "pulls"
         @JvmStatic @JvmField val GITHUB_PULSE_NAME = "pulse"
         @JvmStatic @JvmField val GITHUB_WIKI_NAME = "wiki"
 
         // IMPORTANT: keep alphabetically sorted. These are not re-sorted after match
         @JvmStatic @JvmField val GITHUB_LINKS = arrayOf(
+                GITHUB_FORK_NAME,
                 GITHUB_GRAPHS_NAME,
                 GITHUB_ISSUES_NAME,
                 GITHUB_PULLS_NAME,
@@ -130,7 +132,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
     fun processMatchOptions(linkRef: LinkRef, targetRef: PathInfo, options: Int): PathInfo? {
         if (targetRef is FileRef) {
             if (!wantLocal(options) || wantOnlyURI(options)) {
-                if (projectResolver.isUnderVcs(targetRef)) {
+                if (!wantLocal(options) && projectResolver.isUnderVcs(targetRef)) {
                     // remote available
                     if (wantOnlyURI(options)) {
                         val remoteUrl = projectResolver.getGitHubRepo(targetRef)?.urlForVcsRemote(targetRef, if (linkRef.filePath.isEmpty()) !targetRef.isWikiPage else linkRef.hasExt, linkRef.anchor, branchOrTag)
@@ -143,7 +145,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                         return targetRef
                     }
                 } else {
-                    // local only, if URL only, we need to convert to URI file:// type
+                    // URL only, we need to convert to URI file:// type
                     if (wantOnlyURI(options)) return LinkRef(containingFile, "file://" + targetRef.filePath, null, targetRef as FileRef?)
                 }
             } else {

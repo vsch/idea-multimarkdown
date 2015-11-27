@@ -28,10 +28,7 @@ import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
-import com.vladsch.idea.multimarkdown.util.GitHubLinkResolver;
-import com.vladsch.idea.multimarkdown.util.LinkRef;
-import com.vladsch.idea.multimarkdown.util.LinkResolver;
-import com.vladsch.idea.multimarkdown.util.PathInfo;
+import com.vladsch.idea.multimarkdown.util.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.parboiled.common.StringUtils;
@@ -48,18 +45,20 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
     @NotNull final protected String missingTargetClass;
     final protected int options;
     final protected GitHubLinkResolver resolver;
+    final protected String localOnlyTargetClass;
 
     public MultiMarkdownLinkRenderer() {
         this(0);
     }
 
     public MultiMarkdownLinkRenderer(int options) {
-        this(null, null, null, options);
+        this(null, null, null, null, options);
     }
 
-    public MultiMarkdownLinkRenderer(@Nullable Project project, @Nullable Document document, @Nullable String missingTargetClass, int options) {
+    public MultiMarkdownLinkRenderer(@Nullable Project project, @Nullable Document document, @Nullable String missingTargetClass, @Nullable String localOnlyTargetClass, int options) {
         super();
         this.missingTargetClass = missingTargetClass == null ? "absent" : missingTargetClass;
+        this.localOnlyTargetClass = localOnlyTargetClass == null ? "local-only" : localOnlyTargetClass;
 
         if ((options & VALIDATE_LINKS) != 0) {
             VirtualFile file = document == null ? null : FileDocumentManager.getInstance().getFile(document);
@@ -73,16 +72,18 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
     }
 
     @Nullable
-    public String getLinkTarget(@NotNull String url, boolean isWikiLink) {
+    public String getLinkTarget(@NotNull String url, boolean isWikiLink, @NotNull boolean[] localOnly) {
         // return null if does not resolved, but only if validating links
         if ((options & VALIDATE_LINKS) != 0 && (isWikiLink || MultiMarkdownPlugin.isLicensed())) {
             assert resolver != null;
 
             LinkRef targetRef = isWikiLink ? LinkRef.parseWikiLinkRef(resolver.getContainingFile(), url, null) : LinkRef.parseLinkRef(resolver.getContainingFile(), url, null);
-            PathInfo resolvedTarget = resolver.resolve(targetRef, LinkResolver.ONLY_URI, null);
+            PathInfo resolvedTarget = resolver.resolve(targetRef, LinkResolver.PREFER_REMOTE | LinkResolver.ONLY_URI, null);
             if (resolvedTarget != null) {
-                assert resolvedTarget.isURI() : "Expected URI only target, got " + resolvedTarget;
-                return resolvedTarget.getFilePath();
+                assert resolvedTarget.isURI() && resolvedTarget instanceof LinkRef && (!resolvedTarget.isLocal() || ((LinkRef) resolvedTarget).isResolved()) : "Expected URI only target, got " + resolvedTarget;
+                FileRef fileRef = resolvedTarget.isLocal() ? ((LinkRef) resolvedTarget).getTargetRef() : null;
+                localOnly[0] = fileRef instanceof ProjectFileRef && !((ProjectFileRef) fileRef).isUnderVcs();
+                return ((LinkRef) resolvedTarget).getFilePathWithAnchor();
             }
             return null;
         }
@@ -98,7 +99,7 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
     }
 
     @Nullable
-    public String getImageLinkTarget(@NotNull String url) {
+    public String getImageLinkTarget(@NotNull String url, @NotNull boolean[] localOnly) {
         // return null if does not resolved, but only if validating links
         if ((options & VALIDATE_LINKS) != 0 && MultiMarkdownPlugin.isLicensed()) {
             assert resolver != null;
@@ -106,12 +107,38 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
             LinkRef targetRef = LinkRef.parseImageLinkRef(resolver.getContainingFile(), url, null);
             PathInfo resolvedTarget = resolver.resolve(targetRef, LinkResolver.ONLY_URI, null);
             if (resolvedTarget != null) {
-                assert resolvedTarget.isURI() : "Expected URI only target, got " + resolvedTarget;
+                assert resolvedTarget.isURI() && resolvedTarget instanceof LinkRef && (!resolvedTarget.isLocal() || ((LinkRef) resolvedTarget).isResolved()) : "Expected URI only target, got " + resolvedTarget;
+                FileRef fileRef = resolvedTarget.isLocal() ? ((LinkRef) resolvedTarget).getTargetRef() : null;
+                localOnly[0] = fileRef instanceof ProjectFileRef && !((ProjectFileRef) fileRef).isUnderVcs();
                 return resolvedTarget.getFilePath();
             }
             return null;
         }
         return url;
+    }
+
+    public Rendering renderImageLink(String url, String title, String alt) {
+        boolean[] localOnly = new boolean[] { false };
+        String href = getImageLinkTarget(url, localOnly);
+        Rendering rendering = new Rendering(href == null ? url : href, alt);
+        if (MultiMarkdownPlugin.isLicensed()) {
+            if (href == null) rendering.withAttribute("class", missingTargetClass);
+            else if (localOnly[0]) rendering.withAttribute("class", localOnlyTargetClass);
+        }
+        if (!StringUtils.isEmpty(title)) rendering.withAttribute("title", encode(title));
+        return rendering;
+    }
+
+    public Rendering renderLink(String url, String title, String text, boolean wikiLink) {
+        boolean[] localOnly = new boolean[] { false };
+        String href = getLinkTarget(url, wikiLink, localOnly);
+        Rendering rendering = new Rendering(href == null ? url : href, text);
+        if (MultiMarkdownPlugin.isLicensed() || wikiLink) {
+            if (href == null) rendering.withAttribute("class", missingTargetClass);
+            else if (localOnly[0]) rendering.withAttribute("class", localOnlyTargetClass);
+        }
+        if (!wikiLink && !StringUtils.isEmpty(title)) rendering.withAttribute("title", encode(title));
+        return rendering;
     }
 
     @Override
@@ -126,40 +153,22 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
 
     @Override
     public Rendering render(ExpLinkNode node, String text) {
-        String href = getLinkTarget(node.url, false);
-        Rendering rendering = new Rendering(href == null ? node.url : href, text);
-        if (href == null && MultiMarkdownPlugin.isLicensed()) rendering.withAttribute("class", missingTargetClass);
-        if (!StringUtils.isEmpty(node.title)) rendering.withAttribute("title", encode(node.title));
-        return rendering;
+        return renderLink(node.url, node.title, text, false);
     }
 
     @Override
     public Rendering render(ExpImageNode node, String text) {
-        String href = getImageLinkTarget(node.url);
-        Rendering rendering = new Rendering(href == null ? node.url : href, text);
-        if (href == null && MultiMarkdownPlugin.isLicensed()) rendering.withAttribute("class", missingTargetClass);
-        if (!StringUtils.isEmpty(node.title)) rendering.withAttribute("title", encode(node.title));
-        return rendering;
+        return renderImageLink(node.url, node.title, text);
     }
 
     @Override
     public Rendering render(RefLinkNode node, String url, String title, String text) {
-        //return checkTarget(super.render(node, url, title, text));
-        String href = getLinkTarget(url, false);
-        Rendering rendering = new Rendering(href == null ? url : href, text);
-        if (href == null && MultiMarkdownPlugin.isLicensed()) rendering.withAttribute("class", missingTargetClass);
-        if (!StringUtils.isEmpty(title)) rendering.withAttribute("title", encode(title));
-        return rendering;
+        return renderLink(url, title, text, false);
     }
 
     @Override
     public Rendering render(RefImageNode node, String url, String title, String alt) {
-        //return checkTargetImage(super.render(node, url, title, alt));
-        String href = getImageLinkTarget(url);
-        Rendering rendering = new Rendering(href == null ? url : href, alt);
-        if (href == null && MultiMarkdownPlugin.isLicensed()) rendering.withAttribute("class", missingTargetClass);
-        if (!StringUtils.isEmpty(title)) rendering.withAttribute("title", encode(title));
-        return rendering;
+        return renderImageLink(url, title, alt);
     }
 
     @Override
@@ -189,9 +198,6 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
         }
 
         // vsch: #200 WikiLinks can have anchor # refs, these are now handled by link resolution engine
-        String href = getLinkTarget(url, true);
-        Rendering rendering = new Rendering(href == null ? url : href, text);
-        if (href == null) rendering.withAttribute("class", missingTargetClass);
-        return rendering;
+        return renderLink(url, "", text, true);
     }
 }

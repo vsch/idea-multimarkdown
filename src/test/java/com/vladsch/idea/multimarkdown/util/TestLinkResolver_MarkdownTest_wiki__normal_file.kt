@@ -72,26 +72,26 @@ class TestLinkResolver_MarkdownTest_wiki__normal_file constructor(val rowId:Int,
 
     @Test fun test_ResolveLocal() {
         if (skipTest) return
-        val localRef = resolver.resolve(linkRef, LinkResolver.ONLY_LOCAL, fileList)
+        val localRef = resolver.resolve(linkRef, LinkResolver.PREFER_LOCAL, fileList)
         assertEqualsMessage("Local does not match", resolvesLocal, localRef?.filePath)
     }
 
     @Test fun test_ResolveExternal() {
         if (skipTest) return
-        val localRef = resolver.resolve(linkRef, LinkResolver.ONLY_REMOTE, fileList)
+        val localRef = resolver.resolve(linkRef, LinkResolver.PREFER_REMOTE, fileList)
         assertEqualsMessage("External does not match", resolvesExternal, localRef?.filePath)
     }
 
     @Test fun test_LocalLinkAddress() {
         if (skipTest) return
-        val localRef = resolver.resolve(linkRef, LinkResolver.ONLY_LOCAL, fileList) as? FileRef
+        val localRef = resolver.resolve(linkRef, LinkResolver.PREFER_LOCAL, fileList) as? FileRef
         val localRefAddress = if (localRef != null) resolver.linkAddress(linkRef, localRef, (linkRef.hasExt || (linkRef.hasAnchor && linkAnchor?.contains('.') ?: false)), null) else null
         assertEqualsMessage("Local link address does not match", this.linkAddressText, localRefAddress)
     }
 
     @Test fun test_MultiResolve() {
         if (skipTest) return
-        val localRefs = resolver.multiResolve(linkRef, LinkResolver.ONLY_LOCAL or LinkResolver.LOOSE_MATCH, fileList)
+        val localRefs = resolver.multiResolve(linkRef, LinkResolver.PREFER_LOCAL or LinkResolver.LOOSE_MATCH, fileList)
         val actuals = Array<String>(localRefs.size, { "" })
         for (i in localRefs.indices) {
             actuals[i] = localRefs[i].filePath

@@ -54,10 +54,9 @@ public class MultiMarkdownElementFactory {
         return (MultiMarkdownImageLink) createElementFromText(project, elementText);
     }
 
-    public static MultiMarkdownNamedElement createElementFromText(@NotNull Project project, @NotNull String elementText) {
+    public static PsiElement createElementFromText(@NotNull Project project, @NotNull String elementText) {
         final MultiMarkdownFile file = createFile(project, elementText);
-        PsiElement child = file.getFirstChild();
-        return (MultiMarkdownNamedElement) child;
+        return file.getFirstChild();
     }
 
     public static PsiElement createCRLF(Project project) {
