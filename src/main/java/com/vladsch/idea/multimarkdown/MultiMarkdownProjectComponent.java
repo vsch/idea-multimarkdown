@@ -25,6 +25,7 @@ import com.intellij.ProjectTopics;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootAdapter;
@@ -52,6 +53,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -294,7 +296,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         }
     }
 
-    public GitHubRepo getGitHubRepo(@Nullable String baseDirectoryPath) {
+    public GitHubVcsRoot getGitHubRepo(@Nullable String baseDirectoryPath) {
         if (baseDirectoryPath == null) baseDirectoryPath = project.getBasePath();
         if (baseDirectoryPath == null) return null;
 
@@ -303,12 +305,12 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         }
 
         if (!gitHubRepos.containsKey(baseDirectoryPath)) {
-            GitHubRepo gitHubRepo = GitHubRepo.getGitHubRepo(this, baseDirectoryPath, project.getBasePath());
-            gitHubRepos.put(baseDirectoryPath, gitHubRepo != null ? gitHubRepo : new Object());
+            GitHubVcsRoot gitHubVcsRoot = GitHubVcsRoot.getGitHubVcsRoot(this, baseDirectoryPath, project.getBasePath());
+            gitHubRepos.put(baseDirectoryPath, gitHubVcsRoot != null ? gitHubVcsRoot : new Object());
         }
 
         Object object = gitHubRepos.get(baseDirectoryPath);
-        return object instanceof GitHubRepo ? (GitHubRepo) object : null;
+        return object instanceof GitHubVcsRoot ? (GitHubVcsRoot) object : null;
     }
 
     public boolean isUnderVcs(VirtualFile virtualFile) {
@@ -332,18 +334,16 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
 
     @Nullable
     @Override
-    public String vcsRepoUrlBase(@NotNull FileRef fileRef) {
-        GitHubRepo gitHubRepo = getGitHubRepo(fileRef.getPath());
-        return gitHubRepo == null ? null : gitHubRepo.gitHubBaseUrl();
+    public GitHubVcsRoot getGitHubRepo(@NotNull FileRef fileRef) {
+        return getGitHubRepo(fileRef.getPath());
     }
 
     @Nullable
     @Override
-    public String vcsRepoBase(@NotNull FileRef fileRef) {
-        GitHubRepo gitHubRepo = getGitHubRepo(fileRef.getPath());
-        return gitHubRepo == null ? null : gitHubRepo.getBasePath();
+    public String vcsRootBase(@NotNull FileRef fileRef) {
+        GitHubVcsRoot gitHubVcsRoot = getGitHubRepo(fileRef.getPath());
+        return gitHubVcsRoot == null ? null : gitHubVcsRoot.getBasePath();
     }
-
 
     @NotNull
     @Override
@@ -354,21 +354,14 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
 
     @Nullable
     @Override
-    public String vcsProjectRepoUrlBase() {
-        GitHubRepo gitHubRepo = getGitHubRepo(project.getBasePath());
-        return gitHubRepo == null ? null : gitHubRepo.getBasePath();
+    public String projectVcsBasePath() {
+        GitHubVcsRoot gitHubVcsRoot = getGitHubRepo(project.getBasePath());
+        return gitHubVcsRoot == null ? null : gitHubVcsRoot.getBasePath();
     }
 
     @Nullable
     @Override
-    public String repoUrlFor(@NotNull FileRef fileRef, boolean withExt, @Nullable String anchor) {
-        GitHubRepo gitHubRepo = getGitHubRepo(fileRef.getPath());
-        return gitHubRepo == null ? null : gitHubRepo.repoUrlFor(fileRef, withExt, anchor);
-    }
-
-    @Nullable
-    @Override
-    public List<FileRef> projectFileList() {
+    public List<FileRef> projectFileList(@NotNull HashSet<FileType> fileTypes) {
         return null;
     }
 

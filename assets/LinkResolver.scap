@@ -126,7 +126,7 @@
                 <Border Weight="1">0.331867 0.609932 0.356197</Border>
                 <Fill>0.790123 0.882327 0.80198</Fill>
             </Appearance>
-            <String>gitHubRepo : GitHubRepo</String>
+            <String>gitHubVcsRoot : GitHubRepo</String>
         </Note>
         <Note ID="33" FontSize="12.0" Position="73.0,74.0" Width="167.0">
             <Appearance>

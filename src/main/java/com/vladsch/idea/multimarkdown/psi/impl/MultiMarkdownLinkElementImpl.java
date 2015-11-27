@@ -23,7 +23,7 @@ import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkElement;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownVisitor;
-import com.vladsch.idea.multimarkdown.util.GitHubRepo;
+import com.vladsch.idea.multimarkdown.util.GitHubVcsRoot;
 import com.vladsch.idea.multimarkdown.util.PathInfo;
 import com.vladsch.idea.multimarkdown.util.StringUtilKt;
 import com.vladsch.idea.multimarkdown.util.WikiLinkRef;
@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class MultiMarkdownLinkElementImpl  extends ASTWrapperPsiElement implements MultiMarkdownLinkElement {
     public static String getElementLinkRefWithAnchor(@NotNull String linkRef, @Nullable String linkAnchor) {
-        return linkRef.replace("#", "%23") + StringUtilKt.startWith(linkAnchor, '#');
+        return linkRef.replace("#", "%23") + StringUtilKt.prefixWith(linkAnchor, '#');
     }
 
     public static String getElementLinkRefWithAnchor(@NotNull String linkRefWithAnchor) {
@@ -89,8 +89,8 @@ public abstract class MultiMarkdownLinkElementImpl  extends ASTWrapperPsiElement
         PsiFile psiFile = getContainingFile();
         VirtualFile virtualFile = psiFile.getOriginalFile() != null ? psiFile.getOriginalFile().getVirtualFile() : psiFile.getVirtualFile();
         PathInfo filePathInfo = new PathInfo(virtualFile);
-        GitHubRepo gitHubRepo = projectComponent != null ? projectComponent.getGitHubRepo(filePathInfo.getPath()) : null;
-        String vcsHome = gitHubRepo != null ? gitHubRepo.getBasePath() + "::" : "";
+        GitHubVcsRoot gitHubVcsRoot = projectComponent != null ? projectComponent.getGitHubRepo(filePathInfo.getPath()) : null;
+        String vcsHome = gitHubVcsRoot != null ? gitHubVcsRoot.getBasePath() + "::" : "";
 
         if (addLinkRef) {
             String pageRef = MultiMarkdownPsiImplUtil.getLinkRefTextWithAnchor(this);

@@ -38,7 +38,7 @@ public class MultiMarkdownWikiLinkImpl extends MultiMarkdownLinkElementImpl impl
     }
 
     public static String getElementText(@NotNull String linkRef, @Nullable String linkText, @Nullable String anchor) {
-        return getElementText(linkRef + StringUtilKt.startWith(anchor, '#'), linkText);
+        return getElementText(linkRef + StringUtilKt.prefixWith(anchor, '#'), linkText);
     }
 
     public MultiMarkdownWikiLinkImpl(ASTNode node) {

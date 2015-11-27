@@ -14,48 +14,40 @@
  */
 package com.vladsch.idea.multimarkdown.util
 
+import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.project.Project
 import java.util.*
 
 object MarkdownTestData : LinkResolver.ProjectResolver {
+
+    val mainGitHubRepo = GitHubVcsRoot("https://github.com/vsch/MarkdownTest", "/Users/vlad/src/MarkdownTest")
+    val wikiGitHubRepo = GitHubVcsRoot("https://github.com/vsch/MarkdownTest", "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki")
+
     override fun isUnderVcs(fileRef: FileRef): Boolean {
         return fileRef.filePath !in nonVcsFiles
     }
 
-    override fun vcsRepoUrlBase(fileRef: FileRef): String? {
-        if (fileRef.filePath.startsWith("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/")) return "https://github.com/vsch/MarkdownTest/wiki"
-        else if (fileRef.filePath.startsWith("/Users/vlad/src/MarkdownTest/")) return "https://github.com/vsch/MarkdownTest"
+    override fun getGitHubRepo(fileRef: FileRef): GitHubVcsRoot? {
+        if (fileRef.filePath.suffixWith('/').startsWith(wikiGitHubRepo.basePath.suffixWith('/'))) return wikiGitHubRepo
+        else if (fileRef.filePath.suffixWith('/').startsWith(mainGitHubRepo.basePath.suffixWith('/'))) return mainGitHubRepo
         else return null
     }
 
     override val projectBasePath: String
-        get() = "/Users/vlad/src/MarkdownTest"
+        get() = mainGitHubRepo.basePath
 
     override val project: Project?
         get() = null
 
-    override fun vcsProjectRepoUrlBase(): String? {
-        return "/Users/vlad/src/MarkdownTest"
+    override fun projectVcsBasePath(): String? {
+        return mainGitHubRepo.basePath
     }
 
-    override fun vcsRepoBase(fileRef: FileRef): String? {
-        if (fileRef.filePath.startsWith("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/")) return "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki"
-        else if (fileRef.filePath.startsWith("/Users/vlad/src/MarkdownTest/")) return "/Users/vlad/src/MarkdownTest"
-        else return null
+    override fun vcsRootBase(fileRef: FileRef): String? {
+        return getGitHubRepo(fileRef)?.basePath
     }
 
-    override fun repoUrlFor(fileRef: FileRef, withExt: Boolean, anchor: String?): String? {
-        if (isUnderVcs(fileRef)) {
-            val repoBase = vcsRepoBase(fileRef)
-            val vcsRepoUrlBase = vcsRepoUrlBase(fileRef)
-            if (repoBase != null && vcsRepoUrlBase != null) {
-                return vcsRepoUrlBase.endWith('/') + PathInfo.relativePath(repoBase, fileRef.filePathNoExt) + (if (withExt) fileRef.ext.startWith('.') else "") + anchor.startWith('#')
-            }
-        }
-        return null;
-    }
-
-    override fun projectFileList(): List<FileRef>? {
+    override fun projectFileList(fileTypes:HashSet<FileType>): List<FileRef>? {
         return fileList
     }
 

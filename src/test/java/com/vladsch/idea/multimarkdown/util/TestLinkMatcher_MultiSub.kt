@@ -24,7 +24,7 @@ class TestLinkMatcher_MultiSub {
 
     @Test fun test_linkRefMatcher_SubDirMultiWiki() {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.md")
-        val linkRef = LinkRef(linkInfo, linkInfo.fileNameNoExt, null)
+        val linkRef = LinkRef(linkInfo, linkInfo.fileNameNoExt, null, null)
 
         val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, true)
 
@@ -49,7 +49,7 @@ class TestLinkMatcher_MultiSub {
 
     @Test fun test_linkRefMatcher_SubDirMultiRepo() {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/Multiple-Match.md")
-        val linkRef = LinkRef(linkInfo, linkInfo.fileName, null)
+        val linkRef = LinkRef(linkInfo, linkInfo.fileName, null, null)
 
         val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, true)
 
@@ -79,7 +79,7 @@ class TestLinkMatcher_MultiSub {
 
     @Test fun test_linkRefMatcher_SubDirMulti_Readme() {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/single-link-test.md")
-        val linkRef = LinkRef(linkInfo, "Readme.md", null)
+        val linkRef = LinkRef(linkInfo, "Readme.md", null, null)
 
         val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, true)
 
@@ -114,7 +114,7 @@ class TestLinkMatcher_MultiSub {
 
     @Test fun test_linkRefMatcher_SubDirMulti_ReadmeNoExt() {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/single-link-test.md")
-        val linkRef = LinkRef(linkInfo, "Readme", null)
+        val linkRef = LinkRef(linkInfo, "Readme", null, null)
 
         val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, true)
 
@@ -149,7 +149,7 @@ class TestLinkMatcher_MultiSub {
 
     @Test fun test_WikiLinkRefMatcher_SubDirMulti() {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.md")
-        val linkRef = LinkRef.parseLinkRef(linkInfo, linkInfo.fileName, ::WikiLinkRef)
+        val linkRef = LinkRef.parseLinkRef(linkInfo, linkInfo.fileName, null, ::WikiLinkRef)
 
         val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, true)
 
@@ -175,7 +175,7 @@ class TestLinkMatcher_MultiSub {
 
     @Test fun test_linkRefMatcher_SubDir() {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/SubDirectory/NestedFile.md")
-        val linkRef = LinkRef(linkInfo, "SubDirectory/NestedFile.md", null)
+        val linkRef = LinkRef(linkInfo, "SubDirectory/NestedFile.md", null, null)
 
         val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, true)
 
@@ -198,7 +198,7 @@ class TestLinkMatcher_MultiSub {
 
     @Test fun test_linkRefMatcher_SubDirMultiExact_Repo() {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/Multiple-Match.mkd")
-        val linkRef = LinkRef(linkInfo, linkInfo.fileName, null)
+        val linkRef = LinkRef(linkInfo, linkInfo.fileName, null, null)
 
         val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, false)
 
@@ -221,7 +221,7 @@ class TestLinkMatcher_MultiSub {
 
     @Test fun test_linkRefMatcher_SubDirMultiExact_Readme() {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/single-link-test.md")
-        val linkRef = LinkRef(linkInfo, "Readme.md", null)
+        val linkRef = LinkRef(linkInfo, "Readme.md", null, null)
 
         val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, false)
 
@@ -244,7 +244,7 @@ class TestLinkMatcher_MultiSub {
 
     @Test fun test_linkRefMatcher_SubDirMultiExact_ReadmeNoExt() {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/single-link-test.md")
-        val linkRef = LinkRef(linkInfo, "Readme", null)
+        val linkRef = LinkRef(linkInfo, "Readme", null, null)
 
         val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, false)
 
@@ -266,7 +266,7 @@ class TestLinkMatcher_MultiSub {
 
     @Test fun test_WikiLinkRefMatcher_SubDirMultiExactNoExt() {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.md")
-        val linkRef = LinkRef.parseLinkRef(linkInfo, linkInfo.fileNameNoExt, ::WikiLinkRef)
+        val linkRef = LinkRef.parseLinkRef(linkInfo, linkInfo.fileNameNoExt, null, ::WikiLinkRef)
 
         val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, false)
 
@@ -292,7 +292,7 @@ class TestLinkMatcher_MultiSub {
 
     @Test fun test_WikiLinkRefMatcher_SubDirMultiExactWithExt() {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.md")
-        val linkRef = LinkRef.parseLinkRef(linkInfo, linkInfo.fileName, ::WikiLinkRef)
+        val linkRef = LinkRef.parseLinkRef(linkInfo, linkInfo.fileName, null, ::WikiLinkRef)
 
         val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, false)
 
@@ -315,7 +315,7 @@ class TestLinkMatcher_MultiSub {
 
     @Test fun test_WikiLinkRefMatcher_SubDirMultiExact_Smart() {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.md")
-        val linkRef = LinkRef.parseLinkRef(linkInfo, linkInfo.fileNameNoExt, ::WikiLinkRef)
+        val linkRef = LinkRef.parseLinkRef(linkInfo, linkInfo.fileNameNoExt, null, ::WikiLinkRef)
 
         val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, false)
 
@@ -341,7 +341,7 @@ class TestLinkMatcher_MultiSub {
 
     @Test fun test_linkRefMatcher_SubDirExact() {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/SubDirectory/NestedFile.md")
-        val linkRef = LinkRef(linkInfo, "SubDirectory/NestedFile.md", null)
+        val linkRef = LinkRef(linkInfo, "SubDirectory/NestedFile.md", null, null)
 
         val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, false)
 
@@ -364,7 +364,7 @@ class TestLinkMatcher_MultiSub {
 
     @Test fun test_linkRefMatcher_SubDirMulti_SmartExact() {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/Multiple-Match.md")
-        val linkRef = LinkRef(linkInfo, "SubDirectory/Multiple-Match.md", null)
+        val linkRef = LinkRef(linkInfo, "SubDirectory/Multiple-Match.md", null, null)
 
         val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, false)
 

@@ -450,24 +450,25 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                     ((EventTarget) nodeList.item(i)).addEventListener("click", listener, false);
                 }
 
-                // see if we need to change img tag src to a resource, if the src is relative
-                nodeList = doc.getElementsByTagName("img");
-                for (int i = 0; i < nodeList.getLength(); i++) {
-                    HTMLImageElementImpl imgNode = (HTMLImageElementImpl) nodeList.item(i);
-                    String src = imgNode.getSrc();
-                    if (!src.startsWith("http://") && !src.startsWith("https://") && !src.startsWith("ftp://") && !src.startsWith("file://")) {
-                        // relative to document, change it to absolute file://
-                        if (!project.isDisposed() && containingFile != null && resolver != null) {
-                            ImageLinkRef linkRef = new ImageLinkRef(new FileRef(containingFile), src, null);
-                            PathInfo resolvedTarget = resolver.resolve(linkRef, LinkResolver.ONLY_URI, null);
-
-                            assert resolvedTarget == null || resolvedTarget instanceof LinkRef && linkRef.isURI() : "Expected URI LinkRef, got " + linkRef;
-                            if (resolvedTarget != null) {
-                                imgNode.setSrc(resolvedTarget.getFilePath());
-                            }
-                        }
-                    }
-                }
+                // all images are mapped during conversion. Any relative ones are not resolved.
+                //nodeList = doc.getElementsByTagName("img");
+                //for (int i = 0; i < nodeList.getLength(); i++) {
+                //    HTMLImageElementImpl imgNode = (HTMLImageElementImpl) nodeList.item(i);
+                //    String src = imgNode.getSrc();
+                //    if (!src.startsWith("http://") && !src.startsWith("https://") && !src.startsWith("ftp://") && !src.startsWith("file://")) {
+                //        // relative to document, change it to absolute file://
+                //        // this means it does not resolve, leave it
+                //        if (!project.isDisposed() && containingFile != null && resolver != null) {
+                //            ImageLinkRef linkRef = new ImageLinkRef(new FileRef(containingFile), src, null, null);
+                //            PathInfo resolvedTarget = resolver.resolve(linkRef, LinkResolver.ONLY_URI, null);
+                //
+                //            assert resolvedTarget == null || resolvedTarget instanceof LinkRef && linkRef.isURI() : "Expected URI LinkRef, got " + linkRef;
+                //            if (resolvedTarget != null) {
+                //                imgNode.setSrc(resolvedTarget.getFilePath());
+                //            }
+                //        }
+                //    }
+                //}
             }
 
             if (pageScript != null && pageScript.length() > 0) {

@@ -78,7 +78,7 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
         if ((options & VALIDATE_LINKS) != 0 && (isWikiLink || MultiMarkdownPlugin.isLicensed())) {
             assert resolver != null;
 
-            LinkRef targetRef = isWikiLink ? LinkRef.parseWikiLinkRef(resolver.getContainingFile(), url) : LinkRef.parseLinkRef(resolver.getContainingFile(), url);
+            LinkRef targetRef = isWikiLink ? LinkRef.parseWikiLinkRef(resolver.getContainingFile(), url, null) : LinkRef.parseLinkRef(resolver.getContainingFile(), url, null);
             PathInfo resolvedTarget = resolver.resolve(targetRef, LinkResolver.ONLY_URI, null);
             if (resolvedTarget != null) {
                 assert resolvedTarget.isURI() : "Expected URI only target, got " + resolvedTarget;
@@ -103,7 +103,7 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
         if ((options & VALIDATE_LINKS) != 0 && MultiMarkdownPlugin.isLicensed()) {
             assert resolver != null;
 
-            LinkRef targetRef = LinkRef.parseImageLinkRef(resolver.getContainingFile(), url);
+            LinkRef targetRef = LinkRef.parseImageLinkRef(resolver.getContainingFile(), url, null);
             PathInfo resolvedTarget = resolver.resolve(targetRef, LinkResolver.ONLY_URI, null);
             if (resolvedTarget != null) {
                 assert resolvedTarget.isURI() : "Expected URI only target, got " + resolvedTarget;

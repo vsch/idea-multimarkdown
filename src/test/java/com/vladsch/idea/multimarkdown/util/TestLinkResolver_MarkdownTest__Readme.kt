@@ -15,15 +15,14 @@
 package com.vladsch.idea.multimarkdown.util
 
 import com.vladsch.idea.multimarkdown.TestUtils.*
-import com.vladsch.idea.multimarkdown.printData
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import java.util.*
 
 @RunWith(value = Parameterized::class)
-class TestLinkResolver_MarkdownTest__Readme constructor(val rowId:Int, val fullPath: String
-                                                        , val linkRefType: (containingFile: FileRef, linkRef: String, anchor: String?) -> LinkRef
+class TestLinkResolver_MarkdownTest__Readme constructor(val rowId: Int, val fullPath: String
+                                                        , val linkRefType: (containingFile: FileRef, linkRef: String, anchor: String?, targetRef: FileRef?) -> LinkRef
                                                         , val linkText: String
                                                         , val linkAddress: String
                                                         , val linkAnchor: String?
@@ -32,6 +31,7 @@ class TestLinkResolver_MarkdownTest__Readme constructor(val rowId:Int, val fullP
                                                         , resolvesExternalRel: String?
                                                         , val linkAddressText: String?
                                                         , val remoteAddressText: String?
+                                                        , val uriText: String?
                                                         , multiResolvePartial: Array<String>
                                                         , val inspectionResults: ArrayList<InspectionResult>?
 ) {
@@ -39,15 +39,15 @@ class TestLinkResolver_MarkdownTest__Readme constructor(val rowId:Int, val fullP
     val resolvesExternal: String?
     val filePathInfo = FileRef(fullPath)
     val resolver = GitHubLinkResolver(MarkdownTestData, filePathInfo)
-    val linkRef = LinkRef.parseLinkRef(filePathInfo, linkAddress + linkAnchor.startWith('#'), linkRefType)
-    val linkRefNoExt = LinkRef.parseLinkRef(filePathInfo, linkRef.filePathNoExt + linkAnchor.startWith('#'), linkRefType)
+    val linkRef = LinkRef.parseLinkRef(filePathInfo, linkAddress + linkAnchor.prefixWith('#'), null, linkRefType)
+    val linkRefNoExt = LinkRef.parseLinkRef(filePathInfo, linkRef.filePathNoExt + linkAnchor.prefixWith('#'), null, linkRefType)
     val fileList = ArrayList<FileRef>(MarkdownTestData.filePaths.size)
     val multiResolve: Array<String>
     val localLinkRef = resolvesLocalRel
     val externalLinkRef = resolvesExternalRel
     val skipTest = linkRef.isExternal
 
-    fun resolveRelativePath(filePath:String?):PathInfo? {
+    fun resolveRelativePath(filePath: String?): PathInfo? {
         return if (filePath == null) null else if (filePath.startsWith("http://", "https://")) PathInfo(filePath) else PathInfo.appendParts(filePathInfo.path, filePath.splitToSequence("/"))
     }
 
@@ -85,7 +85,7 @@ class TestLinkResolver_MarkdownTest__Readme constructor(val rowId:Int, val fullP
 
     @Test fun test_LocalLinkAddress() {
         if (skipTest) return
-        val localRef = resolver.resolve(linkRef, LinkResolver.ONLY_LOCAL, fileList) as? FileRef
+        val localRef = resolver.resolve(linkRef, LinkResolver.ONLY_LOCAL, fileList)
         val localRefAddress = if (localRef != null) resolver.linkAddress(linkRef, localRef, (linkRef.hasExt || (linkRef.hasAnchor && linkAnchor?.contains('.') ?: false)), null) else null
         assertEqualsMessage("Local link address does not match", this.linkAddressText, localRefAddress)
     }
@@ -93,14 +93,39 @@ class TestLinkResolver_MarkdownTest__Readme constructor(val rowId:Int, val fullP
     @Test fun test_RemoteLinkAddress() {
         if (skipTest) return
         val localRef = resolver.resolve(linkRef, LinkResolver.ONLY_LOCAL, fileList) as? FileRef
-        val remoteRef = resolver.resolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI, fileList) as? PathInfo
+        val remoteRef = resolver.resolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI, fileList)
         val remoteRefAddress = if (localRef == null && remoteRef != null) resolver.linkAddress(linkRef, remoteRef, linkRef !is WikiLinkRef && (linkRef.hasExt || (linkRef.hasAnchor && linkAnchor?.contains('.') ?: false)), null) else null
         assertEqualsMessage("Remote based link address does not match", this.remoteAddressText, remoteRefAddress)
     }
 
+    @Test fun test_AnyLinkAddress() {
+        if (skipTest) return
+        val anyRef = resolver.resolve(linkRef, LinkResolver.ANY, fileList)
+        val linkAddress = if (anyRef != null) resolver.linkAddress(linkRef, anyRef, null, null) else null
+        assertEqualsMessage("LinkResolver.ANY link address does not match", this.linkAddressText ?: this.remoteAddressText, linkAddress)
+    }
+
+    @Test fun test_OnlyURILinkAddress() {
+        if (skipTest) return
+        val targetRef = resolver.resolve(linkRef, LinkResolver.ANY, fileList)
+        val uriRef = resolver.resolve(linkRef, LinkResolver.ONLY_URI, fileList)
+        val href = if (targetRef != null && targetRef is FileRef && this.uriText != null) {
+            if (resolver.projectResolver.isUnderVcs(targetRef)) {
+                val prefix = if (targetRef.isUnderWikiDir) "" else "blob/master/"
+                val parts = this.uriText.split("#", limit = 2)
+                "https://github.com/vsch/MarkdownTest/" + prefix + parts[0].replace("#", "%23").replace(" ", "%20") + (if (parts.size > 1) parts[1].prefixWith('#') else "")
+
+            } else {
+                "file://" + targetRef.filePath
+            }
+        } else if (targetRef is LinkRef) targetRef.filePathWithAnchor
+        else null
+        assertEqualsMessage("LinkResolver.ONLY_URI link address does not match", href, (uriRef as? LinkRef)?.filePathWithAnchor)
+    }
+
     @Test fun test_MultiResolve() {
         if (skipTest) return
-//        val localRefs = resolver.multiResolve(if (linkRef is WikiLinkRef) linkRef else linkRefNoExt, LinkResolver.ONLY_LOCAL or LinkResolver.LOOSE_MATCH, fileList)
+        //        val localRefs = resolver.multiResolve(if (linkRef is WikiLinkRef) linkRef else linkRefNoExt, LinkResolver.ONLY_LOCAL or LinkResolver.LOOSE_MATCH, fileList)
         val localRefs = resolver.multiResolve(linkRef, LinkResolver.ONLY_LOCAL or LinkResolver.LOOSE_MATCH, fileList)
         val actuals = Array<String>(localRefs.size, { "" })
         for (i in localRefs.indices) {
@@ -125,9 +150,9 @@ class TestLinkResolver_MarkdownTest__Readme constructor(val rowId:Int, val fullP
     }
 
     companion object {
-            fun resolveRelativePath(filePathInfo: PathInfo, filePath:String?):PathInfo? {
-                return if (filePath == null) null else PathInfo.appendParts(filePathInfo.path, filePath.splitToSequence("/"))
-            }
+        fun resolveRelativePath(filePathInfo: PathInfo, filePath: String?): PathInfo? {
+            return if (filePath == null) null else PathInfo.appendParts(filePathInfo.path, filePath.splitToSequence("/"))
+        }
 
         @Parameterized.Parameters(name = "{index}: filePath = {1}, linkRef = {4}, linkAnchor = {5}")
         @JvmStatic
@@ -138,7 +163,7 @@ class TestLinkResolver_MarkdownTest__Readme constructor(val rowId:Int, val fullP
 
             var i = 0
             for (row in data) {
-                val amendedRow = Array<Any?>(row.size+2,{null})
+                val amendedRow = Array<Any?>(row.size + 2, { null })
                 val inspections = ArrayList<InspectionResult>()
                 val filePathInfo = PathInfo(row[0] as String)
                 for (inspectionRow in inspectionData) {
@@ -149,7 +174,7 @@ class TestLinkResolver_MarkdownTest__Readme constructor(val rowId:Int, val fullP
 
                 System.arraycopy(row, 0, amendedRow, 1, row.size)
                 amendedRow[0] = i
-                amendedRow[row.size+1] = inspections
+                amendedRow[row.size + 1] = inspections
                 amendedData.add(amendedRow)
                 i++
             }

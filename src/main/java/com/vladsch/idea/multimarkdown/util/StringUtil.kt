@@ -33,11 +33,11 @@ fun String?.wrapWith(prefixSuffix: Char, ignoreCase: Boolean): String {
 }
 
 fun String?.wrapWith(prefix: Char, suffix: Char): String {
-    return startWith(prefix, false).endWith(suffix, false)
+    return prefixWith(prefix, false).suffixWith(suffix, false)
 }
 
 fun String?.wrapWith(prefix: Char, suffix: Char, ignoreCase: Boolean): String {
-    return startWith(prefix, ignoreCase).endWith(suffix, ignoreCase)
+    return prefixWith(prefix, ignoreCase).suffixWith(suffix, ignoreCase)
 }
 
 fun String?.wrapWith(prefixSuffix: String): String {
@@ -49,45 +49,45 @@ fun String?.wrapWith(prefixSuffix: String, ignoreCase: Boolean): String {
 }
 
 fun String?.wrapWith(prefix: String, suffix: String): String {
-    return startWith(prefix, false).endWith(suffix, false)
+    return prefixWith(prefix, false).suffixWith(suffix, false)
 }
 
 fun String?.wrapWith(prefix: String, suffix: String, ignoreCase: Boolean): String {
-    return startWith(prefix, ignoreCase).endWith(suffix, ignoreCase)
+    return prefixWith(prefix, ignoreCase).suffixWith(suffix, ignoreCase)
 }
 
-fun String?.endWith(suffix: Char): String {
-    return endWith(suffix, false)
+fun String?.suffixWith(suffix: Char): String {
+    return suffixWith(suffix, false)
 }
 
-fun String?.endWith(suffix: Char, ignoreCase: Boolean): String {
+fun String?.suffixWith(suffix: Char, ignoreCase: Boolean): String {
     if (this != null && !isEmpty() && !endsWith(suffix, ignoreCase)) return plus(suffix)
     return orEmpty()
 }
 
-fun String?.endWith(suffix: String): String {
-    return endWith(suffix, false)
+fun String?.suffixWith(suffix: String): String {
+    return suffixWith(suffix, false)
 }
 
-fun String?.endWith(suffix: String, ignoreCase: Boolean): String {
+fun String?.suffixWith(suffix: String, ignoreCase: Boolean): String {
     if (this != null && !isEmpty() && suffix.isNotEmpty() && !endsWith(suffix, ignoreCase)) return plus(suffix)
     return orEmpty()
 }
 
-fun String?.startWith(prefix: Char): String {
-    return startWith(prefix, false)
+fun String?.prefixWith(prefix: Char): String {
+    return prefixWith(prefix, false)
 }
 
-fun String?.startWith(prefix: Char, ignoreCase: Boolean): String {
+fun String?.prefixWith(prefix: Char, ignoreCase: Boolean): String {
     if (this != null && !isEmpty() && !startsWith(prefix, ignoreCase)) return prefix.plus(this.orEmpty())
     return orEmpty()
 }
 
-fun String?.startWith(prefix: String): String {
-    return startWith(prefix, false)
+fun String?.prefixWith(prefix: String): String {
+    return prefixWith(prefix, false)
 }
 
-fun String?.startWith(prefix: String, ignoreCase: Boolean): String {
+fun String?.prefixWith(prefix: String, ignoreCase: Boolean): String {
     if (this != null && !isEmpty() && prefix.isNotEmpty() && !startsWith(prefix, ignoreCase)) return prefix.plus(this)
     return orEmpty()
 }

@@ -120,11 +120,11 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
                                     LinkRef linkRef;
 
                                     if (elementType == IMAGE_LINK_REF) {
-                                        linkRef = new ImageLinkRef(containingFile, "", null);
+                                        linkRef = new ImageLinkRef(containingFile, "", null, null);
                                     } else if (elementType == WIKI_LINK_REF) {
-                                        linkRef = new WikiLinkRef(containingFile, "", null);
+                                        linkRef = new WikiLinkRef(containingFile, "", null, null);
                                     } else {
-                                        linkRef = new LinkRef(containingFile, "", null);
+                                        linkRef = new LinkRef(containingFile, "", null, null);
                                     }
 
                                     GitHubLinkResolver resolver = new GitHubLinkResolver(containingFile);
@@ -176,7 +176,7 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
 
     protected void addLinkRefCompletion(@NotNull CompletionResultSet resultSet, GitHubLinkResolver resolver, LinkRef linkRef, ProjectFileRef projectFileRef, boolean withExtForWikiPage, boolean accessible) {
         String linkRefText = resolver.linkAddress(linkRef, projectFileRef, withExtForWikiPage, null, null);
-        String gitHubRepoPath = resolver.getProjectResolver().vcsProjectRepoUrlBase();
+        String gitHubRepoPath = resolver.getProjectResolver().projectVcsBasePath();
 
         if (gitHubRepoPath == null) gitHubRepoPath = resolver.getProjectBasePath();
         boolean isLinkAccessible = projectFileRef.getPath().startsWith(gitHubRepoPath);

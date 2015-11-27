@@ -14,7 +14,9 @@
  */
 package com.vladsch.idea.multimarkdown.util
 
+import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.project.Project
+import java.util.*
 
 abstract class LinkResolver(val projectResolver: LinkResolver.ProjectResolver, val containingFile: FileRef, val branchOrTag: String?) {
     val projectBasePath = projectResolver.projectBasePath
@@ -25,11 +27,10 @@ abstract class LinkResolver(val projectResolver: LinkResolver.ProjectResolver, v
         val project: Project?
 
         fun isUnderVcs(fileRef: FileRef): Boolean
-        fun vcsRepoUrlBase(fileRef: FileRef): String?
-        fun vcsProjectRepoUrlBase(): String?
-        fun vcsRepoBase(fileRef: FileRef): String?
-        fun repoUrlFor(fileRef: FileRef, withExt: Boolean, anchor: String?): String?
-        fun projectFileList(): List<FileRef>?
+        fun getGitHubRepo(fileRef: FileRef): GitHubVcsRoot?;
+        fun projectVcsBasePath(): String?
+        fun vcsRootBase(fileRef: FileRef): String?
+        fun projectFileList(fileTypes: HashSet<FileType>): List<FileRef>?
     }
 
     companion object {

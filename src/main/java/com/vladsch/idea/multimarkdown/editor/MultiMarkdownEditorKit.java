@@ -162,7 +162,7 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
 
                 if (!editorKit.project.isDisposed()) {
                     if (editorKit.containingFile != null) {
-                        ImageLinkRef linkRef = new ImageLinkRef(new FileRef(editorKit.containingFile), src, null);
+                        ImageLinkRef linkRef = new ImageLinkRef(new FileRef(editorKit.containingFile), src, null, null);
                         PathInfo resolvedTarget = editorKit.resolver.resolve(linkRef, LinkResolver.ONLY_URI, null);
 
                         assert resolvedTarget == null || resolvedTarget instanceof LinkRef && linkRef.isURI() : "Expected URI LinkRef, got " + linkRef;

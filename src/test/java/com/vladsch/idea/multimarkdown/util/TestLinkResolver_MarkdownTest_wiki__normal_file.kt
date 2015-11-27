@@ -23,7 +23,7 @@ import java.util.*
 
 @RunWith(value = Parameterized::class)
 class TestLinkResolver_MarkdownTest_wiki__normal_file constructor(val rowId:Int, val fullPath: String
-                                                                  , val linkRefType: (containingFile: FileRef, linkRef: String, anchor: String?) -> LinkRef
+                                                        , val linkRefType: (containingFile: FileRef, linkRef: String, anchor: String?, targetRef: FileRef?) -> LinkRef
                                                                   , val linkText: String
                                                                   , val linkAddress: String
                                                                   , val linkAnchor: String?
@@ -38,16 +38,16 @@ class TestLinkResolver_MarkdownTest_wiki__normal_file constructor(val rowId:Int,
     val resolvesExternal: String?
     val filePathInfo = FileRef(fullPath)
     val resolver = GitHubLinkResolver(MarkdownTestData, filePathInfo)
-    val linkRef = LinkRef.parseLinkRef(filePathInfo, linkAddress + linkAnchor.startWith('#'), linkRefType)
-    val linkRefNoExt = LinkRef.parseLinkRef(filePathInfo, linkRef.filePathNoExt + linkAnchor.startWith('#'), linkRefType)
+    val linkRef = LinkRef.parseLinkRef(filePathInfo, linkAddress + linkAnchor.prefixWith('#'), null, linkRefType)
+    val linkRefNoExt = LinkRef.parseLinkRef(filePathInfo, linkRef.filePathNoExt + linkAnchor.prefixWith('#'), null, linkRefType)
     val fileList = ArrayList<FileRef>(MarkdownTestData.filePaths.size)
     val multiResolve: Array<String>
     val localLinkRef = resolvesLocalRel
     val externalLinkRef = resolvesExternalRel
     val skipTest = linkRef.isExternal
 
-    fun resolveRelativePath(filePath:String?):PathInfo? {
-        return if (filePath == null) null else PathInfo.appendParts(filePathInfo.path, filePath.splitToSequence("/"))
+    fun resolveRelativePath(filePath: String?): PathInfo? {
+        return if (filePath == null) null else if (filePath.startsWith("http://", "https://")) PathInfo(filePath) else PathInfo.appendParts(filePathInfo.path, filePath.splitToSequence("/"))
     }
 
     init {

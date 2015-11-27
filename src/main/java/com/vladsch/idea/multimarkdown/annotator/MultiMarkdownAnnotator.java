@@ -94,7 +94,8 @@ public class MultiMarkdownAnnotator implements Annotator {
             GitHubLinkResolver resolver = new GitHubLinkResolver(element.getContainingFile());
             List<PathInfo> looseTargetRefs = resolver.multiResolve(linkRefInfo, LinkResolver.ANY | LinkResolver.LOOSE_MATCH, null);
             List<PathInfo> targetRefs = resolver.multiResolve(linkRefInfo, LinkResolver.ANY, looseTargetRefs);
-            PathInfo targetInfo = targetRefs.size() > 0 ? targetRefs.get(0) : (looseTargetRefs.size() > 0 ? looseTargetRefs.get(0) : null);
+            PathInfo resolvedTargetInfo = targetRefs.size() > 0 ? targetRefs.get(0) : null;
+            PathInfo targetInfo = resolvedTargetInfo != null ? resolvedTargetInfo : (looseTargetRefs.size() > 0 ? looseTargetRefs.get(0) : null);
             PsiElement parentElement = element.getParent();
             PsiElement textElement = MultiMarkdownPsiImplUtil.findChildByType(parentElement, elementTypes.textType);
             //PsiElement titleElement = elementTypes.titleType == null ? null : MultiMarkdownPsiImplUtil.findChildByType(parentElement, elementTypes.titleType);
@@ -102,7 +103,13 @@ public class MultiMarkdownAnnotator implements Annotator {
 
             if (targetInfo == null) {
                 state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.unresolved-link-reference"));
-            } else if (targetInfo instanceof LinkRef) {
+                //if (reason.isA(ID_WIKI_LINK_NOT_IN_WIKI)) {
+                if (linkRefInfo instanceof WikiLinkRef && !linkRefInfo.getContainingFile().isWikiPage()) {
+                    state.needTargetList = false;
+                    state.createAnnotation(Severity.ERROR, element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.github-only-on-wiki-page"));
+                    annotateChangeWikiLinkToExplicitLink(element, state, Severity.ERROR);
+                }
+            } else if (targetInfo instanceof LinkRef && resolvedTargetInfo != null) {
                 //state.createInfoAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.link.resolves-to-external"));
             } else {
                 assert targetInfo instanceof FileRef;
@@ -116,28 +123,13 @@ public class MultiMarkdownAnnotator implements Annotator {
                     extensionList += ext;
                 }
 
+                if (resolvedTargetInfo == null) {
+                    state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.unresolved-link-reference"));
+                }
+
                 List<InspectionResult> inspectionResults = resolver.inspect(linkRefInfo, targetRef);
 
                 for (InspectionResult reason : inspectionResults) {
-                    //*ID_TARGET_HAS_SPACES
-                    //*ID_CASE_MISMATCH
-                    //*ID_WIKI_LINK_HAS_DASHES
-                    //*ID_NOT_UNDER_WIKI_HOME
-                    //ID_TARGET_NOT_WIKI_PAGE_EXT
-                    //*ID_NOT_UNDER_SOURCE_WIKI_HOME
-                    //*ID_TARGET_NAME_HAS_ANCHOR
-                    //*ID_TARGET_PATH_HAS_ANCHOR
-                    //*ID_WIKI_LINK_HAS_SLASH
-                    //*ID_WIKI_LINK_HAS_SUBDIR
-                    //*ID_WIKI_LINK_HAS_ONLY_ANCHOR
-                    //*ID_LINK_TARGETS_WIKI_HAS_EXT
-                    //*ID_LINK_TARGETS_WIKI_HAS_BAD_EXT
-                    //*ID_NOT_UNDER_SAME_REPO
-                    //*ID_TARGET_NOT_UNDER_VCS
-                    //*ID_LINK_NEEDS_EXT
-                    //*ID_LINK_HAS_BAD_EXT
-                    //*ID_LINK_TARGET_NEEDS_EXT
-                    //*ID_LINK_TARGET_HAS_BAD_EXT
                     if (reason.getHandled()) continue;
 
                     String fixedFilePath = reason.getFixedFilePath();
@@ -197,6 +189,10 @@ public class MultiMarkdownAnnotator implements Annotator {
                         if (fixedLink != null && state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, fixedLink)) {
                             state.annotator.registerFix(new ChangeLinkRefQuickFix(element, fixedLink));
                         }
+                    } else if (reason.isA(ID_WIKI_LINK_NOT_IN_WIKI)) {
+                        state.needTargetList = false;
+                        state.createAnnotation(reason.getSeverity(), element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.github-only-on-wiki-page"));
+                        annotateChangeWikiLinkToExplicitLink(element, state, reason.getSeverity());
                     } else if (reason.isA(ID_LINK_TARGETS_WIKI_HAS_BAD_EXT)) {
                         state.needTargetList = false;
                         state.createAnnotation(reason.getSeverity(), element.getTextRange(), MultiMarkdownBundle.message("annotation.link.target-wikipage-bad-extension"));
@@ -374,7 +370,7 @@ public class MultiMarkdownAnnotator implements Annotator {
 
                     // get all accessible
                     if (state.needTargetList) {
-                        LinkRef emptyLinkRef = linkRefInfo instanceof WikiLinkRef ? new WikiLinkRef(containingFile, "", null) : (linkRefInfo instanceof ImageLinkRef ? new ImageLinkRef(containingFile, "", null) : (new LinkRef(containingFile, "", null)));
+                        LinkRef emptyLinkRef = linkRefInfo instanceof WikiLinkRef ? new WikiLinkRef(containingFile, "", null,null) : (linkRefInfo instanceof ImageLinkRef ? new ImageLinkRef(containingFile, "", null, null) : (new LinkRef(containingFile, "", null, null)));
                         List<PathInfo> availableTargetRefs = resolver.multiResolve(emptyLinkRef, LinkResolver.ANY | LinkResolver.LOOSE_MATCH, null);
 
                         if (availableTargetRefs.size() > 0) {

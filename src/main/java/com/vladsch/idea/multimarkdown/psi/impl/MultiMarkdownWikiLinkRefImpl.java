@@ -66,7 +66,7 @@ public class MultiMarkdownWikiLinkRefImpl extends MultiMarkdownNamedElementImpl 
     @Override
     public String getFileNameWithAnchor() {
         String anchorText = MultiMarkdownPsiImplUtil.getLinkAnchor(getParent());
-        return getFileName() + StringUtilKt.startWith(anchorText, '#');
+        return getFileName() + StringUtilKt.prefixWith(anchorText, '#');
     }
 
     @Override

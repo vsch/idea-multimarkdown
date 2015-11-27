@@ -136,7 +136,7 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
     open val isAbsolute: Boolean
         get() = isAbsolute(fullPath)
 
-    fun withExt(ext: String?): PathInfo = if (ext == null || isEmpty || this.ext == ext.removePrefix(".")) this else PathInfo(filePathNoExt + ext.startWith('.'))
+    fun withExt(ext: String?): PathInfo = if (ext == null || isEmpty || this.ext == ext.removePrefix(".")) this else PathInfo(filePathNoExt + ext.prefixWith('.'))
     open fun append(vararg parts: String): PathInfo = PathInfo.appendParts(fullPath, *parts, construct = ::PathInfo)
     open fun append(parts: Collection<String>): PathInfo = PathInfo.appendParts(fullPath, parts, construct = ::PathInfo)
     open fun append(parts: Sequence<String>): PathInfo = PathInfo.appendParts(fullPath, parts, construct = ::PathInfo)
@@ -245,11 +245,6 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
             var cleanPath = removeDotDirectory(fullPath)
             if (!cleanPath.endsWith("//")) cleanPath = cleanPath.removeSuffix("/")
             return cleanPath.removeSuffix(".")
-        }
-
-        @JvmStatic fun urlEncodeFilePath(fullPath: String): String {
-            val pathInfo = PathInfo(fullPath)
-            return pathInfo.path.replace("#", "%23") + URLEncoder.encode(pathInfo.fileName, "UTF-8").replace("#", "%23")
         }
 
         @JvmStatic fun relativePath(fromPath: String, toPath: String, withPrefix: Boolean = true): String {

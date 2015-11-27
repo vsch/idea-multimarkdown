@@ -36,7 +36,7 @@ class TestLinkRef constructor(val fullPath: String
                               , val filePathNoExtWithAnchor: String
 ) {
 
-    val linkRef = LinkRef.parseLinkRef(FileRef(""), fullPath, { containingFile, fullPath, anchor -> LinkRef(containingFile, fullPath, anchor) });
+    val linkRef = LinkRef.parseLinkRef(FileRef(""), fullPath, null, { containingFile, fullPath, anchor, targetRef -> LinkRef(containingFile, fullPath, anchor, targetRef) });
 
     /* @formatter:off */
     @Test fun test_hasAnchor() { Assert.assertEquals(hasAnchor, linkRef.hasAnchor) }

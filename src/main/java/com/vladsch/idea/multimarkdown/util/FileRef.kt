@@ -150,7 +150,7 @@ open class ProjectFileRef(virtualFile: VirtualFile, val project: Project, privat
     val psiFile: PsiFile? by lazy { _psiFile ?: PsiManager.getInstance(project).findFile(virtualFile) }
 
     // TODO: change this to resolve to the repo type for this particular file
-    val gitHubRepo: GitHubRepo? by lazy {
+    val gitHubVcsRoot: GitHubVcsRoot? by lazy {
         MultiMarkdownPlugin.getProjectComponent(project)?.getGitHubRepo(path)
     }
 
@@ -164,7 +164,7 @@ open class ProjectFileRef(virtualFile: VirtualFile, val project: Project, privat
         }
 
     val gitHubRepoPath: String?
-        get() = gitHubRepo?.basePath
+        get() = gitHubVcsRoot?.basePath
 
     override fun projectFileRef(project: Project): ProjectFileRef? = this
 }

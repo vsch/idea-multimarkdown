@@ -16,7 +16,6 @@ package com.vladsch.idea.multimarkdown.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownExplicitLink;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkElement;
 import com.vladsch.idea.multimarkdown.util.PathInfo;
 import com.vladsch.idea.multimarkdown.util.StringUtilKt;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +28,7 @@ public class MultiMarkdownExplicitLinkImpl extends MultiMarkdownLinkElementImpl 
     }
 
     public static String getElementText(@NotNull String linkRef, @Nullable String linkText, @Nullable String linkAnchor, @Nullable String linkTitle) {
-        return getElementText(linkRef + StringUtilKt.startWith(linkAnchor, '#'), linkText, linkTitle);
+        return getElementText(linkRef + StringUtilKt.prefixWith(linkAnchor, '#'), linkText, linkTitle);
     }
 
     public MultiMarkdownExplicitLinkImpl(ASTNode node) {

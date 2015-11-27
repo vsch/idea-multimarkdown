@@ -227,13 +227,17 @@ public class AnnotationState {
 
     public Annotation createAnnotation(@NotNull HighlightSeverity severity, @NotNull TextRange range, @Nullable String s) {
         annotator = holder.createAnnotation(severity, range, s);
+        if (severity == HighlightSeverity.ERROR) annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
         annotator.setNeedsUpdateOnTyping(true);
+        warningsOnly = false;
         return annotator;
     }
 
     public Annotation createAnnotation(@NotNull HighlightSeverity severity, @NotNull TextRange range, @Nullable String s, @Nullable String s1) {
         annotator = holder.createAnnotation(severity, range, s, s1);
+        if (severity == HighlightSeverity.ERROR) annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
         annotator.setNeedsUpdateOnTyping(true);
+        warningsOnly = false;
         return annotator;
     }
 
