@@ -296,7 +296,9 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         }
     }
 
+    @Nullable
     public GitHubVcsRoot getGitHubRepo(@Nullable String baseDirectoryPath) {
+        if (project.isDisposed()) return null;
         if (baseDirectoryPath == null) baseDirectoryPath = project.getBasePath();
         if (baseDirectoryPath == null) return null;
 
@@ -309,6 +311,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
             gitHubRepos.put(baseDirectoryPath, gitHubVcsRoot != null ? gitHubVcsRoot : new Object());
         }
 
+        // TODO: optimize this to reduce directory scanning for git config by using the VcsRoots defined in the IDE to find roots and only read config for defined roots
         Object object = gitHubRepos.get(baseDirectoryPath);
         return object instanceof GitHubVcsRoot ? (GitHubVcsRoot) object : null;
     }
@@ -344,15 +347,15 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
     @NotNull
     @Override
     public String getProjectBasePath() {
-        String basePath = project.getBasePath();
+        String basePath = project.isDisposed() ? null : project.getBasePath();
         return basePath != null ? basePath : "";
     }
 
     @Nullable
     @Override
-    public String projectVcsBasePath() {
-        GitHubVcsRoot gitHubVcsRoot = getGitHubRepo(project.getBasePath());
-        return gitHubVcsRoot == null ? null : gitHubVcsRoot.getBasePath();
+    public String vcsProjectBasePath(@NotNull FileRef fileRef) {
+        GitHubVcsRoot gitHubVcsRoot = getGitHubRepo(fileRef.getPath());
+        return gitHubVcsRoot == null ? null : gitHubVcsRoot.getProjectBasePath();
     }
 
     @Nullable

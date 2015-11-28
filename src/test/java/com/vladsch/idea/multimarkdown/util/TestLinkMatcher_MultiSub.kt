@@ -19,14 +19,13 @@ import org.junit.Test
 import java.util.*
 
 class TestLinkMatcher_MultiSub {
-    val projectBasePath = "/Users/vlad/src/MarkdownTest/"
-    val wikiBasePath = "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki"
+    val projectResolver = MarkdownTestData
 
     @Test fun test_linkRefMatcher_SubDirMultiWiki() {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.md")
         val linkRef = LinkRef(linkInfo, linkInfo.fileNameNoExt, null, null)
 
-        val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, true)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, true)
 
         val list = ArrayList<String>()
         val matchText = linkRefMatcher.patternText()
@@ -51,7 +50,7 @@ class TestLinkMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/Multiple-Match.md")
         val linkRef = LinkRef(linkInfo, linkInfo.fileName, null, null)
 
-        val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, true)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, true)
 
         val list = ArrayList<String>()
         val matchText = linkRefMatcher.patternText()
@@ -81,7 +80,7 @@ class TestLinkMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/single-link-test.md")
         val linkRef = LinkRef(linkInfo, "Readme.md", null, null)
 
-        val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, true)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, true)
 
         val list = ArrayList<String>()
         val matchText = linkRefMatcher.patternText()
@@ -116,7 +115,7 @@ class TestLinkMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/single-link-test.md")
         val linkRef = LinkRef(linkInfo, "Readme", null, null)
 
-        val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, true)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, true)
 
         val list = ArrayList<String>()
         val matchText = linkRefMatcher.patternText()
@@ -151,7 +150,7 @@ class TestLinkMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.md")
         val linkRef = LinkRef.parseLinkRef(linkInfo, linkInfo.fileName, null, ::WikiLinkRef)
 
-        val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, true)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, true)
 
         val list = ArrayList<String>()
         val matchText = linkRefMatcher.patternText()
@@ -177,7 +176,7 @@ class TestLinkMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/SubDirectory/NestedFile.md")
         val linkRef = LinkRef(linkInfo, "SubDirectory/NestedFile.md", null, null)
 
-        val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, true)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, true)
 
         val list = ArrayList<String>()
         val matchText = linkRefMatcher.patternText()
@@ -200,7 +199,7 @@ class TestLinkMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/Multiple-Match.mkd")
         val linkRef = LinkRef(linkInfo, linkInfo.fileName, null, null)
 
-        val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, false)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, false)
 
         val list = ArrayList<String>()
         val matchText = linkRefMatcher.patternText()
@@ -223,7 +222,7 @@ class TestLinkMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/single-link-test.md")
         val linkRef = LinkRef(linkInfo, "Readme.md", null, null)
 
-        val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, false)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, false)
 
         val list = ArrayList<String>()
         val matchText = linkRefMatcher.patternText()
@@ -246,7 +245,7 @@ class TestLinkMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/single-link-test.md")
         val linkRef = LinkRef(linkInfo, "Readme", null, null)
 
-        val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, false)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, false)
 
         val list = ArrayList<String>()
         val matchText = linkRefMatcher.patternText()
@@ -268,7 +267,7 @@ class TestLinkMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.md")
         val linkRef = LinkRef.parseLinkRef(linkInfo, linkInfo.fileNameNoExt, null, ::WikiLinkRef)
 
-        val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, false)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, false)
 
         val list = ArrayList<String>()
         val matchText = linkRefMatcher.patternText()
@@ -294,7 +293,7 @@ class TestLinkMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.md")
         val linkRef = LinkRef.parseLinkRef(linkInfo, linkInfo.fileName, null, ::WikiLinkRef)
 
-        val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, false)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, false)
 
         val list = ArrayList<String>()
         val matchText = linkRefMatcher.patternText()
@@ -317,7 +316,7 @@ class TestLinkMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.md")
         val linkRef = LinkRef.parseLinkRef(linkInfo, linkInfo.fileNameNoExt, null, ::WikiLinkRef)
 
-        val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, false)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, false)
 
         val list = ArrayList<String>()
         val matchText = linkRefMatcher.patternText()
@@ -343,7 +342,7 @@ class TestLinkMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/SubDirectory/NestedFile.md")
         val linkRef = LinkRef(linkInfo, "SubDirectory/NestedFile.md", null, null)
 
-        val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, false)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, false)
 
         val list = ArrayList<String>()
         val matchText = linkRefMatcher.patternText()
@@ -366,7 +365,7 @@ class TestLinkMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/Multiple-Match.md")
         val linkRef = LinkRef(linkInfo, "SubDirectory/Multiple-Match.md", null, null)
 
-        val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, false)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, false)
 
         val list = ArrayList<String>()
         val matchText = linkRefMatcher.patternText(false)

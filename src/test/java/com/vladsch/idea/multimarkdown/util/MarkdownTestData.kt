@@ -39,8 +39,8 @@ object MarkdownTestData : LinkResolver.ProjectResolver {
     override val project: Project?
         get() = null
 
-    override fun projectVcsBasePath(): String? {
-        return mainGitHubRepo.basePath
+    override fun vcsProjectBasePath(fileRef: FileRef): String? {
+        return getGitHubRepo(fileRef)?.projectBasePath
     }
 
     override fun vcsRootBase(fileRef: FileRef): String? {

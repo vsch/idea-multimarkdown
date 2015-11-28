@@ -28,7 +28,7 @@ abstract class LinkResolver(val projectResolver: LinkResolver.ProjectResolver, v
 
         fun isUnderVcs(fileRef: FileRef): Boolean
         fun getGitHubRepo(fileRef: FileRef): GitHubVcsRoot?;
-        fun projectVcsBasePath(): String?
+        fun vcsProjectBasePath(fileRef: FileRef): String?
         fun vcsRootBase(fileRef: FileRef): String?
         fun projectFileList(fileTypes: HashSet<FileType>): List<FileRef>?
     }

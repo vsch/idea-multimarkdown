@@ -42,6 +42,7 @@ public class GitHubVcsRoot {
 
     @NotNull protected final String gitHubBaseUrl;
     @NotNull private final String basePath;
+    @NotNull private final String projectBasePath;
     private final boolean isWiki;
 
     @VisibleForTesting
@@ -49,6 +50,7 @@ public class GitHubVcsRoot {
         this.gitHubBaseUrl = StringUtilKt.suffixWith(gitHubBaseUrl, '/');
         this.basePath = StringUtilKt.suffixWith(basePath, '/');
         this.isWiki = new FileRef(this.basePath + "Home.md").isUnderWikiDir();
+        this.projectBasePath = this.isWiki ? new PathInfo(this.basePath).getPath() : this.basePath;
     }
 
     public boolean isWiki() {
@@ -58,6 +60,11 @@ public class GitHubVcsRoot {
     @NotNull
     public String getBasePath() {
         return basePath;
+    }
+
+    @NotNull
+    public String getProjectBasePath() {
+        return projectBasePath;
     }
 
     @NotNull

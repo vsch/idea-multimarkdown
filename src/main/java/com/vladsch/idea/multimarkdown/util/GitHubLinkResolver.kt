@@ -91,7 +91,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
             targetRef = linkRef.containingFile
         } else if (!linkRef.isAbsolute) {
             // resolve the relative link as per requested options
-            val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, wantLooseMatch(options) || linkRef.isEmpty)
+            val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, wantLooseMatch(options) || linkRef.isEmpty)
             val matches = getMatchedRefs(linkRef, linkRefMatcher, options, inList)
             var resolvedRef = (if (matches.size > 0) matches[0] else null) ?: return null
             targetRef = resolvedRef
@@ -104,7 +104,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
         assert(linkRef.containingFile.compareTo(containingFile) == 0, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
 
         if (linkRef is WikiLinkRef && !wantLooseMatch(options) && linkRef.hasExt) return ArrayList()  // wiki links don't resolve with extensions
-        val linkRefMatcher = GitHubLinkMatcher(linkRef, projectBasePath, wantLooseMatch(options) || linkRef.isEmpty)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, wantLooseMatch(options) || linkRef.isEmpty)
         return getMatchedRefs(linkRef, linkRefMatcher, options, inList)
     }
 
