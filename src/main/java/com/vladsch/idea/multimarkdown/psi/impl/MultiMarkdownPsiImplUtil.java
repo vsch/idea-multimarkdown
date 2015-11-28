@@ -120,6 +120,8 @@ public class MultiMarkdownPsiImplUtil {
 
     @NotNull
     public static LinkRef getLinkRef(@NotNull LinkRefElementTypes elementTypes, @NotNull PsiElement element) {
+        assert element.isValid();
+
         if (elementTypes.parentType == WIKI_LINK) {
             return LinkRef.parseWikiLinkRef(new FileRef(element), getLinkRefTextWithAnchor(element), null);
         } else if (elementTypes.parentType == IMAGE || elementTypes.parentType == REFERENCE_IMAGE) {
@@ -160,7 +162,10 @@ public class MultiMarkdownPsiImplUtil {
         return elementTypes == null ? "" : getElementText(elementTypes.parentType, element, elementTypes.titleType, null, null);
     }
 
+    @NotNull
     public static MultiMarkdownNamedElement setName(@NotNull MultiMarkdownNamedElement element, @NotNull String newName, int renameFlags) {
+        if (!element.isValid()) return element;
+
         LinkRefElementTypes elementTypes = getNamedElementTypes(element);
         if (elementTypes == null) return element;
 
@@ -273,7 +278,10 @@ public class MultiMarkdownPsiImplUtil {
         return element;
     }
 
+    @NotNull
     public static MultiMarkdownWikiLink deleteWikiLinkTitle(MultiMarkdownWikiLink element) {
+        if (!element.isValid()) return element;
+
         ASTNode pageTitleNode = element.getNode().findChildByType(WIKI_LINK_TEXT);
         ASTNode pageRefNode = element.getNode().findChildByType(WIKI_LINK_REF);
 
@@ -285,7 +293,10 @@ public class MultiMarkdownPsiImplUtil {
         return element;
     }
 
+    @NotNull
     public static MultiMarkdownWikiLink deleteWikiLinkRef(MultiMarkdownWikiLink element) {
+        if (!element.isValid()) return element;
+
         ASTNode pageTitleNode = element.getNode().findChildByType(WIKI_LINK_TEXT);
         ASTNode pageRefNode = element.getNode().findChildByType(WIKI_LINK_REF);
 
@@ -297,7 +308,10 @@ public class MultiMarkdownPsiImplUtil {
         return element;
     }
 
+    @NotNull
     public static MultiMarkdownWikiLink swapWikiLinkRefTitle(MultiMarkdownWikiLink element) {
+        if (!element.isValid()) return element;
+
         ASTNode pageTitleNode = element.getNode().findChildByType(WIKI_LINK_TEXT);
         ASTNode pageRefNode = element.getNode().findChildByType(WIKI_LINK_REF);
 
@@ -312,6 +326,8 @@ public class MultiMarkdownPsiImplUtil {
 
     @NotNull
     public static PsiElement changeToWikiLink(PsiElement element) {
+        if (!element.isValid()) return element;
+
         LinkRefElementTypes elementTypes = getNamedElementTypes(element);
         if (elementTypes != null) {
             String linkText = getElementText(elementTypes.parentType, element, elementTypes.textType, null, null);
@@ -333,6 +349,8 @@ public class MultiMarkdownPsiImplUtil {
     }
 
     public static boolean isWikiLinkEquivalent(PsiElement element) {
+        if (!element.isValid()) return false;
+
         LinkRefElementTypes elementTypes = getNamedElementTypes(element);
         if (elementTypes != null) {
             String linkRefTitle = getElementText(elementTypes.parentType, element, elementTypes.titleType, null, null);
@@ -350,6 +368,8 @@ public class MultiMarkdownPsiImplUtil {
 
     @NotNull
     public static PsiElement changeToExplicitLink(PsiElement element, @Nullable PsiFile containingFile) {
+        if (!element.isValid()) return element;
+
         String elementText = getTextForChangeToExplicitLink(element, containingFile);
 
         if (!elementText.isEmpty()) {
@@ -388,6 +408,8 @@ public class MultiMarkdownPsiImplUtil {
 
     @Nullable
     public static PsiElement findChildByType(@NotNull PsiElement parentElement, @NotNull IElementType childType) {
+        if (!parentElement.isValid()) return null;
+
         for (PsiElement child : parentElement.getChildren()) {
             if (child.getNode().getElementType() == childType) {
                 return child;

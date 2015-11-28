@@ -30,7 +30,7 @@ class GitHubLinkMatcher(val linkRef: LinkRef, projectBasePath: String? = null, v
         val typeExtensions = if (useDefaultExt) linkRef.linkExtensions else arrayOf()
         var hadExtension = false
         var extensionPattern = ""
-        var linkRefExt = if (!linkRef.hasExt) "" else linkRef.linkToFile(linkRef.ext)
+        var linkRefExt = if (!linkRef.filePath.isEmpty()) if (!linkRef.hasExt) "" else linkRef.ext else linkRef.containingFile.ext
         val anchorPattern = if (addAnchorExt && linkRef.hasAnchor) matchPathText(linkRef.anchorText, true) else ""
 
         for (ext in typeExtensions) {
@@ -41,9 +41,9 @@ class GitHubLinkMatcher(val linkRef: LinkRef, projectBasePath: String? = null, v
             }
         }
 
-        if (!hadExtension && linkRef.hasExt) {
+        if (!hadExtension && !linkRefExt.isEmpty()) {
             if (!extensionPattern.isEmpty()) extensionPattern += "|"
-            extensionPattern += matchExt(linkRef.ext)
+            extensionPattern += matchExt(linkRefExt)
         }
 
         if (anchorPattern.isNotEmpty()) {
@@ -130,9 +130,9 @@ class GitHubLinkMatcher(val linkRef: LinkRef, projectBasePath: String? = null, v
                 // TODO: factor out this kind of logic into the GitHubLinkResolver it is really specific to GitHub wikis
                 if (linkRef.containingFile.isWikiHomePage && (linkRef is ImageLinkRef || (linkRef.hasExt && /*!linkRef.isMarkdownExt &&*/ linkRef.path.startsWith("wiki/")))) {
                     // if the link winds up in the same directory as the homePageWikiPrefixPath, without the wiki prefix then it will not resolve
-                    prefixPath = PathInfo.appendParts(homePageWikiPrefixPath, linkRef.path.split('/')).filePath.suffixWith('/')
+                    prefixPath = PathInfo.appendParts(homePageWikiPrefixPath, linkRef.path).filePath.suffixWith('/')
                 } else {
-                    prefixPath = PathInfo.appendParts(wikiPrefixPath, linkRef.path.split('/')).filePath.suffixWith('/')
+                    prefixPath = PathInfo.appendParts(wikiPrefixPath, linkRef.path).filePath.suffixWith('/')
                     if (useLooseMatch) {
                         // correct for unnecessary wiki/
                         if (prefixPath.startsWith(wikiPrefixPath + "wiki/")) {
@@ -150,7 +150,7 @@ class GitHubLinkMatcher(val linkRef: LinkRef, projectBasePath: String? = null, v
 
                 // if the prefix changes to projectBasePath/wiki then we will search for Wiki pages ignoring subdirectories if the link has no extension and keep subdirectories
                 // if the link has an extension because in the latter case it will map to a raw markdown or image in the wiki repo
-                prefixPath = PathInfo.appendParts(repoPrefixPath, linkRef.path.split('/')).filePath.suffixWith('/')
+                prefixPath = PathInfo.appendParts(repoPrefixPath, linkRef.path).filePath.suffixWith('/')
 
                 // if the file name is wiki then put back the wiki
                 if (prefixPath.equals(projectBasePath.suffixWith('/')) && linkRef.fileNameNoExt.equals("wiki", ignoreCase = useLooseMatch)) {
@@ -216,7 +216,7 @@ class GitHubLinkMatcher(val linkRef: LinkRef, projectBasePath: String? = null, v
                 // prefix is the file's directory plus any path in the link itself, loose match will search down into the tree, but not up
                 // also useLooseMatch is not particular about extension as long as there is one that is an image extension
                 // the file name has to match, no anchor option is used
-                if (useLooseMatch || linkRef.hasExt) extensionPattern = extensionPattern(useDefaultExt = useLooseMatch, addAnchorExt = false, isOptional = false)
+                if (useLooseMatch || linkRef.hasExt || linkRef.filePath.isEmpty()) extensionPattern = extensionPattern(useDefaultExt = useLooseMatch, addAnchorExt = false, isOptional = false)
             }
 
             pattern = "^" + matchPathText(prefixPath.suffixWith('/')) + (if (wikiPages || useLooseMatch && !linkRef.filePath.isEmpty()) subDirPattern else "") + filenamePattern + anchorPattern + extensionPattern + "$"

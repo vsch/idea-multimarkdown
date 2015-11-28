@@ -22,14 +22,12 @@ import com.intellij.lang.annotation.AnnotationSession;
 import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.vladsch.idea.multimarkdown.util.InspectionResult;
 import com.vladsch.idea.multimarkdown.util.Severity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 
 public class AnnotationState {
     final public static String TYPE_CHANGE_LINK_REF_QUICK_FIX = "ChangeLinkRefQuickFix";
@@ -227,17 +225,21 @@ public class AnnotationState {
 
     public Annotation createAnnotation(@NotNull HighlightSeverity severity, @NotNull TextRange range, @Nullable String s) {
         annotator = holder.createAnnotation(severity, range, s);
-        if (severity == HighlightSeverity.ERROR) annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
+        if (severity == HighlightSeverity.ERROR) {
+            annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
+            warningsOnly = false;
+        }
         annotator.setNeedsUpdateOnTyping(true);
-        warningsOnly = false;
         return annotator;
     }
 
     public Annotation createAnnotation(@NotNull HighlightSeverity severity, @NotNull TextRange range, @Nullable String s, @Nullable String s1) {
         annotator = holder.createAnnotation(severity, range, s, s1);
-        if (severity == HighlightSeverity.ERROR) annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
+        if (severity == HighlightSeverity.ERROR) {
+            annotator.setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
+            warningsOnly = false;
+        }
         annotator.setNeedsUpdateOnTyping(true);
-        warningsOnly = false;
         return annotator;
     }
 

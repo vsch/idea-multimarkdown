@@ -121,7 +121,7 @@ public class GitHubVcsRoot {
                         if (line.startsWith("gitdir:")) {
                             line = line.substring("gitdir:".length()).trim();
                             PathInfo lineInfo = new PathInfo(line);
-                            PathInfo configInfo = lineInfo.isRelative() ? filePathInfo.append(line.split("/")) : lineInfo;
+                            PathInfo configInfo = lineInfo.isRelative() ? filePathInfo.append(line) : lineInfo;
                             gitPath = configInfo.getFilePath();
                             break;
                         }

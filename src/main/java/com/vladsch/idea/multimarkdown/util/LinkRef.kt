@@ -20,13 +20,13 @@ open class LinkRef(val containingFile: FileRef, fullPath: String, anchorTxt: Str
         get() = anchor != null
 
     val isSelfAnchor: Boolean
-        get() = fullPath.isEmpty() && hasAnchor
+        get() = _fullPath.isEmpty() && hasAnchor
 
     val isResolved: Boolean
         get() = targetRef != null
 
     override val isEmpty: Boolean
-        get() = fullPath.isEmpty() && !hasAnchor
+        get() = _fullPath.isEmpty() && !hasAnchor
 
     val isDoNothingAnchor: Boolean
         get() = isSelfAnchor && (anchor.isNullOrEmpty())
@@ -41,13 +41,13 @@ open class LinkRef(val containingFile: FileRef, fullPath: String, anchorTxt: Str
         get() = super.filePathNoExt + anchorText
 
     override val isRelative: Boolean
-        get() = !isSelfAnchor && isRelative(fullPath)
+        get() = !isSelfAnchor && isRelative(_fullPath)
 
     override val isLocal: Boolean
-        get() = isSelfAnchor || isLocal(fullPath)
+        get() = isSelfAnchor || isLocal(_fullPath)
 
     override val isAbsolute: Boolean
-        get() = isSelfAnchor || isAbsolute(fullPath)
+        get() = isSelfAnchor || isAbsolute(_fullPath)
 
     override fun toString(): String = filePathWithAnchor
 

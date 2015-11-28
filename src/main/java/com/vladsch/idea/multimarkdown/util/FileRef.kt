@@ -25,29 +25,32 @@ import com.intellij.psi.PsiManager
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin
 
 open class FileRef(fullPath: String, private val _virtualFile: VirtualFile?) : PathInfo(fullPath) {
-    protected val mainRepoDirEnd: Int
-    protected val wikiHomeDirEnd: Int
+    protected val _mainRepoDirEnd: Int
+    protected val _wikiHomeDirEnd: Int
 
     constructor(virtualFile: VirtualFile) : this(virtualFile.path, virtualFile)
+
     constructor(psiFile: PsiFile) : this(psiFile.virtualFile)
+
     constructor(psiElement: PsiElement) : this(psiElement.containingFile)
+
     constructor(fullPath: String) : this(fullPath, null)
 
     init {
         // gitHub wiki home will be like ..../dirname/dirname.wiki
-        var wikiHomeDirEnd = this.fullPath.lastIndexOf(WIKI_HOME_EXTENSION + "/", nameStart)
+        var wikiHomeDirEnd = this._fullPath.lastIndexOf(WIKI_HOME_EXTENSION + "/", _nameStart)
         var mainRepoDirEnd = 0
 
-        if (wikiHomeDirEnd >= nameStart || wikiHomeDirEnd < 0) wikiHomeDirEnd = 0
+        if (wikiHomeDirEnd >= _nameStart || wikiHomeDirEnd < 0) wikiHomeDirEnd = 0
 
         if (wikiHomeDirEnd > 0) {
-            val wikiHomeDirStart = this.fullPath.lastIndexOf('/', wikiHomeDirEnd)
+            val wikiHomeDirStart = this._fullPath.lastIndexOf('/', wikiHomeDirEnd)
             if (wikiHomeDirStart > 1) {
-                val wikiHomeDirName = this.fullPath.substring(wikiHomeDirStart + 1, wikiHomeDirEnd)
+                val wikiHomeDirName = this._fullPath.substring(wikiHomeDirStart + 1, wikiHomeDirEnd)
                 // now previous to start has to be the same directory
-                val mainRepoDirStart = this.fullPath.lastIndexOf('/', wikiHomeDirStart - 1)
+                val mainRepoDirStart = this._fullPath.lastIndexOf('/', wikiHomeDirStart - 1)
                 if (mainRepoDirStart >= 0) {
-                    val mainRepoDirName = this.fullPath.substring(mainRepoDirStart + 1, wikiHomeDirStart)
+                    val mainRepoDirName = this._fullPath.substring(mainRepoDirStart + 1, wikiHomeDirStart)
                     if (mainRepoDirName == wikiHomeDirName) {
                         mainRepoDirEnd = wikiHomeDirStart
                         wikiHomeDirEnd += WIKI_HOME_EXTENSION.length
@@ -62,13 +65,13 @@ open class FileRef(fullPath: String, private val _virtualFile: VirtualFile?) : P
             }
         }
 
-        this.wikiHomeDirEnd = wikiHomeDirEnd
-        this.mainRepoDirEnd = mainRepoDirEnd
+        this._wikiHomeDirEnd = wikiHomeDirEnd
+        this._mainRepoDirEnd = mainRepoDirEnd
 
     }
 
     val isUnderWikiDir: Boolean
-        get() = wikiHomeDirEnd > 0
+        get() = _wikiHomeDirEnd > 0
 
     val isWikiPage: Boolean
         get() = isUnderWikiDir && isWikiPageExt
@@ -77,7 +80,7 @@ open class FileRef(fullPath: String, private val _virtualFile: VirtualFile?) : P
         get() = isWikiPage && WIKI_HOME_FILENAME == fileNameNoExt
 
     val wikiDir: String
-        get() = if (wikiHomeDirEnd <= 0) EMPTY_STRING else fullPath.substring(0, wikiHomeDirEnd)
+        get() = if (_wikiHomeDirEnd <= 0) EMPTY_STRING else _fullPath.substring(0, _wikiHomeDirEnd)
 
     //    val isWikiDir: Boolean
     //        get() {
@@ -89,34 +92,34 @@ open class FileRef(fullPath: String, private val _virtualFile: VirtualFile?) : P
     val mainRepoDir: String
         get() {
             assert(isUnderWikiDir, { "mainRepo related values are only valid if isUnderWikiDir is true" })
-            return if (mainRepoDirEnd <= 0) EMPTY_STRING else fullPath.substring(0, mainRepoDirEnd)
+            return if (_mainRepoDirEnd <= 0) EMPTY_STRING else _fullPath.substring(0, _mainRepoDirEnd)
         }
 
     val filePathFromWikiDir: String
-        get() = if (wikiHomeDirEnd <= 0) fullPath else fullPath.substring(wikiHomeDirEnd + 1)
+        get() = if (_wikiHomeDirEnd <= 0) _fullPath else _fullPath.substring(_wikiHomeDirEnd + 1)
 
     val filePathFromMainRepoDir: String
         get() {
             assert(isUnderWikiDir, { "mainRepo related values are only valid if isUnderWikiDir is true" })
-            return if (mainRepoDirEnd <= 0) fullPath else fullPath.substring(mainRepoDirEnd + 1)
+            return if (_mainRepoDirEnd <= 0) _fullPath else _fullPath.substring(_mainRepoDirEnd + 1)
         }
 
     val pathFromWikiDir: String
-        get() = if (wikiHomeDirEnd <= 0) path else fullPath.substring(wikiHomeDirEnd + 1, nameStart)
+        get() = if (_wikiHomeDirEnd <= 0) path else _fullPath.substring(_wikiHomeDirEnd + 1, _nameStart)
 
     val pathFromMainRepoDir: String
         get() {
             assert(isUnderWikiDir, { "mainRepo related values are only valid if isUnderWikiDir is true" })
-            return if (mainRepoDirEnd <= 0) path else fullPath.substring(mainRepoDirEnd + 1, nameStart)
+            return if (_mainRepoDirEnd <= 0) path else _fullPath.substring(_mainRepoDirEnd + 1, _nameStart)
         }
 
     val upDirectoriesToWikiHome: Int by lazy {
-        if (wikiHomeDirEnd <= 0 || wikiHomeDirEnd == fullPath.length) 0
+        if (_wikiHomeDirEnd <= 0 || _wikiHomeDirEnd == _fullPath.length) 0
         else {
-            var pos = wikiHomeDirEnd
+            var pos = _wikiHomeDirEnd
             var upDirs = 0
-            while (pos < fullPath.length) {
-                pos = fullPath.indexOf('/', pos)
+            while (pos < _fullPath.length) {
+                pos = _fullPath.indexOf('/', pos)
                 if (pos < 0) break;
 
                 upDirs++
@@ -127,11 +130,11 @@ open class FileRef(fullPath: String, private val _virtualFile: VirtualFile?) : P
         }
     }
 
-    override fun append(vararg parts: String): FileRef = PathInfo.appendParts(fullPath, *parts, construct = ::FileRef)
-    override fun append(parts: Collection<String>): FileRef = PathInfo.appendParts(fullPath, parts, ::FileRef)
-    override fun append(parts: Sequence<String>): FileRef = PathInfo.appendParts(fullPath, parts, ::FileRef)
+    override fun append(vararg parts: String): FileRef = PathInfo.appendParts(_fullPath, *parts, construct = ::FileRef)
+    override fun append(parts: Collection<String>): FileRef = PathInfo.appendParts(_fullPath, parts, ::FileRef)
+    override fun append(parts: Sequence<String>): FileRef = PathInfo.appendParts(_fullPath, parts, ::FileRef)
 
-    override val virtualFile by lazy { _virtualFile ?: VirtualFileManager.getInstance().findFileByUrl("file:" + fullPath) }
+    override val virtualFile by lazy { _virtualFile ?: super.virtualFile }
 
     val exists: Boolean
         get() = virtualFile?.exists() as Boolean
@@ -142,10 +145,13 @@ open class FileRef(fullPath: String, private val _virtualFile: VirtualFile?) : P
     }
 }
 
-open class ProjectFileRef(virtualFile: VirtualFile, val project: Project, private val _psiFile:PsiFile?) : FileRef(virtualFile.path, virtualFile) {
+open class ProjectFileRef(_virtualFile: VirtualFile, val project: Project, private val _psiFile: PsiFile?) : FileRef(_virtualFile) {
 
     constructor(psiFile: PsiFile) : this(psiFile.virtualFile, psiFile.project, psiFile)
+
     constructor(virtualFile: VirtualFile, project: Project) : this(virtualFile, project, null)
+
+    override val virtualFile = _virtualFile
 
     val psiFile: PsiFile? by lazy { _psiFile ?: PsiManager.getInstance(project).findFile(virtualFile) }
 

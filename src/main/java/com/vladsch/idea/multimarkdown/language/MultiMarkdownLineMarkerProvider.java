@@ -37,10 +37,7 @@ import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkRef;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLinkRef;
 import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownReference;
-import com.vladsch.idea.multimarkdown.util.FileRef;
-import com.vladsch.idea.multimarkdown.util.GitHubLinkResolver;
-import com.vladsch.idea.multimarkdown.util.PathInfo;
-import com.vladsch.idea.multimarkdown.util.ProjectFileRef;
+import com.vladsch.idea.multimarkdown.util.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,7 +48,7 @@ import java.util.Collection;
 public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
     @Override
-    protected void collectNavigationMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
+    protected void collectNavigationMarkers(@NotNull final PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
         if (element instanceof MultiMarkdownWikiLinkRef || element instanceof MultiMarkdownLinkRef) {
             PsiReference psiReference = element.getReference();
             //MultiMarkdownFile[] markdownFiles = MultiMarkdownPlugin.getProjectComponent(element.getProject()).getFileReferenceList().query()
@@ -60,7 +57,7 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
             //        ;
 
             // incompleteCode in our case means looseMatch criteria, otherwise precise match as per repo rules
-            ResolveResult[] results = psiReference != null ? ((MultiMarkdownReference) psiReference).multiResolve(false) : null;
+            final ResolveResult[] results = psiReference != null ? ((MultiMarkdownReference) psiReference).multiResolve(false) : null;
             if (results != null && results.length > 0) {
                 final PsiFile containingFile = element.getContainingFile();
 
@@ -68,12 +65,13 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
                     @Nullable
                     @Override
                     public String fun(PsiElement element) {
-                        return new GitHubLinkResolver(containingFile).linkAddress(new FileRef((PsiFile) element), null, null, null);
+                        String linkAddress = new GitHubLinkResolver(containingFile).linkAddress(new FileRef((PsiFile) element), null, null, null);
+                        return linkAddress;
                     }
                 };
 
                 final Project project = element.getProject();
-                final String basePath = project.getBasePath() == null ? "/" : project.getBasePath();
+                final String basePath = project.getBasePath() == null ? "/" : StringUtilKt.suffixWith(project.getBasePath(), '/');
                 boolean showWikiHome = false;
                 String lastWikiHome = null;
 
@@ -101,14 +99,23 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
                     }
 
                     if (markdownTargets.size() > 0) {
-                        final boolean showContainer = showWikiHome;
+                        final boolean showContainer = true || showWikiHome;
 
                         PsiElementListCellRenderer cellRenderer = new PsiElementListCellRenderer<PsiElement>() {
 
                             @Override
-                            public String getElementText(PsiElement element) {
-                                if (element instanceof MultiMarkdownFile) {
-                                    return new GitHubLinkResolver(containingFile).linkAddress(new FileRef((PsiFile) element), null, null, null);
+                            public String getElementText(PsiElement fileElement) {
+                                if (fileElement instanceof MultiMarkdownFile) {
+                                    FileRef fileRef = new FileRef((PsiFile) fileElement);
+                                    if (fileRef.isUnderWikiDir() && results.length > 1) {
+                                        // need subdirectory and extension, there is more than one match
+                                        String repoDir = StringUtilKt.suffixWith(fileRef.getWikiDir(), '/');
+                                        String relativePath = PathInfo.relativePath(repoDir, fileRef.getFilePath(), false);
+                                        return relativePath;
+                                    } else {
+                                        String linkAddress = new GitHubLinkResolver(containingFile).linkAddress(fileRef, null, null, null);
+                                        return linkAddress;
+                                    }
                                 }
 
                                 return "<unknown>";
@@ -134,7 +141,8 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
                                         String gitHubRepoPath = projectFileRef == null ? null : projectFileRef.getGitHubRepoPath();
                                         repoDir = gitHubRepoPath == null ? basePath : gitHubRepoPath;
                                     }
-                                    return PathInfo.relativePath(basePath, repoDir, false);
+                                    String relativePath = PathInfo.relativePath(basePath, repoDir, false);
+                                    return relativePath;
                                 }
                                 return null;
                             }

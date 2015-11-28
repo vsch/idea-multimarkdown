@@ -53,7 +53,7 @@ class ChangeWikiLinkToExplicitLinkQuickFix extends BaseIntentionAction {
 
     @Override
     public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
-        return true;
+        return wikiLinkElement.isValid();
     }
 
     @Override
@@ -72,12 +72,14 @@ class ChangeWikiLinkToExplicitLinkQuickFix extends BaseIntentionAction {
             public void run() {
                 // change the element using text, until I can figure out why any operations on ExplicitLinks cause exceptions.
                 //MultiMarkdownPsiImplUtil.changeToExplicitLink(wikiLinkElement);
-                final Document document = editor.getDocument();
-                VirtualFile virtualFile = FileDocumentManager.getInstance().getFile(document);
-                PsiFile psiFile = virtualFile == null ? null : PsiManager.getInstance(project).findFile(virtualFile);
-                String text = MultiMarkdownPsiImplUtil.getTextForChangeToExplicitLink(wikiLinkElement, psiFile);
-                int pos = wikiLinkElement.getTextOffset();
-                document.replaceString(pos, pos + wikiLinkElement.getTextLength(), text);
+                if (wikiLinkElement.isValid()) {
+                    final Document document = editor.getDocument();
+                    VirtualFile virtualFile = FileDocumentManager.getInstance().getFile(document);
+                    PsiFile psiFile = virtualFile == null ? null : PsiManager.getInstance(project).findFile(virtualFile);
+                    String text = MultiMarkdownPsiImplUtil.getTextForChangeToExplicitLink(wikiLinkElement, psiFile);
+                    int pos = wikiLinkElement.getTextOffset();
+                    document.replaceString(pos, pos + wikiLinkElement.getTextLength(), text);
+                }
             }
         }.execute();
     }

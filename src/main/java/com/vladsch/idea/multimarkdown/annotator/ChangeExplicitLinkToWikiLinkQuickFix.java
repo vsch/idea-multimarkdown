@@ -49,7 +49,7 @@ class ChangeExplicitLinkToWikiLinkQuickFix extends BaseIntentionAction {
 
     @Override
     public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
-        return true;
+        return explicitLink.isValid();
     }
 
     @Override
@@ -67,7 +67,7 @@ class ChangeExplicitLinkToWikiLinkQuickFix extends BaseIntentionAction {
             @Override
             public void run() {
                 // change the whole name
-                MultiMarkdownPsiImplUtil.changeToWikiLink(wikiLinkElement);
+                if (explicitLink.isValid()) MultiMarkdownPsiImplUtil.changeToWikiLink(wikiLinkElement);
             }
         }.execute();
     }

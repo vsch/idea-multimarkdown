@@ -137,11 +137,19 @@ class TestLinkResolver_MarkdownTest__Readme constructor(val rowId: Int, val full
         if (skipTest) return
         //        val localRefs = resolver.multiResolve(if (linkRef is WikiLinkRef) linkRef else linkRefNoExt, LinkResolver.ONLY_LOCAL or LinkResolver.LOOSE_MATCH, fileList)
         val localRefs = resolver.multiResolve(linkRef, LinkResolver.PREFER_LOCAL or LinkResolver.LOOSE_MATCH, fileList)
-        val actuals = Array<String>(localRefs.size, { "" })
+        val actuals = Array(localRefs.size, { "" })
         for (i in localRefs.indices) {
             actuals[i] = localRefs[i].filePath
         }
         compareOrderedLists("MultiResolve does not match", multiResolve, actuals)
+    }
+
+    @Test fun test_Resolve() {
+        if (skipTest) return
+        //        val localRefs = resolver.multiResolve(if (linkRef is WikiLinkRef) linkRef else linkRefNoExt, LinkResolver.ONLY_LOCAL or LinkResolver.LOOSE_MATCH, fileList)
+        val localRefs = resolver.multiResolve(linkRef, LinkResolver.ANY, fileList)
+        val targetRef = if (localRefs.size > 0) localRefs[0] else null
+        assertEqualsMessage("Resolve does not match", this.resolvesLocal ?: this.resolvesExternal ?: null, if (targetRef is LinkRef) targetRef.filePathWithAnchor else targetRef?.filePath)
     }
 
     @Test fun test_InspectionResults() {

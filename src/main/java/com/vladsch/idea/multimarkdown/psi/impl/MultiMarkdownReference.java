@@ -20,10 +20,7 @@ import com.intellij.refactoring.rename.BindablePsiReference;
 import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownElementType;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkRef;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
+import com.vladsch.idea.multimarkdown.psi.*;
 import com.vladsch.idea.multimarkdown.util.*;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -176,7 +173,7 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
     protected ResolveResult[] getMultiResolveResults(boolean incompleteCode) {
         String name = myElement.getName();
         if (name != null) {
-            if (myElement instanceof MultiMarkdownWikiLink || myElement instanceof MultiMarkdownLinkRef) {
+            if (myElement instanceof MultiMarkdownWikiLinkRef || myElement instanceof MultiMarkdownLinkRef) {
                 if (myElement.getContainingFile() != null && myElement.getContainingFile().getVirtualFile() != null) {
 
                     LinkRef linkRef = MultiMarkdownPsiImplUtil.getLinkRef(myElement);

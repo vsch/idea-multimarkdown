@@ -20,14 +20,13 @@ import com.intellij.openapi.vfs.VirtualFileManager
 import com.intellij.psi.PsiFile
 import com.vladsch.idea.multimarkdown.MultiMarkdownFileTypeFactory
 import org.apache.log4j.Logger
-import java.net.URLEncoder
 
 open class PathInfo(fullPath: String) : Comparable<PathInfo> {
-    protected val fullPath: String
-    protected val nameStart: Int
-    protected val nameEnd: Int
+    protected val _fullPath: String
+    protected val _nameStart: Int
+    protected val _nameEnd: Int
 
-    constructor(virtualFile: VirtualFile) : this(virtualFile.path)
+    constructor(__virtualFile: VirtualFile) : this(__virtualFile.path)
 
     constructor(psiFile: PsiFile) : this(psiFile.virtualFile.path)
 
@@ -35,39 +34,39 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
         var cleanPath = cleanFullPath(fullPath)
 
         val lastSep = cleanPath.lastIndexOf('/')
-        this.nameStart = if (lastSep < 0) 0 else if (lastSep < cleanPath.lastIndex) lastSep + 1 else lastSep
+        this._nameStart = if (lastSep < 0) 0 else if (lastSep < cleanPath.lastIndex) lastSep + 1 else lastSep
 
         val extStart = cleanPath.lastIndexOf('.')
-        this.nameEnd = if (extStart <= nameStart) cleanPath.length else extStart
-        this.fullPath = cleanPath
+        this._nameEnd = if (extStart <= _nameStart) cleanPath.length else extStart
+        this._fullPath = cleanPath
     }
 
-    override fun compareTo(other: PathInfo): Int = fullPath.compareTo(other.fullPath)
-    override fun toString(): String = fullPath
+    override fun compareTo(other: PathInfo): Int = _fullPath.compareTo(other._fullPath)
+    override fun toString(): String = _fullPath
 
     val filePath: String
-        get() = fullPath
+        get() = _fullPath
 
     val filePathNoExt: String
-        get() = if (nameEnd >= fullPath.length) fullPath else fullPath.substring(0, nameEnd)
+        get() = if (_nameEnd >= _fullPath.length) _fullPath else _fullPath.substring(0, _nameEnd)
 
     val path: String
-        get() = if (nameStart == 0) EMPTY_STRING else fullPath.substring(0, nameStart)
+        get() = if (_nameStart == 0) EMPTY_STRING else _fullPath.substring(0, _nameStart)
 
     val fileName: String
-        get() = if (nameStart == 0) fullPath else fullPath.substring(nameStart, fullPath.length)
+        get() = if (_nameStart == 0) _fullPath else _fullPath.substring(_nameStart, _fullPath.length)
 
     val fileNameNoExt: String
-        get() = if (nameStart == 0 && nameEnd >= fullPath.length) fullPath else fullPath.substring(nameStart, nameEnd)
+        get() = if (_nameStart == 0 && _nameEnd >= _fullPath.length) _fullPath else _fullPath.substring(_nameStart, _nameEnd)
 
     val ext: String
-        get() = if (nameEnd + 1 >= fullPath.length) EMPTY_STRING else fullPath.substring(nameEnd + 1, fullPath.length)
+        get() = if (_nameEnd + 1 >= _fullPath.length) EMPTY_STRING else _fullPath.substring(_nameEnd + 1, _fullPath.length)
 
     val extWithDot: String
-        get() = if (nameEnd >= fullPath.length) EMPTY_STRING else fullPath.substring(nameEnd, fullPath.length)
+        get() = if (_nameEnd >= _fullPath.length) EMPTY_STRING else _fullPath.substring(_nameEnd, _fullPath.length)
 
     val hasExt: Boolean
-        get() = nameEnd + 1 < fullPath.length
+        get() = _nameEnd + 1 < _fullPath.length
 
     fun isExtIn(ignoreCase: Boolean = true, vararg extList: String): Boolean = isExtIn(ext, ignoreCase, *extList)
 
@@ -81,11 +80,11 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
         get() = hasExt && isWikiPageExt(ext)
 
     fun contains(c: Char, ignoreCase: Boolean = false): Boolean {
-        return fullPath.contains(c, ignoreCase)
+        return _fullPath.contains(c, ignoreCase)
     }
 
     fun contains(c: String, ignoreCase: Boolean = false): Boolean {
-        return fullPath.contains(c, ignoreCase)
+        return _fullPath.contains(c, ignoreCase)
     }
 
     fun containsSpaces(): Boolean {
@@ -111,49 +110,56 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
     fun fileNameContainsAnchor(): Boolean = fileNameContains('#')
 
     open val isEmpty: Boolean
-        get() = fullPath.isEmpty()
+        get() = _fullPath.isEmpty()
 
     val isRoot: Boolean
-        get() = fullPath == "/"
+        get() = _fullPath == "/"
 
     // these ones need resolving to absolute reference
     open val isRelative: Boolean
-        get() = isRelative(fullPath)
+        get() = isRelative(_fullPath)
 
     // these ones resolve to local references, if they resolve
     open val isLocal: Boolean
-        get() = isLocal(fullPath)
+        get() = isLocal(_fullPath)
 
     // these ones resolve to external references, if they resolve
     open val isExternal: Boolean
-        get() = isExternal(fullPath)
+        get() = isExternal(_fullPath)
 
     // these ones are URI prefixed
     open val isURI: Boolean
-        get() = isURI(fullPath)
+        get() = isURI(_fullPath)
 
     // these ones are not relative, ie don't need resolving
     open val isAbsolute: Boolean
-        get() = isAbsolute(fullPath)
+        get() = isAbsolute(_fullPath)
 
     fun withExt(ext: String?): PathInfo = if (ext == null || isEmpty || this.ext == ext.removePrefix(".")) this else PathInfo(filePathNoExt + ext.prefixWith('.'))
-    open fun append(vararg parts: String): PathInfo = PathInfo.appendParts(fullPath, *parts, construct = ::PathInfo)
-    open fun append(parts: Collection<String>): PathInfo = PathInfo.appendParts(fullPath, parts, construct = ::PathInfo)
-    open fun append(parts: Sequence<String>): PathInfo = PathInfo.appendParts(fullPath, parts, construct = ::PathInfo)
+    open fun append(vararg parts: String): PathInfo = PathInfo.appendParts(_fullPath, *parts, construct = ::PathInfo)
+    open fun append(parts: Collection<String>): PathInfo = PathInfo.appendParts(_fullPath, parts, construct = ::PathInfo)
+    open fun append(parts: Sequence<String>): PathInfo = PathInfo.appendParts(_fullPath, parts, construct = ::PathInfo)
 
     open fun projectFileRef(project: Project): ProjectFileRef? {
-        val virtualFile = if (!isAbsolute || !isLocal) null else VirtualFileManager.getInstance().findFileByUrl(fullPath)
+        val virtualFile = if (!isAbsolute || !isLocal) null else VirtualFileManager.getInstance().findFileByUrl(_fullPath)
         return if (virtualFile == null) null else ProjectFileRef(virtualFile, project);
     }
 
-    open val virtualFile by lazy {
-        if (!isAbsolute || !isLocal) null else VirtualFileManager.getInstance().findFileByUrl(fullPath)
+     open val virtualFile by lazy {
+        if (!isAbsolute || !isLocal) null
+        else VirtualFileManager.getInstance().findFileByUrl(filePath.prefixWith("file://"))
     }
 
-    fun canRenameFileTo(newName:String) :Boolean {
-        val newPathInfo = append("..", *newName.split("/").toTypedArray())
+    fun canRenameFileTo(newName: String): Boolean {
+        val newPathInfo = append("..", newName)
         val virtualFile = newPathInfo.virtualFile
         return this.virtualFile != null && (this.virtualFile as VirtualFile).exists() && virtualFile != null && !virtualFile.exists() && virtualFile.parent != null
+    }
+
+    fun canCreateFile(): Boolean {
+        val pathInfo = PathInfo(path)
+        val parentDir = pathInfo.virtualFile
+        return parentDir != null
     }
 
     companion object {
@@ -213,20 +219,22 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
         @JvmStatic fun <T : PathInfo> appendParts(fullPath: String?, parts: Sequence<String>, construct: (fullPath: String) -> T): T {
             var path: String = cleanFullPath(fullPath)
 
-            for (part in parts) {
-                var cleanPart = part.removePrefix("/").removeSuffix("/")
-                if (cleanPart != "..") cleanPart = cleanPart.removeSuffix(".")
+            for (mainPart in parts) {
+                for (part in mainPart.split('/')) {
+                    var cleanPart = part.removePrefix("/").removeSuffix("/")
+                    if (cleanPart != "..") cleanPart = cleanPart.removeSuffix(".")
 
-                if (cleanPart !in arrayOf("", ".")) {
-                    if (cleanPart == "..") {
-                        path = PathInfo(path).path.removeSuffix("/")
-                    } else {
-                        if (path.isEmpty() || !path.endsWith('/')) path += '/'
-                        path += cleanPart
+                    if (cleanPart !in arrayOf("", ".")) {
+                        if (cleanPart == "..") {
+                            path = PathInfo(path).path.removeSuffix("/")
+                        } else {
+                            if (path.isEmpty() || !path.endsWith('/')) path += '/'
+                            path += cleanPart
+                        }
                     }
                 }
             }
-            return construct(path) as T
+            return construct(path)
         }
 
         @JvmStatic fun isExtIn(ext: String, ignoreCase: Boolean = true, vararg extList: String): Boolean {

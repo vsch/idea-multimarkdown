@@ -66,7 +66,7 @@ img.local-only {
 img.absent {
     border: 2px solid #C34E7B;
     color: #C34E7B;
-    font-weight: bold;
+    /*font-weight: bold;*/
 }
 
 a {

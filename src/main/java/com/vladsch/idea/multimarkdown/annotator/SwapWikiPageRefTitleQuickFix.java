@@ -53,7 +53,7 @@ class SwapWikiPageRefTitleQuickFix extends BaseIntentionAction {
 
     @Override
     public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
-        return true;
+        return wikiLinkElement.isValid();
     }
 
     @Override
@@ -71,7 +71,7 @@ class SwapWikiPageRefTitleQuickFix extends BaseIntentionAction {
             @Override
             public void run() {
                 // change the whole name
-                MultiMarkdownPsiImplUtil.swapWikiLinkRefTitle(wikiLinkElement);
+                if (wikiLinkElement.isValid()) MultiMarkdownPsiImplUtil.swapWikiLinkRefTitle(wikiLinkElement);
             }
         }.execute();
     }
