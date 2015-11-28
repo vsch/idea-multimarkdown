@@ -394,8 +394,6 @@ public class MultiMarkdownAnnotator implements Annotator {
                         }
                     }
                 }
-
-                state.annotator.setNeedsUpdateOnTyping(true);
             }
         }
     }

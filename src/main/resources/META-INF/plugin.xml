@@ -41,18 +41,25 @@
         </div>
         ]]></description>
 
-    <version>1.2.2.2</version>
+    <version>1.2.2.3</version>
     <idea-version since-build="133.1711"/>
     <change-notes><![CDATA[
     <ul>
         <h3>1.2.3 - Bug Fixes and Enhancements</h3>
         <h4><strong>Basic Edition &amp; Enhanced</strong></h4>
-          <li>Change: default JavaFX preview font order to have Helvetica before Arial, cleaner text rendering.</li>
-          <li>Fix #73: self referencing links with 'Show Modified' not selected do not generate correct HTML.</li>
-          <li>Change: update JavaFX preview to new GitHub style, wider pages.</li>
-          <li>Add: inspections when wiki pages are linked with file extension, they will display raw text not rendered HTML</li>
+        <li>Change: default JavaFX preview font order to have Helvetica before Arial, cleaner text rendering.</li>
+        <li>Fix #73: self referencing links with 'Show Modified' not selected do not generate correct HTML.</li>
+        <li>Change: update JavaFX preview to new GitHub style, wider pages.</li>
+        <li>Add: inspections when wiki pages are linked with file extension, they will display raw text not rendered HTML</li>
+        <li>Fix: anchor links markdown extension was always enabled when 'Use Old Preview' was selected, regardless of preferences settings</li>
+        <li>Add: fork GitHub link to be recognized</li>
         <h4><strong>Enhanced Edition</strong></h4>
-          <li>Change: new implementation of file link resolving logic handles the full set of GitHub idiosyncrasies for relative links, file extensions and case sensitivity.</li>
+        <li>Change: new implementation of file link resolving logic handles the full set of GitHub idiosyncrasies for relative links, file extensions and case sensitivity.</li>
+        <li>Add: new annotation inspections for common errors in link resolution</li>
+        <li>New: modified HTML now has all links as URI's during rendering with preference to GitHub repository file when available, fallback to local file://</li>
+        <li>Fix: added validation for invalid PsiElements during refactoring to prevent exceptions</li>
+        <li>Fix: all link refactoring for file move/rename adjusts affected link according to GitHub rules</li>
+        <li>Add: warning annotation in text editor, link color and image border in preview when a link target is not on GitHub according to its status</li>
     </ul>
     <ul>
       <h3>1.2.2 - Bug Fixes and Enhancements</h3>
