@@ -28,7 +28,7 @@ public abstract class OrderedComparisonCriteria<T> extends TypedComparisonCriter
     @Override
     public void arrayEquals(String message, Object expecteds, Object actuals) throws ArrayComparisonFailure {
         if (expecteds != actuals) {
-            String header = message == null ? "" : message + ": ";
+            String header = message == null ? "" : message + "\n: ";
             int expectedsLength = this.assertArraysAreSameLength(expecteds, actuals, header);
 
             for (int i = 0; i < expectedsLength; ++i) {

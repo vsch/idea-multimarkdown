@@ -61,7 +61,7 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
         }
 
         val linkAddress: String by lazy() {
-            resolver.linkAddress(linkRef, targetRef, linkRef.hasExt)
+            resolver.linkAddress(linkRef, targetRef, resolver.wikiLinkHasRealExt(linkRef, targetRef))
         }
 
         val linkAddressNoExt: String by lazy() {

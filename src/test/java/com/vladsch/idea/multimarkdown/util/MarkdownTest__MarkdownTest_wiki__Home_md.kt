@@ -24,7 +24,7 @@ class MarkdownTest__MarkdownTest_wiki__Home_md {
         //@Parameterized.Parameters(name = "{index}: filePath = {0}, linkRef = {3}, linkAnchor = {4}")
         @JvmStatic
         fun data(): Collection<Array<Any?>> {
-            val cleanData = true
+            val cleanData = false
             val data = arrayListOf<Array<Any?>>(
                     /* @formatter:off */
                 /*      arrayOf<Any?>("fullPath"                                              , "linkType"    , "linkText"              , "linkRef"                                    , "linkAnchor" , "linkTitle", "resolvesLocal"                         , "resolvesExternal"                    , "linkAddress"                                , "multiResolve") */
@@ -113,8 +113,8 @@ class MarkdownTest__MarkdownTest_wiki__Home_md {
                 /* 82 */arrayOf<Any?>("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md", ::WikiLinkRef , ""                      , "Test Name.kt"                               , null         , null       , "Test-Name.kt.md"                       , "Test-Name.kt.md"                     , "Test Name.kt"                               , arrayOf<String>("Test-Name.kt.md", "Test-Name.kt")) /* 82 */,
                 /* 83 */arrayOf<Any?>("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md", ::LinkRef     , "Test-Name.kt"          , "Test-Name.kt"                               , null         , null       , "Test-Name.kt.md"                       , "Test-Name.kt.md"                     , "Test-Name.kt"                               , arrayOf<String>("Test-Name.kt.md", "Test-Name.kt")) /* 83 */,
                 /* 84 */arrayOf<Any?>("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md", ::LinkRef     , "wiki/Test-Name.kt"     , "wiki/Test-Name.kt"                          , null         , null       , "Test-Name.kt.md"                       , "Test-Name.kt.md"                     , "Test-Name.kt"                               , arrayOf<String>("Test-Name.kt.md", "Test-Name.kt")) /* 84 */,
-                /* 85 */arrayOf<Any?>("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md", ::LinkRef     , "Test-Name.kt.md"       , "Test-Name.kt.md"                            , null         , null       , "Test-Name.kt.md"                       , "Test-Name.kt.md"                     , "Test-Name.kt.md"                            , arrayOf<String>()) /* 85 */,
-                /* 86 */arrayOf<Any?>("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md", ::LinkRef     , "wiki/Test-Name.kt.md"  , "wiki/Test-Name.kt.md"                       , null         , null       , "Test-Name.kt.md"                       , "Test-Name.kt.md"                     , "Test-Name.kt.md"                            , arrayOf<String>()) /* 86 */
+                /* 85 */arrayOf<Any?>("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md", ::LinkRef     , "Test-Name.kt.md"       , "Test-Name.kt.md"                            , null         , null       , "Test-Name.kt.md"                       , "Test-Name.kt.md"                     , "Test-Name.kt.md"                            , arrayOf<String>("Test-Name.kt.md", "Test-Name.kt")) /* 85 */,
+                /* 86 */arrayOf<Any?>("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md", ::LinkRef     , "wiki/Test-Name.kt.md"  , "wiki/Test-Name.kt.md"                       , null         , null       , "Test-Name.kt.md"                       , "Test-Name.kt.md"                     , "Test-Name.kt.md"                            , arrayOf<String>("Test-Name.kt.md", "Test-Name.kt")) /* 86 */
                 /* @formatter:on */
             )
 

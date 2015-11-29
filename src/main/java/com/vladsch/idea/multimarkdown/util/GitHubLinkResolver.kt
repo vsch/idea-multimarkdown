@@ -56,6 +56,17 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
         )
     }
 
+    private var matcher: GitHubLinkMatcher? = null
+
+    fun getMatcher(linkRef: LinkRef): GitHubLinkMatcher {
+        var _matcher = matcher
+        if (_matcher === null || _matcher.linkRef != linkRef) {
+            _matcher = GitHubLinkMatcher(projectResolver, linkRef)
+            matcher = _matcher
+        }
+        return _matcher
+    }
+
     constructor(virtualFile: VirtualFile, project: Project) : this(MultiMarkdownPlugin.getProjectComponent(project)!!, FileRef(virtualFile.path))
 
     constructor(projectFileRef: ProjectFileRef) : this(MultiMarkdownPlugin.getProjectComponent(projectFileRef.project)!!, projectFileRef)
@@ -93,7 +104,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
             targetRef = linkRef.containingFile
         } else if (!linkRef.isAbsolute) {
             // resolve the relative link as per requested options
-            val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef)
+            val linkRefMatcher = getMatcher(linkRef)
             val matches = getMatchedRefs(linkRef, linkRefMatcher, options, inList)
             var resolvedRef = (if (matches.size > 0) matches[0] else null) ?: return null
             targetRef = resolvedRef
@@ -104,7 +115,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
 
     override fun multiResolve(linkRef: LinkRef, options: Int, inList: List<PathInfo>?): List<PathInfo> {
         assert(linkRef.containingFile.compareTo(containingFile) == 0, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
-        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef)
+        val linkRefMatcher = getMatcher(linkRef)
         return getMatchedRefs(linkRef, linkRefMatcher, options, inList)
     }
 
@@ -181,7 +192,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
         if (!linkMatcher.gitHubLinks) {
 
             // TODO: need to have a flag or to modify the regex to exclude wiki matches when exact matching in the repo
-            val allMatch =
+            val allMatchWiki =
                     if (wantLooseMatch(options)) {
                         linkMatcher.linkLooseMatch!!.toRegex(RegexOption.IGNORE_CASE)
                     } else {
@@ -189,6 +200,17 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                             linkMatcher.linkAllMatch!!.toRegex(RegexOption.IGNORE_CASE)
                         } else {
                             linkMatcher.linkFileMatch!!.toRegex()
+                        }
+                    }
+
+            val allMatchNonWiki =
+                    if (wantLooseMatch(options)) {
+                        allMatchWiki
+                    } else {
+                        if (linkMatcher.wikiMatchingRules) {
+                            linkMatcher.linkAllMatch!!.toRegex()
+                        } else {
+                            allMatchWiki
                         }
                     }
 
@@ -200,9 +222,11 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                         val projectFileList = projectResolver.projectFileList(targetFileTypes)
                         if (projectFileList != null) {
                             for (fileRef in projectFileList) {
-                                if (fileRef.filePath.matches(allMatch)) {
-                                    // we need to see what matched, exactly but will do it after we have all the matches
-                                    matches.add(fileRef)
+                                if (fileRef.filePath.matches(if (fileRef.isWikiPage) allMatchWiki else allMatchNonWiki)) {
+                                    // here we need to test for wiki page links that resolve to raw files, these have to match case sensitive
+                                    if (allMatchNonWiki === allMatchWiki || !linkMatcher.wikiMatchingRules || !fileRef.isWikiPage || !linkRef.hasExt || fileRef.filePath.matches(allMatchNonWiki)) {
+                                        matches.add(fileRef)
+                                    }
                                 }
                             }
                         }
@@ -213,10 +237,11 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                     //val projectFileList = projectResolver.projectFileList(targetFileTypes)
                     val instance = FileBasedIndex.getInstance() as FileBasedIndexImpl
                     val containingFiles = instance.processFilesContainingAllKeys(FileTypeIndex.NAME, targetFileTypes, GlobalSearchScope.projectScope(project), null, Processor<VirtualFile> { virtualFile ->
-                        if (virtualFile.getPath().matches(allMatch)) {
-                            // we need to see what matched, exactly but will do it after we have all the matches
-                            val virtualFileRef = ProjectFileRef(virtualFile, project)
-                            matches.add(virtualFileRef)
+                        if (virtualFile.getPath().matches(allMatchWiki)) {
+                            val fileRef = ProjectFileRef(virtualFile, project)
+                            if (allMatchNonWiki === allMatchWiki || !linkMatcher.wikiMatchingRules || !fileRef.isWikiPage || !linkRef.hasExt || fileRef.filePath.matches(allMatchNonWiki)) {
+                                matches.add(fileRef)
+                            }
                         }
                         true
                     })
@@ -225,9 +250,11 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                 for (fileRef in fromList) {
                     // here we can have both local and external we skip external since we don't resolve them yet
                     if (fileRef is FileRef) {
-                        if (fileRef.filePath.matches(allMatch)) {
-                            // we need to see what matched, exactly but will do it after we have all the matches
-                            matches.add(fileRef)
+                        if (fileRef.filePath.matches(if (fileRef.isWikiPage) allMatchWiki else allMatchNonWiki)) {
+                            // here we need to test for wiki page links that resolve to raw files, these have to match case sensitive
+                            if (allMatchNonWiki === allMatchWiki || !linkMatcher.wikiMatchingRules || !fileRef.isWikiPage || !linkRef.hasExt || fileRef.filePath.matches(allMatchNonWiki)) {
+                                matches.add(fileRef)
+                            }
                         }
                     }
                 }
@@ -246,12 +273,15 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                     // these match raw file content
                     // case sensitive: linkFileMatch = "^$fixedPrefix$filenamePattern$"
                     // case sensitive: linkFileAnchorMatch = "^$fixedPrefix$filenamePattern$anchorPattern$"
-                    val fileOrAnchorMatch = (linkMatcher.linkFileMatch + "|" + linkMatcher.linkFileAnchorMatch).toRegex()
-                    for (fileRef in matches) {
-                        if (fileRef is FileRef && fileRef.filePath.matches(fileOrAnchorMatch)) {
-                            fileRef.isRawFile = true
+                    val fileOrAnchorMatch = (if (linkMatcher.linkFileAnchorMatch == null) linkMatcher.linkFileMatch else linkMatcher.linkFileMatch + "|" + linkMatcher.linkFileAnchorMatch)?.toRegex()
+                    if (fileOrAnchorMatch != null) {
+                        for (fileRef in matches) {
+                            if (fileRef is FileRef && fileRef.filePath.matches(fileOrAnchorMatch)) {
+                                fileRef.isRawFile = true
+                            }
                         }
                     }
+
                 } else {
                     // these match wiki pages, also have priority over the non-pages, ie. if Test.kt and Test.kt.md exists, then the .md will be matched first
                     // not case sensitive: linkSubExtMatch = "^$fixedPrefix$subDirPattern$filenamePattern$extensionPattern$"
@@ -260,7 +290,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                     // case sensitive: linkFileMatch = "^$fixedPrefix$filenamePattern$"
                     val fileMatch = linkMatcher.linkFileMatch!!.toRegex()
                     for (fileRef in matches) {
-                        if (fileRef is FileRef && fileRef.filePath.matches(fileMatch)) {
+                        if (fileRef is FileRef && (!fileRef.isWikiPageExt || fileRef.filePath.matches(fileMatch))) {
                             fileRef.isRawFile = true
                         }
                     }
@@ -278,7 +308,11 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                 if (self is FileRef && other is FileRef) {
                     if (self.isRawFile && !other.isRawFile) 1
                     else if (!self.isRawFile && other.isRawFile) -1
-                    else self.compareTo(other)
+                    else if (self.isRawFile && other.isRawFile) {
+                        if (self.isWikiPageExt && !other.isWikiPageExt) -1
+                        else if (!self.isWikiPageExt && other.isWikiPageExt) 1
+                        else self.compareTo(other)
+                    } else self.compareTo(other)
                 } else self.compareTo(other)
             }
 
@@ -363,10 +397,16 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
         }
     }
 
+    fun wikiLinkHasRealExt(linkRef: LinkRef, targetRef: PathInfo): Boolean {
+        return linkRef.hasExt && linkRef.fileNameNoExt.equals(linkRef.fileToLink(targetRef.fileNameNoExt), ignoreCase = true)
+    }
+
     @Suppress("NAME_SHADOWING")
     override fun linkAddress(linkRef: LinkRef, targetRef: PathInfo, withExtForWikiPage: Boolean?, branchOrTag: String?, anchor: String?): String {
         assert(linkRef.containingFile.compareTo(containingFile) == 0, { "likRef containingFile differs from LinkResolver containingFile, need new Resolver for each containing file" })
-        val withExtForWikiPage = withExtForWikiPage ?: linkRef.hasExt
+
+        // need to make sure that the extension in the link is a real extension and not part of the file name, otherwise it will add the .md extension erroneously
+        val withExtForWikiPage = withExtForWikiPage ?: wikiLinkHasRealExt(linkRef, targetRef)
 
         if (targetRef is FileRef) {
             var prefix = relativePath(linkRef, targetRef, withExtForWikiPage, branchOrTag)

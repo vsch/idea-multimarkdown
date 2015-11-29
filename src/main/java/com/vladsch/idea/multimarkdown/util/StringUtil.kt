@@ -20,8 +20,6 @@
  */
 package com.vladsch.idea.multimarkdown.util
 
-import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin
-import org.apache.log4j.Logger
 import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
 import java.net.URLEncoder
@@ -203,6 +201,10 @@ fun String?.removeStart(prefix: String): String {
     return ""
 }
 
+fun String?.regexGroup(): String {
+    return "(?:" + this.orEmpty() + ")"
+}
+
 fun splicer(delimiter: String): (accum: String, elem: String) -> String {
     return { accum, elem -> accum + delimiter + elem }
 }
@@ -254,7 +256,7 @@ fun Collection<String?>.splice(delimiter: String, skipNullOrEmpty: Boolean = tru
 }
 
 fun Iterator<String>.splice(delimiter: String, skipEmpty: Boolean = true): String {
-    val result = StringBuilder(10*(delimiter.length + 10))
+    val result = StringBuilder(10 * (delimiter.length + 10))
     var first = true;
     for (elem in this) {
         if (!elem.isEmpty() || !skipEmpty) {

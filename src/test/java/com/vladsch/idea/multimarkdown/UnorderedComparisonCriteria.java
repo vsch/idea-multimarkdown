@@ -34,7 +34,7 @@ public abstract class UnorderedComparisonCriteria<T> extends TypedComparisonCrit
     @Override
     public void arrayEquals(String message, Object expecteds, Object actuals) throws ArrayComparisonFailure {
         if (expecteds != actuals) {
-            String header = message == null ? "" : message + ": ";
+            String header = message == null ? "" : message + "\n: ";
             int expectedsLength = this.assertArraysAreSameLength(expecteds, actuals, header);
 
             Object[] expectedOrdered = new Object[expectedsLength];

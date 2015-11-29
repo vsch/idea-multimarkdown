@@ -59,7 +59,7 @@ open class LinkRef(val containingFile: FileRef, fullPath: String, anchorTxt: Str
             when {
                 ext in IMAGE_EXTENSIONS -> return IMAGE_EXTENSIONS
                 ext.isEmpty(), ext in MARKDOWN_EXTENSIONS -> return MARKDOWN_EXTENSIONS
-                else -> return arrayOf(ext)
+                else -> return arrayOf(ext, *MARKDOWN_EXTENSIONS)
             }
         }
 
@@ -90,6 +90,10 @@ open class LinkRef(val containingFile: FileRef, fullPath: String, anchorTxt: Str
     // make a copy of everything but fullPath and return the same type of link
     open fun replaceFilePath(fullPath: String, withTargetRef: Boolean = false): LinkRef {
         return LinkRef(containingFile, fullPath, anchor, if (withTargetRef) targetRef else null)
+    }
+
+    override fun equals(other:Any?) : Boolean {
+        return this === other || other is LinkRef && this.filePath == other.filePath
     }
 
     companion object {
@@ -163,11 +167,11 @@ open class LinkRef(val containingFile: FileRef, fullPath: String, anchorTxt: Str
         // char in file name to link map
         @JvmStatic @JvmField
         val fileUrlMap = mapOf<String, String>(
+                Pair("%", "%25"), // IMPORTANT: must be first in list otherwise will replace % of url encoded entities
                 Pair(" ", "%20"),
                 Pair("!", "%21"),
                 Pair("#", "%23"),
                 Pair("$", "%24"),
-                Pair("%", "%25"),
                 Pair("&", "%26"),
                 Pair("'", "%27"),
                 Pair("(", "%28"),
@@ -205,6 +209,8 @@ open class LinkRef(val containingFile: FileRef, fullPath: String, anchorTxt: Str
     }
 }
 
+
+
 // this is a [[]] style link ref
 open class WikiLinkRef(containingFile: FileRef, fullPath: String, anchor: String?, targetRef: FileRef?) : LinkRef(containingFile, fullPath, anchor, targetRef) {
     override val linkExtensions: Array<String>
@@ -222,6 +228,10 @@ open class WikiLinkRef(containingFile: FileRef, fullPath: String, anchor: String
     // make a copy of everything but fullPath and return the same type of link
     override fun replaceFilePath(fullPath: String, withTargetRef: Boolean): LinkRef {
         return WikiLinkRef(containingFile, fullPath, anchor, if (withTargetRef) targetRef else null)
+    }
+
+    override fun equals(other:Any?) : Boolean {
+        return this === other || other is WikiLinkRef && this.filePath == other.filePath
     }
 
     companion object {
@@ -272,6 +282,10 @@ open class ImageLinkRef(containingFile: FileRef, fullPath: String, anchor: Strin
     // make a copy of everything but fullPath and targetRef and return the same type of link
     override fun replaceFilePath(fullPath: String, withTargetRef: Boolean): LinkRef {
         return ImageLinkRef(containingFile, fullPath, anchor, if (withTargetRef) targetRef else null)
+    }
+
+    override fun equals(other:Any?) : Boolean {
+        return this === other || other is ImageLinkRef && this.filePath == other.filePath
     }
 
     // CAUTION: just copies link address without figuring out whether it will resolve as is

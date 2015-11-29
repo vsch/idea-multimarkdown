@@ -63,27 +63,27 @@ public class TestUtils {
     }
 
     public static void compareOrderedLists(String message, ArrayList<String> expected, Set<String> actual) {
-        new OrderedPathInfoComparison().arrayEquals(null, expected.toArray(), actual.toArray());
+        new OrderedPathInfoComparison().arrayEquals(message, expected.toArray(), actual.toArray());
     }
 
     public static void compareUnorderedLists(String message, ArrayList<String> expected, Set<String> actual) {
-        new UnorderedPathInfoComparison().arrayEquals(null, expected.toArray(), actual.toArray());
+        new UnorderedPathInfoComparison().arrayEquals(message, expected.toArray(), actual.toArray());
     }
 
     public static void compareOrderedLists(String message, Suggestion[] expected, SuggestionList actual) {
-        new OrderedSuggestionComparison().arrayEquals(null, expected, actual.getSuggestions().toArray(new Suggestion[actual.size()]));
+        new OrderedSuggestionComparison().arrayEquals(message, expected, actual.getSuggestions().toArray(new Suggestion[actual.size()]));
     }
 
     public static void compareOrderedLists(String message, List<Suggestion> expected, SuggestionList actual) {
-        new OrderedSuggestionComparison().arrayEquals(null, expected.toArray(new Suggestion[expected.size()]), actual.getSuggestions().toArray(new Suggestion[actual.size()]));
+        new OrderedSuggestionComparison().arrayEquals(message, expected.toArray(new Suggestion[expected.size()]), actual.getSuggestions().toArray(new Suggestion[actual.size()]));
     }
 
     public static void compareOrderedLists(String message, String[] expected, String[] actual) {
-        new OrderedStringComparison().arrayEquals(null, expected, actual);
+        new OrderedStringComparison().arrayEquals(message, expected, actual);
     }
 
     public static void compareOrderedLists(String message, String[] expected, List<String> actual) {
-        new OrderedStringComparison().arrayEquals(null, expected, actual.toArray(new String[actual.size()]));
+        new OrderedStringComparison().arrayEquals(message, expected, actual.toArray(new String[actual.size()]));
     }
 
     public static void compareOrderedLists(String message, List<String> expected, List<String> actual) {
@@ -91,19 +91,19 @@ public class TestUtils {
     }
 
     public static void compareOrderedLists(String message, SuggestionList expected, SuggestionList actual) {
-        new OrderedSuggestionComparison().arrayEquals(null, expected.getSuggestions().toArray(new Suggestion[expected.size()]), actual.getSuggestions().toArray(new Suggestion[actual.size()]));
+        new OrderedSuggestionComparison().arrayEquals(message, expected.getSuggestions().toArray(new Suggestion[expected.size()]), actual.getSuggestions().toArray(new Suggestion[actual.size()]));
     }
 
     public static void compareUnorderedLists(String message, Suggestion[] expected, SuggestionList actual) {
-        new UnorderedSuggestionComparison().arrayEquals(null, expected, actual.getSuggestions().toArray(new Suggestion[actual.size()]));
+        new UnorderedSuggestionComparison().arrayEquals(message, expected, actual.getSuggestions().toArray(new Suggestion[actual.size()]));
     }
 
     public static void compareUnorderedLists(String message, List<Suggestion> expected, SuggestionList actual) {
-        new UnorderedSuggestionComparison().arrayEquals(null, expected.toArray(new Suggestion[expected.size()]), actual.getSuggestions().toArray(new Suggestion[actual.size()]));
+        new UnorderedSuggestionComparison().arrayEquals(message, expected.toArray(new Suggestion[expected.size()]), actual.getSuggestions().toArray(new Suggestion[actual.size()]));
     }
 
     public static void compareUnorderedLists(String message, SuggestionList expected, SuggestionList actual) {
-        new UnorderedSuggestionComparison().arrayEquals(null, expected.getSuggestions().toArray(new Suggestion[expected.size()]), actual.getSuggestions().toArray(new Suggestion[actual.size()]));
+        new UnorderedSuggestionComparison().arrayEquals(message, expected.getSuggestions().toArray(new Suggestion[expected.size()]), actual.getSuggestions().toArray(new Suggestion[actual.size()]));
     }
 
 

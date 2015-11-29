@@ -67,7 +67,7 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
     protected fun extensionPattern(vararg extensions: String, isOptional: Boolean): String {
         val hashSet = HashSet<String>()
 
-        hashSet.addAll(extensions.map { matchExt(it) })
+        hashSet.addAll(extensions.filter { !it.isEmpty() }.map { matchExt(it) })
         hashSet.addAll(linkRef.linkExtensions.map { matchExt(it) })
         var extensionPattern = "(?:" + hashSet.reduce(skipEmptySplicer("|")) + ")" + if (isOptional) "?" else ""
         return extensionPattern
@@ -101,23 +101,31 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
 
         if (linkRef is WikiLinkRef) {
             // spaces match - and spaces, all subdirectories under Wiki Home match, only WIKI targets accepted, no case sensitivity
+            val linkRef = linkRef.replaceFilePath(linkRef.filePath.trim())
+
             fixedPrefix = linkRef.containingFile.wikiDir.suffixWith('/')
 
+            val pureAnchor = linkRef.filePath.isEmpty() && linkRef.anchor != null
             if (useLooseMatch) {
                 val looseAnchorPattern = linkTextToFileMatch(PathInfo(linkRef.anchorText).filePathNoExt, isOptional = true)
-                val looseFilenamePattern = linkTextToFileMatch(linkRef.fileNameNoExt.trim())
-                val looseExtensionPattern = extensionPattern(linkRef.ext, PathInfo(linkRef.anchorText).ext, *linkRef.linkExtensions, isOptional = true)
+                val looseFilenamePattern = linkTextToFileMatch(if (pureAnchor) linkRef.containingFile.fileNameNoExt else linkRef.fileNameNoExt)
+                val looseExtensionPattern = (extensionPattern(linkRef.ext, isOptional = true) + extensionPattern(linkRef.ext, PathInfo(linkRef.anchorText).ext, *linkRef.linkExtensions, isOptional = true)).regexGroup()
                 linkLooseMatch = "^$fixedPrefix$subDirPattern$looseFilenamePattern$looseAnchorPattern$looseExtensionPattern$"
             }
-            val anchorPattern = linkTextToFileMatch(linkRef.anchorText, isOptional = false)
-            val extensionPattern = if (linkRef.hasExt) extensionPattern(linkRef.ext, isOptional = false) else extensionPattern(*linkRef.linkExtensions, isOptional = false)
-            val filenamePattern = linkTextToFileMatch(linkRef.filePath.trim())
 
-            linkFileMatch = "^$fixedPrefix$filenamePattern$"
-            linkFileAnchorMatch = "^$fixedPrefix$filenamePattern$anchorPattern$"
-            linkSubExtMatch = "^$fixedPrefix$subDirPattern$filenamePattern$extensionPattern$"
-            linkSubAnchorExtMatch = "^$fixedPrefix$subDirPattern$filenamePattern$anchorPattern$extensionPattern$"
-            linkAllMatch = "^$fixedPrefix(?:$filenamePattern${anchorPattern.suffixWith('?')}|$subDirPattern$filenamePattern${anchorPattern.suffixWith('?')}$extensionPattern)$"
+            if (!pureAnchor) {
+                val anchorPattern = linkTextToFileMatch(linkRef.anchorText, isOptional = false)
+                // if it has extension then we inlude it as alternative before default extensions because it may not be an extension but part of the file name
+                val defaultExtensons = extensionPattern(*linkRef.linkExtensions, isOptional = false)
+                val extensionPattern = if (linkRef.hasExt) "(?:" + extensionPattern(linkRef.ext, isOptional = false) + defaultExtensons + "|" + extensionPattern(linkRef.ext, isOptional = false) + ")" else defaultExtensons
+                val filenamePattern = linkTextToFileMatch(linkRef.filePath)
+
+                linkFileMatch = "^$fixedPrefix$filenamePattern$"
+                if (!anchorPattern.isEmpty()) linkFileAnchorMatch = "^$fixedPrefix$filenamePattern$anchorPattern$"
+                linkSubExtMatch = "^$fixedPrefix$subDirPattern$filenamePattern$extensionPattern$"
+                if (!anchorPattern.isEmpty()) linkSubAnchorExtMatch = "^$fixedPrefix$subDirPattern$filenamePattern$anchorPattern$extensionPattern$"
+                linkAllMatch = "^$fixedPrefix(?:$filenamePattern${anchorPattern.suffixWith('?')}|$subDirPattern$filenamePattern${anchorPattern.suffixWith('?')}$extensionPattern)$"
+            }
             wikiMatchingRules = true
         } else {
             // it is assumed that if there is a wiki directory then it is a sub dir of the vcsRepoBasePath with the same name and .wiki appended
@@ -128,15 +136,24 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
             // however, this must be done for image links but is optional for non-image explicit links which resolve if the page was under the wiki directory
             // if it is a wiki but not the main page or not image link then its prefix is not changed
             var prefixPath: String
-            var repoLink: String
+            var repoLink: String = linkRef.filePath
             val projectDirName = PathInfo(vcsRepoBasePath).fileName
             val noWikiSubDirPattern = "(?!\\Q$projectDirName.wiki\\E)"
+            var wikiPrefixIsOptional: Boolean? = null
 
             // here we resolve the start of the relative path
             val containingFilePrefixPath =
                     if (linkRef.containingFile.isWikiPage) {
-                        if (linkRef.containingFile.isWikiHomePage) vcsRepoBasePath
-                        else vcsRepoBasePath + "wiki/"
+                        // for the home page image links require wiki/ prefix, for the rest it is optional
+                        if (linkRef.containingFile.isWikiHomePage) {
+                            if (linkRef is ImageLinkRef) {
+                                wikiPrefixIsOptional = false
+                                vcsRepoBasePath
+                            } else {
+                                wikiPrefixIsOptional = true
+                                vcsRepoBasePath + "wiki/"
+                            }
+                        } else vcsRepoBasePath + "wiki/"
                     } else {
                         vcsRepoBasePath + "blob/master/"
                     }
@@ -166,15 +183,22 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
                 // now we see where we are
                 when {
                     gitHubLink == "" && !linkRef.containingFile.isWikiHomePage -> {
-                            prefixPath = vcsRepoBasePath
-                            this.gitHubLink = "blob"
-                            this.branchOrTag = "master"
-                            linkParamsSuffix = "master"
+                        prefixPath = vcsRepoBasePath
+                        this.gitHubLink = "blob"
+                        this.branchOrTag = "master"
+                        linkParamsSuffix = "master"
                     }
                     gitHubLink == "wiki", gitHubLink == "" && linkRef.containingFile.isWikiHomePage -> {
                         if (linkParams.isEmpty() && !pathParts.hasNext() && linkRef.fileNameNoExt.isEmpty()) {
                             // just a link to wiki, match Home page
                             linkParams = "Home" + linkParams
+                        }
+
+                        if (gitHubLink == "" && wikiPrefixIsOptional === false) {
+                            // has to have a wiki prefix or it will not resolve in the wiki
+                            if (!pathParts.hasNext()) return@computeMatchText false;
+                            val part = pathParts.next()
+                            if (part != "wiki") return@computeMatchText false;
                         }
 
                         prefixPath = "$vcsRepoBasePath$projectDirName${PathInfo.WIKI_HOME_DIR_EXTENSION}/"
@@ -194,11 +218,28 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
                         gitHubLinks = true
                         this.gitHubLink = gitHubLink
                     }
-                    else -> return false
+                    else -> {
+                        if (linkRef.containingFile.isWikiHomePage) {
+                            // this one does checks in wiki, but only if it is not an image link
+                            if (linkRef is ImageLinkRef) return@computeMatchText false
+                        }
+                        prefixPath = "$vcsRepoBasePath$projectDirName${PathInfo.WIKI_HOME_DIR_EXTENSION}/"
+                        this.gitHubLink = "wiki"
+                        wikiMatchingRules = true
+                    }
                 }
 
-                repoLink = linkParams + arrayOf(linkParamsSuffix, pathParts.splice("/", skipEmpty = false)).reduce(skipEmptySplicer("/")).suffixWith('/') + linkRef.fileName + linkRef.anchorText
-                gitHubLinkWithParams = this.gitHubLink + (if (!repoLink.startsWith("?", "/")) "/" else "") + repoLink
+                var splicedParts = pathParts.splice("/", skipEmpty = false)
+
+                // handle the optional wiki prefix for wiki/Home page
+                if (wikiPrefixIsOptional === true) {
+                    if (splicedParts.startsWith("wiki/")) splicedParts = splicedParts.substring("wiki/".length)
+                    else if (splicedParts == "wiki") splicedParts = ""
+                }
+
+                val gitHubRepoLink = (linkParams + arrayOf(linkParamsSuffix, splicedParts).reduce(skipEmptySplicer("/")).suffixWith('/') + linkRef.fileName).removePrefix("/")
+                repoLink = (linkParams + splicedParts.suffixWith('/') + linkRef.fileName).removePrefix("/")
+                gitHubLinkWithParams = this.gitHubLink + (if (!gitHubRepoLink.startsWith("?", "/")) "/" else "") + gitHubRepoLink + linkRef.anchorText
             }
 
             fixedPrefix = prefixPath
@@ -206,11 +247,40 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
             // no need for pattern match, we have the stuff
             if (gitHubLinks) return true
 
+            // from here we need to use repoLink, this is the stuff that comes after fixedPrefix
+            val linkRef = linkRef.replaceFilePath(fullPath = repoLink)
             if (wikiMatchingRules) {
                 // same as wiki link but without the wiki to file name conversion and the anchor matching, anchor needs to be escaped
                 // we do anchor matching for loose match identical to wiki links but without the wiki to file conversion
+
+                // if it has extension then we inlude it as alternative before default extensions because it may not be an extension but part of the file name
+                val defaultExtensons = extensionPattern(*linkRef.linkExtensions, isOptional = false)
+                val extensionPattern = if (linkRef.hasExt) "(?:" + extensionPattern(linkRef.ext, isOptional = false) + defaultExtensons + "|" + extensionPattern(linkRef.ext, isOptional = false) + ")" else defaultExtensons
+                val filenamePattern = linkTextToFileMatch(linkRef.filePath)
+                val filenameNoExtPattern = linkTextToFileMatch(linkRef.filePathNoExt)
+                val anchorPattern = linkTextToFileMatch(linkRef.anchorText, isOptional = false)
+
+                if (useLooseMatch) {
+                    val looseAnchorPattern = linkTextToFileMatch(PathInfo(linkRef.anchorText).filePathNoExt, isOptional = true)
+                    val looseFilenamePattern = linkTextToFileMatch(linkRef.fileNameNoExt)
+                    val looseFilePrefixPattern = linkTextToFileMatch(linkRef.path)
+                    val looseExtensionPattern = (extensionPattern(linkRef.ext, isOptional = true) + extensionPattern(linkRef.ext, PathInfo(linkRef.anchorText).ext, *linkRef.linkExtensions, isOptional = true)).regexGroup()
+                    linkLooseMatch = "^$fixedPrefix$looseFilePrefixPattern$subDirPattern$looseFilenamePattern$looseAnchorPattern${looseExtensionPattern.suffixWith('?')}$"
+
+                }
+
+                linkFileMatch = "^$fixedPrefix$filenamePattern$"
+                if (!anchorPattern.isEmpty()) linkFileAnchorMatch = "^$fixedPrefix$filenameNoExtPattern$anchorPattern$"
+                if (!anchorPattern.isEmpty()) linkSubAnchorExtMatch = "^$fixedPrefix$subDirPattern$filenamePattern$anchorPattern$extensionPattern$"
+                linkSubExtMatch = "^$fixedPrefix$subDirPattern$filenamePattern$extensionPattern$"
+
+                // if linkref path is empty then this should match linkFileMatch|linkSubExtMatch|linkSubAnchorExtMatch|fileAnchorMatch
+                linkAllMatch = if (linkRef.path.isEmpty()) "$linkFileMatch|$linkFileAnchorMatch|$linkSubAnchorExtMatch|$linkSubExtMatch" else linkFileMatch
+            } else {
+                // regular repo match, we build up all options for looseMatch and later resolution as to what we really matched
                 val extensionPattern = if (linkRef.hasExt) extensionPattern(linkRef.ext, isOptional = false) else extensionPattern(*linkRef.linkExtensions, isOptional = false)
                 val filenamePattern = linkTextToFileMatch(linkRef.filePath)
+                val filenameNoExtPattern = linkTextToFileMatch(linkRef.filePathNoExt)
 
                 if (useLooseMatch) {
                     val looseAnchorPattern = linkTextToFileMatch(PathInfo(linkRef.anchorText).filePathNoExt, isOptional = true)
@@ -219,28 +289,9 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
                     linkLooseMatch = "^$fixedPrefix$subDirPattern$looseFilenamePattern$looseAnchorPattern${looseExtensionPattern.suffixWith('?')}$"
 
                     val anchorPattern = linkTextToFileMatch(linkRef.anchorText, isOptional = false)
-                    linkFileAnchorMatch = "^$fixedPrefix$filenamePattern$anchorPattern$"
-                    linkSubAnchorExtMatch = "^$fixedPrefix$subDirPattern$filenamePattern$anchorPattern$extensionPattern$"
-                }
-
-                linkFileMatch = "^$fixedPrefix$filenamePattern$"
-                linkSubExtMatch = "^$fixedPrefix$subDirPattern$filenamePattern$extensionPattern$"
-                linkAllMatch = if (linkRef.path.isEmpty()) "^$fixedPrefix(?:$filenamePattern|$subDirPattern$filenamePattern$extensionPattern)$" else linkFileMatch
-            } else {
-                // regular repo match, we build up all options for looseMatch and later resolution as to what we really matched
-                val extensionPattern = if (linkRef.hasExt) extensionPattern(linkRef.ext, isOptional = false) else extensionPattern(*linkRef.linkExtensions, isOptional = false)
-                val filenamePattern = linkTextToFileMatch(linkRef.filePath)
-
-                if (useLooseMatch) {
-                    val looseAnchorPattern = linkTextToFileMatch(PathInfo(linkRef.anchorText).filePathNoExt, isOptional = true)
-                    val looseFilenamePattern = linkTextToFileMatch(linkRef.fileNameNoExt.trim())
-                    val looseExtensionPattern = extensionPattern(linkRef.ext, PathInfo(linkRef.anchorText).ext, *linkRef.linkExtensions, isOptional = true)
-                    linkLooseMatch = "^$fixedPrefix$noWikiSubDirPattern$looseFilenamePattern$looseAnchorPattern${looseExtensionPattern.suffixWith('?')}$"
-
-                    val anchorPattern = linkTextToFileMatch(linkRef.anchorText, isOptional = false)
-                    linkFileAnchorMatch = "^$fixedPrefix$filenamePattern$anchorPattern$"
-                    linkSubAnchorExtMatch = "^$fixedPrefix$noWikiSubDirPattern$filenamePattern$anchorPattern$extensionPattern$"
-                    linkSubExtMatch = "^$fixedPrefix$noWikiSubDirPattern$filenamePattern$extensionPattern$"
+                    if (!anchorPattern.isEmpty()) linkFileAnchorMatch = "^$fixedPrefix$filenameNoExtPattern$anchorPattern$"
+                    if (!anchorPattern.isEmpty()) linkSubAnchorExtMatch = "^$fixedPrefix$noWikiSubDirPattern$filenameNoExtPattern$anchorPattern$extensionPattern$"
+                    linkSubExtMatch = "^$fixedPrefix$noWikiSubDirPattern$filenameNoExtPattern$extensionPattern$"
                 }
 
                 // only exact matches for files, the rest are loose matches

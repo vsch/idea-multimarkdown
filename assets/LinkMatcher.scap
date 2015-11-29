@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ScappleDocument Version="1.1" ID="55E295DE-4F04-4432-ACCD-DC29C7F5B385">
+    <Notes>
+        <Note ID="8" FontSize="12.0" Position="646.0,249.0" Width="57.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1" Style="Jagged">0.477193 0.557066 0.76433</Border>
+                <Fill>0.840969 0.866828 0.925903</Fill>
+            </Appearance>
+            <String>Wiki Link</String>
+        </Note>
+        <Note ID="9" FontSize="12.0" Position="25.0,81.0" Width="69.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.290055 0.1523 0.182215</Border>
+                <Fill>0.940019 0.892907 0.779716</Fill>
+            </Appearance>
+            <String>zero or one</String>
+        </Note>
+        <Note ID="17" FontSize="12.0" Position="488.0,204.0" Width="85.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.290055 0.1523 0.182215</Border>
+                <Fill>0.940019 0.892907 0.779716</Fill>
+            </Appearance>
+            <String>Anchor as File</String>
+            <ConnectedNoteIDs>18, 49</ConnectedNoteIDs>
+        </Note>
+        <Note ID="18" FontSize="12.0" Position="580.0,204.0" Width="123.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>markdownExtensions</String>
+            <ConnectedNoteIDs>17, 72</ConnectedNoteIDs>
+        </Note>
+        <Note ID="19" FontSize="12.0" Position="280.0,204.0" Width="85.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.290055 0.1523 0.182215</Border>
+                <Fill>0.940019 0.892907 0.779716</Fill>
+            </Appearance>
+            <String>subDirectories</String>
+            <ConnectedNoteIDs>49, 59</ConnectedNoteIDs>
+        </Note>
+        <Note ID="42" FontSize="12.0" Position="281.0,243.0" Width="109.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.747881 0.366532 0.542813</Border>
+                <Fill>0.918452 0.807302 0.863467</Fill>
+            </Appearance>
+            <String>linkFilePath as File</String>
+            <ConnectedNoteIDs>59, 88</ConnectedNoteIDs>
+        </Note>
+        <Note ID="49" FontSize="12.0" Position="372.0,204.0" Width="109.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.747881 0.366532 0.542813</Border>
+                <Fill>0.918452 0.807302 0.863467</Fill>
+            </Appearance>
+            <String>linkFilePath as File</String>
+            <ConnectedNoteIDs>17, 19</ConnectedNoteIDs>
+        </Note>
+        <Note ID="57" FontSize="12.0" Position="439.0,76.0" Width="123.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>markdownExtensions</String>
+            <ConnectedNoteIDs>60, 72</ConnectedNoteIDs>
+        </Note>
+        <Note ID="58" FontSize="12.0" Position="274.0,76.0" Width="85.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.290055 0.1523 0.182215</Border>
+                <Fill>0.940019 0.892907 0.779716</Fill>
+            </Appearance>
+            <String>subDirectories</String>
+            <ConnectedNoteIDs>59-60</ConnectedNoteIDs>
+        </Note>
+        <Note ID="59" FontSize="12.0" Position="192.0,181.0" Width="32.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>wiki/</String>
+            <ConnectedNoteIDs>19, 42, 58, 64, 70</ConnectedNoteIDs>
+        </Note>
+        <Note ID="60" FontSize="12.0" Position="363.0,76.0" Width="71.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>linkFilePath</String>
+            <ConnectedNoteIDs>57-58</ConnectedNoteIDs>
+        </Note>
+        <Note ID="63" FontSize="12.0" Position="35.0,28.0" Width="78.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1" Style="Cloud"></Border>
+            </Appearance>
+            <String>GitHub Repo</String>
+        </Note>
+        <Note ID="64" FontSize="12.0" Position="66.0,390.0" Width="61.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>repoRoot/</String>
+            <ConnectedNoteIDs>59, 65, 67, 73, 81-84</ConnectedNoteIDs>
+        </Note>
+        <Note ID="65" FontSize="12.0" Position="192.0,440.0" Width="33.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>pulls</String>
+            <ConnectedNoteIDs>64, 79</ConnectedNoteIDs>
+        </Note>
+        <Note ID="67" FontSize="12.0" Position="192.0,390.0" Width="35.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>blob/</String>
+            <ConnectedNoteIDs>64, 68</ConnectedNoteIDs>
+        </Note>
+        <Note ID="68" FontSize="12.0" Position="241.0,390.0" Width="81.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>branchOrTag/</String>
+            <ConnectedNoteIDs>67, 69</ConnectedNoteIDs>
+        </Note>
+        <Note ID="69" FontSize="12.0" Position="335.0,390.0" Width="71.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>linkFilePath</String>
+            <ConnectedNoteIDs>68, 78</ConnectedNoteIDs>
+        </Note>
+        <Note ID="70" FontSize="12.0" Position="275.0,142.0" Width="71.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>linkFilePath</String>
+            <ConnectedNoteIDs>59</ConnectedNoteIDs>
+        </Note>
+        <Note ID="72" FontSize="12.0" Position="782.0,76.0" Width="59.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1" Style="Square"></Border>
+            </Appearance>
+            <String>WikiPage</String>
+            <ConnectedNoteIDs>18, 57</ConnectedNoteIDs>
+        </Note>
+        <Note ID="73" FontSize="12.0" Position="192.0,340.0" Width="31.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>raw/</String>
+            <ConnectedNoteIDs>64, 74</ConnectedNoteIDs>
+        </Note>
+        <Note ID="74" FontSize="12.0" Position="241.0,340.0" Width="81.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>branchOrTag/</String>
+            <ConnectedNoteIDs>73, 75</ConnectedNoteIDs>
+        </Note>
+        <Note ID="75" FontSize="12.0" Position="335.0,340.0" Width="71.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>linkFilePath</String>
+            <ConnectedNoteIDs>74, 80</ConnectedNoteIDs>
+        </Note>
+        <Note ID="78" FontSize="12.0" Position="782.0,385.0" Width="28.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1" Style="Square">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
+            </Appearance>
+            <String>File</String>
+            <ConnectedNoteIDs>69</ConnectedNoteIDs>
+        </Note>
+        <Note ID="79" FontSize="12.0" Position="781.0,437.0" Width="33.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1" Style="Square">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
+            </Appearance>
+            <String>URL</String>
+            <ConnectedNoteIDs>65</ConnectedNoteIDs>
+        </Note>
+        <Note ID="80" FontSize="12.0" Position="782.0,337.0" Width="55.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1" Style="Square">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
+            </Appearance>
+            <String>Raw File</String>
+            <ConnectedNoteIDs>75, 88</ConnectedNoteIDs>
+        </Note>
+        <Note ID="81" FontSize="12.0" Position="192.0,468.0" Width="45.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>graphs</String>
+            <ConnectedNoteIDs>64</ConnectedNoteIDs>
+        </Note>
+        <Note ID="82" FontSize="12.0" Position="192.0,496.0" Width="37.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>pulse</String>
+            <ConnectedNoteIDs>64</ConnectedNoteIDs>
+        </Note>
+        <Note ID="83" FontSize="12.0" Position="192.0,524.0" Width="29.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>fork</String>
+            <ConnectedNoteIDs>64</ConnectedNoteIDs>
+        </Note>
+        <Note ID="84" FontSize="12.0" Position="192.0,552.0" Width="43.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+            </Appearance>
+            <String>issues</String>
+            <ConnectedNoteIDs>64</ConnectedNoteIDs>
+        </Note>
+        <Note ID="85" FontSize="12.0" Position="297.0,551.0" Width="71.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1" Style="Jagged">0.331867 0.609932 0.356197</Border>
+                <Fill>0.790123 0.882327 0.80198</Fill>
+            </Appearance>
+            <String>GitHub Link</String>
+        </Note>
+        <Note ID="87" FontSize="12.0" Position="24.0,113.0" Width="55.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.747881 0.366532 0.542813</Border>
+                <Fill>0.918452 0.807302 0.863467</Fill>
+            </Appearance>
+            <String>Trimmed</String>
+        </Note>
+        <Note ID="88" FontSize="12.0" Position="398.0,243.0" Width="85.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.290055 0.1523 0.182215</Border>
+                <Fill>0.940019 0.892907 0.779716</Fill>
+            </Appearance>
+            <String>Anchor as File</String>
+            <ConnectedNoteIDs>42, 80</ConnectedNoteIDs>
+        </Note>
+        <Note ID="89" FontSize="12.0" Position="22.0,148.0" Width="89.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1" Style="Square">0.756763 0.785592 0.373258</Border>
+                <Fill>0.906773 0.910625 0.634363</Fill>
+            </Appearance>
+            <String>Case Sensitive</String>
+        </Note>
+    </Notes>
+    <BackgroundShapes>
+        <Shape ID="77" Sticky="Yes" Position="261.0,183.0" Width="460.996094" Height="103.0">
+            <Appearance>
+                <Border Weight="1">0.477193 0.557066 0.76433</Border>
+                <Fill>0.840969 0.866828 0.925903</Fill>
+            </Appearance>
+        </Shape>
+        <Shape ID="86" Sticky="Yes" Position="181.0,429.0" Width="202.0" Height="162.0">
+            <Appearance>
+                <Border Weight="1">0.331867 0.609932 0.356197</Border>
+                <Fill>0.790123 0.882327 0.80198</Fill>
+            </Appearance>
+        </Shape>
+    </BackgroundShapes>
+    <Stacks>
+        <Stack>65, 81-84</Stack>
+    </Stacks>
+    <AutoFit>8-9, 17-19, 42, 49, 57-60, 63-65, 67-70, 72-75, 78-85, 87-89</AutoFit>
+    <NoteStyles>
+        <Style Name="Title Text" ID="26CD7242-6012-4B10-A0C3-3F37A221CF16" AffectFontStyle="Yes" AffectAlignment="Yes" AffectTextColor="No" AffectNoteBody="No" AffectFade="No">
+            <FontSize>28.0</FontSize>
+            <IsBold>Yes</IsBold>
+        </Style>
+        <Style Name="Red Text" ID="6BC43031-D690-4624-BEF3-76DB36EF9E62" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="Yes" AffectNoteBody="No" AffectFade="No">
+            <TextColor>1.0 0.0 0.0</TextColor>
+        </Style>
+        <Style Name="Brown Bubble" ID="61681A2F-EBF9-450B-9814-34A71ADA8EBC" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.290055 0.1523 0.182215</BorderColor>
+            <FillColor>0.940019 0.892907 0.779716</FillColor>
+        </Style>
+        <Style Name="Yellow Bubble" ID="D5C3FEE7-76D4-421E-A190-458690909109" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.756763 0.785592 0.373258</BorderColor>
+            <FillColor>0.906773 0.910625 0.634363</FillColor>
+        </Style>
+        <Style Name="Green Bubble" ID="DB845A25-26FC-45E6-BA80-08E1F5C66FA3" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.331867 0.609932 0.356197</BorderColor>
+            <FillColor>0.790123 0.882327 0.80198</FillColor>
+        </Style>
+        <Style Name="Blue Bubble" ID="4B1C6936-5C1E-4B2E-8A8D-8D0C63B3C5DC" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.477193 0.557066 0.76433</BorderColor>
+            <FillColor>0.840969 0.866828 0.925903</FillColor>
+        </Style>
+        <Style Name="Pink Bubble" ID="541392A8-4383-4B83-8186-D8D309185EF4" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.747881 0.366532 0.542813</BorderColor>
+            <FillColor>0.918452 0.807302 0.863467</FillColor>
+        </Style>
+    </NoteStyles>
+    <UISettings>
+        <BackgroundColor>0.999737 0.986332 0.931298</BackgroundColor>
+        <DefaultFont>Helvetica</DefaultFont>
+        <DefaultTextColor>0.0 0.0 0.0</DefaultTextColor>
+    </UISettings>
+    <PrintSettings PaperSize="612.0,792.0" LeftMargin="72.0" RightMargin="72.0" TopMargin="90.0" BottomMargin="90.0" PaperType="na-letter" Orientation="Portrait" HorizontalPagination="Clip" VerticalPagination="Auto" ScaleFactor="1.0" HorizontallyCentered="Yes" VerticallyCentered="Yes" Collates="Yes" PagesAcross="1" PagesDown="1"></PrintSettings>
+</ScappleDocument>
