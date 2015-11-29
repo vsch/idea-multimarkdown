@@ -20,6 +20,8 @@
  */
 package com.vladsch.idea.multimarkdown.util
 
+import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin
+import org.apache.log4j.Logger
 import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
 import java.net.URLEncoder
@@ -157,7 +159,7 @@ fun String?.urlDecode(charSet: String? = null): String {
         return URLDecoder.decode(this, charSet ?: "UTF-8")
     } catch (e: UnsupportedEncodingException) {
         //e.printStackTrace()
-        return orEmpty().replace("%23", "#").replace("%20", " ")
+        return orEmpty()
     }
 }
 
@@ -166,7 +168,7 @@ fun String?.urlEncode(charSet: String? = null): String {
         return URLEncoder.encode(this, charSet ?: "UTF-8")
     } catch (e: UnsupportedEncodingException) {
         //e.printStackTrace()
-        return orEmpty().replace("%23", "#").replace("%20", " ")
+        return orEmpty()
     }
 }
 
@@ -201,11 +203,12 @@ fun String?.removeStart(prefix: String): String {
     return ""
 }
 
-fun splicer(delimiter: String, process: (elem: String) -> String): (total: String, elem: String) -> String {
-    return { total, elem ->
-        val result = process(elem)
-        if (total.isEmpty()) result else if (result.isEmpty()) total else total + delimiter + result
-    }
+fun splicer(delimiter: String): (accum: String, elem: String) -> String {
+    return { accum, elem -> accum + delimiter + elem }
+}
+
+fun skipEmptySplicer(delimiter: String): (accum: String, elem: String) -> String {
+    return { accum, elem -> if (elem.isEmpty()) accum else accum + delimiter + elem }
 }
 
 fun Array<String>.splice(delimiter: String): String {

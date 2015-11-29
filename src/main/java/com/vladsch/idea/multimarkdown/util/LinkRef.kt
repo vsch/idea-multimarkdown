@@ -14,6 +14,9 @@
  */
 package com.vladsch.idea.multimarkdown.util
 
+import java.util.*
+import kotlin.text.Regex
+
 open class LinkRef(val containingFile: FileRef, fullPath: String, anchorTxt: String?, val targetRef: FileRef?) : PathInfo(fullPath) {
     val anchor: String? = anchorTxt?.removePrefix("#")
     val hasAnchor: Boolean
@@ -116,7 +119,7 @@ open class LinkRef(val containingFile: FileRef, fullPath: String, anchorTxt: Str
         }
 
         @JvmStatic fun urlEncode(linkAddress: String): String = mapLinkChars(linkAddress, fileUrlMap)
-        @JvmStatic fun urlDecode(linkAddress: String): String = unmapLinkChars(linkAddress, fileUrlMap)
+        @JvmStatic fun urlDecode(linkAddress: String): String = linkAddress.urlDecode()
 
         // prepare text for matching files, wrap in (?:) so matches as a block
         @JvmStatic fun linkAsFileRegex(linkText: String): String {
@@ -131,12 +134,30 @@ open class LinkRef(val containingFile: FileRef, fullPath: String, anchorTxt: Str
             return result
         }
 
+        @JvmStatic fun mapLinkCharsRegex(linkAddress: String, charMap: Map<String, Regex>): String {
+            var result = linkAddress
+            for (pair in charMap) {
+                result = result.replace(pair.value, pair.key)
+            }
+            return result
+        }
+
         @JvmStatic fun unmapLinkChars(linkAddress: String, charMap: Map<String, String>): String {
             var result = linkAddress
             for (pair in charMap) {
                 result = result.replace(pair.value, pair.key)
             }
             return result
+        }
+
+        // more efficient when multiple chars map to the same value, creates a regex to match all keys
+        @JvmStatic fun linkRegexMap(charMap: Map<String, String>): Map<String, Regex> {
+            val regExMap = HashMap<String, Regex>()
+            for (char in charMap.values) {
+                val regex = charMap.filter { it.value == char }.keys.map { "\\Q$it\\E" }.reduce(splicer("|"))
+                regExMap.put(char, regex.toRegex())
+            }
+            return regExMap
         }
 
         // char in file name to link map
@@ -199,7 +220,7 @@ open class WikiLinkRef(containingFile: FileRef, fullPath: String, anchor: String
     override fun linkToFileRegex(linkText: String) = linkAsFileRegex(linkText)
 
     // make a copy of everything but fullPath and return the same type of link
-    override  fun replaceFilePath(fullPath: String, withTargetRef: Boolean): LinkRef {
+    override fun replaceFilePath(fullPath: String, withTargetRef: Boolean): LinkRef {
         return WikiLinkRef(containingFile, fullPath, anchor, if (withTargetRef) targetRef else null)
     }
 
@@ -207,12 +228,17 @@ open class WikiLinkRef(containingFile: FileRef, fullPath: String, anchor: String
         // convert file name to link, usually url encode
         @JvmStatic fun fileAsLink(linkAddress: String): String = linkAddress.replace('-', ' ')
 
+        @JvmStatic
+        val wikiLinkRegexMap by lazy {
+            linkRegexMap(wikiLinkMap)
+        }
+
         // convert link to file name, usually url decode
-        @JvmStatic fun linkAsFile(linkAddress: String): String = mapLinkChars(linkAddress, wikiLinkMap)
+        @JvmStatic fun linkAsFile(linkAddress: String): String = mapLinkCharsRegex(linkAddress, wikiLinkRegexMap)
 
         // prepare text for matching files, wrap in (?:) so matches as a block
         @JvmStatic fun linkAsFileRegex(linkText: String): String {
-            return "(?:\\Q" + linkText.replace(wikiLinkMatchRegex.toRegex(), wikiLinkReplaceRegex) + "\\E)"
+            return "(?:\\Q" + linkText.replace(wikiLinkMatchRegex, "\\\\E(?:-| )\\\\Q") + "\\E)"
         }
 
         @JvmStatic @JvmField
@@ -224,9 +250,7 @@ open class WikiLinkRef(containingFile: FileRef, fullPath: String, anchor: String
                 Pair(">", "-")
         )
 
-        // pathText.replace("-| ".toRegex(), "\\\\E(?:-| )\\\\Q")
-        val wikiLinkReplaceRegex by lazy { "\\\\E(?:-|\\\\Q" + wikiLinkMap.keys.splice("\\\\E|\\\\Q") + "\\\\E)\\\\Q" }
-        val wikiLinkMatchRegex = "-| "
+        val wikiLinkMatchRegex = "-| ".toRegex()
 
         // CAUTION: just copies link address without figuring out whether it will resolve as is
         @JvmStatic fun from(linkRef: LinkRef): WikiLinkRef? {
@@ -246,7 +270,7 @@ open class ImageLinkRef(containingFile: FileRef, fullPath: String, anchor: Strin
         get() = IMAGE_EXTENSIONS
 
     // make a copy of everything but fullPath and targetRef and return the same type of link
-    override  fun replaceFilePath(fullPath: String, withTargetRef: Boolean): LinkRef {
+    override fun replaceFilePath(fullPath: String, withTargetRef: Boolean): LinkRef {
         return ImageLinkRef(containingFile, fullPath, anchor, if (withTargetRef) targetRef else null)
     }
 

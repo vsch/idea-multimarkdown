@@ -202,8 +202,8 @@ class TestLinkMatcher_MultiSub {
         val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef)
 
         val list = ArrayList<String>()
-        val regex = linkRefMatcher.patternRegex(true)
-        val matchText = linkRefMatcher.linkLooseMatch
+        val regex = linkRefMatcher.patternRegex(false)
+        val matchText = linkRefMatcher.linkAllMatch
 
         if (regex != null) {
             for (path in MarkdownTestData.filePaths) {
@@ -362,31 +362,5 @@ class TestLinkMatcher_MultiSub {
     }
 
     // TEST: need to test all the available regex pattern matches, raw, anchor, default ext, etc.
-    @Test fun test_linkRefMatcher_SubDirMulti_SmartExact() {
-        val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/Multiple-Match.md")
-        val linkRef = LinkRef(linkInfo, "SubDirectory/Multiple-Match.md", null, null)
-
-        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef)
-
-        val list = ArrayList<String>()
-        val regex = linkRefMatcher.patternRegex(false)
-        val matchText = linkRefMatcher.linkLooseMatch
-
-        val matchWikiText = linkRefMatcher.linkLooseMatch
-        val regexWiki = linkRefMatcher.patternRegex(true)
-
-        if (regex != null && regexWiki != null) {
-            for (path in MarkdownTestData.filePaths) {
-                val pathInfo = FileRef(path)
-                if (path.matches(if (pathInfo.isWikiPage) regexWiki else regex)) {
-                    list.add(path)
-                }
-            }
-        }
-
-        compareOrderedLists("$matchText\n$matchWikiText\n${linkInfo.filePath}\n", arrayListOf<String>(
-                "/Users/vlad/src/MarkdownTest/SubDirectory/Multiple-Match.md"
-        ), list)
-    }
 }
 
