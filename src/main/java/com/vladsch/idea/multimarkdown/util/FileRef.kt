@@ -28,6 +28,13 @@ open class FileRef(fullPath: String, private val _virtualFile: VirtualFile?) : P
     protected val _mainRepoDirEnd: Int
     protected val _wikiHomeDirEnd: Int
 
+    // these are only set if the fileRef is from a multiResolve result
+    // set by resolver to true if this file matched with link anchor
+    //var isAnchorMatched:Boolean = false, not being set because no code uses this value yet
+
+    // set by resolver to true if this resolves to raw file instead of pretty rendered file
+    var isRawFile = false
+
     constructor(virtualFile: VirtualFile) : this(virtualFile.path, virtualFile)
 
     constructor(psiFile: PsiFile) : this(psiFile.virtualFile)
@@ -38,7 +45,7 @@ open class FileRef(fullPath: String, private val _virtualFile: VirtualFile?) : P
 
     init {
         // gitHub wiki home will be like ..../dirname/dirname.wiki
-        var wikiHomeDirEnd = this._fullPath.lastIndexOf(WIKI_HOME_EXTENSION + "/", _nameStart)
+        var wikiHomeDirEnd = this._fullPath.lastIndexOf(WIKI_HOME_DIR_EXTENSION + "/", _nameStart)
         var mainRepoDirEnd = 0
 
         if (wikiHomeDirEnd >= _nameStart || wikiHomeDirEnd < 0) wikiHomeDirEnd = 0
@@ -53,7 +60,7 @@ open class FileRef(fullPath: String, private val _virtualFile: VirtualFile?) : P
                     val mainRepoDirName = this._fullPath.substring(mainRepoDirStart + 1, wikiHomeDirStart)
                     if (mainRepoDirName == wikiHomeDirName) {
                         mainRepoDirEnd = wikiHomeDirStart
-                        wikiHomeDirEnd += WIKI_HOME_EXTENSION.length
+                        wikiHomeDirEnd += WIKI_HOME_DIR_EXTENSION.length
                     } else {
                         wikiHomeDirEnd = 0
                     }

@@ -102,6 +102,7 @@ public class MultiMarkdownAnnotator implements Annotator {
             if (targetInfo == null) {
                 // file creation quick fix handled later
                 state.warningsOnly = false;
+                state.unresolved = true;
 
                 //if (reason.isA(ID_WIKI_LINK_NOT_IN_WIKI)) {
                 if (linkRefInfo instanceof WikiLinkRef && !linkRefInfo.getContainingFile().isWikiPage()) {
@@ -116,19 +117,15 @@ public class MultiMarkdownAnnotator implements Annotator {
                 ProjectFileRef targetRef = targetInfo.projectFileRef(project);
                 assert targetRef != null;
                 PsiFile psiFile = targetRef.getPsiFile();
-
-                String extensionList = "";
-                for (String ext : linkRefInfo.getLinkExtensions()) {
-                    if (!extensionList.isEmpty()) extensionList += ", ";
-                    extensionList += ext;
-                }
+                String extensionList = StringUtilKt.splice(linkRefInfo.getLinkExtensions(), ", ");
 
                 if (resolvedTargetInfo == null) {
                     // file creation quick fix handled later
                     state.warningsOnly = false;
+                    state.unresolved = true;
                 }
 
-                List<InspectionResult> inspectionResults = resolver.inspect(linkRefInfo, targetRef);
+                List<InspectionResult> inspectionResults = resolver.inspect(linkRefInfo, targetRef, null);
 
                 for (InspectionResult reason : inspectionResults) {
                     if (reason.getHandled()) continue;
@@ -370,7 +367,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                 }
             }
 
-            if (!state.warningsOnly) {
+            if (!state.warningsOnly || state.unresolved) {
                 registerCreateFileFix(element.getFileName(), element, state);
 
                 // get all accessible
@@ -439,7 +436,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                                 if (state.addingAlreadyOffered(TYPE_SWAP_WIKI_PAGE_REF_TITLE_QUICK_FIX)) state.annotator.registerFix(new SwapWikiPageRefTitleQuickFix(element));
                                 if (state.addingAlreadyOffered(TYPE_DELETE_WIKI_PAGE_REF_QUICK_FIX)) state.annotator.registerFix(new DeleteWikiPageRefQuickFix(element));
                             }
-                        } else if (WikiLinkRef.convertFileToLink(targetInfo.getFileNameNoExt()).equals(wikiPageTextName)) {
+                        } else if (WikiLinkRef.fileAsLink(targetInfo.getFileNameNoExt()).equals(wikiPageTextName)) {
                             if (state.alreadyOfferedTypes(TYPE_DELETE_WIKI_PAGE_TITLE_QUICK_FIX, TYPE_DELETE_WIKI_PAGE_REF_QUICK_FIX, TYPE_SWAP_WIKI_PAGE_REF_TITLE_QUICK_FIX)) {
                                 state.createInfoAnnotation(textElement.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.swap-ref-title"));
                                 if (state.addingAlreadyOffered(TYPE_DELETE_WIKI_PAGE_TITLE_QUICK_FIX)) state.annotator.registerFix(new DeleteWikiPageTitleQuickFix(element));
@@ -487,10 +484,7 @@ public class MultiMarkdownAnnotator implements Annotator {
 
     protected void registerCreateFileFix(@NotNull String fileName, @NotNull MultiMarkdownNamedElement element, @NotNull AnnotationState state) {
         if (state.canCreateFile && !fileName.isEmpty()) {
-            if (state.annotator == null) {
-                // creation fix
-                state.createErrorAnnotation(element.getParent().getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.unresolved-link-reference"));
-            }
+            state.createErrorAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.wikilink.unresolved-link-reference"));
 
             PathInfo thisFile = new FileRef(element.getContainingFile());
             PathInfo newFile = PathInfo.appendParts(thisFile.getPath(), fileName);

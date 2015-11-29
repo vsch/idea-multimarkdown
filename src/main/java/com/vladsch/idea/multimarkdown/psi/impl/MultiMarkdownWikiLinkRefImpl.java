@@ -60,7 +60,7 @@ public class MultiMarkdownWikiLinkRefImpl extends MultiMarkdownNamedElementImpl 
 
     @Override
     public String getFileName() {
-        return WikiLinkRef.convertLinkToFile(new PathInfo(getText() == null ? "" : getText()).withExt(PathInfo.WIKI_PAGE_EXTENSION).getFilePath());
+        return WikiLinkRef.linkAsFile(new PathInfo(getText() == null ? "" : getText()).withExt(PathInfo.WIKI_PAGE_EXTENSION).getFilePath());
     }
 
     @Override

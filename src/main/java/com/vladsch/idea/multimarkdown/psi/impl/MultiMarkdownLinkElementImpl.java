@@ -94,7 +94,7 @@ public abstract class MultiMarkdownLinkElementImpl  extends ASTWrapperPsiElement
 
         if (addLinkRef) {
             String pageRef = MultiMarkdownPsiImplUtil.getLinkRefTextWithAnchor(this);
-            if (pageRef.isEmpty()) pageRef = WikiLinkRef.convertFileToLink(filePathInfo.getFileName());
+            if (pageRef.isEmpty()) pageRef = WikiLinkRef.fileAsLink(filePathInfo.getFileName());
             return prefix + (vcsHome.isEmpty() ? vcsHome : vcsHome + "::") + (pageRef.isEmpty() ? pageRef : pageRef + "::");
         }
         return prefix + (vcsHome.isEmpty() ? vcsHome : vcsHome + "::");

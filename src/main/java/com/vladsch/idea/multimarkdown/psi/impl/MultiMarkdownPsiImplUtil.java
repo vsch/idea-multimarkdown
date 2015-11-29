@@ -398,7 +398,7 @@ public class MultiMarkdownPsiImplUtil {
             if (linkRef != null) {
                 if (linkText.isEmpty()) {
                     // TODO: use suggestion for default text
-                    linkText = !linkRefTitle.isEmpty() ? linkRefTitle : WikiLinkRef.convertFileToLink(linkRef.linkToFile(linkRef.getFileNameNoExt()));
+                    linkText = !linkRefTitle.isEmpty() ? linkRefTitle : WikiLinkRef.fileAsLink(linkRef.linkToFile(linkRef.getFileNameNoExt()));
                 }
                 return MultiMarkdownExplicitLinkImpl.getElementText(linkRef.getFilePath(), linkText, linkRef.getAnchorText(), linkRefTitle);
             }

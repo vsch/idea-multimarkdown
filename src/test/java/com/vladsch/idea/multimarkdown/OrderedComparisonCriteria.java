@@ -40,14 +40,14 @@ public abstract class OrderedComparisonCriteria<T> extends TypedComparisonCriter
                     } catch (ArrayComparisonFailure var10) {
                         //var10.addDimension(i);
                         //throw var10;
-                        throw new ArrayComparisonFailure(header + "array differed first at element [" + i + "]\nExpected :"+expected+"\nActual   :"+actual,  var10, i);
+                        throw new ComparisonFailure(header + "array differed first at element [" + i + "]\n",  TestUtils.arrayAsString(expected), TestUtils.arrayAsString(actual));
                     }
                 } else {
                     try {
                         this.assertElementsEqual(expected, actual);
                     } catch (AssertionError var11) {
                         //throw new ArrayComparisonFailure(header, var11, i);
-                        throw new ArrayComparisonFailure(header + "array differed first at element [" + i + "]\nExpected :"+expected+"\nActual   :"+actual,  var11, i);
+                        throw new ComparisonFailure(header + "array differed first at element [" + i + "]\n",  TestUtils.arrayAsString(expecteds), TestUtils.arrayAsString(actuals));
                     }
                 }
             }

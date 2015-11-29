@@ -47,7 +47,7 @@ class TestLinkResolver_MarkdownTest_wiki__Home constructor(val rowId:Int, val fu
     val skipTest = linkRef.isExternal
 
     fun resolveRelativePath(filePath: String?): PathInfo? {
-        return if (filePath == null) null else if (filePath.startsWith("http://", "https://")) PathInfo(filePath) else PathInfo.appendParts(filePathInfo.path, filePath.splitToSequence("/"))
+        return if (filePath == null) null else if (filePath.startsWith("http://", "https://")) PathInfo(filePath) else PathInfo.appendParts(filePathInfo.path, filePath)
     }
 
     init {
@@ -55,13 +55,12 @@ class TestLinkResolver_MarkdownTest_wiki__Home constructor(val rowId:Int, val fu
         resolvesExternal = resolveRelativePath(resolvesExternalRel)?.filePath
 
         var multiResolveAbs = ArrayList<String>()
-
         if (multiResolvePartial.size == 0 && resolvesLocal != null) multiResolveAbs.add(resolvesLocal)
 
         for (path in multiResolvePartial) {
-            multiResolveAbs.add(resolveRelativePath(path)?.filePath.orEmpty())
+            val resolvedPath = resolveRelativePath(path)?.filePath.orEmpty()
+            multiResolveAbs.add(resolvedPath)
         }
-
         multiResolve = multiResolveAbs.toArray(Array(0, { "" }))
 
         for (path in MarkdownTestData.filePaths) {
@@ -103,7 +102,7 @@ class TestLinkResolver_MarkdownTest_wiki__Home constructor(val rowId:Int, val fu
         if (skipTest || this.inspectionResults == null) return
         val targetRef = resolver.resolve(linkRef, LinkResolver.LOOSE_MATCH, fileList) as? FileRef
         if (targetRef != null) {
-            val inspectionResults = resolver.inspect(linkRef, targetRef)
+            val inspectionResults = resolver.inspect(linkRef, targetRef, rowId)
             if (this.inspectionResults.size < inspectionResults.size) {
                 for (inspection in inspectionResults) {
                     //println(inspection.toArrayOfTestString(rowId, filePathInfo.path))

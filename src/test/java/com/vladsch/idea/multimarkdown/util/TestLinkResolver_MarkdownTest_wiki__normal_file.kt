@@ -103,7 +103,7 @@ class TestLinkResolver_MarkdownTest_wiki__normal_file constructor(val rowId:Int,
         if (skipTest || this.inspectionResults == null) return
         val targetRef = resolver.resolve(linkRef, LinkResolver.LOOSE_MATCH, fileList) as? FileRef
         if (targetRef != null) {
-            val inspectionResults = resolver.inspect(linkRef, targetRef)
+            val inspectionResults = resolver.inspect(linkRef, targetRef, null)
             if (this.inspectionResults.size < inspectionResults.size) {
                 for (inspection in inspectionResults) {
                     println(inspection.toArrayOfTestString(rowId, filePathInfo.path))

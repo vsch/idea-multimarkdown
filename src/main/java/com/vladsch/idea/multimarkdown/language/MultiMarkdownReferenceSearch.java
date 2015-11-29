@@ -45,7 +45,7 @@ public class MultiMarkdownReferenceSearch extends QueryExecutorBase<PsiReference
         String text2 = null;
         if (refElement instanceof MultiMarkdownFile && ((MultiMarkdownFile) refElement).isWikiPage()) {
             PathInfo pathInfo = new PathInfo(((MultiMarkdownFile) refElement).getVirtualFile());
-            text = WikiLinkRef.convertFileToLink(pathInfo.getFileNameNoExt());
+            text = WikiLinkRef.fileAsLink(pathInfo.getFileNameNoExt());
             //text2 = pathInfo.getFileNameNoExt();
         //} else if (refElement instanceof MultiMarkdownWikiLinkRef) {
         //    text = ((MultiMarkdownWikiLinkRef) refElement).getName();

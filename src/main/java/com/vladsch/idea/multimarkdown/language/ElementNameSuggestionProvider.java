@@ -69,7 +69,7 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
             PathInfo filePathInfo = new PathInfo(((MultiMarkdownFile) element).getVirtualFile().getPath());
 
             suggestionList = suggestionList
-                    .add(WikiLinkRef.convertFileToLink(filePathInfo.getFileNameNoExt()), new Suggestion.Param<String>(Suggestion.Fixer.FILE_PATH, filePathInfo.getFilePath()))
+                    .add(WikiLinkRef.fileAsLink(filePathInfo.getFileNameNoExt()), new Suggestion.Param<String>(Suggestion.Fixer.FILE_PATH, filePathInfo.getFilePath()))
                     .add(suggestionList.chainFixers(SuggestCleanSpacedWords, (!selfActivated ? SuggestSpelling : null)))
                     .batchFixers(
                             SuggestCleanSpacedWords, SuggestCapSpacedWords

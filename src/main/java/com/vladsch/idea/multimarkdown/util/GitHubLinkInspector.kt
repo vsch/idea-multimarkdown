@@ -52,8 +52,13 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
         @JvmStatic @JvmField val ID_WIKI_LINK_NOT_IN_WIKI = "WIKI_LINK_NOT_IN_WIKI"
     }
 
-    internal class Context(val resolver: GitHubLinkResolver, val linkRef: LinkRef, val targetRef: FileRef) {
+    internal class Context(val resolver: GitHubLinkResolver, val linkRef: LinkRef, val targetRef: FileRef, val referenceId: Any?) {
         val results = ArrayList<InspectionResult>()
+
+        fun addResult(result: InspectionResult) {
+            result.referenceId = referenceId;
+            results.add(result);
+        }
 
         val linkAddress: String by lazy() {
             resolver.linkAddress(linkRef, targetRef, linkRef.hasExt)
@@ -66,14 +71,14 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
         fun INSPECT_LINK_TARGET_HAS_SPACES() {
             if (targetRef.containsSpaces()) {
                 val severity = if (linkRef is WikiLinkRef) Severity.WEAK_WARNING else Severity.WARNING
-                results.add(InspectionResult(ID_TARGET_HAS_SPACES, severity, null, targetRef.filePath.replace(' ', '-')))
+                addResult(InspectionResult(ID_TARGET_HAS_SPACES, severity, null, targetRef.filePath.replace(' ', '-')))
             }
         }
 
         fun INSPECT_LINK_CASE_MISMATCH() {
             if (linkRef is WikiLinkRef) {
                 if (resolver.equalLinks(linkRef.filePath, linkAddress, ignoreCase = true) && !resolver.equalLinks(linkRef.filePath, linkAddress, ignoreCase = false)) {
-                    results.add(InspectionResult(ID_CASE_MISMATCH, Severity.WARNING, linkAddress, targetRef.path.suffixWith('/') + linkRef.linkToFile(linkRef.fileNameNoExt) + targetRef.ext.prefixWith('.')))
+                    addResult(InspectionResult(ID_CASE_MISMATCH, Severity.WARNING, linkAddress, targetRef.path.suffixWith('/') + linkRef.linkToFile(linkRef.fileNameNoExt) + targetRef.ext.prefixWith('.')))
                 }
             } else {
                 if (linkRef.filePath.equals(linkAddress, ignoreCase = true) && !linkRef.filePath.equals(linkAddress, ignoreCase = false)) {
@@ -81,7 +86,7 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
                     val fixedLinkRef = FileRef(linkAddress)
                     // caution: no fixed file name provided if the case mismatch is in the path not the file name
                     // test: no fixed file name provided if the case mismatch is in the path not the file name
-                    results.add(InspectionResult(ID_CASE_MISMATCH, Severity.ERROR, linkAddress, if (linkRef.path == fixedLinkRef.path) fixedPath else null))
+                    addResult(InspectionResult(ID_CASE_MISMATCH, Severity.ERROR, linkAddress, if (linkRef.path == fixedLinkRef.path) fixedPath else null))
                 }
             }
         }
@@ -90,26 +95,26 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
         fun INSPECT_LINK_TARGET_EXT() {
             if (linkRef is ImageLinkRef ) {
                 if (!linkRef.hasExt) {
-                    results.add(InspectionResult(ID_LINK_NEEDS_EXT, Severity.ERROR, linkAddress, null))
+                    addResult(InspectionResult(ID_LINK_NEEDS_EXT, Severity.ERROR, linkAddress, null))
                 }
 
                 if (linkRef.ext != targetRef.ext) {
-                    results.add(InspectionResult(ID_LINK_HAS_BAD_EXT, Severity.ERROR, linkAddress, null))
+                    addResult(InspectionResult(ID_LINK_HAS_BAD_EXT, Severity.ERROR, linkAddress, null))
                 }
 
                 if (!targetRef.hasExt || !targetRef.isImageExt) {
-                    results.add(InspectionResult(if (!linkRef.hasExt) ID_LINK_TARGET_NEEDS_EXT else ID_LINK_TARGET_HAS_BAD_EXT, Severity.WARNING, null, targetRef.path.suffixWith('/') + linkRef.linkToFile(linkRef.fileNameNoExt) + targetRef.ext.prefixWith('.')))
+                    addResult(InspectionResult(if (!linkRef.hasExt) ID_LINK_TARGET_NEEDS_EXT else ID_LINK_TARGET_HAS_BAD_EXT, Severity.WARNING, null, targetRef.path.suffixWith('/') + linkRef.linkToFile(linkRef.fileNameNoExt) + targetRef.ext.prefixWith('.')))
                 }
             }
         }
 
         fun INSPECT_LINK_TARGET_HAS_ANCHOR() {
             if (targetRef.pathContainsAnchor()) {
-                results.add(InspectionResult(ID_TARGET_PATH_HAS_ANCHOR, Severity.WARNING, null, null))
+                addResult(InspectionResult(ID_TARGET_PATH_HAS_ANCHOR, Severity.WARNING, null, null))
             }
 
             if (targetRef.fileNameContainsAnchor()) {
-                results.add(InspectionResult(ID_TARGET_NAME_HAS_ANCHOR, Severity.WARNING, null, targetRef.filePath.replace("#", "")))
+                addResult(InspectionResult(ID_TARGET_NAME_HAS_ANCHOR, Severity.WARNING, null, targetRef.filePath.replace("#", "")))
             }
         }
 
@@ -122,16 +127,16 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
                 if (linkRef.anchor != null && anchorInfo.isWikiPageExt) {
                     if (resolver.wasAnchorUsedInMatch(linkRef, targetRef)) {
                         // resolves to raw
-                        results.add(InspectionResult(ID_LINK_TARGETS_WIKI_HAS_EXT, Severity.WARNING, linkAddressNoExt, null))
+                        addResult(InspectionResult(ID_LINK_TARGETS_WIKI_HAS_EXT, Severity.WARNING, linkAddressNoExt, null))
                         if (anchorInfo.ext != targetRef.ext) {
-                            results.add(InspectionResult(ID_LINK_TARGETS_WIKI_HAS_BAD_EXT, Severity.ERROR, linkAddress, null))
+                            addResult(InspectionResult(ID_LINK_TARGETS_WIKI_HAS_BAD_EXT, Severity.ERROR, linkAddress, null))
                         }
                     }
                 } else if (linkRef.isWikiPageExt && !resolver.wasAnchorUsedInMatch(linkRef, targetRef)) {
                     // resolves to raw
-                    results.add(InspectionResult(ID_LINK_TARGETS_WIKI_HAS_EXT, Severity.WARNING, linkAddressNoExt, null))
+                    addResult(InspectionResult(ID_LINK_TARGETS_WIKI_HAS_EXT, Severity.WARNING, linkAddressNoExt, null))
                     if (linkRef.ext != targetRef.ext) {
-                        results.add(InspectionResult(ID_LINK_TARGETS_WIKI_HAS_BAD_EXT, Severity.ERROR, linkAddress, null))
+                        addResult(InspectionResult(ID_LINK_TARGETS_WIKI_HAS_BAD_EXT, Severity.ERROR, linkAddress, null))
                     }
                 }
             }
@@ -145,10 +150,10 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
                 if (targetGitHubRepoPath != null || sourceGitHubRepoPath != null) {
                     if (targetRef.isUnderWikiDir) {
                         if (targetGitHubRepoPath == null || sourceGitHubRepoPath == null || !targetGitHubRepoPath.startsWith(sourceGitHubRepoPath))
-                            results.add(InspectionResult(ID_NOT_UNDER_SAME_REPO, Severity.ERROR, linkAddress, null))
+                            addResult(InspectionResult(ID_NOT_UNDER_SAME_REPO, Severity.ERROR, linkAddress, null))
                     } else {
                         if (targetGitHubRepoPath == null || sourceGitHubRepoPath == null || !sourceGitHubRepoPath.startsWith(targetGitHubRepoPath))
-                            results.add(InspectionResult(ID_NOT_UNDER_SAME_REPO, Severity.ERROR, linkAddress, null))
+                            addResult(InspectionResult(ID_NOT_UNDER_SAME_REPO, Severity.ERROR, linkAddress, null))
                     }
                 }
             }
@@ -156,14 +161,14 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
 
         fun INSPECT_LINK_TARGET_VCS() {
             if (!resolver.projectResolver.isUnderVcs(targetRef)) {
-                results.add(InspectionResult(ID_TARGET_NOT_UNDER_VCS, Severity.WARNING, null, null))
+                addResult(InspectionResult(ID_TARGET_NOT_UNDER_VCS, Severity.WARNING, null, null))
             }
         }
 
         fun INSPECT_WIKI_LINK_HAS_DASHES() {
             assert (linkRef is WikiLinkRef)
             if (linkRef.filePath.indexOf('-') >= 0) {
-                results.add(InspectionResult(ID_WIKI_LINK_HAS_DASHES, Severity.WEAK_WARNING, linkRef.filePath.replace('-', ' '), null))
+                addResult(InspectionResult(ID_WIKI_LINK_HAS_DASHES, Severity.WEAK_WARNING, linkRef.filePath.replace('-', ' '), null))
             }
         }
 
@@ -171,9 +176,9 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
             assert(linkRef is WikiLinkRef)
             if (linkRef.containingFile.isWikiPage) {
                 if (!targetRef.isUnderWikiDir) {
-                    results.add(InspectionResult(ID_NOT_UNDER_WIKI_HOME, Severity.ERROR, null, targetRef.filePath.replace(' ', '-')))
+                    addResult(InspectionResult(ID_NOT_UNDER_WIKI_HOME, Severity.ERROR, null, targetRef.filePath.replace(' ', '-')))
                 } else if (!targetRef.wikiDir.startsWith(linkRef.containingFile.wikiDir)) {
-                    results.add(InspectionResult(ID_NOT_UNDER_SOURCE_WIKI_HOME, Severity.ERROR, null, targetRef.filePath.replace(' ', '-')))
+                    addResult(InspectionResult(ID_NOT_UNDER_SOURCE_WIKI_HOME, Severity.ERROR, null, targetRef.filePath.replace(' ', '-')))
                 }
             }
         }
@@ -182,21 +187,21 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
         fun INSPECT_WIKI_TARGET_PAGE_EXT() {
             assert(linkRef is WikiLinkRef)
             if (!linkRef.hasExt && !targetRef.isWikiPageExt) {
-                results.add(InspectionResult(ID_TARGET_NOT_WIKI_PAGE_EXT, Severity.ERROR, linkAddress, targetRef.filePathNoExt + PathInfo.WIKI_PAGE_EXTENSION.prefixWith('.')))
+                addResult(InspectionResult(ID_TARGET_NOT_WIKI_PAGE_EXT, Severity.ERROR, linkAddress, targetRef.filePathNoExt + PathInfo.WIKI_PAGE_EXTENSION.prefixWith('.')))
             }
         }
 
         fun INSPECT_WIKI_LINK_ONLY_HAS_ANCHOR() {
             assert(linkRef is WikiLinkRef)
             if (linkRef.filePath.isEmpty() && linkRef.anchor != null) {
-                results.add(InspectionResult(ID_WIKI_LINK_HAS_ONLY_ANCHOR, Severity.ERROR, linkAddress, null))
+                addResult(InspectionResult(ID_WIKI_LINK_HAS_ONLY_ANCHOR, Severity.ERROR, linkAddress, null))
             }
         }
 
         fun INSPECT_WIKI_LINK_NOT_IN_WIKI() {
             assert(linkRef is WikiLinkRef)
             if (!linkRef.containingFile.isWikiPage) {
-                results.add(InspectionResult(ID_WIKI_LINK_NOT_IN_WIKI, Severity.ERROR, null, null))
+                addResult(InspectionResult(ID_WIKI_LINK_NOT_IN_WIKI, Severity.ERROR, null, null))
             }
         }
 
@@ -205,9 +210,9 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
             if (linkRef.contains('/')) {
                 // see if it would resolve to the target without it
                 if (resolver.equalLinks(linkRef.fileName, linkAddress)) {
-                    results.add(InspectionResult(ID_WIKI_LINK_HAS_SUBDIR, Severity.ERROR, linkAddress, null))
+                    addResult(InspectionResult(ID_WIKI_LINK_HAS_SUBDIR, Severity.ERROR, linkAddress, null))
                 } else {
-                    results.add(InspectionResult(ID_WIKI_LINK_HAS_SLASH, Severity.ERROR, linkAddress, null))
+                    addResult(InspectionResult(ID_WIKI_LINK_HAS_SLASH, Severity.ERROR, linkAddress, null))
                 }
             }
         }
@@ -276,8 +281,8 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
     }
 
 
-    fun inspect(linkRef: LinkRef, targetRef: FileRef): List<InspectionResult> {
-        val context = Context(resolver, linkRef, targetRef)
+    fun inspect(linkRef: LinkRef, targetRef: FileRef, referenceId: Any?): List<InspectionResult> {
+        val context = Context(resolver, linkRef, targetRef, referenceId)
 
         context.INSPECT_LINK_TARGET_HAS_SPACES()
         context.INSPECT_LINK_CASE_MISMATCH()

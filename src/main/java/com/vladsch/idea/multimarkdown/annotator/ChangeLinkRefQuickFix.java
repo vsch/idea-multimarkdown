@@ -81,7 +81,7 @@ class ChangeLinkRefQuickFix extends BaseIntentionAction {
         LinkRef linkRef = MultiMarkdownPsiImplUtil.getLinkRef(linkRefElement);
         String[] extensions = linkRef != null ? linkRef.getLinkExtensions() : null;
         String ext = extensions != null && extensions.length > 0 ? extensions[0] : "";
-        String newLinkRefInfo = new PathInfo(linkRefElement instanceof MultiMarkdownWikiLinkRef ? WikiLinkRef.convertLinkToFile(newLinkRef) : newLinkRef).withExt(ext).getFilePath();
+        String newLinkRefInfo = new PathInfo(linkRefElement instanceof MultiMarkdownWikiLinkRef ? WikiLinkRef.linkAsFile(newLinkRef) : newLinkRef).withExt(ext).getFilePath();
 
         switch (alternateMsg) {
             case MATCH_CASE_TO_FILE:

@@ -56,6 +56,7 @@ public class AnnotationState {
     public final AnnotationHolder holder;
     public Annotation annotator = null;
     public boolean warningsOnly = true;
+    public boolean unresolved = false;
     public boolean canCreateFile = true;
     public boolean needTargetList = true;
     protected HashMap<String, HashSet<String>> alreadyOffered = new HashMap<String, HashSet<String>>();

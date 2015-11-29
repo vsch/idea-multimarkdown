@@ -19,6 +19,7 @@ enum class Severity private constructor(val value: Int) {
 }
 
 class InspectionResult(val id: String, val severity: Severity, val fixedLink: String? = null, val fixedFilePath: String? = null) {
+    var referenceId: Any? = null
 
     constructor(mismatch: InspectionResult, fixedLink: String? = null, fixedFilePath: String? = null) : this(mismatch.id, mismatch.severity, fixedLink, fixedFilePath)
 
@@ -28,8 +29,17 @@ class InspectionResult(val id: String, val severity: Severity, val fixedLink: St
         return if (severity == other.severity && fixedLink == other.fixedLink && fixedFilePath == other.fixedFilePath) id.compareTo(other.id) else -1
     }
 
+    private fun dataPrint(value: Any?) :String {
+        return if (value == null) "null" else when(value) {
+            is Unit -> ""
+            is Int, is Long, is Boolean, is Float, is Double, is Byte  -> "$value"
+            is Char  -> "'$value'"
+            else -> "\"$value\""
+        }
+    }
+
     override fun toString(): String {
-        return "InspectionResults(GitHubLinkInspector.ID_$id, Severity.$severity, ${if (fixedLink == null) "null" else "\"$fixedLink\"" }, ${if (fixedFilePath == null) "null" else "\"$fixedFilePath\""}),"
+        return "InspectionResults(${dataPrint(referenceId)}, GitHubLinkInspector.ID_$id, Severity.$severity, ${if (fixedLink == null) "null" else "\"$fixedLink\"" }, ${if (fixedFilePath == null) "null" else "\"$fixedFilePath\""}),"
     }
 
     fun isA(id: String) = this.id == id

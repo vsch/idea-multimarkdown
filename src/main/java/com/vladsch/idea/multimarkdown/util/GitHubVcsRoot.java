@@ -108,7 +108,7 @@ public class GitHubVcsRoot {
 
         if (branchOrTag == null || branchOrTag.isEmpty()) branchOrTag = "master";
 
-        return gitHubBaseUrl + (isWiki() ? "wiki/" : "blob/" + branchOrTag + "/") + LinkRef.convertFileToLink(StringUtilKt.removeStart(relativeFilePath, "./")) + StringUtilKt.prefixWith(anchor, '#', false);
+        return gitHubBaseUrl + (isWiki() ? "wiki/" : "blob/" + branchOrTag + "/") + LinkRef.urlEncode(StringUtilKt.removeStart(relativeFilePath, "./")) + StringUtilKt.prefixWith(anchor, '#', false);
     }
 
     @Nullable
@@ -173,7 +173,7 @@ public class GitHubVcsRoot {
                             .replaceAll("git://|git@|https://", "")
                             .replaceAll(":", "/");
 
-                    if (baseUrl.endsWith(PathInfo.WIKI_HOME_EXTENSION)) {
+                    if (baseUrl.endsWith(PathInfo.WIKI_HOME_DIR_EXTENSION)) {
                         FileRef baseUrlInfo = new FileRef(baseUrl);
                         baseUrl = baseUrlInfo.getFilePathNoExt();
                     }

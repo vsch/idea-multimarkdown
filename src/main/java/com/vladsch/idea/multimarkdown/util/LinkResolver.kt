@@ -28,7 +28,7 @@ abstract class LinkResolver(val projectResolver: LinkResolver.ProjectResolver, v
 
         fun isUnderVcs(fileRef: FileRef): Boolean
         fun getGitHubRepo(fileRef: FileRef): GitHubVcsRoot?;
-        fun vcsProjectBasePath(fileRef: FileRef): String?
+        fun vcsRepoBasePath(fileRef: FileRef): String?
         fun vcsRootBase(fileRef: FileRef): String?
         fun projectFileList(fileTypes: HashSet<FileType>): List<FileRef>?
     }
@@ -59,7 +59,7 @@ abstract class LinkResolver(val projectResolver: LinkResolver.ProjectResolver, v
         fun wantAll(options: Int, flags: Int): Boolean = (options and flags == flags)
     }
 
-    abstract fun inspect(linkRef: LinkRef, targetRef: FileRef): List<InspectionResult>
+    abstract fun inspect(linkRef: LinkRef, targetRef: FileRef, referenceId: Any? = null): List<InspectionResult>
     abstract fun isResolved(linkRef: LinkRef, options: Int = 0, inList: List<PathInfo>? = null): Boolean
     abstract fun isResolvedTo(linkRef: LinkRef, targetRef: FileRef, withExtForWikiPage: Boolean? = null, branchOrTag: String? = null): Boolean
     abstract fun linkAddress(linkRef: LinkRef, targetRef: PathInfo, withExtForWikiPage: Boolean? = null, branchOrTag: String? = null, anchor: String? = null): String

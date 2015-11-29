@@ -39,7 +39,7 @@ object MarkdownTestData : LinkResolver.ProjectResolver {
     override val project: Project?
         get() = null
 
-    override fun vcsProjectBasePath(fileRef: FileRef): String? {
+    override fun vcsRepoBasePath(fileRef: FileRef): String? {
         return getGitHubRepo(fileRef)?.projectBasePath
     }
 
@@ -47,7 +47,7 @@ object MarkdownTestData : LinkResolver.ProjectResolver {
         return getGitHubRepo(fileRef)?.basePath
     }
 
-    override fun projectFileList(fileTypes:HashSet<FileType>): List<FileRef>? {
+    override fun projectFileList(fileTypes: HashSet<FileType>): List<FileRef>? {
         return fileList
     }
 
@@ -90,6 +90,9 @@ object MarkdownTestData : LinkResolver.ProjectResolver {
             "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Test.kt",
             "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/SubDirectory/Test2.kt",
             "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/SubDirectory/Sub-Test.kt",
+            "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Test 4.2.md",
+            "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Test-Name.kt",
+            "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Test-Name.kt.md",
             "/Users/vlad/src/MarkdownTest/Test.kt",
             "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/vcs-image.png",
             "/Users/vlad/src/MarkdownTest/SubDirectory/NestedFile.md",

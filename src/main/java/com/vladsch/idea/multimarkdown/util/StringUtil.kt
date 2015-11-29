@@ -200,3 +200,66 @@ fun String?.removeStart(prefix: String): String {
     }
     return ""
 }
+
+fun splicer(delimiter: String, process: (elem: String) -> String): (total: String, elem: String) -> String {
+    return { total, elem ->
+        val result = process(elem)
+        if (total.isEmpty()) result else if (result.isEmpty()) total else total + delimiter + result
+    }
+}
+
+fun Array<String>.splice(delimiter: String): String {
+    val result = StringBuilder(this.size * (delimiter.length + 10))
+    var first = true;
+    for (elem in this) {
+        if (!elem.isEmpty()) {
+            if (!first) result.append(delimiter)
+            else first = false
+            result.append(elem.orEmpty())
+        }
+    }
+
+    return result.toString()
+}
+
+fun List<String?>.splice(delimiter: String, skipNullOrEmpty: Boolean = true): String {
+    val result = StringBuilder(this.size * (delimiter.length + 10))
+    var first = true;
+    for (elem in this) {
+        if (elem != null && !elem.isEmpty() || !skipNullOrEmpty) {
+            if (!first) result.append(delimiter)
+            else first = false
+            result.append(elem.orEmpty())
+        }
+    }
+
+    return result.toString()
+}
+
+fun Collection<String?>.splice(delimiter: String, skipNullOrEmpty: Boolean = true): String {
+    val result = StringBuilder(this.size * (delimiter.length + 10))
+    var first = true;
+    for (elem in this) {
+        if (elem != null && !elem.isEmpty() || !skipNullOrEmpty) {
+            if (!first) result.append(delimiter)
+            else first = false
+            result.append(elem.orEmpty())
+        }
+    }
+
+    return result.toString()
+}
+
+fun Iterator<String>.splice(delimiter: String, skipEmpty: Boolean = true): String {
+    val result = StringBuilder(10*(delimiter.length + 10))
+    var first = true;
+    for (elem in this) {
+        if (!elem.isEmpty() || !skipEmpty) {
+            if (!first) result.append(delimiter)
+            else first = false
+            result.append(elem.orEmpty())
+        }
+    }
+
+    return result.toString()
+}

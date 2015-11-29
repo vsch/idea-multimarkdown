@@ -142,7 +142,11 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
 
     open fun projectFileRef(project: Project): ProjectFileRef? {
         val virtualFile = if (!isAbsolute || !isLocal) null else VirtualFileManager.getInstance().findFileByUrl(_fullPath)
-        return if (virtualFile == null) null else ProjectFileRef(virtualFile, project);
+        val projectFileRef = if (virtualFile == null) null else ProjectFileRef(virtualFile, project);
+        if (projectFileRef != null && this is LinkRef && targetRef != null && targetRef.isRawFile) {
+           projectFileRef.isRawFile = true
+        }
+        return projectFileRef
     }
 
      open val virtualFile by lazy {
@@ -168,7 +172,7 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
         @JvmStatic @JvmField val EMPTY_STRING = ""
 
         @JvmStatic @JvmField val WIKI_PAGE_EXTENSION = ".md"
-        @JvmStatic @JvmField val WIKI_HOME_EXTENSION = ".wiki"
+        @JvmStatic @JvmField val WIKI_HOME_DIR_EXTENSION = ".wiki"
         @JvmStatic @JvmField val WIKI_HOME_FILENAME = "Home"
 
         @JvmStatic @JvmField val IMAGE_EXTENSIONS = arrayOf("png", "jpg", "jpeg", "gif")

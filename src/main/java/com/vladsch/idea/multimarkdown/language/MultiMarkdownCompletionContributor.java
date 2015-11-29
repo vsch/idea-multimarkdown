@@ -176,7 +176,7 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
 
     protected void addLinkRefCompletion(@NotNull CompletionResultSet resultSet, GitHubLinkResolver resolver, LinkRef linkRef, ProjectFileRef projectFileRef, boolean withExtForWikiPage, boolean accessible) {
         String linkRefText = resolver.linkAddress(linkRef, projectFileRef, withExtForWikiPage, null, null);
-        String gitHubRepoPath = resolver.getProjectResolver().vcsProjectBasePath(linkRef.getContainingFile());
+        String gitHubRepoPath = resolver.getProjectResolver().vcsRepoBasePath(linkRef.getContainingFile());
 
         if (gitHubRepoPath == null) gitHubRepoPath = resolver.getProjectBasePath();
         boolean isLinkAccessible = projectFileRef.getPath().startsWith(gitHubRepoPath);

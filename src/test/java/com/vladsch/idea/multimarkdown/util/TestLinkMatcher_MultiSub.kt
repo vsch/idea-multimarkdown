@@ -25,11 +25,11 @@ class TestLinkMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.md")
         val linkRef = LinkRef(linkInfo, linkInfo.fileNameNoExt, null, null)
 
-        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, true)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef)
 
         val list = ArrayList<String>()
-        val matchText = linkRefMatcher.patternText()
-        val regex = linkRefMatcher.patternRegex()
+        val regex = linkRefMatcher.patternRegex(true)
+        val matchText = linkRefMatcher.linkLooseMatch
 
         if (regex != null) {
             for (path in MarkdownTestData.filePaths) {
@@ -50,11 +50,11 @@ class TestLinkMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/Multiple-Match.md")
         val linkRef = LinkRef(linkInfo, linkInfo.fileName, null, null)
 
-        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, true)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef)
 
         val list = ArrayList<String>()
-        val matchText = linkRefMatcher.patternText()
-        val regex = linkRefMatcher.patternRegex()
+        val regex = linkRefMatcher.patternRegex(true)
+        val matchText = linkRefMatcher.linkLooseMatch
 
         if (regex != null) {
             for (path in MarkdownTestData.filePaths) {
@@ -80,11 +80,11 @@ class TestLinkMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/single-link-test.md")
         val linkRef = LinkRef(linkInfo, "Readme.md", null, null)
 
-        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, true)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef)
 
         val list = ArrayList<String>()
-        val matchText = linkRefMatcher.patternText()
-        val regex = linkRefMatcher.patternRegex()
+        val regex = linkRefMatcher.patternRegex(true)
+        val matchText = linkRefMatcher.linkLooseMatch
 
         if (regex != null) {
             for (path in MarkdownTestData.filePaths) {
@@ -115,11 +115,11 @@ class TestLinkMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/single-link-test.md")
         val linkRef = LinkRef(linkInfo, "Readme", null, null)
 
-        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, true)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef)
 
         val list = ArrayList<String>()
-        val matchText = linkRefMatcher.patternText()
-        val regex = linkRefMatcher.patternRegex()
+        val regex = linkRefMatcher.patternRegex(true)
+        val matchText = linkRefMatcher.linkLooseMatch
 
         if (regex != null) {
             for (path in MarkdownTestData.filePaths) {
@@ -150,11 +150,11 @@ class TestLinkMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.md")
         val linkRef = LinkRef.parseLinkRef(linkInfo, linkInfo.fileName, null, ::WikiLinkRef)
 
-        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, true)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef)
 
         val list = ArrayList<String>()
-        val matchText = linkRefMatcher.patternText()
-        val regex = linkRefMatcher.patternRegex()
+        val regex = linkRefMatcher.patternRegex(true)
+        val matchText = linkRefMatcher.linkLooseMatch
 
         if (regex != null) {
             for (path in MarkdownTestData.filePaths) {
@@ -176,11 +176,11 @@ class TestLinkMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/SubDirectory/NestedFile.md")
         val linkRef = LinkRef(linkInfo, "SubDirectory/NestedFile.md", null, null)
 
-        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, true)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef)
 
         val list = ArrayList<String>()
-        val matchText = linkRefMatcher.patternText()
-        val regex = linkRefMatcher.patternRegex()
+        val regex = linkRefMatcher.patternRegex(true)
+        val matchText = linkRefMatcher.linkLooseMatch
 
         if (regex != null) {
             for (path in MarkdownTestData.filePaths) {
@@ -199,11 +199,11 @@ class TestLinkMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/Multiple-Match.mkd")
         val linkRef = LinkRef(linkInfo, linkInfo.fileName, null, null)
 
-        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, false)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef)
 
         val list = ArrayList<String>()
-        val matchText = linkRefMatcher.patternText()
-        val regex = linkRefMatcher.patternRegex()
+        val regex = linkRefMatcher.patternRegex(true)
+        val matchText = linkRefMatcher.linkLooseMatch
 
         if (regex != null) {
             for (path in MarkdownTestData.filePaths) {
@@ -222,11 +222,11 @@ class TestLinkMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/single-link-test.md")
         val linkRef = LinkRef(linkInfo, "Readme.md", null, null)
 
-        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, false)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef)
 
         val list = ArrayList<String>()
-        val matchText = linkRefMatcher.patternText()
-        val regex = linkRefMatcher.patternRegex()
+        val regex = linkRefMatcher.patternRegex(false)
+        val matchText = linkRefMatcher.linkAllMatch
 
         if (regex != null) {
             for (path in MarkdownTestData.filePaths) {
@@ -245,11 +245,11 @@ class TestLinkMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/single-link-test.md")
         val linkRef = LinkRef(linkInfo, "Readme", null, null)
 
-        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, false)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef)
 
         val list = ArrayList<String>()
-        val matchText = linkRefMatcher.patternText()
-        val regex = linkRefMatcher.patternRegex()
+        val regex = linkRefMatcher.patternRegex(false)
+        val matchText = linkRefMatcher.linkAllMatch
 
         if (regex != null) {
             for (path in MarkdownTestData.filePaths) {
@@ -267,11 +267,11 @@ class TestLinkMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.md")
         val linkRef = LinkRef.parseLinkRef(linkInfo, linkInfo.fileNameNoExt, null, ::WikiLinkRef)
 
-        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, false)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef)
 
         val list = ArrayList<String>()
-        val matchText = linkRefMatcher.patternText()
-        val regex = linkRefMatcher.patternRegex()
+        val regex = linkRefMatcher.patternRegex(false)
+        val matchText = linkRefMatcher.linkAllMatch
 
         if (regex != null) {
             for (path in MarkdownTestData.filePaths) {
@@ -293,11 +293,11 @@ class TestLinkMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.md")
         val linkRef = LinkRef.parseLinkRef(linkInfo, linkInfo.fileName, null, ::WikiLinkRef)
 
-        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, false)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef)
 
         val list = ArrayList<String>()
-        val matchText = linkRefMatcher.patternText()
-        val regex = linkRefMatcher.patternRegex()
+        val regex = linkRefMatcher.patternRegex(false)
+        val matchText = linkRefMatcher.linkAllMatch
 
         if (regex != null) {
             for (path in MarkdownTestData.filePaths) {
@@ -316,11 +316,11 @@ class TestLinkMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.md")
         val linkRef = LinkRef.parseLinkRef(linkInfo, linkInfo.fileNameNoExt, null, ::WikiLinkRef)
 
-        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, false)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef)
 
         val list = ArrayList<String>()
-        val matchText = linkRefMatcher.patternText()
-        val regex = linkRefMatcher.patternRegex()
+        val regex = linkRefMatcher.patternRegex(false)
+        val matchText = linkRefMatcher.linkAllMatch
         var bestMatch = ""
 
         if (regex != null) {
@@ -342,11 +342,11 @@ class TestLinkMatcher_MultiSub {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/SubDirectory/NestedFile.md")
         val linkRef = LinkRef(linkInfo, "SubDirectory/NestedFile.md", null, null)
 
-        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, false)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef)
 
         val list = ArrayList<String>()
-        val matchText = linkRefMatcher.patternText()
-        val regex = linkRefMatcher.patternRegex()
+        val regex = linkRefMatcher.patternRegex(false)
+        val matchText = linkRefMatcher.linkAllMatch
 
         if (regex != null) {
             for (path in MarkdownTestData.filePaths) {
@@ -361,17 +361,19 @@ class TestLinkMatcher_MultiSub {
         ), list)
     }
 
+    // TEST: need to test all the available regex pattern matches, raw, anchor, default ext, etc.
     @Test fun test_linkRefMatcher_SubDirMulti_SmartExact() {
         val linkInfo = FileRef("/Users/vlad/src/MarkdownTest/Multiple-Match.md")
         val linkRef = LinkRef(linkInfo, "SubDirectory/Multiple-Match.md", null, null)
 
-        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef, false)
+        val linkRefMatcher = GitHubLinkMatcher(projectResolver, linkRef)
 
         val list = ArrayList<String>()
-        val matchText = linkRefMatcher.patternText(false)
-        val matchWikiText = linkRefMatcher.patternText(true)
-        val regexWiki = linkRefMatcher.patternRegex(true)
         val regex = linkRefMatcher.patternRegex(false)
+        val matchText = linkRefMatcher.linkLooseMatch
+
+        val matchWikiText = linkRefMatcher.linkLooseMatch
+        val regexWiki = linkRefMatcher.patternRegex(true)
 
         if (regex != null && regexWiki != null) {
             for (path in MarkdownTestData.filePaths) {

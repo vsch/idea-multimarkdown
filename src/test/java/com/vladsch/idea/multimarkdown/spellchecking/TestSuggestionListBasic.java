@@ -20,6 +20,7 @@
  */
 package com.vladsch.idea.multimarkdown.spellchecking;
 
+import org.junit.ComparisonFailure;
 import org.junit.Test;
 import org.junit.internal.ArrayComparisonFailure;
 
@@ -55,7 +56,7 @@ public class TestSuggestionListBasic {
         assertSuggestionListHasSuggestions(suggestionList, suggestion);
     }
 
-    @Test(expected = ArrayComparisonFailure.class)
+    @Test(expected = ComparisonFailure.class)
     public void testAddSuggestionFailure() {
         SuggestionList suggestionList = new SuggestionList();
         assertEquals(0, suggestionList.size());
