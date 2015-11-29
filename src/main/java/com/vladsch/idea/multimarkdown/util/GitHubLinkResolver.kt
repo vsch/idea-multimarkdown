@@ -36,6 +36,7 @@ import kotlin.text.RegexOption
 class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containingFile: FileRef, branchOrTag: String? = null) : LinkResolver(projectResolver, containingFile, branchOrTag) {
 
     companion object {
+        @JvmStatic @JvmField val GITHUB_BLOB_NAME = "blob"
         @JvmStatic @JvmField val GITHUB_FORK_NAME = "fork"
         @JvmStatic @JvmField val GITHUB_GRAPHS_NAME = "graphs"
         @JvmStatic @JvmField val GITHUB_ISSUES_NAME = "issues"
@@ -46,6 +47,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
 
         // IMPORTANT: keep alphabetically sorted. These are not re-sorted after match
         @JvmStatic @JvmField val GITHUB_LINKS = arrayOf(
+                GITHUB_BLOB_NAME,
                 GITHUB_FORK_NAME,
                 GITHUB_GRAPHS_NAME,
                 GITHUB_ISSUES_NAME,
@@ -53,6 +55,14 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                 GITHUB_PULSE_NAME,
                 GITHUB_RAW_NAME,
                 GITHUB_WIKI_NAME
+        )
+
+        @JvmStatic @JvmField val GITHUB_NON_FILE_LINKS = arrayOf(
+                GITHUB_FORK_NAME,
+                GITHUB_GRAPHS_NAME,
+                GITHUB_ISSUES_NAME,
+                GITHUB_PULLS_NAME,
+                GITHUB_PULSE_NAME
         )
     }
 
@@ -187,10 +197,9 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
         // process the files that match the pattern and put them in the list
         var matches = ArrayList<PathInfo>()
 
-        if (!linkMatcher.isValid) return matches
+        if (!linkMatcher.isOnlyLooseMatchValid && !wantLooseMatch(options)) return matches
 
         if (!linkMatcher.gitHubLinks) {
-
             // TODO: need to have a flag or to modify the regex to exclude wiki matches when exact matching in the repo
             val allMatchWiki =
                     if (wantLooseMatch(options)) {

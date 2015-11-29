@@ -56,7 +56,7 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
     var wikiMatchingRules = false
         private set
 
-    val isValid by lazy {
+    val isOnlyLooseMatchValid by lazy {
         computeMatchText()
     }
 
@@ -84,7 +84,7 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
     }
 
     fun patternRegex(looseMatch: Boolean): Regex? {
-        if (!isValid) return null
+        if (!isOnlyLooseMatchValid && !looseMatch) return null
         return (if (looseMatch) linkLooseMatch else linkAllMatch)?.toRegex(RegexOption.IGNORE_CASE)
     }
 
@@ -98,6 +98,7 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
 
         val useLooseMatch = true
         val subDirPattern = "(?:.+/)?"
+        var looseMatchOnly = false
 
         if (linkRef is WikiLinkRef) {
             // spaces match - and spaces, all subdirectories under Wiki Home match, only WIKI targets accepted, no case sensitivity
@@ -112,6 +113,8 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
                 val looseExtensionPattern = (extensionPattern(linkRef.ext, isOptional = true) + extensionPattern(linkRef.ext, PathInfo(linkRef.anchorText).ext, *linkRef.linkExtensions, isOptional = true)).regexGroup()
                 linkLooseMatch = "^$fixedPrefix$subDirPattern$looseFilenamePattern$looseAnchorPattern$looseExtensionPattern$"
             }
+
+            looseMatchOnly = pureAnchor || !linkRef.containingFile.isWikiPage
 
             if (!pureAnchor) {
                 val anchorPattern = linkTextToFileMatch(linkRef.anchorText, isOptional = false)
@@ -140,6 +143,11 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
             val projectDirName = PathInfo(vcsRepoBasePath).fileName
             val noWikiSubDirPattern = "(?!\\Q$projectDirName.wiki\\E)"
             var wikiPrefixIsOptional: Boolean? = null
+            var linkRef = linkRef
+
+            if (linkRef.filePath.isEmpty() && linkRef.anchor != null) {
+                linkRef = linkRef.replaceFilePath(linkRef.containingFile.fileName);
+            }
 
             // here we resolve the start of the relative path
             val containingFilePrefixPath =
@@ -171,6 +179,13 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
                 gitHubLinks = true
             } else {
                 prefixPath = prefixPath.substring(vcsRepoBasePath.length).removeSuffix("/")
+
+                if (prefixPath.isEmpty() && linkRef.fileName in GitHubLinkResolver.GITHUB_LINKS) {
+                    // add these to the path
+                    prefixPath += linkRef.fileName
+                    linkRef = linkRef.replaceFilePath("")
+                }
+
                 val pathParts = prefixPath.split('/', limit = 3).iterator()
 
                 // we take the first subdirectory after the prefix
@@ -196,9 +211,10 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
 
                         if (gitHubLink == "" && wikiPrefixIsOptional === false) {
                             // has to have a wiki prefix or it will not resolve in the wiki
-                            if (!pathParts.hasNext()) return@computeMatchText false;
-                            val part = pathParts.next()
-                            if (part != "wiki") return@computeMatchText false;
+                            if (!pathParts.hasNext() || pathParts.next() != "wiki") {
+                                // to allow for loose matching
+                                looseMatchOnly = true
+                            }
                         }
 
                         prefixPath = "$vcsRepoBasePath$projectDirName${PathInfo.WIKI_HOME_DIR_EXTENSION}/"
@@ -206,9 +222,13 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
                         wikiMatchingRules = true
                     }
                     gitHubLink == "blob", gitHubLink == "raw" -> {
-                        if (!pathParts.hasNext()) return@computeMatchText false;
+                        if (pathParts.hasNext()) {
+                            linkParamsSuffix = pathParts.next()
+                        } else {
+                            linkParamsSuffix = "master"
+                            looseMatchOnly = true
+                        }
 
-                        linkParamsSuffix = pathParts.next()
                         branchOrTag = linkParamsSuffix
                         prefixPath = vcsRepoBasePath
                         this.gitHubLink = gitHubLink
@@ -221,7 +241,9 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
                     else -> {
                         if (linkRef.containingFile.isWikiHomePage) {
                             // this one does checks in wiki, but only if it is not an image link
-                            if (linkRef is ImageLinkRef) return@computeMatchText false
+                            if (linkRef is ImageLinkRef) {
+                                looseMatchOnly = true
+                            }
                         }
                         prefixPath = "$vcsRepoBasePath$projectDirName${PathInfo.WIKI_HOME_DIR_EXTENSION}/"
                         this.gitHubLink = "wiki"
@@ -231,8 +253,11 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
 
                 var splicedParts = pathParts.splice("/", skipEmpty = false)
 
+                // if we have wiki already handled, and there is a wiki/ in the link then it must be optional or only loose match is possible
+                if (wikiPrefixIsOptional !== true && gitHubLink == "wiki" && (splicedParts.startsWith("wiki/") || splicedParts == "wiki")) looseMatchOnly = true;
+
                 // handle the optional wiki prefix for wiki/Home page
-                if (wikiPrefixIsOptional === true) {
+                if (wikiPrefixIsOptional === true || looseMatchOnly) {
                     if (splicedParts.startsWith("wiki/")) splicedParts = splicedParts.substring("wiki/".length)
                     else if (splicedParts == "wiki") splicedParts = ""
                 }
@@ -248,26 +273,25 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
             if (gitHubLinks) return true
 
             // from here we need to use repoLink, this is the stuff that comes after fixedPrefix
-            val linkRef = linkRef.replaceFilePath(fullPath = repoLink)
+            linkRef = linkRef.replaceFilePath(fullPath = repoLink)
             if (wikiMatchingRules) {
                 // same as wiki link but without the wiki to file name conversion and the anchor matching, anchor needs to be escaped
                 // we do anchor matching for loose match identical to wiki links but without the wiki to file conversion
 
                 // if it has extension then we inlude it as alternative before default extensions because it may not be an extension but part of the file name
-                val defaultExtensons = extensionPattern(*linkRef.linkExtensions, isOptional = false)
-                val extensionPattern = if (linkRef.hasExt) "(?:" + extensionPattern(linkRef.ext, isOptional = false) + defaultExtensons + "|" + extensionPattern(linkRef.ext, isOptional = false) + ")" else defaultExtensons
-                val filenamePattern = linkTextToFileMatch(linkRef.filePath)
-                val filenameNoExtPattern = linkTextToFileMatch(linkRef.filePathNoExt)
-                val anchorPattern = linkTextToFileMatch(linkRef.anchorText, isOptional = false)
-
                 if (useLooseMatch) {
                     val looseAnchorPattern = linkTextToFileMatch(PathInfo(linkRef.anchorText).filePathNoExt, isOptional = true)
                     val looseFilenamePattern = linkTextToFileMatch(linkRef.fileNameNoExt)
                     val looseFilePrefixPattern = linkTextToFileMatch(linkRef.path)
                     val looseExtensionPattern = (extensionPattern(linkRef.ext, isOptional = true) + extensionPattern(linkRef.ext, PathInfo(linkRef.anchorText).ext, *linkRef.linkExtensions, isOptional = true)).regexGroup()
                     linkLooseMatch = "^$fixedPrefix$looseFilePrefixPattern$subDirPattern$looseFilenamePattern$looseAnchorPattern${looseExtensionPattern.suffixWith('?')}$"
-
                 }
+
+                val defaultExtensons = extensionPattern(*linkRef.linkExtensions, isOptional = false)
+                val extensionPattern = if (linkRef.hasExt) "(?:" + extensionPattern(linkRef.ext, isOptional = false) + defaultExtensons + "|" + extensionPattern(linkRef.ext, isOptional = false) + ")" else defaultExtensons
+                val filenamePattern = linkTextToFileMatch(linkRef.filePath)
+                val filenameNoExtPattern = linkTextToFileMatch(linkRef.filePathNoExt)
+                val anchorPattern = linkTextToFileMatch(linkRef.anchorText, isOptional = false)
 
                 linkFileMatch = "^$fixedPrefix$filenamePattern$"
                 if (!anchorPattern.isEmpty()) linkFileAnchorMatch = "^$fixedPrefix$filenameNoExtPattern$anchorPattern$"
@@ -300,6 +324,6 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
             }
         }
 
-        return true
+        return !looseMatchOnly
     }
 }

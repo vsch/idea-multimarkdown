@@ -55,12 +55,14 @@ class TestLinkResolver_MarkdownTest_wiki__Home constructor(val rowId:Int, val fu
         resolvesExternal = resolveRelativePath(resolvesExternalRel)?.filePath
 
         var multiResolveAbs = ArrayList<String>()
+
         if (multiResolvePartial.size == 0 && resolvesLocal != null) multiResolveAbs.add(resolvesLocal)
 
         for (path in multiResolvePartial) {
             val resolvedPath = resolveRelativePath(path)?.filePath.orEmpty()
             multiResolveAbs.add(resolvedPath)
         }
+
         multiResolve = multiResolveAbs.toArray(Array(0, { "" }))
 
         for (path in MarkdownTestData.filePaths) {
@@ -88,17 +90,6 @@ class TestLinkResolver_MarkdownTest_wiki__Home constructor(val rowId:Int, val fu
         assertEqualsMessage("Local link address does not match ${resolver.getMatcher(linkRef).linkAllMatch}", this.linkAddressText, localRefAddress)
     }
 
-//    TEST: need to add multi-resolve loose match test
-//    @Test fun test_MultiResolve() {
-//        if (skipTest) return
-//        val localRefs = resolver.multiResolve(linkRef, LinkResolver.PREFER_LOCAL or LinkResolver.LOOSE_MATCH, fileList)
-//        val actuals = Array<String>(localRefs.size, { "" })
-//        for (i in localRefs.indices) {
-//            actuals[i] = localRefs[i].filePath
-//        }
-//        compareOrderedLists("MultiResolve does not match ${resolver.getMatcher(linkRef).linkAllMatch}", multiResolve, actuals)
-//    }
-
     @Test fun test_MultiResolve() {
         if (skipTest) return
         val localFileRef = if (localLinkRef != null) FileRef(localLinkRef) else null
@@ -122,7 +113,7 @@ class TestLinkResolver_MarkdownTest_wiki__Home constructor(val rowId:Int, val fu
                 }
             }
 
-            compareUnorderedLists("InspectionResults do not match", this.inspectionResults, inspectionResults)
+            compareUnorderedLists("InspectionResults do not match ${resolver.getMatcher(linkRef).linkAllMatch}", this.inspectionResults, inspectionResults)
         }
     }
 

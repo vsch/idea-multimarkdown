@@ -48,7 +48,7 @@ class TestLinkResolver_MarkdownTest__Readme constructor(val rowId: Int, val full
     val skipTest = linkRef.isExternal
 
     fun resolveRelativePath(filePath: String?): PathInfo? {
-        return if (filePath == null) null else if (filePath.startsWith("http://", "https://")) PathInfo(filePath) else PathInfo.appendParts(filePathInfo.path, filePath.splitToSequence("/"))
+        return if (filePath == null) null else if (filePath.startsWith("http://", "https://")) PathInfo(filePath) else PathInfo.appendParts(filePathInfo.path, filePath)
     }
 
     init {
@@ -60,7 +60,8 @@ class TestLinkResolver_MarkdownTest__Readme constructor(val rowId: Int, val full
         if (multiResolvePartial.size == 0 && resolvesLocal != null) multiResolveAbs.add(resolvesLocal)
 
         for (path in multiResolvePartial) {
-            multiResolveAbs.add(resolveRelativePath(path)?.filePath.orEmpty())
+            val resolvedPath = resolveRelativePath(path)?.filePath.orEmpty()
+            multiResolveAbs.add(resolvedPath)
         }
 
         multiResolve = multiResolveAbs.toArray(Array(0, { "" }))
@@ -74,20 +75,20 @@ class TestLinkResolver_MarkdownTest__Readme constructor(val rowId: Int, val full
     @Test fun test_ResolveLocal() {
         if (skipTest) return
         val localRef = resolver.resolve(linkRef, LinkResolver.PREFER_LOCAL, fileList)
-        assertEqualsMessage("Local does not match", resolvesLocal, localRef?.filePath)
+        assertEqualsMessage("Local does not match ${resolver.getMatcher(linkRef).linkAllMatch}", resolvesLocal, localRef?.filePath)
     }
 
     @Test fun test_ResolveExternal() {
         if (skipTest) return
         val localRef = resolver.resolve(linkRef, LinkResolver.PREFER_REMOTE or LinkResolver.ACCEPT_URI, fileList)
-        assertEqualsMessage("External does not match", resolvesExternal, localRef?.filePath)
+        assertEqualsMessage("External does not match ${resolver.getMatcher(linkRef).linkAllMatch}", resolvesExternal, localRef?.filePath)
     }
 
     @Test fun test_LocalLinkAddress() {
         if (skipTest) return
         val localRef = resolver.resolve(linkRef, LinkResolver.PREFER_LOCAL, fileList)
         val localRefAddress = if (localRef != null) resolver.linkAddress(linkRef, localRef, (linkRef.hasExt || (linkRef.hasAnchor && linkAnchor?.contains('.') ?: false)), null) else null
-        assertEqualsMessage("Local link address does not match", this.linkAddressText, localRefAddress)
+        assertEqualsMessage("Local link address does not match ${resolver.getMatcher(linkRef).linkAllMatch}", this.linkAddressText, localRefAddress)
     }
 
     @Test fun test_RemoteLinkAddress() {
@@ -95,14 +96,14 @@ class TestLinkResolver_MarkdownTest__Readme constructor(val rowId: Int, val full
         val localRef = resolver.resolve(linkRef, LinkResolver.PREFER_LOCAL, fileList) as? FileRef
         val remoteRef = resolver.resolve(linkRef, LinkResolver.PREFER_REMOTE or LinkResolver.ACCEPT_URI, fileList)
         val remoteRefAddress = if (localRef == null && remoteRef != null) resolver.linkAddress(linkRef, remoteRef, linkRef !is WikiLinkRef && (linkRef.hasExt || (linkRef.hasAnchor && linkAnchor?.contains('.') ?: false)), null) else null
-        assertEqualsMessage("Remote based link address does not match", this.remoteAddressText, remoteRefAddress)
+        assertEqualsMessage("Remote based link address does not match ${resolver.getMatcher(linkRef).linkAllMatch}", this.remoteAddressText, remoteRefAddress)
     }
 
     @Test fun test_AnyLinkAddress() {
         if (skipTest) return
         val anyRef = resolver.resolve(linkRef, LinkResolver.ANY, fileList)
         val linkAddress = if (anyRef != null) resolver.linkAddress(linkRef, anyRef, null, null) else null
-        assertEqualsMessage("LinkResolver.ANY link address does not match", this.linkAddressText ?: this.remoteAddressText, linkAddress)
+        assertEqualsMessage("LinkResolver.ANY link address does not match ${resolver.getMatcher(linkRef).linkAllMatch}", this.linkAddressText ?: this.remoteAddressText, linkAddress)
     }
 
     @Test fun test_OnlyURILinkAddress() {
@@ -113,7 +114,7 @@ class TestLinkResolver_MarkdownTest__Readme constructor(val rowId: Int, val full
             "file://" + targetRef.filePath
         } else if (targetRef is LinkRef) targetRef.filePathWithAnchor
         else null
-        assertEqualsMessage("LinkResolver.ONLY_URI link address does not match", href, (uriRef as? LinkRef)?.filePathWithAnchor)
+        assertEqualsMessage("LinkResolver.ONLY_URI link address does not match ${resolver.getMatcher(linkRef).linkAllMatch}", href, (uriRef as? LinkRef)?.filePathWithAnchor)
     }
 
     @Test fun test_RemoteURILinkAddress() {
@@ -130,18 +131,19 @@ class TestLinkResolver_MarkdownTest__Readme constructor(val rowId: Int, val full
             }
         } else if (targetRef is LinkRef) targetRef.filePathWithAnchor
         else null
-        assertEqualsMessage("LinkResolver.ONLY_URI link address does not match", href, (uriRef as? LinkRef)?.filePathWithAnchor)
+        assertEqualsMessage("LinkResolver.ONLY_URI link address does not match ${resolver.getMatcher(linkRef).linkAllMatch}", href, (uriRef as? LinkRef)?.filePathWithAnchor)
     }
 
     @Test fun test_MultiResolve() {
         if (skipTest) return
-        //        val localRefs = resolver.multiResolve(if (linkRef is WikiLinkRef) linkRef else linkRefNoExt, LinkResolver.ONLY_LOCAL or LinkResolver.LOOSE_MATCH, fileList)
-        val localRefs = resolver.multiResolve(linkRef, LinkResolver.PREFER_LOCAL or LinkResolver.LOOSE_MATCH, fileList)
-        val actuals = Array(localRefs.size, { "" })
+        val localFileRef = if (localLinkRef != null) FileRef(localLinkRef) else null
+        val looseMatch = localFileRef == null || localFileRef.path.isEmpty() && linkRef.anchor == null
+        val localRefs = resolver.multiResolve(linkRef, LinkResolver.PREFER_LOCAL or if (looseMatch) LinkResolver.LOOSE_MATCH else 0, fileList)
+        val actuals = Array<String>(localRefs.size, { "" })
         for (i in localRefs.indices) {
             actuals[i] = localRefs[i].filePath
         }
-        compareOrderedLists("MultiResolve does not match", multiResolve, actuals)
+        compareOrderedLists("MultiResolve ${if (looseMatch) "looseMatch" else "exact" } does not match ${if (looseMatch) resolver.getMatcher(linkRef).linkLooseMatch else resolver.getMatcher(linkRef).linkAllMatch}", multiResolve, actuals)
     }
 
     @Test fun test_Resolve() {
@@ -149,21 +151,21 @@ class TestLinkResolver_MarkdownTest__Readme constructor(val rowId: Int, val full
         //        val localRefs = resolver.multiResolve(if (linkRef is WikiLinkRef) linkRef else linkRefNoExt, LinkResolver.ONLY_LOCAL or LinkResolver.LOOSE_MATCH, fileList)
         val localRefs = resolver.multiResolve(linkRef, LinkResolver.ANY, fileList)
         val targetRef = if (localRefs.size > 0) localRefs[0] else null
-        assertEqualsMessage("Resolve does not match", this.resolvesLocal ?: this.resolvesExternal ?: null, if (targetRef is LinkRef) targetRef.filePathWithAnchor else targetRef?.filePath)
+        assertEqualsMessage("Resolve does not match ${resolver.getMatcher(linkRef).linkAllMatch}", this.resolvesLocal ?: this.resolvesExternal ?: null, if (targetRef is LinkRef) targetRef.filePathWithAnchor else targetRef?.filePath)
     }
 
     @Test fun test_InspectionResults() {
         if (skipTest || this.inspectionResults == null) return
         val targetRef = resolver.resolve(linkRef, LinkResolver.LOOSE_MATCH, fileList) as? FileRef
         if (targetRef != null) {
-            val inspectionResults = resolver.inspect(linkRef, targetRef, null)
+            val inspectionResults = resolver.inspect(linkRef, targetRef, rowId)
             if (this.inspectionResults.size < inspectionResults.size) {
                 for (inspection in inspectionResults) {
-                    println(inspection.toArrayOfTestString(rowId, filePathInfo.path))
+                    //println(inspection.toArrayOfTestString(rowId, filePathInfo.path))
                 }
             }
 
-            compareUnorderedLists("InspectionResults do not match", this.inspectionResults, inspectionResults)
+            compareUnorderedLists("InspectionResults do not match ${resolver.getMatcher(linkRef).linkAllMatch}", this.inspectionResults, inspectionResults)
         }
     }
 
