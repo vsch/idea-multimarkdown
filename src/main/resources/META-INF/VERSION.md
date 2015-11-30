@@ -8,6 +8,7 @@
 - Add: inspections when wiki pages are linked with file extension, they will display raw text not rendered HTML
 - Fix: anchor links markdown extension was always enabled when 'Use Old Preview' was selected, regardless of preferences settings
 - Add: fork and raw GitHub link to be recognized
+- Add: line icon to show multiple resolved targets
 
 #### Enhanced Edition
 
@@ -19,7 +20,7 @@
 - Add: warning annotation in text editor, link color and image border in preview when a link target is not on GitHub according to its status
 - Add: intention to change relative to absolute link addresses and vice-versa
 - Add: validation of absolute links that look like they are targeting files in the same repository as the containing file 
-- Add: navigation line items for absolute links
+- Add: navigation line items for absolute links that resolve to files
 
 ### 1.2.2 - Bug Fixes and Enhancements
 
