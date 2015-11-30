@@ -399,22 +399,17 @@ public class MultiMarkdownAnnotator implements Annotator {
 
                 // get all accessible
                 if (state.needTargetList) {
-                    LinkRef emptyLinkRef = linkRefInfo instanceof WikiLinkRef ? new WikiLinkRef(containingFile, "", null, null) : (linkRefInfo instanceof ImageLinkRef ? new ImageLinkRef(containingFile, "", null, null) : (new LinkRef(containingFile, "", null, null)));
-                    List<PathInfo> availableTargetRefs = resolver.multiResolve(emptyLinkRef, LinkResolver.ANY | LinkResolver.LOOSE_MATCH, null);
+                    LinkRef emptyLinkRef = element instanceof WikiLinkRef ? new WikiLinkRef(containingFile, "", null, null) : (linkRefInfo instanceof ImageLinkRef ? new ImageLinkRef(containingFile, "", null, null) : (new LinkRef(containingFile, "", null, null)));
+                    List<PathInfo> availableTargetRefs = resolver.multiResolve(emptyLinkRef, LinkResolver.PREFER_LOCAL | LinkResolver.ACCEPT_URI | LinkResolver.LOOSE_MATCH, null);
 
-                    if (availableTargetRefs.size() > 0) {
-                        /*
-                         *   have a file but it is not accessible we can:
-                         *   1. rename the link to another accessible file?
-                         */
-                        for (PathInfo linkRef : availableTargetRefs) {
-                            String linkRefText = resolver.linkAddress(emptyLinkRef, linkRef, null, null, null);
+                    int hadItems = state.getAlreadyOfferedSize(TYPE_CHANGE_LINK_REF_QUICK_FIX);
+                    for (PathInfo targetRef : availableTargetRefs) {
+                        String linkRefText = resolver.linkAddress(emptyLinkRef, targetRef, null, null, null);
 
-                            if (state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, linkRefText)) {
-                                state.annotator.registerFix(new ChangeLinkRefQuickFix(element, linkRefText, 0, RENAME_KEEP_ANCHOR));
-                                // TODO: make max quick fix wikilink targets a config item
-                                if (state.getAlreadyOfferedSize(TYPE_CHANGE_LINK_REF_QUICK_FIX) >= 15) break;
-                            }
+                        if (state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, linkRefText)) {
+                            state.annotator.registerFix(new ChangeLinkRefQuickFix(element, linkRefText, 0, RENAME_KEEP_TITLE | RENAME_KEEP_ANCHOR));
+                            // TODO: make max quick fix wikilink targets a config item
+                            if (state.getAlreadyOfferedSize(TYPE_CHANGE_LINK_REF_QUICK_FIX) >= hadItems+15) break;
                         }
                     }
                 }

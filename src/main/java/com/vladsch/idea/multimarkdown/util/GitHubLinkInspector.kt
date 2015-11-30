@@ -103,7 +103,7 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
         }
 
         fun INSPECT_LINK_TARGET_HAS_ANCHOR() {
-            if (linkRef.containingFile.isWikiPage) {
+            if (targetRef.isWikiPage) {
                 if (targetRef.pathContainsAnchor()) {
                     addResult(InspectionResult(ID_TARGET_PATH_HAS_ANCHOR, Severity.WARNING, null, null))
                 }

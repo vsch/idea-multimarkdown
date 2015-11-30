@@ -84,7 +84,7 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
 
                             if (icon == null) {
                                 // TODO: use standard icon that IDE uses
-                                icon = file.getIcon(0);
+                                icon = results.length > 1 ? MultiMarkdownIcons.MULTI_WIKI : file.getIcon(0);
                                 //icon = MultiMarkdownIcons.GITHUB;
                             }
 
@@ -105,7 +105,7 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
 
                             @Override
                             public String getElementText(PsiElement fileElement) {
-                                if (fileElement instanceof MultiMarkdownFile) {
+                                if (fileElement instanceof PsiFile) {
                                     FileRef fileRef = new FileRef((PsiFile) fileElement);
                                     if (fileRef.isUnderWikiDir() && results.length > 1) {
                                         // need subdirectory and extension, there is more than one match
@@ -124,7 +124,7 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
                             protected Icon getIcon(PsiElement element) {
                                 boolean firstItem = element == markdownTargets.get(0);
                                 boolean isWikiPage = element instanceof MultiMarkdownFile && ((MultiMarkdownFile) element).isWikiPage();
-                                return firstItem ? element.getIcon(0) : (isWikiPage ? MultiMarkdownIcons.HIDDEN_WIKI : MultiMarkdownIcons.HIDDEN_FILE);
+                                return firstItem ? MultiMarkdownIcons.MULTI_WIKI : (element instanceof MultiMarkdownFile ? (isWikiPage ? MultiMarkdownIcons.HIDDEN_WIKI : MultiMarkdownIcons.HIDDEN_FILE) : element.getIcon(0));
                             }
 
                             @Nullable
@@ -138,7 +138,7 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
                                         repoDir = fileRef.getWikiDir();
                                     } else {
                                         ProjectFileRef projectFileRef = fileRef.projectFileRef(project);
-                                        String gitHubRepoPath = projectFileRef == null ? null : projectFileRef.getGitHubRepoPath();
+                                        String gitHubRepoPath = projectFileRef == null ? null : projectFileRef.getGitHubBasePath();
                                         repoDir = gitHubRepoPath == null ? basePath : gitHubRepoPath;
                                     }
                                     String relativePath = PathInfo.relativePath(basePath, repoDir, false);

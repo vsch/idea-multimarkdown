@@ -28,6 +28,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.ProcessingContext;
@@ -42,6 +43,7 @@ import com.vladsch.idea.multimarkdown.util.*;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
@@ -117,6 +119,11 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
                                 Project fileProject = parameters.getEditor().getProject();
                                 if (fileProject != null) {
                                     ProjectFileRef containingFile = new ProjectFileRef(virtualFile, fileProject);
+                                    GitHubLinkResolver resolver = new GitHubLinkResolver(containingFile);
+                                    String linkRefText = MultiMarkdownPsiImplUtil.getLinkRefText(element);
+                                    PathInfo linkRefTextInfo = new PathInfo(linkRefText.replace(DUMMY_IDENTIFIER, ""));
+                                    boolean withExtForWikiRef = elementType == IMAGE_LINK_REF || linkRefTextInfo.getHasExt();
+                                    boolean uriLinks = linkRefTextInfo.isURI();
                                     LinkRef linkRef;
 
                                     if (elementType == IMAGE_LINK_REF) {
@@ -124,37 +131,37 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
                                     } else if (elementType == WIKI_LINK_REF) {
                                         linkRef = new WikiLinkRef(containingFile, "", null, null);
                                     } else {
-                                        linkRef = new LinkRef(containingFile, "", null, null);
+                                        String fullPath;
+                                        if (linkRefTextInfo.getHasExt() && !linkRefTextInfo.isWikiPageExt()) fullPath = linkRefTextInfo.getExt();
+                                        else if (linkRefTextInfo.getFileName().startsWith(".") && !linkRefTextInfo.getHasExt()) fullPath = linkRefTextInfo.getFileName();
+                                        else fullPath = "";
+
+                                        linkRef = new LinkRef(containingFile, fullPath, null, null);
                                     }
 
-                                    GitHubLinkResolver resolver = new GitHubLinkResolver(containingFile);
                                     List<PathInfo> matchedFiles = resolver.multiResolve(linkRef, LinkResolver.LOOSE_MATCH, null);
 
                                     for (PathInfo fileRef : matchedFiles) {
                                         if (fileRef instanceof ProjectFileRef) {
-                                            addLinkRefCompletion(resultSet, resolver, linkRef, (ProjectFileRef) fileRef, !((ProjectFileRef) fileRef).isWikiPage() || elementType == IMAGE_LINK_REF, true);
+                                            addLinkRefCompletion(resultSet, resolver, linkRef, (ProjectFileRef) fileRef, withExtForWikiRef || !((ProjectFileRef) fileRef).isWikiPage(), uriLinks);
                                         }
                                     }
 
                                     // add standard GitHub parts
-                                    if (elementType != IMAGE_LINK_REF && elementType != WIKI_LINK_REF && !containingFile.isWikiPage()) {
-                                        for (String gitHubLink : GitHubLinkResolver.GITHUB_LINKS) {
-                                            FileRef gitHubFileRef = new FileRef(containingFile.getGitHubRepoPath() + gitHubLink);
-                                            String gitHubLinkRef = resolver.linkAddress(linkRef, gitHubFileRef, null, null, null);
+                                    if (elementType != IMAGE_LINK_REF && elementType != WIKI_LINK_REF) {
+                                        for (String gitHubLink : GitHubLinkResolver.GITHUB_TARGET_LINKS) {
+                                            LinkRef uriLink = new LinkRef(containingFile, containingFile.getGitHubBaseUrl() + gitHubLink, null, null);
+                                            LinkRef gitHubLinkRef = uriLinks ? uriLink : resolver.uriToRelativeLink(uriLink);
 
-                                            LookupElementBuilder lookupElementBuilder = LookupElementBuilder.create(gitHubFileRef)
-                                                    //.withLookupString(wikiPageShortRef)
-                                                    .withCaseSensitivity(true)
-                                                    .withIcon(MultiMarkdownIcons.GITHUB)
-                                                    .withTypeText(MultiMarkdownBundle.message("annotation.link.github-" + gitHubLink), false);
+                                            if (gitHubLinkRef != null) {
+                                                LookupElementBuilder lookupElementBuilder = LookupElementBuilder.create(gitHubLinkRef.getFilePath())
+                                                        //.withLookupString(wikiPageShortRef)
+                                                        .withCaseSensitivity(true)
+                                                        .withIcon(MultiMarkdownIcons.GITHUB)
+                                                        .withTypeText(MultiMarkdownBundle.message("annotation.link.github-" + gitHubLink), false);
 
-                                            resultSet.addElement(lookupElementBuilder);
-                                        }
-                                    }
-
-                                    for (PathInfo fileRef : matchedFiles) {
-                                        if (fileRef instanceof ProjectFileRef) {
-                                            addLinkRefCompletion(resultSet, resolver, linkRef, (ProjectFileRef) fileRef, !((ProjectFileRef) fileRef).isWikiPage() || elementType == IMAGE_LINK_REF, true);
+                                                resultSet.addElement(lookupElementBuilder);
+                                            }
                                         }
                                     }
                                 }
@@ -174,33 +181,47 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
         );
     }
 
-    protected void addLinkRefCompletion(@NotNull CompletionResultSet resultSet, GitHubLinkResolver resolver, LinkRef linkRef, ProjectFileRef projectFileRef, boolean withExtForWikiPage, boolean accessible) {
-        String linkRefText = resolver.linkAddress(linkRef, projectFileRef, withExtForWikiPage, null, null);
+    protected void addLinkRefCompletion(@NotNull CompletionResultSet resultSet, GitHubLinkResolver resolver, LinkRef linkRef, PathInfo targetInfo, boolean withExtForWikiPage, boolean uriLinks) {
+        String linkRefText = resolver.linkAddress(linkRef, targetInfo, withExtForWikiPage, null, null);
         String gitHubRepoPath = resolver.getProjectResolver().vcsRepoBasePath(linkRef.getContainingFile());
 
         if (gitHubRepoPath == null) gitHubRepoPath = resolver.getProjectBasePath();
-        boolean isLinkAccessible = projectFileRef.getPath().startsWith(gitHubRepoPath);
 
-        if (accessible == isLinkAccessible) {
+        if (!linkRefText.equals("#")) {
             String linkRefFileName = PathInfo.relativePath(gitHubRepoPath, linkRefText, false);
 
-            if (isLinkAccessible || !linkRefFileName.startsWith("../")) {
+            Icon icon = null;
 
-                LookupElementBuilder lookupElementBuilder = LookupElementBuilder.create(linkRefText)
-                        .withCaseSensitivity(true)
-                        .withIcon(accessible && projectFileRef.isWikiPage() ? MultiMarkdownIcons.WIKI : MultiMarkdownIcons.FILE);
-
-                if (!linkRefText.equals(linkRefFileName)) {
-                    lookupElementBuilder = lookupElementBuilder.withTypeText(linkRefFileName, false);
+            if (targetInfo instanceof FileRef && ((FileRef) targetInfo).isWikiPage()) icon = MultiMarkdownIcons.WIKI;
+            else if (targetInfo.isMarkdownExt()) icon = MultiMarkdownIcons.FILE;
+            else {
+                Project project = resolver.getProject();
+                if (project != null) {
+                    ProjectFileRef projectFileRef = targetInfo.projectFileRef(project);
+                    PsiFile psiFile = projectFileRef == null ? null : projectFileRef.getPsiFile();
+                    if (psiFile != null) {
+                        icon = psiFile.getIcon(0);
+                    }
                 }
-
-                if (!isLinkAccessible) {
-                    // TODO: get the color from color settings
-                    lookupElementBuilder = lookupElementBuilder.withItemTextForeground(Color.RED);
-                }
-
-                resultSet.addElement(lookupElementBuilder);
             }
+
+            LookupElementBuilder lookupElementBuilder = LookupElementBuilder.create(linkRefText)
+                    .withCaseSensitivity(true);
+
+            if (icon != null) {
+                lookupElementBuilder = lookupElementBuilder.withIcon(icon);
+            }
+
+            if (!linkRefText.equals(linkRefFileName)) {
+                lookupElementBuilder = lookupElementBuilder.withTypeText(linkRefFileName, false);
+            }
+
+            //if (!isLinkAccessible) {
+            //    // TODO: get the color from color settings
+            //    lookupElementBuilder = lookupElementBuilder.withItemTextForeground(Color.RED);
+            //}
+
+            resultSet.addElement(lookupElementBuilder);
         }
     }
 }

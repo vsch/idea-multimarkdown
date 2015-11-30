@@ -141,7 +141,7 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
     open fun append(parts: Sequence<String>): PathInfo = PathInfo.appendParts(_fullPath, parts, construct = ::PathInfo)
 
     open fun projectFileRef(project: Project): ProjectFileRef? {
-        val virtualFile = if (!isAbsolute || !isLocal) null else VirtualFileManager.getInstance().findFileByUrl(_fullPath)
+        val virtualFile = if (!isAbsolute || !isLocal) null else VirtualFileManager.getInstance().findFileByUrl(_fullPath.prefixWith("file://"))
         val projectFileRef = if (virtualFile == null) null else ProjectFileRef(virtualFile, project);
         if (projectFileRef != null && this is LinkRef && targetRef != null && targetRef.isRawFile) {
            projectFileRef.isRawFile = true

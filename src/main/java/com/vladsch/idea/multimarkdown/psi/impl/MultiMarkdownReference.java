@@ -95,17 +95,17 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
     @NotNull
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
-        if (incompleteCode) {
-            return getMultiResolveResults(true);
-        } else {
-            if (resolveResults == null || resolveResultsName == null || !resolveResultsName.equals(getElement().getName())) {
-                resolveResultsName = getElement().getName();
-                if (resolveResultsName == null) resolveResultsName = "";
-                setRangeInElement(new TextRange(0, resolveResultsName.length()));
-                resolveResults = getMultiResolveResults(false);
-            }
-            return resolveResults;
-        }
+        //if (incompleteCode) {
+            return getMultiResolveResults(incompleteCode);
+        //} else {
+        //    if (resolveResults == null || resolveResultsName == null || !resolveResultsName.equals(getElement().getName())) {
+        //        resolveResultsName = getElement().getName();
+        //        if (resolveResultsName == null) resolveResultsName = "";
+        //        setRangeInElement(new TextRange(0, resolveResultsName.length()));
+        //        resolveResults = getMultiResolveResults(false);
+        //    }
+        //    return resolveResults;
+        //}
     }
 
     @Override

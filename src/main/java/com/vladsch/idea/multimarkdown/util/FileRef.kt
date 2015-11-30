@@ -176,8 +176,11 @@ open class ProjectFileRef(_virtualFile: VirtualFile, val project: Project, priva
             return !fileStatus
         }
 
-    val gitHubRepoPath: String?
+    val gitHubBasePath: String?
         get() = gitHubVcsRoot?.basePath
+
+    val gitHubBaseUrl: String?
+        get() = gitHubVcsRoot?.baseUrl
 
     override fun projectFileRef(project: Project): ProjectFileRef? = this
 }

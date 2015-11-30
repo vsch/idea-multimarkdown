@@ -26,9 +26,7 @@ import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.util.Processor
 import com.intellij.util.indexing.FileBasedIndex
 import com.intellij.util.indexing.FileBasedIndexImpl
-import com.vladsch.idea.multimarkdown.MultiMarkdownFileType
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin
-import org.intellij.images.fileTypes.ImageFileTypeManager
 import java.util.*
 import kotlin.text.RegexOption
 
@@ -63,6 +61,15 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                 GITHUB_ISSUES_NAME,
                 GITHUB_PULLS_NAME,
                 GITHUB_PULSE_NAME
+        )
+
+        @JvmStatic @JvmField val GITHUB_TARGET_LINKS = arrayOf(
+                GITHUB_FORK_NAME,
+                GITHUB_GRAPHS_NAME,
+                GITHUB_ISSUES_NAME,
+                GITHUB_PULLS_NAME,
+                GITHUB_PULSE_NAME,
+                GITHUB_WIKI_NAME
         )
     }
 
@@ -153,19 +160,16 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
         return linkInspector.inspect(linkRef, targetRef, referenceId)
     }
 
-    protected fun getTargetFileTypes(linkRef: LinkRef): HashSet<FileType> {
-        var targetFileType = when {
-            linkRef is WikiLinkRef, (linkRef !is ImageLinkRef && !linkRef.hasExt) || linkRef.isMarkdownExt -> MultiMarkdownFileType.INSTANCE
-            linkRef is ImageLinkRef, linkRef.isImageExt -> ImageFileTypeManager.getInstance().imageFileType
-            else -> {
-                // get the file type from extension
-                val typeManager = FileTypeManager.getInstance() as FileTypeManagerImpl
-                typeManager.getFileTypeByExtension(linkRef.ext)
-            }
-        }
+    protected fun getTargetFileTypes(extensions: List<String>?): HashSet<FileType> {
 
         val typeSet = HashSet<FileType>()
-        typeSet.add(targetFileType)
+        if (extensions == null) return typeSet
+
+        val typeManager = FileTypeManager.getInstance() as FileTypeManagerImpl
+        for (ext in extensions) {
+            val targetFileType = typeManager.getFileTypeByExtension(ext)
+            typeSet.add(targetFileType)
+        }
         return typeSet
     }
 
@@ -240,8 +244,17 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                         }
                     }
 
+            val allExtensions =
+                    if (wantLooseMatch(options)) {
+                        linkMatcher.linkLooseMatchExtensions
+                    } else {
+                        linkMatcher.linkAllMatchExtensions
+                    }
+
+//            val allFiles = ArrayList<String>()
+
             if (fromList == null) {
-                val targetFileTypes = getTargetFileTypes(linkRef)
+                val targetFileTypes = getTargetFileTypes(allExtensions)
                 if (targetFileTypes.isEmpty() || project == null) {
                     if (targetFileTypes.isNotEmpty()) {
                         // Only used in testing, runtime uses the file indices
@@ -262,15 +275,18 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                 } else {
                     //val projectFileList = projectResolver.projectFileList(targetFileTypes)
                     val instance = FileBasedIndex.getInstance() as FileBasedIndexImpl
-                    val containingFiles = instance.processFilesContainingAllKeys(FileTypeIndex.NAME, targetFileTypes, GlobalSearchScope.projectScope(project), null, Processor<VirtualFile> { virtualFile ->
-                        if (virtualFile.path.matches(allMatchWiki)) {
-                            val fileRef = ProjectFileRef(virtualFile, project)
-                            if (allMatchNonWiki === allMatchWiki || !linkMatcher.wikiMatchingRules || !linkRef.hasExt || fileRef.filePath.matches(allMatchNonWiki)) {
-                                matches.add(fileRef)
+                    for (type in targetFileTypes) {
+                        val containingFiles = instance.processFilesContainingAllKeys(FileTypeIndex.NAME, setOf(type), GlobalSearchScope.projectScope(project), null, Processor<VirtualFile> { virtualFile ->
+                            //                            allFiles.add(virtualFile.path)
+                            if (virtualFile.path.matches(allMatchWiki)) {
+                                val fileRef = ProjectFileRef(virtualFile, project)
+                                if (allMatchNonWiki === allMatchWiki || !linkMatcher.wikiMatchingRules || !linkRef.hasExt || fileRef.filePath.matches(allMatchNonWiki)) {
+                                    matches.add(fileRef)
+                                }
                             }
-                        }
-                        true
-                    })
+                            true
+                        })
+                    }
                 }
             } else {
                 for (fileRef in fromList) {

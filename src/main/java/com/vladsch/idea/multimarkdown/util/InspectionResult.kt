@@ -39,7 +39,7 @@ class InspectionResult(val id: String, val severity: Severity, val fixedLink: St
     }
 
     override fun toString(): String {
-        return "InspectionResults(${dataPrint(referenceId)}, GitHubLinkInspector.ID_$id, Severity.$severity, ${if (fixedLink == null) "null" else "\"$fixedLink\"" }, ${if (fixedFilePath == null) "null" else "\"$fixedFilePath\""}),"
+        return "InspectionResults(${dataPrint(referenceId)}, GitHubLinkInspector.$id, Severity.$severity, ${if (fixedLink == null) "null" else "\"$fixedLink\"" }, ${if (fixedFilePath == null) "null" else "\"$fixedFilePath\""}),"
     }
 
     fun isA(id: String) = this.id == id
@@ -47,7 +47,7 @@ class InspectionResult(val id: String, val severity: Severity, val fixedLink: St
     //    /*  0 */arrayOf<Any?>(18, GitHubLinkInspector.ID_WIKI_LINK_HAS_DASHES , Severity.WEAK_WARNING, "Normal File", null) /*  0 */
     fun toArrayOfTestString(rowId: Int = 0, removePrefix: String = ""): String {
         val rowPad = " ".repeat(3 - rowId.toString().length) + rowId
-        return "arrayOf($rowPad, GitHubLinkInspector.ID_$id, Severity.$severity, ${if (fixedLink == null) "null" else "\"$fixedLink\"" }, ${if (fixedFilePath == null) "null" else "\"${if (!removePrefix.isEmpty()) PathInfo.relativePath(removePrefix.suffixWith('/'), fixedFilePath) else fixedFilePath}\""}),"
+        return "arrayOf($rowPad, GitHubLinkInspector.$id, Severity.$severity, ${if (fixedLink == null) "null" else "\"$fixedLink\"" }, ${if (fixedFilePath == null) "null" else "\"${if (!removePrefix.isEmpty()) PathInfo.relativePath(removePrefix.suffixWith('/'), fixedFilePath) else fixedFilePath}\""}),"
     }
 
     companion object {
