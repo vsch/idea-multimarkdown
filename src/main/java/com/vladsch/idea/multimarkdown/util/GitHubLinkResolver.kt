@@ -233,7 +233,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                             for (fileRef in projectFileList) {
                                 if (fileRef.filePath.matches(if (fileRef.isWikiPage) allMatchWiki else allMatchNonWiki)) {
                                     // here we need to test for wiki page links that resolve to raw files, these have to match case sensitive
-                                    if (allMatchNonWiki === allMatchWiki || !linkMatcher.wikiMatchingRules || !fileRef.isWikiPage || !linkRef.hasExt || fileRef.filePath.matches(allMatchNonWiki)) {
+                                    if (allMatchNonWiki === allMatchWiki || !linkMatcher.wikiMatchingRules || !linkRef.hasExt || fileRef.filePath.matches(allMatchNonWiki)) {
                                         matches.add(fileRef)
                                     }
                                 }
@@ -248,7 +248,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                     val containingFiles = instance.processFilesContainingAllKeys(FileTypeIndex.NAME, targetFileTypes, GlobalSearchScope.projectScope(project), null, Processor<VirtualFile> { virtualFile ->
                         if (virtualFile.getPath().matches(allMatchWiki)) {
                             val fileRef = ProjectFileRef(virtualFile, project)
-                            if (allMatchNonWiki === allMatchWiki || !linkMatcher.wikiMatchingRules || !fileRef.isWikiPage || !linkRef.hasExt || fileRef.filePath.matches(allMatchNonWiki)) {
+                            if (allMatchNonWiki === allMatchWiki || !linkMatcher.wikiMatchingRules || !linkRef.hasExt || fileRef.filePath.matches(allMatchNonWiki)) {
                                 matches.add(fileRef)
                             }
                         }

@@ -299,7 +299,7 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
                 linkSubExtMatch = "^$fixedPrefix$subDirPattern$filenamePattern$extensionPattern$"
 
                 // if linkref path is empty then this should match linkFileMatch|linkSubExtMatch|linkSubAnchorExtMatch|fileAnchorMatch
-                linkAllMatch = if (linkRef.path.isEmpty()) "$linkFileMatch|$linkFileAnchorMatch|$linkSubAnchorExtMatch|$linkSubExtMatch" else linkFileMatch
+                linkAllMatch = if (linkRef.path.isEmpty()) "$linkFileMatch|$linkSubExtMatch" else linkFileMatch
             } else {
                 // regular repo match, we build up all options for looseMatch and later resolution as to what we really matched
                 val extensionPattern = if (linkRef.hasExt) extensionPattern(linkRef.ext, isOptional = false) else extensionPattern(*linkRef.linkExtensions, isOptional = false)
@@ -324,6 +324,8 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
             }
         }
 
+        assert(linkLooseMatch != null)
+        assert(linkAllMatch != null)
         return !looseMatchOnly
     }
 }

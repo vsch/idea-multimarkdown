@@ -146,6 +146,16 @@ class TestLinkResolver_MarkdownTest__Readme constructor(val rowId: Int, val full
         compareOrderedLists("MultiResolve ${if (looseMatch) "looseMatch" else "exact" } does not match ${if (looseMatch) resolver.getMatcher(linkRef).linkLooseMatch else resolver.getMatcher(linkRef).linkAllMatch}", multiResolve, actuals)
     }
 
+    @Test fun test_MultiResolveExactNoMatch() {
+        if (skipTest || localLinkRef != null) return
+        val localRefs = resolver.multiResolve(linkRef, LinkResolver.PREFER_LOCAL, fileList)
+        val actuals = Array<String>(localRefs.size, { "" })
+        for (i in localRefs.indices) {
+            actuals[i] = localRefs[i].filePath
+        }
+        compareOrderedLists("MultiResolve exact does not match ${resolver.getMatcher(linkRef).linkAllMatch}", arrayOf<String>(), actuals)
+    }
+
     @Test fun test_Resolve() {
         if (skipTest) return
         //        val localRefs = resolver.multiResolve(if (linkRef is WikiLinkRef) linkRef else linkRefNoExt, LinkResolver.ONLY_LOCAL or LinkResolver.LOOSE_MATCH, fileList)

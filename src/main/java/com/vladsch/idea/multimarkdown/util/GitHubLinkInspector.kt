@@ -86,7 +86,7 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
                     val fixedLinkRef = FileRef(linkAddress)
                     // caution: no fixed file name provided if the case mismatch is in the path not the file name
                     // test: no fixed file name provided if the case mismatch is in the path not the file name
-                    addResult(InspectionResult(ID_CASE_MISMATCH, Severity.ERROR, linkAddress, if (linkRef.path == fixedLinkRef.path) fixedPath else null))
+                    addResult(InspectionResult(ID_CASE_MISMATCH, if (targetRef.isWikiPage) Severity.WEAK_WARNING else Severity.ERROR, linkAddress, if (linkRef.path == fixedLinkRef.path) fixedPath else null))
                 }
             }
         }
