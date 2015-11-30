@@ -25,12 +25,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiReference;
-import com.intellij.refactoring.JavaRefactoringFactory;
-import com.intellij.refactoring.JavaRenameRefactoring;
-import com.intellij.usageView.UsageInfo;
 import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
@@ -53,6 +48,8 @@ class ChangeLinkRefQuickFix extends BaseIntentionAction {
     public static final int ADD_PAGE_REF = 5;
     public static final int REMOVE_EXT = 6;
     public static final int URL_ENCODE_ANCHOR = 7;
+    public static final int CHANGE_TO_RELATIVE = 8;
+    public static final int CHANGE_TO_ABSOLUTE = 9;
 
     private String newLinkRef;
     private MultiMarkdownNamedElement linkRefElement;
@@ -60,11 +57,11 @@ class ChangeLinkRefQuickFix extends BaseIntentionAction {
     private final int renameFlags;
 
     ChangeLinkRefQuickFix(MultiMarkdownNamedElement linkRefElement, String newLinkRef) {
-        this(linkRefElement, newLinkRef, 0);
+        this(linkRefElement, newLinkRef, RENAME_KEEP_TEXT | RENAME_KEEP_RENAMED_TEXT | RENAME_KEEP_TITLE | RENAME_KEEP_ANCHOR);
     }
 
     ChangeLinkRefQuickFix(MultiMarkdownNamedElement linkRefElement, String newLinkRef, int alternateMsg) {
-        this(linkRefElement, newLinkRef, alternateMsg, RENAME_KEEP_TEXT | RENAME_KEEP_RENAMED_TEXT | RENAME_KEEP_TITLE | RENAME_KEEP_ANCHOR | RENAME_KEEP_PATH);
+        this(linkRefElement, newLinkRef, alternateMsg, RENAME_KEEP_TEXT | RENAME_KEEP_RENAMED_TEXT | RENAME_KEEP_TITLE | RENAME_KEEP_ANCHOR);
     }
 
     ChangeLinkRefQuickFix(MultiMarkdownNamedElement linkRefElement, String newLinkRef, int alternateMsg, int renameFlags) {
@@ -81,7 +78,8 @@ class ChangeLinkRefQuickFix extends BaseIntentionAction {
         LinkRef linkRef = MultiMarkdownPsiImplUtil.getLinkRef(linkRefElement);
         String[] extensions = linkRef != null ? linkRef.getLinkExtensions() : null;
         String ext = extensions != null && extensions.length > 0 ? extensions[0] : "";
-        String newLinkRefInfo = new PathInfo(linkRefElement instanceof MultiMarkdownWikiLinkRef ? WikiLinkRef.linkAsFile(newLinkRef) : newLinkRef).withExt(ext).getFilePath();
+        String newLinkRefInfo = new PathInfo(linkRefElement instanceof MultiMarkdownWikiLinkRef ? WikiLinkRef.linkAsFile(newLinkRef) : newLinkRef).withExt(ext).getFileName();
+        String newLinkRefInfoNoExt = new PathInfo(linkRefElement instanceof MultiMarkdownWikiLinkRef ? WikiLinkRef.linkAsFile(newLinkRef) : newLinkRef).getFileNameNoExt();
 
         switch (alternateMsg) {
             case MATCH_CASE_TO_FILE:
@@ -90,6 +88,14 @@ class ChangeLinkRefQuickFix extends BaseIntentionAction {
 
             case REMOVE_DASHES:
                 msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-dashes", newLinkRefInfo);
+                break;
+
+            case CHANGE_TO_RELATIVE:
+                msg = MultiMarkdownBundle.message("quickfix.link.change-to-relative");
+                break;
+
+            case CHANGE_TO_ABSOLUTE:
+                msg = MultiMarkdownBundle.message("quickfix.link.change-to-absolute");
                 break;
 
             case REMOVE_SLASHES:
@@ -101,7 +107,7 @@ class ChangeLinkRefQuickFix extends BaseIntentionAction {
                 break;
 
             case REMOVE_EXT:
-                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-ext", newLinkRefInfo);
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-ext", newLinkRefInfoNoExt);
                 break;
 
             case ADD_PAGE_REF:
@@ -138,12 +144,12 @@ class ChangeLinkRefQuickFix extends BaseIntentionAction {
         ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
-                changelinkRef(project, linkRefElement, newLinkRef);
+                changelinkRef(project, editor, linkRefElement, newLinkRef);
             }
         });
     }
 
-    private void changelinkRef(final Project project, final MultiMarkdownNamedElement linkRefElement, final String fileName) {
+    private void changelinkRef(final Project project, final Editor editor, final MultiMarkdownNamedElement linkRefElement, final String fileName) {
         final MultiMarkdownProjectComponent projectComponent = MultiMarkdownPlugin.getProjectComponent(project);
         if (projectComponent != null) {
             new WriteCommandAction.Simple(project) {
@@ -151,25 +157,40 @@ class ChangeLinkRefQuickFix extends BaseIntentionAction {
                 public void run() {
                     // change the whole name
                     //wikiPageRefElement.setName(fileName, MultiMarkdownNamedElement.REASON_FILE_MOVED);
-                    PsiReference reference = linkRefElement.getReference();
-                    PsiElement rootElement = reference == null ? null : reference.resolve();
-
-                    if (!(rootElement instanceof MultiMarkdownNamedElement)) {
-                        rootElement = linkRefElement;
-                    }
-
-                    JavaRefactoringFactory factory = JavaRefactoringFactory.getInstance(project);
-                    JavaRenameRefactoring rename = factory.createRename(rootElement, fileName);
-                    UsageInfo[] usages = rename.findUsages();
-
                     try {
                         projectComponent.pushRefactoringRenameFlags(renameFlags);
-                        rename.doRefactoring(usages); // modified 'usages' array
-                    } finally {
-                        projectComponent.popRefactoringRenameFlags();
-                    }
+                        // cannot rename, just set it
+                        linkRefElement.setName(fileName);
+                        //if (linkRefElement.isValid()) {
+                        //    final Document document = editor.getDocument();
+                        //    VirtualFile virtualFile = FileDocumentManager.getInstance().getFile(document);
+                        //    PsiFile psiFile = virtualFile == null ? null : PsiManager.getInstance(project).findFile(virtualFile);
+                        //    String text = MultiMarkdownPsiImplUtil.getTextForChangeToExplicitLink(wikiLinkElement, psiFile);
+                        //    int pos = linkRefElement.getTextOffset();
+                        //    document.replaceString(pos, pos + linkRefElement.getTextLength(), text);
+                        //}
+
+                        //} else {
+                        //    PsiReference reference = linkRefElement.getReference();
+                        //    PsiElement rootElement = reference == null ? null : reference.resolve();
+                        //
+                        //    if (!(rootElement instanceof MultiMarkdownNamedElement)) {
+                        //        rootElement = linkRefElement;
+                        //    }
+                        //
+                        //    JavaRefactoringFactory factory = JavaRefactoringFactory.getInstance(project);
+                        //    JavaRenameRefactoring rename = factory.createRename(rootElement, fileName);
+                        //    UsageInfo[] usages = rename.findUsages();
+                        //
+                        //    rename.doRefactoring(usages); // modified 'usages' array
+                        //}
                 }
-            }.execute();
-        }
+                finally
+                {
+                    projectComponent.popRefactoringRenameFlags();
+                }
+            }
+        }.execute();
     }
+}
 }

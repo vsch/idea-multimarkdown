@@ -120,10 +120,10 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
             if (href == null) rendering.withAttribute("class", missingTargetClass);
             else if (localOnly[0]) {
                 rendering.withAttribute("class", localOnlyTargetClass);
-                appendTitle += " **" + MultiMarkdownBundle.message("annotation.link.not-vcs-target") + "**";
+                appendTitle = (title == null ? "" : title) + " **" + MultiMarkdownBundle.message("annotation.link.not-vcs-target") + "**";
             }
         }
-        if (linkType != LinkType.Link && !StringUtils.isEmpty(appendTitle)) rendering.withAttribute("title", encode(appendTitle));
+        if (linkType != LinkType.Wiki && !StringUtils.isEmpty(appendTitle)) rendering.withAttribute("title", encode(appendTitle));
         return rendering;
     }
 

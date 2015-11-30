@@ -118,9 +118,9 @@ public class MultiMarkdownPsiImplUtil {
         return null;
     }
 
-    @NotNull
+    @Nullable
     public static LinkRef getLinkRef(@NotNull LinkRefElementTypes elementTypes, @NotNull PsiElement element) {
-        assert element.isValid();
+        if (!element.isValid()) return null;
 
         if (elementTypes.parentType == WIKI_LINK) {
             return LinkRef.parseWikiLinkRef(new FileRef(element), getLinkRefTextWithAnchor(element), null);
@@ -172,7 +172,7 @@ public class MultiMarkdownPsiImplUtil {
         ASTNode pageRefNode = element.getNode();
         if (pageRefNode == null) return element;
 
-        LinkRef newNameInfo = LinkRef.parseLinkRef(new FileRef(element.getContainingFile().getVirtualFile().getPath()), newName,null);
+        LinkRef newNameInfo = LinkRef.parseLinkRef(new FileRef(element.getContainingFile().getVirtualFile().getPath()), newName, null);
 
         PsiElement parent = element.getParent();
         String linkRef = getElementText(elementTypes.parentType, parent, elementTypes.linkRefType, null, null);
@@ -333,15 +333,17 @@ public class MultiMarkdownPsiImplUtil {
             String linkText = getElementText(elementTypes.parentType, element, elementTypes.textType, null, null);
             LinkRef sourceLinkRef = getLinkRef(elementTypes, element);
 
-            LinkRef linkRef = WikiLinkRef.from(sourceLinkRef);
+            if (sourceLinkRef != null) {
+                LinkRef linkRef = WikiLinkRef.from(sourceLinkRef);
 
-            if (linkRef != null) {
-                if (linkText.equals(linkRef.getFilePath())) linkText = null;
+                if (linkRef != null) {
+                    if (linkText.equals(linkRef.getFilePath())) linkText = null;
 
-                MultiMarkdownWikiLink otherLink = MultiMarkdownElementFactory.createWikiLink(element.getProject(), linkRef.getFilePathWithAnchor(), linkText);
-                if (otherLink != null) {
-                    element.replace(otherLink);
-                    return otherLink;
+                    MultiMarkdownWikiLink otherLink = MultiMarkdownElementFactory.createWikiLink(element.getProject(), linkRef.getFilePathWithAnchor(), linkText);
+                    if (otherLink != null) {
+                        element.replace(otherLink);
+                        return otherLink;
+                    }
                 }
             }
         }
@@ -356,10 +358,13 @@ public class MultiMarkdownPsiImplUtil {
             String linkRefTitle = getElementText(elementTypes.parentType, element, elementTypes.titleType, null, null);
             if (linkRefTitle.isEmpty()) {
                 LinkRef sourceLinkRef = getLinkRef(elementTypes, element);
-                LinkRef linkRef = WikiLinkRef.from(sourceLinkRef);
 
-                if (linkRef != null) {
-                    return !(sourceLinkRef.pathContains("%23") && sourceLinkRef.getHasAnchor());
+                if (sourceLinkRef != null) {
+                    LinkRef linkRef = WikiLinkRef.from(sourceLinkRef);
+
+                    if (linkRef != null) {
+                        return !(sourceLinkRef.pathContains("%23") && sourceLinkRef.getHasAnchor());
+                    }
                 }
             }
         }
@@ -393,14 +398,16 @@ public class MultiMarkdownPsiImplUtil {
             LinkRef sourceLinkRef = getLinkRef(elementTypes, element);
             String linkRefTitle = getElementText(elementTypes.parentType, element, elementTypes.titleType, null, null);
 
-            LinkRef linkRef = LinkRef.from(sourceLinkRef);
+            if (sourceLinkRef != null) {
+                LinkRef linkRef = LinkRef.from(sourceLinkRef);
 
-            if (linkRef != null) {
-                if (linkText.isEmpty()) {
-                    // TODO: use suggestion for default text
-                    linkText = !linkRefTitle.isEmpty() ? linkRefTitle : WikiLinkRef.fileAsLink(linkRef.linkToFile(linkRef.getFileNameNoExt()));
+                if (linkRef != null) {
+                    if (linkText.isEmpty()) {
+                        // TODO: use suggestion for default text
+                        linkText = !linkRefTitle.isEmpty() ? linkRefTitle : WikiLinkRef.fileAsLink(linkRef.linkToFile(linkRef.getFileNameNoExt()));
+                    }
+                    return MultiMarkdownExplicitLinkImpl.getElementText(linkRef.getFilePath(), linkText, linkRef.getAnchorText(), linkRefTitle);
                 }
-                return MultiMarkdownExplicitLinkImpl.getElementText(linkRef.getFilePath(), linkText, linkRef.getAnchorText(), linkRefTitle);
             }
         }
         return "";

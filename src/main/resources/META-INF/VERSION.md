@@ -7,16 +7,19 @@
 - Change: update JavaFX preview to new GitHub style, wider pages.
 - Add: inspections when wiki pages are linked with file extension, they will display raw text not rendered HTML
 - Fix: anchor links markdown extension was always enabled when 'Use Old Preview' was selected, regardless of preferences settings
-- Add: fork GitHub link to be recognized
+- Add: fork and raw GitHub link to be recognized
 
 #### Enhanced Edition
 
-- Change: new implementation of file link resolving logic handles the full set of GitHub idiosyncrasies for relative links, file extensions and case sensitivity.
+- Change: new implementation of file link resolving logic handles a full set of GitHub idiosyncrasies for relative links, file extensions and case sensitivity.
 - Add: new annotation inspections for common errors in link resolution
 - New: modified HTML now has all links as URI's during rendering with preference to GitHub repository file when available, fallback to local file://
 - Fix: added validation for invalid PsiElements during refactoring to prevent exceptions
 - Fix: all link refactoring for file move/rename adjusts affected link according to GitHub rules
 - Add: warning annotation in text editor, link color and image border in preview when a link target is not on GitHub according to its status
+- Add: intention to change relative to absolute link addresses and vice-versa
+- Add: validation of absolute links that look like they are targeting files in the same repository as the containing file 
+- Add: navigation line items for absolute links
 
 ### 1.2.2 - Bug Fixes and Enhancements
 

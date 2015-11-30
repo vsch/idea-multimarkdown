@@ -179,25 +179,29 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
                     LinkRef linkRef = MultiMarkdownPsiImplUtil.getLinkRef(myElement);
                     if (linkRef != null) {
                         GitHubLinkResolver resolver = new GitHubLinkResolver(myElement);
-                        List<PathInfo> pathInfos = resolver.multiResolve(linkRef, LinkResolver.PREFER_LOCAL | (incompleteCode ? LinkResolver.LOOSE_MATCH : 0), null);
+                        if (linkRef.isAbsolute()) linkRef = MultiMarkdownPlugin.isLicensed() ? resolver.uriToResolvedRelativeLink(linkRef) : null;
 
-                        if (pathInfos.size() > 0) {
-                            List<ResolveResult> results = new ArrayList<ResolveResult>();
-                            for (PathInfo pathInfo : pathInfos) {
-                                if (pathInfo instanceof ProjectFileRef) {
-                                    PsiFile psiFile = ((ProjectFileRef) pathInfo).getPsiFile();
-                                    if (psiFile != null) {
-                                        results.add(new PsiElementResolveResult(psiFile));
+                        if (linkRef != null) {
+                            List<PathInfo> pathInfos = resolver.multiResolve(linkRef, LinkResolver.PREFER_LOCAL | (incompleteCode ? LinkResolver.LOOSE_MATCH : 0), null);
+
+                            if (pathInfos.size() > 0) {
+                                List<ResolveResult> results = new ArrayList<ResolveResult>();
+                                for (PathInfo pathInfo : pathInfos) {
+                                    if (pathInfo instanceof ProjectFileRef) {
+                                        PsiFile psiFile = ((ProjectFileRef) pathInfo).getPsiFile();
+                                        if (psiFile != null) {
+                                            results.add(new PsiElementResolveResult(psiFile));
+                                        }
                                     }
                                 }
-                            }
 
-                            if (results.size() > 0) {
-                                removeReferenceChangeListener();
-                                return results.toArray(new ResolveResult[results.size()]);
+                                if (results.size() > 0) {
+                                    removeReferenceChangeListener();
+                                    return results.toArray(new ResolveResult[results.size()]);
+                                }
                             }
+                            return new ResolveResult[] { new PsiElementResolveResult(getMissingRefElement(name)) };
                         }
-                        return new ResolveResult[] { new PsiElementResolveResult(getMissingRefElement(name)) };
                     }
                 }
             } else {

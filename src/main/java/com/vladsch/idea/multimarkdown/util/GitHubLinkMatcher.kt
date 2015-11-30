@@ -116,19 +116,17 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
 
             looseMatchOnly = pureAnchor || !linkRef.containingFile.isWikiPage
 
-            if (!pureAnchor) {
-                val anchorPattern = linkTextToFileMatch(linkRef.anchorText, isOptional = false)
-                // if it has extension then we inlude it as alternative before default extensions because it may not be an extension but part of the file name
-                val defaultExtensons = extensionPattern(*linkRef.linkExtensions, isOptional = false)
-                val extensionPattern = if (linkRef.hasExt) "(?:" + extensionPattern(linkRef.ext, isOptional = false) + defaultExtensons + "|" + extensionPattern(linkRef.ext, isOptional = false) + ")" else defaultExtensons
-                val filenamePattern = linkTextToFileMatch(linkRef.filePath)
+            val anchorPattern = linkTextToFileMatch(linkRef.anchorText, isOptional = false)
+            // if it has extension then we inlude it as alternative before default extensions because it may not be an extension but part of the file name
+            val defaultExtensons = extensionPattern(*linkRef.linkExtensions, isOptional = false)
+            val extensionPattern = if (linkRef.hasExt) "(?:" + extensionPattern(linkRef.ext, isOptional = false) + defaultExtensons + "|" + extensionPattern(linkRef.ext, isOptional = false) + ")" else defaultExtensons
+            val filenamePattern = linkTextToFileMatch(linkRef.filePath)
 
-                linkFileMatch = "^$fixedPrefix$filenamePattern$"
-                if (!anchorPattern.isEmpty()) linkFileAnchorMatch = "^$fixedPrefix$filenamePattern$anchorPattern$"
-                linkSubExtMatch = "^$fixedPrefix$subDirPattern$filenamePattern$extensionPattern$"
-                if (!anchorPattern.isEmpty()) linkSubAnchorExtMatch = "^$fixedPrefix$subDirPattern$filenamePattern$anchorPattern$extensionPattern$"
-                linkAllMatch = "^$fixedPrefix(?:$filenamePattern${anchorPattern.suffixWith('?')}|$subDirPattern$filenamePattern${anchorPattern.suffixWith('?')}$extensionPattern)$"
-            }
+            linkFileMatch = "^$fixedPrefix$filenamePattern$"
+            if (!anchorPattern.isEmpty()) linkFileAnchorMatch = "^$fixedPrefix$filenamePattern$anchorPattern$"
+            linkSubExtMatch = "^$fixedPrefix$subDirPattern$filenamePattern$extensionPattern$"
+            if (!anchorPattern.isEmpty()) linkSubAnchorExtMatch = "^$fixedPrefix$subDirPattern$filenamePattern$anchorPattern$extensionPattern$"
+            linkAllMatch = "^$fixedPrefix(?:$filenamePattern${anchorPattern.suffixWith('?')}|$subDirPattern$filenamePattern${anchorPattern.suffixWith('?')}$extensionPattern)$"
             wikiMatchingRules = true
         } else {
             // it is assumed that if there is a wiki directory then it is a sub dir of the vcsRepoBasePath with the same name and .wiki appended

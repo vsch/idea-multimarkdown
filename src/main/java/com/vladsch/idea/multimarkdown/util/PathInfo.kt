@@ -254,7 +254,7 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
         @JvmStatic fun removeDotDirectory(path: String?): String = path.orEmpty().replace("/./", "/").removePrefix("./")
 
         @JvmStatic fun cleanFullPath(fullPath: String?): String {
-            var cleanPath = removeDotDirectory(fullPath)
+            var cleanPath = removeDotDirectory(fullPath?.trim())
             if (!cleanPath.endsWith("//")) cleanPath = cleanPath.removeSuffix("/")
             return cleanPath.removeSuffix(".")
         }

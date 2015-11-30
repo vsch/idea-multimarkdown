@@ -82,22 +82,50 @@ public class MultiMarkdownAnnotator implements Annotator {
                 || (elementTypes != MultiMarkdownPsiImplUtil.WIKI_LINK_ELEMENT && !MultiMarkdownPlugin.isLicensed())) return;
 
         LinkRef linkRefInfo = MultiMarkdownPsiImplUtil.getLinkRef(elementTypes, element);
+        LinkRef relativeRefInfo = linkRefInfo;
+
+        if (linkRefInfo == null) return;
 
         //noinspection StatementWithEmptyBody
-        if (linkRefInfo.isExternal()) {
-            //state.createInfoAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.link.resolves-to-external"));
-        } else /*if (!linkRefInfo.getFilePath().isEmpty())*/ {
+        if (linkRefInfo.isURI()) {
+            if (MultiMarkdownPlugin.isLicensed()) {
+                GitHubLinkResolver resolver = new GitHubLinkResolver(element);
+                LinkRef relRef = resolver.uriToRelativeLink(linkRefInfo);
+                if (relRef != null) {
+                    relativeRefInfo = relRef;
+                }
+            }
+        }
+
+        if (!relativeRefInfo.isURI()) {
             Project project = element.getProject();
             ProjectFileRef containingFile = new ProjectFileRef(element.getContainingFile());
             GitHubLinkResolver resolver = new GitHubLinkResolver(element.getContainingFile());
-            final List<PathInfo> looseTargetRefs = resolver.multiResolve(linkRefInfo, LinkResolver.ANY | LinkResolver.LOOSE_MATCH, null);
-            final List<PathInfo> targetRefs = resolver.multiResolve(linkRefInfo, LinkResolver.ANY, looseTargetRefs);
+            final List<PathInfo> looseTargetRefs = resolver.multiResolve(relativeRefInfo, LinkResolver.ANY | LinkResolver.LOOSE_MATCH, null);
+            final List<PathInfo> targetRefs = resolver.multiResolve(relativeRefInfo, LinkResolver.ANY, looseTargetRefs);
             PathInfo resolvedTargetInfo = targetRefs.size() > 0 ? targetRefs.get(0) : null;
             PathInfo targetInfo = resolvedTargetInfo != null ? resolvedTargetInfo : (looseTargetRefs.size() > 0 ? looseTargetRefs.get(0) : null);
             PsiElement parentElement = element.getParent();
             PsiElement textElement = MultiMarkdownPsiImplUtil.findChildByType(parentElement, elementTypes.textType);
-            //PsiElement titleElement = elementTypes.titleType == null ? null : MultiMarkdownPsiImplUtil.findChildByType(parentElement, elementTypes.titleType);
-            //PsiElement anchorElement = elementTypes.anchorType == null ? null : MultiMarkdownPsiImplUtil.findChildByType(parentElement, elementTypes.anchorType);
+
+            if (resolvedTargetInfo != null && MultiMarkdownPlugin.isLicensed()) {
+                if (linkRefInfo.isURI()) {
+                    state.createAnnotation(Severity.WEAK_WARNING, element.getTextRange(), MultiMarkdownBundle.message("annotation.link.can-be-relative"));
+                    String newLinkAddress = resolver.linkAddress(relativeRefInfo, resolvedTargetInfo, null, null, null);
+                    if (state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, newLinkAddress)) {
+                        state.annotator.registerFix(new ChangeLinkRefQuickFix(element, newLinkAddress, ChangeLinkRefQuickFix.CHANGE_TO_RELATIVE, RENAME_KEEP_ANCHOR | RENAME_KEEP_TEXT | RENAME_KEEP_TITLE));
+                    }
+                } else {
+                    PathInfo absRef = resolver.resolve(relativeRefInfo, LinkResolver.ONLY_URI | LinkResolver.PREFER_REMOTE, targetRefs);
+                    if (absRef instanceof LinkRef && absRef.isExternal()) {
+                        state.createAnnotation(Severity.WEAK_WARNING, element.getTextRange(), MultiMarkdownBundle.message("annotation.link.can-be-absolute"));
+                        String newLinkAddress = absRef.getFilePath();
+                        if (state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, newLinkAddress)) {
+                            state.annotator.registerFix(new ChangeLinkRefQuickFix(element, newLinkAddress, ChangeLinkRefQuickFix.CHANGE_TO_ABSOLUTE, RENAME_KEEP_ANCHOR | RENAME_KEEP_TEXT | RENAME_KEEP_TITLE));
+                        }
+                    }
+                }
+            }
 
             if (targetInfo == null) {
                 // file creation quick fix handled later
@@ -111,7 +139,6 @@ public class MultiMarkdownAnnotator implements Annotator {
                     offerWikiToExplicitLinkQuickFix(element, state, Severity.ERROR);
                 }
             } else if (targetInfo instanceof LinkRef && resolvedTargetInfo != null) {
-                //state.createInfoAnnotation(element.getTextRange(), MultiMarkdownBundle.message("annotation.link.resolves-to-external"));
             } else {
                 assert targetInfo instanceof FileRef;
                 ProjectFileRef targetRef = targetInfo.projectFileRef(project);
@@ -125,7 +152,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                     state.unresolved = true;
                 }
 
-                List<InspectionResult> inspectionResults = resolver.inspect(linkRefInfo, targetRef, null);
+                List<InspectionResult> inspectionResults = resolver.inspect(relativeRefInfo, targetRef, null);
 
                 for (InspectionResult reason : inspectionResults) {
                     if (reason.getHandled()) continue;
@@ -185,7 +212,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                         state.createAnnotation(reason.getSeverity(), element.getTextRange(), MultiMarkdownBundle.message("annotation.link.target-wikipage-with-extension"));
 
                         if (fixedLink != null && state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, fixedLink)) {
-                            state.annotator.registerFix(new ChangeLinkRefQuickFix(element, fixedLink));
+                            state.annotator.registerFix(new ChangeLinkRefQuickFix(element, fixedLink, ChangeLinkRefQuickFix.REMOVE_EXT, RENAME_KEEP_ANCHOR | RENAME_KEEP_TEXT | RENAME_KEEP_TITLE));
                         }
                     } else if (reason.isA(ID_WIKI_LINK_NOT_IN_WIKI)) {
                         state.needTargetList = false;
