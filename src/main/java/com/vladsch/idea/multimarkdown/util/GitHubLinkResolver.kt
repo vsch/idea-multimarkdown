@@ -562,7 +562,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
             if (gitHubVcsRoot != null) {
                 val gitHubRepoBaseUrl = gitHubVcsRoot.baseUrl
                 if (linkRef.filePath.startsWith(gitHubRepoBaseUrl)) {
-                    var targetFilePath = gitHubVcsRoot.basePath.suffixWith('/') + linkRef.filePath.substring(gitHubRepoBaseUrl.suffixWith('/').length)
+                    var targetFilePath = gitHubVcsRoot.basePath.suffixWith('/') + linkRef.linkToFile(linkRef.filePath.substring(gitHubRepoBaseUrl.suffixWith('/').length))
                     val containingFilePath = logicalRemotePath(containingFile, useWikiPageActualLocation = false, isSourceRef = true, isImageLinkRef = linkRef is ImageLinkRef, branchOrTag = null).filePath.suffixWith('/')
                     val relLink = linkRef.replaceFilePath(PathInfo.relativePath(containingFilePath, targetFilePath), false)
                     return relLink
