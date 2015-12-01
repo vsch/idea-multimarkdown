@@ -60,61 +60,44 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
             final ResolveResult[] results = psiReference != null ? ((MultiMarkdownReference) psiReference).multiResolve(false) : null;
             if (results != null && results.length > 0) {
                 final PsiFile containingFile = element.getContainingFile();
+                final GitHubLinkResolver resolver = new GitHubLinkResolver(containingFile);
 
                 NullableFunction<PsiElement, String> namer = new NullableFunction<PsiElement, String>() {
                     @Nullable
                     @Override
                     public String fun(PsiElement element) {
-                        String linkAddress = new GitHubLinkResolver(containingFile).linkAddress(new FileRef((PsiFile) element), null, null, null);
-                        return linkAddress;
+                        return resolver.linkAddress(new FileRef((PsiFile) element), null, null, null);
                     }
                 };
 
                 final Project project = element.getProject();
                 final String basePath = project.getBasePath() == null ? "/" : StringUtilKt.suffixWith(project.getBasePath(), '/');
-                boolean showWikiHome = false;
-                String lastWikiHome = null;
 
                 if (results.length > 0) {
-                    final ArrayList<PsiFile> markdownTargets = new ArrayList<PsiFile>();
+                    final ArrayList<PsiFile> linkTargets = new ArrayList<PsiFile>();
                     Icon icon = null;
+
                     for (ResolveResult resolveResult : results) {
-                        if (resolveResult.getElement() instanceof PsiFile && resolveResult.getElement() != containingFile) {
+                        if (resolveResult.getElement() instanceof PsiFile && !((results.length == 1 || results.length != 2) && resolveResult.getElement() == containingFile)) {
                             PsiFile file = (PsiFile) resolveResult.getElement();
-
-                            if (icon == null) {
-                                // TODO: use standard icon that IDE uses
-                                icon = results.length > 1 ? MultiMarkdownIcons.MULTI_WIKI : file.getIcon(0);
-                                //icon = MultiMarkdownIcons.GITHUB;
-                            }
-
-                            FileRef fileRef = new FileRef(file.getVirtualFile());
-                            if (lastWikiHome == null) {
-                                lastWikiHome = fileRef.getWikiDir();
-                            } else if (!showWikiHome && !lastWikiHome.equals(fileRef.getWikiDir())) {
-                                showWikiHome = true;
-                            }
-                            markdownTargets.add(file);
+                            if (icon == null) icon = file.getIcon(0);
+                            linkTargets.add(file);
                         }
                     }
 
-                    if (markdownTargets.size() > 0) {
-                        final boolean showContainer = true || showWikiHome;
+                    if (linkTargets.size() > 0) {
+                        if (linkTargets.size() > 1) icon = MultiMarkdownIcons.MULTI_WIKI;
 
                         PsiElementListCellRenderer cellRenderer = new PsiElementListCellRenderer<PsiElement>() {
-
                             @Override
                             public String getElementText(PsiElement fileElement) {
                                 if (fileElement instanceof PsiFile) {
                                     FileRef fileRef = new FileRef((PsiFile) fileElement);
                                     if (fileRef.isUnderWikiDir() && results.length > 1) {
                                         // need subdirectory and extension, there is more than one match
-                                        String repoDir = StringUtilKt.suffixWith(fileRef.getWikiDir(), '/');
-                                        String relativePath = PathInfo.relativePath(repoDir, fileRef.getFilePath(), false);
-                                        return relativePath;
+                                        return PathInfo.relativePath(StringUtilKt.suffixWith(fileRef.getWikiDir(), '/'), fileRef.getFilePath(), false);
                                     } else {
-                                        String linkAddress = new GitHubLinkResolver(containingFile).linkAddress(fileRef, null, null, null);
-                                        return linkAddress;
+                                        return new GitHubLinkResolver(containingFile).linkAddress(fileRef, null, null, null);
                                     }
                                 }
 
@@ -122,27 +105,24 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
                             }
 
                             protected Icon getIcon(PsiElement element) {
-                                boolean firstItem = element == markdownTargets.get(0);
+                                boolean firstItem = element == linkTargets.get(0);
                                 boolean isWikiPage = element instanceof MultiMarkdownFile && ((MultiMarkdownFile) element).isWikiPage();
-                                return firstItem ? MultiMarkdownIcons.MULTI_WIKI : (element instanceof MultiMarkdownFile ? (isWikiPage ? MultiMarkdownIcons.HIDDEN_WIKI : MultiMarkdownIcons.HIDDEN_FILE) : element.getIcon(0));
+                                return firstItem || !(element instanceof MultiMarkdownFile) ? element.getIcon(0) : (isWikiPage ? MultiMarkdownIcons.HIDDEN_WIKI : MultiMarkdownIcons.HIDDEN_FILE);
                             }
 
                             @Nullable
                             @Override
                             protected String getContainerText(PsiElement element, String name) {
-                                if (showContainer && element instanceof PsiFile) {
+                                if (element instanceof PsiFile) {
                                     FileRef fileRef = new FileRef((PsiFile) element);
                                     String repoDir;
 
-                                    if (fileRef.isWikiPage()) {
+                                    if (fileRef.isUnderWikiDir()) {
                                         repoDir = fileRef.getWikiDir();
                                     } else {
-                                        ProjectFileRef projectFileRef = fileRef.projectFileRef(project);
-                                        String gitHubRepoPath = projectFileRef == null ? null : projectFileRef.getGitHubBasePath();
-                                        repoDir = gitHubRepoPath == null ? basePath : gitHubRepoPath;
+                                        repoDir = fileRef.getPath();
                                     }
-                                    String relativePath = PathInfo.relativePath(basePath, repoDir, false);
-                                    return relativePath;
+                                    return PathInfo.relativePath(basePath, repoDir, false);
                                 }
                                 return null;
                             }
@@ -158,7 +138,7 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
                         NavigationGutterIconBuilder<PsiElement> builder =
                                 NavigationGutterIconBuilder.create(icon)
                                         .setCellRenderer(cellRenderer)
-                                        .setTargets(markdownTargets)
+                                        .setTargets(linkTargets)
                                         .setNamer(namer)
                                         .setTooltipText(MultiMarkdownBundle.message("linemarker.navigate-to"));
 

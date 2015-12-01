@@ -21,6 +21,7 @@
 - Add: intention to change relative to absolute link addresses and vice-versa
 - Add: validation of absolute links that look like they are targeting files in the same repository as the containing file 
 - Add: navigation line items for absolute links that resolve to files
+- Add: absolute address link completions and link completions based on extensions other than markdown for wiki and explicit and images for image links, just add https:// in front to get url completions and .ext without a file name to get extension based completions.  
 
 ### 1.2.2 - Bug Fixes and Enhancements
 

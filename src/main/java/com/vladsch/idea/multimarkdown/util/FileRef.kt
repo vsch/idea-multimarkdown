@@ -18,7 +18,6 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vcs.FileStatus
 import com.intellij.openapi.vcs.FileStatusManager
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.openapi.vfs.VirtualFileManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
@@ -146,6 +145,11 @@ open class FileRef(fullPath: String, private val _virtualFile: VirtualFile?) : P
     val exists: Boolean
         get() = virtualFile?.exists() as Boolean
 
+    open fun psiFile(project: Project): PsiFile? {
+        val virtualFileCopy = virtualFile
+        return if (virtualFileCopy == null) null else PsiManager.getInstance(project).findFile(virtualFileCopy)
+    }
+
     override fun projectFileRef(project: Project): ProjectFileRef? {
         val myVirtualFile = virtualFile
         return if (myVirtualFile == null) null else ProjectFileRef(myVirtualFile, project);
@@ -182,6 +186,7 @@ open class ProjectFileRef(_virtualFile: VirtualFile, val project: Project, priva
     val gitHubBaseUrl: String?
         get() = gitHubVcsRoot?.baseUrl
 
-    override fun projectFileRef(project: Project): ProjectFileRef? = this
+    override fun psiFile(project: Project): PsiFile? = if (project === this.project) this.psiFile else super.psiFile(project)
+    override fun projectFileRef(project: Project): ProjectFileRef? = if (project === this.project) this else super.projectFileRef(project)
 }
 
