@@ -22,17 +22,17 @@ import org.junit.runners.Parameterized
 import java.util.*
 
 @RunWith(value = Parameterized::class)
-class TestLinkResolver_MarkdownTest_wiki__Home constructor(val rowId:Int, val fullPath: String
-                                                        , val linkRefType: (containingFile: FileRef, linkRef: String, anchor: String?, targetRef: FileRef?) -> LinkRef
-                                                           , val linkText: String
-                                                           , val linkAddress: String
-                                                           , val linkAnchor: String?
-                                                           , val linkTitle: String?
-                                                           , resolvesLocalRel: String?
-                                                           , resolvesExternalRel: String?
-                                                           , val linkAddressText: String?
-                                                           , multiResolvePartial: Array<String>
-                                                           , val inspectionResults: ArrayList<InspectionResult>?
+class TestLinkResolver_Basic_wiki_Home constructor(val rowId:Int, val fullPath: String
+                                                   , val linkRefType: (containingFile: FileRef, linkRef: String, anchor: String?, targetRef: FileRef?) -> LinkRef
+                                                   , val linkText: String
+                                                   , val linkAddress: String
+                                                   , val linkAnchor: String?
+                                                   , val linkTitle: String?
+                                                   , resolvesLocalRel: String?
+                                                   , resolvesExternalRel: String?
+                                                   , val linkAddressText: String?
+                                                   , multiResolvePartial: Array<String>
+                                                   , val inspectionResults: ArrayList<InspectionResult>?
 ) {
     val resolvesLocal: String?
     val resolvesExternal: String?
@@ -91,7 +91,7 @@ class TestLinkResolver_MarkdownTest_wiki__Home constructor(val rowId:Int, val fu
     }
 
     @Test fun test_MultiResolve() {
-        if (skipTest) return
+        if (skipTest || linkRef.filePath.isEmpty() && linkRef.anchor == null) return
         val localFileRef = if (localLinkRef != null) FileRef(localLinkRef) else null
         val looseMatch = localFileRef == null || localFileRef.path.isEmpty()
         val localRefs = resolver.multiResolve(linkRef, LinkResolver.PREFER_LOCAL or if (looseMatch) LinkResolver.LOOSE_MATCH else 0, fileList)

@@ -213,12 +213,26 @@ fun List<String>.asLocalURI(branchOrTag: String? = null): List<String> {
     return this.map { "file://" + it }
 }
 
+val EMPTY_LIST = arrayListOf<String>()
+
 val gitHubLinks = arrayListOf(
         "https://github.com/vsch/MarkdownTest/fork",
         "https://github.com/vsch/MarkdownTest/graphs",
         "https://github.com/vsch/MarkdownTest/issues",
         "https://github.com/vsch/MarkdownTest/pulls",
         "https://github.com/vsch/MarkdownTest/pulse"
+)
+
+val wikiImageRemoteFiles = arrayListOf<String>(
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/SubDirectory/sub-dir-vcs-image.png",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/vcs-image.png"
+)
+
+val wikiImageFiles = arrayListOf<String>(
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/SubDirectory/sub-dir-non-vcs-image.png",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/SubDirectory/sub-dir-vcs-image.png",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/non-vcs-image.png",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/vcs-image.png"
 )
 
 val imageRemoteFiles = arrayListOf<String>(
@@ -239,6 +253,13 @@ val imageFiles = arrayListOf<String>(
         "/Users/vlad/src/MarkdownTest/vcs-image.png"
 )
 
+val wikiKotlinFiles = arrayListOf<String>(
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/SubDirectory/Sub-Test.kt",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/SubDirectory/Test2.kt",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Test-Name.kt",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Test.kt"
+)
+
 val kotlinFiles = arrayListOf<String>(
         "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/SubDirectory/Sub-Test.kt",
         "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/SubDirectory/Test2.kt",
@@ -246,6 +267,45 @@ val kotlinFiles = arrayListOf<String>(
         "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Test.kt",
         "/Users/vlad/src/MarkdownTest/SubDirectory/Test.kt",
         "/Users/vlad/src/MarkdownTest/Test.kt"
+)
+
+val wikiMarkdownRemoteFiles = arrayListOf<String>(
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.markdown",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.md",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.mkd",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Not-Wiki-Ext-2.markdown",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Not-Wiki-Ext.mkd",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Space In Name#6.md",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Space In Name.md",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/SubDirectory/File-In-Subdirectory.md",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/SubDirectory/In-Name.md",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/SubDirectory/Multiple-Match.md",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Test 4.2.md",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Test-Name.kt.md",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/anchor-in-name#5.md",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/normal-file.md",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/single-link-test.md"
+)
+
+val wikiMarkdownFiles = arrayListOf<String>(
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.markdown",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.md",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Multiple-Match.mkd",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Non-Vcs-Page.md",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Not-Wiki-Ext-2.markdown",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Not-Wiki-Ext.mkd",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Space In Name#6.md",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Space In Name.md",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/SubDirectory/File-In-Subdirectory.md",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/SubDirectory/In-Name.md",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/SubDirectory/Multiple-Match.md",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Test 4.2.md",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Test-Name.kt.md",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/anchor-in-name#5.md",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/normal-file.md",
+        "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/single-link-test.md"
 )
 
 val markdownRemoteFiles = arrayListOf<String>(

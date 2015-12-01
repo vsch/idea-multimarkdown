@@ -22,17 +22,17 @@ import org.junit.runners.Parameterized
 import java.util.*
 
 @RunWith(value = Parameterized::class)
-class TestLinkResolver_MarkdownTest_wiki__normal_file constructor(val rowId:Int, val fullPath: String
-                                                        , val linkRefType: (containingFile: FileRef, linkRef: String, anchor: String?, targetRef: FileRef?) -> LinkRef
-                                                                  , val linkText: String
-                                                                  , val linkAddress: String
-                                                                  , val linkAnchor: String?
-                                                                  , val linkTitle: String?
-                                                                  , resolvesLocalRel: String?
-                                                                  , resolvesExternalRel: String?
-                                                                  , val linkAddressText: String?
-                                                                  , multiResolvePartial: Array<String>
-                                                                  , val inspectionResults: ArrayList<InspectionResult>?
+class TestLinkResolver_Basic_wiki_normal_file constructor(val rowId:Int, val fullPath: String
+                                                          , val linkRefType: (containingFile: FileRef, linkRef: String, anchor: String?, targetRef: FileRef?) -> LinkRef
+                                                          , val linkText: String
+                                                          , val linkAddress: String
+                                                          , val linkAnchor: String?
+                                                          , val linkTitle: String?
+                                                          , resolvesLocalRel: String?
+                                                          , resolvesExternalRel: String?
+                                                          , val linkAddressText: String?
+                                                          , multiResolvePartial: Array<String>
+                                                          , val inspectionResults: ArrayList<InspectionResult>?
 ) {
     val resolvesLocal: String?
     val resolvesExternal: String?

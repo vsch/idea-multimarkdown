@@ -143,7 +143,7 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
 
                                     for (PathInfo fileRef : matchedFiles) {
                                         if (fileRef instanceof ProjectFileRef) {
-                                            addLinkRefCompletion(resultSet, resolver, linkRef, (ProjectFileRef) fileRef, withExtForWikiRef || !((ProjectFileRef) fileRef).isWikiPage(), uriLinks);
+                                            addLinkRefCompletion(resultSet, resolver, linkRef, fileRef, withExtForWikiRef || !((ProjectFileRef) fileRef).isWikiPage(), uriLinks);
                                         }
                                     }
 

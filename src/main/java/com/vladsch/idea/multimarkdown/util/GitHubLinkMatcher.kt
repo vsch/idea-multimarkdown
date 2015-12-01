@@ -65,7 +65,7 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
         private set
 
     // effective file extension: either file ext or if the filename starts with . and has no ext then the file name
-    var effectiveExt:String? = null
+    var effectiveExt: String? = null
         private set
 
     val isOnlyLooseMatchValid by lazy {
@@ -161,147 +161,161 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
             // if the page is a wiki home page then it will be treated as if it is located in the vcsRepoBasePath so that its relative links resolve correctly
             // however, this must be done for image links but is optional for non-image explicit links which resolve if the page was under the wiki directory
             // if it is a wiki but not the main page or not image link then its prefix is not changed
-            var prefixPath: String
             var repoLink: String = linkRef.filePath
             val projectDirName = PathInfo(vcsRepoBasePath).fileName
             val noWikiSubDirPattern = "(?!\\Q$projectDirName.wiki\\E)"
             var wikiPrefixIsOptional: Boolean? = null
             var linkRef = linkRef
 
-            if (linkRef.filePath.isEmpty() && linkRef.anchor != null) {
-                linkRef = linkRef.replaceFilePath(linkRef.containingFile.fileName);
-            }
+            val originalWantCompletionMatch = linkRef.anchor == null && (linkRef.filePath.isEmpty() || linkRef.fileNameNoExt.startsWith('.') && !linkRef.hasExt)
 
-            // here we resolve the start of the relative path
-            val containingFilePrefixPath =
-                    if (linkRef.containingFile.isWikiPage) {
-                        // for the home page image links require wiki/ prefix, for the rest it is optional
-                        if (linkRef.containingFile.isWikiHomePage) {
-                            if (linkRef is ImageLinkRef) {
-                                wikiPrefixIsOptional = false
-                                vcsRepoBasePath
-                            } else {
-                                wikiPrefixIsOptional = true
-                                vcsRepoBasePath + "wiki/"
-                            }
-                        } else vcsRepoBasePath + "wiki/"
-                    } else {
-                        vcsRepoBasePath + "blob/master/"
-                    }
-
-            // now append the link's path to see where we wind up
-            prefixPath = PathInfo.appendParts(containingFilePrefixPath, linkRef.linkToFile(linkRef.path)).filePath.suffixWith('/')
-
-            // we now see if we are still in the repo, if not then no match
-            if (!prefixPath.startsWith(vcsRepoBasePath)) return false
-
-            if (linkRef.fileName.isEmpty() && (prefixPath.equals(vcsRepoBasePath) || prefixPath.equals(vcsRepoBasePath.removeSuffix("/")))) {
-                // main repo link
-                prefixPath = vcsRepoBasePath
-                gitHubLink = ""
-                gitHubLinks = true
+            if (originalWantCompletionMatch) {
+                fixedPrefix = vcsRepoBasePath
             } else {
-                prefixPath = prefixPath.substring(vcsRepoBasePath.length).removeSuffix("/")
+                var prefixPath: String
 
-                if (prefixPath.isEmpty() && linkRef.fileName in GitHubLinkResolver.GITHUB_LINKS) {
-                    // add these to the path
-                    prefixPath += linkRef.fileName
-                    linkRef = linkRef.replaceFilePath("")
+                if (linkRef.filePath.isEmpty() && linkRef.anchor != null) {
+                    linkRef = linkRef.replaceFilePath(linkRef.containingFile.fileName);
                 }
 
-                val pathParts = prefixPath.split('/', limit = 3).iterator()
-
-                // we take the first subdirectory after the prefix
-                val firstSub = pathParts.next()
-                val linkQuery = firstSub.split('?', limit = 2).iterator()
-                val gitHubLink = linkQuery.next()
-                var linkParams = if (linkQuery.hasNext()) "?" + linkQuery.next() else ""
-                var linkParamsSuffix = ""
-
-                // now we see where we are
-                when {
-                    gitHubLink == "" && !linkRef.containingFile.isWikiHomePage -> {
-                        prefixPath = vcsRepoBasePath
-                        this.gitHubLink = "blob"
-                        this.branchOrTag = "master"
-                        linkParamsSuffix = "master"
-                    }
-                    gitHubLink == "wiki", gitHubLink == "" && linkRef.containingFile.isWikiHomePage -> {
-                        if (linkParams.isEmpty() && !pathParts.hasNext() && linkRef.fileNameNoExt.isEmpty()) {
-                            // just a link to wiki, match Home page
-                            linkParams = "Home" + linkParams
+                // here we resolve the start of the relative path
+                val containingFilePrefixPath =
+                        if (linkRef.containingFile.isWikiPage) {
+                            // for the home page image links require wiki/ prefix, for the rest it is optional
+                            if (linkRef.containingFile.isWikiHomePage) {
+                                if (linkRef is ImageLinkRef) {
+                                    wikiPrefixIsOptional = false
+                                    vcsRepoBasePath
+                                } else {
+                                    wikiPrefixIsOptional = true
+                                    vcsRepoBasePath + "wiki/"
+                                }
+                            } else vcsRepoBasePath + "wiki/"
+                        } else {
+                            vcsRepoBasePath + "blob/master/"
                         }
 
-                        if (gitHubLink == "" && wikiPrefixIsOptional === false) {
-                            // has to have a wiki prefix or it will not resolve in the wiki
-                            if (!pathParts.hasNext() || pathParts.next() != "wiki") {
-                                // to allow for loose matching
+                // now append the link's path to see where we wind up
+                prefixPath = PathInfo.appendParts(containingFilePrefixPath, linkRef.linkToFile(linkRef.path)).filePath.suffixWith('/')
+
+                // we now see if we are still in the repo, if not then no match
+                if (!prefixPath.startsWith(vcsRepoBasePath)) return false
+
+                if (linkRef.fileName.isEmpty() && (prefixPath.equals(vcsRepoBasePath) || prefixPath.equals(vcsRepoBasePath.removeSuffix("/")))) {
+                    // main repo link
+                    prefixPath = vcsRepoBasePath
+                    gitHubLink = ""
+                    gitHubLinks = true
+                } else {
+                    prefixPath = prefixPath.substring(vcsRepoBasePath.length).removeSuffix("/")
+
+                    if (!(linkRef.filePath.isEmpty() && linkRef.anchor == null)) {
+
+                    } else {
+                        // completion match
+                    }
+
+                    if (prefixPath.isEmpty() && linkRef.fileName in GitHubLinkResolver.GITHUB_LINKS) {
+                        // add these to the path
+                        prefixPath += linkRef.fileName
+                        linkRef = linkRef.replaceFilePath("")
+                    }
+
+                    val pathParts = prefixPath.split('/', limit = 3).iterator()
+
+                    // we take the first subdirectory after the prefix
+                    val firstSub = pathParts.next()
+                    val linkQuery = firstSub.split('?', limit = 2).iterator()
+                    val gitHubLink = linkQuery.next()
+                    var linkParams = if (linkQuery.hasNext()) "?" + linkQuery.next() else ""
+                    var linkParamsSuffix = ""
+
+                    // now we see where we are
+                    when {
+                        gitHubLink == "" && !linkRef.containingFile.isWikiHomePage -> {
+                            prefixPath = vcsRepoBasePath
+                            this.gitHubLink = "blob"
+                            this.branchOrTag = "master"
+                            linkParamsSuffix = "master"
+                        }
+                        gitHubLink == "wiki", gitHubLink == "" && linkRef.containingFile.isWikiHomePage -> {
+                            if (linkParams.isEmpty() && !pathParts.hasNext() && linkRef.fileNameNoExt.isEmpty()) {
+                                // just a link to wiki, match Home page
+                                linkParams = "Home" + linkParams
+                            }
+
+                            if (gitHubLink == "" && wikiPrefixIsOptional === false) {
+                                // has to have a wiki prefix or it will not resolve in the wiki
+                                if (!pathParts.hasNext() || pathParts.next() != "wiki") {
+                                    // to allow for loose matching
+                                    looseMatchOnly = true
+                                }
+                            }
+
+                            prefixPath = "$vcsRepoBasePath$projectDirName${PathInfo.WIKI_HOME_DIR_EXTENSION}/"
+                            this.gitHubLink = "wiki"
+                            wikiMatchingRules = true
+                        }
+                        gitHubLink == "blob", gitHubLink == "raw" -> {
+                            if (pathParts.hasNext()) {
+                                linkParamsSuffix = pathParts.next()
+                            } else {
+                                linkParamsSuffix = "master"
                                 looseMatchOnly = true
                             }
-                        }
 
-                        prefixPath = "$vcsRepoBasePath$projectDirName${PathInfo.WIKI_HOME_DIR_EXTENSION}/"
-                        this.gitHubLink = "wiki"
-                        wikiMatchingRules = true
-                    }
-                    gitHubLink == "blob", gitHubLink == "raw" -> {
-                        if (pathParts.hasNext()) {
-                            linkParamsSuffix = pathParts.next()
-                        } else {
-                            linkParamsSuffix = "master"
-                            looseMatchOnly = true
+                            branchOrTag = linkParamsSuffix
+                            prefixPath = vcsRepoBasePath
+                            this.gitHubLink = gitHubLink
                         }
-
-                        branchOrTag = linkParamsSuffix
-                        prefixPath = vcsRepoBasePath
-                        this.gitHubLink = gitHubLink
-                    }
-                    gitHubLink in GitHubLinkResolver.GITHUB_LINKS -> {
-                        if (linkRef is ImageLinkRef) {
-                            looseMatchOnly = true
-                        }
-
-                        prefixPath = "$vcsRepoBasePath$gitHubLink/"
-                        gitHubLinks = true
-                        this.gitHubLink = gitHubLink
-                    }
-                    else -> {
-                        if (linkRef.containingFile.isWikiHomePage) {
-                            // this one does checks in wiki, but only if it is not an image link
+                        gitHubLink in GitHubLinkResolver.GITHUB_LINKS -> {
                             if (linkRef is ImageLinkRef) {
                                 looseMatchOnly = true
                             }
+
+                            prefixPath = "$vcsRepoBasePath$gitHubLink/"
+                            gitHubLinks = true
+                            this.gitHubLink = gitHubLink
                         }
-                        prefixPath = "$vcsRepoBasePath$projectDirName${PathInfo.WIKI_HOME_DIR_EXTENSION}/"
-                        this.gitHubLink = "wiki"
-                        wikiMatchingRules = true
+                        else -> {
+                            if (linkRef.containingFile.isWikiHomePage) {
+                                // this one does checks in wiki, but only if it is not an image link
+                                if (linkRef is ImageLinkRef) {
+                                    looseMatchOnly = true
+                                }
+                            }
+                            prefixPath = "$vcsRepoBasePath$projectDirName${PathInfo.WIKI_HOME_DIR_EXTENSION}/"
+                            this.gitHubLink = "wiki"
+                            wikiMatchingRules = true
+                        }
                     }
+
+                    var splicedParts = pathParts.splice("/", skipEmpty = false)
+
+                    // if we have wiki already handled, and there is a wiki/ in the link then it must be optional or only loose match is possible
+                    if (wikiPrefixIsOptional !== true && gitHubLink == "wiki" && (splicedParts.startsWith("wiki/") || splicedParts == "wiki")) looseMatchOnly = true;
+
+                    // handle the optional wiki prefix for wiki/Home page
+                    if (wikiPrefixIsOptional === true || looseMatchOnly) {
+                        if (splicedParts.startsWith("wiki/")) splicedParts = splicedParts.substring("wiki/".length)
+                        else if (splicedParts == "wiki") splicedParts = ""
+                    }
+
+                    val gitHubRepoLink = (linkParams + arrayOf(linkParamsSuffix, splicedParts).reduce(skipEmptySplicer("/")).suffixWith('/') + linkRef.fileName).removePrefix("/")
+                    repoLink = (linkParams + splicedParts.suffixWith('/') + linkRef.fileName).removePrefix("/")
+                    gitHubLinkWithParams = this.gitHubLink + (if (!gitHubRepoLink.startsWith("?", "/")) "/" else "") + gitHubRepoLink + linkRef.anchorText
                 }
 
-                var splicedParts = pathParts.splice("/", skipEmpty = false)
+                fixedPrefix = prefixPath
 
-                // if we have wiki already handled, and there is a wiki/ in the link then it must be optional or only loose match is possible
-                if (wikiPrefixIsOptional !== true && gitHubLink == "wiki" && (splicedParts.startsWith("wiki/") || splicedParts == "wiki")) looseMatchOnly = true;
-
-                // handle the optional wiki prefix for wiki/Home page
-                if (wikiPrefixIsOptional === true || looseMatchOnly) {
-                    if (splicedParts.startsWith("wiki/")) splicedParts = splicedParts.substring("wiki/".length)
-                    else if (splicedParts == "wiki") splicedParts = ""
-                }
-
-                val gitHubRepoLink = (linkParams + arrayOf(linkParamsSuffix, splicedParts).reduce(skipEmptySplicer("/")).suffixWith('/') + linkRef.fileName).removePrefix("/")
-                repoLink = (linkParams + splicedParts.suffixWith('/') + linkRef.fileName).removePrefix("/")
-                gitHubLinkWithParams = this.gitHubLink + (if (!gitHubRepoLink.startsWith("?", "/")) "/" else "") + gitHubRepoLink + linkRef.anchorText
+                // no need for pattern match, we have the stuff
+                if (gitHubLinks) return true
             }
 
-            fixedPrefix = prefixPath
-
-            // no need for pattern match, we have the stuff
-            if (gitHubLinks) return true
 
             // from here we need to use repoLink, this is the stuff that comes after fixedPrefix
             linkRef = linkRef.replaceFilePath(fullPath = repoLink)
-            val wantCompletionMatch = linkRef.filePath.isEmpty() || linkRef.fileNameNoExt.startsWith('.') && !linkRef.hasExt
+            val wantCompletionMatch = originalWantCompletionMatch || linkRef.filePath.isEmpty() || linkRef.fileNameNoExt.startsWith('.') && !linkRef.hasExt
             val filePath = if (wantCompletionMatch) "" else linkRef.filePath
             val filePathNoExt = if (wantCompletionMatch) "" else linkRef.filePathNoExt
             val fileName = if (wantCompletionMatch) "" else linkRef.fileName

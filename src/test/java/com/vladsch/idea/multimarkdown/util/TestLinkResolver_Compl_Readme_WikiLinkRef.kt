@@ -16,21 +16,18 @@ package com.vladsch.idea.multimarkdown.util
 
 import com.vladsch.idea.multimarkdown.TestUtils.*
 import org.junit.Test
-import java.util.*
 
-class TestLinkResolver_MarkdownTest__Readme_ImageLinkRef_Completions {
+class TestLinkResolver_Compl_Readme_WikiLinkRef {
     val projectResolver: LinkResolver.ProjectResolver = MarkdownTestData
+    val containingFileRef = FileRef("/Users/vlad/src/MarkdownTest/Readme.md")
+    val resolver = GitHubLinkResolver(projectResolver, containingFileRef)
 
     /**
      * REMOTE or LOCAL URI
      */
     @Test
     fun test_LocalRemoteUri_With_png() {
-        val containingFileRef = FileRef("/Users/vlad/src/MarkdownTest/Readme.md")
-        val linkRef = ImageLinkRef(containingFileRef, ".png", null, null)
-
-        val resolver = GitHubLinkResolver(projectResolver, containingFileRef)
-
+        val linkRef = WikiLinkRef(containingFileRef, ".png", null, null)
         val list = resolver.multiResolve(linkRef, LinkResolver.PREFER_LOCAL or LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
@@ -39,11 +36,7 @@ class TestLinkResolver_MarkdownTest__Readme_ImageLinkRef_Completions {
 
     @Test
     fun test_LocalRemoteUri_With_kt() {
-        val containingFileRef = FileRef("/Users/vlad/src/MarkdownTest/Readme.md")
-        val linkRef = ImageLinkRef(containingFileRef, ".kt", null, null)
-
-        val resolver = GitHubLinkResolver(projectResolver, containingFileRef)
-
+        val linkRef = WikiLinkRef(containingFileRef, ".kt", null, null)
         val list = resolver.multiResolve(linkRef, LinkResolver.PREFER_LOCAL or LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
@@ -52,11 +45,7 @@ class TestLinkResolver_MarkdownTest__Readme_ImageLinkRef_Completions {
 
     @Test
     fun test_LocalRemoteUri_With_md() {
-        val containingFileRef = FileRef("/Users/vlad/src/MarkdownTest/Readme.md")
-        val linkRef = ImageLinkRef(containingFileRef, ".md", null, null)
-
-        val resolver = GitHubLinkResolver(projectResolver, containingFileRef)
-
+        val linkRef = WikiLinkRef(containingFileRef, ".md", null, null)
         val list = resolver.multiResolve(linkRef, LinkResolver.PREFER_LOCAL or LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
@@ -65,15 +54,11 @@ class TestLinkResolver_MarkdownTest__Readme_ImageLinkRef_Completions {
 
     @Test
     fun test_LocalRemoteUri_NoExt() {
-        val containingFileRef = FileRef("/Users/vlad/src/MarkdownTest/Readme.md")
-        val linkRef = ImageLinkRef(containingFileRef, "", null, null)
-
-        val resolver = GitHubLinkResolver(projectResolver, containingFileRef)
-
+        val linkRef = WikiLinkRef(containingFileRef, "", null, null)
         val list = resolver.multiResolve(linkRef, LinkResolver.PREFER_LOCAL or LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", imageFiles.asLocalURI(), list.asFilePaths())
+        compareOrderedLists("$matchText does not match\n", markdownFiles.asLocalURI(), list.asFilePaths())
     }
 
     /**
@@ -81,11 +66,7 @@ class TestLinkResolver_MarkdownTest__Readme_ImageLinkRef_Completions {
      */
     @Test
     fun test_RemoteUri_With_png() {
-        val containingFileRef = FileRef("/Users/vlad/src/MarkdownTest/Readme.md")
-        val linkRef = ImageLinkRef(containingFileRef, ".png", null, null)
-
-        val resolver = GitHubLinkResolver(projectResolver, containingFileRef)
-
+        val linkRef = WikiLinkRef(containingFileRef, ".png", null, null)
         val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
@@ -94,11 +75,7 @@ class TestLinkResolver_MarkdownTest__Readme_ImageLinkRef_Completions {
 
     @Test
     fun test_RemoteUri_With_kt() {
-        val containingFileRef = FileRef("/Users/vlad/src/MarkdownTest/Readme.md")
-        val linkRef = ImageLinkRef(containingFileRef, ".kt", null, null)
-
-        val resolver = GitHubLinkResolver(projectResolver, containingFileRef)
-
+        val linkRef = WikiLinkRef(containingFileRef, ".kt", null, null)
         val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
@@ -107,11 +84,7 @@ class TestLinkResolver_MarkdownTest__Readme_ImageLinkRef_Completions {
 
     @Test
     fun test_RemoteUri_With_md() {
-        val containingFileRef = FileRef("/Users/vlad/src/MarkdownTest/Readme.md")
-        val linkRef = ImageLinkRef(containingFileRef, ".md", null, null)
-
-        val resolver = GitHubLinkResolver(projectResolver, containingFileRef)
-
+        val linkRef = WikiLinkRef(containingFileRef, ".md", null, null)
         val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
@@ -120,15 +93,11 @@ class TestLinkResolver_MarkdownTest__Readme_ImageLinkRef_Completions {
 
     @Test
     fun test_RemoteUri_NoExt() {
-        val containingFileRef = FileRef("/Users/vlad/src/MarkdownTest/Readme.md")
-        val linkRef = ImageLinkRef(containingFileRef, "", null, null)
-
-        val resolver = GitHubLinkResolver(projectResolver, containingFileRef)
-
+        val linkRef = WikiLinkRef(containingFileRef, "", null, null)
         val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", imageRemoteFiles.asRemoteURI(), list.asFilePaths())
+        compareOrderedLists("$matchText does not match\n", markdownRemoteFiles.asRemoteURI(), list.asFilePaths())
     }
 
     /**
@@ -136,11 +105,7 @@ class TestLinkResolver_MarkdownTest__Readme_ImageLinkRef_Completions {
      */
     @Test
     fun test_Uri_With_png() {
-        val containingFileRef = FileRef("/Users/vlad/src/MarkdownTest/Readme.md")
-        val linkRef = ImageLinkRef(containingFileRef, ".png", null, null)
-
-        val resolver = GitHubLinkResolver(projectResolver, containingFileRef)
-
+        val linkRef = WikiLinkRef(containingFileRef, ".png", null, null)
         val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
@@ -149,11 +114,7 @@ class TestLinkResolver_MarkdownTest__Readme_ImageLinkRef_Completions {
 
     @Test
     fun test_Uri_With_kt() {
-        val containingFileRef = FileRef("/Users/vlad/src/MarkdownTest/Readme.md")
-        val linkRef = ImageLinkRef(containingFileRef, ".kt", null, null)
-
-        val resolver = GitHubLinkResolver(projectResolver, containingFileRef)
-
+        val linkRef = WikiLinkRef(containingFileRef, ".kt", null, null)
         val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
@@ -162,11 +123,7 @@ class TestLinkResolver_MarkdownTest__Readme_ImageLinkRef_Completions {
 
     @Test
     fun test_Uri_With_md() {
-        val containingFileRef = FileRef("/Users/vlad/src/MarkdownTest/Readme.md")
-        val linkRef = ImageLinkRef(containingFileRef, ".md", null, null)
-
-        val resolver = GitHubLinkResolver(projectResolver, containingFileRef)
-
+        val linkRef = WikiLinkRef(containingFileRef, ".md", null, null)
         val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
@@ -175,15 +132,11 @@ class TestLinkResolver_MarkdownTest__Readme_ImageLinkRef_Completions {
 
     @Test
     fun test_Uri_NoExt() {
-        val containingFileRef = FileRef("/Users/vlad/src/MarkdownTest/Readme.md")
-        val linkRef = ImageLinkRef(containingFileRef, "", null, null)
-
-        val resolver = GitHubLinkResolver(projectResolver, containingFileRef)
-
+        val linkRef = WikiLinkRef(containingFileRef, "", null, null)
         val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", imageFiles.asURI(), list.asFilePaths())
+        compareOrderedLists("$matchText does not match\n", markdownFiles.asURI(), list.asFilePaths())
     }
 
     /**
@@ -193,11 +146,7 @@ class TestLinkResolver_MarkdownTest__Readme_ImageLinkRef_Completions {
 
     @Test
     fun test_Remote_With_png() {
-        val containingFileRef = FileRef("/Users/vlad/src/MarkdownTest/Readme.md")
-        val linkRef = ImageLinkRef(containingFileRef, ".png", null, null)
-
-        val resolver = GitHubLinkResolver(projectResolver, containingFileRef)
-
+        val linkRef = WikiLinkRef(containingFileRef, ".png", null, null)
         val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.LOOSE_MATCH)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
@@ -206,11 +155,7 @@ class TestLinkResolver_MarkdownTest__Readme_ImageLinkRef_Completions {
 
     @Test
     fun test_Remote_With_kt() {
-        val containingFileRef = FileRef("/Users/vlad/src/MarkdownTest/Readme.md")
-        val linkRef = ImageLinkRef(containingFileRef, ".kt", null, null)
-
-        val resolver = GitHubLinkResolver(projectResolver, containingFileRef)
-
+        val linkRef = WikiLinkRef(containingFileRef, ".kt", null, null)
         val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.LOOSE_MATCH)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
@@ -219,11 +164,7 @@ class TestLinkResolver_MarkdownTest__Readme_ImageLinkRef_Completions {
 
     @Test
     fun test_Remote_With_md() {
-        val containingFileRef = FileRef("/Users/vlad/src/MarkdownTest/Readme.md")
-        val linkRef = ImageLinkRef(containingFileRef, ".md", null, null)
-
-        val resolver = GitHubLinkResolver(projectResolver, containingFileRef)
-
+        val linkRef = WikiLinkRef(containingFileRef, ".md", null, null)
         val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.LOOSE_MATCH)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
@@ -232,15 +173,11 @@ class TestLinkResolver_MarkdownTest__Readme_ImageLinkRef_Completions {
 
     @Test
     fun test_Remote_NoExt() {
-        val containingFileRef = FileRef("/Users/vlad/src/MarkdownTest/Readme.md")
-        val linkRef = ImageLinkRef(containingFileRef, "", null, null)
-
-        val resolver = GitHubLinkResolver(projectResolver, containingFileRef)
-
+        val linkRef = WikiLinkRef(containingFileRef, "", null, null)
         val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.LOOSE_MATCH)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", imageRemoteFiles, list.asFilePaths())
+        compareOrderedLists("$matchText does not match\n", markdownRemoteFiles, list.asFilePaths())
     }
 
     /**
@@ -248,11 +185,7 @@ class TestLinkResolver_MarkdownTest__Readme_ImageLinkRef_Completions {
      * BASIC
      */
     @Test fun test_Basic_WithExt_png() {
-        val containingFileRef = FileRef("/Users/vlad/src/MarkdownTest/Readme.md")
-        val linkRef = ImageLinkRef(containingFileRef, ".png", null, null)
-
-        val resolver = GitHubLinkResolver(projectResolver, containingFileRef)
-
+        val linkRef = WikiLinkRef(containingFileRef, ".png", null, null)
         val list = resolver.multiResolve(linkRef, LinkResolver.LOOSE_MATCH)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
@@ -260,11 +193,7 @@ class TestLinkResolver_MarkdownTest__Readme_ImageLinkRef_Completions {
     }
 
     @Test fun test_Basic_WithExt_iml() {
-        val containingFileRef = FileRef("/Users/vlad/src/MarkdownTest/Readme.md")
-        val linkRef = ImageLinkRef(containingFileRef, ".iml", null, null)
-
-        val resolver = GitHubLinkResolver(projectResolver, containingFileRef)
-
+        val linkRef = WikiLinkRef(containingFileRef, ".iml", null, null)
         val list = resolver.multiResolve(linkRef, LinkResolver.LOOSE_MATCH)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
@@ -275,11 +204,7 @@ class TestLinkResolver_MarkdownTest__Readme_ImageLinkRef_Completions {
     }
 
     @Test fun test_Basic_WithExt_kt() {
-        val containingFileRef = FileRef("/Users/vlad/src/MarkdownTest/Readme.md")
-        val linkRef = ImageLinkRef(containingFileRef, ".kt", null, null)
-
-        val resolver = GitHubLinkResolver(projectResolver, containingFileRef)
-
+        val linkRef = WikiLinkRef(containingFileRef, ".kt", null, null)
         val list = resolver.multiResolve(linkRef, LinkResolver.LOOSE_MATCH)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
@@ -287,11 +212,7 @@ class TestLinkResolver_MarkdownTest__Readme_ImageLinkRef_Completions {
     }
 
     @Test fun test_Basic_WithExt_md() {
-        val containingFileRef = FileRef("/Users/vlad/src/MarkdownTest/Readme.md")
-        val linkRef = ImageLinkRef(containingFileRef, ".md", null, null)
-
-        val resolver = GitHubLinkResolver(projectResolver, containingFileRef)
-
+        val linkRef = WikiLinkRef(containingFileRef, ".md", null, null)
         val list = resolver.multiResolve(linkRef, LinkResolver.LOOSE_MATCH)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
@@ -299,15 +220,11 @@ class TestLinkResolver_MarkdownTest__Readme_ImageLinkRef_Completions {
     }
 
     @Test fun test_Basic_NoExt() {
-        val containingFileRef = FileRef("/Users/vlad/src/MarkdownTest/Readme.md")
-        val linkRef = ImageLinkRef(containingFileRef, "", null, null)
-
-        val resolver = GitHubLinkResolver(projectResolver, containingFileRef)
-
+        val linkRef = WikiLinkRef(containingFileRef, "", null, null)
         val list = resolver.multiResolve(linkRef, LinkResolver.LOOSE_MATCH)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", imageFiles, list.asFilePaths())
+        compareOrderedLists("$matchText does not match\n", markdownFiles, list.asFilePaths())
     }
 
 }

@@ -21,19 +21,19 @@ import org.junit.runners.Parameterized
 import java.util.*
 
 @RunWith(value = Parameterized::class)
-class TestLinkResolver_MarkdownTest__Readme constructor(val rowId: Int, val fullPath: String
-                                                        , val linkRefType: (containingFile: FileRef, linkRef: String, anchor: String?, targetRef: FileRef?) -> LinkRef
-                                                        , val linkText: String
-                                                        , val linkAddress: String
-                                                        , val linkAnchor: String?
-                                                        , val linkTitle: String?
-                                                        , resolvesLocalRel: String?
-                                                        , resolvesExternalRel: String?
-                                                        , val linkAddressText: String?
-                                                        , val remoteAddressText: String?
-                                                        , val uriText: String?
-                                                        , multiResolvePartial: Array<String>
-                                                        , val inspectionResults: ArrayList<InspectionResult>?
+class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: String
+                                                , val linkRefType: (containingFile: FileRef, linkRef: String, anchor: String?, targetRef: FileRef?) -> LinkRef
+                                                , val linkText: String
+                                                , val linkAddress: String
+                                                , val linkAnchor: String?
+                                                , val linkTitle: String?
+                                                , resolvesLocalRel: String?
+                                                , resolvesExternalRel: String?
+                                                , val linkAddressText: String?
+                                                , val remoteAddressText: String?
+                                                , val uriText: String?
+                                                , multiResolvePartial: Array<String>
+                                                , val inspectionResults: ArrayList<InspectionResult>?
 ) {
     val resolvesLocal: String?
     val resolvesExternal: String?
