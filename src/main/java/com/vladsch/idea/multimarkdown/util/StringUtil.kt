@@ -24,6 +24,30 @@ import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
 import java.net.URLEncoder
 
+fun String?.ifNullOr(condition:Boolean, altValue:String): String {
+    return if (this == null || condition) altValue else this
+}
+
+fun String?.ifNullOrNot(condition:Boolean, altValue:String): String {
+    return if (this == null || !condition) altValue else this
+}
+
+inline fun String?.ifNullOr(condition:(String)->Boolean, altValue:String): String {
+    return if (this == null || condition(this)) altValue else this
+}
+
+inline fun String?.ifNullOrNot(condition:(String)->Boolean, altValue:String): String {
+    return if (this == null || !condition(this)) altValue else this
+}
+
+fun String?.ifNullOrEmpty(altValue:String): String {
+    return if (this == null || this.isEmpty()) altValue else this
+}
+
+fun String?.ifNullOrBlank(altValue:String): String {
+    return if (this == null || this.isBlank()) altValue else this
+}
+
 fun String?.wrapWith(prefixSuffix: Char): String {
     return wrapWith(prefixSuffix, prefixSuffix)
 }

@@ -24,10 +24,7 @@ import com.google.common.io.Resources;
 import com.intellij.ide.ui.UISettings;
 import com.intellij.ide.ui.UISettingsListener;
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.components.*;
 import com.intellij.util.ui.UIUtil;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.util.ListenerNotifier;
@@ -43,7 +40,11 @@ import java.net.URL;
 
 @State(
         name = "MultiMarkdownSettings",
-        storages = @Storage(id = "other", file = "$APP_CONFIG$/multimarkdown.xml")
+        storages = {
+                @Storage(id = "shared", file = StoragePathMacros.APP_CONFIG + "/multimarkdown.shared.xml"),
+                //@Storage(id = "other", file = StoragePathMacros.APP_CONFIG + "/multimarkdown.xml", roamingType = RoamingType.DISABLED)
+                @Storage(id = "other", file = StoragePathMacros.APP_CONFIG + "/multimarkdown.xml", deprecated = true)
+        }
 )
 public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Element>, Disposable {
 
@@ -135,25 +136,29 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     final public Settings.IntegerSetting tabbedPaneIndex = settings.IntegerSetting(0, "tabbedPaneIndex");
     final public Settings.StringSetting customCss = settings.StringSetting("", "customCss");
     final public Settings.StringSetting customFxCss = settings.StringSetting("", "customFxCss");
-    final public Settings.ElementSetting customCssEditorState = settings.ElementSetting(null, "customCssEditorState");
-    final public Settings.ElementSetting customFxCssEditorState = settings.ElementSetting(null, "customFxCssEditorState");
     final public Settings.BooleanSetting useOldPreview = settings.BooleanSetting(false, "useOldPreview", 0);
-
-    // notifications that are only shown once
-    final public Settings.BooleanSetting wasShownDarkBug = settings.BooleanSetting(false, "wasShownDarkBug", 0);
-    final public Settings.BooleanSetting wasShownLicensedAvailable = settings.BooleanSetting(false, "wasShownLicensedAvailable", 0);
 
     // TODO: add this option to pegdown
     final public Settings.BooleanSetting githubWikiLinks = settings.BooleanSetting(true, "githubWikiLinks", 0);
 
+
+    // Local Application Level Settings Now
+    final public Settings.ElementSetting customCssEditorState = settings.LocalElementSetting(null, "customCssEditorState");
+    final public Settings.ElementSetting customFxCssEditorState = settings.LocalElementSetting(null, "customFxCssEditorState");
+
+    // notifications that are only shown once
+    final public Settings.BooleanSetting wasShownDarkBug = settings.LocalBooleanSetting(false, "wasShownDarkBug", 0, false);
+    final public Settings.BooleanSetting wasShownLicensedAvailable = settings.LocalBooleanSetting(false, "wasShownLicensedAvailable", 0);
+
     // when loading of classes fails for some earlier builds these are used to store the build number to avoid retrying until the build changes
+    // caution: failed builds are always local
     final public Settings.FailedBuildSetting scratchFileServiceFailed = settings.FailedBuildSetting("", "scratchFileServiceFailed");
     final public Settings.FailedBuildSetting lightParserFailedBuild = settings.FailedBuildSetting("", "lightParserFailedBuild");
     final public Settings.FailedBuildSetting fxPreviewFailedBuild = settings.FailedBuildSetting("", "fxPreviewFailedBuild", true);
     //final public Settings.FailedBuildSetting fxPlatformFailedBuild = settings.FailedBuildSetting("", "fxPlatformFailedBuild", true);
 
-    final public Settings.StringSetting licenseCode = settings.StringSetting("", "licenseCode");
-    final public Settings.StringSetting activationCode = settings.StringSetting("", "activationCode");
+    final public Settings.StringSetting licenseCode = settings.LocalStringSetting("", "licenseCode");
+    final public Settings.StringSetting activationCode = settings.LocalStringSetting("", "activationCode");
 
     public boolean isFxHtmlPreview() {
         return isFxHtmlPreview;
@@ -165,15 +170,30 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
 
     static boolean isFxHtmlPreview = false;
 
+    @Nullable
+    @Override
     public Element getState() {
-        // vsch: hardwire github wiki links
-        githubWikiLinks.setValue(true);
-        return settings.getState("MultiMarkdownSettings");
+        return getState(false);
     }
 
-    public void loadState(@NotNull Element element) {
+    @Override
+    public void loadState(Element state) {
+        loadState(state, null);
+    }
+
+    // HACK: persistence is now split for roaming and non-roaming settings by having another class handle the non-roaming storage.
+    public Element getState(Boolean isRoamingDisabled) {
+        // vsch: hardwire github wiki links
+        githubWikiLinks.setValue(true);
+        final Element element = new Element("MultiMarkdownSettings");
+        settings.getState(element, isRoamingDisabled);
+        return element;
+    }
+
+    // HACK: persistence is now split for roaming and non-roaming settings by having another class handle the non-roaming storage.
+    public void loadState(@NotNull Element element, Boolean isRoamingDisabled) {
         startGroupNotifications();
-        settings.loadState(element);
+        settings.loadState(element, isRoamingDisabled);
         // vsch: hardwire github wiki links
         githubWikiLinks.setValue(true);
         endGroupNotifications();
@@ -201,7 +221,7 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     }
 
     @NotNull
-    public String getColorsCssExternalForm(boolean isFxHtmlPreview) {
+    public String getColorsCssExternalForm(boolean cisFxHtmlPreview) {
         return isDarkHtmlPreview() ? MultiMarkdownPlugin.getInstance().getUrlDarculaFxCss() : MultiMarkdownPlugin.getInstance().getUrlDefaultFxCss();
     }
 

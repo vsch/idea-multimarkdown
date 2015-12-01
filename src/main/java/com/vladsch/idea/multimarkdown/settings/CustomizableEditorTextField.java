@@ -34,6 +34,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.ui.EditorTextField;
 import com.intellij.util.LocalTimeCounter;
+import com.intellij.util.xml.ui.BooleanColumnInfo;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -247,16 +248,17 @@ public class CustomizableEditorTextField extends EditorTextField implements Comp
     }
 
     private void setRawText(@Nullable final String text) {
-        ((Settings.IntegerSetting) selectionOffset.getSetting(0)).setValue(0);
-        ((Settings.IntegerSetting) selectionOffset.getSetting(1)).setValue(0);
-        ((Settings.IntegerSetting) caretOffset.getSetting(0)).setValue(0);
+        selectionOffset.getSetting(0).setValue(0);
+        selectionOffset.getSetting(1).setValue(0);
+        caretOffset.getSetting(0).setValue(0);
         handlers.loadState((EditorEx) getEditor());
 
         super.setText(text);
     }
 
+    // all the settings are either roaming or non-roaming, there is no splitting
     @Override public Element getState(String elementName) {
-        return handlers.getState((EditorEx) getEditor(), elementName, this);
+        return handlers.getState((EditorEx) getEditor(), elementName, this, null);
     }
 
     public void loadState(@NotNull final Element element) {
@@ -278,10 +280,12 @@ public class CustomizableEditorTextField extends EditorTextField implements Comp
     }
 
     @Override public boolean haveSavedState() {
+        //noinspection unchecked
         return getEditor() != null && selectionOffset.isSettingValid((EditorEx) getEditor());
     }
 
     public boolean haveSavedState(@NotNull EditorEx ex) {
+        //noinspection unchecked
         return selectionOffset.isSettingValid(ex);
     }
 

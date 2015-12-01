@@ -56,7 +56,7 @@ public class MultiMarkdownAnnotator implements Annotator {
         //noinspection StatementWithEmptyBody
         AnnotationState state = new AnnotationState(holder);
 
-        //noinspection ConstantIfStatement,StatementWithEmptyBody
+        //noinspection ConstantConditions, StatementWithEmptyBody
         if (false) {
         } else if (element instanceof MultiMarkdownWikiLink) {
         } else if (element instanceof MultiMarkdownExplicitLink) {

@@ -49,15 +49,27 @@ public class Settings {
     }
 
     public BooleanSetting BooleanSetting(Boolean initialValue, String persistName, int flags) {
-        return new BooleanSetting(initialValue, persistName, flags);
+        return new BooleanSetting(initialValue, persistName, flags, false, false);
     }
 
     public BooleanSetting BooleanSetting(Boolean initialValue, String persistName, int flags, boolean isLicensedFeature) {
-        return new BooleanSetting(initialValue, persistName, flags, isLicensedFeature);
+        return new BooleanSetting(initialValue, persistName, flags, isLicensedFeature, false);
+    }
+
+    public BooleanSetting LocalBooleanSetting(Boolean initialValue, String persistName, int flags) {
+        return new BooleanSetting(initialValue, persistName, flags, false, true);
+    }
+
+    public BooleanSetting LocalBooleanSetting(Boolean initialValue, String persistName, int flags, boolean isLicensedFeature) {
+        return new BooleanSetting(initialValue, persistName, flags, isLicensedFeature, true);
     }
 
     public ElementSetting ElementSetting(Element initialValue, String persistName) {
-        return new ElementSetting(initialValue, persistName);
+        return new ElementSetting(initialValue, persistName, false, false);
+    }
+
+    public ElementSetting LocalElementSetting(Element initialValue, String persistName) {
+        return new ElementSetting(initialValue, persistName, false, true);
     }
 
     public IntegerSetting IntegerSetting(Integer initialValue, String persistName) {
@@ -69,42 +81,64 @@ public class Settings {
     }
 
     public StringSetting StringSetting(String initialValue, String persistName) {
-        return new StringSetting(initialValue, persistName);
+        return new StringSetting(initialValue, persistName, false, false);
+    }
+
+    public StringSetting StringSetting(String initialValue, String persistName, boolean isLicensedFeature) {
+        return new StringSetting(initialValue, persistName, isLicensedFeature, false);
+    }
+
+    public StringSetting LocalStringSetting(String initialValue, String persistName) {
+        return new StringSetting(initialValue, persistName, false, true);
+    }
+
+    public StringSetting LocalStringSetting(String initialValue, String persistName, boolean isLicensedFeature) {
+        return new StringSetting(initialValue, persistName, isLicensedFeature, true);
     }
 
     public FailedBuildSetting FailedBuildSetting(String initialValue, String persistName) {
-        return new FailedBuildSetting(initialValue, persistName, false);
+        return new FailedBuildSetting(initialValue, persistName, false, true);
     }
 
     public FailedBuildSetting FailedBuildSetting(String initialValue, String persistName, boolean withJdk) {
-        return new FailedBuildSetting(initialValue, persistName, withJdk);
+        return new FailedBuildSetting(initialValue, persistName, withJdk, true);
     }
 
-    public Element getState(String name) {
-        final Element element = new Element(name);
-        for (Setting setting : settings) {
-            setting.saveState(element);
-        }
-        return element;
-    }
+    //public Element getState(String name) {
+    //    final Element element = new Element(name);
+    //    for (Setting setting : settings) {
+    //        setting.saveState(element);
+    //    }
+    //    return element;
+    //}
 
-    public Element getState(String name, ComponentProvider provider) {
-        final Element element = new Element(name);
+    public void getState(Element element, Boolean isRoamingDisabled) {
         for (Setting setting : settings) {
-            String value = (String) provider.getComponent(setting.persistName);
-            if (value == null) {
-                value = (String) provider.getComponent(setting.persistName);
+            if (isRoamingDisabled == null || setting.isNonRoaming == isRoamingDisabled) {
+                setting.saveState(element);
             }
-            setting.setValue(value == null ? setting.getDefaultValue() : setting.fromString(value));
-            setting.saveState(element);
+        }
+    }
+
+    public Element getState(String name, ComponentProvider provider, Boolean isRoamingDisabled) {
+        final Element element = new Element(name);
+        for (Setting setting : settings) {
+            if (isRoamingDisabled == null || setting.isNonRoaming == isRoamingDisabled) {
+                String value = (String) provider.getComponent(setting.persistName);
+                //noinspection unchecked
+                setting.setValue(value == null ? setting.getDefaultValue() : setting.fromString(value));
+                setting.saveState(element);
+            }
         }
         return element;
     }
 
-    public void loadState(@NotNull Element element) {
+    public void loadState(@NotNull Element element, Boolean isRoamingDisabled) {
         if (notifier != null) notifier.startGroupNotifications();
         for (Setting setting : settings) {
-            setting.loadState(element);
+            if (isRoamingDisabled == null || setting.isNonRoaming == isRoamingDisabled) {
+                setting.loadState(element);
+            }
         }
         if (notifier != null) notifier.endGroupNotifications();
     }
@@ -116,6 +150,7 @@ public class Settings {
             } else {
                 String storedValue = element.getAttributeValue(setting.persistName);
                 String currentValue = (String) componentProvider.getComponent(setting.persistName);
+                //noinspection ConstantConditions
                 if ((storedValue == null) != (currentValue == null)
                         || (storedValue != null && currentValue != null
                         && !setting.fromString(currentValue).equals(setting.fromString(storedValue)))) return true;
@@ -136,18 +171,24 @@ public class Settings {
         private T value;
         final protected T initialValue;
         final protected boolean isLicensedFeature;
+        final protected boolean isNonRoaming;
 
         protected String persistName;
 
         public Setting(T initialValue, String persistName) {
-            this(initialValue, persistName, false);
+            this(initialValue, persistName, false, false);
         }
 
         public Setting(T initialValue, String persistName, boolean isLicensedFeature) {
+            this(initialValue, persistName, isLicensedFeature, false);
+        }
+
+        public Setting(T initialValue, String persistName, boolean isLicensedFeature, boolean isNonRoaming) {
             this.initialValue = initialValue;
             this.value = initialValue;
             this.persistName = persistName;
             this.isLicensedFeature = isLicensedFeature;
+            this.isNonRoaming = isNonRoaming;
             settings.add(this);
         }
 
@@ -246,13 +287,8 @@ public class Settings {
     public class BooleanSetting extends Setting<Boolean> {
         final protected int flags;
 
-        public BooleanSetting(Boolean initialValue, String persistName, int flags) {
-            super(initialValue, persistName);
-            this.flags = flags;
-        }
-
-        public BooleanSetting(Boolean initialValue, String persistName, int flags, boolean isLicensedFeature) {
-            super(initialValue, persistName, isLicensedFeature);
+        public BooleanSetting(Boolean initialValue, String persistName, int flags, boolean isLicensedFeature, boolean isNonRoaming) {
+            super(initialValue, persistName, isLicensedFeature, isNonRoaming);
             this.flags = flags;
         }
 
@@ -273,7 +309,7 @@ public class Settings {
     }
 
     public class StringSetting extends Setting<String> {
-        public StringSetting(String initialValue, String persistName) { super(initialValue, persistName); }
+        public StringSetting(String initialValue, String persistName, boolean isLicensedFeature, boolean isNonRoaming) { super(initialValue, persistName, isLicensedFeature, isNonRoaming); }
 
         @Override
         public String fromString(String text) {
@@ -310,8 +346,8 @@ public class Settings {
     public class FailedBuildSetting extends StringSetting {
         protected final boolean withJdk;
 
-        public FailedBuildSetting(String initialValue, String persistName, boolean withJdk) {
-            super(initialValue, persistName);
+        public FailedBuildSetting(String initialValue, String persistName, boolean withJdk, boolean isNonRoaming) {
+            super(initialValue, persistName, false, true);
             this.withJdk = withJdk;
         }
 
@@ -346,8 +382,8 @@ public class Settings {
     }
 
     public class ElementSetting extends Setting<Element> {
-        public ElementSetting(Element initialValue, String persistName) {
-            super(initialValue != null ? initialValue.clone() : null, persistName);
+        public ElementSetting(Element initialValue, String persistName, boolean isLicensedFeature, boolean isNonRoaming) {
+            super(initialValue != null ? initialValue.clone() : null, persistName, isLicensedFeature, isNonRoaming);
         }
 
         @Override

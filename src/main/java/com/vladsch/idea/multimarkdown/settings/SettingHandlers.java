@@ -38,17 +38,17 @@ public class SettingHandlers<M> extends Settings {
         super(notifier);
     }
 
-    public Element getState(@Nullable M model, String elementName, ComponentProvider componentProvider) {
+    public Element getState(@Nullable M model, String elementName, ComponentProvider componentProvider, Boolean isRoamingDisabled) {
         if (model != null) {
             for (GroupHandler<M> handler : handlers) {
                 handler.saveModelValue(model);
             }
         }
-        return super.getState(elementName, componentProvider);
+        return super.getState(elementName, componentProvider, isRoamingDisabled);
     }
 
     public void loadState(@Nullable M model, @NotNull Element element) {
-        super.loadState(element);
+        super.loadState(element, null);
         loadState(model);
     }
 

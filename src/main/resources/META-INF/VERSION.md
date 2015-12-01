@@ -9,6 +9,7 @@
 - Fix: anchor links markdown extension was always enabled when 'Use Old Preview' was selected, regardless of preferences settings
 - Add: fork and raw GitHub link to be recognized
 - Add: line icon to show multiple resolved targets
+- Change: preferences for the plugin are now split between local, non-roaming persistence in multimarkdown.local.xml and shared roaming persistence in multimarkdown.shared.xml. Preferences from multimarkdown.xml are migrated to new files and the file is deleted. 
 
 #### Enhanced Edition
 
@@ -22,6 +23,7 @@
 - Add: validation of absolute links that look like they are targeting files in the same repository as the containing file 
 - Add: navigation line items for absolute links that resolve to files
 - Add: absolute address link completions and link completions based on extensions other than markdown for wiki and explicit and images for image links, just add https:// in front to get url completions and .ext without a file name to get extension based completions.  
+- Fix #71: license information is now saved in multimarkdown.local.xml and is marked as non-roaming 
 
 ### 1.2.2 - Bug Fixes and Enhancements
 

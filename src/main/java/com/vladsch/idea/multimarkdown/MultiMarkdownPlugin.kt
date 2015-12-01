@@ -43,6 +43,7 @@ import com.vladsch.idea.multimarkdown.license.LicenseAgent
 import com.vladsch.idea.multimarkdown.license.LicenseRequest
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener
+import com.vladsch.idea.multimarkdown.settings.MultiMarkdownNonRoamingGlobalSettings
 import org.apache.log4j.ConsoleAppender
 import org.apache.log4j.Level
 import org.apache.log4j.Logger
@@ -96,6 +97,7 @@ class MultiMarkdownPlugin : ApplicationComponent {
         //System.setProperty("prism.lcdtext", "false");
         myClassLoader = null
         val settings = MultiMarkdownGlobalSettings.getInstance()
+        val nonRoamingSettings = MultiMarkdownNonRoamingGlobalSettings.getInstance()
         classLoader
 
         license_features = 0

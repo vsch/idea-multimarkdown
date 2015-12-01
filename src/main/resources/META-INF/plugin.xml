@@ -41,7 +41,7 @@
         </div>
         ]]></description>
 
-    <version>1.2.2.6</version>
+    <version>1.2.2.7</version>
     <idea-version since-build="133.1711"/>
     <change-notes><![CDATA[
     <ul>
@@ -54,6 +54,7 @@
         <li>Fix: anchor links markdown extension was always enabled when 'Use Old Preview' was selected, regardless of preferences settings</li>
         <li>Add: fork and raw GitHub link to be recognized</li>
         <li>Add: line icon to show multiple resolved targets</li>
+        <li>Change: preferences for the plugin are now split between local, non-roaming persistence in multimarkdown.local.xml and shared roaming persistence in multimarkdown.shared.xml. Preferences from multimarkdown.xml are migrated to new files and the file is deleted.</li>
         <h4><strong>Enhanced Edition</strong></h4>
         <li>Change: new implementation of file link resolving logic handles a full set of GitHub idiosyncrasies for relative links, file extensions and case sensitivity.</li>
         <li>Add: new annotation inspections for common errors in link resolution</li>
@@ -65,6 +66,7 @@
         <li>Add: validation of absolute links that look like they are targeting files in the same repository as the containing file</li>
         <li>Add: navigation line items for absolute links that resolve to files</li>
         <li>Add: absolute address link completions and link completions based on extensions other than markdown for wiki and explicit and images for image links, just add https:// in front to get url completions and .ext without a file name to get extension based completions.</li>
+        <li>Fix #71: license information is now saved in multimarkdown.local.xml and is marked as non-roaming</li>
     </ul>
     <ul>
       <h3>1.2.2 - Bug Fixes and Enhancements</h3>
@@ -438,6 +440,7 @@
         <annotator language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.annotator.MultiMarkdownAnnotator"/>
         <applicationConfigurable instance="com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsConfigurable"/>
         <applicationService serviceInterface="com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings" serviceImplementation="com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings"/>
+        <applicationService serviceInterface="com.vladsch.idea.multimarkdown.settings.MultiMarkdownNonRoamingGlobalSettings" serviceImplementation="com.vladsch.idea.multimarkdown.settings.MultiMarkdownNonRoamingGlobalSettings"/>
         <codeStyleSettingsProvider implementation="com.vladsch.idea.multimarkdown.language.MultiMarkdownCodeStyleSettingsProvider"/>
         <colorSettingsPage implementation="com.vladsch.idea.multimarkdown.highlighter.MultiMarkdownColorSettingsPage"/>
         <completion.contributor language="MultiMarkdown" implementationClass="com.vladsch.idea.multimarkdown.language.MultiMarkdownCompletionContributor"/>

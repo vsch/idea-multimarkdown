@@ -14,10 +14,21 @@
  */
 package com.vladsch.idea.multimarkdown
 
+import org.jetbrains.annotations.Contract
+
+
+fun String?.ifNullOrEmpty(altValue:String): String {
+    return if (this == null || this.isEmpty()) altValue else this
+}
+
+fun String?.ifNullOrBlank(altValue:String): String {
+    return if (this == null || this.isBlank()) altValue else this
+}
 
 object Test {
     val isNullable: String? = null
     val isNotNullable = ""
-    val test1 = with<String?, String?>(isNullable) { if (this.isNullOrEmpty()) isNotNullable else this }
+    val test1 = with<String?, String>(isNullable) { this.ifNullOrEmpty(isNotNullable) }
     val test2 = with<String?, String>(isNullable) { if (this == null || this.isEmpty()) isNotNullable else this }
 }
+
