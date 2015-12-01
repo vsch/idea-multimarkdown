@@ -79,7 +79,7 @@ class TestLinkResolver_MarkdownTest_wiki__Home constructor(val rowId:Int, val fu
 
     @Test fun test_ResolveExternal() {
         if (skipTest) return
-        val localRef = resolver.resolve(linkRef, LinkResolver.PREFER_REMOTE, fileList)
+        val localRef = resolver.resolve(linkRef, LinkResolver.ONLY_REMOTE, fileList)
         assertEqualsMessage("External does not match ${resolver.getMatcher(linkRef).linkAllMatch}", resolvesExternal, localRef?.filePath)
     }
 
@@ -136,7 +136,9 @@ class TestLinkResolver_MarkdownTest_wiki__Home constructor(val rowId:Int, val fu
                 val filePathInfo = PathInfo(row[0] as String)
                 for (inspectionRow in inspectionData) {
                     if (inspectionRow[0] == i) {
-                        inspections.add(InspectionResult(inspectionRow[1] as String, inspectionRow[2] as Severity, inspectionRow[3] as String?, resolveRelativePath(filePathInfo, inspectionRow[4] as String?)?.filePath))
+                        val inspectionResult = InspectionResult(inspectionRow[1] as String, inspectionRow[2] as Severity, inspectionRow[3] as String?, resolveRelativePath(filePathInfo, inspectionRow[4] as String?)?.filePath)
+                        inspectionResult.referenceId = i
+                        inspections.add(inspectionResult)
                     }
                 }
 

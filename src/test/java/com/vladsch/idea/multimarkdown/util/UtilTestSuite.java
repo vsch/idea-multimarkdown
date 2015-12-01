@@ -31,7 +31,10 @@ import org.junit.runners.Suite;
         TestLinkMatcher_MultiSub.class,
         TestLinkResolver_MarkdownTest_wiki__Home.class,
         TestLinkResolver_MarkdownTest_wiki__normal_file.class,
-        TestLinkResolver_MarkdownTest__Readme.class
+        TestLinkResolver_MarkdownTest__Readme.class,
+        TestLinkResolver_MarkdownTest__Readme_LinkRef_Completions.class,
+        TestLinkResolver_MarkdownTest__Readme_WikiLinkRef_Completions.class,
+        TestLinkResolver_MarkdownTest__Readme_ImageLinkRef_Completions.class
 })
 public class UtilTestSuite {
 }

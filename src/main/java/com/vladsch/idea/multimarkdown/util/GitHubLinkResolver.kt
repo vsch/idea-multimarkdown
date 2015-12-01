@@ -84,6 +84,10 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
         return _matcher
     }
 
+    fun getLastMatcher(): GitHubLinkMatcher? {
+        return matcher
+    }
+
     constructor(virtualFile: VirtualFile, project: Project) : this(MultiMarkdownPlugin.getProjectComponent(project)!!, FileRef(virtualFile.path))
 
     constructor(projectFileRef: ProjectFileRef) : this(MultiMarkdownPlugin.getProjectComponent(projectFileRef.project)!!, projectFileRef)
@@ -161,13 +165,12 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
     }
 
     protected fun getTargetFileTypes(extensions: List<String>?): HashSet<FileType> {
-
         val typeSet = HashSet<FileType>()
-        if (extensions == null) return typeSet
+        if (extensions == null || project == null) return typeSet
 
         val typeManager = FileTypeManager.getInstance() as FileTypeManagerImpl
         for (ext in extensions) {
-            val targetFileType = typeManager.getFileTypeByExtension(ext)
+            val targetFileType = typeManager.getFileTypeByExtension(ext.removePrefix("."))
             typeSet.add(targetFileType)
         }
         return typeSet
@@ -179,7 +182,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                 if (!wantLocal(options) && projectResolver.isUnderVcs(targetRef)) {
                     // remote available
                     if (wantOnlyURI(options)) {
-                        val remoteUrl = projectResolver.getGitHubRepo(targetRef)?.urlForVcsRemote(targetRef, targetRef.isRawFile, linkRef.anchor, branchOrTag)
+                        val remoteUrl = projectResolver.getVcsRoot(targetRef)?.urlForVcsRemote(targetRef, targetRef.isRawFile, linkRef.anchor, branchOrTag)
                         if (remoteUrl != null) {
                             val urlRef = LinkRef.parseLinkRef(linkRef.containingFile, remoteUrl, targetRef)
                             assert(urlRef.isExternal, { "expected to get URL, instead got $urlRef" })
@@ -190,7 +193,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                     }
                 } else {
                     // URL only, we need to convert to URI file:// type
-                    if (wantOnlyURI(options)) return LinkRef(containingFile, "file://" + targetRef.filePath, null, targetRef as FileRef?)
+                    if (wantLocal(options) && wantOnlyURI(options)) return LinkRef(containingFile, "file://" + targetRef.filePath, null, targetRef as FileRef?)
                 }
             } else {
                 // local, remote or URL
@@ -251,26 +254,24 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                         linkMatcher.linkAllMatchExtensions
                     }
 
-//            val allFiles = ArrayList<String>()
+            //            val allFiles = ArrayList<String>()
 
             if (fromList == null) {
                 val targetFileTypes = getTargetFileTypes(allExtensions)
                 if (targetFileTypes.isEmpty() || project == null) {
-                    if (targetFileTypes.isNotEmpty()) {
-                        // Only used in testing, runtime uses the file indices
-                        val projectFileList = projectResolver.projectFileList(targetFileTypes)
-                        if (projectFileList != null) {
-                            for (fileRef in projectFileList) {
-                                if (fileRef.filePath.matches(if (fileRef.isWikiPage) allMatchWiki else allMatchNonWiki)) {
-                                    // here we need to test for wiki page links that resolve to raw files, these have to match case sensitive
-                                    if (allMatchNonWiki === allMatchWiki || !linkMatcher.wikiMatchingRules || !linkRef.hasExt || fileRef.filePath.matches(allMatchNonWiki)) {
-                                        matches.add(fileRef)
-                                    }
+                    // Only used in testing, runtime uses the file indices
+                    if (project != null) return ArrayList(0)
+
+                    val projectFileList = projectResolver.projectFileList(allExtensions)
+                    if (projectFileList != null) {
+                        for (fileRef in projectFileList) {
+                            if (fileRef.filePath.matches(if (fileRef.isWikiPage) allMatchWiki else allMatchNonWiki)) {
+                                // here we need to test for wiki page links that resolve to raw files, these have to match case sensitive
+                                if (allMatchNonWiki === allMatchWiki || !linkMatcher.wikiMatchingRules || !linkRef.hasExt || fileRef.filePath.matches(allMatchNonWiki)) {
+                                    matches.add(fileRef)
                                 }
                             }
                         }
-                    } else {
-                        return ArrayList(0)
                     }
                 } else {
                     //val projectFileList = projectResolver.projectFileList(targetFileTypes)
@@ -371,13 +372,31 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
             }
         }
 
-        if (linkMatcher.gitHubLinks && wantRemote(options) && wantURI(options)) {
-            // no need to check for links, the matcher has the link already set and we even pass all the stuff after the link
-            val remoteUrl = projectResolver.getGitHubRepo(linkRef.containingFile)?.gitHubBaseUrl
-            if (remoteUrl != null) {
-                assert(remoteUrl.startsWith("http://") || remoteUrl.startsWith("https://"), { "remote vcsRepoBase has to start with http:// or https://, instead got $remoteUrl" })
-                val urlRef = LinkRef.parseLinkRef(linkRef.containingFile, remoteUrl.suffixWith('/') + linkMatcher.gitHubLinkWithParams, null)
-                matches.add(urlRef)
+        if (wantRemote(options) && wantURI(options) && linkRef !is WikiLinkRef && linkRef !is ImageLinkRef) {
+            if (linkMatcher.gitHubLinks) {
+                // no need to check for links, the matcher has the link already set and we even pass all the stuff after the link
+                val remoteUrl = projectResolver.getVcsRoot(linkRef.containingFile)?.baseUrl
+                if (remoteUrl != null) {
+                    assert(remoteUrl.startsWith("http://") || remoteUrl.startsWith("https://"), { "remote vcsRepoBase has to start with http:// or https://, instead got $remoteUrl" })
+                    val urlRef = LinkRef.parseLinkRef(linkRef.containingFile, remoteUrl.suffixWith('/') + linkMatcher.gitHubLinkWithParams, null)
+                    matches.add(urlRef)
+                }
+            } else if (linkMatcher.isOnlyLooseMatchValid && linkMatcher.effectiveExt.isNullOrEmpty()) {
+                val vcsRoot = projectResolver.getVcsRoot(linkRef.containingFile)
+                if (vcsRoot != null) {
+                    val remoteUrl = vcsRoot.baseUrl
+                    val basePath = vcsRoot.basePath
+                    val allMatchWiki = linkMatcher.linkLooseMatch!!.toRegex(RegexOption.IGNORE_CASE)
+
+                    assert(remoteUrl.startsWith("http://") || remoteUrl.startsWith("https://"), { "remote vcsRepoBase has to start with http:// or https://, instead got $remoteUrl" })
+
+                    for (link in GITHUB_NON_FILE_LINKS) {
+                        if ((basePath.suffixWith('/') + link).matches(allMatchWiki)) {
+                            val urlRef = LinkRef.parseLinkRef(linkRef.containingFile, remoteUrl.suffixWith('/') + link, null)
+                            matches.add(urlRef)
+                        }
+                    }
+                }
             }
         }
 
@@ -481,7 +500,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
             }
         } else if (targetRef.isURI) {
             // convert git hub links to relative links
-            val remoteUrl = projectResolver.getGitHubRepo(linkRef.containingFile)?.gitHubBaseUrl
+            val remoteUrl = projectResolver.getVcsRoot(linkRef.containingFile)?.gitHubBaseUrl
             if (remoteUrl != null) {
                 assert(remoteUrl.startsWith("http://", "https://"), { "remote vcsRepoBase has to start with http:// or https://, instead got ${remoteUrl}" })
 
@@ -574,7 +593,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                 return relRef
             }
         } else if (linkRef.isExternal) {
-            val gitHubVcsRoot = projectResolver.getGitHubRepo(linkRef.containingFile)
+            val gitHubVcsRoot = projectResolver.getVcsRoot(linkRef.containingFile)
             if (gitHubVcsRoot != null) {
                 val gitHubRepoBaseUrl = gitHubVcsRoot.baseUrl
                 if (linkRef.filePath.startsWith(gitHubRepoBaseUrl)) {

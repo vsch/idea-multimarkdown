@@ -333,7 +333,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
 
     @Nullable
     @Override
-    public GitHubVcsRoot getGitHubRepo(@NotNull FileRef fileRef) {
+    public GitHubVcsRoot getVcsRoot(@NotNull FileRef fileRef) {
         return getGitHubRepo(fileRef.getPath());
     }
 
@@ -360,7 +360,8 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
 
     @Nullable
     @Override
-    public List<FileRef> projectFileList(@NotNull HashSet<FileType> fileTypes) {
+    public List<FileRef> projectFileList(@Nullable List<? extends String> fileTypes) {
+        assert false: "Should never be called";
         return null;
     }
 
@@ -418,6 +419,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         });
     }
 
+    @NotNull
     public Project getProject() {
         return project;
     }

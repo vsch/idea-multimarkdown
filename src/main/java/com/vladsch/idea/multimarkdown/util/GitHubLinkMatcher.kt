@@ -64,6 +64,10 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
     var wikiMatchingRules = false
         private set
 
+    // effective file extension: either file ext or if the filename starts with . and has no ext then the file name
+    var effectiveExt:String? = null
+        private set
+
     val isOnlyLooseMatchValid by lazy {
         computeMatchText()
     }
@@ -123,6 +127,7 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
             val ext = if (linkRef.fileName.startsWith('.') && !linkRef.hasExt) linkRef.fileName else linkRef.ext
             val linkExtensions = if (linkRef.fileName.startsWith('.') && !linkRef.hasExt) arrayOf() else linkRef.linkExtensions
             val emptyMatchesAll = filePath.isEmpty() || wantCompletionMatch
+            effectiveExt = ext
 
             val pureAnchor = linkRef.filePath.isEmpty() && linkRef.anchor != null
             if (useLooseMatch) {
@@ -252,6 +257,10 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
                         this.gitHubLink = gitHubLink
                     }
                     gitHubLink in GitHubLinkResolver.GITHUB_LINKS -> {
+                        if (linkRef is ImageLinkRef) {
+                            looseMatchOnly = true
+                        }
+
                         prefixPath = "$vcsRepoBasePath$gitHubLink/"
                         gitHubLinks = true
                         this.gitHubLink = gitHubLink
@@ -300,6 +309,7 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
             val ext = if (linkRef.fileName.startsWith('.') && !linkRef.hasExt) linkRef.fileName else linkRef.ext
             val linkExtensions = if (linkRef.fileName.startsWith('.') && !linkRef.hasExt) arrayOf() else linkRef.linkExtensions
             val emptyMatchesAll = filePath.isEmpty() || wantCompletionMatch
+            effectiveExt = ext
 
             if (wikiMatchingRules) {
                 // same as wiki link but without the wiki to file name conversion and the anchor matching, anchor needs to be escaped

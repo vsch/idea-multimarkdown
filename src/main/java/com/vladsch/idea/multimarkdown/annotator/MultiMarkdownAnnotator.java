@@ -116,7 +116,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                         state.annotator.registerFix(new ChangeLinkRefQuickFix(element, newLinkAddress, ChangeLinkRefQuickFix.CHANGE_TO_RELATIVE, RENAME_KEEP_ANCHOR | RENAME_KEEP_TEXT | RENAME_KEEP_TITLE));
                     }
                 } else {
-                    PathInfo absRef = resolver.resolve(relativeRefInfo, LinkResolver.ONLY_URI | LinkResolver.PREFER_REMOTE, targetRefs);
+                    PathInfo absRef = resolver.resolve(relativeRefInfo, LinkResolver.ONLY_URI | LinkResolver.ONLY_REMOTE, targetRefs);
                     if (absRef instanceof LinkRef && absRef.isExternal()) {
                         state.createAnnotation(Severity.WEAK_WARNING, element.getTextRange(), MultiMarkdownBundle.message("annotation.link.can-be-absolute"));
                         String newLinkAddress = absRef.getFilePath();
