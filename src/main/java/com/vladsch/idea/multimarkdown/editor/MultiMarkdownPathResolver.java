@@ -79,7 +79,7 @@ public class MultiMarkdownPathResolver {
 
         if (projectComponent != null) {
             if (virtualFile != null && projectComponent.isUnderVcs(virtualFile)) {
-                GitHubVcsRoot gitHubVcsRoot = projectComponent.getGitHubRepo(virtualFile.getPath());
+                GitHubVcsRoot gitHubVcsRoot = projectComponent.getGitHubRepo(new PathInfo(virtualFile.getPath()).getPath());
                 if (gitHubVcsRoot != null) {
                     return gitHubVcsRoot.urlForVcsRemote(virtualFile, withExtension, anchor, null);
                 }

@@ -70,7 +70,7 @@ open class LinkRef(val containingFile: FileRef, fullPath: String, anchorTxt: Str
 
     val remoteURL: String? by lazy {
         if (targetRef is ProjectFileRef) {
-            targetRef.gitHubVcsRoot?.gitHubBaseUrl.suffixWith('/') + filePath + anchorText
+            targetRef.gitHubVcsRoot?.getBaseUrl().suffixWith('/') + filePath + anchorText
         } else if (isExternal) {
             filePath + anchorText
         } else {
@@ -92,8 +92,14 @@ open class LinkRef(val containingFile: FileRef, fullPath: String, anchorTxt: Str
         return LinkRef(containingFile, fullPath, anchor, if (withTargetRef) targetRef else null)
     }
 
-    override fun equals(other:Any?) : Boolean {
+    override fun equals(other: Any?): Boolean {
         return this === other || other is LinkRef && this.filePath == other.filePath
+    }
+
+    override fun hashCode(): Int {
+        var result = containingFile.hashCode()
+        result += 31 * result + (anchor?.hashCode() ?: 0)
+        return result
     }
 
     companion object {
@@ -197,18 +203,23 @@ open class LinkRef(val containingFile: FileRef, fullPath: String, anchorTxt: Str
         )
 
         // CAUTION: just copies link address without figuring out whether it will resolve as is
-        @JvmStatic fun from(linkRef: LinkRef): LinkRef? {
+        @JvmStatic fun from(linkRef: LinkRef): LinkRef {
             return when (linkRef) {
                 is ImageLinkRef ->
                     LinkRef(linkRef.containingFile, if (linkRef.filePath.isEmpty()) linkRef.containingFile.fileNameNoExt else linkRef.fileName, linkRef.anchor, linkRef.targetRef)
-                is WikiLinkRef ->
-                    LinkRef(linkRef.containingFile, if (linkRef.filePath.isEmpty()) linkRef.containingFile.fileNameNoExt else WikiLinkRef.linkAsFile(linkRef.fileName), linkRef.anchor, linkRef.targetRef)
+                is WikiLinkRef -> {
+                    val wikiLink = WikiLinkRef.linkAsFile(linkRef.filePathNoExt)
+
+                    if (wikiLink.equals(linkRef.containingFile.fileNameNoExt, ignoreCase = true))
+                        LinkRef(linkRef.containingFile, "", linkRef.anchor.orEmpty(), linkRef.targetRef)
+                    else
+                        LinkRef(linkRef.containingFile, linkRef.filePath.ifEmpty("", WikiLinkRef.linkAsFile(linkRef.fileName)), linkRef.filePath.ifEmptyNulls(linkRef.anchor.orEmpty(), linkRef.anchor), linkRef.targetRef)
+                }
                 else -> linkRef
             }
         }
     }
 }
-
 
 
 // this is a [[]] style link ref
@@ -230,8 +241,12 @@ open class WikiLinkRef(containingFile: FileRef, fullPath: String, anchor: String
         return WikiLinkRef(containingFile, fullPath, anchor, if (withTargetRef) targetRef else null)
     }
 
-    override fun equals(other:Any?) : Boolean {
+    override fun equals(other: Any?): Boolean {
         return this === other || other is WikiLinkRef && this.filePath == other.filePath
+    }
+
+    override fun hashCode(): Int{
+        return super.hashCode()
     }
 
     companion object {
@@ -284,8 +299,12 @@ open class ImageLinkRef(containingFile: FileRef, fullPath: String, anchor: Strin
         return ImageLinkRef(containingFile, fullPath, anchor, if (withTargetRef) targetRef else null)
     }
 
-    override fun equals(other:Any?) : Boolean {
+    override fun equals(other: Any?): Boolean {
         return this === other || other is ImageLinkRef && this.filePath == other.filePath
+    }
+
+    override fun hashCode(): Int{
+        return super.hashCode()
     }
 
     // CAUTION: just copies link address without figuring out whether it will resolve as is

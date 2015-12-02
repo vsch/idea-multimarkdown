@@ -25,7 +25,6 @@ import com.intellij.ProjectTopics;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootAdapter;
@@ -53,7 +52,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -62,6 +60,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
 
     private final static int LISTENER_ADDED = 0;
     private final static int SYMBOL_REF_CHANGED = 1;
+    public static final Object NULL_VCS_ROOT = new Object();
 
     private ConcurrentHashMap<String, Object> gitHubRepos = null;
 
@@ -299,19 +298,32 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
     @Nullable
     public GitHubVcsRoot getGitHubRepo(@Nullable String baseDirectoryPath) {
         if (project.isDisposed()) return null;
-        if (baseDirectoryPath == null) baseDirectoryPath = project.getBasePath();
-        if (baseDirectoryPath == null) return null;
+
+        String projectBasePath = project.getBasePath();
+        if (projectBasePath == null) return null;
+
+        if (baseDirectoryPath == null) baseDirectoryPath = projectBasePath;
 
         if (gitHubRepos == null) {
             gitHubRepos = new ConcurrentHashMap<String, Object>();
         }
 
+        // TODO: optimize this to reduce directory scanning for git config by using the VcsRoots defined in the IDE to find roots and only read config for defined roots
+        baseDirectoryPath = StringUtilKt.removeEnd(baseDirectoryPath, '/');
+        projectBasePath = StringUtilKt.removeEnd(projectBasePath, '/');
         if (!gitHubRepos.containsKey(baseDirectoryPath)) {
-            GitHubVcsRoot gitHubVcsRoot = GitHubVcsRoot.getGitHubVcsRoot(this, baseDirectoryPath, project.getBasePath());
-            gitHubRepos.put(baseDirectoryPath, gitHubVcsRoot != null ? gitHubVcsRoot : new Object());
+            GitHubVcsRoot gitHubVcsRoot = GitHubVcsRoot.getGitHubVcsRoot(baseDirectoryPath, projectBasePath);
+            // add all intervening directories to point to this repo or null if none was found so we don't search for it again
+            String gitRootBaseDir = gitHubVcsRoot == null ? projectBasePath : StringUtilKt.removeEnd(gitHubVcsRoot.getBasePath(), '/');
+            PathInfo currentBaseDir = new PathInfo(baseDirectoryPath);
+            do {
+                //logger.info("getGitHubRepo("+baseDirectoryPath+") : Adding vcsRepoRoot: " + gitHubVcsRoot + " for " + currentBaseDir.getFilePath());
+                gitHubRepos.put(currentBaseDir.getFilePath(), gitHubVcsRoot != null ? gitHubVcsRoot : NULL_VCS_ROOT);
+                if (currentBaseDir.getFilePath().equals(gitRootBaseDir)) break;
+                currentBaseDir = new PathInfo(currentBaseDir.getPath());
+            } while (!currentBaseDir.isEmpty() && !currentBaseDir.isRoot() && !currentBaseDir.getFilePath().equals(gitRootBaseDir) && !currentBaseDir.getFilePath().equals(projectBasePath));
         }
 
-        // TODO: optimize this to reduce directory scanning for git config by using the VcsRoots defined in the IDE to find roots and only read config for defined roots
         Object object = gitHubRepos.get(baseDirectoryPath);
         return object instanceof GitHubVcsRoot ? (GitHubVcsRoot) object : null;
     }

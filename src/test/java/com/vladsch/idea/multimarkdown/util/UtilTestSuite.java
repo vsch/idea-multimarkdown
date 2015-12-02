@@ -28,6 +28,7 @@ import org.junit.runners.Suite;
         TestPathInfo.class,
         TestFileInfo.class,
         TestLinkRef.class,
+        TestLinkRef_from.class,
         TestLinkMatcher_MultiSub.class,
         TestLinkResolver_Basic_wiki_Home.class,
         TestLinkResolver_Basic_wiki_normal_file.class,

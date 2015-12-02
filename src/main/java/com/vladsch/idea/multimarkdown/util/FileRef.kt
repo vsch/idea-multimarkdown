@@ -40,6 +40,8 @@ open class FileRef(fullPath: String, private val _virtualFile: VirtualFile?) : P
 
     constructor(psiElement: PsiElement) : this(psiElement.containingFile)
 
+    constructor(fileRef: FileRef) : this(fileRef._fullPath, fileRef._virtualFile)
+
     constructor(fullPath: String) : this(fullPath, null)
 
     init {

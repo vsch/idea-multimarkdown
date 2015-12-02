@@ -400,14 +400,11 @@ public class MultiMarkdownPsiImplUtil {
 
             if (sourceLinkRef != null) {
                 LinkRef linkRef = LinkRef.from(sourceLinkRef);
-
-                if (linkRef != null) {
-                    if (linkText.isEmpty()) {
-                        // TODO: use suggestion for default text
-                        linkText = !linkRefTitle.isEmpty() ? linkRefTitle : WikiLinkRef.fileAsLink(linkRef.linkToFile(linkRef.getFileNameNoExt()));
-                    }
-                    return MultiMarkdownExplicitLinkImpl.getElementText(linkRef.getFilePath(), linkText, linkRef.getAnchorText(), linkRefTitle);
+                if (linkText.isEmpty()) {
+                    // TODO: use suggestion for default text
+                    linkText = WikiLinkRef.fileAsLink(linkRef.linkToFile(sourceLinkRef.getFileNameNoExt()));
                 }
+                return MultiMarkdownExplicitLinkImpl.getElementText(linkRef.getFilePath(), linkText, linkRef.getAnchorText(), linkRefTitle);
             }
         }
         return "";

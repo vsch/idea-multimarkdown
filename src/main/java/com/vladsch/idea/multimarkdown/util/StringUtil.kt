@@ -194,21 +194,26 @@ fun String?.urlEncode(charSet: String? = null): String {
     }
 }
 
-fun String?.ifEmpty(vararg args: String?): String {
+fun String?.ifEmpty(arg: String): String {
     if (this != null && !this.isEmpty()) return this
-    for (arg in args) {
-        if (arg != null && !arg.isEmpty()) return arg
-    }
-    return ""
+    return arg
 }
 
-fun String?.ifEmpty(vararg args: () -> String?): String {
+fun String?.ifEmpty(ifEmptyArg: String, ifNotEmptyArg: String): String {
+    return if (this == null || this.isEmpty()) ifEmptyArg else ifNotEmptyArg
+}
+
+fun String?.ifEmptyNulls(ifEmptyArg: String?, ifNotEmptyArg: String?): String? {
+    return if (this == null || this.isEmpty()) ifEmptyArg else ifNotEmptyArg
+}
+
+fun String?.ifEmpty(arg: () -> String): String {
     if (this != null && !this.isEmpty()) return this
-    for (arg in args) {
-        val alt = arg()
-        if (alt != null && !alt.isEmpty()) return alt
-    }
-    return ""
+    return arg()
+}
+
+fun String?.ifEmpty(ifEmptyArg: () -> String?, ifNotEmptyArg: () -> String?): String? {
+    return if (this == null || this.isEmpty()) ifEmptyArg() else ifNotEmptyArg()
 }
 
 fun String?.removeStart(prefix: Char): String {
@@ -221,6 +226,20 @@ fun String?.removeStart(prefix: Char): String {
 fun String?.removeStart(prefix: String): String {
     if (this != null) {
         return removePrefix(prefix)
+    }
+    return ""
+}
+
+fun String?.removeEnd(prefix: Char): String {
+    if (this != null) {
+        return removeSuffix(prefix.toString())
+    }
+    return ""
+}
+
+fun String?.removeEnd(prefix: String): String {
+    if (this != null) {
+        return removeSuffix(prefix)
     }
     return ""
 }

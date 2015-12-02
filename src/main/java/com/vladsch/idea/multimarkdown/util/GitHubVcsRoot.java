@@ -19,7 +19,6 @@ package com.vladsch.idea.multimarkdown.util;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,14 +39,25 @@ public class GitHubVcsRoot {
     final private static Pattern URL_VALUE = Pattern.compile("\\s*url\\s*=\\s*([^\\s]*)\\.git");
     final protected static String GIT_CONFIG = "config";
 
-    @NotNull protected final String gitHubBaseUrl;
+    @NotNull private final String gitHubBaseUrl;
     @NotNull private final String basePath;
     @NotNull private final String projectBasePath;
     private final boolean isWiki;
 
     @VisibleForTesting
     protected GitHubVcsRoot(@NotNull String gitHubBaseUrl, @NotNull String basePath) {
-        this.gitHubBaseUrl = StringUtilKt.suffixWith(gitHubBaseUrl, '/');
+        // strip out username if the url contains @ from URL
+        // regex: ^(https?://)(?:[^@]*\Q@\E)(.*)$
+        // replace with $1$2
+        String _gitHubBaseUrl = gitHubBaseUrl;
+        int atPos = _gitHubBaseUrl.indexOf('@', 7);
+        if ((_gitHubBaseUrl.startsWith("http://") || _gitHubBaseUrl.startsWith("https://")) && atPos > 0) {
+            int prefixPos = _gitHubBaseUrl.startsWith("http://") ? "http://".length() : "https://".length();
+            _gitHubBaseUrl = _gitHubBaseUrl.substring(0, prefixPos) + _gitHubBaseUrl.substring(atPos+1);
+            //logger.info("cleaned username from url " + gitHubBaseUrl + " -> " + _gitHubBaseUrl);
+        }
+
+        this.gitHubBaseUrl = StringUtilKt.suffixWith(_gitHubBaseUrl, '/');
         this.basePath = StringUtilKt.suffixWith(basePath, '/');
         this.isWiki = new FileRef(this.basePath + "Home.md").isUnderWikiDir();
         this.projectBasePath = this.isWiki ? new PathInfo(this.basePath).getPath() : this.basePath;
@@ -194,12 +204,7 @@ public class GitHubVcsRoot {
     }
 
     @Nullable
-    public static GitHubVcsRoot getGitHubVcsRoot(@NotNull MultiMarkdownProjectComponent projectComponent, @Nullable String path, @Nullable String basePath) {
-        return getGitHubVcsRoot(projectComponent, path, basePath, null);
-    }
-
-    @Nullable
-    public static GitHubVcsRoot getGitHubVcsRoot(@NotNull MultiMarkdownProjectComponent projectComponent, @Nullable String path, @Nullable String basePath, @Nullable String gitConfig) {
+    public static GitHubVcsRoot getGitHubVcsRoot(@Nullable String path, @Nullable String basePath) {
         if (path == null || basePath == null) return null;
 
         String nextPath = path;
@@ -208,7 +213,7 @@ public class GitHubVcsRoot {
 
             String gitPath = getGitPath(pathInfo.getFilePath());
             if (gitPath != null) {
-                File gitConfigFile = new File(gitPath, gitConfig != null ? gitConfig : GIT_CONFIG);
+                File gitConfigFile = new File(gitPath, GIT_CONFIG);
                 if (gitConfigFile.exists() && gitConfigFile.isFile()) {
                     String baseUrl = getBaseUrl(gitConfigFile);
                     if (baseUrl != null) {

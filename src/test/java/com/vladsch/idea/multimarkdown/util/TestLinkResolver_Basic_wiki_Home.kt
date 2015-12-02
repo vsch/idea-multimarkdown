@@ -44,7 +44,7 @@ class TestLinkResolver_Basic_wiki_Home constructor(val rowId:Int, val fullPath: 
     val multiResolve: Array<String>
     val localLinkRef = resolvesLocalRel
     val externalLinkRef = resolvesExternalRel
-    val skipTest = linkRef.isExternal
+    val skipTest = false //linkRef.isExternal
 
     fun resolveRelativePath(filePath: String?): PathInfo? {
         return if (filePath == null) null else if (filePath.startsWith("http://", "https://")) PathInfo(filePath) else PathInfo.appendParts(filePathInfo.path, filePath)

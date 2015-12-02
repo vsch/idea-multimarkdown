@@ -184,13 +184,11 @@ class ChangeLinkRefQuickFix extends BaseIntentionAction {
                         //
                         //    rename.doRefactoring(usages); // modified 'usages' array
                         //}
+                    } finally {
+                        projectComponent.popRefactoringRenameFlags();
+                    }
                 }
-                finally
-                {
-                    projectComponent.popRefactoringRenameFlags();
-                }
-            }
-        }.execute();
+            }.execute();
+        }
     }
-}
 }

@@ -110,15 +110,15 @@ public class MultiMarkdownAnnotator implements Annotator {
 
             if (resolvedTargetInfo != null && MultiMarkdownPlugin.isLicensed()) {
                 if (linkRefInfo.isURI()) {
-                    state.createAnnotation(Severity.WEAK_WARNING, element.getTextRange(), MultiMarkdownBundle.message("annotation.link.can-be-relative"));
-                    String newLinkAddress = resolver.linkAddress(relativeRefInfo, resolvedTargetInfo, null, null, null);
+                    state.createAnnotation(Severity.WEAK_WARNING, parentElement.getTextRange(), MultiMarkdownBundle.message("annotation.link.can-be-relative"));
+                    String newLinkAddress = resolver.linkAddress(relativeRefInfo, resolvedTargetInfo, null, null, "");
                     if (state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, newLinkAddress)) {
                         state.annotator.registerFix(new ChangeLinkRefQuickFix(element, newLinkAddress, ChangeLinkRefQuickFix.CHANGE_TO_RELATIVE, RENAME_KEEP_ANCHOR | RENAME_KEEP_TEXT | RENAME_KEEP_TITLE));
                     }
-                } else {
-                    PathInfo absRef = resolver.resolve(relativeRefInfo, LinkResolver.ONLY_URI | LinkResolver.ONLY_REMOTE, targetRefs);
+                } else if (!(linkRefInfo instanceof WikiLinkRef)) {
+                    PathInfo absRef = resolver.resolve(linkRefInfo, LinkResolver.ONLY_URI | LinkResolver.ONLY_REMOTE, targetRefs);
                     if (absRef instanceof LinkRef && absRef.isExternal()) {
-                        state.createAnnotation(Severity.WEAK_WARNING, element.getTextRange(), MultiMarkdownBundle.message("annotation.link.can-be-absolute"));
+                        state.createAnnotation(Severity.WEAK_WARNING, parentElement.getTextRange(), MultiMarkdownBundle.message("annotation.link.can-be-absolute"));
                         String newLinkAddress = absRef.getFilePath();
                         if (state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, newLinkAddress)) {
                             state.annotator.registerFix(new ChangeLinkRefQuickFix(element, newLinkAddress, ChangeLinkRefQuickFix.CHANGE_TO_ABSOLUTE, RENAME_KEEP_ANCHOR | RENAME_KEEP_TEXT | RENAME_KEEP_TITLE));
@@ -409,7 +409,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                         if (state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, linkRefText)) {
                             state.annotator.registerFix(new ChangeLinkRefQuickFix(element, linkRefText, 0, RENAME_KEEP_TITLE | RENAME_KEEP_ANCHOR));
                             // TODO: make max quick fix wikilink targets a config item
-                            if (state.getAlreadyOfferedSize(TYPE_CHANGE_LINK_REF_QUICK_FIX) >= hadItems+15) break;
+                            if (state.getAlreadyOfferedSize(TYPE_CHANGE_LINK_REF_QUICK_FIX) >= hadItems + 15) break;
                         }
                     }
                 }

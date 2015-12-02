@@ -114,33 +114,35 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
         assertContainingFile(linkRef)
         // TODO: if only want local, then can try to resolve external links to local file refs if they map, for that need to parse the
         // LinkRef's URL file path and remove the repoPrefix for non-Wiki and wikiRepoPrefix for wiki files, then prefix the result with the corresponding basePath
-        var targetRef: PathInfo = linkRef
+        var linkRef_ = linkRef
+        var targetRef: PathInfo = linkRef_
 
-        if (linkRef.isSelfAnchor) {
-            if (linkRef is WikiLinkRef && linkRef.filePath.isEmpty()) {
+        if (linkRef_.isSelfAnchor) {
+            if (linkRef_ is WikiLinkRef && linkRef_.filePath.isEmpty()) {
                 // here it is a pure anchor wiki link, which does not resolve
                 if (!wantLooseMatch(options)) return null
             }
 
-            targetRef = linkRef.containingFile
+            targetRef = linkRef_.containingFile
+            linkRef_ = linkRef.replaceFilePath(if (linkRef_.hasExt) targetRef.fileName else targetRef.fileNameNoExt)
         }
 
         if (targetRef.isURI) {
-            val relPath = uriToRelativeLink(linkRef)
+            val relPath = uriToRelativeLink(linkRef_)
             if (relPath is LinkRef) {
-                targetRef = relPath
+                linkRef_ = relPath
             }
         }
 
-        if (!linkRef.isAbsolute) {
+        if (!linkRef_.isAbsolute) {
             // resolve the relative link as per requested options
-            val linkRefMatcher = getMatcher(linkRef)
-            val matches = getMatchedRefs(linkRef, linkRefMatcher, options, inList)
+            val linkRefMatcher = getMatcher(linkRef_)
+            val matches = getMatchedRefs(linkRef_, linkRefMatcher, options, inList)
             var resolvedRef = (if (matches.size > 0) matches[0] else null) ?: return null
             targetRef = resolvedRef
         }
 
-        return processMatchOptions(linkRef, targetRef, options)
+        return processMatchOptions(linkRef_, targetRef, options)
     }
 
     override fun multiResolve(linkRef: LinkRef, options: Int, inList: List<PathInfo>?): List<PathInfo> {
@@ -202,7 +204,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
         } else {
             if (!wantOnlyURI(options) && targetRef.isLocal) {
                 // must be a file:// type, we convert it to a projectFileType if we have a project and just a path if we do not
-                assert(targetRef.filePath.startsWith("file:"))
+                assert(targetRef.filePath.startsWith("file:"), {"Expected local targetRef, got $targetRef"})
                 if (project != null) {
                     return targetRef.projectFileRef(project)
                 }
@@ -296,7 +298,9 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                         if (fileRef.filePath.matches(if (fileRef.isWikiPage) allMatchWiki else allMatchNonWiki)) {
                             // here we need to test for wiki page links that resolve to raw files, these have to match case sensitive
                             if (allMatchNonWiki === allMatchWiki || !linkMatcher.wikiMatchingRules || !fileRef.isWikiPage || !linkRef.hasExt || fileRef.filePath.matches(allMatchNonWiki)) {
-                                matches.add(fileRef)
+                                // if isRawFile is set we cannot reuse it, since in our case it may no longer be raw access
+                                if (fileRef.isRawFile) matches.add(FileRef(fileRef))
+                                else matches.add(fileRef)
                             }
                         }
                     }
@@ -500,7 +504,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
             }
         } else if (targetRef.isURI) {
             // convert git hub links to relative links
-            val remoteUrl = projectResolver.getVcsRoot(linkRef.containingFile)?.gitHubBaseUrl
+            val remoteUrl = projectResolver.getVcsRoot(linkRef.containingFile)?.getBaseUrl()
             if (remoteUrl != null) {
                 assert(remoteUrl.startsWith("http://", "https://"), { "remote vcsRepoBase has to start with http:// or https://, instead got ${remoteUrl}" })
 
@@ -599,10 +603,11 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
         } else if (linkRef.isExternal) {
             val gitHubVcsRoot = projectResolver.getVcsRoot(linkRef.containingFile)
             if (gitHubVcsRoot != null) {
-                val gitHubRepoBaseUrl = gitHubVcsRoot.baseUrl
+                var gitHubRepoBaseUrl = gitHubVcsRoot.baseUrl
                 if (linkRef.filePath.startsWith(gitHubRepoBaseUrl)) {
-                    var targetFilePath = gitHubVcsRoot.basePath.suffixWith('/') + linkRef.linkToFile(linkRef.filePath.substring(gitHubRepoBaseUrl.suffixWith('/').length))
+                    var targetFilePath = gitHubVcsRoot.projectBasePath.suffixWith('/') + linkRef.linkToFile(linkRef.filePath.substring(gitHubRepoBaseUrl.suffixWith('/').length))
                     val containingFilePath = logicalRemotePath(containingFile, useWikiPageActualLocation = false, isSourceRef = true, isImageLinkRef = linkRef is ImageLinkRef, branchOrTag = null).filePath.suffixWith('/')
+
                     val relLink = linkRef.replaceFilePath(PathInfo.relativePath(containingFilePath, targetFilePath), false)
                     return relLink
                 }
