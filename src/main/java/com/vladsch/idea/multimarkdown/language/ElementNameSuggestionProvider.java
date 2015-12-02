@@ -192,7 +192,7 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
         }
 
         if (!linkRefText.isEmpty()) {
-            String linkRef = new PathInfo(linkRefText).getFileName();
+            String linkRef = new PathInfo(linkRefText).getFileNameNoExt();
 
             if (!linkAnchor.isEmpty()) {
                 originalList.add(linkRef);

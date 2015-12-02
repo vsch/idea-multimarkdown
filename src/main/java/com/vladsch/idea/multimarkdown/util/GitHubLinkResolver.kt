@@ -181,12 +181,17 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
     fun processMatchOptions(linkRef: LinkRef, targetRef: PathInfo, options: Int): PathInfo? {
         if (targetRef is FileRef) {
             if (!wantLocal(options) || wantOnlyURI(options)) {
-                if (!wantLocal(options) && projectResolver.isUnderVcs(targetRef)) {
+                val vcsRoot = projectResolver.getVcsRoot(targetRef)
+                if (!wantLocal(options) && (projectResolver.isUnderVcs(targetRef)) || (wantOnlyRemoteURI(options) && vcsRoot != null)) {
                     // remote available
-                    if (wantOnlyURI(options)) {
-                        val remoteUrl = projectResolver.getVcsRoot(targetRef)?.urlForVcsRemote(targetRef, targetRef.isRawFile, linkRef.anchor, branchOrTag, if (linkRef is ImageLinkRef) "raw" else null)
+                    if (wantOnlyURI(options) || wantOnlyRemoteURI(options)) {
+                        val remoteUrl = vcsRoot?.urlForVcsRemote(targetRef, targetRef.isRawFile || wikiLinkHasRealExt(linkRef, targetRef), linkRef.anchor, branchOrTag, if (linkRef is ImageLinkRef) "raw" else null)
                         if (remoteUrl != null) {
-                            val urlRef = LinkRef.parseLinkRef(linkRef.containingFile, remoteUrl, targetRef)
+                            //                            val urlRef = LinkRef.parseLinkRef(linkRef.containingFile, remoteUrl, targetRef, if (linkRef is ImageLinkRef) ::ImageLinkRef else ::LinkRef)
+                            val urlRef =
+                                    if (linkRef is ImageLinkRef) LinkRef.parseLinkRef(linkRef.containingFile, remoteUrl, targetRef, ::ImageLinkRef)
+                                    else LinkRef.parseLinkRef(linkRef.containingFile, remoteUrl, targetRef, ::LinkRef)
+
                             assert(urlRef.isExternal, { "expected to get URL, instead got $urlRef" })
                             return urlRef
                         }
@@ -339,10 +344,12 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
 
                     // these match raw file content and images
                     // case sensitive: linkFileMatch = "^$fixedPrefix$filenamePattern$"
-                    val fileMatch = linkMatcher.linkFileMatch!!.toRegex()
-                    for (fileRef in matches) {
-                        if (fileRef is FileRef && (!fileRef.isWikiPageExt || fileRef.filePath.matches(fileMatch))) {
-                            fileRef.isRawFile = true
+                    val fileMatch = linkMatcher.linkFileMatch?.toRegex()
+                    if (fileMatch != null) {
+                        for (fileRef in matches) {
+                            if (fileRef is FileRef && (!fileRef.isWikiPageExt || fileRef.filePath.matches(fileMatch))) {
+                                fileRef.isRawFile = true
+                            }
                         }
                     }
                 }
@@ -356,8 +363,38 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
             }
 
             if (linkRef is ImageLinkRef) {
-                if (matches.size > 1) matches.sort { self, other ->
-                    self.compareTo(other)
+                // have to remove all that will not resolve, unless loose matching
+                var resolved = ArrayList<PathInfo>()
+                var unresolved = ArrayList<PathInfo>()
+                matches.forEach {
+                    // if it is an image it should only resolve for raw
+                    if (it is FileRef) {
+                        val resolvedLinkAddress = linkAddress(linkRef, it, null, null, null)
+                        if (linkRef.filePath.equals(resolvedLinkAddress, ignoreCase = true)) resolved.add(it)
+                        else unresolved.add(it)
+                    } else {
+                        unresolved.add(it)
+                    }
+                }
+
+
+                var linkFileMatchRegex = linkMatcher.linkFileMatch?.toRegex() ?: linkAllMatch.toRegex()
+                resolved.sort { self, other ->
+                    if (self.filePath.matches(linkFileMatchRegex) && !other.filePath.matches(linkFileMatchRegex)) -1
+                    else if (!self.filePath.matches(linkFileMatchRegex) && other.filePath.matches(linkFileMatchRegex)) 1
+                    else self.compareTo(other)
+                }
+
+                if (wantLooseMatch(options)) {
+                    unresolved.sort { self, other ->
+                        if (self.filePath.matches(linkFileMatchRegex) && !other.filePath.matches(linkFileMatchRegex)) -1
+                        else if (!self.filePath.matches(linkFileMatchRegex) && other.filePath.matches(linkFileMatchRegex)) 1
+                        else self.compareTo(other)
+                    }
+                    matches = resolved
+                    matches.addAll(unresolved)
+                } else {
+                    matches = resolved
                 }
             } else {
                 if (matches.size > 1) matches.sort { self, other ->

@@ -104,15 +104,13 @@ public class GitHubVcsRoot {
 
     @Nullable
     public String urlForVcsRemote(@NotNull FileRef fileRef, boolean withExtension, @Nullable String anchor, @Nullable String branchOrTag, @Nullable String gitHubLink) {
-        String relativePath = !isWiki || withExtension ? getRelativePath(fileRef.getFilePath()) : fileRef.getFileNameNoExt();
+        String relativePath = !fileRef.isUnderWikiDir() || withExtension ? getRelativePath(fileRef.getFilePath()) : fileRef.getFileNameNoExt();
         if (isWiki && relativePath != null && relativePath.equals("Home")) relativePath = "";
         return relativePath == null ? null : urlForVcsRemote(relativePath, anchor, branchOrTag, gitHubLink);
     }
 
     public String urlForVcsRemote(@NotNull String relativeFilePath, @Nullable String anchor, @Nullable String branchOrTag, @Nullable String gitHubLink) {
         if (isWiki() && relativeFilePath.startsWith("../../wiki")) {
-            assert false;
-
             relativeFilePath = StringUtilKt.removeStart(relativeFilePath, "../../wiki");
         }
 

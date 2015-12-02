@@ -34,6 +34,7 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
                                                 , val uriText: String?
                                                 , multiResolvePartial: Array<String>
                                                 , val inspectionResults: ArrayList<InspectionResult>?
+                                                , val inspectionExtResults: ArrayList<InspectionResult>?
 ) {
     val resolvesLocal: String?
     val resolvesExternal: String?
@@ -165,17 +166,89 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
     }
 
     @Test fun test_InspectionResults() {
-        if (skipTest || this.inspectionResults == null) return
-        val targetRef = resolver.resolve(linkRef, LinkResolver.LOOSE_MATCH, fileList) as? FileRef
+        if (skipTest) return
+        val targetRef = resolver.resolve(linkRef, LinkResolver.ANY, fileList) as? FileRef
         if (targetRef != null) {
-            val inspectionResults = resolver.inspect(linkRef, targetRef, rowId)
-            if (this.inspectionResults.size < inspectionResults.size) {
-                for (inspection in inspectionResults) {
+            val inspections = resolver.inspect(linkRef, targetRef, rowId)
+            if (inspectionResults == null || inspectionResults.size < inspections.size) {
+                for (inspection in inspections) {
                     //println(inspection.toArrayOfTestString(rowId, filePathInfo.path))
                 }
             }
 
-            compareUnorderedLists("InspectionResults do not match ${resolver.getMatcher(linkRef).linkAllMatch}", this.inspectionResults, inspectionResults)
+            compareUnorderedLists("InspectionResults do not match ${resolver.getMatcher(linkRef).linkAllMatch}", inspectionResults, inspections)
+        }
+    }
+
+    @Test fun test_ResolveHttp() {
+        if (skipTest) return
+        if (resolvesLocal != null) {
+            val targetRef = FileRef(resolvesLocal)
+            val linkRefUri = resolver.processMatchOptions(linkRef, targetRef, LinkResolver.ONLY_REMOTE_URI)
+            if (linkRefUri != null && linkRefUri is LinkRef && linkRefUri.isExternal) {
+                val originalCaseLinkRefUri = if (linkRefUri.filePath.endsWith("/wiki")) linkRefUri else linkRefUri.replaceFilePath(linkRefUri.path + linkRef.fileName.ifEmpty { linkRefUri.fileName })
+                val localRef = resolver.resolve(originalCaseLinkRefUri, LinkResolver.PREFER_LOCAL, fileList)
+                assertEqualsMessage("ResolveHttp $originalCaseLinkRefUri does not match ${resolver.getMatcher(linkRef).linkAllMatch}", resolvesLocal, localRef?.filePath)
+            } else {
+                assertEqualsMessage("ResolveHttp no remote link ${resolver.getMatcher(linkRef).linkAllMatch} for $resolvesLocal", resolvesLocal, linkRefUri?.filePath)
+            }
+        }
+    }
+
+    @Test fun test_NonResolveHttp() {
+        if (skipTest) return
+        // test to make sure linkrefs with blob/../ do not resolve
+        if (resolvesLocal != null && linkRef is ImageLinkRef) {
+            val targetRef = FileRef(resolvesLocal)
+            if (!targetRef.isUnderWikiDir) {
+                val linkRefUri = resolver.processMatchOptions(linkRef, targetRef, LinkResolver.ONLY_REMOTE_URI)
+                if (linkRefUri != null && linkRefUri is LinkRef && linkRefUri.isExternal) {
+                    val originalCaseLinkRefUri = linkRefUri.replaceFilePath((linkRefUri.path + linkRef.fileName.ifEmpty { linkRefUri.fileName }).replace("/raw/","/blob/"))
+                    val localRef = resolver.resolve(originalCaseLinkRefUri, LinkResolver.PREFER_LOCAL, fileList)
+                    assertEqualsMessage("ResolveHttp $originalCaseLinkRefUri does not match ${resolver.getMatcher(linkRef).linkAllMatch}", null, localRef?.filePath)
+                } else {
+                    assertEqualsMessage("ResolveHttp no remote link ${resolver.getMatcher(linkRef).linkAllMatch} for $resolvesLocal", resolvesLocal, linkRefUri?.filePath)
+                }
+            }
+        }
+    }
+
+    @Test fun test_MultiResolveHttp() {
+        if (skipTest) return
+        if (resolvesLocal != null) {
+            val targetRef = FileRef(resolvesLocal)
+            val linkRefUri = resolver.processMatchOptions(linkRef, targetRef, LinkResolver.ONLY_REMOTE_URI)
+
+            assert(linkRefUri == null || linkRefUri.isExternal)
+
+            if (linkRefUri != null && linkRefUri is LinkRef && linkRefUri.isExternal) {
+                val originalCaseLinkRefUri = if (linkRefUri.filePath.endsWith("/wiki")) linkRefUri else linkRefUri.replaceFilePath(linkRefUri.path + linkRef.fileName.ifEmpty { linkRefUri.fileName })
+                val localRefs = resolver.multiResolve(originalCaseLinkRefUri, LinkResolver.ANY)
+                val resolvedTargetRef = if (localRefs.size > 0) localRefs[0] else null
+                assertEqualsMessage("MultiResolveHttp $originalCaseLinkRefUri does not match ${resolver.getMatcher(linkRef).linkAllMatch}", this.resolvesLocal, if (resolvedTargetRef is LinkRef) resolvedTargetRef.filePathWithAnchor else resolvedTargetRef?.filePath)
+            }
+        }
+    }
+
+    @Test fun test_InspectionResultsUri() {
+        if (skipTest) return
+        if (resolvesLocal != null) {
+            val targetRef = FileRef(resolvesLocal)
+            val linkRefUri = resolver.processMatchOptions(linkRef, targetRef, LinkResolver.ONLY_REMOTE_URI)
+
+            assert(linkRefUri == null || linkRefUri.isExternal)
+
+            if (linkRefUri != null && linkRefUri is LinkRef && linkRefUri.isExternal) {
+                val originalCaseLinkRefUri = if (linkRefUri.filePath.endsWith("/wiki")) linkRefUri else linkRefUri.replaceFilePath(linkRefUri.path + linkRef.fileName.ifEmpty { linkRefUri.fileName })
+                val inspections = resolver.inspect(originalCaseLinkRefUri, targetRef, rowId)
+                if (inspectionExtResults == null || inspectionExtResults.size < inspections.size) {
+                    for (inspection in inspections) {
+                        //println(inspection.toArrayOfTestString(rowId, filePathInfo.path))
+                    }
+                }
+
+                compareUnorderedLists("InspectionResultsUri $originalCaseLinkRefUri do not match ${resolver.getMatcher(linkRef).linkAllMatch}", inspectionExtResults, inspections)
+            }
         }
     }
 
@@ -193,20 +266,26 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
 
             var i = 0
             for (row in data) {
-                val amendedRow = Array<Any?>(row.size + 2, { null })
+                val amendedRow = Array<Any?>(row.size + 3, { null })
                 val inspections = ArrayList<InspectionResult>()
+                val inspectionsExt = ArrayList<InspectionResult>()
                 val filePathInfo = PathInfo(row[0] as String)
                 for (inspectionRow in inspectionData) {
                     if (inspectionRow[0] == i) {
-                        val inspectionResult = InspectionResult(inspectionRow[1] as String, inspectionRow[2] as Severity, inspectionRow[3] as String?, resolveRelativePath(filePathInfo, inspectionRow[4] as String?)?.filePath)
+                        val inspectionResult = InspectionResult(inspectionRow[1] as String, inspectionRow[2] as Severity, inspectionRow[3] as String?, resolveRelativePath(filePathInfo, inspectionRow[5] as String?)?.filePath)
                         inspectionResult.referenceId = i
                         inspections.add(inspectionResult)
+
+                        val inspectionExtResult = InspectionResult(inspectionRow[1] as String, inspectionRow[2] as Severity, inspectionRow[4] as String?, resolveRelativePath(filePathInfo, inspectionRow[5] as String?)?.filePath)
+                        inspectionExtResult.referenceId = i
+                        inspectionsExt.add(inspectionExtResult)
                     }
                 }
 
                 System.arraycopy(row, 0, amendedRow, 1, row.size)
                 amendedRow[0] = i
                 amendedRow[row.size + 1] = inspections
+                amendedRow[row.size + 2] = inspectionsExt
                 amendedData.add(amendedRow)
                 i++
             }

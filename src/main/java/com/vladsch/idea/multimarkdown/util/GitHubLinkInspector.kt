@@ -47,20 +47,34 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
         @JvmStatic @JvmField val ID_WIKI_LINK_TEXT_MATCHES_SELF_REF = "ID_WIKI_LINK_TEXT_MATCHES_SELF_REF"
     }
 
-    internal class Context(val resolver: GitHubLinkResolver, val linkRef: LinkRef, val targetRef: FileRef, val referenceId: Any?) {
+    internal class Context(val resolver: GitHubLinkResolver, val originalLinkRef: LinkRef, val targetRef: FileRef, val referenceId: Any?) {
         val results = ArrayList<InspectionResult>()
+
+        val linkRef: LinkRef = if (originalLinkRef.isURI) resolver.uriToRelativeLink(originalLinkRef) as? LinkRef ?: originalLinkRef else originalLinkRef
+        val linkRefRemote: LinkRef? = resolver.processMatchOptions(linkRef, targetRef, LinkResolver.ONLY_REMOTE_URI) as? LinkRef
+
+        val linkAddressLocal: String = resolver.linkAddress(linkRef, targetRef, null, null, "")
+        val linkAddressNoExtLocal: String = stripSubDirAfterWiki(PathInfo(linkAddressLocal).filePathNoExt)
+
+        val linkAddressRemote: String = linkRefRemote?.filePath ?: linkAddressLocal
+        val linkAddressNoExtRemote: String = (if (linkRefRemote == null) null else stripSubDirAfterWiki(linkRefRemote.filePathNoExt)) ?: linkAddressNoExtLocal
+
+        val linkAddress: String = if (originalLinkRef != linkRef) linkAddressRemote else linkAddressLocal
+        val linkAddressNoExt: String = if (originalLinkRef != linkRef) linkAddressNoExtRemote else linkAddressNoExtLocal
+
+        fun stripSubDirAfterWiki(linkAddress: String): String {
+            val pos = linkAddress.indexOf("/wiki/")
+            val lastDir = linkAddress.lastIndexOf("/")
+            if (pos > 0) {
+                return (linkAddress.substring(0, pos + "/wiki/".length) + linkAddress.substring(lastDir + 1)).removeSuffix("/")
+            }
+            return PathInfo(linkAddress).fileName
+        }
+
 
         fun addResult(result: InspectionResult) {
             result.referenceId = referenceId;
             results.add(result);
-        }
-
-        val linkAddress: String by lazy() {
-            resolver.linkAddress(linkRef, targetRef, null, null, "")
-        }
-
-        val linkAddressNoExt: String by lazy() {
-            resolver.linkAddress(linkRef, targetRef, false, null, "")
         }
 
         fun INSPECT_LINK_TARGET_HAS_SPACES() {
@@ -72,13 +86,14 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
 
         fun INSPECT_LINK_CASE_MISMATCH() {
             if (linkRef is WikiLinkRef) {
-                if (resolver.equalLinks(linkRef.filePath, linkAddress, ignoreCase = true) && !resolver.equalLinks(linkRef.filePath, linkAddress, ignoreCase = false)) {
+                if (resolver.equalLinks(linkRef.filePath, linkAddressLocal, ignoreCase = true) && !resolver.equalLinks(linkRef.filePath, linkAddressLocal, ignoreCase = false)) {
                     addResult(InspectionResult(ID_CASE_MISMATCH, Severity.WARNING, linkAddress, targetRef.path.suffixWith('/') + linkRef.linkToFile(linkRef.fileNameNoExt) + targetRef.ext.prefixWith('.')))
                 }
             } else {
-                if (linkRef.filePath.equals(linkAddress, ignoreCase = true) && !linkRef.filePath.equals(linkAddress, ignoreCase = false)) {
+                if (linkAddressLocal.isEmpty() && linkRef.fileNameNoExt.equals(targetRef.fileNameNoExt, ignoreCase = true) && !linkRef.fileNameNoExt.equals(targetRef.fileNameNoExt, ignoreCase = false)
+                    || linkRef.filePath.equals(linkAddressLocal, ignoreCase = true) && !linkRef.filePath.equals(linkAddressLocal, ignoreCase = false)) {
                     val fixedPath = targetRef.path.suffixWith('/') + linkRef.linkToFile(linkRef.fileNameNoExt) + linkRef.ext.ifEmpty(targetRef.ext).prefixWith('.')
-                    val fixedLinkRef = FileRef(linkAddress)
+                    val fixedLinkRef = FileRef(linkAddressLocal)
                     // caution: no fixed file name provided if the case mismatch is in the path not the file name
                     // test: no fixed file name provided if the case mismatch is in the path not the file name
                     addResult(InspectionResult(ID_CASE_MISMATCH, if (targetRef.isWikiPage) Severity.WEAK_WARNING else Severity.ERROR, linkAddress, if (linkRef.path == fixedLinkRef.path) fixedPath else null))
@@ -163,7 +178,7 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
 
             if (linkRef is ImageLinkRef) {
                 // see if it is pointed at the raw/ or blob/ branch
-                if (!linkRef.filePath.equals(linkAddress, ignoreCase = true) && linkRef.filePath.replace("\\bblob/".toRegex(), "raw/").equals(linkAddress, ignoreCase = true)) {
+                if (!linkRef.filePath.equals(linkAddressLocal, ignoreCase = true) && linkRef.filePath.replace("\\bblob/".toRegex(), "raw/").equals(linkAddressLocal, ignoreCase = true)) {
                     addResult(InspectionResult(ID_IMAGE_TARGET_NOT_IN_RAW, Severity.ERROR, linkAddress, null))
                 }
             }

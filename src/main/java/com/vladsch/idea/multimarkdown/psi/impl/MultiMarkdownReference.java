@@ -175,54 +175,29 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
         if (name != null) {
             if (myElement instanceof MultiMarkdownWikiLinkRef || myElement instanceof MultiMarkdownLinkRef) {
                 if (myElement.getContainingFile() != null && myElement.getContainingFile().getVirtualFile() != null) {
-
-                    LinkRef origLinkRef = MultiMarkdownPsiImplUtil.getLinkRef(myElement);
-                    LinkRef linkRef = origLinkRef;
+                    LinkRef linkRef = MultiMarkdownPsiImplUtil.getLinkRef(myElement);
 
                     if (linkRef != null) {
                         GitHubLinkResolver resolver = new GitHubLinkResolver(myElement);
-                        if (linkRef.isAbsolute()) {
-                            if (MultiMarkdownPlugin.isLicensed()) {
-                                LinkRef resolvedLinkRef = resolver.uriToResolvedRelativeLink(linkRef);
+                        List<PathInfo> pathInfos = resolver.multiResolve(linkRef, LinkResolver.PREFER_LOCAL | (incompleteCode ? LinkResolver.LOOSE_MATCH : 0), null);
 
-                                if (resolvedLinkRef != null && (incompleteCode || myElement instanceof MultiMarkdownImageLinkRef)) {
-                                    LinkRef relLinkRef = resolver.uriToRelativeLink(linkRef);
-                                    linkRef = relLinkRef == null ? null : (relLinkRef.getFilePath().equals(resolvedLinkRef.getFilePath()) ? resolvedLinkRef : null);
-                                } else {
-                                    linkRef = resolvedLinkRef;
-                                }
-                            } else {
-                                linkRef = null;
-                            }
-                        }
-
-                        if (linkRef != null) {
-                            List<PathInfo> pathInfos = resolver.multiResolve(linkRef, LinkResolver.PREFER_LOCAL | (incompleteCode ? LinkResolver.LOOSE_MATCH : 0), null);
-
-                            if (pathInfos.size() > 0) {
-                                List<ResolveResult> results = new ArrayList<ResolveResult>();
-                                for (PathInfo pathInfo : pathInfos) {
-                                    if (!incompleteCode) {
-                                        if (!origLinkRef.isURI() && !resolver.linkAddress(linkRef, pathInfo, null,null,null).equalsIgnoreCase(origLinkRef.getFilePath())) {
-                                            continue;
-                                        }
-                                    }
-
-                                    if (pathInfo instanceof ProjectFileRef) {
-                                        PsiFile psiFile = ((ProjectFileRef) pathInfo).getPsiFile();
-                                        if (psiFile != null) {
-                                            results.add(new PsiElementResolveResult(psiFile));
-                                        }
+                        if (pathInfos.size() > 0) {
+                            List<ResolveResult> results = new ArrayList<ResolveResult>();
+                            for (PathInfo pathInfo : pathInfos) {
+                                if (pathInfo instanceof ProjectFileRef) {
+                                    PsiFile psiFile = ((ProjectFileRef) pathInfo).getPsiFile();
+                                    if (psiFile != null) {
+                                        results.add(new PsiElementResolveResult(psiFile));
                                     }
                                 }
-
-                                if (results.size() > 0) {
-                                    removeReferenceChangeListener();
-                                    return results.toArray(new ResolveResult[results.size()]);
-                                }
                             }
-                            return new ResolveResult[] { new PsiElementResolveResult(getMissingRefElement(name)) };
+
+                            if (results.size() > 0) {
+                                removeReferenceChangeListener();
+                                return results.toArray(new ResolveResult[results.size()]);
+                            }
                         }
+                        return new ResolveResult[] { new PsiElementResolveResult(getMissingRefElement(name)) };
                     }
                 }
             } else {

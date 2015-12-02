@@ -36,13 +36,14 @@ abstract class LinkResolver(val projectResolver: LinkResolver.ProjectResolver, v
     companion object {
 
         @JvmField val ANY = 0                                               // local, remote or URL
-        @JvmField val PREFER_LOCAL = 1                                        // file ref that has local resolve, file references
+        @JvmField val PREFER_LOCAL = 1                                      // file ref that has local resolve, file references
         @JvmField val ONLY_REMOTE = 2                                       // file ref that has remote resolve, file references
         @JvmField val ONLY_URI = 4                                          // if no local or remote specified then both but as URL's only. URL for file on repo website, URI for local files
-        @JvmField val ACCEPT_URI = 8                                          // if no local or remote specified then both but as URL's only. URL for file on repo website, URI for local files
+        @JvmField val ACCEPT_URI = 8                                        // if no local or remote specified then both but as URL's only. URL for file on repo website, URI for local files
         @JvmField val LOOSE_MATCH = 16                                      // inexact match for error detection
-        @JvmField val COMPLETION_MATCH = 32                                 // inexact match for error detection
-        @JvmField val LOCAL_OR_REMOTE = PREFER_LOCAL or ONLY_REMOTE           // local or remote resolved files
+        @JvmField val ONLY_REMOTE_URI = 32                                  // remote ref whether file ref has remote resolve or not
+        @JvmField val COMPLETION_MATCH = 64                                 // inexact match for error detection
+        @JvmField val LOCAL_OR_REMOTE = PREFER_LOCAL or ONLY_REMOTE         // local or remote resolved files
 
         private val ALL = LOCAL_OR_REMOTE or ONLY_URI             // local, remote or URI, no conversion will be done, refs returned as they are resolved
         private val MATCH_MASK = LOOSE_MATCH or COMPLETION_MATCH
@@ -50,9 +51,10 @@ abstract class LinkResolver(val projectResolver: LinkResolver.ProjectResolver, v
 
         fun wantAny(options: Int): Boolean = (options and ALL == ANY) || (options and ALL == ALL)
         fun wantLocal(options: Int): Boolean = (options and LOCAL_OR_REMOTE == 0) || (options and PREFER_LOCAL != 0)
-        fun wantRemote(options: Int): Boolean = (options and LOCAL_OR_REMOTE == 0) || (options and ONLY_REMOTE != 0)
-        fun wantURI(options: Int): Boolean = (options and ALL == ANY) || (options and (ACCEPT_URI or ONLY_URI) != 0)
-        fun wantOnlyURI(options: Int): Boolean = (options and ONLY_URI != 0)
+        fun wantRemote(options: Int): Boolean = (options and LOCAL_OR_REMOTE == 0) || (options and (ONLY_REMOTE or ONLY_REMOTE_URI) != 0)
+        fun wantURI(options: Int): Boolean = (options and ALL == ANY) || (options and (ACCEPT_URI or ONLY_URI or ONLY_REMOTE_URI) != 0)
+        fun wantOnlyURI(options: Int): Boolean = (options and (ONLY_URI or ONLY_REMOTE_URI) != 0)
+        fun wantOnlyRemoteURI(options: Int): Boolean = (options and ONLY_REMOTE_URI != 0)
         fun wantLooseMatch(options: Int): Boolean = (options and MATCH_MASK != 0)
         fun wantCompletionMatch(options: Int): Boolean = (options and COMPLETION_MATCH != 0)
         fun wantSome(options: Int, flags: Int): Boolean = (options and flags != 0)

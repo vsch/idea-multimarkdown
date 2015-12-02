@@ -105,16 +105,9 @@ class TestLinkResolver_Basic_wiki_Home constructor(val rowId:Int, val fullPath: 
     @Test fun test_InspectionResults() {
         if (skipTest || this.inspectionResults == null) return
         val looseTargetRef = resolver.resolve(linkRef, LinkResolver.LOOSE_MATCH, fileList) as? FileRef
-        val  targetRef = resolver.resolve(linkRef, LinkResolver.ANY, fileList) as? FileRef ?: looseTargetRef
-        var relLinkRef = linkRef
-        if (targetRef != null) {
-            if (linkRef.isURI) {
-                val relRef = resolver.uriToRelativeLink(linkRef)
-                if (relRef != null) {
-                    relLinkRef = relRef
-                }
-            }
-            val inspectionResults = resolver.inspect(relLinkRef, targetRef, rowId)
+        val targetRef = resolver.resolve(linkRef, LinkResolver.ANY, fileList) as? FileRef
+        if (targetRef != null || looseTargetRef != null) {
+            val inspectionResults = resolver.inspect(linkRef, targetRef ?: looseTargetRef as FileRef, rowId)
             if (this.inspectionResults.size < inspectionResults.size) {
                 for (inspection in inspectionResults) {
                     //println(inspection.toArrayOfTestString(rowId, filePathInfo.path))
