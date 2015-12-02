@@ -187,7 +187,15 @@ fun List<String>.with(list: List<String>): List<String> {
     return result
 }
 
+fun List<String>.asRemoteImageURI(branchOrTag: String? = null): List<String> {
+    return this.asRemoteUriType(branchOrTag, "raw");
+}
+
 fun List<String>.asRemoteURI(branchOrTag: String? = null): List<String> {
+    return this.asRemoteUriType(branchOrTag, "blob");
+}
+
+fun List<String>.asRemoteUriType(branchOrTag: String? = null, gitHubLink:String?): List<String> {
     val _branchOrTag = branchOrTag ?: "master"
     val projectResolver: LinkResolver.ProjectResolver = MarkdownTestData
     val result = this.map {
@@ -200,7 +208,7 @@ fun List<String>.asRemoteURI(branchOrTag: String? = null): List<String> {
             if (fileRef.isUnderWikiDir) {
                 baseUrl.suffixWith('/') + "wiki/" + it.substring(basePath.length).replace(" ", "%20").replace("#", "%23")
             } else {
-                baseUrl.suffixWith('/') + "blob/$_branchOrTag/" + it.substring(basePath.length).replace(" ", "%20").replace("#", "%23")
+                baseUrl.suffixWith('/') + gitHubLink.ifEmpty("blob") + "/$_branchOrTag/" + it.substring(basePath.length).replace(" ", "%20").replace("#", "%23")
             }
         } else {
             "file://" + it

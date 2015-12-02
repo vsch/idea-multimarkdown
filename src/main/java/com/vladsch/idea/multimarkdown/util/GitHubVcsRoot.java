@@ -91,25 +91,25 @@ public class GitHubVcsRoot {
     }
 
     @NotNull
-    public String urlForVcsRemote(String relativeFilePath, @Nullable String branchOrTag) {
-        return urlForVcsRemote(relativeFilePath, null, branchOrTag);
+    public String urlForVcsRemote(String relativeFilePath, @Nullable String branchOrTag, @Nullable String gitHubLink) {
+        return urlForVcsRemote(relativeFilePath, null, branchOrTag, gitHubLink);
     }
 
     @Nullable
-    public String urlForVcsRemote(@NotNull VirtualFile virtualFile, boolean withExtension, @Nullable String anchor, @Nullable String branchOrTag) {
+    public String urlForVcsRemote(@NotNull VirtualFile virtualFile, boolean withExtension, @Nullable String anchor, @Nullable String branchOrTag, @Nullable String gitHubLink) {
         PathInfo pathInfo = new PathInfo(virtualFile.getPath());
         String relativePath = getRelativePath(withExtension ? pathInfo.getFilePath() : pathInfo.getFilePathNoExt());
-        return relativePath == null ? null : urlForVcsRemote(relativePath, anchor, branchOrTag);
+        return relativePath == null ? null : urlForVcsRemote(relativePath, anchor, branchOrTag, gitHubLink);
     }
 
     @Nullable
-    public String urlForVcsRemote(@NotNull FileRef fileRef, boolean withExtension, @Nullable String anchor, @Nullable String branchOrTag) {
+    public String urlForVcsRemote(@NotNull FileRef fileRef, boolean withExtension, @Nullable String anchor, @Nullable String branchOrTag, @Nullable String gitHubLink) {
         String relativePath = !isWiki || withExtension ? getRelativePath(fileRef.getFilePath()) : fileRef.getFileNameNoExt();
         if (isWiki && relativePath != null && relativePath.equals("Home")) relativePath = "";
-        return relativePath == null ? null : urlForVcsRemote(relativePath, anchor, branchOrTag);
+        return relativePath == null ? null : urlForVcsRemote(relativePath, anchor, branchOrTag, gitHubLink);
     }
 
-    public String urlForVcsRemote(@NotNull String relativeFilePath, @Nullable String anchor, @Nullable String branchOrTag) {
+    public String urlForVcsRemote(@NotNull String relativeFilePath, @Nullable String anchor, @Nullable String branchOrTag, @Nullable String gitHubLink) {
         if (isWiki() && relativeFilePath.startsWith("../../wiki")) {
             assert false;
 
@@ -117,8 +117,9 @@ public class GitHubVcsRoot {
         }
 
         if (branchOrTag == null || branchOrTag.isEmpty()) branchOrTag = "master";
+        if (gitHubLink == null || gitHubLink.isEmpty()) gitHubLink = "blob";
 
-        return gitHubBaseUrl + (isWiki() ? "wiki/" : "blob/" + branchOrTag + "/") + LinkRef.urlEncode(StringUtilKt.removeStart(relativeFilePath, "./")) + StringUtilKt.prefixWith(anchor, '#', false);
+        return gitHubBaseUrl + (isWiki() ? "wiki/" : gitHubLink + "/" + branchOrTag + "/") + LinkRef.urlEncode(StringUtilKt.removeStart(relativeFilePath, "./")) + StringUtilKt.prefixWith(anchor, '#', false);
     }
 
     @Nullable

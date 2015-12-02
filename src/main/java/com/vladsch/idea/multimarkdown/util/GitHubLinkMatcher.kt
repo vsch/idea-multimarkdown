@@ -234,7 +234,7 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
                     when {
                         gitHubLink == "" && !linkRef.containingFile.isWikiHomePage -> {
                             prefixPath = vcsRepoBasePath
-                            this.gitHubLink = "blob"
+                            this.gitHubLink = if (linkRef is ImageLinkRef) "raw" else "blob"
                             this.branchOrTag = "master"
                             linkParamsSuffix = "master"
                         }

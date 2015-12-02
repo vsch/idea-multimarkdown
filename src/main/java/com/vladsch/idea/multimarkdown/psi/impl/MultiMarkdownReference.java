@@ -96,7 +96,7 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
         //if (incompleteCode) {
-            return getMultiResolveResults(incompleteCode);
+        return getMultiResolveResults(incompleteCode);
         //} else {
         //    if (resolveResults == null || resolveResultsName == null || !resolveResultsName.equals(getElement().getName())) {
         //        resolveResultsName = getElement().getName();
@@ -176,10 +176,25 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
             if (myElement instanceof MultiMarkdownWikiLinkRef || myElement instanceof MultiMarkdownLinkRef) {
                 if (myElement.getContainingFile() != null && myElement.getContainingFile().getVirtualFile() != null) {
 
-                    LinkRef linkRef = MultiMarkdownPsiImplUtil.getLinkRef(myElement);
+                    LinkRef origLinkRef = MultiMarkdownPsiImplUtil.getLinkRef(myElement);
+                    LinkRef linkRef = origLinkRef;
+
                     if (linkRef != null) {
                         GitHubLinkResolver resolver = new GitHubLinkResolver(myElement);
-                        if (linkRef.isAbsolute()) linkRef = MultiMarkdownPlugin.isLicensed() ? resolver.uriToResolvedRelativeLink(linkRef) : null;
+                        if (linkRef.isAbsolute()) {
+                            if (MultiMarkdownPlugin.isLicensed()) {
+                                LinkRef resolvedLinkRef = resolver.uriToResolvedRelativeLink(linkRef);
+
+                                if (resolvedLinkRef != null && (incompleteCode || myElement instanceof MultiMarkdownImageLinkRef)) {
+                                    LinkRef relLinkRef = resolver.uriToRelativeLink(linkRef);
+                                    linkRef = relLinkRef == null ? null : (relLinkRef.getFilePath().equals(resolvedLinkRef.getFilePath()) ? resolvedLinkRef : null);
+                                } else {
+                                    linkRef = resolvedLinkRef;
+                                }
+                            } else {
+                                linkRef = null;
+                            }
+                        }
 
                         if (linkRef != null) {
                             List<PathInfo> pathInfos = resolver.multiResolve(linkRef, LinkResolver.PREFER_LOCAL | (incompleteCode ? LinkResolver.LOOSE_MATCH : 0), null);
@@ -187,6 +202,12 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
                             if (pathInfos.size() > 0) {
                                 List<ResolveResult> results = new ArrayList<ResolveResult>();
                                 for (PathInfo pathInfo : pathInfos) {
+                                    if (!incompleteCode) {
+                                        if (!resolver.linkAddress(linkRef, pathInfo, null,null,null).equalsIgnoreCase(origLinkRef.getFilePath())) {
+                                            continue;
+                                        }
+                                    }
+
                                     if (pathInfo instanceof ProjectFileRef) {
                                         PsiFile psiFile = ((ProjectFileRef) pathInfo).getPsiFile();
                                         if (psiFile != null) {

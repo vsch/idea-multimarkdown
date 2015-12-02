@@ -50,6 +50,7 @@ class ChangeLinkRefQuickFix extends BaseIntentionAction {
     public static final int URL_ENCODE_ANCHOR = 7;
     public static final int CHANGE_TO_RELATIVE = 8;
     public static final int CHANGE_TO_ABSOLUTE = 9;
+    public static final int CHANGE_TO_RAW = 10;
 
     private String newLinkRef;
     private MultiMarkdownNamedElement linkRefElement;
@@ -108,6 +109,10 @@ class ChangeLinkRefQuickFix extends BaseIntentionAction {
 
             case REMOVE_EXT:
                 msg = MultiMarkdownBundle.message("quickfix.wikilink.0.remove-ext", newLinkRefInfoNoExt);
+                break;
+
+            case CHANGE_TO_RAW:
+                msg = MultiMarkdownBundle.message("quickfix.wikilink.0.change-to-raw", newLinkRefInfoNoExt);
                 break;
 
             case ADD_PAGE_REF:

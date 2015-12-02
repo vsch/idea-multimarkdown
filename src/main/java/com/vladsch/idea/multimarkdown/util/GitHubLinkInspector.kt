@@ -38,6 +38,7 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
         @JvmStatic @JvmField val ID_LINK_TARGET_NEEDS_EXT = "ID_LINK_TARGET_NEEDS_EXT"
         @JvmStatic @JvmField val ID_LINK_TARGET_HAS_BAD_EXT = "ID_LINK_TARGET_HAS_BAD_EXT"
         @JvmStatic @JvmField val ID_WIKI_LINK_NOT_IN_WIKI = "ID_WIKI_LINK_NOT_IN_WIKI"
+        @JvmStatic @JvmField val ID_IMAGE_TARGET_NOT_IN_RAW = "ID_IMAGE_TARGET_NOT_IN_RAW"
 
         // TODO: implment these inspections
         @JvmStatic @JvmField val ID_WIKI_LINK_HAS_REDUNDANT_TEXT = "ID_WIKI_LINK_HAS_REDUNDANT_TEXT"
@@ -158,6 +159,13 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
         fun INSPECT_LINK_TARGET_VCS() {
             if (!resolver.projectResolver.isUnderVcs(targetRef)) {
                 addResult(InspectionResult(ID_TARGET_NOT_UNDER_VCS, Severity.WARNING, null, null))
+            }
+
+            if (linkRef is ImageLinkRef) {
+                // see if it is pointed at the raw/ or blob/ branch
+                if (!linkRef.filePath.equals(linkAddress, ignoreCase = true) && linkRef.filePath.replace("\\bblob/".toRegex(), "raw/").equals(linkAddress, ignoreCase = true)) {
+                    addResult(InspectionResult(ID_IMAGE_TARGET_NOT_IN_RAW, Severity.ERROR, linkAddress, null))
+                }
             }
         }
 

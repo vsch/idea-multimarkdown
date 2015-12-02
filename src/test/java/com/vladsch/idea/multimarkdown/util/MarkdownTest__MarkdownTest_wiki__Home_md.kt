@@ -115,7 +115,9 @@ class MarkdownTest__MarkdownTest_wiki__Home_md {
                 /* 84 */arrayOf<Any?>("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md", ::LinkRef     , "wiki/Test-Name.kt"     , "wiki/Test-Name.kt"                          , null         , null       , "Test-Name.kt.md"                       , "Test-Name.kt.md"                     , "Test-Name.kt"                               , arrayOf<String>("Test-Name.kt.md", "Test-Name.kt")) /* 84 */,
                 /* 85 */arrayOf<Any?>("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md", ::LinkRef     , "Test-Name.kt.md"       , "Test-Name.kt.md"                            , null         , null       , "Test-Name.kt.md"                       , "Test-Name.kt.md"                     , "Test-Name.kt.md"                            , arrayOf<String>("Test-Name.kt.md", "Test-Name.kt")) /* 85 */,
                 /* 86 */arrayOf<Any?>("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md", ::LinkRef     , "wiki/Test-Name.kt.md"  , "wiki/Test-Name.kt.md"                       , null         , null       , "Test-Name.kt.md"                       , "Test-Name.kt.md"                     , "Test-Name.kt.md"                            , arrayOf<String>("Test-Name.kt.md", "Test-Name.kt")) /* 86 */,
-                /* 87 */arrayOf<Any?>("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md", ::ImageLinkRef, "vcs image"             , "https://github.com/vsch/MarkdownTest/wiki/vcs-image.png", null, null    , "vcs-image.png"                         , "vcs-image.png"                       , "wiki/vcs-image.png"                         , arrayOf<String>()) /* 87 */
+                /* 87 */arrayOf<Any?>("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md", ::ImageLinkRef, "vcs image"             , "https://github.com/vsch/MarkdownTest/wiki/vcs-image.png", null, null    , "vcs-image.png"                         , "vcs-image.png"                       , "wiki/vcs-image.png"                         , arrayOf<String>()) /* 87 */,
+                /* 88 */arrayOf<Any?>("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md", ::ImageLinkRef, "vcs image"             , "https://github.com/vsch/MarkdownTest/raw/master/vcs-image.png", null, null    , "../vcs-image.png"                         , "../vcs-image.png"                       , "raw/master/vcs-image.png"                         , arrayOf<String>()) /* 88 */,
+                /* 89 */arrayOf<Any?>("/Users/vlad/src/MarkdownTest/MarkdownTest.wiki/Home.md", ::ImageLinkRef, "vcs image"             , "https://github.com/vsch/MarkdownTest/blob/master/vcs-image.png", null, null    , "../vcs-image.png"                         , "../vcs-image.png"                       , "raw/master/vcs-image.png"                         , arrayOf<String>()) /* 89 */
             /* @formatter:on */
             )
 
@@ -184,7 +186,8 @@ class MarkdownTest__MarkdownTest_wiki__Home_md {
                 /* 37 */arrayOf<Any?>(79       , "ID_LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "normal-file"                  , null) /* 37 */,
                 /* 38 */arrayOf<Any?>(81       , "ID_TARGET_HAS_SPACES"            , Severity.WEAK_WARNING, null                           , "Test-4.2.md") /* 38 */,
                 /* 39 */arrayOf<Any?>(85       , "ID_LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "Test-Name.kt"                 , null) /* 39 */,
-                /* 40 */arrayOf<Any?>(86       , "ID_LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "Test-Name.kt"                 , null) /* 40 */
+                /* 40 */arrayOf<Any?>(86       , "ID_LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "Test-Name.kt"                 , null) /* 40 */,
+                /* 40 */arrayOf<Any?>(89       , "ID_IMAGE_TARGET_NOT_IN_RAW"      , Severity.ERROR       , "raw/master/vcs-image.png"     , null) /* 40 */
                 /* @formatter:on */
             )
 

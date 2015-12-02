@@ -123,7 +123,7 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
         val uriRef = resolver.resolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI, fileList)
         val href = if (targetRef != null && targetRef is FileRef && this.uriText != null) {
             if (resolver.projectResolver.isUnderVcs(targetRef)) {
-                val prefix = if (targetRef.isUnderWikiDir) "" else "blob/master/"
+                val prefix = if (targetRef.isUnderWikiDir) "" else "${if (linkRef is ImageLinkRef) "raw" else "blob"}/master/"
                 val parts = this.uriText.split("#", limit = 2)
                 "https://github.com/vsch/MarkdownTest/" + prefix + parts[0].replace("#", "%23").replace(" ", "%20") + (if (parts.size > 1) parts[1].prefixWith('#') else "")
             } else {

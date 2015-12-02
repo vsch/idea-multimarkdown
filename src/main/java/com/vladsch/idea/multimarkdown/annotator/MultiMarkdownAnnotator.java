@@ -87,9 +87,10 @@ public class MultiMarkdownAnnotator implements Annotator {
         if (linkRefInfo == null) return;
 
         //noinspection StatementWithEmptyBody
+        GitHubLinkResolver resolver = new GitHubLinkResolver(element);
+
         if (linkRefInfo.isURI()) {
             if (MultiMarkdownPlugin.isLicensed()) {
-                GitHubLinkResolver resolver = new GitHubLinkResolver(element);
                 LinkRef relRef = resolver.uriToRelativeLink(linkRefInfo);
                 if (relRef != null) {
                     relativeRefInfo = relRef;
@@ -100,11 +101,11 @@ public class MultiMarkdownAnnotator implements Annotator {
         if (!relativeRefInfo.isURI()) {
             Project project = element.getProject();
             ProjectFileRef containingFile = new ProjectFileRef(element.getContainingFile());
-            GitHubLinkResolver resolver = new GitHubLinkResolver(element.getContainingFile());
             final List<PathInfo> looseTargetRefs = resolver.multiResolve(relativeRefInfo, LinkResolver.ANY | LinkResolver.LOOSE_MATCH, null);
             final List<PathInfo> targetRefs = resolver.multiResolve(relativeRefInfo, LinkResolver.ANY, looseTargetRefs);
-            PathInfo resolvedTargetInfo = targetRefs.size() > 0 ? targetRefs.get(0) : null;
-            PathInfo targetInfo = resolvedTargetInfo != null ? resolvedTargetInfo : (looseTargetRefs.size() > 0 ? looseTargetRefs.get(0) : null);
+            final PathInfo exactTargetRef = resolver.resolve(relativeRefInfo, LinkResolver.ANY, targetRefs);
+            PathInfo resolvedTargetInfo = exactTargetRef != null && (!(linkRefInfo instanceof ImageLinkRef) || resolver.linkAddress(relativeRefInfo, exactTargetRef, null, null, null).equals(relativeRefInfo.getFilePath())) ? exactTargetRef : null;
+            PathInfo targetInfo = resolvedTargetInfo != null ? resolvedTargetInfo : (exactTargetRef != null ? exactTargetRef : (looseTargetRefs.size() > 0 ? looseTargetRefs.get(0) : null));
             PsiElement parentElement = element.getParent();
             PsiElement textElement = MultiMarkdownPsiImplUtil.findChildByType(parentElement, elementTypes.textType);
 
@@ -271,6 +272,14 @@ public class MultiMarkdownAnnotator implements Annotator {
                             if (psiFile != null && state.addingAlreadyOffered(TYPE_RENAME_FILE_QUICK_FIX, fixedFilePath, fixedFilePath)) {
                                 state.annotator.registerFix(new RenameFileQuickFix(psiFile, null, fixedFilePath));
                             }
+                        }
+                    } else if (reason.isA(ID_IMAGE_TARGET_NOT_IN_RAW)) {
+                        state.needTargetList = false;
+                        state.canCreateFile = false;
+                        state.createAnnotation(reason.getSeverity(), element.getTextRange(), MultiMarkdownBundle.message("annotation.imagelink.link-to-raw"));
+
+                        if (fixedLink != null && state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, fixedLink)) {
+                            state.annotator.registerFix(new ChangeLinkRefQuickFix(element, fixedLink, ChangeLinkRefQuickFix.CHANGE_TO_RAW));
                         }
                     } else if (reason.isA(ID_WIKI_LINK_HAS_DASHES)) {
                         state.needTargetList = false;

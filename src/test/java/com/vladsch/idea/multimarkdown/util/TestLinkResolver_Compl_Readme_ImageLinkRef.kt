@@ -70,7 +70,7 @@ class TestLinkResolver_Compl_Readme_ImageLinkRef {
         val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", imageRemoteFiles.asRemoteURI(), list.asFilePaths())
+        compareOrderedLists("$matchText does not match\n", imageRemoteFiles.asRemoteImageURI(), list.asFilePaths())
     }
 
     @Test
@@ -79,7 +79,7 @@ class TestLinkResolver_Compl_Readme_ImageLinkRef {
         val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", kotlinFiles.asRemoteURI(), list.asFilePaths())
+        compareOrderedLists("$matchText does not match\n", kotlinFiles.asRemoteImageURI(), list.asFilePaths())
     }
 
     @Test
@@ -88,7 +88,7 @@ class TestLinkResolver_Compl_Readme_ImageLinkRef {
         val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", markdownRemoteFiles.asRemoteURI(), list.asFilePaths())
+        compareOrderedLists("$matchText does not match\n", markdownRemoteFiles.asRemoteImageURI(), list.asFilePaths())
     }
 
     @Test
@@ -97,7 +97,7 @@ class TestLinkResolver_Compl_Readme_ImageLinkRef {
         val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", imageRemoteFiles.asRemoteURI(), list.asFilePaths())
+        compareOrderedLists("$matchText does not match\n", imageRemoteFiles.asRemoteImageURI(), list.asFilePaths())
     }
 
     /**
