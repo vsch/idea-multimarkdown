@@ -269,12 +269,10 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
 
             // for every dir in containingFilePath after lastSlash add ../ as the prefix
             if (withPrefix) {
-
                 var prefix = "../".repeat(fromPath.count('/', lastSlash + 1))
                 prefix += toPath.substring(lastSlash + 1)
                 return prefix
             } else {
-
                 return toPath.substring(lastSlash + 1)
             }
         }

@@ -84,6 +84,13 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
             }
         }
 
+        fun hadInspection(id:String) : Boolean {
+            for (inspection  in results) {
+                if (inspection.id == id) return true
+            }
+            return false
+        }
+
         fun INSPECT_LINK_CASE_MISMATCH() {
             if (linkRef is WikiLinkRef) {
                 if (resolver.equalLinks(linkRef.filePath, linkAddressLocal, ignoreCase = true) && !resolver.equalLinks(linkRef.filePath, linkAddressLocal, ignoreCase = false)) {
@@ -93,10 +100,10 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
                 if (linkAddressLocal.isEmpty() && linkRef.fileNameNoExt.equals(targetRef.fileNameNoExt, ignoreCase = true) && !linkRef.fileNameNoExt.equals(targetRef.fileNameNoExt, ignoreCase = false)
                     || linkRef.filePath.equals(linkAddressLocal, ignoreCase = true) && !linkRef.filePath.equals(linkAddressLocal, ignoreCase = false)) {
                     val fixedPath = targetRef.path.suffixWith('/') + linkRef.linkToFile(linkRef.fileNameNoExt) + linkRef.ext.ifEmpty(targetRef.ext).prefixWith('.')
-                    val fixedLinkRef = FileRef(linkAddressLocal)
                     // caution: no fixed file name provided if the case mismatch is in the path not the file name
                     // test: no fixed file name provided if the case mismatch is in the path not the file name
-                    addResult(InspectionResult(ID_CASE_MISMATCH, if (targetRef.isWikiPage) Severity.WEAK_WARNING else Severity.ERROR, linkAddress, if (linkRef.path == fixedLinkRef.path) fixedPath else null))
+                    var wikiPageHasExt = hadInspection(ID_LINK_TARGETS_WIKI_HAS_EXT)
+                    addResult(InspectionResult(ID_CASE_MISMATCH, if (targetRef.isWikiPage && !wikiPageHasExt) Severity.WEAK_WARNING else Severity.ERROR, linkAddress, fixedPath))
                 }
             }
         }
@@ -304,9 +311,9 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
         val context = Context(resolver, linkRef, targetRef, referenceId)
 
         context.INSPECT_LINK_TARGET_HAS_SPACES()
-        context.INSPECT_LINK_CASE_MISMATCH()
         context.INSPECT_LINK_TARGET_HAS_ANCHOR()
         context.INSPECT_LINK_TARGETS_WIKI_HAS_EXT()
+        context.INSPECT_LINK_CASE_MISMATCH() // IMPORTANT: has to be run after WIKI_HAS_EXT it uses the info to decide on severity level
         context.INSPECT_LINK_REPO()
         context.INSPECT_LINK_TARGET_VCS()
         context.INSPECT_LINK_TARGET_EXT()
