@@ -203,7 +203,7 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
                                 List<ResolveResult> results = new ArrayList<ResolveResult>();
                                 for (PathInfo pathInfo : pathInfos) {
                                     if (!incompleteCode) {
-                                        if (!resolver.linkAddress(linkRef, pathInfo, null,null,null).equalsIgnoreCase(origLinkRef.getFilePath())) {
+                                        if (!origLinkRef.isURI() && !resolver.linkAddress(linkRef, pathInfo, null,null,null).equalsIgnoreCase(origLinkRef.getFilePath())) {
                                             continue;
                                         }
                                     }
