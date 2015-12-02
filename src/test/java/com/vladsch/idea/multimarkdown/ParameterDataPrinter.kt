@@ -89,5 +89,3 @@ fun printData(data: Collection<Array<Any?>>, header: Array<String>): Unit {
 
     System.out.println("\n            )")
 }
-
-

@@ -311,3 +311,7 @@ fun Iterator<String>.splice(delimiter: String, skipEmpty: Boolean = true): Strin
 
     return result.toString()
 }
+
+fun String?.appendDelim(delimiter: String, vararg args: String): String {
+    return arrayListOf<String?>(this.orEmpty(), *args).splice(delimiter, true)
+}

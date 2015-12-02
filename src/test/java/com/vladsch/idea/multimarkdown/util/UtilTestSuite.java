@@ -33,15 +33,7 @@ import org.junit.runners.Suite;
         TestLinkResolver_Basic_wiki_Home.class,
         TestLinkResolver_Basic_wiki_normal_file.class,
         TestLinkResolver_Basic_Readme.class,
-        TestLinkResolver_Compl_Readme_LinkRef.class,
-        TestLinkResolver_Compl_Readme_WikiLinkRef.class,
-        TestLinkResolver_Compl_Readme_ImageLinkRef.class,
-        TestLinkResolver_Compl_wiki_Home_LinkRef.class,
-        TestLinkResolver_Compl_wiki_Home_WikiLinkRef_Completions.class,
-        TestLinkResolver_Compl_wiki_Home_ImageLinkRef_Completions.class,
-        TestLinkResolver_Compl_wiki_normal_file_LinkRef.class,
-        TestLinkResolver_Compl_wiki_normal_file_WikiLinkRef_Completions.class,
-        TestLinkResolver_Compl_wiki_normal_file_ImageLinkRef_Completions.class
+        TestLinkResolver_Completion.class
 })
 public class UtilTestSuite {
 }

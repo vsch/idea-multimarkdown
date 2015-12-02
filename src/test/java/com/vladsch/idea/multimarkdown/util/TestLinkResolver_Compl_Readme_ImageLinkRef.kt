@@ -15,6 +15,7 @@
 package com.vladsch.idea.multimarkdown.util
 
 import com.vladsch.idea.multimarkdown.TestUtils.*
+import org.junit.After
 import org.junit.Test
 
 class TestLinkResolver_Compl_Readme_ImageLinkRef {
@@ -22,43 +23,52 @@ class TestLinkResolver_Compl_Readme_ImageLinkRef {
     val containingFileRef = FileRef("/Users/vlad/src/MarkdownTest/Readme.md")
     val resolver = GitHubLinkResolver(projectResolver, containingFileRef)
 
+    @After
+    fun tearDown() {
+        printResultData()
+    }
+
     /**
      * REMOTE or LOCAL URI
      */
     @Test
     fun test_LocalRemoteUri_With_png() {
         val linkRef = ImageLinkRef(containingFileRef, ".png", null, null)
-        val list = resolver.multiResolve(linkRef, LinkResolver.PREFER_LOCAL or LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
+        val matchOptions = LinkResolver.PREFER_LOCAL or LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH
+        val list = resolver.multiResolve(linkRef, matchOptions)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", imageFiles.asLocalURI(), list.asFilePaths())
+        validateResults("$matchText does not match\n", imageFiles.asLocalURI(), list.asFilePaths(), linkRef, matchOptions)
     }
 
     @Test
     fun test_LocalRemoteUri_With_kt() {
         val linkRef = ImageLinkRef(containingFileRef, ".kt", null, null)
-        val list = resolver.multiResolve(linkRef, LinkResolver.PREFER_LOCAL or LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
+        val matchOptions = LinkResolver.PREFER_LOCAL or LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH
+        val list = resolver.multiResolve(linkRef, matchOptions)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", kotlinFiles.asLocalURI(), list.asFilePaths())
+        validateResults("$matchText does not match\n", kotlinFiles.asLocalURI(), list.asFilePaths(), linkRef, matchOptions)
     }
 
     @Test
     fun test_LocalRemoteUri_With_md() {
         val linkRef = ImageLinkRef(containingFileRef, ".md", null, null)
-        val list = resolver.multiResolve(linkRef, LinkResolver.PREFER_LOCAL or LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
+        val matchOptions = LinkResolver.PREFER_LOCAL or LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH
+        val list = resolver.multiResolve(linkRef, matchOptions)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", markdownFiles.asLocalURI(), list.asFilePaths())
+        validateResults("$matchText does not match\n", markdownFiles.asLocalURI(), list.asFilePaths(), linkRef, matchOptions)
     }
 
     @Test
     fun test_LocalRemoteUri_NoExt() {
         val linkRef = ImageLinkRef(containingFileRef, "", null, null)
-        val list = resolver.multiResolve(linkRef, LinkResolver.PREFER_LOCAL or LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
+        val matchOptions = LinkResolver.PREFER_LOCAL or LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH
+        val list = resolver.multiResolve(linkRef, matchOptions)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", imageFiles.asLocalURI(), list.asFilePaths())
+        validateResults("$matchText does not match\n", imageFiles.asLocalURI(), list.asFilePaths(), linkRef, matchOptions)
     }
 
     /**
@@ -67,37 +77,41 @@ class TestLinkResolver_Compl_Readme_ImageLinkRef {
     @Test
     fun test_RemoteUri_With_png() {
         val linkRef = ImageLinkRef(containingFileRef, ".png", null, null)
-        val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
+        val matchOptions = LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH
+        val list = resolver.multiResolve(linkRef, matchOptions)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", imageRemoteFiles.asRemoteImageURI(), list.asFilePaths())
+        validateResults("$matchText does not match\n", imageRemoteFiles.asRemoteImageURI(), list.asFilePaths(), linkRef, matchOptions)
     }
 
     @Test
     fun test_RemoteUri_With_kt() {
         val linkRef = ImageLinkRef(containingFileRef, ".kt", null, null)
-        val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
+        val matchOptions = LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH
+        val list = resolver.multiResolve(linkRef, matchOptions)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", kotlinFiles.asRemoteImageURI(), list.asFilePaths())
+        validateResults("$matchText does not match\n", kotlinFiles.asRemoteImageURI(), list.asFilePaths(), linkRef, matchOptions)
     }
 
     @Test
     fun test_RemoteUri_With_md() {
         val linkRef = ImageLinkRef(containingFileRef, ".md", null, null)
-        val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
+        val matchOptions = LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH
+        val list = resolver.multiResolve(linkRef, matchOptions)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", markdownRemoteFiles.asRemoteImageURI(), list.asFilePaths())
+        validateResults("$matchText does not match\n", markdownRemoteFiles.asRemoteImageURI(), list.asFilePaths(), linkRef, matchOptions)
     }
 
     @Test
     fun test_RemoteUri_NoExt() {
         val linkRef = ImageLinkRef(containingFileRef, "", null, null)
-        val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
+        val matchOptions = LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH
+        val list = resolver.multiResolve(linkRef, matchOptions)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", imageRemoteFiles.asRemoteImageURI(), list.asFilePaths())
+        validateResults("$matchText does not match\n", imageRemoteFiles.asRemoteImageURI(), list.asFilePaths(), linkRef, matchOptions)
     }
 
     /**
@@ -106,37 +120,41 @@ class TestLinkResolver_Compl_Readme_ImageLinkRef {
     @Test
     fun test_Uri_With_png() {
         val linkRef = ImageLinkRef(containingFileRef, ".png", null, null)
-        val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
+        val matchOptions = LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH
+        val list = resolver.multiResolve(linkRef, matchOptions)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", imageFiles.asURI(), list.asFilePaths())
+        validateResults("$matchText does not match\n", imageFiles.asURI(), list.asFilePaths(), linkRef, matchOptions)
     }
 
     @Test
     fun test_Uri_With_kt() {
         val linkRef = ImageLinkRef(containingFileRef, ".kt", null, null)
-        val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
+        val matchOptions = LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH
+        val list = resolver.multiResolve(linkRef, matchOptions)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", kotlinFiles.asURI(), list.asFilePaths())
+        validateResults("$matchText does not match\n", kotlinFiles.asURI(), list.asFilePaths(), linkRef, matchOptions)
     }
 
     @Test
     fun test_Uri_With_md() {
         val linkRef = ImageLinkRef(containingFileRef, ".md", null, null)
-        val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
+        val matchOptions = LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH
+        val list = resolver.multiResolve(linkRef, matchOptions)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", markdownFiles.asURI(), list.asFilePaths())
+        validateResults("$matchText does not match\n", markdownFiles.asURI(), list.asFilePaths(), linkRef, matchOptions)
     }
 
     @Test
     fun test_Uri_NoExt() {
         val linkRef = ImageLinkRef(containingFileRef, "", null, null)
-        val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH)
+        val matchOptions = LinkResolver.ONLY_URI or LinkResolver.LOOSE_MATCH
+        val list = resolver.multiResolve(linkRef, matchOptions)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", imageFiles.asURI(), list.asFilePaths())
+        validateResults("$matchText does not match\n", imageFiles.asURI(), list.asFilePaths(), linkRef, matchOptions)
     }
 
     /**
@@ -147,37 +165,41 @@ class TestLinkResolver_Compl_Readme_ImageLinkRef {
     @Test
     fun test_Remote_With_png() {
         val linkRef = ImageLinkRef(containingFileRef, ".png", null, null)
-        val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.LOOSE_MATCH)
+        val matchOptions = LinkResolver.ONLY_REMOTE or LinkResolver.LOOSE_MATCH
+        val list = resolver.multiResolve(linkRef, matchOptions)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", imageRemoteFiles, list.asFilePaths())
+        validateResults("$matchText does not match\n", imageRemoteFiles, list.asFilePaths(), linkRef, matchOptions)
     }
 
     @Test
     fun test_Remote_With_kt() {
         val linkRef = ImageLinkRef(containingFileRef, ".kt", null, null)
-        val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.LOOSE_MATCH)
+        val matchOptions = LinkResolver.ONLY_REMOTE or LinkResolver.LOOSE_MATCH
+        val list = resolver.multiResolve(linkRef, matchOptions)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", kotlinFiles, list.asFilePaths())
+        validateResults("$matchText does not match\n", kotlinFiles, list.asFilePaths(), linkRef, matchOptions)
     }
 
     @Test
     fun test_Remote_With_md() {
         val linkRef = ImageLinkRef(containingFileRef, ".md", null, null)
-        val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.LOOSE_MATCH)
+        val matchOptions = LinkResolver.ONLY_REMOTE or LinkResolver.LOOSE_MATCH
+        val list = resolver.multiResolve(linkRef, matchOptions)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", markdownRemoteFiles, list.asFilePaths())
+        validateResults("$matchText does not match\n", markdownRemoteFiles, list.asFilePaths(), linkRef, matchOptions)
     }
 
     @Test
     fun test_Remote_NoExt() {
         val linkRef = ImageLinkRef(containingFileRef, "", null, null)
-        val list = resolver.multiResolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.LOOSE_MATCH)
+        val matchOptions = LinkResolver.ONLY_REMOTE or LinkResolver.LOOSE_MATCH
+        val list = resolver.multiResolve(linkRef, matchOptions)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", imageRemoteFiles, list.asFilePaths())
+        validateResults("$matchText does not match\n", imageRemoteFiles, list.asFilePaths(), linkRef, matchOptions)
     }
 
     /**
@@ -186,15 +208,17 @@ class TestLinkResolver_Compl_Readme_ImageLinkRef {
      */
     @Test fun test_Basic_WithExt_png() {
         val linkRef = ImageLinkRef(containingFileRef, ".png", null, null)
-        val list = resolver.multiResolve(linkRef, LinkResolver.LOOSE_MATCH)
+        val matchOptions = LinkResolver.LOOSE_MATCH
+        val list = resolver.multiResolve(linkRef, matchOptions)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", imageFiles, list.asFilePaths())
+        validateResults("$matchText does not match\n", imageFiles, list.asFilePaths(), linkRef, matchOptions)
     }
 
     @Test fun test_Basic_WithExt_iml() {
         val linkRef = ImageLinkRef(containingFileRef, ".iml", null, null)
-        val list = resolver.multiResolve(linkRef, LinkResolver.LOOSE_MATCH)
+        val matchOptions = LinkResolver.LOOSE_MATCH
+        val list = resolver.multiResolve(linkRef, matchOptions)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
         compareOrderedLists("$matchText does not match\n", arrayListOf<String>(
@@ -205,26 +229,29 @@ class TestLinkResolver_Compl_Readme_ImageLinkRef {
 
     @Test fun test_Basic_WithExt_kt() {
         val linkRef = ImageLinkRef(containingFileRef, ".kt", null, null)
-        val list = resolver.multiResolve(linkRef, LinkResolver.LOOSE_MATCH)
+        val matchOptions = LinkResolver.LOOSE_MATCH
+        val list = resolver.multiResolve(linkRef, matchOptions)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", kotlinFiles, list.asFilePaths())
+        validateResults("$matchText does not match\n", kotlinFiles, list.asFilePaths(), linkRef, matchOptions)
     }
 
     @Test fun test_Basic_WithExt_md() {
         val linkRef = ImageLinkRef(containingFileRef, ".md", null, null)
-        val list = resolver.multiResolve(linkRef, LinkResolver.LOOSE_MATCH)
+        val matchOptions = LinkResolver.LOOSE_MATCH
+        val list = resolver.multiResolve(linkRef, matchOptions)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", markdownFiles, list.asFilePaths())
+        validateResults("$matchText does not match\n", markdownFiles, list.asFilePaths(), linkRef, matchOptions)
     }
 
     @Test fun test_Basic_NoExt() {
         val linkRef = ImageLinkRef(containingFileRef, "", null, null)
-        val list = resolver.multiResolve(linkRef, LinkResolver.LOOSE_MATCH)
+        val matchOptions = LinkResolver.LOOSE_MATCH
+        val list = resolver.multiResolve(linkRef, matchOptions)
         val matchText = resolver.getLastMatcher()?.linkLooseMatch
 
-        compareOrderedLists("$matchText does not match\n", imageFiles, list.asFilePaths())
+        validateResults("$matchText does not match\n", imageFiles, list.asFilePaths(), linkRef, matchOptions)
     }
 
 }

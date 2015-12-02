@@ -15,7 +15,12 @@
 package com.vladsch.idea.multimarkdown.util
 
 import com.intellij.openapi.project.Project
+import com.vladsch.idea.multimarkdown.TestUtils
+import com.vladsch.idea.multimarkdown.printData
 import java.util.*
+
+val data = ArrayList<Array<Any?>>()
+val cleanData = true
 
 object MarkdownTestData : LinkResolver.ProjectResolver {
 
@@ -195,7 +200,7 @@ fun List<String>.asRemoteURI(branchOrTag: String? = null): List<String> {
     return this.asRemoteUriType(branchOrTag, "blob");
 }
 
-fun List<String>.asRemoteUriType(branchOrTag: String? = null, gitHubLink:String?): List<String> {
+fun List<String>.asRemoteUriType(branchOrTag: String? = null, gitHubLink: String?): List<String> {
     val _branchOrTag = branchOrTag ?: "master"
     val projectResolver: LinkResolver.ProjectResolver = MarkdownTestData
     val result = this.map {
@@ -443,5 +448,134 @@ val markdownFiles = arrayListOf<String>(
         "/Users/vlad/src/MarkdownTest/single-link-test.md",
         "/Users/vlad/src/MarkdownTest/untitled/README.md"
 )
+
+fun printResultData() {
+    if (cleanData) {
+        val header = arrayOf(
+                "fullPath",
+                "linkType",
+                "linkRef",
+                "linkAnchor",
+                "options",
+                "optionsText",
+                "multiResolve"
+        )
+
+        printData(data, header)
+    }
+}
+
+fun matchOptions(matchOptions: Int): String {
+    var options = matchOptions
+    var result = ""
+
+    if (options == LinkResolver.ANY) {
+        result = "ANY"
+    }
+    if (options and LinkResolver.LOCAL_OR_REMOTE != 0) {
+        options = options and LinkResolver.LOCAL_OR_REMOTE.inv()
+        result = result.appendDelim(" or ", "LOCAL_OR_REMOTE")
+    }
+    if (options and LinkResolver.PREFER_LOCAL != 0) {
+        options = options and LinkResolver.PREFER_LOCAL.inv()
+        result = result.appendDelim(" or ", "PREFER_LOCAL")
+    }
+    if (options and LinkResolver.ONLY_REMOTE != 0) {
+        options = options and LinkResolver.ONLY_REMOTE.inv()
+        result = result.appendDelim(" or ", "ONLY_REMOTE")
+    }
+    if (options and LinkResolver.ONLY_URI != 0) {
+        options = options and LinkResolver.ONLY_URI.inv()
+        result = result.appendDelim(" or ", "ONLY_URI")
+    }
+    if (options and LinkResolver.ACCEPT_URI != 0) {
+        options = options and LinkResolver.ACCEPT_URI.inv()
+        result = result.appendDelim(" or ", "ACCEPT_URI")
+    }
+    if (options and LinkResolver.LOOSE_MATCH != 0) {
+        options = options and LinkResolver.LOOSE_MATCH.inv()
+        result = result.appendDelim(" or ", "LOOSE_MATCH")
+    }
+
+    return result
+}
+
+val availableLists = mapOf<List<String>, String>(
+        Pair(EMPTY_LIST, "EMPTY_LIST"),
+        Pair(gitHubLinks, "gitHubLinks"),
+        Pair(markdownFiles, "markdownFiles"),
+        Pair(wikiImageRemoteFiles, "wikiImageRemoteFiles"),
+        Pair(wikiImageFiles, "wikiImageFiles"),
+        Pair(imageRemoteFiles, "imageRemoteFiles"),
+        Pair(imageFiles, "imageFiles"),
+        Pair(wikiKotlinFiles, "wikiKotlinFiles"),
+        Pair(kotlinFiles, "kotlinFiles"),
+        Pair(wikiMarkdownRemoteFiles, "wikiMarkdownRemoteFiles"),
+        Pair(wikiMarkdownFiles, "wikiMarkdownFiles"),
+        Pair(markdownRemoteFiles, "markdownRemoteFiles")
+)
+
+val availablePermutations = mapOf<(List<String>) -> List<String>, String>(
+        Pair({ it -> it.with(gitHubLinks) }, ".with(gitHubLinks)"),
+        Pair({ it -> it.asURI() }, ".asURI()"),
+        Pair({ it -> it.asLocalURI() }, ".asLocalURI()"),
+        Pair({ it -> it.asRemoteURI() }, ".asRemoteURI()"),
+        Pair({ it -> it.asRemoteImageURI() }, ".asRemoteImageURI()"),
+        Pair({ it -> it.asURI().with(gitHubLinks) }, ".asURI().with(gitHubLinks)"),
+        Pair({ it -> it.asLocalURI().with(gitHubLinks) }, ".asLocalURI().with(gitHubLinks)"),
+        Pair({ it -> it.asRemoteURI().with(gitHubLinks) }, ".asRemoteURI().with(gitHubLinks)"),
+        Pair({ it -> it.asRemoteImageURI().with(gitHubLinks) }, ".asRemoteImageURI().with(gitHubLinks)")
+)
+
+fun exactMatch(list: List<String>, other: List<String>): Boolean {
+    if (list.size == other.size) {
+        for (i in list.indices) {
+            if (list[i] != other[i]) return false
+        }
+        return true
+    }
+    return false
+}
+
+fun selectExactList(list: List<String>, availableLists: Map<List<String>, String>, availablePermutations: Map<(List<String>) -> List<String>, String>): Any? {
+    for (other in availableLists.keys) {
+        if (exactMatch(list, other)) return availableLists[other]
+    }
+
+    for (perm in availablePermutations.keys) {
+        for (other in availableLists.keys) {
+            if (exactMatch(list, perm(other))) return availableLists[other] + availablePermutations[perm]
+        }
+    }
+    return list
+}
+
+fun addCompletionData(linkRef: LinkRef, matchOptions: Int, expectedResult: Any?) {
+    //        "fullPath",
+    //        "linkType",
+    //        "linkRef",
+    //        "linkAnchor",
+    //        "options",
+    //        "optionsText",
+    //        "multiResolve"
+    val result = arrayOf<Any?>(
+            linkRef.containingFile.filePath,
+            when (linkRef) {
+                is WikiLinkRef -> ::WikiLinkRef
+                is ImageLinkRef -> ::ImageLinkRef
+                else -> ::LinkRef
+            },
+            linkRef.filePath,
+            linkRef.anchor,
+            matchOptions, matchOptions(matchOptions),
+            if (expectedResult as? List<String> != null) selectExactList(expectedResult as List<String>, availableLists, availablePermutations) else expectedResult
+    )
+    data.add(result)
+}
+
+fun validateResults(message: String, expected: List<String>, actual: List<String>, linkRef: LinkRef, matchOptions: Int) {
+    if (cleanData) addCompletionData(linkRef, matchOptions, expected)
+    TestUtils.compareOrderedLists(message, expected, actual)
+}
 
 

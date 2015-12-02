@@ -44,9 +44,9 @@ abstract class LinkResolver(val projectResolver: LinkResolver.ProjectResolver, v
         @JvmField val COMPLETION_MATCH = 32                                 // inexact match for error detection
         @JvmField val LOCAL_OR_REMOTE = PREFER_LOCAL or ONLY_REMOTE           // local or remote resolved files
 
+        private val ALL = LOCAL_OR_REMOTE or ONLY_URI             // local, remote or URI, no conversion will be done, refs returned as they are resolved
         private val MATCH_MASK = LOOSE_MATCH or COMPLETION_MATCH
 
-        private val ALL = PREFER_LOCAL or ONLY_REMOTE or ONLY_URI             // local, remote or URI, no conversion will be done, refs returned as they are resolved
 
         fun wantAny(options: Int): Boolean = (options and ALL == ANY) || (options and ALL == ALL)
         fun wantLocal(options: Int): Boolean = (options and LOCAL_OR_REMOTE == 0) || (options and PREFER_LOCAL != 0)
