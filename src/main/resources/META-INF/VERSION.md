@@ -24,7 +24,8 @@
 - Add: navigation line items for absolute links that resolve to files
 - Add: absolute address link completions and link completions based on extensions other than markdown for wiki and explicit and images for image links, just add https:// in front to get url completions and .ext without a file name to get extension based completions.  
 - Fix #71: license information is now saved in multimarkdown.local.xml and is marked as non-roaming 
-- Add: image links must resolve to raw file access in main repository default behavior and validation  
+- Add: handle relative image links in wiki pages must resolve to raw file access in main repository default behavior and validation  
+- Add: automatically change wiki link to explicit link if target file is moved out of wiki link access range
 
 ### 1.2.2 - Bug Fixes and Enhancements
 

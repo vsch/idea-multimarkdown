@@ -90,7 +90,6 @@ public class MultiMarkdownWikiLinkRefImpl extends MultiMarkdownNamedElementImpl 
         if (projectComponent == null) return this;
 
         if (projectComponent.getRefactoringRenameFlags() != RENAME_NO_FLAGS) renameFlags = projectComponent.getRefactoringRenameFlags();
-        else if (reference.isResolveRefMissing()) renameFlags &= ~RENAME_KEEP_ANCHOR;
 
         return MultiMarkdownPsiImplUtil.setName(this, newName, renameFlags);
     }

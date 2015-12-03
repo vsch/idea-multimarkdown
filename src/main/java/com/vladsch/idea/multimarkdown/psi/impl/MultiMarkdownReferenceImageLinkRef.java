@@ -22,38 +22,15 @@ import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownImageLink;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownImageLinkRef;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
-import com.vladsch.idea.multimarkdown.util.FileRef;
-import com.vladsch.idea.multimarkdown.util.GitHubLinkResolver;
-import com.vladsch.idea.multimarkdown.util.LinkRef;
+import com.vladsch.idea.multimarkdown.util.*;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class MultiMarkdownReferenceImageLinkRef extends MultiMarkdownReference {
+public class MultiMarkdownReferenceImageLinkRef extends MultiMarkdownReferenceLinkRef {
     private static final Logger logger = Logger.getLogger(MultiMarkdownReferenceImageLinkRef.class);
 
     public MultiMarkdownReferenceImageLinkRef(@NotNull MultiMarkdownImageLinkRef element, @NotNull TextRange textRange) {
         super(element, textRange);
-    }
-
-    @Nullable
-    @Override
-    public PsiElement resolve() {
-        ResolveResult[] resolveResults = multiResolve(false);
-        return resolveResults.length > 0 ? resolveResults[0].getElement() : null;
-    }
-
-    @Override
-    public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
-        // we will handle this by renaming the element to point to the new location
-        if (myElement instanceof MultiMarkdownImageLink && element instanceof PsiFile) {
-            LinkRef linkRef = MultiMarkdownPsiImplUtil.getLinkRef(myElement);
-            if (linkRef != null) {
-                String linkRefText = new GitHubLinkResolver(myElement).linkAddress(linkRef, new FileRef((PsiFile) element), null, null, null);
-                // this will create a new reference and loose connection to this one
-                return myElement.setName(linkRefText,  MultiMarkdownNamedElement.REASON_BIND_TO_FILE);
-            }
-        }
-        return super.bindToElement(element);
     }
 }

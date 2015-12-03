@@ -197,7 +197,8 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
                                 return results.toArray(new ResolveResult[results.size()]);
                             }
                         }
-                        return new ResolveResult[] { new PsiElementResolveResult(getMissingRefElement(name)) };
+                        //return new ResolveResult[] { new PsiElementResolveResult(getMissingRefElement(name)) };
+                        return EMPTY_RESULTS;
                     }
                 }
             } else {

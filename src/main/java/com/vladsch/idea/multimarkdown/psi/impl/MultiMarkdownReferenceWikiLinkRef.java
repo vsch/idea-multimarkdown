@@ -19,11 +19,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.ResolveResult;
 import com.intellij.util.IncorrectOperationException;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLinkRef;
+import com.vladsch.idea.multimarkdown.psi.*;
 import com.vladsch.idea.multimarkdown.util.FileRef;
 import com.vladsch.idea.multimarkdown.util.GitHubLinkResolver;
 import com.vladsch.idea.multimarkdown.util.LinkRef;
+import com.vladsch.idea.multimarkdown.util.ProjectFileRef;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -48,12 +48,24 @@ public class MultiMarkdownReferenceWikiLinkRef extends MultiMarkdownReference {
         if (myElement instanceof MultiMarkdownWikiLinkRef && element instanceof PsiFile) {
             LinkRef linkRef = MultiMarkdownPsiImplUtil.getLinkRef(myElement);
             if (linkRef != null) {
-                String linkRefText = new GitHubLinkResolver(myElement).linkAddress(linkRef, new FileRef((PsiFile) element), null, null, null);
-                // this will create a new reference and loose connection to this one
-                return myElement.setName(linkRefText,  MultiMarkdownNamedElement.REASON_BIND_TO_FILE);
+                ProjectFileRef targetRef = new ProjectFileRef((PsiFile) element);
+                if (targetRef.isUnderWikiDir()) {
+                    String linkAddress = new GitHubLinkResolver(myElement).linkAddress(linkRef, new FileRef((PsiFile) element), null, null, null);
+                    // this will create a new reference and loose connection to this one
+                    return myElement.setName(linkAddress, MultiMarkdownNamedElement.REASON_BIND_TO_FILE);
+                } else {
+                    // change to explicit link
+                    GitHubLinkResolver resolver = new GitHubLinkResolver(myElement);
+                    LinkRef expLinkRef = LinkRef.from(linkRef);
+                    String linkAddress = resolver.linkAddress(expLinkRef, new FileRef((PsiFile) element), null, null, "");
+
+                    PsiElement newLink = MultiMarkdownPsiImplUtil.changeToExplicitLink(myElement.getParent(), myElement.getContainingFile(), linkAddress);
+                    if (newLink instanceof MultiMarkdownExplicitLink) {
+                        return MultiMarkdownPsiImplUtil.findChildByType(newLink, MultiMarkdownTypes.LINK_REF);
+                    }
+                }
             }
         }
         return super.bindToElement(element);
     }
-
 }

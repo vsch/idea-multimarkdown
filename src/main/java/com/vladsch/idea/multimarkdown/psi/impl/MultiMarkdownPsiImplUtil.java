@@ -372,10 +372,10 @@ public class MultiMarkdownPsiImplUtil {
     }
 
     @NotNull
-    public static PsiElement changeToExplicitLink(PsiElement element, @Nullable PsiFile containingFile) {
+    public static PsiElement changeToExplicitLink(PsiElement element, @Nullable PsiFile containingFile, @Nullable String newLinkRef) {
         if (!element.isValid()) return element;
 
-        String elementText = getTextForChangeToExplicitLink(element, containingFile);
+        String elementText = getTextForChangeToExplicitLink(element, containingFile, newLinkRef);
 
         if (!elementText.isEmpty()) {
             MultiMarkdownExplicitLink otherLink = (MultiMarkdownExplicitLink) MultiMarkdownElementFactory.createElementFromText(element.getProject(), elementText);
@@ -388,7 +388,7 @@ public class MultiMarkdownPsiImplUtil {
     }
 
     @NotNull
-    public static String getTextForChangeToExplicitLink(PsiElement element, @Nullable PsiFile containingFile) {
+    public static String getTextForChangeToExplicitLink(PsiElement element, @Nullable PsiFile containingFile, @Nullable String newLinkRef) {
         LinkRefElementTypes elementTypes = getNamedElementTypes(element);
 
         if (containingFile == null) containingFile = element.getContainingFile();
@@ -400,6 +400,11 @@ public class MultiMarkdownPsiImplUtil {
 
             if (sourceLinkRef != null) {
                 LinkRef linkRef = LinkRef.from(sourceLinkRef);
+
+                if (newLinkRef != null) {
+                    linkRef = linkRef.replaceFilePath(newLinkRef, false);
+                }
+
                 if (linkText.isEmpty()) {
                     // TODO: use suggestion for default text
                     linkText = WikiLinkRef.fileAsLink(linkRef.linkToFile(sourceLinkRef.getFileNameNoExt()));

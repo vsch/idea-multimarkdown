@@ -76,7 +76,7 @@ class ChangeWikiLinkToExplicitLinkQuickFix extends BaseIntentionAction {
                     final Document document = editor.getDocument();
                     VirtualFile virtualFile = FileDocumentManager.getInstance().getFile(document);
                     PsiFile psiFile = virtualFile == null ? null : PsiManager.getInstance(project).findFile(virtualFile);
-                    String text = MultiMarkdownPsiImplUtil.getTextForChangeToExplicitLink(wikiLinkElement, psiFile);
+                    String text = MultiMarkdownPsiImplUtil.getTextForChangeToExplicitLink(wikiLinkElement, psiFile, null);
                     int pos = wikiLinkElement.getTextOffset();
                     document.replaceString(pos, pos + wikiLinkElement.getTextLength(), text);
                 }

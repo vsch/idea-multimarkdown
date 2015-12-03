@@ -21,9 +21,7 @@ import com.intellij.psi.ResolveResult;
 import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownLinkRef;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownNamedElement;
-import com.vladsch.idea.multimarkdown.util.FileRef;
-import com.vladsch.idea.multimarkdown.util.GitHubLinkResolver;
-import com.vladsch.idea.multimarkdown.util.LinkRef;
+import com.vladsch.idea.multimarkdown.util.*;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -48,9 +46,18 @@ public class MultiMarkdownReferenceLinkRef extends MultiMarkdownReference {
         if (myElement instanceof MultiMarkdownLinkRef && element instanceof PsiFile) {
             LinkRef linkRef = MultiMarkdownPsiImplUtil.getLinkRef(myElement);
             if (linkRef != null) {
-                String linkRefText = new GitHubLinkResolver(myElement).linkAddress(linkRef, new FileRef((PsiFile) element), null, null, null);
+                GitHubLinkResolver resolver = new GitHubLinkResolver(myElement);
+                ProjectFileRef targetRef = new ProjectFileRef((PsiFile) element);
+                String linkAddress = resolver.linkAddress(linkRef, targetRef, null, null, "");
+                LinkRef newLinkRef = linkRef.replaceFilePath(linkAddress, true);
+                if (linkRef.isURI()) {
+                    newLinkRef = (LinkRef) resolver.processMatchOptions(newLinkRef, targetRef, LinkResolver.ONLY_REMOTE_URI);
+                    if (newLinkRef != null) {
+                        linkAddress = newLinkRef.getFilePath();
+                    }
+                }
                 // this will create a new reference and loose connection to this one
-                return myElement.setName(linkRefText,  MultiMarkdownNamedElement.REASON_BIND_TO_FILE);
+                return myElement.setName(linkAddress,  MultiMarkdownNamedElement.REASON_BIND_TO_FILE);
             }
         }
         return super.bindToElement(element);

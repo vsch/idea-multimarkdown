@@ -41,7 +41,7 @@
         </div>
         ]]></description>
 
-    <version>1.2.2.13</version>
+    <version>1.2.2.14</version>
     <idea-version since-build="133.1711"/>
     <change-notes><![CDATA[
     <ul>
@@ -64,7 +64,7 @@
         <li>Add: warning annotation in text editor, link color and image border in preview when a link target is not on GitHub according to its status</li>
         <li>Add: intention to change relative to absolute link addresses and vice-versa</li>
         <li>Add: validation of absolute links that look like they are targeting files in the same repository as the containing file</li>
-        <li>Add: navigation line items for absolute links that resolve to files</li>
+        <li>Add: navigation line items for absolute links that resolve to files in the repository</li>
         <li>Add: absolute address link completions and link completions based on extensions other than markdown for wiki and explicit and images for image links, just add https:// in front to get url completions and .ext without a file name to get extension based completions.</li>
         <li>Fix #71: license information is now saved in multimarkdown.local.xml and is marked as non-roaming</li>
     </ul>
