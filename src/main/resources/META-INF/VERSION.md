@@ -13,20 +13,20 @@
 
 #### Enhanced Edition
 
-- Change: new implementation of file link resolving logic handles a full set of GitHub idiosyncrasies for relative links, raw/blob access, absolute https:// links, file extensions and case sensitivity.
-- Add: new annotation inspections for common errors in link resolution
-- New: modified HTML now has all links as URI's during rendering with preference to GitHub repository file when available, fallback to local file://
-- Fix: added validation for invalid PsiElements during refactoring to prevent exceptions
-- Fix: all link refactoring for file move/rename adjusts affected link according to GitHub rules
-- Add: warning annotation in text editor, link color and image border in preview when a link target is not on GitHub according to its status
-- Add: intention to change relative to absolute link addresses and vice-versa
-- Add: validation of absolute links that look like they are targeting files in the same repository as the containing file 
-- Add: navigation line items for absolute links that resolve to files
-- Add: absolute address link completions and link completions based on extensions other than markdown for wiki and explicit and images for image links, just add https:// in front to get url completions and .ext without a file name to get extension based completions.  
-- Fix #71: license information is now saved in multimarkdown.local.xml and is marked as non-roaming 
-- Add: handle relative image links in wiki pages must resolve to raw file access in main repository default behavior and validation  
-- Add: automatically change wiki link to explicit link if target file is moved out of wiki link access range
-- Add: refactoring now keeps link format as it was before, if it was absolute or page relative.
+* Change: new implementation of file link resolving logic handles a full set of GitHub idiosyncrasies for relative links, raw/blob access, absolute https:// links, file extensions and case sensitivity.
+* Add: new annotation inspections for common errors in link resolution
+* New: modified HTML now has all links as URI's during rendering with preference to GitHub repository file when available, fallback to local file://
+* Fix: added validation for invalid PsiElements during refactoring to prevent exceptions
+* Fix: all link refactoring for file move/rename adjusts affected link according to GitHub rules
+* Add: warning annotation in text editor, link color and image border in preview when a link target is not on GitHub according to its status
+* Add: intention to change relative to absolute link addresses and vice-versa
+* Add: validation of absolute links that look like they are targeting files in the same repository as the containing file 
+* Add: navigation line items for absolute links that resolve to files
+* Add: absolute address link completions and link completions based on extensions other than markdown for wiki and explicit and images for image links, just add file:// or https:// in front to get url completions and an extension without a file name to get extension based completions. `https://.java` will show java files with https:// absolute link address.  
+* Fix #71: license information is now saved in multimarkdown.local.xml and is marked as non-roaming 
+* Add: handle relative image links in wiki pages must resolve to raw file access in main repository default behavior and validation  
+* Add: automatically change wiki link to explicit link if target file is moved out of wiki link access range
+* Add: refactoring now keeps link format as it was before, if it was absolute or page relative.
 
 ### 1.2.2 - Bug Fixes and Enhancements
 

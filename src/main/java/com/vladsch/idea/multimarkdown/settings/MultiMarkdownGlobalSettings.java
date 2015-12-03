@@ -64,6 +64,7 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
 
     public static final String NOTIFICATION_GROUP_ISSUES = "MultiMarkdown Alerts";
     public static final String NOTIFICATION_GROUP_UPDATE = "MultiMarkdown Update";
+    public static final String NOTIFICATION_GROUP_LICENSE = "MultiMarkdown License";
 
     /**
      * A set of listeners to this object state changes.
@@ -159,6 +160,11 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
 
     final public Settings.StringSetting licenseCode = settings.LocalStringSetting("", "licenseCode");
     final public Settings.StringSetting activationCode = settings.LocalStringSetting("", "activationCode");
+    final public Settings.StringSetting licenseType = settings.LocalStringSetting("", "licenseType");
+    final public Settings.StringSetting lastFeatureUpdateVersion = settings.LocalStringSetting("", "lastFeatureUpdateVersion");
+    final public Settings.BooleanSetting showLicenseExpiration = settings.LocalBooleanSetting(true, "showLicenseExpiration", 0);
+    final public Settings.BooleanSetting showLicenseExpired = settings.LocalBooleanSetting(true, "showLicenseExpired", 0);
+    final public Settings.BooleanSetting showFeatureUpdates = settings.LocalBooleanSetting(true, "showFeatureUpdates", 0);
 
     public boolean isFxHtmlPreview() {
         return isFxHtmlPreview;

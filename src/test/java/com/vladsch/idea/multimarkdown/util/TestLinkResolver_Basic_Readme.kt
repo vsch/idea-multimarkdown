@@ -46,7 +46,7 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
     val multiResolve: Array<String>
     val localLinkRef = resolvesLocalRel
     val externalLinkRef = resolvesExternalRel
-    val skipTest = linkRef.isExternal
+    val skipTest = linkRef.isExternal && !linkRef.filePath.startsWith(MarkdownTestData.mainGitHubRepo.baseUrl, ignoreCase = true)
 
     fun resolveRelativePath(filePath: String?): PathInfo? {
         return if (filePath == null) null else if (filePath.startsWith("http://", "https://")) PathInfo(filePath) else PathInfo.appendParts(filePathInfo.path, filePath)
@@ -76,20 +76,20 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
     @Test fun test_ResolveLocal() {
         if (skipTest) return
         val localRef = resolver.resolve(linkRef, LinkResolver.PREFER_LOCAL, fileList)
-        assertEqualsMessage("Local does not match ${resolver.getMatcher(linkRef).linkAllMatch}", resolvesLocal, localRef?.filePath)
+        assertEqualsMessage("Local does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", resolvesLocal, localRef?.filePath)
     }
 
     @Test fun test_ResolveExternal() {
         if (skipTest) return
         val localRef = resolver.resolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.ACCEPT_URI, fileList)
-        assertEqualsMessage("External does not match ${resolver.getMatcher(linkRef).linkAllMatch}", resolvesExternal, localRef?.filePath)
+        assertEqualsMessage("External does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", resolvesExternal, localRef?.filePath)
     }
 
     @Test fun test_LocalLinkAddress() {
         if (skipTest) return
         val localRef = resolver.resolve(linkRef, LinkResolver.PREFER_LOCAL, fileList)
         val localRefAddress = if (localRef != null) resolver.linkAddress(linkRef, localRef, null, null) else null
-        assertEqualsMessage("Local link address does not match ${resolver.getMatcher(linkRef).linkAllMatch}", this.linkAddressText, localRefAddress)
+        assertEqualsMessage("Local link address does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", this.linkAddressText, localRefAddress)
     }
 
     @Test fun test_RemoteLinkAddress() {
@@ -97,14 +97,14 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
         val localRef = resolver.resolve(linkRef, LinkResolver.PREFER_LOCAL, fileList) as? FileRef
         val remoteRef = resolver.resolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.ACCEPT_URI, fileList)
         val remoteRefAddress = if (localRef == null && remoteRef != null) resolver.linkAddress(linkRef, remoteRef, linkRef !is WikiLinkRef && (linkRef.hasExt || (linkRef.hasAnchor && linkAnchor?.contains('.') ?: false)), null) else null
-        assertEqualsMessage("Remote based link address does not match ${resolver.getMatcher(linkRef).linkAllMatch}", this.remoteAddressText, remoteRefAddress)
+        assertEqualsMessage("Remote based link address does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", this.remoteAddressText, remoteRefAddress)
     }
 
     @Test fun test_AnyLinkAddress() {
         if (skipTest) return
         val anyRef = resolver.resolve(linkRef, LinkResolver.ANY, fileList)
         val linkAddress = if (anyRef != null) resolver.linkAddress(linkRef, anyRef, null, null) else null
-        assertEqualsMessage("LinkResolver.ANY link address does not match ${resolver.getMatcher(linkRef).linkAllMatch}", this.linkAddressText ?: this.remoteAddressText, linkAddress)
+        assertEqualsMessage("LinkResolver.ANY link address does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", this.linkAddressText ?: this.remoteAddressText, linkAddress)
     }
 
     @Test fun test_OnlyURILinkAddress() {
@@ -115,7 +115,7 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
             "file://" + targetRef.filePath
         } else if (targetRef is LinkRef) targetRef.filePathWithAnchor
         else null
-        assertEqualsMessage("LinkResolver.ONLY_URI link address does not match ${resolver.getMatcher(linkRef).linkAllMatch}", href, (uriRef as? LinkRef)?.filePathWithAnchor)
+        assertEqualsMessage("LinkResolver.ONLY_URI link address does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", href, (uriRef as? LinkRef)?.filePathWithAnchor)
     }
 
     @Test fun test_RemoteURILinkAddress() {
@@ -132,7 +132,7 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
             }
         } else if (targetRef is LinkRef) targetRef.filePathWithAnchor
         else null
-        assertEqualsMessage("LinkResolver.ONLY_URI link address does not match ${resolver.getMatcher(linkRef).linkAllMatch}", href, (uriRef as? LinkRef)?.filePathWithAnchor)
+        assertEqualsMessage("LinkResolver.ONLY_URI link address does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", href, (uriRef as? LinkRef)?.filePathWithAnchor)
     }
 
     @Test fun test_MultiResolve() {
@@ -144,7 +144,7 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
         for (i in localRefs.indices) {
             actuals[i] = localRefs[i].filePath
         }
-        compareOrderedLists("MultiResolve ${if (looseMatch) "looseMatch" else "exact" } does not match ${if (looseMatch) resolver.getMatcher(linkRef).linkLooseMatch else resolver.getMatcher(linkRef).linkAllMatch}", multiResolve, actuals)
+        compareOrderedLists("MultiResolve ${if (looseMatch) "looseMatch" else "exact" } does not match ${if (looseMatch) resolver.getMatcher(linkRef, false).linkLooseMatch else resolver.getMatcher(linkRef, false).linkAllMatch}", multiResolve, actuals)
     }
 
     @Test fun test_MultiResolveExactNoMatch() {
@@ -154,7 +154,7 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
         for (i in localRefs.indices) {
             actuals[i] = localRefs[i].filePath
         }
-        compareOrderedLists("MultiResolve exact does not match ${resolver.getMatcher(linkRef).linkAllMatch}", arrayOf<String>(), actuals)
+        compareOrderedLists("MultiResolve exact does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", arrayOf<String>(), actuals)
     }
 
     @Test fun test_Resolve() {
@@ -162,7 +162,7 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
         //        val localRefs = resolver.multiResolve(if (linkRef is WikiLinkRef) linkRef else linkRefNoExt, LinkResolver.ONLY_LOCAL or LinkResolver.LOOSE_MATCH, fileList)
         val localRefs = resolver.multiResolve(linkRef, LinkResolver.ANY, fileList)
         val targetRef = if (localRefs.size > 0) localRefs[0] else null
-        assertEqualsMessage("Resolve does not match ${resolver.getMatcher(linkRef).linkAllMatch}", this.resolvesLocal ?: this.resolvesExternal ?: null, if (targetRef is LinkRef) targetRef.filePathWithAnchor else targetRef?.filePath)
+        assertEqualsMessage("Resolve does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", this.resolvesLocal ?: this.resolvesExternal ?: null, if (targetRef is LinkRef) targetRef.filePathWithAnchor else targetRef?.filePath)
     }
 
     @Test fun test_InspectionResults() {
@@ -176,7 +176,7 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
                 }
             }
 
-            compareUnorderedLists("InspectionResults do not match ${resolver.getMatcher(linkRef).linkAllMatch}", inspectionResults, inspections)
+            compareUnorderedLists("InspectionResults do not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", inspectionResults, inspections)
         }
     }
 
@@ -188,9 +188,9 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
             if (linkRefUri != null && linkRefUri is LinkRef && linkRefUri.isExternal) {
                 val originalCaseLinkRefUri = if (linkRefUri.filePath.endsWith("/wiki")) linkRefUri else linkRefUri.replaceFilePath(linkRefUri.path + linkRef.fileName.ifEmpty { linkRefUri.fileName })
                 val localRef = resolver.resolve(originalCaseLinkRefUri, LinkResolver.PREFER_LOCAL, fileList)
-                assertEqualsMessage("ResolveHttp $originalCaseLinkRefUri does not match ${resolver.getMatcher(linkRef).linkAllMatch}", resolvesLocal, localRef?.filePath)
+                assertEqualsMessage("ResolveHttp $originalCaseLinkRefUri does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", resolvesLocal, localRef?.filePath)
             } else {
-                assertEqualsMessage("ResolveHttp no remote link ${resolver.getMatcher(linkRef).linkAllMatch} for $resolvesLocal", resolvesLocal, linkRefUri?.filePath)
+                assertEqualsMessage("ResolveHttp no remote link ${resolver.getMatcher(linkRef, false).linkAllMatch} for $resolvesLocal", resolvesLocal, linkRefUri?.filePath)
             }
         }
     }
@@ -206,9 +206,9 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
 //                if (linkRefUri != null && linkRefUri is LinkRef && linkRefUri.isExternal) {
 //                    val originalCaseLinkRefUri = linkRefUri.replaceFilePath((linkRefUri.path + linkRef.fileName.ifEmpty { linkRefUri.fileName }).replace("/raw/","/blob/"))
 //                    val localRef = resolver.resolve(originalCaseLinkRefUri, LinkResolver.PREFER_LOCAL, fileList)
-//                    assertEqualsMessage("ResolveHttp $originalCaseLinkRefUri does not match ${resolver.getMatcher(linkRef).linkAllMatch}", null, localRef?.filePath)
+//                    assertEqualsMessage("ResolveHttp $originalCaseLinkRefUri does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", null, localRef?.filePath)
 //                } else {
-//                    assertEqualsMessage("ResolveHttp no remote link ${resolver.getMatcher(linkRef).linkAllMatch} for $resolvesLocal", resolvesLocal, linkRefUri?.filePath)
+//                    assertEqualsMessage("ResolveHttp no remote link ${resolver.getMatcher(linkRef, false).linkAllMatch} for $resolvesLocal", resolvesLocal, linkRefUri?.filePath)
 //                }
 //            }
 //        }
@@ -226,7 +226,7 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
                 val originalCaseLinkRefUri = if (linkRefUri.filePath.endsWith("/wiki")) linkRefUri else linkRefUri.replaceFilePath(linkRefUri.path + linkRef.fileName.ifEmpty { linkRefUri.fileName })
                 val localRefs = resolver.multiResolve(originalCaseLinkRefUri, LinkResolver.ANY)
                 val resolvedTargetRef = if (localRefs.size > 0) localRefs[0] else null
-                assertEqualsMessage("MultiResolveHttp $originalCaseLinkRefUri does not match ${resolver.getMatcher(linkRef).linkAllMatch}", this.resolvesLocal, if (resolvedTargetRef is LinkRef) resolvedTargetRef.filePathWithAnchor else resolvedTargetRef?.filePath)
+                assertEqualsMessage("MultiResolveHttp $originalCaseLinkRefUri does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", this.resolvesLocal, if (resolvedTargetRef is LinkRef) resolvedTargetRef.filePathWithAnchor else resolvedTargetRef?.filePath)
             }
         }
     }
@@ -248,7 +248,7 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
                     }
                 }
 
-                compareUnorderedLists("InspectionResultsUri $originalCaseLinkRefUri do not match ${resolver.getMatcher(linkRef).linkAllMatch}", inspectionExtResults, inspections)
+                compareUnorderedLists("InspectionResultsUri $originalCaseLinkRefUri do not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", inspectionExtResults, inspections)
             }
         }
     }

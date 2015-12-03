@@ -121,7 +121,7 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
                                     ProjectFileRef containingFile = new ProjectFileRef(virtualFile, fileProject);
                                     GitHubLinkResolver resolver = new GitHubLinkResolver(containingFile);
                                     String linkRefText = MultiMarkdownPsiImplUtil.getLinkRefText(element);
-                                    boolean uriLinks = false;
+                                    int uriLinks = LinkResolver.ANY;
                                     LinkRef linkRef;
                                     String fullPath = "";
 
@@ -131,7 +131,7 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
                                         if (linkRefTextInfo.getHasExt() && !linkRefTextInfo.isWikiPageExt()) fullPath = StringUtilKt.prefixWith(linkRefTextInfo.getExt(), '.');
                                         else if (linkRefTextInfo.getFileName().startsWith(".") && !linkRefTextInfo.getHasExt()) fullPath = StringUtilKt.prefixWith(linkRefTextInfo.getFileName(), '.');
 
-                                        if (linkRefTextInfo.isURI() && elementType != WIKI_LINK_REF) uriLinks = true;
+                                        if (linkRefTextInfo.isURI() && elementType != WIKI_LINK_REF) uriLinks = linkRefTextInfo.isLocal() ? LinkResolver.ONLY_LOCAL_URI : LinkResolver.ONLY_REMOTE_URI;
                                     }
 
                                     if (elementType == WIKI_LINK_REF) {
@@ -147,10 +147,10 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
                                     String gitHubRepoPath = resolver.getProjectResolver().vcsRepoBasePath(linkRef.getContainingFile());
                                     if (gitHubRepoPath == null) gitHubRepoPath = resolver.getProjectBasePath();
 
-                                    List<PathInfo> matchedFiles = resolver.multiResolve(linkRef, (uriLinks ? LinkResolver.ONLY_REMOTE | LinkResolver.ONLY_URI : 0) | LinkResolver.LOOSE_MATCH, null);
+                                    List<PathInfo> matchedFiles = resolver.multiResolve(linkRef, uriLinks | LinkResolver.LOOSE_MATCH, null);
 
                                     for (PathInfo pathInfo : matchedFiles) {
-                                        String linkRefAddress = uriLinks ? pathInfo.getFilePath() : resolver.linkAddress(linkRef, pathInfo, !pathInfo.isWikiPageExt(), null, null);
+                                        String linkRefAddress = uriLinks != LinkResolver.ANY ? pathInfo.getFilePath() : resolver.linkAddress(linkRef, pathInfo, !pathInfo.isWikiPageExt(), null, null);
 
                                         if (!linkRefAddress.equals("#") && !linkRefAddress.isEmpty()) {
                                             String linkRefFileName = linkRefAddress;
@@ -161,7 +161,7 @@ public class MultiMarkdownCompletionContributor extends CompletionContributor {
                                                 fileRef = (FileRef) pathInfo;
                                             } else {
                                                 assert pathInfo instanceof LinkRef && pathInfo.isURI();
-                                                fileRef = linkRef.getTargetRef();
+                                                fileRef = ((LinkRef) pathInfo).getTargetRef();
                                             }
 
                                             if (fileRef != null) {

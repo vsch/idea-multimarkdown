@@ -85,10 +85,16 @@ public class MultiMarkdownAnnotator implements Annotator {
 
         if (linkRefInfo == null || linkRefInfo.getFilePathWithAnchor().isEmpty() || linkRefInfo instanceof WikiLinkRef && linkRefInfo.getFilePathWithAnchor().trim().isEmpty()) return;
 
-        //noinspection StatementWithEmptyBody
         GitHubLinkResolver resolver = new GitHubLinkResolver(element);
         Project project = element.getProject();
-        ProjectFileRef containingFile = new ProjectFileRef(element.getContainingFile());
+        GitHubVcsRoot gitHubVcsRoot = resolver.getProjectResolver().getVcsRoot(linkRefInfo.getContainingFile());
+
+        if (linkRefInfo.isExternal() && (gitHubVcsRoot == null || !linkRefInfo.getFilePath().toLowerCase().startsWith(gitHubVcsRoot.getBaseUrl().toLowerCase()))) {
+            // not in the same repo, or no repo, we don't handle this, yet
+            return;
+        }
+
+        //noinspection StatementWithEmptyBody
         final List<PathInfo> looseTargetRefs = resolver.multiResolve(linkRefInfo, LinkResolver.ANY | LinkResolver.LOOSE_MATCH, null);
         final List<PathInfo> targetRefs = resolver.multiResolve(linkRefInfo, LinkResolver.ANY, looseTargetRefs);
         PathInfo resolvedTargetInfo = targetRefs.size() > 0 ? targetRefs.get(0) : null;
@@ -354,6 +360,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                     }
                 }
             }
+
             // if this is a valid wikiLink see if more than one match
             if (state.warningsOnly) {
                 if (targetRefs.size() > 1 && targetRef.isWikiPage()) {
@@ -393,14 +400,15 @@ public class MultiMarkdownAnnotator implements Annotator {
         if (!state.warningsOnly || state.unresolved) {
             registerCreateFileFix(element.getFileName(), element, state);
 
-            // get all accessible
+            // get all loose ones
             if (state.needTargetList) {
-                LinkRef emptyLinkRef = element instanceof WikiLinkRef ? new WikiLinkRef(containingFile, "", null, null) : (linkRefInfo instanceof ImageLinkRef ? new ImageLinkRef(containingFile, "", null, null) : (new LinkRef(containingFile, "", null, null)));
-                List<PathInfo> availableTargetRefs = resolver.multiResolve(emptyLinkRef, LinkResolver.PREFER_LOCAL | LinkResolver.ACCEPT_URI | LinkResolver.LOOSE_MATCH, null);
+                //LinkRef emptyLinkRef = element instanceof WikiLinkRef ? new WikiLinkRef(containingFile, "", null, null) : (linkRefInfo instanceof ImageLinkRef ? new ImageLinkRef(containingFile, "", null, null) : (new LinkRef(containingFile, "", null, null)));
+                //List<PathInfo> availableTargetRefs = resolver.multiResolve(emptyLinkRef, LinkResolver.PREFER_LOCAL | LinkResolver.ACCEPT_URI | LinkResolver.LOOSE_MATCH, null);
+                List<PathInfo> availableTargetRefs = looseTargetRefs;
 
                 int hadItems = state.getAlreadyOfferedSize(TYPE_CHANGE_LINK_REF_QUICK_FIX);
                 for (PathInfo targetRef : availableTargetRefs) {
-                    String linkRefText = resolver.linkAddress(emptyLinkRef, targetRef, null, null, null);
+                    String linkRefText = resolver.linkAddress(linkRefInfo, targetRef, null, null, null);
 
                     if (state.addingAlreadyOffered(TYPE_CHANGE_LINK_REF_QUICK_FIX, linkRefText)) {
                         state.annotator.registerFix(new ChangeLinkRefQuickFix(element, linkRefText, 0, RENAME_KEEP_TITLE | RENAME_KEEP_ANCHOR));

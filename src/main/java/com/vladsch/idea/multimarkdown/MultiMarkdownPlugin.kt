@@ -32,7 +32,6 @@ import com.intellij.notification.NotificationGroup
 import com.intellij.notification.NotificationListener
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.application.ex.ApplicationManagerEx
 import com.intellij.openapi.components.ApplicationComponent
 import com.intellij.openapi.extensions.PluginId
 import com.intellij.openapi.project.Project
@@ -44,6 +43,7 @@ import com.vladsch.idea.multimarkdown.license.LicenseRequest
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownNonRoamingGlobalSettings
+import com.vladsch.idea.multimarkdown.util.wrapWith
 import org.apache.log4j.ConsoleAppender
 import org.apache.log4j.Level
 import org.apache.log4j.Logger
@@ -309,23 +309,208 @@ class MultiMarkdownPlugin : ApplicationComponent {
 
     fun initLicense(init: Boolean) {
         // load license information
+        // RELEASE : change to true
         val showOnce = true
+        val settings = MultiMarkdownGlobalSettings.getInstance()
 
         if (agent.isValidLicense && agent.isValidActivation) {
             license_features = agent.licenseFeatures
             if (init) {
-                if (showOnce)
-                    MultiMarkdownGlobalSettings.getInstance().wasShownLicensedAvailable.value = true
-                else
-                    notifyLicensedUpdate(null, showOnce)
+                if (showOnce) {
+                    settings.wasShownLicensedAvailable.value = true
+                } else
+                    notifyLicensedUpdate(showOnce)
+
+                settings.licenseType.value = agent.licenseType
+                settings.showLicenseExpired.value = true
+                val expiresIn = agent.licenseExpiringIn
+
+                if (expiresIn <= 7) {
+                    val licenseType = MultiMarkdownBundle.message("settings.license-type-" + agent.licenseType)
+                    notifyLicenseExpiration(!showOnce, licenseType, agent.licenseExpiration, expiresIn)
+                } else if (!showOnce) {
+                    val licenseType = MultiMarkdownBundle.message("settings.license-type-" + agent.licenseType)
+                    notifyLicenseExpiration(!showOnce, licenseType, agent.licenseExpiration, expiresIn)
+                    notifyLicenseExpiration(!showOnce, licenseType, agent.licenseExpiration, 2)
+                    notifyLicenseExpiration(!showOnce, licenseType, agent.licenseExpiration, -1)
+                    notifyLicenseExpiration(!showOnce, "trial", agent.licenseExpiration, 2)
+                    notifyLicenseExpiration(!showOnce, "trial", agent.licenseExpiration, 1)
+                    notifyLicenseExpiration(!showOnce, "trial", agent.licenseExpiration, -1)
+                    //                    notifyLicenseExpiration(!showOnce, "subscription", agent.licenseExpiration, 2)
+                    //                    notifyLicenseExpiration(!showOnce, "subscription", agent.licenseExpiration, 1)
+                    //                    notifyLicenseExpiration(!showOnce, "subscription", agent.licenseExpiration, -1)
+                }
             }
         } else {
+            if (!settings.licenseType.value.isEmpty()) {
+                notifyLicenseExpiration(!showOnce, settings.licenseType.value, "", -1)
+            }
+
             license_features = 0
             if (init) {
-                notifyLicensedUpdate(null, showOnce)
+                notifyLicensedUpdate(showOnce)
             }
         }
+
+        if (init) {
+            notifyFeatureUpdate(!showOnce, productVersion)
+        }
     }
+
+    protected fun notifyFeatureUpdate(debug: Boolean, currentVersion: String) {
+        val settings = MultiMarkdownGlobalSettings.getInstance()
+        val showNotification = settings.showFeatureUpdates
+
+        if (showNotification.value && settings.lastFeatureUpdateVersion.value != currentVersion) {
+            val lastFeatureUpdateVersion = settings.lastFeatureUpdateVersion.value
+            val notificationType = NotificationType.INFORMATION
+            if (!debug) settings.lastFeatureUpdateVersion.value = currentVersion
+
+            val issueNotificationGroup = NotificationGroup(MultiMarkdownGlobalSettings.NOTIFICATION_GROUP_UPDATE, NotificationDisplayType.STICKY_BALLOON, true, null)
+
+            // collect features based on latest version
+            val featureList = """
+- Warning if GitHub will render wiki pages as raw text not HTML
+- Plugin preferences now split between local and shared
+- Inspections for common errors in wiki link resolution
+- HTML Text tab now has all links as URI's
+* Github fork and raw link are now recognized by the plugin
+* Link color, image border in preview when file not on GitHub
+* Change link address between relative &amp; absolute
+* Change between wiki &amp; explicit link
+* Inspections for common errors in explicit and image links
+* Absolute links to project files now validated
+* Navigation line markers for absolute links to project files
+* Absolute link completions for https:// &amp; file:// links.
+* Completions also work with non-markdown files
+* Refactoring changes wiki to explicit links if target moved from wiki
+* Refactoring keeps link format: relative, https:// or file:// prefixes
+"""
+            val features = featureList.split('\n').fold("") { accum, elem ->
+                val item = elem.trim()
+                accum +
+                (
+                        if (item.startsWith('*')) item.removePrefix("*").trim().wrapWith("<span style=\"color: {{ENHANCED}}\">", "</span>")
+                        else item.removePrefix("-").trim()
+                ).wrapWith("<li>", "</li>")
+            }.wrapWith("""
+<h4 style="margin: 0;">New Features: Basic &amp; Enhanced / <span style="color: {{ENHANCED}}">Enhanced Edition only</span></h4>
+<ul style="margin-left: 10px;">
+""", "</ul>")
+
+            val href = (if (!debug) "http://vladsch.com" else "http://vladsch.dev") + "/"
+            val title = MultiMarkdownBundle.message("plugin.feature.notification.title", productName, currentVersion)
+            val licenseBased = if (isLicensed) MultiMarkdownBundle.message("plugin.feature.notification.licensed") else MultiMarkdownBundle.message("plugin.feature.notification.unlicensed")
+            val enhColor = if (settings.isDarkUITheme) "#B0A8E6" else "#6106A5"
+            val message = MultiMarkdownBundle.message("plugin.feature.notification.message", features, licenseBased).replace("{{ENHANCED}}", enhColor)
+
+            val listener = NotificationListener { notification, hyperlinkEvent ->
+                //notification.expire();
+                if (hyperlinkEvent.url == null) {
+                    val link = hyperlinkEvent.description
+                    when (link) {
+                        ":DISABLE" -> {
+                            showNotification.value = false
+                            notification.expire()
+                        }
+                        ":BUY" -> MultiMarkdownPathResolver.openLink(href + "product/multimarkdown/buy")
+                        ":TRY" -> MultiMarkdownPathResolver.openLink(href + "product/multimarkdown/try")
+                        ":SPECIALS" -> MultiMarkdownPathResolver.openLink(href + "product/multimarkdown/specials")
+                        ":FEATURES" -> MultiMarkdownPathResolver.openLink(href + "product/multimarkdown")
+                    }
+                } else {
+                    MultiMarkdownPathResolver.openLink(hyperlinkEvent.url.toString())
+                }
+            }
+
+            issueNotificationGroup.createNotification(title, XmlStringUtil.wrapInHtml(message), notificationType, listener).notify(null)
+        }
+    }
+
+    protected fun notifyLicenseExpiration(debug: Boolean, licenseType: String, expiration: String, expiresIn: Int) {
+        val settings = MultiMarkdownGlobalSettings.getInstance()
+        val showLicenseNotification = if (expiresIn < 0) settings.showLicenseExpired else settings.showLicenseExpiration
+
+        if (showLicenseNotification.value) {
+            var notification = if (expiresIn < 0) "license-expired" else "license-expiring"
+            val expires =
+                    when {
+                        expiresIn <= 0 -> MultiMarkdownBundle.message("settings.notification.license-has-expired-" + licenseType)
+                        expiresIn == 1 -> MultiMarkdownBundle.message("settings.notification.license-expires-tomorrow-" + licenseType)
+                        else -> MultiMarkdownBundle.message("settings.notification.license-expires-" + licenseType, expiration, MultiMarkdownBundle.message("settings.notification.license-expires-in-days", expiresIn))
+                    }
+
+            val notificationType =
+                    when {
+                        expiresIn <= 0 -> NotificationType.WARNING
+                        else -> NotificationType.INFORMATION
+                    }
+
+            val issueNotificationGroup = NotificationGroup(MultiMarkdownGlobalSettings.NOTIFICATION_GROUP_LICENSE, NotificationDisplayType.STICKY_BALLOON, true, null)
+
+            val href = (if (!debug) "http://vladsch.com" else "http://vladsch.dev") + "/"
+            val title = MultiMarkdownBundle.message("plugin.$notification.notification.title", productName)
+            val message = MultiMarkdownBundle.message("plugin.$notification.notification.message", MultiMarkdownBundle.message("settings.license-type-" + licenseType), expires)
+
+            val listener = NotificationListener { notification, hyperlinkEvent ->
+                //notification.expire();
+                if (hyperlinkEvent.url == null) {
+                    val link = hyperlinkEvent.description
+                    when (link) {
+                        ":DISABLE" -> {
+                            showLicenseNotification.value = false
+                            notification.expire()
+                            if (expiresIn <= 0 && !debug) {
+                                settings.licenseType.value = ""
+                            }
+                        }
+                        ":BUY" -> MultiMarkdownPathResolver.openLink(href + "product/multimarkdown/buy")
+                        ":TRY" -> MultiMarkdownPathResolver.openLink(href + "product/multimarkdown/try")
+                        ":SPECIALS" -> MultiMarkdownPathResolver.openLink(href + "product/multimarkdown/specials")
+                        ":FEATURES" -> MultiMarkdownPathResolver.openLink(href + "product/multimarkdown")
+                    }
+                } else {
+                    MultiMarkdownPathResolver.openLink(hyperlinkEvent.url.toString())
+                }
+            }
+
+            issueNotificationGroup.createNotification(title, XmlStringUtil.wrapInHtml(message), notificationType, listener).notify(null)
+        }
+    }
+
+    protected fun notifyLicensedUpdate(showOnce: Boolean) {
+        val settings = MultiMarkdownGlobalSettings.getInstance()
+
+        if (!showOnce || !settings.wasShownLicensedAvailable.value) {
+            if (showOnce) settings.wasShownLicensedAvailable.value = true
+            val issueNotificationGroup = NotificationGroup(MultiMarkdownGlobalSettings.NOTIFICATION_GROUP_UPDATE, NotificationDisplayType.STICKY_BALLOON, true, null)
+
+            val href = (if (showOnce) "http://vladsch.com" else "http://vladsch.dev") + "/"
+            val title = MultiMarkdownBundle.message("plugin.licensed-available.notification.title", productName)
+            val message = MultiMarkdownBundle.message("plugin.licensed-available.notification.message")
+            val listener = NotificationListener { notification, hyperlinkEvent ->
+                //notification.expire();
+                if (hyperlinkEvent.url == null) {
+                    val link = hyperlinkEvent.description
+                    when (link) {
+                        ":DISABLE" -> {
+                            settings.wasShownLicensedAvailable.value = false
+                            notification.expire()
+                        }
+                        ":BUY" -> MultiMarkdownPathResolver.openLink(href + "product/multimarkdown/buy")
+                        ":TRY" -> MultiMarkdownPathResolver.openLink(href + "product/multimarkdown/try")
+                        ":SPECIALS" -> MultiMarkdownPathResolver.openLink(href + "product/multimarkdown/specials")
+                        ":FEATURES" -> MultiMarkdownPathResolver.openLink(href + "product/multimarkdown")
+                    }
+                } else {
+                    MultiMarkdownPathResolver.openLink(hyperlinkEvent.url.toString())
+                }
+            }
+
+            issueNotificationGroup.createNotification(title, XmlStringUtil.wrapInHtml(message), NotificationType.INFORMATION, listener).notify(null)
+        }
+    }
+
 
     override fun disposeComponent() {
         // empty
@@ -387,30 +572,6 @@ class MultiMarkdownPlugin : ApplicationComponent {
         @JvmStatic
         val isLicensed: Boolean
             get() = license_features != 0
-
-        @JvmStatic
-        fun notifyLicensedUpdate(project: Project?, showOnce: Boolean) {
-            val settings = MultiMarkdownGlobalSettings.getInstance()
-
-            if (!showOnce || !settings.wasShownLicensedAvailable.value) {
-                // notify the user that a new licensed version is available
-                if (showOnce) settings.wasShownLicensedAvailable.value = true
-                val app = ApplicationManagerEx.getApplicationEx()
-
-                val issueNotificationGroup = NotificationGroup(MultiMarkdownGlobalSettings.NOTIFICATION_GROUP_UPDATE, NotificationDisplayType.STICKY_BALLOON, true, null)
-
-                val href = (if (showOnce) "http://vladsch.com" else "http://vladsch.dev") + "/product/multimarkdown/specials"
-                val title = MultiMarkdownBundle.message("plugin.updated.notification.title", productName)
-                val action = MultiMarkdownBundle.message("plugin.updated.notification.action")
-                val message = MultiMarkdownBundle.message("plugin.updated.notification.message", action, href)
-                val listener = NotificationListener { notification, hyperlinkEvent ->
-                    //notification.expire();
-                    MultiMarkdownPathResolver.openLink(href)
-                }
-
-                issueNotificationGroup.createNotification(title, XmlStringUtil.wrapInHtml(message), NotificationType.INFORMATION, listener).notify(project)
-            }
-        }
 
         @JvmStatic
         val instance: MultiMarkdownPlugin

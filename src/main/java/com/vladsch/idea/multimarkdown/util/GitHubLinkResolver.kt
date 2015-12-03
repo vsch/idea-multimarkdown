@@ -27,6 +27,7 @@ import com.intellij.util.Processor
 import com.intellij.util.indexing.FileBasedIndex
 import com.intellij.util.indexing.FileBasedIndexImpl
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin
+import java.net.URI
 import java.util.*
 import kotlin.text.RegexOption
 
@@ -75,10 +76,10 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
 
     private var matcher: GitHubLinkMatcher? = null
 
-    fun getMatcher(linkRef: LinkRef): GitHubLinkMatcher {
+    fun getMatcher(linkRef: LinkRef, linkRefWasURI: Boolean): GitHubLinkMatcher {
         var _matcher = matcher
         if (_matcher === null || _matcher.linkRef != linkRef) {
-            _matcher = GitHubLinkMatcher(projectResolver, linkRef)
+            _matcher = GitHubLinkMatcher(projectResolver, linkRef, linkRefWasURI)
             matcher = _matcher
         }
         return _matcher
@@ -138,7 +139,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
 
         if (!linkRef_.isAbsolute) {
             // resolve the relative link as per requested options
-            val linkRefMatcher = getMatcher(linkRef_)
+            val linkRefMatcher = getMatcher(linkRef_, linkRefWasURI(opts))
             val matches = getMatchedRefs(linkRef_, linkRefMatcher, opts, inList)
             var resolvedRef = (if (matches.size > 0) matches[0] else null) ?: return null
             targetRef = resolvedRef
@@ -159,7 +160,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
             }
         }
 
-        val linkRefMatcher = getMatcher(relLink)
+        val linkRefMatcher = getMatcher(relLink, linkRefWasURI(opts))
         return getMatchedRefs(relLink, linkRefMatcher, opts, inList)
     }
 
@@ -232,7 +233,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
         // process the files that match the pattern and put them in the list
         var matches = ArrayList<PathInfo>()
 
-        if (!linkMatcher.isOnlyLooseMatchValid && !wantLooseMatch(options)) return matches
+        if (linkMatcher.isOnlyLooseMatchValid && !wantLooseMatch(options)) return matches
 
         if (!linkMatcher.gitHubLinks) {
             val linkLooseMatch = linkMatcher.linkLooseMatch
@@ -440,7 +441,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                 }
             } else {
                 val linkLooseMatch = linkMatcher.linkLooseMatch
-                if (linkMatcher.isOnlyLooseMatchValid && linkMatcher.effectiveExt.isNullOrEmpty() && linkLooseMatch != null) {
+                if (!linkMatcher.isOnlyLooseMatchValid && linkMatcher.effectiveExt.isNullOrEmpty() && linkLooseMatch != null) {
                     val vcsRoot = projectResolver.getVcsRoot(linkRef.containingFile)
                     if (vcsRoot != null) {
                         val remoteUrl = vcsRoot.baseUrl
@@ -472,7 +473,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
             else filePathInfo = PathInfo(fileRef.wikiDir)
         } else {
             val gitHubVcsRoot = projectResolver.getVcsRoot(fileRef)
-            val vcsMainRepoBase = (gitHubVcsRoot?.projectBasePath ?: projectBasePath).suffixWith('/')
+            val vcsMainRepoBase = (gitHubVcsRoot?.mainRepoBaseDir ?: projectBasePath).suffixWith('/')
             filePathInfo = PathInfo(vcsMainRepoBase + (if (isImageLinkRef) "raw/" else "blob/") + (branchOrTag ?: "master").suffixWith('/') + PathInfo.relativePath(vcsMainRepoBase, fileRef.path, withPrefix = false))
         }
         return filePathInfo
@@ -664,7 +665,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
             if (gitHubVcsRoot != null) {
                 var gitHubRepoBaseUrl = gitHubVcsRoot.baseUrl
                 if (linkRef.filePath.startsWith(gitHubRepoBaseUrl)) {
-                    var targetFilePath = gitHubVcsRoot.projectBasePath.suffixWith('/') + linkRef.linkToFile(linkRef.filePath.substring(gitHubRepoBaseUrl.suffixWith('/').length))
+                    var targetFilePath = gitHubVcsRoot.mainRepoBaseDir.suffixWith('/') + linkRef.linkToFile(linkRef.filePath.substring(gitHubRepoBaseUrl.suffixWith('/').length))
                     val containingFilePath = logicalRemotePath(containingFile, useWikiPageActualLocation = false, isSourceRef = true, isImageLinkRef = linkRef is ImageLinkRef, branchOrTag = null).filePath.suffixWith('/')
 
                     val relLink = linkRef.replaceFilePath(PathInfo.relativePath(containingFilePath, targetFilePath), false)

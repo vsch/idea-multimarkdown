@@ -44,6 +44,7 @@ abstract class LinkResolver(val projectResolver: LinkResolver.ProjectResolver, v
         @JvmField val ONLY_REMOTE_URI = 32                                  // remote ref whether file ref has remote resolve or not
         @JvmField val COMPLETION_MATCH = 64                                 // inexact match for error detection
         @JvmField val LOCAL_OR_REMOTE = PREFER_LOCAL or ONLY_REMOTE         // local or remote resolved files
+        @JvmField val ONLY_LOCAL_URI = PREFER_LOCAL or ONLY_URI             // local or remote resolved files
 
 
         private val ALL = LOCAL_OR_REMOTE or ONLY_URI             // local, remote or URI, no conversion will be done, refs returned as they are resolved

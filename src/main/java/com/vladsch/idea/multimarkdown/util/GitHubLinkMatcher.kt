@@ -14,11 +14,16 @@
  */
 package com.vladsch.idea.multimarkdown.util
 
+import org.apache.log4j.Logger
 import java.util.*
 import kotlin.text.Regex
 import kotlin.text.RegexOption
 
-class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val linkRef: LinkRef) {
+class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val linkRef: LinkRef, val linkRefWasURI:Boolean) {
+    companion object {
+        private val logger = Logger.getLogger(GitHubLinkMatcher::class.java)
+    }
+
     var fixedPrefix = ""
         private set
 
@@ -96,7 +101,7 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
     }
 
     fun patternRegex(looseMatch: Boolean): Regex? {
-        if (!isOnlyLooseMatchValid && !looseMatch) return null
+        if (isOnlyLooseMatchValid && !looseMatch) return null
         return (if (looseMatch) linkLooseMatch else linkAllMatch)?.toRegex(RegexOption.IGNORE_CASE)
     }
 
@@ -209,12 +214,6 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
                 } else {
                     prefixPath = prefixPath.substring(vcsRepoBasePath.length).removeSuffix("/")
 
-                    if (!(linkRef.filePath.isEmpty() && linkRef.anchor == null)) {
-
-                    } else {
-                        // completion match
-                    }
-
                     if (prefixPath.isEmpty() && linkRef.fileName in GitHubLinkResolver.GITHUB_LINKS) {
                         // add these to the path
                         prefixPath += linkRef.fileName
@@ -283,10 +282,16 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
                                 if (linkRef is ImageLinkRef) {
                                     looseMatchOnly = true
                                 }
+
+                                prefixPath = "$vcsRepoBasePath$projectDirName${PathInfo.WIKI_HOME_DIR_EXTENSION}/"
+                                this.gitHubLink = "wiki"
+                                wikiMatchingRules = true
+                            } else {
+                                // we are trying to resolve a non-existent sub directory
+                                // RELEASE: disable logging
+                                println("rejecting for only loose match originalURI $linkRefWasURI ${linkRef.filePath}")
+                                looseMatchOnly = true
                             }
-                            prefixPath = "$vcsRepoBasePath$projectDirName${PathInfo.WIKI_HOME_DIR_EXTENSION}/"
-                            this.gitHubLink = "wiki"
-                            wikiMatchingRules = true
                         }
                     }
 
@@ -307,9 +312,6 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
                 }
 
                 fixedPrefix = prefixPath
-
-                // no need for pattern match, we have the stuff
-                if (gitHubLinks) return true
             }
 
 
@@ -381,6 +383,6 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
 
         assert(linkLooseMatch != null)
         assert(linkAllMatch != null)
-        return !looseMatchOnly
+        return looseMatchOnly
     }
 }

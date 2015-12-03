@@ -51,7 +51,7 @@ public class MultiMarkdownReferenceLinkRef extends MultiMarkdownReference {
                 String linkAddress = resolver.linkAddress(linkRef, targetRef, null, null, "");
                 LinkRef newLinkRef = linkRef.replaceFilePath(linkAddress, true);
                 if (linkRef.isURI()) {
-                    newLinkRef = (LinkRef) resolver.processMatchOptions(newLinkRef, targetRef, LinkResolver.ONLY_REMOTE_URI);
+                    newLinkRef = (LinkRef) resolver.processMatchOptions(newLinkRef, targetRef, linkRef.isLocal() ? LinkResolver.ONLY_LOCAL_URI: LinkResolver.ONLY_REMOTE_URI);
                     if (newLinkRef != null) {
                         linkAddress = newLinkRef.getFilePath();
                     }

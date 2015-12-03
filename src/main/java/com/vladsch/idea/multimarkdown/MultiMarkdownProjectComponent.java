@@ -367,7 +367,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
     @Override
     public String vcsRepoBasePath(@NotNull FileRef fileRef) {
         GitHubVcsRoot gitHubVcsRoot = getGitHubRepo(fileRef.getPath());
-        return gitHubVcsRoot == null ? null : gitHubVcsRoot.getProjectBasePath();
+        return gitHubVcsRoot == null ? null : gitHubVcsRoot.getMainRepoBaseDir();
     }
 
     @Nullable

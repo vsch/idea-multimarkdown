@@ -61,9 +61,6 @@ import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class MultiMarkdownSettingsPanel implements ComponentProvider {
@@ -142,6 +139,7 @@ public class MultiMarkdownSettingsPanel implements ComponentProvider {
     @LicensedFeature
     private JCheckBox tocCheckBox;
     private JLabel tocLabel;
+    private JCheckBox showFeaturesUpdatesCheckBox;
 
     final private LicenseAgent agent;
 
@@ -190,6 +188,7 @@ public class MultiMarkdownSettingsPanel implements ComponentProvider {
         if (persistName.equals("useHighlightJsCheckBox")) return useHighlightJsCheckBox;
         if (persistName.equals("useOldPreviewCheckBox")) return useOldPreviewCheckBox;
         if (persistName.equals("wikiLinksCheckBox")) return wikiLinksCheckBox;
+        if (persistName.equals("showFeaturesUpdatesCheckBox")) return showFeaturesUpdatesCheckBox;
 
         return null;
     }
@@ -489,7 +488,6 @@ public class MultiMarkdownSettingsPanel implements ComponentProvider {
                 if (agent.isValidActivation()) {
                     licenseTextArea.setVisible(false);
                     int expiresIn = agent.getLicenseExpiringIn();
-                    String licenseType = MultiMarkdownBundle.message("settings.license-type-" + agent.getLicenseType());
 
                     String days = (expiresIn < 0) ? MultiMarkdownBundle.message("settings.license-has-expired-" + agent.getLicenseType())
                             : (expiresIn == 1 ? MultiMarkdownBundle.message("settings.license-expires-tomorrow-" + agent.getLicenseType())

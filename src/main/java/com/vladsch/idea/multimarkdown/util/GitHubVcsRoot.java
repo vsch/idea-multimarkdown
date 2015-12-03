@@ -73,7 +73,7 @@ public class GitHubVcsRoot {
     }
 
     @NotNull
-    public String getProjectBasePath() {
+    public String getMainRepoBaseDir() {
         return projectBasePath;
     }
 

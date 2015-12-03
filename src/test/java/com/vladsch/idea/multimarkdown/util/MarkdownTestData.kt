@@ -44,7 +44,7 @@ object MarkdownTestData : LinkResolver.ProjectResolver {
         get() = null
 
     override fun vcsRepoBasePath(fileRef: FileRef): String? {
-        return getVcsRoot(fileRef)?.projectBasePath
+        return getVcsRoot(fileRef)?.mainRepoBaseDir
     }
 
     override fun vcsRootBase(fileRef: FileRef): String? {
