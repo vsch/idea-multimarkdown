@@ -180,7 +180,7 @@ class MarkdownTest__MarkdownTest_wiki__Home_md {
                 /* 28 */arrayOf<Any?>(69       , "ID_TARGET_NOT_UNDER_VCS"         , Severity.WARNING     , null                                                           , null) /* 28 */,
                 /* 29 */arrayOf<Any?>(70       , "ID_TARGET_NOT_UNDER_VCS"         , Severity.WARNING     , null                                                           , null) /* 29 */,
                 /* 30 */arrayOf<Any?>(71       , "ID_WIKI_LINK_HAS_ONLY_ANCHOR"    , Severity.ERROR       , "Home"                                                         , null) /* 30 */,
-                /* 31 */arrayOf<Any?>(73       , "ID_TARGET_HAS_SPACES"            , Severity.WARNING     , null                                                           , "Space-In-Name.md") /* 31 */,
+                /* 31 */arrayOf<Any?>(73       , "ID_TARGET_HAS_SPACES"            , Severity.WEAK_WARNING, null                                                           , "Space-In-Name.md") /* 31 */,
                 /* 32 */arrayOf<Any?>(74       , "ID_CASE_MISMATCH"                , Severity.ERROR       , "Test.kt"                                                      , "test.kt") /* 32 */,
                 /* 33 */arrayOf<Any?>(76       , "ID_LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "normal-file"                                                  , null) /* 33 */,
                 /* 34 */arrayOf<Any?>(77       , "ID_LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , "normal-file"                                                  , null) /* 34 */,

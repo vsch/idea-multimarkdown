@@ -195,23 +195,24 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
         }
     }
 
-    @Test fun test_NonResolveHttp() {
-        if (skipTest) return
-        // test to make sure linkrefs with blob/../ do not resolve
-        if (resolvesLocal != null && linkRef is ImageLinkRef) {
-            val targetRef = FileRef(resolvesLocal)
-            if (!targetRef.isUnderWikiDir) {
-                val linkRefUri = resolver.processMatchOptions(linkRef, targetRef, LinkResolver.ONLY_REMOTE_URI)
-                if (linkRefUri != null && linkRefUri is LinkRef && linkRefUri.isExternal) {
-                    val originalCaseLinkRefUri = linkRefUri.replaceFilePath((linkRefUri.path + linkRef.fileName.ifEmpty { linkRefUri.fileName }).replace("/raw/","/blob/"))
-                    val localRef = resolver.resolve(originalCaseLinkRefUri, LinkResolver.PREFER_LOCAL, fileList)
-                    assertEqualsMessage("ResolveHttp $originalCaseLinkRefUri does not match ${resolver.getMatcher(linkRef).linkAllMatch}", null, localRef?.filePath)
-                } else {
-                    assertEqualsMessage("ResolveHttp no remote link ${resolver.getMatcher(linkRef).linkAllMatch} for $resolvesLocal", resolvesLocal, linkRefUri?.filePath)
-                }
-            }
-        }
-    }
+//    // Only true for wiki pages using relative image links
+//    @Test fun test_NonResolveHttp() {
+//        if (skipTest) return
+//        // test to make sure linkrefs with blob/../ do not resolve
+//        if (resolvesLocal != null && linkRef is ImageLinkRef) {
+//            val targetRef = FileRef(resolvesLocal)
+//            if (!targetRef.isUnderWikiDir) {
+//                val linkRefUri = resolver.processMatchOptions(linkRef, targetRef, LinkResolver.ONLY_REMOTE_URI)
+//                if (linkRefUri != null && linkRefUri is LinkRef && linkRefUri.isExternal) {
+//                    val originalCaseLinkRefUri = linkRefUri.replaceFilePath((linkRefUri.path + linkRef.fileName.ifEmpty { linkRefUri.fileName }).replace("/raw/","/blob/"))
+//                    val localRef = resolver.resolve(originalCaseLinkRefUri, LinkResolver.PREFER_LOCAL, fileList)
+//                    assertEqualsMessage("ResolveHttp $originalCaseLinkRefUri does not match ${resolver.getMatcher(linkRef).linkAllMatch}", null, localRef?.filePath)
+//                } else {
+//                    assertEqualsMessage("ResolveHttp no remote link ${resolver.getMatcher(linkRef).linkAllMatch} for $resolvesLocal", resolvesLocal, linkRefUri?.filePath)
+//                }
+//            }
+//        }
+//    }
 
     @Test fun test_MultiResolveHttp() {
         if (skipTest) return

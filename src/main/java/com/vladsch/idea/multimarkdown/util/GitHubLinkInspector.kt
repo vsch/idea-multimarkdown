@@ -79,7 +79,7 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
 
         fun INSPECT_LINK_TARGET_HAS_SPACES() {
             if (targetRef.containsSpaces()) {
-                val severity = if (linkRef is WikiLinkRef) Severity.WEAK_WARNING else Severity.WARNING
+                val severity = if (linkRef is WikiLinkRef) Severity.WEAK_WARNING else Severity.WEAK_WARNING
                 addResult(InspectionResult(ID_TARGET_HAS_SPACES, severity, null, targetRef.filePath.replace(' ', '-')))
             }
         }
@@ -183,7 +183,7 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
                 addResult(InspectionResult(ID_TARGET_NOT_UNDER_VCS, Severity.WARNING, null, null))
             }
 
-            if (linkRef is ImageLinkRef) {
+            if (linkRef is ImageLinkRef && linkRef.containingFile.isWikiPage && !originalLinkRef.isURI) {
                 // see if it is pointed at the raw/ or blob/ branch
                 if (!linkRef.filePath.equals(linkAddressLocal, ignoreCase = true) && linkRef.filePath.replace("\\bblob/".toRegex(), "raw/").equals(linkAddressLocal, ignoreCase = true)) {
                     addResult(InspectionResult(ID_IMAGE_TARGET_NOT_IN_RAW, Severity.ERROR, linkAddress, null))

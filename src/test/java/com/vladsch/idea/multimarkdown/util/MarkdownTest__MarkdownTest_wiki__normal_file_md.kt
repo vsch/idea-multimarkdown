@@ -181,7 +181,7 @@ class MarkdownTest__MarkdownTest_wiki__normal_file_md {
                 /* 29 */arrayOf<Any?>(70       , "ID_TARGET_NOT_UNDER_VCS"         , Severity.WARNING     , null                           , null) /* 29 */,
                 /* 30 */arrayOf<Any?>(71       , "ID_WIKI_LINK_HAS_ONLY_ANCHOR"    , Severity.ERROR       , "normal file"                  , null) /* 30 */,
                 /* 31 */arrayOf<Any?>(72       , "ID_WIKI_LINK_HAS_DASHES"         , Severity.WEAK_WARNING, "normal file"                  , null) /* 31 */,
-                /* 32 */arrayOf<Any?>(73       , "ID_TARGET_HAS_SPACES"            , Severity.WARNING     , null                           , "Space-In-Name.md") /* 32 */,
+                /* 32 */arrayOf<Any?>(73       , "ID_TARGET_HAS_SPACES"            , Severity.WEAK_WARNING, null                           , "Space-In-Name.md") /* 32 */,
                 /* 33 */arrayOf<Any?>(74       , "ID_CASE_MISMATCH"                , Severity.ERROR       , "Test.kt"                      , "test.kt") /* 33 */,
                 /* 34 */arrayOf<Any?>(75       , "ID_LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , ""                             , null) /* 34 */,
                 /* 34 */arrayOf<Any?>(76       , "ID_LINK_TARGETS_WIKI_HAS_EXT"    , Severity.WARNING     , ""                             , null) /* 34 */,
