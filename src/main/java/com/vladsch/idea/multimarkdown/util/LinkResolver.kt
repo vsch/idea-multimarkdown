@@ -45,8 +45,10 @@ abstract class LinkResolver(val projectResolver: LinkResolver.ProjectResolver, v
         @JvmField val COMPLETION_MATCH = 64                                 // inexact match for error detection
         @JvmField val LOCAL_OR_REMOTE = PREFER_LOCAL or ONLY_REMOTE         // local or remote resolved files
 
+
         private val ALL = LOCAL_OR_REMOTE or ONLY_URI             // local, remote or URI, no conversion will be done, refs returned as they are resolved
         private val MATCH_MASK = LOOSE_MATCH or COMPLETION_MATCH
+        internal val LINK_REF_WAS_URI = 0x8000000                          // original linkref was external, all resolution is done via relative links
 
 
         fun wantAny(options: Int): Boolean = (options and ALL == ANY) || (options and ALL == ALL)
@@ -59,6 +61,7 @@ abstract class LinkResolver(val projectResolver: LinkResolver.ProjectResolver, v
         fun wantCompletionMatch(options: Int): Boolean = (options and COMPLETION_MATCH != 0)
         fun wantSome(options: Int, flags: Int): Boolean = (options and flags != 0)
         fun wantAll(options: Int, flags: Int): Boolean = (options and flags == flags)
+        fun linkRefWasURI(options: Int): Boolean = (options and LINK_REF_WAS_URI != 0)
     }
 
     abstract fun inspect(linkRef: LinkRef, targetRef: FileRef, referenceId: Any? = null): List<InspectionResult>

@@ -116,6 +116,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
         // LinkRef's URL file path and remove the repoPrefix for non-Wiki and wikiRepoPrefix for wiki files, then prefix the result with the corresponding basePath
         var linkRef_ = linkRef
         var targetRef: PathInfo = linkRef_
+        var opts = options
 
         if (linkRef_.isSelfAnchor) {
             if (linkRef_ is WikiLinkRef && linkRef_.filePath.isEmpty()) {
@@ -131,32 +132,35 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
             val relPath = uriToRelativeLink(linkRef_)
             if (relPath is LinkRef) {
                 linkRef_ = relPath
+                opts = opts or LINK_REF_WAS_URI
             }
         }
 
         if (!linkRef_.isAbsolute) {
             // resolve the relative link as per requested options
             val linkRefMatcher = getMatcher(linkRef_)
-            val matches = getMatchedRefs(linkRef_, linkRefMatcher, options, inList)
+            val matches = getMatchedRefs(linkRef_, linkRefMatcher, opts, inList)
             var resolvedRef = (if (matches.size > 0) matches[0] else null) ?: return null
             targetRef = resolvedRef
         }
 
-        return processMatchOptions(linkRef_, targetRef, options)
+        return processMatchOptions(linkRef_, targetRef, opts)
     }
 
     override fun multiResolve(linkRef: LinkRef, options: Int, inList: List<PathInfo>?): List<PathInfo> {
         assertContainingFile(linkRef)
         var relLink = linkRef
+        var opts = options
         if (linkRef.isURI) {
             val relPath = uriToRelativeLink(linkRef)
             if (relPath is LinkRef) {
                 relLink = relPath
+                opts = opts or LINK_REF_WAS_URI
             }
         }
 
         val linkRefMatcher = getMatcher(relLink)
-        return getMatchedRefs(relLink, linkRefMatcher, options, inList)
+        return getMatchedRefs(relLink, linkRefMatcher, opts, inList)
     }
 
     // TODO: change this to take an exact resolve list and a loose matched list so that
@@ -364,16 +368,18 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
 
             if (linkRef is ImageLinkRef) {
                 // have to remove all that will not resolve, unless loose matching
-                var resolved = ArrayList<PathInfo>()
+                var resolved = if (linkRefWasURI(options)) matches else ArrayList<PathInfo>()
                 var unresolved = ArrayList<PathInfo>()
-                matches.forEach {
-                    // if it is an image it should only resolve for raw
-                    if (it is FileRef) {
-                        val resolvedLinkAddress = linkAddress(linkRef, it, null, null, null)
-                        if (linkRef.filePath.equals(resolvedLinkAddress, ignoreCase = true)) resolved.add(it)
-                        else unresolved.add(it)
-                    } else {
-                        unresolved.add(it)
+                if (!linkRefWasURI(options)) {
+                    matches.forEach {
+                        // if it is an image it should only resolve for raw
+                        if (it is FileRef) {
+                            val resolvedLinkAddress = linkAddress(linkRef, it, null, null, null)
+                            if (linkRef.filePath.equals(resolvedLinkAddress, ignoreCase = true)) resolved.add(it)
+                            else unresolved.add(it)
+                        } else {
+                            unresolved.add(it)
+                        }
                     }
                 }
 
