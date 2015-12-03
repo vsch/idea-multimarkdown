@@ -321,7 +321,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
                 gitHubRepos.put(currentBaseDir.getFilePath(), gitHubVcsRoot != null ? gitHubVcsRoot : NULL_VCS_ROOT);
                 if (currentBaseDir.getFilePath().equals(gitRootBaseDir)) break;
                 currentBaseDir = new PathInfo(currentBaseDir.getPath());
-            } while (!currentBaseDir.isEmpty() && !currentBaseDir.isRoot() && !currentBaseDir.getFilePath().equals(gitRootBaseDir) && !currentBaseDir.getFilePath().equals(projectBasePath));
+            } while (!currentBaseDir.isEmpty() && !currentBaseDir.isRoot());
         }
 
         Object object = gitHubRepos.get(baseDirectoryPath);

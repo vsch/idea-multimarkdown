@@ -465,7 +465,9 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
             else if (fileRef.isWikiHomePage && isSourceRef && isImageLinkRef) filePathInfo = PathInfo.appendParts(fullPath = fileRef.wikiDir, parts = "..")
             else filePathInfo = PathInfo(fileRef.wikiDir)
         } else {
-            filePathInfo = PathInfo(projectBasePath.suffixWith('/') + (if (isImageLinkRef) "raw/" else "blob/") + (branchOrTag ?: "master").suffixWith('/') + PathInfo.relativePath(projectBasePath.suffixWith('/'), fileRef.path, withPrefix = false))
+            val gitHubVcsRoot = projectResolver.getVcsRoot(fileRef)
+            val vcsMainRepoBase = (gitHubVcsRoot?.projectBasePath ?: projectBasePath).suffixWith('/')
+            filePathInfo = PathInfo(vcsMainRepoBase + (if (isImageLinkRef) "raw/" else "blob/") + (branchOrTag ?: "master").suffixWith('/') + PathInfo.relativePath(vcsMainRepoBase, fileRef.path, withPrefix = false))
         }
         return filePathInfo
     }
