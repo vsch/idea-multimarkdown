@@ -368,9 +368,9 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
 
             if (linkRef is ImageLinkRef) {
                 // have to remove all that will not resolve, unless loose matching
-                var resolved = if (linkRefWasURI(options)) matches else ArrayList<PathInfo>()
+                var resolved = if (linkRefWasURI(options) || !linkRef.containingFile.isWikiPage) matches else ArrayList<PathInfo>()
                 var unresolved = ArrayList<PathInfo>()
-                if (!linkRefWasURI(options)) {
+                if (!linkRefWasURI(options) && linkRef.containingFile.isWikiPage) {
                     matches.forEach {
                         // if it is an image it should only resolve for raw
                         if (it is FileRef) {
