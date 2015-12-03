@@ -56,7 +56,7 @@
         <li>Add: line icon to show multiple resolved targets</li>
         <li>Change: preferences for the plugin are now split between local, non-roaming persistence in multimarkdown.local.xml and shared roaming persistence in multimarkdown.shared.xml. Preferences from multimarkdown.xml are migrated to new files and the file is deleted.</li>
         <h4><strong>Enhanced Edition</strong></h4>
-        <li>Change: new implementation of file link resolving logic handles a full set of GitHub idiosyncrasies for relative links, file extensions and case sensitivity.</li>
+        <li>Change: new implementation of file link resolving logic handles a full set of GitHub idiosyncrasies for relative links, raw/blob access, absolute https:// links, file extensions and case sensitivity.</li>
         <li>Add: new annotation inspections for common errors in link resolution</li>
         <li>New: modified HTML now has all links as URI's during rendering with preference to GitHub repository file when available, fallback to local file://</li>
         <li>Fix: added validation for invalid PsiElements during refactoring to prevent exceptions</li>
@@ -64,9 +64,12 @@
         <li>Add: warning annotation in text editor, link color and image border in preview when a link target is not on GitHub according to its status</li>
         <li>Add: intention to change relative to absolute link addresses and vice-versa</li>
         <li>Add: validation of absolute links that look like they are targeting files in the same repository as the containing file</li>
-        <li>Add: navigation line items for absolute links that resolve to files in the repository</li>
+        <li>Add: navigation line items for absolute links that resolve to files</li>
         <li>Add: absolute address link completions and link completions based on extensions other than markdown for wiki and explicit and images for image links, just add https:// in front to get url completions and .ext without a file name to get extension based completions.</li>
         <li>Fix #71: license information is now saved in multimarkdown.local.xml and is marked as non-roaming</li>
+        <li>Add: handle relative image links in wiki pages must resolve to raw file access in main repository default behavior and validation</li>
+        <li>Add: automatically change wiki link to explicit link if target file is moved out of wiki link access range</li>
+        <li>Add: refactoring now keeps link format as it was before, if it was absolute or page relative.</li>
     </ul>
     <ul>
       <h3>1.2.2 - Bug Fixes and Enhancements</h3>

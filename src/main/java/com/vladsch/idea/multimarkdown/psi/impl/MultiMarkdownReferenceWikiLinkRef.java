@@ -19,6 +19,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.ResolveResult;
 import com.intellij.util.IncorrectOperationException;
+import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.psi.*;
 import com.vladsch.idea.multimarkdown.util.FileRef;
 import com.vladsch.idea.multimarkdown.util.GitHubLinkResolver;
@@ -49,7 +50,7 @@ public class MultiMarkdownReferenceWikiLinkRef extends MultiMarkdownReference {
             LinkRef linkRef = MultiMarkdownPsiImplUtil.getLinkRef(myElement);
             if (linkRef != null) {
                 ProjectFileRef targetRef = new ProjectFileRef((PsiFile) element);
-                if (targetRef.isUnderWikiDir()) {
+                if (targetRef.isUnderWikiDir() || !MultiMarkdownPlugin.isLicensed()) {
                     String linkAddress = new GitHubLinkResolver(myElement).linkAddress(linkRef, new FileRef((PsiFile) element), null, null, null);
                     // this will create a new reference and loose connection to this one
                     return myElement.setName(linkAddress, MultiMarkdownNamedElement.REASON_BIND_TO_FILE);

@@ -13,7 +13,7 @@
 
 #### Enhanced Edition
 
-- Change: new implementation of file link resolving logic handles a full set of GitHub idiosyncrasies for relative links, file extensions and case sensitivity.
+- Change: new implementation of file link resolving logic handles a full set of GitHub idiosyncrasies for relative links, raw/blob access, absolute https:// links, file extensions and case sensitivity.
 - Add: new annotation inspections for common errors in link resolution
 - New: modified HTML now has all links as URI's during rendering with preference to GitHub repository file when available, fallback to local file://
 - Fix: added validation for invalid PsiElements during refactoring to prevent exceptions
