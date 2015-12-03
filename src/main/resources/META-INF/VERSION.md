@@ -26,6 +26,7 @@
 - Fix #71: license information is now saved in multimarkdown.local.xml and is marked as non-roaming 
 - Add: handle relative image links in wiki pages must resolve to raw file access in main repository default behavior and validation  
 - Add: automatically change wiki link to explicit link if target file is moved out of wiki link access range
+- Add: refactoring now keeps link format as it was before, if it was absolute or page relative.
 
 ### 1.2.2 - Bug Fixes and Enhancements
 
