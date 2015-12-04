@@ -79,7 +79,7 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
     @Nullable
     public String getLinkTarget(@NotNull String url, LinkType linkType, @NotNull boolean[] localOnly) {
         // return null if does not resolved, but only if validating links
-        if ((options & VALIDATE_LINKS) != 0 && (linkType == LinkType.Wiki || MultiMarkdownPlugin.isLicensed())) {
+        if ((options & VALIDATE_LINKS) != 0 && (linkType == LinkType.Wiki || MultiMarkdownPlugin.isLicensed() || new PathInfo(url).isRelative())) {
             assert resolver != null;
 
             LinkRef targetRef;
@@ -99,12 +99,16 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
             }
 
             PathInfo resolvedTarget = resolver.resolve(targetRef, (linkType != LinkType.Image ? LinkResolver.ONLY_REMOTE : 0) | LinkResolver.ONLY_URI, null);
-
             if (resolvedTarget != null) {
                 assert resolvedTarget.isURI() && resolvedTarget instanceof LinkRef && (!resolvedTarget.isLocal() || ((LinkRef) resolvedTarget).isResolved()) : "Expected URI only target, got " + resolvedTarget;
-                FileRef fileRef = resolvedTarget.isLocal() ? ((LinkRef) resolvedTarget).getTargetRef() : null;
-                localOnly[0] = fileRef instanceof ProjectFileRef && !((ProjectFileRef) fileRef).isUnderVcs();
-                return linkType == LinkType.Image ? resolvedTarget.getFilePath() : ((LinkRef) resolvedTarget).getFilePathWithAnchor();
+
+                if (!(new PathInfo(url).isURI())) {
+                    FileRef fileRef = resolvedTarget.isLocal() ? ((LinkRef) resolvedTarget).getTargetRef() : null;
+                    localOnly[0] = fileRef instanceof ProjectFileRef && !((ProjectFileRef) fileRef).isUnderVcs();
+                    return linkType == LinkType.Image ? resolvedTarget.getFilePath() : ((LinkRef) resolvedTarget).getFilePathWithAnchor();
+                } else {
+                    return url;
+                }
             }
             return null;
         }

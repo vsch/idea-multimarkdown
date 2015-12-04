@@ -24,8 +24,8 @@ val cleanData = true
 
 object MarkdownTestData : LinkResolver.ProjectResolver {
 
-    val mainGitHubRepo = GitHubVcsRoot("https://github.com/vsch/MarkdownTest", "/Users/vlad/src/MarkdownTest")
-    val wikiGitHubRepo = GitHubVcsRoot("https://github.com/vsch/MarkdownTest", "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki")
+    val mainGitHubRepo = GitHubVcsRoot.create("https://github.com/vsch/MarkdownTest", "/Users/vlad/src/MarkdownTest")
+    val wikiGitHubRepo = GitHubVcsRoot.create("https://github.com/vsch/MarkdownTest", "/Users/vlad/src/MarkdownTest/MarkdownTest.wiki")
 
     override fun isUnderVcs(fileRef: FileRef): Boolean {
         return fileRef.filePath !in nonVcsFiles

@@ -312,7 +312,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
         baseDirectoryPath = StringUtilKt.removeEnd(baseDirectoryPath, '/');
         projectBasePath = StringUtilKt.removeEnd(projectBasePath, '/');
         if (!gitHubRepos.containsKey(baseDirectoryPath)) {
-            GitHubVcsRoot gitHubVcsRoot = GitHubVcsRoot.getGitHubVcsRoot(baseDirectoryPath, projectBasePath);
+            GitHubVcsRoot gitHubVcsRoot = GitHubVcsRoot.Companion.getGitHubVcsRoot(baseDirectoryPath, projectBasePath);
             // add all intervening directories to point to this repo or null if none was found so we don't search for it again
             String gitRootBaseDir = gitHubVcsRoot == null ? projectBasePath : StringUtilKt.removeEnd(gitHubVcsRoot.getBasePath(), '/');
             PathInfo currentBaseDir = new PathInfo(baseDirectoryPath);

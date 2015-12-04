@@ -70,7 +70,7 @@ open class LinkRef(val containingFile: FileRef, fullPath: String, anchorTxt: Str
 
     val remoteURL: String? by lazy {
         if (targetRef is ProjectFileRef) {
-            targetRef.gitHubVcsRoot?.getBaseUrl().suffixWith('/') + filePath + anchorText
+            targetRef.gitHubVcsRoot?.baseUrl.suffixWith('/') + filePath + anchorText
         } else if (isExternal) {
             filePath + anchorText
         } else {

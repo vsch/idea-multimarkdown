@@ -1,3 +1,17 @@
+### 1.2.4 - Bug Fixes and Enhancements
+
+#### Basic Edition & Enhanced
+
+- 
+
+#### Enhanced Edition
+
+* Add: https://raw.githubusercontent.com/ mapping to project files 
+* Fix: https://github.com/user/repository/raw/... would produce https://github.com/user/repository/blob/... urls in HTML Preview and HTML Text tabs 
+* Fix: absolute URL's to raw files would convert to blob/ access relative links 
+* Fix: relative links to raw files would convert to blob/ access absolute URL's 
+* Fix: not offer change to wiki link, explicit links to non-wiki files. 
+
 ### 1.2.3 - Bug Fixes and Enhancements
 
 #### Basic Edition & Enhanced

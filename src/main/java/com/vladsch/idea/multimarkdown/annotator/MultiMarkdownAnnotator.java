@@ -81,11 +81,13 @@ public class MultiMarkdownAnnotator implements Annotator {
         if (elementTypes == null || !(element.getParent() instanceof MultiMarkdownLinkElement)
                 || (elementTypes != MultiMarkdownPsiImplUtil.WIKI_LINK_ELEMENT && !MultiMarkdownPlugin.isLicensed())) return;
 
-        LinkRef linkRefInfo = MultiMarkdownPsiImplUtil.getLinkRef(elementTypes, element);
+        LinkRef denormLinkRefInfo = MultiMarkdownPsiImplUtil.getLinkRef(elementTypes, element);
 
-        if (linkRefInfo == null || linkRefInfo.getFilePathWithAnchor().isEmpty() || linkRefInfo instanceof WikiLinkRef && linkRefInfo.getFilePathWithAnchor().trim().isEmpty()) return;
+        if (denormLinkRefInfo == null || denormLinkRefInfo.getFilePathWithAnchor().isEmpty() || denormLinkRefInfo instanceof WikiLinkRef && denormLinkRefInfo.getFilePathWithAnchor().trim().isEmpty()) return;
 
         GitHubLinkResolver resolver = new GitHubLinkResolver(element);
+        LinkRef linkRefInfo = resolver.normalizedLinkRef(denormLinkRefInfo);
+
         Project project = element.getProject();
         GitHubVcsRoot gitHubVcsRoot = resolver.getProjectResolver().getVcsRoot(linkRefInfo.getContainingFile());
 
@@ -392,7 +394,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                 }
 
                 // TODO: move these into inspections of INFORMATION type
-                if (element instanceof MultiMarkdownLinkRef) offerExplicitToWikiQuickFix(element, state, Severity.WEAK_WARNING);
+                if (element instanceof MultiMarkdownLinkRef && resolvedTargetInfo instanceof FileRef && ((FileRef) resolvedTargetInfo).isUnderWikiDir()) offerExplicitToWikiQuickFix(element, state, Severity.WEAK_WARNING);
                 else if (element instanceof MultiMarkdownWikiLinkRef) offerWikiToExplicitLinkQuickFix(element, state, Severity.WEAK_WARNING);
             }
         }

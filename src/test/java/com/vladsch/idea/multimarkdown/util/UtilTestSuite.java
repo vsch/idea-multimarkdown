@@ -30,6 +30,7 @@ import org.junit.runners.Suite;
         TestLinkRef.class,
         TestLinkRef_from.class,
         TestLinkMatcher_MultiSub.class,
+        TestGitHubVcsRoot_Basic.class,
         TestLinkResolver_Basic_wiki_Home.class,
         TestLinkResolver_Basic_wiki_normal_file.class,
         TestLinkResolver_Basic_Readme.class,

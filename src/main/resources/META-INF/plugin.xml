@@ -41,9 +41,14 @@
         </div>
         ]]></description>
 
-    <version>1.2.3</version>
+    <version>1.2.3.1</version>
     <idea-version since-build="139.1603"/>
     <change-notes><![CDATA[
+    <ul>
+        <h3>1.2.4 - Bug Fixes and Enhancements</h3>
+        <h4><strong>Basic Edition &amp; Enhanced</strong></h4>
+        <h4><strong>Enhanced Edition</strong></h4>
+    </ul>
     <ul>
         <h3>1.2.3 - Bug Fixes and Enhancements</h3>
         <h4><strong>Basic Edition &amp; Enhanced</strong></h4>

@@ -24,27 +24,27 @@ import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
 import java.net.URLEncoder
 
-fun String?.ifNullOr(condition:Boolean, altValue:String): String {
+fun String?.ifNullOr(condition: Boolean, altValue: String): String {
     return if (this == null || condition) altValue else this
 }
 
-fun String?.ifNullOrNot(condition:Boolean, altValue:String): String {
+fun String?.ifNullOrNot(condition: Boolean, altValue: String): String {
     return if (this == null || !condition) altValue else this
 }
 
-inline fun String?.ifNullOr(condition:(String)->Boolean, altValue:String): String {
+inline fun String?.ifNullOr(condition: (String) -> Boolean, altValue: String): String {
     return if (this == null || condition(this)) altValue else this
 }
 
-inline fun String?.ifNullOrNot(condition:(String)->Boolean, altValue:String): String {
+inline fun String?.ifNullOrNot(condition: (String) -> Boolean, altValue: String): String {
     return if (this == null || !condition(this)) altValue else this
 }
 
-fun String?.ifNullOrEmpty(altValue:String): String {
+fun String?.ifNullOrEmpty(altValue: String): String {
     return if (this == null || this.isEmpty()) altValue else this
 }
 
-fun String?.ifNullOrBlank(altValue:String): String {
+fun String?.ifNullOrBlank(altValue: String): String {
     return if (this == null || this.isBlank()) altValue else this
 }
 
@@ -256,12 +256,28 @@ fun skipEmptySplicer(delimiter: String): (accum: String, elem: String) -> String
     return { accum, elem -> if (elem.isEmpty()) accum else accum + delimiter + elem }
 }
 
+
+fun StringBuilder.regionMatches(thisOffset:Int, other:String, otherOffset:Int, length:Int, ignoreCase: Boolean = false) : Boolean {
+    for (i in 0..length-1) {
+        if (!this.get(i+thisOffset).equals(other.get(i+otherOffset), ignoreCase)) return false
+    }
+    return true
+}
+
+fun StringBuilder.endsWith(suffix: String, ignoreCase: Boolean = false): Boolean {
+    return this.length >= suffix.length && this.regionMatches(this.length - suffix.length, suffix, 0, suffix.length, ignoreCase)
+}
+
+fun StringBuilder.startsWith(prefix: String, ignoreCase: Boolean = false): Boolean {
+    return this.length >= prefix.length && this.regionMatches(0, prefix, 0, prefix.length, ignoreCase)
+}
+
 fun Array<String>.splice(delimiter: String): String {
     val result = StringBuilder(this.size * (delimiter.length + 10))
     var first = true;
     for (elem in this) {
         if (!elem.isEmpty()) {
-            if (!first) result.append(delimiter)
+            if (!first && !elem.startsWith(delimiter) && !result.endsWith(delimiter)) result.append(delimiter)
             else first = false
             result.append(elem.orEmpty())
         }
@@ -275,7 +291,7 @@ fun List<String?>.splice(delimiter: String, skipNullOrEmpty: Boolean = true): St
     var first = true;
     for (elem in this) {
         if (elem != null && !elem.isEmpty() || !skipNullOrEmpty) {
-            if (!first) result.append(delimiter)
+            if (!first && (!skipNullOrEmpty || !elem.startsWith(delimiter) && !result.endsWith(delimiter))) result.append(delimiter)
             else first = false
             result.append(elem.orEmpty())
         }
@@ -289,7 +305,7 @@ fun Collection<String?>.splice(delimiter: String, skipNullOrEmpty: Boolean = tru
     var first = true;
     for (elem in this) {
         if (elem != null && !elem.isEmpty() || !skipNullOrEmpty) {
-            if (!first) result.append(delimiter)
+            if (!first && (!skipNullOrEmpty || !elem.startsWith(delimiter) && !result.endsWith(delimiter))) result.append(delimiter)
             else first = false
             result.append(elem.orEmpty())
         }
@@ -303,7 +319,7 @@ fun Iterator<String>.splice(delimiter: String, skipEmpty: Boolean = true): Strin
     var first = true;
     for (elem in this) {
         if (!elem.isEmpty() || !skipEmpty) {
-            if (!first) result.append(delimiter)
+            if (!first && (!skipEmpty || !elem.startsWith(delimiter) && !result.endsWith(delimiter))) result.append(delimiter)
             else first = false
             result.append(elem.orEmpty())
         }

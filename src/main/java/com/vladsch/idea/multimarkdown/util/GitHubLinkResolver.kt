@@ -27,7 +27,6 @@ import com.intellij.util.Processor
 import com.intellij.util.indexing.FileBasedIndex
 import com.intellij.util.indexing.FileBasedIndexImpl
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin
-import java.net.URI
 import java.util.*
 import kotlin.text.RegexOption
 
@@ -78,8 +77,9 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
 
     fun getMatcher(linkRef: LinkRef, linkRefWasURI: Boolean): GitHubLinkMatcher {
         var _matcher = matcher
-        if (_matcher === null || _matcher.linkRef != linkRef) {
-            _matcher = GitHubLinkMatcher(projectResolver, linkRef, linkRefWasURI)
+        val normLinkRef = normalizedLinkRef(linkRef)
+        if (_matcher === null || _matcher.linkRef != normLinkRef) {
+            _matcher = GitHubLinkMatcher(projectResolver, normLinkRef, linkRefWasURI)
             matcher = _matcher
         }
         return _matcher
@@ -102,20 +102,22 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
     // TEST: this needs tests to make sure it works
     override fun isResolvedTo(linkRef: LinkRef, targetRef: FileRef, withExtForWikiPage: Boolean?, branchOrTag: String?): Boolean {
         assertContainingFile(linkRef)
-        val linkRefText = linkAddress(linkRef, targetRef, withExtForWikiPage, branchOrTag, "")
+        val normLinkRef = normalizedLinkRef(linkRef)
+        val linkRefText = linkAddress(normLinkRef, targetRef, withExtForWikiPage, branchOrTag, "")
         return linkRef.filePath.equals(linkRefText, ignoreCase = targetRef.isWikiPage && !linkRef.hasExt)
     }
 
     override fun isResolved(linkRef: LinkRef, options: Int, inList: List<PathInfo>?): Boolean {
         assertContainingFile(linkRef)
-        return resolve(linkRef, options, inList) != null
+        val normLinkRef = normalizedLinkRef(linkRef)
+        return resolve(normLinkRef, options, inList) != null
     }
 
     override fun resolve(linkRef: LinkRef, options: Int, inList: List<PathInfo>?): PathInfo? {
         assertContainingFile(linkRef)
         // TODO: if only want local, then can try to resolve external links to local file refs if they map, for that need to parse the
         // LinkRef's URL file path and remove the repoPrefix for non-Wiki and wikiRepoPrefix for wiki files, then prefix the result with the corresponding basePath
-        var linkRef_ = linkRef
+        var linkRef_ = normalizedLinkRef(linkRef)
         var targetRef: PathInfo = linkRef_
         var opts = options
 
@@ -126,7 +128,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
             }
 
             targetRef = linkRef_.containingFile
-            linkRef_ = linkRef.replaceFilePath(if (linkRef_.hasExt || !linkRef_.containingFile.isUnderWikiDir) targetRef.fileName else targetRef.fileNameNoExt)
+            linkRef_ = linkRef_.replaceFilePath(if (linkRef_.hasExt || !linkRef_.containingFile.isUnderWikiDir) targetRef.fileName else targetRef.fileNameNoExt)
         }
 
         if (targetRef.isURI) {
@@ -150,10 +152,10 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
 
     override fun multiResolve(linkRef: LinkRef, options: Int, inList: List<PathInfo>?): List<PathInfo> {
         assertContainingFile(linkRef)
-        var relLink = linkRef
+        var relLink = normalizedLinkRef(linkRef)
         var opts = options
-        if (linkRef.isURI) {
-            val relPath = uriToRelativeLink(linkRef)
+        if (relLink.isURI) {
+            val relPath = uriToRelativeLink(relLink)
             if (relPath is LinkRef) {
                 relLink = relPath
                 opts = opts or LINK_REF_WAS_URI
@@ -168,7 +170,8 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
     // all types of issues could be analyzed, not just based on single target
     override fun inspect(linkRef: LinkRef, targetRef: FileRef, referenceId: Any?): List<InspectionResult> {
         assertContainingFile(linkRef)
-        return linkInspector.inspect(linkRef, targetRef, referenceId)
+        val normLinkRef = normalizedLinkRef(linkRef)
+        return linkInspector.inspect(normLinkRef, targetRef, referenceId)
     }
 
     protected fun getTargetFileTypes(extensions: List<String>?): HashSet<FileType> {
@@ -184,13 +187,15 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
     }
 
     fun processMatchOptions(linkRef: LinkRef, targetRef: PathInfo, options: Int): PathInfo? {
+        assert(linkRef === normalizedLinkRef(linkRef))
+
         if (targetRef is FileRef) {
             if (!wantLocal(options) || wantOnlyURI(options)) {
                 val vcsRoot = projectResolver.getVcsRoot(targetRef)
                 if (!wantLocal(options) && (projectResolver.isUnderVcs(targetRef)) || (wantOnlyRemoteURI(options) && vcsRoot != null)) {
                     // remote available
                     if (wantOnlyURI(options) || wantOnlyRemoteURI(options)) {
-                        val remoteUrl = vcsRoot?.urlForVcsRemote(targetRef, targetRef.isRawFile || wikiLinkHasRealExt(linkRef, targetRef), linkRef.anchor, branchOrTag, if (linkRef is ImageLinkRef) "raw" else null)
+                        val remoteUrl = vcsRoot?.urlForVcsRemote(targetRef, targetRef.isRawFile || wikiLinkHasRealExt(linkRef, targetRef), linkRef.anchor, branchOrTag, if (linkRef is ImageLinkRef || targetRef.isRawFile) "raw" else null)
                         if (remoteUrl != null) {
                             //                            val urlRef = LinkRef.parseLinkRef(linkRef.containingFile, remoteUrl, targetRef, if (linkRef is ImageLinkRef) ::ImageLinkRef else ::LinkRef)
                             val urlRef =
@@ -230,6 +235,8 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
     }
 
     fun getMatchedRefs(linkRef: LinkRef, linkMatcher: GitHubLinkMatcher, options: Int, fromList: List<PathInfo>?): List<PathInfo> {
+        assert(linkRef === normalizedLinkRef(linkRef))
+
         // process the files that match the pattern and put them in the list
         var matches = ArrayList<PathInfo>()
 
@@ -272,6 +279,9 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
 
             //            val allFiles = ArrayList<String>()
 
+            // TEST: raw links will produce raw relative and remote url addresses
+            val rawGitHubLink = linkMatcher.gitHubLink == "raw"
+
             if (fromList == null) {
                 val targetFileTypes = getTargetFileTypes(allExtensions)
                 if (targetFileTypes.isEmpty() || project == null) {
@@ -284,7 +294,9 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                             if (fileRef.filePath.matches(if (fileRef.isWikiPage) allMatchWiki else allMatchNonWiki)) {
                                 // here we need to test for wiki page links that resolve to raw files, these have to match case sensitive
                                 if (allMatchNonWiki === allMatchWiki || !linkMatcher.wikiMatchingRules || !linkRef.hasExt || fileRef.filePath.matches(allMatchNonWiki)) {
-                                    matches.add(fileRef)
+                                    val newFileRef = if (rawGitHubLink) FileRef(fileRef) else fileRef
+                                    if (rawGitHubLink) newFileRef.isRawFile = true
+                                    matches.add(newFileRef)
                                 }
                             }
                         }
@@ -298,7 +310,9 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                             if (virtualFile.path.matches(allMatchWiki)) {
                                 val fileRef = ProjectFileRef(virtualFile, project)
                                 if (allMatchNonWiki === allMatchWiki || !linkMatcher.wikiMatchingRules || !linkRef.hasExt || fileRef.filePath.matches(allMatchNonWiki)) {
-                                    matches.add(fileRef)
+                                    val newFileRef = if (rawGitHubLink) FileRef(fileRef) else fileRef
+                                    if (rawGitHubLink) newFileRef.isRawFile = true
+                                    matches.add(newFileRef)
                                 }
                             }
                             true
@@ -313,8 +327,12 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                             // here we need to test for wiki page links that resolve to raw files, these have to match case sensitive
                             if (allMatchNonWiki === allMatchWiki || !linkMatcher.wikiMatchingRules || !fileRef.isWikiPage || !linkRef.hasExt || fileRef.filePath.matches(allMatchNonWiki)) {
                                 // if isRawFile is set we cannot reuse it, since in our case it may no longer be raw access
-                                if (fileRef.isRawFile) matches.add(FileRef(fileRef))
-                                else matches.add(fileRef)
+                                if (fileRef.isRawFile && !rawGitHubLink) matches.add(FileRef(fileRef))
+                                else {
+                                    val newFileRef = FileRef(fileRef)
+                                    newFileRef.isRawFile = true
+                                    matches.add(newFileRef)
+                                }
                             }
                         }
                     }
@@ -383,7 +401,6 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                         }
                     }
                 }
-
 
                 var linkFileMatchRegex = linkMatcher.linkFileMatch?.toRegex() ?: linkAllMatch.toRegex()
                 resolved.sort { self, other ->
@@ -474,17 +491,20 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
         } else {
             val gitHubVcsRoot = projectResolver.getVcsRoot(fileRef)
             val vcsMainRepoBase = (gitHubVcsRoot?.mainRepoBaseDir ?: projectBasePath).suffixWith('/')
-            filePathInfo = PathInfo(vcsMainRepoBase + (if (isImageLinkRef) "raw/" else "blob/") + (branchOrTag ?: "master").suffixWith('/') + PathInfo.relativePath(vcsMainRepoBase, fileRef.path, withPrefix = false))
+
+            filePathInfo = PathInfo(vcsMainRepoBase + (if (isImageLinkRef || fileRef.isRawFile) "raw/" else "blob/") + (branchOrTag ?: "master").suffixWith('/') + PathInfo.relativePath(vcsMainRepoBase, fileRef.path, withPrefix = false))
         }
         return filePathInfo
     }
 
     override fun relativePath(linkRef: LinkRef, targetRef: FileRef, withExtForWikiPage: Boolean, branchOrTag: String?): String {
         assertContainingFile(linkRef)
+        assert(linkRef === normalizedLinkRef(linkRef))
 
         val containingFilePath = logicalRemotePath(containingFile, useWikiPageActualLocation = false, isSourceRef = true, isImageLinkRef = linkRef is ImageLinkRef, branchOrTag = branchOrTag).filePath.suffixWith('/')
         val targetFilePath = logicalRemotePath(targetRef, useWikiPageActualLocation = withExtForWikiPage, isSourceRef = false, isImageLinkRef = linkRef is ImageLinkRef, branchOrTag = branchOrTag).filePath.suffixWith('/')
 
+        //        val linkBranchOrTag = branchOrTag ?: extractBranchOrTag(linkRef)
         return PathInfo.relativePath(containingFilePath, targetFilePath, withPrefix = true)
     }
 
@@ -516,6 +536,8 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
     }
 
     fun linkRef(linkRef: LinkRef, targetRef: PathInfo, withExtForWikiPage: Boolean?, branchOrTag: String?, anchor: String?): LinkRef {
+        assert(linkRef === normalizedLinkRef(linkRef))
+
         return when (linkRef) {
             is WikiLinkRef -> LinkRef.parseLinkRef(containingFile, linkAddress(linkRef, targetRef, withExtForWikiPage, branchOrTag, anchor), targetRef as? FileRef, ::WikiLinkRef)
             is ImageLinkRef -> LinkRef.parseLinkRef(containingFile, linkAddress(linkRef, targetRef, withExtForWikiPage, branchOrTag, anchor), targetRef as? FileRef, ::ImageLinkRef)
@@ -530,15 +552,16 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
     @Suppress("NAME_SHADOWING")
     override fun linkAddress(linkRef: LinkRef, targetRef: PathInfo, withExtForWikiPage: Boolean?, branchOrTag: String?, anchor: String?): String {
         assertContainingFile(linkRef)
+        val normLinkRef = normalizedLinkRef(linkRef)
 
         // need to make sure that the extension in the link is a real extension and not part of the file name, otherwise it will add the .md extension erroneously
-        val withExtForWikiPage = withExtForWikiPage ?: wikiLinkHasRealExt(linkRef, targetRef)
+        val withExtForWikiPage = withExtForWikiPage ?: wikiLinkHasRealExt(normLinkRef, targetRef)
 
         if (targetRef is FileRef) {
-            var prefix = relativePath(linkRef, targetRef, withExtForWikiPage, branchOrTag)
+            var prefix = relativePath(normLinkRef, targetRef, withExtForWikiPage, branchOrTag)
 
-            if (linkRef is WikiLinkRef) {
-                return prefix.suffixWith('/') + linkRef.fileToLink(if (withExtForWikiPage) targetRef.fileName else targetRef.fileNameNoExt) + (anchor ?: if (wasAnchorUsedInMatch(linkRef, targetRef)) "" else linkRef.anchor).prefixWith("#")
+            if (normLinkRef is WikiLinkRef) {
+                return prefix.suffixWith('/') + normLinkRef.fileToLink(if (withExtForWikiPage) targetRef.fileName else targetRef.fileNameNoExt) + (anchor ?: if (wasAnchorUsedInMatch(normLinkRef, targetRef)) "" else normLinkRef.anchor).prefixWith("#")
             } else {
                 if (prefix.isNotEmpty() && targetRef.isUnderWikiDir) {
                     // if the prefix starts with the wiki dir change it to the generic wiki used in links
@@ -547,23 +570,23 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                     else if (!containingFile.isUnderWikiDir && prefix.startsWith("../../" + wikiDirName)) prefix = "../../wiki/" + prefix.substring(("../../" + wikiDirName).length)
                 }
 
-                val selfRef = isSelfRef(linkRef, targetRef, withExtForWikiPage)
-                val optimizedAnchor = (anchor ?: optimizedLinkAnchor(linkRef, targetRef, withExtForWikiPage)).prefixWith('#')
+                val selfRef = isSelfRef(normLinkRef, targetRef, withExtForWikiPage)
+                val optimizedAnchor = (anchor ?: optimizedLinkAnchor(normLinkRef, targetRef, withExtForWikiPage)).prefixWith('#')
 
                 if (targetRef.isWikiPage) {
                     if (selfRef) return optimizedAnchor
                     else {
                         val fileName = prefix.suffixWith('/') + if (!withExtForWikiPage) (if (targetRef.isWikiHomePage) "" else targetRef.fileNameNoExt) else targetRef.fileName
-                        return linkRef.fileToLink(fileName).removeSuffix("/") + optimizedAnchor
+                        return normLinkRef.fileToLink(fileName).removeSuffix("/") + optimizedAnchor
                     }
                 } else {
                     if (selfRef) return optimizedAnchor
-                    else return linkRef.fileToLink(prefix.suffixWith('/') + targetRef.fileName) + optimizedAnchor
+                    else return normLinkRef.fileToLink(prefix.suffixWith('/') + targetRef.fileName) + optimizedAnchor
                 }
             }
         } else if (targetRef.isURI) {
             // convert git hub links to relative links
-            val remoteUrl = projectResolver.getVcsRoot(linkRef.containingFile)?.getBaseUrl()
+            val remoteUrl = projectResolver.getVcsRoot(normLinkRef.containingFile)?.baseUrl
             if (remoteUrl != null) {
                 assert(remoteUrl.startsWith("http://", "https://"), { "remote vcsRepoBase has to start with http:// or https://, instead got ${remoteUrl}" })
 
@@ -579,7 +602,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                         if (fileName.startsWith("wiki/")) {
                             // trying for wiki page
                             val filePath = when {
-                                containingFile.isWikiHomePage && linkRef is ImageLinkRef -> fileName
+                                containingFile.isWikiHomePage && normLinkRef is ImageLinkRef -> fileName
                                 containingFile.isUnderWikiDir -> fileName.substring("wiki/".length)
                                 else -> PathInfo.relativePath(containingFile.path, projectBasePath.suffixWith('/'), withPrefix = true).suffixWith("/") + "../../" + fileName
                             }
@@ -615,6 +638,8 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
     }
 
     fun optimizedLinkAnchor(linkRef: LinkRef, targetRef: FileRef, withExtForWikiPage: Boolean): String {
+        assert(linkRef === normalizedLinkRef(linkRef))
+
         val anchorUsedInMatch = wasAnchorUsedInMatch(linkRef, targetRef)
         val selfRef = isSelfRef(linkRef, targetRef, withExtForWikiPage)
 
@@ -625,11 +650,15 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
     }
 
     fun isSelfRef(linkRef: LinkRef, targetRef: FileRef, withExtForWikiPage: Boolean): Boolean {
+        assert(linkRef === normalizedLinkRef(linkRef))
+
         return if ((targetRef.isWikiPage && withExtForWikiPage) || (!targetRef.isWikiPage && linkRef.hasExt)) linkRef.containingFile.filePathNoExt.equals(targetRef.filePathNoExt)
         else linkRef.containingFile.filePath.equals(targetRef.filePath)
     }
 
     fun wasAnchorUsedInMatch(linkRef: LinkRef, targetRef: PathInfo): Boolean {
+        assert(linkRef === normalizedLinkRef(linkRef))
+
         return linkRef.hasAnchor && (!linkRef.linkToFile(linkRef.fileName).equals(targetRef.fileName) && targetRef.fileName.endsWith(linkRef.anchorText)
                                      || !linkRef.linkToFile(linkRef.fileNameNoExt).equals(targetRef.fileNameNoExt) && targetRef.fileNameNoExt.endsWith(linkRef.anchorText))
     }
@@ -639,12 +668,14 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
     }
 
     fun uriToResolvedRelativeLink(linkRef: LinkRef): LinkRef? {
-        val relLink = uriToRelativeLink(linkRef)
+        val normLinkRef = normalizedLinkRef(linkRef)
+
+        val relLink = uriToRelativeLink(normLinkRef)
         if (relLink != null) {
             val targetRef = resolve(relLink, PREFER_LOCAL, null)
 
             if (targetRef != null) {
-                val relRef = linkRef(linkRef, targetRef, null, null, null);
+                val relRef = linkRef(normLinkRef, targetRef, null, null, null);
                 return relRef
             }
         }
@@ -653,27 +684,80 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
 
     fun uriToRelativeLink(linkRef: LinkRef): LinkRef? {
         if (!linkRef.isURI) return linkRef
+        val normLinkRef = normalizedLinkRef(linkRef)
 
-        if (linkRef.isLocal) {
-            val targetRef = FileRef(linkRef.filePath.removePrefix("file://"))
-            val relRef = linkRef.replaceFilePath(linkAddress(linkRef, targetRef, null, null, null), true)
+        if (normLinkRef.isLocal) {
+            val targetRef = FileRef(normLinkRef.filePath.removePrefix("file://"))
+            val relRef = normLinkRef.replaceFilePath(linkAddress(normLinkRef, targetRef, null, null, null), true)
             if (isResolvedTo(relRef, targetRef, null, null)) {
                 return relRef
             }
-        } else if (linkRef.isExternal) {
-            val gitHubVcsRoot = projectResolver.getVcsRoot(linkRef.containingFile)
+        } else if (normLinkRef.isExternal) {
+            val gitHubVcsRoot = projectResolver.getVcsRoot(normLinkRef.containingFile)
             if (gitHubVcsRoot != null) {
                 var gitHubRepoBaseUrl = gitHubVcsRoot.baseUrl
-                if (linkRef.filePath.startsWith(gitHubRepoBaseUrl)) {
-                    var targetFilePath = gitHubVcsRoot.mainRepoBaseDir.suffixWith('/') + linkRef.linkToFile(linkRef.filePath.substring(gitHubRepoBaseUrl.suffixWith('/').length))
-                    val containingFilePath = logicalRemotePath(containingFile, useWikiPageActualLocation = false, isSourceRef = true, isImageLinkRef = linkRef is ImageLinkRef, branchOrTag = null).filePath.suffixWith('/')
+                if (normLinkRef.filePath.startsWith(gitHubRepoBaseUrl)) {
+                    var targetFilePath = gitHubVcsRoot.mainRepoBaseDir.suffixWith('/') + normLinkRef.linkToFile(normLinkRef.filePath.substring(gitHubRepoBaseUrl.suffixWith('/').length))
+                    val containingFilePath = logicalRemotePath(containingFile, useWikiPageActualLocation = false, isSourceRef = true, isImageLinkRef = normLinkRef is ImageLinkRef, branchOrTag = null).filePath.suffixWith('/')
 
-                    val relLink = linkRef.replaceFilePath(PathInfo.relativePath(containingFilePath, targetFilePath), false)
+                    val relLink = normLinkRef.replaceFilePath(PathInfo.relativePath(containingFilePath, targetFilePath), false)
                     return relLink
                 }
             }
         }
         return null
+    }
+
+//    fun useRawAccess(linkRef: LinkRef): Boolean {
+//        assertContainingFile(linkRef)
+//        assert(linkRef === normalizedLinkRef(linkRef))
+//
+//        if (linkRef is ImageLinkRef || )
+//        // should have raw/ after path
+//        if (linkRef.isRelative) {
+//
+//        }
+//        else if (linkRef.filePath.startsWith("https://github.com/")) {
+//            val noRawContentPrefix = linkRef.filePath.removePrefix("https://raw.githubusercontent.com/")
+//            val linkParts = noRawContentPrefix.split("?", limit = 2)[0].split("/")
+//
+//            if (linkParts.size >= 3) {
+//                if (linkParts[2] in arrayOf("raw", "blob")) {
+//                    // we have a user and repo match
+//                    return linkParts[
+//                }
+//            }
+//        }
+//        return null
+//        return ""
+//    }
+
+    fun normalizedLinkRef(linkRef: LinkRef): LinkRef {
+        // from "https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_source_preview.png"
+        // to "https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/ScreenShot_source_preview.png"
+        // from "https://raw.githubusercontent.com/wiki/vsch/idea-multimarkdown/img/ScreenShot_source_preview_Large.png?token=AJ0mzve3jxMArvfYq7nKkL1ZaYZbPVxXks5Was-1wA%3D%3D"
+        // to "https://github.com/vsch/idea-multimarkdown/wiki/img/ScreenShot_source_preview.png"
+        if (linkRef.filePath.startsWith("https://raw.githubusercontent.com/")) {
+            val noRawContentPrefix = linkRef.filePath.removePrefix("https://raw.githubusercontent.com/")
+            val linkParts = noRawContentPrefix.split("?", limit = 2)[0].split("/")
+
+            if (linkParts.size >= 3 && (linkParts[0] != "wiki" || linkParts.size >= 4)) {
+                var normLinkParts: List<String>
+
+                if (linkParts[0] == "wiki") {
+                    // we have a user and repo match
+                    normLinkParts = arrayListOf<String>(linkParts[1], linkParts[2], "wiki", *linkParts.subList(3, linkParts.size).toTypedArray())
+                } else {
+                    // we have a user and repo match
+                    normLinkParts = arrayListOf<String>(linkParts[0], linkParts[1], "raw", *linkParts.subList(2, linkParts.size).toTypedArray())
+                }
+
+                val changedUrlPath = PathInfo.appendParts("https://github.com", normLinkParts).filePath
+                val normalizedLinkRef = linkRef.replaceFilePath(changedUrlPath, true)
+                return normalizedLinkRef
+            }
+        }
+        return linkRef
     }
 }
 
