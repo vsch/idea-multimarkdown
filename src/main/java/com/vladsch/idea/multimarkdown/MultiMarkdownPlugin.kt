@@ -25,6 +25,7 @@ package com.vladsch.idea.multimarkdown
 
 import com.google.common.base.Charsets
 import com.google.common.io.Resources
+import com.intellij.ide.BrowserUtil
 import com.intellij.ide.plugins.PluginManager
 import com.intellij.ide.plugins.cl.PluginClassLoader
 import com.intellij.notification.NotificationDisplayType
@@ -418,13 +419,13 @@ class MultiMarkdownPlugin : ApplicationComponent {
                             showNotification.value = false
                             notification.expire()
                         }
-                        ":BUY" -> MultiMarkdownPathResolver.openLink(href + "product/multimarkdown/buy")
-                        ":TRY" -> MultiMarkdownPathResolver.openLink(href + "product/multimarkdown/try")
-                        ":SPECIALS" -> MultiMarkdownPathResolver.openLink(href + "product/multimarkdown/specials")
-                        ":FEATURES" -> MultiMarkdownPathResolver.openLink(href + "product/multimarkdown")
+                        ":BUY" -> BrowserUtil.browse (href + "product/multimarkdown/buy")
+                        ":TRY" -> BrowserUtil.browse (href + "product/multimarkdown/try")
+                        ":SPECIALS" -> BrowserUtil.browse (href + "product/multimarkdown/specials")
+                        ":FEATURES" -> BrowserUtil.browse (href + "product/multimarkdown")
                     }
                 } else {
-                    MultiMarkdownPathResolver.openLink(hyperlinkEvent.url.toString())
+                    BrowserUtil.browse (hyperlinkEvent.url.toString())
                 }
             }
 
@@ -469,13 +470,13 @@ class MultiMarkdownPlugin : ApplicationComponent {
                                 settings.licenseType.value = ""
                             }
                         }
-                        ":BUY" -> MultiMarkdownPathResolver.openLink(href + "product/multimarkdown/buy")
-                        ":TRY" -> MultiMarkdownPathResolver.openLink(href + "product/multimarkdown/try")
-                        ":SPECIALS" -> MultiMarkdownPathResolver.openLink(href + "product/multimarkdown/specials")
-                        ":FEATURES" -> MultiMarkdownPathResolver.openLink(href + "product/multimarkdown")
+                        ":BUY" -> BrowserUtil.browse (href + "product/multimarkdown/buy")
+                        ":TRY" -> BrowserUtil.browse (href + "product/multimarkdown/try")
+                        ":SPECIALS" -> BrowserUtil.browse (href + "product/multimarkdown/specials")
+                        ":FEATURES" -> BrowserUtil.browse (href + "product/multimarkdown")
                     }
                 } else {
-                    MultiMarkdownPathResolver.openLink(hyperlinkEvent.url.toString())
+                    BrowserUtil.browse (hyperlinkEvent.url.toString())
                 }
             }
 
@@ -502,13 +503,13 @@ class MultiMarkdownPlugin : ApplicationComponent {
                             settings.wasShownLicensedAvailable.value = false
                             notification.expire()
                         }
-                        ":BUY" -> MultiMarkdownPathResolver.openLink(href + "product/multimarkdown/buy")
-                        ":TRY" -> MultiMarkdownPathResolver.openLink(href + "product/multimarkdown/try")
-                        ":SPECIALS" -> MultiMarkdownPathResolver.openLink(href + "product/multimarkdown/specials")
-                        ":FEATURES" -> MultiMarkdownPathResolver.openLink(href + "product/multimarkdown")
+                        ":BUY" -> BrowserUtil.browse (href + "product/multimarkdown/buy")
+                        ":TRY" -> BrowserUtil.browse (href + "product/multimarkdown/try")
+                        ":SPECIALS" -> BrowserUtil.browse (href + "product/multimarkdown/specials")
+                        ":FEATURES" -> BrowserUtil.browse (href + "product/multimarkdown")
                     }
                 } else {
-                    MultiMarkdownPathResolver.openLink(hyperlinkEvent.url.toString())
+                    BrowserUtil.browse (hyperlinkEvent.url.toString())
                 }
             }
 

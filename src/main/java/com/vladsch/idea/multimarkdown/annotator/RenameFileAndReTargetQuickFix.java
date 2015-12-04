@@ -96,6 +96,7 @@ class RenameFileAndReTargetQuickFix extends BaseIntentionAction {
                         final JavaRefactoringFactory factory = JavaRefactoringFactory.getInstance(project);
 
                         // RELEASE: make sure the change of not searching comments works
+                        // TEST: make sure the change of not searching comments works
                         JavaRenameRefactoring rename = (JavaRenameRefactoring) factory.createRename(targetFile, newFileName, false, true);
                         UsageInfo[] usages = rename.findUsages();
                         rename.doRefactoring(usages);

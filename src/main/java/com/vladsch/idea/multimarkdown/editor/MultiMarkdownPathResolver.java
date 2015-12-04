@@ -20,6 +20,7 @@
  */
 package com.vladsch.idea.multimarkdown.editor;
 
+import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
@@ -34,11 +35,7 @@ import com.vladsch.idea.multimarkdown.util.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
-import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 
 public class MultiMarkdownPathResolver {
@@ -51,20 +48,6 @@ public class MultiMarkdownPathResolver {
     public static boolean isWikiDocument(@NotNull final Document document) {
         VirtualFile file = FileDocumentManager.getInstance().getFile(document);
         return file != null && new FileRef(file).isWikiPage();
-    }
-
-    public static void openLink(@NotNull String href) {
-        if (Desktop.isDesktopSupported()) {
-            try {
-                Object foundFile = new URI(href);
-                Desktop.getDesktop().browse((URI) foundFile);
-            } catch (URISyntaxException ex) {
-                // invalid URI, just log
-                logger.info("URISyntaxException on '" + href + "'" + ex.toString());
-            } catch (IOException ex) {
-                logger.info("IOException on '" + href + "'" + ex.toString());
-            }
-        }
     }
 
     @Nullable
@@ -90,7 +73,7 @@ public class MultiMarkdownPathResolver {
 
     public static void launchExternalLink(@NotNull final Project project, @NotNull final String href) {
         if (PathInfo.isExternal(href)) {
-            openLink(href);
+            BrowserUtil.browse(href);
         } else if (href.startsWith("file://")) {
             try {
                 URL target = new URL(href);
