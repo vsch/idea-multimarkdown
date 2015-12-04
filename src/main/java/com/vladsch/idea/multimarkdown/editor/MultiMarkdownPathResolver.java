@@ -31,7 +31,10 @@ import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.vfs.VirtualFileSystem;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
-import com.vladsch.idea.multimarkdown.util.*;
+import com.vladsch.idea.multimarkdown.util.FileRef;
+import com.vladsch.idea.multimarkdown.util.GitHubVcsRoot;
+import com.vladsch.idea.multimarkdown.util.LinkRef;
+import com.vladsch.idea.multimarkdown.util.PathInfo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -78,15 +81,18 @@ public class MultiMarkdownPathResolver {
             try {
                 URL target = new URL(href);
                 VirtualFileSystem virtualFileSystem = VirtualFileManager.getInstance().getFileSystem(target.getProtocol());
-                final VirtualFile virtualFile = virtualFileSystem == null ? null : virtualFileSystem.findFileByPath(target.getFile());
+                final VirtualFile virtualFile = virtualFileSystem == null ? null : virtualFileSystem.findFileByPath(LinkRef.urlDecode(target.getFile()));
                 // open local file
                 if (virtualFile != null) {
+                    final String anchorRef = target.getRef();
                     ApplicationManager.getApplication().invokeLater(new Runnable() {
                         @Override
                         public void run() {
                             FileEditorManager.getInstance(project).openFile(virtualFile, true, true);
-                            // TODO: see if we can resolve the #hashSuffix in the file
-                            //logger.info("got hash suffixed href: " + href + "#" + hashSuffix);
+                            //noinspection StatementWithEmptyBody
+                            if (anchorRef != null && !anchorRef.isEmpty()) {
+                                // TODO: see if we can resolve the #hashSuffix in the file
+                            }
                         }
                     });
                 }

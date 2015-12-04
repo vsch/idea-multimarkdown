@@ -210,7 +210,8 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                     }
                 } else {
                     // URL only, we need to convert to URI file:// type
-                    if (wantLocal(options) && wantOnlyURI(options)) return LinkRef(containingFile, "file://" + targetRef.filePath, null, targetRef as FileRef?)
+                    if (wantLocal(options) && wantOnlyURI(options)) return LinkRef(containingFile, "file://" + LinkRef.urlEncode(targetRef.filePath), null, targetRef as FileRef?)
+//                    if (wantLocal(options) && wantOnlyURI(options)) return LinkRef(containingFile, "file://" + targetRef.filePath, null, targetRef as FileRef?)
                 }
             } else {
                 // local, remote or URL
@@ -327,7 +328,8 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                             // here we need to test for wiki page links that resolve to raw files, these have to match case sensitive
                             if (allMatchNonWiki === allMatchWiki || !linkMatcher.wikiMatchingRules || !fileRef.isWikiPage || !linkRef.hasExt || fileRef.filePath.matches(allMatchNonWiki)) {
                                 // if isRawFile is set we cannot reuse it, since in our case it may no longer be raw access
-                                if (fileRef.isRawFile && !rawGitHubLink) matches.add(FileRef(fileRef))
+                                if (fileRef.isRawFile == rawGitHubLink) matches.add(fileRef)
+                                else if (!rawGitHubLink) matches.add(FileRef(fileRef))
                                 else {
                                     val newFileRef = FileRef(fileRef)
                                     newFileRef.isRawFile = true
@@ -338,6 +340,9 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                     }
                 }
             }
+
+            val exactFileRefMatches = HashSet<FileRef>()
+            val rawWikiFileRefMatches = HashSet<FileRef>()
 
             // now we need to weed out the matches that will not work, unless this is a loose match
             if (linkMatcher.wikiMatchingRules) {
@@ -356,7 +361,9 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                     if (fileOrAnchorMatch != null) {
                         for (fileRef in matches) {
                             if (fileRef is FileRef && fileRef.filePath.matches(fileOrAnchorMatch)) {
-                                fileRef.isRawFile = true
+                                exactFileRefMatches.add(fileRef)
+                                rawWikiFileRefMatches.add(fileRef)
+                                if (fileRef.isUnderWikiDir) fileRef.isRawFile = true
                             }
                         }
                     }
@@ -370,17 +377,27 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                     val fileMatch = linkMatcher.linkFileMatch?.toRegex()
                     if (fileMatch != null) {
                         for (fileRef in matches) {
-                            if (fileRef is FileRef && (!fileRef.isWikiPageExt || fileRef.filePath.matches(fileMatch))) {
-                                fileRef.isRawFile = true
+                            if (fileRef is FileRef) {
+                                val exactMatch = fileRef.filePath.matches(fileMatch)
+                                if (exactMatch) exactFileRefMatches.add(fileRef)
+
+                                // it will be raw access if it is under the wiki directory  and has a 'real' extension
+                                if (!fileRef.isWikiPageExt || exactMatch) {
+                                    rawWikiFileRefMatches.add(fileRef)
+                                    if (fileRef.isUnderWikiDir) fileRef.isRawFile = true
+                                }
                             }
                         }
                     }
                 }
             } else {
                 // case sensitive: linkFileMatch = "^$fixedPrefix$filenamePattern$"
+                // these are already set for raw if taken from the raw/ access URL and all are exact matches
                 for (fileRef in matches) {
                     if (fileRef is FileRef) {
-                        fileRef.isRawFile = true
+                        exactFileRefMatches.add(fileRef)
+                        rawWikiFileRefMatches.add(fileRef)
+                        if (fileRef.isUnderWikiDir) fileRef.isRawFile = true
                     }
                 }
             }
@@ -423,9 +440,9 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
             } else {
                 if (matches.size > 1) matches.sort { self, other ->
                     if (self is FileRef && other is FileRef) {
-                        if (self.isRawFile && !other.isRawFile) 1
-                        else if (!self.isRawFile && other.isRawFile) -1
-                        else if (self.isRawFile && other.isRawFile) {
+                        if (self in rawWikiFileRefMatches && other !in rawWikiFileRefMatches) 1
+                        else if (self !in rawWikiFileRefMatches && other in rawWikiFileRefMatches) -1
+                        else if (self in rawWikiFileRefMatches && other in rawWikiFileRefMatches) {
                             if (self.isWikiPageExt && !other.isWikiPageExt) -1
                             else if (!self.isWikiPageExt && other.isWikiPageExt) 1
                             else self.compareTo(other)
@@ -708,29 +725,29 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
         return null
     }
 
-//    fun useRawAccess(linkRef: LinkRef): Boolean {
-//        assertContainingFile(linkRef)
-//        assert(linkRef === normalizedLinkRef(linkRef))
-//
-//        if (linkRef is ImageLinkRef || )
-//        // should have raw/ after path
-//        if (linkRef.isRelative) {
-//
-//        }
-//        else if (linkRef.filePath.startsWith("https://github.com/")) {
-//            val noRawContentPrefix = linkRef.filePath.removePrefix("https://raw.githubusercontent.com/")
-//            val linkParts = noRawContentPrefix.split("?", limit = 2)[0].split("/")
-//
-//            if (linkParts.size >= 3) {
-//                if (linkParts[2] in arrayOf("raw", "blob")) {
-//                    // we have a user and repo match
-//                    return linkParts[
-//                }
-//            }
-//        }
-//        return null
-//        return ""
-//    }
+    //    fun useRawAccess(linkRef: LinkRef): Boolean {
+    //        assertContainingFile(linkRef)
+    //        assert(linkRef === normalizedLinkRef(linkRef))
+    //
+    //        if (linkRef is ImageLinkRef || )
+    //        // should have raw/ after path
+    //        if (linkRef.isRelative) {
+    //
+    //        }
+    //        else if (linkRef.filePath.startsWith("https://github.com/")) {
+    //            val noRawContentPrefix = linkRef.filePath.removePrefix("https://raw.githubusercontent.com/")
+    //            val linkParts = noRawContentPrefix.split("?", limit = 2)[0].split("/")
+    //
+    //            if (linkParts.size >= 3) {
+    //                if (linkParts[2] in arrayOf("raw", "blob")) {
+    //                    // we have a user and repo match
+    //                    return linkParts[
+    //                }
+    //            }
+    //        }
+    //        return null
+    //        return ""
+    //    }
 
     fun normalizedLinkRef(linkRef: LinkRef): LinkRef {
         // from "https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_source_preview.png"
