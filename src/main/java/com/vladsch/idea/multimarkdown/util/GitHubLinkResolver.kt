@@ -27,11 +27,13 @@ import com.intellij.util.Processor
 import com.intellij.util.indexing.FileBasedIndex
 import com.intellij.util.indexing.FileBasedIndexImpl
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin
+import org.apache.log4j.Logger
 import java.util.*
 import kotlin.text.RegexOption
 
 
 class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containingFile: FileRef, branchOrTag: String? = null) : LinkResolver(projectResolver, containingFile, branchOrTag) {
+    private val logger = Logger.getLogger(GitHubLinkResolver::class.java)
 
     companion object {
         @JvmStatic @JvmField val GITHUB_BLOB_NAME = "blob"
@@ -211,7 +213,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                 } else {
                     // URL only, we need to convert to URI file:// type
                     if (wantLocal(options) && wantOnlyURI(options)) return LinkRef(containingFile, "file://" + LinkRef.urlEncode(targetRef.filePath), null, targetRef as FileRef?)
-//                    if (wantLocal(options) && wantOnlyURI(options)) return LinkRef(containingFile, "file://" + targetRef.filePath, null, targetRef as FileRef?)
+                    //                    if (wantLocal(options) && wantOnlyURI(options)) return LinkRef(containingFile, "file://" + targetRef.filePath, null, targetRef as FileRef?)
                 }
             } else {
                 // local, remote or URL
@@ -341,7 +343,6 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                 }
             }
 
-            val exactFileRefMatches = HashSet<FileRef>()
             val rawWikiFileRefMatches = HashSet<FileRef>()
 
             // now we need to weed out the matches that will not work, unless this is a loose match
@@ -361,7 +362,6 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                     if (fileOrAnchorMatch != null) {
                         for (fileRef in matches) {
                             if (fileRef is FileRef && fileRef.filePath.matches(fileOrAnchorMatch)) {
-                                exactFileRefMatches.add(fileRef)
                                 rawWikiFileRefMatches.add(fileRef)
                                 if (fileRef.isUnderWikiDir) fileRef.isRawFile = true
                             }
@@ -378,11 +378,8 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                     if (fileMatch != null) {
                         for (fileRef in matches) {
                             if (fileRef is FileRef) {
-                                val exactMatch = fileRef.filePath.matches(fileMatch)
-                                if (exactMatch) exactFileRefMatches.add(fileRef)
-
                                 // it will be raw access if it is under the wiki directory  and has a 'real' extension
-                                if (!fileRef.isWikiPageExt || exactMatch) {
+                                if (!fileRef.isWikiPageExt || fileRef.filePath.matches(fileMatch)) {
                                     rawWikiFileRefMatches.add(fileRef)
                                     if (fileRef.isUnderWikiDir) fileRef.isRawFile = true
                                 }
@@ -395,7 +392,6 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                 // these are already set for raw if taken from the raw/ access URL and all are exact matches
                 for (fileRef in matches) {
                     if (fileRef is FileRef) {
-                        exactFileRefMatches.add(fileRef)
                         rawWikiFileRefMatches.add(fileRef)
                         if (fileRef.isUnderWikiDir) fileRef.isRawFile = true
                     }

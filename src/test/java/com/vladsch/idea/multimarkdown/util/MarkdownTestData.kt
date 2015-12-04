@@ -176,13 +176,11 @@ object MarkdownTestData : LinkResolver.ProjectResolver {
 }
 
 fun List<PathInfo>.asFilePaths(): List<String> {
-    val result = this.map { it.filePath }
-    return result
+    return this.map { it.filePath }
 }
 
 fun List<String>.asURI(): List<String> {
-    val result = this.map { "file://" + it }
-    return result
+    return this.map { "file://" + it.replace(" ", "%20").replace("#", "%23") }
 }
 
 fun List<String>.with(list: List<String>): List<String> {
@@ -220,10 +218,6 @@ fun List<String>.asRemoteUriType(branchOrTag: String? = null, gitHubLink: String
         }
     }
     return result
-}
-
-fun List<String>.asLocalURI(branchOrTag: String? = null): List<String> {
-    return this.map { "file://" + it }
 }
 
 val EMPTY_LIST = arrayListOf<String>()
@@ -518,11 +512,9 @@ val availableLists = mapOf<List<String>, String>(
 val availablePermutations = mapOf<(List<String>) -> List<String>, String>(
         Pair({ it -> it.with(gitHubLinks) }, ".with(gitHubLinks)"),
         Pair({ it -> it.asURI() }, ".asURI()"),
-        Pair({ it -> it.asLocalURI() }, ".asLocalURI()"),
         Pair({ it -> it.asRemoteURI() }, ".asRemoteURI()"),
         Pair({ it -> it.asRemoteImageURI() }, ".asRemoteImageURI()"),
         Pair({ it -> it.asURI().with(gitHubLinks) }, ".asURI().with(gitHubLinks)"),
-        Pair({ it -> it.asLocalURI().with(gitHubLinks) }, ".asLocalURI().with(gitHubLinks)"),
         Pair({ it -> it.asRemoteURI().with(gitHubLinks) }, ".asRemoteURI().with(gitHubLinks)"),
         Pair({ it -> it.asRemoteImageURI().with(gitHubLinks) }, ".asRemoteImageURI().with(gitHubLinks)")
 )

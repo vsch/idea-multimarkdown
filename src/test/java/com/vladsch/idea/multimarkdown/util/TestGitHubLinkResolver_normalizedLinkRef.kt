@@ -25,9 +25,9 @@ import kotlin.test.assertEquals
 @RunWith(value = Parameterized::class)
 
 //arrayOf<Any?>("fullPath", "linkType", "linkRef", "linkAnchor", "options", "optionsText", "multiResolve") * /
-class TestGitHubVcsRoot_Basic constructor(val rowId: Int, val containingFile: String
-                                          , val linkAddress: String
-                                          , val normalizedAddress: String
+class TestGitHubLinkResolver_normalizedLinkRef constructor(val rowId: Int, val containingFile: String
+                                                           , val linkAddress: String
+                                                           , val normalizedAddress: String
 ) {
     val projectResolver: LinkResolver.ProjectResolver = MarkdownTestData
     val containingFileRef = FileRef(containingFile)
@@ -64,7 +64,7 @@ class TestGitHubVcsRoot_Basic constructor(val rowId: Int, val containingFile: St
         fun data(): Collection<Array<Any?>> {
             val data = completionData
             val amendedData = ArrayList<Array<Any?>>()
-            val cleanData = true
+            val cleanData = false
 
             var i = 0
             for (row in data) {

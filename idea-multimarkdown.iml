@@ -12,8 +12,8 @@
       <excludeFolder url="file://$MODULE_DIR$/src/misc" />
       <excludeFolder url="file://$MODULE_DIR$/src/test/resources/GitHubIssues/Issue-46" />
     </content>
-    <orderEntry type="inheritedJdk" />
-    <orderEntry type="module-library" exported="">
+    <orderEntry type="jdk" jdkName="IntelliJ IDEA Community Edition IC-143.382.35 jdk 1.8.60" jdkType="IDEA JDK" />
+    <orderEntry type="module-library">
       <library name="lib">
         <CLASSES>
           <root url="file://$MODULE_DIR$/lib" />

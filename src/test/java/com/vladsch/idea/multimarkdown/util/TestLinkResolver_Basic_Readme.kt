@@ -112,7 +112,7 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
         val targetRef = resolver.resolve(linkRef, LinkResolver.ANY, fileList)
         val uriRef = resolver.resolve(linkRef, LinkResolver.ONLY_URI, fileList)
         val href = if (targetRef != null && targetRef is FileRef && this.uriText != null) {
-            "file://" + targetRef.filePath
+            "file://" + targetRef.filePath.replace(" ", "%20").replace("#", "%23")
         } else if (targetRef is LinkRef) targetRef.filePathWithAnchor
         else null
         assertEqualsMessage("LinkResolver.ONLY_URI link address does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", href, (uriRef as? LinkRef)?.filePathWithAnchor)
