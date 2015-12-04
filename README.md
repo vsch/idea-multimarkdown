@@ -15,6 +15,14 @@ idea-multimarkdown
 
 2. Licensed version with enhanced refactoring and code completion functionality. 30-day free trial licenses are available in plugin preferences and from [idea-multimarkdown](http://vladsch.com/product/multimarkdown) 
 
+Latest Developments, version 1.2.3
+-----------------------------------
+
+I spent three weeks rewriting and testing some of the messy classes involved in link resolution. They did not start out that way but by the time I figured out all the idiosyncrasies of how GitHub resolves links from wiki to the main repository, they certainly became an unmanageable mess. The previous release was difficult to stabilize so I decided to rewrite the mess from scratch. Which I did in Kotlin. I also took the time to write complete tests for the low level code so that I can have the safety net of automated tests when I have make changes.
+
+I will be updating the source for the latest release over the weekend, once I had a chance to merge all the changes from the licensed version into the open source version. Some of the source will be in Kotlin, and within the next few releases I will migrate all of it to Kotlin. Java can't compete with the joy of developing in Kotlin.  
+
+If you haven't used Kotlin yet, do yourself a favor and give it a try. It is a joy to work with. Much more effective and productive than Java.
 
 The Background
 --------------
