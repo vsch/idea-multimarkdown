@@ -107,7 +107,7 @@ class GitHubVcsRoot protected constructor(gitHubBaseUrl: String, basePath: Strin
                     var reader: BufferedReader? = null
                     try {
                         reader = BufferedReader(FileReader(gitFile))
-                        var line: String
+                        var line: String?
                         while (true) {
                             line = reader.readLine()
                             if (line == null) break
@@ -145,7 +145,7 @@ class GitHubVcsRoot protected constructor(gitHubBaseUrl: String, basePath: Strin
             var reader: BufferedReader? = null
             try {
                 reader = BufferedReader(FileReader(gitConfigFile))
-                var line: String
+                var line: String?
                 var inRemoteOriginSection = false
 
                 while (true) {
