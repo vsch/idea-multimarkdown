@@ -295,7 +295,6 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         String regex = "(<table>|<thead>|<tbody>|<tr>|<hr/>|<del>|</del>|</p>|<kbd>|</kbd>|<var>|</var>";//|<code>|</code>";
         StringBuilder result = new StringBuilder(html.length() + (html.length() >> 2));
 
-        // RELEASE: see why only wiki documents have a link to github in the header
         String gitHubHref = MultiMarkdownPathResolver.getGitHubDocumentURL(project, document, !isWikiDocument);
         String gitHubClose = "";
         if (gitHubHref == null) {

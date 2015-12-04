@@ -14,6 +14,7 @@
  */
 package com.vladsch.idea.multimarkdown.settings;
 
+import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
@@ -162,16 +163,7 @@ public class SettingsPanelImpl implements SettingsPanel {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (Desktop.isDesktopSupported()) {
-                    try {
-                        Desktop.getDesktop().browse((URI) new URI(url));
-                    } catch (URISyntaxException ex) {
-                        // invalid URI, just log
-                        logger.info("URISyntaxException on '" + url + "'" + ex.toString());
-                    } catch (IOException ex) {
-                        logger.info("IOException on '" + url + "'" + ex.toString());
-                    }
-                }
+                BrowserUtil.browse(url);
             }
         };
     }
@@ -184,16 +176,7 @@ public class SettingsPanelImpl implements SettingsPanel {
                 if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
                     URL href = e.getURL();
                     if (href != null) {
-                        if (Desktop.isDesktopSupported()) {
-                            try {
-                                Desktop.getDesktop().browse(href.toURI());
-                            } catch (URISyntaxException ex) {
-                                // invalid URI, just log
-                                logger.error("URISyntaxException on '" + href.toString() + "'" + ex.toString());
-                            } catch (IOException ex) {
-                                logger.error("IOException on '" + href.toString() + "'" + ex.toString());
-                            }
-                        }
+                        BrowserUtil.browse(href);
                     }
                 }
             }

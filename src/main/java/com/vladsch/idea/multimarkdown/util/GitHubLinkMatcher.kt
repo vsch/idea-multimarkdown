@@ -288,8 +288,8 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
                                 wikiMatchingRules = true
                             } else {
                                 // we are trying to resolve a non-existent sub directory
-                                // RELEASE: disable logging
-                                println("rejecting for only loose match originalURI $linkRefWasURI ${linkRef.filePath}")
+                                // RELEASE : disable logging
+                                //println("rejecting for only loose match originalURI $linkRefWasURI ${linkRef.filePath}")
                                 looseMatchOnly = true
                             }
                         }
