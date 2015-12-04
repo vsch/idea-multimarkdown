@@ -342,12 +342,11 @@ class MultiMarkdownPlugin : ApplicationComponent {
                 }
             }
         } else {
-            if (!settings.licenseType.value.isEmpty()) {
-                notifyLicenseExpiration(!showOnce, settings.licenseType.value, "", -1)
-            }
-
             license_features = 0
             if (init) {
+                if (!settings.licenseType.value.isEmpty()) {
+                    notifyLicenseExpiration(!showOnce, settings.licenseType.value, "", -1)
+                }
                 notifyLicensedUpdate(showOnce)
             }
         }
@@ -355,6 +354,13 @@ class MultiMarkdownPlugin : ApplicationComponent {
         if (init) {
             notifyFeatureUpdate(!showOnce, productVersion)
         }
+    }
+
+    protected fun applyHtmlColors(htmlText: String, settings: MultiMarkdownGlobalSettings): String {
+        val enhColor = if (settings.isDarkUITheme) "#B0A8E6" else "#6106A5"
+        val buyColor = if (settings.isDarkUITheme) "#F0A8D4" else "#C02080"
+        val specialsColor = if (settings.isDarkUITheme) "#A4EBC5" else "#04964F"
+        return htmlText.replace("[[ENHANCED]]", enhColor).replace("[[BUY]]", buyColor).replace("[[SPECIALS]]", specialsColor)
     }
 
     protected fun notifyFeatureUpdate(debug: Boolean, currentVersion: String) {
@@ -374,7 +380,7 @@ class MultiMarkdownPlugin : ApplicationComponent {
 - Plugin preferences now split between local and shared
 - Inspections for common errors in wiki link resolution
 - HTML Text tab now has all links as URI's
-* Github fork and raw link are now recognized by the plugin
+* Github fork and raw links are now recognized by the plugin
 * Link color, image border in preview when file not on GitHub
 * Change link address between relative &amp; absolute
 * Change between wiki &amp; explicit link
@@ -382,27 +388,26 @@ class MultiMarkdownPlugin : ApplicationComponent {
 * Absolute links to project files now validated
 * Navigation line markers for absolute links to project files
 * Absolute link completions for https:// &amp; file:// links.
-* Completions also work with non-markdown files
+* Completions now work with non-markdown files
 * Refactoring changes wiki to explicit links if target moved from wiki
-* Refactoring keeps link format: relative, https:// or file:// prefixes
+* Refactoring preserves link format: relative, https:// or file://
 """
             val features = featureList.split('\n').fold("") { accum, elem ->
                 val item = elem.trim()
                 accum +
                 (
-                        if (item.startsWith('*')) item.removePrefix("*").trim().wrapWith("<span style=\"color: {{ENHANCED}}\">", "</span>")
+                        if (item.startsWith('*')) item.removePrefix("*").trim().wrapWith("<span style=\"color: [[ENHANCED]]\">", "</span>")
                         else item.removePrefix("-").trim()
                 ).wrapWith("<li>", "</li>")
             }.wrapWith("""
-<h4 style="margin: 0;">New Features: Basic &amp; Enhanced / <span style="color: {{ENHANCED}}">Enhanced Edition only</span></h4>
+<h4 style="margin: 0;">New Features: Basic &amp; Enhanced / <span style="color: [[ENHANCED]]">Enhanced Edition only</span></h4>
 <ul style="margin-left: 10px;">
 """, "</ul>")
 
             val href = (if (!debug) "http://vladsch.com" else "http://vladsch.dev") + "/"
             val title = MultiMarkdownBundle.message("plugin.feature.notification.title", productName, currentVersion)
             val licenseBased = if (isLicensed) MultiMarkdownBundle.message("plugin.feature.notification.licensed") else MultiMarkdownBundle.message("plugin.feature.notification.unlicensed")
-            val enhColor = if (settings.isDarkUITheme) "#B0A8E6" else "#6106A5"
-            val message = MultiMarkdownBundle.message("plugin.feature.notification.message", features, licenseBased).replace("{{ENHANCED}}", enhColor)
+            val message = applyHtmlColors(MultiMarkdownBundle.message("plugin.feature.notification.message", features, licenseBased), settings)
 
             val listener = NotificationListener { notification, hyperlinkEvent ->
                 //notification.expire();
@@ -450,7 +455,7 @@ class MultiMarkdownPlugin : ApplicationComponent {
 
             val href = (if (!debug) "http://vladsch.com" else "http://vladsch.dev") + "/"
             val title = MultiMarkdownBundle.message("plugin.$notification.notification.title", productName)
-            val message = MultiMarkdownBundle.message("plugin.$notification.notification.message", MultiMarkdownBundle.message("settings.license-type-" + licenseType), expires)
+            val message = applyHtmlColors(MultiMarkdownBundle.message("plugin.$notification.notification.message", MultiMarkdownBundle.message("settings.license-type-" + licenseType), expires), settings)
 
             val listener = NotificationListener { notification, hyperlinkEvent ->
                 //notification.expire();
@@ -487,7 +492,7 @@ class MultiMarkdownPlugin : ApplicationComponent {
 
             val href = (if (showOnce) "http://vladsch.com" else "http://vladsch.dev") + "/"
             val title = MultiMarkdownBundle.message("plugin.licensed-available.notification.title", productName)
-            val message = MultiMarkdownBundle.message("plugin.licensed-available.notification.message")
+            val message = applyHtmlColors(MultiMarkdownBundle.message("plugin.licensed-available.notification.message"), settings)
             val listener = NotificationListener { notification, hyperlinkEvent ->
                 //notification.expire();
                 if (hyperlinkEvent.url == null) {

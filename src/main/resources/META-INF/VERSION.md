@@ -10,7 +10,6 @@
 - Add: fork and raw GitHub link to be recognized
 - Add: line icon to show multiple resolved targets
 - Change: preferences for the plugin are now split between local, non-roaming persistence in multimarkdown.local.xml and shared roaming persistence in multimarkdown.shared.xml. Preferences from multimarkdown.xml are migrated to new files and the file is deleted. 
-- Change: add parser manager for parse result caching. Benefits mostly new preview tab since it uses the same pegdown extension flags as text editor lexing/parsing. Also helps if same files open with split editor.
 
 #### Enhanced Edition
 

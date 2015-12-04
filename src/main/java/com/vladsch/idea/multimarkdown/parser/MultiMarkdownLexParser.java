@@ -808,6 +808,14 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
             }
         }
 
+        public void visit(ReferenceNode node) {
+            addTokenWithChildren(node, REFERENCE);
+        }
+
+        public void visit(RefImageNode node) {
+            addTokenWithChildren(node, REFERENCE_IMAGE);
+        }
+
         public void visit(AutoLinkNode node) {
             if (MultiMarkdownPlugin.isLicensed()) {
                 SyntheticNodes nodes = new SyntheticNodes(currentChars, node, AUTO_LINK, LINK_REF);
@@ -1058,14 +1066,6 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
                     return new InlineHtmlNode(text);
                 }
             })) addToken(node, INLINE_HTML);
-        }
-
-        public void visit(ReferenceNode node) {
-            addTokenWithChildren(node, REFERENCE);
-        }
-
-        public void visit(RefImageNode node) {
-            addTokenWithChildren(node, REFERENCE_IMAGE);
         }
 
         public void visit(AbbreviationNode node) {

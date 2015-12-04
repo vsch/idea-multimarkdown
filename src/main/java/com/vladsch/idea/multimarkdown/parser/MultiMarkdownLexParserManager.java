@@ -18,13 +18,13 @@ import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
 import org.pegdown.ast.RootNode;
 
 public class MultiMarkdownLexParserManager {
     private static final Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownLexParserManager.class);
     private static final boolean log = false;
+    private static final boolean disable = true;
 
     private static final ThreadLocal<ParsingInfo> lastParsingResult = new ThreadLocal<ParsingInfo>();
     public static final int GITHUB_WIKI_LINKS = 0x80000000;
@@ -32,18 +32,20 @@ public class MultiMarkdownLexParserManager {
     public static RootNode parseMarkdownRoot(@NotNull final CharSequence buffer, @Nullable Integer pegdownExtensions, @Nullable Integer parsingTimeout) {
         int actualPegdownExtensions = (pegdownExtensions != null ? pegdownExtensions : MultiMarkdownGlobalSettings.getInstance().getExtensionsValue()) | (MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue() ? GITHUB_WIKI_LINKS : 0);
 
-        final ParsingInfo info = lastParsingResult.get();
-        if (info != null && info.pegdownExtensions == actualPegdownExtensions && info.bufferHash == buffer.hashCode() && info.buffer.equals(buffer)) {
-            if (log) logger.info("Root Parsing request satisfied by cache for thread " + Thread.currentThread());
-            return info.rootNode;
-        }
+        if (!disable) {
+            final ParsingInfo info = lastParsingResult.get();
+            if (info != null && info.pegdownExtensions == actualPegdownExtensions && info.bufferHash == buffer.hashCode() && info.buffer.equals(buffer)) {
+                if (log) logger.info("Root Parsing request satisfied by cache for thread " + Thread.currentThread());
+                return info.rootNode;
+            }
 
-        if (log) logger.info("Root Parsing request not satisfied by cache for thread " + Thread.currentThread());
+            if (log) logger.info("Root Parsing request not satisfied by cache for thread " + Thread.currentThread());
+        }
         PegDownProcessor processor = new PegDownProcessor(actualPegdownExtensions, parsingTimeout != null ? parsingTimeout : MultiMarkdownGlobalSettings.getInstance().parsingTimeout.getValue());
 
         char[] currentChars = buffer.toString().toCharArray();
         RootNode rootNode = processor.parseMarkdown(currentChars);
-        lastParsingResult.set(new ParsingInfo(buffer, actualPegdownExtensions, rootNode, null, false));
+        if (!disable) lastParsingResult.set(new ParsingInfo(buffer, actualPegdownExtensions, rootNode, null, false));
         return rootNode;
     }
 
@@ -53,14 +55,16 @@ public class MultiMarkdownLexParserManager {
         int actualPegdownExtensions = (pegdownExtensions != null ? pegdownExtensions : MultiMarkdownGlobalSettings.getInstance().getExtensionsValue()) | (MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue() ? GITHUB_WIKI_LINKS : 0);
         RootNode rootNode = null;
 
-        final ParsingInfo info = lastParsingResult.get();
-        if (info != null && info.pegdownExtensions == actualPegdownExtensions && info.bufferHash == buffer.hashCode() && info.buffer.equals(buffer)) {
-            if (info.hadLexerTokens) {
-                if (log) logger.info("LexerToken Parsing request satisfied by cache for thread " + Thread.currentThread());
-                return info.lexerTokens;
+        if (!disable) {
+            final ParsingInfo info = lastParsingResult.get();
+            if (info != null && info.pegdownExtensions == actualPegdownExtensions && info.bufferHash == buffer.hashCode() && info.buffer.equals(buffer)) {
+                if (info.hadLexerTokens) {
+                    if (log) logger.info("LexerToken Parsing request satisfied by cache for thread " + Thread.currentThread());
+                    return info.lexerTokens;
+                }
+                if (log) logger.info("LexerToken Parsing request partially satisfied by cache for thread " + Thread.currentThread());
+                rootNode = info.rootNode;
             }
-            if (log) logger.info("LexerToken Parsing request partially satisfied by cache for thread " + Thread.currentThread());
-            rootNode = info.rootNode;
         }
 
         char[] currentChars = buffer.toString().toCharArray();
@@ -74,7 +78,7 @@ public class MultiMarkdownLexParserManager {
         MultiMarkdownLexParser lexParser = new MultiMarkdownLexParser();
         MultiMarkdownLexParser.LexerToken[] lexerTokens = lexParser.parseMarkdown(rootNode, currentChars, actualPegdownExtensions);
 
-        lastParsingResult.set(new ParsingInfo(buffer, actualPegdownExtensions, rootNode, lexerTokens, true));
+        if (!disable) lastParsingResult.set(new ParsingInfo(buffer, actualPegdownExtensions, rootNode, lexerTokens, true));
         return lexerTokens;
     }
 

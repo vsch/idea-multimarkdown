@@ -29,20 +29,20 @@
 
     <description><![CDATA[
         <div xmlns="http://www.w3.org/1999/html">
-            <img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_source_preview_Small.png" border="0" width="270" height="135"
-                    alt="Screenshot">
-            <p><b><a color="#30A0D8"
-                    href="http://daringfireball.net/projects/markdown">Markdown</a> language support for IntelliJ platform.</b><br> With GitHub Flavoured Markdown extensions and GitHub style formatting. HTML Preview and HTML Text tabs.
+            <img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_source_preview_Small.png" border="0" width="270" height="135" alt="Screenshot">
+            <p>
+                <strong><a href="http://daringfireball.net/projects/markdown"><span style="color:#30A0D8">Markdown</span></a> language support for IntelliJ platform.</strong>
+                <br>With GitHub Flavoured Markdown extensions and GitHub style formatting. HTML Preview and HTML Text tabs.
+                <br><strong style="color:#30A0D8">The only markdown plugin for more than just previewing. Features include link address completions, refactoring, and validation. Works with GitHub wiki and main repository files.</strong>
             </p>
-            <p><b>Plugin website: <a color="#30A0D8" href="http://vladsch.com/product/multimarkdown"><u>idea-multimarkdown Enhanced Edition</u></a></b></p>
-            <p><b>For all feedback requiring a reply please use the <a color="#30A0D8"
-                    href="https://github.com/vsch/idea-multimarkdown/issues"><u>MultiMarkdown GitHub Issues</u></a> page.</b></p>
-            <p><b>Documentation: <a color="#30A0D8" href="https://github.com/vsch/idea-multimarkdown/wiki"><u>MultiMarkdown GitHub Wiki page.</u></a></b></p>
+            <p><strong>Plugin website: <a href="http://vladsch.com/product/multimarkdown"><span style="color:#30A0D8">idea-multimarkdown Enhanced Edition</span></a></strong></p>
+            <p><strong>Bug tracking & feature requests: <a href="https://github.com/vsch/idea-multimarkdown/issues"><span style="color:#30A0D8">MultiMarkdown GitHub Issues</span></a></strong></p>
+            <p><strong>Documentation: <a href="https://github.com/vsch/idea-multimarkdown/wiki"><span style="color:#30A0D8">MultiMarkdown GitHub Wiki page.</span></a></strong></p>
         </div>
         ]]></description>
 
-    <version>1.2.2.18</version>
-    <idea-version since-build="133.1711"/>
+    <version>1.2.3</version>
+    <idea-version since-build="139.1603"/>
     <change-notes><![CDATA[
     <ul>
         <h3>1.2.3 - Bug Fixes and Enhancements</h3>
@@ -65,7 +65,7 @@
         <li>Add: intention to change relative to absolute link addresses and vice-versa</li>
         <li>Add: validation of absolute links that look like they are targeting files in the same repository as the containing file</li>
         <li>Add: navigation line items for absolute links that resolve to files</li>
-        <li>Add: absolute address link completions and link completions based on extensions other than markdown for wiki and explicit and images for image links, just add https:// in front to get url completions and .ext without a file name to get extension based completions.</li>
+        <li>Add: absolute address link completions and link completions based on extensions other than markdown for wiki and explicit and images for image links, just add file:// or https:// in front to get url completions and an extension without a file name to get extension based completions. <code>https://.java</code> will show java files with https:// absolute link address.</li>
         <li>Fix #71: license information is now saved in multimarkdown.local.xml and is marked as non-roaming</li>
         <li>Add: handle relative image links in wiki pages must resolve to raw file access in main repository default behavior and validation</li>
         <li>Add: automatically change wiki link to explicit link if target file is moved out of wiki link access range</li>
