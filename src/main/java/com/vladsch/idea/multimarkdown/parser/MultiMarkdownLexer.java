@@ -26,11 +26,11 @@ import com.intellij.psi.tree.IElementType;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.pegdown.ast.RootNode;
 
 public class MultiMarkdownLexer extends Lexer {
     private static final Logger logger = Logger.getLogger(MultiMarkdownLexer.class);
 
-    protected MultiMarkdownLexParser lexParser = null;
     protected int startOffset = 0;
     protected int endOffset = 0;
     protected int lexemeIndex = 0;
@@ -38,25 +38,22 @@ public class MultiMarkdownLexer extends Lexer {
     protected CharSequence buffer = null;
     protected MultiMarkdownLexParser.LexerToken lexerToken = null;
     protected MultiMarkdownLexParser.LexerToken[] lexerTokens = null;
-
-    public MultiMarkdownLexParser getLexParser() {
-        return lexParser;
-    }
+    protected Integer pegdownExtensions = null;
+    protected Integer parsingTimeout = null;
 
     public MultiMarkdownLexer() {
         super();
-
-        lexParser = new MultiMarkdownLexParser();
     }
 
     public MultiMarkdownLexer(int pegdownExtensions) {
         super();
-        lexParser = new MultiMarkdownLexParser(pegdownExtensions);
+        this.pegdownExtensions = pegdownExtensions;
     }
 
     public MultiMarkdownLexer(int pegdownExtensions, int parsingTimeout) {
         super();
-        lexParser = new MultiMarkdownLexParser(pegdownExtensions, parsingTimeout);
+        this.pegdownExtensions = pegdownExtensions;
+        this.parsingTimeout = parsingTimeout;
     }
 
     protected void logStackTrace() {
@@ -79,9 +76,7 @@ public class MultiMarkdownLexer extends Lexer {
         lexerTokens = null;
 
         if (buffer.length() > 0) {
-            lexParser.parseMarkdown(buffer.toString());
-            lexerTokens = lexParser.getLexerTokens();
-            lexParser.clearParsed();    // release all memory from the parse, we don't need it.
+            lexerTokens = MultiMarkdownLexParserManager.parseMarkdown(buffer, pegdownExtensions, parsingTimeout);
         }
 
         lexerToken = null;
@@ -91,7 +86,7 @@ public class MultiMarkdownLexer extends Lexer {
         if (lexerTokens != null && lexerTokens.length > 0) {
             lexerToken = lexerTokens[lexemeIndex];
             if (currentOffset <= lexerToken.getRange().getStart()) {
-                lexerToken = lexParser.getSkippedSpaceToken(currentOffset, lexerToken.getRange().getStart());
+                lexerToken = MultiMarkdownLexParser.getSkippedSpaceToken(currentOffset, lexerToken.getRange().getStart());
             } else {
                 lexemeIndex++;
             }
@@ -99,7 +94,7 @@ public class MultiMarkdownLexer extends Lexer {
 
         if (lexerToken == null) {
             // create a dummy whitespace token for the whole file
-            lexerToken = lexParser.getSkippedSpaceToken(currentOffset, this.endOffset);
+            lexerToken = MultiMarkdownLexParser.getSkippedSpaceToken(currentOffset, this.endOffset);
         }
 
         currentOffset = lexerToken.getRange().getEnd();
@@ -139,18 +134,18 @@ public class MultiMarkdownLexer extends Lexer {
             do {
                 if (lexerTokens != null && lexemeIndex >= 0 && lexemeIndex < lexerTokens.length) {
                     if (lexerToken == null || currentOffset < lexerToken.getRange().getStart()) {
-                        lexerToken = lexParser.getSkippedSpaceToken(currentOffset, lexerTokens[lexemeIndex].getRange().getStart());
+                        lexerToken = MultiMarkdownLexParser.getSkippedSpaceToken(currentOffset, lexerTokens[lexemeIndex].getRange().getStart());
                     } else {
                         lexerToken = lexerTokens[lexemeIndex];
                         if (currentOffset < lexerToken.getRange().getStart()) {
-                            lexerToken = lexParser.getSkippedSpaceToken(currentOffset, lexerToken.getRange().getStart());
+                            lexerToken = MultiMarkdownLexParser.getSkippedSpaceToken(currentOffset, lexerToken.getRange().getStart());
                         } else {
                             lexemeIndex++;
                         }
                     }
                 } else {
                     if (currentOffset < endOffset) {
-                        lexerToken = lexParser.getSkippedSpaceToken(currentOffset, endOffset);
+                        lexerToken = MultiMarkdownLexParser.getSkippedSpaceToken(currentOffset, endOffset);
                     } else {
                         lexerToken = null;
                     }

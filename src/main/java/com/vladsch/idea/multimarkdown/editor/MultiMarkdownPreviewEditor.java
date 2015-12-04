@@ -49,13 +49,16 @@ import com.intellij.ui.components.JBScrollPane;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
+import com.vladsch.idea.multimarkdown.parser.MultiMarkdownLexParserManager;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
 import com.vladsch.idea.multimarkdown.util.ReferenceChangeListener;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pegdown.*;
+import org.pegdown.Extensions;
+import org.pegdown.LinkRenderer;
+import org.pegdown.ToHtmlSerializer;
 import org.pegdown.ast.RootNode;
 
 import javax.swing.*;
@@ -92,7 +95,6 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
      * The {@link JBScrollPane} allowing to browse {@link #jEditorPane}.
      */
     protected final JBScrollPane scrollPane;
-    private RootNode astRoot = null;
 
     /**
      * The {@link Document} previewed in this editor.
@@ -107,12 +109,6 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
 
     protected MultiMarkdownGlobalSettingsListener globalSettingsListener;
     protected ReferenceChangeListener projectFileListener;
-
-    /**
-     * The {@link PegDownProcessor} used for building the document AST.
-     */
-    //private ThreadLocal<PegDownProcessor> processor = initProcessor();
-    private PegDownProcessor processor = null;
 
     private boolean isActive = false;
 
@@ -151,24 +147,6 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
 
     public static boolean isShowHtmlText() {
         return MultiMarkdownGlobalSettings.getInstance().showHtmlText.getValue();
-    }
-
-    /**
-     * Init/reinit thread local {@link PegDownProcessor}.
-     */
-    //private static ThreadLocal<PegDownProcessor> initProcessor() {
-    //    return new ThreadLocal<PegDownProcessor>() {
-    //        @Override
-    //        protected PegDownProcessor initialValue() {
-    //            // ISSUE: #7 worked around, disable pegdown TaskList HTML rendering, they don't display well in Darcula.
-    //            return getProcessor();
-    //        }
-    //    };
-    //}
-    @NotNull
-    private static PegDownProcessor getProcessor() {
-        int options = MultiMarkdownGlobalSettings.getInstance().getExtensionsValue();
-        return new PegDownProcessor((options & ~Extensions.TASKLISTITEMS) | ((options & Extensions.EXTANCHORLINKS) != 0 ? Extensions.EXTANCHORLINKS_WRAP : 0), getParsingTimeout());
     }
 
     /**
@@ -246,7 +224,6 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
             public void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings) {
                 if (project.isDisposed()) return;
-                processor = null;
                 updateEditorTabIsVisible();
                 updateLinkRenderer();
                 delayedHtmlPreviewUpdate(true);
@@ -574,8 +551,8 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         });
     }
 
-    protected String markdownToHtml(boolean modified) {
-        if (astRoot == null) {
+    protected String markdownToHtml(boolean modified, RootNode rootNode) {
+        if (rootNode == null) {
             return "<strong>Parser timed out</strong>";
         } else {
             if (modified) {
@@ -585,21 +562,10 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
                     htmlSerializer.setFlag(MultiMarkdownToHtmlSerializer.NO_WIKI_LINKS);
                 }
 
-                return htmlSerializer.toHtml(astRoot);
+                return htmlSerializer.toHtml(rootNode);
             } else {
-                return new ToHtmlSerializer(linkRendererNormal).toHtml(astRoot).replace("<br/>", "<br/>\n");
+                return new ToHtmlSerializer(linkRendererNormal).toHtml(rootNode).replace("<br/>", "<br/>\n");
             }
-        }
-    }
-
-    protected void parseMarkdown(String markdownSource) {
-        try {
-            if (processor == null) {
-                processor = getProcessor();
-            }
-            astRoot = processor.parseMarkdown(markdownSource.toCharArray());
-        } catch (ParsingTimeoutException e) {
-            astRoot = null;
         }
     }
 
@@ -611,13 +577,15 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
 
         if (previewIsObsolete && isEditorTabVisible && (isActive || force)) {
             try {
-                parseMarkdown(document.getText());
+                int options = MultiMarkdownGlobalSettings.getInstance().getExtensionsValue();
+                int pegdownExtensions = (options & ~Extensions.TASKLISTITEMS) | ((options & Extensions.EXTANCHORLINKS) != 0 ? Extensions.EXTANCHORLINKS_WRAP : 0);
+                RootNode rootNode = MultiMarkdownLexParserManager.parseMarkdownRoot(document.getCharsSequence(), pegdownExtensions, getParsingTimeout());
+
                 if (isRawHtml) {
-                    updateRawHtmlText(isShowModified() ? makeHtmlPage(markdownToHtml(true)) : markdownToHtml(false));
+                    updateRawHtmlText(isShowModified() ? makeHtmlPage(markdownToHtml(true, rootNode)) : markdownToHtml(false, rootNode));
                 } else {
-                    jEditorPane.setText(makeHtmlPage(markdownToHtml(true)));
+                    jEditorPane.setText(makeHtmlPage(markdownToHtml(true, rootNode)));
                 }
-                astRoot = null;
                 previewIsObsolete = false;
 
                 // here we can find our HTML Text counterpart but it is better to keep it separate for now

@@ -50,9 +50,11 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
+import com.vladsch.idea.multimarkdown.parser.MultiMarkdownLexParserManager;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
-import com.vladsch.idea.multimarkdown.util.*;
+import com.vladsch.idea.multimarkdown.util.GitHubLinkResolver;
+import com.vladsch.idea.multimarkdown.util.ReferenceChangeListener;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -70,7 +72,6 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pegdown.LinkRenderer;
-import org.pegdown.ParsingTimeoutException;
 import org.pegdown.PegDownProcessor;
 import org.pegdown.ToHtmlSerializer;
 import org.pegdown.ast.RootNode;
@@ -108,7 +109,6 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     protected WebEngine webEngine;
     protected JFXPanel jfxPanel;
     protected String scrollOffset = null;
-    protected RootNode astRoot = null;
     protected AnchorPane anchorPane;
 
     /**
@@ -175,23 +175,6 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
 
     public static boolean isShowHtmlText() {
         return MultiMarkdownGlobalSettings.getInstance().showHtmlText.getValue();
-    }
-
-    /**
-     * Init/reinit thread local {@link PegDownProcessor}.
-     */
-    //protected static ThreadLocal<PegDownProcessor> initProcessor() {
-    //    return new ThreadLocal<PegDownProcessor>() {
-    //        @Override
-    //        protected PegDownProcessor initialValue() {
-    //            // ISSUE: #7 worked around, disable pegdown TaskList HTML rendering, they don't display well in Darcula.
-    //            return getProcessor();
-    //        }
-    //    };
-    //}
-    @NotNull
-    private static PegDownProcessor getProcessor() {
-        return new PegDownProcessor(MultiMarkdownGlobalSettings.getInstance().getExtensionsValue() /*& ~Extensions.TASKLISTITEMS*/, getParsingTimeout());
     }
 
     /**
@@ -750,8 +733,8 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         });
     }
 
-    protected String markdownToHtml(boolean modified) {
-        if (astRoot == null) {
+    protected String markdownToHtml(boolean modified, RootNode rootNode) {
+        if (rootNode == null) {
             return "<strong>Parser timed out</strong>";
         } else {
             if (modified) {
@@ -761,22 +744,11 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                     htmlSerializer.setFlag(MultiMarkdownToHtmlSerializer.NO_WIKI_LINKS);
                 }
 
-                return htmlSerializer.toHtml(astRoot).replace("<br/>", "<br/>\n");
+                return htmlSerializer.toHtml(rootNode).replace("<br/>", "<br/>\n");
             } else {
 
-                return new ToHtmlSerializer(linkRendererNormal).toHtml(astRoot).replace("<br/>", "<br/>\n");
+                return new ToHtmlSerializer(linkRendererNormal).toHtml(rootNode).replace("<br/>", "<br/>\n");
             }
-        }
-    }
-
-    protected void parseMarkdown(String markdownSource) {
-        try {
-            if (processor == null) {
-                processor = getProcessor();
-            }
-            astRoot = processor.parseMarkdown(markdownSource.toCharArray());
-        } catch (ParsingTimeoutException e) {
-            astRoot = null;
         }
     }
 
@@ -788,20 +760,16 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
 
         if (previewIsObsolete && isEditorTabVisible && (isActive || force)) {
             try {
+                final RootNode rootNode = MultiMarkdownLexParserManager.parseMarkdownRoot(document.getCharsSequence(), MultiMarkdownGlobalSettings.getInstance().getExtensionsValue(), getParsingTimeout());
                 if (isRawHtml) {
-                    parseMarkdown(document.getText());
-                    final String html = makeHtmlPage(markdownToHtml(true));
-                    final String htmlTxt = isShowModified() ? html : markdownToHtml(false);
-                    astRoot = null;
+                    final String htmlTxt = isShowModified() ? makeHtmlPage(markdownToHtml(true, rootNode)) : markdownToHtml(false, rootNode);
                     updateRawHtmlText(htmlTxt);
                 } else {
                     if (!htmlWorkerRunning) {
                         htmlWorkerRunning = true;
                         previewIsObsolete = false;
 
-                        parseMarkdown(document.getText());
-                        final String html = makeHtmlPage(markdownToHtml(true));
-                        astRoot = null;
+                        final String html = makeHtmlPage(markdownToHtml(true, rootNode));
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
