@@ -58,7 +58,7 @@ open class LinkRef(val containingFile: FileRef, fullPath: String, anchorTxt: Str
         get() {
             when {
                 ext in IMAGE_EXTENSIONS -> return IMAGE_EXTENSIONS
-                ext.isEmpty(), ext in MARKDOWN_EXTENSIONS -> return MARKDOWN_EXTENSIONS
+                ext.isEmpty() || ext in MARKDOWN_EXTENSIONS -> return MARKDOWN_EXTENSIONS
                 else -> return arrayOf(ext, *MARKDOWN_EXTENSIONS)
             }
         }
