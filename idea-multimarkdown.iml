@@ -13,7 +13,7 @@
       <excludeFolder url="file://$MODULE_DIR$/src/test/resources/GitHubIssues/Issue-46" />
     </content>
     <orderEntry type="inheritedJdk" />
-    <orderEntry type="module-library" exported="">
+    <orderEntry type="module-library">
       <library name="lib">
         <CLASSES>
           <root url="file://$MODULE_DIR$/lib" />
@@ -29,5 +29,7 @@
     <orderEntry type="library" name="javax.json-1.0.4" level="project" />
     <orderEntry type="library" name="commons-validator-1.4.1" level="project" />
     <orderEntry type="library" name="pegdown-1.6.6" level="project" />
+    <orderEntry type="library" name="kotlin-reflect" level="project" />
+    <orderEntry type="library" name="kotlin-runtime" level="project" />
   </component>
 </module>
