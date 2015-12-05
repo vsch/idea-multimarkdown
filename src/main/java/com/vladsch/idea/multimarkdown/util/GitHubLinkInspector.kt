@@ -51,7 +51,7 @@ class GitHubLinkInspector(val resolver: GitHubLinkResolver) {
         val results = ArrayList<InspectionResult>()
 
         val linkRef: LinkRef = if (originalLinkRef.isURI) resolver.uriToRelativeLink(originalLinkRef) as? LinkRef ?: originalLinkRef else originalLinkRef
-        val linkRefRemote: LinkRef? = resolver.processMatchOptions(linkRef, targetRef, LinkResolver.ONLY_REMOTE_URI) as? LinkRef
+        val linkRefRemote: LinkRef? = resolver.processMatchOptions(linkRef, targetRef, Want(Local.URL, Remote.URL)) as? LinkRef
 
         val linkAddressLocal: String = resolver.linkAddress(linkRef, targetRef, null, null, "")
         val linkAddressNoExtLocal: String = stripSubDirAfterWiki(PathInfo(linkAddressLocal).filePathNoExt)

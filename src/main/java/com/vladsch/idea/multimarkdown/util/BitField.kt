@@ -15,12 +15,13 @@
 package com.vladsch.idea.multimarkdown.util
 
 open class BitField(val bits: Int, val prevField: BitField? = null) : DataPrinterAware {
-    init {
-        assert(bits > 0, {"BitField bits $bits must be > 0"})
-    }
-
     val prevBits: Int = prevField?.totalBits ?: 0
     val totalBits: Int = prevBits + bits
+
+    init {
+        assert(bits > 0, {"BitField bits $bits must be > 0"})
+        assert(totalBits <= 31, {"BitField total bits $totalBits must be <= 31"})
+    }
 
     fun unboxed(flags: Int): Int = (flags and (((1 shl bits) - 1))) shl prevBits
     fun unboxedFlags(flags: Int): Int = flags and ((((1 shl bits) - 1)) shl prevBits)

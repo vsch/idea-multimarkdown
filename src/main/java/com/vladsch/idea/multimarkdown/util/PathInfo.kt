@@ -116,23 +116,23 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
         get() = _fullPath == "/"
 
     // these ones need resolving to absolute reference
-    open val isRelative: Boolean
+    val isRelative: Boolean
         get() = isRelative(_fullPath)
 
     // these ones resolve to local references, if they resolve
-    open val isLocal: Boolean
+    val isLocal: Boolean
         get() = isLocal(_fullPath)
 
     // these ones resolve to external references, if they resolve
-    open val isExternal: Boolean
+    val isExternal: Boolean
         get() = isExternal(_fullPath)
 
     // these ones are URI prefixed
-    open val isURI: Boolean
+    val isURI: Boolean
         get() = isURI(_fullPath)
 
     // these ones are not relative, ie don't need resolving
-    open val isAbsolute: Boolean
+    val isAbsolute: Boolean
         get() = isAbsolute(_fullPath)
 
     fun withExt(ext: String?): PathInfo = if (ext == null || isEmpty || this.ext == ext.removePrefix(".")) this else PathInfo(filePathNoExt + ext.prefixWith('.'))

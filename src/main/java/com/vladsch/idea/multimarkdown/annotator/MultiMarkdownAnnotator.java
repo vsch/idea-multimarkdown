@@ -97,8 +97,8 @@ public class MultiMarkdownAnnotator implements Annotator {
         }
 
         //noinspection StatementWithEmptyBody
-        final List<PathInfo> looseTargetRefs = resolver.multiResolve(linkRefInfo, LinkResolver.ANY | LinkResolver.LOOSE_MATCH, null);
-        final List<PathInfo> targetRefs = resolver.multiResolve(linkRefInfo, LinkResolver.ANY, looseTargetRefs);
+        final List<PathInfo> looseTargetRefs = resolver.multiResolve(linkRefInfo, Want.INSTANCE.invoke(Match.getLOOSE()), null);
+        final List<PathInfo> targetRefs = resolver.multiResolve(linkRefInfo, Want.INSTANCE.invoke(), looseTargetRefs);
         PathInfo resolvedTargetInfo = targetRefs.size() > 0 ? targetRefs.get(0) : null;
         PathInfo targetInfo = resolvedTargetInfo != null ? resolvedTargetInfo : looseTargetRefs.size() > 0 ? looseTargetRefs.get(0) : null;
         PsiElement parentElement = element.getParent();
@@ -112,7 +112,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                     state.annotator.registerFix(new ChangeLinkRefQuickFix(element, newLinkAddress, ChangeLinkRefQuickFix.CHANGE_TO_RELATIVE, RENAME_KEEP_ANCHOR | RENAME_KEEP_TEXT | RENAME_KEEP_TITLE));
                 }
             } else if (!(linkRefInfo instanceof WikiLinkRef)) {
-                PathInfo absRef = resolver.resolve(linkRefInfo, LinkResolver.ONLY_REMOTE_URI, targetRefs);
+                PathInfo absRef = resolver.resolve(linkRefInfo, Want.INSTANCE.invoke(Local.getURL(), Remote.getURL()), targetRefs);
                 if (absRef instanceof LinkRef && absRef.isExternal()) {
                     state.createAnnotation(Severity.WEAK_WARNING, parentElement.getTextRange(), MultiMarkdownBundle.message("annotation.link.can-be-absolute"));
                     String newLinkAddress = absRef.getFilePath();
@@ -448,7 +448,7 @@ public class MultiMarkdownAnnotator implements Annotator {
                     ProjectFileRef containingFile = new ProjectFileRef(element.getContainingFile());
                     GitHubLinkResolver resolver = new GitHubLinkResolver(element.getContainingFile());
                     LinkRef linkRefInfo = LinkRef.parseWikiLinkRef(containingFile, wikiPageTextName, null);
-                    List<PathInfo> targetRefs = resolver.multiResolve(linkRefInfo, LinkResolver.ANY, null);
+                    List<PathInfo> targetRefs = resolver.multiResolve(linkRefInfo, Want.INSTANCE.invoke(), null);
                     PathInfo targetInfo = targetRefs.size() > 0 ? targetRefs.get(0) : null;
 
                     if (targetRefs.size() > 0 && targetInfo != null) {

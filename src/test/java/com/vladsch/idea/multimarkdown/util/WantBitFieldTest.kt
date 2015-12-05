@@ -38,7 +38,7 @@ class WantBitFieldTest constructor(val rowId: Int, val bits: Int, val flags: Int
 
     @Test
     fun testBasic_Unboxed() {
-        val actual = bitField.unboxed(flags)
+        val actual = bitField.unboxedFlags(flags)
         assertEquals(unboxed, actual)
     }
 
@@ -133,7 +133,8 @@ class WantBitFieldTest constructor(val rowId: Int, val bits: Int, val flags: Int
                 /* 60 */arrayOf<Any?>(2     , 8      , 1      , 8        , BitField(1,BitField(1,BitField(1)))) /* 60 */,
                 /* 61 */arrayOf<Any?>(2     , 16     , 2      , 16       , BitField(1,BitField(1,BitField(1)))) /* 61 */,
                 /* 62 */arrayOf<Any?>(2     , 24     , 3      , 24       , BitField(1,BitField(1,BitField(1)))) /* 62 */,
-                /* 63 */arrayOf<Any?>(2     , 255    , 3      , 24       , BitField(1,BitField(1,BitField(1)))) /* 63 */
+                /* 63 */arrayOf<Any?>(2     , 255    , 3      , 24       , BitField(1,BitField(1,BitField(1)))) /* 63 */,
+                /* 64 */arrayOf<Any?>(2     , 0x7FFFFFFF    , 3      , 0x60000000       , BitField(29)) /* 64 */
                 /* @formatter:on */
         )
     }

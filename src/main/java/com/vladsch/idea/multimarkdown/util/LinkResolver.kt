@@ -34,34 +34,26 @@ abstract class LinkResolver(val projectResolver: LinkResolver.ProjectResolver, v
     }
 
     companion object {
-
-        @JvmField val ANY = 0                                               // local, remote or URL
-        @JvmField val PREFER_LOCAL = 1                                      // file ref that has local resolve, file references
-        @JvmField val ONLY_REMOTE = 2                                       // file ref that has remote resolve, file references
-        @JvmField val ONLY_URI = 4                                          // if no local or remote specified then both but as URL's only. URL for file on repo website, URI for local files
-        @JvmField val ACCEPT_URI = 8                                        // if no local or remote specified then both but as URL's only. URL for file on repo website, URI for local files
-        @JvmField val LOOSE_MATCH = 16                                      // inexact match for error detection
-        @JvmField val ONLY_REMOTE_URI = 32                                  // remote ref whether file ref has remote resolve or not
-        @JvmField val COMPLETION_MATCH = 64                                 // inexact match for error detection
-        @JvmField val LOCAL_OR_REMOTE = PREFER_LOCAL or ONLY_REMOTE         // local or remote resolved files
-        @JvmField val ONLY_LOCAL_URI = PREFER_LOCAL or ONLY_URI             // local or remote resolved files
-
-
-        private val ALL = LOCAL_OR_REMOTE or ONLY_URI             // local, remote or URI, no conversion will be done, refs returned as they are resolved
-        private val MATCH_MASK = LOOSE_MATCH or COMPLETION_MATCH
         internal val LINK_REF_WAS_URI = 0x8000000                          // original linkref was external, all resolution is done via relative links
 
+        // delegated for convenience
+        fun wantLocalType(options: Int) = Want.localType(options)
+        fun wantRemoteType(options: Int) = Want.remoteType(options)
+        fun wantMatchType(options: Int) = Want.matchType(options)
+        fun wantLinksType(options: Int) = Want.linksType(options)
+        fun wantExactMatch(options: Int) = Want.exactMatch(options)
+        fun wantLooseMatch(options: Int) = Want.looseMatch(options)
+        fun wantCompletionMatch(options: Int) = Want.completionMatch(options)
+        fun wantLinks(options: Int) = Want.links(options)
+        fun wantLocal(options: Int) = Want.local(options)
+        fun wantLocalREF(options: Int) = Want.localREF(options)
+        fun wantLocalURI(options: Int) = Want.localURI(options)
+        fun wantLocalURL(options: Int) = Want.localURL(options)
+        fun wantRemote(options: Int) = Want.remote(options)
+        fun wantRemoteREF(options: Int) = Want.remoteREF(options)
+        fun wantRemoteURI(options: Int) = Want.remoteURI(options)
+        fun wantRemoteURL(options: Int) = Want.remoteURL(options)
 
-        fun wantAny(options: Int): Boolean = (options and ALL == ANY) || (options and ALL == ALL)
-        fun wantLocal(options: Int): Boolean = (options and LOCAL_OR_REMOTE == 0) || (options and PREFER_LOCAL != 0)
-        fun wantRemote(options: Int): Boolean = (options and LOCAL_OR_REMOTE == 0) || (options and (ONLY_REMOTE or ONLY_REMOTE_URI) != 0)
-        fun wantURI(options: Int): Boolean = (options and ALL == ANY) || (options and (ACCEPT_URI or ONLY_URI or ONLY_REMOTE_URI) != 0)
-        fun wantOnlyURI(options: Int): Boolean = (options and (ONLY_URI or ONLY_REMOTE_URI) != 0)
-        fun wantOnlyRemoteURI(options: Int): Boolean = (options and ONLY_REMOTE_URI != 0)
-        fun wantLooseMatch(options: Int): Boolean = (options and MATCH_MASK != 0)
-        fun wantCompletionMatch(options: Int): Boolean = (options and COMPLETION_MATCH != 0)
-        fun wantSome(options: Int, flags: Int): Boolean = (options and flags != 0)
-        fun wantAll(options: Int, flags: Int): Boolean = (options and flags == flags)
         fun linkRefWasURI(options: Int): Boolean = (options and LINK_REF_WAS_URI != 0)
     }
 

@@ -75,42 +75,42 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
 
     @Test fun test_ResolveLocal() {
         if (skipTest) return
-        val localRef = resolver.resolve(linkRef, LinkResolver.PREFER_LOCAL, fileList)
+        val localRef = resolver.resolve(linkRef, Want(Local.REF, Remote.REF), fileList)
         assertEqualsMessage("Local does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", resolvesLocal, localRef?.filePath)
     }
 
     @Test fun test_ResolveExternal() {
         if (skipTest) return
-        val localRef = resolver.resolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.ACCEPT_URI, fileList)
+        val localRef = resolver.resolve(linkRef, Want(Local.NONE, Remote.REF, Links.URL), fileList)
         assertEqualsMessage("External does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", resolvesExternal, localRef?.filePath)
     }
 
     @Test fun test_LocalLinkAddress() {
         if (skipTest) return
-        val localRef = resolver.resolve(linkRef, LinkResolver.PREFER_LOCAL, fileList)
+        val localRef = resolver.resolve(linkRef, Want(Local.REF, Remote.REF), fileList)
         val localRefAddress = if (localRef != null) resolver.linkAddress(linkRef, localRef, null, null) else null
         assertEqualsMessage("Local link address does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", this.linkAddressText, localRefAddress)
     }
 
     @Test fun test_RemoteLinkAddress() {
         if (skipTest) return
-        val localRef = resolver.resolve(linkRef, LinkResolver.PREFER_LOCAL, fileList) as? FileRef
-        val remoteRef = resolver.resolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.ACCEPT_URI, fileList)
+        val localRef = resolver.resolve(linkRef, Want(Local.REF, Remote.REF), fileList) as? FileRef
+        val remoteRef = resolver.resolve(linkRef, Want(Local.NONE, Remote.URL, Links.URL), fileList)
         val remoteRefAddress = if (localRef == null && remoteRef != null) resolver.linkAddress(linkRef, remoteRef, linkRef !is WikiLinkRef && (linkRef.hasExt || (linkRef.hasAnchor && linkAnchor?.contains('.') ?: false)), null) else null
         assertEqualsMessage("Remote based link address does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", this.remoteAddressText, remoteRefAddress)
     }
 
     @Test fun test_AnyLinkAddress() {
         if (skipTest) return
-        val anyRef = resolver.resolve(linkRef, LinkResolver.ANY, fileList)
+        val anyRef = resolver.resolve(linkRef, Want(), fileList)
         val linkAddress = if (anyRef != null) resolver.linkAddress(linkRef, anyRef, null, null) else null
-        assertEqualsMessage("LinkResolver.ANY link address does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", this.linkAddressText ?: this.remoteAddressText, linkAddress)
+        assertEqualsMessage("Want() link address does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", this.linkAddressText ?: this.remoteAddressText, linkAddress)
     }
 
     @Test fun test_OnlyURILinkAddress() {
         if (skipTest) return
-        val targetRef = resolver.resolve(linkRef, LinkResolver.ANY, fileList)
-        val uriRef = resolver.resolve(linkRef, LinkResolver.ONLY_URI, fileList)
+        val targetRef = resolver.resolve(linkRef, Want(), fileList)
+        val uriRef = resolver.resolve(linkRef, Want(Local.URI, Remote.URI, Links.URL), fileList)
         val href = if (targetRef != null && targetRef is FileRef && this.uriText != null) {
             "file://" + targetRef.filePath.replace(" ", "%20").replace("#", "%23")
         } else if (targetRef is LinkRef) targetRef.filePathWithAnchor
@@ -120,8 +120,8 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
 
     @Test fun test_RemoteURILinkAddress() {
         if (skipTest) return
-        val targetRef = resolver.resolve(linkRef, LinkResolver.ANY, fileList)
-        val uriRef = resolver.resolve(linkRef, LinkResolver.ONLY_REMOTE or LinkResolver.ONLY_URI, fileList)
+        val targetRef = resolver.resolve(linkRef, Want(Local.REF,  Remote.REF, Links.URL), fileList)
+        val uriRef = resolver.resolve(linkRef, Want(Local.NONE, Remote.URL, Links.URL), fileList)
         val href = if (targetRef != null && targetRef is FileRef && this.uriText != null) {
             if (resolver.projectResolver.isUnderVcs(targetRef)) {
                 val prefix = if (targetRef.isUnderWikiDir) "" else "${if (linkRef is ImageLinkRef) "raw" else "blob"}/master/"
@@ -139,7 +139,7 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
         if (skipTest) return
         val localFileRef = if (localLinkRef != null) FileRef(localLinkRef) else null
         val looseMatch = localFileRef == null || localFileRef.path.isEmpty() && linkRef.anchor == null
-        val localRefs = resolver.multiResolve(linkRef, LinkResolver.PREFER_LOCAL or if (looseMatch) LinkResolver.LOOSE_MATCH else 0, fileList)
+        val localRefs = resolver.multiResolve(linkRef, Want(Local.REF, Remote.REF, if (looseMatch) Match.LOOSE else null), fileList)
         val actuals = Array<String>(localRefs.size, { "" })
         for (i in localRefs.indices) {
             actuals[i] = localRefs[i].filePath
@@ -149,7 +149,7 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
 
     @Test fun test_MultiResolveExactNoMatch() {
         if (skipTest || localLinkRef != null) return
-        val localRefs = resolver.multiResolve(linkRef, LinkResolver.PREFER_LOCAL, fileList)
+        val localRefs = resolver.multiResolve(linkRef, Want(Local.REF, Remote.REF), fileList)
         val actuals = Array<String>(localRefs.size, { "" })
         for (i in localRefs.indices) {
             actuals[i] = localRefs[i].filePath
@@ -160,14 +160,14 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
     @Test fun test_Resolve() {
         if (skipTest) return
         //        val localRefs = resolver.multiResolve(if (linkRef is WikiLinkRef) linkRef else linkRefNoExt, LinkResolver.ONLY_LOCAL or LinkResolver.LOOSE_MATCH, fileList)
-        val localRefs = resolver.multiResolve(linkRef, LinkResolver.ANY, fileList)
+        val localRefs = resolver.multiResolve(linkRef, Want(), fileList)
         val targetRef = if (localRefs.size > 0) localRefs[0] else null
         assertEqualsMessage("Resolve does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", this.resolvesLocal ?: this.resolvesExternal ?: null, if (targetRef is LinkRef) targetRef.filePathWithAnchor else targetRef?.filePath)
     }
 
     @Test fun test_InspectionResults() {
         if (skipTest) return
-        val targetRef = resolver.resolve(linkRef, LinkResolver.ANY, fileList) as? FileRef
+        val targetRef = resolver.resolve(linkRef, Want(), fileList) as? FileRef
         if (targetRef != null) {
             val inspections = resolver.inspect(linkRef, targetRef, rowId)
             if (inspectionResults == null || inspectionResults.size < inspections.size) {
@@ -184,10 +184,10 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
         if (skipTest) return
         if (resolvesLocal != null) {
             val targetRef = FileRef(resolvesLocal)
-            val linkRefUri = resolver.processMatchOptions(linkRef, targetRef, LinkResolver.ONLY_REMOTE_URI)
+            val linkRefUri = resolver.processMatchOptions(linkRef, targetRef, Want(Local.URL, Remote.URL, Links.URL))
             if (linkRefUri != null && linkRefUri is LinkRef && linkRefUri.isExternal) {
                 val originalCaseLinkRefUri = if (linkRefUri.filePath.endsWith("/wiki")) linkRefUri else linkRefUri.replaceFilePath(linkRefUri.path + linkRef.fileName.ifEmpty { linkRefUri.fileName })
-                val localRef = resolver.resolve(originalCaseLinkRefUri, LinkResolver.PREFER_LOCAL, fileList)
+                val localRef = resolver.resolve(originalCaseLinkRefUri, Want(Local.REF, Remote.REF), fileList)
                 assertEqualsMessage("ResolveHttp $originalCaseLinkRefUri does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", resolvesLocal, localRef?.filePath)
             } else {
                 assertEqualsMessage("ResolveHttp no remote link ${resolver.getMatcher(linkRef, false).linkAllMatch} for $resolvesLocal", resolvesLocal, linkRefUri?.filePath)
@@ -203,10 +203,10 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
                 targetRef.isRawFile = true
                 val rawLinkRef = linkRef.replaceFilePath("raw/" + linkRef.filePath, true)
 
-                val linkRefUri = resolver.processMatchOptions(rawLinkRef, targetRef, LinkResolver.ONLY_REMOTE_URI)
+                val linkRefUri = resolver.processMatchOptions(rawLinkRef, targetRef, Want(Local.URL, Remote.URL, Links.URL))
                 if (linkRefUri != null && linkRefUri is LinkRef && linkRefUri.isExternal) {
                     val originalCaseLinkRefUri = if (linkRefUri.filePath.endsWith("/wiki")) linkRefUri else linkRefUri.replaceFilePath(linkRefUri.path + linkRef.fileName.ifEmpty { linkRefUri.fileName })
-                    val localRef = resolver.resolve(originalCaseLinkRefUri, LinkResolver.PREFER_LOCAL, fileList)
+                    val localRef = resolver.resolve(originalCaseLinkRefUri, Want(Local.REF, Remote.REF), fileList)
                     assertEqualsMessage("ResolveHttpRaw $originalCaseLinkRefUri does not match ${resolver.getMatcher(rawLinkRef, false).linkAllMatch}", resolvesLocal, localRef?.filePath)
                 } else {
                     assertEqualsMessage("ResolveHttpRaw no remote link ${resolver.getMatcher(rawLinkRef, false).linkAllMatch} for $resolvesLocal", resolvesLocal, linkRefUri?.filePath)
@@ -222,10 +222,10 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
     //        if (resolvesLocal != null && linkRef is ImageLinkRef) {
     //            val targetRef = FileRef(resolvesLocal)
     //            if (!targetRef.isUnderWikiDir) {
-    //                val linkRefUri = resolver.processMatchOptions(linkRef, targetRef, LinkResolver.ONLY_REMOTE_URI)
+    //                val linkRefUri = resolver.processMatchOptions(linkRef, targetRef, Want(Local.NONE, Remote.URL, Links.URL)_URI)
     //                if (linkRefUri != null && linkRefUri is LinkRef && linkRefUri.isExternal) {
     //                    val originalCaseLinkRefUri = linkRefUri.replaceFilePath((linkRefUri.path + linkRef.fileName.ifEmpty { linkRefUri.fileName }).replace("/raw/","/blob/"))
-    //                    val localRef = resolver.resolve(originalCaseLinkRefUri, LinkResolver.PREFER_LOCAL, fileList)
+    //                    val localRef = resolver.resolve(originalCaseLinkRefUri, Want(Local.REF, Remote.REF), fileList)
     //                    assertEqualsMessage("ResolveHttp $originalCaseLinkRefUri does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", null, localRef?.filePath)
     //                } else {
     //                    assertEqualsMessage("ResolveHttp no remote link ${resolver.getMatcher(linkRef, false).linkAllMatch} for $resolvesLocal", resolvesLocal, linkRefUri?.filePath)
@@ -238,13 +238,13 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
         if (skipTest) return
         if (resolvesLocal != null) {
             val targetRef = FileRef(resolvesLocal)
-            val linkRefUri = resolver.processMatchOptions(linkRef, targetRef, LinkResolver.ONLY_REMOTE_URI)
+            val linkRefUri = resolver.processMatchOptions(linkRef, targetRef, Want(Local.URL, Remote.URL, Links.URL))
 
             assert(linkRefUri == null || linkRefUri.isExternal)
 
             if (linkRefUri != null && linkRefUri is LinkRef && linkRefUri.isExternal) {
                 val originalCaseLinkRefUri = if (linkRefUri.filePath.endsWith("/wiki")) linkRefUri else linkRefUri.replaceFilePath(linkRefUri.path + linkRef.fileName.ifEmpty { linkRefUri.fileName })
-                val localRefs = resolver.multiResolve(originalCaseLinkRefUri, LinkResolver.ANY)
+                val localRefs = resolver.multiResolve(originalCaseLinkRefUri, Want())
                 val resolvedTargetRef = if (localRefs.size > 0) localRefs[0] else null
                 assertEqualsMessage("MultiResolveHttp $originalCaseLinkRefUri does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", this.resolvesLocal, if (resolvedTargetRef is LinkRef) resolvedTargetRef.filePathWithAnchor else resolvedTargetRef?.filePath)
             }
@@ -255,7 +255,7 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
         if (skipTest) return
         if (resolvesLocal != null) {
             val targetRef = FileRef(resolvesLocal)
-            val linkRefUri = resolver.processMatchOptions(linkRef, targetRef, LinkResolver.ONLY_REMOTE_URI)
+            val linkRefUri = resolver.processMatchOptions(linkRef, targetRef, Want(Local.URL, Remote.URL, Links.URL))
 
             assert(linkRefUri == null || linkRefUri.isExternal)
 

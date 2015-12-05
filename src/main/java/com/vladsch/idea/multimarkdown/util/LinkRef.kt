@@ -43,15 +43,6 @@ open class LinkRef(val containingFile: FileRef, fullPath: String, anchorTxt: Str
     val filePathNoExtWithAnchor: String
         get() = super.filePathNoExt + anchorText
 
-    override val isRelative: Boolean
-        get() = !isSelfAnchor && isRelative(_fullPath)
-
-    override val isLocal: Boolean
-        get() = isSelfAnchor || isLocal(_fullPath)
-
-    override val isAbsolute: Boolean
-        get() = isSelfAnchor || isAbsolute(_fullPath)
-
     override fun toString(): String = filePathWithAnchor
 
     open val linkExtensions: Array<String>

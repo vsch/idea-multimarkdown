@@ -103,7 +103,7 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
             LinkRef linkRef = new LinkRef(fileRef, "", null, null);
 
             GitHubLinkResolver resolver = new GitHubLinkResolver(element.getContainingFile());
-            List<PathInfo> linkRefs = resolver.multiResolve(linkRef, LinkResolver.LOOSE_MATCH, null);
+            List<PathInfo> linkRefs = resolver.multiResolve(linkRef, Want.INSTANCE.invoke(Match.getLOOSE()), null);
 
             if (linkRefs.size() > 0) {
                 // add fixed up version to result
@@ -123,7 +123,7 @@ public class ElementNameSuggestionProvider extends PreferrableNameSuggestionProv
             LinkRef linkRef = new WikiLinkRef(fileRef, "", null, null);
 
             GitHubLinkResolver resolver = new GitHubLinkResolver(element.getContainingFile());
-            List<PathInfo> linkRefs = resolver.multiResolve(linkRef, LinkResolver.LOOSE_MATCH, null);
+            List<PathInfo> linkRefs = resolver.multiResolve(linkRef, Want.INSTANCE.invoke(Match.getLOOSE()), null);
 
             if (linkRefs.size() > 0) {
                 // add fixed up version to result

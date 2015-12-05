@@ -331,3 +331,6 @@ fun Iterator<String>.splice(delimiter: String, skipEmpty: Boolean = true): Strin
 fun String?.appendDelim(delimiter: String, vararg args: String): String {
     return arrayListOf<String?>(this.orEmpty(), *args).splice(delimiter, true)
 }
+
+
+fun <T:Any> Any?.ifNotNull(eval: () -> T?):T? = if (this == null) null else eval()

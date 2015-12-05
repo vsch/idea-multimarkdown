@@ -31,6 +31,8 @@ import org.junit.runners.Suite;
         TestLinkRef_from.class,
         TestLinkMatcher_MultiSub.class,
         TestGitHubLinkResolver_normalizedLinkRef.class,
+        WantBitFieldTest.class,
+        WantTest.class,
         TestLinkResolver_Basic_wiki_Home.class,
         TestLinkResolver_Basic_wiki_normal_file.class,
         TestLinkResolver_Basic_Readme.class,

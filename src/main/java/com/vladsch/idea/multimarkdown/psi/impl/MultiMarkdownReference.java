@@ -179,7 +179,7 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
 
                     if (linkRef != null) {
                         GitHubLinkResolver resolver = new GitHubLinkResolver(myElement);
-                        List<PathInfo> pathInfos = resolver.multiResolve(linkRef, LinkResolver.PREFER_LOCAL | (incompleteCode ? LinkResolver.LOOSE_MATCH : 0), null);
+                        List<PathInfo> pathInfos = resolver.multiResolve(linkRef, incompleteCode ? Want.INSTANCE.invoke(Match.getLOOSE()) : Want.INSTANCE.invoke(), null);
 
                         if (pathInfos.size() > 0) {
                             List<ResolveResult> results = new ArrayList<ResolveResult>();

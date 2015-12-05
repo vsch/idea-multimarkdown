@@ -14,6 +14,73 @@
  */
 package com.vladsch.idea.multimarkdown.util
 
+/**
+ * singleton Want : used to create a bit mask of type of link resolving results we want
+ *
+ * The whole mess here was created so we can easily write: Want(Local.URI, REMOTE.URL, Links.None, Match.LOOSE)
+ * instead of a whole bunch of that or those or ....
+ *
+ * I also wanted to avoid creating objects just to setup options. I wanted all singletons and enums with the final
+ * result an integer of bits for various fields without the mess of figuring out the bits and shifts and bitmask.
+ *
+ * The result is comfortable to use, but a bit on the heavy side as far as code quantity. The goal was comfortable,
+ * flexible use and low overhead querying of options.
+ *
+ * Also in the resolver testing for options is likewise easy:
+ *
+ * val options:Int = Want(....)
+ *
+ * if (Want.local(options))....  : any local other than NONE
+ * if (Want.remote(options)).... : any remote other than NONE
+ *
+ * or for specific type of result desired:
+ *
+ * if (Want.localType(options) == Local.URI)....
+ * if (Want.remoteType(options) == Remote.URL)....
+ *
+ * if (Want.exactMatch(options))   : true if not loose or completion
+ * if (Want.looseMatch(options))   : true if loose match was specified
+ * if (Want.completionMatch(options))   : true if completion match was specified
+ *
+ * if (Want.links(options))        : true if Links is other than NONE
+ *
+ * Local is file not under Vcs, ie. not on Remote Repo site
+ * Remote is file under Vcs, ie. on Remote Repo site
+ * Links are just URLs we recognize and resolve for the Repo. ie. GitHub: fork, pulls, issues, pulse, graphs
+ *
+ * Local and Remote can be:
+ *       NONE - we don't want these files, ie. Local.NONE will eliminate any files not under VCS
+ *       REF - file reference, used to derive a relative address
+ *       URI - a link with file:// followed by file path, used to pass to browser for local file
+ *       URL - a link with https:// to the remote repo file
+ *
+ *  Links are either Links.NONE or Links.URL
+ *
+ *  Match specifies type of matching:
+ *      EXACT       - we are resolving an exact reference, we want same files as a link would
+ *                  resolve on the Repo site
+ *
+ *      LOOSE       - we want something close so we can inspect and give user options
+ *
+ *      COMPLETION  - we want a list for completions (currently not implemented and an empty
+ *                  file name is used as a marker that it is for completion list
+ *
+ * It also allows for type safety, flexible defaults based on what options were already given.
+ *
+ * So Want() is the same as Want(Local.REF, Remote.REF, Links.URL, Match.Exact)
+ * So Want(Local.NONE) is the same as Want(Local.NONE, Remote.REF, Links.URL, Match.EXACT)
+ * So Want(Remote.NONE) is the same as Want(Local.REF, Remote.NONE, Links.URL, Match.EXACT)
+ * So Want(Links.NONE) is the same as Want(Local.REF, Remote.REF, Links.NONE, Match.EXACT)
+ * So Want(Match.LOOSE) is the same as Want(Local.REF, Remote.REF, Links.URL, Match.LOOSE)
+ *
+ * Specifying local or remote option to something other than none, will eliminate the default
+ * for its counterparts. Links don't get defaults if either local or remote is specified
+ * So Want(Local.REF) is the same as Want(Local.REF, Remote.NONE, Links.NONE, Match.EXACT)
+ * So Want(Remote.URL) is the same as Want(Local.NONE, Remote.URL, Links.NONE, Match.EXACT)
+ *
+ * Match.LOOSE and Match.COMPLETION can be used together, otherwise only one option of a type is allowed.
+ *
+ */
 object Want : DataPrinterAware {
     enum class FileType(val flags: Int) {
         NONE(0),
@@ -70,8 +137,8 @@ object Want : DataPrinterAware {
 
     enum class MatchType(val flags: Int) {
         EXACT(0),
-        LOOSE(1),
-        COMPLETION(2);
+        LOOSE(1),              // must be single bit
+        COMPLETION(2);         // must be single bit
 
         internal val unboxed: Int get() = unboxed(flags)
 
@@ -124,7 +191,7 @@ object Want : DataPrinterAware {
         override fun testData(): String {
             return when (this) {
                 is Remotes -> "Remote." + unboxed.type
-                is Locals -> "Local."  + unboxed.type
+                is Locals -> "Local." + unboxed.type
                 is Matches -> "Match." + unboxed
                 is Links -> "Links." + unboxed
             }
@@ -163,65 +230,75 @@ object Want : DataPrinterAware {
         assert(option == null, { "option ${(option as Options).className()} is already set to ${option.testData()}" })
     }
 
-    fun unboxed(vararg options: Options): Int {
+    fun unboxed(vararg options: Options?): Int {
         var remote: Options.Remotes? = null
         var local: Options.Locals? = null
-        var match: Options.Matches? = null
+        var matches  = arrayListOf<Options.Matches>()
         var links: Options.Links? = null
         for (option in options) {
-            when (option) {
-                is Options.Remotes -> {
-                    assertNull(remote); remote = option
-                }
-                is Options.Locals -> {
-                    assertNull(local); local = option
-                }
-                is Options.Matches -> {
-                    assertNull(match); match = option
-                }
-                is Options.Links -> {
-                    assertNull(links); links = option
+            if (option != null) {
+                when (option) {
+                    is Options.Remotes -> {
+                        assertNull(remote)
+                        remote = option
+                    }
+                    is Options.Locals -> {
+                        assertNull(local)
+                        local = option
+                    }
+                    is Options.Matches -> {
+                        // allow for completion and loose to be used
+                        if (matches.size != 0 && !(option == MatchLoose && matches[0] == MatchCompletion || option == MatchCompletion && matches[0] == MatchLoose )) {
+                            assertNull(matches[0])
+                        }
+                        matches.add(option)
+                    }
+                    is Options.Links -> {
+                        assertNull(links)
+                        links = option
+                    }
                 }
             }
         }
 
         var flags: Int = 0
 
-        flags = flags or (local?.unboxed ?: LocalRef.unboxed).unboxed
-        flags = flags or (remote?.unboxed ?: RemoteRef.unboxed).unboxed
-        flags = flags or (match?.unboxed ?: MatchExact.unboxed).unboxed
-        flags = flags or (links?.unboxed ?: LinksUrl.unboxed).unboxed
+        if (local != null || remote == null || remote == RemoteNone) flags = flags or (local?.unboxed ?: LocalRef.unboxed).unboxed
+        if (remote != null || local == null || local == LocalNone) flags = flags or (remote?.unboxed ?: RemoteRef.unboxed).unboxed
+        flags = flags or if (matches.size == 0) MatchType.EXACT.unboxed else matches.fold(0) { flags, match -> flags or match.unboxed.unboxed }
+
+        // this one only gets a default if nothing but match is provided
+        if (links != null || ((local == null || local == LocalNone) && (remote == null || remote == RemoteNone))) flags = flags or (links?.unboxed ?: LinksUrl.unboxed).unboxed
 
         return flags
     }
 
-    operator fun invoke(vararg options: Options) = unboxed(*options)
+    fun testData(options: Int): String {
+        // print the options as our Want(...) processing params explicitly so tests won't change if defaults change
+        var optionList = arrayListOf<String>()
+        optionList.add(localType(options).testData())
+        optionList.add(remoteType(options).testData())
+        if (links(options)) optionList.add(linksType(options).testData())
+        optionList.add(matchType(options).testData())
 
-    fun localType(options: Int): Options.Locals {
-        return Local.boxed(LocalType.boxed(options))
+        val result = "Want(" + optionList.splice(",") + ")"
+        return result
     }
 
-    fun remoteType(options: Int): Options.Remotes {
-        return Remote.boxed(RemoteType.boxed(options))
-    }
+    operator fun invoke(vararg options: Options?) = unboxed(*options)
 
-    fun matchType(options: Int): Options.Matches {
-        return Match.boxed(MatchType.boxed(options))
-    }
-
-    fun linksType(options: Int): Options.Links {
-        return Links.boxed(LinkType.boxed(options))
-    }
-
-    fun looseMatch(options: Int): Boolean = MatchType.unboxedFlags(options) != MatchType.EXACT.unboxed
-    fun completionMatch(options: Int): Boolean = MatchType.unboxedFlags(options) == MatchType.COMPLETION.unboxed
+    fun localType(options: Int): Options.Locals = Local.boxed(LocalType.boxed(options))
+    fun remoteType(options: Int): Options.Remotes = Remote.boxed(RemoteType.boxed(options))
+    fun matchType(options: Int): Options.Matches = Match.boxed(MatchType.boxed(options))
+    fun linksType(options: Int): Options.Links = Links.boxed(LinkType.boxed(options))
+    fun exactMatch(options: Int): Boolean = MatchType.unboxedFlags(options) == MatchType.EXACT.unboxed
+    fun looseMatch(options: Int): Boolean = MatchType.unboxedFlags(options) and MatchType.LOOSE.unboxed != 0
+    fun completionMatch(options: Int): Boolean = MatchType.unboxedFlags(options) and MatchType.COMPLETION.unboxed != 0
     fun links(options: Int): Boolean = LinkType.unboxedFlags(options) == LinkType.URL.unboxed
-
     fun local(options: Int): Boolean = LocalType.unboxedFlags(options) != LocalType.NONE.unboxed
     fun localREF(options: Int): Boolean = LocalType.unboxedFlags(options) == LocalType.REF.unboxed
     fun localURI(options: Int): Boolean = LocalType.unboxedFlags(options) == LocalType.URI.unboxed
     fun localURL(options: Int): Boolean = LocalType.unboxedFlags(options) == LocalType.URL.unboxed
-
     fun remote(options: Int): Boolean = RemoteType.unboxedFlags(options) != RemoteType.NONE.unboxed
     fun remoteREF(options: Int): Boolean = RemoteType.unboxedFlags(options) == RemoteType.REF.unboxed
     fun remoteURI(options: Int): Boolean = RemoteType.unboxedFlags(options) == RemoteType.URI.unboxed
@@ -229,10 +306,10 @@ object Want : DataPrinterAware {
 }
 
 object Local {
-    val NONE: Want.Options.Locals get() = Want.LocalNone
-    val REF: Want.Options.Locals get() = Want.LocalRef
-    val URI: Want.Options.Locals get() = Want.LocalUri
-    val URL: Want.Options.Locals get() = Want.LocalUrl
+    @JvmStatic val NONE: Want.Options.Locals get() = Want.LocalNone
+    @JvmStatic val REF: Want.Options.Locals get() = Want.LocalRef
+    @JvmStatic val URI: Want.Options.Locals get() = Want.LocalUri
+    @JvmStatic val URL: Want.Options.Locals get() = Want.LocalUrl
 
     fun boxed(fileType: Want.FileType): Want.Options.Locals {
         return when (fileType) {
@@ -245,10 +322,10 @@ object Local {
 }
 
 object Remote {
-    val NONE: Want.Options.Remotes get() = Want.RemoteNone
-    val REF: Want.Options.Remotes get() = Want.RemoteRef
-    val URI: Want.Options.Remotes get() = Want.RemoteUri
-    val URL: Want.Options.Remotes get() = Want.RemoteUrl
+    @JvmStatic val NONE: Want.Options.Remotes get() = Want.RemoteNone
+    @JvmStatic val REF: Want.Options.Remotes get() = Want.RemoteRef
+    @JvmStatic val URI: Want.Options.Remotes get() = Want.RemoteUri
+    @JvmStatic val URL: Want.Options.Remotes get() = Want.RemoteUrl
 
     fun boxed(fileType: Want.FileType): Want.Options.Remotes {
         return when (fileType) {
@@ -261,9 +338,9 @@ object Remote {
 }
 
 object Match {
-    val EXACT: Want.Options.Matches get() = Want.MatchExact
-    val LOOSE: Want.Options.Matches get() = Want.MatchLoose
-    val COMPLETION: Want.Options.Matches get() = Want.MatchCompletion
+    @JvmStatic val EXACT: Want.Options.Matches get() = Want.MatchExact
+    @JvmStatic val LOOSE: Want.Options.Matches get() = Want.MatchLoose
+    @JvmStatic val COMPLETION: Want.Options.Matches get() = Want.MatchCompletion
 
     fun boxed(fileType: Want.MatchType): Want.Options.Matches {
         return when (fileType) {
@@ -275,8 +352,8 @@ object Match {
 }
 
 object Links {
-    val NONE: Want.Options.Links get() = Want.LinksNone
-    val URL: Want.Options.Links get() = Want.LinksUrl
+    @JvmStatic val NONE: Want.Options.Links get() = Want.LinksNone
+    @JvmStatic val URL: Want.Options.Links get() = Want.LinksUrl
 
     fun boxed(fileType: Want.LinkType): Want.Options.Links {
         return when (fileType) {

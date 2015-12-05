@@ -73,19 +73,19 @@ class TestLinkResolver_Basic_wiki_Home constructor(val rowId:Int, val fullPath: 
 
     @Test fun test_ResolveLocal() {
         if (skipTest) return
-        val localRef = resolver.resolve(linkRef, LinkResolver.PREFER_LOCAL, fileList)
+        val localRef = resolver.resolve(linkRef, Want(Local.REF, Remote.REF), fileList)
         assertEqualsMessage("Local does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", resolvesLocal, localRef?.filePath)
     }
 
     @Test fun test_ResolveExternal() {
         if (skipTest) return
-        val localRef = resolver.resolve(linkRef, LinkResolver.ONLY_REMOTE, fileList)
+        val localRef = resolver.resolve(linkRef, Want(Local.NONE, Remote.REF, Links.NONE), fileList)
         assertEqualsMessage("External does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", resolvesExternal, localRef?.filePath)
     }
 
     @Test fun test_LocalLinkAddress() {
         if (skipTest) return
-        val localRef = resolver.resolve(linkRef, LinkResolver.PREFER_LOCAL, fileList) as? FileRef
+        val localRef = resolver.resolve(linkRef, Want(Local.REF, Remote.REF), fileList)
         val localRefAddress = if (localRef != null) resolver.linkAddress(linkRef, localRef, ((linkRef.hasExt && linkRef.ext == localRef.ext) || (linkRef.hasAnchor && linkAnchor?.contains('.') ?: false)), null) else null
         assertEqualsMessage("Local link address does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", this.linkAddressText, localRefAddress)
     }
@@ -94,7 +94,7 @@ class TestLinkResolver_Basic_wiki_Home constructor(val rowId:Int, val fullPath: 
         if (skipTest || linkRef.filePath.isEmpty() && linkRef.anchor == null) return
         val localFileRef = if (localLinkRef != null) FileRef(localLinkRef) else null
         val looseMatch = localFileRef == null || localFileRef.path.isEmpty()
-        val localRefs = resolver.multiResolve(linkRef, LinkResolver.PREFER_LOCAL or if (looseMatch) LinkResolver.LOOSE_MATCH else 0, fileList)
+        val localRefs = resolver.multiResolve(linkRef, Want(Local.REF, Remote.REF, if (looseMatch) Match.LOOSE else null), fileList)
         val actuals = Array<String>(localRefs.size, { "" })
         for (i in localRefs.indices) {
             actuals[i] = localRefs[i].filePath
@@ -104,8 +104,8 @@ class TestLinkResolver_Basic_wiki_Home constructor(val rowId:Int, val fullPath: 
 
     @Test fun test_InspectionResults() {
         if (skipTest || this.inspectionResults == null) return
-        val looseTargetRef = resolver.resolve(linkRef, LinkResolver.LOOSE_MATCH, fileList) as? FileRef
-        val targetRef = resolver.resolve(linkRef, LinkResolver.ANY, fileList) as? FileRef
+        val looseTargetRef = resolver.resolve(linkRef, Want(Match.LOOSE), fileList) as? FileRef
+        val targetRef = resolver.resolve(linkRef, Want(), fileList) as? FileRef
         if (targetRef != null || looseTargetRef != null) {
             val inspectionResults = resolver.inspect(linkRef, targetRef ?: looseTargetRef as FileRef, rowId)
             if (this.inspectionResults.size < inspectionResults.size) {

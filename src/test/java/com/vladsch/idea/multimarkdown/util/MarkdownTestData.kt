@@ -460,38 +460,7 @@ fun printResultData() {
 }
 
 fun matchOptions(matchOptions: Int): String {
-    var options = matchOptions
-    var result = ""
-
-    if (options == LinkResolver.ANY) {
-        result = "ANY"
-    }
-    if (options and LinkResolver.LOCAL_OR_REMOTE != 0) {
-        options = options and LinkResolver.LOCAL_OR_REMOTE.inv()
-        result = result.appendDelim(" or ", "LOCAL_OR_REMOTE")
-    }
-    if (options and LinkResolver.PREFER_LOCAL != 0) {
-        options = options and LinkResolver.PREFER_LOCAL.inv()
-        result = result.appendDelim(" or ", "PREFER_LOCAL")
-    }
-    if (options and LinkResolver.ONLY_REMOTE != 0) {
-        options = options and LinkResolver.ONLY_REMOTE.inv()
-        result = result.appendDelim(" or ", "ONLY_REMOTE")
-    }
-    if (options and LinkResolver.ONLY_URI != 0) {
-        options = options and LinkResolver.ONLY_URI.inv()
-        result = result.appendDelim(" or ", "ONLY_URI")
-    }
-    if (options and LinkResolver.ACCEPT_URI != 0) {
-        options = options and LinkResolver.ACCEPT_URI.inv()
-        result = result.appendDelim(" or ", "ACCEPT_URI")
-    }
-    if (options and LinkResolver.LOOSE_MATCH != 0) {
-        options = options and LinkResolver.LOOSE_MATCH.inv()
-        result = result.appendDelim(" or ", "LOOSE_MATCH")
-    }
-
-    return result
+    return Want.testData(matchOptions)
 }
 
 val availableLists = mapOf<List<String>, String>(
