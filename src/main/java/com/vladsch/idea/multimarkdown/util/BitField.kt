@@ -14,7 +14,7 @@
  */
 package com.vladsch.idea.multimarkdown.util
 
-open class BitField(val bits: Int, val prevField: BitField? = null) : TestDataAware {
+open class BitField(val bits: Int, val prevField: BitField? = null) : DataPrinterAware {
     init {
         assert(bits > 0, {"BitField bits $bits must be > 0"})
     }
