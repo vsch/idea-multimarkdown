@@ -14,7 +14,7 @@
  */
 package com.vladsch.idea.multimarkdown.util
 
-object Want : TestDataAware {
+object Want : DataPrinterAware {
     enum class FileType(val flags: Int) {
         NONE(0),
         REF(1),
@@ -104,7 +104,7 @@ object Want : TestDataAware {
         }
     }
 
-    sealed class Options : TestDataAware {
+    sealed class Options : DataPrinterAware {
         abstract class Remotes : Options() {
             abstract val unboxed: RemoteType
         }

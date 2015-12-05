@@ -16,14 +16,14 @@ package com.vladsch.idea.multimarkdown
 
 import com.vladsch.idea.multimarkdown.util.BitField
 import com.vladsch.idea.multimarkdown.util.Severity
-import com.vladsch.idea.multimarkdown.util.TestDataAware
+import com.vladsch.idea.multimarkdown.util.DataPrinterAware
 
 fun dataColText(col: Any?, padStart: Int = 0, padEnd: Int = 0): String {
     val text: String
     if (col == null) text = "null";
     else {
         when (col) {
-            is TestDataAware -> text = col.testData()
+            is DataPrinterAware -> text = col.testData()
             is Array<*> -> {
                 var colText = "";
                 for (elem in col) {

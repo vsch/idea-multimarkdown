@@ -15,7 +15,7 @@
 package com.vladsch.idea.multimarkdown.util
 
 
-interface TestDataAware {
+interface DataPrinterAware {
     fun testData():String = className()
     fun className(inParent: java.lang.Class<Any>? = null):String = javaClass.name.removePrefix(javaClass.`package`.name+".")
 }

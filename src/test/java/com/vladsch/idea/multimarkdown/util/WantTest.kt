@@ -20,28 +20,28 @@ import org.junit.Test
 class WantTest {
     @Test
     fun testLinksTypeNone() {
-        val opt = Want(Links.NONE)
+        val opt:Int = Want(Links.NONE)
         assertEquals(false, Want.links(opt))
         assertEquals(Links.NONE, Want.linksType(opt))
     }
 
     @Test
     fun testLinksTypeURL() {
-        val opt = Want(Links.URL)
+        val opt:Int = Want(Links.URL)
         assertEquals(true, Want.links(opt))
         assertEquals(Links.URL, Want.linksType(opt))
     }
 
     @Test
     fun testLinksTypeDefault() {
-        val opt = Want()
+        val opt:Int = Want()
         assertEquals(true, Want.links(opt))
         assertEquals(Links.URL, Want.linksType(opt))
     }
 
     @Test
     fun testDefaultMatch() {
-        val opt = Want()
+        val opt:Int = Want()
         assertEquals(false, Want.looseMatch(opt))
         assertEquals(false, Want.completionMatch(opt))
         assertEquals(Match.EXACT, Want.matchType(opt))
@@ -49,7 +49,7 @@ class WantTest {
 
     @Test
     fun testExactMatch() {
-        val opt = Want(Match.EXACT)
+        val opt:Int = Want(Match.EXACT)
         assertEquals(false, Want.looseMatch(opt))
         assertEquals(false, Want.completionMatch(opt))
         assertEquals(Match.EXACT, Want.matchType(opt))
@@ -57,7 +57,7 @@ class WantTest {
 
     @Test
     fun testLooseMatch() {
-        val opt = Want(Match.LOOSE)
+        val opt:Int = Want(Match.LOOSE)
         assertEquals(true, Want.looseMatch(opt))
         assertEquals(false, Want.completionMatch(opt))
         assertEquals(Match.LOOSE, Want.matchType(opt))
@@ -65,7 +65,7 @@ class WantTest {
 
     @Test
     fun testCompletionMatch() {
-        val opt = Want(Match.COMPLETION)
+        val opt:Int = Want(Match.COMPLETION)
         assertEquals(true, Want.looseMatch(opt))
         assertEquals(true, Want.completionMatch(opt))
         assertEquals(Match.COMPLETION, Want.matchType(opt))
@@ -73,7 +73,7 @@ class WantTest {
 
     @Test
     fun testLocal_NONE() {
-        val opt = Want(Local.NONE)
+        val opt:Int = Want(Local.NONE)
         assertEquals(false, Want.local(opt))
         assertEquals(false, Want.localREF(opt))
         assertEquals(false, Want.localURI(opt))
@@ -83,7 +83,7 @@ class WantTest {
 
     @Test
     fun testLocal_REF() {
-        val opt = Want(Local.REF)
+        val opt:Int = Want(Local.REF)
         assertEquals(true, Want.local(opt))
         assertEquals(true, Want.localREF(opt))
         assertEquals(false, Want.localURI(opt))
@@ -93,7 +93,7 @@ class WantTest {
 
     @Test
     fun testLocal_Default() {
-        val opt = Want()
+        val opt:Int = Want()
         assertEquals(true, Want.local(opt))
         assertEquals(true, Want.localREF(opt))
         assertEquals(false, Want.localURI(opt))
@@ -103,7 +103,7 @@ class WantTest {
 
     @Test
     fun testLocal_URI() {
-        val opt = Want(Local.URI)
+        val opt:Int = Want(Local.URI)
         assertEquals(true, Want.local(opt))
         assertEquals(false, Want.localREF(opt))
         assertEquals(true, Want.localURI(opt))
@@ -113,7 +113,7 @@ class WantTest {
 
     @Test
     fun testLocal_URL() {
-        val opt = Want(Local.URL)
+        val opt:Int = Want(Local.URL)
         assertEquals(true, Want.local(opt))
         assertEquals(false, Want.localREF(opt))
         assertEquals(false, Want.localURI(opt))
@@ -123,7 +123,7 @@ class WantTest {
 
     @Test
     fun testRemote_NONE() {
-        val opt = Want(Remote.NONE)
+        val opt:Int = Want(Remote.NONE)
         assertEquals(false, Want.remote(opt))
         assertEquals(false, Want.remoteREF(opt))
         assertEquals(false, Want.remoteURI(opt))
@@ -133,7 +133,7 @@ class WantTest {
 
     @Test
     fun testRemote_REF() {
-        val opt = Want(Remote.REF)
+        val opt:Int = Want(Remote.REF)
         assertEquals(true, Want.remote(opt))
         assertEquals(true, Want.remoteREF(opt))
         assertEquals(false, Want.remoteURI(opt))
@@ -143,7 +143,7 @@ class WantTest {
 
     @Test
     fun testRemote_Default() {
-        val opt = Want()
+        val opt:Int = Want()
         assertEquals(true, Want.remote(opt))
         assertEquals(true, Want.remoteREF(opt))
         assertEquals(false, Want.remoteURI(opt))
@@ -153,7 +153,7 @@ class WantTest {
 
     @Test
     fun testRemote_URI() {
-        val opt = Want(Remote.URI)
+        val opt:Int = Want(Remote.URI)
         assertEquals(true, Want.remote(opt))
         assertEquals(false, Want.remoteREF(opt))
         assertEquals(true, Want.remoteURI(opt))
@@ -163,7 +163,7 @@ class WantTest {
 
     @Test
     fun testRemote_URL() {
-        val opt = Want(Remote.URL)
+        val opt:Int = Want(Remote.URL)
         assertEquals(true, Want.remote(opt))
         assertEquals(false, Want.remoteREF(opt))
         assertEquals(false, Want.remoteURI(opt))
@@ -173,7 +173,7 @@ class WantTest {
 
     @Test
     fun testDefaults() {
-        val opt = Want()
+        val opt:Int = Want()
         assertEquals(true, Want.links(opt))
         assertEquals(Links.URL, Want.linksType(opt))
 
@@ -196,7 +196,7 @@ class WantTest {
 
     @Test
     fun testImageLinkRenderer() {
-        val opt = Want(Local.URI, Remote.URI, Links.NONE)
+        val opt:Int = Want(Local.URI, Remote.URI, Links.NONE)
 
         assertEquals(false, Want.links(opt))
         assertEquals(Links.NONE, Want.linksType(opt))
@@ -220,7 +220,7 @@ class WantTest {
 
     @Test
     fun testLinkRenderer() {
-        val opt = Want(Local.URI, Remote.URL, Links.URL)
+        val opt:Int = Want(Local.URI, Remote.URL, Links.URL)
 
         assertEquals(true, Want.links(opt))
         assertEquals(Links.URL, Want.linksType(opt))
@@ -244,7 +244,7 @@ class WantTest {
 
     @Test
     fun testHttpAll() {
-        val opt = Want(Local.URL, Remote.URL, Links.URL)
+        val opt:Int = Want(Local.URL, Remote.URL, Links.URL)
 
         assertEquals(true, Want.links(opt))
         assertEquals(Links.URL, Want.linksType(opt))
@@ -268,21 +268,21 @@ class WantTest {
 
     @Test
     fun test_DupeOptsLinks() {
-        val opt = Want(Links.URL, Links.NONE)
+        val opt:Int = Want(Links.URL, Links.NONE)
     }
 
     @Test
     fun test_DupeOptsMatch() {
-        val opt = Want(Match.EXACT, Match.LOOSE)
+        val opt:Int = Want(Match.EXACT, Match.LOOSE)
     }
 
     @Test
     fun test_DupeOptsLocal() {
-        val opt = Want(Local.REF, Local.NONE)
+        val opt:Int = Want(Local.REF, Local.NONE)
     }
 
     @Test
     fun test_DupeOptsRemote() {
-        val opt = Want(Remote.REF, Remote.NONE)
+        val opt:Int = Want(Remote.REF, Remote.NONE)
     }
 }

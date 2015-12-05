@@ -14,7 +14,7 @@
  */
 package com.vladsch.idea.multimarkdown.util
 
-enum class Severity private constructor(val value: Int) : TestDataAware {
+enum class Severity private constructor(val value: Int) : DataPrinterAware {
     INFO(0), WEAK_WARNING(1), WARNING(2), ERROR(3);
 
     override fun testData(): String = super.testData() + "." + toString()
