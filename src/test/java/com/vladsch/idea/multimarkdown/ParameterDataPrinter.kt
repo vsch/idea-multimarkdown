@@ -14,14 +14,16 @@
  */
 package com.vladsch.idea.multimarkdown
 
+import com.vladsch.idea.multimarkdown.util.BitField
 import com.vladsch.idea.multimarkdown.util.Severity
-import java.lang.reflect.Constructor
+import com.vladsch.idea.multimarkdown.util.TestDataAware
 
 fun dataColText(col: Any?, padStart: Int = 0, padEnd: Int = 0): String {
     val text: String
     if (col == null) text = "null";
     else {
         when (col) {
+            is TestDataAware -> text = col.testData()
             is Array<*> -> {
                 var colText = "";
                 for (elem in col) {
@@ -31,7 +33,6 @@ fun dataColText(col: Any?, padStart: Int = 0, padEnd: Int = 0): String {
                 text = "arrayOf<String>($colText)";
             }
             is Boolean -> text = col.toString()
-            is Severity -> text = "Severity."+col.toString()
             is Int -> text = col.toString()
             is kotlin.reflect.KCallable<*> -> text = "::" + col.toString().substringAfterLast('.')
             else -> text = "\"$col\"";
