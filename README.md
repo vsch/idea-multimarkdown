@@ -24,6 +24,13 @@ I will be updating the source for the latest release over the weekend, once I ha
 
 If you haven't used Kotlin yet, do yourself a favor and give it a try. It is a joy to work with. Much more effective and productive than Java.
 
+Plugins that are a great compliment to idea-multimarkdown
+---------------------------------------------------------
+
+[Pipe Table Formatter](https://github.com/anton-dev-ua/PipeTableFormatter) A plugin that is great for formatting tables. I use to pretty up the tables and find it a great compliment.
+
+[.gitignore](http://hsz.mobi) to add .gitignore file brains to the IDE
+
 The Background
 --------------
 
