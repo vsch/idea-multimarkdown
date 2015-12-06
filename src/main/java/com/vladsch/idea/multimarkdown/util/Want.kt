@@ -51,6 +51,7 @@ package com.vladsch.idea.multimarkdown.util
  * Local and Remote can be:
  *       NONE - we don't want these files, ie. Local.NONE will eliminate any files not under VCS
  *       REF - file reference, used to derive a relative address
+ *       REL - a link with relative address
  *       URI - a link with file:// followed by file path, used to pass to browser for local file
  *       URL - a link with https:// to the remote repo file
  *
@@ -85,18 +86,20 @@ object Want : DataPrinterAware {
     enum class FileType(val flags: Int) {
         NONE(0),
         REF(1),
-        URI(2),
-        URL(3);
+        REL(2),
+        URI(3),
+        URL(4);
 
         internal val unboxed: Int get() = FileType.unboxed(flags)
 
-        companion object : EnumBitField<FileType>(2) {
+        companion object : EnumBitField<FileType>(3) {
             override fun boxed(flags: Int): FileType {
                 val masked = flags(flags)
                 return when (masked) {
                     REF.flags -> REF
                     URI.flags -> URI
                     URL.flags -> URL
+                    REL.flags -> REL
                     else -> NONE
                 }
             }
@@ -106,6 +109,7 @@ object Want : DataPrinterAware {
     enum class LocalType(val type: FileType) {
         NONE(FileType.NONE),
         REF(FileType.REF),
+        REL(FileType.REL),
         URI(FileType.URI),
         URL(FileType.URL);
 
@@ -122,6 +126,7 @@ object Want : DataPrinterAware {
     enum class RemoteType(val type: FileType) {
         NONE(FileType.NONE),
         REF(FileType.REF),
+        REL(FileType.REL),
         URI(FileType.URI),
         URL(FileType.URL);
 
@@ -137,8 +142,9 @@ object Want : DataPrinterAware {
 
     enum class MatchType(val flags: Int) {
         EXACT(0),
-        LOOSE(1),              // must be single bit
-        COMPLETION(2);         // must be single bit
+        LOOSE(1),
+        COMPLETION(2),
+        LOOSE_COMPLETION(3);
 
         internal val unboxed: Int get() = unboxed(flags)
 
@@ -148,6 +154,7 @@ object Want : DataPrinterAware {
                 return when (masked) {
                     LOOSE.flags -> LOOSE
                     COMPLETION.flags -> COMPLETION
+                    LOOSE_COMPLETION.flags -> LOOSE_COMPLETION
                     else -> EXACT
                 }
             }
@@ -210,17 +217,20 @@ object Want : DataPrinterAware {
     // @formatter:off
     object RemoteNone : Options.Remotes() { override val unboxed:RemoteType get() = RemoteType.NONE }
     object RemoteRef : Options.Remotes() { override val unboxed:RemoteType get() = RemoteType.REF }
+    object RemoteRel : Options.Remotes() { override val unboxed:RemoteType get() = RemoteType.REL }
     object RemoteUri : Options.Remotes() { override val unboxed:RemoteType get() = RemoteType.URI }
     object RemoteUrl : Options.Remotes() { override val unboxed:RemoteType get() = RemoteType.URL }
 
     object LocalNone : Options.Locals() { override val unboxed:LocalType get() = LocalType.NONE }
     object LocalRef : Options.Locals() { override val unboxed:LocalType get() = LocalType.REF }
+    object LocalRel : Options.Locals() { override val unboxed:LocalType get() = LocalType.REL }
     object LocalUri : Options.Locals() { override val unboxed:LocalType get() = LocalType.URI }
     object LocalUrl : Options.Locals() { override val unboxed:LocalType get() = LocalType.URL }
 
     object MatchExact : Options.Matches() { override val unboxed:MatchType get() = MatchType.EXACT }
     object MatchLoose : Options.Matches() { override val unboxed:MatchType get() = MatchType.LOOSE }
     object MatchCompletion : Options.Matches() { override val unboxed:MatchType get() = MatchType.COMPLETION }
+    object MatchLooseCompletion : Options.Matches() { override val unboxed:MatchType get() = MatchType.LOOSE_COMPLETION }
 
     object LinksNone : Options.Links() { override val unboxed:LinkType get() = LinkType.NONE }
     object LinksUrl : Options.Links() { override val unboxed:LinkType get() = LinkType.URL }
@@ -233,7 +243,7 @@ object Want : DataPrinterAware {
     fun unboxed(vararg options: Options?): Int {
         var remote: Options.Remotes? = null
         var local: Options.Locals? = null
-        var matches  = arrayListOf<Options.Matches>()
+        var match: Options.Matches? = null
         var links: Options.Links? = null
         for (option in options) {
             if (option != null) {
@@ -247,11 +257,8 @@ object Want : DataPrinterAware {
                         local = option
                     }
                     is Options.Matches -> {
-                        // allow for completion and loose to be used
-                        if (matches.size != 0 && !(option == MatchLoose && matches[0] == MatchCompletion || option == MatchCompletion && matches[0] == MatchLoose )) {
-                            assertNull(matches[0])
-                        }
-                        matches.add(option)
+                        assertNull(match)
+                        match = option
                     }
                     is Options.Links -> {
                         assertNull(links)
@@ -265,7 +272,7 @@ object Want : DataPrinterAware {
 
         if (local != null || remote == null || remote == RemoteNone) flags = flags or (local?.unboxed ?: LocalRef.unboxed).unboxed
         if (remote != null || local == null || local == LocalNone) flags = flags or (remote?.unboxed ?: RemoteRef.unboxed).unboxed
-        flags = flags or if (matches.size == 0) MatchType.EXACT.unboxed else matches.fold(0) { flags, match -> flags or match.unboxed.unboxed }
+        flags = flags or (match?.unboxed ?: MatchExact.unboxed).unboxed
 
         // this one only gets a default if nothing but match is provided
         if (links != null || ((local == null || local == LocalNone) && (remote == null || remote == RemoteNone))) flags = flags or (links?.unboxed ?: LinksUrl.unboxed).unboxed
@@ -281,7 +288,7 @@ object Want : DataPrinterAware {
         if (links(options)) optionList.add(linksType(options).testData())
         optionList.add(matchType(options).testData())
 
-        val result = "Want(" + optionList.splice(",") + ")"
+        val result = "Want(" + optionList.splice(", ") + ")"
         return result
     }
 
@@ -292,15 +299,18 @@ object Want : DataPrinterAware {
     fun matchType(options: Int): Options.Matches = Match.boxed(MatchType.boxed(options))
     fun linksType(options: Int): Options.Links = Links.boxed(LinkType.boxed(options))
     fun exactMatch(options: Int): Boolean = MatchType.unboxedFlags(options) == MatchType.EXACT.unboxed
-    fun looseMatch(options: Int): Boolean = MatchType.unboxedFlags(options) and MatchType.LOOSE.unboxed != 0
-    fun completionMatch(options: Int): Boolean = MatchType.unboxedFlags(options) and MatchType.COMPLETION.unboxed != 0
+    fun looseMatch(options: Int): Boolean = MatchType.unboxedFlags(options) == MatchType.LOOSE.unboxed
+    fun completionMatch(options: Int): Boolean = MatchType.unboxedFlags(options) == MatchType.COMPLETION.unboxed
+    fun looseCompletionMatch(options: Int): Boolean = MatchType.unboxedFlags(options) == MatchType.LOOSE_COMPLETION.unboxed
     fun links(options: Int): Boolean = LinkType.unboxedFlags(options) == LinkType.URL.unboxed
     fun local(options: Int): Boolean = LocalType.unboxedFlags(options) != LocalType.NONE.unboxed
     fun localREF(options: Int): Boolean = LocalType.unboxedFlags(options) == LocalType.REF.unboxed
+    fun localREL(options: Int): Boolean = LocalType.unboxedFlags(options) == LocalType.REL.unboxed
     fun localURI(options: Int): Boolean = LocalType.unboxedFlags(options) == LocalType.URI.unboxed
     fun localURL(options: Int): Boolean = LocalType.unboxedFlags(options) == LocalType.URL.unboxed
     fun remote(options: Int): Boolean = RemoteType.unboxedFlags(options) != RemoteType.NONE.unboxed
     fun remoteREF(options: Int): Boolean = RemoteType.unboxedFlags(options) == RemoteType.REF.unboxed
+    fun remoteREL(options: Int): Boolean = RemoteType.unboxedFlags(options) == RemoteType.REL.unboxed
     fun remoteURI(options: Int): Boolean = RemoteType.unboxedFlags(options) == RemoteType.URI.unboxed
     fun remoteURL(options: Int): Boolean = RemoteType.unboxedFlags(options) == RemoteType.URL.unboxed
 }
@@ -308,11 +318,13 @@ object Want : DataPrinterAware {
 object Local {
     @JvmStatic val NONE: Want.Options.Locals get() = Want.LocalNone
     @JvmStatic val REF: Want.Options.Locals get() = Want.LocalRef
+    @JvmStatic val REL: Want.Options.Locals get() = Want.LocalRel
     @JvmStatic val URI: Want.Options.Locals get() = Want.LocalUri
     @JvmStatic val URL: Want.Options.Locals get() = Want.LocalUrl
 
     fun boxed(fileType: Want.FileType): Want.Options.Locals {
         return when (fileType) {
+            Want.FileType.REL -> REL
             Want.FileType.REF -> REF
             Want.FileType.URI -> URI
             Want.FileType.URL -> URL
@@ -324,12 +336,14 @@ object Local {
 object Remote {
     @JvmStatic val NONE: Want.Options.Remotes get() = Want.RemoteNone
     @JvmStatic val REF: Want.Options.Remotes get() = Want.RemoteRef
+    @JvmStatic val REL: Want.Options.Remotes get() = Want.RemoteRel
     @JvmStatic val URI: Want.Options.Remotes get() = Want.RemoteUri
     @JvmStatic val URL: Want.Options.Remotes get() = Want.RemoteUrl
 
     fun boxed(fileType: Want.FileType): Want.Options.Remotes {
         return when (fileType) {
             Want.FileType.REF -> REF
+            Want.FileType.REL -> REL
             Want.FileType.URI -> URI
             Want.FileType.URL -> URL
             else -> NONE
@@ -341,11 +355,13 @@ object Match {
     @JvmStatic val EXACT: Want.Options.Matches get() = Want.MatchExact
     @JvmStatic val LOOSE: Want.Options.Matches get() = Want.MatchLoose
     @JvmStatic val COMPLETION: Want.Options.Matches get() = Want.MatchCompletion
+    @JvmStatic val LOOSE_COMPLETION: Want.Options.Matches get() = Want.MatchLooseCompletion
 
     fun boxed(fileType: Want.MatchType): Want.Options.Matches {
         return when (fileType) {
             Want.MatchType.LOOSE -> LOOSE
             Want.MatchType.COMPLETION -> COMPLETION
+            Want.MatchType.LOOSE_COMPLETION -> LOOSE_COMPLETION
             else -> EXACT
         }
     }

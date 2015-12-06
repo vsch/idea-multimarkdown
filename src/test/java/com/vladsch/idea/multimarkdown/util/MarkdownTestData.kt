@@ -16,6 +16,7 @@ package com.vladsch.idea.multimarkdown.util
 
 import com.intellij.openapi.project.Project
 import com.vladsch.idea.multimarkdown.TestUtils
+import com.vladsch.idea.multimarkdown.dataColText
 import com.vladsch.idea.multimarkdown.printData
 import java.util.*
 
@@ -498,7 +499,7 @@ fun exactMatch(list: List<String>, other: List<String>): Boolean {
     return false
 }
 
-fun selectExactList(list: List<String>, availableLists: Map<List<String>, String>, availablePermutations: Map<(List<String>) -> List<String>, String>): Any? {
+fun selectExactList(list: List<String>, availableLists: Map<List<String>, String>, availablePermutations: Map<(List<String>) -> List<String>, String>): String? {
     for (other in availableLists.keys) {
         if (exactMatch(list, other)) return availableLists[other]
     }
@@ -508,7 +509,7 @@ fun selectExactList(list: List<String>, availableLists: Map<List<String>, String
             if (exactMatch(list, perm(other))) return availableLists[other] + availablePermutations[perm]
         }
     }
-    return list
+    return dataColText(null, null, list)
 }
 
 fun addCompletionData(linkRef: LinkRef, matchOptions: Int, expectedResult: Any?) {
@@ -532,6 +533,10 @@ fun addCompletionData(linkRef: LinkRef, matchOptions: Int, expectedResult: Any?)
             if (expectedResult as? List<String> != null) selectExactList(expectedResult as List<String>, availableLists, availablePermutations) else expectedResult
     )
     data.add(result)
+}
+
+fun selectExactList(expectedResult:Any?):String {
+    return if (expectedResult as? List<String> != null) selectExactList(expectedResult as List<String>, availableLists, availablePermutations) ?: "null" else "null"
 }
 
 fun validateResults(message: String, expected: List<String>, actual: List<String>, linkRef: LinkRef, matchOptions: Int) {
