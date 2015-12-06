@@ -98,7 +98,7 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
                     break;
             }
 
-            PathInfo resolvedTarget = resolver.resolve(targetRef, linkType != LinkType.Image && MultiMarkdownPlugin.isLicensed() ? Want.INSTANCE.invoke(Remote.getURL(), Local.getURI()) : Want.INSTANCE.invoke(Remote.getURI(), Local.getURI()), null);
+            PathInfo resolvedTarget = resolver.resolve(targetRef, linkType != LinkType.Image && MultiMarkdownPlugin.isLicensed() ? Want.INSTANCE.invoke(Remote.getURL(), Local.getURI(), Links.getURL()) : Want.INSTANCE.invoke(Remote.getURI(), Local.getURI()), null);
             if (resolvedTarget != null) {
                 assert resolvedTarget.isURI() && resolvedTarget instanceof LinkRef && (!resolvedTarget.isLocal() || ((LinkRef) resolvedTarget).isResolved()) : "Expected URI only target, got " + resolvedTarget;
 
