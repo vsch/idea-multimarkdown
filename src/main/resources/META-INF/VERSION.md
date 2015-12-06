@@ -12,6 +12,7 @@
 * Fix: absolute URL's to raw files would convert to blob/ access relative links 
 * Fix: relative links to raw files would convert to blob/ access absolute URL's 
 * Fix: was offering to change explicit link to  wiki link to files not in the wiki. 
+* Fix: absolute links that are outside of the remote repo URL no longer show unresolved 
 
 ### 1.2.3 - Bug Fixes and Enhancements
 

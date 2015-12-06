@@ -152,9 +152,14 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
         return processMatchOptions(linkRef_, targetRef, opts)
     }
 
+    fun isExternalUnchecked(linkRef: LinkRef):Boolean {
+        val vcsRoot = projectResolver.getVcsRoot(linkRef.containingFile)
+        return linkRef.isExternal && (vcsRoot == null || !linkRef.filePath.toLowerCase().startsWith(vcsRoot.baseUrl.toLowerCase()))
+    }
+
     override fun multiResolve(linkRef: LinkRef, options: Int, inList: List<PathInfo>?): List<PathInfo> {
         assertContainingFile(linkRef)
-        var relLink = normalizedLinkRef(linkRef)
+        var relLink = linkRef
         var opts = options
         if (relLink.isURI) {
             val relPath = uriToRelativeLink(relLink)
@@ -728,7 +733,8 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                     var targetFilePath = gitHubVcsRoot.mainRepoBaseDir.suffixWith('/') + normLinkRef.linkToFile(normLinkRef.filePath.substring(gitHubRepoBaseUrl.suffixWith('/').length))
                     val containingFilePath = logicalRemotePath(containingFile, useWikiPageActualLocation = false, isSourceRef = true, isImageLinkRef = normLinkRef is ImageLinkRef, branchOrTag = null).filePath.suffixWith('/')
 
-                    val relLink = normLinkRef.replaceFilePath(PathInfo.relativePath(containingFilePath, targetFilePath), false)
+                    val fullPath = PathInfo.relativePath(containingFilePath, targetFilePath)
+                    val relLink = normLinkRef.replaceFilePath(fullPath, false)
                     return relLink
                 }
             }

@@ -98,19 +98,21 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
                     break;
             }
 
-            PathInfo resolvedTarget = resolver.resolve(targetRef, linkType != LinkType.Image && MultiMarkdownPlugin.isLicensed() ? Want.INSTANCE.invoke(Remote.getURL(), Local.getURI(), Links.getURL()) : Want.INSTANCE.invoke(Remote.getURI(), Local.getURI()), null);
-            if (resolvedTarget != null) {
-                assert resolvedTarget.isURI() && resolvedTarget instanceof LinkRef && (!resolvedTarget.isLocal() || ((LinkRef) resolvedTarget).isResolved()) : "Expected URI only target, got " + resolvedTarget;
+            if (!resolver.isExternalUnchecked(targetRef)) {
+                PathInfo resolvedTarget = resolver.resolve(targetRef, linkType != LinkType.Image && MultiMarkdownPlugin.isLicensed() ? Want.INSTANCE.invoke(Remote.getURL(), Local.getURI(), Links.getURL()) : Want.INSTANCE.invoke(Remote.getURI(), Local.getURI()), null);
+                if (resolvedTarget != null) {
+                    assert resolvedTarget.isURI() && resolvedTarget instanceof LinkRef && (!resolvedTarget.isLocal() || ((LinkRef) resolvedTarget).isResolved()) : "Expected URI only target, got " + resolvedTarget;
 
-                if (!(new PathInfo(url).isURI())) {
-                    FileRef fileRef = resolvedTarget.isLocal() ? ((LinkRef) resolvedTarget).getTargetRef() : null;
-                    localOnly[0] = fileRef instanceof ProjectFileRef && !((ProjectFileRef) fileRef).isUnderVcs();
-                    return linkType == LinkType.Image ? resolvedTarget.getFilePath() : ((LinkRef) resolvedTarget).getFilePathWithAnchor();
-                } else {
-                    return url;
+                    if (!(new PathInfo(url).isURI())) {
+                        FileRef fileRef = resolvedTarget.isLocal() ? ((LinkRef) resolvedTarget).getTargetRef() : null;
+                        localOnly[0] = fileRef instanceof ProjectFileRef && !((ProjectFileRef) fileRef).isUnderVcs();
+                        return linkType == LinkType.Image ? resolvedTarget.getFilePath() : ((LinkRef) resolvedTarget).getFilePathWithAnchor();
+                    } else {
+                        return url;
+                    }
                 }
+                return null;
             }
-            return null;
         }
         return url;
     }

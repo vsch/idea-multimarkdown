@@ -184,8 +184,8 @@ public class MultiMarkdownReference extends PsiReferenceBase<MultiMarkdownNamedE
                         if (pathInfos.size() > 0) {
                             List<ResolveResult> results = new ArrayList<ResolveResult>();
                             for (PathInfo pathInfo : pathInfos) {
-                                if (pathInfo instanceof ProjectFileRef) {
-                                    PsiFile psiFile = ((ProjectFileRef) pathInfo).getPsiFile();
+                                if (pathInfo instanceof FileRef) {
+                                    PsiFile psiFile = pathInfo instanceof  ProjectFileRef ? ((ProjectFileRef) pathInfo).getPsiFile() : ((FileRef) pathInfo).psiFile(myElement.getProject());
                                     if (psiFile != null) {
                                         results.add(new PsiElementResolveResult(psiFile));
                                     }

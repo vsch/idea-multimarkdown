@@ -91,7 +91,7 @@ public class MultiMarkdownAnnotator implements Annotator {
         Project project = element.getProject();
         GitHubVcsRoot gitHubVcsRoot = resolver.getProjectResolver().getVcsRoot(linkRefInfo.getContainingFile());
 
-        if (linkRefInfo.isExternal() && (gitHubVcsRoot == null || !linkRefInfo.getFilePath().toLowerCase().startsWith(gitHubVcsRoot.getBaseUrl().toLowerCase()))) {
+        if (resolver.isExternalUnchecked(linkRefInfo)) {
             // not in the same repo, or no repo, we don't handle this, yet
             return;
         }
