@@ -159,7 +159,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
 
     override fun multiResolve(linkRef: LinkRef, options: Int, inList: List<PathInfo>?): List<PathInfo> {
         assertContainingFile(linkRef)
-        var relLink = linkRef
+        var relLink = normalizedLinkRef(linkRef)
         var opts = options
         if (relLink.isURI) {
             val relPath = uriToRelativeLink(relLink)
