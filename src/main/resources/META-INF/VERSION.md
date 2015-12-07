@@ -4,6 +4,7 @@
 
 - Fix: pre-licensing behavior for Basic edition relative links and wiki links to open file in IDE when clicking on a link, was not opening files  
 - Fix: use BrowserUtil for launching URL in browser instead of Java Desktop 
+- Fix: line markers with empty elements would show the completion file list as targets. 
 
 #### Enhanced Edition
 

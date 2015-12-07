@@ -49,12 +49,8 @@ public class MultiMarkdownLineMarkerProvider extends RelatedItemLineMarkerProvid
 
     @Override
     protected void collectNavigationMarkers(@NotNull final PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
-        if (element instanceof MultiMarkdownWikiLinkRef || element instanceof MultiMarkdownLinkRef) {
+        if (!element.getText().trim().isEmpty() && (element instanceof MultiMarkdownWikiLinkRef || element instanceof MultiMarkdownLinkRef)) {
             PsiReference psiReference = element.getReference();
-            //MultiMarkdownFile[] markdownFiles = MultiMarkdownPlugin.getProjectComponent(element.getProject()).getFileReferenceList().query()
-            //        .matchWikiRef((MultiMarkdownWikiLinkRef) element)
-            //        .accessibleWikiPageFiles()
-            //        ;
 
             // incompleteCode in our case means looseMatch criteria, otherwise precise match as per repo rules
             final ResolveResult[] results = psiReference != null ? ((MultiMarkdownReference) psiReference).multiResolve(false) : null;
