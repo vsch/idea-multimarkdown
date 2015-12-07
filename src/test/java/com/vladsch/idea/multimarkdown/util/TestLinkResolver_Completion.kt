@@ -51,7 +51,7 @@ class TestLinkResolver_Completion constructor(val rowId: Int, val containingFile
         fun data(): Collection<Array<Any?>> {
             val data = completionData
             val amendedData = ArrayList<Array<Any?>>()
-            val cleanData = true
+            val cleanData = false
 
             var i = 0
             for (row in data) {

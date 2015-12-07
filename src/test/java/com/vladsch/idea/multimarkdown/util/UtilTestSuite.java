@@ -36,7 +36,8 @@ import org.junit.runners.Suite;
         TestLinkResolver_Basic_wiki_Home.class,
         TestLinkResolver_Basic_wiki_normal_file.class,
         TestLinkResolver_Basic_Readme.class,
-        TestLinkResolver_Completion.class
+        TestLinkResolver_Completion.class,
+        LexParserTest.class
 })
 public class UtilTestSuite {
 }

@@ -26,7 +26,6 @@ import com.intellij.psi.tree.IElementType;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pegdown.ast.RootNode;
 
 public class MultiMarkdownLexer extends Lexer {
     private static final Logger logger = Logger.getLogger(MultiMarkdownLexer.class);
@@ -36,8 +35,8 @@ public class MultiMarkdownLexer extends Lexer {
     protected int lexemeIndex = 0;
     protected int currentOffset = 0;
     protected CharSequence buffer = null;
-    protected MultiMarkdownLexParser.LexerToken lexerToken = null;
-    protected MultiMarkdownLexParser.LexerToken[] lexerTokens = null;
+    protected LexerToken lexerToken = null;
+    protected LexerToken[] lexerTokens = null;
     protected Integer pegdownExtensions = null;
     protected Integer parsingTimeout = null;
 

@@ -27,10 +27,9 @@ public class MultiMarkdownLexParserManager {
     private static final boolean disable = true;
 
     private static final ThreadLocal<ParsingInfo> lastParsingResult = new ThreadLocal<ParsingInfo>();
-    public static final int GITHUB_WIKI_LINKS = 0x80000000;
 
     public static RootNode parseMarkdownRoot(@NotNull final CharSequence buffer, @Nullable Integer pegdownExtensions, @Nullable Integer parsingTimeout) {
-        int actualPegdownExtensions = (pegdownExtensions != null ? pegdownExtensions : MultiMarkdownGlobalSettings.getInstance().getExtensionsValue()) | (MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue() ? GITHUB_WIKI_LINKS : 0);
+        int actualPegdownExtensions = (pegdownExtensions != null ? pegdownExtensions : MultiMarkdownGlobalSettings.getInstance().getExtensionsValue());
 
         if (!disable) {
             final ParsingInfo info = lastParsingResult.get();
@@ -51,8 +50,8 @@ public class MultiMarkdownLexParserManager {
 
     public static
     @Nullable
-    MultiMarkdownLexParser.LexerToken[] parseMarkdown(@NotNull final CharSequence buffer, @Nullable Integer pegdownExtensions, @Nullable Integer parsingTimeout) {
-        int actualPegdownExtensions = (pegdownExtensions != null ? pegdownExtensions : MultiMarkdownGlobalSettings.getInstance().getExtensionsValue()) | (MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue() ? GITHUB_WIKI_LINKS : 0);
+    LexerToken[] parseMarkdown(@NotNull final CharSequence buffer, @Nullable Integer pegdownExtensions, @Nullable Integer parsingTimeout) {
+        int actualPegdownExtensions = (pegdownExtensions != null ? pegdownExtensions : MultiMarkdownGlobalSettings.getInstance().getExtensionsValue());
         RootNode rootNode = null;
 
         if (!disable) {
@@ -76,7 +75,7 @@ public class MultiMarkdownLexParserManager {
         }
 
         MultiMarkdownLexParser lexParser = new MultiMarkdownLexParser();
-        MultiMarkdownLexParser.LexerToken[] lexerTokens = lexParser.parseMarkdown(rootNode, currentChars, actualPegdownExtensions);
+        LexerToken[] lexerTokens = lexParser.parseMarkdown(rootNode, currentChars, actualPegdownExtensions);
 
         if (!disable) lastParsingResult.set(new ParsingInfo(buffer, actualPegdownExtensions, rootNode, lexerTokens, true));
         return lexerTokens;
@@ -85,12 +84,12 @@ public class MultiMarkdownLexParserManager {
     private static class ParsingInfo {
         @NotNull final CharSequence buffer;
         @Nullable final RootNode rootNode;
-        @Nullable MultiMarkdownLexParser.LexerToken[] lexerTokens;
+        @Nullable LexerToken[] lexerTokens;
         final int bufferHash;
         final int pegdownExtensions;
         final boolean hadLexerTokens;
 
-        public ParsingInfo(@NotNull CharSequence buffer, int pegdownExtensions, @Nullable RootNode rootNode, @Nullable MultiMarkdownLexParser.LexerToken[] lexerTokens, boolean hadLexerTokens) {
+        public ParsingInfo(@NotNull CharSequence buffer, int pegdownExtensions, @Nullable RootNode rootNode, @Nullable LexerToken[] lexerTokens, boolean hadLexerTokens) {
             this.buffer = buffer;
             this.bufferHash = buffer.hashCode();
             this.rootNode = rootNode;

@@ -22,7 +22,6 @@ import java.util.*
 import kotlin.test.assertEquals
 
 @RunWith(value = Parameterized::class)
-
 class WantBitFieldTest constructor(val rowId: Int, val bits: Int, val flags: Int, val boxed: Int, val unboxed: Int, val prevField: BitField?) {
     val bitField: BitField
 

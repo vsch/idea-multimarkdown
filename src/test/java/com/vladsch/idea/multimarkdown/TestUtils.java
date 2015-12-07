@@ -20,8 +20,10 @@
  */
 package com.vladsch.idea.multimarkdown;
 
+import com.vladsch.idea.multimarkdown.parser.MultiMarkdownLexParser;
 import com.vladsch.idea.multimarkdown.spellchecking.Suggestion;
 import com.vladsch.idea.multimarkdown.spellchecking.SuggestionList;
+import com.vladsch.idea.multimarkdown.util.DataPrinterAware;
 import com.vladsch.idea.multimarkdown.util.InspectionResult;
 import com.vladsch.idea.multimarkdown.util.PathInfo;
 import org.junit.internal.ArrayComparisonFailure;
@@ -80,6 +82,10 @@ public class TestUtils {
 
     public static void compareOrderedLists(String message, String[] expected, String[] actual) {
         new OrderedStringComparison().arrayEquals(message, expected, actual);
+    }
+
+    public static <T> void compareOrderedLists(String message, T[] expected, T[] actual) {
+        new OrderedComparableComparison<T>().arrayEquals(message, expected, actual);
     }
 
     public static void compareOrderedLists(String message, String[] expected, List<String> actual) {
@@ -214,6 +220,17 @@ public class TestUtils {
         }
     }
 
+    public static class OrderedComparableComparison<T> extends OrderedComparisonCriteria<Comparable<T>> {
+        @Override
+        protected void assertElementsAreEqual(Comparable<T> o1, Comparable<T> o2) {
+            if (o1.compareTo((T)o2) != 0) failNotEquals("Strings not equal", o1, o2);
+        }
+        @Override
+        protected boolean elementsAreEqual(Comparable<T> o1, Comparable<T> o2) {
+            return o1.compareTo((T)o2) == 0;
+        }
+    }
+
     public static class OrderedStringComparison extends OrderedComparisonCriteria<String> {
         @Override
         protected boolean elementsAreEqual(String o1, String o2) {
@@ -315,6 +332,7 @@ public class TestUtils {
             builder.append("  ");
             if (elem == null) builder.append("null");
             else if (elem instanceof String) builder.append("\"").append(elem.toString().replace("\"", "\\\"")).append("\"");
+            else if (elem instanceof DataPrinterAware) builder.append(((DataPrinterAware) elem).testData());
             else builder.append(elem.toString());
             if (i+1 < length) builder.append(',');
             builder.append('\n');

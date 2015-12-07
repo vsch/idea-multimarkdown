@@ -27,6 +27,7 @@ import com.intellij.openapi.Disposable;
 import com.intellij.openapi.components.*;
 import com.intellij.util.ui.UIUtil;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
+import com.vladsch.idea.multimarkdown.parser.MultiMarkdownLexParser;
 import com.vladsch.idea.multimarkdown.util.ListenerNotifier;
 import org.apache.commons.codec.Charsets;
 import org.jdom.Element;
@@ -364,7 +365,7 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
 
     public int getExtensionsValue() {
         int options = settings.getExtensionsValue();
-        return options | Extensions.INTELLIJ_DUMMY_IDENTIFIER | ((options & Extensions.ANCHORLINKS) != 0 ? Extensions.EXTANCHORLINKS : 0);
+        return options | Extensions.INTELLIJ_DUMMY_IDENTIFIER | ((options & Extensions.ANCHORLINKS) != 0 ? Extensions.EXTANCHORLINKS : 0) | (githubWikiLinks.getValue() ? MultiMarkdownLexParser.GITHUB_WIKI_LINKS : 0);
     }
 
     public void addListener(@NotNull final SettingsListener<MultiMarkdownGlobalSettings> listener) {

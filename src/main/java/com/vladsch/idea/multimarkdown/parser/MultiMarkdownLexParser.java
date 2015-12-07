@@ -26,10 +26,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
-import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.pegdown.PegDownProcessor;
 import org.pegdown.ast.*;
 
 import java.util.*;
@@ -42,7 +39,8 @@ import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.*;
  * Lexer/Parser Combination that uses pegdown behind the scenes to do the heavy lifting
  * here we just fake everything.
  */
-public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
+public class MultiMarkdownLexParser {
+    public static final int GITHUB_WIKI_LINKS = 0x80000000; //implements Lexer, PsiParser {
     private static final Logger LOGGER = Logger.getInstance(MultiMarkdownLexParser.class);
 
     private int currentStringLength;
@@ -222,18 +220,16 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         // that way only the bullets will be left to punch out  the block quote
         addExclusion(BLOCK_QUOTE, LIST_ITEM);
     }
-
-    public
-    @Nullable
-    LexerToken[] parseMarkdown(final RootNode rootNode, char[] currentChars, int pegdownExtensions) {
+    @NotNull
+    public LexerToken[] parseMarkdown(final RootNode rootNode, char[] currentChars, int pegdownExtensions) {
         assert !parseCalled;
-        if (rootNode == null) return null;
+        if (rootNode == null) return new LexerToken[0];
 
         this.currentChars = currentChars;
         this.currentStringLength = currentChars.length;
 
         // process tokens right away and return them
-        this.githubWikiLinks = (pegdownExtensions & MultiMarkdownLexParserManager.GITHUB_WIKI_LINKS) != 0;
+        this.githubWikiLinks = (pegdownExtensions & GITHUB_WIKI_LINKS) != 0;
         MarkdownASTVisitor visitor = new MarkdownASTVisitor();
         rootNode.accept(visitor);
         ArrayList<LexerToken> lexerTokens = visitor.getTokens();
@@ -389,57 +385,6 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
             }
         }
         return start;
-    }
-
-    protected static class LexerToken implements Comparable<LexerToken> {
-
-        @Override
-        public int compareTo(@NotNull LexerToken o) {
-            return compare(o);
-        }
-
-        private final Range range;
-        private final IElementType elementType;
-        private int nesting;
-
-        public LexerToken(final Range range, final IElementType elementType) {
-            this.range = range;
-            this.elementType = elementType;
-            this.nesting = Integer.MAX_VALUE;
-        }
-
-        public LexerToken(int start, int end, final IElementType elementType) {
-            this.range = new Range(start, end);
-            this.elementType = elementType;
-            this.nesting = Integer.MAX_VALUE;
-        }
-
-        public LexerToken(final Range range, final IElementType elementType, int nesting) {
-            this.range = range;
-            this.elementType = elementType;
-            this.nesting = nesting;
-        }
-
-        public Range getRange() { return range; }
-
-        public IElementType getElementType() { return elementType; }
-
-        public String toString() {
-            return "MultiMarkdownLexParser$LexerToken" + range.toString() + " " + elementType.toString();
-        }
-
-        public boolean isWhiteSpace() { return elementType == TokenType.WHITE_SPACE; }
-
-        public boolean isSkippedSpace() { return elementType == NONE; }
-
-        public int compare(LexerToken that) {
-            int rangeCompare = this.range.compare(that.range);
-            return rangeCompare != 0 ? rangeCompare : (this.nesting < that.nesting ? -1 : (this.nesting > that.nesting ? 1 : 0));
-        }
-
-        public boolean doesExtend(LexerToken that) {
-            return this.elementType == that.elementType && this.range.isAdjacent(that.range);
-        }
     }
 
     protected void pushRange(Range range, IElementType type) {
@@ -740,28 +685,119 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
             }
         }
 
+        class CharSeq implements CharSequence {
+            protected final int start;
+            protected final int end;
+
+            public CharSeq(int start, int end) {
+                this.start = start;
+                this.end = end > currentStringLength ? currentStringLength : end;
+            }
+
+            public CharSeq(Node node) {
+                this.start = node.getStartIndex();
+                this.end = node.getEndIndex() > currentStringLength ? currentStringLength : node.getEndIndex();
+            }
+
+            @Override
+            public int length() {
+                return end - start;
+            }
+
+            @Override
+            public char charAt(int index) {
+                return currentChars[start + index];
+            }
+
+            @Override
+            public CharSequence subSequence(int start, int end) {
+                return new CharSeq(this.start + start, this.start + end);
+            }
+
+            @NotNull
+            @Override
+            public String toString() {
+                String me = "";
+                for (int i = start; i < end; i++) {
+                    me += currentChars[i];
+                }
+                return me;
+            }
+        }
+
+        void addToken(Node node, IElementType nodeElementType, Matcher matcher, IElementType... elementTypes) {
+            if (matcher.hitEnd() && matcher.groupCount() == elementTypes.length) {
+                int i = 1;
+                for (IElementType elementType : elementTypes) {
+                    if (matcher.group(i) != null) {
+                        addToken(matcher.start(i) + node.getStartIndex(), matcher.end(i) + node.getStartIndex(), elementTypes[i - 1]);
+                    }
+                    i++;
+                }
+            } else {
+                // not good, just do the node
+                assert matcher.hitEnd() : node.toString() + " matcher did not match full node";
+                if (matcher.hitEnd()) assert matcher.groupCount() == elementTypes.length : node.toString() + " matcher groups don't match elementTypes";
+                addToken(node, nodeElementType);
+            }
+        }
+
+        void addTokenWithChildren(Node node, IElementType nodeElementType, int childGroup, Matcher matcher, IElementType... elementTypes) {
+            if (matcher.hitEnd() && matcher.groupCount() == elementTypes.length) {
+                int i = 1;
+                for (IElementType elementType : elementTypes) {
+                    if (matcher.group(i) != null) {
+                        if (i == childGroup) {
+                            addTokenWithChildren(matcher.start(i) + node.getStartIndex(), matcher.end(i) + node.getStartIndex(), elementTypes[i - 1], node.getChildren());
+                        } else {
+                            addToken(matcher.start(i) + node.getStartIndex(), matcher.end(i) + node.getStartIndex(), elementTypes[i - 1]);
+                        }
+                    }
+                    i++;
+                }
+            } else {
+                // not good, just do the node
+                assert matcher.hitEnd() : node.toString() + " matcher did not match full node";
+                if (matcher.hitEnd()) assert matcher.groupCount() == elementTypes.length : node.toString() + " matcher groups don't match elementTypes";
+                addTokenWithChildren(node, nodeElementType);
+            }
+        }
+
+        private final boolean useMatcher = false;
+
         public void visit(ExpImageNode node) {
             if (MultiMarkdownPlugin.isLicensed()) {
-                SyntheticNodes nodes = new SyntheticNodes(currentChars, node, IMAGE, IMAGE_LINK_REF_TEXT, 2, IMAGE_LINK_REF_TEXT_OPEN, 1, IMAGE_LINK_REF_CLOSE);
+                if (useMatcher) {
+                    // NOTE: the regex matching is about 3x slower if compile is done every time and 2x if it is done statically, too bad, it is much easier than all that chopping
+                    // It is used to do the first gen parser, then collect the results for tests and use the data to validate the hand rolled parser
+                    String regex = "^(!\\[)([^\\]]*)(\\])\\s*(\\()\\s*([^) ]*)(?:\\s+(\")(.*)(\"))?\\s*(\\))$";
+                    Pattern pattern = Pattern.compile(regex);
+                    CharSeq input = new CharSeq(node);
+                    Matcher matcher = pattern.matcher(input);
+                    boolean found = matcher.find();
+                    addTokenWithChildren(node, IMAGE, 2, matcher, IMAGE_LINK_REF_TEXT_OPEN, IMAGE_LINK_REF_TEXT, IMAGE_LINK_REF_TEXT_CLOSE, IMAGE_LINK_REF_OPEN, IMAGE_LINK_REF, IMAGE_LINK_REF_TITLE_MARKER, IMAGE_LINK_REF, IMAGE_LINK_REF_TITLE_MARKER, IMAGE_LINK_REF_CLOSE);
+                } else {
+                    SyntheticNodes nodes = new SyntheticNodes(currentChars, node, IMAGE, IMAGE_LINK_REF_TEXT, 2, IMAGE_LINK_REF_TEXT_OPEN, 1, IMAGE_LINK_REF_CLOSE);
 
-                if (!node.title.isEmpty() && nodes.chopLastTail(node.title, IMAGE_LINK_REF_TITLE, IMAGE_LINK_REF_TITLE_MARKER)) {
-                    nodes.chopTail(-1, IMAGE_LINK_REF_TITLE_MARKER);
+                    if (!node.title.isEmpty() && nodes.chopLastTail(node.title, IMAGE_LINK_REF_TITLE, IMAGE_LINK_REF_TITLE_MARKER)) {
+                        nodes.chopTail(-1, IMAGE_LINK_REF_TITLE_MARKER);
+                    }
+
+                    if (!node.url.isEmpty()) {
+                        nodes.chopLastTail(node.url, IMAGE_LINK_REF);
+                    }
+
+                    // now chop off lead and tail alt markers
+                    if (nodes.chopTail(']', IMAGE_LINK_REF_TEXT_CLOSE)) {
+                        nodes.next();
+                        nodes.chopTail('(', IMAGE_LINK_REF_OPEN);
+                        nodes.prev();
+                    }
+
+                    // need to process children with the current node
+                    nodes.dropWhiteSpace(IMAGE_LINK_REF_TEXT_CLOSE, IMAGE_LINK_REF_OPEN, IMAGE_LINK_REF);
+                    addTokensWithChildren(nodes);
                 }
-
-                if (!node.url.isEmpty()) {
-                    nodes.chopLastTail(node.url, IMAGE_LINK_REF);
-                }
-
-                // now chop off lead and tail alt markers
-                if (nodes.chopTail(']', IMAGE_LINK_REF_TEXT_CLOSE)) {
-                    nodes.next();
-                    nodes.chopTail('(', IMAGE_LINK_REF_OPEN);
-                    nodes.prev();
-                }
-
-                // need to process children with the current node
-                nodes.dropWhiteSpace(IMAGE_LINK_REF_TEXT_CLOSE, IMAGE_LINK_REF_OPEN, IMAGE_LINK_REF);
-                addTokensWithChildren(nodes);
             } else {
                 addTokenWithChildren(node, IMAGE);
             }
@@ -769,31 +805,42 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
 
         public void visit(ExpLinkNode node) {
             if (MultiMarkdownPlugin.isLicensed()) {
-                SyntheticNodes nodes = new SyntheticNodes(currentChars, node, EXPLICIT_LINK, LINK_REF_TEXT, 1, LINK_REF_TEXT_OPEN, LINK_REF_CLOSE);
+                if (useMatcher) {
+                    // NOTE: the regex matching is about 3x slower if compile is done every time and 2x if it is done statically, too bad, it is much easier than all that chopping
+                    // It is used to do the first gen parser, then collect the results for tests and use the data to validate the hand rolled parser
+                    String regex = "^(\\[)([^\\]]*)(\\])\\s*(\\()\\s*([^) #]*)(?:(#)([^) ]*))?(?:\\s+(\")(.*)(\"))?\\s*(\\))$";
+                    Pattern pattern = Pattern.compile(regex);
+                    CharSeq input = new CharSeq(node);
+                    Matcher matcher = pattern.matcher(input);
+                    boolean found = matcher.find();
+                    addTokenWithChildren(node, EXPLICIT_LINK, 2, matcher, LINK_REF_TEXT_OPEN, LINK_REF_TEXT, LINK_REF_TEXT_CLOSE, LINK_REF_OPEN, LINK_REF, LINK_REF_ANCHOR_MARKER, LINK_REF_ANCHOR, LINK_REF_TITLE_MARKER, LINK_REF_TITLE, LINK_REF_TITLE_MARKER, LINK_REF_CLOSE);
+                } else {
+                    SyntheticNodes nodes = new SyntheticNodes(currentChars, node, EXPLICIT_LINK, LINK_REF_TEXT, 1, LINK_REF_TEXT_OPEN, LINK_REF_CLOSE);
 
-                // now chop off lead child nodes
-                int childNode = nodes.current();
-                if (nodes.chopChildren(SyntheticNodes.ChildLocationType.LEAD, LINK_REF_TEXT_CLOSE)) nodes.next();
+                    // now chop off lead child nodes
+                    int childNode = nodes.current();
+                    if (nodes.chopChildren(SyntheticNodes.ChildLocationType.LEAD, LINK_REF_TEXT_CLOSE)) nodes.next();
 
-                if (nodes.chopTail('(', LINK_REF_OPEN)) nodes.next();
+                    if (nodes.chopTail('(', LINK_REF_OPEN)) nodes.next();
 
-                if (!node.title.isEmpty() && nodes.chopLastTail(node.title, LINK_REF_TITLE, LINK_REF_TITLE_MARKER)) {
-                    nodes.chopTail(-1, LINK_REF_TITLE_MARKER);
+                    if (!node.title.isEmpty() && nodes.chopLastTail(node.title, LINK_REF_TITLE, LINK_REF_TITLE_MARKER)) {
+                        nodes.chopTail(-1, LINK_REF_TITLE_MARKER);
+                    }
+
+                    if (!node.url.isEmpty()) {
+                        nodes.chopLastTail(node.url, LINK_REF);
+                        nodes.next();
+                        nodes.chopLastTail('#', LINK_REF_ANCHOR_MARKER, LINK_REF_ANCHOR);
+                    }
+
+                    //nodes.validateAllContiguous();
+                    // need to process children with the current node
+                    nodes.dropWhiteSpace(LINK_REF_TEXT_CLOSE, LINK_REF_OPEN, LINK_REF, LINK_REF_ANCHOR_MARKER, LINK_REF_ANCHOR);
+
+                    // need to process children with the current node
+                    nodes.setCurrent(childNode);
+                    addTokensWithChildren(nodes);
                 }
-
-                if (!node.url.isEmpty()) {
-                    nodes.chopLastTail(node.url, LINK_REF);
-                    nodes.next();
-                    nodes.chopLastTail('#', LINK_REF_ANCHOR_MARKER, LINK_REF_ANCHOR);
-                }
-
-                //nodes.validateAllContiguous();
-                // need to process children with the current node
-                nodes.dropWhiteSpace(LINK_REF_TEXT_CLOSE, LINK_REF_OPEN, LINK_REF, LINK_REF_ANCHOR_MARKER, LINK_REF_ANCHOR);
-
-                // need to process children with the current node
-                nodes.setCurrent(childNode);
-                addTokensWithChildren(nodes);
             } else {
                 addTokenWithChildren(node, EXPLICIT_LINK);
             }

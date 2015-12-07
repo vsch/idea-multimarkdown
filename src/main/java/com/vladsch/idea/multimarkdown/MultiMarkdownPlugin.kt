@@ -538,6 +538,10 @@ class MultiMarkdownPlugin : ApplicationComponent {
         val productName: String
             get() = "idea-multimarkdown"
 
+        fun testing() {
+            license_features = -1
+        }
+
         @JvmStatic
         val productVersion: String
             get() {

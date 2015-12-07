@@ -92,6 +92,20 @@ class TestLinkResolver_Basic_Readme constructor(val rowId: Int, val fullPath: St
         assertEqualsMessage("Local link address does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", this.linkAddressText, localRefAddress)
     }
 
+    @Test fun test_RelativeLinkAddress() {
+        if (skipTest) return
+        val localRef = resolver.resolve(linkRef, Want(Local.REL, Remote.REL), fileList)
+        assertEqualsMessage("Expected Relative linkRef, got $localRef", true, linkRef is LinkRef)
+        assert(linkRef is LinkRef)
+        assertEqualsMessage("Relative link address does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", this.linkAddressText, (localRef as? LinkRef)?.filePathWithAnchor)
+    }
+
+//    @Test fun test_IdenticalLinkAddress() {
+//        if (skipTest || !linkRef.isRelative || linkRef is WikiLinkRef || this.linkAddressText == null) return
+//        val localRef = resolver.resolve(linkRef, Want(Local.REL, Remote.REL), fileList)
+//        assertEqualsMessage("Relative link address does not match ${resolver.getMatcher(linkRef, false).linkAllMatch}", this.linkRef.filePath, localRef?.filePath)
+//    }
+
     @Test fun test_RemoteLinkAddress() {
         if (skipTest) return
         val localRef = resolver.resolve(linkRef, Want(Local.REF, Remote.REF), fileList) as? FileRef

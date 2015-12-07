@@ -25,12 +25,27 @@ package com.vladsch.idea.multimarkdown.psi;
 
 import com.intellij.psi.tree.IElementType;
 import com.vladsch.idea.multimarkdown.MultiMarkdownLanguage;
+import com.vladsch.idea.multimarkdown.util.DataPrinterAware;
+import com.vladsch.idea.multimarkdown.util.StringUtilKt;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class MultiMarkdownTokenType extends IElementType {
+public class MultiMarkdownTokenType extends IElementType implements DataPrinterAware {
     public MultiMarkdownTokenType(@NotNull @NonNls String debugName) {
         super(debugName, MultiMarkdownLanguage.INSTANCE);
+    }
+
+    @NotNull
+    @Override
+    public String testData() {
+        return super.toString();
+    }
+
+    @NotNull
+    @Override
+    public String className(@Nullable Class<Object> inParent) {
+        return DataPrinterAware.DefaultImpls.className(this,null);
     }
 
     @Override

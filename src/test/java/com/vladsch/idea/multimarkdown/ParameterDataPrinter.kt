@@ -14,9 +14,14 @@
  */
 package com.vladsch.idea.multimarkdown
 
-import com.vladsch.idea.multimarkdown.util.BitField
-import com.vladsch.idea.multimarkdown.util.Severity
 import com.vladsch.idea.multimarkdown.util.DataPrinterAware
+
+class UnquotedString(val text: String) {
+    override fun toString(): String {
+        return text
+    }
+}
+
 
 fun dataColText(colStringer: ((Array<Any?>) -> String)? = null, row: Array<Any?>?, col: Any?, padStart: Int = 0, padEnd: Int = 0): String {
     val text: String
@@ -34,10 +39,15 @@ fun dataColText(colStringer: ((Array<Any?>) -> String)? = null, row: Array<Any?>
                     }
                     text = "arrayOf<String>($colText)";
                 }
+                is UnquotedString -> text = col.toString()
                 is Boolean -> text = col.toString()
-                is Int -> text = col.toString()
+                is Int -> when (col) {
+                    Integer.MAX_VALUE -> text = "Integer.MAX_VALUE"
+                    Integer.MIN_VALUE -> text = "Integer.MIN_VALUE"
+                    else -> text = col.toString()
+                }
                 is kotlin.reflect.KCallable<*> -> text = "::" + col.toString().substringAfterLast('.')
-                else -> text = "\"$col\"";
+                else -> text = "\"${col.toString().replace("\\", "\\\\").replace("\"", "\\\"")}\"";
             }
         }
     }
@@ -45,11 +55,11 @@ fun dataColText(colStringer: ((Array<Any?>) -> String)? = null, row: Array<Any?>
     return text.padStart(padStart, ' ').padEnd(padEnd, ' ')
 }
 
-fun printData(data: Collection<Array<Any?>>, header: Array<String>, colStringersMap:Map<String, (Array<Any?>)->String>? = null): Unit {
+fun printData(data: Collection<Array<Any?>>, header: Array<String>, colStringersMap: Map<String, (Array<Any?>) -> String>? = null): Unit {
     if (data.size == 0) return
 
     var colWidths = Array<Int>(data.last().size, { 0 });
-    val colStringers = Array<((Array<Any?>)->String)?>(data.last().size, {null})
+    val colStringers = Array<((Array<Any?>) -> String)?>(data.last().size, { null })
 
     for (i in header.indices) {
         val col = header[i]
