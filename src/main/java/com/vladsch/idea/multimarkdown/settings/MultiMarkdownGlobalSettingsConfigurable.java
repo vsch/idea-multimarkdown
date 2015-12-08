@@ -34,7 +34,6 @@ import java.util.ArrayList;
 
 public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfigurable {
     protected MultiMarkdownGlobalSettings globalSettings;
-
     protected MultiMarkdownSettingsPanel settingsPanel;
 
     @NotNull
@@ -260,6 +259,21 @@ public class MultiMarkdownGlobalSettingsConfigurable implements SearchableConfig
                 setting.reset(component);
             }
         }
+    }
+
+    class TextAreaComponent extends ComponentSetting<JTextArea, Settings.StringSetting> {
+        TextAreaComponent(String component, Settings.StringSetting setting) {
+            super(component, setting);
+        }
+
+        @Override
+        public boolean isChanged(JTextArea component) { return setting.isChanged(component); }
+
+        @Override
+        public void setValue(JTextArea component) { setting.setValue(component); }
+
+        @Override
+        public void reset(JTextArea component) { setting.reset(component); }
     }
 
     class SettingsComponentState extends ComponentSetting<ComponentState, Settings.ElementSetting> {

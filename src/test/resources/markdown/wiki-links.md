@@ -7,3 +7,9 @@
 [[Bad File Name]]
 
 [[main|Main]]
+
+[**Test**](products "title popup")
+
+[![testing](images/test.png 'image title popup')](products "title popup")
+
+![testing](images/test.png "image title")

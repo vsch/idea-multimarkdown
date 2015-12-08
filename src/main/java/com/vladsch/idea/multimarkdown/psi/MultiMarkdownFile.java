@@ -32,7 +32,8 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.FileViewProvider;
 import com.vladsch.idea.multimarkdown.*;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
-import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import com.vladsch.idea.multimarkdown.util.FileRef;
+import com.vladsch.idea.multimarkdown.util.PathInfo;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -64,7 +65,7 @@ public class MultiMarkdownFile extends PsiFileBase {
     }
 
     public boolean isWikiPage() {
-        return new FilePathInfo(getVirtualFile()).isWikiPage();
+        return new FileRef(getVirtualFile()).isWikiPage();
     }
 
     @Override
@@ -94,7 +95,7 @@ public class MultiMarkdownFile extends PsiFileBase {
     @Nullable
     private static Key<String> getOverrideStripTrailingSpacesKey() {
         final String apiVersion = ApplicationInfo.getInstance().getApiVersion();
-        final Pattern apiVersionPattern = Pattern.compile("^[A-Z]+-(\\d+\\.\\d+)$");
+        final Pattern apiVersionPattern = Pattern.compile("^[A-Z]*-(\\d+\\..*)$");
         final Matcher matcher = apiVersionPattern.matcher(apiVersion);
 
         if (!matcher.matches()) {

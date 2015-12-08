@@ -24,10 +24,6 @@ import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
-public interface MultiMarkdownWikiLink extends PsiElement {
-    String getPageText();
-    String getPageRef();
-    ItemPresentation getPresentation();
-    String getDisplayName();
-    @NotNull String getMissingElementNameSpace(@NotNull String prefix, boolean addLinkRef);
+public interface MultiMarkdownWikiLink extends MultiMarkdownLinkElement {
+
 }

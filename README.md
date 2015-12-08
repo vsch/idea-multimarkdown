@@ -11,10 +11,25 @@ idea-multimarkdown
 
 #### Two tier model of the plugin
 
-1. Free and open source for the basic functionality. 
+1. Free and open source for the basic functionality.
 
-2. Licensed version with enhanced refactoring and code completion functionality. 30-day free trial licenses are available in plugin settings and on the site [idea-multimarkdown](http://vladsch.com/product/multimarkdown) 
+2. Licensed version with enhanced refactoring and code completion functionality. 30-day free trial licenses are available in plugin preferences and from [idea-multimarkdown](http://vladsch.com/product/multimarkdown)
 
+Latest Developments, version 1.2.3
+-----------------------------------
+
+I spent three weeks rewriting and testing some of the messy classes involved in link resolution. They did not start out that way but by the time I figured out all the idiosyncrasies of how GitHub resolves links from wiki to the main repository, they certainly became an unmanageable mess. The previous release was difficult to stabilize so I decided to rewrite the mess from scratch. Which I did in Kotlin. I also took the time to write complete tests for the low level code so that I can have the safety net of automated tests when I do have to make changes.
+
+I updated the source for the latest release. Some of the source is in Kotlin and within the next few releases I will migrate all of it to Kotlin. Java can't compete with the joy of developing in Kotlin.
+
+If you haven't used Kotlin yet, do yourself a favor and give it a try. It is a joy to work with. Much more effective and productive than Java.
+
+Plugins that are a great compliment to idea-multimarkdown
+---------------------------------------------------------
+
+[Pipe Table Formatter](https://github.com/anton-dev-ua/PipeTableFormatter) A plugin that is great for formatting tables. I use to pretty up the tables in markdown and find it a great compliment to idea-multimarkdown.
+
+[.gitignore](http://hsz.mobi) to add .gitignore file brains to the IDE
 
 The Background
 --------------

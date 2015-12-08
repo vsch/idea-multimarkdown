@@ -37,14 +37,14 @@ THE SOFTWARE.
 }
 
 .container {
-    width: 790px;
+    width: 980px;
     margin: 0 auto;
     padding-left: 10px;
     float: left !important;
 }
 
 .wiki-container {
-    width: 770px;
+    width: 830px;
     margin: 0 auto;
     padding-left: 20px;
     float: left !important;
@@ -57,7 +57,7 @@ THE SOFTWARE.
 }
 
 .wiki-body {
-    width: 640px;
+    width: 700px;
     margin-left: -20px;
     padding-left: 20px;
 }
@@ -501,7 +501,7 @@ dl,
 table,
 pre {
     margin-bottom: 16px;
-    margin-top: 0px;
+    margin-top: 0;
 }
 
 ul,

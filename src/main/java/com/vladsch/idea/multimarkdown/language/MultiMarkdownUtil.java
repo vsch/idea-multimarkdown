@@ -42,10 +42,10 @@ public class MultiMarkdownUtil {
         for (VirtualFile virtualFile : virtualFiles) {
             MultiMarkdownFile markdownFile = (MultiMarkdownFile) PsiManager.getInstance(project).findFile(virtualFile);
             if (markdownFile != null) {
-                //MultiMarkdownWikiPageRef[] wikiPageRefs = PsiTreeUtil.getChildrenOfType(markdownFile, MultiMarkdownWikiPageRef.class);
+                //MultiMarkdownWikiLinkRef[] wikiPageRefs = PsiTreeUtil.getChildrenOfType(markdownFile, MultiMarkdownWikiLinkRef.class);
                 //if (wikiPageRefs != null) {
                 //
-                //    for (MultiMarkdownWikiPageRef wikiPageRef : wikiPageRefs) {
+                //    for (MultiMarkdownWikiLinkRef wikiPageRef : wikiPageRefs) {
                 //        if (name.equals(wikiPageRef.getName())) {
                 //            if (result == null) {
                 //                result = new ArrayList<MultiMarkdownNamedElement>();
@@ -54,9 +54,9 @@ public class MultiMarkdownUtil {
                 //        }
                 //    }
                 //
-                //    MultiMarkdownWikiPageText[] wikiPageTitles = PsiTreeUtil.getChildrenOfType(markdownFile, MultiMarkdownWikiPageText.class);
+                //    MultiMarkdownWikiLinkText[] wikiPageTitles = PsiTreeUtil.getChildrenOfType(markdownFile, MultiMarkdownWikiLinkText.class);
                 //    if (wikiPageTitles != null) {
-                //        for (MultiMarkdownWikiPageText wikiPageTitle : wikiPageTitles) {
+                //        for (MultiMarkdownWikiLinkText wikiPageTitle : wikiPageTitles) {
                 //            if (name.equals(wikiPageTitle.getName())) {
                 //                if (result == null) {
                 //                    result = new ArrayList<MultiMarkdownNamedElement>();
@@ -79,9 +79,9 @@ public class MultiMarkdownUtil {
             //MultiMarkdownFile markdownFile = (MultiMarkdownFile) PsiManager.getInstance(project).findFile(virtualFile);
             //if (markdownFile != null) {
             //
-            //    MultiMarkdownWikiPageRef[] wikiPageRefs = PsiTreeUtil.getChildrenOfType(markdownFile, MultiMarkdownWikiPageRef.class);
+            //    MultiMarkdownWikiLinkRef[] wikiPageRefs = PsiTreeUtil.getChildrenOfType(markdownFile, MultiMarkdownWikiLinkRef.class);
             //    if (wikiPageRefs != null) {
-            //        for (MultiMarkdownWikiPageRef wikiPageRef : wikiPageRefs) {
+            //        for (MultiMarkdownWikiLinkRef wikiPageRef : wikiPageRefs) {
             //            if (result == null) {
             //                result = new ArrayList<MultiMarkdownNamedElement>();
             //            }
@@ -89,9 +89,9 @@ public class MultiMarkdownUtil {
             //        }
             //    }
             //
-            //    MultiMarkdownWikiPageText[] wikiPageTitles = PsiTreeUtil.getChildrenOfType(markdownFile, MultiMarkdownWikiPageText.class);
+            //    MultiMarkdownWikiLinkText[] wikiPageTitles = PsiTreeUtil.getChildrenOfType(markdownFile, MultiMarkdownWikiLinkText.class);
             //    if (wikiPageTitles != null) {
-            //        for (MultiMarkdownWikiPageText wikiPageTitle : wikiPageTitles) {
+            //        for (MultiMarkdownWikiLinkText wikiPageTitle : wikiPageTitles) {
             //            if (result == null) {
             //                result = new ArrayList<MultiMarkdownNamedElement>();
             //            }

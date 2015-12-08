@@ -38,22 +38,21 @@ public interface MultiMarkdownTypes {
     // no specific element, blank lines and white spaces
     IElementType NONE = new MultiMarkdownTokenType("NONE");
 
-    IElementType ABBREVIATION = new MultiMarkdownElementType("ABBREVIATION");
-    IElementType ABBREVIATED_TEXT = new MultiMarkdownElementType("ABBREVIATED_TEXT");
+    IElementType ABBREVIATION = new MultiMarkdownTokenType("ABBREVIATION");
+    IElementType ABBREVIATED_TEXT = new MultiMarkdownTokenType("ABBREVIATED_TEXT");
     IElementType ANCHOR_LINK = new MultiMarkdownTokenType("ANCHOR_LINK");
     IElementType AUTO_LINK = new MultiMarkdownTokenType("AUTO_LINK");
-    IElementType BLOCK_QUOTE = new MultiMarkdownElementType("BLOCK_QUOTE");
+    IElementType BLOCK_QUOTE = new MultiMarkdownTokenType("BLOCK_QUOTE");
     IElementType BOLD = new MultiMarkdownTokenType("BOLD");
     IElementType BOLD_MARKER = new MultiMarkdownTokenType("BOLD_MARKER");
     IElementType BOLDITALIC = new MultiMarkdownTokenType("BOLDITALIC");
-    IElementType BULLET_LIST = new MultiMarkdownElementType("BULLET_LIST");
+    IElementType BULLET_LIST = new MultiMarkdownTokenType("BULLET_LIST");
     IElementType CODE = new MultiMarkdownTokenType("CODE");
-    IElementType DEFINITION = new MultiMarkdownElementType("DEFINITION");
-    IElementType DEFINITION_LIST = new MultiMarkdownElementType("DEFINITION_LIST");
-    IElementType DEFINITION_TERM = new MultiMarkdownElementType("DEFINITION_TERM");
-    IElementType EXPLICIT_LINK = new MultiMarkdownElementType("EXPLICIT_LINK");
-    IElementType FOOTNOTE = new MultiMarkdownElementType("FOOTNOTE");
-    IElementType FOOTNOTE_REF = new MultiMarkdownElementType("FOOTNOTE_REF");
+    IElementType DEFINITION = new MultiMarkdownTokenType("DEFINITION");
+    IElementType DEFINITION_LIST = new MultiMarkdownTokenType("DEFINITION_LIST");
+    IElementType DEFINITION_TERM = new MultiMarkdownTokenType("DEFINITION_TERM");
+    IElementType FOOTNOTE = new MultiMarkdownTokenType("FOOTNOTE");
+    IElementType FOOTNOTE_REF = new MultiMarkdownTokenType("FOOTNOTE_REF");
     IElementType HEADER_LEVEL_1 = new MultiMarkdownTokenType("HEADER_LEVEL_1");
     IElementType SETEXT_HEADER_LEVEL_1 = new MultiMarkdownTokenType("HEADER_LEVEL_1");
     IElementType HEADER_LEVEL_2 = new MultiMarkdownTokenType("SETEXT_HEADER_LEVEL_2");
@@ -64,17 +63,16 @@ public interface MultiMarkdownTypes {
     IElementType HEADER_LEVEL_6 = new MultiMarkdownTokenType("HEADER_LEVEL_6");
     IElementType HRULE = new MultiMarkdownTokenType("HRULE");
     IElementType HTML_BLOCK = new MultiMarkdownTokenType("HTML_BLOCK");
-    IElementType IMAGE = new MultiMarkdownElementType("IMAGE");
     IElementType INLINE_HTML = new MultiMarkdownTokenType("INLINE_HTML");
     IElementType ITALIC = new MultiMarkdownTokenType("ITALIC");
     IElementType ITALIC_MARKER = new MultiMarkdownTokenType("ITALIC_MARKER");
-    IElementType LIST_ITEM = new MultiMarkdownElementType("LIST_ITEM");
+    IElementType LIST_ITEM = new MultiMarkdownTokenType("LIST_ITEM");
     IElementType MAIL_LINK = new MultiMarkdownTokenType("MAIL_LINK");
-    IElementType ORDERED_LIST = new MultiMarkdownElementType("ORDERED_LIST");
+    IElementType ORDERED_LIST = new MultiMarkdownTokenType("ORDERED_LIST");
     IElementType QUOTE = new MultiMarkdownTokenType("QUOTE");
-    IElementType REFERENCE = new MultiMarkdownElementType("REFERENCE");
-    IElementType REFERENCE_IMAGE = new MultiMarkdownElementType("REFERENCE_IMAGE");
-    IElementType REFERENCE_LINK = new MultiMarkdownElementType("REFERENCE_LINK");
+    IElementType REFERENCE = new MultiMarkdownTokenType("REFERENCE");
+    IElementType REFERENCE_IMAGE = new MultiMarkdownTokenType("REFERENCE_IMAGE");
+    IElementType REFERENCE_LINK = new MultiMarkdownTokenType("REFERENCE_LINK");
     IElementType SMARTS = new MultiMarkdownTokenType("SMARTS");
     IElementType SPECIAL_TEXT = new MultiMarkdownTokenType("SPECIAL_TEXT");
     IElementType STRIKETHROUGH = new MultiMarkdownTokenType("STRIKETHROUGH");
@@ -82,34 +80,37 @@ public interface MultiMarkdownTypes {
     IElementType STRIKETHROUGH_ITALIC = new MultiMarkdownTokenType("STRIKETHROUGH_ITALIC");
     IElementType STRIKETHROUGH_BOLDITALIC = new MultiMarkdownTokenType("STRIKETHROUGH_BOLDITALIC");
     IElementType STRIKETHROUGH_MARKER = new MultiMarkdownTokenType("STRIKETHROUGH_MARKER");
-    IElementType TABLE = new MultiMarkdownElementType("TABLE");
-    IElementType TABLE_BODY = new MultiMarkdownElementType("TABLE_BODY");
+    IElementType TABLE = new MultiMarkdownTokenType("TABLE");
+    IElementType TABLE_BODY = new MultiMarkdownTokenType("TABLE_BODY");
     IElementType TABLE_CAPTION = new MultiMarkdownTokenType("TABLE_CAPTION");
     IElementType TABLE_CELL_REVEN_CEVEN = new MultiMarkdownTokenType("TABLE_CELL_REVEN_CEVEN");
     IElementType TABLE_CELL_REVEN_CODD = new MultiMarkdownTokenType("TABLE_CELL_REVEN_CODD");
     IElementType TABLE_CELL_RODD_CEVEN = new MultiMarkdownTokenType("TABLE_CELL_RODD_CEVEN");
     IElementType TABLE_CELL_RODD_CODD = new MultiMarkdownTokenType("TABLE_CELL_RODD_CODD");
-    IElementType TABLE_COLUMN = new MultiMarkdownElementType("TABLE_COLUMN");
-    IElementType TABLE_HEADER = new MultiMarkdownElementType("TABLE_HEADER");
-    IElementType TABLE_ROW_EVEN = new MultiMarkdownElementType("TABLE_ROW_EVEN");
-    IElementType TABLE_ROW_ODD = new MultiMarkdownElementType("TABLE_ROW_ODD");
+    IElementType TABLE_COLUMN = new MultiMarkdownTokenType("TABLE_COLUMN");
+    IElementType TABLE_HEADER = new MultiMarkdownTokenType("TABLE_HEADER");
+    IElementType TABLE_ROW_EVEN = new MultiMarkdownTokenType("TABLE_ROW_EVEN");
+    IElementType TABLE_ROW_ODD = new MultiMarkdownTokenType("TABLE_ROW_ODD");
     IElementType TASK_ITEM = new MultiMarkdownTokenType("TASK_ITEM");
     IElementType TASK_DONE_ITEM = new MultiMarkdownTokenType("TASK_DONE_ITEM");
     IElementType TASK_ITEM_MARKER = new MultiMarkdownTokenType("TASK_ITEM_MARKER");
     IElementType TASK_DONE_ITEM_MARKER = new MultiMarkdownTokenType("TASK_DONE_ITEM_MARKER");
     IElementType TEXT = new MultiMarkdownTokenType("TEXT");
-    IElementType VERBATIM = new MultiMarkdownElementType("VERBATIM");
+    IElementType VERBATIM = new MultiMarkdownTokenType("VERBATIM");
 
     IElementType WIKI_LINK_OPEN = new MultiMarkdownTokenType("WIKI_LINK_OPEN");
     IElementType WIKI_LINK_SEPARATOR = new MultiMarkdownTokenType("WIKI_LINK_SEPARATOR");
     IElementType WIKI_LINK_CLOSE = new MultiMarkdownTokenType("WIKI_LINK_CLOSE");
-    IElementType WIKI_LINK_REF = new MultiMarkdownTokenType("WIKI_LINK_REF");
     IElementType WIKI_LINK_REF_ANCHOR_MARKER = new MultiMarkdownTokenType("WIKI_LINK_REF_ANCHOR_MARKER");
-    IElementType WIKI_LINK_REF_ANCHOR = new MultiMarkdownTokenType("WIKI_LINK_REF_ANCHOR");
-    IElementType WIKI_LINK_TEXT = new MultiMarkdownTokenType("WIKI_LINK_TEXT");
+
+    IElementType WIKI_LINK = new MultiMarkdownElementType("WIKI_LINK");
+    IElementType WIKI_LINK_REF = new MultiMarkdownElementType("WIKI_LINK_REF");
+    IElementType WIKI_LINK_REF_ANCHOR = new MultiMarkdownElementType("WIKI_LINK_REF_ANCHOR");
+    IElementType WIKI_LINK_TEXT = new MultiMarkdownElementType("WIKI_LINK_TEXT");
+    IElementType IMAGE = new MultiMarkdownElementType("IMAGE");
+    IElementType EXPLICIT_LINK = new MultiMarkdownElementType("EXPLICIT_LINK");
 
     IElementType COMMENT = new MultiMarkdownElementType("COMMENT");
-    IElementType WIKI_LINK = new MultiMarkdownElementType("WIKI_LINK");
 
     class Factory {
 
@@ -120,11 +121,11 @@ public interface MultiMarkdownTypes {
             } else if (type == WIKI_LINK) {
                 return new MultiMarkdownWikiLinkImpl(node);
             } else if (type == WIKI_LINK_REF) {
-                return new MultiMarkdownWikiPageRefImpl(node);
+                return new MultiMarkdownWikiLinkRefImpl(node);
             } else if (type == WIKI_LINK_REF_ANCHOR) {
-                return new MultiMarkdownWikiPageRefAnchorImpl(node);
+                return new MultiMarkdownWikiLinkAnchorImpl(node);
             } else if (type == WIKI_LINK_TEXT) {
-                return new MultiMarkdownWikiPageTextImpl(node);
+                return new MultiMarkdownWikiLinkTextImpl(node);
             }
             throw new AssertionError("Unknown element type: " + type);
         }

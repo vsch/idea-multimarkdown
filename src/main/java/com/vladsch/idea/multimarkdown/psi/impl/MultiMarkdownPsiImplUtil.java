@@ -29,13 +29,13 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiReference;
 import com.intellij.psi.tree.IElementType;
 import com.vladsch.idea.multimarkdown.MultiMarkdownIcons;
 import com.vladsch.idea.multimarkdown.psi.*;
-import com.vladsch.idea.multimarkdown.util.FilePathInfo;
-import com.vladsch.idea.multimarkdown.util.FileReferenceLink;
-import com.vladsch.idea.multimarkdown.util.FileReferenceLinkGitHubRules;
+import com.vladsch.idea.multimarkdown.util.FileRef;
+import com.vladsch.idea.multimarkdown.util.LinkRef;
+import com.vladsch.idea.multimarkdown.util.PathInfo;
+import com.vladsch.idea.multimarkdown.util.WikiLinkRef;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -48,13 +48,13 @@ import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.*;
 public class MultiMarkdownPsiImplUtil {
     private static final Logger logger = Logger.getLogger(MultiMarkdownPsiImplUtil.class);
     final protected static int EXTENSION_STRIP = 1;
-    final protected static int EXTENSION_KEEP = 2;
-    final protected static int EXTENSION_AS_IS = 3;
-    final protected static int EXTENSION_USE = 4;
+    final protected static int EXTENSION_KEEP_OLD = 2;
+    final protected static int EXTENSION_USE_NEW_IF_OLD_HAS = 3;
+    final protected static int EXTENSION_USE_NEW = 4;
 
     final public static LinkRefElementTypes WIKI_LINK_ELEMENT = new LinkRefElementTypes(WIKI_LINK, WIKI_LINK_REF, WIKI_LINK_TEXT, WIKI_LINK_REF_ANCHOR, EXTENSION_STRIP);
 
-    static class LinkRefElementTypes {
+    public static class LinkRefElementTypes {
         @NotNull public final IElementType parentType;
         @NotNull public final IElementType linkRefType;
         @NotNull public final IElementType textType;
@@ -78,9 +78,9 @@ public class MultiMarkdownPsiImplUtil {
 
     public static LinkRefElementTypes getNamedElementTypes(@Nullable PsiElement element) {
         if (element instanceof MultiMarkdownWikiLink
-                || element instanceof MultiMarkdownWikiPageRef
-                || element instanceof MultiMarkdownWikiPageText
-                || element instanceof MultiMarkdownWikiPageRefAnchor
+                || element instanceof MultiMarkdownWikiLinkRef
+                || element instanceof MultiMarkdownWikiLinkText
+                || element instanceof MultiMarkdownWikiLinkAnchor
                 ) return WIKI_LINK_ELEMENT;
         return null;
     }
@@ -96,72 +96,99 @@ public class MultiMarkdownPsiImplUtil {
         return astNode.getText();
     }
 
+    @Nullable
+    public static LinkRef getLinkRef(@Nullable PsiElement element) {
+        LinkRefElementTypes elementTypes = getNamedElementTypes(element);
+        if (elementTypes != null) {
+            return getLinkRef(elementTypes, element);
+        }
+        return null;
+    }
+
+    @Nullable
+    public static LinkRef getLinkRef(@NotNull LinkRefElementTypes elementTypes, @NotNull PsiElement element) {
+        if (!element.isValid()) return null;
+
+        if (elementTypes.parentType == WIKI_LINK) {
+            return LinkRef.parseWikiLinkRef(new FileRef(element), getLinkRefTextWithAnchor(element), null);
+        } else if (elementTypes.parentType == IMAGE || elementTypes.parentType == REFERENCE_IMAGE) {
+            return LinkRef.parseImageLinkRef(new FileRef(element), getLinkRefTextWithAnchor(element), null);
+        } else {
+            return LinkRef.parseLinkRef(new FileRef(element), getLinkRefTextWithAnchor(element), null);
+        }
+    }
+
     @NotNull
-    public static String getLinkRef(@Nullable PsiElement element) {
+    public static String getLinkRefText(@Nullable PsiElement element) {
         LinkRefElementTypes elementTypes = getNamedElementTypes(element);
         return elementTypes == null ? "" : getElementText(elementTypes.parentType, element, elementTypes.linkRefType, null, null);
     }
 
     @NotNull
-    public static String getLinkRefWithAnchor(@Nullable PsiElement element) {
+    public static String getLinkRefTextWithAnchor(@Nullable PsiElement element) {
         LinkRefElementTypes elementTypes = getNamedElementTypes(element);
         return elementTypes == null ? "" : getElementText(elementTypes.parentType, element, elementTypes.linkRefType, null, null)
                 + getElementText(elementTypes.parentType, element, elementTypes.anchorType, "#", null);
     }
 
     @NotNull
-    public static String getLinkRefAnchor(@Nullable PsiElement element) {
+    public static String getLinkAnchor(@Nullable PsiElement element) {
         LinkRefElementTypes elementTypes = getNamedElementTypes(element);
         return elementTypes == null ? "" : getElementText(elementTypes.parentType, element, elementTypes.anchorType, null, null);
     }
 
     @NotNull
-    public static String getLinkRefText(@Nullable PsiElement element) {
+    public static String getLinkText(@Nullable PsiElement element) {
         LinkRefElementTypes elementTypes = getNamedElementTypes(element);
         return elementTypes == null ? "" : getElementText(elementTypes.parentType, element, elementTypes.textType, null, null);
     }
 
     @NotNull
-    public static String getLinkRefTitle(@Nullable PsiElement element) {
+    public static String getLinkTitle(@Nullable PsiElement element) {
         LinkRefElementTypes elementTypes = getNamedElementTypes(element);
         return elementTypes == null ? "" : getElementText(elementTypes.parentType, element, elementTypes.titleType, null, null);
     }
 
+    @NotNull
     public static MultiMarkdownNamedElement setName(@NotNull MultiMarkdownNamedElement element, @NotNull String newName, int renameFlags) {
+        if (!element.isValid()) return element;
+
         LinkRefElementTypes elementTypes = getNamedElementTypes(element);
         if (elementTypes == null) return element;
 
         ASTNode pageRefNode = element.getNode();
         if (pageRefNode == null) return element;
 
+        LinkRef newNameInfo = LinkRef.parseLinkRef(new FileRef(element.getContainingFile().getVirtualFile().getPath()), newName, null);
+
         PsiElement parent = element.getParent();
         String linkRef = getElementText(elementTypes.parentType, parent, elementTypes.linkRefType, null, null);
         String title = null;
         String text = null;
+        String anchor = newNameInfo.getAnchor();
 
         IElementType elementType = element.getNode().getElementType();
 
         if (elementType == elementTypes.linkRefType) {
-            if (elementTypes.extensionFlags != 0) {
-                FilePathInfo linkRefInfo = new FilePathInfo(linkRef);
-                FilePathInfo newNameInfo = new FilePathInfo(newName);
+            if (elementTypes.extensionFlags != 0 && (renameFlags & RENAME_ELEMENT_HANDLES_EXT) != 0) {
+                PathInfo linkRefInfo = new PathInfo(linkRef);
 
                 switch (elementTypes.extensionFlags) {
-                    case EXTENSION_KEEP:
-                        linkRef = newNameInfo.getFilePathWithAnchorNoExt() + linkRefInfo.getExt();
+                    case EXTENSION_KEEP_OLD:
+                        linkRef = newNameInfo.getFilePathNoExt() + linkRefInfo.getExtWithDot();
                         break;
 
                     case EXTENSION_STRIP:
-                        linkRef = newNameInfo.getFilePathWithAnchorNoExt();
+                        linkRef = newNameInfo.getFilePathNoExt();
                         break;
 
-                    case EXTENSION_AS_IS:
-                        linkRef = linkRefInfo.hasExt() ? newNameInfo.getFilePathWithAnchor() : newNameInfo.getFilePathWithAnchorNoExt();
+                    case EXTENSION_USE_NEW_IF_OLD_HAS:
+                        linkRef = linkRefInfo.getHasExt() ? newNameInfo.getFilePath() : newNameInfo.getFilePathNoExt();
                         break;
 
-                    case EXTENSION_USE:
+                    case EXTENSION_USE_NEW:
                     default:
-                        linkRef = newName;
+                        linkRef = newNameInfo.getFilePath();
                         break;
                 }
             } else {
@@ -170,24 +197,21 @@ public class MultiMarkdownPsiImplUtil {
 
             if ((renameFlags & RENAME_KEEP_PATH) != 0 && element.getText().contains("/")) {
                 // keep the old path
-                String path = new FilePathInfo(element.getText()).getPath();
-                String name = new FilePathInfo(newName).getFileName();
+                String path = new PathInfo(element.getText()).getPath();
+                String name = new PathInfo(newName).getFileName();
                 linkRef = path + name;
             }
 
             if ((renameFlags & RENAME_KEEP_NAME) != 0) {
                 // keep the old name
-                String path = new FilePathInfo(newName).getPath();
-                String name = new FilePathInfo(element.getText()).getFileName();
+                String path = new PathInfo(newName).getPath();
+                String name = new PathInfo(element.getText()).getFileName();
                 linkRef = path + name;
             }
 
             // preserve anchor
             if ((renameFlags & RENAME_KEEP_ANCHOR) != 0 && elementTypes.anchorType != null) {
-                String anchorText = getElementText(elementTypes.parentType, parent, elementTypes.anchorType, "#", null);
-                if (!anchorText.isEmpty()) {
-                    linkRef = FilePathInfo.linkRefNoAnchor(newName) + anchorText;
-                }
+                anchor = getElementText(elementTypes.parentType, parent, elementTypes.anchorType, "#", null);
             }
 
             // preserve text
@@ -237,7 +261,10 @@ public class MultiMarkdownPsiImplUtil {
         return element;
     }
 
+    @NotNull
     public static MultiMarkdownWikiLink deleteWikiLinkTitle(MultiMarkdownWikiLink element) {
+        if (!element.isValid()) return element;
+
         ASTNode pageTitleNode = element.getNode().findChildByType(WIKI_LINK_TEXT);
         ASTNode pageRefNode = element.getNode().findChildByType(WIKI_LINK_REF);
 
@@ -249,7 +276,10 @@ public class MultiMarkdownPsiImplUtil {
         return element;
     }
 
+    @NotNull
     public static MultiMarkdownWikiLink deleteWikiLinkRef(MultiMarkdownWikiLink element) {
+        if (!element.isValid()) return element;
+
         ASTNode pageTitleNode = element.getNode().findChildByType(WIKI_LINK_TEXT);
         ASTNode pageRefNode = element.getNode().findChildByType(WIKI_LINK_REF);
 
@@ -261,7 +291,10 @@ public class MultiMarkdownPsiImplUtil {
         return element;
     }
 
+    @NotNull
     public static MultiMarkdownWikiLink swapWikiLinkRefTitle(MultiMarkdownWikiLink element) {
+        if (!element.isValid()) return element;
+
         ASTNode pageTitleNode = element.getNode().findChildByType(WIKI_LINK_TEXT);
         ASTNode pageRefNode = element.getNode().findChildByType(WIKI_LINK_REF);
 
@@ -276,6 +309,8 @@ public class MultiMarkdownPsiImplUtil {
 
     @Nullable
     public static PsiElement findChildByType(@NotNull PsiElement parentElement, @NotNull IElementType childType) {
+        if (!parentElement.isValid()) return null;
+
         for (PsiElement child : parentElement.getChildren()) {
             if (child.getNode().getElementType() == childType) {
                 return child;

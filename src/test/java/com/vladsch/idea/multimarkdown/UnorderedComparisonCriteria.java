@@ -34,7 +34,7 @@ public abstract class UnorderedComparisonCriteria<T> extends TypedComparisonCrit
     @Override
     public void arrayEquals(String message, Object expecteds, Object actuals) throws ArrayComparisonFailure {
         if (expecteds != actuals) {
-            String header = message == null ? "" : message + ": ";
+            String header = message == null ? "" : message + "\n: ";
             int expectedsLength = this.assertArraysAreSameLength(expecteds, actuals, header);
 
             Object[] expectedOrdered = new Object[expectedsLength];
@@ -73,14 +73,16 @@ public abstract class UnorderedComparisonCriteria<T> extends TypedComparisonCrit
                     try {
                         this.arrayEquals(message, expected, actual);
                     } catch (ArrayComparisonFailure var10) {
-                        var10.addDimension(i);
-                        throw var10;
+                        //var10.addDimension(i);
+                        //throw var10;
+                        throw new ComparisonFailure(header + "array differed first at element [" + i + "]\n",  TestUtils.arrayAsString(expected), TestUtils.arrayAsString(actual));
                     }
                 } else {
                     try {
                         this.assertElementsEqual(expected, actual);
                     } catch (AssertionError var11) {
-                        throw new ArrayComparisonFailure(header, var11, i);
+                        //throw new ArrayComparisonFailure(header, var11, i);
+                        throw new ComparisonFailure(header + "array differed first at element [" + i + "]\n",  TestUtils.arrayAsString(expecteds), TestUtils.arrayAsString(actuals));
                     }
                 }
             }
@@ -89,22 +91,6 @@ public abstract class UnorderedComparisonCriteria<T> extends TypedComparisonCrit
 
     private boolean isArray(Object expected) {
         return expected != null && expected.getClass().isArray();
-    }
-
-    private String arrayAsString(Object expecteds) {
-        StringBuilder builder = new StringBuilder(100);
-
-        builder.append(expecteds.toString());
-        builder.append("[\n");
-        for (int i = 0; i < Array.getLength(expecteds); i++) {
-            Object elem = Array.get(expecteds,i);
-            builder.append("  ");
-            builder.append(elem == null ? "null" : elem.toString());
-            builder.append('\n');
-        }
-        builder.append("]\n");
-
-        return builder.toString();
     }
 
     private int assertArraysAreSameLength(Object expecteds, Object actuals, String header) {
@@ -119,7 +105,7 @@ public abstract class UnorderedComparisonCriteria<T> extends TypedComparisonCrit
         int actualsLength = Array.getLength(actuals);
         int expectedsLength = Array.getLength(expecteds);
         if (actualsLength != expectedsLength) {
-            throw new ComparisonFailure(header + "array lengths differed, expected.length=" + expectedsLength + " actual.length=" + actualsLength,  arrayAsString(expecteds), arrayAsString(actuals));
+            throw new ComparisonFailure(header + "array lengths differed, expected.length=" + expectedsLength + " actual.length=" + actualsLength,  TestUtils.arrayAsString(expecteds), TestUtils.arrayAsString(actuals));
         }
 
         return expectedsLength;

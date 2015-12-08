@@ -27,5 +27,5 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface SettingsUpdater {
-    public @Nullable void setComponent(@NotNull String name);
+    void setComponent(@NotNull String name);
 }

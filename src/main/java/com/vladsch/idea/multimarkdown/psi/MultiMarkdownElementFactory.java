@@ -39,8 +39,12 @@ public class MultiMarkdownElementFactory {
 
     public static MultiMarkdownWikiLink createWikiLink(@NotNull Project project, @NotNull String name, @Nullable String text) {
         String elementText = MultiMarkdownWikiLinkImpl.getElementText(name, text);
+        return (MultiMarkdownWikiLink) createElementFromText(project, elementText);
+    }
+
+    public static PsiElement createElementFromText(@NotNull Project project, @NotNull String elementText) {
         final MultiMarkdownFile file = createFile(project, elementText);
-        return (MultiMarkdownWikiLink) file.getFirstChild();
+        return file.getFirstChild();
     }
 
     public static PsiElement createCRLF(Project project) {

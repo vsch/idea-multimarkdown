@@ -32,7 +32,6 @@ import javax.swing.event.HyperlinkListener;
 import java.net.URL;
 
 import static com.vladsch.idea.multimarkdown.editor.MultiMarkdownPathResolver.launchExternalLink;
-import static com.vladsch.idea.multimarkdown.editor.MultiMarkdownPathResolver.resolveLink;
 
 /**
  * {@link MultiMarkdownLinkListener} is able to resolve the following types of links and open them in a new editor window:
@@ -90,10 +89,10 @@ public class MultiMarkdownLinkListener implements HyperlinkListener {
                 if (e.getDescription().startsWith("#")) {
                     editor.scrollToReference(e.getDescription().substring(1));
                 } else {
-                    launchExternalLink(project, document, e.getDescription());
+                    launchExternalLink(project, e.getDescription());
                 }
             } else {
-                launchExternalLink(project, document, e.getDescription());
+                launchExternalLink(project, e.getDescription());
             }
         }
     }

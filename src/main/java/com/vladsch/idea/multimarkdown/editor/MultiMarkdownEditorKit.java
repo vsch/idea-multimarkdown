@@ -21,8 +21,6 @@
  */
 package com.vladsch.idea.multimarkdown.editor;
 
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
 import org.jetbrains.annotations.NotNull;
@@ -30,12 +28,9 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.text.html.HTML;
-import javax.swing.text.html.HTML.Attribute;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.ImageView;
 import java.awt.*;
-import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -51,7 +46,6 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
     /**
      * The document.
      */
-    private final Document document;
     protected float maxWidth;
 
     protected MultiMarkdownGlobalSettingsListener globalSettingsListener;
@@ -63,10 +57,8 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
     /**
      * Build a new instance of {@link MultiMarkdownEditorKit}.
      *
-     * @param document the document
      */
-    public MultiMarkdownEditorKit(@NotNull Document document) {
-        this.document = document;
+    public MultiMarkdownEditorKit() {
         maxWidth = MultiMarkdownGlobalSettings.getInstance().maxImgWidth.getValue();
 
         MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
@@ -81,9 +73,10 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
      *
      * @return a new {@link MultiMarkdownEditorKit} instance
      */
+    @SuppressWarnings("CloneDoesntCallSuperClone")
     @Override
     public Object clone() {
-        return new MultiMarkdownEditorKit(document);
+        return new MultiMarkdownEditorKit();
     }
 
     /**
@@ -91,7 +84,7 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
      */
     @Override
     public ViewFactory getViewFactory() {
-        return new MarkdownViewFactory(document, this);
+        return new MarkdownViewFactory(this);
     }
 
     /**
@@ -103,20 +96,9 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
      * @since 0.8
      */
     private static class MarkdownViewFactory extends HTMLFactory {
-
-        /**
-         * The document.
-         */
-        private final Document document;
         private MultiMarkdownEditorKit editorKit;
 
-        /**
-         * Build a new instance of {@link MarkdownViewFactory}.
-         *
-         * @param document the document
-         */
-        private MarkdownViewFactory(Document document, MultiMarkdownEditorKit editorKit) {
-            this.document = document;
+        private MarkdownViewFactory(MultiMarkdownEditorKit editorKit) {
             this.editorKit = editorKit;
         }
 
@@ -125,7 +107,7 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
         @Override
         public View create(Element elem) {
             if (HTML.Tag.IMG.equals(elem.getAttributes().getAttribute(StyleConstants.NameAttribute))) {
-                return new MarkdownImageView(document, elem, editorKit);
+                return new MarkdownImageView(editorKit, elem);
             }
             return super.create(elem);
         }
@@ -139,26 +121,14 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
      * @since 0.8
      */
     protected static class MarkdownImageView extends ImageView {
-
-        /**
-         * The document.
-         */
-        private final Document document;
         private MultiMarkdownEditorKit editorKit;
         private boolean scaled;
 
-        /**
-         * Build a new instance of {@link MarkdownImageView}.
-         *
-         * @param document the document
-         * @param elem     the element to create a view for
-         */
-        private MarkdownImageView(@NotNull Document document, @NotNull Element elem, @NotNull MultiMarkdownEditorKit editorKit) {
+        private MarkdownImageView(@NotNull MultiMarkdownEditorKit editorKit, @NotNull Element elem) {
             super(elem);
+            this.editorKit = editorKit;
 
             scaled = false;
-            this.document = document;
-            this.editorKit = editorKit;
         }
 
         /**
@@ -170,19 +140,6 @@ public class MultiMarkdownEditorKit extends HTMLEditorKit {
          */
         @Override
         public URL getImageURL() {
-            final String src = (String) getElement().getAttributes().getAttribute(Attribute.SRC);
-            if (src != null) {
-                Object link = MultiMarkdownPathResolver.resolveLink(null, document, src, false, true);
-                if (link instanceof VirtualFile) {
-                    final VirtualFile localImage = (VirtualFile) link;
-                    try {
-                        if (localImage.exists())
-                            return new File(localImage.getPath()).toURI().toURL();
-                    } catch (MalformedURLException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
             return super.getImageURL();
         }
 

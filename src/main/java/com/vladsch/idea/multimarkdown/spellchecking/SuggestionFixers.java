@@ -24,8 +24,10 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.codeStyle.NameUtil;
 import com.intellij.spellchecker.SpellCheckerManager;
-import com.vladsch.idea.multimarkdown.util.FilePathInfo;
-import com.vladsch.idea.multimarkdown.util.FileReference;
+import com.vladsch.idea.multimarkdown.util.FileRef;
+import com.vladsch.idea.multimarkdown.util.PathInfo;
+import com.vladsch.idea.multimarkdown.util.ProjectFileRef;
+import com.vladsch.idea.multimarkdown.util.WikiLinkRef;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -96,7 +98,7 @@ public class SuggestionFixers {
     public static class WikiRefAsFilNameWithExtFixer extends FixerBase {
         @Override
         public void makeSuggestions(@NotNull String text, @NotNull Suggestion suggestion, Project project) {
-            String fileName = FilePathInfo.wikiRefAsFileNameWithExt(new FilePathInfo(text).getFileNameNoExt());
+            String fileName = WikiLinkRef.linkAsFile(new PathInfo(text).getFileNameNoExt()) + PathInfo.WIKI_PAGE_EXTENSION;
             addSuggestion(fileName);
         }
     }
@@ -133,8 +135,10 @@ public class SuggestionFixers {
         @Override
         public void makeSuggestions(final @NotNull String text, @NotNull final Suggestion suggestion, Project project) {
             if (project != null && suggestion.hasParam(FILE_PATH)) {
-                FileReference fileReference = new FileReference(suggestion.stringParam(FILE_PATH), project);
-                if (!fileReference.canRenameFileTo(text)) return;
+                FileRef fileReference = new FileRef(suggestion.stringParam(FILE_PATH));
+                FileRef renamedFileReference = fileReference.append("..", text);
+                ProjectFileRef projectFileRef = renamedFileReference.projectFileRef(project);
+                if (projectFileRef == null || projectFileRef.getExists()) return;
             }
             addSuggestion(suggestion);
         }
@@ -143,8 +147,8 @@ public class SuggestionFixers {
     public static class FileNameWithExtFixer extends FixerBase {
         @Override
         public void makeSuggestions(@NotNull String text, @NotNull Suggestion suggestion, Project project) {
-            String wikiRef = new FilePathInfo(text).getFileNameNoExt();
-            addSuggestion(wikiRef + FilePathInfo.WIKI_PAGE_EXTENSION);
+            String wikiRef = new PathInfo(text).getFileNameNoExt();
+            addSuggestion(wikiRef + PathInfo.WIKI_PAGE_EXTENSION);
         }
     }
 

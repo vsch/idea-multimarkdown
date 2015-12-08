@@ -48,11 +48,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -60,123 +58,122 @@ import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 
-public class MultiMarkdownSettingsPanel implements SettingsProvider {
+public class MultiMarkdownSettingsPanel implements ComponentProvider {
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownSettingsPanel.class);
 
-    public JSpinner parsingTimeoutSpinner;
-    public JCheckBox smartsCheckBox;
-    public JCheckBox quotesCheckBox;
-    public JCheckBox abbreviationsCheckBox;
-    public JCheckBox hardWrapsCheckBox;
-    public JCheckBox autoLinksCheckBox;
-    public JCheckBox wikiLinksCheckBox;
-    public JCheckBox tablesCheckBox;
-    public JCheckBox definitionsCheckBox;
-    public JCheckBox fencedCodeBlocksCheckBox;
-    public JCheckBox suppressHTMLBlocksCheckBox;
-    public JCheckBox suppressInlineHTMLCheckBox;
-    public JCheckBox strikethroughCheckBox;
-    public JSpinner updateDelaySpinner;
-    public JSpinner maxImgWidthSpinner;
-    //public JTextArea textCustomCss;
-    public JPanel customCssPanel;
-    public JButton clearCustomCssButton;
-    public JButton btnLoadDefault;
-    public JCheckBox taskListsCheckBox;
-    public JCheckBox headerSpaceCheckBox;
-    public JCheckBox showHtmlTextCheckBox;
-    public JCheckBox showHtmlTextAsModifiedCheckBox;
-    public JCheckBox anchorLinksCheckBox;
-    public JCheckBox forceListParaCheckBox;
-    public JCheckBox relaxedHRulesCheckBox;
-    public JComponent htmlThemeComboBox;
-    public JCheckBox enableTrimSpacesCheckBox;
     private EditorTextField textCustomCss;
-
-    public JPanel panel;
-    public JPanel settingsPanel;
-    public JPanel extensionsPanel;
-
-    private JLabel suppressInlineHTMLDescriptionLabel;
-    private JLabel suppressHTMLBlocksDescriptionLabel;
-    private JLabel fencedCodeBlocksDescriptionLabel;
-    private JLabel definitionsDescriptionLabel;
-    private JLabel tablesDescriptionLabel;
-    private JLabel autoLinksDescriptionLabel;
-    private JLabel wikiLinksDescriptionLabel;
-    private JLabel hardWarpsDescriptionLabel;
+    private JButton btnLoadDefault;
+    private JButton buyLicenseButton;
+    private JButton clearCustomCssButton;
+    private JButton clearLicenseButton;
+    private JButton fetchLicenseButton;
+    private JButton focusEditorButton;
+    private JButton trialLicenseButton;
+    private JCheckBox abbreviationsCheckBox;
+    private JCheckBox anchorLinksCheckBox;
+    private JCheckBox autoLinksCheckBox;
+    private JCheckBox definitionsCheckBox;
+    private JCheckBox enableFirebugCheckBox;
+    private JCheckBox enableTrimSpacesCheckBox;
+    private JCheckBox fencedCodeBlocksCheckBox;
+    private JCheckBox footnotesCheckBox;
+    private JCheckBox forceListParaCheckBox;
+    private JCheckBox githubWikiLinksCheckBox;
+    private JCheckBox hardWrapsCheckBox;
+    private JCheckBox headerSpaceCheckBox;
+    private JCheckBox includesColorsCheckBox;
+    private JCheckBox includesHljsCssCheckBox;
+    private JCheckBox includesLayoutCssCheckBox;
+    private JCheckBox quotesCheckBox;
+    private JCheckBox relaxedHRulesCheckBox;
+    private JCheckBox showHtmlTextAsModifiedCheckBox;
+    private JCheckBox showHtmlTextCheckBox;
+    private JCheckBox smartsCheckBox;
+    private JCheckBox strikethroughCheckBox;
+    private JCheckBox suppressHTMLBlocksCheckBox;
+    private JCheckBox suppressInlineHTMLCheckBox;
+    private JCheckBox tablesCheckBox;
+    private JCheckBox taskListsCheckBox;
+    private JCheckBox useCustomCssCheckBox;
+    private JCheckBox useHighlightJsCheckBox;
+    private JCheckBox useOldPreviewCheckBox;
+    private JCheckBox wikiLinksCheckBox;
+    private JComponent htmlThemeComboBox;
+    private JEditorPane licenseInfoEditorPane;
+    private JEditorPane noticesEditorPane;
     private JLabel abbreviationsDescriptionLabel;
+    private JLabel autoLinksDescriptionLabel;
+    private JLabel definitionsDescriptionLabel;
+    private JLabel enableFirebugLabel;
+    private JLabel fencedCodeBlocksDescriptionLabel;
+    private JLabel githubWikiLinksLabel;
+    private JLabel hardWarpsDescriptionLabel;
+    private JLabel maxImgWidthLabel;
+    private JLabel pageZoomLabel;
+    private JLabel parsingTimeoutDescriptionLabel;
     private JLabel quotesDescriptionLabel;
     private JLabel smartsDescriptionLabel;
     private JLabel strikethroughDescriptionLabel;
-    private JLabel parsingTimeoutDescriptionLabel;
-    private JButton focusEditorButton;
-    private JCheckBox useCustomCssCheckBox;
-    private JCheckBox useOldPreviewCheckBox;
-    private JLabel maxImgWidthLabel;
-    private JCheckBox enableFirebugCheckBox;
+    private JLabel suppressHTMLBlocksDescriptionLabel;
+    private JLabel suppressInlineHTMLDescriptionLabel;
+    private JLabel tablesDescriptionLabel;
+    private JLabel wikiLinksDescriptionLabel;
     private JList htmlThemeList;
-    //private JEditorPane tippingJarEditorPane;
+    private JPanel customCssPanel;
+    private JPanel extensionsPanel;
+    public JPanel panel;
+    private JPanel settingsPanel;
+    private JSpinner maxImgWidthSpinner;
     private JSpinner pageZoomSpinner;
-    private JLabel pageZoomLabel;
+    private JSpinner parsingTimeoutSpinner;
+    private JSpinner updateDelaySpinner;
     private JTabbedPane tabbedPane;
-    private JEditorPane noticesEditorPane;
-    private JLabel enableFirebugLabel;
-    private JCheckBox useHighlightJsCheckBox;
-    private JCheckBox includesHljsCssCheckBox;
-    private JCheckBox includesLayoutCssCheckBox;
-    private JCheckBox includesColorsCheckBox;
-    private JCheckBox githubWikiLinksCheckBox;
-    private JLabel githubWikiLinksLabel;
-    private JCheckBox footnotesCheckBox;
 
-    // need this so that we dont try to access components before they are created
+    // need this so that we don't try to access components before they are created
     public
     @Nullable
     Object getComponent(@NotNull String persistName) {
-        if (persistName.equals("parsingTimeoutSpinner")) return parsingTimeoutSpinner;
-        if (persistName.equals("smartsCheckBox")) return smartsCheckBox;
-        if (persistName.equals("quotesCheckBox")) return quotesCheckBox;
-        if (persistName.equals("abbreviationsCheckBox")) return abbreviationsCheckBox;
-        if (persistName.equals("hardWrapsCheckBox")) return hardWrapsCheckBox;
-        if (persistName.equals("autoLinksCheckBox")) return autoLinksCheckBox;
-        if (persistName.equals("wikiLinksCheckBox")) return wikiLinksCheckBox;
-        if (persistName.equals("tablesCheckBox")) return tablesCheckBox;
-        if (persistName.equals("definitionsCheckBox")) return definitionsCheckBox;
-        if (persistName.equals("fencedCodeBlocksCheckBox")) return fencedCodeBlocksCheckBox;
-        if (persistName.equals("suppressHTMLBlocksCheckBox")) return suppressHTMLBlocksCheckBox;
-        if (persistName.equals("suppressInlineHTMLCheckBox")) return suppressInlineHTMLCheckBox;
-        if (persistName.equals("strikethroughCheckBox")) return strikethroughCheckBox;
-        if (persistName.equals("updateDelaySpinner")) return updateDelaySpinner;
-        if (persistName.equals("maxImgWidthSpinner")) return maxImgWidthSpinner;
-        if (persistName.equals("textCustomCss")) return textCustomCss;
-        if (persistName.equals("clearCustomCssButton")) return clearCustomCssButton;
-        if (persistName.equals("btnLoadDefault")) return btnLoadDefault;
-        if (persistName.equals("taskListsCheckBox")) return taskListsCheckBox;
-        if (persistName.equals("headerSpaceCheckBox")) return headerSpaceCheckBox;
-        if (persistName.equals("showHtmlTextCheckBox")) return showHtmlTextCheckBox;
-        if (persistName.equals("showHtmlTextAsModifiedCheckBox")) return showHtmlTextAsModifiedCheckBox;
-        if (persistName.equals("anchorLinksCheckBox")) return anchorLinksCheckBox;
-        if (persistName.equals("forceListParaCheckBox")) return forceListParaCheckBox;
-        if (persistName.equals("relaxedHRulesCheckBox")) return relaxedHRulesCheckBox;
         //if (persistName.equals("htmlThemeComboBox")) return htmlThemeComboBox;
-        if (persistName.equals("enableTrimSpacesCheckBox")) return enableTrimSpacesCheckBox;
-        if (persistName.equals("useCustomCssCheckBox")) return useCustomCssCheckBox;
-        if (persistName.equals("useOldPreviewCheckBox")) return useOldPreviewCheckBox;
+        if (persistName.equals("abbreviationsCheckBox")) return abbreviationsCheckBox;
+        if (persistName.equals("anchorLinksCheckBox")) return anchorLinksCheckBox;
+        if (persistName.equals("autoLinksCheckBox")) return autoLinksCheckBox;
+        if (persistName.equals("btnLoadDefault")) return btnLoadDefault;
+        if (persistName.equals("clearCustomCssButton")) return clearCustomCssButton;
+        if (persistName.equals("definitionsCheckBox")) return definitionsCheckBox;
         if (persistName.equals("enableFirebugCheckBox")) return enableFirebugCheckBox;
+        if (persistName.equals("enableTrimSpacesCheckBox")) return enableTrimSpacesCheckBox;
+        if (persistName.equals("fencedCodeBlocksCheckBox")) return fencedCodeBlocksCheckBox;
+        if (persistName.equals("footnotesCheckBox")) return footnotesCheckBox;
+        if (persistName.equals("forceListParaCheckBox")) return forceListParaCheckBox;
+        if (persistName.equals("githubWikiLinksCheckBox")) return githubWikiLinksCheckBox;
+        if (persistName.equals("hardWrapsCheckBox")) return hardWrapsCheckBox;
+        if (persistName.equals("headerSpaceCheckBox")) return headerSpaceCheckBox;
         if (persistName.equals("htmlThemeList")) return htmlThemeList;
-        if (persistName.equals("pageZoomSpinner")) return pageZoomSpinner;
-        if (persistName.equals("tabbedPane")) return tabbedPane;
-        if (persistName.equals("useHighlightJsCheckBox")) return useHighlightJsCheckBox;
+        if (persistName.equals("includesColorsCssCheckBox")) return includesColorsCheckBox;
         if (persistName.equals("includesHljsCssCheckBox")) return includesHljsCssCheckBox;
         if (persistName.equals("includesLayoutCssCheckBox")) return includesLayoutCssCheckBox;
-        if (persistName.equals("includesColorsCssCheckBox")) return includesColorsCheckBox;
-        if (persistName.equals("githubWikiLinksCheckBox")) return githubWikiLinksCheckBox;
-        if (persistName.equals("footnotesCheckBox")) return footnotesCheckBox;
+        if (persistName.equals("maxImgWidthSpinner")) return maxImgWidthSpinner;
+        if (persistName.equals("pageZoomSpinner")) return pageZoomSpinner;
+        if (persistName.equals("parsingTimeoutSpinner")) return parsingTimeoutSpinner;
+        if (persistName.equals("quotesCheckBox")) return quotesCheckBox;
+        if (persistName.equals("relaxedHRulesCheckBox")) return relaxedHRulesCheckBox;
+        if (persistName.equals("showHtmlTextAsModifiedCheckBox")) return showHtmlTextAsModifiedCheckBox;
+        if (persistName.equals("showHtmlTextCheckBox")) return showHtmlTextCheckBox;
+        if (persistName.equals("smartsCheckBox")) return smartsCheckBox;
+        if (persistName.equals("strikethroughCheckBox")) return strikethroughCheckBox;
+        if (persistName.equals("suppressHTMLBlocksCheckBox")) return suppressHTMLBlocksCheckBox;
+        if (persistName.equals("suppressInlineHTMLCheckBox")) return suppressInlineHTMLCheckBox;
+        if (persistName.equals("tabbedPane")) return tabbedPane;
+        if (persistName.equals("tablesCheckBox")) return tablesCheckBox;
+        if (persistName.equals("taskListsCheckBox")) return taskListsCheckBox;
+        if (persistName.equals("textCustomCss")) return textCustomCss;
+        if (persistName.equals("updateDelaySpinner")) return updateDelaySpinner;
+        if (persistName.equals("useCustomCssCheckBox")) return useCustomCssCheckBox;
+        if (persistName.equals("useHighlightJsCheckBox")) return useHighlightJsCheckBox;
+        if (persistName.equals("useOldPreviewCheckBox")) return useOldPreviewCheckBox;
+        if (persistName.equals("wikiLinksCheckBox")) return wikiLinksCheckBox;
 
         return null;
     }
@@ -187,7 +184,6 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         }
     }
 
-    protected boolean useCustomCSSOriginalState;
     protected boolean haveCustomizableEditor;
 
     protected void updateCustomCssControls() {
@@ -247,14 +243,9 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
                 //String cssText = new String(Base64.decodeBase64(base64Css), Charset.forName("utf-8"));
                 MultiMarkdownGlobalSettings settings = MultiMarkdownGlobalSettings.getInstance();
                 textCustomCss.setText((useOldPreviewCheckBox.isSelected() ? settings.getCssFileText(htmlThemeList.getSelectedIndex(), false)
-
                         : (includesColorsCheckBox.isSelected() ? settings.getCssFileText(htmlThemeList.getSelectedIndex(), true) : "") +
-
-                        (includesLayoutCssCheckBox.isSelected()
-                                ? settings.getLayoutCssFileText() : "") +
-
-                        (includesHljsCssCheckBox.isSelected() && useHighlightJsCheckBox.isSelected()
-                                ? settings.getHljsCssFileText(htmlThemeList.getSelectedIndex(), true) : "")
+                        (includesLayoutCssCheckBox.isSelected() ? settings.getLayoutCssFileText() : "") +
+                        (includesHljsCssCheckBox.isSelected() && useHighlightJsCheckBox.isSelected() ? settings.getHljsCssFileText(htmlThemeList.getSelectedIndex(), true) : "")
                 ));
             }
         });
@@ -367,29 +358,8 @@ public class MultiMarkdownSettingsPanel implements SettingsProvider {
         MultiMarkdownPreviewEditor.setStyleSheet(noticesEditorPane);
         noticesEditorPane.setText(htmlText);
 
-        HyperlinkListener listener = new HyperlinkListener() {
-            @Override
-            public void hyperlinkUpdate(HyperlinkEvent e) {
-                if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
-                    URL href = e.getURL();
-                    if (href != null) {
-                        if (Desktop.isDesktopSupported()) {
-                            try {
-                                Desktop.getDesktop().browse(href.toURI());
-                            } catch (URISyntaxException ex) {
-                                // invalid URI, just log
-                                logger.error("URISyntaxException on '" + href.toString() + "'" + ex.toString());
-                            } catch (IOException ex) {
-                                logger.error("IOException on '" + href.toString() + "'" + ex.toString());
-                            }
-                        }
-                    }
-                }
-            }
-        };
-
         //tippingJarEditorPane.addHyperlinkListener(listener);
-        noticesEditorPane.addHyperlinkListener(listener);
+        noticesEditorPane.addHyperlinkListener(SettingsPanelImpl.getHyperLinkListenerBrowseUrl());
 
         // we don't change these
         githubWikiLinksCheckBox.setEnabled(false);
