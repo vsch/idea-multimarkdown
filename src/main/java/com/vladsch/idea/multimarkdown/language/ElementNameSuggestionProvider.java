@@ -1,4 +1,5 @@
 /*
+ * Copyright 2000-2009 JetBrains s.r.o.
  * Copyright (c) 2015-2015 Vladimir Schneider <vladimir.schneider@gmail.com>
  *
  * Licensed to the Apache Software Foundation (ASF) under one

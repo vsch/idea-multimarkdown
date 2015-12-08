@@ -18,8 +18,6 @@
  * specific language governing permissions and limitations
  * under the License.
  *
- * This file is based on the IntelliJ SimplePlugin tutorial
- *
  */
 package com.vladsch.idea.multimarkdown;
 

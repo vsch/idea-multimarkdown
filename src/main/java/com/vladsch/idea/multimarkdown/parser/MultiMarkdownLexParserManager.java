@@ -18,7 +18,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *
- * This file is based on the IntelliJ SimplePlugin tutorial
+ * This file is based on the IntelliJ Markdown Support plugin
  *
  */
 package com.vladsch.idea.multimarkdown.parser;
