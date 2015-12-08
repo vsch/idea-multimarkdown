@@ -28,8 +28,8 @@ import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.util.Processor;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownFile;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
-import com.vladsch.idea.multimarkdown.util.FilePathInfo;
+import com.vladsch.idea.multimarkdown.util.PathInfo;
+import com.vladsch.idea.multimarkdown.util.WikiLinkRef;
 import org.jetbrains.annotations.NotNull;
 
 public class MultiMarkdownReferenceSearch extends QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters> {
@@ -42,22 +42,13 @@ public class MultiMarkdownReferenceSearch extends QueryExecutorBase<PsiReference
         final PsiElement refElement = p.getElementToSearch();
 
         String text = null;
-        String text2 = null;
-        if (refElement instanceof MultiMarkdownFile) {
-            FilePathInfo pathInfo = new FilePathInfo(((MultiMarkdownFile) refElement).getVirtualFile());
-            text = pathInfo.getFileNameNoExtAsWikiRef();
-            //text2 = pathInfo.getFileNameNoExt();
-        } else if (refElement instanceof MultiMarkdownWikiPageRef) {
-            text = ((MultiMarkdownWikiPageRef) refElement).getName();
-            //text2 = ((MultiMarkdownWikiPageRef) refElement).getNameWithAnchor();
+        if (refElement instanceof MultiMarkdownFile && ((MultiMarkdownFile) refElement).isWikiPage()) {
+            PathInfo pathInfo = new PathInfo(((MultiMarkdownFile) refElement).getVirtualFile());
+            text = WikiLinkRef.fileAsLink(pathInfo.getFileNameNoExt());
         }
         if (StringUtil.isNotEmpty(text)) {
             final SearchScope searchScope = p.getEffectiveSearchScope();
             p.getOptimizer().searchWord(text, searchScope, refElement.getLanguage().isCaseSensitive(), refElement);
         }
-        //if (StringUtil.isNotEmpty(text2) && !text2.equals(text)) {
-        //    final SearchScope searchScope = p.getEffectiveSearchScope();
-        //    p.getOptimizer().searchWord(text2, searchScope, refElement.getLanguage().isCaseSensitive(), refElement);
-        //}
     }
 }

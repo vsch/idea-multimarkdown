@@ -38,11 +38,7 @@ public class MultiMarkdownParser implements PsiParser {
     }
 
     protected boolean parseRoot(IElementType root, PsiBuilder builder) {
-        // we need the pegdown references
-        //MultiMarkdownLexParser lexParser = ((MultiMarkdownLexer) ((PsiBuilderImpl) builder).getLexer()).getLexParser();
-
         PsiBuilder.Marker rootMarker = builder.mark();
-        //Lexer lexer = ((PsiBuilderImpl) builder).getLexer();
         while (!builder.eof()) {
             if (builder.getTokenType() == COMMENT) {
                 PsiBuilder.Marker tokenMarker = builder.mark();

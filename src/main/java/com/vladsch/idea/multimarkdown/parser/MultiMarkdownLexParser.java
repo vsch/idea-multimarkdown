@@ -26,8 +26,8 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
-import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.pegdown.PegDownProcessor;
 import org.pegdown.ast.*;
 
@@ -44,9 +44,6 @@ import static com.vladsch.idea.multimarkdown.psi.MultiMarkdownTypes.*;
 public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
     private static final Logger LOGGER = Logger.getInstance(MultiMarkdownLexParser.class);
 
-    private MultiMarkdownGlobalSettingsListener globalSettingsListener = null;
-    //private ThreadLocal<PegDownProcessor> processor = initProcessor();
-    private PegDownProcessor processor = null;
     private int currentStringLength;
     //private String currentString;
 
@@ -54,7 +51,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
     private static Map<IElementType, HashSet<IElementType>> overrideExclusions = new HashMap<IElementType, HashSet<IElementType>>();
     private static Map<IElementType, HashMap<IElementType, IElementType>> combinationSplits = new HashMap<IElementType, HashMap<IElementType, IElementType>>();
 
-    protected ArrayList<SegmentedRange> parentRanges = null;
+    protected ArrayList<SegmentedRange> parentRanges = new ArrayList<SegmentedRange>();
     protected int minStackLevel = 0;
     protected int tableRows = 0;
     protected int rowColumns = 0;
@@ -63,35 +60,13 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
     protected static boolean recursingItalic = false;
     protected static boolean recursingStrike = false;
 
-    protected LexerToken[] tokenArray = null;
-    protected LexerToken[] lexerTokens = null;
-    protected RootNode rootNode = null;
-    protected Map<String, MarkdownASTVisitor.ParserNodeInfo> abbreviations = null;
+    protected Map<String, MarkdownASTVisitor.ParserNodeInfo> abbreviations = new HashMap<String, MarkdownASTVisitor.ParserNodeInfo>();
     protected String abbreviationsRegEx = "";
     protected Pattern abbreviationsPattern = null;
 
-    protected final Integer pegdownExtensions;
-    protected Integer parsingTimeout;
     protected boolean githubWikiLinks;
 
-    protected void clearParsed() {
-        tableRows = 0;
-        rowColumns = 0;
-        recursingBold = false;
-        recursingItalic = false;
-        recursingStrike = false;
-        abbreviations = null;
-        abbreviationsPattern = null;
-        tokenArray = null;
-        lexerTokens = null;
-        rootNode = null;
-        minStackLevel = 0;
-
-        clearStack();
-
-        abbreviations = new HashMap<String, MarkdownASTVisitor.ParserNodeInfo>();
-        abbreviationsRegEx = "";
-    }
+    private boolean parseCalled = false;
 
     // when an exclusion is added then the parent range will not be punched out by the child
     // default child range punches out a hole in the parent range.
@@ -150,8 +125,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         if (!overrideExclusions.containsKey(child)) return false;
 
         childExclusions = overrideExclusions.get(child);
-        if (!childExclusions.contains(parent)) return false;
-        return true;
+        return childExclusions.contains(parent);
     }
 
     static protected void addCombinationSplit(IElementType resultingType, IElementType elementType1, IElementType elementType2) {
@@ -247,121 +221,61 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         // that way only the bullets will be left to punch out  the block quote
         addExclusion(BLOCK_QUOTE, LIST_ITEM);
     }
-    ///** Init/reinit thread local {@link PegDownProcessor}. */
-    //private ThreadLocal<PegDownProcessor> initProcessor() {
-    //    return new ThreadLocal<PegDownProcessor>() {
-    //        @Override protected PegDownProcessor initialValue() {
-    //            return getProcessor();
-    //        }
-    //    };
-    //}
 
-    @NotNull
-    private PegDownProcessor getProcessor() {
-        return new PegDownProcessor(pegdownExtensions != null ? pegdownExtensions : MultiMarkdownGlobalSettings.getInstance().getExtensionsValue(),
-                parsingTimeout != null ? parsingTimeout : MultiMarkdownGlobalSettings.getInstance().parsingTimeout.getValue());
-    }
+    public
+    @Nullable
+    LexerToken[] parseMarkdown(final RootNode rootNode, char[] currentChars, int pegdownExtensions) {
+        assert !parseCalled;
+        if (rootNode == null) return null;
 
-    public MultiMarkdownLexParser() {
-        // Listen to global settings changes.
-        this.pegdownExtensions = null;
-        this.parsingTimeout = null;
+        this.currentStringLength = currentChars.length;
 
-        MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
-            public void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings) {
-                processor = null;
-            }
-        });
-    }
+        // process tokens right away and return them
+        this.githubWikiLinks = (pegdownExtensions & MultiMarkdownLexParserManager.GITHUB_WIKI_LINKS) != 0;
+        MarkdownASTVisitor visitor = new MarkdownASTVisitor();
+        rootNode.accept(visitor);
+        ArrayList<LexerToken> lexerTokens = visitor.getTokens();
 
-    public MultiMarkdownLexParser(int pegdownExtensions) {
-        // here we don't listen to global changes, our flags are fixed
-        this.pegdownExtensions = pegdownExtensions;
-        this.parsingTimeout = null;
+        LexerToken[] tokens = new LexerToken[lexerTokens.size()];
+        tokens = lexerTokens.toArray(tokens);
 
-        MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
-            public void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings) {
-                processor = null;
-            }
-        });
-    }
+        if (tokens.length > 0) {
+            Arrays.sort(tokens);
 
-    public MultiMarkdownLexParser(int pegdownExtensions, int parsingTimeout) {
-        // here we don't listen to global changes, our flags are fixed
-        this.pegdownExtensions = pegdownExtensions;
-        this.parsingTimeout = parsingTimeout;
-    }
+            // now need to step through and merge consecutive tokens
+            int iMax = tokens.length;
+            LexerToken thisToken = tokens[0];
+            lexerTokens = new ArrayList<LexerToken>(iMax);
 
-    public boolean parseMarkdown(final String source) {
-        clearParsed();
-        currentStringLength = source.length();
-        //currentString = source;
+            for (int i = 1; i < iMax; i++) {
+                LexerToken thatToken = tokens[i];
 
-        try {
-            if (processor == null) {
-                processor = getProcessor();
-            }
-            rootNode = processor.parseMarkdown(source.toCharArray());
-            return true;
-        } catch (Exception e) {
-            LOGGER.error("Failed processing Markdown document", e);
-            return false;
-        }
-    }
-
-    public LexerToken[] getTokenArray() {
-        if (tokenArray == null && rootNode != null) {
-            githubWikiLinks = MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue();
-            MarkdownASTVisitor visitor = new MarkdownASTVisitor();
-            rootNode.accept(visitor);
-            ArrayList<LexerToken> lexerTokens = visitor.getTokens();
-            tokenArray = new LexerToken[lexerTokens.size()];
-            tokenArray = lexerTokens.toArray(tokenArray);
-
-            if (tokenArray.length > 0) {
-                Arrays.sort(tokenArray);
-
-                // now need to step through and merge consecutive tokens
-                int iMax = tokenArray.length;
-                LexerToken thisToken = tokenArray[0];
-                lexerTokens = new ArrayList<LexerToken>(iMax);
-
-                for (int i = 1; i < iMax; i++) {
-                    LexerToken thatToken = tokenArray[i];
-
-                    if (!thatToken.doesExtend(thisToken)) {
-                        lexerTokens.add(thisToken);
-                        thisToken = thatToken;
-                    } else {
-                        thisToken.getRange().expandToInclude(thatToken.getRange());
-                    }
+                if (!thatToken.doesExtend(thisToken)) {
+                    lexerTokens.add(thisToken);
+                    thisToken = thatToken;
+                } else {
+                    thisToken.getRange().expandToInclude(thatToken.getRange());
                 }
-
-                lexerTokens.add(thisToken);
-                tokenArray = new LexerToken[lexerTokens.size()];
-                tokenArray = lexerTokens.toArray(tokenArray);
             }
-        }
-        return tokenArray;
-    }
+            lexerTokens.add(thisToken);
 
-    public LexerToken[] getLexerTokens() {
-        if (lexerTokens == null && rootNode != null) {
-            LexerToken[] tokens = getTokenArray();
+            // now we generate lexemes from the combined optimized tokens
+            tokens = new LexerToken[lexerTokens.size()];
+            tokens = lexerTokens.toArray(tokens);
 
             // we create a list of non-intersecting, sorted, ranges
-            if (tokens != null) {
-                lexerTokens = splitLexerTokens(tokens);
-            }
+            tokens = splitLexerTokens(tokens);
         }
-        return lexerTokens;
+
+        parseCalled = true;
+        return tokens;
     }
 
-    public LexerToken getWhiteSpaceToken(int start, int end) {
+    public static LexerToken getWhiteSpaceToken(int start, int end) {
         return new LexerToken(new Range(start, end), TokenType.WHITE_SPACE);
     }
 
-    public LexerToken getSkippedSpaceToken(int start, int end) {
+    public static LexerToken getSkippedSpaceToken(int start, int end) {
         //if (end > currentStringLength) {
         //    int tmp = 0;
         //}
@@ -377,24 +291,6 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
             // do all of them
             splitLexemes(lexemes, tokens, 0, Integer.MAX_VALUE);
 
-            end = lexemes.size() - 1;
-            for (int i = 0; i < end; i++) {
-                LexerToken t1 = lexemes.get(i);
-                LexerToken t2 = lexemes.get(i + 1);
-                //if (t1.compare(t2) > 0 || t1.getRange().doesOverlap(t2.getRange())) {
-                //    int tmp = 0;
-                //}
-            }
-
-            //if (lexemes.get(end).getRange().getEnd() > currentStringLength) {
-            //    int tmp = 0;
-            //    lexemes.get(end).getRange().setEnd(currentStringLength);
-            //    if (lexemes.get(end).getRange().isEmpty())
-            //    {
-            //        // pegdown issue, creates nodes beyond the end of file
-            //        lexemes.remove(end);
-            //    }
-            //}
 
             LexerToken[] lexerTokens = new LexerToken[lexemes.size()];
             return lexemes.toArray(lexerTokens);
@@ -474,14 +370,10 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         return start;
     }
 
-    public LexerToken[] getTokens() {
-        return tokenArray;
-    }
-
     protected static class LexerToken implements Comparable<LexerToken> {
 
         @Override
-        public int compareTo(LexerToken o) {
+        public int compareTo(@NotNull LexerToken o) {
             return compare(o);
         }
 
@@ -558,17 +450,6 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         return parentRanges.get(parentRanges.size() - 1);
     }
 
-    protected void clearStack() {
-        //if (minStackLevel > 0) {
-        //    int tmp = 0;
-        //}
-        if (parentRanges == null) {
-            parentRanges = new ArrayList<SegmentedRange>(100);
-        } else {
-            parentRanges.clear();
-        }
-    }
-
     protected class MarkdownASTVisitor implements Visitor {
         protected final ArrayList<LexerToken> tokens = new ArrayList<LexerToken>(100);
 
@@ -633,7 +514,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         public void visit(FootnoteNode node) {
             //ArrayList<Node> children = new ArrayList<Node>(1);
             //children.add(node.getFootnote());
-            addTokenWithChildren(node, node.getFootnote().getChildren(), FOOTNOTE);
+            addTokenWithChildren(node, FOOTNOTE, node.getFootnote().getChildren());
         }
 
         public void visit(FootnoteRefNode node) {
@@ -830,6 +711,14 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
 
         public void visit(final RefLinkNode node) {
             addTokenWithChildren(node, REFERENCE_LINK);
+        }
+
+        public void visit(ReferenceNode node) {
+            addTokenWithChildren(node, REFERENCE);
+        }
+
+        public void visit(RefImageNode node) {
+            addTokenWithChildren(node, REFERENCE_IMAGE);
         }
 
         public void visit(AutoLinkNode node) {
@@ -1108,14 +997,6 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
             })) addToken(node, INLINE_HTML);
         }
 
-        public void visit(ReferenceNode node) {
-            addTokenWithChildren(node, REFERENCE);
-        }
-
-        public void visit(RefImageNode node) {
-            addTokenWithChildren(node, REFERENCE_IMAGE);
-        }
-
         public void visit(AbbreviationNode node) {
             addTokenWithChildren(node, ABBREVIATION);
         }
@@ -1265,10 +1146,14 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
         // punch out the child's range from the parent's so that we can eliminate parent's highlighting
         // on the child text
         protected void addTokenWithChildren(Node node, IElementType tokenType) {
-            addTokenWithChildren(node, node.getChildren(), tokenType);
+            addTokenWithChildren(node, tokenType, node.getChildren());
         }
 
-        protected void addTokenWithChildren(Node node, List<Node> children, IElementType tokenType) {
+        protected void addTokenWithChildren(Node node, IElementType tokenType, List<Node> children) {
+            addTokenWithChildren(node.getStartIndex(), node.getEndIndex(), tokenType, children);
+        }
+
+        protected void addTokenWithChildren(int startIndex, int endIndex, IElementType tokenType, List<Node> children) {
             //if (node.getEndIndex() > currentStringLength) {
             //    ((SuperNode) node).setEndIndex(currentStringLength);
             //    if (node.getStartIndex() >= node.getEndIndex()) {
@@ -1277,7 +1162,7 @@ public class MultiMarkdownLexParser { //implements Lexer, PsiParser {
             //}
 
             int entryStackLevel = parentRanges.size();
-            Range range = new Range(node.getStartIndex(), node.getEndIndex());
+            Range range = new Range(startIndex, endIndex);
 
             //System.out.println("addTokenWithChildren " + tokenType + range);
 

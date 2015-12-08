@@ -29,9 +29,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiLink;
-import com.vladsch.idea.multimarkdown.psi.MultiMarkdownWikiPageRef;
 import com.vladsch.idea.multimarkdown.psi.impl.MultiMarkdownPsiImplUtil;
-import com.vladsch.idea.multimarkdown.util.FilePathInfo;
 import org.jetbrains.annotations.NotNull;
 
 class SwapWikiPageRefTitleQuickFix extends BaseIntentionAction {
@@ -55,7 +53,7 @@ class SwapWikiPageRefTitleQuickFix extends BaseIntentionAction {
 
     @Override
     public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
-        return true;
+        return wikiLinkElement.isValid();
     }
 
     @Override
@@ -73,7 +71,7 @@ class SwapWikiPageRefTitleQuickFix extends BaseIntentionAction {
             @Override
             public void run() {
                 // change the whole name
-                MultiMarkdownPsiImplUtil.swapWikiLinkRefTitle(wikiLinkElement);
+                if (wikiLinkElement.isValid()) MultiMarkdownPsiImplUtil.swapWikiLinkRefTitle(wikiLinkElement);
             }
         }.execute();
     }

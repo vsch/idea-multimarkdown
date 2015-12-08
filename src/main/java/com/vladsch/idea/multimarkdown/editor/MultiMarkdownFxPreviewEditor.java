@@ -47,12 +47,13 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.UserDataHolderBase;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.sun.webkit.dom.HTMLImageElementImpl;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
+import com.vladsch.idea.multimarkdown.parser.MultiMarkdownLexParserManager;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
+import com.vladsch.idea.multimarkdown.util.GitHubLinkResolver;
 import com.vladsch.idea.multimarkdown.util.ReferenceChangeListener;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -71,7 +72,6 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pegdown.LinkRenderer;
-import org.pegdown.ParsingTimeoutException;
 import org.pegdown.PegDownProcessor;
 import org.pegdown.ToHtmlSerializer;
 import org.pegdown.ast.RootNode;
@@ -84,8 +84,6 @@ import org.w3c.dom.events.EventTarget;
 import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.net.MalformedURLException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -111,7 +109,6 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     protected WebEngine webEngine;
     protected JFXPanel jfxPanel;
     protected String scrollOffset = null;
-    protected RootNode astRoot = null;
     protected AnchorPane anchorPane;
 
     /**
@@ -149,6 +146,8 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     protected boolean htmlWorkerRunning;
 
     protected String fireBugJS;
+    private final VirtualFile containingFile;
+    private GitHubLinkResolver resolver;
 
     public static boolean isShowModified() {
         return MultiMarkdownGlobalSettings.getInstance().showHtmlTextAsModified.getValue();
@@ -176,23 +175,6 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
 
     public static boolean isShowHtmlText() {
         return MultiMarkdownGlobalSettings.getInstance().showHtmlText.getValue();
-    }
-
-    /**
-     * Init/reinit thread local {@link PegDownProcessor}.
-     */
-    //protected static ThreadLocal<PegDownProcessor> initProcessor() {
-    //    return new ThreadLocal<PegDownProcessor>() {
-    //        @Override
-    //        protected PegDownProcessor initialValue() {
-    //            // ISSUE: #7 worked around, disable pegdown TaskList HTML rendering, they don't display well in Darcula.
-    //            return getProcessor();
-    //        }
-    //    };
-    //}
-    @NotNull
-    private static PegDownProcessor getProcessor() {
-        return new PegDownProcessor(MultiMarkdownGlobalSettings.getInstance().getExtensionsValue() /*& ~Extensions.TASKLISTITEMS*/, getParsingTimeout());
     }
 
     /**
@@ -240,9 +222,10 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
     }
 
     protected void updateLinkRenderer() {
-        int options = MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue() ? MultiMarkdownLinkRenderer.GITHUB_WIKI_LINK_FORMAT : 0;
-        linkRendererModified = new MultiMarkdownFxLinkRenderer(project, document, "absent", options);
-        linkRendererNormal = new MultiMarkdownFxLinkRenderer(options);
+        int options = 0;
+        if (MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue()) options |= MultiMarkdownLinkRenderer.GITHUB_WIKI_LINK_FORMAT;
+        linkRendererModified = new MultiMarkdownLinkRenderer(project, document, "absent", null, options | MultiMarkdownLinkRenderer.VALIDATE_LINKS);
+        linkRendererNormal = new MultiMarkdownLinkRenderer(options);
     }
 
     /**
@@ -256,6 +239,8 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         this.document = doc;
         this.project = project;
         this.isWikiDocument = isWikiDocument(document);
+        containingFile = FileDocumentManager.getInstance().getFile(document);
+        resolver = containingFile == null ? null : new GitHubLinkResolver(containingFile, project);
 
         // Listen to the document modifications.
         this.document.addDocumentListener(new DocumentAdapter() {
@@ -426,7 +411,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                             }
                         }
                     } else {
-                        MultiMarkdownPathResolver.launchExternalLink(project, document, href);
+                        MultiMarkdownPathResolver.launchExternalLink(project, href);
                     }
                 }
             };
@@ -447,35 +432,25 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                     ((EventTarget) nodeList.item(i)).addEventListener("click", listener, false);
                 }
 
-                // see if we need to change img tag src to a resource, if the src is relative
-                nodeList = doc.getElementsByTagName("img");
-                for (int i = 0; i < nodeList.getLength(); i++) {
-                    HTMLImageElementImpl imgNode = (HTMLImageElementImpl) nodeList.item(i);
-                    String src = imgNode.getSrc();
-                    if (!src.startsWith("http://") && !src.startsWith("https://") && !src.startsWith("ftp://") && !src.startsWith("file://")) {
-                        // relative to document, change it to absolute file://
-                        //VirtualFile file = FileDocumentManager.getInstance().getFile(document);
-                        //VirtualFile parent = file == null ? null : file.getParent();
-                        //final VirtualFile localImage = parent == null ? null : parent.findFileByRelativePath(src);
-                        //final VirtualFile localImage = MultiMarkdownPathResolver.resolveRelativePath(document, src);
-                        Object resolveLink = MultiMarkdownPathResolver.resolveLink(project, document, src, false, true);
-                        if (resolveLink != null && resolveLink instanceof VirtualFile) {
-                            final VirtualFile localImage = (VirtualFile) resolveLink;
-                            if (localImage.exists()) {
-                                try {
-                                    imgNode.setSrc(String.valueOf(new File(localImage.getPath()).toURI().toURL()));
-                                } catch (MalformedURLException e) {
-                                    logger.info("[" + instance + "] " + "MalformedURLException" + localImage.getPath());
-                                }
-                            } else {
-                                String href = MultiMarkdownPathResolver.resolveExternalReference(project, document, src);
-                                if (href != null) {
-                                    imgNode.setSrc(href);
-                                }
-                            }
-                        }
-                    }
-                }
+                // all images are mapped during conversion. Any relative ones are not resolved.
+                //nodeList = doc.getElementsByTagName("img");
+                //for (int i = 0; i < nodeList.getLength(); i++) {
+                //    HTMLImageElementImpl imgNode = (HTMLImageElementImpl) nodeList.item(i);
+                //    String src = imgNode.getSrc();
+                //    if (!src.startsWith("http://") && !src.startsWith("https://") && !src.startsWith("ftp://") && !src.startsWith("file://")) {
+                //        // relative to document, change it to absolute file://
+                //        // this means it does not resolve, leave it
+                //        if (!project.isDisposed() && containingFile != null && resolver != null) {
+                //            ImageLinkRef linkRef = new ImageLinkRef(new FileRef(containingFile), src, null, null);
+                //            PathInfo resolvedTarget = resolver.resolve(linkRef, LinkResolver.ONLY_URI, null);
+                //
+                //            assert resolvedTarget == null || resolvedTarget instanceof LinkRef && linkRef.isURI() : "Expected URI LinkRef, got " + linkRef;
+                //            if (resolvedTarget != null) {
+                //                imgNode.setSrc(resolvedTarget.getFilePath());
+                //            }
+                //        }
+                //    }
+                //}
             }
 
             if (pageScript != null && pageScript.length() > 0) {
@@ -603,7 +578,7 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                 "<body>\n" +
                 "";
 
-        String gitHubHref = MultiMarkdownPathResolver.getGitHubDocumentURL(project, document, isWikiDocument);
+        String gitHubHref = MultiMarkdownPathResolver.getGitHubDocumentURL(project, document, !isWikiDocument);
         String gitHubClose = "";
         if (isWikiDocument) {
             if (gitHubHref == null) {
@@ -758,8 +733,8 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
         });
     }
 
-    protected String markdownToHtml(boolean modified) {
-        if (astRoot == null) {
+    protected String markdownToHtml(boolean modified, RootNode rootNode) {
+        if (rootNode == null) {
             return "<strong>Parser timed out</strong>";
         } else {
             if (modified) {
@@ -769,22 +744,11 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
                     htmlSerializer.setFlag(MultiMarkdownToHtmlSerializer.NO_WIKI_LINKS);
                 }
 
-                return htmlSerializer.toHtml(astRoot);
+                return htmlSerializer.toHtml(rootNode).replace("<br/>", "<br/>\n");
             } else {
 
-                return new ToHtmlSerializer(linkRendererNormal).toHtml(astRoot);
+                return new ToHtmlSerializer(linkRendererNormal).toHtml(rootNode).replace("<br/>", "<br/>\n");
             }
-        }
-    }
-
-    protected void parseMarkdown(String markdownSource) {
-        try {
-            if (processor == null) {
-                processor = getProcessor();
-            }
-            astRoot = processor.parseMarkdown(markdownSource.toCharArray());
-        } catch (ParsingTimeoutException e) {
-            astRoot = null;
         }
     }
 
@@ -796,20 +760,16 @@ public class MultiMarkdownFxPreviewEditor extends UserDataHolderBase implements 
 
         if (previewIsObsolete && isEditorTabVisible && (isActive || force)) {
             try {
+                final RootNode rootNode = MultiMarkdownLexParserManager.parseMarkdownRoot(document.getCharsSequence(), MultiMarkdownGlobalSettings.getInstance().getExtensionsValue(), getParsingTimeout());
                 if (isRawHtml) {
-                    parseMarkdown(document.getText());
-                    final String html = makeHtmlPage(markdownToHtml(true));
-                    final String htmlTxt = isShowModified() ? html : markdownToHtml(false);
-                    astRoot = null;
+                    final String htmlTxt = isShowModified() ? makeHtmlPage(markdownToHtml(true, rootNode)) : markdownToHtml(false, rootNode);
                     updateRawHtmlText(htmlTxt);
                 } else {
                     if (!htmlWorkerRunning) {
                         htmlWorkerRunning = true;
                         previewIsObsolete = false;
 
-                        parseMarkdown(document.getText());
-                        final String html = makeHtmlPage(markdownToHtml(true));
-                        astRoot = null;
+                        final String html = makeHtmlPage(markdownToHtml(true, rootNode));
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {

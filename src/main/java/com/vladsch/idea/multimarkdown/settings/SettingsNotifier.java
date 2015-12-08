@@ -23,8 +23,58 @@
  */
 package com.vladsch.idea.multimarkdown.settings;
 
-public interface SettingsNotifier {
-    public void notifyListeners();
-    public int startGroupNotifications();
-    public int endGroupNotifications();
+import com.vladsch.idea.multimarkdown.util.ListenerNotifier;
+
+public class SettingsNotifier<D> extends ListenerNotifier<SettingsListener<D>> {
+    private int groupNotifications;
+    private int suspendNotifications;
+    private boolean needToNotify;
+    private D settings;
+
+    public SettingsNotifier(D settings) {
+        this.settings = settings;
+    }
+
+    public int startSuspendNotifications() {
+        return suspendNotifications++;
+    }
+
+    public int endSuspendNotifications() {
+        if (suspendNotifications == 0) return 0;
+        suspendNotifications--;
+        return suspendNotifications;
+    }
+
+    public int startGroupNotifications() {
+        return groupNotifications++;
+    }
+
+    public int endGroupNotifications() {
+        if (groupNotifications == 0) return 0;
+
+        if (--groupNotifications == 0) {
+            if (needToNotify) {
+                needToNotify = false;
+                notifyListeners();
+            }
+        }
+
+        return groupNotifications;
+    }
+
+    public void notifyListeners() {
+        if (suspendNotifications > 0) return;
+
+        if (groupNotifications > 0) {
+            needToNotify = true;
+        } else {
+            super.notifyListeners(new RunnableNotifier<SettingsListener<D>>() {
+                @Override
+                public boolean notify(SettingsListener<D> listener) {
+                    listener.handleSettingsChanged(settings);
+                    return false;
+                }
+            });
+        }
+    }
 }

@@ -49,13 +49,16 @@ import com.intellij.ui.components.JBScrollPane;
 import com.vladsch.idea.multimarkdown.MultiMarkdownBundle;
 import com.vladsch.idea.multimarkdown.MultiMarkdownPlugin;
 import com.vladsch.idea.multimarkdown.MultiMarkdownProjectComponent;
+import com.vladsch.idea.multimarkdown.parser.MultiMarkdownLexParserManager;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettingsListener;
 import com.vladsch.idea.multimarkdown.util.ReferenceChangeListener;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pegdown.*;
+import org.pegdown.Extensions;
+import org.pegdown.LinkRenderer;
+import org.pegdown.ToHtmlSerializer;
 import org.pegdown.ast.RootNode;
 
 import javax.swing.*;
@@ -92,7 +95,6 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
      * The {@link JBScrollPane} allowing to browse {@link #jEditorPane}.
      */
     protected final JBScrollPane scrollPane;
-    private RootNode astRoot = null;
 
     /**
      * The {@link Document} previewed in this editor.
@@ -107,12 +109,6 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
 
     protected MultiMarkdownGlobalSettingsListener globalSettingsListener;
     protected ReferenceChangeListener projectFileListener;
-
-    /**
-     * The {@link PegDownProcessor} used for building the document AST.
-     */
-    //private ThreadLocal<PegDownProcessor> processor = initProcessor();
-    private PegDownProcessor processor = null;
 
     private boolean isActive = false;
 
@@ -151,23 +147,6 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
 
     public static boolean isShowHtmlText() {
         return MultiMarkdownGlobalSettings.getInstance().showHtmlText.getValue();
-    }
-
-    /**
-     * Init/reinit thread local {@link PegDownProcessor}.
-     */
-    //private static ThreadLocal<PegDownProcessor> initProcessor() {
-    //    return new ThreadLocal<PegDownProcessor>() {
-    //        @Override
-    //        protected PegDownProcessor initialValue() {
-    //            // ISSUE: #7 worked around, disable pegdown TaskList HTML rendering, they don't display well in Darcula.
-    //            return getProcessor();
-    //        }
-    //    };
-    //}
-    @NotNull
-    private static PegDownProcessor getProcessor() {
-        return new PegDownProcessor((MultiMarkdownGlobalSettings.getInstance().getExtensionsValue() & ~Extensions.TASKLISTITEMS) | Extensions.EXTANCHORLINKS_WRAP, getParsingTimeout());
     }
 
     /**
@@ -215,8 +194,9 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
     }
 
     protected void updateLinkRenderer() {
-        int options = MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue() ? MultiMarkdownLinkRenderer.GITHUB_WIKI_LINK_FORMAT : 0;
-        linkRendererModified = new MultiMarkdownLinkRenderer(project, document, "absent", options);
+        int options = 0;
+        if (MultiMarkdownGlobalSettings.getInstance().githubWikiLinks.getValue()) options |= MultiMarkdownLinkRenderer.GITHUB_WIKI_LINK_FORMAT;
+        linkRendererModified = new MultiMarkdownLinkRenderer(project, document, "absent", null, options | MultiMarkdownLinkRenderer.VALIDATE_LINKS);
         linkRendererNormal = new MultiMarkdownLinkRenderer(options);
     }
 
@@ -244,7 +224,6 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         MultiMarkdownGlobalSettings.getInstance().addListener(globalSettingsListener = new MultiMarkdownGlobalSettingsListener() {
             public void handleSettingsChanged(@NotNull final MultiMarkdownGlobalSettings newSettings) {
                 if (project.isDisposed()) return;
-                processor = null;
                 updateEditorTabIsVisible();
                 updateLinkRenderer();
                 delayedHtmlPreviewUpdate(true);
@@ -314,28 +293,31 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         // scan for <table>, </table>, <tr>, </tr> and other tags we modify, this could be done with a custom plugin to pegdown but
         // then it would be more trouble to get un-modified HTML.
         String regex = "(<table>|<thead>|<tbody>|<tr>|<hr/>|<del>|</del>|</p>|<kbd>|</kbd>|<var>|</var>";//|<code>|</code>";
-        String result = "";
+        StringBuilder result = new StringBuilder(html.length() + (html.length() >> 2));
 
-        if (isWikiDocument) {
-            String gitHubHref = MultiMarkdownPathResolver.getGitHubDocumentURL(project, document, isWikiDocument);
-            String gitHubClose = "";
-            if (gitHubHref == null) {
-                gitHubHref = "";
-            } else {
-                gitHubHref = "<a href=\"" + gitHubHref + "\" name=\"wikipage\" id=\"wikipage\">";
-                gitHubClose = "</a>";
-            }
-
-            result += "<body class=\"multimarkdown-wiki-preview\">\n<div class=\"content\">\n";
-            result += "" +
-                    "<h1 class=\"first-child\">" + gitHubHref + escapeHtml(file == null ? "" : file.getNameWithoutExtension().replace('-', ' ')) + gitHubClose + "</h1>\n" +
-                    "";
+        String gitHubHref = MultiMarkdownPathResolver.getGitHubDocumentURL(project, document, !isWikiDocument);
+        String gitHubClose = "";
+        if (gitHubHref == null) {
+            gitHubHref = "";
         } else {
-            String fileName = escapeHtml(file == null ? "" : file.getName());
-            result += "<body class=\"multimarkdown-preview\">\n<div class=\"content\">\n" +
-                    "<div class=\"page-header\"><a href=\"" + fileName + "\">" + fileName + "</a></div>\n" +
-                    "<div class=\"hr\"></div>\n" +
-                    "";
+            gitHubHref = "<a href=\"" + gitHubHref + "\" name=\"wikipage\" id=\"wikipage\">";
+            gitHubClose = "</a>";
+        }
+        if (isWikiDocument) {
+            result.append("<body class=\"multimarkdown-wiki-preview\">\n<div class=\"content\">\n");
+            result.append("" + "<h1 class=\"first-child\">")
+                    .append(gitHubHref)
+                    .append(escapeHtml(file == null ? "" : file.getNameWithoutExtension().replace('-', ' ')))
+                    .append(gitHubClose).append("</h1>\n")
+                    .append("");
+        } else {
+            result.append("<body class=\"multimarkdown-preview\">\n<div class=\"content\">\n" + "<div class=\"page-header\">")
+                    .append(gitHubHref)
+                    .append(escapeHtml(file == null ? "" : file.getName().replace('-', ' ')))
+                    .append(gitHubClose)
+                    .append("</div>\n")
+                    .append("<div class=\"hr\"></div>\n")
+                    .append("");
             // for now nothing
             regex += "|<h1>";
         }
@@ -345,7 +327,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         boolean taskLists = isTaskLists();
 
         if (taskLists) {
-            regex += "|<li class=\"task-list-item\">\\n*\\s*<p>|<li class=\"task-list-item\">|<li>\\[x\\]\\s*|<li>\\[ \\]\\s*|<li>\\n*\\s*<p>\\[x\\]\\s*|<li>\\n*\\s*<p>\\[ \\]\\s*";
+            regex += "|<li class=\"task-list-item\">\\n*\\s*<p>|<br\\s*/?>|<li class=\"task-list-item\">|<li>\\[(?:x|X)\\]\\s*|<li>\\[ \\]\\s*|<li>\\n*\\s*<p>\\[x\\]\\s*|<li>\\n*\\s*<p>\\[ \\]\\s*";
         }
         regex += regexTail;
         regex += ")";
@@ -361,52 +343,56 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         while (m.find()) {
             String found = m.group();
             if (lastPos < m.start(0)) {
-                result += html.substring(lastPos, m.start(0));
+                result.append(html.substring(lastPos, m.start(0)));
             }
 
             if (found.equals("</p>")) {
-                result += found;
+                result.append(found);
+            } else if (found.startsWith("<br")) {
+                result.append("<br/>\n");
             } else if (found.equals("<table>")) {
                 rowCount = 0;
-                result += found;
+                result.append(found);
             } else if (found.equals("<thead>")) {
-                result += found;
+                result.append(found);
             } else if (found.equals("<tbody>")) {
-                result += found;
+                result.append(found);
             } else if (found.equals("/>")) {
-                result += ">";
+                result.append(">");
             } else if (found.equals("<tr>")) {
                 rowCount++;
-                result += "<tr class=\"" + (rowCount == 1 ? "first-child" : (rowCount & 1) != 0 ? "odd-child" : "even-child") + "\">";
+                result.append("<tr class=\"").append(rowCount == 1 ? "first-child" : (rowCount & 1) != 0 ? "odd-child" : "even-child").append("\">");
             } else if (found.equals("<hr/>")) {
-                result += "<div class=\"hr\">&nbsp;</div>";
+                result.append("<div class=\"hr\">&nbsp;</div>");
             } else if (found.equals("<h1>")) {
-                result += firstChildH1 ? "<h1 class=\"first-child\">" : "<h1>";
+                result.append(firstChildH1 ? "<h1 class=\"first-child\">" : "<h1>");
                 firstChildH1 = false;
             } else if (found.equals("<del>")) {
-                result += "<span class=\"del\">";
+                result.append("<span class=\"del\">");
             } else if (found.equals("</del>")) {
-                result += "</span>";
+                result.append("</span>");
             } else if (found.equals("<kbd>")) {
-                result += "<span class=\"kbd\">";
+                result.append("<span class=\"kbd\">");
             } else if (found.equals("</kbd>")) {
-                result += "</span>";
+                result.append("</span>");
             } else if (found.equals("<code>")) {
-                result += "<span class=\"code\">";
+                result.append("<span class=\"code\">");
             } else if (found.equals("</code>")) {
-                result += "</span>";
+                result.append("</span>");
             } else if (found.equals("<var>")) {
-                result += "<span class=\"var\">";
+                result.append("<span class=\"var\">");
             } else if (found.equals("</var>")) {
-                result += "</span>";
+                result.append("</span>");
             } else {
                 found = found.trim();
                 if (taskLists && found.equals("<li>[x]")) {
-                    result += "<li class=\"dtask\">";
+                    result.append("<li class=\"dtask\">");
+                } else if (taskLists && found.equals("<li>[X]")) {
+                    result.append("<li class=\"dtask\">");
                 } else if (taskLists && found.equals("<li>[ ]")) {
-                    result += "<li class=\"dtask\">";
+                    result.append("<li class=\"dtask\">");
                 } else if (taskLists && found.equals("<li class=\"task-list-item\">")) {
-                    result += "<li class=\"taski\">";
+                    result.append("<li class=\"taski\">");
                 } else {
                     // here we have <li>\n*\s*<p>, need to strip out \n*\s* so we can match them easier
                     String foundWithP = found;
@@ -414,15 +400,15 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
                     found = foundWithP.replaceAll("<li class=\"task-list-item\">\\n*\\s*<p>", "<li class=\"task\"><p>");
                     found = found.trim();
                     if (found.equals("<li><p>")) {
-                        result += "<li class=\"p\"><p class=\"p\">";
+                        result.append("<li class=\"p\"><p class=\"p\">");
                     } else if (taskLists && found.equals("<li><p>[x]")) {
-                        result += "<li class=\"dtaskp\"><p class=\"p\">";
+                        result.append("<li class=\"dtaskp\"><p class=\"p\">");
                     } else if (taskLists && found.equals("<li><p>[ ]")) {
-                        result += "<li class=\"dtaskp\"><p class=\"p\">";
+                        result.append("<li class=\"dtaskp\"><p class=\"p\">");
                     } else if (taskLists && found.equals("<li class=\"task-list-item\"><p>")) {
-                        result += "<li class=\"taskp\"><p class=\"p\">";
+                        result.append("<li class=\"taskp\"><p class=\"p\">");
                     } else {
-                        result += found;
+                        result.append(found);
                     }
                 }
             }
@@ -431,11 +417,11 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         }
 
         if (lastPos < html.length()) {
-            result += html.substring(lastPos);
+            result.append(html.substring(lastPos));
         }
 
-        result += "\n</div>\n</body>\n";
-        return result;
+        result.append("\n</div>\n</body>\n");
+        return result.toString();
     }
 
     protected void delayedHtmlPreviewUpdate(final boolean fullKit) {
@@ -483,15 +469,15 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         return false;
     }
 
-    protected MultiMarkdownFxPreviewEditor findCounterpart() {
+    protected MultiMarkdownPreviewEditor findCounterpart() {
         // here we can find our HTML Text counterpart and update its HTML at the same time. but it is better to keep it separate for now
         VirtualFile file = FileDocumentManager.getInstance().getFile(document);
         if (file != null) {
             FileEditorManager manager = FileEditorManager.getInstance(project);
             FileEditor[] editors = manager.getEditors(file);
             for (FileEditor editor : editors) {
-                if (editor != this && editor instanceof MultiMarkdownFxPreviewEditor) {
-                    return (MultiMarkdownFxPreviewEditor) editor;
+                if (editor != this && editor instanceof MultiMarkdownPreviewEditor) {
+                    return (MultiMarkdownPreviewEditor) editor;
                 }
             }
         }
@@ -502,7 +488,7 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
     protected void setStyleSheet() {
         if (isRawHtml) return;
 
-        MultiMarkdownEditorKit htmlKit = new MultiMarkdownEditorKit(document);
+        MultiMarkdownEditorKit htmlKit = new MultiMarkdownEditorKit();
 
         final StyleSheet style = new MultiMarkdownStyleSheet();
 
@@ -564,8 +550,8 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
         });
     }
 
-    protected String markdownToHtml(boolean modified) {
-        if (astRoot == null) {
+    protected String markdownToHtml(boolean modified, RootNode rootNode) {
+        if (rootNode == null) {
             return "<strong>Parser timed out</strong>";
         } else {
             if (modified) {
@@ -575,22 +561,10 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
                     htmlSerializer.setFlag(MultiMarkdownToHtmlSerializer.NO_WIKI_LINKS);
                 }
 
-                return htmlSerializer.toHtml(astRoot);
+                return htmlSerializer.toHtml(rootNode);
             } else {
-
-                return new ToHtmlSerializer(linkRendererNormal).toHtml(astRoot);
+                return new ToHtmlSerializer(linkRendererNormal).toHtml(rootNode).replace("<br/>", "<br/>\n");
             }
-        }
-    }
-
-    protected void parseMarkdown(String markdownSource) {
-        try {
-            if (processor == null) {
-                processor = getProcessor();
-            }
-            astRoot = processor.parseMarkdown(markdownSource.toCharArray());
-        } catch (ParsingTimeoutException e) {
-            astRoot = null;
         }
     }
 
@@ -602,13 +576,15 @@ public class MultiMarkdownPreviewEditor extends UserDataHolderBase implements Fi
 
         if (previewIsObsolete && isEditorTabVisible && (isActive || force)) {
             try {
-                parseMarkdown(document.getText());
+                int options = MultiMarkdownGlobalSettings.getInstance().getExtensionsValue();
+                int pegdownExtensions = (options & ~Extensions.TASKLISTITEMS) | ((options & Extensions.EXTANCHORLINKS) != 0 ? Extensions.EXTANCHORLINKS_WRAP : 0);
+                RootNode rootNode = MultiMarkdownLexParserManager.parseMarkdownRoot(document.getCharsSequence(), pegdownExtensions, getParsingTimeout());
+
                 if (isRawHtml) {
-                    updateRawHtmlText(isShowModified() ? makeHtmlPage(markdownToHtml(true)) : markdownToHtml(false));
+                    updateRawHtmlText(isShowModified() ? makeHtmlPage(markdownToHtml(true, rootNode)) : markdownToHtml(false, rootNode));
                 } else {
-                    jEditorPane.setText(makeHtmlPage(markdownToHtml(true)));
+                    jEditorPane.setText(makeHtmlPage(markdownToHtml(true, rootNode)));
                 }
-                astRoot = null;
                 previewIsObsolete = false;
 
                 // here we can find our HTML Text counterpart but it is better to keep it separate for now

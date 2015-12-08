@@ -8,11 +8,9 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
-      <excludeFolder url="file://$MODULE_DIR$/src/misc" />
-      <excludeFolder url="file://$MODULE_DIR$/src/test/resources/GitHubIssues/Issue-46" />
     </content>
     <orderEntry type="inheritedJdk" />
-    <orderEntry type="module-library" exported="">
+    <orderEntry type="module-library">
       <library name="lib">
         <CLASSES>
           <root url="file://$MODULE_DIR$/lib" />
@@ -26,5 +24,6 @@
     <orderEntry type="library" scope="PROVIDED" name="jfxrt" level="project" />
     <orderEntry type="library" name="commons-io-2.4" level="project" />
     <orderEntry type="library" name="pegdown-1.6.6" level="project" />
+    <orderEntry type="library" name="KotlinJavaRuntime" level="application" />
   </component>
 </module>

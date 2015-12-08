@@ -223,8 +223,8 @@ public class TestSuggestionFixersBasic extends TestCase {
                         "simple_document_suggestion", // SuggestLowerSnakedWords
                         "SIMPLE_DOCUMENT_SUGGESTION", // SuggestUpperSnakedWords
 
-                        "simple.md", // SuggestWikiRefAsFilNameWithExt
-                        "simple.md", // SuggestFileNameWithExt
+                        "simple#document#suggestion.md", // SuggestWikiRefAsFilNameWithExt
+                        "simple#document#suggestion.md", // SuggestFileNameWithExt
                 },
                 {
                         "SimpleDocumentSuggestion",

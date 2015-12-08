@@ -16,6 +16,8 @@
 
 package com.vladsch.idea.multimarkdown.spellchecking;
 
+import com.intellij.lang.ASTNode;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.spellchecker.inspections.IdentifierSplitter;
 import com.intellij.spellchecker.tokenizer.TokenConsumer;
 import com.intellij.spellchecker.tokenizer.Tokenizer;
@@ -28,6 +30,60 @@ import org.jetbrains.annotations.NotNull;
 public class MultiMarkdownIdentifierTokenizer extends Tokenizer<MultiMarkdownNamedElement> {
     @Override
     public void tokenize(@NotNull MultiMarkdownNamedElement element, TokenConsumer consumer) {
-        consumer.consumeToken(element, true, IdentifierSplitter.getInstance());
+        StringBuilder text = new StringBuilder(element.getTextLength());
+        int offset = -1;
+        int nodeOffset = -1;
+        int firstOffset = -1;
+        int lastOffset = -1;
+
+        // extract a range of spell checkable elements, leave out any leading/trailing non-checkable
+        // and any non-checkable in the middle replace with spaces
+        for (ASTNode astNode : element.getNode().getChildren(null)) {
+            if (!MultiMarkdownSpellcheckingStrategy.NO_SPELL_CHECK_SET.contains(astNode.getElementType())) {
+                offset = astNode.getStartOffset();
+                if (firstOffset < 0) firstOffset = offset;
+                else if (lastOffset < offset) appendSpaces(text, offset - lastOffset);
+                text.append(astNode.getChars());
+                lastOffset = offset + astNode.getTextLength();
+            }
+
+            if (nodeOffset < 0) {
+                nodeOffset = offset >= 0 ? offset : astNode.getStartOffset();
+            }
+        }
+
+        if (nodeOffset < 0) {
+            // leaf element, take all text, if it is not to be spell checked then should not be here
+            String elemText = element.getText();
+            consumer.consumeToken(element, elemText, true, 0, TextRange.allOf(elemText), IdentifierSplitter.getInstance());
+        } else if (firstOffset >= 0) {
+            consumer.consumeToken(element, text.toString(), true, firstOffset - element.getNode().getStartOffset(), TextRange.create(0, lastOffset - firstOffset), IdentifierSplitter.getInstance());
+        }
+    }
+
+    public interface SpellCheckConsumer {
+        void consume(String word, boolean spellCheck);
+    }
+
+    // used during spell check corrections to create variations that preserve non-spell checkable text
+    public void tokenizeSpellingSuggestions(@NotNull MultiMarkdownNamedElement element, SpellCheckConsumer consumer) {
+        // extract a range of spell checkable elements, leave out any leading/trailing non-checkable
+        // and any non-checkable in the middle replace with spaces
+        boolean hadChildren = false;
+        for (ASTNode astNode : element.getNode().getChildren(null)) {
+            hadChildren = true;
+            consumer.consume(astNode.getText(), !MultiMarkdownSpellcheckingStrategy.NO_SPELL_CHECK_SET.contains(astNode.getElementType()));
+        }
+
+        if (!hadChildren) {
+            // leaf element, take all text, if it is not to be spell checked then should not be here
+            consumer.consume(element.getText(), true);
+        }
+    }
+
+    private void appendSpaces(StringBuilder text, int i) {
+        while (i-- > 0) {
+            text.append(' ');
+        }
     }
 }

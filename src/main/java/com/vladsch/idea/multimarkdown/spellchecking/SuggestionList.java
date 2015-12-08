@@ -21,6 +21,7 @@
 package com.vladsch.idea.multimarkdown.spellchecking;
 
 import com.intellij.openapi.project.Project;
+import groovy.lang.Sequence;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,6 +34,7 @@ public class SuggestionList {
     final protected @NotNull ArrayList<Suggestion> suggestions = new ArrayList<Suggestion>();
     final protected @NotNull HashSet<String> suggestionSet = new HashSet<String>();
     final protected @Nullable Project project;
+    final public static SuggestionList EMPTY_LIST = new SuggestionList();
 
     public SuggestionList(@Nullable Project project) {
         this.project = project;
@@ -346,5 +348,11 @@ public class SuggestionList {
     @Nullable
     public Project getProject() {
         return project;
+    }
+
+    @NotNull
+    public String get(int i) {
+        Suggestion suggestion = suggestions.get(i);
+        return suggestion != null ? suggestion.getText() : "";
     }
 }

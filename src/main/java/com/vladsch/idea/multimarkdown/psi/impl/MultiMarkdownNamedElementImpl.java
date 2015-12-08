@@ -36,15 +36,10 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class MultiMarkdownNamedElementImpl extends ASTWrapperPsiElement implements MultiMarkdownNamedElement {
     private static final Logger logger = Logger.getLogger(MultiMarkdownNamedElementImpl.class);
-    protected final MultiMarkdownReference reference;
+    //protected final MultiMarkdownReference reference;
 
     public MultiMarkdownNamedElementImpl(@NotNull ASTNode node) {
-        this(node, new TextRange(0, node.getTextLength()));
-    }
-
-    public MultiMarkdownNamedElementImpl(@NotNull ASTNode node, @NotNull TextRange textRange) {
         super(node);
-        reference = createReference(textRange);
     }
 
     public void accept(@NotNull PsiElementVisitor visitor) {
@@ -103,6 +98,8 @@ public abstract class MultiMarkdownNamedElementImpl extends ASTWrapperPsiElement
     @Override
     @Nullable
     public PsiReference getReference() {
-        return reference;
+        //return reference;
+        return createReference(new TextRange(0, getNode().getTextLength()));
     }
+
 }

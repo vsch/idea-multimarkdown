@@ -22,11 +22,14 @@ package com.vladsch.idea.multimarkdown;
 
 import com.vladsch.idea.multimarkdown.spellchecking.Suggestion;
 import com.vladsch.idea.multimarkdown.spellchecking.SuggestionList;
-import com.vladsch.idea.multimarkdown.util.FileReference;
-import com.vladsch.idea.multimarkdown.util.FileReferenceList;
+import com.vladsch.idea.multimarkdown.util.InspectionResult;
+import com.vladsch.idea.multimarkdown.util.PathInfo;
 import org.junit.internal.ArrayComparisonFailure;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -59,71 +62,91 @@ public class TestUtils {
         }
     }
 
-    public static void compareOrderedLists(String message, FileReferenceList expected, FileReferenceList actual) {
-        new OrderedFileReferenceComparison().arrayEquals(null, expected.get(), actual.get());
+    public static void compareOrderedLists(String message, ArrayList<String> expected, Set<String> actual) {
+        new OrderedPathInfoComparison().arrayEquals(message, expected.toArray(), actual.toArray());
     }
 
-    public static void compareOrderedLists(String message, FileReferenceList.Builder expected, FileReferenceList actual) {
-        new OrderedFileReferenceComparison().arrayEquals(null, expected.getFileReferences(), actual.get());
-    }
-
-    public static void compareOrderedLists(String message, FileReference[] expected, FileReferenceList actual) {
-        new OrderedFileReferenceComparison().arrayEquals(null, expected, actual.get());
+    public static void compareUnorderedLists(String message, ArrayList<String> expected, Set<String> actual) {
+        new UnorderedPathInfoComparison().arrayEquals(message, expected.toArray(), actual.toArray());
     }
 
     public static void compareOrderedLists(String message, Suggestion[] expected, SuggestionList actual) {
-        new OrderedSuggestionComparison().arrayEquals(null, expected, actual.getSuggestions().toArray(new Suggestion[actual.size()]));
+        new OrderedSuggestionComparison().arrayEquals(message, expected, actual.getSuggestions().toArray(new Suggestion[actual.size()]));
     }
 
-    public static void compareOrderedLists(String message, List<Suggestion>expected, SuggestionList actual) {
-        new OrderedSuggestionComparison().arrayEquals(null, expected.toArray(new Suggestion[expected.size()]), actual.getSuggestions().toArray(new Suggestion[actual.size()]));
+    public static void compareOrderedLists(String message, List<Suggestion> expected, SuggestionList actual) {
+        new OrderedSuggestionComparison().arrayEquals(message, expected.toArray(new Suggestion[expected.size()]), actual.getSuggestions().toArray(new Suggestion[actual.size()]));
     }
 
     public static void compareOrderedLists(String message, String[] expected, String[] actual) {
-        new OrderedStringComparison().arrayEquals(null, expected, actual);
+        new OrderedStringComparison().arrayEquals(message, expected, actual);
     }
 
     public static void compareOrderedLists(String message, String[] expected, List<String> actual) {
-        new OrderedStringComparison().arrayEquals(null, expected, actual.toArray(new String[actual.size()]));
+        new OrderedStringComparison().arrayEquals(message, expected, actual.toArray(new String[actual.size()]));
     }
 
-    public static void compareOrderedLists(String message, List<String>expected, List<String> actual) {
-        new OrderedStringComparison().arrayEquals(null, expected.toArray(new String[expected.size()]), actual.toArray(new String[actual.size()]));
+    public static void compareOrderedLists(String message, List<String> expected, List<String> actual) {
+        new OrderedStringComparison().arrayEquals(message, expected.toArray(new String[expected.size()]), actual.toArray(new String[actual.size()]));
     }
 
     public static void compareOrderedLists(String message, SuggestionList expected, SuggestionList actual) {
-        new OrderedSuggestionComparison().arrayEquals(null, expected.getSuggestions().toArray(new Suggestion[expected.size()]), actual.getSuggestions().toArray(new Suggestion[actual.size()]));
-    }
-
-    public static void compareUnorderedLists(String message, FileReferenceList expected, FileReferenceList actual) {
-        new UnorderedFileReferenceComparison().arrayEquals(null, expected.get(), actual.get());
-    }
-
-    public static void compareUnorderedLists(String message, FileReferenceList.Builder expected, FileReferenceList actual) {
-        new UnorderedFileReferenceComparison().arrayEquals(null, expected.getFileReferences(), actual.get());
-    }
-
-    public static void compareUnorderedLists(String message, FileReference[] expected, FileReferenceList actual) {
-        new UnorderedFileReferenceComparison().arrayEquals(null, expected, actual.get());
+        new OrderedSuggestionComparison().arrayEquals(message, expected.getSuggestions().toArray(new Suggestion[expected.size()]), actual.getSuggestions().toArray(new Suggestion[actual.size()]));
     }
 
     public static void compareUnorderedLists(String message, Suggestion[] expected, SuggestionList actual) {
-        new UnorderedSuggestionComparison().arrayEquals(null, expected, actual.getSuggestions().toArray(new Suggestion[actual.size()]));
+        new UnorderedSuggestionComparison().arrayEquals(message, expected, actual.getSuggestions().toArray(new Suggestion[actual.size()]));
     }
 
-    public static void compareUnorderedLists(String message, List<Suggestion>expected, SuggestionList actual) {
-        new UnorderedSuggestionComparison().arrayEquals(null, expected.toArray(new Suggestion[expected.size()]), actual.getSuggestions().toArray(new Suggestion[actual.size()]));
+    public static void compareUnorderedLists(String message, List<Suggestion> expected, SuggestionList actual) {
+        new UnorderedSuggestionComparison().arrayEquals(message, expected.toArray(new Suggestion[expected.size()]), actual.getSuggestions().toArray(new Suggestion[actual.size()]));
     }
 
     public static void compareUnorderedLists(String message, SuggestionList expected, SuggestionList actual) {
-        new UnorderedSuggestionComparison().arrayEquals(null, expected.getSuggestions().toArray(new Suggestion[expected.size()]), actual.getSuggestions().toArray(new Suggestion[actual.size()]));
+        new UnorderedSuggestionComparison().arrayEquals(message, expected.getSuggestions().toArray(new Suggestion[expected.size()]), actual.getSuggestions().toArray(new Suggestion[actual.size()]));
     }
+
+
+    public static void compareOrderedLists(String message, ArrayList<InspectionResult> expected, List<InspectionResult> actual) {
+        new OrderedInspectionComparison().arrayEquals(message, expected.toArray(new InspectionResult[expected.size()]), actual.toArray(new InspectionResult[actual.size()]));
+    }
+
+    public static void compareUnorderedLists(String message, ArrayList<InspectionResult> expected, List<InspectionResult> actual) {
+        new UnorderedInspectionComparison().arrayEquals(message, expected.toArray(new InspectionResult[expected.size()]), actual.toArray(new InspectionResult[actual.size()]));
+    }
+
 
     public static void assertSuggestionListHasSuggestions(SuggestionList suggestionList, Suggestion... suggestions) {
         compareOrderedLists((String) null, suggestions, suggestionList);
     }
 
+    public static void assertEqualsMessage(String message, Object expected, Object actual) {
+        if ((expected == null && actual != null) || (expected != null && !expected.equals(actual))) {
+            failNotEquals(message, expected, actual);
+        }
+    }
+
+    public static void assertEqualsMessage(String message, boolean expected, boolean actual) {
+        if (expected != actual) {
+            failNotEquals(message, expected, actual);
+        }
+    }
+
+    public static void assertEqualsMessage(String message, int expected, int actual) {
+        if (expected != actual) {
+            failNotEquals(message, expected, actual);
+        }
+    }
+
     public static void failNotEquals(String message, Object expected, Object actual) {
+        fail(format(message, expected, actual));
+    }
+
+    public static void failNotEquals(String message, boolean expected, boolean actual) {
+        fail(format(message, expected, actual));
+    }
+
+    public static void failNotEquals(String message, int expected, int actual) {
         fail(format(message, expected, actual));
     }
 
@@ -143,31 +166,55 @@ public class TestUtils {
         return className + "<" + valueString + ">";
     }
 
-    public static class OrderedFileReferenceComparison extends TypedComparisonCriteria<FileReference> {
+    public static class OrderedPathInfoComparison extends OrderedComparisonCriteria<PathInfo> {
         @Override
-        protected boolean elementsAreEqual(FileReference o1, FileReference o2) {
+        protected boolean elementsAreEqual(PathInfo o1, PathInfo o2) {
             return o1.compareTo(o2) == 0;
         }
 
         @Override
-        protected void assertElementsAreEqual(FileReference o1, FileReference o2) {
-            if (o1.compareTo(o2) != 0) failNotEquals("FileReferences not equal", o1, o2);
+        protected void assertElementsAreEqual(PathInfo o1, PathInfo o2) {
+            if (o1.compareTo(o2) != 0) failNotEquals("PathInfo not equal", o1, o2);
         }
     }
 
-    public static class UnorderedFileReferenceComparison extends UnorderedComparisonCriteria<FileReference> {
+    public static class UnorderedPathInfoComparison extends UnorderedComparisonCriteria<PathInfo> {
         @Override
-        protected boolean elementsAreEqual(FileReference o1, FileReference o2) {
+        protected boolean elementsAreEqual(PathInfo o1, PathInfo o2) {
             return o1.compareTo(o2) == 0;
         }
 
         @Override
-        protected void assertElementsAreEqual(FileReference o1, FileReference o2) {
-            if (o1.compareTo(o2) != 0) failNotEquals("FileReferences not equal", o1, o2);
+        protected void assertElementsAreEqual(PathInfo o1, PathInfo o2) {
+            if (o1.compareTo(o2) != 0) failNotEquals("PathInfo not equal", o1, o2);
         }
     }
 
-    public static class OrderedStringComparison extends TypedComparisonCriteria<String> {
+    public static class OrderedInspectionComparison extends OrderedComparisonCriteria<InspectionResult> {
+        @Override
+        protected boolean elementsAreEqual(InspectionResult o1, InspectionResult o2) {
+            return o1.compareTo(o2) == 0;
+        }
+
+        @Override
+        protected void assertElementsAreEqual(InspectionResult o1, InspectionResult o2) {
+            if (o1.compareTo(o2) != 0) failNotEquals("PathInfo not equal", o1, o2);
+        }
+    }
+
+    public static class UnorderedInspectionComparison extends UnorderedComparisonCriteria<InspectionResult> {
+        @Override
+        protected boolean elementsAreEqual(InspectionResult o1, InspectionResult o2) {
+            return o1.compareTo(o2) == 0;
+        }
+
+        @Override
+        protected void assertElementsAreEqual(InspectionResult o1, InspectionResult o2) {
+            if (o1.compareTo(o2) != 0) failNotEquals("PathInfo not equal", o1, o2);
+        }
+    }
+
+    public static class OrderedStringComparison extends OrderedComparisonCriteria<String> {
         @Override
         protected boolean elementsAreEqual(String o1, String o2) {
             return o1.compareTo(o2) == 0;
@@ -191,7 +238,7 @@ public class TestUtils {
         }
     }
 
-    public static class OrderedSuggestionComparison extends TypedComparisonCriteria<Suggestion> {
+    public static class OrderedSuggestionComparison extends OrderedComparisonCriteria<Suggestion> {
         @Override
         protected boolean elementsAreEqual(Suggestion o1, Suggestion o2) {
             if (!o1.getText().equals(o2.getText())) return false;
@@ -245,7 +292,7 @@ public class TestUtils {
         }
     }
 
-    public static class OrderedSuggestionParamComparison extends com.vladsch.idea.multimarkdown.TypedComparisonCriteria<Suggestion.Param> {
+    public static class OrderedSuggestionParamComparison extends OrderedComparisonCriteria<Suggestion.Param> {
         @Override
         protected boolean elementsAreEqual(Suggestion.Param o1, Suggestion.Param o2) {
             return o1.key.equals(o2.key) && o1.value.equals(o2.value);
@@ -255,5 +302,25 @@ public class TestUtils {
         protected void assertElementsAreEqual(Suggestion.Param o1, Suggestion.Param o2) {
             if (!elementsAreEqual(o1, o2)) failNotEquals("Suggestion.Param not equal", o1, o2);
         }
+    }
+
+    public static String arrayAsString(Object expecteds) {
+        StringBuilder builder = new StringBuilder(100);
+
+        builder.append(expecteds.toString());
+        builder.append("[\n");
+        int length = Array.getLength(expecteds);
+        for (int i = 0; i < length; i++) {
+            Object elem = Array.get(expecteds, i);
+            builder.append("  ");
+            if (elem == null) builder.append("null");
+            else if (elem instanceof String) builder.append("\"").append(elem.toString().replace("\"", "\\\"")).append("\"");
+            else builder.append(elem.toString());
+            if (i+1 < length) builder.append(',');
+            builder.append('\n');
+        }
+        builder.append("]\n");
+
+        return builder.toString();
     }
 }

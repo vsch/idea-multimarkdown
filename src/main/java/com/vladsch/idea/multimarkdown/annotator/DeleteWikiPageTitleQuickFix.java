@@ -53,7 +53,7 @@ class DeleteWikiPageTitleQuickFix extends BaseIntentionAction {
 
     @Override
     public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
-        return true;
+        return wikiLinkElement.isValid();
     }
 
     @Override
@@ -61,7 +61,7 @@ class DeleteWikiPageTitleQuickFix extends BaseIntentionAction {
         ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
-                deleteWikiPageRefTitle(project, wikiLinkElement);
+                if (wikiLinkElement.isValid()) deleteWikiPageRefTitle(project, wikiLinkElement);
             }
         });
     }
@@ -71,7 +71,7 @@ class DeleteWikiPageTitleQuickFix extends BaseIntentionAction {
             @Override
             public void run() {
                 // change the whole name
-                MultiMarkdownPsiImplUtil.deleteWikiLinkTitle(wikiLinkElement);
+                if (wikiLinkElement.isValid()) MultiMarkdownPsiImplUtil.deleteWikiLinkTitle(wikiLinkElement);
             }
         }.execute();
     }
