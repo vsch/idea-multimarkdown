@@ -15,14 +15,20 @@ idea-multimarkdown
 
 2. Licensed version with enhanced refactoring and code completion functionality. 30-day free trial licenses are available in plugin preferences and from [idea-multimarkdown](http://vladsch.com/product/multimarkdown)
 
-Latest Developments, version 1.2.3
+Latest Developments, version 1.3.0
 -----------------------------------
 
-I spent three weeks rewriting and testing some of the messy classes involved in link resolution. They did not start out that way but by the time I figured out all the idiosyncrasies of how GitHub resolves links from wiki to the main repository, they certainly became an unmanageable mess. The previous release was difficult to stabilize so I decided to rewrite the mess from scratch. Which I did in Kotlin. I also took the time to write complete tests for the low level code so that I can have the safety net of automated tests when I do have to make changes.
+Another three week rewrite of the old infrastructure to be able to split editor support for markdown files. Now you can have split preview with either rendered or text HTML beside your markdown source.
 
-I updated the source for the latest release. Some of the source is in Kotlin and within the next few releases I will migrate all of it to Kotlin. Java can't compete with the joy of developing in Kotlin.
+User interface for settings has been moved under **Languages & Frameworks**, split into sections with new customizations added for html generation. Now can add CSS url, CSS Text or even extras directly in HTML with four insertion points: head top, head bottom, body top, body bottom.
 
-If you haven't used Kotlin yet, do yourself a favor and give it a try. It is a joy to work with. Much more effective and productive than Java.
+Easier to show than explain, see screenshots below. 
+
+### Still Great GitHub Rendering Resemblance for your preview pleasure
+
+##### One of the images is idea-multimarkdown preview, the other of same file on GitHub: 
+
+![Screen Shot Jfx Webview](assets/images/ScreenShot_jfx_webview.png)
 
 Plugins that are a great compliment to idea-multimarkdown
 ---------------------------------------------------------
@@ -30,7 +36,7 @@ Plugins that are a great compliment to idea-multimarkdown
 [Pipe Table Formatter](https://github.com/anton-dev-ua/PipeTableFormatter) A plugin that is great for formatting tables. I use to pretty up the tables in markdown and find it a great compliment to idea-multimarkdown.
 
 [.gitignore](http://hsz.mobi) to add .gitignore file brains to the IDE
-
+                                                        
 The Background
 --------------
 
@@ -45,6 +51,7 @@ It has been a fun trip down the rabbit hole of IntelliJ IDEA plugin development 
 Enhancements
 ------------
 
+- [x] Split Editor
 - [x] Striped tables
 - [x] GitHub style task list items
 - [x] CSS editable in settings
@@ -52,7 +59,6 @@ Enhancements
 - [x] HTML Text tab to view the generated HTML
 - [x] syntax highlighting, color striped tables by row and column in your source
 - [x] Default and Darcula for syntax highlighting and for HTML Preview supported.
-    CSS Style sheet for HTML Perview selectable in Settings/Other Settings/MultiMarkdown.
 - [x] Add Lexer to use IntelliJ standard features
 - [x] Add Standard HTML/CSS rendering engine to make styling easier.
 - [x] Add PsiBuilder compatible parser to implement expected comforts:
@@ -64,20 +70,27 @@ Enhancements
 Screenshots
 -----------
 
-![idea-multimarkdown-source](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_source_preview.png)
+![idea-multimarkdown-source](assets/images/ScreenShot_source_preview.png)   
 
 ### Split your editor and see the preview as you type
 
-![idea-multimarkdown](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_preview.png)
+![idea-multimarkdown](assets/images/ScreenShot_preview.png)
 
 ### Peek at the HTML
 
-![idea-multimarkdown-settings](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_html.png)
+![idea-multimarkdown-settings](assets/images/ScreenShot_peek_html.png)
 
 #### Change options, customize the syntax colors and CSS to your liking.
-![idea-multimarkdown-settings](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_color_settings.png)
 
-![idea-multimarkdown-settings](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/ScreenShot_settings.png)
+![idea-multimarkdown-settings](assets/images/ScreenShot_settings_color.png)
+
+![idea-multimarkdown-settings](assets/images/ScreenShot_settings_markdown.png)
+ 
+![idea-multimarkdown-settings](assets/images/ScreenShot_settings_parser.png)
+
+![idea-multimarkdown-settings](assets/images/ScreenShot_settings_css.png)
+
+![idea-multimarkdown-settings](assets/images/ScreenShot_settings_html.png)
 
 Forking
 -------
