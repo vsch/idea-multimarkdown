@@ -22,7 +22,7 @@ Another three week rewrite of the old infrastructure to be able to split editor 
 
 User interface for settings has been moved under **Languages & Frameworks**, split into sections with new customizations added for html generation. Now can add CSS url, CSS Text or even extras directly in HTML with four insertion points: head top, head bottom, body top, body bottom.
 
-Easier to show than explain, see screenshots below. 
+Easier to show than explain, see screenshots below. For a summary of changes please see [Version Notes](resources/META-INF/VERSION.md)
 
 ### Still Great GitHub Rendering Resemblance for your preview pleasure
 
