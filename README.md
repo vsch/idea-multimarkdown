@@ -15,8 +15,10 @@ idea-multimarkdown
 
 2. Licensed version with enhanced refactoring and code completion functionality. 30-day free trial licenses are available in plugin preferences and from [idea-multimarkdown](http://vladsch.com/product/multimarkdown)
 
-Latest Developments, version 1.3.0
------------------------------------
+Latest Developments, version 1.3.x
+----------------------------------
+
+Latest release 1.3.2 is a bug fix and stability release, fixing issues that arose since the big code churn release 1.3.0.
 
 Another three week rewrite of the old infrastructure to be able to split editor support for markdown files. Now you can have split preview with either rendered or text HTML beside your markdown source.
 
@@ -35,7 +37,7 @@ Plugins that are a great compliment to idea-multimarkdown
 
 [Pipe Table Formatter](https://github.com/anton-dev-ua/PipeTableFormatter) A plugin that is great for formatting tables. I use to pretty up the tables in markdown and find it a great compliment to idea-multimarkdown.
 
-[.gitignore](http://hsz.mobi) to add .gitignore file brains to the IDE
+[.gitignore](http://hsz.mobi) to add .gitignore file brains to the IDE and allows idea-multimarkdown to show files and links to these files that will only resolve locally because they are not under git vcs.
                                                         
 The Background
 --------------
