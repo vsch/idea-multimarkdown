@@ -15,16 +15,20 @@ idea-multimarkdown
 
 2. Licensed version with enhanced refactoring and code completion functionality. 30-day free trial licenses are available in plugin preferences and from [idea-multimarkdown](http://vladsch.com/product/multimarkdown)
 
-Latest Developments, version 1.3.x
+Latest Developments, version 1.4.0
 ----------------------------------
 
-Latest release 1.3.2 is a bug fix and stability release, fixing issues that arose since the big code churn release 1.3.0.
+Language injections added to verbatim, fenced code, HTML blocks and multi-line URL content. Also auto completions, validation, refactoring for all link elements is now done, including anchor reference completions to available headers in the target file. Footnote completions and validation were also done.
 
-Another three week rewrite of the old infrastructure to be able to split editor support for markdown files. Now you can have split preview with either rendered or text HTML beside your markdown source.
+Language injections are at the top of my favorite feature list of IntelliJ. Here is a demo of nested injections: 
 
-User interface for settings has been moved under **Languages & Frameworks**, split into sections with new customizations added for html generation. Now can add CSS url, CSS Text or even extras directly in HTML with four insertion points: head top, head bottom, body top, body bottom.
+* Java injected into Kotlin String
+* in Kotlin code which is injected into a idea-multimarkdown fenced code block
+* fenced code block located in a nested block quote   
 
-Easier to show than explain, see screenshots below. For a summary of changes please see [Version Notes](resources/META-INF/VERSION.md)
+##### Editing is performed on the Java code fragment
+
+![Nested Code Injection](assets/images/NestedCodeInjection.gif)
 
 ### Still Great GitHub Rendering Resemblance for your preview pleasure
 
@@ -37,7 +41,7 @@ Plugins that are a great compliment to idea-multimarkdown
 
 [Pipe Table Formatter](https://github.com/anton-dev-ua/PipeTableFormatter) A plugin that is great for formatting tables. I use to pretty up the tables in markdown and find it a great compliment to idea-multimarkdown.
 
-[.gitignore](http://hsz.mobi) to add .gitignore file brains to the IDE and allows idea-multimarkdown to show files and links to these files that will only resolve locally because they are not under git vcs.
+[.gitignore](http://hsz.mobi) to add .gitignore file brains to the IDE and allows idea-multimarkdown to show files and links to files that will only resolve locally because they are not under git vcs.
                                                         
 The Background
 --------------
