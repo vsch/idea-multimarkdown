@@ -85,15 +85,17 @@ Screenshots
 
 #### Change options, customize the syntax colors and CSS to your liking.
 
-![idea-multimarkdown-settings](/assets/images/ScreenShot_settings_color.png)
+![Screen Shot Settings Intentions](/assets/images/ScreenShot_settings_intentions.png)
 
-![idea-multimarkdown-settings](/assets/images/ScreenShot_settings_markdown.png)
+![Screen Shot Settings Color](/assets/images/ScreenShot_settings_color.png)
+
+![Screen Shot Settings Markdown](/assets/images/ScreenShot_settings_markdown.png)
  
-![idea-multimarkdown-settings](/assets/images/ScreenShot_settings_parser.png)
+![Screen Shot Settings Parser](/assets/images/ScreenShot_settings_parser.png)
 
-![idea-multimarkdown-settings](/assets/images/ScreenShot_settings_css.png)
+![Screen Shot Settings Css](/assets/images/ScreenShot_settings_css.png)
 
-![idea-multimarkdown-settings](/assets/images/ScreenShot_settings_html.png)
+![Screen Shot Settings Html](/assets/images/ScreenShot_settings_html.png)
 
 Forking
 -------
