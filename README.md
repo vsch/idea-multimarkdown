@@ -1,6 +1,6 @@
 idea-multimarkdown
 ==================
-
+       
 idea-multimarkdown plugin provides **[Markdown] language support for [IntelliJ IDEA], [RubyMine], [PhpStorm], [WebStorm], [PyCharm], [AppCode], [Android Studio] and [DataGrip].**
 
 **You can download it on the [JetBrains plugin page].**
@@ -19,8 +19,20 @@ GitHub may recognize variants of Markdown syntax that this plugin will not and v
 
 2. Advanced features used for creating and maintaining markdown documents such as split editor, refactoring, find usages, validation, auto formatting and HTML page customizations are only available in the Enhanced licensed version. 30-day free trial licenses are available from [idea-multimarkdown] page on my website. 
 
-Latest Developments: Version 1.4.0
+Latest Developments: Version 1.4.2
 ----------------------------------
+
+#### File Move Refactoring
+
+For a full list see the [Version Notes]
+
+* Implemented refactoring of links contained in the file being moved. Link format is preserved, wiki links will be changed to explicit links if the file is moved out of the wiki directory.
+
+* Intentions implemented to replace annotator quick fixes. Now intentions can be individually disabled and no more weak warning highlighting just to get the quick fix to show up. 
+
+#### Language Injections
+
+* Fixed bug in split editor that would prevent injected language fragment editor from being resizeable.
 
 Language injections added to verbatim, fenced code, HTML blocks and multi-line URL content. Also auto completions, validation, refactoring for all link elements is now done, including anchor reference completions to available headers in the target file. Footnote completions and validation were also done.
 
@@ -119,3 +131,4 @@ The pegdown source used in this plugin can be found [vsch/pegdown].
 [GitHub]: https://github.com/vsch/laravel-translation-manager
 [nicoulaj]: https://github.com/nicoulaj
 [vsch/pegdown]: https://github.com/vsch/pegdown/tree/develop
+[Version Notes]: resources/META-INF/VERSION.md
