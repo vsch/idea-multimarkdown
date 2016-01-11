@@ -27,7 +27,10 @@ Latest Developments: Version 1.4.2
 For a full list see the [Version Notes]
 
 * Implemented refactoring of links contained in the file being moved. Link format is preserved, wiki links will be changed to explicit links if the file is moved out of the wiki directory.
-
+* **To Keep your links in sync** use rename refactoring for: 
+    * link addresses
+    * anchor references and header text
+    * references and reference links
 * Intentions implemented to replace annotator quick fixes. Now intentions can be individually disabled and no more weak warning highlighting just to get the quick fix to show up. 
 
 #### Language Injections
