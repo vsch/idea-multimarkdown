@@ -1,7 +1,7 @@
 idea-multimarkdown
 ==================
        
-idea-multimarkdown plugin provides **[Markdown] language support for [IntelliJ IDEA], [RubyMine], [PhpStorm], [WebStorm], [PyCharm], [AppCode], [Android Studio] and [DataGrip].**
+idea-multimarkdown plugin provides **[Markdown] language support for [IntelliJ IDEA], [RubyMine], [PhpStorm], [WebStorm], [PyCharm], [AppCode], [Android Studio], [CLion] and [DataGrip].**
 
 **You can download it on the [JetBrains plugin page].**
 
@@ -113,27 +113,28 @@ The pegdown source used in this plugin can be found [vsch/pegdown].
 
 \* This plugin is based on the [nicoulaj/idea-markdown plugin] by [nicoulaj], which is based on [pegdown] library by [sirthias].
 
-[Markdown]: http://daringfireball.net/projects/markdown
-[IntelliJ IDEA]: http://www.jetbrains.com/idea
-[RubyMine]: http://www.jetbrains.com/ruby
-[PhpStorm]: http://www.jetbrains.com/phpstorm
-[WebStorm]: http://www.jetbrains.com/webstorm
-[PyCharm]: http://www.jetbrains.com/pycharm
-[AppCode]: http://www.jetbrains.com/objc
-[Android Studio]: http://developer.android.com/sdk/installing/studio.html
-[DataGrip]: https://www.jetbrains.com/datagrip
-[JetBrains plugin page]: https://plugins.jetbrains.com/plugin?pr=&pluginId=7896
-[idea-multimarkdown]: http://vladsch.com/product/multimarkdown
-[pegdown]: http://pegdown.org
-[sirthias]: https://github.com/sirthias
-[GitHub Issues page]: ../../issues
-[JetBrains plugin comment and rate page]: https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896
-[Wiki]: ../../wiki
-[Pipe Table Formatter]: https://github.com/anton-dev-ua/PipeTableFormatter
 [.gitignore]: http://hsz.mobi
-[nicoulaj/idea-markdown plugin]: https://github.com/nicoulaj/idea-markdown
+[Android Studio]: http://developer.android.com/sdk/installing/studio.html
+[AppCode]: http://www.jetbrains.com/objc
+[CLion]: https://www.jetbrains.com/clion
 [Craig's List]: http://montreal.en.craigslist.ca/
+[DataGrip]: https://www.jetbrains.com/datagrip
+[GitHub Issues page]: ../../issues
 [GitHub]: https://github.com/vsch/laravel-translation-manager
+[idea-multimarkdown]: http://vladsch.com/product/multimarkdown
+[IntelliJ IDEA]: http://www.jetbrains.com/idea
+[JetBrains plugin comment and rate page]: https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896
+[JetBrains plugin page]: https://plugins.jetbrains.com/plugin?pr=&pluginId=7896
+[Markdown]: http://daringfireball.net/projects/markdown
+[nicoulaj/idea-markdown plugin]: https://github.com/nicoulaj/idea-markdown
 [nicoulaj]: https://github.com/nicoulaj
-[vsch/pegdown]: https://github.com/vsch/pegdown/tree/develop
+[pegdown]: http://pegdown.org
+[PhpStorm]: http://www.jetbrains.com/phpstorm
+[Pipe Table Formatter]: https://github.com/anton-dev-ua/PipeTableFormatter
+[PyCharm]: http://www.jetbrains.com/pycharm
+[RubyMine]: http://www.jetbrains.com/ruby
+[sirthias]: https://github.com/sirthias
 [Version Notes]: resources/META-INF/VERSION.md
+[vsch/pegdown]: https://github.com/vsch/pegdown/tree/develop
+[WebStorm]: http://www.jetbrains.com/webstorm
+[Wiki]: ../../wiki
