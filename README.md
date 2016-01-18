@@ -19,10 +19,17 @@ GitHub may recognize variants of Markdown syntax that this plugin will not and v
 
 2. Advanced features used for creating and maintaining markdown documents such as split editor, refactoring, find usages, validation, auto formatting and HTML page customizations are only available in the Enhanced licensed version. 30-day free trial licenses are available from [idea-multimarkdown] page on my website. 
 
-Latest Developments: Version 1.4.2
+Latest Developments: Version 1.4.3
 ----------------------------------
 
-#### File Move Refactoring
+#### Minor Improvements & Bug Fixes
+
+- GitHub issue # completions added in plain text and `issues/` link
+- Option to view GitHub page in preview if the document was committed and has not been modified.
+- Added more elements to code folding and added configuration for collapse by default in settings/preferences
+- Improved link completions and added changing of completion addressing format by repeated invocations of the completion action
+
+#### File Move Refactoring added in 1.4.2
 
 For a full list see the [Version Notes]
 
@@ -32,8 +39,8 @@ For a full list see the [Version Notes]
     * anchor references and header text
     * references and reference links
 * Intentions implemented to replace annotator quick fixes. Now intentions can be individually disabled and no more weak warning highlighting just to get the quick fix to show up. 
-
-#### Language Injections
+                     
+#### Language Injections added in 1.4.1
 
 * Fixed bug in split editor that would prevent injected language fragment editor from being resizeable.
 
