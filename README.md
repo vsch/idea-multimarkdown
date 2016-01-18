@@ -19,6 +19,8 @@ GitHub may recognize variants of Markdown syntax that this plugin will not and v
 
 2. Advanced features used for creating and maintaining markdown documents such as split editor, refactoring, find usages, validation, auto formatting and HTML page customizations are only available in the Enhanced licensed version. 30-day free trial licenses are available from [idea-multimarkdown] page on my website. 
 
+![Capabilities](assets/images/capabilities.png)
+
 Latest Developments: Version 1.4.3
 ----------------------------------
 
