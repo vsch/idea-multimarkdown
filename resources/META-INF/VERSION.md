@@ -1,3 +1,51 @@
+### 1.4.4 - Bug Fix Release
+
+#### Basic & Enhanced Editions
+
+- Fix: #153, Bug: URL encode 
+- Fix: settings forms not always disposed
+- Fix: #155, NoClassDefFound exception in PhpStorm, probably other non-Java IDEs on Markdown file move
+
+#### Enhanced Edition
+
+* Change: References that have reference images referencing them, will have link address completion defaulting to image files
+* Fix: #154, Absolute links to repo files with http:// are not highlighted as unresolved if they have an error
+                            
+### 1.4.3 - Bug Fix & Improvements Release
+
+#### Basic & Enhanced Editions
+
+- Fix: license fetch dialog message box font too small on Windows with retina resolution display 
+- Fix: #149, Out of memory errors possibly caused by parser throwing an exception during indexing
+- Change: vcs roots are now obtained from the IDE and not by scanning for git configuration in the file system. So if the VCS root is not defined in the IDE the plugin will not be able to resolve links for that GitHub repository.
+
+#### Enhanced Edition
+                            
+* Fix: #143, In wiki link completions file names that contain `#` are truncated with `#` in the file treated as an anchor ref 
+* Fix: #144, Annotation for wiki links with `#` in filename not shown
+* Fix: #145, Wiki link refactoring not working for file names containing `#` 
+* Fix: #146, File names that contain # do not show link references with URL encoded link address. 
+* Add: #147, GitHub issue # completions in plain text and for links. In text after `#`, for links after `/issues/`, the cursor must be after a valid issues link for the current file's github repository and come after the last `/`. 
+
+    **NOTE:** For this to work correctly you need to enable "ATX Header Space" option in the parser otherwise a `#` followed by non-space text is parsed as a header and not a github issue. 
+* Add: link completions now display shortened file path in completion list. The addressing format is controllable via multiple invocations of the completion popup. If the link does not start with a protocol prefix nor a `/` for repo relative addressing then pressing ctrl+space will cycle through all possible formats configured in preferences under Completions, by default: relative addressing, `/` repo relative, `https://` absolute. With `file://` addressing completions only if the link starts with `file://` before pressing ctrl+space or by changing preferences to include file:// protocol in completion format cycle.
+* Add: code folding for multi-line image urls 
+* Add: collapsed by default config under settings **Editor** > **General** > **Code Folding**, for:
+    * verbatim blocks
+    * code fence blocks
+    * multi-line URL images
+    * references
+    * explicit links
+    * explicit image links
+* Fix: ANCHORLINKS parser option only affects unmodified HTML text preview and should not be changed by parser profile changes.    
+* Fix: unmodified HTML text preview should not generate header tag ids if ANCHORLINKS parser option is not selected.    
+* Fix: multi-line url images with `http://gravizo?` 
+    * prefix were adding `;` after `{` 
+    * all trailing `;` are removed, not just one when editing injected code fragment     
+* Add: view document on GitHub option when file is under vcs and is not modified. No checking is done if changes were actually pushed to the remote branch.    
+* Change: color attributes that previously contained `BOLDITALIC` are now `BOLD_ITALIC` to match the naming convention of other attributes.
+* Change: page relative and repo relative links in preview resolve to file in current remote branch with fallback to `master` if current branch has no remote counterpart. Previously they always resolved to `master`.
+
 ### 1.4.2 - Bug Fix & Improvements Release
 
 #### Basic & Enhanced Editions

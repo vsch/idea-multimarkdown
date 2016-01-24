@@ -11,7 +11,7 @@ GitHub may recognize variants of Markdown syntax that this plugin will not and v
 
 **For any communications requiring a reply** please use the [GitHub Issues page] for this plugin. There is no ability to reply to comments left on the [JetBrains plugin comment and rate page].
 
-**[Wiki] added** with instructions on [how to include your GitHub wiki in the IntelliJ IDE](../../wiki/Adding-GitHub-Wiki-to-Your-IntelliJ-Project) so you can work on the wiki in the IDE and use the plugin for syntax highlighting,preview, link completions and validation. This makes adding images and manipulating the wiki a lot easier.
+**[Wiki] added** with instructions on how to include your [GitHub wiki in IntelliJ IDE] so you can work on the wiki in the IDE and use the plugin for syntax highlighting,preview, link completions and validation. This makes adding images and manipulating the wiki a lot easier.
 
 #### Two tier model of the plugin
 
@@ -20,6 +20,23 @@ GitHub may recognize variants of Markdown syntax that this plugin will not and v
 2. Advanced features used for creating and maintaining markdown documents such as split editor, refactoring, find usages, validation, auto formatting and HTML page customizations are only available in the Enhanced licensed version. 30-day free trial licenses are available from [idea-multimarkdown] page on my website. 
 
 ![Capabilities](/assets/images/capabilities.png)
+
+### Updating of the source  
+
+There was much code churn in the enhanced version and I have not had time to merge them into the open source version. Initially when most of the differences were limited to a few files it easy to keep them separated and sync the rest. Now, with major preferences and settings re-work, directory layout changes and new features, the differences have spread out where keeping them in sync is a major effort. I started factoring out the enhanced only changes to separate files so that future synchronization of the two branches can be less time consuming.   
+
+I am part way through the task but will need at least another week to complete it and make a release that updates this repo source to version 1.4.4
+
+Latest Developments: Version 1.4.4
+----------------------------------
+
+For a full list see the [Version Notes]
+
+#### Bug Fix Release
+
+- Fix: #153, #154, #155
+- Fix: settings forms not always disposed
+- Change: References that have reference images referencing them, will have link address completion defaulting to image files
 
 Latest Developments: Version 1.4.3
 ----------------------------------
@@ -33,8 +50,6 @@ Latest Developments: Version 1.4.3
 
 #### File Move Refactoring added in 1.4.2
 
-For a full list see the [Version Notes]
-
 * Implemented refactoring of links contained in the file being moved. Link format is preserved, wiki links will be changed to explicit links if the file is moved out of the wiki directory.
 * **To Keep your links in sync** use rename refactoring for: 
     * link addresses
@@ -42,22 +57,6 @@ For a full list see the [Version Notes]
     * references and reference links
 * Intentions implemented to replace annotator quick fixes. Now intentions can be individually disabled and no more weak warning highlighting just to get the quick fix to show up. 
                      
-#### Language Injections added in 1.4.1
-
-* Fixed bug in split editor that would prevent injected language fragment editor from being resizeable.
-
-Language injections added to verbatim, fenced code, HTML blocks and multi-line URL content. Also auto completions, validation, refactoring for all link elements is now done, including anchor reference completions to available headers in the target file. Footnote completions and validation were also done.
-
-Language injections are at the top of my favorite feature list of IntelliJ. Here is a demo of nested injections: 
-
-* Java injected into Kotlin String
-* in Kotlin code which is injected into a idea-multimarkdown fenced code block
-* fenced code block located in a nested block quote   
-
-##### Editing is performed on the Java code fragment
-
-![Nested Code Injection](/assets/images/NestedCodeInjection.gif)
-
 ### Still Great GitHub Rendering Resemblance for your preview pleasure
 
 ##### One of the images is idea-multimarkdown preview, the other of same file on GitHub: 
@@ -147,3 +146,4 @@ The pegdown source used in this plugin can be found [vsch/pegdown].
 [vsch/pegdown]: https://github.com/vsch/pegdown/tree/develop
 [WebStorm]: http://www.jetbrains.com/webstorm
 [Wiki]: ../../wiki
+[GitHub wiki in IntelliJ IDE]: ../../wiki/Adding-GitHub-Wiki-to-IntelliJ-Project
