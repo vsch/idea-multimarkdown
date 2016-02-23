@@ -21,15 +21,14 @@ that GitHub has a few syntax modifications that conflict with original
 Markdown spec. This plugin uses [pegdown] library by [sirthias] with a 
 few extensions added to make the rendering of GFM more faithful. 
 
-**For any communications requiring a reply** please use the   
-[GitHub Issues page] for this plugin. There is no ability to reply to 
-comments left on the [JetBrains plugin comment and rate page]. 
+**For any communications requiring a reply** please use the [GitHub 
+Issues page] for this plugin. There is no ability to reply to comments 
+left on the [JetBrains plugin comment and rate page]. 
 
-**[Wiki] added** with instructions on how to include your  
-[GitHub wiki in IntelliJ IDE] so you can work on the wiki in the IDE and 
-use the plugin for syntax highlighting,preview, link completions and 
-validation. This makes adding images and manipulating the wiki a lot 
-easier. 
+**[Wiki] added** with instructions on how to include your [GitHub wiki 
+in IntelliJ IDE] so you can work on the wiki in the IDE and use the 
+plugin for syntax highlighting,preview, link completions and validation. 
+This makes adding images and manipulating the wiki a lot easier. 
 
 #### Two tier model of the plugin
 
@@ -62,7 +61,7 @@ more intricate than I imagined and it is not leaving me much time to
 make updates to latest version. I will address it as soon as I have the 
 formatting functionality complete. 
 
-Latest Developments: Version 1.4.5
+Latest Developments: Version 1.4.6
 ----------------------------------
 
 For a full list see the [Version Notes]
@@ -141,11 +140,7 @@ Latest Developments: Version 1.4.3
 Plugins that are a great compliment to idea-multimarkdown
 ---------------------------------------------------------
 
-[Pipe Table Formatter] A plugin that is great for formatting markdown 
-tables. I use to pretty up the tables in markdown and find it a great 
-compliment to idea-multimarkdown. 
-
-[.gitignore] to add .gitignore file brains to the IDE and allows 
+[.gitignore] to add `.gitignore` file brains to the IDE and allows 
 idea-multimarkdown to show files and links to files that will only 
 resolve locally because they are not under git vcs. 
                                                         
@@ -153,11 +148,10 @@ The Background
 --------------
 
 It all started with a desire to see Markdown files in PhpStorm IDE as 
-they would look on GitHub. I was already using  
-[nicoulaj/idea-markdown plugin] but found its preview was more like  
-[Craig's List] than [GitHub]. It did not appear to have been recently 
-updated, so I decided to fork it and modify the style sheet it uses. How 
-hard could that be? 
+they would look on GitHub. I was already using [nicoulaj/idea-markdown 
+plugin] but found its preview was more like [Craig's List] than 
+[GitHub]. It did not appear to have been recently updated, so I decided 
+to fork it and modify the style sheet it uses. How hard could that be? 
 
 I found out quickly that there was more to it than meets the eye. 
 Rendering is done by Java not a browser, the parser is HTML 3.1 and not 
@@ -188,7 +182,7 @@ Screenshots
 
 ### Split your editor and see the preview as you type
 
-![idea-multimarkdown](/assets/images/ScreenShot_preview.png)
+![idea-multimarkdown](/assets/images/ScreenShot_preview.png) 
 
 ### Peek at the HTML
 
@@ -196,17 +190,17 @@ Screenshots
 
 #### Change options, customize the syntax colors and CSS to your liking.
 
-![Screen Shot Settings Intentions](/assets/images/ScreenShot_settings_intentions.png)
+![Screen Shot Settings Intentions](/assets/images/ScreenShot_settings_intentions.png) 
 
-![Screen Shot Settings Color](/assets/images/ScreenShot_settings_color.png)
+![Screen Shot Settings Color](/assets/images/ScreenShot_settings_color.png) 
 
-![Screen Shot Settings Markdown](/assets/images/ScreenShot_settings_markdown.png)
+![Screen Shot Settings Markdown](/assets/images/ScreenShot_settings_markdown.png) 
  
-![Screen Shot Settings Parser](/assets/images/ScreenShot_settings_parser.png)
+![Screen Shot Settings Parser](/assets/images/ScreenShot_settings_parser.png) 
 
-![Screen Shot Settings Css](/assets/images/ScreenShot_settings_css.png)
+![Screen Shot Settings Css](/assets/images/ScreenShot_settings_css.png) 
 
-![Screen Shot Settings Html](/assets/images/ScreenShot_settings_html.png)
+![Screen Shot Settings Html](/assets/images/ScreenShot_settings_html.png) 
 
 Forking
 -------
