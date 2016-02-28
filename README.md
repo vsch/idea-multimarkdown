@@ -23,7 +23,7 @@ few extensions added to make the rendering of GFM more faithful.
 
 **For any communications requiring a reply** please use the [GitHub 
 Issues page] for this plugin. There is no ability to reply to comments 
-left on the [JetBrains plugin comment and rate page]. 
+left on the [JetBrains plugin comment and rate page].  
 
 **[Wiki] added** with instructions on how to include your [GitHub wiki 
 in IntelliJ IDE] so you can work on the wiki in the IDE and use the 
@@ -61,10 +61,15 @@ more intricate than I imagined and it is not leaving me much time to
 make updates to latest version. I will address it as soon as I have the 
 formatting functionality complete. 
 
-Latest Developments: Version 1.4.6
+Latest Developments: Version 1.4.7
 ----------------------------------
 
 For a full list see the [Version Notes]
+
+#### External Annotator added
+
+Syntax Highlighting now done with an external annotator which runs after 
+a delay in typing.  
 
 #### Format and Wrap on Edit
 
