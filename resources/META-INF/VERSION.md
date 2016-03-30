@@ -1,4 +1,4 @@
-### 1.4.7.11 - Bug Fix & Optimization Release
+### 1.4.8 - Bug Fix & Optimization Release
 
 #### Basic & Enhanced Editions
 

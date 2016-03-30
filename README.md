@@ -66,6 +66,15 @@ Latest Developments: Version 1.4.7
 
 For a full list see the [Version Notes]
 
+- fix pegdown infinite loop parsing of markdown documents with HTML documents that contain HTML blocks with unclosed 
+  tags and fenced code blocks that contain HTML or HTML looking code. Note that this fix breaks SUPPRESS_HTML_BLOCK 
+  parser extension. 
+- Add non-wrap markdown inline element handling for wrap on typing so that links are not wrapped across lines.
+- Fix an exception in JavaFX WebView preview. 
+
+Latest Developments: Version 1.4.7 
+---------------------------------- 
+
 #### External Annotator added
 
 Syntax Highlighting now done with an external annotator which runs after 
