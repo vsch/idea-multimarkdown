@@ -61,7 +61,7 @@ more intricate than I imagined and it is not leaving me much time to
 make updates to latest version. I will address it as soon as I have the 
 formatting functionality complete. 
 
-Latest Developments: Version 1.4.7
+Latest Developments: Version 1.4.8
 ----------------------------------
 
 For a full list see the [Version Notes]
