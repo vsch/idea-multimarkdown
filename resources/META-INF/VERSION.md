@@ -1,3 +1,21 @@
+### 1.4.9 - Bug Fix & Optimization Release
+
+#### Basic & Enhanced Editions
+
+- Add: formatting buttons 
+- Add: markdown specific soft-wrap setting. This only affects the editor when it is first opened. Thereafter use 
+  keyboard shortcuts to toggle soft wrap mode. 
+    - default - uses global setting 
+    - disabled - always opens editor with soft-wraps turned off 
+    - enabled - always opens editor with soft-wraps turned on 
+- Fix #190, Incorrect parsing of HTML blocks. This also fixes improper handling of HTML block suppression. 
+
+#### Enhanced Edition
+
+* Add: handling of Jekyll front matter in markdown documents. Document must start with `---` and have another `---` 
+  terminating the front matter for it not to be parsed as Markdown. 
+* Add: option to embed CSS resources into the HTML document instead of URL links  
+
 ### 1.4.8 - Bug Fix & Optimization Release
 
 #### Basic & Enhanced Editions

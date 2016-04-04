@@ -61,10 +61,21 @@ more intricate than I imagined and it is not leaving me much time to
 make updates to latest version. I will address it as soon as I have the 
 formatting functionality complete. 
 
-Latest Developments: Version 1.4.8
+Latest Developments: Version 1.4.9
 ----------------------------------
 
 For a full list see the [Version Notes]
+
+- Add: formatting buttons 
+- Add: handling of Jekyll front matter in markdown documents. Document must start with `---` and have another `---` 
+  terminating the front matter for it not to be parsed as Markdown. 
+- Add: option to embed CSS resources into the HTML document instead of URL links  
+- Add: markdown specific soft-wrap setting. This only affects the editor when it is first opened. Thereafter use 
+  keyboard shortcuts to toggle soft wrap mode. 
+- Fix #190, Incorrect parsing of HTML blocks. This also fixes improper handling of HTML block suppression. 
+
+Latest Developments: Version 1.4.8
+----------------------------------
 
 - fix pegdown infinite loop parsing of markdown documents with HTML documents that contain HTML blocks with unclosed 
   tags and fenced code blocks that contain HTML or HTML looking code. Note that this fix breaks SUPPRESS_HTML_BLOCK 
