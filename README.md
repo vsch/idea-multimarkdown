@@ -43,7 +43,7 @@ This makes adding images and manipulating the wiki a lot easier.
    the Enhanced licensed version. 30-day free trial licenses are 
    available from [idea-multimarkdown] page on my website. 
                                                     
-![Capabilities](/assets/images/capabilities.png)
+![Capabilities](/assets/images/capabilities.png)       
 
 ### Updating of the source  
 
@@ -58,8 +58,18 @@ synchronization of the two branches can be less time consuming.
 
 I am part way through the task but the formatting wound up being much 
 more intricate than I imagined and it is not leaving me much time to 
-make updates to latest version. I will address it as soon as I have the 
-formatting functionality complete. 
+make updates to latest version.  
+
+Release Road Map
+----------------
+
+I will be changing the [Markdown] parser used by the plugin from [pegdown] to [commonmark-java] 
+over the next month or two.
+
+Current implementation using [pegdown][] parser has caused many of the performance and IDE 
+hanging issues resulting in many complaints about the plugin causing degraded IDE performance. 
+Reason for the choice is detailed in: 
+[Pegdown - Achilles heel of the MultiMarkdown plugin](http://vladsch.com/blog/15). 
 
 Latest Developments: Version 1.4.9
 ----------------------------------
@@ -270,3 +280,6 @@ The pegdown source used in this plugin can be found [vsch/pegdown].
 [WebStorm]: http://www.jetbrains.com/webstorm
 [Wiki]: ../../wiki
 [GitHub wiki in IntelliJ IDE]: ../../wiki/Adding-GitHub-Wiki-to-IntelliJ-Project
+[Kotlin]: http://kotlinlang.org
+[intellij-markdown]: https://github.com/valich/intellij-markdown 
+[commonmark-java]: https://github.com/atlassian/commonmark-java
