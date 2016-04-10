@@ -71,11 +71,21 @@ hanging issues resulting in many complaints about the plugin causing degraded ID
 Reason for the choice is detailed in: 
 [Pegdown - Achilles heel of the MultiMarkdown plugin](http://vladsch.com/blog/15). 
 
-Latest Developments: Version 1.4.9
-----------------------------------
+Latest Developments: Version 1.4.10
+-----------------------------------
 
 For a full list see the [Version Notes]
 
+#### Bug Fixes and Improvements
+
+- Add table formatting for format toolbar button
+- Add table formatting option to format as you type in table separator line
+- Fix book icon in preview would not open document in browser 
+- Fix incorrect HTML rendering of undefined reference link `[some-text][]` as `[some-text][some-text]` 
+- Add list item handling on <kbd>ENTER</kbd> and <kbd>BACKSPACE</kbd>. <kbd>ENTER</kbd> will add unordered item or 
+  ordered item depending on what is preceding caret location. <kbd>ENTER</kbd> and <kbd>BACKSPACE</kbd> will remove 
+  empty list items. Configuration to enable/disable in Editor > Code Style > MultiMarkdown under `List Items` 
+- Improve auto format handling on typing, <kbd>ENTER</kbd> and <kbd>BACKSPACE</kbd> 
 - Add: formatting buttons 
 - Add: handling of Jekyll front matter in markdown documents. Document must start with `---` and have another `---` 
   terminating the front matter for it not to be parsed as Markdown. 
@@ -83,18 +93,11 @@ For a full list see the [Version Notes]
 - Add: markdown specific soft-wrap setting. This only affects the editor when it is first opened. Thereafter use 
   keyboard shortcuts to toggle soft wrap mode. 
 - Fix #190, Incorrect parsing of HTML blocks. This also fixes improper handling of HTML block suppression. 
-
-Latest Developments: Version 1.4.8
-----------------------------------
-
 - fix pegdown infinite loop parsing of markdown documents with HTML documents that contain HTML blocks with unclosed 
   tags and fenced code blocks that contain HTML or HTML looking code. Note that this fix breaks SUPPRESS_HTML_BLOCK 
   parser extension. 
 - Add non-wrap markdown inline element handling for wrap on typing so that links are not wrapped across lines.
 - Fix an exception in JavaFX WebView preview. 
-
-Latest Developments: Version 1.4.7 
----------------------------------- 
 
 #### External Annotator added
 
