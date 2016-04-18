@@ -1,17 +1,78 @@
+### 1.4.10.20 - Bug Fix & Optimization Release
+
+#### Basic & Enhanced Editions
+
+- Add: patch release and eap update streams 
+- Add: live templates starting with `.` 
+
+    | Element       | Abbreviation | Expansion         |
+    |:--------------|:-------------|:------------------|
+    | Code fence    | `.codefence` | \`\`\` ... \`\`\` |
+    | Explicit link | `.link`      | `[]()`            |
+    | Footnote      | `.footnote`  | `[^]:`            |
+    | Footnote Ref  | `.rfootnote` | `[^]`             |
+    | Image         | `.image`     | `![]()`           |
+    | Ref link      | `.rlink`     | `[][]`            |
+    | Ref image     | `.rimage`    | `![][]`           |
+    | Reference     | `.reference` | `![]()`           |
+    | Wiki link     | `.wikilink`  | `[[]]`            |
+    
+- Fix: syntax highlighting inline elements in definition text
+
+#### Enhanced Edition
+
+* Fix: #195, License activation being reset when no network connection is available. 
+* Fix: format as you type tables whose body columns contain what looks like a separator column. 
+* Fix: #196, Incorrect parsing of compound reference links
+* Fix: #198, Image links that don't end with an extension don't get recognized. Now image links
+  without extension are assumed to be correct. No error or warning is generated for these links.
+  Query strings are also stripped from the link address before looking for an extension.
+* Fix: #199, Multi-line image URLs not parsed correctly when terminating ) is followed by white
+  space characters
+* Fix: #200, Jekyll front matter is not recognized if the terminating marker is at the end of
+  file and without EOL.
+* Fix: #201, Image link completion in wiki pages leaves out subdirectories 
+* Fix: #202, Plain text paragraphs that have indentation spaces do not get properly wrapped as
+  you type.
+* Fix: made wiki link elements non-wrappable so that they will not be wrapped across lines.
+* Fix: intermittent wrap on typing failure to wrap paragraphs
+* Add: wrapping of text when it contains embedded multi-line URL image links. Now these image
+  links for the purpose of wrapping are treated as paragraph breaks and each segment is wrapped
+  separately.
+* Fix: remove appending spaces at end of wrapped text lines. Now only hard break spaces will be
+  kept at end of text lines.
+* Fix: wrap on typing continuation line indenting now has the following options:
+    * None - continuation lines will start at column 1
+    * **Align text edge - default**. Will align continuation lines with the text of the first
+      line
+    * Indent - continuation lines will start at indent of first line
+    * Indent +1 level - continuation lines will start at indent of first line + 4 spaces
+    * Indent +2 levels - continuation lines will start at indent of first line + 8 spaces
+* Fix: hard break spaces would not always be preserved when formatting paragraphs
+* Fix: Auto links would be treated as paragraph breaks during wrap on typing reformatting op,
+* Fix: only the first paragraph of a multi-paragraph list item to be wrapped.
+* Fix: lines ending in '* ' or '- ' would be erroneously handled as empty list items by
+  BACKSPACE handler.
+* Add: List item un-indent/indent toolbar buttons, assigned to Ctrl-Y/Ctrl-U on mac and
+  alt-Y/alt-U on Windows.
+* Fix: missing completions for some empty link elements.
+  
 ### 1.4.10 - Bug Fix & Optimization Release
 
 #### Basic & Enhanced Editions
 
 - Fix: book icon in preview would not open document in browser
-- Fix: incorrect HTML rendering of undefined reference link `[some-text][]` as `[some-text][some-text]`   
+- Fix: incorrect HTML rendering of undefined reference link `[some-text][]` as
+  `[some-text][some-text]`
 
 #### Enhanced Edition
 
-* Add: list item handling on <kbd>ENTER</kbd> and <kbd>BACKSPACE</kbd>. <kbd>ENTER</kbd> will add unordered item or 
-  ordered item depending on what is preceding caret location. <kbd>ENTER</kbd> and <kbd>BACKSPACE</kbd> will remove 
-  empty list items. Configuration to enable/disable in Editor > Code Style > MultiMarkdown under `List Items` 
-* Improve: auto format handling on typing, <kbd>ENTER</kbd> and <kbd>BACKSPACE</kbd> 
-* Add: table formatting via the format toolbar button 
+* Add: list item handling on <kbd>ENTER</kbd> and <kbd>BACKSPACE</kbd>. <kbd>ENTER</kbd> will
+  add unordered item or ordered item depending on what is preceding caret location.
+  <kbd>ENTER</kbd> and <kbd>BACKSPACE</kbd> will remove empty list items. Configuration to
+  enable/disable in Editor > Code Style > MultiMarkdown under `List Items`
+* Improve: auto format handling on typing, <kbd>ENTER</kbd> and <kbd>BACKSPACE</kbd>
+* Add: table formatting via the format toolbar button
 * Add: table formatting option to format as you type in table separator line
 
 ### 1.4.9 - Bug Fix & Optimization Release 
@@ -19,17 +80,18 @@
 #### Basic & Enhanced Editions
 
 - Add: formatting buttons
-- Add: markdown specific soft-wrap setting. This only affects the editor when it is first opened. Thereafter use 
-  keyboard shortcuts to toggle soft wrap mode. 
+- Add: markdown specific soft-wrap setting. This only affects the editor when it is first
+  opened. Thereafter use keyboard shortcuts to toggle soft wrap mode.
     - default - uses global setting
     - disabled - always opens editor with soft-wraps turned off
     - enabled - always opens editor with soft-wraps turned on
-- Fix #190, Incorrect parsing of HTML blocks. This also fixes improper handling of HTML block suppression.
+- Fix #190, Incorrect parsing of HTML blocks. This also fixes improper handling of HTML block
+  suppression.
 
 #### Enhanced Edition
 
-* Add: handling of Jekyll front matter in markdown documents. Document must start with `---` and have another `---`
-  terminating the front matter for it not to be parsed as Markdown.
+* Add: handling of Jekyll front matter in markdown documents. Document must start with `---` and
+  have another `---` terminating the front matter for it not to be parsed as Markdown.
 * Add: option to embed CSS resources into the HTML document instead of URL links
 
 ### 1.4.8 - Bug Fix & Optimization Release
@@ -40,29 +102,35 @@
 - Fix: #176, Exception: Panel is guaranteed to be not null now
 - Fix: #180, code syntax highlighting has border around code blocks in HTML preview.
 - Fix: #183, Incomplete Tasks in Task list not rendering correctly
-- Fix: #182, Light scroll bars showing in dark theme. Added CSS to change WebView scroll bar colors.
-- Fix: #178, Chinese character display problem. Headings would be empty if they contained only non-ascii alpha
-  characters.
-- Fix: #184, Smooth scroll issues with preview. Reduce frequency of on scroll callbacks to reduce delay during
-  scrolling.
-- Fix: #185, IntelliJ IDEA performance is heavily affected by this plug-in. Pegdown bug causes exponential parse time
-  for markdown with unclosed HTML tags and fenced code blocks that contain HTML.
+- Fix: #182, Light scroll bars showing in dark theme. Added CSS to change WebView scroll bar
+  colors.
+- Fix: #178, Chinese character display problem. Headings would be empty if they contained only
+  non-ascii alpha characters.
+- Fix: #184, Smooth scroll issues with preview. Reduce frequency of on scroll callbacks to
+  reduce delay during scrolling.
+- Fix: #185, IntelliJ IDEA performance is heavily affected by this plug-in. Pegdown bug causes
+  exponential parse time for markdown with unclosed HTML tags and fenced code blocks that
+  contain HTML.
 
 #### Enhanced Edition
 
-* Add: parsing of HTML anchor elements with id for resolving, annotating duplicates and finding usages for ref anchors.
-  Only the opening tag is significant: `<a id='ref-anchor'>` or `<a id="ref-anchor">`
-* Change: anchor ref completion shows header level and text, for ref anchors shows complete opening tag
-* Fix: optimizations that skip reformatting to be less optimistic improving wrap on typing results.
-* Add: handling of non-wrap inline elements that cannot handle being wrapped across lines. Embedded spaces in these
-  elements are now treated as non-break spaces.
+* Add: parsing of HTML anchor elements with id for resolving, annotating duplicates and finding
+  usages for ref anchors. Only the opening tag is significant: `<a id='ref-anchor'>` or `<a
+  id="ref-anchor">`
+* Change: anchor ref completion shows header level and text, for ref anchors shows complete
+  opening tag
+* Fix: optimizations that skip reformatting to be less optimistic improving wrap on typing
+  results.
+* Add: handling of non-wrap inline elements that cannot handle being wrapped across lines.
+  Embedded spaces in these elements are now treated as non-break spaces.
 * Add: reformat document action which for now formats the current paragraph.
 
 ### 1.4.7 - Bug Fix & Optimization Release
 
 #### Basic & Enhanced Editions
 
-- Fix: #164, PyCharm & RubyMine highlight a single space at the end of the line as Markdown HARD BREAK
+- Fix: #164, PyCharm & RubyMine highlight a single space at the end of the line as Markdown HARD
+  BREAK
 - Fix: #167, NoSuchMethodError when typing text
 - Fix: #169, IndexOutOfBoundsException chars sequence.length:5, start:-1, end:5
 - Add: external annotator to reduce typing delay.
@@ -70,7 +138,8 @@
 #### Enhanced Edition
 
 * Fix: #165, Reference Images and Links split across a line boundary show as unresolved
-* Fix: #166, Image Links embedded in text are not recognized as inline elements that can be wrapped.
+* Fix: #166, Image Links embedded in text are not recognized as inline elements that can be
+  wrapped.
 * Fix: #168, Optimize wrap on typing to not reformat text block on every typed character
 
 ### 1.4.6 - Bug Fix Release
@@ -84,19 +153,22 @@
 #### Basic & Enhanced Editions
 
 - Fix: #158, ATX headers do not trim trailing #'s from Header text element
-- Fix: #159, Preview HTML anchor links do not have id's matching those generated by GitHub or the plugin anchor link
-  completions
-- Fix: #162, Allow strong/emphasis markers to be recognized when surrounded by non-white space characters
-- Add: as you type formatting for setext header marker equalization, matching atx trailing markers, bold/italic doubling
-- Add: syntax highlight for markdown hard break, two spaces before at the end of line that has a continuation.
+- Fix: #159, Preview HTML anchor links do not have id's matching those generated by GitHub or
+  the plugin anchor link completions
+- Fix: #162, Allow strong/emphasis markers to be recognized when surrounded by non-white space
+  characters
+- Add: as you type formatting for setext header marker equalization, matching atx trailing
+  markers, bold/italic doubling
+- Add: syntax highlight for markdown hard break, two spaces before at the end of line that has a
+  continuation.
 - Add: Editor  Code Style for headers and auto-format options
 
 #### Enhanced Edition
 
 * Add: Editor Code Style for Markdown
 * Fix: #160, IllegalStateException when opening settings
-* Fix: indented Code fence blocks would remove leading indent characters from code fragment even when these were not
-  blank.
+* Fix: indented Code fence blocks would remove leading indent characters from code fragment even
+  when these were not blank.
 * Add: format as you type for tables
 * Add: wrap on typing for text blocks, footnotes, list items, definitions
 
@@ -106,135 +178,157 @@
 
 - Fix: #153, Bug: URL encode
 - Fix: settings forms not always disposed
-- Fix: #155, NoClassDefFound exception in PhpStorm, probably other non-Java IDEs on Markdown file move
+- Fix: #155, NoClassDefFound exception in PhpStorm, probably other non-Java IDEs on Markdown
+  file move
 
 #### Enhanced Edition
 
-* Change: References that have reference images referencing them, will have link address completion defaulting to image
-  files
-* Fix: #154, Absolute links to repo files with http:// are not highlighted as unresolved if they have an error
+* Change: References that have reference images referencing them, will have link address
+  completion defaulting to image files
+* Fix: #154, Absolute links to repo files with http:// are not highlighted as unresolved if they
+  have an error
 
 ### 1.4.3 - Bug Fix & Improvements Release
 
 #### Basic & Enhanced Editions
 
 - Fix: license fetch dialog message box font too small on Windows with retina resolution display
-- Fix: #149, Out of memory errors possibly caused by parser throwing an exception during indexing
-- Change: vcs roots are now obtained from the IDE and not by scanning for git configuration in the file system. So if
-  the VCS root is not defined in the IDE the plugin will not be able to resolve links for that GitHub repository.
+- Fix: #149, Out of memory errors possibly caused by parser throwing an exception during
+  indexing
+- Change: vcs roots are now obtained from the IDE and not by scanning for git configuration in
+  the file system. So if the VCS root is not defined in the IDE the plugin will not be able to
+  resolve links for that GitHub repository.
 
 #### Enhanced Edition
 
-* Fix: #143, In wiki link completions file names that contain `#` are truncated with `#` in the file treated as an
-  anchor ref
+* Fix: #143, In wiki link completions file names that contain `#` are truncated with `#` in the
+  file treated as an anchor ref
 * Fix: #144, Annotation for wiki links with `#` in filename not shown
 * Fix: #145, Wiki link refactoring not working for file names containing `#`
-* Fix: #146, File names that contain # do not show link references with URL encoded link address.
-* Add: #147, GitHub issue # completions in plain text and for links. In text after `#`, for links after `/issues/`, the
-  cursor must be after a valid issues link for the current file's github repository and come after the last `/`.
+* Fix: #146, File names that contain # do not show link references with URL encoded link
+  address.
+* Add: #147, GitHub issue # completions in plain text and for links. In text after `#`, for
+  links after `/issues/`, the cursor must be after a valid issues link for the current file's
+  github repository and come after the last `/`.
 
-    **NOTE:** For this to work correctly you need to enable "ATX Header Space" option in the parser otherwise a `#`
-    followed by non-space text is parsed as a header and not a github issue.
-* Add: link completions now display shortened file path in completion list. The addressing format is controllable via
-  multiple invocations of the completion popup. If the link does not start with a protocol prefix nor a `/` for repo
-  relative addressing then pressing ctrl+space will cycle through all possible formats configured in preferences under
-  Completions, by default: relative addressing, `/` repo relative, `https://` absolute. With `file://` addressing
-  completions only if the link starts with `file://` before pressing ctrl+space or by changing preferences to include
-  file:// protocol in completion format cycle.
+    **NOTE:** For this to work correctly you need to enable "ATX Header Space" option in the
+    parser otherwise a `#` followed by non-space text is parsed as a header and not a github
+    issue.
+* Add: link completions now display shortened file path in completion list. The addressing 
+  format is controllable via multiple invocations of the completion popup. If the link does not 
+  start with a protocol prefix nor a `/` for repo relative addressing then pressing ctrl+space 
+  will cycle through all possible formats configured in preferences under Completions, by 
+  default: relative addressing, `/` repo relative, `https://` absolute. With `file://` 
+  addressing completions only if the link starts with `file://` before pressing ctrl+space or by 
+  changing preferences to include file:// protocol in completion format cycle. 
 * Add: code folding for multi-line image urls
-* Add: collapsed by default config under settings **Editor** > **General** > **Code Folding**, for:
+* Add: collapsed by default config under settings **Editor** > **General** > **Code Folding**, 
+  for: 
     * verbatim blocks
     * code fence blocks
     * multi-line URL images
     * references
     * explicit links
     * explicit image links
-* Fix: ANCHORLINKS parser option only affects unmodified HTML text preview and should not be changed by parser profile
-  changes.
-* Fix: unmodified HTML text preview should not generate header tag ids if ANCHORLINKS parser option is not selected.
+* Fix: ANCHORLINKS parser option only affects unmodified HTML text preview and should not be 
+  changed by parser profile changes. 
+* Fix: unmodified HTML text preview should not generate header tag ids if ANCHORLINKS parser 
+  option is not selected. 
 * Fix: multi-line url images with `http://gravizo?`
     * prefix were adding `;` after `{`
     * all trailing `;` are removed, not just one when editing injected code fragment
-* Add: view document on GitHub option when file is under vcs and is not modified. No checking is done if changes were
-  actually pushed to the remote branch.
-* Change: color attributes that previously contained `BOLDITALIC` are now `BOLD_ITALIC` to match the naming convention
-  of other attributes.
-* Change: page relative and repo relative links in preview resolve to file in current remote branch with fallback to
-  `master` if current branch has no remote counterpart. Previously they always resolved to `master`.
+* Add: view document on GitHub option when file is under vcs and is not modified. No checking is 
+  done if changes were actually pushed to the remote branch. 
+* Change: color attributes that previously contained `BOLDITALIC` are now `BOLD_ITALIC` to match 
+  the naming convention of other attributes. 
+* Change: page relative and repo relative links in preview resolve to file in current remote 
+  branch with fallback to `master` if current branch has no remote counterpart. Previously they 
+  always resolved to `master`. 
 
 ### 1.4.2 - Bug Fix & Improvements Release
 
 #### Basic & Enhanced Editions
 
 - Fix: disable spell checker on reference anchors
-- Fix: mitigate pegdown parser timeouts by treating the whole text as error with preview showing the pegdown exception
-  with some information on the location where it gave up.
-- Fix: #142, reduced max timeout to 1000 ms, and default to 100ms. No point in longer timeouts, just harder to edit the
-  text to eliminate the error.
-- Fix: removed native thread creation in preview tabs, should be the last of the leftover old code.
+- Fix: mitigate pegdown parser timeouts by treating the whole text as error with preview showing 
+  the pegdown exception with some information on the location where it gave up. 
+- Fix: #142, reduced max timeout to 1000 ms, and default to 100ms. No point in longer timeouts, 
+  just harder to edit the text to eliminate the error. 
+- Fix: removed native thread creation in preview tabs, should be the last of the leftover old 
+  code. 
 
 #### Enhanced Edition
 
-* Fix: #138, reference with title refactoring causes exception due to single quote use for title instead of double quote
-* Add: #139, completions for reference and footnote id will show all unresolved corresponding referencing ids in the
-  file
+* Fix: #138, reference with title refactoring causes exception due to single quote use for title 
+  instead of double quote 
+* Add: #139, completions for reference and footnote id will show all unresolved corresponding 
+  referencing ids in the file 
 * Add: #140, under some conditions unresolved links would not be highlighted as such
-* Change: for image alt text completion remove subdirectories matching: "image", "images", "img" and "imgs" from parts
-  used to make suggestions
-* Change: for all link text/title suggestions remove subdirectory parts which match file target GitHub links: blob, raw,
-  wiki from directory parts before generating suggestion
-* Fix: language fragment editor would not be resizeable if more than one split editor is open with JavaFx preview
-  enabled.
-* Change: previous releases did not reset show preview tab when the license was activated for the first time, resulting
-  in many people having preview tab shown by default and not noticing it. This version does a one time reset of this
-  setting. If you really want a preview tab with split editor then just set it again in preferences to have it shown.
-  Only affects files opened after the setting is changed. So you may need to reopen files already opened when you change
-  this setting.
-* New: implement file move refactoring for contained links. If the contained wiki links will no longer reach their
-  targets they are changed to explicit links.
-* Fix: refactoring of links to wiki pages, from files nested below root directory would leave the physical wiki home
-  directory instead of changing it to `wiki` as required to resolve on GitHub.
-* Fix: refactoring explicit to wiki link would leave the markdown extension in the wiki. Extensions are now left only if
-  target is not a markdown file.
-* New: raw/blob preservation across wiki/main repo boundary during file move. Best attempt is made to preserve raw file
-  access of original link
-* New: intention actions implemented instead of annotation quick fixes. Same functionality but no unnecessary weak
-  warnings just to have the quick fix showing and now they can be disabled individually if you don't need them.
+* Change: for image alt text completion remove subdirectories matching: "image", "images", "img" 
+  and "imgs" from parts used to make suggestions 
+* Change: for all link text/title suggestions remove subdirectory parts which match file target 
+  GitHub links: blob, raw, wiki from directory parts before generating suggestion 
+* Fix: language fragment editor would not be resizeable if more than one split editor is open 
+  with JavaFx preview enabled. 
+* Change: previous releases did not reset show preview tab when the license was activated for 
+  the first time, resulting in many people having preview tab shown by default and not noticing 
+  it. This version does a one time reset of this setting. If you really want a preview tab with 
+  split editor then just set it again in preferences to have it shown. Only affects files opened 
+  after the setting is changed. So you may need to reopen files already opened when you change 
+  this setting. 
+* New: implement file move refactoring for contained links. If the contained wiki links will no 
+  longer reach their targets they are changed to explicit links. 
+* Fix: refactoring of links to wiki pages, from files nested below root directory would leave 
+  the physical wiki home directory instead of changing it to `wiki` as required to resolve on 
+  GitHub. 
+* Fix: refactoring explicit to wiki link would leave the markdown extension in the wiki. 
+  Extensions are now left only if target is not a markdown file. 
+* New: raw/blob preservation across wiki/main repo boundary during file move. Best attempt is 
+  made to preserve raw file access of original link 
+* New: intention actions implemented instead of annotation quick fixes. Same functionality but 
+  no unnecessary weak warnings just to have the quick fix showing and now they can be disabled 
+  individually if you don't need them. 
 
 ### 1.4.1 - Bug Fix Release
 
 #### Basic & Enhanced Editions
 
-- Fix: get rid of the annoying flicker of JavaFx preview when restoring scroll position after document change.
-- Fix: #136, incorrect parsing of reference link and reference image link with dummy reference: `[reference][]` and
-  `![reference][]`
-- Fix: #133, wiki link create target file quick fix would create a file without the `.md` extension.
+- Fix: get rid of the annoying flicker of JavaFx preview when restoring scroll position after 
+  document change. 
+- Fix: #136, incorrect parsing of reference link and reference image link with dummy reference: 
+  `[reference][]` and `![reference][]` 
+- Fix: #133, wiki link create target file quick fix would create a file without the `.md` 
+  extension. 
 - Fix: #131, Windows regex exception.
-- Fix: on Windows local file URI's were not correctly generated causing file links in preview not to open files and
-  images not to render.
+- Fix: on Windows local file URI's were not correctly generated causing file links in preview 
+  not to open files and images not to render. 
 - Fix: resolving absolute URI on Windows of the form `file:/C:....`.
-- Fix: #130, intermittent exception "parent must be showing" on project open if JavaFx Preview is not available.
-- Fix: in case of intermittent server error during license activation a balloon notification is shown instead of modal
-  dialog.
+- Fix: #130, intermittent exception "parent must be showing" on project open if JavaFx Preview 
+  is not available. 
+- Fix: in case of intermittent server error during license activation a balloon notification is 
+  shown instead of modal dialog. 
 
 #### Enhanced Edition
 
-* Add: #137, refactoring explicit link and explicit image to implicit reference will add dummy reference to avoid the
-  next element from being interpreted as the reference key for the newly inserted element.
+* Add: #137, refactoring explicit link and explicit image to implicit reference will add dummy
+  reference to avoid the next element from being interpreted as the reference key for the newly
+  inserted element.
 * Fix: #134, rename refactoring atx header inserted a line break after atx marker
-* Fix: #135, references to files with image extension now only offer to convert to raw target URL
+* Fix: #135, references to files with image extension now only offer to convert to raw target
+  URL
 * Add: annotation for references if reference to image is to blob/ instead of raw/ target URL
-* Add: annotation for reference image links if reference to image is to blob/ instead of raw/ target URL and offer quick
-  fix to retarget reference
+* Add: annotation for reference image links if reference to image is to blob/ instead of raw/
+  target URL and offer quick fix to retarget reference
 
 ### 1.4.0 - Feature Release
 
 #### Basic & Enhanced Editions
 
-- Add: no syntax highlighting option to improve typing response, temporary measure until syntax highlighting is moved to
-  external annotator.
+- Add: no syntax highlighting option to improve typing response, temporary measure until syntax
+  highlighting is moved to external annotator.
 - Change: document settings moved to non-shared local settings.
-- Change: plugin default color schemes changed, inheritance added to default language colors for many elements
+- Change: plugin default color schemes changed, inheritance added to default language colors for
+  many elements
 - Fix: wiki links would be Creole regardless of parser settings in preferences
 - Fix: wiki links with reversed text/address would not show annotation nor quick fix
 - Fix: wiki link with only anchor would not show quickfix
@@ -246,41 +340,46 @@
 #### Enhanced Edition
 
 * Add: language injection functionality to verbatim blocks, fenced code and html blocks
-* Add: injected language seamless fragment editing with complex prefix and indentation on original element
+* Add: injected language seamless fragment editing with complex prefix and indentation on 
+  original element 
 * Add: code fence language completion
-* Add: references, reference links and reference image links, with validation, find usages, refactoring, completions and
-  quick fixes.
+* Add: references, reference links and reference image links, with validation, find usages,
+  refactoring, completions and quick fixes.
 * Add: anchor reference validation, completion, find usages and refactoring.
-* Add: references with reference links and reference images, with annotations, unused reference highlighting and code
-  completion
+* Add: references with reference links and reference images, with annotations, unused reference
+  highlighting and code completion
 * Add: fenced code marker matching
 * Add: code folding for fenced code and link addresses
-* Add: Experimental split editor with preview for HTML documents. Intended to preview html code fragments embedded into
-  a markdown document.
-* Add: preview link for local only files now has anchor reference if one is provided. Clicking on the link will take you
-  to the header whose reference matches the anchor reference.
-* Add: Header's reference id validation, refactoring, find usages and quick fixes for switch setext/atx format, equalize
-  setext marker
+* Add: Experimental split editor with preview for HTML documents. Intended to preview html code
+  fragments embedded into a markdown document.
+* Add: preview link for local only files now has anchor reference if one is provided. Clicking
+  on the link will take you to the header whose reference matches the anchor reference.
+* Add: Header's reference id validation, refactoring, find usages and quick fixes for switch
+  setext/atx format, equalize setext marker
 * Fix: URI format links would leave out the anchor reference in preview
 * Add: intention actions for switching explicit and reference links.
 * Add: footnote and footnote reference refactoring, navigation, completions and find usages.
 * Add: multi-line url images so gravizo.com can be used for UML diagrams.
-* Add: language injections to multi-line image url content for comfortable editing of url content part.
-* Change: link completions improved for extensions: any extension text given will match files whose extension starts
-  with the given fragment: ie. .j will match .js, .java etc.
-* Change: link completions improved for subdirectories: any path segments given will need to be found in the path of the
-  file: sub/ will find files that are in a directory that contains "sub" in its name; sub/abc/ will match files
-  contained under directory that has "sub" in its name, followed by a subdirectory that has "abc" in its name. File name
-  for completions is ignored.
-* Add: folding of https:// and file:// link addresses to their repo relative or page relative formats, whichever is
-  shorter.
+* Add: language injections to multi-line image url content for comfortable editing of url 
+  content part. 
+* Change: link completions improved for extensions: any extension text given will match files
+  whose extension starts with the given fragment: ie. .j will match .js, .java etc.
+* Change: link completions improved for subdirectories: any path segments given will need to be
+  found in the path of the file: sub/ will find files that are in a directory that contains
+  "sub" in its name; sub/abc/ will match files contained under directory that has "sub" in its
+  name, followed by a subdirectory that has "abc" in its name. File name for completions is
+  ignored.
+* Add: folding of https:// and file:// link addresses to their repo relative or page relative
+  formats, whichever is shorter.
 
 ### 1.3.2 - Bug Fix and Stability Release
 
 #### Basic & Enhanced Editions
 
-- Change: defaults on initial installation for zoom factor to HiDPI support and dynamic page width to true
-- Fix: vcsRoots were not searched above project directory. Now will be searched to root directory
+- Change: defaults on initial installation for zoom factor to HiDPI support and dynamic page
+  width to true
+- Fix: vcsRoots were not searched above project directory. Now will be searched to root
+  directory
 - Fix: wiki links would be Creole regardless of parser settings in preferences
 - Fix: wiki links with reversed text/address would not show annotation nor quick fix
 
@@ -294,15 +393,19 @@
 #### Basic & Enhanced Editions
 
 - Add: dynamic page width setting to stylesheet preferences
-- Add: zoom factor effect in swing browser, only affects font size and max image width but not image scale
-- Fix: exception on startup if Java security does not allow creating files directly in the temp directory
-- Fix: absolute paths from main repository would not resolve, also main path included /blob/master in completions
+- Add: zoom factor effect in swing browser, only affects font size and max image width but not
+  image scale
+- Fix: exception on startup if Java security does not allow creating files directly in the temp
+  directory
+- Fix: absolute paths from main repository would not resolve, also main path included
+  /blob/master in completions
 - Fix: sub-module vcs roots would not be found for some config formats
 - Fix: font size in preference settings on systems with HiDPI
-- Fix: self referencing links would generate absolute https:// address instead of plain # reference
+- Fix: self referencing links would generate absolute https:// address instead of plain #
+  reference
 - Fix: default zoom factor on installation reflects systems that need multiplier for HiDPI
-- Change: split layout and color scheme for swing stylesheets. default.css and darcula.css contain only color
-  definitions for swing browser, layout.css contains the rest.
+- Change: split layout and color scheme for swing stylesheets. default.css and darcula.css
+  contain only color definitions for swing browser, layout.css contains the rest.
 
 #### Enhanced Edition
 
@@ -313,39 +416,45 @@
 * Fix: html preferences text fields were configured for CSS syntax instead of HTML
 * Fix: preferences text boxes disappearing when enabled/disabled on IDEA 16 EAP
 * Fix: JavaFX html generator was not adding body bottom custom html text
-* Fix: absolute links would show resolved but line markers were missing and images did not display
-* Fix: extension errors now offer to target link to an existing file with the same name and different extension
+* Fix: absolute links would show resolved but line markers were missing and images did not
+  display
+* Fix: extension errors now offer to target link to an existing file with the same name and
+  different extension
 * Fix: images would not display in preview for some resolved link address formats
 
 ### 1.3.0 - New Features Release
 
 #### Basic & Enhanced Editions
 
-- ISSUE: with JetBrains Bundled JRE svg images will not be rendered due to a bug that causes a crash in WebView if they
-  are not disabled.
-- Fix: relative links and wiki links to open file in IDE when clicking on a link, was not opening files
+- ISSUE: with JetBrains Bundled JRE svg images will not be rendered due to a bug that causes a
+  crash in WebView if they are not disabled.
+- Fix: relative links and wiki links to open file in IDE when clicking on a link, was not
+  opening files
 - Fix: use BrowserUtil for launching URL in browser instead of Java Desktop
 - Fix: line markers with empty elements would show the completion file list as targets.
-- Add: `upsource://` external link mapping to https://upsource.jetbrains.com/idea-ce/file/HEAD/ as prefix and the rest
-  whatever comes after `upsource://` url encoded.
+- Add: `upsource://` external link mapping to https://upsource.jetbrains.com/idea-ce/file/HEAD/ 
+  as prefix and the rest whatever comes after `upsource://` url encoded. 
 - Change: support for HTML Text display is now an enhanced edition feature.
 - Change: layout of options file, same file names but different content, migrated on startup
 
 #### Enhanced Edition
 
-* Add: Split Editor with Preview, HTML Text as rendered and plain HTML Text as serialized by pegdown.
+* Add: Split Editor with Preview, HTML Text as rendered and plain HTML Text as serialized by 
+  pegdown. 
 * Add: New Preferences UI and implementation, preferences now under Languages and Frameworks
 * Add: Support for **Open JavaFX** with **JetBrains** bundled JRE for Mac OS X
-* Add: Keyboard shortcuts to switch split layout (ctrl p/Mac p) and preview/HTML Text modes (ctrl shift p/Mac shift p)
+* Add: Keyboard shortcuts to switch split layout (ctrl p/Mac p) and preview/HTML Text modes 
+  (ctrl shift p/Mac shift p) 
 * Add: https://raw.githubusercontent.com/ mapping to project files
 * Add: resolve `upsource://` URLs to upsource server, no validation is done on the link
-* Add: intention actions to convert link formats between: relative /absolute, https:// absolute and file:// absolute
-* Add: Lobo Evolution browser option, currently experimental and is not fully supported with its own stylesheets and
-  scripts
-* Add: Table of Contents markdown extension `[TOC]` with optional level specification `[TOC level=n` where n is the
-  maximum header level to include in the table of contents
-* Fix: https://github.com/user/repository/raw/... would produce https://github.com/user/repository/blob/... urls in HTML
-  Preview and HTML Text tabs
+* Add: intention actions to convert link formats between: relative /absolute, https:// absolute 
+  and file:// absolute 
+* Add: Lobo Evolution browser option, currently experimental and is not fully supported with its 
+  own stylesheets and scripts 
+* Add: Table of Contents markdown extension `[TOC]` with optional level specification `[TOC 
+  level=n` where n is the maximum header level to include in the table of contents 
+* Fix: https://github.com/user/repository/raw/... would produce 
+  https://github.com/user/repository/blob/... urls in HTML Preview and HTML Text tabs 
 * Fix: absolute URL's to raw files would convert to blob/ access relative links
 * Fix: relative links to raw files would convert to blob/ access absolute URL's
 * Fix: was offering to change explicit link to wiki link to files not in the wiki.
@@ -358,66 +467,77 @@
 
 #### Basic & Enhanced Editions
 
-- Change: default JavaFX preview font order to have Helvetica before Arial, cleaner text rendering.
-- Fix #73: self referencing links with 'Show Modified' not selected do not generate correct HTML.
+- Change: default JavaFX preview font order to have Helvetica before Arial, cleaner text 
+  rendering. 
+- Fix #73: self referencing links with 'Show Modified' not selected do not generate correct 
+  HTML. 
 - Change: update JavaFX preview to new GitHub style, wider pages.
-- Add: inspections when wiki pages are linked with file extension, they will display raw text not rendered HTML
-- Fix: anchor links markdown extension was always enabled when 'Use Old Preview' was selected, regardless of preferences
-  settings
+- Add: inspections when wiki pages are linked with file extension, they will display raw text 
+  not rendered HTML 
+- Fix: anchor links markdown extension was always enabled when 'Use Old Preview' was selected, 
+  regardless of preferences settings 
 - Add: fork and raw GitHub link to be recognized
 - Add: line icon to show multiple resolved targets
-- Change: preferences for the plugin are now split between local, non-roaming persistence in multimarkdown.local.xml and
-  shared roaming persistence in multimarkdown.shared.xml. Preferences from multimarkdown.xml are migrated to new files
-  and the file is deleted.
+- Change: preferences for the plugin are now split between local, non-roaming persistence in 
+  multimarkdown.local.xml and shared roaming persistence in multimarkdown.shared.xml. 
+  Preferences from multimarkdown.xml are migrated to new files and the file is deleted. 
 
 #### Enhanced Edition
 
-* Change: new implementation of file link resolving logic handles a full set of GitHub idiosyncrasies for relative
-  links, raw/blob access, absolute https:// links, file extensions and case sensitivity.
+* Change: new implementation of file link resolving logic handles a full set of GitHub 
+  idiosyncrasies for relative links, raw/blob access, absolute https:// links, file extensions 
+  and case sensitivity. 
 * Add: new annotation inspections for common errors in link resolution
-* New: modified HTML now has all links as URI's during rendering with preference to GitHub repository file when
-  available, fallback to local file://
+* New: modified HTML now has all links as URI's during rendering with preference to GitHub 
+  repository file when available, fallback to local file:// 
 * Fix: added validation for invalid PsiElements during refactoring to prevent exceptions
 * Fix: all link refactoring for file move/rename adjusts affected link according to GitHub rules
-* Add: warning annotation in text editor, link color and image border in preview when a link target is not on GitHub
-  according to its status
+* Add: warning annotation in text editor, link color and image border in preview when a link 
+  target is not on GitHub according to its status 
 * Add: intention to change relative to absolute link addresses and vice-versa
-* Add: validation of absolute links that look like they are targeting files in the same repository as the containing
-  file
+* Add: validation of absolute links that look like they are targeting files in the same 
+  repository as the containing file 
 * Add: navigation line items for absolute links that resolve to files
-* Add: absolute address link completions and link completions based on extensions other than markdown for wiki and
-  explicit and images for image links, just add file:// or https:// in front to get url completions and an extension
-  without a file name to get extension based completions. `https://.java` will show java files with https:// absolute
-  link address.
-* Fix #71: license information is now saved in multimarkdown.local.xml and is marked as non-roaming
-* Add: handle relative image links in wiki pages must resolve to raw file access in main repository default behavior and
-  validation
-* Add: automatically change wiki link to explicit link if target file is moved out of wiki link access range
+* Add: absolute address link completions and link completions based on extensions other than 
+  markdown for wiki and explicit and images for image links, just add file:// or https:// in 
+  front to get url completions and an extension without a file name to get extension based 
+  completions. `https://.java` will show java files with https:// absolute link address. 
+* Fix #71: license information is now saved in multimarkdown.local.xml and is marked as 
+  non-roaming 
+* Add: handle relative image links in wiki pages must resolve to raw file access in main 
+  repository default behavior and validation 
+* Add: automatically change wiki link to explicit link if target file is moved out of wiki link 
+  access range 
 * Add: refactoring now keeps link format as it was before, if it was absolute or page relative.
 
 ### 1.2.2 - Bug Fixes and Enhancements
 
 #### Basic & Enhanced Editions
 
-- Add a change to quick fix on an unresolved link will apply the same change to all links that match the link being
-  modified.
+- Add a change to quick fix on an unresolved link will apply the same change to all links that 
+  match the link being modified. 
 - Add annotation if wiki link ends in .md, with quick fix to remove .md extension
-- Fix #60: use another class for string to input stream conversion that is universally support across os types.
+- Fix #60: use another class for string to input stream conversion that is universally support 
+  across os types. 
 - Fix #62: Plugin exhausted thread resources if a lot of projects were open
 - Fix #63: Unresolved links were not always highlighted as error
 - Fix #65: threading issues causing slow preview update and other intermittent errors.
 - Fix #67: change message for not finding javafx from warning to info.
-- Fix #70: closed to to task list items with capital x `- [X]` would not render correctly in the WevView preview.
+- Fix #70: closed to to task list items with capital x `- [X]` would not render correctly in the 
+  WevView preview. 
 - Fix link resolution did not work if non-default Markdown extension was used on Wiki pages
 - Fix link resolution in preview to match the rules for markdown source
 - Fix wiki link with multiple matched targets would not resolve according to sort order
-- Fix wiki link with multiple matched targets would show quick fix to rename unreachable targets
-- Fix wiki links with subdirectory references did not show annotation popup or quick fix to remove directory
-- Fix buy license button in settings navigated to the get trial license page instead of the full license page.
+- Fix wiki link with multiple matched targets would show quick fix to rename unreachable targets 
+- Fix wiki links with subdirectory references did not show annotation popup or quick fix to 
+  remove directory 
+- Fix buy license button in settings navigated to the get trial license page instead of the full 
+  license page. 
 
 #### Enhanced Edition
 
-- Add validation for relative links accessing wiki raw content by using the Wiki page link with extension.
+- Add validation for relative links accessing wiki raw content by using the Wiki page link with 
+  extension. 
 - Add validation of all explicit relative links from the main repository to wiki files.
 - Add warning when a file is a target of a link but is not on GitHub.
 - Fix #64: class cast exception in explicit link.
