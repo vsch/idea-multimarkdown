@@ -1,25 +1,26 @@
-### 1.4.10.24 - Bug Fix & Optimization Release
+### 1.4.10.25 - Bug Fix & Optimization Release
 
 #### Basic & Enhanced Editions
 
 - Add: patch release and eap update streams 
 - Add: live templates starting with `.` 
 
-    | Element       | Abbreviation    | Expansion         |
-    |---------------|-----------------|-------------------|
-    | Abbreviation  | `.abbreviation` | `*[]:`            |
-    | Code fence    | `.codefence`    | \`\`\` ... \`\`\` |
-    | Explicit link | `.link`         | `[]()`            |
-    | Footnote      | `.footnote`     | `[^]:`            |
-    | Footnote Ref  | `.rfootnote`    | `[^]`             |
-    | Image         | `.image`        | `![]()`           |
-    | Ref link      | `.rlink`        | `[][]`            |
-    | Ref image     | `.rimage`       | `![][]`           |
-    | Reference     | `.reference`    | `![]()`           |
-    | Task          | `.task`         | `- [ ] `          |
-    | Wiki link     | `.wikilink`     | `[[]]`            |
+    | Element       | Abbreviation    | Expansion                                               |
+    |---------------|-----------------|---------------------------------------------------------|
+    | Abbreviation  | `.abbreviation` | `*[]:`                                                  |
+    | Code fence    | `.codefence`    | \`\`\` ... \`\`\`                                       |
+    | Explicit link | `.link`         | `[]()`                                                  |
+    | Footnote      | `.footnote`     | `[^]:`                                                  |
+    | Footnote Ref  | `.rfootnote`    | `[^]`                                                   |
+    | Image         | `.image`        | `![]()`                                                 |
+    | Ref image     | `.rimage`       | `![][]`                                                 |
+    | Ref link      | `.rlink`        | `[][]`                                                  |
+    | Reference     | `.reference`    | `![]()`                                                 |
+    | Table         | `.table`        | <pre><code>`|   |`&#10;`|---|`&#10;`|   |`</code></pre> |
+    | Task          | `.task`         | `- [ ] `                                                |
+    | Wiki link     | `.wikilink`     | `[[]]`                                                  |
 
-- Fix: syntax highlighting inline elements in definition text
+- Fix: syntax highlighting inline elements in definition text 
 
 #### Enhanced Edition
 
@@ -52,7 +53,8 @@
     * Indent +1 level - continuation lines will start at indent of first line + 4 spaces
     * Indent +2 levels - continuation lines will start at indent of first line + 8 spaces
 * Fix: #207, Markdown hard break spaces are not always be preserved when formatting paragraphs
-* Fix: #208, Auto links are not recognized as inline elements during wrap on typing reformatting op
+* Fix: #208, Auto links are not recognized as inline elements during wrap on typing reformatting 
+  op 
 * Fix: #209, lines ending in '* ' or '- ' would be erroneously handled as empty list items by
   BACKSPACE handler.
 * Add: #210, List item un-indent/indent toolbar buttons, and actions. List item un-indent/indent
@@ -67,6 +69,9 @@
 * Add: #215, Feature: table insert/delete row/column toolbar buttons
 * Add: #216, On ENTER insert table row with configuration options
 * Add: #217, On BACKSPACE delete empty table row/column with configuration options
+* Add: Separate syntax highlighting colors for table header cells separate from table body 
+  cells. 
+* Fix: as you type table parsing changed to use pegdown instead of hand rolled parser. 
   
 ### 1.4.10 - Bug Fix & Optimization Release
 
