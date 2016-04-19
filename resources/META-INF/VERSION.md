@@ -1,22 +1,24 @@
-### 1.4.10.20 - Bug Fix & Optimization Release
+### 1.4.10.24 - Bug Fix & Optimization Release
 
 #### Basic & Enhanced Editions
 
 - Add: patch release and eap update streams 
 - Add: live templates starting with `.` 
 
-    | Element       | Abbreviation | Expansion         |
-    |:--------------|:-------------|:------------------|
-    | Code fence    | `.codefence` | \`\`\` ... \`\`\` |
-    | Explicit link | `.link`      | `[]()`            |
-    | Footnote      | `.footnote`  | `[^]:`            |
-    | Footnote Ref  | `.rfootnote` | `[^]`             |
-    | Image         | `.image`     | `![]()`           |
-    | Ref link      | `.rlink`     | `[][]`            |
-    | Ref image     | `.rimage`    | `![][]`           |
-    | Reference     | `.reference` | `![]()`           |
-    | Wiki link     | `.wikilink`  | `[[]]`            |
-    
+    | Element       | Abbreviation    | Expansion         |
+    |---------------|-----------------|-------------------|
+    | Abbreviation  | `.abbreviation` | `*[]:`            |
+    | Code fence    | `.codefence`    | \`\`\` ... \`\`\` |
+    | Explicit link | `.link`         | `[]()`            |
+    | Footnote      | `.footnote`     | `[^]:`            |
+    | Footnote Ref  | `.rfootnote`    | `[^]`             |
+    | Image         | `.image`        | `![]()`           |
+    | Ref link      | `.rlink`        | `[][]`            |
+    | Ref image     | `.rimage`       | `![][]`           |
+    | Reference     | `.reference`    | `![]()`           |
+    | Task          | `.task`         | `- [ ] `          |
+    | Wiki link     | `.wikilink`     | `[[]]`            |
+
 - Fix: syntax highlighting inline elements in definition text
 
 #### Enhanced Edition
@@ -34,28 +36,37 @@
 * Fix: #201, Image link completion in wiki pages leaves out subdirectories 
 * Fix: #202, Plain text paragraphs that have indentation spaces do not get properly wrapped as
   you type.
-* Fix: made wiki link elements non-wrappable so that they will not be wrapped across lines.
+* Fix: made wiki link elements non-wrap so that they will not be wrapped across lines.
 * Fix: intermittent wrap on typing failure to wrap paragraphs
-* Add: wrapping of text when it contains embedded multi-line URL image links. Now these image
-  links for the purpose of wrapping are treated as paragraph breaks and each segment is wrapped
-  separately.
-* Fix: remove appending spaces at end of wrapped text lines. Now only hard break spaces will be
-  kept at end of text lines.
-* Fix: wrap on typing continuation line indenting now has the following options:
+* Fix: #205, Wrap on typing of paragraphs with embedded multi-line URL images will only wrap
+  text before the image. Now for the purpose of wrapping these image links are treated as
+  paragraph breaks and each segment is wrapped separately.
+* Fix: extra spaces added at end of wrapped text lines. Now only hard break spaces will be kept
+  at end of text lines.
+* Add: #206, Wrap on typing continuation line indents are not logical. Wrap on typing
+  continuation line indenting now has the following options:
     * None - continuation lines will start at column 1
     * **Align text edge - default**. Will align continuation lines with the text of the first
       line
     * Indent - continuation lines will start at indent of first line
     * Indent +1 level - continuation lines will start at indent of first line + 4 spaces
     * Indent +2 levels - continuation lines will start at indent of first line + 8 spaces
-* Fix: hard break spaces would not always be preserved when formatting paragraphs
-* Fix: Auto links would be treated as paragraph breaks during wrap on typing reformatting op,
-* Fix: only the first paragraph of a multi-paragraph list item to be wrapped.
-* Fix: lines ending in '* ' or '- ' would be erroneously handled as empty list items by
+* Fix: #207, Markdown hard break spaces are not always be preserved when formatting paragraphs
+* Fix: #208, Auto links are not recognized as inline elements during wrap on typing reformatting op
+* Fix: #209, lines ending in '* ' or '- ' would be erroneously handled as empty list items by
   BACKSPACE handler.
-* Add: List item un-indent/indent toolbar buttons, assigned to Ctrl-Y/Ctrl-U on mac and
-  alt-Y/alt-U on Windows.
-* Fix: missing completions for some empty link elements.
+* Add: #210, List item un-indent/indent toolbar buttons, and actions. List item un-indent/indent
+  toolbar buttons, assigned to Ctrl-Y/Ctrl-U respectively.
+* Fix: #211, Completions for some empty link elements show no suggestions.
+* Fix: #212, Table formatting while typing sometimes causes the cursor to jump erratically to
+  end of table. 
+* Fix: #213, Enabling HARD WRAPS in parser options prevents wrap on typing of list items that
+  span multiple lines. HARD WRAPS parser extension is now disabled for purposes of syntax
+  highlighting and PSI generation. It is only used for HTML rendering. 
+* Add: #214, Feature: add insert table toolbar button
+* Add: #215, Feature: table insert/delete row/column toolbar buttons
+* Add: #216, On ENTER insert table row with configuration options
+* Add: #217, On BACKSPACE delete empty table row/column with configuration options
   
 ### 1.4.10 - Bug Fix & Optimization Release
 
