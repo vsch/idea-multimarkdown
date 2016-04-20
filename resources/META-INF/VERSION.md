@@ -1,4 +1,4 @@
-### 1.4.10.25 - Bug Fix & Optimization Release
+### 1.4.10.26 - Bug Fix & Optimization Release
 
 #### Basic & Enhanced Editions
 
@@ -72,7 +72,18 @@
 * Add: Separate syntax highlighting colors for table header cells separate from table body 
   cells. 
 * Fix: as you type table parsing changed to use pegdown instead of hand rolled parser. 
-  
+* Add: Toolbar buttons for toggle Auto-format and toggle wrap on typing. 
+* Change: Auto-format table on typing and smart `*` `~` duplication is off by default. 
+* Fix: toggle actions: bold, italic, code, strikethrough; to select text when toggling the
+  effect off.
+* Add: logic to disable `wrap on typing` when modifying a table causes it to no longer be a
+  valid markdown table
+* Add: logic to disable `auto-format table on typing` when modifying a table causes it to no 
+  longer have the same number of columns on all rows for editing actions that may be partial 
+  modifications and if `Add missing columns` is enable. ie. backspacing or typing back ticks,
+  backslash or pipe characters. 
+* Add: tooltip when `wrap on typing` or `auto-format table on typing` is automatically disabled.
+
 ### 1.4.10 - Bug Fix & Optimization Release
 
 #### Basic & Enhanced Editions
