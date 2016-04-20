@@ -71,10 +71,20 @@ hanging issues resulting in many complaints about the plugin causing degraded ID
 Reason for the choice is detailed in: 
 [Pegdown - Achilles heel of the MultiMarkdown plugin](http://vladsch.com/blog/15). 
 
-Latest Developments: Version 1.4.10
------------------------------------
+Upcoming Release: Version 1.5.0
+-------------------------------
 
 For a full list see the [Version Notes]
+
+Toolbar, Live Template and Table editing improved. See
+[Enhanced Features](../../wiki/Enhanced-Features). 
+
+You can create and edit a markdown table with ease: 
+
+![Table Format](assets/images/noload/TableFormat.gif) 
+
+Latest Developments: Version 1.4.10
+-----------------------------------
 
 #### Bug Fixes and Improvements
 
