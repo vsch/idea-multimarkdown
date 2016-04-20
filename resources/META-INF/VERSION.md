@@ -1,4 +1,4 @@
-### 1.4.10.26 - Bug Fix & Optimization Release
+### 1.4.10.27 - Bug Fix & Optimization Release
 
 #### Basic & Enhanced Editions
 
@@ -83,6 +83,8 @@
   modifications and if `Add missing columns` is enable. ie. backspacing or typing back ticks,
   backslash or pipe characters. 
 * Add: tooltip when `wrap on typing` or `auto-format table on typing` is automatically disabled.
+* Add: logic to disable `wrap on typing` when a block is not terminated by a blank line and the
+  following block can be potentially merged into the paragraph. 
 
 ### 1.4.10 - Bug Fix & Optimization Release
 
