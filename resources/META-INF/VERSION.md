@@ -1,4 +1,4 @@
-### 1.4.10.27 - Bug Fix & Optimization Release
+### 1.4.10.28 - Bug Fix & Optimization Release
 
 #### Basic & Enhanced Editions
 
@@ -7,15 +7,15 @@
 
     | Element       | Abbreviation    | Expansion                                               |
     |---------------|-----------------|---------------------------------------------------------|
-    | Abbreviation  | `.abbreviation` | `*[]:`                                                  |
+    | Abbreviation  | `.abbreviation` | `*[]: `                                                 |
     | Code fence    | `.codefence`    | \`\`\` ... \`\`\`                                       |
     | Explicit link | `.link`         | `[]()`                                                  |
-    | Footnote      | `.footnote`     | `[^]:`                                                  |
+    | Footnote      | `.footnote`     | `[^]: `                                                 |
     | Footnote Ref  | `.rfootnote`    | `[^]`                                                   |
     | Image         | `.image`        | `![]()`                                                 |
     | Ref image     | `.rimage`       | `![][]`                                                 |
     | Ref link      | `.rlink`        | `[][]`                                                  |
-    | Reference     | `.reference`    | `![]()`                                                 |
+    | Reference     | `.reference`    | `[]: `                                                  |
     | Table         | `.table`        | <pre><code>`|   |`&#10;`|---|`&#10;`|   |`</code></pre> |
     | Task          | `.task`         | `- [ ] `                                                |
     | Wiki link     | `.wikilink`     | `[[]]`                                                  |
@@ -85,6 +85,21 @@
 * Add: tooltip when `wrap on typing` or `auto-format table on typing` is automatically disabled.
 * Add: logic to disable `wrap on typing` when a block is not terminated by a blank line and the
   following block can be potentially merged into the paragraph. 
+* Fix: optimize wrap on typing and auto-format table on typing to reduce typing delays.
+* Fix: second list items would not enable the indent list action. 
+* Add: code style option to not splice image and explicit links which are start of line to 
+  previous line during paragraph reformatting.
+* Add: Inspection to detect Jekyll front matter presence in the file, with option to enable or 
+  ignore. 
+* Add: option to keep image and explicit links at start of line. Jekyll files are of this
+  format. 
+* Fix: optimized wrap on typing and table reformat to minimize updates and handle IDE skipping
+  calls to handlers when fast typing (or rolling forehead on the keyboard).
+* Change: Default syntax highlighter to external annotator based to reduce typing delay. If you
+  want to use the lexer based syntax highlighting you will need to change it in
+  settings/preferences. 
+* Add: Jekyll front matter file inspection. Offers to turn on Jekyll front matter parser option 
+  if the file is detected to be Jekyll front matter type.
 
 ### 1.4.10 - Bug Fix & Optimization Release
 
