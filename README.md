@@ -71,8 +71,8 @@ hanging issues resulting in many complaints about the plugin causing degraded ID
 Reason for the choice is detailed in: 
 [Pegdown - Achilles heel of the MultiMarkdown plugin](http://vladsch.com/blog/15). 
 
-Upcoming Release: Version 1.5.0
--------------------------------
+Latest Developments: Version 1.5.0
+----------------------------------
 
 For a full list see the [Version Notes]
 
@@ -83,105 +83,7 @@ You can create and edit a markdown table with ease:
 
 ![Table Format](assets/images/noload/TableFormat.gif) 
 
-Latest Developments: Version 1.4.10
------------------------------------
-
-#### Bug Fixes and Improvements
-
-- Add table formatting for format toolbar button
-- Add table formatting option to format as you type in table separator line
-- Fix book icon in preview would not open document in browser 
-- Fix incorrect HTML rendering of undefined reference link `[some-text][]` as `[some-text][some-text]` 
-- Add list item handling on <kbd>ENTER</kbd> and <kbd>BACKSPACE</kbd>. <kbd>ENTER</kbd> will add unordered item or 
-  ordered item depending on what is preceding caret location. <kbd>ENTER</kbd> and <kbd>BACKSPACE</kbd> will remove 
-  empty list items. Configuration to enable/disable in Editor > Code Style > MultiMarkdown under `List Items` 
-- Improve auto format handling on typing, <kbd>ENTER</kbd> and <kbd>BACKSPACE</kbd> 
-- Add: formatting buttons 
-- Add: handling of Jekyll front matter in markdown documents. Document must start with `---` and have another `---` 
-  terminating the front matter for it not to be parsed as Markdown. 
-- Add: option to embed CSS resources into the HTML document instead of URL links  
-- Add: markdown specific soft-wrap setting. This only affects the editor when it is first opened. Thereafter use 
-  keyboard shortcuts to toggle soft wrap mode. 
-- Fix #190, Incorrect parsing of HTML blocks. This also fixes improper handling of HTML block suppression. 
-- fix pegdown infinite loop parsing of markdown documents with HTML documents that contain HTML blocks with unclosed 
-  tags and fenced code blocks that contain HTML or HTML looking code. Note that this fix breaks SUPPRESS_HTML_BLOCK 
-  parser extension. 
-- Add non-wrap markdown inline element handling for wrap on typing so that links are not wrapped across lines.
-- Fix an exception in JavaFX WebView preview. 
-
-#### External Annotator added
-
-Syntax Highlighting now done with an external annotator which runs after 
-a delay in typing.  
-
-#### Format and Wrap on Edit
-
-- As you type formatting for setext header marker equalization and 
-  matching atx trailing markers 
-- Smart bold/italic doubling 
-- Syntax highlight for markdown hard break, two spaces before at the end 
-  of line that has a continuation. 
-
-##### new Enhanced Edition features  
-
-* Editor Code Style for Markdown, for now only the format on edit 
-  options are implemented 
-* Wrap on typing for text blocks, footnotes, list items, definitions 
-  with options to align continuation lines: 
-    - to first line's text (default)
-    - no indent
-    - indent 1 level
-    - indent 2 levels
-* Format as you type for tables with options for:
-    - align column widths
-    - align column text to reflect column's actual alignment
-    - add/remove opening and closing pipes on each row
-    - add/remove padding spaces around pipes
-    - add/remove/leave left alignment column header marker
-    
-    Here is what it looks like with all options enabled: 
-
-    ![Table Auto Format](/assets/images/TableAutoFormat.gif)
-
-Latest Developments: Version 1.4.4
-----------------------------------
-
-#### Bug Fix Release
-
-- Fix: #153, #154, #155
-- Fix: settings forms not always disposed
-- Change: References that have reference images referencing them, will 
-  have link address completion defaulting to image files 
-
-Latest Developments: Version 1.4.3
-----------------------------------
-
-#### Minor Improvements & Bug Fixes
-
-- GitHub issue # completions added in plain text and `issues/` link 
-- Option to view GitHub page in preview if the document was committed 
-  and has not been modified. 
-- Added more elements to code folding and added configuration for 
-  collapse by default in settings/preferences 
-- Improved link completions and added changing of completion addressing 
-  format by repeated invocations of the completion action 
-
-#### File Move Refactoring added in 1.4.2
-
-* Implemented refactoring of links contained in the file being moved. 
-  Link format is preserved, wiki links will be changed to explicit links 
-  if the file is moved out of the wiki directory. 
-* **To Keep your links in sync** use rename refactoring for: 
-    * link addresses
-    * anchor references and header text
-    * references and reference links
-* Intentions implemented to replace annotator quick fixes. Now 
-  intentions can be individually disabled and no more weak warning 
-  highlighting just to get the quick fix to show up. 
-                     
 ### Still Great GitHub Rendering Resemblance for your preview pleasure
-
-##### One of the images is idea-multimarkdown preview, the other of same file on GitHub: 
 
 ![Screen Shot Jfx WebView](/assets/images/ScreenShot_jfx_webview.png)
 

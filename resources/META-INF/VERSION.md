@@ -1,4 +1,4 @@
-### 1.4.10.32 - Bug Fix & Optimization Release
+### 1.5.0 - Bug Fix & Optimization Release
 
 #### Basic & Enhanced Editions
 
@@ -8,6 +8,7 @@
 - Fix: Comments with todo items would not show up in to do list when syntax highlighting was set
   to annotator. Now comments are parsed by the plain text lexer used to disable lexer syntax
   highlighting. 
+- Fix: update highlight.js to version 9.3.0 and include all available languages.
 - Add: live templates starting with `.` 
 
     | Element       | Abbreviation    | Expansion                                               |
@@ -40,6 +41,9 @@
 * Change: Auto-format table on typing and smart `*` `~` duplication to be off by default. 
 * Add: Auto inserted `*`, `_` and `~` that will be deleted by typing a space are now colored in
   the scheme's comment color to highlight that they can be deleted by typing a space
+* Fix: block quote prefix on fenced code would not be stripped off. Prefix needs to be
+  consistent on all the lines for the prefix to be properly stripped for the injected language
+  fragment. 
     
 * **List editing features**
     * Add: #210, List item un-indent/indent toolbar buttons, and actions. List item
