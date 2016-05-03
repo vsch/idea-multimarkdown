@@ -1,3 +1,18 @@
+### 1.5.0.2 - Bug Fix & Optimization Release
+
+#### Basic & Enhanced Editions
+
+
+#### Enhanced Edition
+
+* Add emoji text to icon conversion for preview. Default is enabled. Optionally can have image
+  url point to GitHub for those that want to generate a stand alone file from the preview HTML
+  text and don't want to lug the 860+ icons for emoji with the file.
+* Fix: inline elements were not syntax highlighted in footnote text. This also resulted in no
+  completions, validation or intentions being available in footnote text.
+* Fix: toolbar table actions are not updated for enable/disable state if the current table is
+  >100 lines, to prevent excessive cursor travel delays.
+
 ### 1.5.0 - Bug Fix & Optimization Release
 
 #### Basic & Enhanced Editions
@@ -49,7 +64,7 @@
     * Add: #210, List item un-indent/indent toolbar buttons, and actions. List item
       un-indent/indent toolbar buttons, assigned to Ctrl-Y/Ctrl-U respectively. 
     * Fix: #209, lines ending in `* ` or `- ` would be erroneously handled as empty list items
-      by BACKSPACE handler.
+      by <kbd>BACKSPACE</kbd> handler.
     * Fix: second list items would not enable the indent list action. 
     
 * **Table editing features**
@@ -57,8 +72,8 @@
       to end of table.
     * Add: #214, Feature: add insert table toolbar button
     * Add: #215, Feature: table insert/delete row/column toolbar buttons
-    * Add: #216, On ENTER insert table row with configuration options
-    * Add: #217, On BACKSPACE delete empty table row/column with configuration options
+    * Add: #216, On <kbd>ENTER</kbd> insert table row with configuration options
+    * Add: #217, On <kbd>BACKSPACE</kbd> delete empty table row/column with configuration options
     * Add: Syntax highlighting colors for table header cells separate from table body cells.
     * Fix: as you type table parsing changed to use pegdown instead of hand rolled parser.
       Handles escaped pipes and pipes in code spans correctly.
@@ -151,7 +166,7 @@
 * Add: list item handling on <kbd>ENTER</kbd> and <kbd>BACKSPACE</kbd>. <kbd>ENTER</kbd> will
   add unordered item or ordered item depending on what is preceding caret location.
   <kbd>ENTER</kbd> and <kbd>BACKSPACE</kbd> will remove empty list items. Configuration to
-  enable/disable in Editor > Code Style > MultiMarkdown under `List Items`
+  enable/disable in *Editor > Code Style > MultiMarkdown* under `List Items`
 * Improve: auto format handling on typing, <kbd>ENTER</kbd> and <kbd>BACKSPACE</kbd>
 * Add: table formatting via the format toolbar button
 * Add: table formatting option to format as you type in table separator line
