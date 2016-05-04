@@ -1,0 +1,29 @@
+<root>
+    <item name='org.pegdown.plugins.PegDownPlugins.Builder org.pegdown.plugins.PegDownPlugins.Builder withInlinePluginRules(org.parboiled.Rule...)'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='org.pegdown.plugins.PegDownPlugins.Builder org.pegdown.plugins.PegDownPlugins.Builder withPlugin(java.lang.Class&lt;? extends org.parboiled.BaseParser&lt;java.lang.Object&gt;&gt;, java.lang.Object...)'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='org.pegdown.plugins.PegDownPlugins org.pegdown.plugins.PegDownPlugins.Builder builder(org.pegdown.plugins.PegDownPlugins) 0'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='org.pegdown.plugins.PegDownPlugins.Builder org.pegdown.plugins.PegDownPlugins.Builder withBlockPluginRules(org.parboiled.Rule...)'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='org.pegdown.plugins.PegDownPlugins org.pegdown.plugins.PegDownPlugins.Builder builder()'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='org.pegdown.plugins.PegDownPlugins org.pegdown.plugins.PegDownPlugins.Builder builder(org.pegdown.plugins.PegDownPlugins)'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='org.pegdown.plugins.PegDownPlugins.Builder org.pegdown.plugins.PegDownPlugins build()'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='org.pegdown.plugins.PegDownPlugins.Builder org.pegdown.plugins.PegDownPlugins.Builder withHtmlSerializer(org.pegdown.plugins.ToHtmlSerializerPlugin...)'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='org.pegdown.plugins.PegDownPlugins.Builder org.pegdown.plugins.PegDownPlugins.Builder withSpecialChars(java.lang.Character...)'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+</root>

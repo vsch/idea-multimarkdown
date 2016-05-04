@@ -128,7 +128,7 @@ public class MultiMarkdownGlobalSettings implements PersistentStateComponent<Ele
     final public Settings.BooleanSetting footnotes = settings.BooleanSetting(false, "footnotes", Extensions.FOOTNOTES);
     final public Settings.IntegerSetting htmlTheme = settings.IntegerSetting(HTML_THEME_UI, "htmlTheme");
     final public Settings.IntegerSetting maxImgWidth = settings.IntegerSetting(900, "maxImgWidth");
-    final public Settings.IntegerSetting parsingTimeout = settings.IntegerSetting(10000, "parsingTimeout");
+    final public Settings.IntegerSetting parsingTimeout = settings.IntegerSetting(200, "parsingTimeout");
     final public Settings.DoubleSetting pageZoom = settings.DoubleSetting(1.0, "pageZoom");
     final public Settings.IntegerSetting updateDelay = settings.IntegerSetting(1000, "updateDelay");
     final public Settings.IntegerSetting tabbedPaneIndex = settings.IntegerSetting(0, "tabbedPaneIndex");

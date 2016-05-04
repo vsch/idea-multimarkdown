@@ -146,7 +146,7 @@ public class MultiMarkdownToHtmlSerializer extends ToHtmlSerializer {
         if (isSet(NO_WIKI_LINKS)) {
             printer.printEncoded("[[" + node.getText() + "]]");
         } else {
-            printLink(linkRenderer.render(node));
+            printLink(node, linkRenderer.render(node));
         }
     }
 

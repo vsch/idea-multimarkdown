@@ -1,0 +1,2 @@
+rule org.objectweb.asm.** com.vladsch.asm4.@1
+

@@ -115,12 +115,12 @@ public class MultiMarkdownLinkRenderer extends LinkRenderer {
 
     @Override
     public Rendering render(ExpLinkNode node, String text) {
-        return renderLink(LinkType.Link, node.url, node.title, text);
+        return renderLink(LinkType.Link, node.getUrl(), node.getTitle(), text);
     }
 
     @Override
     public Rendering render(ExpImageNode node, String text) {
-        return renderLink(LinkType.Image, node.url, node.title, text);
+        return renderLink(LinkType.Image, node.getUrl(), node.getTitle(), text);
     }
 
     @Override

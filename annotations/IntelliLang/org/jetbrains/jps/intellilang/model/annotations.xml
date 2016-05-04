@@ -1,0 +1,14 @@
+<root>
+    <item name='org.jetbrains.jps.intellilang.model.JpsIntelliLangExtensionService org.jetbrains.jps.intellilang.model.JpsIntelliLangConfiguration getConfiguration(org.jetbrains.jps.model.JpsGlobal)'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='org.jetbrains.jps.intellilang.model.JpsIntelliLangExtensionService org.jetbrains.jps.intellilang.model.JpsIntelliLangConfiguration getConfiguration(org.jetbrains.jps.model.JpsGlobal) 0'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='org.jetbrains.jps.intellilang.model.JpsIntelliLangExtensionService void setConfiguration(org.jetbrains.jps.model.JpsGlobal, org.jetbrains.jps.intellilang.model.JpsIntelliLangConfiguration) 1'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='org.jetbrains.jps.intellilang.model.JpsIntelliLangExtensionService void setConfiguration(org.jetbrains.jps.model.JpsGlobal, org.jetbrains.jps.intellilang.model.JpsIntelliLangConfiguration) 0'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+</root>

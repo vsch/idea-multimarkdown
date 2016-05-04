@@ -27,8 +27,13 @@ import com.vladsch.idea.multimarkdown.settings.MultiMarkdownGlobalSettings;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.parboiled.errors.ParserRuntimeException;
+import org.pegdown.ParsingTimeoutException;
 import org.pegdown.PegDownProcessor;
+import org.pegdown.ast.Node;
 import org.pegdown.ast.RootNode;
+
+import java.util.ArrayList;
 
 public class MultiMarkdownLexParserManager {
     private static final Logger logger = org.apache.log4j.Logger.getLogger(MultiMarkdownLexParserManager.class);
@@ -54,6 +59,25 @@ public class MultiMarkdownLexParserManager {
 
         char[] currentChars = buffer.toString().toCharArray();
         RootNode rootNode = processor.parseMarkdown(currentChars);
+        String exceptionText = null;
+
+        try {
+            rootNode = processor.parseMarkdown(currentChars);
+        } catch (ParsingTimeoutException e) {
+            exceptionText = e.getMessage();
+        } catch (ParserRuntimeException e) {
+            exceptionText = e.getMessage();
+        }
+
+        if (rootNode == null) {
+            ErrorNode errorNode = new ErrorNode("Parser Timeout Error: " + exceptionText);
+            errorNode.setStartIndex(0);
+            errorNode.setEndIndex(buffer.length());
+            ArrayList<Node> nodes = new ArrayList<Node>();
+            nodes.add(errorNode);
+            rootNode = new RootNode(nodes);
+        }
+
         if (!disable) lastParsingResult.set(new ParsingInfo(buffer, actualPegdownExtensions, rootNode, null, false));
         return rootNode;
     }
@@ -81,7 +105,24 @@ public class MultiMarkdownLexParserManager {
         if (rootNode == null) {
             if (log) logger.info("LexerToken Parsing request not satisfied by cache for thread " + Thread.currentThread());
             PegDownProcessor processor = new PegDownProcessor(actualPegdownExtensions, parsingTimeout != null ? parsingTimeout : MultiMarkdownGlobalSettings.getInstance().parsingTimeout.getValue());
-            rootNode = processor.parseMarkdown(currentChars);
+            String exceptionText = null;
+
+            try {
+                rootNode = processor.parseMarkdown(currentChars);
+            } catch (ParsingTimeoutException e) {
+                exceptionText = e.getMessage();
+            } catch (ParserRuntimeException e) {
+                exceptionText = e.getMessage();
+            }
+
+            if (rootNode == null) {
+                ErrorNode errorNode = new ErrorNode("Parser Timeout Error: " + exceptionText);
+                errorNode.setStartIndex(0);
+                errorNode.setEndIndex(buffer.length());
+                ArrayList<Node> nodes = new ArrayList<Node>();
+                nodes.add(errorNode);
+                rootNode = new RootNode(nodes);
+            }
         }
 
         MultiMarkdownLexParser lexParser = new MultiMarkdownLexParser();

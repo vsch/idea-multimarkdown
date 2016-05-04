@@ -1,3 +1,12 @@
+### 1.2.3.1 - Bug Fixes and Enhancements
+
+#### Basic Edition & Enhanced
+
+- Update Sources for latest Kotlin compatibility
+- Add Pegdown timeout exception handling to prevent ide hanging during indexing
+- Change default pegdown parse timeout to 200 ms to prevent erroneous parsing from hanging the
+  UI.
+
 ### 1.2.3 - Bug Fixes and Enhancements
 
 #### Basic Edition & Enhanced

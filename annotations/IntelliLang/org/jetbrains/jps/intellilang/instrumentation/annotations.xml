@@ -1,0 +1,29 @@
+<root>
+    <item name='org.jetbrains.jps.intellilang.instrumentation.InstrumentationType EXCEPTION'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='org.jetbrains.jps.intellilang.instrumentation.PatternValidatorBuilder org.jetbrains.jps.incremental.BinaryContent instrument(org.jetbrains.jps.incremental.CompileContext, org.jetbrains.jps.incremental.CompiledClass, org.jetbrains.org.objectweb.asm.ClassReader, org.jetbrains.org.objectweb.asm.ClassWriter, com.intellij.compiler.instrumentation.InstrumentationClassFinder) 0'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='org.jetbrains.jps.intellilang.instrumentation.PatternValidatorBuilder java.lang.String getPresentableName()'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='org.jetbrains.jps.intellilang.instrumentation.PatternValidatorBuilder java.lang.String getProgressMessage()'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='org.jetbrains.jps.intellilang.instrumentation.PatternValidatorBuilder boolean isEnabled(org.jetbrains.jps.incremental.CompileContext, org.jetbrains.jps.ModuleChunk) 0'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='org.jetbrains.jps.intellilang.instrumentation.ErrorPostponingMethodVisitor ErrorPostponingMethodVisitor(org.jetbrains.jps.intellilang.instrumentation.PatternInstrumenter, java.lang.String, org.jetbrains.org.objectweb.asm.MethodVisitor) 0'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='org.jetbrains.jps.intellilang.instrumentation.InstrumentationType ASSERT'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='org.jetbrains.jps.intellilang.instrumentation.InstrumentationType NONE'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='org.jetbrains.jps.intellilang.instrumentation.PatternValidatorBuilderService java.util.List&lt;? extends org.jetbrains.jps.incremental.ModuleLevelBuilder&gt; createModuleLevelBuilders()'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+</root>

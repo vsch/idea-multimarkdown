@@ -568,9 +568,9 @@ fun addCompletionData(linkRef: LinkRef, matchOptions: Int, expectedResult: Any?)
     val result = arrayOf<Any?>(
             linkRef.containingFile.filePath,
             when (linkRef) {
-                is WikiLinkRef -> ::WikiLinkRef
-                is ImageLinkRef -> ::ImageLinkRef
-                else -> ::LinkRef
+                is WikiLinkRef -> { containingFile: FileRef, fullPath: String, anchor: String?, targetRef: FileRef? -> WikiLinkRef(containingFile, fullPath, anchor, targetRef) }
+                is ImageLinkRef -> { containingFile: FileRef, fullPath: String, anchor: String?, targetRef: FileRef? -> ImageLinkRef(containingFile, fullPath, anchor, targetRef) }
+                else -> { containingFile: FileRef, fullPath: String, anchor: String?, targetRef: FileRef? -> LinkRef(containingFile, fullPath, anchor, targetRef) }
             },
             linkRef.filePath,
             linkRef.anchor,

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="PLUGIN_MODULE" version="4">
-  <component name="DevKit.ModuleBuildProperties" url="file://$MODULE_DIR$/src/main/resources/META-INF/plugin.xml" />
+  <component name="DevKit.ModuleBuildProperties" url="file://$MODULE_DIR$/src/main/resources/META-INF/plugin.xml" manifest="file://$MODULE_DIR$/src/main/java/META-INF/MANIFEST.MF" />
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
@@ -10,20 +10,14 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
     </content>
     <orderEntry type="inheritedJdk" />
-    <orderEntry type="module-library">
-      <library name="lib">
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/lib" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-        <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" />
-      </library>
-    </orderEntry>
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="jfxrt" level="project" />
-    <orderEntry type="library" name="commons-io-2.4" level="project" />
-    <orderEntry type="library" name="pegdown-1.6.6" level="project" />
     <orderEntry type="library" name="KotlinJavaRuntime" level="application" />
+    <orderEntry type="library" scope="TEST" name="kotlin-test" level="application" />
+    <orderEntry type="library" name="jfxrt" level="application" />
+    <orderEntry type="library" name="asm-all-asm4" level="project" />
+    <orderEntry type="library" name="commons-io-2.4" level="project" />
+    <orderEntry type="library" name="parboiled-core-asm4" level="project" />
+    <orderEntry type="library" name="parboiled-java-asm4" level="project" />
+    <orderEntry type="library" name="pegdown-1.6.7" level="project" />
   </component>
 </module>

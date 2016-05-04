@@ -244,7 +244,7 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
                             this.branchOrTag = "master"
                             linkParamsSuffix = "master"
                         }
-                        gitHubLink == "wiki", gitHubLink == "" && linkRef.containingFile.isWikiHomePage -> {
+                        gitHubLink == "wiki" || gitHubLink == "" && linkRef.containingFile.isWikiHomePage -> {
                             if (linkParams.isEmpty() && !pathParts.hasNext() && linkRef.fileNameNoExt.isEmpty()) {
                                 // just a link to wiki, match Home page
                                 linkParams = "Home" + linkParams
@@ -262,7 +262,7 @@ class GitHubLinkMatcher(val projectResolver: LinkResolver.ProjectResolver, val l
                             this.gitHubLink = "wiki"
                             wikiMatchingRules = true
                         }
-                        gitHubLink == "blob", gitHubLink == "raw" -> {
+                        gitHubLink == "blob" || gitHubLink == "raw" -> {
                             if (pathParts.hasNext()) {
                                 linkParamsSuffix = pathParts.next()
                             } else {

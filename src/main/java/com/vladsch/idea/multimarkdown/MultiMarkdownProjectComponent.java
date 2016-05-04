@@ -372,7 +372,7 @@ public class MultiMarkdownProjectComponent implements ProjectComponent, VirtualF
 
     @Nullable
     @Override
-    public List<FileRef> projectFileList(@Nullable List<? extends String> fileTypes) {
+    public List<FileRef> projectFileList(@Nullable List<String> fileTypes) {
         assert false: "Should never be called";
         return null;
     }

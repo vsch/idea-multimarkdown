@@ -176,21 +176,18 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
     companion object {
         private val logger = Logger.getLogger(PathInfo::class.java)
 
-        @JvmStatic @JvmField val EMPTY_STRING = ""
-
-        @JvmStatic @JvmField val WIKI_PAGE_EXTENSION = ".md"
-        @JvmStatic @JvmField val WIKI_HOME_DIR_EXTENSION = ".wiki"
-        @JvmStatic @JvmField val WIKI_HOME_FILENAME = "Home"
-
-        @JvmStatic @JvmField val IMAGE_EXTENSIONS = arrayOf("png", "jpg", "jpeg", "gif")
-        @JvmStatic @JvmField val MARKDOWN_EXTENSIONS = MultiMarkdownFileTypeFactory.EXTENSIONS
-        @JvmStatic @JvmField val WIKI_PAGE_EXTENSIONS = MultiMarkdownFileTypeFactory.EXTENSIONS
-
-        @JvmStatic @JvmField val EXTERNAL_PREFIXES = arrayOf("http://", "ftp://", "https://", "mailto:")
-        @JvmStatic @JvmField val URI_PREFIXES = arrayOf("file://", *EXTERNAL_PREFIXES)
-        @JvmStatic @JvmField val RELATIVE_PREFIXES = arrayOf<String>()
-        @JvmStatic @JvmField val LOCAL_PREFIXES = arrayOf("file:", "/", *RELATIVE_PREFIXES)
-        @JvmStatic @JvmField val ABSOLUTE_PREFIXES = arrayOf("/", *URI_PREFIXES)
+        const val EMPTY_STRING = ""
+        const val WIKI_PAGE_EXTENSION = ".md"
+        const val WIKI_HOME_DIR_EXTENSION = ".wiki"
+        const val WIKI_HOME_FILENAME = "Home"
+        @JvmField val IMAGE_EXTENSIONS = arrayOf("png", "jpg", "jpeg", "gif")
+        @JvmField val MARKDOWN_EXTENSIONS = MultiMarkdownFileTypeFactory.EXTENSIONS
+        @JvmField val WIKI_PAGE_EXTENSIONS = MultiMarkdownFileTypeFactory.EXTENSIONS
+        @JvmField val EXTERNAL_PREFIXES = arrayOf("http://", "ftp://", "https://", "mailto:")
+        @JvmField val URI_PREFIXES = arrayOf("file://", *EXTERNAL_PREFIXES)
+        @JvmField val RELATIVE_PREFIXES = arrayOf<String>()
+        @JvmField val LOCAL_PREFIXES = arrayOf("file:", "/", *RELATIVE_PREFIXES)
+        @JvmField val ABSOLUTE_PREFIXES = arrayOf("/", *URI_PREFIXES)
 
         // true if needs resolving to absolute reference
         @JvmStatic fun isRelative(fullPath: String?): Boolean = fullPath != null && !isAbsolute(fullPath)

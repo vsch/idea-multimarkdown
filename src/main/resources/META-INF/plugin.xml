@@ -44,380 +44,72 @@
     <version>1.2.3</version>
     <idea-version since-build="139.1603"/>
     <change-notes><![CDATA[
-    <ul>
-        <h3>1.2.3 - Bug Fixes and Enhancements</h3>
-        <h4><strong>Basic Edition &amp; Enhanced</strong></h4>
-        <li>Change: default JavaFX preview font order to have Helvetica before Arial, cleaner text rendering.</li>
-        <li>Fix #73: self referencing links with 'Show Modified' not selected do not generate correct HTML.</li>
-        <li>Change: update JavaFX preview to new GitHub style, wider pages.</li>
-        <li>Add: inspections when wiki pages are linked with file extension, they will display raw text not rendered HTML</li>
-        <li>Fix: anchor links markdown extension was always enabled when 'Use Old Preview' was selected, regardless of preferences settings</li>
-        <li>Add: fork and raw GitHub link to be recognized</li>
-        <li>Add: line icon to show multiple resolved targets</li>
-        <li>Change: preferences for the plugin are now split between local, non-roaming persistence in multimarkdown.local.xml and shared roaming persistence in multimarkdown.shared.xml. Preferences from multimarkdown.xml are migrated to new files and the file is deleted.</li>
-        <h4><strong>Enhanced Edition</strong></h4>
-        <li>Change: new implementation of file link resolving logic handles a full set of GitHub idiosyncrasies for relative links, raw/blob access, absolute https:// links, file extensions and case sensitivity.</li>
-        <li>Add: new annotation inspections for common errors in link resolution</li>
-        <li>New: modified HTML now has all links as URI's during rendering with preference to GitHub repository file when available, fallback to local file://</li>
-        <li>Fix: added validation for invalid PsiElements during refactoring to prevent exceptions</li>
-        <li>Fix: all link refactoring for file move/rename adjusts affected link according to GitHub rules</li>
-        <li>Add: warning annotation in text editor, link color and image border in preview when a link target is not on GitHub according to its status</li>
-        <li>Add: intention to change relative to absolute link addresses and vice-versa</li>
-        <li>Add: validation of absolute links that look like they are targeting files in the same repository as the containing file</li>
-        <li>Add: navigation line items for absolute links that resolve to files</li>
-        <li>Add: absolute address link completions and link completions based on extensions other than markdown for wiki and explicit and images for image links, just add file:// or https:// in front to get url completions and an extension without a file name to get extension based completions. <code>https://.java</code> will show java files with https:// absolute link address.</li>
-        <li>Fix #71: license information is now saved in multimarkdown.local.xml and is marked as non-roaming</li>
-        <li>Add: handle relative image links in wiki pages must resolve to raw file access in main repository default behavior and validation</li>
-        <li>Add: automatically change wiki link to explicit link if target file is moved out of wiki link access range</li>
-        <li>Add: refactoring now keeps link format as it was before, if it was absolute or page relative.</li>
-    </ul>
-    <ul>
-      <h3>1.2.2 - Bug Fixes and Enhancements</h3>
-      <h4><b>Basic Edition &amp; Enhanced</b></h4>
-      <li>Add a change to quick fix on an unresolved link will apply the same change to all links that match the link being modified.</li>
-      <li>Add annotation if wiki link ends in .md, with quick fix to remove .md extension</li>
-      <li>Fix #60: fix plugin failing to initialize on some systems.</li>
-      <li>Fix #62: Plugin exhausted thread resources if a lot of projects were open</li>
-      <li>Fix #63: Unresolved links were not always highlighted as error</li>
-      <li>Fix #65: threading issues causing slow preview update and other intermittent errors.</li>
-      <li>Fix #67: change message for not finding javafx from warning to info.</li>
-      <li>Fix #70: closed to to task list items with capital x <code>- [X]</code> would not render correctly in the WevView preview.</li>
-      <li>Fix link resolution did not work if non-default Markdown extension was used on Wiki pages</li>
-      <li>Fix link resolution in preview to match the rules for markdown source</li>
-      <li>Fix wiki link with multiple matched targets would not resolve according to sort order</li>
-      <li>Fix wiki link with multiple matched targets would show quick fix to rename unreachable targets</li>
-      <li>Fix wiki links with subdirectory references did not show annotation popup or quick fix to remove directory</li>
-      <li>Fix buy license button in settings navigated to the get trial license page instead of the full license page.</li>
-      <h4><b>Enhanced Edition</b></h4>
-      <li>Add validation for relative links accessing wiki raw content by using the Wiki page link with extension.</li>
-      <li>Add validation of all explicit relative links from the main repository to wiki files.</li>
-      <li>Add warning when a file is a target of a link but is not on GitHub.</li>
-      <li>Fix #64: class cast exception in explicit link.</li>
-      <li>Fix link errors in source, preview and click actions are now in agreement</li>
-      <li>Fix link resolution was not always consistent with GitHub</li>
-      <li>Fix license registration failing in version 133.1711 for lack of methods in some classes.</li>
-      <li>Fix intention to change wiki link to explicit and vice-versa.</li>
-    </ul>
-    <ul><h3><b>1.2.0 - Bug Fixes and Enhancements</b></h3>
-      <h4><b>Basic Edition &amp; Enhanced</b></h4>
-      <li>Fix: not recognizing tables that have a divider and table cells that look like divider cells. (pegdown)</li>
-      <li>Fix: Custom CSS was not loaded in new preview tab or html text.</li>
-      <li>Fix: verbatim first line in task list item was cutting off first character if highlight.js option was selected.</li>
-      <li>Fix: #58, wiki links with anchor references would show as unresolved.</li>
-      <li>Add: MultiMarkdown style footnotes. The <code>[^n]</code> for reference and <code>[^n]: Footnote text</code>, for definition where n is one or more digit, letter, dash, dot or underscore.</li>
-      <h4><b>Enhanced Edition</b></h4>
-      <li>Add: Explicit link completions, refactoring, annotation for errors and quick fixes.</li>
-      <li>Add: Image link completions, refactoring, annotation for errors and quick fixes.</li>
-      <li>Add: GitHub Issues, Pull requests, Graphs and Pulse link references available in link completions.</li>
-      <li>Add: Intention action to change wiki link to explicit link.</li>
-      <li>Add: Explicit and Image links are GitHub wiki aware.</li>
-    </ul>
-    <ul><h3><b>1.1.13 - More GitHub integration, Bug Fixes &amp; Optimizations.</b></h3>
-      <li>Fix now using FileBasedIndex to find files for link resolution. No longer need to mark wiki directories as source or resource roots</li>
-      <li>Add re-targeting an invalid wiki link using quick fixes will also re-target all matching wiki refs located in the same wiki</li>
-      <li>Fix #47, closing a project before preview update delay timer is triggered caused project already disposed assertion failure.</li>
-      <li>Change GitHub syntax wiki links are now default and not changeable.</li>
-      <li>Change to support GitHub wiki's not handling subdirectories in wiki links and resolving always on unique file name.</li>
-      <li>Add annotation error when GitHub wiki links have /. </li>
-      <li>Add annotation error when wiki links are used in non-wiki pages. GitHub only supports wiki links in wiki pages. </li>
-      <li>Add annotations to detect conflicts in GitHub wiki page names.</li>
-      <li>Add links from non-wiki markdown files of the '../../wiki/{other stuff}' will try to resolve to a link '{dir}.wiki/{other stuff}. This is to mimic GitHub relative links from the main repository to wiki pages. This means that your wiki directory should have the name of its parent directory with '.wiki' extension added, again to follow GitHub wiki naming conventions.'.</li>
-      <li>Add duplicate matching wiki pages resolve to the first one based on alphabetically sorted relative path from the wiki home folder. Same as GitHub wiki.</li>
-      <li>Add Preview Tab links to wiki pages and markdown documents now open the corresponding files on github.com.</li>
-      <li>Add header with file name to markdown in old preview tab, clicking on file name takes you to the file on GitHub.</li>
-      <li>Add Clicking on the book icon in file header in new preview takes you to the file on GitHub.</li>
-      <li>Add Relative links in markdown documents now also support GitHub specific links for: wiki, issues, pulls, graphs, pulse. For example from the readme.md file in VCS root you can create a link to issues using: [Issues](../../issues). The same way you would do it on GitHub. These also resolve to their corresponding pages on GitHub when clicked. These links always resolve to the master branch on GitHub, regardless of what branch is current in the IDE.</li>
-      <li>Add relative image links resolve to local files the same way they would resolve to files on GitHub, so you can use relative links for embedded images.</li>
-      <li>Change Wiki links now fully GitHub like with same resolution rules except with warnings and annotations.</li>
-      <li>Fix comment/uncomment would leave a space around text.</li>
-      <li>Fix minimized parser memory hogging. pegdown processor AST was kept around long after it was needed.</li>
-      <li>Fix #50 hang when >20 files were modified in the file system triggering re-indexing in dumb mode. Plugin did not check for dumb service mode before trying to collect PsiFile(s) for re-parse.</li>
-      <li>Fix #49 inline code being interpreted as start of code fence.</li>
-      <li>Add unresolved links within a wiki with the same text are the same reference so can be renamed as a group.</li>
-      <li>Add wiki link titles within a wiki with the same text and the same link address are the same reference so the link text can be renamed as a group.</li>
-      <li>Add wiki link ref anchor and ref anchor marker coloring attributes and psi elements for anchors.</li>
-      <li>Add wiki link ref anchors within a wiki with the same text and the same parent link address are the same reference so the text can be renamed as a group for all of them.</li>
-    </ul>
-    <ul><h3><b>1.1.12 - Bug Fixes &amp; Optimizations.</b></h3>
-      <li>Fix url's with spaces showing up as unresolved.</li>
-      <li>Fix resolution of file links that are followed by a hash. For now they just resolve to the file not to any anchor link in the file</li>
-      <li>Add resolution of file links without an extension to markdown files.</li>
-      <li>Fix HTML preview and text tabs to update only if they are visible instead of always.</li>
-      <li>Fix intermittent loss of scroll position in the JavaFX HTML preview window. WebView issue.</li>
-      <li>Fix intermittent null pointer exception on project close. Issue: #38.</li>
-      <li>Fix Wiki Links with anchor references were not properly generated.</li>
-      <li>Change completely refactored refactoring code.</li>
-      <li>Change link references without file extension will attempt to match markdown files first.</li>
-      <li>Fix exception starting to edit an empty file or when the file becomes empty after an edit.</li>
-      <li>Add wiki link text refactoring, completion, inspections.</li>
-      <li>Add quick fixes that rename files now do project wide refactoring on related links.</li>
-      <li>Add quick fixes that change a link target because it is unresolved now do refactor rename for links that have the same text in the file.</li>
-      <li>Add option in settings for GitHub wiki link syntax [[Link text|Link address]], vs Creole syntax: [[Link address|Link text]].</li>
-      <li>Add inspection and quick fix when wiki link text and address are reversed, link text is redundant, or link text is also a resolvable page.</li>
-    </ul>
-    <ul><h3><b>1.1.11 - Bug Fixes.</b></h3>
-      <li>Fix intermittent project is disposed assertion failure on closing app.</li>
-      <li>Change removed old code trying to resolve a link to a Java Class file. Php storm was generating class def not found exception. Also caused issue #33</li>
-      <li>Fix directories marked excluded or libraries are skipped completely, only directories marked as source (this includes: source, test, resource directories) are scanned for markdown files for link resolution. Same for wiki pages. Now you need to mark the wiki directory as sources root, if it isn't already under a parent that is sources root. This addresses issues: #36, #35, #34, #33</li>
-    </ul>
-    <ul><h3><b>1.1.10 - Wiki link refactoring bug fixes and enhancement.</b></h3>
-      <li>Fix wiki links to missing targets did not always update annotations after create file quick fix.</li>
-      <li>Fix wiki links with missing targets rename as a group with suggested names collected from available targets.</li>
-      <li>Change wiki link &amp;change to:&amp; quick fixes limited to max 10.</li>
-      <li>Change wiki link suggested names sorted by closest directory distance, with .. directories last.</li>
-      <li>Change refactor code to be more efficient in generating and resolving target reference links.</li>
-      <li>Change wiki page icon only used if file has no spaces in path parts, starting from the wiki home directory.</li>
-      <li>Change completions for wiki links only show files below the wiki home directory.</li>
-    </ul>
-    <ul><h3><b>1.1.9 - Wiki link refactoring bug fixes.</b></h3>
-      <li>Fix wiki links to missing targets would not have proper reference if create file quick fix is used until project is reopened.</li>
-      <li>Add Spell check quick fix for Rename To: for wiki link page references, with proper suggested renames for the file.</li>
-    </ul>
-    <ul><h3><b>1.1.8 - Cosmetic Changes & Bug Fixes.</b></h3>
-      <li>Fix after list spacing in css for javafx preview.</li>
-      <li>Add option to allow customizing highlight.js in the custom css.</li>
-      <li>Change separated color and font from layout for javafx preview css. Now layout is contained in a separate css. Custom Css can contain zero or more of: color, layout, hightlight.js css.</li>
-      <li>Change font ordering for javafx preview css trying to improve poor font rendering.</li>
-      <li>Fix #32, spell checking inspections, broken since version 1.1.5.</li>
-      <li>Fix icons, wiki icon shown only if 'Show HTML Text' was enabled in settings.</li>
-    </ul>
-    <ul><h3><b>1.1.7 - Wiki Link Refactoring and highlight.js added</b></h3>
-      <li>Fix make html preview and text tabs dumb aware so that they load properly in older versions if the index is not ready.</li>
-      <li>Fix attempting to use new preview with older versions of IDEA no longer generates an exception on the first run.</li>
-      <li>Change Use Old Preview is disabled if an attempt to use it on the current application build and jdk combination failed. It stays disabled until the build or jdk is changed.</li>
-      <li>Fix Wiki Link refactoring working.</li>
-      <li>Add Wiki Link quick fixes, line markers, completions.</li>
-      <li>Add Wiki Link annotation for wiki links that try to go outside their home directory tree.</li>
-      <li>Add Wiki Link annotation for wiki links that contain dashes, with quick fix.</li>
-      <li>Add Wiki Link annotation for wiki target files that contain spaces, with quick fix.</li>
-      <li>Add Wiki Link annotation for case mismatch between wiki link and its target's file name, with quick fix.</li>
-      <li>Add Wiki Link annotation for unresolved wiki links, with quick fixes to target another page or create the missing one.</li>
-      <li>Add highlight.js for syntax highlighting verbatim blocks, in the javafx WebView preview tab.</li>
-    </ul>
-    <ul><h3><b>1.1.6 - Wiki Link Refactoring/Code Completion/Navigation</b></h3>
-      <li>Add rudimentary `<kbd></kbd>` styling to old preview. It's not going away, so it must be maintained.</li>
-      <li>Add `<var></var>` styling to new preview.</li>
-      <li>Add Code style indentations settings for MultiMarkdown so that tab/spaces can be configured.</li>
-      <li>Add Comment provider and rudimentary PsiParser to allow commenting/uncommenting lines via standard actions.</li>
-      <li>Add error annotator for missing Wiki Links in source.</li>
-      <li>Add Quick Fix for missing wiki links to create a file.</li>
-      <li>Add Wiki Link Reference completion, will show all files in the project that are markdown, with proper sub-directory references. </li>
-      <li>Add Add Wiki Link refactoring. Now link and the file it refers to a linked. Renaming or moving the file, changes the links to that file.</li>
-      <li>Add Add Wiki Link go to definition, to jump from link ref to markdown file it is targeting.</li>
-      <li>Add Add Markdown file find usages, will show all wiki links to that file.</li>
-      <li>Add Separate Wiki link: marker, separator, link ref and link text highlighting attributes.</li>
-      <li>Change Markdown files whose ancestor directory has a .wiki extension show a different icon in project view and completion list.</li>
-      <li>Fix Escaped chars highlighting disappeared due to over-optimization. Restored.</li>
-      <li>Fix null project pointer exception if doing find/replace in custom css text editor in settings.</li>
-      <li>Fix make all HTML Preview links that are not http, https or mailto turn red if they cannot be resolved to a local resource. Previously only wiki links were affected.</li>
-    </ul>
-    <ul><h3><b>1.1.5 - Page Zoom and GitHub Wiki Improvements</b></h3>
-      <li>Fix CSS for wiki page differences from regular pages.</li>
-      <li>Fix switching old and new preview could generate exceptions if markdown files were open.</li>
-      <li>Change Use Old Preview option takes effect when files are reopened. Now you can have some files open with new and some with old preview.</li>
-      <li>Change Settings to use tab control so that it is less crowded.</li>
-      <li>Add page zoom setting for JavaFx based preview tab.</li>
-      <li>Add Automatic H1 header insertion into documents contained under a folder that ends in &quot;.wiki&quot;.</li>
-    </ul>
-    <ul><h3><b>1.1.4 - Improve GitHub Wiki Markdown Support</b></h3>
-      <li>Change the HTML Preview and HTML Text editors now require the index to be built, the tabs open after the index update is complete.</li>
-      <li>Add Absent Link checking for HTML Preview for non HTTP type links.</li>
-      <li>Add Open files in the IDE for non-HTTP links, files with no extension will attempt to find a class that matches the name in the link.</li>
-      <li>Add wiki pages to GitHub project. If you want to maintain</li>
-      <li>Add Adding GitHub Wiki To Your IntelliJ Project instructions, for those that would prefer to maintain and edit their project's wiki pages in their IntelliJ project.</li>
-    </ul>
-    <ul><h3><b>1.1.3 - Tweaks &amp; Cosmetics Release</b></h3>
-      <li>Fix icon to make text following it in the project tree line up with text of other nodes.</li>
-      <li>Fix clicking on a link with href="#" now does nothing.</li>
-      <li>Fix disable context menu in preview tab to prevent off page navigation.</li>
-      <li>Add title to the html document for preview tab containing the file name of the displayed document.</li>
-      <li>Add abbr tag styles to css for new preview pane.</li>
-      <li>Add abbreviated text color attribute for syntax highlighting abbreviations that appear in the text.</li>
-    </ul>
-    <ul><h3><b>1.1.2</b></h3>
-      <li>Fix Exception reporting for ScratchFileService not found on older versions. If the check fails then no others will be performed until build of IDE changes.</li>
-      <li>Fix WebView Preview Tab no working for 1.8u60 and up. In 1.8u60+ it no longer handles fonts with uri(data:) nor font/woff only .ttf.</li>
-      <li>Fix allowing capital X to mark closed tasks. Fix #24</li>
-      <li>Fix lack of ComboBox for Build 133.1711, now for earlier builds using List for theme selection instead of ComboBox.</li>
-      <li>Change since-build to 133.1711, earliest tested version IDEA 13.0 CE, new Preview is not available but old preview works.</li>
-    </ul>
-    <ul><h3><b>1.1.1</b></h3>
-      <li>Fix plugin was compiled for JRE 1.8 in error. It does not use language features beyond 1.6.</li>
-      <li>Fix scratch file associations broken in new preview and html tabs.</li>
-      <li>Add Automatically set 'Use Old Preview' if the new preview could not be loaded, to eliminate errors on startup.</li>
-      <li>Add add experimental setting `Enable firebug-lite' for JavaFX preview tab.</li>
-      <li>Change CSS to reference font in temporary file instead of embedding via url(data:).</li>
-    </ul>
-    <ul><h3><b>1.1.0</b></h3>
-      <li>Change HTML Preview now using javafx WebView, <strong>requires jre 1.8+ with JavaFX library under Java Home/lib/ext directory</strong>. Big Improvement on compatibility with browsers.</li>
-      <li>Add If JavaFX library is not found then the plugin will fall back to using the old JEditorPane HTML Preview.</li>
-      <li>Add Setting to allow always using the old preview even if JavaFX is available.</li>
-      <li>Add default-fx.css and darcula-fx.css for the javafx WebView preview page.</li>
-      <li>Add custom font for task items, header link icon and book icon at the page title.</li>
-      <li>Fix #16, No longer applicable with new HTML rendering engine.</li>
-      <li>Fix #17, No longer applicable with new HTML rendering engine.</li>
-      <li>Fix #4, Not able to handle Gravizo generated images.</li>
-      <li>Fix Two or more blank lines would end a list and start a new one, pegdown.</li>
-    </ul>
-    <ul><h3><b>1.0.25</b></h3>
-      <li><b><span color="#C00038">Note: </span>This will probably be the last release of this plugin that works with jre 1.6.</b> I implemented javafx WebView for the preview tab and it is a joy to look at, work with and maintain.</li>
-      <li>Change removed the use images for bullets and tasks. These introduced too many rendering side-effects that were impossible to resolve.</li>
-      <li>Fix issue #16, images in bullet list items or task items displayed as the bullet or task image instead. Bug in HTMLEditorKit CSS attribute inheritance passing class of parent to child nodes.</li>
-      <li>Fix issue #17, nested lists not being indented correctly caused by CSS mess up.</li>
-      <li>Fix Two or more blank lines would interrupt a list and start a new one, pegdown.</li>
-      <li>Fix loose task items would be rendered wrong, pegdown.</li>
-    </ul>
-    <ul><h3><b>1.0.24</b></h3>
-      <li>Fix issue #15, will not load in build 139.1117, changed 'since-build' to 135.1306 earliest tested working IDEA 13, and updated classes.</li>
-      <li>Minor tweaks to CSS default and darcula.</li>
-    </ul>
-    <ul><h3><b>1.0.23</b></h3>
-      <li>Fix issue #14, all scratch files would have MultiMarkdown editor tabs attached.</li>
-      <li>Minor tweaks to CSS default and darcula.</li>
-    </ul>
-    <ul><h3><b>1.0.22</b></h3>
-      <li>Fix issue #7, tasks and bullets use images instead of icons so that they are rendered correctly in Darcula.</li>
-      <li>Change for issue #8, removed syntax highlighter inheritance from hidden DEFAULT_MARKDOWN type back to not inherited or inherited from Language Defaults.</li>
-    </ul>
-    <ul><h3><b>1.0.21</b></h3>
-      <li>Change Settings for Custom CSS, now a checkbox controls if the text in custom CSS editor will be used as the stylesheet.</li>
-      <li>Fix clearing or loading new text into the CSS editor was not clearing caret position and selection</li>
-      <li>Add check box to specify that the custom CSS should be treated as a dark theme. Used to determine which Icons to use for Bullets/Task items</li>
-      <li>Add Focus Editor button to set focus to custom CSS editor without clearing selection or caret.</li>
-      <li>Add Settings option for rendering tasks items as Icons. Turn off to get square list items. The latter causes all task items to display without a check mark</li>
-      <li>Fix Temporary work around for issue #7, the IDEA's icon rendering bug with Darcula, to display bullets and task items using simple list items: circle for bullets, square for tasks.</li>
-    </ul>
-    <ul><h3><b>1.0.20</b></h3>
-      <li>Fix Changing settings was not updating files. My apologies, it was a one-line cut/paste error during heavy refactoring of code.</li>
-    </ul>
-    <ul><h3><b>1.0.19</b></h3>
-      <li>Fix detection of files so that HTML Preview and HTML Text tabs will be displayed along with other plugins that handle Markdown</li>
-      <li>Add Application UI option to CSS theme. This will make HTML Preview match the Application UI setting: Default or Darcula</li>
-      <li>Add Custom CSS Editor in settings, now saves state of caret, selection and vertical scroll position when you apply or ok changes to make it more comfortable to experiment with custom CSS.</li>
-    </ul>
-    <ul><h3><b>1.0.18</b></h3>
-      <li>Fix darcula.css did not set background for body. Short documents would have white bottom</li>
-      <li>Fix bullets and numbers for loose list items did not line up with text</li>
-      <li>Add option to render bullet lists via icons. Color is set by CSS option: default/darcula but you get smaller bullets, with retina resolution, if your displays allows it.</li>
-      <li>Change HTML used for Preview Tab now has body.multimarkdown-preview instead of div#multimarkdown-preview. Otherwise, setting body background would affect IDEA tooltips and other dialog elements.</li>
-      <li>Change FileType to MultiMarkdown to avoid conflicts with other Markdown plugins for syntax highlighting</li>
-      <li>Change Settings Sample Text syntax highlighting is now always done with all optional extensions except Force Item Para and HTML Suppression to make all atttributes show up in the sample</li>
-      <li>Change default style sheet defines ordered list styles like GitHub: 1. - decimal, 2. lower-roman, 3. lower-alpha</li>
-    </ul>
-    <ul><h3><b>1.0.17</b></h3>
-      <li>Fix styles for loose task list items spacing not being the same for first and following items</li>
-      <li>Fix task list items checkbox to be disabled, look closer to GitHub's</li>
-      <li>Add task item marker and task item marker (done) style attributes to settings</li>
-      <li>Change Custom CSS text area now uses CSS syntax highlighting and shows line numbers</li>
-      <li>Change Task list HTML conversion now done in pegdown</li>
-    </ul>
-    <ul><h3><b>1.0.16</b></h3>
-      <li>Fix potential conflict with old Markdown plugin by prefixing all classes with MultiMarkdown</li>
-      <li>Change HTML Text tab is now an IDEA syntax highlighting text view</li>
-    </ul>
-    <ul><h3><b>1.0.15</b></h3>
-      <li>Add Separate Setext header styles</li>
-      <li>Fix highlighting not working on version 14.1, due to plugin.xml change</li>
-    </ul>
-    <ul><h3><b>1.0.14</b></h3>
-      <li>Fix Scratch files were not recognized as MultiMarkdown files</li>
-      <li>Fix Implement a Lexer so that expected IntelliJ functionality can be implemented</li>
-      <li>Fix Sample Text not working in Settings/Editor/Colors &amp; Fonts</li>
-      <li>Fix TODO's. Now working in comments like: &lt;!-- TODO: this is a todo item --&gt;</li>
-      <li>Add Option to trim trailing spaces from Markdown files. Previously it was disabled.</li>
-    </ul>
-    <ul><h3><b>1.0.13</b></h3>
-      <li>Fix Compound Definition list parsing. (pegdown)</li>
-      <li>Fix syntax highlighting for nested list elements would get out of sync with source. (pegdown)</li>
-      <li>Add Darcula default settings for syntax highlighting</li>
-      <li>Add Darcula CSS style sheet for HTML Preview</li>
-      <li>Add Force Loose List Items option to force a list item/definition term to be loose if it is more than a simple paragraph. (pegdown)</li>
-      <li>Add Header Space option to require a space after # for Atx Headers</li>
-      <li>Add Relaxed HRules to not require a blank line after a horizontal ruler, GitHub style</li>
-      <li>Change Tighten Definition list styles</li>
-      <li>Change Default Bullet list and Ordered list color to match Default Definition list color</li>
-    </ul>
-    <ul><h3><b>1.0.12</b></h3>
-      <li>Add separate color setting for strikethrough, italic and bold lead/trail marker than the contained text</li>
-      <li>Add Smart character and Smart Quote color settings</li>
-      <li>Add default color definitions for Default color scheme. Darcula in the next few days.</li>
-      <li>Fix source range discrepancies for definition, list, html block, ... (pegdown)</li>
-      <li>Fix special character now only escaped with \ and takes selected extension options, ... (pegdown)</li>
-      <li>Fix table caption not syntax highlighting, (pegdown)</li>
-    </ul>
-    <ul><h3><b>1.0.11</b></h3>
-      <li>Fix syntax highlighting broken since forking to a new plugin</li>
-      <li>Fix syntax highlighting for elements at the end of a file which missing a new line</li>
-      <li>Fix Setext headers with trailing blanks would not be recognized (pegdown)</li>
-      <li>Fix syntax highlighting to handle all permutations of strikeout, bold and italic</li>
-      <li>Add Table odd/even row and odd/even column syntax highlighting</li>
-    </ul>
-    <ul><h3><b>1.0.10</b></h3>
-      <li>Change default style sheet to make fonts relative to the one and only set in px, clean up ignored attributes</li>
-      <li>Change plugin.xml to display description and change-notes in the settings dialog, plug-in info panel</li>
-      <li>Add Automatic generation of anchor links in headers in settings, pegdown ANCHORLINKS extension</li>
-      <li>Add 2x icons and dracula themed ones</li>
-      <li>Fixed default file extension was missing 'markdown'</li>
-      <li>Add HTML Text view to show generated HTML
+        <h3>1.2.3.1 - Bug Fixes and Enhancements</h3>
+        <h4>Basic Edition &amp; Enhanced</h4>
         <ul>
-          <li>Enable disable the HTML Text view in settings. Will need to reopen markdown files to take effect.</li>
-          <li>Can show HTML as generated by pegdown or modified for idiosyncrasies of the HTMLEditorKit used to render the preview pane.</li>
+            <li>Update Sources for latest Kotlin compatibility</li>
+            <li>Add Pegdown timeout exception handling to prevent ide hanging during indexing</li>
+            <li>Change default pegdown parse timeout to 200 ms to prevent erroneous   parsing from hanging the UI.</li>
         </ul>
-    </ul>
-    <ul><h3><b>1.0.9</b></h3>
-      <li>Fix null pointer exception when following a malformed link</li>
-      <li>Change document icon</li>
-    </ul>
-    <ul><h3><b>1.0.8</b></h3>
-      <li>Add header space option, which requires a space between # and the title for headers GFM style</li>
-      <li>Fix fenced code without preceding blank line would become a code block embedded in the paragraph (pegdown)</li>
-    </ul>
-    <ul><h3><b>1.0.7</b></h3>
-      <li>Fixed definition list parsing broken by last fix in pegdown</li>
-      <li>Fixed loose list items ignored the next blank line and were loose only if they contained other blocks in pegdown</li>
-      <p>Now nested lists with paragraphs and code blocks are generated like GitHub but with better control over loose/tight lists.</p>
-    </ul>
-    <ul><h3><b>1.0.6</b></h3>
-      <li>Fixed list parser bugs in pegdown-1.5.0 and included the fixed jar in the plug-in.
-        <p>Now nested lists with paragraphs and code blocks are generated identical to GitHub.</p>
-      </li>
-    </ul>
-    <ul><h3><b>1.0.5</b></h3>
-      <li>Change generated HTML to use span instead of del for strikethrough to control the look through CSS</li>
-      <li>Change max img width of 0 disables resizing</li>
-      <li>Fix tables had width=100%, removed</li>
-      <li>Add GitHub style task list items, ones starting with [], [ ] or [x] and associated settings options</li>
-    </ul>
-    <ul><h3><b>1.0.4</b></h3>
-      <li>Change generated HTML to use span instead of del for strikethrough to control the look through CSS</li>
-      <li>Change max img width of 0 disables resizing</li>
-    </ul>
-    <ul><h3><b>1.0.3</b></h3>
-      <li>Change generated HTML to use div instead of hr to control the look through CSS</li>
-      <li>Tweak document icon</li>
-    </ul>
-    <ul><h3><b>1.0.2</b></h3>
-      <li>Change document icon</li>
-      <li>Fix use Application invokeLater, instead of SwingUtil</li>
-    </ul>
-    <ul><h3><b>1.0.1</b></h3>
-      <li>Fork source into its own plug-in: MultiMarkdown</li>
-      <li>Add settings for update delay, img max-width</li>
-      <li>Add custom Css text area in settings and also ability to use defaults and load defaults for editing</li>
-    </ul>
-    <ul><h3><b>1.0.0</b></h3>
-      <li>Limit images to 1000 pixels wide, resize if larger</li>
-      <li>Fix table to be striped</li>
-    </ul>
-    <ul><h3><b>0.9.8</b></h3>
-      <li>Fix no refresh on settings change</li>
-      <li>Update pegdown to 1.5.0 and parboiled to 1.1.7.</li>
-    </ul>
-    <ul><h3><b>0.9.7</b></h3>
-      <li>Forked from <a href="https://github.com/nicoulaj/idea-markdown">idea-markdown</a></li>
-    </ul>
-    <p>&nbsp;</p>
-    ]]></change-notes>
+        <h3>1.2.3 - Bug Fixes and Enhancements</h3>
+        <h4>Basic Edition &amp; Enhanced</h4>
+        <ul>
+            <li>Change: default JavaFX preview font order to have Helvetica before Arial, cleaner text rendering.</li>
+            <li>Fix #73: self referencing links with 'Show Modified' not selected do not generate correct HTML.</li>
+            <li>Change: update JavaFX preview to new GitHub style, wider pages.</li>
+            <li>Add: inspections when wiki pages are linked with file extension, they will display raw text not rendered HTML</li>
+            <li>Fix: anchor links markdown extension was always enabled when 'Use Old Preview' was selected, regardless of preferences settings</li>
+            <li>Add: fork and raw GitHub link to be recognized</li>
+            <li>Add: line icon to show multiple resolved targets</li>
+            <li>Change: preferences for the plugin are now split between local, non-roaming persistence in multimarkdown.local.xml and shared roaming persistence in multimarkdown.shared.xml. Preferences from multimarkdown.xml are migrated to new files and the file is deleted.</li>
+        </ul>
+        <h4>Enhanced Edition</h4>
+        <ul>
+            <li>Change: new implementation of file link resolving logic handles a full set of GitHub idiosyncrasies for relative links, raw/blob access, absolute https:// links, file extensions and case sensitivity.</li>
+            <li>Add: new annotation inspections for common errors in link resolution</li>
+            <li>New: modified HTML now has all links as URI's during rendering with preference to GitHub repository file when available, fallback to local file://</li>
+            <li>Fix: added validation for invalid PsiElements during refactoring to prevent exceptions</li>
+            <li>Fix: all link refactoring for file move/rename adjusts affected link according to GitHub rules</li>
+            <li>Add: warning annotation in text editor, link color and image border in preview when a link target is not on GitHub according to its status</li>
+            <li>Add: intention to change relative to absolute link addresses and vice-versa</li>
+            <li>Add: validation of absolute links that look like they are targeting files in the same repository as the containing file</li>
+            <li>Add: navigation line items for absolute links that resolve to files</li>
+            <li>Add: absolute address link completions and link completions based on extensions other than markdown for wiki and explicit and images for image links, just add file:// or https:// in front to get url completions and an extension without a file name to get extension based completions. <code>https://.java</code> will show java files with https:// absolute link address.</li>
+            <li>Fix #71: license information is now saved in multimarkdown.local.xml and is marked as non-roaming</li>
+            <li>Add: handle relative image links in wiki pages must resolve to raw file access in main repository default behavior and validation</li>
+            <li>Add: automatically change wiki link to explicit link if target file is moved out of wiki link access range</li>
+            <li>Add: refactoring now keeps link format as it was before, if it was absolute or page relative.</li>
+        </ul>
+        <h3>1.2.2 - Bug Fixes and Enhancements</h3>
+        <h4>Basic Edition &amp; Enhanced</h4>
+        <ul>
+            <li>Add a change to quick fix on an unresolved link will apply the same change to all links that match the link being modified.</li>
+            <li>Add annotation if wiki link ends in .md, with quick fix to remove .md extension</li>
+            <li>Fix #60: use another class for string to input stream conversion that is universally support across os types.</li>
+            <li>Fix #62: Plugin exhausted thread resources if a lot of projects were open</li>
+            <li>Fix #63: Unresolved links were not always highlighted as error</li>
+            <li>Fix #65: threading issues causing slow preview update and other intermittent errors.</li>
+            <li>Fix #67: change message for not finding javafx from warning to info.</li>
+            <li>Fix #70: closed to to task list items with capital x <code>- [X]</code> would not render correctly in the WevView preview.</li>
+            <li>Fix link resolution did not work if non-default Markdown extension was used on Wiki pages</li>
+            <li>Fix link resolution in preview to match the rules for markdown source</li>
+            <li>Fix wiki link with multiple matched targets would not resolve according to sort order</li>
+            <li>Fix wiki link with multiple matched targets would show quick fix to rename unreachable targets</li>
+            <li>Fix wiki links with subdirectory references did not show annotation popup or quick fix to remove directory</li>
+            <li>Fix buy license button in settings navigated to the get trial license page instead of the full license page.</li>
+        </ul>
+        <h4>Enhanced Edition</h4>
+        <ul>
+            <li>Add validation for relative links accessing wiki raw content by using the Wiki page link with extension.</li>
+            <li>Add validation of all explicit relative links from the main repository to wiki files.</li>
+            <li>Add warning when a file is a target of a link but is not on GitHub.</li>
+            <li>Fix #64: class cast exception in explicit link.</li>
+            <li>Fix link errors in source, preview and click actions are now in agreement</li>
+            <li>Fix link resolution was not always consistent with GitHub</li>
+            <li>Fix license registration failing in version 133.1711 for lack of methods in some classes.</li>
+            <li>Fix intention to change wiki link to explicit and vice-versa.</li>
+        </ul>
+        ]]></change-notes>
 
     <project-components>
         <!-- Plugin's project components -->

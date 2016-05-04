@@ -24,9 +24,13 @@ Setting up the project in Intellij IDEA
 Note
 ----
 
-This plug-in is using a modified version of [sirthias/pegdown](https://github.com/sirthias), I post my PR's but there is a delay in both generating them and for them to be merged.
-I added a few changes and extensions to the parser. For now I am using my forked copy until the official version has these features.
+This plug-in is using a modified version of [sirthias/pegdown](https://github.com/sirthias). The
+jar is included in the lib directory of this project.
 
-If you are not modifying pegdown then you can build idea-multimarkdown with the included pegdown .jar in the lib directory. Otherwise, you will need to get the pegdown source used in this plug-in from [vsch/pegdown](https://github.com/vsch/pegdown/tree/develop).
+If you are not modifying pegdown then you can build idea-multimarkdown with the included pegdown
+.jar in the lib directory. Otherwise, you will need to get the pegdown source used in this
+plug-in from [vsch/pegdown](https://github.com/vsch/pegdown/tree/develop).
 
-                    
+I had had to be jarjar the parboiled libraries and asm4 library otherwise they would conflict in
+tests which would prevent running pegdown in test cases. The rules, script and original libraries
+are included in the `preplib` directory.

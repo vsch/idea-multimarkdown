@@ -42,17 +42,17 @@ import kotlin.text.RegexOption
 class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containingFile: FileRef, branchOrTag: String? = null) : LinkResolver(projectResolver, containingFile, branchOrTag) {
 
     companion object {
-        @JvmStatic @JvmField val GITHUB_BLOB_NAME = "blob"
-        @JvmStatic @JvmField val GITHUB_FORK_NAME = "fork"
-        @JvmStatic @JvmField val GITHUB_GRAPHS_NAME = "graphs"
-        @JvmStatic @JvmField val GITHUB_ISSUES_NAME = "issues"
-        @JvmStatic @JvmField val GITHUB_PULLS_NAME = "pulls"
-        @JvmStatic @JvmField val GITHUB_PULSE_NAME = "pulse"
-        @JvmStatic @JvmField val GITHUB_RAW_NAME = "raw"
-        @JvmStatic @JvmField val GITHUB_WIKI_NAME = "wiki"
+        @JvmStatic val GITHUB_BLOB_NAME = "blob"
+        @JvmStatic val GITHUB_FORK_NAME = "fork"
+        @JvmStatic val GITHUB_GRAPHS_NAME = "graphs"
+        @JvmStatic val GITHUB_ISSUES_NAME = "issues"
+        @JvmStatic val GITHUB_PULLS_NAME = "pulls"
+        @JvmStatic val GITHUB_PULSE_NAME = "pulse"
+        @JvmStatic val GITHUB_RAW_NAME = "raw"
+        @JvmStatic val GITHUB_WIKI_NAME = "wiki"
 
         // IMPORTANT: keep alphabetically sorted. These are not re-sorted after match
-        @JvmStatic @JvmField val GITHUB_LINKS = arrayOf(
+        @JvmStatic val GITHUB_LINKS = arrayOf(
                 GITHUB_BLOB_NAME,
                 GITHUB_FORK_NAME,
                 GITHUB_GRAPHS_NAME,
@@ -63,7 +63,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                 GITHUB_WIKI_NAME
         )
 
-        @JvmStatic @JvmField val GITHUB_NON_FILE_LINKS = arrayOf(
+        @JvmStatic val GITHUB_NON_FILE_LINKS = arrayOf(
                 GITHUB_FORK_NAME,
                 GITHUB_GRAPHS_NAME,
                 GITHUB_ISSUES_NAME,
@@ -71,7 +71,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                 GITHUB_PULSE_NAME
         )
 
-        @JvmStatic @JvmField val GITHUB_TARGET_LINKS = arrayOf(
+        @JvmStatic val GITHUB_TARGET_LINKS = arrayOf(
                 GITHUB_FORK_NAME,
                 GITHUB_GRAPHS_NAME,
                 GITHUB_ISSUES_NAME,
@@ -578,7 +578,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                     val fileName = targetRef.filePath.substring(remoteUrl.suffixWith('/').length)
                     if (fileName in GITHUB_NON_FILE_LINKS) {
                         return when {
-                            containingFile.isWikiHomePage, containingFile.isUnderWikiDir -> "../" + fileName
+                            containingFile.isWikiHomePage || containingFile.isUnderWikiDir -> "../" + fileName
                             else -> PathInfo.relativePath(containingFile.path, projectBasePath.suffixWith('/'), withPrefix = true) + "../../" + fileName
                         }
                     } else {
@@ -600,7 +600,7 @@ class GitHubLinkResolver(projectResolver: LinkResolver.ProjectResolver, containi
                                     val oldGitHubLink = match.groups[0]
                                     val oldBranchOrTag = match.groups[1]
                                     // we throw out the branch if one is given to us or if linking from another file in the repo, its branch or tag will be used by GitHub
-                                    var fileNamePart = fileName.substring(match.range.end + 1)
+                                    var fileNamePart = fileName.substring(match.range.endInclusive + 1)
                                     val filePath = when {
                                         containingFile.isWikiHomePage -> "$oldGitHubLink/${branchOrTag ?: oldBranchOrTag ?: "master"}/" + fileNamePart
                                         containingFile.isUnderWikiDir -> "../$oldGitHubLink/${branchOrTag ?: oldBranchOrTag ?: "master"}/" + fileNamePart

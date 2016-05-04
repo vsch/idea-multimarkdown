@@ -65,7 +65,7 @@ open class LinkRef(val containingFile: FileRef, fullPath: String, anchorTxt: Str
         get() {
             when {
                 ext in IMAGE_EXTENSIONS -> return IMAGE_EXTENSIONS
-                ext.isEmpty(), ext in MARKDOWN_EXTENSIONS -> return MARKDOWN_EXTENSIONS
+                ext.isEmpty() || ext in MARKDOWN_EXTENSIONS -> return MARKDOWN_EXTENSIONS
                 else -> return arrayOf(ext, *MARKDOWN_EXTENSIONS)
             }
         }
@@ -77,7 +77,7 @@ open class LinkRef(val containingFile: FileRef, fullPath: String, anchorTxt: Str
 
     val remoteURL: String? by lazy {
         if (targetRef is ProjectFileRef) {
-            targetRef.gitHubVcsRoot?.getBaseUrl().suffixWith('/') + filePath + anchorText
+            targetRef.gitHubVcsRoot?.baseUrl.suffixWith('/') + filePath + anchorText
         } else if (isExternal) {
             filePath + anchorText
         } else {
@@ -178,7 +178,7 @@ open class LinkRef(val containingFile: FileRef, fullPath: String, anchorTxt: Str
         }
 
         // char in file name to link map
-        @JvmStatic @JvmField
+        @JvmStatic
         val fileUrlMap = mapOf<String, String>(
                 Pair("%", "%25"), // IMPORTANT: must be first in list otherwise will replace % of url encoded entities
                 Pair(" ", "%20"),
@@ -273,7 +273,7 @@ open class WikiLinkRef(containingFile: FileRef, fullPath: String, anchor: String
             return "(?:\\Q" + linkText.replace(wikiLinkMatchRegex, "\\\\E(?:-| )\\\\Q") + "\\E)"
         }
 
-        @JvmStatic @JvmField
+        @JvmStatic
         val wikiLinkMap = mapOf<String, String>(
                 Pair(" ", "-"),
                 Pair("+", "-"),

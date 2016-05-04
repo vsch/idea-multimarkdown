@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Kotlin2JsCompilerArguments">
+    <option name="sourceMap" value="true" />
+  </component>
+  <component name="KotlinCommonCompilerArguments">
+    <option name="suppressWarnings" value="true" />
+  </component>
+</project>
