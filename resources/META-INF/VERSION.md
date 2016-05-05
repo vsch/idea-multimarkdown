@@ -1,17 +1,23 @@
-### 1.5.0.2 - Bug Fix & Optimization Release
+### 1.5.0.4 - Bug Fix & Optimization Release
 
 #### Basic & Enhanced Editions
 
+-  
 
 #### Enhanced Edition
 
-* Add emoji text to icon conversion for preview. Default is enabled. Optionally can have image
-  url point to GitHub for those that want to generate a stand alone file from the preview HTML
-  text and don't want to lug the 860+ icons for emoji with the file.
+* Add emoji text to icon conversion for preview, see:
+  [Emoji Cheat Sheet](http://emoji-cheat-sheet.com/) . Default is enabled. Optionally can have
+  image url point to GitHub for those that want to generate a stand alone file from the preview
+  HTML text and don't want to lug the 860+ icons for emoji with the file.
 * Fix: inline elements were not syntax highlighted in footnote text. This also resulted in no
   completions, validation or intentions being available in footnote text.
-* Fix: toolbar table actions are not updated for enable/disable state if the current table is
-  >100 lines, to prevent excessive cursor travel delays.
+* Change: toolbar table actions will not be updated for enable/disable state if the current
+  table is \>100 lines, to prevent excessive cursor movement delays.
+* Fix: Load license from server dialog had get trial license title.
+* Fix: #233, Usages of files are not found if the link url encoding did not equal the original
+  file name.
+* Fix: emoji not being translated in Swing preview.
 
 ### 1.5.0 - Bug Fix & Optimization Release
 
@@ -225,8 +231,8 @@
 
 #### Basic & Enhanced Editions
 
-- Fix: #164, PyCharm & RubyMine highlight a single space at the end of the line as Markdown HARD
-  BREAK
+- Fix: #164, PyCharm & RubyMine highlight a single space at the end of the line as Markdown `HARD
+  BREAK`
 - Fix: #167, NoSuchMethodError when typing text
 - Fix: #169, IndexOutOfBoundsException chars sequence.length:5, start:-1, end:5
 - Add: external annotator to reduce typing delay.
