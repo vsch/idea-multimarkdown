@@ -1,13 +1,13 @@
-### 1.5.0.4 - Bug Fix & Optimization Release
+### 1.5.0.10 - Bug Fix & Optimization Release
 
 #### Basic & Enhanced Editions
 
--  
+- 
 
 #### Enhanced Edition
 
 * Add emoji text to icon conversion for preview, see:
-  [Emoji Cheat Sheet](http://emoji-cheat-sheet.com/) . Default is enabled. Optionally can have
+  [Emoji Cheat Sheet](http://emoji-cheat-sheet.com/). Default is enabled. Optionally can have
   image url point to GitHub for those that want to generate a stand alone file from the preview
   HTML text and don't want to lug the 860+ icons for emoji with the file.
 * Fix: inline elements were not syntax highlighted in footnote text. This also resulted in no
@@ -18,19 +18,21 @@
 * Fix: #233, Usages of files are not found if the link url encoding did not equal the original
   file name.
 * Fix: emoji not being translated in Swing preview.
+* Fix: image links and ref images in a link text element would not show completions
+* Add: Emoji completions and annotations of invalid or ones missing on GitHub.
 
 ### 1.5.0 - Bug Fix & Optimization Release
 
 #### Basic & Enhanced Editions
 
-- Add: patch release and eap update streams 
-- Fix: syntax highlighting inline elements in definition text 
+- Add: patch release and eap update streams
+- Fix: syntax highlighting inline elements in definition text
 - Add: HTML entity syntax highlighting.
 - Fix: Comments with todo items would not show up in to do list when syntax highlighting was set
   to annotator. Now comments are parsed by the plain text lexer used to disable lexer syntax
-  highlighting. 
+  highlighting.
 - Fix: update highlight.js to version 9.3.0 and include all available languages.
-- Add: live templates starting with `.` 
+- Add: live templates starting with `.`
 
     | Element       | Abbreviation    | Expansion                                               |
     |---------------|-----------------|---------------------------------------------------------|
@@ -56,23 +58,23 @@
   Query strings are also stripped from the link address before looking for an extension.
 * Fix: #199, Multi-line image URLs not parsed correctly when terminating ) is followed by white
   space characters file and without EOL.
-* Fix: #201, Image link completion in wiki pages leaves out subdirectories 
+* Fix: #201, Image link completion in wiki pages leaves out subdirectories
 * Fix: #211, Completions for some empty link elements show no suggestions.
 * Add: highlighting of auto-inserted `*`, `_` or `~` that would be deleted if a space is typed.
-* Change: Auto-format table on typing and smart `*` `~` duplication to be off by default. 
+* Change: Auto-format table on typing and smart `*` `~` duplication to be off by default.
 * Add: Auto inserted `*`, `_` and `~` that will be deleted by typing a space are now colored in
   the scheme's comment color to highlight that they can be deleted by typing a space
 * Fix: block quote prefix on fenced code would not be stripped off. Prefix needs to be
   consistent on all the lines for the prefix to be properly stripped for the injected language
-  fragment. 
-    
+  fragment.
+
 * **List editing features**
     * Add: #210, List item un-indent/indent toolbar buttons, and actions. List item
-      un-indent/indent toolbar buttons, assigned to Ctrl-Y/Ctrl-U respectively. 
+      un-indent/indent toolbar buttons, assigned to Ctrl-Y/Ctrl-U respectively.
     * Fix: #209, lines ending in `* ` or `- ` would be erroneously handled as empty list items
       by <kbd>BACKSPACE</kbd> handler.
-    * Fix: second list items would not enable the indent list action. 
-    
+    * Fix: second list items would not enable the indent list action.
+
 * **Table editing features**
     * Fix: #212, Table formatting while typing sometimes causes the cursor to jump erratically
       to end of table.
@@ -99,9 +101,9 @@
       and wrap on typing and auto-format table are turned off to prevent messing up the format.
     * Fix: Adjust caret to be at the pipe symbol when typing before the first table column.
       Otherwise indentation could be changed causing the table to no longer be valid.
-    
+
 * **Auto-format and Wrap on typing features**
-    * Add: Toolbar buttons for toggle Auto-format and toggle wrap on typing. 
+    * Add: Toolbar buttons for toggle Auto-format and toggle wrap on typing.
     * Fix: #202, Plain text paragraphs that have indentation spaces do not get properly wrapped
       as you type.
     * Fix: made wiki link elements non-wrap so that they will not be wrapped across lines.
@@ -131,10 +133,10 @@
       disabled.
     * Add: logic to disable `wrap on typing` when a block is not terminated by a blank line and
       the following block can be potentially merged into the paragraph.
-    
+
 * **Typing response optimizations**
     * Fix: #19, Optimize typing response with or without wrap on typing and table reformat
-    * minimize updates to unchanged parts of the paragraph or table 
+    * minimize updates to unchanged parts of the paragraph or table
     * handle IDE skipping calls to handlers when fast typing (or rolling forehead on the
       keyboard).
     * HTML generation was not disabled when only main editor was shown. This would cause
@@ -142,9 +144,9 @@
       you want to use lexer based syntax highlighting you will need to change it in
       settings/preferences.
     * disabled html generation when preview is not shown
-    
+
     Fastest typing response is achieved when:
-    
+
     * syntax highlighting is turned off
     * wrap on typing is disabled
     * auto-format tables is disabled
@@ -177,7 +179,7 @@
 * Add: table formatting via the format toolbar button
 * Add: table formatting option to format as you type in table separator line
 
-### 1.4.9 - Bug Fix & Optimization Release 
+### 1.4.9 - Bug Fix & Optimization Release
 
 #### Basic & Enhanced Editions
 
