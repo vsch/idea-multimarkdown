@@ -74,10 +74,12 @@ hanging issues resulting in many complaints about the plugin causing degraded ID
 Reason for the choice is detailed in:
 [Pegdown - Achilles heel of the MultiMarkdown plugin](http://vladsch.com/blog/15).
 
-Latest Developments: Version 1.5.0
+Latest Developments: Version 1.6.0
 ----------------------------------
 
 For a full list see the [Version Notes]
+
+Emoji support added to preview.
 
 Toolbar, Live Template and Table editing improved. See
 [Enhanced Features](../../wiki/Enhanced-Features). 
