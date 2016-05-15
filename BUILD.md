@@ -3,8 +3,9 @@ Building from sources
 
 First of all, clone the project:
 
-    git clone git://github.com/vsch/idea-multimarkdown.git
-
+```bash
+git clone git://github.com/vsch/idea-multimarkdown.git
+```
 
 Setting up the project in Intellij IDEA
 ---------------------------------------

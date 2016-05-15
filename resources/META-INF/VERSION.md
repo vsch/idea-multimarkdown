@@ -1,15 +1,17 @@
-### 1.5.0.10 - Bug Fix & Optimization Release
+### 1.6.0 - Name Change Release
 
 #### Basic & Enhanced Editions
 
-- 
-
-#### Enhanced Edition
-
-* Add emoji text to icon conversion for preview, see:
+- Change: plugin name changed to Markdown Navigator
+- Add: emoji text to icon conversion for preview, see:
   [Emoji Cheat Sheet](http://emoji-cheat-sheet.com/). Default is enabled. Optionally can have
   image url point to GitHub for those that want to generate a stand alone file from the preview
   HTML text and don't want to lug the 860+ icons for emoji with the file.
+- Fix: emoji shortcut non_potable_water to non-potable_water. 
+- Fix: emoji not being translated in Swing preview.
+
+#### Enhanced Edition
+
 * Fix: inline elements were not syntax highlighted in footnote text. This also resulted in no
   completions, validation or intentions being available in footnote text.
 * Change: toolbar table actions will not be updated for enable/disable state if the current
@@ -17,9 +19,10 @@
 * Fix: Load license from server dialog had get trial license title.
 * Fix: #233, Usages of files are not found if the link url encoding did not equal the original
   file name.
-* Fix: emoji not being translated in Swing preview.
 * Fix: image links and ref images in a link text element would not show completions
 * Add: Emoji completions and annotations of invalid or ones missing on GitHub.
+* Fix: valid emoji text characters to include `+` and `-`
+* Add: code style settings migration from MultiMarkdown to MarkdownNavigator
 
 ### 1.5.0 - Bug Fix & Optimization Release
 

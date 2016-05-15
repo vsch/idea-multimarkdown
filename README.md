@@ -1,19 +1,19 @@
-idea-multimarkdown
+Markdown Navigator
 ==================
        
-idea-multimarkdown plugin provides **[Markdown] language support for [IntelliJ IDEA],
-[RubyMine], [PhpStorm], [WebStorm], [PyCharm], [AppCode], [Android Studio], [CLion] and
-[DataGrip].**
+Markdown Navigator plugin provides **[Markdown] language support for [IntelliJ IDEA], [RubyMine],
+[PhpStorm], [WebStorm], [PyCharm], [AppCode], [Android Studio], [CLion] and [DataGrip].**
 
 **You can download it on the [JetBrains plugin page].**
 
-#### Plugin Name Change
+#### Plugin Name Has Changed
 
-The plugin name will be changing in the next release to avoid confusion and name infringement on
-[Fletcher T. Penney's MultiMarkdown] project. The plugin id used for updates will not change but
-the displayed name will change from **idea-multimarkdown** and **MultiMarkdown** to **Markdown
-Navigator**. Additionally, the language supported by the plugin will change to **[Markdown]**
-from **MultiMarkdown**.
+The plugin name was changed to avoid name infringement on [Fletcher T. Penney's MultiMarkdown]
+project. The plugin id used for updates has not changed but the displayed name has changed from
+**idea-multimarkdown** and **MultiMarkdown** to **Markdown Navigator**. Additionally, the
+language supported by the plugin was changed to **[Markdown]** from **MultiMarkdown**. For
+details see
+[Settings Affected by Plugin Name Change](../../wiki/Settings-Affected-by-Plugin-Name-Change)
 
 #### Plugin Benefits
 
@@ -88,14 +88,39 @@ You can create and edit a markdown table with ease:
 
 ### Still Great GitHub Rendering Resemblance for your preview pleasure
 
-![Screen Shot Jfx WebView](/assets/images/ScreenShot_jfx_webview.png)
+![Screen Shot Jfx WebView](/assets/images/faq/ScreenShot_jfx_webview.png)
 
-Plugins that are a great compliment to idea-multimarkdown
----------------------------------------------------------
+### Split your editor and see the preview as you type
 
-[.gitignore] to add `.gitignore` file brains to the IDE and allows idea-multimarkdown to show
-files and links to files that will only resolve locally because they are not under git vcs.
-                                                        
+![idea-multimarkdown](/assets/images/faq/ScreenShot_preview.png) 
+
+### Peek at the HTML
+
+![idea-multimarkdown-settings](/assets/images/faq/ScreenShot_preview_html.png)
+
+#### Change options, customize the syntax colors and CSS to your liking.
+
+![Screen Shot Settings Intentions](/assets/images/faq/Screenshot_Intentions.png) 
+
+![Screen Shot Settings Color](/assets/images/faq/Screenshot_Colors_and_Fonts.png) 
+
+![Screen Shot Settings Markdown](/assets/images/faq/Screenshot_Main_licensed.png) 
+ 
+![Screen Shot Settings Parser](/assets/images/faq/Screenshot_Parser.png) 
+
+![Screen Shot Settings Css](/assets/images/faq/Screenshot_Stylesheet.png) 
+
+![Screen Shot Settings Html](/assets/images/faq/Screenshot_Html.png) 
+
+Working with the source
+-----------------------
+
+This plugin is using a modified version of [sirthias], I post my PR's but there is always a
+delay in both generating them and for them to be merged. Additionally, some changes are specific
+to this plugin and have no wide appeal.
+
+The pegdown source used in this plugin can be found [vsch/pegdown]. 
+
 The Background
 --------------
 
@@ -120,44 +145,6 @@ new extension. Finally, to help me with debugging and generating test expectatio
 
 It has been a fun trip down the rabbit hole of IntelliJ IDEA plugin development that started
 with a simple desire for a Markdown preview that looked like GitHub's.
-
-Screenshots
------------
-
-![idea-multimarkdown-source](/assets/images/ScreenShot_source_preview.png)   
-
-### Split your editor and see the preview as you type
-
-![idea-multimarkdown](/assets/images/ScreenShot_preview.png) 
-
-### Peek at the HTML
-
-![idea-multimarkdown-settings](/assets/images/ScreenShot_peek_html.png)
-
-#### Change options, customize the syntax colors and CSS to your liking.
-
-![Screen Shot Settings Intentions](/assets/images/ScreenShot_settings_intentions.png) 
-
-![Screen Shot Settings Color](/assets/images/ScreenShot_settings_color.png) 
-
-![Screen Shot Settings Markdown](/assets/images/ScreenShot_settings_markdown.png) 
- 
-![Screen Shot Settings Parser](/assets/images/ScreenShot_settings_parser.png) 
-
-![Screen Shot Settings Css](/assets/images/ScreenShot_settings_css.png) 
-
-![Screen Shot Settings Html](/assets/images/ScreenShot_settings_html.png) 
-
-Forking
--------
-
-This plugin is using a modified version of [sirthias], I post my PR's but there is always a
-delay in both generating them and for them to be merged.
-
-I added a few changes and extensions to the parser. For now I am using my forked copy until the
-official version has all the features.
-
-The pegdown source used in this plugin can be found [vsch/pegdown]. 
 
 ---
 
