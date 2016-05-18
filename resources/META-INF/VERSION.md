@@ -1,3 +1,11 @@
+### 1.6.2 - Bug Fix Release
+
+#### Basic & Enhanced Editions
+
+#### Enhanced Edition
+
+* Fix: #233, links to file names with + do not resolve.
+
 ### 1.6.0 - Name Change Release
 
 #### Basic & Enhanced Editions
