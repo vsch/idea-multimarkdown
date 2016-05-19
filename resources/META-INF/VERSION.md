@@ -1,10 +1,12 @@
-### 1.6.2 - Bug Fix Release
+### 1.6.3 - Bug Fix Release
 
 #### Basic & Enhanced Editions
 
 #### Enhanced Edition
 
 * Fix: #233, links to file names with + do not resolve.
+* Add: parser option to not encode/decode `+` in links for compatibility with GitBook.
+* Add: quick fix to create missing file and directories in the path. 
 
 ### 1.6.0 - Name Change Release
 
