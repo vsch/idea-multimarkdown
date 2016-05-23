@@ -1,14 +1,57 @@
-### 1.6.3 - Bug Fix Release
+### 1.6.3.84 - Full PsiTree Parser Changes
 
 #### Basic & Enhanced Editions
 
+- Add: Now combination syntax attributes are created on load to simulate overlay with alpha of
+  various attribute combinations. Colors for these combination attributes are updated when
+  current scheme changes. Changing colors within a color scheme does not generate and update
+  event so if you are changing a color scheme and need the computed combination attribute colors
+  re-computed, select another color scheme, press <kbd>Apply</kbd>, now select your desired
+  color scheme and close the preferences dialog.
+- Change: Inserting a link when there is a selection in the document will use the selected text
+  as the link text and put the caret ready for typing or auto-completing the link.
+- Change: Bold/Italic/Strikethrough actions now will wrap the word if caret is at the end of the
+  word. Easier to make emphasis by typing a word and then invoking the action.
+- Change: Bold/Italic/Strikethrough actions now will un-wrap their corresponding emphasis if
+  caret is right after the trailing marker of the emphasis.
+- Change: removed Lobo browser preview browser option.
+- Add: document structure view
+
+#### Enhanced Edition ####
+
+* Change: implemented full PsiTree building from pegdown AST as transition to pegdown
+  replacement. Introduced bugs fixed:
+    * Move refactoring of contained links was broken
+    * Completions were broken
+    * Completions of elements in header text was broken
+    * Completions of link text was broken
+* Fix: Header ids of headers that contained link or ref links or images would not be generated
+  identical to GitHub.
+* Add: block quote increase/decrease level
+* Change: list item indent/unindent now affects sub-items and renumbers ordered list items.
+* Add: document structure view with Headers, Images, Tables, References and Footnotes sections. 
+* Add: image link text suggestions now strip out file ending of @2x and @2x_dark before building
+  the suggestion list from the file name.
+* Fix: table auto-format to handle arbitrary parent prefixes
+
+### 1.6.3.3 - Bug Fix Patch Release
+
+#### Basic & Enhanced Editions
+
+- Fix: #233, links to file names with + do not resolve.
+- Fix: #234, blurry text in preview mode, now using IDE Editor setting for font smoothing by
+  default and basic version has grey scale font smoothing as an option.
+
 #### Enhanced Edition
 
-* Fix: #233, links to file names with + do not resolve.
 * Add: parser option to not encode/decode `+` in links for compatibility with GitBook.
 * Add: quick fix to create missing file and directories in the path. 
+* Fix: quick fixes that create file or retarget link to display url decoded file path.
+* Change: inline HTML to not split across lines when wrapping text to margins. 
+* Fix: link format change intentions to account for GitBook URL encoding setting
+* Fix: remove URL encoding from URI based format (`file://`) links 
 
-### 1.6.0 - Name Change Release
+### 1.6.1 - Name Change Release
 
 #### Basic & Enhanced Editions
 
@@ -94,7 +137,8 @@
     * Add: #214, Feature: add insert table toolbar button
     * Add: #215, Feature: table insert/delete row/column toolbar buttons
     * Add: #216, On <kbd>ENTER</kbd> insert table row with configuration options
-    * Add: #217, On <kbd>BACKSPACE</kbd> delete empty table row/column with configuration options
+    * Add: #217, On <kbd>BACKSPACE</kbd> delete empty table row/column with configuration
+      options
     * Add: Syntax highlighting colors for table header cells separate from table body cells.
     * Fix: as you type table parsing changed to use pegdown instead of hand rolled parser.
       Handles escaped pipes and pipes in code spans correctly.
@@ -264,5 +308,3 @@
 #### Basic & Enhanced Editions
 
 - Fix: #163, NullPointerException on new files
-
-### 1.4.5 - Bug Fix & Enhancements Release
