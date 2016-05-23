@@ -1,4 +1,4 @@
-### 1.6.3.84 - Full PsiTree Parser Changes
+### 1.6.3.86 - Full PsiTree Parser Changes
 
 #### Basic & Enhanced Editions
 
@@ -25,6 +25,7 @@
     * Completions were broken
     * Completions of elements in header text was broken
     * Completions of link text was broken
+    * Definition wrapping was broken
 * Fix: Header ids of headers that contained link or ref links or images would not be generated
   identical to GitHub.
 * Add: block quote increase/decrease level
