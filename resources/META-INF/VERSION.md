@@ -1,4 +1,4 @@
-### 1.6.3.92 - Full PsiTree Parser Changes
+### 1.6.3.94 - Full PsiTree Parser Changes
 
 #### Basic & Enhanced Editions
 
@@ -15,7 +15,7 @@
 - Change: Bold/Italic/Strikethrough actions now will un-wrap their corresponding emphasis if
   caret is right after the trailing marker of the emphasis.
 - Change: removed Lobo browser preview browser option.
-- Fix: #100, invalidate javafx webview image cache on reload, currently images are not updated
+- Fix: #100, invalidate JavaFX WebView image cache on reload, currently images are not updated
   if they change on disk. Not able to clear the cache but have a workaround. JavaFX WebView
   preview now adds a query parameter to modified image files so that each modification is
   treated as a different file by the WebView file cache. This fixes the problem of the preview
@@ -47,6 +47,8 @@
 * Fix: multi-line image URL to use proper prefix handling
 * Fix: #223, Wrap on typing and Table format do not take actual character widths into account
   for multi-byte characters 
+* Add: Code style option to use actual character width for wrapping and table formatting. On by
+  default.
 
 ### 1.6.3.3 - Bug Fix Patch Release
 
