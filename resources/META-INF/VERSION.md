@@ -1,4 +1,4 @@
-### 1.6.3.90 - Full PsiTree Parser Changes
+### 1.6.3.92 - Full PsiTree Parser Changes
 
 #### Basic & Enhanced Editions
 
@@ -45,6 +45,8 @@
 * Fix: table auto-format to handle arbitrary parent prefixes
 * Fix: fenced code to use proper prefix handling
 * Fix: multi-line image URL to use proper prefix handling
+* Fix: #223, Wrap on typing and Table format do not take actual character widths into account
+  for multi-byte characters 
 
 ### 1.6.3.3 - Bug Fix Patch Release
 
