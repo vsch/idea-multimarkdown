@@ -1,4 +1,4 @@
-### 1.6.3.86 - Full PsiTree Parser Changes
+### 1.6.3.90 - Full PsiTree Parser Changes
 
 #### Basic & Enhanced Editions
 
@@ -15,7 +15,13 @@
 - Change: Bold/Italic/Strikethrough actions now will un-wrap their corresponding emphasis if
   caret is right after the trailing marker of the emphasis.
 - Change: removed Lobo browser preview browser option.
-- Add: document structure view
+- Fix: #100, invalidate javafx webview image cache on reload, currently images are not updated
+  if they change on disk. Not able to clear the cache but have a workaround. JavaFX WebView
+  preview now adds a query parameter to modified image files so that each modification is
+  treated as a different file by the WebView file cache. This fixes the problem of the preview
+  displaying a cached image after modification but will cause WebView to cache more files, an
+  extra copy for each modification.
+- Fix: Markdown Application settings to handle null for UIManager.LookAndFeelInfo.
 
 #### Enhanced Edition ####
 
@@ -26,14 +32,19 @@
     * Completions of elements in header text was broken
     * Completions of link text was broken
     * Definition wrapping was broken
+    * Multi-line image URL injection was broken
+    * Editing injected language fragment of verbatim element 
 * Fix: Header ids of headers that contained link or ref links or images would not be generated
   identical to GitHub.
 * Add: block quote increase/decrease level
 * Change: list item indent/unindent now affects sub-items and renumbers ordered list items.
-* Add: document structure view with Headers, Images, Tables, References and Footnotes sections. 
+* Add: document structure view with Headers, Images, Tables, References, Footnotes sections and
+  Document.
 * Add: image link text suggestions now strip out file ending of @2x and @2x_dark before building
   the suggestion list from the file name.
 * Fix: table auto-format to handle arbitrary parent prefixes
+* Fix: fenced code to use proper prefix handling
+* Fix: multi-line image URL to use proper prefix handling
 
 ### 1.6.3.3 - Bug Fix Patch Release
 
