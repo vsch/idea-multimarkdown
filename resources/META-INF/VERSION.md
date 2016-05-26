@@ -1,4 +1,4 @@
-### 1.6.3.94 - Full PsiTree Parser Changes
+### 1.6.3.96 - Full PsiTree Parser Changes
 
 #### Basic & Enhanced Editions
 
@@ -31,6 +31,8 @@
     * Completions were broken
     * Completions of elements in header text was broken
     * Completions of link text was broken
+    * Completions of wiki links was broken
+    * Wiki link anchor refs were broken
     * Definition wrapping was broken
     * Multi-line image URL injection was broken
     * Editing injected language fragment of verbatim element 
@@ -224,7 +226,7 @@
     * wrap on typing is disabled
     * auto-format tables is disabled
     * all previews are turned off
-
+    
 * **Jekyll front matter handling**
     * Fix: #200, Jekyll front matter is not recognized if the terminating marker is at the end
       of file.
