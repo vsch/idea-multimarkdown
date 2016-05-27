@@ -1,4 +1,4 @@
-### 1.6.3.96 - Full PsiTree Parser Changes
+### 1.6.3.98 - Full PsiTree Parser Changes
 
 #### Basic & Enhanced Editions
 
@@ -51,6 +51,7 @@
   for multi-byte characters 
 * Add: Code style option to use actual character width for wrapping and table formatting. On by
   default.
+* Fix: table insert row on ENTER with soft wrap on would not place the caret on the new row.
 
 ### 1.6.3.3 - Bug Fix Patch Release
 
