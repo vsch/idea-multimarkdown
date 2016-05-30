@@ -1,4 +1,4 @@
-### 1.6.3.106 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
+### 1.6.3.108 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
 
 #### Basic & Enhanced Editions
 
@@ -57,6 +57,7 @@
   character sequences.
 * Add: document format action to reformat and re-arrange elements in current document.
 * Add: abbreviations section to document structure view
+* Fix: ordered list item renumbering was off by blank lines between items
 
 ### 1.6.3.3 - Bug Fix Patch Release
 
