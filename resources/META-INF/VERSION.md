@@ -1,4 +1,4 @@
-### 1.6.3.102 - Full PsiTree Parser Changes
+### 1.6.3.104 - Full PsiTree Parser Changes
 
 #### Basic & Enhanced Editions
 
@@ -22,6 +22,7 @@
   displaying a cached image after modification but will cause WebView to cache more files, an
   extra copy for each modification.
 - Fix: Markdown Application settings to handle null for UIManager.LookAndFeelInfo.
+- Fix: pegdown parser error in abbreviation definition that contains trailing spaces
 
 #### Enhanced Edition ####
 
@@ -54,6 +55,7 @@
 * Fix: table insert row on ENTER with soft wrap on would not place the caret on the new row.
 * Fix: table auto-format on typing was not formatting when using keyboard input for multi-byte
   character sequences. 
+* Add: document format action to reformat and re-arrange elements in current document.
 
 ### 1.6.3.3 - Bug Fix Patch Release
 
