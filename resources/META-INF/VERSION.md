@@ -1,4 +1,4 @@
-### 1.6.3.104 - Full PsiTree Parser Changes
+### 1.6.3.106 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
 
 #### Basic & Enhanced Editions
 
@@ -24,7 +24,7 @@
 - Fix: Markdown Application settings to handle null for UIManager.LookAndFeelInfo.
 - Fix: pegdown parser error in abbreviation definition that contains trailing spaces
 
-#### Enhanced Edition ####
+#### Enhanced Edition
 
 * Change: implemented full PsiTree building from pegdown AST as transition to pegdown
   replacement. Introduced bugs fixed:
@@ -36,7 +36,7 @@
     * Wiki link anchor refs were broken
     * Definition wrapping was broken
     * Multi-line image URL injection was broken
-    * Editing injected language fragment of verbatim element 
+    * Editing injected language fragment of verbatim element
 * Fix: Header ids of headers that contained link or ref links or images would not be generated
   identical to GitHub.
 * Add: block quote increase/decrease level
@@ -49,13 +49,14 @@
 * Fix: fenced code to use proper prefix handling
 * Fix: multi-line image URL to use proper prefix handling
 * Fix: #223, Wrap on typing and Table format do not take actual character widths into account
-  for multi-byte characters 
+  for multi-byte characters
 * Add: Code style option to use actual character width for wrapping and table formatting. On by
   default.
 * Fix: table insert row on ENTER with soft wrap on would not place the caret on the new row.
 * Fix: table auto-format on typing was not formatting when using keyboard input for multi-byte
-  character sequences. 
+  character sequences.
 * Add: document format action to reformat and re-arrange elements in current document.
+* Add: abbreviations section to document structure view
 
 ### 1.6.3.3 - Bug Fix Patch Release
 
@@ -68,11 +69,11 @@
 #### Enhanced Edition
 
 * Add: parser option to not encode/decode `+` in links for compatibility with GitBook.
-* Add: quick fix to create missing file and directories in the path. 
+* Add: quick fix to create missing file and directories in the path.
 * Fix: quick fixes that create file or retarget link to display url decoded file path.
-* Change: inline HTML to not split across lines when wrapping text to margins. 
+* Change: inline HTML to not split across lines when wrapping text to margins.
 * Fix: link format change intentions to account for GitBook URL encoding setting
-* Fix: remove URL encoding from URI based format (`file://`) links 
+* Fix: remove URL encoding from URI based format (`file://`) links
 
 ### 1.6.1 - Name Change Release
 
@@ -83,7 +84,7 @@
   [Emoji Cheat Sheet](http://emoji-cheat-sheet.com/). Default is enabled. Optionally can have
   image url point to GitHub for those that want to generate a stand alone file from the preview
   HTML text and don't want to lug the 860+ icons for emoji with the file.
-- Fix: emoji shortcut non_potable_water to non-potable_water. 
+- Fix: emoji shortcut non_potable_water to non-potable_water.
 - Fix: emoji not being translated in Swing preview.
 
 #### Enhanced Edition
@@ -231,7 +232,7 @@
     * wrap on typing is disabled
     * auto-format tables is disabled
     * all previews are turned off
-    
+
 * **Jekyll front matter handling**
     * Fix: #200, Jekyll front matter is not recognized if the terminating marker is at the end
       of file.
@@ -313,8 +314,8 @@
 
 #### Basic & Enhanced Editions
 
-- Fix: #164, PyCharm & RubyMine highlight a single space at the end of the line as Markdown `HARD
-  BREAK`
+- Fix: #164, PyCharm & RubyMine highlight a single space at the end of the line as Markdown
+  `HARD BREAK`
 - Fix: #167, NoSuchMethodError when typing text
 - Fix: #169, IndexOutOfBoundsException chars sequence.length:5, start:-1, end:5
 - Add: external annotator to reduce typing delay.
