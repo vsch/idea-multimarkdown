@@ -1,4 +1,4 @@
-### 1.6.3.114 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
+### 1.7.0 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
 
 #### Basic & Enhanced Editions
 
@@ -63,6 +63,7 @@
   definitions in the document
 * Fix: block quote indent must always be multiple of 4 spaces.
 * Fix: formatter was not outputting jekyll front matter
+* Fix: formatter with wrap text option disabled would leave non-break spaces in file.
 
 ### 1.6.3.3 - Bug Fix Patch Release
 
