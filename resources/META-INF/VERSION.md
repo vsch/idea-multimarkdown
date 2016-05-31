@@ -1,4 +1,4 @@
-### 1.6.3.108 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
+### 1.6.3.110 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
 
 #### Basic & Enhanced Editions
 
@@ -23,6 +23,7 @@
   extra copy for each modification.
 - Fix: Markdown Application settings to handle null for UIManager.LookAndFeelInfo.
 - Fix: pegdown parser error in abbreviation definition that contains trailing spaces
+- Add: combination attributes for definition term and inline attributes.
 
 #### Enhanced Edition
 
