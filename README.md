@@ -1,8 +1,9 @@
 Markdown Navigator
 ==================
-       
-Markdown Navigator plugin provides **[Markdown] language support for [IntelliJ IDEA], [RubyMine],
-[PhpStorm], [WebStorm], [PyCharm], [AppCode], [Android Studio], [CLion] and [DataGrip].**
+
+Markdown Navigator plugin provides **[Markdown] language support for [IntelliJ IDEA],
+[RubyMine], [PhpStorm], [WebStorm], [PyCharm], [AppCode], [Android Studio], [CLion] and
+[DataGrip].**
 
 **You can download it on the [JetBrains plugin page].**
 
@@ -48,7 +49,7 @@ completions and validation. This makes adding images and manipulating the wiki a
    refactoring, find usages, validation, auto formatting and HTML page customizations are only
    available in the Enhanced licensed version. 30-day free trial licenses are available from
    [idea-multimarkdown] page on my website.
-                                                    
+
 ![Capabilities](/assets/images/capabilities.png)       
 
 ### Updating of the source  
@@ -66,7 +67,7 @@ imagined and it is not leaving me much time to make updates to latest version.
 Release Road Map
 ----------------
 
-I will be changing the [Markdown] parser used by the plugin from [pegdown] to [commonmark-java] 
+I will be changing the [Markdown] parser used by the plugin from [pegdown] to [commonmark-java]
 over the next month or two.
 
 Current implementation using [pegdown][] parser has caused many of the performance and IDE
@@ -74,19 +75,52 @@ hanging issues resulting in many complaints about the plugin causing degraded ID
 Reason for the choice is detailed in:
 [Pegdown - Achilles heel of the MultiMarkdown plugin](http://vladsch.com/blog/15).
 
-Latest Developments: Version 1.6.1
+Latest Developments: Version 1.7.0
 ----------------------------------
 
 For a full list see the [Version Notes]
 
-Emoji support added to preview.
+- **Document Structure View** added with sections for:
+
+    - Headers to show header hierarchy by level  
+      ![Screenshot Structure Headers](assets/images/faq/structure/Screenshot_Structure_Headers.png)
+    - Images with all images in the document
+    - References with all references in the document
+    - Tables with all tables in the document
+    - Abbreviations with all abbreviations in the document
+    - Footnotes with all Footnotes in the document
+    - Document showing all abbreviations, block quotes, footnotes, headers, images, lists,
+      references and tables in the document in the hierarchy and order of their location in the
+      document.  
+      ![Screenshot Structure Document](assets/images/faq/structure/Screenshot_Structure_Document.png)
+
+- **Document format** toolbar button and action to format the document to code style settings.
+  [Document Format Options](../../wiki/Document-Format-Options)
+
+- Dynamically created syntax highlighting attributes to simulate overlay of element style with
+  transparency. This creates consistent colors when multiple attributes are combined, such as
+  inline elements in tables, headers and definition terms.  
+  ![Screenshot Combination Splits](assets/images/faq/Screenshot_combination_splits.png)
+
+    Actual character display font width used for wrapping and table formatting, allowing best
+    alignment for multi-byte characters and proportional fonts:
+
+    With character width taken into account:  
+    ![Screen Shot multibyte sample](assets/images/faq/ScreenShot_multibyte_sample.png)
+
+    Assuming fixed character width:  
+    ![Screen Shot nomultibyte sample](assets/images/faq/ScreenShot_nomultibyte_sample.png)
+
+- **Block Quote** increase/decrease level toolbar buttons and actions.
+
+- **Emoji** support added to preview.
 
 Toolbar, Live Template and Table editing improved. See
-[Enhanced Features](../../wiki/Enhanced-Features). 
+[Enhanced Features](../../wiki/Enhanced-Features).
 
-You can create and edit a markdown table with ease: 
+You can create and edit a markdown table with ease:
 
-![Table Format](assets/images/noload/TableFormat.gif) 
+![Table Format](assets/images/noload/TableFormat.gif)
 
 ### Still Great GitHub Rendering Resemblance for your preview pleasure
 
@@ -94,7 +128,7 @@ You can create and edit a markdown table with ease:
 
 ### Split your editor and see the preview as you type
 
-![idea-multimarkdown](/assets/images/faq/ScreenShot_preview.png) 
+![idea-multimarkdown](/assets/images/faq/ScreenShot_preview.png)
 
 ### Peek at the HTML
 
@@ -102,17 +136,17 @@ You can create and edit a markdown table with ease:
 
 #### Change options, customize the syntax colors and CSS to your liking.
 
-![Screen Shot Settings Intentions](/assets/images/faq/Screenshot_Intentions.png) 
+![Screen Shot Settings Intentions](/assets/images/faq/Screenshot_Intentions.png)
 
-![Screen Shot Settings Color](/assets/images/faq/Screenshot_Colors_and_Fonts.png) 
+![Screen Shot Settings Color](/assets/images/faq/Screenshot_Colors_and_Fonts.png)
 
-![Screen Shot Settings Markdown](/assets/images/faq/Screenshot_Main_licensed.png) 
- 
-![Screen Shot Settings Parser](/assets/images/faq/Screenshot_Parser.png) 
+![Screen Shot Settings Markdown](/assets/images/faq/Screenshot_Main_licensed.png)
 
-![Screen Shot Settings Css](/assets/images/faq/Screenshot_Stylesheet.png) 
+![Screen Shot Settings Parser](/assets/images/faq/Screenshot_Parser.png)
 
-![Screen Shot Settings Html](/assets/images/faq/Screenshot_Html.png) 
+![Screen Shot Settings Css](/assets/images/faq/Screenshot_Stylesheet.png)
+
+![Screen Shot Settings Html](/assets/images/faq/Screenshot_Html.png)
 
 Working with the source
 -----------------------
@@ -121,7 +155,7 @@ This plugin is using a modified version of [sirthias], I post my PR's but there 
 delay in both generating them and for them to be merged. Additionally, some changes are specific
 to this plugin and have no wide appeal.
 
-The pegdown source used in this plugin can be found [vsch/pegdown]. 
+The pegdown source used in this plugin can be found [vsch/pegdown].
 
 The Background
 --------------
@@ -150,8 +184,8 @@ with a simple desire for a Markdown preview that looked like GitHub's.
 
 ---
 
-\* This plugin is based on the [nicoulaj/idea-markdown plugin] by 
-[nicoulaj], which is based on [pegdown] library by [sirthias]. 
+\* This plugin is based on the [nicoulaj/idea-markdown plugin] by [nicoulaj], which is based on
+[pegdown] library by [sirthias].
 
 Markdown Navigator, Copyright (c) 2016, V. Schneider,  
 <http://vladsch.com> All Rights Reserved.
@@ -186,3 +220,4 @@ Markdown Navigator, Copyright (c) 2016, V. Schneider,
 [intellij-markdown]: https://github.com/valich/intellij-markdown 
 [commonmark-java]: https://github.com/atlassian/commonmark-java
 [Fletcher T. Penney's MultiMarkdown]: http://fletcherpenney.net/multimarkdown/
+

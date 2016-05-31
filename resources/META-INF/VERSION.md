@@ -1,4 +1,4 @@
-### 1.6.3.110 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
+### 1.6.3.112 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
 
 #### Basic & Enhanced Editions
 
@@ -59,6 +59,9 @@
 * Add: document format action to reformat and re-arrange elements in current document.
 * Add: abbreviations section to document structure view
 * Fix: ordered list item renumbering was off by blank lines between items
+* Add: definition marker code style option: any, colon, tilde to affect the markers used for
+  definitions in the document
+* Fix: block quote indent must always be multiple of 4 spaces.
 
 ### 1.6.3.3 - Bug Fix Patch Release
 
