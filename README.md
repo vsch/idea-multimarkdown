@@ -102,8 +102,8 @@ For a full list see the [Version Notes]
   inline elements in tables, headers and definition terms.  
   ![Screenshot Combination Splits](assets/images/faq/Screenshot_combination_splits.png)
 
-    Actual character display font width used for wrapping and table formatting, allowing best
-    alignment for multi-byte characters and proportional fonts:
+- Actual character display font width used for wrapping and table formatting, allowing best
+  alignment for multi-byte characters and proportional fonts:
 
     With character width taken into account:  
     ![Screen Shot multibyte sample](assets/images/faq/ScreenShot_multibyte_sample.png)
@@ -115,8 +115,8 @@ For a full list see the [Version Notes]
 
 - **Emoji** support added to preview.
 
-Toolbar, Live Template and Table editing improved. See
-[Enhanced Features](../../wiki/Enhanced-Features).
+- Toolbar, Live Template and Table editing improved. See
+  [Enhanced Features](../../wiki/Enhanced-Features).
 
 You can create and edit a markdown table with ease:
 
