@@ -1,4 +1,4 @@
-### 1.6.3.112 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
+### 1.6.3.114 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
 
 #### Basic & Enhanced Editions
 
@@ -62,6 +62,7 @@
 * Add: definition marker code style option: any, colon, tilde to affect the markers used for
   definitions in the document
 * Fix: block quote indent must always be multiple of 4 spaces.
+* Fix: formatter was not outputting jekyll front matter
 
 ### 1.6.3.3 - Bug Fix Patch Release
 
