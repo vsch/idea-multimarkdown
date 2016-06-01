@@ -1,3 +1,9 @@
+### 1.7.0.1 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
+
+#### Basic & Enhanced Editions
+
+- Fix: #244, NPE upon opening simple markdown file
+
 ### 1.7.0 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
 
 #### Basic & Enhanced Editions
