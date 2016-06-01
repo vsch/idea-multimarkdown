@@ -1,8 +1,12 @@
-### 1.7.0.1 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
+### 1.7.0.2 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
 
 #### Basic & Enhanced Editions
 
 - Fix: #244, NPE upon opening simple markdown file
+
+#### Enhanced Edition
+
+* Fix: #245, Inserting an ordered list item on ENTER with renumbering enabled causes exception
 
 ### 1.7.0 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
 
