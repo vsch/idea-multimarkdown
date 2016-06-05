@@ -1,4 +1,4 @@
-### 1.7.0.2 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
+### 1.7.0.3 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
 
 #### Basic & Enhanced Editions
 
@@ -7,6 +7,9 @@
 #### Enhanced Edition
 
 * Fix: #245, Inserting an ordered list item on ENTER with renumbering enabled causes exception
+* Fix: #246, Auto scroll to source. Swing preview would always scroll to top of page after
+  document modification.
+* Add: preview setting for `Scroll preview to source position` for Swing prevew.
 
 ### 1.7.0 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
 
