@@ -1,8 +1,10 @@
-### 1.7.0.3 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
+### 1.7.0.5 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
 
 #### Basic & Enhanced Editions
 
 - Fix: #244, NPE upon opening simple markdown file
+- Fix: scratch files not recognized as Markdown during editor creation in latest
+  intellij-community builds.
 
 #### Enhanced Edition
 
@@ -10,6 +12,7 @@
 * Fix: #246, Auto scroll to source. Swing preview would always scroll to top of page after
   document modification.
 * Add: preview setting for `Scroll preview to source position` for Swing prevew.
+* Fix: #247, Error and corrupting files, pegdown source position out of range
 
 ### 1.7.0 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
 
