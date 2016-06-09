@@ -1,4 +1,4 @@
-### 1.7.0.5 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
+### 1.7.0.8 - Bug Fixes and Enhancements 
 
 #### Basic & Enhanced Editions
 
@@ -11,8 +11,19 @@
 * Fix: #245, Inserting an ordered list item on ENTER with renumbering enabled causes exception
 * Fix: #246, Auto scroll to source. Swing preview would always scroll to top of page after
   document modification.
-* Add: preview setting for `Scroll preview to source position` for Swing prevew.
+* Add: preview setting for `Scroll preview to source position` for Swing preview.
 * Fix: #247, Error and corrupting files, pegdown source position out of range
+* Add: Loosen/Tighten list toolbar buttons and action to make all items in a list double spaces
+  or single spaced.
+* Fix: add list item will now add task item marker if the current list item has one.
+* Add: task list item toggle done intention, button and action for caret or selection
+* Add: change list item or selection elements to: bullet, ordered, task list button and action
+  for caret or selection. If election contains nothing but paragraphs then convert them to list
+  items. If the selection contains nothing but list items which match the action type then the
+  list items will be converted to paragraphs.
+* Change: bold/italic/strikethrough buttons and actions when removing their markers will not
+  create a selection if the action automatically would automatically select the same text if
+  invoked again.
 
 ### 1.7.0 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
 
@@ -259,11 +270,12 @@
 * **Jekyll front matter handling**
     * Fix: #200, Jekyll front matter is not recognized if the terminating marker is at the end
       of file.
-    * #222 Inspection to detect Jekyll front matter presence in the file, with option to enable
-      or ignore.
-    * Code style option to not splice image and explicit links which are start of line to
-      previous line during paragraph reformatting.
-    * Jekyll front matter folding region and config
+
+        # 222 Inspection to detect Jekyll front matter presence in the file, with option to enable
+        
+    or ignore. * Code style option to not splice image and explicit links which are start of
+    line to previous line during paragraph reformatting. * Jekyll front matter folding region
+    and config
 
 ### 1.4.10 - Bug Fix & Optimization Release
 
