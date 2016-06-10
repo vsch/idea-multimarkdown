@@ -1,4 +1,4 @@
-### 1.7.0.8 - Bug Fixes and Enhancements 
+### 1.7.0.10 - Bug Fixes and Enhancements 
 
 #### Basic & Enhanced Editions
 
@@ -24,6 +24,9 @@
 * Change: bold/italic/strikethrough buttons and actions when removing their markers will not
   create a selection if the action automatically would automatically select the same text if
   invoked again.
+* Fix: first paragraph of a file would not be recognized for list actions unless it had a blank
+  line before.
+* Fix: memory use going high in 2016.3 IDEA and probably other versions of the IDE
 
 ### 1.7.0 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
 

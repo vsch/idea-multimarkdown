@@ -67,18 +67,66 @@ imagined and it is not leaving me much time to make updates to latest version.
 Release Road Map
 ----------------
 
-I will be changing the [Markdown] parser used by the plugin from [pegdown] to [commonmark-java]
-over the next month or two.
-
 Current implementation using [pegdown][] parser has caused many of the performance and IDE
 hanging issues resulting in many complaints about the plugin causing degraded IDE performance.
 Reason for the choice is detailed in:
 [Pegdown - Achilles heel of the MultiMarkdown plugin](http://vladsch.com/blog/15).
 
-Latest Developments: Version 1.7.0
-----------------------------------
+I am changing the [Markdown] parser used by the plugin from [pegdown] to [commonmark-java] this
+month. [commonmark-java] is geared towards HTML generation. It lacks markdown elements in its
+AST, keeping only those needed for generating HTML and does not have source postion tracking for
+its inline elements. It also assumes that extension will add to the parser and not change the
+basic behavior of the parser, which in the case of a parser for this plugin does not hold true.
+
+To overcome these limitations I forked the project and created the needed modifications,
+allowing extensions to change every aspect of the parser. The [flexmark-java] project is in its
+early development stage. All the commonmark spec tests have been converted to include testing
+the generated AST and are passing. All extensions have been converted along with their tests to
+use the spec.txt format with AST validation and are also passing.
+
+In the process of adding source tracking the performance was impacted by about 35%, which still
+makes it about 20x faster than pegdown on average and about 7x on large files than
+[intellij-markdown] parser used by [Markdown Support] but without the exponential parse time
+edge cases or the infinite loop parsing on some sources.
+
+I am now in the process of adding all the necessary extensions to make the new parser be able to
+replace pegdown in the plugin.
+
+Latest Developments: EAP Version 1.7.0.10
+-----------------------------------------
 
 For a full list see the [Version Notes]
+
+- New toolbar buttons and actions:
+    - Double/Single space list
+    - Toggle task item done status on/off
+    - Change list item or items in selection to:
+        - Bullet items
+        - Numbered items
+        - Task items
+
+        If the selection does not contain any list items and only paragraphs then the paragraphs
+        will be changed to respective list items
+
+        If all the list items in selection are already of respective type then they will be
+        changed to plain text paragraphs.
+
+    ![List Item Actions](assets/images/noload/ListItemActions.gif)
+
+Latest Developments: Patch Release Version 1.7.0.5
+--------------------------------------------------
+
+- Fix #247, Error and corrupting files, duplicates #248, #249, #250 and #251
+- Fix: #244, NPE upon opening simple markdown file
+- Fix: scratch files not recognized as Markdown during editor creation in latest
+  intellij-community builds.
+- Fix: #245, Inserting an ordered list item on ENTER with renumbering enabled causes exception
+- Fix: #246, Auto scroll to source. Swing preview would always scroll to top of page after
+- document modification.
+- Add: preview setting for `Scroll preview to source position` for Swing preview.
+
+Latest Developments: Version 1.7.0
+----------------------------------
 
 - **Document Structure View** added with sections for:
 
@@ -203,6 +251,7 @@ Markdown Navigator, Copyright (c) 2016, V. Schneider,
 [JetBrains plugin comment and rate page]: https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896
 [JetBrains plugin page]: https://plugins.jetbrains.com/plugin?pr=&pluginId=7896
 [Markdown]: http://daringfireball.net/projects/markdown
+[Markdown Support]: https://plugins.jetbrains.com/plugin/7793?pr=
 [nicoulaj/idea-markdown plugin]: https://github.com/nicoulaj/idea-markdown
 [nicoulaj]: https://github.com/nicoulaj
 [pegdown]: http://pegdown.org
@@ -220,4 +269,5 @@ Markdown Navigator, Copyright (c) 2016, V. Schneider,
 [intellij-markdown]: https://github.com/valich/intellij-markdown 
 [commonmark-java]: https://github.com/atlassian/commonmark-java
 [Fletcher T. Penney's MultiMarkdown]: http://fletcherpenney.net/multimarkdown/
+[flexmark-java]: https://github.com/vsch/flexmark-java
 
