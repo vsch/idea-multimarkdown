@@ -1,4 +1,4 @@
-### 1.7.0.10 - Bug Fixes and Enhancements 
+### 1.7.0.12 - Bug Fixes and Enhancements 
 
 #### Basic & Enhanced Editions
 
@@ -27,6 +27,12 @@
 * Fix: first paragraph of a file would not be recognized for list actions unless it had a blank
   line before.
 * Fix: memory use going high in 2016.3 IDEA and probably other versions of the IDE
+* Add: code style option for unordered list prefix: no change, dash, asterisk
+* Add: code style option for new unordered list prefix: dash, asterisk, used for bullet list
+  item action
+* Fix: reference link completions, broken by moving to full parse tree
+* Fix: intermittent backspace at end of paragraph would duplicate last non-space character of
+  the paragraph.
 
 ### 1.7.0 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
 

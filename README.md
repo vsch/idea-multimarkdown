@@ -70,7 +70,7 @@ Release Road Map
 Current implementation using [pegdown][] parser has caused many of the performance and IDE
 hanging issues resulting in many complaints about the plugin causing degraded IDE performance.
 Reason for the choice is detailed in:
-[Pegdown - Achilles heel of the MultiMarkdown plugin](http://vladsch.com/blog/15).
+[Pegdown - Achilles heel of the Markdown Navigator plugin](http://vladsch.com/blog/15).
 
 I am changing the [Markdown] parser used by the plugin from [pegdown] to [commonmark-java] this
 month. [commonmark-java] is geared towards HTML generation. It lacks markdown elements in its
