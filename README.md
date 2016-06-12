@@ -85,14 +85,14 @@ the generated AST and are passing. All extensions have been converted along with
 use the spec.txt format with AST validation and are also passing.
 
 In the process of adding source tracking the performance was impacted by about 35%, which still
-makes it about 20x faster than pegdown on average and about 7x on large files than
-[intellij-markdown] parser used by [Markdown Support] but without the exponential parse time
-edge cases or the infinite loop parsing on some sources.
+makes it about 7x faster on large files than [intellij-markdown] parser used by
+[Markdown Support] and about 20x faster than pegdown but without the exponential parse time edge
+cases or the infinite loop parsing on some sources.
 
 I am now in the process of adding all the necessary extensions to make the new parser be able to
 replace pegdown in the plugin.
 
-Latest Developments: EAP Version 1.7.0.10
+Latest Developments: EAP Version 1.7.0.12
 -----------------------------------------
 
 For a full list see the [Version Notes]
