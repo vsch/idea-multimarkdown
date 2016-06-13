@@ -1,4 +1,4 @@
-### 1.7.0.12 - Bug Fixes and Enhancements 
+### 1.7.1 - Bug Fixes and Enhancements 
 
 #### Basic & Enhanced Editions
 
@@ -33,6 +33,16 @@
 * Fix: reference link completions, broken by moving to full parse tree
 * Fix: intermittent backspace at end of paragraph would duplicate last non-space character of
   the paragraph.
+* Fix: exception when creating a code fence element with an empty content
+* Fix: pegdown parsing code fence with first line containing three or more `-` or `=` would
+  parse code fence opening sequence as a Setext header.
+* Fix: show preview for HTML documents would not recognize HTML scratch files.
+* Change: backspace to delete row/column when backspacing in an empty cell. Previously it
+  deleted these when the cell became empty.
+* Change: bold/italic/strikethrough/code actions now will apply to the next word when caret is
+  at the beginning of a word and there is no selection.
+* Fix: insert link action with no selection would not move the caret inside the link URL
+  parentheses.
 
 ### 1.7.0 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
 

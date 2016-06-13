@@ -92,8 +92,8 @@ cases or the infinite loop parsing on some sources.
 I am now in the process of adding all the necessary extensions to make the new parser be able to
 replace pegdown in the plugin.
 
-Latest Developments: EAP Version 1.7.0.12
------------------------------------------
+Latest Developments: Version 1.7.1
+----------------------------------
 
 For a full list see the [Version Notes]
 
@@ -113,16 +113,13 @@ For a full list see the [Version Notes]
 
     ![List Item Actions](assets/images/noload/ListItemActions.gif)
 
-Latest Developments: Patch Release Version 1.7.0.5
---------------------------------------------------
-
 - Fix #247, Error and corrupting files, duplicates #248, #249, #250 and #251
 - Fix: #244, NPE upon opening simple markdown file
 - Fix: scratch files not recognized as Markdown during editor creation in latest
   intellij-community builds.
 - Fix: #245, Inserting an ordered list item on ENTER with renumbering enabled causes exception
 - Fix: #246, Auto scroll to source. Swing preview would always scroll to top of page after
-- document modification.
+  document modification.
 - Add: preview setting for `Scroll preview to source position` for Swing preview.
 
 Latest Developments: Version 1.7.0
