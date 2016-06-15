@@ -1,3 +1,16 @@
+### 1.7.1.2 - Bug Fixes and Enhancements 
+
+#### Basic & Enhanced Editions
+
+- 
+
+#### Enhanced Edition
+
+* Change: Now disabling table formatting also disables row insert on ENTER and delete row/column
+  on BACKSPACE to make it easier to turn off side-effects for manual editing.  
+* Fix: #252, update failed for AnAction with ID=com.vladsch.idea.multimarkdown.editor.actions.styling.ListTightAction
+* Fix: #253, null
+
 ### 1.7.1 - Bug Fixes and Enhancements 
 
 #### Basic & Enhanced Editions
