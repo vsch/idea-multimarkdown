@@ -1,15 +1,23 @@
-### 1.7.1.2 - Bug Fixes and Enhancements 
+### 1.7.1.4 - Bug Fixes and Enhancements 
 
 #### Basic & Enhanced Editions
 
-- 
+- Fix: add tests for project being disposed in a few places to catch when later invocation may
+  occur after a project is closed.
+- Fix: make emoji shortcut into a non spell checking element
+- Add: `.emoji` live template
 
 #### Enhanced Edition
 
 * Change: Now disabling table formatting also disables row insert on ENTER and delete row/column
   on BACKSPACE to make it easier to turn off side-effects for manual editing.  
-* Fix: #252, update failed for AnAction with ID=com.vladsch.idea.multimarkdown.editor.actions.styling.ListTightAction
+* Fix: #252, update failed for AnAction with
+  ID=com.vladsch.idea.multimarkdown.editor.actions.styling.ListTightAction
 * Fix: #253, null
+* Fix: occasional fast typing with wrap as you type would insert a copy of previously typed few
+  characters.
+* Fix: reformat element action added an extra prefix and duplicated last character of the
+  paragraph. 
 
 ### 1.7.1 - Bug Fixes and Enhancements 
 
