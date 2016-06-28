@@ -1,4 +1,4 @@
-### 1.7.1.4 - Bug Fixes and Enhancements 
+### 1.7.1.5 - Bug Fixes and Enhancements 
 
 #### Basic & Enhanced Editions
 
@@ -6,6 +6,9 @@
   occur after a project is closed.
 - Fix: make emoji shortcut into a non spell checking element
 - Add: `.emoji` live template
+- Fix: wiki link syntax parser option was being taken from old settings in some parts of the
+  code.
+- Fix: #262, NPE opening file
 
 #### Enhanced Edition
 
@@ -18,6 +21,16 @@
   characters.
 * Fix: reformat element action added an extra prefix and duplicated last character of the
   paragraph. 
+* [ ] Add: Toggle emphasis action config for end of region punctuations to be treated as
+      whitespace when the caret is immediately to the left of one and is at the end of a
+      non-space region, to allow the toggle actions to work when at the end of a word but
+      followed by a punctuation.
+* Fix: Task item toggle action to preserve `-` or `*` prefix of the item and only use the new
+  bullet item prefix code style setting when converting paragraphs or numbered list items. 
+* Fix: Bullet item toggle action to preserve `-` or `*` prefix of the item and only use the new
+  bullet item prefix code style setting when converting paragraphs or numbered list items. 
+* Fix: add missing `+` prefix for bullet lists in code style settings
+* Fix: exception in paragraph context with empty paragraph.
 
 ### 1.7.1 - Bug Fixes and Enhancements 
 
