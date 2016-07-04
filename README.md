@@ -101,21 +101,21 @@ For a full list see the [Version Notes]
   when you format the document or the `[TOC]` element. Also available with HTML block instead of
   markdown.
 
-    [TOC levels=3]: #### "Table of Contents"
-    #### Table of Contents
-    - [Markdown Navigator](#markdown-navigator)
-        - [Plugin Name Has Changed](#plugin-name-has-changed)
-        - [General Information](#general-information)
-            - [Plugin Benefits](#plugin-benefits)
-        - [Release Road Map](#release-road-map)
-        - [Latest Developments: Upcoming release of Version 1.8.0](#latest-developments-upcoming-release-of-version-180)
-        - [Version 1.7.1](#version-171)
-        - [Version 1.7.0](#version-170)
-            - [Still Great GitHub Rendering Resemblance for your preview pleasure](#still-great-github-rendering-resemblance-for-your-preview-pleasure)
-            - [Split your editor and see the preview as you type](#split-your-editor-and-see-the-preview-as-you-type)
-            - [Peek at the HTML](#peek-at-the-html)
-        - [Working with the source](#working-with-the-source)
-        - [The Background](#the-background)
+[TOC levels=3]: #### "Table of Contents"
+#### Table of Contents
+- [Markdown Navigator](#markdown-navigator)
+    - [Plugin Name Has Changed](#plugin-name-has-changed)
+    - [General Information](#general-information)
+        - [Plugin Benefits](#plugin-benefits)
+    - [Release Road Map](#release-road-map)
+    - [Latest Developments: Upcoming release of Version 1.8.0](#latest-developments-upcoming-release-of-version-180)
+    - [Version 1.7.1](#version-171)
+    - [Version 1.7.0](#version-170)
+        - [Still Great GitHub Rendering Resemblance for your preview pleasure](#still-great-github-rendering-resemblance-for-your-preview-pleasure)
+        - [Split your editor and see the preview as you type](#split-your-editor-and-see-the-preview-as-you-type)
+        - [Peek at the HTML](#peek-at-the-html)
+    - [Working with the source](#working-with-the-source)
+    - [The Background](#the-background)
 
 ---
 
