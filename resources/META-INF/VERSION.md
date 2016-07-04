@@ -1,4 +1,6 @@
-### 1.7.1.5 - Bug Fixes and Enhancements 
+### 1.7.1.15 - Bug Fixes and Enhancements 
+
+[TOC levels=3]
 
 #### Basic & Enhanced Editions
 
@@ -9,6 +11,8 @@
 - Fix: wiki link syntax parser option was being taken from old settings in some parts of the
   code.
 - Fix: #262, NPE opening file
+- Fix: clicking on links anchor referencing links did not move the element into view in JavaFX
+  preview. 
 
 #### Enhanced Edition
 
@@ -20,17 +24,63 @@
 * Fix: occasional fast typing with wrap as you type would insert a copy of previously typed few
   characters.
 * Fix: reformat element action added an extra prefix and duplicated last character of the
-  paragraph. 
+  paragraph.
+* Fix: Task item toggle action to preserve `-` or `*` prefix of the item and only use the new
+  bullet item prefix code style setting when converting paragraphs or numbered list items.
+* Fix: Bullet item toggle action to preserve `-` or `*` prefix of the item and only use the new
+  bullet item prefix code style setting when converting paragraphs or numbered list items.
+* Fix: add missing `+` prefix for bullet lists in code style settings
+* Fix: exception in paragraph context with empty paragraph.
+* Fix: wrap on typing turns off intermittently when typing in a paragraph immediately followed
+  by a table
+* Add: flexmark-java test spec file format handling with flexmark front matter and example
+  elements.
+* Add: flexmark-java test spec option completions, references, annotations and quick fixes.
+* Add: flexmark-java test spec options keyword completion
+* Fix: spell checking of text had identifier setting in error
+* Add: implement stub elements and index for flexmark options
+* Fix: flexmark option refactoring
+* Add: debug actions to collect unique markdown files and to open all of them one at a time to
+  check for WebView crashing bug.
+* Add: List spacing option to code style settings
+* Add: add list item on ENTER will add a blank line above/below a new item if list spacing is
+  set to Loosen or Loose in code style.
+* Add: flexmark edit options intention and dialog
+* Add: flexmark refactoring of options. Needs work but functional.
+* Fix: invalid regex in wrap on typing before markdown element prefix text 
+* Add: flexmark options completion to show actual `DataKey` and value assigned making it easier
+  to figure out which option is the one you want.
+* Add: flexmark java completion contributor to handle option string literal completions.
+* Add: inline code to be a language injection host
+* Add: completion in inline code will attempt to complete a Java references separated by `.`.
+  First classes, then: methods, fields and inner classes. Methods complete with their parameter
+  type signature. Fields, methods and inner classes will continue completion if a `.` is typed.
+* Fix: self referencing links in scratch files with would not resolve because scratch files are
+  not part of the project. Now a self referencing link in any file will resolve. 
+* Fix: Reference refactoring of reference name would not work if the link reference was self
+  referencing.
+* Add: Table of Contents tag that works with basic Markdown processors. Updated on format
+  element format document when
+  [Simulated Table Of Contents](../../../../wiki/Enhanced-Features#simulated-table-of-contents)
+* Change: toggle task list item now changes items to bullet list items if all selected items
+  are already task list items.
+* [ ] Fix: typing on a line with the next text stretch too long to fit, should keep cursor on
+      the same line after space, add extra space if needed.
+* [ ] Fix: toc to check if there is a blank line between it and the first child. Very important.
+      Also check if list following it has a link with an empty file name. Otherwise accidentally
+      blows away item text that follows.
+* [ ] Add: a file inspection for TOC needing updating and a quick fix
+* [ ] Add: update TOC on save
+* [ ] Fix: issues when inserting characters and backspacing right after numbered item prefix.
+* [ ] Fix: sometimes characters typed at the beginning of a line, are inserted at the beginning
+      of the next line. 
+* [ ] Fix: self referencing links should not check if the file is on GitHub
+* [ ] Add: intelligent nested children find function that understands which elements can be
+      inside others. Generic function too slow because it dives into unnecessary elements.
 * [ ] Add: Toggle emphasis action config for end of region punctuations to be treated as
       whitespace when the caret is immediately to the left of one and is at the end of a
       non-space region, to allow the toggle actions to work when at the end of a word but
       followed by a punctuation.
-* Fix: Task item toggle action to preserve `-` or `*` prefix of the item and only use the new
-  bullet item prefix code style setting when converting paragraphs or numbered list items. 
-* Fix: Bullet item toggle action to preserve `-` or `*` prefix of the item and only use the new
-  bullet item prefix code style setting when converting paragraphs or numbered list items. 
-* Fix: add missing `+` prefix for bullet lists in code style settings
-* Fix: exception in paragraph context with empty paragraph.
 
 ### 1.7.1 - Bug Fixes and Enhancements 
 
@@ -77,6 +127,7 @@
   at the beginning of a word and there is no selection.
 * Fix: insert link action with no selection would not move the caret inside the link URL
   parentheses.
+* Add: develop feature flexmark-java spec file format handling.
 
 ### 1.7.0 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
 
@@ -420,3 +471,5 @@
 #### Basic & Enhanced Editions
 
 - Fix: #163, NullPointerException on new files
+
+[test]: asdfasfd "test"

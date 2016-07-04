@@ -7,7 +7,7 @@ Markdown Navigator plugin provides **[Markdown] language support for [IntelliJ I
 
 **You can download it on the [JetBrains plugin page].**
 
-#### Plugin Name Has Changed
+## Plugin Name Has Changed
 
 The plugin name was changed to avoid name infringement on [Fletcher T. Penney's MultiMarkdown]
 project. The plugin id used for updates has not changed but the displayed name has changed from
@@ -16,7 +16,9 @@ language supported by the plugin was changed to **[Markdown]** from **MultiMarkd
 details see
 [Settings Affected by Plugin Name Change](../../wiki/Settings-Affected-by-Plugin-Name-Change)
 
-#### Plugin Benefits
+## General Information
+
+### Plugin Benefits
 
 This plugin generates a preview that it is as close as possible to how the page will look on
 GitHub but do it with more IntelliJ environment intelligence to make editing and maintaining
@@ -31,14 +33,6 @@ few extensions added to make the rendering of GFM more faithful.
 
 The plugin also includes syntax extension from [Fletcher T. Penney's MultiMarkdown] project.
 
-**For any communications requiring a reply** please use the [GitHub Issues page] for this
-plugin. There is no ability to reply to comments left on the
-[JetBrains plugin comment and rate page].
-
-**[Wiki] added** with instructions on how to include your [GitHub wiki in IntelliJ IDE] so you
-can work on the wiki in the IDE and use the plugin for syntax highlighting,preview, link
-completions and validation. This makes adding images and manipulating the wiki a lot easier.
-
 #### Two tier model of the plugin
 
 1. Previewing and syntax highlighting functionality is available in the Basic open source
@@ -52,7 +46,7 @@ completions and validation. This makes adding images and manipulating the wiki a
 
 ![Capabilities](/assets/images/capabilities.png)       
 
-### Updating of the source  
+#### Updating of the source  
 
 There was much code churn in the enhanced version and I have not had time to merge them into the
 open source version. Initially when most of the differences were limited to a few files it easy
@@ -67,15 +61,17 @@ imagined and it is not leaving me much time to make updates to latest version.
 Release Road Map
 ----------------
 
-Current implementation using [pegdown][] parser has caused many of the performance and IDE
-hanging issues resulting in many complaints about the plugin causing degraded IDE performance.
+Current implementation using [pegdown][] as the parser, which has caused many of the performance
+and IDE hanging issues, resulting in many complaints about the plugin degrading IDE performance.
 Reason for the choice is detailed in:
+
+I am changing the [Markdown] parser used by the plugin from [pegdown] to [flexmark-java], a fork
+from [commonmark-java].
 [Pegdown - Achilles heel of the Markdown Navigator plugin](http://vladsch.com/blog/15).
 
-I am changing the [Markdown] parser used by the plugin from [pegdown] to [commonmark-java] this
-month. [commonmark-java] is geared towards HTML generation. It lacks markdown elements in its
-AST, keeping only those needed for generating HTML and does not have source postion tracking for
-its inline elements. It also assumes that extension will add to the parser and not change the
+[commonmark-java] is intended for HTML generation and lacks markdown elements in its AST,
+keeping only those needed for generating the HTML. It does not have source position tracking for
+its inline elements assumes assumes that extension will add to the parser and not change the
 basic behavior of the parser, which in the case of a parser for this plugin does not hold true.
 
 To overcome these limitations I forked the project and created the needed modifications,
@@ -84,18 +80,50 @@ early development stage. All the commonmark spec tests have been converted to in
 the generated AST and are passing. All extensions have been converted along with their tests to
 use the spec.txt format with AST validation and are also passing.
 
-In the process of adding source tracking the performance was impacted by about 35%, which still
-makes it about 7x faster on large files than [intellij-markdown] parser used by
-[Markdown Support] and about 20x faster than pegdown but without the exponential parse time edge
-cases or the infinite loop parsing on some sources.
+In the process of adding source tracking the performance was impacted by about 25-35%, which
+still makes it about **10x** faster on large files than [intellij-markdown] parser used by
+[Markdown Support] and about **30x-50x** faster than pegdown. All that without the exponential
+parse time edge cases or the infinite loop parsing on some sources.
 
 I am now in the process of adding all the necessary extensions to make the new parser be able to
 replace pegdown in the plugin.
 
-Latest Developments: Version 1.7.1
-----------------------------------
+A few days were sacrificed to hack some features into Markdown Navigator to help with creating
+and navigating the common mark spec format file and generating flexmark-java extensions. Just
+could not live without basic auto completions, go to declaration and some error highlighting.
+
+Latest Developments: Upcoming release of Version 1.8.0
+------------------------------------------------------
 
 For a full list see the [Version Notes]
+
+- **Table of Contents** tag that works with basic markdown syntax and is updated by the plugin
+  when you format the document or the `[TOC]` element. Also available with HTML block instead of
+  markdown.
+
+    [TOC levels=3]: #### "Table of Contents"
+    #### Table of Contents
+    - [Markdown Navigator](#markdown-navigator)
+        - [Plugin Name Has Changed](#plugin-name-has-changed)
+        - [General Information](#general-information)
+            - [Plugin Benefits](#plugin-benefits)
+        - [Release Road Map](#release-road-map)
+        - [Latest Developments: Upcoming release of Version 1.8.0](#latest-developments-upcoming-release-of-version-180)
+        - [Version 1.7.1](#version-171)
+        - [Version 1.7.0](#version-170)
+            - [Still Great GitHub Rendering Resemblance for your preview pleasure](#still-great-github-rendering-resemblance-for-your-preview-pleasure)
+            - [Split your editor and see the preview as you type](#split-your-editor-and-see-the-preview-as-you-type)
+            - [Peek at the HTML](#peek-at-the-html)
+        - [Working with the source](#working-with-the-source)
+        - [The Background](#the-background)
+
+---
+
+- Java class, method, field completions in inline code. Great if you need to reference code
+  elements in your project from a markdown document.
+
+Version 1.7.1
+-------------
 
 - New toolbar buttons and actions:
     - Double/Single space list
@@ -109,7 +137,8 @@ For a full list see the [Version Notes]
         will be changed to respective list items
 
         If all the list items in selection are already of respective type then they will be
-        changed to plain text paragraphs.
+        changed to plain text paragraphs, except for task list items. These will revert to
+        bullet list items.
 
     ![List Item Actions](assets/images/noload/ListItemActions.gif)
 
@@ -122,8 +151,8 @@ For a full list see the [Version Notes]
   document modification.
 - Add: preview setting for `Scroll preview to source position` for Swing preview.
 
-Latest Developments: Version 1.7.0
-----------------------------------
+Version 1.7.0
+-------------
 
 - **Document Structure View** added with sections for:
 
