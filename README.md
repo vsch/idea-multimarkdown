@@ -8,26 +8,23 @@ Markdown Navigator plugin provides **[Markdown] language support for [IntelliJ I
 **You can download it on the [JetBrains plugin page].**
 
 [TOC levels=2,3]: #### "Table of Contents"
-#### Table of Contents
+### Table of Contents
 - [Plugin Name Has Changed](#plugin-name-has-changed)
 - [General Information](#general-information)
     - [Plugin Benefits](#plugin-benefits)
 - [Release Road Map](#release-road-map)
-- [Latest Developments: Upcoming release of Version 1.8.0](#latest-developments-upcoming-release-of-version-180)
+- [Latest Developments: EAP Release of Upcoming Version 1.8.0](#latest-developments-eap-release-of-upcoming-version-180)
 - [Version 1.7.1](#version-171)
 - [Version 1.7.0](#version-170)
-    - [Still Great GitHub Rendering Resemblance for your preview pleasure](#still-great-github-rendering-resemblance-for-your-preview-pleasure)
-    - [Split your editor and see the preview as you type](#split-your-editor-and-see-the-preview-as-you-type)
-    - [Peek at the HTML](#peek-at-the-html)
+    - [Screenshots](#screenshots)
 - [Working with the source](#working-with-the-source)
 - [The Background](#the-background)
-
 
 ***
 
 ## Plugin Name Has Changed
 
-The plugin name was changed to avoid name infringement on [Fletcher T. Penney's MultiMarkdown]
+The plugin name was changed to address name infringement on [Fletcher T. Penney's MultiMarkdown]
 project. The plugin id used for updates has not changed but the displayed name has changed from
 **idea-multimarkdown** and **MultiMarkdown** to **Markdown Navigator**. Additionally, the
 language supported by the plugin was changed to **[Markdown]** from **MultiMarkdown**. For
@@ -38,11 +35,10 @@ details see
 
 ### Plugin Benefits
 
-This plugin generates a preview that it is as close as possible to how the page will look on
-GitHub but do it with more IntelliJ environment intelligence to make editing and maintaining
-markdown documents easier. Developing with pleasure is only half the job. Real projects need to
-be documented. This plugin wants to extend the pleasure principle to the inevitable
-documentation part of the project.
+This plugin generates a preview that is as close as possible to how the page will look on GitHub
+but do it with more IntelliJ IDE intelligence to make editing and maintaining markdown documents
+easier. Developing with pleasure is only half the job. Real projects need to be documented. This
+plugin extends the pleasure principle to the inevitable documentation part of the project.
 
 GitHub may recognize variants of Markdown syntax that this plugin will not and vice versa. This
 is due to the parser differences and the fact that GitHub has a few syntax modifications that
@@ -50,7 +46,7 @@ conflict with original Markdown spec. This plugin uses [pegdown] library by [sir
 few extensions added to make the rendering of GFM more faithful.
 
 The plugin also includes some syntax extensions from [Fletcher T. Penney's MultiMarkdown]
-project.
+project.  
 
 #### Two tier model of the plugin
 
@@ -68,14 +64,14 @@ project.
 #### Updating of the source  
 
 There was much code churn in the enhanced version and I have not had time to merge them into the
-open source version. Initially when most of the differences were limited to a few files it easy
-to keep them separated and sync the rest. Now, with major preferences and settings re-work,
+open source version. Initially, most of the differences were limited to a few files making it
+easy to keep them separated and sync the rest. Now, with major preferences and settings re-work,
 directory layout changes and new features, the differences have spread out where keeping them in
 sync is a major effort. I started factoring out the enhanced only changes to separate files so
 that future synchronization of the two branches can be less time consuming.
 
-I am part way through the task but the formatting wound up being much more intricate than I
-imagined and it is not leaving me much time to make updates to latest version.
+I will address the open source release once version 2.0 of the plugin, with a new parser is
+released. I only want to go through the major effort of merging these major differences once.
 
 Release Road Map
 ----------------
@@ -88,31 +84,31 @@ I am changing the [Markdown] parser used by the plugin from [pegdown] to [flexma
 from [commonmark-java].
 [Pegdown - Achilles heel of the Markdown Navigator plugin](http://vladsch.com/blog/15).
 
-[commonmark-java] is intended for HTML generation and lacks markdown elements in its AST,
-keeping only those needed for generating the HTML. It does not have source position tracking for
-its inline elements assumes assumes that extension will add to the parser and not change the
-basic behavior of the parser, which in the case of a parser for this plugin does not hold true.
+Original [commonmark-java] is intended for HTML generation and lacks markdown elements in its
+AST, keeping only those needed for generating the HTML. It does not have source position
+tracking for its inline elements assumes assumes that extension will add to the parser and not
+change the basic behavior of the parser.
 
-To overcome these limitations I forked the project and created the needed modifications,
-allowing extensions to change every aspect of the parser. The [flexmark-java] project is in its
+To overcome these limitations I forked the project and made the necessary changes to allow
+extensions to change almost every aspect of the parser. The [flexmark-java] project is in its
 early development stage. All the commonmark spec tests have been converted to include testing
 the generated AST and are passing. All extensions have been converted along with their tests to
 use the spec.txt format with AST validation and are also passing.
 
-In the process of adding source tracking the performance was impacted by about 25-35%, which
-still makes it about **10x** faster on large files than [intellij-markdown] parser used by
-[Markdown Support] and about **30x-50x** faster than pegdown. All that without the exponential
-parse time edge cases or the infinite loop parsing on some sources.
+In the process of adding source tracking, performance was impacted by about 25-35%, which still
+makes it **7x-10x** faster on large files than [intellij-markdown] parser used by
+[Markdown Support] and **30x-50x** faster than pegdown. All that without pegdown's exponential
+parse time or the infinite loop parsing on some pathological cases.
 
 I am now in the process of adding all the necessary extensions to make the new parser be able to
 replace pegdown in the plugin.
 
-A few days were sacrificed to hack some features into Markdown Navigator to help with creating
-and navigating the common mark spec format file and generating flexmark-java extensions. Just
+A few days were sacrificed to hack some features into Markdown Navigator to make creating and
+navigating the common mark spec format file and generating flexmark-java extensions easier. I
 could not live without basic auto completions, go to declaration and some error highlighting.
 
-Latest Developments: Upcoming release of Version 1.8.0
-------------------------------------------------------
+Latest Developments: EAP Release of Upcoming Version 1.8.0
+----------------------------------------------------------
 
 For a full list see the [Version Notes]
 
@@ -120,8 +116,17 @@ For a full list see the [Version Notes]
   The table of contents at the top of this page is an example. For more information see the
   [wiki](../../wiki/Adding-a-Table-of-Contents)
 
-- Java class, method, field completions in inline code. Great if you need to reference code
+- Java class, method and field completions in inline code. Great if you need to reference code
   elements in your project from a markdown document.
+
+- Bug fixes and improvements in wrap-on-typing and table auto-format
+
+- Code style settings added for:
+    - List spacing: no change, loose if has loose item, tight if has tight item, loose and
+      tight.
+    - List item marker: no change, dash, asterisk, plus.
+    - List new item marker, used when a new bullet list item is created by actions.
+    - Arrange elements sorting: not sorted, sorted and sorted with unused last.
 
 Version 1.7.1
 -------------
@@ -138,7 +143,7 @@ Version 1.7.1
         will be changed to respective list items
 
         If all the list items in selection are already of respective type then they will be
-        changed to plain text paragraphs, except for task list items. These will revert to
+        changed to plain text paragraphs, except for task list items, which will revert to
         bullet list items.
 
     ![List Item Actions](assets/images/noload/ListItemActions.gif)
@@ -156,7 +161,6 @@ Version 1.7.0
 -------------
 
 - **Document Structure View** added with sections for:
-
     - Headers to show header hierarchy by level  
       ![Screenshot Structure Headers](assets/images/faq/structure/Screenshot_Structure_Headers.png)
     - Images with all images in the document
@@ -197,19 +201,21 @@ You can create and edit a markdown table with ease:
 
 ![Table Format](assets/images/noload/TableFormat.gif)
 
-### Still Great GitHub Rendering Resemblance for your preview pleasure
+### Screenshots
+
+##### Still Great GitHub Rendering Resemblance for your preview pleasure
 
 ![Screen Shot Jfx WebView](/assets/images/faq/ScreenShot_jfx_webview.png)
 
-### Split your editor and see the preview as you type
+##### Split your editor and see the preview as you type
 
 ![idea-multimarkdown](/assets/images/faq/ScreenShot_preview.png)
 
-### Peek at the HTML
+##### Peek at the HTML
 
 ![idea-multimarkdown-settings](/assets/images/faq/ScreenShot_preview_html.png)
 
-#### Change options, customize the syntax colors and CSS to your liking.
+###### Change options, customize the syntax colors and CSS to your liking.
 
 ![Screen Shot Settings Intentions](/assets/images/faq/Screenshot_Intentions.png)
 
@@ -265,36 +271,36 @@ with a simple desire for a Markdown preview that looked like GitHub's.
 Markdown Navigator, Copyright (c) 2016, V. Schneider,  
 <http://vladsch.com> All Rights Reserved.
 
-[.gitignore]: http://hsz.mobi
 [Android Studio]: http://developer.android.com/sdk/installing/studio.html
 [AppCode]: http://www.jetbrains.com/objc
 [CLion]: https://www.jetbrains.com/clion
 [Craig's List]: http://montreal.en.craigslist.ca/
 [DataGrip]: https://www.jetbrains.com/datagrip
-[GitHub Issues page]: ../../issues
+[Fletcher T. Penney's MultiMarkdown]: http://fletcherpenney.net/multimarkdown/
 [GitHub]: https://github.com/vsch/laravel-translation-manager
-[idea-multimarkdown]: http://vladsch.com/product/multimarkdown
 [IntelliJ IDEA]: http://www.jetbrains.com/idea
-[JetBrains plugin comment and rate page]: https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896
 [JetBrains plugin page]: https://plugins.jetbrains.com/plugin?pr=&pluginId=7896
 [Markdown]: http://daringfireball.net/projects/markdown
 [Markdown Support]: https://plugins.jetbrains.com/plugin/7793?pr=
-[nicoulaj/idea-markdown plugin]: https://github.com/nicoulaj/idea-markdown
-[nicoulaj]: https://github.com/nicoulaj
-[pegdown]: http://pegdown.org
 [PhpStorm]: http://www.jetbrains.com/phpstorm
-[Pipe Table Formatter]: https://github.com/anton-dev-ua/PipeTableFormatter
 [PyCharm]: http://www.jetbrains.com/pycharm
 [RubyMine]: http://www.jetbrains.com/ruby
-[sirthias]: https://github.com/sirthias
 [Version Notes]: resources/META-INF/VERSION.md
-[vsch/pegdown]: https://github.com/vsch/pegdown/tree/develop
 [WebStorm]: http://www.jetbrains.com/webstorm
-[Wiki]: ../../wiki
-[GitHub wiki in IntelliJ IDE]: ../../wiki/Adding-GitHub-Wiki-to-IntelliJ-Project
-[Kotlin]: http://kotlinlang.org
-[intellij-markdown]: https://github.com/valich/intellij-markdown 
 [commonmark-java]: https://github.com/atlassian/commonmark-java
-[Fletcher T. Penney's MultiMarkdown]: http://fletcherpenney.net/multimarkdown/
 [flexmark-java]: https://github.com/vsch/flexmark-java
+[idea-multimarkdown]: http://vladsch.com/product/multimarkdown
+[intellij-markdown]: https://github.com/valich/intellij-markdown 
+[nicoulaj]: https://github.com/nicoulaj
+[nicoulaj/idea-markdown plugin]: https://github.com/nicoulaj/idea-markdown
+[pegdown]: http://pegdown.org
+[sirthias]: https://github.com/sirthias
+[vsch/pegdown]: https://github.com/vsch/pegdown/tree/develop
+[.gitignore]: http://hsz.mobi
+[GitHub Issues page]: ../../issues
+[GitHub wiki in IntelliJ IDE]: ../../wiki/Adding-GitHub-Wiki-to-IntelliJ-Project
+[JetBrains plugin comment and rate page]: https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896
+[Kotlin]: http://kotlinlang.org
+[Pipe Table Formatter]: https://github.com/anton-dev-ua/PipeTableFormatter
+[Wiki]: ../../wiki
 

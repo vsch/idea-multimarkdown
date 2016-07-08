@@ -1,8 +1,8 @@
 ## Markdown Navigator
 
-[TOC levels=3,6    ]: # "Version History"
+[TOC levels=3,6]: # "# Version History"
 # Version History
-- [1.7.1.20 - Bug Fixes and Enhancements](#17120---bug-fixes-and-enhancements)
+- [1.7.1.24 - Bug Fixes and Enhancements](#17124---bug-fixes-and-enhancements)
 - [1.7.1 - Bug Fixes and Enhancements](#171---bug-fixes-and-enhancements)
 - [1.7.0 - Full PsiTree Parser, Doc Structure View & Doc Formatting](#170---full-psitree-parser-doc-structure-view--doc-formatting)
 - [1.6.3.3 - Bug Fix Patch Release](#1633---bug-fix-patch-release)
@@ -14,7 +14,7 @@
 - [1.4.7 - Bug Fix & Optimization Release](#147---bug-fix--optimization-release)
 - [1.4.6 - Bug Fix Release](#146---bug-fix-release)
 
-### 1.7.1.20 - Bug Fixes and Enhancements 
+### 1.7.1.24 - Bug Fixes and Enhancements 
 
 #### Basic & Enhanced Editions
 
@@ -73,9 +73,9 @@
   not part of the project. Now a self referencing link in any file will resolve.
 * Fix: Reference refactoring of reference name would not work if the link reference was self ß
   referencing.
-* Add: Table of Contents tag that works with basic Markdown processors. Updated on format
+* Add: Table of Contents element that works with basic Markdown processors. Updated on format
   element format document when
-  [Simulated Table Of Contents](../../../../wiki/Enhanced-Features#simulated-table-of-contents)
+  [Table Of Contents](../../../../wiki/Enhanced-Features#table-of-contents)
 * Change: toggle task list item now changes items to bullet list items if all selected items are
   already task list items.
 * Add: flexmark-java feature to work with unicode invisible characters. Dialog to show, add.
@@ -83,9 +83,9 @@
 * Fix: toc to check there is a blank line between it and the first child. Also need to split a
   list at first loose item or one that is not a TOC style list item since it is not part of the
   toc. Very important. Otherwise accidentally blows away list items that follow a TOC element.
-* Fix: simulated TOC element to accept `[TOC ....]:#` anything after the space in the tag as a
-  valid `[TOC]:#` tag. Otherwise partial edits may cause the elements to be chewed up since the
-  TOC element disappears on formatting.
+* Fix: TOC element to accept `[TOC ....]:#` anything after the space in the tag as a valid
+  `[TOC]:#` tag. Otherwise partial edits may cause the elements to be chewed up since the TOC
+  element disappears on formatting.
 * Add: TOC levels to select which heading levels to include:
     * a single number: levels accepted 1 to number
     * a list of numbers: heading accepted if its number is in the list
@@ -99,15 +99,16 @@
 * Add: test for TOC option in parser settings before parsing SimToc
 * Add: annotation for TOC needs updating and a quick fix
 * Add: intention to edit TOC options, with preview and all the fixings
-* Add: dedicated license server with two fallback URLs in case of failure. 
+* Add: dedicated license server with two fallback URLs in case of failure.
 * Add: TOC options refactoring will use dummy headings if the current file does not have any.
 * Fix: issues when inserting characters and backspacing right after numbered item prefix.
 * Fix: characters typed on a blank line right above a paragraph would insert a duplicate of the
   character at the start of the next line.
 * Fix: anchor ref links should not check if the file is on GitHub
-* Fix: completions for emoji and GitHub issues in headers 
-* [ ] Add: implement list loose/tight formatting style setting. 
-* [ ] Add: update TOC on save
+* Fix: completions for emoji and GitHub issues in headers
+* Add: TOC line marker to navigate to toc listed headers
+* Add: update TOC on save
+* [ ] Add: implement list loose/tight formatting style setting.
 * [ ] Fix: typing on a line with the next text stretch too long to fit, should keep cursor on
       the same line after space, add extra space if needed.
 * [ ] Add: intelligent nested children find function that understands which elements can be
