@@ -7,6 +7,24 @@ Markdown Navigator plugin provides **[Markdown] language support for [IntelliJ I
 
 **You can download it on the [JetBrains plugin page].**
 
+[TOC levels=2,3]: #### "Table of Contents"
+#### Table of Contents
+- [Plugin Name Has Changed](#plugin-name-has-changed)
+- [General Information](#general-information)
+    - [Plugin Benefits](#plugin-benefits)
+- [Release Road Map](#release-road-map)
+- [Latest Developments: Upcoming release of Version 1.8.0](#latest-developments-upcoming-release-of-version-180)
+- [Version 1.7.1](#version-171)
+- [Version 1.7.0](#version-170)
+    - [Still Great GitHub Rendering Resemblance for your preview pleasure](#still-great-github-rendering-resemblance-for-your-preview-pleasure)
+    - [Split your editor and see the preview as you type](#split-your-editor-and-see-the-preview-as-you-type)
+    - [Peek at the HTML](#peek-at-the-html)
+- [Working with the source](#working-with-the-source)
+- [The Background](#the-background)
+
+
+***
+
 ## Plugin Name Has Changed
 
 The plugin name was changed to avoid name infringement on [Fletcher T. Penney's MultiMarkdown]
@@ -31,7 +49,8 @@ is due to the parser differences and the fact that GitHub has a few syntax modif
 conflict with original Markdown spec. This plugin uses [pegdown] library by [sirthias] with a
 few extensions added to make the rendering of GFM more faithful.
 
-The plugin also includes syntax extension from [Fletcher T. Penney's MultiMarkdown] project.
+The plugin also includes some syntax extensions from [Fletcher T. Penney's MultiMarkdown]
+project.
 
 #### Two tier model of the plugin
 
@@ -97,27 +116,9 @@ Latest Developments: Upcoming release of Version 1.8.0
 
 For a full list see the [Version Notes]
 
-- **Table of Contents** tag that works with basic markdown syntax and is updated by the plugin
-  when you format the document or the `[TOC]` element. Also available with HTML block instead of
-  markdown.
-
-[TOC levels=3]: #### "Table of Contents"
-#### Table of Contents
-- [Markdown Navigator](#markdown-navigator)
-    - [Plugin Name Has Changed](#plugin-name-has-changed)
-    - [General Information](#general-information)
-        - [Plugin Benefits](#plugin-benefits)
-    - [Release Road Map](#release-road-map)
-    - [Latest Developments: Upcoming release of Version 1.8.0](#latest-developments-upcoming-release-of-version-180)
-    - [Version 1.7.1](#version-171)
-    - [Version 1.7.0](#version-170)
-        - [Still Great GitHub Rendering Resemblance for your preview pleasure](#still-great-github-rendering-resemblance-for-your-preview-pleasure)
-        - [Split your editor and see the preview as you type](#split-your-editor-and-see-the-preview-as-you-type)
-        - [Peek at the HTML](#peek-at-the-html)
-    - [Working with the source](#working-with-the-source)
-    - [The Background](#the-background)
-
----
+- **Table of Contents** tag that works with basic markdown syntax and is updated by the plugin.
+  The table of contents at the top of this page is an example. For more information see the
+  [wiki](../../wiki/Adding-a-Table-of-Contents)
 
 - Java class, method, field completions in inline code. Great if you need to reference code
   elements in your project from a markdown document.

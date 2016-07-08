@@ -1,6 +1,20 @@
-### 1.7.1.15 - Bug Fixes and Enhancements 
+## Markdown Navigator
 
-[TOC levels=3]
+[TOC levels=3,6    ]: # "Version History"
+# Version History
+- [1.7.1.20 - Bug Fixes and Enhancements](#17120---bug-fixes-and-enhancements)
+- [1.7.1 - Bug Fixes and Enhancements](#171---bug-fixes-and-enhancements)
+- [1.7.0 - Full PsiTree Parser, Doc Structure View & Doc Formatting](#170---full-psitree-parser-doc-structure-view--doc-formatting)
+- [1.6.3.3 - Bug Fix Patch Release](#1633---bug-fix-patch-release)
+- [1.6.1 - Name Change Release](#161---name-change-release)
+- [1.5.0 - Bug Fix & Optimization Release](#150---bug-fix--optimization-release)
+- [1.4.10 - Bug Fix & Optimization Release](#1410---bug-fix--optimization-release)
+- [1.4.9 - Bug Fix & Optimization Release](#149---bug-fix--optimization-release)
+- [1.4.8 - Bug Fix & Optimization Release](#148---bug-fix--optimization-release)
+- [1.4.7 - Bug Fix & Optimization Release](#147---bug-fix--optimization-release)
+- [1.4.6 - Bug Fix Release](#146---bug-fix-release)
+
+### 1.7.1.20 - Bug Fixes and Enhancements 
 
 #### Basic & Enhanced Editions
 
@@ -12,7 +26,7 @@
   code.
 - Fix: #262, NPE opening file
 - Fix: clicking on links anchor referencing links did not move the element into view in JavaFX
-  preview. 
+  preview.
 
 #### Enhanced Edition
 
@@ -47,7 +61,7 @@
   set to Loosen or Loose in code style.
 * Add: flexmark edit options intention and dialog
 * Add: flexmark refactoring of options. Needs work but functional.
-* Fix: invalid regex in wrap on typing before markdown element prefix text 
+* Fix: invalid regex in wrap on typing before markdown element prefix text
 * Add: flexmark options completion to show actual `DataKey` and value assigned making it easier
   to figure out which option is the one you want.
 * Add: flexmark java completion contributor to handle option string literal completions.
@@ -56,25 +70,46 @@
   First classes, then: methods, fields and inner classes. Methods complete with their parameter
   type signature. Fields, methods and inner classes will continue completion if a `.` is typed.
 * Fix: self referencing links in scratch files with would not resolve because scratch files are
-  not part of the project. Now a self referencing link in any file will resolve. 
-* Fix: Reference refactoring of reference name would not work if the link reference was self
+  not part of the project. Now a self referencing link in any file will resolve.
+* Fix: Reference refactoring of reference name would not work if the link reference was self ß
   referencing.
 * Add: Table of Contents tag that works with basic Markdown processors. Updated on format
   element format document when
   [Simulated Table Of Contents](../../../../wiki/Enhanced-Features#simulated-table-of-contents)
-* Change: toggle task list item now changes items to bullet list items if all selected items
-  are already task list items.
+* Change: toggle task list item now changes items to bullet list items if all selected items are
+  already task list items.
+* Add: flexmark-java feature to work with unicode invisible characters. Dialog to show, add.
+  clean or remove from selected text.
+* Fix: toc to check there is a blank line between it and the first child. Also need to split a
+  list at first loose item or one that is not a TOC style list item since it is not part of the
+  toc. Very important. Otherwise accidentally blows away list items that follow a TOC element.
+* Fix: simulated TOC element to accept `[TOC ....]:#` anything after the space in the tag as a
+  valid `[TOC]:#` tag. Otherwise partial edits may cause the elements to be chewed up since the
+  TOC element disappears on formatting.
+* Add: TOC levels to select which heading levels to include:
+    * a single number: levels accepted 1 to number
+    * a list of numbers: heading accepted if its number is in the list
+    * a list of ranges #-#: heading accepted if its number is in one of the listed ranges
+* Fix: TOC option to not create missing empty header levels. ie. collapse missing headers.
+* Fix: task list item action not to change closed task items to open ones.
+* Add: combination syntax attributes for abbreviations in quotes, tables, headers and definition
+  term.
+* Add: code style option to sort abbreviations, footnotes and references, with or without unused
+  ones last.
+* Add: test for TOC option in parser settings before parsing SimToc
+* Add: annotation for TOC needs updating and a quick fix
+* Add: intention to edit TOC options, with preview and all the fixings
+* Add: dedicated license server with two fallback URLs in case of failure. 
+* Add: TOC options refactoring will use dummy headings if the current file does not have any.
+* Fix: issues when inserting characters and backspacing right after numbered item prefix.
+* Fix: characters typed on a blank line right above a paragraph would insert a duplicate of the
+  character at the start of the next line.
+* Fix: anchor ref links should not check if the file is on GitHub
+* Fix: completions for emoji and GitHub issues in headers 
+* [ ] Add: implement list loose/tight formatting style setting. 
+* [ ] Add: update TOC on save
 * [ ] Fix: typing on a line with the next text stretch too long to fit, should keep cursor on
       the same line after space, add extra space if needed.
-* [ ] Fix: toc to check if there is a blank line between it and the first child. Very important.
-      Also check if list following it has a link with an empty file name. Otherwise accidentally
-      blows away item text that follows.
-* [ ] Add: a file inspection for TOC needing updating and a quick fix
-* [ ] Add: update TOC on save
-* [ ] Fix: issues when inserting characters and backspacing right after numbered item prefix.
-* [ ] Fix: sometimes characters typed at the beginning of a line, are inserted at the beginning
-      of the next line. 
-* [ ] Fix: self referencing links should not check if the file is on GitHub
 * [ ] Add: intelligent nested children find function that understands which elements can be
       inside others. Generic function too slow because it dives into unnecessary elements.
 * [ ] Add: Toggle emphasis action config for end of region punctuations to be treated as
@@ -374,12 +409,11 @@
 * **Jekyll front matter handling**
     * Fix: #200, Jekyll front matter is not recognized if the terminating marker is at the end
       of file.
-
-        # 222 Inspection to detect Jekyll front matter presence in the file, with option to enable
-        
-    or ignore. * Code style option to not splice image and explicit links which are start of
-    line to previous line during paragraph reformatting. * Jekyll front matter folding region
-    and config
+    * Fix: # 222 Inspection to detect Jekyll front matter presence in the file, with option to
+      enable or ignore.
+    * Code style option to not splice image and explicit links which are start of line to
+      previous line during paragraph reformatting. * Jekyll front matter folding region and
+      config
 
 ### 1.4.10 - Bug Fix & Optimization Release
 
