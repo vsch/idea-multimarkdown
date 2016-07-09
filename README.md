@@ -13,7 +13,7 @@ Markdown Navigator plugin provides **[Markdown] language support for [IntelliJ I
 - [General Information](#general-information)
     - [Plugin Benefits](#plugin-benefits)
 - [Release Road Map](#release-road-map)
-- [Latest Developments: EAP Release of Upcoming Version 1.8.0](#latest-developments-eap-release-of-upcoming-version-180)
+- [Latest Developments: Version 1.8.0](#latest-developments-version-180)
 - [Version 1.7.1](#version-171)
 - [Version 1.7.0](#version-170)
     - [Screenshots](#screenshots)
@@ -107,10 +107,10 @@ A few days were sacrificed to hack some features into Markdown Navigator to make
 navigating the common mark spec format file and generating flexmark-java extensions easier. I
 could not live without basic auto completions, go to declaration and some error highlighting.
 
-Latest Developments: EAP Release of Upcoming Version 1.8.0
-----------------------------------------------------------
+Latest Developments: Version 1.8.0
+----------------------------------
 
-For a full list see the [Version Notes]
+For a full list of changes see the [Version Notes]
 
 - **Table of Contents** tag that works with basic markdown syntax and is updated by the plugin.
   The table of contents at the top of this page is an example. For more information see the

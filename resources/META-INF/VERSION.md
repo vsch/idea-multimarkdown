@@ -1,8 +1,8 @@
 ## Markdown Navigator
 
-[TOC levels=3,6]: # "# Version History"
-# Version History
-- [1.7.1.24 - Bug Fixes and Enhancements](#17124---bug-fixes-and-enhancements)
+[TOC levels=3,6]: # "Version History"
+### Version History
+- [1.8.0 - Bug Fixes and Enhancements](#180---bug-fixes-and-enhancements)
 - [1.7.1 - Bug Fixes and Enhancements](#171---bug-fixes-and-enhancements)
 - [1.7.0 - Full PsiTree Parser, Doc Structure View & Doc Formatting](#170---full-psitree-parser-doc-structure-view--doc-formatting)
 - [1.6.3.3 - Bug Fix Patch Release](#1633---bug-fix-patch-release)
@@ -14,7 +14,7 @@
 - [1.4.7 - Bug Fix & Optimization Release](#147---bug-fix--optimization-release)
 - [1.4.6 - Bug Fix Release](#146---bug-fix-release)
 
-### 1.7.1.24 - Bug Fixes and Enhancements 
+### 1.8.0 - Bug Fixes and Enhancements 
 
 #### Basic & Enhanced Editions
 
@@ -87,7 +87,7 @@
   `[TOC]:#` tag. Otherwise partial edits may cause the elements to be chewed up since the TOC
   element disappears on formatting.
 * Add: TOC levels to select which heading levels to include:
-    * a single number: levels accepted 1 to number
+    * a single number: levels accepted 2 to number
     * a list of numbers: heading accepted if its number is in the list
     * a list of ranges #-#: heading accepted if its number is in one of the listed ranges
 * Fix: TOC option to not create missing empty header levels. ie. collapse missing headers.
@@ -108,7 +108,8 @@
 * Fix: completions for emoji and GitHub issues in headers
 * Add: TOC line marker to navigate to toc listed headers
 * Add: update TOC on save
-* [ ] Add: implement list loose/tight formatting style setting.
+* Fix: TOC element with empty title `""` would use default title setting
+* Add: format list loose/tight style setting implementation.
 * [ ] Fix: typing on a line with the next text stretch too long to fit, should keep cursor on
       the same line after space, add extra space if needed.
 * [ ] Add: intelligent nested children find function that understands which elements can be
@@ -506,5 +507,3 @@
 #### Basic & Enhanced Editions
 
 - Fix: #163, NullPointerException on new files
-
-[test]: asdfasfd "test"
