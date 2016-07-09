@@ -81,7 +81,7 @@ and IDE hanging issues, resulting in many complaints about the plugin degrading 
 Reason for the choice is detailed in:
 
 I am changing the [Markdown] parser used by the plugin from [pegdown] to [flexmark-java], a fork
-from [commonmark-java].
+from [commonmark-java]. Reasons detailed in
 [Pegdown - Achilles heel of the Markdown Navigator plugin](http://vladsch.com/blog/15).
 
 Original [commonmark-java] is intended for HTML generation and lacks markdown elements in its
