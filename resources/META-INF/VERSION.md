@@ -2,6 +2,7 @@
 
 [TOC levels=3,6]: # "Version History"
 ### Version History
+- [1.8.1 - Bug Fixes and Enhancements](#181---bug-fixes-and-enhancements)
 - [1.8.0 - Bug Fixes and Enhancements](#180---bug-fixes-and-enhancements)
 - [1.7.1 - Bug Fixes and Enhancements](#171---bug-fixes-and-enhancements)
 - [1.7.0 - Full PsiTree Parser, Doc Structure View & Doc Formatting](#170---full-psitree-parser-doc-structure-view--doc-formatting)
@@ -13,6 +14,20 @@
 - [1.4.8 - Bug Fix & Optimization Release](#148---bug-fix--optimization-release)
 - [1.4.7 - Bug Fix & Optimization Release](#147---bug-fix--optimization-release)
 - [1.4.6 - Bug Fix Release](#146---bug-fix-release)
+
+### 1.8.1 - Bug Fixes and Enhancements 
+
+#### Basic & Enhanced Editions
+
+- Fix: #268, Installed exception on webstorm load V1.80, caused by attempt to use a Java support
+  class that does not exist on WebStorm. Causes exception on any refactoring action.
+
+#### Enhanced Edition
+
+* Fix: list loose/tight formatting when last item of nested list has blank line 
+* Fix: list loose/tight formatting when tight option is selected and have multiple blank lines
+  between items. 
+* Fix: insert loose list item on ENTER with `loosen if has loose item` list spacing option 
 
 ### 1.8.0 - Bug Fixes and Enhancements 
 
