@@ -2,7 +2,7 @@
 
 [TOC levels=3,6]: # "Version History"
 ### Version History
-- [1.8.1 - Bug Fixes and Enhancements](#181---bug-fixes-and-enhancements)
+- [1.8.2 - Bug Fixes and Enhancements](#182---bug-fixes-and-enhancements)
 - [1.8.0 - Bug Fixes and Enhancements](#180---bug-fixes-and-enhancements)
 - [1.7.1 - Bug Fixes and Enhancements](#171---bug-fixes-and-enhancements)
 - [1.7.0 - Full PsiTree Parser, Doc Structure View & Doc Formatting](#170---full-psitree-parser-doc-structure-view--doc-formatting)
@@ -15,7 +15,7 @@
 - [1.4.7 - Bug Fix & Optimization Release](#147---bug-fix--optimization-release)
 - [1.4.6 - Bug Fix Release](#146---bug-fix-release)
 
-### 1.8.1 - Bug Fixes and Enhancements 
+### 1.8.2 - Bug Fixes and Enhancements 
 
 #### Basic & Enhanced Editions
 
@@ -24,10 +24,42 @@
 
 #### Enhanced Edition
 
-* Fix: list loose/tight formatting when last item of nested list has blank line 
+* Fix: #271, ClassNotFoundError with Latest PhpStorm update and other locations where Java based
+  refactoring classes were used.
+* Fix: toc element post parsing bug that caused assertion failure during parsing
+* Fix: annotator showing reference used when it is not used
+* Fix: unnecessary no issue token type logging
+* Add: tooltip to flexmark option checkbox in edit example options dialog
+* Fix: list loose/tight formatting when last item of nested list has blank line
 * Fix: list loose/tight formatting when tight option is selected and have multiple blank lines
-  between items. 
-* Fix: insert loose list item on ENTER with `loosen if has loose item` list spacing option 
+  between items.
+* Fix: insert loose list item on ENTER with `loosen if has loose item` list spacing option
+* Fix: improper flexmark ext rename processor implementation disabled test spec class/file and
+  spec file renaming.
+* Add: flexmark-java spec example FAIL option
+* Change: inline code now treated as literal so that classes, methods and fields can be
+  refactored with search in strings. :warning: this only works if syntax highlighting is set to
+  lexer not annotator. Lexer used with annotator syntax highlighting only distinguishes text and
+  html comments. The latter so that TODO processing will work with either highlighter.
+* Change: markdown inside code fence or verbatim with markdown injected language gets all types
+  of references from the outer file. Outer references see their inner referencing elements and
+  will be marked as used if there are any inner or outer references. Refactoring will rename all
+  referring elements. Outer reference elements do not see inner duplicates, but inner ones see
+  outer ones.   
+
+    :warning: Exception to outer reference access is a `[TOC]:#` element. It only uses outer
+    context headings if none are defined within the injected context. An inner `[TOC]:#` element
+    is not updated automatically on file save or format. **Only manual update** via the update
+    table of contents quick fix to prevent inadvertent changes to code fence or verbatim text.
+* Prep: for sim toc parsing to be done by flexmark-java options parser    
+* Add: flexmark-java extension to convert module camel case to dot for extension package.
+* Add: flexmark-java extension to convert module camel case to dashed for: module name
+* Add: flexmark-java extension module config common profiles to select common combinations:
+      * Select None/All Buttons
+      * BlockParser
+* [ ] Fix: list actions do not recognize the item as of their type if it is empty.    
+* [ ] Fix: for list item indentation purposes the prefix should be the child prefix, not child
+      continuation or item continuation prefix.
 
 ### 1.8.0 - Bug Fixes and Enhancements 
 
@@ -322,18 +354,27 @@
 #### Enhanced Edition
 
 * Fix: #195, License activation being reset when no network connection is available.
+
 * Fix: #196, Incorrect parsing of compound reference links
+
 * Fix: #198, Image links that don't end with an extension don't get recognized. Now image links
   without extension are assumed to be correct. No error or warning is generated for these links.
   Query strings are also stripped from the link address before looking for an extension.
+
 * Fix: #199, Multi-line image URLs not parsed correctly when terminating ) is followed by white
   space characters file and without EOL.
+
 * Fix: #201, Image link completion in wiki pages leaves out subdirectories
+
 * Fix: #211, Completions for some empty link elements show no suggestions.
+
 * Add: highlighting of auto-inserted `*`, `_` or `~` that would be deleted if a space is typed.
+
 * Change: Auto-format table on typing and smart `*` `~` duplication to be off by default.
+
 * Add: Auto inserted `*`, `_` and `~` that will be deleted by typing a space are now colored in
   the scheme's comment color to highlight that they can be deleted by typing a space
+
 * Fix: block quote prefix on fenced code would not be stripped off. Prefix needs to be
   consistent on all the lines for the prefix to be properly stripped for the injected language
   fragment.
@@ -419,8 +460,11 @@
     Fastest typing response is achieved when:
 
     * syntax highlighting is turned off
+    
     * wrap on typing is disabled
+    
     * auto-format tables is disabled
+    
     * all previews are turned off
 
 * **Jekyll front matter handling**
