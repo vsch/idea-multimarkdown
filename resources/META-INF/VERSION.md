@@ -2,6 +2,9 @@
 
 [TOC levels=3,6]: # "Version History"
 ### Version History
+- [1.9.9.4 - New Parser Early Preview](#1994---new-parser-early-preview)
+- [Enhanced Edition](#enhanced-edition)
+- [1.8.2.4 - Bug Fixes and Enhancements](#1824---bug-fixes-and-enhancements)
 - [1.8.2 - Bug Fixes and Enhancements](#182---bug-fixes-and-enhancements)
 - [1.8.0 - Bug Fixes and Enhancements](#180---bug-fixes-and-enhancements)
 - [1.7.1 - Bug Fixes and Enhancements](#171---bug-fixes-and-enhancements)
@@ -14,6 +17,43 @@
 - [1.4.8 - Bug Fix & Optimization Release](#148---bug-fix--optimization-release)
 - [1.4.7 - Bug Fix & Optimization Release](#147---bug-fix--optimization-release)
 - [1.4.6 - Bug Fix Release](#146---bug-fix-release)
+
+### 1.9.9.4 - New Parser Early Preview 
+
+#### Basic & Enhanced Editions
+
+- Add: flexmark parser as the default option for lexer, parser and external annotator. Typing
+  response is amazing. Some elements still missing and there are emphasis parsing differences
+  not yet addressed due to commonmark rules:
+    * Definitions 
+    * Typographic: Quotes, Smarts
+    * Multi-Line Image URLs
+    * Some emphasis inline parsing is commonmark, not GitHub 
+
+### Enhanced Edition
+
+### 1.8.2.4 - Bug Fixes and Enhancements 
+
+#### Basic & Enhanced Editions
+
+- Fix: if remote url in git config lacked a .git extension then the repo would not resolve links
+  in preview.
+- Fix: #263, AssertionError while indexing .md file and probably a few others. pegdown bug would
+  cause some AST nodes to have start > end.
+
+#### Enhanced Edition
+
+* Add: project module names to inline code completions
+* Fix: range assertion fail in folding builder for empty range
+* Fix: #274, Default Editor layout always reset to "editor and preview"
+* Fix: #273, Loosen list action IndexOutOfBoundsException when not all list items are selected
+* Fix: Reformat document and reformat element actions now remove unnecessary trailing spaces at
+  end of text blocks. Reformat element will only remove trailing spaces located after the caret
+  to prevent the caret from hanging off the end of the text block after reformatting or changing
+  the caret position.
+* Fix: caret placed one character left of a space if wrapping after a typed space with a space
+  before caret.
+* Add: flexmark spec line markers for option missing in some test classes.
 
 ### 1.8.2 - Bug Fixes and Enhancements 
 
@@ -45,19 +85,19 @@
   of references from the outer file. Outer references see their inner referencing elements and
   will be marked as used if there are any inner or outer references. Refactoring will rename all
   referring elements. Outer reference elements do not see inner duplicates, but inner ones see
-  outer ones.   
+  outer ones.
 
     :warning: Exception to outer reference access is a `[TOC]:#` element. It only uses outer
     context headings if none are defined within the injected context. An inner `[TOC]:#` element
     is not updated automatically on file save or format. **Only manual update** via the update
     table of contents quick fix to prevent inadvertent changes to code fence or verbatim text.
-* Prep: for sim toc parsing to be done by flexmark-java options parser    
+* Prep: for sim toc parsing to be done by flexmark-java options parser
 * Add: flexmark-java extension to convert module camel case to dot for extension package.
 * Add: flexmark-java extension to convert module camel case to dashed for: module name
 * Add: flexmark-java extension module config common profiles to select common combinations:
-      * Select None/All Buttons
-      * BlockParser
-* [ ] Fix: list actions do not recognize the item as of their type if it is empty.    
+    * Select None/All Buttons
+    * BlockParser
+* [ ] Fix: list actions do not recognize the item as of their type if it is empty.
 * [ ] Fix: for list item indentation purposes the prefix should be the child prefix, not child
       continuation or item continuation prefix.
 
@@ -78,7 +118,7 @@
 #### Enhanced Edition
 
 * Change: Now disabling table formatting also disables row insert on ENTER and delete row/column
-  on BACKSPACE to make it easier to turn off side-effects for manual editing.  
+  on BACKSPACE to make it easier to turn off side-effects for manual editing.
 * Fix: #252, update failed for AnAction with
   ID=com.vladsch.idea.multimarkdown.editor.actions.styling.ListTightAction
 * Fix: #253, null
@@ -460,11 +500,11 @@
     Fastest typing response is achieved when:
 
     * syntax highlighting is turned off
-    
+
     * wrap on typing is disabled
-    
+
     * auto-format tables is disabled
-    
+
     * all previews are turned off
 
 * **Jekyll front matter handling**

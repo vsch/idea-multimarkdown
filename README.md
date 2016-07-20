@@ -7,12 +7,13 @@ Markdown Navigator plugin provides **[Markdown] language support for [IntelliJ I
 
 **You can download it on the [JetBrains plugin page].**
 
-[TOC levels=2,3]: #### "Table of Contents"
+[TOC levels=2,3]: # "Table of Contents"
 ### Table of Contents
 - [Plugin Name Has Changed](#plugin-name-has-changed)
 - [General Information](#general-information)
     - [Plugin Benefits](#plugin-benefits)
 - [Release Road Map](#release-road-map)
+- [Preview With New Parser: Version 1.9.9.4](#preview-with-new-parser-version-1994)
 - [Latest Developments: Version 1.8.0](#latest-developments-version-180)
 - [Version 1.7.1](#version-171)
 - [Version 1.7.0](#version-170)
@@ -74,7 +75,7 @@ I will address the open source release once version 2.0 of the plugin, with a ne
 released. I only want to go through the major effort of merging these major differences once.
 
 Release Road Map
-----------------
+---------------- 
 
 Current implementation using [pegdown][] as the parser, which has caused many of the performance
 and IDE hanging issues, resulting in many complaints about the plugin degrading IDE performance.
@@ -106,6 +107,27 @@ replace pegdown in the plugin.
 A few days were sacrificed to hack some features into Markdown Navigator to make creating and
 navigating the common mark spec format file and generating flexmark-java extensions easier. I
 could not live without basic auto completions, go to declaration and some error highlighting.
+
+Preview With New Parser: Version 1.9.9.4
+----------------------------------------
+
+Available through the "Early Access Program" channel.
+
+- Add: flexmark parser as the default option for lexer, parser and external annotator. Typing
+  response is amazing. Some elements still missing and there are emphasis parsing differences
+  not yet addressed due to commonmark rules:
+    * Definitions 
+    * Typographic: Quotes, Smarts
+    * Multi-Line Image URLs
+    * Some emphasis inline parsing is commonmark, not GitHub 
+    
+    :warning: HTML rendering for the preview is still using pegdown. Set split editor layout to
+    "Editor Only" to get the benefit of "no pegdown" typing response.
+    
+- Add: Under Languages & Settings > Markdown > Debug settings for which parser is to be used
+  for: lexer, parser and annotator. Highly recommended these are all set to "flexmark" but if
+  you want to compare set them to pegdown.
+
 
 Latest Developments: Version 1.8.0
 ----------------------------------
