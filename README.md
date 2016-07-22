@@ -13,8 +13,8 @@ Markdown Navigator plugin provides **[Markdown] language support for [IntelliJ I
 - [General Information](#general-information)
     - [Plugin Benefits](#plugin-benefits)
 - [Release Road Map](#release-road-map)
-- [Preview With New Parser: Version 1.9.9.4](#preview-with-new-parser-version-1994)
-- [Latest Developments: Version 1.8.4](#latest-developments-version-184)
+- [Preview With New Parser: Version 1.9.9.8](#preview-with-new-parser-version-1998)
+- [Latest Developments: Version 1.8.3](#latest-developments-version-183)
 - [Version 1.8.0](#version-180)
 - [Version 1.7.1](#version-171)
 - [Version 1.7.0](#version-170)
@@ -63,7 +63,7 @@ project.
 
 ![Capabilities](/assets/images/capabilities.png)
 
-#### Updating of the source  
+#### Updating of the source
 
 There was much code churn in the enhanced version and I have not had time to merge them into the
 open source version. Initially, most of the differences were limited to a few files making it
@@ -90,7 +90,7 @@ change the basic behavior of the parser.
 To overcome these limitations I forked the project and made the necessary changes to allow
 extensions to change almost every aspect of the parser. The [flexmark-java] project is maturing
 rapidly, enough to be used to replace pegdown in the
-[Preview With New Parser: Version 1.9.9.4](#preview-with-new-parser-version-1994)
+[Preview With New Parser: Version 1.9.9.8](#preview-with-new-parser-version-1998)
 
 In the process of adding source tracking, performance was impacted by about 25-35%, which still
 makes it **7x-10x** faster than [intellij-markdown] parser used by [Markdown Support] and
@@ -100,11 +100,11 @@ time or the infinite loop parsing on some pathological cases.
 I am now in the process of adding a few more extensions and testing HTML rendering to completely
 replace pegdown in the plugin in the next release.
 
-Preview With New Parser: Version 1.9.9.4
+Preview With New Parser: Version 1.9.9.8
 ----------------------------------------
 
 Available through the "Early Access Program" channel and through direct
-[download](../../raw/master/dist/idea-multimarkdown.1.9.9.4.zip).
+[download](../../raw/master/dist/idea-multimarkdown.1.9.9.8.zip).
 
 - Add: flexmark parser as the default option for lexer, parser and external annotator. Typing
   response is amazing. Some elements still missing and there are emphasis parsing differences
@@ -199,7 +199,7 @@ Version 1.7.0
 -------------
 
 - **Document Structure View** added with sections for:
-    - Headers to show header hierarchy by level  
+    - Headers to show header hierarchy by level
       ![Screenshot Structure Headers](assets/images/faq/structure/Screenshot_Structure_Headers.png)
     - Images with all images in the document
     - References with all references in the document
@@ -208,7 +208,7 @@ Version 1.7.0
     - Footnotes with all Footnotes in the document
     - Document showing all abbreviations, block quotes, footnotes, headers, images, lists,
       references and tables in the document in the hierarchy and order of their location in the
-      document.  
+      document.
       ![Screenshot Structure Document](assets/images/faq/structure/Screenshot_Structure_Document.png)
 
 - **Document format** toolbar button and action to format the document to code style settings.
@@ -216,16 +216,16 @@ Version 1.7.0
 
 - Dynamically created syntax highlighting attributes to simulate overlay of element style with
   transparency. This creates consistent colors when multiple attributes are combined, such as
-  inline elements in tables, headers and definition terms.  
+  inline elements in tables, headers and definition terms.
   ![Screenshot Combination Splits](assets/images/faq/Screenshot_combination_splits.png)
 
 - Actual character display font width used for wrapping and table formatting, allowing best
   alignment for multi-byte characters and proportional fonts:
 
-    With character width taken into account:  
+    With character width taken into account:
     ![Screen Shot multibyte sample](assets/images/faq/ScreenShot_multibyte_sample.png)
 
-    Assuming fixed character width:  
+    Assuming fixed character width:
     ![Screen Shot nomultibyte sample](assets/images/faq/ScreenShot_nomultibyte_sample.png)
 
 - **Block Quote** increase/decrease level toolbar buttons and actions.
@@ -306,7 +306,7 @@ with a simple desire for a Markdown preview that looked like GitHub's.
 \* This plugin is based on the [nicoulaj/idea-markdown plugin] by [nicoulaj], which is based on
 [pegdown] library by [sirthias].
 
-Markdown Navigator, Copyright (c) 2016, V. Schneider,  
+Markdown Navigator, Copyright (c) 2016, V. Schneider,
 <http://vladsch.com> All Rights Reserved.
 
 [Android Studio]: http://developer.android.com/sdk/installing/studio.html
@@ -328,7 +328,7 @@ Markdown Navigator, Copyright (c) 2016, V. Schneider,
 [commonmark-java]: https://github.com/atlassian/commonmark-java
 [flexmark-java]: https://github.com/vsch/flexmark-java
 [idea-multimarkdown]: http://vladsch.com/product/multimarkdown
-[intellij-markdown]: https://github.com/valich/intellij-markdown 
+[intellij-markdown]: https://github.com/valich/intellij-markdown
 [nicoulaj]: https://github.com/nicoulaj
 [nicoulaj/idea-markdown plugin]: https://github.com/nicoulaj/idea-markdown
 [pegdown]: http://pegdown.org

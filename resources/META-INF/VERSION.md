@@ -2,6 +2,8 @@
 
 [TOC levels=3,6]: # "Version History"
 ### Version History
+- [1.9.9.8 - New Parser Early Preview](#1998---new-parser-early-preview)
+- [Enhanced Edition](#enhanced-edition)
 - [1.8.4 - Bug Fixes and Enhancements](#184---bug-fixes-and-enhancements)
 - [1.8.3 - Bug Fixes and Enhancements](#183---bug-fixes-and-enhancements)
 - [1.8.2 - Bug Fixes and Enhancements](#182---bug-fixes-and-enhancements)
@@ -16,6 +18,25 @@
 - [1.4.8 - Bug Fix & Optimization Release](#148---bug-fix--optimization-release)
 - [1.4.7 - Bug Fix & Optimization Release](#147---bug-fix--optimization-release)
 - [1.4.6 - Bug Fix Release](#146---bug-fix-release)
+
+### 1.9.9.8 - New Parser Early Preview
+
+#### Basic & Enhanced Editions
+
+- Change: update flexmark-java parser to spec 0.26 with more intuitive emphasis parsing
+- Add: skeleton error reporter to make reporting plugin errors more convenient and also more
+  complete. No server code yet. For now disabled.
+- Fix: With lexer as syntax highlighter deleting the last space after `[ ]` would cause an
+   exception that was trapped but it would mess up syntax highlighting
+- Fix: parser would accept ordered lists using `)` delimiter, as per commonmark spec.
+- Add: flexmark parser as the default option for lexer, parser and external annotator. Typing
+  response is amazing. Some elements still missing and there are emphasis parsing differences
+  not yet addressed due to commonmark rules:
+    * Definitions
+    * Typographic: Quotes, Smarts
+    * Multi-Line Image URLs
+
+### Enhanced Edition
 
 ### 1.8.4 - Bug Fixes and Enhancements
 
