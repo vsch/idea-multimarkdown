@@ -14,7 +14,7 @@ Markdown Navigator plugin provides **[Markdown] language support for [IntelliJ I
     - [Plugin Benefits](#plugin-benefits)
 - [Release Road Map](#release-road-map)
 - [Preview With New Parser: Version 1.9.9.4](#preview-with-new-parser-version-1994)
-- [Latest Developments: Version 1.8.3](#latest-developments-version-183)
+- [Latest Developments: Version 1.8.4](#latest-developments-version-184)
 - [Version 1.8.0](#version-180)
 - [Version 1.7.1](#version-171)
 - [Version 1.7.0](#version-170)
@@ -121,7 +121,7 @@ Available through the "Early Access Program" channel and through direct
   for: lexer, parser and annotator. Highly recommended these are all set to "flexmark" but if
   you want to compare set them to pegdown.
 
-Latest Developments: Version 1.8.3
+Latest Developments: Version 1.8.4
 ----------------------------------
 
 :warning: This is the last release of version 1.x using pegdown parser. All future releases will

@@ -2,6 +2,7 @@
 
 [TOC levels=3,6]: # "Version History"
 ### Version History
+- [1.8.4 - Bug Fixes and Enhancements](#184---bug-fixes-and-enhancements)
 - [1.8.3 - Bug Fixes and Enhancements](#183---bug-fixes-and-enhancements)
 - [1.8.2 - Bug Fixes and Enhancements](#182---bug-fixes-and-enhancements)
 - [1.8.0 - Bug Fixes and Enhancements](#180---bug-fixes-and-enhancements)
@@ -15,6 +16,13 @@
 - [1.4.8 - Bug Fix & Optimization Release](#148---bug-fix--optimization-release)
 - [1.4.7 - Bug Fix & Optimization Release](#147---bug-fix--optimization-release)
 - [1.4.6 - Bug Fix Release](#146---bug-fix-release)
+
+### 1.8.4 - Bug Fixes and Enhancements
+
+#### Basic & Enhanced Editions
+
+- Fix: #278, After upgrading to 1.8.3. IntelliJ IDEA 2016.2 hangs immediately after startup. One
+  more effing pegdown parsing related issue.
 
 ### 1.8.3 - Bug Fixes and Enhancements
 
