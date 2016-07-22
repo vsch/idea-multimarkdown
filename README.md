@@ -14,7 +14,8 @@ Markdown Navigator plugin provides **[Markdown] language support for [IntelliJ I
     - [Plugin Benefits](#plugin-benefits)
 - [Release Road Map](#release-road-map)
 - [Preview With New Parser: Version 1.9.9.4](#preview-with-new-parser-version-1994)
-- [Latest Developments: Version 1.8.0](#latest-developments-version-180)
+- [Latest Developments: Version 1.8.3](#latest-developments-version-183)
+- [Version 1.8.0](#version-180)
 - [Version 1.7.1](#version-171)
 - [Version 1.7.0](#version-170)
     - [Screenshots](#screenshots)
@@ -47,7 +48,7 @@ conflict with original Markdown spec. This plugin uses [pegdown] library by [sir
 few extensions added to make the rendering of GFM more faithful.
 
 The plugin also includes some syntax extensions from [Fletcher T. Penney's MultiMarkdown]
-project.  
+project.
 
 #### Two tier model of the plugin
 
@@ -60,7 +61,7 @@ project.
    available in the Enhanced licensed version. 30-day free trial licenses are available from
    [idea-multimarkdown] page on my website.
 
-![Capabilities](/assets/images/capabilities.png)       
+![Capabilities](/assets/images/capabilities.png)
 
 #### Updating of the source  
 
@@ -72,17 +73,13 @@ sync is a major effort. I started factoring out the enhanced only changes to sep
 that future synchronization of the two branches can be less time consuming.
 
 I will address the open source release once version 2.0 of the plugin, with a new parser is
-released. I only want to go through the major effort of merging these major differences once.
+released. I only want to go through the effort of merging these major differences once.
 
 Release Road Map
----------------- 
+----------------
 
-Current implementation using [pegdown][] as the parser, which has caused many of the performance
-and IDE hanging issues, resulting in many complaints about the plugin degrading IDE performance.
-Reason for the choice is detailed in:
-
-I am changing the [Markdown] parser used by the plugin from [pegdown] to [flexmark-java], a fork
-from [commonmark-java]. Reasons detailed in
+The [Markdown] parser used by the plugin from [pegdown] to [flexmark-java], a fork from
+[commonmark-java]. Reasons detailed in
 [Pegdown - Achilles heel of the Markdown Navigator plugin](http://vladsch.com/blog/15).
 
 Original [commonmark-java] is intended for HTML generation and lacks markdown elements in its
@@ -91,48 +88,62 @@ tracking for its inline elements assumes assumes that extension will add to the 
 change the basic behavior of the parser.
 
 To overcome these limitations I forked the project and made the necessary changes to allow
-extensions to change almost every aspect of the parser. The [flexmark-java] project is in its
-early development stage. All the commonmark spec tests have been converted to include testing
-the generated AST and are passing. All extensions have been converted along with their tests to
-use the spec.txt format with AST validation and are also passing.
+extensions to change almost every aspect of the parser. The [flexmark-java] project is maturing
+rapidly, enough to be used to replace pegdown in the
+[Preview With New Parser: Version 1.9.9.4](#preview-with-new-parser-version-1994)
 
 In the process of adding source tracking, performance was impacted by about 25-35%, which still
-makes it **7x-10x** faster on large files than [intellij-markdown] parser used by
-[Markdown Support] and **30x-50x** faster than pegdown. All that without pegdown's exponential
-parse time or the infinite loop parsing on some pathological cases.
+makes it **7x-10x** faster than [intellij-markdown] parser used by [Markdown Support] and
+**30x-50x** faster than pegdown. All that without pegdown's parsing timeouts, exponential parse
+time or the infinite loop parsing on some pathological cases.
 
-I am now in the process of adding all the necessary extensions to make the new parser be able to
-replace pegdown in the plugin.
-
-A few days were sacrificed to hack some features into Markdown Navigator to make creating and
-navigating the common mark spec format file and generating flexmark-java extensions easier. I
-could not live without basic auto completions, go to declaration and some error highlighting.
+I am now in the process of adding a few more extensions and testing HTML rendering to completely
+replace pegdown in the plugin in the next release.
 
 Preview With New Parser: Version 1.9.9.4
 ----------------------------------------
 
-Available through the "Early Access Program" channel.
+Available through the "Early Access Program" channel and through direct
+[download](../../raw/master/dist/idea-multimarkdown.1.9.9.4.zip).
 
 - Add: flexmark parser as the default option for lexer, parser and external annotator. Typing
   response is amazing. Some elements still missing and there are emphasis parsing differences
   not yet addressed due to commonmark rules:
-    * Definitions 
+    * Definitions
     * Typographic: Quotes, Smarts
     * Multi-Line Image URLs
-    * Some emphasis inline parsing is commonmark, not GitHub 
-    
+    * Some emphasis inline parsing is commonmark, not GitHub
+
     :warning: HTML rendering for the preview is still using pegdown. Set split editor layout to
     "Editor Only" to get the benefit of "no pegdown" typing response.
-    
+
 - Add: Under Languages & Settings > Markdown > Debug settings for which parser is to be used
   for: lexer, parser and annotator. Highly recommended these are all set to "flexmark" but if
   you want to compare set them to pegdown.
 
-
-Latest Developments: Version 1.8.0
+Latest Developments: Version 1.8.3
 ----------------------------------
 
+:warning: This is the last release of version 1.x using pegdown parser. All future releases will
+be based on the new [flexmark-java] parser.
+
 For a full list of changes see the [Version Notes]
+
+- Project module names added to inline code completions
+
+- More flexible inline code completions, will allow qualified class names and multi-class name
+  matches when completing members. If more than one class name matches then the combined set of
+  members is used from all matched classes.
+
+- Inline code elements are now treated as literal so that classes, methods and fields can be
+  refactored with search in strings.
+
+    :warning: this only works if syntax highlighting is set to lexer not annotator. Lexer used
+    with annotator syntax highlighting only distinguishes text and html comments. The latter
+    allows TODO processing to work with either highlighter.
+
+Version 1.8.0
+-------------
 
 - **Table of Contents** tag that works with basic markdown syntax and is updated by the plugin.
   The table of contents at the top of this page is an example. For more information see the
@@ -171,12 +182,17 @@ Version 1.7.1
     ![List Item Actions](assets/images/noload/ListItemActions.gif)
 
 - Fix #247, Error and corrupting files, duplicates #248, #249, #250 and #251
+
 - Fix: #244, NPE upon opening simple markdown file
+
 - Fix: scratch files not recognized as Markdown during editor creation in latest
   intellij-community builds.
+
 - Fix: #245, Inserting an ordered list item on ENTER with renumbering enabled causes exception
+
 - Fix: #246, Auto scroll to source. Swing preview would always scroll to top of page after
   document modification.
+
 - Add: preview setting for `Scroll preview to source position` for Swing preview.
 
 Version 1.7.0

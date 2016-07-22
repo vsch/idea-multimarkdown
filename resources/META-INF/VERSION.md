@@ -2,9 +2,7 @@
 
 [TOC levels=3,6]: # "Version History"
 ### Version History
-- [1.9.9.4 - New Parser Early Preview](#1994---new-parser-early-preview)
-- [Enhanced Edition](#enhanced-edition)
-- [1.8.2.4 - Bug Fixes and Enhancements](#1824---bug-fixes-and-enhancements)
+- [1.8.3 - Bug Fixes and Enhancements](#183---bug-fixes-and-enhancements)
 - [1.8.2 - Bug Fixes and Enhancements](#182---bug-fixes-and-enhancements)
 - [1.8.0 - Bug Fixes and Enhancements](#180---bug-fixes-and-enhancements)
 - [1.7.1 - Bug Fixes and Enhancements](#171---bug-fixes-and-enhancements)
@@ -18,21 +16,7 @@
 - [1.4.7 - Bug Fix & Optimization Release](#147---bug-fix--optimization-release)
 - [1.4.6 - Bug Fix Release](#146---bug-fix-release)
 
-### 1.9.9.4 - New Parser Early Preview 
-
-#### Basic & Enhanced Editions
-
-- Add: flexmark parser as the default option for lexer, parser and external annotator. Typing
-  response is amazing. Some elements still missing and there are emphasis parsing differences
-  not yet addressed due to commonmark rules:
-    * Definitions 
-    * Typographic: Quotes, Smarts
-    * Multi-Line Image URLs
-    * Some emphasis inline parsing is commonmark, not GitHub 
-
-### Enhanced Edition
-
-### 1.8.2.4 - Bug Fixes and Enhancements 
+### 1.8.3 - Bug Fixes and Enhancements
 
 #### Basic & Enhanced Editions
 
@@ -54,8 +38,11 @@
 * Fix: caret placed one character left of a space if wrapping after a typed space with a space
   before caret.
 * Add: flexmark spec line markers for option missing in some test classes.
+* Add: more flexible inline code completions, will allow qualified class names and multi-class
+  name matches when completing members. If more than one class name matches then the combined
+  set of members is used from all matched classes.
 
-### 1.8.2 - Bug Fixes and Enhancements 
+### 1.8.2 - Bug Fixes and Enhancements
 
 #### Basic & Enhanced Editions
 
@@ -97,11 +84,8 @@
 * Add: flexmark-java extension module config common profiles to select common combinations:
     * Select None/All Buttons
     * BlockParser
-* [ ] Fix: list actions do not recognize the item as of their type if it is empty.
-* [ ] Fix: for list item indentation purposes the prefix should be the child prefix, not child
-      continuation or item continuation prefix.
 
-### 1.8.0 - Bug Fixes and Enhancements 
+### 1.8.0 - Bug Fixes and Enhancements
 
 #### Basic & Enhanced Editions
 
@@ -206,7 +190,7 @@
       non-space region, to allow the toggle actions to work when at the end of a word but
       followed by a punctuation.
 
-### 1.7.1 - Bug Fixes and Enhancements 
+### 1.7.1 - Bug Fixes and Enhancements
 
 #### Basic & Enhanced Editions
 
@@ -253,7 +237,7 @@
   parentheses.
 * Add: develop feature flexmark-java spec file format handling.
 
-### 1.7.0 - Full PsiTree Parser, Doc Structure View & Doc Formatting 
+### 1.7.0 - Full PsiTree Parser, Doc Structure View & Doc Formatting
 
 #### Basic & Enhanced Editions
 
