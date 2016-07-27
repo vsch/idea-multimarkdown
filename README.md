@@ -8,13 +8,14 @@ Markdown Navigator plugin provides **[Markdown] language support for [IntelliJ I
 **You can download it on the [JetBrains plugin page].**
 
 [TOC levels=2,3]: # "Table of Contents"
+
 ### Table of Contents
 - [Plugin Name Has Changed](#plugin-name-has-changed)
 - [General Information](#general-information)
     - [Plugin Benefits](#plugin-benefits)
 - [Release Road Map](#release-road-map)
-- [Preview With New Parser: Version 1.9.9.8](#preview-with-new-parser-version-1998)
-- [Latest Developments: Version 1.8.3](#latest-developments-version-183)
+- [Preview With New Parser: Version 1.9.9.12](#preview-with-new-parser-version-19912)
+- [Latest Developments: Version 1.8.4](#latest-developments-version-184)
 - [Version 1.8.0](#version-180)
 - [Version 1.7.1](#version-171)
 - [Version 1.7.0](#version-170)
@@ -46,6 +47,9 @@ GitHub may recognize variants of Markdown syntax that this plugin will not and v
 is due to the parser differences and the fact that GitHub has a few syntax modifications that
 conflict with original Markdown spec. This plugin uses [pegdown] library by [sirthias] with a
 few extensions added to make the rendering of GFM more faithful.
+
+The parser and rendering differences are greatly reduced by the new parser which has a lot of
+flexibility in parsing rules to allow tweaking it to emulate other markdown parsers.
 
 The plugin also includes some syntax extensions from [Fletcher T. Penney's MultiMarkdown]
 project.
@@ -90,32 +94,34 @@ change the basic behavior of the parser.
 To overcome these limitations I forked the project and made the necessary changes to allow
 extensions to change almost every aspect of the parser. The [flexmark-java] project is maturing
 rapidly, enough to be used to replace pegdown in the
-[Preview With New Parser: Version 1.9.9.8](#preview-with-new-parser-version-1998)
+[Preview With New Parser: Version 1.9.9.8](#preview-with-new-parser-version-19912)
 
 In the process of adding source tracking, performance was impacted by about 25-35%, which still
 makes it **7x-10x** faster than [intellij-markdown] parser used by [Markdown Support] and
 **30x-50x** faster than pegdown. All that without pegdown's parsing timeouts, exponential parse
 time or the infinite loop parsing on some pathological cases.
 
-I am now in the process of adding a few more extensions and testing HTML rendering to completely
-replace pegdown in the plugin in the next release.
+I am now in the process of adding a few more extensions and testing HTML rendering for Swing
+preview to completely replace pegdown in the plugin in the next release.
 
-Preview With New Parser: Version 1.9.9.8
-----------------------------------------
+Preview With New Parser: Version 1.9.9.12
+-----------------------------------------
+
+For a full list of changes see the [Version Notes]
 
 Available through the "Early Access Program" channel and through direct
-[download](../../raw/master/dist/idea-multimarkdown.1.9.9.8.zip).
+[download](../../raw/master/dist/idea-multimarkdown.1.9.9.12.zip).
 
+- Add: flexmark parser as the default option for JavaFX HTML preview renderer.
 - Add: flexmark parser as the default option for lexer, parser and external annotator. Typing
-  response is amazing. Some elements still missing and there are emphasis parsing differences
-  not yet addressed due to commonmark rules:
+  response is amazing. Some elements still missing:
     * Definitions
     * Typographic: Quotes, Smarts
     * Multi-Line Image URLs
-    * Some emphasis inline parsing is commonmark, not GitHub
 
-    :warning: HTML rendering for the preview is still using pegdown. Set split editor layout to
-    "Editor Only" to get the benefit of "no pegdown" typing response.
+    :warning: HTML rendering for Swing preview is still using pegdown. Set split editor layout
+    to "Editor Only" if using Swing based preview to get the benefit of "no pegdown" typing
+    response.
 
 - Add: Under Languages & Settings > Markdown > Debug settings for which parser is to be used
   for: lexer, parser and annotator. Highly recommended these are all set to "flexmark" but if
@@ -270,9 +276,9 @@ You can create and edit a markdown table with ease:
 Working with the source
 -----------------------
 
-This plugin is using a modified version of [sirthias], I post my PR's but there is always a
-delay in both generating them and for them to be merged. Additionally, some changes are specific
-to this plugin and have no wide appeal.
+This plugin is using a modified version of [sirthias/pegdown], I post my PR's but there is
+always a delay in both generating them and for them to be merged. Additionally, some changes are
+specific to this plugin and have no wide appeal.
 
 The pegdown source used in this plugin can be found [vsch/pegdown].
 
@@ -306,8 +312,7 @@ with a simple desire for a Markdown preview that looked like GitHub's.
 \* This plugin is based on the [nicoulaj/idea-markdown plugin] by [nicoulaj], which is based on
 [pegdown] library by [sirthias].
 
-Markdown Navigator, Copyright (c) 2016, V. Schneider,
-<http://vladsch.com> All Rights Reserved.
+Markdown Navigator, Copyright (c) 2016, V. Schneider, <http://vladsch.com> All Rights Reserved.
 
 [Android Studio]: http://developer.android.com/sdk/installing/studio.html
 [AppCode]: http://www.jetbrains.com/objc
@@ -333,6 +338,7 @@ Markdown Navigator, Copyright (c) 2016, V. Schneider,
 [nicoulaj/idea-markdown plugin]: https://github.com/nicoulaj/idea-markdown
 [pegdown]: http://pegdown.org
 [sirthias]: https://github.com/sirthias
+[sirthias/pegdown]: https://github.com/sirthias/pegdown
 [vsch/pegdown]: https://github.com/vsch/pegdown/tree/develop
 [.gitignore]: http://hsz.mobi
 [GitHub Issues page]: ../../issues

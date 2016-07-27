@@ -1,8 +1,9 @@
 ## Markdown Navigator
 
 [TOC levels=3,6]: # "Version History"
+
 ### Version History
-- [1.9.9.8 - New Parser Early Preview](#1998---new-parser-early-preview)
+- [1.9.9.12 - New Parser Early Preview](#19912---new-parser-early-preview)
 - [Enhanced Edition](#enhanced-edition)
 - [1.8.4 - Bug Fixes and Enhancements](#184---bug-fixes-and-enhancements)
 - [1.8.3 - Bug Fixes and Enhancements](#183---bug-fixes-and-enhancements)
@@ -19,10 +20,19 @@
 - [1.4.7 - Bug Fix & Optimization Release](#147---bug-fix--optimization-release)
 - [1.4.6 - Bug Fix Release](#146---bug-fix-release)
 
-### 1.9.9.8 - New Parser Early Preview
+### 1.9.9.12 - New Parser Early Preview
 
 #### Basic & Enhanced Editions
 
+- Add: Flexmark parser used for JavaFX Html preview rendering. 
+- Add: Debug setting to allow switching to pegdown for HTML rendering for debug and comparison
+  purposes.
+- Change: simulated TOC to allow `''` for titles to match what is allowed in references
+- Add: list annotation and quick fixes when list items are inconsistent. i.e. bullet and
+  numbered items mixed in one list.
+- Add: table annotations and reformat quick fix
+- Add: parser option for generated TOC to include a blank line spacer after the `[TOC]:#` marker
+  to increase compatibility with existing markdown parsers.
 - Change: update flexmark-java parser to spec 0.26 with more intuitive emphasis parsing
 - Add: skeleton error reporter to make reporting plugin errors more convenient and also more
   complete. No server code yet. For now disabled.
@@ -30,8 +40,7 @@
    exception that was trapped but it would mess up syntax highlighting
 - Fix: parser would accept ordered lists using `)` delimiter, as per commonmark spec.
 - Add: flexmark parser as the default option for lexer, parser and external annotator. Typing
-  response is amazing. Some elements still missing and there are emphasis parsing differences
-  not yet addressed due to commonmark rules:
+  response is amazing. Some elements still missing:
     * Definitions
     * Typographic: Quotes, Smarts
     * Multi-Line Image URLs
