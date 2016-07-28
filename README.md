@@ -14,7 +14,7 @@ Markdown Navigator plugin provides **[Markdown] language support for [IntelliJ I
 - [General Information](#general-information)
     - [Plugin Benefits](#plugin-benefits)
 - [Release Road Map](#release-road-map)
-- [Preview With New Parser: Version 1.9.9.12](#preview-with-new-parser-version-19912)
+- [Preview With New Parser: Version 1.9.9.14](#preview-with-new-parser-version-19914)
 - [Latest Developments: Version 1.8.4](#latest-developments-version-184)
 - [Version 1.8.0](#version-180)
 - [Version 1.7.1](#version-171)
@@ -94,38 +94,42 @@ change the basic behavior of the parser.
 To overcome these limitations I forked the project and made the necessary changes to allow
 extensions to change almost every aspect of the parser. The [flexmark-java] project is maturing
 rapidly, enough to be used to replace pegdown in the
-[Preview With New Parser: Version 1.9.9.8](#preview-with-new-parser-version-19912)
+[Preview With New Parser: Version 1.9.9.8](#preview-with-new-parser-version-19914)
 
 In the process of adding source tracking, performance was impacted by about 25-35%, which still
 makes it **7x-10x** faster than [intellij-markdown] parser used by [Markdown Support] and
 **30x-50x** faster than pegdown. All that without pegdown's parsing timeouts, exponential parse
 time or the infinite loop parsing on some pathological cases.
 
-I am now in the process of adding a few more extensions and testing HTML rendering for Swing
-preview to completely replace pegdown in the plugin in the next release.
-
-Preview With New Parser: Version 1.9.9.12
+Preview With New Parser: Version 1.9.9.14
 -----------------------------------------
 
 For a full list of changes see the [Version Notes]
 
 Available through the "Early Access Program" channel and through direct
-[download](../../raw/master/dist/idea-multimarkdown.1.9.9.12.zip).
+[download](../../raw/master/dist/idea-multimarkdown.1.9.9.14.zip).
 
-- Add: flexmark parser as the default option for JavaFX HTML preview renderer.
-- Add: flexmark parser as the default option for lexer, parser and external annotator. Typing
-  response is amazing. Some elements still missing:
+The new version is almost ready. All parsing and rendering is done by the new parser.
+Performance and typing response is simply amazing. For small files less than a 100k and less
+than a thousand lines long, you can set the syntax highlighter to "Lexer" without degrading the
+typing response. For larger files, typing is more responsive when syntax highlighter is set to
+"Annotator", which is the default. For best typing response in very large files, you can turn
+off the preview to gain even better typing response.
+
+- Add: flexmark parser for all parsing and rendering.
+- Some elements still missing but they are not supported by GFM anyway:
     * Definitions
     * Typographic: Quotes, Smarts
     * Multi-Line Image URLs
 
-    :warning: HTML rendering for Swing preview is still using pegdown. Set split editor layout
-    to "Editor Only" if using Swing based preview to get the benefit of "no pegdown" typing
-    response.
-
 - Add: Under Languages & Settings > Markdown > Debug settings for which parser is to be used
-  for: lexer, parser and annotator. Highly recommended these are all set to "flexmark" but if
-  you want to compare set them to pegdown.
+  for: lexer, parser, annotator and HTML renderer. Highly recommended these are all set to
+  "flexmark" but if you want to compare set them to how it used to be, set one or all to
+  pegdown. 
+
+    :warning: Pegdown version is no longer supported so you are on your own for any issues and
+    problems caused by using the pegdown parser. :smiling_imp: I couldn't wait to be able to say
+    that.
 
 Latest Developments: Version 1.8.4
 ----------------------------------
@@ -205,7 +209,7 @@ Version 1.7.0
 -------------
 
 - **Document Structure View** added with sections for:
-    - Headers to show header hierarchy by level
+    - Headers to show header hierarchy by level  
       ![Screenshot Structure Headers](assets/images/faq/structure/Screenshot_Structure_Headers.png)
     - Images with all images in the document
     - References with all references in the document
@@ -214,7 +218,7 @@ Version 1.7.0
     - Footnotes with all Footnotes in the document
     - Document showing all abbreviations, block quotes, footnotes, headers, images, lists,
       references and tables in the document in the hierarchy and order of their location in the
-      document.
+      document.  
       ![Screenshot Structure Document](assets/images/faq/structure/Screenshot_Structure_Document.png)
 
 - **Document format** toolbar button and action to format the document to code style settings.
