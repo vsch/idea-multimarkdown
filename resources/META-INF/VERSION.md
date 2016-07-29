@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [1.9.9.20 - New Parser Early Preview](#19920---new-parser-early-preview)
+- [1.9.9.22 - New Parser Early Preview](#19922---new-parser-early-preview)
 - [Enhanced Edition](#enhanced-edition)
 - [1.8.4 - Bug Fixes and Enhancements](#184---bug-fixes-and-enhancements)
 - [1.8.3 - Bug Fixes and Enhancements](#183---bug-fixes-and-enhancements)
@@ -20,7 +20,7 @@
 - [1.4.7 - Bug Fix & Optimization Release](#147---bug-fix--optimization-release)
 - [1.4.6 - Bug Fix Release](#146---bug-fix-release)
 
-### 1.9.9.20 - New Parser Early Preview
+### 1.9.9.22 - New Parser Early Preview
 
 #### Basic & Enhanced Editions
 
@@ -47,6 +47,8 @@
 
 ### Enhanced Edition
 
+* Fix: Refine JavaFX scroll preview to source position and highlighting to work more intuitively
+  for block elements, images and address JavaFX WebView DOM element offset quirks.
 * Add: JavaFX scroll preview to source position and various highlight options to show which
   element in the source has focus.
 * Add: flexmark spec example rendering options: fenced code, sections, definition list
