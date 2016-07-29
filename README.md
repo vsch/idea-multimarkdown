@@ -14,7 +14,7 @@ Markdown Navigator plugin provides **[Markdown] language support for [IntelliJ I
 - [General Information](#general-information)
     - [Plugin Benefits](#plugin-benefits)
 - [Release Road Map](#release-road-map)
-- [Preview With New Parser: Version 1.9.9.14](#preview-with-new-parser-version-19914)
+- [Preview With New Parser: Version 1.9.9.20](#preview-with-new-parser-version-19920)
 - [Latest Developments: Version 1.8.4](#latest-developments-version-184)
 - [Version 1.8.0](#version-180)
 - [Version 1.7.1](#version-171)
@@ -25,7 +25,7 @@ Markdown Navigator plugin provides **[Markdown] language support for [IntelliJ I
 
 ***
 
-## Plugin Name Has Changed
+## Plugin Name Has Changed 
 
 The plugin name was changed to address name infringement on [Fletcher T. Penney's MultiMarkdown]
 project. The plugin id used for updates has not changed but the displayed name has changed from
@@ -94,20 +94,20 @@ change the basic behavior of the parser.
 To overcome these limitations I forked the project and made the necessary changes to allow
 extensions to change almost every aspect of the parser. The [flexmark-java] project is maturing
 rapidly, enough to be used to replace pegdown in the
-[Preview With New Parser: Version 1.9.9.8](#preview-with-new-parser-version-19914)
+[Preview With New Parser: Version 1.9.9.20](#preview-with-new-parser-version-19920)
 
 In the process of adding source tracking, performance was impacted by about 25-35%, which still
 makes it **7x-10x** faster than [intellij-markdown] parser used by [Markdown Support] and
 **30x-50x** faster than pegdown. All that without pegdown's parsing timeouts, exponential parse
 time or the infinite loop parsing on some pathological cases.
 
-Preview With New Parser: Version 1.9.9.14
+Preview With New Parser: Version 1.9.9.20
 -----------------------------------------
 
 For a full list of changes see the [Version Notes]
 
 Available through the "Early Access Program" channel and through direct
-[download](../../raw/master/dist/idea-multimarkdown.1.9.9.14.zip).
+[download](../../raw/master/dist/idea-multimarkdown.1.9.9.20.zip).
 
 The new version is almost ready. All parsing and rendering is done by the new parser.
 Performance and typing response is simply amazing. For small files less than a 100k and less
@@ -116,6 +116,8 @@ typing response. For larger files, typing is more responsive when syntax highlig
 "Annotator", which is the default. For best typing response in very large files, you can turn
 off the preview to gain even better typing response.
 
+- Add: JavaFX preview scroll to source caret position
+- Add: JavaFX highlight preview element at caret position
 - Add: flexmark parser for all parsing and rendering.
 - Some elements still missing but they are not supported by GFM anyway:
     * Definitions

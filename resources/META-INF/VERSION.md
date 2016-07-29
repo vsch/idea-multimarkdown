@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [1.9.9.14 - New Parser Early Preview](#19914---new-parser-early-preview)
+- [1.9.9.20 - New Parser Early Preview](#19920---new-parser-early-preview)
 - [Enhanced Edition](#enhanced-edition)
 - [1.8.4 - Bug Fixes and Enhancements](#184---bug-fixes-and-enhancements)
 - [1.8.3 - Bug Fixes and Enhancements](#183---bug-fixes-and-enhancements)
@@ -20,13 +20,7 @@
 - [1.4.7 - Bug Fix & Optimization Release](#147---bug-fix--optimization-release)
 - [1.4.6 - Bug Fix Release](#146---bug-fix-release)
 
-This is so much better for typing response and having a 500ms delay in updating the preview. So
-no time is wasted updating the preview during fast typing periods and at the same time there is
-hardly a delay in updating the preview once you stop typing. The lexer is also capable of
-generating. The update delay but for some reason switching disabled the updating of the preview.
-After switching syntax highlighters it appears to be necessary to re-create the panels.
-
-### 1.9.9.14 - New Parser Early Preview
+### 1.9.9.20 - New Parser Early Preview
 
 #### Basic & Enhanced Editions
 
@@ -53,6 +47,8 @@ After switching syntax highlighters it appears to be necessary to re-create the 
 
 ### Enhanced Edition
 
+* Add: JavaFX scroll preview to source position and various highlight options to show which
+  element in the source has focus.
 * Add: flexmark spec example rendering options: fenced code, sections, definition list
 * Change: simulated TOC to allow `''` for titles to match what is allowed in references
 * Add: list annotation and quick fixes when list items are inconsistent. i.e. bullet and
