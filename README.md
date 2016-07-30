@@ -10,64 +10,48 @@ Markdown Navigator plugin provides **[Markdown] language support for [IntelliJ I
 [TOC levels=2,3]: # "Table of Contents"
 
 ### Table of Contents
-- [Plugin Name Has Changed](#plugin-name-has-changed)
-- [General Information](#general-information)
-    - [Plugin Benefits](#plugin-benefits)
+- [Plugin Benefits](#plugin-benefits)
+    - [Two tier model](#two-tier-model)
+    - [Source Update is Long Overdue](#source-update-is-long-overdue)
 - [Release Road Map](#release-road-map)
-- [Preview With New Parser: Version 1.9.9.22](#preview-with-new-parser-version-19922)
-- [Latest Developments: Version 1.8.4](#latest-developments-version-184)
-- [Version 1.8.0](#version-180)
-- [Version 1.7.1](#version-171)
-- [Version 1.7.0](#version-170)
+- [New Parser Release: EAP Version 1.9.9.22](#new-parser-release-eap-version-19922)
+- [Version 1.8.4](#version-184)
+- [Recent Additions:](#recent-additions)
     - [Screenshots](#screenshots)
 - [Working with the source](#working-with-the-source)
 - [The Background](#the-background)
 
+
 ***
 
-## Plugin Name Has Changed 
-
-The plugin name was changed to address name infringement on [Fletcher T. Penney's MultiMarkdown]
-project. The plugin id used for updates has not changed but the displayed name has changed from
-**idea-multimarkdown** and **MultiMarkdown** to **Markdown Navigator**. Additionally, the
-language supported by the plugin was changed to **[Markdown]** from **MultiMarkdown**. For
-details see
-[Settings Affected by Plugin Name Change](../../wiki/Settings-Affected-by-Plugin-Name-Change)
-
-## General Information
-
-### Plugin Benefits
+## Plugin Benefits
 
 This plugin generates a preview that is as close as possible to how the page will look on GitHub
 but do it with more IntelliJ IDE intelligence to make editing and maintaining markdown documents
 easier. Developing with pleasure is only half the job. Real projects need to be documented. This
 plugin extends the pleasure principle to the inevitable documentation part of the project.
 
-GitHub may recognize variants of Markdown syntax that this plugin will not and vice versa. This
-is due to the parser differences and the fact that GitHub has a few syntax modifications that
-conflict with original Markdown spec. This plugin uses [pegdown] library by [sirthias] with a
-few extensions added to make the rendering of GFM more faithful.
+The parser and rendering differences are greatly reduced by the new parser which offers a lot of
+flexibility in tweaking parsing rules to allow better emulation of other markdown parsers.
 
-The parser and rendering differences are greatly reduced by the new parser which has a lot of
-flexibility in parsing rules to allow tweaking it to emulate other markdown parsers.
+The plugin includes some syntax extensions from [Fletcher T. Penney's MultiMarkdown] project
+which are not supported by GFM.
 
-The plugin also includes some syntax extensions from [Fletcher T. Penney's MultiMarkdown]
-project.
-
-#### Two tier model of the plugin
+### Two tier model
 
 1. Previewing and syntax highlighting functionality is available in the Basic open source
-   edition. Intended for mostly previewing markdown documents. Wiki link refactoring and
-   completions are also available in the basic edition to ease the task of wiki maintenance.
+   edition. Intended for mostly previewing markdown documents and unaided editing. Wiki link
+   refactoring and completions are also available in the basic edition to ease the task of wiki
+   maintenance.
 
-2. Advanced features used for creating and maintaining markdown documents such as split editor,
+2. Advanced features used for creating and maintaining markdown documents with a split editor,
    refactoring, find usages, validation, auto formatting and HTML page customizations are only
-   available in the Enhanced licensed version. 30-day free trial licenses are available from
+   available in the Enhanced licensed version. 15-day free trial licenses are available from
    [idea-multimarkdown] page on my website.
 
 ![Capabilities](/assets/images/capabilities.png)
 
-#### Updating of the source
+### Source Update is Long Overdue
 
 There was much code churn in the enhanced version and I have not had time to merge them into the
 open source version. Initially, most of the differences were limited to a few files making it
@@ -76,47 +60,54 @@ directory layout changes and new features, the differences have spread out where
 sync is a major effort. I started factoring out the enhanced only changes to separate files so
 that future synchronization of the two branches can be less time consuming.
 
-I will address the open source release once version 2.0 of the plugin, with a new parser is
-released. I only want to go through the effort of merging these major differences once.
+I will address the open source release after version 2.0 release of the plugin. I only want to
+go through the effort of merging these major differences once.
 
 Release Road Map
 ----------------
 
-The [Markdown] parser used by the plugin from [pegdown] to [flexmark-java], a fork from
-[commonmark-java]. Reasons detailed in
-[Pegdown - Achilles heel of the Markdown Navigator plugin](http://vladsch.com/blog/15).
+The [Markdown] parser used by the plugin has changed from [pegdown] to [flexmark-java].
 
-Original [commonmark-java] is intended for HTML generation and lacks markdown elements in its
-AST, keeping only those needed for generating the HTML. It does not have source position
-tracking for its inline elements assumes assumes that extension will only add some functionality
-to the parser and not change its core behavior.
+The [flexmark-java] project is mature enough to replace pegdown and is available in the EAP
+update chanel version of the plugin:
+[Preview With New Parser: Version 1.9.9.22](#new-parser-release-eap-version-19922)
 
-To overcome these limitations I forked the project and made the necessary changes to allow
-extensions to change almost every aspect of the parser. The [flexmark-java] project is mature
-enough to be used to replace pegdown in the
-[Preview With New Parser: Version 1.9.9.20](#preview-with-new-parser-version-19922)
+[flexmark-java] is my fork of [commonmark-java], with the following changes:
 
-In the process of adding source tracking, performance was impacted by about 25-35%, which still
-makes it **7x-10x** faster than [intellij-markdown] parser used by [Markdown Support] and
-**30x-50x** faster than pegdown. All that without pegdown's parsing timeouts, exponential parse
-time or the infinite loop parsing on some pathological cases.
+- source element based AST with detailed break down of each element for syntax highlighting 
+- complete source position tracking for all elements and their lexical parts
+- optimized for efficient parsing with many parser extensions installed
+- unified core and extension options API to simplify parser/renderer configuration
+- options to tweak core parser rules
 
-Preview With New Parser: Version 1.9.9.22
------------------------------------------
+In the process of making the needed modifications to the original [commonmark-java] parser,
+performance was impacted by about 25-35%. This still makes the new parser **7x-10x** faster than
+[intellij-markdown] parser used by [Markdown Support] and **25x-50x** faster than pegdown. As an
+added benefit, the new parser does not suffer from pegdown's idiosyncrasies of exponential parse
+times or pathological input cases that cause infinite loops in the parser's state machine.
+
+On the coding end, the new parser is a joy to maintain and enhance. The parser architecture,
+inherited from [commonmark-java], is easy to debug and test. Markdown element parsers have
+little or no interdependencies with other element parsers making it easy to fine tune parser
+behaviour on a per element basis and add parser configuration options to emulate other markdown
+processors. All this is in contrast to pegdown's one big PEG grammar implementation with
+everything potentially inter-dependent.
+
+New Parser Release: EAP Version 1.9.9.22
+----------------------------------------
+
+Available through the "Early Access Program" channel in plugin configuration and through direct
+[download](../../raw/master/dist/idea-multimarkdown.1.9.9.22.zip).
+
+All parsing and rendering is now done by the new parser. Performance and typing response is
+simply amazing. For small files, about 100k and less than a thousand lines, you can set the
+syntax highlighter to "Lexer". For larger files or when you want fastest typing response, then
+syntax highlighter should be set to "Annotator", which is the default. For best typing response
+in very large files, you can turn off the preview while editing.
 
 For a full list of changes see the [Version Notes]
 
-Available through the "Early Access Program" channel and through direct
-[download](../../raw/master/dist/idea-multimarkdown.1.9.9.22.zip).
-
-The new version is almost ready. All parsing and rendering is done by the new parser.
-Performance and typing response is simply amazing. For small files less than a 100k and less
-than a thousand lines long, you can set the syntax highlighter to "Lexer" without degrading the
-typing response. For larger files, typing is more responsive when syntax highlighter is set to
-"Annotator", which is the default. For best typing response in very large files, you can turn
-off the preview to gain even better typing response.
-
-- Add: JavaFX preview scroll to source caret position
+- Add: JavaFX preview scroll to source position
 - Add: JavaFX highlight preview element at caret position, with detail down to source line
 - Add: flexmark parser for all parsing and rendering.
 - Some elements still missing but they are not supported by GFM anyway:
@@ -129,16 +120,14 @@ off the preview to gain even better typing response.
   or all to pegdown.
 
     :warning: Pegdown version is no longer supported so you are on your own for any issues and
-    problems caused by using the pegdown parser. :smiling_imp: I couldn't wait to be able to say
+    problems caused by using pegdown parser. :smiling_imp: I couldn't wait to be able to say
     that.
 
-Latest Developments: Version 1.8.4
-----------------------------------
+Version 1.8.4
+-------------
 
-:warning: This is the last release of version 1.x using pegdown parser. All future releases will
-be based on the new [flexmark-java] parser.
-
-For a full list of changes see the [Version Notes]
+:warning: This is the last release using [pegdown] and compatible with JRE 1.6. Later releases
+are based on the [flexmark-java] and require JRE 1.8.
 
 - Project module names added to inline code completions
 
@@ -150,12 +139,16 @@ For a full list of changes see the [Version Notes]
   refactored with search in strings.
 
     :warning: this only works if syntax highlighting is set to lexer not annotator. Lexer used
-    with annotator syntax highlighting only distinguishes text and html comments. The latter
-    allows TODO processing to work with either highlighter.
+    when annotator syntax highlighting is selected only distinguishes html comments from plain
+    text. The comments are needed to allow for TODO processing to work with either highlighter.
 
-Version 1.8.0
--------------
+Recent Additions:
+-----------------
 
+- JavaFX preview scroll to source with highlight element in preview
+
+    ![Preview Scroll To With Highlight](assets/images/noload/PreviewScrollToWithHighlight.gif)
+    
 - **Table of Contents** tag that works with basic markdown syntax and is updated by the plugin.
   The table of contents at the top of this page is an example. For more information see the
   [wiki](../../wiki/Adding-a-Table-of-Contents)
@@ -163,63 +156,21 @@ Version 1.8.0
 - Java class, method and field completions in inline code. Great if you need to reference code
   elements in your project from a markdown document.
 
-- Bug fixes and improvements in wrap-on-typing and table auto-format
-
-- Code style settings added for:
-    - List spacing: no change, loose if has loose item, tight if has tight item, loose and
-      tight.
-    - List item marker: no change, dash, asterisk, plus.
-    - List new item marker, used when a new bullet list item is created by actions.
-    - Arrange elements sorting: not sorted, sorted and sorted with unused last.
-
-Version 1.7.1
--------------
-
-- New toolbar buttons and actions:
-    - Double/Single space list
-    - Toggle task item done status on/off
-    - Change list item or items in selection to:
-        - Bullet items
-        - Numbered items
-        - Task items
-
-        If the selection does not contain any list items and only paragraphs then the paragraphs
-        will be changed to respective list items
-
-        If all the list items in selection are already of respective type then they will be
-        changed to plain text paragraphs, except for task list items, which will revert to
-        bullet list items.
+- toolbar buttons and actions, see [Enhanced Features](../../wiki/Enhanced-Features)
 
     ![List Item Actions](assets/images/noload/ListItemActions.gif)
 
-- Fix #247, Error and corrupting files, duplicates #248, #249, #250 and #251
-
-- Fix: #244, NPE upon opening simple markdown file
-
-- Fix: scratch files not recognized as Markdown during editor creation in latest
-  intellij-community builds.
-
-- Fix: #245, Inserting an ordered list item on ENTER with renumbering enabled causes exception
-
-- Fix: #246, Auto scroll to source. Swing preview would always scroll to top of page after
-  document modification.
-
-- Add: preview setting for `Scroll preview to source position` for Swing preview.
-
-Version 1.7.0
--------------
-
-- **Document Structure View** added with sections for:
+- **Document Structure View** with sections for:
     - Headers to show header hierarchy by level  
       ![Screenshot Structure Headers](assets/images/faq/structure/Screenshot_Structure_Headers.png)
-    - Images with all images in the document
-    - References with all references in the document
-    - Tables with all tables in the document
-    - Abbreviations with all abbreviations in the document
-    - Footnotes with all Footnotes in the document
-    - Document showing all abbreviations, block quotes, footnotes, headers, images, lists,
-      references and tables in the document in the hierarchy and order of their location in the
-      document.  
+    - Images
+    - References
+    - Tables
+    - Abbreviations
+    - Footnotes
+    - Document section showing all abbreviations, block quotes, footnotes, headers, images,
+      lists, references and tables in the document. According to markdown element hierarchy and
+      in order of their location in the document.  
       ![Screenshot Structure Document](assets/images/faq/structure/Screenshot_Structure_Document.png)
 
 - **Document format** toolbar button and action to format the document to code style settings.
@@ -227,16 +178,17 @@ Version 1.7.0
 
 - Dynamically created syntax highlighting attributes to simulate overlay of element style with
   transparency. This creates consistent colors when multiple attributes are combined, such as
-  inline elements in tables, headers and definition terms.
+  inline elements in tables, headers and definition terms. Additionally allows for bold, italic,
+  and effect type and color to be combined for nested markdown inline elements.
   ![Screenshot Combination Splits](assets/images/faq/Screenshot_combination_splits.png)
 
-- Actual character display font width used for wrapping and table formatting, allowing best
-  alignment for multi-byte characters and proportional fonts:
+- Actual character display font width can be used for wrapping and table formatting, allowing
+  best alignment for multi-byte characters and proportional fonts:
 
     With character width taken into account:
     ![Screen Shot multibyte sample](assets/images/faq/ScreenShot_multibyte_sample.png)
 
-    Assuming fixed character width:
+    Without taking character width into account:
     ![Screen Shot nomultibyte sample](assets/images/faq/ScreenShot_nomultibyte_sample.png)
 
 - **Block Quote** increase/decrease level toolbar buttons and actions.
@@ -246,11 +198,11 @@ Version 1.7.0
 - Toolbar, Live Template and Table editing improved. See
   [Enhanced Features](../../wiki/Enhanced-Features).
 
-You can create and edit a markdown table with ease:
+### Screenshots
+
+##### Create and edit a markdown table with ease:
 
 ![Table Format](assets/images/noload/TableFormat.gif)
-
-### Screenshots
 
 ##### Still Great GitHub Rendering Resemblance for your preview pleasure
 
