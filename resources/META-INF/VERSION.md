@@ -3,7 +3,8 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [1.9.9.22 - New Parser Early Preview](#19922---new-parser-early-preview)
+- [** Requires Boot JDK 1.8 **](#-requires-boot-jdk-18-)
+- [1.9.9.24 - New Parser Early Preview](#19924---new-parser-early-preview)
 - [Enhanced Edition](#enhanced-edition)
 - [1.8.4 - Bug Fixes and Enhancements](#184---bug-fixes-and-enhancements)
 - [1.8.3 - Bug Fixes and Enhancements](#183---bug-fixes-and-enhancements)
@@ -20,10 +21,15 @@
 - [1.4.7 - Bug Fix & Optimization Release](#147---bug-fix--optimization-release)
 - [1.4.6 - Bug Fix Release](#146---bug-fix-release)
 
-### 1.9.9.22 - New Parser Early Preview
+### ** Requires Boot JDK 1.8 **
+
+### 1.9.9.24 - New Parser Early Preview
 
 #### Basic & Enhanced Editions
 
+- Change: Component name for Markdown Navigator application shared settings changed to `Markdown
+  Navigator` from a confusing `ApplicationShared`. I did not realize that the component name was
+  used for display in import/export settings dialog.
 - Fix: JavaFX and Swing stylesheets to better match GFM rendering.
 - Add: Flexmark parser used for Swing preview rendering and plain HTML text previews.
 - Add: allow task list items from ordered list items like GitHub, rendering is the same as
@@ -47,6 +53,16 @@
 
 ### Enhanced Edition
 
+* Add: parser option to use GFM table rendering rules
+* Fix: wrap on typing right before an element set to always be at the beginning of line would
+  always put the caret right before the element after wrapping, typing the next word and space
+  would wrap the word to the previous line, leaving the caret at the start of line. Now the
+  caret is kept at the end of the previous line making caret behaviour more natural.
+* Fix: split editor layout change actions and preview content change actions now restore focus
+  back to the text editor. Now they can be used in keyboard shortcuts without interrupting
+  typing by needing a mouse click to restore focus.
+* Add: source position information to list items.
+* Fix: link text suggestion provider to remove any `..` directory references
 * Fix: Refine JavaFX scroll preview to source position and highlighting to work more intuitively
   for block elements, images and address JavaFX WebView DOM element offset quirks.
 * Add: JavaFX scroll preview to source position and various highlight options to show which

@@ -14,7 +14,7 @@ Markdown Navigator plugin provides **[Markdown] language support for [IntelliJ I
     - [Two tier model](#two-tier-model)
     - [Source Update is Long Overdue](#source-update-is-long-overdue)
 - [Release Road Map](#release-road-map)
-- [New Parser Release: EAP Version 1.9.9.22](#new-parser-release-eap-version-19922)
+- [New Parser Release: EAP Version 1.9.9.24](#new-parser-release-eap-version-19924)
 - [Version 1.8.4](#version-184)
 - [Recent Additions:](#recent-additions)
     - [Screenshots](#screenshots)
@@ -70,7 +70,7 @@ The [Markdown] parser used by the plugin has changed from [pegdown] to [flexmark
 
 The [flexmark-java] project is mature enough to replace pegdown and is available in the EAP
 update chanel version of the plugin:
-[Preview With New Parser: Version 1.9.9.22](#new-parser-release-eap-version-19922)
+[Preview With New Parser: Version 1.9.9.24](#new-parser-release-eap-version-19924)
 
 [flexmark-java] is my fork of [commonmark-java], with the following changes:
 
@@ -93,11 +93,11 @@ behaviour on a per element basis and add parser configuration options to emulate
 processors. All this is in contrast to pegdown's one big PEG grammar implementation with
 everything potentially inter-dependent.
 
-New Parser Release: EAP Version 1.9.9.22
+New Parser Release: EAP Version 1.9.9.24
 ----------------------------------------
 
 Available through the "Early Access Program" channel in plugin configuration and through direct
-[download](../../raw/master/dist/idea-multimarkdown.1.9.9.22.zip).
+[download](../../raw/master/dist/idea-multimarkdown.1.9.9.24.zip).
 
 All parsing and rendering is now done by the new parser. Performance and typing response is
 simply amazing. For small files, about 100k and less than a thousand lines, you can set the
@@ -107,6 +107,7 @@ in very large files, you can turn off the preview while editing.
 
 For a full list of changes see the [Version Notes]
 
+- Add: GFM table rendering option
 - Add: JavaFX preview scroll to source position
 - Add: JavaFX highlight preview element at caret position, with detail down to source line
 - Add: flexmark parser for all parsing and rendering.
