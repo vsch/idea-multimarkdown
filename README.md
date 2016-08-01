@@ -1,4 +1,4 @@
-<img src="https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/MNLogo.png?4" height="48" width="48" align="absmiddle"> Markdown Navigator
+<img src="https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/MNLogo.png?4" height="48" width="48" align="absmiddle"> Markdown Navigator 2.0
 ========================================================================================================
 
 Markdown Navigator plugin provides **[Markdown] language support for [IntelliJ IDEA],
