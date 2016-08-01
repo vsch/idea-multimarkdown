@@ -1,5 +1,5 @@
-Markdown Navigator
-==================
+<img src="https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/MNLogo.png?4" height="48" width="48" align="absmiddle"> Markdown Navigator
+========================================================================================================
 
 Markdown Navigator plugin provides **[Markdown] language support for [IntelliJ IDEA],
 [RubyMine], [PhpStorm], [WebStorm], [PyCharm], [AppCode], [Android Studio], [CLion] and
@@ -14,7 +14,7 @@ Markdown Navigator plugin provides **[Markdown] language support for [IntelliJ I
     - [Two tier model](#two-tier-model)
     - [Source Update is Long Overdue](#source-update-is-long-overdue)
 - [Release Road Map](#release-road-map)
-- [New Parser Release: EAP Version 1.9.9.24](#new-parser-release-eap-version-19924)
+- [New Parser Release: Version 2.0.0](#new-parser-release-version-200)
 - [Version 1.8.4](#version-184)
 - [Recent Additions:](#recent-additions)
     - [Screenshots](#screenshots)
@@ -68,10 +68,6 @@ Release Road Map
 
 The [Markdown] parser used by the plugin has changed from [pegdown] to [flexmark-java].
 
-The [flexmark-java] project is mature enough to replace pegdown and is available in the EAP
-update chanel version of the plugin:
-[Preview With New Parser: Version 1.9.9.24](#new-parser-release-eap-version-19924)
-
 [flexmark-java] is my fork of [commonmark-java], with the following changes:
 
 - source element based AST with detailed break down of each element for syntax highlighting 
@@ -93,11 +89,8 @@ behaviour on a per element basis and add parser configuration options to emulate
 processors. All this is in contrast to pegdown's one big PEG grammar implementation with
 everything potentially inter-dependent.
 
-New Parser Release: EAP Version 1.9.9.24
-----------------------------------------
-
-Available through the "Early Access Program" channel in plugin configuration and through direct
-[download](../../raw/master/dist/idea-multimarkdown.1.9.9.24.zip).
+New Parser Release: Version 2.0.0
+---------------------------------
 
 All parsing and rendering is now done by the new parser. Performance and typing response is
 simply amazing. For small files, about 100k and less than a thousand lines, you can set the
@@ -107,11 +100,11 @@ in very large files, you can turn off the preview while editing.
 
 For a full list of changes see the [Version Notes]
 
-- Add: GFM table rendering option
+- Add: GFM table rendering option to render tables text that GFM would render as text.
 - Add: JavaFX preview scroll to source position
 - Add: JavaFX highlight preview element at caret position, with detail down to source line
 - Add: flexmark parser for all parsing and rendering.
-- Some elements still missing but they are not supported by GFM anyway:
+- Some elements still missing but they are not supported by GFM:
     * Definitions
     * Typographic: Quotes, Smarts
     * Multi-Line Image URLs

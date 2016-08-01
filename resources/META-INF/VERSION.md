@@ -3,8 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [** Requires Boot JDK 1.8 **](#-requires-boot-jdk-18-)
-- [1.9.9.24 - New Parser Early Preview](#19924---new-parser-early-preview)
+- [2.0.0 - New Parser Release](#200---new-parser-release)
 - [Enhanced Edition](#enhanced-edition)
 - [1.8.4 - Bug Fixes and Enhancements](#184---bug-fixes-and-enhancements)
 - [1.8.3 - Bug Fixes and Enhancements](#183---bug-fixes-and-enhancements)
@@ -21,14 +20,16 @@
 - [1.4.7 - Bug Fix & Optimization Release](#147---bug-fix--optimization-release)
 - [1.4.6 - Bug Fix Release](#146---bug-fix-release)
 
-### ** Requires Boot JDK 1.8 **
+# ** This version requires Boot JDK 1.8 **
 
-### 1.9.9.24 - New Parser Early Preview
+### 2.0.0 - New Parser Release
 
 #### Basic & Enhanced Editions
 
+- Fix: #282, Child paragraphs of tight list items are merged into the item text in preview
+  instead of being a separate paragraph.
 - Change: Component name for Markdown Navigator application shared settings changed to `Markdown
-  Navigator` from a confusing `ApplicationShared`. I did not realize that the component name was
+  Navigator` from a confusing `ApplicationShared`. Did't realize that the component name was
   used for display in import/export settings dialog.
 - Fix: JavaFX and Swing stylesheets to better match GFM rendering.
 - Add: Flexmark parser used for Swing preview rendering and plain HTML text previews.
@@ -53,7 +54,10 @@
 
 ### Enhanced Edition
 
-* Add: parser option to use GFM table rendering rules
+* Change: Move pegdown timeout from parser settings to debug settings. :grinning:
+* Add: use actual char width to fix for wrap on typing fix when typing right before start
+  of line elements.
+* Add: GFM table rendering option to render tables text that GFM would render as text.
 * Fix: wrap on typing right before an element set to always be at the beginning of line would
   always put the caret right before the element after wrapping, typing the next word and space
   would wrap the word to the previous line, leaving the caret at the start of line. Now the
