@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.0.0.2 - Bug Fix Release](#2002---bug-fix-release)
+- [2.0.0.4 - Bug Fix Release](#2004---bug-fix-release)
 - [Enhanced Edition](#enhanced-edition)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
 - [Enhanced Edition](#enhanced-edition)
@@ -24,12 +24,13 @@
 
 # ** This version requires Boot JDK 1.8 **
 
-### 2.0.0.2 - Bug Fix Release
+### 2.0.0.4 - Bug Fix Release
 
 #### Basic & Enhanced Editions
 
 - Change: update source for flexmark-java refactored file layout.
 - Fix: #287, tables stopped rendering
+- Fix: #286, PyCharm 2016.2.1, unterminated fenced code causing too many exceptions 
 
 ### Enhanced Edition
 
