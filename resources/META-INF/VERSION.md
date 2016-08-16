@@ -3,6 +3,8 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
+- [2.0.0.2 - Bug Fix Release](#2002---bug-fix-release)
+- [Enhanced Edition](#enhanced-edition)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
 - [Enhanced Edition](#enhanced-edition)
 - [1.8.4 - Bug Fixes and Enhancements](#184---bug-fixes-and-enhancements)
@@ -21,6 +23,22 @@
 - [1.4.6 - Bug Fix Release](#146---bug-fix-release)
 
 # ** This version requires Boot JDK 1.8 **
+
+### 2.0.0.2 - Bug Fix Release
+
+#### Basic & Enhanced Editions
+
+- Change: update source for flexmark-java refactored file layout.
+- Fix: #287, tables stopped rendering
+
+### Enhanced Edition
+
+* Fix: typing at the start of text of a numbered list item with wrap on typing enabled would
+  delete the character as soon as it was typed.
+* Fix: wrap on typing would stop wrapping text when space was typed. Caused by the IDE no longer
+  generating pre-char typed handler calls for some yet unknown reasons. 
+* Fix: remove wrap on typing disabling when typing back ticks or back slashes because it was
+  only needed due to pegdown parser quirks.
 
 ### 2.0.0 - New Parser Release
 
