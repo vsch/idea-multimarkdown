@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.0.0.6 - Bug Fix Release](#2006---bug-fix-release)
+- [2.0.0.8 - Bug Fix Release](#2008---bug-fix-release)
 - [Enhanced Edition](#enhanced-edition)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
 - [Enhanced Edition](#enhanced-edition)
@@ -24,7 +24,7 @@
 
 # ** This version requires Boot JDK 1.8 **
 
-### 2.0.0.6 - Bug Fix Release
+### 2.0.0.8 - Bug Fix Release
 
 #### Basic & Enhanced Editions
 
@@ -32,6 +32,7 @@
 - Fix: #287, tables stopped rendering
 - Fix: #286, PyCharm 2016.2.1, unterminated fenced code causing too many exceptions 
 - Fix: #285, Not able to parse .md.erbfile
+- Fix: #287, tables stopped rendering part 2, tables not rendering at all
 
 ### Enhanced Edition
 
@@ -41,6 +42,7 @@
   generating pre-char typed handler calls for some yet unknown reasons. 
 * Fix: remove wrap on typing disabling when typing back ticks or back slashes because it was
   only needed due to pegdown parser quirks.
+* Fix: #288, IndexOutOfBoundsException 
 
 ### 2.0.0 - New Parser Release
 
