@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.0.0.8 - Bug Fix Release](#2008---bug-fix-release)
+- [2.0.0.10 - Bug Fix Release](#20010---bug-fix-release)
 - [Enhanced Edition](#enhanced-edition)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
 - [Enhanced Edition](#enhanced-edition)
@@ -24,7 +24,7 @@
 
 # ** This version requires Boot JDK 1.8 **
 
-### 2.0.0.8 - Bug Fix Release
+### 2.0.0.10 - Bug Fix Release
 
 #### Basic & Enhanced Editions
 
@@ -33,6 +33,8 @@
 - Fix: #286, PyCharm 2016.2.1, unterminated fenced code causing too many exceptions 
 - Fix: #285, Not able to parse .md.erbfile
 - Fix: #287, tables stopped rendering part 2, tables not rendering at all
+- Fix: #291, on open idea load multimarkdown failure some time!, tentative fix.
+- Fix: #293, Cannot adjust settings for "Explicit Link"
 
 ### Enhanced Edition
 
