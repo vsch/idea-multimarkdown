@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.0.0.10 - Bug Fix Release](#20010---bug-fix-release)
+- [2.0.0.12 - Bug Fix Release](#20012---bug-fix-release)
 - [Enhanced Edition](#enhanced-edition)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
 - [Enhanced Edition](#enhanced-edition)
@@ -24,7 +24,7 @@
 
 # ** This version requires Boot JDK 1.8 **
 
-### 2.0.0.10 - Bug Fix Release
+### 2.0.0.12 - Bug Fix Release
 
 #### Basic & Enhanced Editions
 
@@ -35,6 +35,7 @@
 - Fix: #287, tables stopped rendering part 2, tables not rendering at all
 - Fix: #291, on open idea load multimarkdown failure some time!, tentative fix.
 - Fix: #293, Cannot adjust settings for "Explicit Link"
+- Fix: remove e-mail validation from fetch license dialog.
 
 ### Enhanced Edition
 
