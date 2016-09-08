@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.0.0.12 - Bug Fix Release](#20012---bug-fix-release)
+- [2.0.0.14 - Bug Fix Release](#20014---bug-fix-release)
 - [Enhanced Edition](#enhanced-edition)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
 - [Enhanced Edition](#enhanced-edition)
@@ -22,30 +22,40 @@
 - [1.4.7 - Bug Fix & Optimization Release](#147---bug-fix--optimization-release)
 - [1.4.6 - Bug Fix Release](#146---bug-fix-release)
 
+
 # ** This version requires Boot JDK 1.8 **
 
-### 2.0.0.12 - Bug Fix Release
+### 2.0.0.14 - Bug Fix Release
 
 #### Basic & Enhanced Editions
 
 - Change: update source for flexmark-java refactored file layout.
 - Fix: #287, tables stopped rendering
-- Fix: #286, PyCharm 2016.2.1, unterminated fenced code causing too many exceptions 
+- Fix: #286, PyCharm 2016.2.1, unterminated fenced code causing too many exceptions
 - Fix: #285, Not able to parse .md.erbfile
 - Fix: #287, tables stopped rendering part 2, tables not rendering at all
 - Fix: #291, on open idea load multimarkdown failure some time!, tentative fix.
 - Fix: #293, Cannot adjust settings for "Explicit Link"
 - Fix: remove e-mail validation from fetch license dialog.
+- Change: remove Lobo Evolution library and other unused dependencies.
 
 ### Enhanced Edition
 
 * Fix: typing at the start of text of a numbered list item with wrap on typing enabled would
   delete the character as soon as it was typed.
 * Fix: wrap on typing would stop wrapping text when space was typed. Caused by the IDE no longer
-  generating pre-char typed handler calls for some yet unknown reasons. 
+  generating pre-char typed handler calls for some yet unknown reasons.
 * Fix: remove wrap on typing disabling when typing back ticks or back slashes because it was
   only needed due to pegdown parser quirks.
-* Fix: #288, IndexOutOfBoundsException 
+* Fix: #288, IndexOutOfBoundsException
+* Fix: #294, Structure view text not compatible with text search.
+    1. Headings: searchable text is the heading text, greyed out text is the heading id with #
+       prefixed showing the ref anchor for the heading
+    2. Images: searchable text is the image link, greyed out text is the alt text
+    3. List Items: searchable text is the first line of the item text
+    4. Links: searchable text is the link url, greyed out text is the link text
+    5. Footnotes: searchable text is footnote reference `:` first line of footnote text
+    6. References: searchable text is the reference id `:` reference link url
 
 ### 2.0.0 - New Parser Release
 
@@ -80,8 +90,8 @@
 ### Enhanced Edition
 
 * Change: Move pegdown timeout from parser settings to debug settings. :grinning:
-* Add: use actual char width to fix for wrap on typing fix when typing right before start
-  of line elements.
+* Add: use actual char width to fix for wrap on typing fix when typing right before start of
+  line elements.
 * Add: GFM table rendering option to render tables text that GFM would render as text.
 * Fix: wrap on typing right before an element set to always be at the beginning of line would
   always put the caret right before the element after wrapping, typing the next word and space
