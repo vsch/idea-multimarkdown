@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.0.0.14 - Bug Fix Release](#20014---bug-fix-release)
+- [2.1.0 - Bug Fix Release](#210---bug-fix-release)
 - [Enhanced Edition](#enhanced-edition)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
 - [Enhanced Edition](#enhanced-edition)
@@ -25,7 +25,7 @@
 
 # ** This version requires Boot JDK 1.8 **
 
-### 2.0.0.14 - Bug Fix Release
+### 2.1.0 - Bug Fix Release
 
 #### Basic & Enhanced Editions
 
@@ -35,12 +35,12 @@
 - Fix: #285, Not able to parse .md.erbfile
 - Fix: #287, tables stopped rendering part 2, tables not rendering at all
 - Fix: #291, on open idea load multimarkdown failure some time!, tentative fix.
-- Fix: #293, Cannot adjust settings for "Explicit Link"
-- Fix: remove e-mail validation from fetch license dialog.
 - Change: remove Lobo Evolution library and other unused dependencies.
+- Fix: #293, Cannot adjust settings for "Explicit Link"
 
 ### Enhanced Edition
 
+* Fix: remove e-mail validation from fetch license dialog.
 * Fix: typing at the start of text of a numbered list item with wrap on typing enabled would
   delete the character as soon as it was typed.
 * Fix: wrap on typing would stop wrapping text when space was typed. Caused by the IDE no longer
@@ -56,6 +56,11 @@
     4. Links: searchable text is the link url, greyed out text is the link text
     5. Footnotes: searchable text is footnote reference `:` first line of footnote text
     6. References: searchable text is the reference id `:` reference link url
+* Fix: #296, License expiration not handled properly by plugin for versions released before
+  license expired
+* Fix: #297, Code Fence only minimizes leading spaces of the first code line during formatting
+* Fix: #298, Formatting list items with empty text and first item a Atx heading, moves the
+  heading before the list item
 
 ### 2.0.0 - New Parser Release
 

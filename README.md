@@ -14,7 +14,7 @@ Markdown Navigator plugin provides **[Markdown] language support for [IntelliJ I
     - [Two tier model](#two-tier-model)
     - [Source Update is Long Overdue](#source-update-is-long-overdue)
 - [Release Road Map](#release-road-map)
-- [New Parser Release: Version 2.0.0](#new-parser-release-version-200)
+- [New Parser Release: Version 2.1.0](#new-parser-release-version-210)
 - [Version 1.8.4](#version-184)
 - [Recent Additions:](#recent-additions)
     - [Screenshots](#screenshots)
@@ -89,7 +89,7 @@ behaviour on a per element basis and add parser configuration options to emulate
 processors. All this is in contrast to pegdown's one big PEG grammar implementation with
 everything potentially inter-dependent.
 
-New Parser Release: Version 2.0.0
+New Parser Release: Version 2.1.0
 ---------------------------------
 
 All parsing and rendering is now done by the new parser. Performance and typing response is
@@ -100,6 +100,7 @@ in very large files, you can turn off the preview while editing.
 
 For a full list of changes see the [Version Notes]
 
+- Add: Structure View elements now compatible with text search
 - Add: GFM table rendering option to render tables text that GFM would render as text.
 - Add: JavaFX preview scroll to source position
 - Add: JavaFX highlight preview element at caret position, with detail down to source line
