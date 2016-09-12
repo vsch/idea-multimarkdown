@@ -3,6 +3,8 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
+- [2.1.0.1 - Bug Fix Release](#2101---bug-fix-release)
+- [Enhanced Edition](#enhanced-edition)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
 - [Enhanced Edition](#enhanced-edition)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
@@ -24,6 +26,15 @@
 
 
 # ** This version requires Boot JDK 1.8 **
+
+### 2.1.0.1 - Bug Fix Release
+
+#### Basic & Enhanced Editions
+
+- Fix: #299, Tables not syntax highlighted in basic version
+
+### Enhanced Edition
+
 
 ### 2.1.0 - Bug Fix Release
 
