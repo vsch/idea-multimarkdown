@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.1.0.1 - Bug Fix Release](#2101---bug-fix-release)
+- [2.1.0.2 - Bug Fix Release](#2102---bug-fix-release)
 - [Enhanced Edition](#enhanced-edition)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
 - [Enhanced Edition](#enhanced-edition)
@@ -27,14 +27,18 @@
 
 # ** This version requires Boot JDK 1.8 **
 
-### 2.1.0.1 - Bug Fix Release
+### 2.1.0.2 - Bug Fix Release
 
 #### Basic & Enhanced Editions
 
-- Fix: #299, Tables not syntax highlighted in basic version
+- Fix: #299, Tables not syntax highlighted in basic version.
+- Add: List syntax options: CommonMark, Fixed, GitHub.
+- Add: Option to use non-secure connection for license activation. 
 
 ### Enhanced Edition
 
+- [ ] Add: List syntax dependent list item action behavior.
+- [ ] Add: List syntax dependent list format behavior.
 
 ### 2.1.0 - Bug Fix Release
 
