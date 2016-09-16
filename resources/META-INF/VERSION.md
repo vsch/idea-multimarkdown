@@ -3,12 +3,9 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.1.0.2 - Bug Fix Release](#2102---bug-fix-release)
-- [Enhanced Edition](#enhanced-edition)
+- [2.1.0.4 - Bug Fix Release](#2104---bug-fix-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
-- [Enhanced Edition](#enhanced-edition)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
-- [Enhanced Edition](#enhanced-edition)
 - [1.8.4 - Bug Fixes and Enhancements](#184---bug-fixes-and-enhancements)
 - [1.8.3 - Bug Fixes and Enhancements](#183---bug-fixes-and-enhancements)
 - [1.8.2 - Bug Fixes and Enhancements](#182---bug-fixes-and-enhancements)
@@ -27,15 +24,18 @@
 
 # ** This version requires Boot JDK 1.8 **
 
-### 2.1.0.2 - Bug Fix Release
+### 2.1.0.4 - Bug Fix Release
 
 #### Basic & Enhanced Editions
 
 - Fix: #299, Tables not syntax highlighted in basic version.
 - Add: List syntax options: CommonMark, Fixed, GitHub.
-- Add: Option to use non-secure connection for license activation. 
+- Add: #301, License activation not working for some network security configurations, Option to
+  use non-secure connection for license activation.
+- Add: #300, Breadcrumbs support for Markdown documents
+- Fix: #302, IndexOutOfBoundsException: Index out of range: 190
 
-### Enhanced Edition
+#### Enhanced Edition
 
 - [ ] Add: List syntax dependent list item action behavior.
 - [ ] Add: List syntax dependent list format behavior.
@@ -53,7 +53,7 @@
 - Change: remove Lobo Evolution library and other unused dependencies.
 - Fix: #293, Cannot adjust settings for "Explicit Link"
 
-### Enhanced Edition
+#### Enhanced Edition
 
 * Fix: remove e-mail validation from fetch license dialog.
 * Fix: typing at the start of text of a numbered list item with wrap on typing enabled would
@@ -107,7 +107,7 @@
     - Typographic: Quotes, Smarts
     - Multi-Line Image URLs
 
-### Enhanced Edition
+#### Enhanced Edition
 
 * Change: Move pegdown timeout from parser settings to debug settings. :grinning:
 * Add: use actual char width to fix for wrap on typing fix when typing right before start of
