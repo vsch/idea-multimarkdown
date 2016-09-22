@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.1.0.6 - Bug Fix & Enhancement Release](#2106---bug-fix--enhancement-release)
+- [2.1.0.8 - Bug Fix & Enhancement Release](#2108---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
 - [1.8.4 - Bug Fixes and Enhancements](#184---bug-fixes-and-enhancements)
@@ -24,7 +24,7 @@
 
 # ** This version requires Boot JDK 1.8 **
 
-### 2.1.0.6 - Bug Fix & Enhancement Release
+### 2.1.0.8 - Bug Fix & Enhancement Release
 
 #### Basic & Enhanced Editions
 
@@ -42,6 +42,8 @@
   references and footnotes on paste.
 - Fix: breadcrumbs to show heading hierarchy as parents, including headings nested within other
   elements like list items, block quotes, etc.
+- Add: breadcrumb option to show element text and maximum number of characters of text to use
+  (10-60, 30 default).
 - [ ] Add: on paste reference link format resolution for new destination file 
 - [ ] Add: on paste link format resolution for new destination file 
 - [ ] Add: List syntax dependent list item action behavior.
