@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.1.0.4 - Bug Fix Release](#2104---bug-fix-release)
+- [2.1.0.6 - Bug Fix & Enhancement Release](#2106---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
 - [1.8.4 - Bug Fixes and Enhancements](#184---bug-fixes-and-enhancements)
@@ -24,7 +24,7 @@
 
 # ** This version requires Boot JDK 1.8 **
 
-### 2.1.0.4 - Bug Fix Release
+### 2.1.0.6 - Bug Fix & Enhancement Release
 
 #### Basic & Enhanced Editions
 
@@ -37,6 +37,13 @@
 
 #### Enhanced Edition
 
+- Fix: #305, Document Format indents Footmarks converting them to code blocks
+- Add: #306, Copy/Cut of reference links, images or footnote references to include the
+  references and footnotes on paste.
+- Fix: breadcrumbs to show heading hierarchy as parents, including headings nested within other
+  elements like list items, block quotes, etc.
+- [ ] Add: on paste reference link format resolution for new destination file 
+- [ ] Add: on paste link format resolution for new destination file 
 - [ ] Add: List syntax dependent list item action behavior.
 - [ ] Add: List syntax dependent list format behavior.
 
@@ -700,7 +707,7 @@
 - Fix: #164, PyCharm & RubyMine highlight a single space at the end of the line as Markdown
   `HARD BREAK`
 - Fix: #167, NoSuchMethodError when typing text
-- Fix: #169, IndexOutOfBoundsException chars sequence.length:5, start:-1, end:5
+- Fix: #169, `IndexOutOfBoundsException chars sequence.length:5, start:-1, end:5`
 - Add: external annotator to reduce typing delay.
 
 #### Enhanced Edition
