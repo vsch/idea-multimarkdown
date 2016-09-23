@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.1.0.8 - Bug Fix & Enhancement Release](#2108---bug-fix--enhancement-release)
+- [2.1.0.10 - Bug Fix & Enhancement Release](#21010---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
 - [1.8.4 - Bug Fixes and Enhancements](#184---bug-fixes-and-enhancements)
@@ -24,7 +24,7 @@
 
 # ** This version requires Boot JDK 1.8 **
 
-### 2.1.0.8 - Bug Fix & Enhancement Release
+### 2.1.0.10 - Bug Fix & Enhancement Release
 
 #### Basic & Enhanced Editions
 
@@ -32,7 +32,6 @@
 - Add: List syntax options: CommonMark, Fixed, GitHub.
 - Add: #301, License activation not working for some network security configurations, Option to
   use non-secure connection for license activation.
-- Add: #300, Breadcrumbs support for Markdown documents
 - Fix: #302, IndexOutOfBoundsException: Index out of range: 190
 
 #### Enhanced Edition
@@ -40,10 +39,13 @@
 - Fix: #305, Document Format indents Footmarks converting them to code blocks
 - Add: #306, Copy/Cut of reference links, images or footnote references to include the
   references and footnotes on paste.
+- Add: #300, Breadcrumbs support for Markdown documents
 - Fix: breadcrumbs to show heading hierarchy as parents, including headings nested within other
   elements like list items, block quotes, etc.
 - Add: breadcrumb option to show element text and maximum number of characters of text to use
   (10-60, 30 default).
+- Fix: breadcrumb setext heading to use atx equivalent text
+- Fix: breadcrumbs to show paragraph text instead of `Text Block`
 - [ ] Add: on paste reference link format resolution for new destination file 
 - [ ] Add: on paste link format resolution for new destination file 
 - [ ] Add: List syntax dependent list item action behavior.
