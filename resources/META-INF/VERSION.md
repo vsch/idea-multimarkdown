@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.1.0.10 - Bug Fix & Enhancement Release](#21010---bug-fix--enhancement-release)
+- [2.1.0.12 - Bug Fix & Enhancement Release](#21012---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
 - [1.8.4 - Bug Fixes and Enhancements](#184---bug-fixes-and-enhancements)
@@ -24,7 +24,7 @@
 
 # ** This version requires Boot JDK 1.8 **
 
-### 2.1.0.10 - Bug Fix & Enhancement Release
+### 2.1.0.12 - Bug Fix & Enhancement Release
 
 #### Basic & Enhanced Editions
 
@@ -33,6 +33,7 @@
 - Add: #301, License activation not working for some network security configurations, Option to
   use non-secure connection for license activation.
 - Fix: #302, IndexOutOfBoundsException: Index out of range: 190
+- Fix: #307, NegativeArraySizeException when opening .md.erb file, IDE bug
 
 #### Enhanced Edition
 
