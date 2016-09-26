@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.1.0.14 - Bug Fix & Enhancement Release](#21014---bug-fix--enhancement-release)
+- [2.1.0.16 - Bug Fix & Enhancement Release](#21016---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
 - [1.8.4 - Bug Fixes and Enhancements](#184---bug-fixes-and-enhancements)
@@ -24,7 +24,7 @@
 
 # ** This version requires Boot JDK 1.8 **
 
-### 2.1.0.14 - Bug Fix & Enhancement Release
+### 2.1.0.16 - Bug Fix & Enhancement Release
 
 #### Basic & Enhanced Editions
 
@@ -49,6 +49,8 @@
 - Fix: breadcrumbs to show paragraph text instead of `Text Block`
 - Add: Copy as JIRA formatted text action. Copy selection or whole document to clipboard as JIRA
   formatted text.
+- Fix: #308, Wiki vcs repo not recognized in 2016.3 due to API changes. Affects to http:...
+  absolute link conversion from non wiki markdown files to wiki target files.
 - [ ] Add: on paste reference link format resolution for new destination file 
 - [ ] Add: on paste link format resolution for new destination file 
 - [ ] Add: List syntax dependent list item action behavior.
