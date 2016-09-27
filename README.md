@@ -159,10 +159,11 @@ Recent Additions:
     - Headers to show header hierarchy by level  
       ![Screenshot Structure Headers](assets/images/faq/structure/Screenshot_Structure_Headers.png)
     - Images
+    - Links
     - References
     - Tables
-    - Abbreviations
     - Footnotes
+    - Abbreviations
     - Document section showing all abbreviations, block quotes, footnotes, headers, images,
       lists, references and tables in the document. According to markdown element hierarchy and
       in order of their location in the document.  
