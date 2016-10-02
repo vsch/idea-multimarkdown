@@ -14,7 +14,8 @@ Markdown Navigator plugin provides **[Markdown] language support for [IntelliJ I
     - [Two tier model](#two-tier-model)
     - [Source Update is Long Overdue](#source-update-is-long-overdue)
 - [Release Road Map](#release-road-map)
-- [New Parser Release: Version 2.1.0](#new-parser-release-version-210)
+- [Version 2.1.1](#version-211)
+- [Version 2.1.0](#version-210)
 - [Version 1.8.4](#version-184)
 - [Recent Additions:](#recent-additions)
     - [Screenshots](#screenshots)
@@ -89,8 +90,8 @@ behaviour on a per element basis and add parser configuration options to emulate
 processors. All this is in contrast to pegdown's one big PEG grammar implementation with
 everything potentially inter-dependent.
 
-New Parser Release: Version 2.1.0
----------------------------------
+Version 2.1.1
+-------------
 
 All parsing and rendering is now done by the new parser. Performance and typing response is
 simply amazing. For small files, about 100k and less than a thousand lines, you can set the
@@ -100,7 +101,16 @@ in very large files, you can turn off the preview while editing.
 
 For a full list of changes see the [Version Notes]
 
+- Add: Smart copy/paste between files
+    - change relative links/references to reflect destination file's location 
+    - change relative links/references to absolute if relative format will cannot be resolved  
+    - append footnotes/references that are not included but are referenced in the copied text 
+- Add: Breadcrumbs support for markdown documents
 - Add: Structure View elements now compatible with text search
+
+Version 2.1.0
+-------------
+
 - Add: GFM table rendering option to render tables text that GFM would render as text.
 - Add: JavaFX preview scroll to source position
 - Add: JavaFX highlight preview element at caret position, with detail down to source line
@@ -146,7 +156,7 @@ Recent Additions:
     
 - **Table of Contents** tag that works with basic markdown syntax and is updated by the plugin.
   The table of contents at the top of this page is an example. For more information see the
-  [wiki](../../wiki/Adding-a-Table-of-Contents)
+  [wiki](../../wiki/Adding-a-Table-of-Contents#anchor)
 
 - Java class, method and field completions in inline code. Great if you need to reference code
   elements in your project from a markdown document.
