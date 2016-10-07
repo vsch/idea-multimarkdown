@@ -3,6 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
+- [2.1.1.2 - Bug Fix & Enhancement Release](#2112---bug-fix--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
@@ -23,6 +24,14 @@
 
 
 # ** This version requires Boot JDK 1.8 **
+
+### 2.1.1.2 - Bug Fix & Enhancement Release
+
+#### Basic & Enhanced Editions
+
+- Add: #225, code highlight line number via Prism.js highlighter option
+
+#### Enhanced Edition
 
 ### 2.1.1 - Bug Fix & Enhancement Release
 
