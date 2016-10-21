@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.1.1.4 - Bug Fix & Enhancement Release](#2114---bug-fix--enhancement-release)
+- [2.1.1.6 - Bug Fix & Enhancement Release](#2116---bug-fix--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
@@ -25,17 +25,19 @@
 
 # ** This version requires Boot JDK 1.8 **
 
-### 2.1.1.4 - Bug Fix & Enhancement Release
+### 2.1.1.6 - Bug Fix & Enhancement Release
 
 #### Basic & Enhanced Editions
 
 - Add: #225, code highlight line number via Prism.js highlighter option
 - Fix: #313, Changing fonts causes WebStorm to freeze
+- Add: #316, Make shared settings Project specific
 
 #### Enhanced Edition
 
 * Fix: when Prism.js is used as highlighter, scrolling to source with caret in the code part of
   the fenced code would always scroll to top of document.
+* Add: #314, Export .html files (as part of build?)
 
 ### 2.1.1 - Bug Fix & Enhancement Release
 
@@ -45,7 +47,7 @@
 - Add: List syntax options: CommonMark, Fixed, GitHub.
 - Add: #301, License activation not working for some network security configurations, Option to
   use non-secure connection for license activation.
-- Fix: #302, IndexOutOfBoundsException: Index out of range: 190    
+- Fix: #302, IndexOutOfBoundsException: Index out of range: 190
 - Fix: #307, NegativeArraySizeException when opening .md.erb file, IDE bug
 - Change: update Kotlin to 1.0.4
 
@@ -65,8 +67,8 @@
   formatted text.
 - Fix: #308, Wiki vcs repo not recognized in 2016.3 due to API changes. Affects to http:...
   absolute link conversion from non wiki markdown files to wiki target files.
-- Add: on paste reference link format resolution for new destination file 
-- Add: on paste link format resolution for new destination file 
+- Add: on paste reference link format resolution for new destination file
+- Add: on paste link format resolution for new destination file
 - [ ] Add: List syntax dependent list item action behavior.
 - [ ] Add: List syntax dependent list format behavior.
 
