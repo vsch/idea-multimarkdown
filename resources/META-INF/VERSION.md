@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.1.1.6 - Bug Fix & Enhancement Release](#2116---bug-fix--enhancement-release)
+- [2.1.1.7 - Bug Fix & Enhancement Release](#2117---bug-fix--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
@@ -25,19 +25,26 @@
 
 # ** This version requires Boot JDK 1.8 **
 
-### 2.1.1.6 - Bug Fix & Enhancement Release
+### 2.1.1.7 - Bug Fix & Enhancement Release
 
 #### Basic & Enhanced Editions
 
 - Add: #225, code highlight line number via Prism.js highlighter option
 - Fix: #313, Changing fonts causes WebStorm to freeze
 - Add: #316, Make shared settings Project specific
+- Fix: #315, NullPointerException with v2016.3 EAP (163.6110.12)
 
 #### Enhanced Edition
 
 * Fix: when Prism.js is used as highlighter, scrolling to source with caret in the code part of
   the fenced code would always scroll to top of document.
 * Add: #314, Export .html files (as part of build?)
+    * exported files are limited to being under the project base directory to prevent erroneous
+      target directory from writing to the file system in unexpected location.
+* Add: scope based rendering profiles allowing fine grained control on markdown rendering
+  options.
+* [ ] Add: List syntax dependent list item action behavior.
+* [ ] Add: List syntax dependent list format behavior.
 
 ### 2.1.1 - Bug Fix & Enhancement Release
 
@@ -69,8 +76,6 @@
   absolute link conversion from non wiki markdown files to wiki target files.
 - Add: on paste reference link format resolution for new destination file
 - Add: on paste link format resolution for new destination file
-- [ ] Add: List syntax dependent list item action behavior.
-- [ ] Add: List syntax dependent list format behavior.
 
 ### 2.1.0 - Bug Fix Release
 
