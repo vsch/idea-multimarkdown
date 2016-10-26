@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.1.1.7 - Bug Fix & Enhancement Release](#2117---bug-fix--enhancement-release)
+- [2.1.1.8 - Bug Fix & Enhancement Release](#2118---bug-fix--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
@@ -25,7 +25,7 @@
 
 # ** This version requires Boot JDK 1.8 **
 
-### 2.1.1.7 - Bug Fix & Enhancement Release
+### 2.1.1.8 - Bug Fix & Enhancement Release
 
 #### Basic & Enhanced Editions
 
@@ -33,6 +33,7 @@
 - Fix: #313, Changing fonts causes WebStorm to freeze
 - Add: #316, Make shared settings Project specific
 - Fix: #315, NullPointerException with v2016.3 EAP (163.6110.12)
+- Fix: Implement multi-line URL image links in flexmark-java
 
 #### Enhanced Edition
 
@@ -43,6 +44,7 @@
       target directory from writing to the file system in unexpected location.
 * Add: scope based rendering profiles allowing fine grained control on markdown rendering
   options.
+* Add: #319, Synchronize source caret to preview element on click. 
 * [ ] Add: List syntax dependent list item action behavior.
 * [ ] Add: List syntax dependent list format behavior.
 
