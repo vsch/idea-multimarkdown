@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.1.1.10 - Bug Fix & Enhancement Release](#21110---bug-fix--enhancement-release)
+- [2.1.1.12 - Bug Fix & Enhancement Release](#21112---bug-fix--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
@@ -25,7 +25,7 @@
 
 # ** This version requires Boot JDK 1.8 **
 
-### 2.1.1.10 - Bug Fix & Enhancement Release
+### 2.1.1.12 - Bug Fix & Enhancement Release
 
 #### Basic & Enhanced Editions
 
@@ -47,6 +47,7 @@
 * Add: #319, Synchronize source caret to preview element on click. 
 * Add: Html export to optionally copy image files 
 * Add: Html export to optionally link to other exported files when applicable 
+* Fix: #320, ArrayIndexOutOfBoundsException at BlockQuoteAddAction
 * [ ] Add: List syntax dependent list item action behavior.
 * [ ] Add: List syntax dependent list format behavior.
 
