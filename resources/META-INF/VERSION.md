@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.1.1.14 - Bug Fix & Enhancement Release](#21114---bug-fix--enhancement-release)
+- [2.1.1.16 - Bug Fix & Enhancement Release](#21116---bug-fix--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
@@ -25,7 +25,7 @@
 
 # ** This version requires Boot JDK 1.8 **
 
-### 2.1.1.14 - Bug Fix & Enhancement Release
+### 2.1.1.16 - Bug Fix & Enhancement Release
 
 #### Basic & Enhanced Editions
 
@@ -42,12 +42,17 @@
 * Add: #314, Export .html files (as part of build?)
     * exported files are limited to being under the project base directory to prevent erroneous
       target directory from writing to the file system in unexpected location.
+    * copy custom font file if stylesheet has reference to it
+    * optionally use relative links to:
+        * other exported files when applicable 
+        * stylesheets and scripts 
+        * custom font 
+    * optionally copy image files 
 * Add: scope based rendering profiles allowing fine grained control on markdown rendering
   options.
 * Add: #319, Synchronize source caret to preview element on click. 
-* Add: Html export to optionally copy image files 
-* Add: Html export to optionally link to other exported files when applicable 
 * Fix: #320, ArrayIndexOutOfBoundsException at BlockQuoteAddAction
+* Fix: #283, print html preview, only dev feature for now
 * [ ] Add: List syntax dependent list item action behavior.
 * [ ] Add: List syntax dependent list format behavior.
 
