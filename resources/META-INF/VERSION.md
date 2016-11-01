@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.1.1.16 - Bug Fix & Enhancement Release](#21116---bug-fix--enhancement-release)
+- [2.1.1.19 - Bug Fix & Enhancement Release](#21119---bug-fix--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
@@ -25,7 +25,7 @@
 
 # ** This version requires Boot JDK 1.8 **
 
-### 2.1.1.16 - Bug Fix & Enhancement Release
+### 2.1.1.20 - Bug Fix & Enhancement Release
 
 #### Basic & Enhanced Editions
 
@@ -35,7 +35,7 @@
 - Fix: #315, NullPointerException with v2016.3 EAP (163.6110.12)
 - Fix: Implement multi-line URL image links in flexmark-java
 
-#### Enhanced Edition
+#### Enhanced Edition     
 
 * Fix: when Prism.js is used as highlighter, scrolling to source with caret in the code part of
   the fenced code would always scroll to top of document.
@@ -44,15 +44,20 @@
       target directory from writing to the file system in unexpected location.
     * copy custom font file if stylesheet has reference to it
     * optionally use relative links to:
-        * other exported files when applicable 
+        * exported html files 
         * stylesheets and scripts 
         * custom font 
+        * image files 
     * optionally copy image files 
 * Add: scope based rendering profiles allowing fine grained control on markdown rendering
   options.
 * Add: #319, Synchronize source caret to preview element on click. 
 * Fix: #320, ArrayIndexOutOfBoundsException at BlockQuoteAddAction
-* Fix: #283, print html preview, only dev feature for now
+* Add: #283, print html preview for now only for JavaFx
+* Add: #174, Suggestion: URL-to-filename transformation rules for image previews
+    * Options to map from markdown link text to GitHub based link reference. ie. `{{static}}` --> `/`
+    * Options to map from GitHub based link reference to markdown link text. ie. `/` --> `{{static}}`
+    * With scope based rendering profiles this mapping can be customized for specific files and/or directories
 * [ ] Add: List syntax dependent list item action behavior.
 * [ ] Add: List syntax dependent list format behavior.
 
