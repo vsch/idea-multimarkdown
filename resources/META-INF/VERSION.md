@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.1.1.26 - Bug Fix & Enhancement Release](#21126---bug-fix--enhancement-release)
+- [2.1.1.28 - Bug Fix & Enhancement Release](#21128---bug-fix--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
@@ -25,7 +25,7 @@
 
 # ** This version requires Boot JDK 1.8 **
 
-### 2.1.1.26 - Bug Fix & Enhancement Release
+### 2.1.1.28 - Bug Fix & Enhancement Release
 
 #### Basic & Enhanced Editions
 
@@ -69,6 +69,7 @@
 * Add: #329, Now can delete all previously generated file through HTML export or just the files
   that were previously generated and will no longer be generated in the current configuration.
 * Add: Update HTML Export on project settings change option.
+* Fix: JavaFX preview synchronize to caret would mess up for heading elements in list items.
 * [ ] Add: List syntax dependent list item action behavior.
 * [ ] Add: List syntax dependent list format behavior.
 
