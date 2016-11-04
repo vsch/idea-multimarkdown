@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.1.1.22 - Bug Fix & Enhancement Release](#21122---bug-fix--enhancement-release)
+- [2.1.1.24 - Bug Fix & Enhancement Release](#21124---bug-fix--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
@@ -25,7 +25,7 @@
 
 # ** This version requires Boot JDK 1.8 **
 
-### 2.1.1.22 - Bug Fix & Enhancement Release
+### 2.1.1.24 - Bug Fix & Enhancement Release
 
 #### Basic & Enhanced Editions
 
@@ -35,8 +35,10 @@
 - Fix: #315, NullPointerException with v2016.3 EAP (163.6110.12)
 - Fix: Implement multi-line URL image links in flexmark-java
 - Fix: #327, IntelliJ IDEA 2016.3 EAP API change incompatibility.
+- Fix: #328, wiki link can use ` `, `-`, `+`, `<` or `>` to match a `-` in the file name. Added
+  stub index for links to make file reference search efficient.
 
-#### Enhanced Edition     
+#### Enhanced Edition
 
 * Fix: when Prism.js is used as highlighter, scrolling to source with caret in the code part of
   the fenced code would always scroll to top of document.
@@ -62,6 +64,10 @@
       `{{static}}`
     * With scope based rendering profiles this mapping can be customized for specific files
       and/or directories
+* Fix: #330, unexpected HTML export files on save.
+* Add: #331, Add markdown context aware trailing space removal
+* Add: #329, Now can delete all previously generated file through HTML export or just the files
+  that were previously generated and will no longer be generated in the current configuration.
 * [ ] Add: List syntax dependent list item action behavior.
 * [ ] Add: List syntax dependent list format behavior.
 
