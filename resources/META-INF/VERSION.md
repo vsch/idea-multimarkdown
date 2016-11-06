@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.1.1.28 - Bug Fix & Enhancement Release](#21128---bug-fix--enhancement-release)
+- [2.1.1.30 - Bug Fix & Enhancement Release](#21130---bug-fix--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
@@ -25,7 +25,7 @@
 
 # ** This version requires Boot JDK 1.8 **
 
-### 2.1.1.28 - Bug Fix & Enhancement Release
+### 2.1.1.30 - Bug Fix & Enhancement Release
 
 #### Basic & Enhanced Editions
 
@@ -37,11 +37,10 @@
 - Fix: #327, IntelliJ IDEA 2016.3 EAP API change incompatibility.
 - Fix: #328, wiki link can use ` `, `-`, `+`, `<` or `>` to match a `-` in the file name. Added
   stub index for links to make file reference search efficient.
+- Change: document icons to match 2016.3 style
 
 #### Enhanced Edition
 
-* Fix: when Prism.js is used as highlighter, scrolling to source with caret in the code part of
-  the fenced code would always scroll to top of document.
 * Add: #314, Export .html files (as part of build?)
     * exported files are limited to being under the project base directory to prevent erroneous
       target directory from writing to the file system in unexpected location.
@@ -55,7 +54,6 @@
 * Add: scope based rendering profiles allowing fine grained control on markdown rendering
   options.
 * Add: #319, Synchronize source caret to preview element on click.
-* Fix: #320, ArrayIndexOutOfBoundsException at BlockQuoteAddAction
 * Add: #283, print html preview for now only for JavaFx
 * Add: #174, Suggestion: URL-to-filename transformation rules for image previews
     * Options to map from markdown link text to GitHub based link reference. ie. `{{static}}`
@@ -64,12 +62,23 @@
       `{{static}}`
     * With scope based rendering profiles this mapping can be customized for specific files
       and/or directories
-* Fix: #330, unexpected HTML export files on save.
 * Add: #331, Add markdown context aware trailing space removal
 * Add: #329, Now can delete all previously generated file through HTML export or just the files
   that were previously generated and will no longer be generated in the current configuration.
 * Add: Update HTML Export on project settings change option.
-* Fix: JavaFX preview synchronize to caret would mess up for heading elements in list items.
+* Fix: #330, unexpected HTML export files on save.
+* Fix: exported HTML was missing custom CSS text from Stylesheet options.
+* Add: HTML Export will export any HTML files that were exported with different settings
+* Add: Export Markdown to HTML action will export all changed files and delete any invalid ones
+  from previous exports.
+* Add: HTML Export to display error on export of different sources to same target
+* Add: Soft wrap at right margin option to application settings for markdown documents.
+* Fix: when Prism.js is used as highlighter, scrolling to source with caret in the code part of
+  the fenced code would always scroll to top of document.
+* Fix: #320, ArrayIndexOutOfBoundsException at BlockQuoteAddAction
+* Fix: JavaFX preview synchronize to caret would mess up for heading and fenced code in list
+  items.
+* Fix: Edit TOC dialog did not add a space between `levels=...` and the next option
 * [ ] Add: List syntax dependent list item action behavior.
 * [ ] Add: List syntax dependent list format behavior.
 
