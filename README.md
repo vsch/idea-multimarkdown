@@ -71,7 +71,7 @@ The [Markdown] parser used by the plugin has changed from [pegdown] to [flexmark
 
 [flexmark-java] is my fork of [commonmark-java], with the following changes:
 
-- source element based AST with detailed break down of each element for syntax highlighting 
+- source element based AST with detailed break down of each element for syntax highlighting
 - complete source position tracking for all elements and their lexical parts
 - optimized for efficient parsing with many parser extensions installed
 - unified core and extension options API to simplify parser/renderer configuration
@@ -102,9 +102,9 @@ in very large files, you can turn off the preview while editing.
 For a full list of changes see the [Version Notes]
 
 - Add: Smart copy/paste between files
-    - change relative links/references to reflect destination file's location 
-    - change relative links/references to absolute if relative format will cannot be resolved  
-    - append footnotes/references that are not included but are referenced in the copied text 
+    - change relative links/references to reflect destination file's location
+    - change relative links/references to absolute if relative format will cannot be resolved
+    - append footnotes/references that are not included but are referenced in the copied text
 - Add: Breadcrumbs support for markdown documents
 - Add: Structure View elements now compatible with text search
 
@@ -153,7 +153,7 @@ Recent Additions:
 - JavaFX preview scroll to source with highlight element in preview
 
     ![Preview Scroll To With Highlight](assets/images/noload/PreviewScrollToWithHighlight.gif)
-    
+
 - **Table of Contents** tag that works with basic markdown syntax and is updated by the plugin.
   The table of contents at the top of this page is an example. For more information see the
   [wiki](../../wiki/Adding-a-Table-of-Contents#anchor)
@@ -234,7 +234,15 @@ Recent Additions:
 
 ![Screen Shot Settings Css](/assets/images/faq/Screenshot_Stylesheet.png)
 
-![Screen Shot Settings Html](/assets/images/faq/Screenshot_Html.png)
+![Screenshot Html](/assets/images/faq/Screenshot_Html.png)
+
+![Screenshot Html Export](/assets/images/faq/Screenshot_HtmlExport.png)
+
+![Screenshot Html Export](/assets/images/faq/Screenshot_LinkMap_Settings.png)
+
+![Screenshot Html Export](/assets/images/faq/Screenshot_Rendering.png)
+
+![Screenshot Html Export](/assets/images/faq/Screenshot_RenderingProfiles.png)
 
 Working with the source
 -----------------------
