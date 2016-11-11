@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.1.1.32 - Bug Fix & Enhancement Release](#21132---bug-fix--enhancement-release)
+- [2.1.1.34 - Bug Fix & Enhancement Release](#21134---bug-fix--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
@@ -25,7 +25,7 @@
 
 # ** This version requires Boot JDK 1.8 **
 
-### 2.1.1.32 - Bug Fix & Enhancement Release
+### 2.1.1.34 - Bug Fix & Enhancement Release
 
 #### Basic & Enhanced Editions
 
@@ -74,6 +74,8 @@
 * Add: HTML Export to display error on export of different sources to same target
 * Add: progress indicator to HTML Export and make it backgroundable and cancellable.
 * Add: Soft wrap at right margin option to application settings for markdown documents.
+* Add: configurable file reference recognition in jekyll front matter element
+* Add: #332, refactor file name reference in jekyll front matter when renaming file
 * Fix: when Prism.js is used as highlighter, scrolling to source with caret in the code part of
   the fenced code would always scroll to top of document.
 * Fix: #320, ArrayIndexOutOfBoundsException at BlockQuoteAddAction
