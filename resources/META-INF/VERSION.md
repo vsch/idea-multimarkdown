@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.1.1.34 - Bug Fix & Enhancement Release](#21134---bug-fix--enhancement-release)
+- [2.1.1.40 - Bug Fix & Enhancement Release](#21140---bug-fix--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
@@ -22,10 +22,20 @@
 - [1.4.7 - Bug Fix & Optimization Release](#147---bug-fix--optimization-release)
 - [1.4.6 - Bug Fix Release](#146---bug-fix-release)
 
+* [ ] move up/down groups within tree node
+* [ ] implement jekyll templates
+* [ ] implement `ExpandedItemRendererComponentWrapper` for table cells so that the extended tooltip
+  does not hide an error tooltip.
+* [ ] add quick fix to move errant mapping group to `unused` link type
+* [ ] see if jekyll text mapping works when the file name consists of two separate groups.
+* [ ] change list toolbar icons to be simpler and more distinguishable. they all look alike.
+* [x] fix Jira copy to add blank lines for loosely spaced lists and after the last list item of
+      the outer-most list and the next element
+* [ ] Add option to not wrap on typing when soft wrap is enabled for the editor
 
 # ** This version requires Boot JDK 1.8 **
 
-### 2.1.1.34 - Bug Fix & Enhancement Release
+### 2.1.1.40 - Bug Fix & Enhancement Release
 
 #### Basic & Enhanced Editions
 
@@ -75,6 +85,7 @@
 * Add: progress indicator to HTML Export and make it backgroundable and cancellable.
 * Add: Soft wrap at right margin option to application settings for markdown documents.
 * Add: configurable file reference recognition in jekyll front matter element
+* Fix: linked map settings adding empty group on settings load in migration code
 * Add: #332, refactor file name reference in jekyll front matter when renaming file
 * Fix: when Prism.js is used as highlighter, scrolling to source with caret in the code part of
   the fenced code would always scroll to top of document.
@@ -82,6 +93,10 @@
 * Fix: JavaFX preview synchronize to caret would mess up for heading and fenced code in list
   items.
 * Fix: Edit TOC dialog did not add a space between `levels=...` and the next option
+* Fix: Jira copy failed to include `:lang=` for fenced code and did not add an extra blank line
+  after the fenced code
+* Fix: flexmark-java options refactoring exception and make dialog reflect position and
+  selection of element being renamed.
 * [ ] Add: List syntax dependent list item action behavior.
 * [ ] Add: List syntax dependent list format behavior.
 
