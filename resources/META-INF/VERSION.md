@@ -4,7 +4,7 @@
 
 ### Version History
 - [To Do before release](#to-do-before-release)
-- [2.1.1.44 - Bug Fix & Enhancement Release](#21144---bug-fix--enhancement-release)
+- [2.1.1.46 - Bug Fix & Enhancement Release](#21146---bug-fix--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
@@ -28,14 +28,10 @@
 
 ### To Do before release
 
-- [ ] Change: move disable annotations from debug to document settings. 
-- [ ] Add: a commonmark profile and compatible options in settings 
-- [ ] Fix: preview sync in swing browser
-* [ ] Add: detection for **GitHub** issue completions when no task servers are defined.
 * [ ] Fix: sync preview to source position in swing.
-* [ ] Fix: can't modify PSI inside on save listener.
 * [ ] change list toolbar icons to be simpler and more distinguishable. they all look
       alike.
+* [ ] Add warning that prism syntax highlighter slows typing response
 * [ ] Fix: Link Map
       * [ ] move up/down groups within tree node
       * [ ] implement jekyll templates
@@ -45,21 +41,30 @@
             be saved.
       * [ ] test if jekyll text mapping works when the file name consists of two separate
             groups.
+* [ ] Add: source synchronization for HTML text previews
+- [ ] Add: a commonmark profile and compatible options in settings
+* [ ] Fix list indent for nested items should not indent to more than (listLevel)*4 + 3 in
+      fixed 4 mode.
+- [x] Change: move disable annotations from debug to document settings.
+* [ ] Fix: can't modify PSI inside on save listener.
+* [ ] Add: detection for **GitHub** issue completions when no task servers are defined.
 
-## *** This version requires Boot JDK 1.8 *** ### 
+## *** This version requires Boot JDK 1.8 *** ## 
 
-### 2.1.1.44 - Bug Fix & Enhancement Release
+### 2.1.1.46 - Bug Fix & Enhancement Release
 
 #### Basic & Enhanced Editions
 
+- Add: option in settings to hide disabled buttons
+- Fix #335, Markdown Navigator breaks the line end whitespace trimming feature of EditorConfig
 - Change: remove all **pegdown** dependencies
 - Change: remove tab previews and enable split editor for basic edition, with fixed position
-      restoring. 
+  restoring.
 - Add: basic version now has split editor
-- Fix: Slow scrolling with JavaFX WebView, was also causing unacceptable typing response for
-  files of 500+ lines. Caused by WebView handling of CSS parameters not code.
-- Fix: reimplemented JavaFX WebView integration with interruptible rendering to favour typing
-  response.
+- Fix: Slow scrolling with JavaFX WebView, was also causing unacceptable typing response
+  for files of 500+ lines. Caused by WebView handling of CSS parameters not code.
+- Fix: reimplemented JavaFX WebView integration with interruptible rendering to favour
+  typing response.
 - Add: #225, code highlight line number via Prism.js highlighter option
 - Fix: #313, Changing fonts causes WebStorm to freeze
 - Add: #316, Make shared settings Project specific
@@ -72,12 +77,20 @@
 
 #### Enhanced Edition
 
+* Add: warning to Prism.js and Fire Bug Lite that they can affect preview display and
+  typing response.
+* Add: preview update delay tweak, default of 500ms makes typing a breeze and preview
+  updates half second later.
+* Fix: export on smart mode exit broke exporting all together
+* Fix: style sheets need url prefix when displaying HTML
+* Add: Re-Export action that will ignore modification time and force re-exporting of all
+  required files.
 * Fix: added a short time delay to running export after settings change or project open.
 * Add: option to not wrap on typing when soft wrap is enabled for the editor
 * Fix: #340, 2.1.1.40 Fail to re-gen HTML files when HTML already exists
 * Add: option for format document with soft wraps: disabled, enabled and infinite margins.
   Will remove all soft breaks when formatting the document.
-* Fix: balloon on html project export 
+* Fix: balloon on html project export
 * Add: link text completion for GitHub issue titles. Completes same as in text. Fast way
   to link to issues and have the title in the link.
 * Add: #314, Export .html files (as part of build?)
@@ -188,7 +201,7 @@
 * Fix: #288, IndexOutOfBoundsException
 * Fix: #294, Structure view text not compatible with text search.
     1. Headings: searchable text is the heading text, greyed out text is the heading id with
-        `#` prefixed showing the ref anchor for the heading
+       `#` prefixed showing the ref anchor for the heading
     2. Images: searchable text is the image link, greyed out text is the alt text
     3. List Items: searchable text is the first line of the item text
     4. Links: searchable text is the link url, greyed out text is the link text
@@ -646,9 +659,10 @@
 
 * Fix: #196, Incorrect parsing of compound reference links
 
-* Fix: #198, Image links that don't end with an extension don't get recognized. Now image links
-  without extension are assumed to be correct. No error or warning is generated for these links.
-  Query strings are also stripped from the link address before looking for an extension.
+* Fix: #198, Image links that don't end with an extension don't get recognized. Now image
+  links without extension are assumed to be correct. No error or warning is generated for
+  these links. Query strings are also stripped from the link address before looking for an
+  extension.
 
 * Fix: #199, Multi-line image URLs not parsed correctly when terminating ) is followed by
   white space characters file and without EOL.
