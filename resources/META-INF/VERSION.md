@@ -4,7 +4,7 @@
 
 ### Version History
 - [To Do before release](#to-do-before-release)
-- [2.1.1.42 - Bug Fix & Enhancement Release](#21142---bug-fix--enhancement-release)
+- [2.1.1.44 - Bug Fix & Enhancement Release](#21144---bug-fix--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
@@ -28,12 +28,10 @@
 
 ### To Do before release
 
-- [ ] Change: remove tab previews and enable split editor for basic edition, with fixed position
-      restoring. 
 - [ ] Change: move disable annotations from debug to document settings. 
-- [ ] Change: remove all pegdown dependencies
-- [ ] Change: fix preview sync in swing browser
-* [ ] Add: detection for GitHub issue completions when no task servers are defined.
+- [ ] Add: a commonmark profile and compatible options in settings 
+- [ ] Fix: preview sync in swing browser
+* [ ] Add: detection for **GitHub** issue completions when no task servers are defined.
 * [ ] Fix: sync preview to source position in swing.
 * [ ] Fix: can't modify PSI inside on save listener.
 * [ ] change list toolbar icons to be simpler and more distinguishable. they all look
@@ -50,10 +48,14 @@
 
 ## *** This version requires Boot JDK 1.8 *** ### 
 
-### 2.1.1.42 - Bug Fix & Enhancement Release
+### 2.1.1.44 - Bug Fix & Enhancement Release
 
 #### Basic & Enhanced Editions
 
+- Change: remove all **pegdown** dependencies
+- Change: remove tab previews and enable split editor for basic edition, with fixed position
+      restoring. 
+- Add: basic version now has split editor
 - Fix: Slow scrolling with JavaFX WebView, was also causing unacceptable typing response for
   files of 500+ lines. Caused by WebView handling of CSS parameters not code.
 - Fix: reimplemented JavaFX WebView integration with interruptible rendering to favour typing
@@ -70,7 +72,9 @@
 
 #### Enhanced Edition
 
+* Fix: added a short time delay to running export after settings change or project open.
 * Add: option to not wrap on typing when soft wrap is enabled for the editor
+* Fix: #340, 2.1.1.40 Fail to re-gen HTML files when HTML already exists
 * Add: option for format document with soft wraps: disabled, enabled and infinite margins.
   Will remove all soft breaks when formatting the document.
 * Fix: balloon on html project export 
@@ -183,19 +187,12 @@
   was only needed due to pegdown parser quirks.
 * Fix: #288, IndexOutOfBoundsException
 * Fix: #294, Structure view text not compatible with text search.
-
     1. Headings: searchable text is the heading text, greyed out text is the heading id with
-
-        # prefixed showing the ref anchor for the heading
-        
+        `#` prefixed showing the ref anchor for the heading
     2. Images: searchable text is the image link, greyed out text is the alt text
-
     3. List Items: searchable text is the first line of the item text
-
     4. Links: searchable text is the link url, greyed out text is the link text
-
     5. Footnotes: searchable text is footnote reference `:` first line of footnote text
-
     6. References: searchable text is the reference id `:` reference link url
 * Fix: #296, License expiration not handled properly by plugin for versions released
   before license expired
