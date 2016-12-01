@@ -4,7 +4,7 @@
 
 ### Version History
 - [*** This version requires Boot JDK 1.8 ***](#-this-version-requires-boot-jdk-18-)
-- [2.1.1.50 - Bug Fix & Enhancement Release](#21150---bug-fix--enhancement-release)
+- [2.2.0 - Compatibility & Enhancement Release](#220---compatibility--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
@@ -12,23 +12,22 @@
 
 <!--![TOC Demo](https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/noload/TOCDemo.gif) -->
 
-
 &nbsp;<details id="todo"><summary>**To Do List**</summary>
-##### Next Release
 
+##### This Release To Do
+
+
+##### Next Release To Do
+
+* [ ] Add: fixed GitHub links should offer the same change relative/http: intention as the rest
+      of the links.
+* [ ] Fix: HRule colors the whole line even when it is in a list item
 * [ ] Fix: flexmark-java bugs
-* [ ] Change: update wiki
-    * [ ] Add: `.collapsed` live template for collapsed markdown section, deactivated by
-          default. You need to enable the `Details tag opener` script so that all details are
-          open while you edit the document.
-    * [ ] Add: Jekyll link map template description
-* [ ] Change: update readme
-
-##### Future Release
-
+* [ ] Fix: SimToc requires default settings so that rendering will reflect project settings not
+      defaults of flexmark-java SimToc extension.
 * [ ] Fix: Link Map
-    * [ ] implement `ExpandedItemRendererComponentWrapper` for table cells so that the extended
-          tooltip does not hide an error tooltip.
+      * [ ] implement `ExpandedItemRendererComponentWrapper` for table cells so that the
+            extended tooltip does not hide an error tooltip.
 * [ ] Add: option for escaping special cases for `*`, `-`, `+`, `#` _`N.`_ where _N_ is numeric
       with a `\` so that it is not interpreted as a special char. If one is found in such a
       position then it should be annotated with a warning and a quick fix to escape it, unless
@@ -57,12 +56,13 @@
 * [ ] Fix: can't modify PSI inside on save listener.
 * [ ] Add: detection for **GitHub** issue completions when no task servers are defined.
 * [ ] Add: List syntax dependent list item action behavior.
-* [ ] Add: List syntax dependent list format behavior.
+* [ ] Add: List syntax dependent list format behavior. 
+
 &nbsp;</details>
 
 ### *** This version requires Boot JDK 1.8 *** 
 
-### 2.1.1.50 - Bug Fix & Enhancement Release
+### 2.2.0 - Compatibility & Enhancement Release
 
 #### Basic & Enhanced Editions
 
@@ -90,8 +90,9 @@
 
 #### Enhanced Edition
 
+* Fix: Rename refactoring of referencing elements broken by stub index work 
 * Add: JavaFX WebView script provider `Details tag opener` to open all `<details>` tags in
-  preview so the content can be seen while editing 
+  preview so the content can be seen while editing
 * Add: collapsible headers and markdown scripts
 * Fix: setting change export now forces to re-export files in case some settings changed that
   affect the content of exported files.
@@ -146,8 +147,8 @@
 * Add: #319, Synchronize source caret to preview element on click.
 * Add: #283, print html preview for now only for JavaFx
 * Add: #174, Suggestion: URL-to-filename transformation rules for image previews
-    * Options to map from markdown link text to GitHub based link reference. ie. `{{ static_root }}`
-      --> `/`
+    * Options to map from markdown link text to GitHub based link reference. ie. `{{ static_root
+      }}` --> `/`
     * Options to map from GitHub based link reference to markdown link text. ie. `/` --> `{{
       static_root }}`
     * With scope based rendering profiles this mapping can be customized for specific files

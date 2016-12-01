@@ -1,42 +1,75 @@
-<img src="https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/MNLogo.png?4" height="48" width="48" align="absmiddle"> Markdown Navigator 2.0
-========================================================================================================
-
-Markdown Navigator plugin provides **[Markdown] language support for [IntelliJ IDEA],
-[RubyMine], [PhpStorm], [WebStorm], [PyCharm], [AppCode], [Android Studio], [CLion] and
-[DataGrip].**
-
-**You can download it on the [JetBrains plugin page].**
+<img src="https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/MNLogo.png" height="48" width="48" align="absmiddle"> Markdown Navigator 2.0
+============================================================================================================================================================
 
 [TOC levels=2,3]: # "Table of Contents"
 
 ### Table of Contents
-- [Plugin Benefits](#plugin-benefits)
+- [Overview](#overview)
+    - [Document with pleasure!](#document-with-pleasure)
+    - [Features](#features)
     - [Two tier model](#two-tier-model)
-    - [Source Update is Long Overdue](#source-update-is-long-overdue)
 - [Release Road Map](#release-road-map)
+- [Version 2.2.0](#version-220)
 - [Version 2.1.1](#version-211)
 - [Version 2.1.0](#version-210)
+    - [Source Update is Long Overdue](#source-update-is-long-overdue)
 - [Version 1.8.4](#version-184)
-- [Recent Additions:](#recent-additions)
+- [Rogues Gallery of Features](#rogues-gallery-of-features)
     - [Screenshots](#screenshots)
-- [Working with the source](#working-with-the-source)
 - [The Background](#the-background)
 
 
-***
+## Overview   
 
-## Plugin Benefits
+![Screenshot](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets//images/plugin_description_img.png)
 
-This plugin generates a preview that is as close as possible to how the page will look on GitHub
-but do it with more IntelliJ IDE intelligence to make editing and maintaining markdown documents
-easier. Developing with pleasure is only half the job. Real projects need to be documented. This
-plugin extends the pleasure principle to the inevitable documentation part of the project.
+**[<span style="color:#30A0D8;">Markdown</span>][Markdown] language support for IntelliJ
+platform**
 
-The parser and rendering differences are greatly reduced by the new parser which offers a lot of
-flexibility in tweaking parsing rules to allow better emulation of other markdown parsers.
+**A Markdown plugin** with GFM and a **matching** preview style.
 
-The plugin includes some syntax extensions from [Fletcher T. Penney's MultiMarkdown] project
-which are not supported by GFM.
+### Document with pleasure! 
+
+Work with [Markdown] files like you do with other languages in the IDE, by getting full support
+for:
+
+- completions to reduce typing
+    - link address ⇐ files
+    - ref anchors ⇐ headings
+    - footnote refs ⇐ footnotes
+    - ref links/ref images ⇐ references
+    - link text ⇐ ref anchor/link address
+- error and warning annotations to help catch mistakes early
+- intention actions for fast results with less effort
+- wrap on typing to keep it nicely formatted as you edit
+- formatting to change format with a key stroke
+- navigation and find usages to find references without effort
+- refactoring of all referencing elements: to keep it all in sync while evolving
+    - files ⟺ links
+    - headings ⟺ ref anchors
+    - footnotes ⟺ footnote refs
+    - references ⟺ ref links/ref images
+- GitHub style rendering that you are used to, out of the box
+- Plain-text-like typing response large documents with syntax highlighting and preview.
+- Fully customizable to adjust to your project's needs and your preferences
+
+### Features
+
+- **<span style="color:#b200c2">Split Editor</span>**
+- **Fast** typing response in large files
+- **HTML text** preview and export
+- Soft Wrap **on right margin**
+- **Format** with code style:
+    - **Multi-byte** support with mixed character width
+    - **Table** justification
+    - **Wrap on typing** auto format of element
+    - **Renumbering** of list items
+- **Bidirectional** Source and Preview synchronization
+    - **Scrolls** preview to show source element at caret
+    - **Moves caret** to source line of element clicked in preview
+- Also does **completions, refactoring, validation, language injections, code folding**
+- **Fully configurable** by project with support for scopes
+- Understands **GitHub wiki** nuances
 
 ### Two tier model
 
@@ -48,47 +81,63 @@ which are not supported by GFM.
 2. Advanced features used for creating and maintaining markdown documents with a split editor,
    refactoring, find usages, validation, auto formatting and HTML page customizations are only
    available in the Enhanced licensed version. 15-day free trial licenses are available from
-   [idea-multimarkdown] page on my website.
-
-![Capabilities](/assets/images/capabilities.png)
-
-### Source Update is Long Overdue
-
-There was much code churn in the enhanced version and I have not had time to merge them into the
-open source version. Initially, most of the differences were limited to a few files making it
-easy to keep them separated and sync the rest. Now, with major preferences and settings re-work,
-directory layout changes and new features, the differences have spread out where keeping them in
-sync is a major effort. I started factoring out the enhanced only changes to separate files so
-that future synchronization of the two branches can be less time consuming.
-
-I will address the open source release after version 2.0 release of the plugin. I only want to
-go through the effort of merging these major differences once.
+   [Markdown Navigator] page on my website.
 
 Release Road Map
 ----------------
 
-The [Markdown] parser used by the plugin has changed from [pegdown] to [flexmark-java].
+Version 2.2.0
+-------------
 
-[flexmark-java] is my fork of [commonmark-java], with the following changes:
+The goal of zero latency typing in 1000+ line files with preview showing is now a reality. This
+release is a rewrite of JavaFX WebView integration code with changes to the style sheet to
+eliminate all typing response typing delays.
 
-- source element based AST with detailed break down of each element for syntax highlighting
-- complete source position tracking for all elements and their lexical parts
-- optimized for efficient parsing with many parser extensions installed
-- unified core and extension options API to simplify parser/renderer configuration
-- options to tweak core parser rules
+It is now possible, should you need it, to edit a 500k file with 11,000+ lines with an easily
+tolerable typing delay.
 
-In the process of making the needed modifications to the original [commonmark-java] parser,
-performance was impacted by about 25-35%. This still makes the new parser **7x-10x** faster than
-[intellij-markdown] parser used by [Markdown Support] and **25x-50x** faster than pegdown. As an
-added benefit, the new parser does not suffer from pegdown's idiosyncrasies of exponential parse
-times or pathological input cases that cause infinite loops in the parser's state machine.
+In addition to a long list of bug fixes you can find in [Version Notes], this release was a
+major tie up of user feature requests:
 
-On the coding end, the new parser is a joy to maintain and enhance. The parser architecture,
-inherited from [commonmark-java], is easy to debug and test. Markdown element parsers have
-little or no interdependencies with other element parsers making it easy to fine tune parser
-behaviour on a per element basis and add parser configuration options to emulate other markdown
-processors. All this is in contrast to pegdown's one big PEG grammar implementation with
-everything potentially inter-dependent.
+- Basic version now with split editor and HTML text preview
+- Live template for collapsible details <details><summary>under mnemonic `.collapsed`</summary>
+  must first be enabled in <kbd>LiveTemplates > Markdown</kbd>. To keep all `detail` tags open
+  after preview update, add JavaFX WebView script `Details tag opener` so the content can be
+  seen while editing &nbsp;</details>
+- Option to hide disabled toolbar buttons makes better use of screen real-estate
+- Display line numbers in fenced code by enabling `Prism.js` script in Stylesheet settings
+- All markdown settings affecting rendering are now per project with support for scoped
+  rendering profiles allowing different settings down to file level granularity to be defined
+  for a project
+- Multi-line URL image links are back since upgrade to [flexmark-java] parser
+- Collapsible headers script adapted from [GitHub-userscripts] by Rob Garrison. Enable `GitHub
+  Collapse Markdown` in Stylesheet settings
+- HTML Export with optional auto-export on document save or project open, with Tools menu
+  `Markdown Navigator` items and all the fixings for the generated HTML which can be different
+  from ones used for rendering the document in preview
+- Link pre and post processing replacements to allow refactoring, completion, validation and
+  navigation for links decorated with non-github parameters, like Jekyll's macros. See:
+  [Modifying Link Processing]
+- Jekyll front matter pre and post processing replacements to allow refactoring, completion,
+  validation and navigation for key values that contain file references. See:
+  [Modifying Link Processing]
+- Swing browser options now support embedding stylesheet contents into the HTML
+- Swing browser now supports displaying HTML documents `Show Split Editor for HTML documents`
+- Soft Wrap at right margin option with:
+    - option to disable wrap on typing when soft wrap is enabled
+    - option for document format when soft wrap is enabled:
+        - disable format
+        - leave enabled
+        - infinite margins. This will effectively remove all soft breaks when formatting the
+          document.
+- Link text completion for GitHub issue titles now do issue title lookup
+- `Copy Jira Formatted text` ![Copy Jira] action improved to add blank lines for loosely spaced
+  lists and after the last list item of the outer-most list and the next element; and now adds
+  `:lang=` for fenced code that specifies the language
+- Move caret to line of element clicked in preview
+- Scroll and optionally Highlight element in preview at source caret position
+- Print HTML preview for JavaFx
+- Markdown syntax and context aware trailing space trimming when enabled
 
 Version 2.1.1
 -------------
@@ -98,8 +147,6 @@ simply amazing. For small files, about 100k and less than a thousand lines, you 
 syntax highlighter to "Lexer". For larger files or when you want fastest typing response, then
 syntax highlighter should be set to "Annotator", which is the default. For best typing response
 in very large files, you can turn off the preview while editing.
-
-For a full list of changes see the [Version Notes]
 
 - Add: Smart copy/paste between files
     - change relative links/references to reflect destination file's location
@@ -128,6 +175,53 @@ Version 2.1.0
     problems caused by using pegdown parser. :smiling_imp: I couldn't wait to be able to say
     that.
 
+### Source Update is Long Overdue
+
+Now that I unified the display between the licensed and unlicensed versions by removing support
+for preview tabs in favour of split editor as the only option, I will be updating the open
+source with a new version much easier.
+
+The update will be more like a replacement of the source than an evolution of it. The directory
+structure has changed significantly and a lot of Java has been converted to Kotlin.
+
+The enhanced version is now 120k lines of code so my goal is to separate the open source
+functionality from the proprietary code with a clean boundary to make open source releases
+synchronized with plugin releases like they used to be but without the need for manual merging
+between the two.
+
+#### Working with the source
+
+Pretty standard IntelliJ Plugin development environment.
+
+#### Some internal details, should you care to know
+
+The [pegdown][] [Markdown] parser used by the plugin in its original incarnation was changed to
+[flexmark-java] and [pegdown] dependencies have been removed as of version 2.2.0.
+
+[flexmark-java] is my fork of [commonmark-java], with changes:
+
+- source element based AST with detailed break down of each element for syntax highlighting
+- complete source position tracking for all elements and their lexical parts
+- optimized for efficient parsing with many parser extensions installed
+- unified core and extension options API to simplify parser/renderer configuration
+- options to tweak core parser rules
+
+In the process of making the needed modifications to the original [commonmark-java] parser,
+performance was impacted by about 25-35%. This still makes the new parser **7x-10x** faster than
+[intellij-markdown] parser used by [Markdown Support] and **25x-50x** faster than pegdown. As an
+added benefit, the new parser does not suffer from pegdown's idiosyncrasies of exponential parse
+times or pathological input cases that cause infinite loops in the parser's state machine.
+
+On the coding end, the new parser is a joy to maintain and enhance. The parser architecture,
+inherited from [commonmark-java], is easy to debug and test. Markdown element parsers have
+little or no interdependencies with other element parsers making it easy to fine tune parser
+behaviour on a per element basis and add parser configuration options to emulate other markdown
+processors. All this is in contrast to pegdown's one big PEG grammar implementation with
+everything potentially inter-dependent.
+
+Older Versions
+==============
+
 Version 1.8.4
 -------------
 
@@ -147,8 +241,8 @@ are based on the [flexmark-java] and require JRE 1.8.
     when annotator syntax highlighting is selected only distinguishes html comments from plain
     text. The comments are needed to allow for TODO processing to work with either highlighter.
 
-Recent Additions:
------------------
+Rogues Gallery of Features
+--------------------------
 
 - JavaFX preview scroll to source with highlight element in preview
 
@@ -156,12 +250,13 @@ Recent Additions:
 
 - **Table of Contents** tag that works with basic markdown syntax and is updated by the plugin.
   The table of contents at the top of this page is an example. For more information see the
-  [wiki](../../wiki/Adding-a-Table-of-Contents#anchor)
+  [wiki](../../wiki/Adding-a-Table-of-Contents#enabling-table-of-contents)
 
 - Java class, method and field completions in inline code. Great if you need to reference code
   elements in your project from a markdown document.
 
-- toolbar buttons and actions, see [Enhanced Features](../../wiki/Enhanced-Features)
+- toolbar buttons and actions, see
+  [Enhanced Features](../../wiki/Enhanced-Features)
 
     ![List Item Actions](assets/images/noload/ListItemActions.gif)
 
@@ -212,46 +307,37 @@ Recent Additions:
 
 ##### Still Great GitHub Rendering Resemblance for your preview pleasure
 
-![Screen Shot Jfx WebView](/assets/images/faq/ScreenShot_jfx_webview.png)
+![Screen Shot Jfx WebView](assets/images/faq/ScreenShot_jfx_webview.png)
 
 ##### Split your editor and see the preview as you type
 
-![idea-multimarkdown](/assets/images/faq/ScreenShot_preview.png)
+![Screen Shot Preview](assets/images/faq/ScreenShot_preview.png)
 
 ##### Peek at the HTML
 
-![idea-multimarkdown-settings](/assets/images/faq/ScreenShot_preview_html.png)
+![idea-multimarkdown-settings](assets/images/faq/ScreenShot_preview_html.png)
 
 ###### Change options, customize the syntax colors and CSS to your liking.
 
-![Screen Shot Settings Intentions](/assets/images/faq/Screenshot_Intentions.png)
+![Screen Shot Settings Intentions](assets/images/faq/Screenshot_Intentions.png)
 
-![Screen Shot Settings Color](/assets/images/faq/Screenshot_Colors_and_Fonts.png)
+![Screen Shot Settings Color](assets/images/faq/Screenshot_Colors_and_Fonts.png)
 
-![Screen Shot Settings Markdown](/assets/images/faq/Screenshot_Main_licensed.png)
+![Screen Shot Settings Markdown](assets/images/faq/Screenshot_Main_licensed.png)
 
-![Screen Shot Settings Parser](/assets/images/faq/Screenshot_Parser.png)
+![Screen Shot Settings Parser](assets/images/faq/Screenshot_Parser_Settings.png)
 
-![Screen Shot Settings Css](/assets/images/faq/Screenshot_Stylesheet.png)
+![Screen Shot Settings Css](assets/images/faq/Screenshot_Stylesheet.png)
 
-![Screenshot Html](/assets/images/faq/Screenshot_Html.png)
+![Screenshot Html](assets/images/faq/Screenshot_Html.png)
 
-![Screenshot Html Export](/assets/images/faq/Screenshot_HtmlExport.png)
+![Screenshot Html Export](assets/images/faq/Screenshot_HtmlExport.png)
 
-![Screenshot Html Export](/assets/images/faq/Screenshot_LinkMap_Settings.png)
+![Screenshot Html Export](assets/images/faq/Screenshot_LinkMap_Settings.png)
 
-![Screenshot Html Export](/assets/images/faq/Screenshot_Rendering.png)
+![Screenshot Html Export](assets/images/faq/Screenshot_Rendering.png)
 
-![Screenshot Html Export](/assets/images/faq/Screenshot_RenderingProfiles.png)
-
-Working with the source
------------------------
-
-This plugin is using a modified version of [sirthias/pegdown], I post my PR's but there is
-always a delay in both generating them and for them to be merged. Additionally, some changes are
-specific to this plugin and have no wide appeal.
-
-The pegdown source used in this plugin can be found [vsch/pegdown].
+![Screenshot Html Export](assets/images/faq/Screenshot_RenderingProfiles.png)
 
 The Background
 --------------
@@ -280,42 +366,48 @@ with a simple desire for a Markdown preview that looked like GitHub's.
 
 ---
 
-\* This plugin is based on the [nicoulaj/idea-markdown plugin] by [nicoulaj], which is based on
-[pegdown] library by [sirthias].
+\* This plugin was originally based on the [nicoulaj/idea-markdown plugin] by [nicoulaj], which
+was based on [pegdown] library by [sirthias]. 
 
-Markdown Navigator, Copyright (c) 2016, V. Schneider, <http://vladsch.com> All Rights Reserved.
+Markdown Navigator, Copyright (c) 2015-2016, V. Schneider, <http://vladsch.com> All Rights
+Reserved.
 
-[Android Studio]: http://developer.android.com/sdk/installing/studio.html
-[AppCode]: http://www.jetbrains.com/objc
-[CLion]: https://www.jetbrains.com/clion
+[Copy Jira]: https://github.com/vsch/idea-multimarkdown/raw/master/resources/icons/editor_actions/Copy_jira.png
 [Craig's List]: http://montreal.en.craigslist.ca/
-[DataGrip]: https://www.jetbrains.com/datagrip
-[Fletcher T. Penney's MultiMarkdown]: http://fletcherpenney.net/multimarkdown/
 [GitHub]: https://github.com/vsch/laravel-translation-manager
-[IntelliJ IDEA]: http://www.jetbrains.com/idea
-[JetBrains plugin page]: https://plugins.jetbrains.com/plugin?pr=&pluginId=7896
-[Markdown]: http://daringfireball.net/projects/markdown
+[GitHub-userscripts]: https://github.com/Mottie/GitHub-userscripts
+[Markdown]: http://daringfireball.net/projects/markdown"
+[Markdown Navigator]: http://vladsch.com/product/markdown-navigator
 [Markdown Support]: https://plugins.jetbrains.com/plugin/7793?pr=
-[PhpStorm]: http://www.jetbrains.com/phpstorm
-[PyCharm]: http://www.jetbrains.com/pycharm
-[RubyMine]: http://www.jetbrains.com/ruby
-[Version Notes]: resources/META-INF/VERSION.md
-[WebStorm]: http://www.jetbrains.com/webstorm
+[Modifying Link Processing]: https://github.com/vsch/idea-multimarkdown/wiki/Modifying-Link-Processing
+[Version Notes]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/META-INF/VERSION.md
 [commonmark-java]: https://github.com/atlassian/commonmark-java
 [flexmark-java]: https://github.com/vsch/flexmark-java
-[idea-multimarkdown]: http://vladsch.com/product/multimarkdown
 [intellij-markdown]: https://github.com/valich/intellij-markdown
 [nicoulaj]: https://github.com/nicoulaj
 [nicoulaj/idea-markdown plugin]: https://github.com/nicoulaj/idea-markdown
 [pegdown]: http://pegdown.org
 [sirthias]: https://github.com/sirthias
+[.gitignore]: http://hsz.mobi
+[Android Studio]: http://developer.android.com/sdk/installing/studio.html
+[AppCode]: http://www.jetbrains.com/objc
+[CLion]: https://www.jetbrains.com/clion
+[DataGrip]: https://www.jetbrains.com/datagrip
+[Fletcher T. Penney's MultiMarkdown]: http://fletcherpenney.net/multimarkdown/
+[GitHub Issues]: https://github.com/vsch/idea-multimarkdown/issues
+[GitHub Issues page]: https://github.com/vsch/idea-multimarkdown/issues/
+[GitHub Wiki pages]: https://github.com/vsch/idea-multimarkdown/wiki
+[GitHub wiki in IntelliJ IDE]: https://github.com/vsch/idea-multimarkdown/wiki/Adding-GitHub-Wiki-to-IntelliJ-Project
+[IntelliJ IDEA]: http://www.jetbrains.com/idea
+[JetBrains plugin comment and rate page]: https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896
+[JetBrains plugin page]: https://plugins.jetbrains.com/plugin?pr=&pluginId=7896
+[Kotlin]: http://kotlinlang.org
+[PhpStorm]: http://www.jetbrains.com/phpstorm
+[Pipe Table Formatter]: https://github.com/anton-dev-ua/PipeTableFormatter
+[PyCharm]: http://www.jetbrains.com/pycharm
+[RubyMine]: http://www.jetbrains.com/ruby
+[WebStorm]: http://www.jetbrains.com/webstorm
+[Wiki]: https://github.com/vsch/idea-multimarkdown/wiki
 [sirthias/pegdown]: https://github.com/sirthias/pegdown
 [vsch/pegdown]: https://github.com/vsch/pegdown/tree/develop
-[.gitignore]: http://hsz.mobi
-[GitHub Issues page]: ../../issues
-[GitHub wiki in IntelliJ IDE]: ../../wiki/Adding-GitHub-Wiki-to-IntelliJ-Project
-[JetBrains plugin comment and rate page]: https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896
-[Kotlin]: http://kotlinlang.org
-[Pipe Table Formatter]: https://github.com/anton-dev-ua/PipeTableFormatter
-[Wiki]: ../../wiki
 
