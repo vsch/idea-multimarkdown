@@ -1,5 +1,5 @@
 <img src="https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/MNLogo.png" height="48" width="48" align="absmiddle"> Markdown Navigator 2.0
-============================================================================================================================================================
+==========================================================================================================================================================
 
 [TOC levels=2,3]: # "Table of Contents"
 
@@ -50,7 +50,7 @@ for:
     - footnotes ⟺ footnote refs
     - references ⟺ ref links/ref images
 - GitHub style rendering that you are used to, out of the box
-- Plain-text-like typing response large documents with syntax highlighting and preview.
+- Fast typing response for distraction free editing
 - Fully customizable to adjust to your project's needs and your preferences
 
 ### Features
@@ -246,7 +246,7 @@ Rogues Gallery of Features
 
 - JavaFX preview scroll to source with highlight element in preview
 
-    ![Preview Scroll To With Highlight](assets/images/noload/PreviewScrollToWithHighlight.gif)
+    ![Preview Scroll To With Highlight](/assets/images/noload/PreviewScrollToWithHighlight.gif)
 
 - **Table of Contents** tag that works with basic markdown syntax and is updated by the plugin.
   The table of contents at the top of this page is an example. For more information see the
@@ -258,7 +258,7 @@ Rogues Gallery of Features
 - toolbar buttons and actions, see
   [Enhanced Features](../../wiki/Enhanced-Features)
 
-    ![List Item Actions](assets/images/noload/ListItemActions.gif)
+    ![List Item Actions](/assets/images/noload/ListItemActions.gif)
 
 - **Document Structure View** with sections for:
     - Headers to show header hierarchy by level  
@@ -303,7 +303,7 @@ Rogues Gallery of Features
 
 ##### Create and edit a markdown table with ease:
 
-![Table Format](assets/images/noload/TableFormat.gif)
+![Table Format](/assets/images/noload/TableFormat.gif)
 
 ##### Still Great GitHub Rendering Resemblance for your preview pleasure
 
@@ -371,6 +371,7 @@ was based on [pegdown] library by [sirthias].
 
 Markdown Navigator, Copyright (c) 2015-2016, V. Schneider, <http://vladsch.com> All Rights
 Reserved.
+
 
 [Copy Jira]: https://github.com/vsch/idea-multimarkdown/raw/master/resources/icons/editor_actions/Copy_jira.png
 [Craig's List]: http://montreal.en.craigslist.ca/

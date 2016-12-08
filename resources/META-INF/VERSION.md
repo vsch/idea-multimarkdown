@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [*** This version requires Boot JDK 1.8 ***](#-this-version-requires-boot-jdk-18-)
+- [2.2.0.2 - Compatibility & Enhancement Release](#2202---compatibility--enhancement-release)
 - [2.2.0 - Compatibility & Enhancement Release](#220---compatibility--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
@@ -16,23 +16,100 @@
 
 ##### This Release To Do
 
+* [ ] Add: update parser configuration to new flexmark-java options.
+* [ ] Add: `<!-- @formatter:on -->` and `<!-- @formatter:off -->` processing in
+      `MarkdownFormatter` so that formatting could be controlled. May want to add a suite of
+      options to manipulate formatting like: `@formatter:margin=#` and any other formatting
+      option that is available in code style settings.
+* [ ] Add: wrap on typing to respect the `@formatter:off`/`@formatter:on` tagging by searching
+      for HTML Comment Block in the `PsiFile` at file level (not embedded in other elements)
+      located before caret line. First one with `@formatter:on` or `@formatter:off` setting
+      wins.
+* [ ] Add: all inline toggling actions to take punctuation characters that they will not wrap by
+      default if caret is on them or the current word to wrap ends on one of them: `.,;:!?`. If
+      the caret is right after one of them then default behavior should be to wrap the word
+      immediately before the punctuation char.
+* [ ] Change: change inline code action to work just like bold, italic and strike through,
+      instead of continuously adding back ticks.
+* [ ] Fix: Swing preview HTML table has body row count reset or reversed so first row is like
+      heading.
+* [ ] Add: TOC option to wrap generated TOC in `&nbsp;<details id="todo"><summary>Toc
+      Title</summary>` and `&nbsp;<details>` so it is collapsible. Add this parsing option to
+      flexmark-java to parse this format.
+* [ ] Add: format option to sort task lists with completed ones last, leaving the order
+      otherwise unchanged.
+* [ ] Add: parser emulation family to parser configuration
+* [ ] Add: parser profile needs to be passed to functions handling formatting and prefix
+      generation. Now this can vary significantly from one parser family to another.
+* [ ] Fix: when ENTER deletes a list item prefix inserts extra blank line
+* [ ] Add: option to disable all smart typing and handlers with an action or toolbar button
+* [ ] Add: Copy to YouTrack button similar to copy to Jira
+* [ ] Fix: for parsing purposes make all bullets interrupt all paragraphs. This will eliminate
+      the possibility of wrap on typing will merge a block of list items when one of them is
+      edited to non-list item, as it does now.
+* [ ] Add: option for escaping special cases for `*`, `-`, `+`, `#` _`N.`_ where _N_ is numeric
+      with a `\` so that it is not mis-interpreted as a special char at first non-blank of a
+      wrapped line. If one is found in such a position then it should be annotated with a
+      warning and a quick fix to escape it, unless it is the first non-blank of the list item's
+      text. The `#` affects current implementation but should only be escaped if it lands
+      exactly on the items child indent position, if parser rules don't allow leading spaces
+      before ATX headings.
+* [ ] Add: join processor to remove bullet list marker when joining next line item
+* [ ] Fix: CommonMark and Commonmark to CommonMark
+* [ ] Add: CommonMark 0.27 compliant flexmark-java
+* [ ] Add: other parser profiles and appropriate options to allow using these:
+      * [ ] CommonMark: GitHub Comments
+      * [ ] Kramdown: GitHub Docs, GitHub Wiki Pages, Jekyll
+      * [ ] FixedIndent: MultiMarkdown, PanDocs, Pegdown
+* [ ] Add: `PARSE_JEKYLL_MACROS_IN_URLS` option for parser and to Parser settings to enable
+      parsing of jekyll macros in urls with spaces between macro and braces.
+* [ ] Fix: cursor navigation very slow in table with few rows but very long text in columns: see
+      `Extensions.md` in `flexmark-java` wiki. Suspect is figuring out table context for toolbar
+      button state update.
+* [ ] Fix: inserting list item above in a loose list should not insert blank line below current
+      item since we are inserting above and not affecting the current item.
+* [ ] Add: List syntax dependent list item action behavior.
+      - [x] Add: flexmark option to recognize empty list sub-items option to PARSER purpose.
+      - [x] Fix: psi list item prefix reporting to match fixed4, github and CommonMark list
+            processing settings.
+      * [x] Fix: list indent for nested items should not indent to more than (listLevel)*4 + 3
+            in fixed 4 mode, and check if also in GitHub compatible mode
+      - [ ] Fix: indent/un-indent for other than fixed 4 has to re-indent child items to the
+            parent's new indent level. Otherwise parsing of the children will be off. Right now
+            works only for fixed4
+* [ ] Add: List syntax dependent list format behavior.
+      * [ ] GitHub enforces styleSettings.LIST_ALIGN_CHILD_BLOCKS and has a maximum for prefix
+            marker start
+      * [ ] CommonMark enforces styleSettings.LIST_ALIGN_CHILD_BLOCKS and have no maximum for
+            prefix as long as it matches the parent item's content indent
+- [ ] Fix: Un-indent item action leaves leading indent if it was aligned to parent's left text
+      edge.
 
 ##### Next Release To Do
+
+* [ ] Add: state persistence for JavaFX script parameters and modify the `details` opener and
+      Collapse Markdown scripts to use these for initializing the open/close state.
+* [ ] Add: save the persistence for JavaFX with the document state so that it is restored when
+      the document opens.
+* [ ] Add: option to not load gif images or if possible to not animate them just display the
+      first frame. Really messes up preview and scrolling. Even crashed PhpStorm needing a power
+      down because it would not be killed.
+* [ ] Fix: When pasting text that contains ref links over a selection that already has these
+      references, after the paste the references are deleted but new ones are not added. Put a
+      check if possible to ignore any existing references in a selection since they will be
+      deleted by the paste.
+* [ ] Fix: can't modify PSI inside on save listener.
+
+----
 
 * [ ] Add: fixed GitHub links should offer the same change relative/http: intention as the rest
       of the links.
 * [ ] Fix: HRule colors the whole line even when it is in a list item
-* [ ] Fix: flexmark-java bugs
 * [ ] Fix: SimToc requires default settings so that rendering will reflect project settings not
-      defaults of flexmark-java SimToc extension.
+      defaults of flexmark-java SimToc extension. For now renders what is in the document.
 * [ ] Fix: Link Map
       * [ ] implement `ExpandedItemRendererComponentWrapper` for table cells so that the
             extended tooltip does not hide an error tooltip.
-* [ ] Add: option for escaping special cases for `*`, `-`, `+`, `#` _`N.`_ where _N_ is numeric
-      with a `\` so that it is not interpreted as a special char. If one is found in such a
-      position then it should be annotated with a warning and a quick fix to escape it, unless
-      it is the first non-blank of the list item's text. The `#` affects current implementation
-      but should only be escaped if it lands exactly on the items child indent position.
 * [ ] Add: option to escape special chars when they migrate to the beginning of a line and away
       from the beginning of a line after wrapping. Simpler to un-escape them if they are escaped
       before wrap and re-escape any at the beginning of a line.
@@ -40,27 +117,24 @@
       for emoji shortcuts and links located in heading elements can be properly aligned.
 * [ ] Fix: take a look at the toolbar implementation to see if it can be made to put in a drop
       down for buttons that don't fit.
-* [ ] Add: option for escaping special cases for `*`, `-`, `+`, `#` _`N.`_ where _N_ is numeric
-      with a `\` so that it is not interpreted as a special char. If one is found in such a
-      position then it should be annotated with a warning and a quick fix to escape it, unless
-      it is the first non-blank of the list item's text. The `#` affects current implementation
-      but should only be escaped if it lands exactly on the items child indent position.
-* [ ] Add: option to escape special chars when they migrate to the beginning of a line and away
-      from the beginning of a line after wrapping. Simpler to un-escape them if they are escaped
-      before wrap and re-escape any at the beginning of a line.
 * [ ] Add: source synchronization for Swing preview window
 * [ ] Add: source synchronization for HTML plain text previews
-- [ ] Add: a commonmark profile and compatible options in settings
-* [ ] Fix: list indent for nested items should not indent to more than (listLevel)*4 + 3 in
-      fixed 4 mode.
-* [ ] Fix: can't modify PSI inside on save listener.
+- [ ] Add: a CommonMark profile and compatible options in settings
 * [ ] Add: detection for **GitHub** issue completions when no task servers are defined.
-* [ ] Add: List syntax dependent list item action behavior.
-* [ ] Add: List syntax dependent list format behavior. 
 
 &nbsp;</details>
 
-### *** This version requires Boot JDK 1.8 *** 
+### 2.2.0.2 - Compatibility & Enhancement Release
+
+* Add: Copy YouTrack formatted text, like Jira but with differences 
+* Fix: Copy Jira formatted text adding extra blank line in block quote
+* Add: fenced/indented code trailing space trimming options.
+* Add: flexmark-java flexmark example trailing space trimming options.
+* Add: fenced code style option `Space before language info` to put a space between opening
+      marker and language info string
+* Fix: disable backspace, enter and typed character handlers in multi-caret mode.
+* Add: multi-invoke for inline code completion to select fully qualified names or just simple
+  names. Make simple name the default. Very annoying to get full names in docs.
 
 ### 2.2.0 - Compatibility & Enhancement Release
 
@@ -90,7 +164,7 @@
 
 #### Enhanced Edition
 
-* Fix: Rename refactoring of referencing elements broken by stub index work 
+* Fix: Rename refactoring of referencing elements broken by stub index work
 * Add: JavaFX WebView script provider `Details tag opener` to open all `<details>` tags in
   preview so the content can be seen while editing
 * Add: collapsible headers and markdown scripts
@@ -270,7 +344,7 @@
   complete. No server code yet. For now disabled.
 - Fix: With lexer as syntax highlighter deleting the last space after `[ ]` would cause an
   exception that was trapped but it would mess up syntax highlighting
-- Fix: parser would accept ordered lists using `)` delimiter, as per commonmark spec.
+- Fix: parser would accept ordered lists using `)` delimiter, as per CommonMark spec.
 - Add: flexmark parser as the default option for lexer, parser and external annotator. Typing
   response is amazing. Some elements still missing:
     - Definitions
