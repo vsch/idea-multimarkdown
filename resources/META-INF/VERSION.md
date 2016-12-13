@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.2.0.2 - Compatibility & Enhancement Release](#2202---compatibility--enhancement-release)
+- [2.2.0.4 - Compatibility & Enhancement Release](#2204---compatibility--enhancement-release)
 - [2.2.0 - Compatibility & Enhancement Release](#220---compatibility--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
@@ -16,11 +16,17 @@
 
 ##### This Release To Do
 
+* [ ] Fix: `[flexmark icon logo]: raw/master/assets/images/flexmark-icon-logo.png` shows as
+      unresolved by annotator but completes fine.
+* [ ] Add: when typing in the text field for change link to reference, automatically enable the
+      add reference text if reference id is different from original
+* [ ] Fix: on ENTER when removing item prefix should not insert a blank line
+* [ ] Fix: Header marker equalization
+* [ ] Add: paste image into document, use content preview and replace whatever is selected or
+      under caret not just full links. Default to reuse the name at caret. Directory to be
+      configurable by scope of the destination file.
+* [ ] Add: transpose table, best to copy to clipboard transposed table
 * [ ] Add: update parser configuration to new flexmark-java options.
-* [ ] Add: `<!-- @formatter:on -->` and `<!-- @formatter:off -->` processing in
-      `MarkdownFormatter` so that formatting could be controlled. May want to add a suite of
-      options to manipulate formatting like: `@formatter:margin=#` and any other formatting
-      option that is available in code style settings.
 * [ ] Add: wrap on typing to respect the `@formatter:off`/`@formatter:on` tagging by searching
       for HTML Comment Block in the `PsiFile` at file level (not embedded in other elements)
       located before caret line. First one with `@formatter:on` or `@formatter:off` setting
@@ -87,13 +93,13 @@
 
 ##### Next Release To Do
 
+* [ ] Add: option to not load GIF images, later if possible to not animate them just display the
+      first frame. Really messes up preview and scrolling. Even crashed PhpStorm needing a power
+      down because it would not be killed. Same with IDEA but force quit worked.
 * [ ] Add: state persistence for JavaFX script parameters and modify the `details` opener and
       Collapse Markdown scripts to use these for initializing the open/close state.
 * [ ] Add: save the persistence for JavaFX with the document state so that it is restored when
       the document opens.
-* [ ] Add: option to not load gif images or if possible to not animate them just display the
-      first frame. Really messes up preview and scrolling. Even crashed PhpStorm needing a power
-      down because it would not be killed.
 * [ ] Fix: When pasting text that contains ref links over a selection that already has these
       references, after the paste the references are deleted but new ones are not added. Put a
       check if possible to ignore any existing references in a selection since they will be
@@ -124,9 +130,13 @@
 
 &nbsp;</details>
 
-### 2.2.0.2 - Compatibility & Enhancement Release
+### 2.2.0.4 - Compatibility & Enhancement Release
 
-* Add: Copy YouTrack formatted text, like Jira but with differences 
+* Add: option to not load GIF images, later if possible to not animate them just display the
+      first frame. Really messes up preview and scrolling. Even crashed PhpStorm needing a power
+      down because it would not be killed.
+* Add: formatter control tags support
+* Add: Copy YouTrack formatted text, like Jira but with differences
 * Fix: Copy Jira formatted text adding extra blank line in block quote
 * Add: fenced/indented code trailing space trimming options.
 * Add: flexmark-java flexmark example trailing space trimming options.
