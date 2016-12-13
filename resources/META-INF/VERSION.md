@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.2.0.4 - Compatibility & Enhancement Release](#2204---compatibility--enhancement-release)
+- [2.2.0.6 - Compatibility & Enhancement Release](#2206---compatibility--enhancement-release)
 - [2.2.0 - Compatibility & Enhancement Release](#220---compatibility--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
@@ -130,8 +130,10 @@
 
 &nbsp;</details>
 
-### 2.2.0.4 - Compatibility & Enhancement Release
+### 2.2.0.6 - Compatibility & Enhancement Release
 
+* Fix: Copy Jira and YouTrack heading would not have text if `Anchor Links` parser option was
+  selected.
 * Add: option to not load GIF images, later if possible to not animate them just display the
       first frame. Really messes up preview and scrolling. Even crashed PhpStorm needing a power
       down because it would not be killed.
