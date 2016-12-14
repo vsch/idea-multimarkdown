@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.2.0.6 - Compatibility & Enhancement Release](#2206---compatibility--enhancement-release)
+- [2.2.0.8 - Compatibility & Enhancement Release](#2208---compatibility--enhancement-release)
 - [2.2.0 - Compatibility & Enhancement Release](#220---compatibility--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
@@ -16,8 +16,11 @@
 
 ##### This Release To Do
 
+* [ ] Add: Copy Rendered Markdown to HTML mime format to allow composing e-mails in plugin and
+      pasting to apple mail.
 * [ ] Fix: `[flexmark icon logo]: raw/master/assets/images/flexmark-icon-logo.png` shows as
-      unresolved by annotator but completes fine.
+      unresolved by annotator but completes fine and inline link with same URL does not show as
+      unresolved.
 * [ ] Add: when typing in the text field for change link to reference, automatically enable the
       add reference text if reference id is different from original
 * [ ] Fix: on ENTER when removing item prefix should not insert a blank line
@@ -93,9 +96,6 @@
 
 ##### Next Release To Do
 
-* [ ] Add: option to not load GIF images, later if possible to not animate them just display the
-      first frame. Really messes up preview and scrolling. Even crashed PhpStorm needing a power
-      down because it would not be killed. Same with IDEA but force quit worked.
 * [ ] Add: state persistence for JavaFX script parameters and modify the `details` opener and
       Collapse Markdown scripts to use these for initializing the open/close state.
 * [ ] Add: save the persistence for JavaFX with the document state so that it is restored when
@@ -108,8 +108,8 @@
 
 ----
 
-* [ ] Add: fixed GitHub links should offer the same change relative/http: intention as the rest
-      of the links.
+* [ ] Add: GitHub links should offer the same change relative/http: intention as the rest of the
+      links.
 * [ ] Fix: HRule colors the whole line even when it is in a list item
 * [ ] Fix: SimToc requires default settings so that rendering will reflect project settings not
       defaults of flexmark-java SimToc extension. For now renders what is in the document.
@@ -130,20 +130,37 @@
 
 &nbsp;</details>
 
-### 2.2.0.6 - Compatibility & Enhancement Release
+### 2.2.0.8 - Compatibility & Enhancement Release
 
+* Add: `Copy markdown document or selection as HTML mime formatted text` action that will copy
+  document or selection to the clipboard in HTML format that will paste as formatted text into
+  applications that handle HTML formatted text. Useful for pasting rendered markdown in e-mails.
+  To override the default styles and parser options for rendered HTML create a profile named
+  `COPY_HTML_MIME` and override CSS Text. Use
+  `/com/vladsch/idea/multimarkdown/html_mime_default.css` as a starting template. All style
+  settings must be contained in a single matching entry since they are set in each element and
+  there is no stylesheet and the "css" text is parsed and its style added to the element's style
+  attribute. The "parent" selector is based on Markdown AST hierarchy and not actual HTML which
+  at the time attributes are applied does not exist, so any HTML tags surrounding Markdonw
+  elements will have no effect. Also the classes are hardcoded into the attribute provider such
+  as: `tr.odd`, `tr.even` and `li.loose` based again on Markdown AST.
+* Add: option to not load GIF images, later if possible to not animate them just display the
+  first frame. Really messes up preview and scrolling. Even crashed PhpStorm needing a power
+  down because it would not be killed. Same with IDEA but force quit worked.
+* Fix: In profiles Stylesheet and HTML override project settings options were reversed in the
+  code. Html controlled Stylesheet and Stylesheet controlled HTML.
 * Fix: Copy Jira and YouTrack heading would not have text if `Anchor Links` parser option was
   selected.
 * Add: option to not load GIF images, later if possible to not animate them just display the
-      first frame. Really messes up preview and scrolling. Even crashed PhpStorm needing a power
-      down because it would not be killed.
+  first frame. Really messes up preview and scrolling. Even crashed PhpStorm needing a power
+  down because it would not be killed.
 * Add: formatter control tags support
 * Add: Copy YouTrack formatted text, like Jira but with differences
 * Fix: Copy Jira formatted text adding extra blank line in block quote
 * Add: fenced/indented code trailing space trimming options.
 * Add: flexmark-java flexmark example trailing space trimming options.
 * Add: fenced code style option `Space before language info` to put a space between opening
-      marker and language info string
+  marker and language info string
 * Fix: disable backspace, enter and typed character handlers in multi-caret mode.
 * Add: multi-invoke for inline code completion to select fully qualified names or just simple
   names. Make simple name the default. Very annoying to get full names in docs.
