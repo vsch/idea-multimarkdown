@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.2.0.14 - Compatibility & Enhancement Release](#22014---compatibility--enhancement-release)
+- [2.2.0.18 - Compatibility & Enhancement Release](#22018---compatibility--enhancement-release)
 - [2.2.0 - Compatibility & Enhancement Release](#220---compatibility--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
@@ -14,7 +14,7 @@
 
 &nbsp;<details id="todo"><summary>**To Do List**</summary>
 
-##### This Release To Do
+##### To Do
 
 * [ ] Add: when typing in the text field for change link to reference, automatically enable the
       add reference text if reference id is different from original
@@ -25,17 +25,12 @@
 * [ ] Add: update parser configuration to new flexmark-java options.
 * [ ] Add: parser emulation family to parser configuration
 * [ ] Fix: document format to respect markdown processor family and settings.
-* [ ] Add: parser profile needs to be passed to functions handling formatting and prefix
-      generation. Now this can vary significantly from one parser family to another.
-* [ ] Fix: when ENTER deletes a list item prefix inserts extra blank line
-* [ ] Remove: smart asterisk, underscore and tilde handlers and options.
 * [ ] Add: option for escaping special cases for `*`, `-`, `+`, `#` _`N.`_ where _N_ is numeric
-      with a `\` so that it is not mis-interpreted as a special char at first non-blank of a
-      wrapped line. If one is found in such a position then it should be annotated with a
-      warning and a quick fix to escape it, unless it is the first non-blank of the list item's
-      text. The `#` affects current implementation but should only be escaped if it lands
-      exactly on the items child indent position, if parser rules don't allow leading spaces
-      before ATX headings.
+      with a `\` so that it is not interpreted as a special char at first non-blank of a wrapped
+      line. If one is found in such a position then it should be annotated with a warning and a
+      quick fix to escape it, unless it is the first non-blank of the list item's text. The `#`
+      affects current implementation but should only be escaped if it lands exactly on the items
+      child indent position, if parser rules don't allow leading spaces before ATX headings.
 * [ ] Add: join processor to remove bullet list marker when joining next line item
 * [ ] Fix: CommonMark and Commonmark to CommonMark
 * [ ] Add: other parser profiles and appropriate options to allow using these:
@@ -47,28 +42,6 @@
 * [ ] Fix: cursor navigation very slow in table with few rows but very long text in columns: see
       `Extensions.md` in `flexmark-java` wiki. Suspect is figuring out table context for toolbar
       button state update.
-* [ ] Fix: inserting list item above in a loose list should not insert blank line below current
-      item since we are inserting above and not affecting the current item.
-* [ ] Add: List syntax dependent list item action behavior.
-      * [ ] Fix: indent/un-indent for other than fixed 4 has to re-indent child items to the
-            parent's new indent level. Otherwise parsing of the children will be off. Right now
-            works only for fixed4
-      * Add: flexmark option to recognize empty list sub-items option to PARSER purpose.
-      * Fix: psi list item prefix reporting to match fixed4, github and CommonMark list
-        processing settings.
-      * Fix: list indent for nested items should not indent to more than (listLevel)*4 + 3 in
-        fixed 4 mode, and check if also in GitHub compatible mode
-* [ ] Add: List syntax dependent list format behavior.
-      * [ ] GitHub enforces styleSettings.LIST_ALIGN_CHILD_BLOCKS and has a maximum for prefix
-            marker start
-      * [ ] CommonMark enforces styleSettings.LIST_ALIGN_CHILD_BLOCKS and have no maximum for
-            prefix as long as it matches the parent item's content indent
-      * [ ]
-* [ ] Fix: Un-indent item action leaves leading indent if it was aligned to parent's left text
-      edge.
-
-##### Next Release To Do
-
 * [ ] Add: state persistence for JavaFX script parameters and modify the `details` opener and
       Collapse Markdown scripts to use these for initializing the open/close state.
 * [ ] Add: save the persistence for JavaFX with the document state so that it is restored when
@@ -80,10 +53,6 @@
 * [ ] Fix: can't modify PSI inside on save listener.
 * [ ] Add: GitHub links should offer the same change relative/http: intention as the rest of the
       links.
-* [ ] Fix: HRule colors the whole line even when it is in a list item
-* [ ] Fix: SimToc requires default settings option so that rendering will reflect project
-      settings not defaults of flexmark-java SimToc extension. For now renders what is in the
-      document.
 * [ ] Fix: Link Map
       * [ ] implement `ExpandedItemRendererComponentWrapper` for table cells so that the
             extended tooltip does not hide an error tooltip.
@@ -98,20 +67,83 @@
 
 &nbsp;</details>
 
-### 2.2.0.14 - Compatibility & Enhancement Release
+* [ ] Update: wiki
+      * [ ] action to navigate table cells and general ability to define keymap to any plugin
+            action
+      * [ ] animated GIF issue for JavaFX and option to not load any GIF images in preview.
+      * Code Style changes:
+        * [ ] removal of smart asterisk, underscore and tilde functionality
+        * [ ] task sorting code style options
+        * [ ] fenced code style option `Space before language info` to put a space between
+              opening marker and language info string
+        * [ ] `Copy Markdown as HTML formatted` action and tool menu, pastes as HTML formatted
+              mime content
+        * [ ] @formatter on/off comment directives
+        * [ ] Toc options for table of contents list generation: * hierarchy: as before
+              hierarchical list of headings in document order * flat: flat list of headings in
+              document order * reversed: flat reversed list of headings in reverse document
+              order * increasing: flat, alphabetically increasing by heading text * decreasing:
+              flat, alphabetically decreasing by heading text
+      * [ ] surround live templates for: * fenced code, * collapsed sections, * @formatter:off /
+            @formatter:on comments
+      * [ ] toggle style action now have punctuation option to skip when at end of word
+      * [ ] update an improved way to customize CSS for both JavaFX and Swing is to enable split
+            preview for HTML, export markdown document as HTML with stylesheet embedded, open
+            the exported HTML and edit the styles to get live update results.
 
-* Fix: Swing preview HTML table did not render correctly. Swing CSS used tbody and thead which
-  Swing browser does not support. Now generating different class for `tr` tags depending on
-  whether they are `thead` or `tbody` rows.
-* Add: format option to sort task lists based on their done/not done status:
-    * `No Change`: leave all as is
-    * `Incomplete first`: put incomplete tasks first, followed by the rest
-    * `Has incomplete first`: put incomplete tasks and list items that contain incomplete tasks
-      first followed by the rest
-    * `Incomplete first, complete to non-task`: put incomplete tasks first, followed by the rest
-      and convert complete tasks to non-task items.
-    * `Has incomplete, complete to non-task`: put incomplete tasks and list items that contain
-      incomplete tasks first followed by the rest and convert complete tasks to non-task items.
+### 2.2.0.18 - Compatibility & Enhancement Release
+
+* Add: Actions to navigate table cells: next/prev table cell with and without selection to stop
+  at beginning/end of cell and start/end of table row
+* Fix: List syntax dependent list item action behavior.
+  * Fix: indent/un-indent for other than fixed 4 has to re-indent child items to the parent's
+    new indent level. Otherwise parsing of the children will be off. Right now works only for
+    fixed4
+  * Add: flexmark option to recognize empty list sub-items option to PARSER purpose.
+  * Fix: psi list item prefix reporting to match fixed4, github and CommonMark list processing
+    settings.
+* Add: List syntax dependent list format behavior.
+  * Fix: list indent for nested items should not indent to more than (listLevel)*4 + 3 in fixed
+    4 mode
+  * GitHub enforces styleSettings.LIST_ALIGN_CHILD_BLOCKS and has no maximum for content offset.
+  * CommonMark enforces styleSettings.LIST_ALIGN_CHILD_BLOCKS and has a maximum for content
+    offset beyond the marker end of 4 characters before the content is treated as indented text.
+* Fix: indent/un-indent empty task item adds extra blank line after it on every action, on first
+  action caret at start of next line
+* Change: `StripTrailingSpacesSmartFilter` to use the abstract class instead of an interface.
+* Add: parser profile added to functions handling formatting and prefix generation. Now this can
+  vary significantly from one parser family to another.
+* Fix: when ENTER deletes a list item prefix inserted extra blank line
+* Fix: Un-indent item action leaves leading indent if it was aligned to parent's left text edge.
+* Fix: SimToc requires default settings option so that rendering will reflect project settings
+  not defaults of flexmark-java SimToc extension.
+* Fix: HRule would span the whole line even when it was not the first element on the line
+* Remove: smart asterisk, underscore and tilde handlers and options.
+* Fix: edge formatting cases when list item marker is immediately followed by a block element,
+  then the elements are left on the same line and no extra blank lines are added:
+  * thematic break
+  * atx heading
+  * setext heading
+  * fenced code
+  * verbatim code
+  * block quote marker
+* Fix: edge formatting cases when list item marker is immediately followed by a block element,
+  then the element is put on its own line:
+  * list item marker
+* Add: parser settings parameter to prefix related functions to use when prefix limits are
+  defined by content indent not fixed indent
+* Fix: Swing preview HTML table did not render correctly. Swing CSS used `tbody` and `thead`
+  which Swing browser does not support. Now generating different class for `tr` tags depending
+  on whether they are `thead` or `tbody` rows.
+* Add: format option to sort task items based on their done/not done status:
+  * `No Change`: leave all as is
+  * `Incomplete first`: put incomplete tasks first, followed by the rest
+  * `Has incomplete first`: put incomplete tasks and list items that contain incomplete tasks
+    first followed by the rest
+  * `Incomplete first, complete to non-task`: put incomplete tasks first, followed by the rest
+    and convert complete tasks to non-task items.
+  * `Has incomplete, complete to non-task`: put incomplete tasks and list items that contain
+    incomplete tasks first followed by the rest and convert complete tasks to non-task items.
 * Fix: task list item content indent based parsing was broken in flexmark-java.
 * Fix: all inline toggling actions to remove markers if caret is between markers and no
   intervening text, as occurs when toggle action was just used to inserted markers.
@@ -126,51 +158,52 @@
   only image links would handle the optional wiki prefix from home page for image files.
 * Fix: backspace at end of file after `# ` did nothing.
 * Fix: Header marker equalization was broken.
-* Fix: CSS when task list item is first level, bullet sub-items mess up items
-* Fix: when inserting list item above in a loose list, adds a blank line right after the first
+* Fix: CSS when task list item was first level, bullet sub-item spacing was messed up
+* Fix: when inserting list item above in a loose list, added a blank line right after the first
   line of the next item, even if the item has more than one line of text. Should not add blank
   line after the next item at all.
 * Add: surround live templates for:
-    * fenced code,
-    * collapsed sections,
-    * @formatter:off / @formatter:on comments
+  * fenced code,
+  * collapsed sections,
+  * @formatter:off / @formatter:on comments
 * Add: Markdown context for Live Templates
 * Fix: Table body and head should not use node text for breadcrumb. Row does that causing double
   breadcrumb text to appear.
 * Add: definition lists implementation from flexmark-java
 * Fix: format document did not preserve block quotes on fenced code
-* Change: image links to http://github.com/user/project/blob are now always flagged with a
+* Change: image links to `http://github.com/user/project/blob` are now always flagged with a
   warning regardless of whether they are part of an image link or reference.
 * Add: `<html></html>` wrapper tags to `JavaFxHtmlGenerator` and `SwingHtmlGenerator`
 * Add: `NO_FILE_EOL` to flexmark example options as built-in option
 * Add: updated to flexmark-java 0.9.0, added subscript/superscript/ins extensions to parser
   options. Can be used with Jira, Copy HTML mime
-* Add: Toc options for table of contents list generation options:
-    * hierarchy: as before hierarchical list of headings in document order
-    * flat: flat list of headings in document order
-    * reversed: flat reversed list of headings in reverse document order
-    * increasing: flat, alphabetically increasing by heading text
-    * decreasing: flat, alphabetically decreasing by heading text
+* Add: Toc options for table of contents list generation:
+  * hierarchy: as before hierarchical list of headings in document order
+  * flat: flat list of headings in document order
+  * reversed: flat reversed list of headings in reverse document order
+  * increasing: flat, alphabetically increasing by heading text
+  * decreasing: flat, alphabetically decreasing by heading text
 * Change: for parsing purposes all bullets interrupt all paragraphs. Eliminate the possibility
   of wrap on typing merging a block of list items when one of them is edited to non-list item.
-* Add: wrap on typing and document format to respect the `@formatter:off`/`@formatter:on` tags
+* Add: wrap on typing and document format respects the `@formatter:off`/`@formatter:on` tags
 * Change: refactor all the settings to use settable component list where possible.
 * Fix: Copy HTML mime formatted text to use CSS settings only if the profile name is
   `COPY_HTML_MIME`, otherwise use internal defaults.
 * Fix: table column alignment was not taking accumulated span offset in the table row when
   getting alignment for the column from separator row.
-* Add: `Copy markdown document or selection as HTML mime formatted text` action that will copy
-  document or selection to the clipboard in HTML format that will paste as formatted text into
-  applications that handle HTML formatted text. Useful for pasting rendered markdown in e-mails.
-  To override the default styles and parser options for rendered HTML create a profile named
-  `COPY_HTML_MIME` and override CSS Text. Use
-  `/com/vladsch/idea/multimarkdown/html_mime_default.css` as a starting template. All style
-  settings must be contained in a single matching entry since they are set in each element and
-  there is no stylesheet and the "css" text is parsed and its style added to the element's style
-  attribute. The "parent" selector is based on Markdown AST hierarchy and not actual HTML which
-  at the time attributes are applied does not exist, so any HTML tags surrounding Markdown
-  elements will have no effect. Also the classes are hardcoded into the attribute provider such
-  as: `tr.odd`, `tr.even` and `li.loose` based again on Markdown AST.
+* Add: `Copy Markdown as HTML formatted text` action that will copy document or selection to the
+  clipboard in HTML mime format that will paste as formatted HTML into applications that
+  recognize this format. Useful for pasting rendered markdown in e-mails. To override the
+  default styles and parser options for rendered HTML create a profile named `COPY_HTML_MIME`
+  and override CSS Text. Use
+  [html_mime_default.css](/resources/com/vladsch/idea/multimarkdown/html_mime_default.css) as a
+  starting template. All style settings must be contained in a single matching one line entry
+  since they are set in each element and there is no stylesheet. The "css" text is parsed with a
+  simple parser, one line comments stripped out and each line's style attributed to element
+  selector, with style to be added to the element's style attribute. The "parent" selector is
+  based on Markdown AST hierarchy and not actual HTML, so any HTML tags surrounding Markdown
+  elements will have no effect. The classes are hardcoded into the attribute provider such as:
+  `tr.odd`, `tr.even` and `li.loose` based on Markdown AST.
 * Add: option to not load GIF images, later if possible to not animate them just display the
   first frame. Really messes up preview and scrolling. Even crashed PhpStorm needing a power
   down because it would not be killed. Same with IDEA but force quit worked.
@@ -261,15 +294,15 @@
 * Add: link text completion for GitHub issue titles. Completes same as in text. Fast way to link
   to issues and have the title in the link.
 * Add: #314, Export .html files (as part of build?)
-    * exported files are limited to being under the project base directory to prevent erroneous
-      target directory from writing to the file system in unexpected location.
-    * copy custom font file if stylesheet has reference to it
-    * optionally use relative links to:
-        * exported html files
-        * stylesheets and scripts
-        * custom font
-        * image files
-    * optionally copy image files
+  * exported files are limited to being under the project base directory to prevent erroneous
+    target directory from writing to the file system in unexpected location.
+  * copy custom font file if stylesheet has reference to it
+  * optionally use relative links to:
+    * exported html files
+    * stylesheets and scripts
+    * custom font
+    * image files
+  * optionally copy image files
 * Fix : Jira copy to add blank lines for loosely spaced lists and after the last list item of
   the outer-most list and the next element
 * Add: scope based rendering profiles allowing fine grained control on markdown rendering
@@ -277,12 +310,12 @@
 * Add: #319, Synchronize source caret to preview element on click.
 * Add: #283, print html preview for now only for JavaFx
 * Add: #174, Suggestion: URL-to-filename transformation rules for image previews
-    * Options to map from markdown link text to GitHub based link reference. ie. `{{ static_root
-      }}` --> `/`
-    * Options to map from GitHub based link reference to markdown link text. ie. `/` --> `{{
-      static_root }}`
-    * With scope based rendering profiles this mapping can be customized for specific files
-      and/or directories
+  * Options to map from markdown link text to GitHub based link reference. ie. `{{ static_root
+    }}` --> `/`
+  * Options to map from GitHub based link reference to markdown link text. ie. `/` --> `{{
+    static_root }}`
+  * With scope based rendering profiles this mapping can be customized for specific files and/or
+    directories
 * Add: #331, Add markdown context aware trailing space removal
 * Add: #329, Now can delete all previously generated file through HTML export or just the files
   that were previously generated and will no longer be generated in the current configuration.
@@ -364,13 +397,13 @@
   only needed due to pegdown parser quirks.
 * Fix: #288, IndexOutOfBoundsException
 * Fix: #294, Structure view text not compatible with text search.
-    1. Headings: searchable text is the heading text, greyed out text is the heading id with `#`
-       prefixed showing the ref anchor for the heading
-    2. Images: searchable text is the image link, greyed out text is the alt text
-    3. List Items: searchable text is the first line of the item text
-    4. Links: searchable text is the link url, greyed out text is the link text
-    5. Footnotes: searchable text is footnote reference `:` first line of footnote text
-    6. References: searchable text is the reference id `:` reference link url
+  1. Headings: searchable text is the heading text, greyed out text is the heading id with `#`
+     prefixed showing the ref anchor for the heading
+  2. Images: searchable text is the image link, greyed out text is the alt text
+  3. List Items: searchable text is the first line of the item text
+  4. Links: searchable text is the link url, greyed out text is the link text
+  5. Footnotes: searchable text is footnote reference `:` first line of footnote text
+  6. References: searchable text is the reference id `:` reference link url
 * Fix: #296, License expiration not handled properly by plugin for versions released before
   license expired
 * Fix: #297, Code Fence only minimizes leading spaces of the first code line during formatting
@@ -403,9 +436,9 @@
 * Fix: parser would accept ordered lists using `)` delimiter, as per CommonMark spec.
 * Add: flexmark parser as the default option for lexer, parser and external annotator. Typing
   response is amazing. Some elements still missing:
-    * Definitions
-    * Typographic: Quotes, Smarts
-    * Multi-Line Image URLs
+  * Definitions
+  * Typographic: Quotes, Smarts
+  * Multi-Line Image URLs
 
 #### Enhanced Edition
 
