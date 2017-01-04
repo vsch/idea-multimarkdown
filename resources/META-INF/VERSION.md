@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.2.0.18 - Compatibility & Enhancement Release](#22018---compatibility--enhancement-release)
+- [2.2.0.20 - Compatibility & Enhancement Release](#22020---compatibility--enhancement-release)
 - [2.2.0 - Compatibility & Enhancement Release](#220---compatibility--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
@@ -67,8 +67,21 @@
 
 &nbsp;</details>
 
-### 2.2.0.18 - Compatibility & Enhancement Release
+### 2.2.0.20 - Compatibility & Enhancement Release
 
+* Fix: #349, Show version number on plugin configuration screen, moved version number. Now more
+  prominently displayed at the top of the main panel next to update channel selection.
+* Fix: #348, IDE error when switching to Default JavaFX Stylesheet, added a validation for
+  browser/stylesheet combinations so that invalid restored editor state would be corrected.
+* Fix: #347, Stops rendering on PHPStorm, added a validation for split editor setting and
+  preview type so that if restored editor setting is not editor only and preview set to NONE
+  then preview will be changed to PREVIEW.
+* Fix: #352, Files without suffix are not resolved in links, also show them in completion. These
+  files are assumed to be Text files
+* Add: Parser extensions:
+  * Inserted: `++inserted text++` results in underlined text
+  * Subscript: `~subscript~`
+  * Superscript: `^superscript^`
 * Add: Actions to navigate table cells: next/prev table cell with and without selection to stop
   at beginning/end of cell and start/end of table row
 * Fix: List syntax dependent list item action behavior.
