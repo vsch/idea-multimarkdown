@@ -67,30 +67,6 @@
 
 &nbsp;</details>
 
-* [ ] Update: wiki
-      * [ ] action to navigate table cells and general ability to define keymap to any plugin
-            action
-      * [ ] animated GIF issue for JavaFX and option to not load any GIF images in preview.
-      * Code Style changes:
-        * [ ] removal of smart asterisk, underscore and tilde functionality
-        * [ ] task sorting code style options
-        * [ ] fenced code style option `Space before language info` to put a space between
-              opening marker and language info string
-        * [ ] `Copy Markdown as HTML formatted` action and tool menu, pastes as HTML formatted
-              mime content
-        * [ ] @formatter on/off comment directives
-        * [ ] Toc options for table of contents list generation: * hierarchy: as before
-              hierarchical list of headings in document order * flat: flat list of headings in
-              document order * reversed: flat reversed list of headings in reverse document
-              order * increasing: flat, alphabetically increasing by heading text * decreasing:
-              flat, alphabetically decreasing by heading text
-      * [ ] surround live templates for: * fenced code, * collapsed sections, * @formatter:off /
-            @formatter:on comments
-      * [ ] toggle style action now have punctuation option to skip when at end of word
-      * [ ] update an improved way to customize CSS for both JavaFX and Swing is to enable split
-            preview for HTML, export markdown document as HTML with stylesheet embedded, open
-            the exported HTML and edit the styles to get live update results.
-
 ### 2.2.0.18 - Compatibility & Enhancement Release
 
 * Add: Actions to navigate table cells: next/prev table cell with and without selection to stop
