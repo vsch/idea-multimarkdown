@@ -10,8 +10,6 @@
 - [2.0.0 - New Parser Release](#200---new-parser-release)
 
 
-<!--![TOC Demo](https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/noload/TOCDemo.gif) -->
-
 &nbsp;<details id="todo"><summary>**To Do List**</summary>
 
 ##### To Do
@@ -22,9 +20,6 @@
       under caret not just full links. Default to reuse the name at caret. Directory to be
       configurable by scope of the destination file.
 * [ ] Add: transpose table, best to add `copy to clipboard transposed table`
-* [ ] Add: update parser configuration to new flexmark-java options.
-* [ ] Add: parser emulation family to parser configuration
-* [ ] Fix: document format to respect markdown processor family and settings.
 * [ ] Add: option for escaping special cases for `*`, `-`, `+`, `#` _`N.`_ where _N_ is numeric
       with a `\` so that it is not interpreted as a special char at first non-blank of a wrapped
       line. If one is found in such a position then it should be annotated with a warning and a
@@ -32,11 +27,6 @@
       affects current implementation but should only be escaped if it lands exactly on the items
       child indent position, if parser rules don't allow leading spaces before ATX headings.
 * [ ] Add: join processor to remove bullet list marker when joining next line item
-* [ ] Fix: CommonMark and Commonmark to CommonMark
-* [ ] Add: other parser profiles and appropriate options to allow using these:
-      * [ ] CommonMark: GitHub Comments
-      * [ ] Kramdown: GitHub Docs, GitHub Wiki Pages, Jekyll
-      * [ ] FixedIndent: MultiMarkdown, PanDocs, Pegdown
 * [ ] Add: `PARSE_JEKYLL_MACROS_IN_URLS` option for parser and to Parser settings to enable
       parsing of jekyll macros in urls with spaces between macro and braces.
 * [ ] Fix: cursor navigation very slow in table with few rows but very long text in columns: see
@@ -62,7 +52,6 @@
       down for buttons that don't fit.
 * [ ] Add: source synchronization for Swing preview window
 * [ ] Add: source synchronization for HTML plain text previews
-* [ ] Add: a CommonMark profile and compatible options in settings
 * [ ] Add: detection for **GitHub** issue completions when no task servers are defined.
 
 &nbsp;</details>

@@ -9,15 +9,16 @@
     - [Features](#features)
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
-- [Version 2.3.0](#version-230)
-- [Version 2.2.0](#version-220)
-- [Version 2.1.1](#version-211)
-- [Version 2.1.0](#version-210)
+    - [Version 2.3.0](#version-230)
+    - [Version 2.2.0](#version-220)
+    - [Version 2.1.1](#version-211)
+    - [Version 2.1.0](#version-210)
     - [Source Update is Long Overdue](#source-update-is-long-overdue)
-- [Version 1.8.4](#version-184)
+- [Older Versions](#older-versions)
+    - [Version 1.8.4](#version-184)
 - [Rogues Gallery of Features](#rogues-gallery-of-features)
     - [Screenshots](#screenshots)
-- [The Background](#the-background)
+- [Background](#background)
 
 
 ## Overview
@@ -74,28 +75,27 @@ for:
 
 ### Two tier model
 
-1. Previewing and syntax highlighting functionality is available in the Basic open source
-   edition. Intended for mostly previewing markdown documents and unaided editing. Wiki link
-   refactoring and completions are also available in the basic edition to ease the task of wiki
-   maintenance.
+1. Previewing and syntax highlighting functionality with a split editor is available in the
+   Basic open source edition. Intended for mostly previewing markdown documents and unaided
+   editing. Wiki link refactoring and completions are also available in the basic edition to
+   ease the task of wiki maintenance.
 
-2. Advanced features used for creating and maintaining markdown documents with a split editor,
-   refactoring, find usages, validation, auto formatting and HTML page customizations are only
-   available in the Enhanced licensed version. 15-day free trial licenses are available from
-   [Markdown Navigator] page on my website.
+2. Advanced features used for creating and maintaining markdown documents: refactoring, find
+   usages, validation, auto formatting and HTML page customizations are only available in the
+   Enhanced licensed version. 15-day free trial licenses are available from [Markdown Navigator]
+   page on my website.
 
 Release Road Map
 ----------------
 
-Version 2.3.0
--------------
+### Version 2.3.0
 
 In addition to a long list of bug fixes you can find in [Version Notes], this release was a
 rework of parser, actions and formatting to handle different Markdown processors' idiosyncrasies
 when parsing lists and determining indentation of items:
 
 - Now list processing option can be set to one of the following:
-  - GitHub: [kramdown], GitHub and GitBook documents
+  - GitHub: [kramdown], GitHub and GitBook documents, GitHub Wiki Pages, [Jekyll]
   - CommonMark: [CommonMark] and GitHub Comments
   - Fixed 4 Spaces: [MultiMarkdown], [pegdown], [pandoc].
 
@@ -104,9 +104,11 @@ when parsing lists and determining indentation of items:
 
 - Format element, document and list indent/un-indent actions respect the list processing
   configuration.
+
 - Actions to navigate and select table cells added with permutations of next/prev table
   cell/cell-start/cell-end with/without selection. Assign to shortcuts in Keymap > Plug-ins >
   Markdown Navigator
+
 - Code Style option to sort task items based on their done/not done status:
   - `No Change`: leave all as is
   - `Incomplete first`: put incomplete tasks first, followed by the rest
@@ -116,6 +118,7 @@ when parsing lists and determining indentation of items:
     and convert complete tasks to non-task items.
   - `Has incomplete, complete to non-task`: put incomplete tasks and list items that contain
     incomplete tasks first followed by the rest and convert complete tasks to non-task items.
+
 - Code Style options for Table of Contents to control generated TOC format and new style
   keywords in the `[TOC]` element:
   - `hierarchy`: as before hierarchical list of headings in document order
@@ -123,29 +126,33 @@ when parsing lists and determining indentation of items:
   - `reversed`: flat reversed list of headings in reverse document order
   - `increasing`: flat, alphabetically increasing by heading text
   - `decreasing`: flat, alphabetically decreasing by heading text
+
 - Inline toggling actions take punctuation characters that they will not wrap by default if
   caret is on them or the current word to wrap ends on them. Default punctuation symbols in
   settings: `.,;:!?`. If the caret is right after one of them then default behavior is to wrap
   the word immediately before the punctuation characters in the corresponding style.
+
 - `@formatter:off` / `@formatter:on`, or configured Code Style: Formatter Control Markers, in
   comments can be used to disable auto-formatting and wrap on typing for sections of a document
+
 - `Copy Markdown as HTML formatted text` action that will copy document or selection to the
   clipboard in HTML mime format that will paste as formatted HTML into applications that
   recognize this format. Useful for pasting rendered markdown into e-mails or word processor
   applications. To override the default styles and parser options create a profile named
   `COPY_HTML_MIME` and override `Parser` and/or `Stylesheet` CSS Text. See:
   [Copy Markdown to HTML formatted text]
+
 - Option in Main Settings `Inline code toggle like other text style actions` to change inline
   code action to work like other style toggle actions: bold, italic and strike through, instead
   of continuously adding back ticks when at the end of word. Enabled by default. To get previous
   behavior disable this option.
+
 - Add: Parser extensions and options for:
   - Ins: `++inserted text++` results in underlined text
   - Subscript: `~subscript~`
   - Superscript: `^superscript^`
 
-Version 2.2.0
--------------
+### Version 2.2.0
 
 The goal of zero latency typing in 1000+ line files with preview showing is now a reality. This
 release is a rewrite of JavaFX WebView integration code with changes to the style sheet to
@@ -197,8 +204,7 @@ major tie up of user feature requests:
 - Print HTML preview for JavaFx
 - Markdown syntax and context aware trailing space trimming when enabled
 
-Version 2.1.1
--------------
+### Version 2.1.1
 
 All parsing and rendering is now done by the new parser. Performance and typing response is
 simply amazing. For small files, about 100k and less than a thousand lines, you can set the
@@ -213,8 +219,7 @@ in very large files, you can turn off the preview while editing.
 - Add: Breadcrumbs support for markdown documents
 - Add: Structure View elements now compatible with text search
 
-Version 2.1.0
--------------
+### Version 2.1.0
 
 - Add: GFM table rendering option to render tables text that GFM would render as text.
 - Add: JavaFX preview scroll to source position
@@ -277,10 +282,9 @@ processors. All this is in contrast to pegdown's one big PEG grammar implementat
 everything potentially inter-dependent.
 
 Older Versions
-==============
+--------------
 
-Version 1.8.4
--------------
+### Version 1.8.4
 
 :warning: This is the last release using [pegdown] and compatible with JRE 1.6. Later releases
 are based on the [flexmark-java] and require JRE 1.8.
@@ -395,8 +399,8 @@ Rogues Gallery of Features
 
 ![Screenshot Html Export](assets/images/faq/Screenshot_RenderingProfiles.png)
 
-The Background
---------------
+Background
+----------
 
 It all started with a desire to see Markdown files in PhpStorm IDE as they would look on GitHub.
 I was already using [nicoulaj/idea-markdown plugin] but found its preview was more like
@@ -428,15 +432,20 @@ was based on [pegdown] library by [sirthias].
 Markdown Navigator, Copyright (c) 2015-2016, V. Schneider, <http://vladsch.com> All Rights
 Reserved.
 
+[CommonMark]: http://commonmark.org/
 [Copy Jira]: https://github.com/vsch/idea-multimarkdown/raw/master/resources/icons/editor_actions/Copy_jira.png
 [Copy Markdown to HTML formatted text]: ../../wiki/Enhanced-Features#copy-markdown-to-html-formatted-text
 [Craig's List]: http://montreal.en.craigslist.ca/
 [GitHub]: https://github.com/vsch/laravel-translation-manager
 [GitHub-userscripts]: https://github.com/Mottie/GitHub-userscripts
-[Markdown]: http://daringfireball.net/projects/markdown"
+[Jekyll]: https://jekyllrb.com
+[Kramdown]: http://kramdown.gettalong.org/
+[Markdown]: http://daringfireball.net/projects/markdown
 [Markdown Navigator]: http://vladsch.com/product/markdown-navigator
 [Markdown Support]: https://plugins.jetbrains.com/plugin/7793?pr=
 [Modifying Link Processing]: https://github.com/vsch/idea-multimarkdown/wiki/Modifying-Link-Processing
+[MultiMarkdown]: http://fletcherpenney.net/multimarkdown/
+[Pandoc]: http://pandoc.org/MANUAL.html#pandocs-markdown
 [Version Notes]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/META-INF/VERSION.md
 [commonmark-java]: https://github.com/atlassian/commonmark-java
 [flexmark-java]: https://github.com/vsch/flexmark-java
@@ -450,7 +459,6 @@ Reserved.
 [AppCode]: http://www.jetbrains.com/objc
 [CLion]: https://www.jetbrains.com/clion
 [DataGrip]: https://www.jetbrains.com/datagrip
-[MultiMarkdown]: http://fletcherpenney.net/multimarkdown/
 [GitHub Issues]: https://github.com/vsch/idea-multimarkdown/issues
 [GitHub Issues page]: https://github.com/vsch/idea-multimarkdown/issues/
 [GitHub Wiki pages]: https://github.com/vsch/idea-multimarkdown/wiki
@@ -459,6 +467,7 @@ Reserved.
 [JetBrains plugin comment and rate page]: https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896
 [JetBrains plugin page]: https://plugins.jetbrains.com/plugin?pr=&pluginId=7896
 [Kotlin]: http://kotlinlang.org
+[PhpExtra]: https://michelf.ca/projects/php-markdown/extra/
 [PhpStorm]: http://www.jetbrains.com/phpstorm
 [Pipe Table Formatter]: https://github.com/anton-dev-ua/PipeTableFormatter
 [PyCharm]: http://www.jetbrains.com/pycharm
@@ -467,8 +476,4 @@ Reserved.
 [Wiki]: https://github.com/vsch/idea-multimarkdown/wiki
 [sirthias/pegdown]: https://github.com/sirthias/pegdown
 [vsch/pegdown]: https://github.com/vsch/pegdown/tree/develop
-[CommonMark]: http://commonmark.org/
-[Pandoc]: http://pandoc.org/MANUAL.html#pandocs-markdown
-[PhpExtra]: https://michelf.ca/projects/php-markdown/extra/
-[Kramdown]: http://kramdown.gettalong.org/
 
