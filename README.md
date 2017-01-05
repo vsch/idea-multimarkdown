@@ -90,7 +90,7 @@ Release Road Map
 
 ### Version 2.3.0
 
-In addition to a long list of bug fixes you can find in [Version Notes], this release was a
+In addition to a long list of bug fixes you can find in [Version Notes], this release is a
 rework of parser, actions and formatting to handle different Markdown processors' idiosyncrasies
 when parsing lists and determining indentation of items:
 

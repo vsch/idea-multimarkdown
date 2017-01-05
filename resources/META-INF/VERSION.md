@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.2.0.20 - Compatibility & Enhancement Release](#22020---compatibility--enhancement-release)
+- [2.2.0.21 - Compatibility & Enhancement Release](#22021---compatibility--enhancement-release)
 - [2.2.0 - Compatibility & Enhancement Release](#220---compatibility--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
@@ -56,8 +56,15 @@
 
 &nbsp;</details>
 
-### 2.2.0.20 - Compatibility & Enhancement Release
+### 2.2.0.21 - Compatibility & Enhancement Release
 
+* Add: Code Style option to insert a blank line before a list item if it is not preceded by
+  another list item, enabled by default and formatting a document will create maximum
+  compatibility with markdown processors that limit list item interpretation when not preceded
+  by a blank line.
+* Add: Annotation and quick fix if first list item needs to have a blank line before it to be
+  properly parsed as a list. List indentation type dependent and for CommonMark list item type
+  and numeric sequence dependent.
 * Fix: #349, Show version number on plugin configuration screen, moved version number. Now more
   prominently displayed at the top of the main panel next to update channel selection.
 * Fix: #348, IDE error when switching to Default JavaFX Stylesheet, added a validation for
