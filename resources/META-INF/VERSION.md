@@ -58,6 +58,12 @@
 
 ### 2.2.0.21 - Compatibility & Enhancement Release
 
+* Fix: fenced code and indented code would loose indentation prefix when formatting document
+* Fix: list items whose first element is a heading, indented code or fenced code now add a line
+  break when parser compatibility set to other than CommonMark to allow GitHub to properly
+  process these list items.
+* Add: Code Style option for spaces after definition item marker, default 3 for greater
+  compatibility with various markdown processors.
 * Add: Code Style option to insert a blank line before a list item if it is not preceded by
   another list item, enabled by default and formatting a document will create maximum
   compatibility with markdown processors that limit list item interpretation when not preceded

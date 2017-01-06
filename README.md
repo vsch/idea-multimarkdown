@@ -310,7 +310,7 @@ Rogues Gallery of Features
   ![Preview Scroll To With Highlight](/assets/images/noload/PreviewScrollToWithHighlight.gif)
 
 - **Table of Contents** tag that works with basic markdown syntax and is updated by the plugin.
-  The table of contents at the top of this page is an example. For more information see the
+  The table of contents at the top of this page is an example. For more information see the  
   [wiki](../../wiki/Adding-a-Table-of-Contents#enabling-table-of-contents)
 
 - Java class, method and field completions in inline code. Great if you need to reference code
@@ -321,7 +321,7 @@ Rogues Gallery of Features
   ![List Item Actions](/assets/images/noload/ListItemActions.gif)
 
 - **Document Structure View** with sections for:
-  - Headers to show header hierarchy by level
+  - Headers to show header hierarchy by level  
     ![Screenshot Structure Headers](assets/images/faq/structure/Screenshot_Structure_Headers.png)
   - Images
   - Links
@@ -331,25 +331,25 @@ Rogues Gallery of Features
   - Abbreviations
   - Document section showing all abbreviations, block quotes, footnotes, headers, images, lists,
     references and tables in the document. According to markdown element hierarchy and in order
-    of their location in the document.
+    of their location in the document.  
     ![Screenshot Structure Document](assets/images/faq/structure/Screenshot_Structure_Document.png)
 
-- **Document format** toolbar button and action to format the document to code style settings.
+- **Document format** toolbar button and action to format the document to code style settings.  
   [Document Format Options](../../wiki/Document-Format-Options)
 
 - Dynamically created syntax highlighting attributes to simulate overlay of element style with
   transparency. This creates consistent colors when multiple attributes are combined, such as
   inline elements in tables, headers and definition terms. Additionally allows for bold, italic,
-  and effect type and color to be combined for nested markdown inline elements.
+  and effect type and color to be combined for nested markdown inline elements.  
   ![Screenshot Combination Splits](assets/images/faq/Screenshot_combination_splits.png)
 
 - Actual character display font width can be used for wrapping and table formatting, allowing
   best alignment for multi-byte characters and proportional fonts:
 
-  With character width taken into account:
+  With character width taken into account:  
   ![Screen Shot multibyte sample](assets/images/faq/ScreenShot_multibyte_sample.png)
 
-  Without taking character width into account:
+  Without taking character width into account:  
   ![Screen Shot nomultibyte sample](assets/images/faq/ScreenShot_nomultibyte_sample.png)
 
 - **Block Quote** increase/decrease level toolbar buttons and actions.
