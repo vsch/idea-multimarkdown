@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.2.0.21 - Compatibility & Enhancement Release](#22021---compatibility--enhancement-release)
+- [2.3.0 - Compatibility & Enhancement Release](#230---compatibility--enhancement-release)
 - [2.2.0 - Compatibility & Enhancement Release](#220---compatibility--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
@@ -56,8 +56,12 @@
 
 &nbsp;</details>
 
-### 2.2.0.21 - Compatibility & Enhancement Release
+### 2.3.0 - Compatibility & Enhancement Release
 
+* Add: annotation and quick fix when an empty list item needs a space after item marker.
+* Add: annotation and quick fixes when possible list items are found in paragraphs and indented
+  code when list indentation rules are set to CommonMark or GitHub because incorrect
+  indentation.
 * Fix: fenced code and indented code would loose indentation prefix when formatting document
 * Fix: list items whose first element is a heading, indented code or fenced code now add a line
   break when parser compatibility set to other than CommonMark to allow GitHub to properly
@@ -65,9 +69,10 @@
 * Add: Code Style option for spaces after definition item marker, default 3 for greater
   compatibility with various markdown processors.
 * Add: Code Style option to insert a blank line before a list item if it is not preceded by
-  another list item, enabled by default and formatting a document will create maximum
+  another list item, disabled by default and formatting a document will create maximum
   compatibility with markdown processors that limit list item interpretation when not preceded
-  by a blank line.
+  by a blank line. When disabled formatting a document may still add a blank line before a list
+  if the current list processing type requires a blank line before a list.
 * Add: Annotation and quick fix if first list item needs to have a blank line before it to be
   properly parsed as a list. List indentation type dependent and for CommonMark list item type
   and numeric sequence dependent.
@@ -289,10 +294,10 @@
     target directory from writing to the file system in unexpected location.
   * copy custom font file if stylesheet has reference to it
   * optionally use relative links to:
-    * exported html files
-    * stylesheets and scripts
-    * custom font
-    * image files
+  * exported html files
+  * stylesheets and scripts
+  * custom font
+  * image files
   * optionally copy image files
 * Fix : Jira copy to add blank lines for loosely spaced lists and after the last list item of
   the outer-most list and the next element

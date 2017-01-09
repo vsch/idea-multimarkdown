@@ -95,9 +95,9 @@ rework of parser, actions and formatting to handle different Markdown processors
 when parsing lists and determining indentation of items:
 
 - Now list processing option can be set to one of the following:
-  - GitHub: [kramdown], GitHub and GitBook documents, GitHub Wiki Pages, [Jekyll]
+  - GitHub: [Markdown], GitHub and GitBook documents, GitHub Wiki Pages
   - CommonMark: [CommonMark] and GitHub Comments
-  - Fixed 4 Spaces: [MultiMarkdown], [pegdown], [pandoc].
+  - Fixed 4 Indent: [MultiMarkdown], [pegdown], [pandoc].
 
   :warning: Changing the list processing option can change the formatting of the document since
   element indentation will be interpreted differently.
