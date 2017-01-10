@@ -3,6 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
+- [2.3.0.2 - Compatibility & Enhancement Release](#2302---compatibility--enhancement-release)
 - [2.3.0 - Compatibility & Enhancement Release](#230---compatibility--enhancement-release)
 - [2.2.0 - Compatibility & Enhancement Release](#220---compatibility--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
@@ -27,8 +28,6 @@
       affects current implementation but should only be escaped if it lands exactly on the items
       child indent position, if parser rules don't allow leading spaces before ATX headings.
 * [ ] Add: join processor to remove bullet list marker when joining next line item
-* [ ] Add: `PARSE_JEKYLL_MACROS_IN_URLS` option for parser and to Parser settings to enable
-      parsing of jekyll macros in urls with spaces between macro and braces.
 * [ ] Fix: cursor navigation very slow in table with few rows but very long text in columns: see
       `Extensions.md` in `flexmark-java` wiki. Suspect is figuring out table context for toolbar
       button state update.
@@ -55,6 +54,23 @@
 * [ ] Add: detection for **GitHub** issue completions when no task servers are defined.
 
 &nbsp;</details>
+
+### 2.3.0.2 - Compatibility & Enhancement Release
+
+* Fix: #358, "Unresolved link reference" errors for `gh-pages` and `releases` where branch is
+  expected. Now only `blob/` and `raw/` are attempted to be resolved, the rest are treated as
+  external unchecked links.
+* Fix: HTML export was not working on Windows due to missed system dependent/independent
+  conversions.
+* Fix: #359, "Reformat Document" inflates files with link references, footnotes would double
+  their text content output
+* Fix: "Jekyll front matter" inspection to force re-parse of files after parser option is
+  enabled.
+* Add: `PARSE_JEKYLL_MACROS_IN_URLS` option for parser when Jekyll Front matter parsing is
+  enabled to allow parsing of jekyll macros in urls with spaces between macro and braces.
+* Fix: fenced code that is adjusted for indentation should keep content indent relative to other
+  content unchanged.
+* Fix: sub-list after a paragraph needs a blank line, it should not be considered a loose list.
 
 ### 2.3.0 - Compatibility & Enhancement Release
 
