@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.0.4 - Compatibility & Enhancement Release](#2304---compatibility--enhancement-release)
+- [2.3.0.6 - Compatibility & Enhancement Release](#2306---compatibility--enhancement-release)
 - [2.3.0 - Compatibility & Enhancement Release](#230---compatibility--enhancement-release)
 - [2.2.0 - Compatibility & Enhancement Release](#220---compatibility--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
@@ -21,12 +21,6 @@
       under caret not just full links. Default to reuse the name at caret. Directory to be
       configurable by scope of the destination file.
 * [ ] Add: transpose table, best to add `copy to clipboard transposed table`
-* [ ] Add: option for escaping special cases for `*`, `-`, `+`, `#` _`N.`_ where _N_ is numeric
-      with a `\` so that it is not interpreted as a special char at first non-blank of a wrapped
-      line. If one is found in such a position then it should be annotated with a warning and a
-      quick fix to escape it, unless it is the first non-blank of the list item's text. The `#`
-      affects current implementation but should only be escaped if it lands exactly on the items
-      child indent position, if parser rules don't allow leading spaces before ATX headings.
 * [ ] Add: join processor to remove bullet list marker when joining next line item
 * [ ] Fix: cursor navigation very slow in table with few rows but very long text in columns: see
       `Extensions.md` in `flexmark-java` wiki. Suspect is figuring out table context for toolbar
@@ -55,11 +49,13 @@
 
 &nbsp;</details>
 
-### 2.3.0.4 - Compatibility & Enhancement Release
+### 2.3.0.6 - Compatibility & Enhancement Release
 
+* Fix: #362, Java exception in version 2.3.0 with Pycharm 2016.1.5
+* Fix: #361, HTML Export "CSS dir" and "script dir" not saved
 * Fix: #360, Auto-formatting creates list by accident, added two code style settings for text
-  wrapping options for `Special Characters` which are `*+-:~` and digits followed by `.` or `)`
-  for CommonMark, enabled by default:
+  wrapping options for `Special Characters` which are `*+-:~>#` and digits followed by `.` or
+  `)` for CommonMark, enabled by default:
   * `Escape when wrapped to start of line`
   * `Unescape when wrapped away from start of line`
 * Fix: #358, "Unresolved link reference" errors for `gh-pages` and `releases` where branch is
@@ -72,7 +68,7 @@
 * Fix: "Jekyll front matter" inspection to force re-parse of files after parser option is
   enabled.
 * Add: `PARSE_JEKYLL_MACROS_IN_URLS` option for parser when Jekyll Front matter parsing is
-  enabled to allow parsing of jekyll macros in urls with spaces between macro and braces.
+  enabled to allow parsing of jekyll macros in urls with spaces between braces.
 * Fix: fenced code that is adjusted for indentation should keep content indent relative to other
   content unchanged.
 * Fix: sub-list after a paragraph needs a blank line, it should not be considered a loose list.

@@ -434,7 +434,7 @@ Reserved.
 
 [CommonMark]: http://commonmark.org/
 [Copy Jira]: https://github.com/vsch/idea-multimarkdown/raw/master/resources/icons/editor_actions/Copy_jira.png
-[Copy Markdown to HTML formatted text]: ../../wiki/Enhanced-Features#copy-markdown-to-html-formatted-text
+[Copy Markdown to HTML formatted text]: https://github.com/vsch/idea-multimarkdown/wiki/Enhanced-Features#copy-markdown-to-html-formatted-text
 [Craig's List]: http://montreal.en.craigslist.ca/
 [GitHub]: https://github.com/vsch/laravel-translation-manager
 [GitHub-userscripts]: https://github.com/Mottie/GitHub-userscripts
