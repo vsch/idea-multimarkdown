@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.0.2 - Compatibility & Enhancement Release](#2302---compatibility--enhancement-release)
+- [2.3.0.4 - Compatibility & Enhancement Release](#2304---compatibility--enhancement-release)
 - [2.3.0 - Compatibility & Enhancement Release](#230---compatibility--enhancement-release)
 - [2.2.0 - Compatibility & Enhancement Release](#220---compatibility--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
@@ -55,8 +55,13 @@
 
 &nbsp;</details>
 
-### 2.3.0.2 - Compatibility & Enhancement Release
+### 2.3.0.4 - Compatibility & Enhancement Release
 
+* Fix: #360, Auto-formatting creates list by accident, added two code style settings for text
+  wrapping options for `Special Characters` which are `*+-:~` and digits followed by `.` or `)`
+  for CommonMark, enabled by default:
+  * `Escape when wrapped to start of line`
+  * `Unescape when wrapped away from start of line`
 * Fix: #358, "Unresolved link reference" errors for `gh-pages` and `releases` where branch is
   expected. Now only `blob/` and `raw/` are attempted to be resolved, the rest are treated as
   external unchecked links.
