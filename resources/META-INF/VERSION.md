@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.0.6 - Compatibility & Enhancement Release](#2306---compatibility--enhancement-release)
+- [2.3.0.8 - Compatibility & Enhancement Release](#2308---compatibility--enhancement-release)
 - [2.3.0 - Compatibility & Enhancement Release](#230---compatibility--enhancement-release)
 - [2.2.0 - Compatibility & Enhancement Release](#220---compatibility--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
@@ -49,8 +49,11 @@
 
 &nbsp;</details>
 
-### 2.3.0.6 - Compatibility & Enhancement Release
+### 2.3.0.8 - Compatibility & Enhancement Release
 
+* Add: enable emoji completions if completions are invoked after a single `:` with the caret
+  right after the colon.
+* Fix: #363, Markdown aware trailing space stripping is not working in 2017.1 EAP
 * Fix: #362, Java exception in version 2.3.0 with Pycharm 2016.1.5
 * Fix: #361, HTML Export "CSS dir" and "script dir" not saved
 * Fix: #360, Auto-formatting creates list by accident, added two code style settings for text
