@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.0.8 - Compatibility & Enhancement Release](#2308---compatibility--enhancement-release)
+- [2.3.0.10 - Compatibility & Enhancement Release](#23010---compatibility--enhancement-release)
 - [2.3.0 - Compatibility & Enhancement Release](#230---compatibility--enhancement-release)
 - [2.2.0 - Compatibility & Enhancement Release](#220---compatibility--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
@@ -49,10 +49,12 @@
 
 &nbsp;</details>
 
-### 2.3.0.8 - Compatibility & Enhancement Release
+### 2.3.0.10 - Compatibility & Enhancement Release
 
-* Add: enable emoji completions if completions are invoked after a single `:` with the caret
-  right after the colon.
+* Fix: enable emoji completions if completions are invoked after a single `:` with the caret
+  right after the colon or without spaces or tabs between colon and caret position.
+* Fix: enable GitHub issue completion when completion invoked with only digits between caret and
+  preceding #.
 * Fix: #363, Markdown aware trailing space stripping is not working in 2017.1 EAP
 * Fix: #362, Java exception in version 2.3.0 with Pycharm 2016.1.5
 * Fix: #361, HTML Export "CSS dir" and "script dir" not saved
