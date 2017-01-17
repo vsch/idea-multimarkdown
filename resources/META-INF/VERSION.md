@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.0.10 - Compatibility & Enhancement Release](#23010---compatibility--enhancement-release)
+- [2.3.0.12 - Compatibility & Enhancement Release](#23012---compatibility--enhancement-release)
 - [2.3.0 - Compatibility & Enhancement Release](#230---compatibility--enhancement-release)
 - [2.2.0 - Compatibility & Enhancement Release](#220---compatibility--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
@@ -49,8 +49,9 @@
 
 &nbsp;</details>
 
-### 2.3.0.10 - Compatibility & Enhancement Release
+### 2.3.0.12 - Compatibility & Enhancement Release
 
+* Fix: #365, PhpStorm - Highlight preview element settings doesn't persist between sessions
 * Fix: enable emoji completions if completions are invoked after a single `:` with the caret
   right after the colon or without spaces or tabs between colon and caret position.
 * Fix: enable GitHub issue completion when completion invoked with only digits between caret and
