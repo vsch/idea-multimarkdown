@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.0.12 - Compatibility & Enhancement Release](#23012---compatibility--enhancement-release)
+- [2.3.0.14 - Compatibility & Enhancement Release](#23014---compatibility--enhancement-release)
 - [2.3.0 - Compatibility & Enhancement Release](#230---compatibility--enhancement-release)
 - [2.2.0 - Compatibility & Enhancement Release](#220---compatibility--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
@@ -49,8 +49,13 @@
 
 &nbsp;</details>
 
-### 2.3.0.12 - Compatibility & Enhancement Release
+### 2.3.0.14 - Compatibility & Enhancement Release
 
+* Add: adding markdown referenceable elements such as footnotes, references and headings from
+  files included through Jekyll include tags
+* Add: Jekyll include tag parsing and processing the include, if markdown will be parsed to HTML
+  and rendered in the view, if not markdown will be included in the HTML
+* Add: flexmark-java Inline Parser Extension option to module defaults
 * Fix: #365, PhpStorm - Highlight preview element settings doesn't persist between sessions
 * Fix: enable emoji completions if completions are invoked after a single `:` with the caret
   right after the colon or without spaces or tabs between colon and caret position.
