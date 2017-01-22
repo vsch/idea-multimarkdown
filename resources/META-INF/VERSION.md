@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.0.14 - Compatibility & Enhancement Release](#23014---compatibility--enhancement-release)
+- [2.3.0.16 - Compatibility & Enhancement Release](#23016---compatibility--enhancement-release)
 - [2.3.0 - Compatibility & Enhancement Release](#230---compatibility--enhancement-release)
 - [2.2.0 - Compatibility & Enhancement Release](#220---compatibility--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
@@ -49,8 +49,17 @@
 
 &nbsp;</details>
 
-### 2.3.0.14 - Compatibility & Enhancement Release
+### 2.3.0.16 - Compatibility & Enhancement Release
 
+* Add: Markdown To Html intention action to convert some markdown elements like:
+  * Tables
+  * Image Links
+  * Definitions List
+* Add: Html to Markdown intention action to convert html blocks to Markdown
+* Fix: `NoClassDefFoundError` when running in PhpStorm for flexmark-java-plugin code
+* Fix: toc refactoring was not reflecting raw title string
+* Add: annotation and quick fix for TOC with empty title string. GitHub does not accept this so
+  an empty title needs at least one space in the title string of the TOC element.
 * Add: adding markdown referenceable elements such as footnotes, references and headings from
   files included through Jekyll include tags
 * Add: Jekyll include tag parsing and processing the include, if markdown will be parsed to HTML
