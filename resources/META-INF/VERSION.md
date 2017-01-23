@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.0.16 - Compatibility & Enhancement Release](#23016---compatibility--enhancement-release)
+- [2.3.0.18 - Compatibility & Enhancement Release](#23018---compatibility--enhancement-release)
 - [2.3.0 - Compatibility & Enhancement Release](#230---compatibility--enhancement-release)
 - [2.2.0 - Compatibility & Enhancement Release](#220---compatibility--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
@@ -49,8 +49,9 @@
 
 &nbsp;</details>
 
-### 2.3.0.16 - Compatibility & Enhancement Release
+### 2.3.0.18 - Compatibility & Enhancement Release
 
+* Add: Automatic mime `text/html` conversion to markdown on paste in Markdown documents.
 * Add: Markdown To Html intention action to convert some markdown elements like:
   * Tables
   * Image Links
