@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.0.18 - Compatibility & Enhancement Release](#23018---compatibility--enhancement-release)
+- [2.3.0.20 - Compatibility & Enhancement Release](#23020---compatibility--enhancement-release)
 - [2.3.0 - Compatibility & Enhancement Release](#230---compatibility--enhancement-release)
 - [2.2.0 - Compatibility & Enhancement Release](#220---compatibility--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
@@ -49,13 +49,16 @@
 
 &nbsp;</details>
 
-### 2.3.0.18 - Compatibility & Enhancement Release
+### 2.3.0.20 - Compatibility & Enhancement Release
 
+* Add: toolbar button for underline, subscript, superscript
+* Update: emoji shortcuts and icons to latest Emoji Cheat Sheet version and refactor code to use
+  flexmark-java emoji extension data.
 * Add: Automatic mime `text/html` conversion to markdown on paste in Markdown documents.
 * Add: Markdown To Html intention action to convert some markdown elements like:
   * Tables
   * Image Links
-  * Definitions List
+  * Definition Lists
 * Add: Html to Markdown intention action to convert html blocks to Markdown
 * Fix: `NoClassDefFoundError` when running in PhpStorm for flexmark-java-plugin code
 * Fix: toc refactoring was not reflecting raw title string
