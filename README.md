@@ -9,6 +9,7 @@
     - [Features](#features)
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
+    - [Version 2.3.1](#version-231)
     - [Version 2.3.0](#version-230)
     - [Version 2.2.0](#version-220)
     - [Version 2.1.1](#version-211)
@@ -54,6 +55,8 @@ for:
 - GitHub style rendering that you are used to, out of the box
 - Fast typing response for distraction free editing
 - Fully customizable to adjust to your project's needs and your preferences
+- Copy Markdown as JIRA, YouTrack or HTML formatted text or export as HTML
+- Convert HTML content to Markdown by pasting it into a Markdown document.
 
 ### Features
 
@@ -72,6 +75,7 @@ for:
 - Also does **completions, refactoring, validation, language injections, code folding**
 - **Fully configurable** by project with support for scopes
 - Understands **GitHub wiki** nuances
+- Conversion between HTML and Markdown
 
 ### Two tier model
 
@@ -88,11 +92,43 @@ for:
 Release Road Map
 ----------------
 
-### Version 2.3.0
+### Version 2.3.1
 
-In addition to a long list of bug fixes you can find in [Version Notes], this release is a
-rework of parser, actions and formatting to handle different Markdown processors' idiosyncrasies
-when parsing lists and determining indentation of items:
+In addition to bug and 2017 EAP compatibility fixes which you can find in [Version Notes], this
+release adds HTML to Markdown conversion capability allowing you to Copy HTML from the browser
+and get Markdown when you paste it in your Markdown document.
+
+* Conversion between HTML and Markdown
+  * Automatic mime `text/html` conversion to markdown on paste in Markdown documents.
+  * Markdown To Html intention action to convert some markdown elements to HTML in your document
+    so they can be rendered on processors that do not support these Markdown extensions:
+    * Tables
+    * Image Links (Multi-line URL images for inserting UML, LaTex, etc)
+    * Definitions List
+  * Html to Markdown intention action to convert html in Markdown
+
+* Annotations and Quick Fixes:
+  * for TOC with empty title string. GitHub does not accept this so an
+    empty title needs at least one space in the title string of the TOC element.
+  * for list items that need a blank line before them or empty items that
+    need a space after them to be processed by target markdown processor.
+
+* Jekyll Support:
+  * include Jekyll tag parsing and processing the include, if markdown will be parsed to HTML
+    and rendered in the view, if not markdown will be included in the HTML
+    * Markdown referenceable elements such as footnotes, references and headings from files
+      included through Jekyll include tags are now recognized for: find usages, completions,
+      navigation and refactoring.
+  * enable parsing of jekyll macros in urls with spaces between braces when Jekyll Front matter
+    parsing.
+
+* Escape/Unescape `Special Characters` when these wrap to start of line or unescape them when
+  they are wrapped away from the start of line. This prevents accidental lists, heading and
+  definition lists. Code style options:
+  * `Escape when wrapped to start of line`
+  * `Unescape when wrapped away from start of line`
+
+### Version 2.3.0
 
 - Now list processing option can be set to one of the following:
   - GitHub: [Markdown], GitHub and GitBook documents, GitHub Wiki Pages
@@ -438,8 +474,6 @@ Reserved.
 [Craig's List]: http://montreal.en.craigslist.ca/
 [GitHub]: https://github.com/vsch/laravel-translation-manager
 [GitHub-userscripts]: https://github.com/Mottie/GitHub-userscripts
-[Jekyll]: https://jekyllrb.com
-[Kramdown]: http://kramdown.gettalong.org/
 [Markdown]: http://daringfireball.net/projects/markdown
 [Markdown Navigator]: http://vladsch.com/product/markdown-navigator
 [Markdown Support]: https://plugins.jetbrains.com/plugin/7793?pr=
@@ -464,9 +498,11 @@ Reserved.
 [GitHub Wiki pages]: https://github.com/vsch/idea-multimarkdown/wiki
 [GitHub wiki in IntelliJ IDE]: https://github.com/vsch/idea-multimarkdown/wiki/Adding-GitHub-Wiki-to-IntelliJ-Project
 [IntelliJ IDEA]: http://www.jetbrains.com/idea
+[Jekyll]: https://jekyllrb.com
 [JetBrains plugin comment and rate page]: https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896
 [JetBrains plugin page]: https://plugins.jetbrains.com/plugin?pr=&pluginId=7896
 [Kotlin]: http://kotlinlang.org
+[Kramdown]: http://kramdown.gettalong.org/
 [PhpExtra]: https://michelf.ca/projects/php-markdown/extra/
 [PhpStorm]: http://www.jetbrains.com/phpstorm
 [Pipe Table Formatter]: https://github.com/anton-dev-ua/PipeTableFormatter

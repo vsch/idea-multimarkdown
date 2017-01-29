@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.0.20 - Compatibility & Enhancement Release](#23020---compatibility--enhancement-release)
+- [2.3.0.22 - Compatibility & Enhancement Release](#23022---compatibility--enhancement-release)
 - [2.3.0 - Compatibility & Enhancement Release](#230---compatibility--enhancement-release)
 - [2.2.0 - Compatibility & Enhancement Release](#220---compatibility--enhancement-release)
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
@@ -49,8 +49,12 @@
 
 &nbsp;</details>
 
-### 2.3.0.20 - Compatibility & Enhancement Release
+### 2.3.0.22 - Compatibility & Enhancement Release
 
+* Fix: #374, EAP Plugin version Find Usages related functionality generates exception in 2016.3
+  and prior
+* Change: inline code completion for Java now second invocation does simple completion and third
+  does fully qualified names.
 * Add: toolbar button for underline, subscript, superscript
 * Update: emoji shortcuts and icons to latest Emoji Cheat Sheet version and refactor code to use
   flexmark-java emoji extension data.
