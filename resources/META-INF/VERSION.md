@@ -3,6 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
+- [2.3.1.2 - Compatibility & Enhancement Release](#2312---compatibility--enhancement-release)
 - [2.3.1 - Compatibility & Enhancement Release](#231---compatibility--enhancement-release)
 - [2.3.0 - Compatibility & Enhancement Release](#230---compatibility--enhancement-release)
 - [2.2.0 - Compatibility & Enhancement Release](#220---compatibility--enhancement-release)
@@ -48,6 +49,23 @@
 * [ ] Add: detection for **GitHub** issue completions when no task servers are defined.
 
 &nbsp;</details>
+
+### 2.3.1.2 - Compatibility & Enhancement Release
+
+* Fix: typing a character right after a list item marker would sometimes insert a space after
+  the character.
+
+* Change: sorting of non-rendering elements to be not case sensitive
+
+* Add: annotation and quick fix for GitHub Doc parsing issue of `- [ ] [reference]` being
+  interpreted as `- [ ][reference]` which is a list item with a link reference with explicit
+  link text of a space.
+
+* Add: #377, Add Format conversion between list indentation types for files.
+
+* Fix: #376, HTML to Markdown converter does not handle pre tags with inner span tags. HTML to
+  Markdown to properly handle conversion to fenced code when HTML consists of `<pre>` and
+  content is `<span>`'s with color and highlighting information.
 
 ### 2.3.1 - Compatibility & Enhancement Release
 
