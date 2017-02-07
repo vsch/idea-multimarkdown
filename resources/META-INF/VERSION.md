@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.1.2 - Compatibility & Enhancement Release](#2312---compatibility--enhancement-release)
+- [2.3.1.4 - Compatibility & Enhancement Release](#2314---compatibility--enhancement-release)
 - [2.3.1 - Compatibility & Enhancement Release](#231---compatibility--enhancement-release)
 - [2.3.0 - Compatibility & Enhancement Release](#230---compatibility--enhancement-release)
 - [2.2.0 - Compatibility & Enhancement Release](#220---compatibility--enhancement-release)
@@ -50,12 +50,21 @@
 
 &nbsp;</details>
 
-### 2.3.1.2 - Compatibility & Enhancement Release
+### 2.3.1.4 - Compatibility & Enhancement Release
+
+* Fix: #379, HTML block content indent doubling on document format
+
+* Fix: #378, Leading spaces on reference definition after the first would cause the reference to
+  be processed as text.
+
+* Fix: copy markdown as html to use the current file's rendering profile as the parent for
+  COPY_HTML_MIME so that any settings not marked as overriding project settings will be as per
+  rendering profile for the file.
 
 * Fix: typing a character right after a list item marker would sometimes insert a space after
   the character.
 
-* Change: sorting of non-rendering elements to be not case sensitive
+* Change: #380, Sorting of non-rendering elements should not be case sensitive
 
 * Add: annotation and quick fix for GitHub Doc parsing issue of `- [ ] [reference]` being
   interpreted as `- [ ][reference]` which is a list item with a link reference with explicit
