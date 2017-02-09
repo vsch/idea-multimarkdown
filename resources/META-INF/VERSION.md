@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.1.4 - Compatibility & Enhancement Release](#2314---compatibility--enhancement-release)
+- [2.3.1.6 - Compatibility & Enhancement Release](#2316---compatibility--enhancement-release)
 - [2.3.1 - Compatibility & Enhancement Release](#231---compatibility--enhancement-release)
 - [2.3.0 - Compatibility & Enhancement Release](#230---compatibility--enhancement-release)
 - [2.2.0 - Compatibility & Enhancement Release](#220---compatibility--enhancement-release)
@@ -50,28 +50,25 @@
 
 &nbsp;</details>
 
-### 2.3.1.4 - Compatibility & Enhancement Release
+### 2.3.1.6 - Compatibility & Enhancement Release
 
+* Fix: #383, Absolute http:// links to wiki pages do not resolve to files
+* Fix: #382, JavaFX Preview is using project settings for Zoom and Grey Scale Antialiasing
+  instead of scoped rendering profile
+* Fix: update to flexmark-java 0.14.0 with typographic quotes and smarts conversion
 * Fix: #379, HTML block content indent doubling on document format
-
 * Fix: #378, Leading spaces on reference definition after the first would cause the reference to
   be processed as text.
-
 * Fix: copy markdown as html to use the current file's rendering profile as the parent for
   COPY_HTML_MIME so that any settings not marked as overriding project settings will be as per
   rendering profile for the file.
-
 * Fix: typing a character right after a list item marker would sometimes insert a space after
   the character.
-
 * Change: #380, Sorting of non-rendering elements should not be case sensitive
-
 * Add: annotation and quick fix for GitHub Doc parsing issue of `- [ ] [reference]` being
   interpreted as `- [ ][reference]` which is a list item with a link reference with explicit
   link text of a space.
-
 * Add: #377, Add Format conversion between list indentation types for files.
-
 * Fix: #376, HTML to Markdown converter does not handle pre tags with inner span tags. HTML to
   Markdown to properly handle conversion to fenced code when HTML consists of `<pre>` and
   content is `<span>`'s with color and highlighting information.
@@ -100,7 +97,7 @@
 * Add: Jekyll include tag parsing and processing the include, if markdown will be parsed to HTML
   and rendered in the view, if not markdown will be included in the HTML
 * Add: flexmark-java Inline Parser Extension option to module defaults
-* Fix: #365, PhpStorm - Highlight preview element settings doesn't persist between sessions
+* Fix: #365, PhpStorm - Highlight preview element settings does not persist between sessions
 * Fix: enable emoji completions if completions are invoked after a single `:` with the caret
   right after the colon or without spaces or tabs between colon and caret position.
 * Fix: enable GitHub issue completion when completion invoked with only digits between caret and
