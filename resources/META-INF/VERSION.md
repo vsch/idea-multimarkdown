@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.1.6 - Compatibility & Enhancement Release](#2316---compatibility--enhancement-release)
+- [2.3.1.8 - Compatibility & Bug Fix Release](#2318---compatibility--bug-fix-release)
 - [2.3.1 - Compatibility & Enhancement Release](#231---compatibility--enhancement-release)
 - [2.3.0 - Compatibility & Enhancement Release](#230---compatibility--enhancement-release)
 - [2.2.0 - Compatibility & Enhancement Release](#220---compatibility--enhancement-release)
@@ -50,9 +50,13 @@
 
 &nbsp;</details>
 
-### 2.3.1.6 - Compatibility & Enhancement Release
+### 2.3.1.8 - Compatibility & Bug Fix Release
 
-* Fix: #383, Absolute http:// links to wiki pages do not resolve to files
+* Add: toolbar button tooltips to show reason for button being disabled.
+* Fix: #384, Add block quote level on ATX heading looses the heading prefix
+* Fix: Markdown list indentation format conversion would loose blank lines.
+* Fix: HTML to Markdown would only take the opening inline HTML tag
+* Fix: #383, Absolute `http://` links to wiki pages do not resolve to files
 * Fix: #382, JavaFX Preview is using project settings for Zoom and Grey Scale Antialiasing
   instead of scoped rendering profile
 * Fix: update to flexmark-java 0.14.0 with typographic quotes and smarts conversion
