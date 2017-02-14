@@ -3,6 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
+- [2.3.2.4 - Compatibility & Bug Fix Release](#2324---compatibility--bug-fix-release)
 - [2.3.2 - Compatibility & Bug Fix Release](#232---compatibility--bug-fix-release)
 - [2.3.1 - Compatibility & Enhancement Release](#231---compatibility--enhancement-release)
 - [2.3.0 - Compatibility & Enhancement Release](#230---compatibility--enhancement-release)
@@ -49,6 +50,16 @@
 * [ ] Add: detection for **GitHub** issue completions when no task servers are defined.
 
 &nbsp;</details>
+
+### 2.3.2.4 - Compatibility & Bug Fix Release
+
+* Add: PDF export action, menu and toolbar item
+* Fix: highlight on scroll to only exclude typing and backspace edit actions if Highlight on
+  edit is disabled.
+* Fix: Swing preview paragraphs not missing inter-paragraph spacing
+* Fix: add parser option to turn off GFM treatment of list item as loose if blank line follows
+  item paragraph. This is incompatible with GitHub rendering but gives better control of when an
+  item is loose.
 
 ### 2.3.2 - Compatibility & Bug Fix Release
 
