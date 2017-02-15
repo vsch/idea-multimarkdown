@@ -9,6 +9,7 @@
     - [Features](#features)
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
+    - [Version 2.3.3](#version-233)
     - [Version 2.3.2](#version-232)
     - [Version 2.3.1](#version-231)
     - [Version 2.3.0](#version-230)
@@ -25,7 +26,7 @@
 
 ## Overview
 
-![Screenshot](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets//images/plugin_description_img.png)
+![Screenshot](assets/images/capabilities2.png)
 
 **[<span style="color:#30A0D8;">Markdown</span>][Markdown] language support for IntelliJ
 platform**
@@ -93,9 +94,17 @@ for:
 Release Road Map
 ----------------
 
-### Version 2.3.2
+### Version 2.3.3
 
 Bug and compatibility fixes you can find in [Version Notes].
+
+* Add: PDF export action, menu and toolbar item
+
+* Add: JavaFX script for GitHub Collapse Markdown script use state persistence for initializing
+  the open/close state of headings. Now collapsed heading are preserved between page refreshes
+  and when opening markdown files.
+
+### Version 2.3.2
 
 * Fix bugs in HTML to Markdown converter
 

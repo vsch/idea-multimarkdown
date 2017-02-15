@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.2.6 - Bug Fix & Enhancement Release](#2326---bug-fix--enhancement-release)
+- [2.3.2.7 - Bug Fix & Enhancement Release](#2327---bug-fix--enhancement-release)
 - [2.3.2 - Compatibility & Bug Fix Release](#232---compatibility--bug-fix-release)
 - [2.3.1 - Compatibility & Enhancement Release](#231---compatibility--enhancement-release)
 - [2.3.0 - Compatibility & Enhancement Release](#230---compatibility--enhancement-release)
@@ -47,11 +47,11 @@
 
 &nbsp;</details>
 
-### 2.3.2.6 - Bug Fix & Enhancement Release
+### 2.3.2.7 - Bug Fix & Enhancement Release
 
 * Add: JavaFX WebView state persistence through `window.__MarkdownNavigator.getState("name")`
   and `window.__MarkdownNavigator.setState("name", value)`
-* Add: make JavaFX script for GitHub Collapse Markdown script use state persistence for
+* Add: #388, JavaFX script for GitHub Collapse Markdown script use state persistence for
   initializing the open/close state of headings. Now collapsed heading are preserved between
   page refreshes and when opening markdown files.
 * Add: img style `width:100%` to HTML mime copy and PDF export to scale images instead of
