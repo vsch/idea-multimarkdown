@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.2.4 - Compatibility & Bug Fix Release](#2324---compatibility--bug-fix-release)
+- [2.3.2.6 - Bug Fix & Enhancement Release](#2326---bug-fix--enhancement-release)
 - [2.3.2 - Compatibility & Bug Fix Release](#232---compatibility--bug-fix-release)
 - [2.3.1 - Compatibility & Enhancement Release](#231---compatibility--enhancement-release)
 - [2.3.0 - Compatibility & Enhancement Release](#230---compatibility--enhancement-release)
@@ -15,7 +15,7 @@
 
 &nbsp;<details id="todo"><summary>**To Do List**</summary>
 
-##### To Do
+##### To Do                     
 
 * [ ] Add: when typing in the text field for change link to reference, automatically enable the
       add reference text if reference id is different from original
@@ -27,10 +27,6 @@
 * [ ] Fix: cursor navigation very slow in table with few rows but very long text in columns: see
       `Extensions.md` in `flexmark-java` wiki. Suspect is figuring out table context for toolbar
       button state update.
-* [ ] Add: state persistence for JavaFX script parameters and modify the `details` opener and
-      Collapse Markdown scripts to use these for initializing the open/close state.
-* [ ] Add: save the persistence for JavaFX with the document state so that it is restored when
-      the document opens.
 * [ ] Fix: When pasting text that contains ref links over a selection that already has these
       references, after the paste the references are deleted but new ones are not added. Put a
       check if possible to ignore any existing references in a selection since they will be
@@ -51,8 +47,16 @@
 
 &nbsp;</details>
 
-### 2.3.2.4 - Compatibility & Bug Fix Release
+### 2.3.2.6 - Bug Fix & Enhancement Release
 
+* Add: JavaFX WebView state persistence through `window.__MarkdownNavigator.getState("name")`
+  and `window.__MarkdownNavigator.setState("name", value)`
+* Add: make JavaFX script for GitHub Collapse Markdown script use state persistence for
+  initializing the open/close state of headings. Now collapsed heading are preserved between
+  page refreshes and when opening markdown files.
+* Add: img style `width:100%` to HTML mime copy and PDF export to scale images instead of
+  clipping them.
+* Fix: paragraph spacing in `html_mime_default.css`
 * Add: PDF export action, menu and toolbar item
 * Fix: highlight on scroll to only exclude typing and backspace edit actions if Highlight on
   edit is disabled.
