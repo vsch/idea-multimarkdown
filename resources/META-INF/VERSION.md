@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.2.7 - Bug Fix & Enhancement Release](#2327---bug-fix--enhancement-release)
+- [2.3.2.8 - Bug Fix & Enhancement Release](#2328---bug-fix--enhancement-release)
 - [2.3.2 - Compatibility & Bug Fix Release](#232---compatibility--bug-fix-release)
 - [2.3.1 - Compatibility & Enhancement Release](#231---compatibility--enhancement-release)
 - [2.3.0 - Compatibility & Enhancement Release](#230---compatibility--enhancement-release)
@@ -15,7 +15,7 @@
 
 &nbsp;<details id="todo"><summary>**To Do List**</summary>
 
-##### To Do                     
+##### To Do
 
 * [ ] Add: when typing in the text field for change link to reference, automatically enable the
       add reference text if reference id is different from original
@@ -47,8 +47,10 @@
 
 &nbsp;</details>
 
-### 2.3.2.7 - Bug Fix & Enhancement Release
+### 2.3.2.8 - Bug Fix & Enhancement Release
 
+* Add: max image width and default font family settings for use by Copy Markdown to HTML formatted
+  and Export to PDF actions
 * Add: JavaFX WebView state persistence through `window.__MarkdownNavigator.getState("name")`
   and `window.__MarkdownNavigator.setState("name", value)`
 * Add: #388, JavaFX script for GitHub Collapse Markdown script use state persistence for

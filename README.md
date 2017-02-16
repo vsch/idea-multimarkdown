@@ -57,8 +57,9 @@ for:
 * GitHub style rendering that you are used to, out of the box
 * Fast typing response for distraction free editing
 * Fully customizable to adjust to your project's needs and your preferences
-* Copy Markdown as JIRA, YouTrack or HTML formatted text or export as HTML
+* Copy Markdown as JIRA, YouTrack or HTML formatted text
 * Convert HTML content to Markdown by pasting it into a Markdown document.
+* Export as HTML or PDF to share with others
 
 ### Features
 
@@ -78,6 +79,7 @@ for:
 * **Fully configurable** by project with support for scopes
 * Understands **GitHub wiki** nuances
 * Conversion between HTML and Markdown
+* Export to PDF
 
 ### Two tier model
 
@@ -98,11 +100,11 @@ Release Road Map
 
 Bug and compatibility fixes you can find in [Version Notes].
 
-* Add: PDF export action, menu and toolbar item
+* PDF export action, menu and toolbar item added
 
-* Add: JavaFX script for GitHub Collapse Markdown script use state persistence for initializing
-  the open/close state of headings. Now collapsed heading are preserved between page refreshes
-  and when opening markdown files.
+* GitHub Collapse Markdown script, which converts headings in the document to collapsible
+  sections in preview, with state persistence for initializing the open/close state of headings.
+  Now collapsed heading are preserved between page refreshes and when opening markdown files.
 
 ### Version 2.3.2
 
@@ -422,15 +424,15 @@ Rogues Gallery of Features
 
 ##### Still Great GitHub Rendering Resemblance for your preview pleasure
 
-![Screen Shot Jfx WebView](assets/images/faq/ScreenShot_jfx_webview.png)
+![Screen Shot Jfx WebView](https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/faq/ScreenShot_jfx_webview.png)
 
 ##### Split your editor and see the preview as you type
 
-![Screen Shot Preview](assets/images/faq/ScreenShot_preview.png)
+![Screen Shot Preview](https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/faq/ScreenShot_preview.png)
 
 ##### Peek at the HTML
 
-![idea-multimarkdown-settings](assets/images/faq/ScreenShot_preview_html.png)
+![idea-multimarkdown-settings](https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/faq/ScreenShot_preview_html.png)
 
 ###### Change options, customize the syntax colors and CSS to your liking.
 
