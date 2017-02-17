@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.2.8 - Bug Fix & Enhancement Release](#2328---bug-fix--enhancement-release)
+- [2.3.2.10 - Bug Fix & Enhancement Release](#23210---bug-fix--enhancement-release)
 - [2.3.2 - Compatibility & Bug Fix Release](#232---compatibility--bug-fix-release)
 - [2.3.1 - Compatibility & Enhancement Release](#231---compatibility--enhancement-release)
 - [2.3.0 - Compatibility & Enhancement Release](#230---compatibility--enhancement-release)
@@ -47,17 +47,22 @@
 
 &nbsp;</details>
 
-### 2.3.2.8 - Bug Fix & Enhancement Release
+### 2.3.2.10 - Bug Fix & Enhancement Release
 
+* Fix: convert link format intention would be disabled for some image links
+* Add: pdf export customizable profile, defaults to `COPY_HTML_MIME`
+* Add: pdf export font family drop down for built in fonts
+* Fix: toggle style would not wrap the previous word if caret at end of document without a
+  terminating EOL.
 * Add: max image width and default font family settings for use by Copy Markdown to HTML formatted
   and Export to PDF actions
+* Add: img style `max-width:100%` to HTML mime copy and `max-width:504pt` PDF export to scale
+  images instead of clipping them.
 * Add: JavaFX WebView state persistence through `window.__MarkdownNavigator.getState("name")`
   and `window.__MarkdownNavigator.setState("name", value)`
 * Add: #388, JavaFX script for GitHub Collapse Markdown script use state persistence for
   initializing the open/close state of headings. Now collapsed heading are preserved between
   page refreshes and when opening markdown files.
-* Add: img style `width:100%` to HTML mime copy and PDF export to scale images instead of
-  clipping them.
 * Fix: paragraph spacing in `html_mime_default.css`
 * Add: PDF export action, menu and toolbar item
 * Fix: highlight on scroll to only exclude typing and backspace edit actions if Highlight on
