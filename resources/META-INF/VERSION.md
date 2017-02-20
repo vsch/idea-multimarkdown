@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.2.10 - Bug Fix & Enhancement Release](#23210---bug-fix--enhancement-release)
+- [2.3.2.12 - Bug Fix & Enhancement Release](#23212---bug-fix--enhancement-release)
 - [2.3.2 - Compatibility & Bug Fix Release](#232---compatibility--bug-fix-release)
 - [2.3.1 - Compatibility & Enhancement Release](#231---compatibility--enhancement-release)
 - [2.3.0 - Compatibility & Enhancement Release](#230---compatibility--enhancement-release)
@@ -47,8 +47,10 @@
 
 &nbsp;</details>
 
-### 2.3.2.10 - Bug Fix & Enhancement Release
+### 2.3.2.12 - Bug Fix & Enhancement Release
 
+* Fix: #389, Null Pointer Exception on in toolbar disabled button handling.
+* Add: suggestion for file rename refactoring replacing spaces with dashes
 * Fix: convert link format intention would be disabled for some image links
 * Add: pdf export customizable profile, defaults to `COPY_HTML_MIME`
 * Add: pdf export font family drop down for built in fonts
