@@ -100,6 +100,18 @@ Release Road Map
 
 Bug and compatibility fixes you can find in [Version Notes].
 
+* Paste Images from clipboard directly into Markdown documents to inserts an image link or
+  update links and save PNG image file thanks image utils library from
+  [holgerbrandl/pasteimages]
+  * caret context ops: insert image link, replace link, replace link target, replace image file
+    content
+  * image processing options with preview:
+    * change white to transparent
+    * round corners with corner radius setting
+    * add border with border width option
+
+  ![Screen Shot Paste Image](assets/images/faq/ScreenShot_PasteImage.png)
+
 * PDF export action, menu and toolbar item added
 
 * GitHub Collapse Markdown script, which converts headings in the document to collapsible
@@ -497,6 +509,7 @@ Reserved.
 [flexmark-java]: https://github.com/vsch/flexmark-java
 [GitHub]: https://github.com/vsch/laravel-translation-manager
 [GitHub-userscripts]: https://github.com/Mottie/GitHub-userscripts
+[holgerbrandl/pasteimages]: https://github.com/holgerbrandl/pasteimages
 [intellij-markdown]: https://github.com/valich/intellij-markdown
 [Markdown]: http://daringfireball.net/projects/markdown
 [Markdown Navigator]: http://vladsch.com/product/markdown-navigator

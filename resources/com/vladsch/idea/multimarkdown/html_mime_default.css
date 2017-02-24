@@ -30,7 +30,7 @@ ol ol ul                     { list-style-type:square;margin-left:0.5em;padding-
 ol ul                        { list-style-type:circle;margin-left:0.5em;padding-left:0.5em;text-indent:0; }
 ol ul ol                     { list-style-type:lower-alpha;margin-left:0.5em;padding-left:0.5em;text-indent:0; }
 ol ul ul                     { list-style-type:square;margin-left:0.5em;padding-left:0.5em;text-indent:0; }
-p                            { margin:0 0 1.2em; }
+p                            { margin:1.2em 0; }
 pre                          { font-family:Consolas,Inconsolata,Courier,monospace;font-size:1em;line-height:1.3em;margin:1.2em 0; }
 pre > code                   { background-color:#f8f8f8;border-radius:3px;border:1px solid #ccc;display:block;font-family:Consolas,Inconsolata,Courier,monospace;font-size:0.9em;margin:0 0.15em;overflow:auto;padding:0.5em 0.7em;white-space:pre;color:#444; }
 table                        { margin:1.2em 0;padding:0;border-collapse:collapse;border-spacing:0;font:inherit;border:0 none; }
@@ -50,3 +50,4 @@ dl                           { margin:1.5em 0;padding:0; }
 dl dt                        { font-size:1em;font-style:italic;font-weight:bold;margin-top:0.75em;padding:0; }
 dl dd                        { margin:0.3em 0 0 0;padding:0 1.5em; }
 dd > p                       { margin:1em 0 1.2em; }
+img                          { max-width:$MAX_WIDTH$; }

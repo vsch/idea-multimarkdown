@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.2.12 - Bug Fix & Enhancement Release](#23212---bug-fix--enhancement-release)
+- [2.3.2.14 - Bug Fix & Enhancement Release](#23214---bug-fix--enhancement-release)
 - [2.3.2 - Compatibility & Bug Fix Release](#232---compatibility--bug-fix-release)
 - [2.3.1 - Compatibility & Enhancement Release](#231---compatibility--enhancement-release)
 - [2.3.0 - Compatibility & Enhancement Release](#230---compatibility--enhancement-release)
@@ -47,8 +47,13 @@
 
 &nbsp;</details>
 
-### 2.3.2.12 - Bug Fix & Enhancement Release
+### 2.3.2.14 - Bug Fix & Enhancement Release
 
+* Add: paste of images directly into markdown files as image links. Pasting with a caret on an
+  existing image link will set the defaults in the paste image dialog from the link.
+  Functionality implemented thanks image utils library from [holgerbrandl/pasteimages].
+* Fix: #390, `Copy Markdown as HTML formatted` action is disabled unless there is a selection in
+  the document.
 * Fix: #389, Null Pointer Exception on in toolbar disabled button handling.
 * Add: suggestion for file rename refactoring replacing spaces with dashes
 * Fix: convert link format intention would be disabled for some image links
@@ -56,8 +61,8 @@
 * Add: pdf export font family drop down for built in fonts
 * Fix: toggle style would not wrap the previous word if caret at end of document without a
   terminating EOL.
-* Add: max image width and default font family settings for use by Copy Markdown to HTML formatted
-  and Export to PDF actions
+* Add: max image width and default font family settings for use by Copy Markdown to HTML
+  formatted and Export to PDF actions
 * Add: img style `max-width:100%` to HTML mime copy and `max-width:504pt` PDF export to scale
   images instead of clipping them.
 * Add: JavaFX WebView state persistence through `window.__MarkdownNavigator.getState("name")`
@@ -559,3 +564,6 @@
 * Add: table annotations and reformat quick fix
 * Add: parser option for generated TOC to include a blank line spacer after the `[TOC]:#` marker
   to increase compatibility with existing markdown parsers.
+
+
+[holgerbrandl/pasteimages]: https://github.com/holgerbrandl/pasteimages
