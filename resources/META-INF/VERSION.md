@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.2.18 - Bug Fix & Enhancement Release](#23218---bug-fix--enhancement-release)
+- [2.3.2.20 - Bug Fix & Enhancement Release](#23220---bug-fix--enhancement-release)
 - [2.3.2 - Compatibility & Bug Fix Release](#232---compatibility--bug-fix-release)
 - [2.3.1 - Compatibility & Enhancement Release](#231---compatibility--enhancement-release)
 - [2.3.0 - Compatibility & Enhancement Release](#230---compatibility--enhancement-release)
@@ -47,8 +47,10 @@
 
 &nbsp;</details>
 
-### 2.3.2.18 - Bug Fix & Enhancement Release
+### 2.3.2.20 - Bug Fix & Enhancement Release
 
+* Add: cropping options to paste image dialog
+* Add: color selection with tolerance to make transparent
 * Fix: change directory history for paste image dialog to display project directories without
   project base path prefix and store them as system independent.
 * Fix: image link not correct when pasting image in non-wiki document with actual image file is
