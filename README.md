@@ -106,6 +106,7 @@ Bug and compatibility fixes you can find in [Version Notes].
   * caret context ops: insert image link, replace link, replace link target, replace image file
     content
   * image processing options with preview:
+    * scale image 10% to 200% with interpolation options:nearest neighbour, bilinear, bicubic
     * change white to transparent
     * round corners with corner radius setting
     * add border with border width option

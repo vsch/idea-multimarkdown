@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.2.14 - Bug Fix & Enhancement Release](#23214---bug-fix--enhancement-release)
+- [2.3.2.16 - Bug Fix & Enhancement Release](#23216---bug-fix--enhancement-release)
 - [2.3.2 - Compatibility & Bug Fix Release](#232---compatibility--bug-fix-release)
 - [2.3.1 - Compatibility & Enhancement Release](#231---compatibility--enhancement-release)
 - [2.3.0 - Compatibility & Enhancement Release](#230---compatibility--enhancement-release)
@@ -47,8 +47,11 @@
 
 &nbsp;</details>
 
-### 2.3.2.14 - Bug Fix & Enhancement Release
+### 2.3.2.16 - Bug Fix & Enhancement Release
 
+* Fix: image link not correct when pasting image in non-wiki document with actual image file is
+  put in wiki
+* Add: image scaling with interpolation type to paste image dialog
 * Add: paste of images directly into markdown files as image links. Pasting with a caret on an
   existing image link will set the defaults in the paste image dialog from the link.
   Functionality implemented thanks image utils library from [holgerbrandl/pasteimages].
@@ -565,5 +568,5 @@
 * Add: parser option for generated TOC to include a blank line spacer after the `[TOC]:#` marker
   to increase compatibility with existing markdown parsers.
 
-
 [holgerbrandl/pasteimages]: https://github.com/holgerbrandl/pasteimages
+
