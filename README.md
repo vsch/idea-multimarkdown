@@ -60,6 +60,7 @@ for:
 * Copy Markdown as JIRA, YouTrack or HTML formatted text
 * Convert HTML content to Markdown by pasting it into a Markdown document.
 * Export as HTML or PDF to share with others
+* Paste images from clipboard into markdown documents for fast screenshot based documentation
 
 ### Features
 
@@ -80,6 +81,11 @@ for:
 * Understands **GitHub wiki** nuances
 * Conversion between HTML and Markdown
 * Export to PDF
+* Paste Image into Markdown documents with basic image transformations:
+  * crop image
+  * round corners
+  * add border
+  * transparent color
 
 ### Two tier model
 

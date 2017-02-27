@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.2.24 - Bug Fix & Enhancement Release](#23224---bug-fix--enhancement-release)
+- [2.3.3 - Bug Fix & Enhancement Release](#233---bug-fix--enhancement-release)
 - [2.3.2 - Compatibility & Bug Fix Release](#232---compatibility--bug-fix-release)
 - [2.3.1 - Compatibility & Enhancement Release](#231---compatibility--enhancement-release)
 - [2.3.0 - Compatibility & Enhancement Release](#230---compatibility--enhancement-release)
@@ -47,7 +47,7 @@
 
 &nbsp;</details>
 
-### 2.3.2.24 - Bug Fix & Enhancement Release
+### 2.3.3 - Bug Fix & Enhancement Release
 
 * Add: change mouse cursor to cross hairs when over preview image in paste image dialog
 * Add: outline to center pixel zoomed in image
@@ -61,6 +61,9 @@
 * Add: paste of images directly into markdown files as image links. Pasting with a caret on an
   existing image link will set the defaults in the paste image dialog from the link.
   Functionality implemented thanks image utils library from [holgerbrandl/pasteimages].
+
+  ![ScreenShot_PasteImages_sm](https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/ScreenShot_PasteImages_sm.png)
+
 * Fix: #390, `Copy Markdown as HTML formatted` action is disabled unless there is a selection in
   the document.
 * Fix: #389, Null Pointer Exception on in toolbar disabled button handling.
