@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.3.2 - Bug Fix & Enhancement Release](#2332---bug-fix--enhancement-release)
+- [2.3.3.4 - Bug Fix & Enhancement Release](#2334---bug-fix--enhancement-release)
 - [2.3.3 - Bug Fix & Enhancement Release](#233---bug-fix--enhancement-release)
 - [2.3.2 - Compatibility & Bug Fix Release](#232---compatibility--bug-fix-release)
 - [2.3.1 - Compatibility & Enhancement Release](#231---compatibility--enhancement-release)
@@ -14,7 +14,7 @@
 - [2.0.0 - New Parser Release](#200---new-parser-release)
 
 
-&nbsp;<details id="todo"><summary>**To Do List**</summary>
+&nbsp;<details id="todo" open><summary>**To Do List**</summary>
 
 ##### To Do
 
@@ -45,10 +45,16 @@
 
 &nbsp;</details>
 
-### 2.3.3.2 - Bug Fix & Enhancement Release
+### 2.3.3.4 - Bug Fix & Enhancement Release
 
+* Add: File drag and drop into markdown document to create links, image files create image links
+  the rest create inline links. Each file link will be added as a separately undoable command.
+
+  If copy dragging images (Ctrl on Linux/Windows, ⌥ on OS X) then for image files the `Copy
+  Image` dialog will open (like paste image) that will allow you to modify the image and choose
+  the location where to store the copy. Copy drag mode has no effect on other files and is
+  ignored.
 * Fix: #394, NullPointerException in MarkdownPasteHandler.doExecute()
-
 * Fix: references to images in the project from wiki home page with `file://`, `http://` or
   `https://` format would show as unresolved and conversion. Also affected conversion of link
   format on wiki home page.
@@ -68,7 +74,7 @@
   existing image link will set the defaults in the paste image dialog from the link.
   Functionality implemented thanks image utils library from [holgerbrandl/pasteimages].
 
-  ![ScreenShot_PasteImages_sm](https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/ScreenShot_PasteImages_sm.png)
+  ![ScreenShot_PasteImages_sm](../../assets/images/ScreenShot_PasteImages_sm.png)
 
 * Fix: #390, `Copy Markdown as HTML formatted` action is disabled unless there is a selection in
   the document.
