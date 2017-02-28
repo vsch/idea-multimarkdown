@@ -3,6 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
+- [2.3.3.2 - Bug Fix & Enhancement Release](#2332---bug-fix--enhancement-release)
 - [2.3.3 - Bug Fix & Enhancement Release](#233---bug-fix--enhancement-release)
 - [2.3.2 - Compatibility & Bug Fix Release](#232---compatibility--bug-fix-release)
 - [2.3.1 - Compatibility & Enhancement Release](#231---compatibility--enhancement-release)
@@ -19,9 +20,6 @@
 
 * [ ] Add: when typing in the text field for change link to reference, automatically enable the
       add reference text if reference id is different from original
-* [ ] Add: paste image into document, use content preview and replace whatever is selected or
-      under caret not just full links. Default to reuse the name at caret. Directory to be
-      configurable by scope of the destination file.
 * [ ] Add: transpose table, best to add `copy to clipboard transposed table`
 * [ ] Add: join processor to remove bullet list marker when joining next line item
 * [ ] Fix: cursor navigation very slow in table with few rows but very long text in columns: see
@@ -46,6 +44,14 @@
 * [ ] Add: detection for **GitHub** issue completions when no task servers are defined.
 
 &nbsp;</details>
+
+### 2.3.3.2 - Bug Fix & Enhancement Release
+
+* Fix: #394, NullPointerException in MarkdownPasteHandler.doExecute()
+
+* Fix: references to images in the project from wiki home page with `file://`, `http://` or
+  `https://` format would show as unresolved and conversion. Also affected conversion of link
+  format on wiki home page.
 
 ### 2.3.3 - Bug Fix & Enhancement Release
 
