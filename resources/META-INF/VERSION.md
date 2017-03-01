@@ -3,6 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
+- [2.3.4.2 - Bug Fix & Enhancement Release](#2342---bug-fix--enhancement-release)
 - [2.3.4 - Bug Fix & Enhancement Release](#234---bug-fix--enhancement-release)
 - [2.3.3 - Bug Fix & Enhancement Release](#233---bug-fix--enhancement-release)
 - [2.3.2 - Compatibility & Bug Fix Release](#232---compatibility--bug-fix-release)
@@ -45,6 +46,17 @@
 
 &nbsp;</details>
 
+### 2.3.4.2 - Bug Fix & Enhancement Release
+
+* Fix: #400, Better code color consistency needed. Now same as Fenced Code/Verbatim. Also change
+  copy Markdown as HTML formatted text and PDF export to align inline code color with indented
+  and fenced code.
+* Fix: #398, Poor alignment between source and preview when using "Sync source to preview". Now
+  there is an option to vertically align synchronized position in Preview Settings, selected by
+  default.
+* Fix: #402, PDF Export action fails silently if no text is selected in document instead of
+  exporting the full document.
+
 ### 2.3.4 - Bug Fix & Enhancement Release
 
 * Fix: incorrect parsing in GitHub Doc compatibility mode, #401, Parser fails if code chunks
@@ -55,7 +67,7 @@
   * Absolute (`http://`)
   * Absolute (`file://`)
 
-  ![ScreenShot_PasteImages_sm](https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/ScreenShot_PasteImages_sm.png)
+  ![ScreenShot_PasteImages_sm](../../assets/images/ScreenShot_PasteImages_sm.png)
 * Add: Link Format option to drag & drop non-image files if copy dragging (Ctrl on
   Linux/Windows, ⌥ on OS X) dialog is presented before the first file link is created and the
   same format is used for the rest of the files.

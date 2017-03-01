@@ -9,6 +9,7 @@
     - [Features](#features)
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
+    - [Next Release: Version 2.3.5](#next-release-version-235)
     - [Version 2.3.4](#version-234)
     - [Version 2.3.3](#version-233)
     - [Version 2.3.2](#version-232)
@@ -103,9 +104,14 @@ for:
 Release Road Map
 ----------------
 
-### Version 2.3.4
+### Next Release: Version 2.3.5
 
 Bug and compatibility fixes you can find in [Version Notes].
+
+* Add: option to vertically align synchronized position in Preview Settings, selected by default
+  in Preview settings.
+
+### Version 2.3.4
 
 * Add: link format option to Paste Images & Copy Images
   * Page Relative
@@ -113,7 +119,7 @@ Bug and compatibility fixes you can find in [Version Notes].
   * Absolute (`http://`)
   * Absolute (`file://`)
 
-  ![Screen Shot Paste Image](https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/faq/ScreenShot_PasteImage.png)
+  ![Screen Shot Paste Image](assets/images/faq/ScreenShot_PasteImage.png)
 * Add: File drag and drop into markdown document to create links, image files create image links
   the rest create inline links. Each file link will be added as a separately undoable command.
 
