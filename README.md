@@ -9,6 +9,7 @@
     - [Features](#features)
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
+    - [Next Release: Version 2.3.4](#next-release-version-234)
     - [Version 2.3.3](#version-233)
     - [Version 2.3.2](#version-232)
     - [Version 2.3.1](#version-231)
@@ -102,9 +103,28 @@ for:
 Release Road Map
 ----------------
 
-### Version 2.3.3
+### Next Release: Version 2.3.4
 
 Bug and compatibility fixes you can find in [Version Notes].
+
+* Add: link format option to Paste Images & Copy Images
+  * Page Relative
+  * Repo Relative (`/...`)
+  * Absolute (`http://`)
+  * Absolute (`file://`)
+
+  ![Screen Shot Paste Image](https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/faq/ScreenShot_PasteImage.png)
+* Add: File drag and drop into markdown document to create links, image files create image links
+  the rest create inline links. Each file link will be added as a separately undoable command.
+
+  If copy dragging files (Ctrl on Linux/Windows, ⌥ on OS X) then for image files the `Copy
+  Image` dialog will open (like Paste Image dialog) that will allow you to modify the image and choose
+  the location where to store the copy.
+
+  For non-image files a link format dialog is displayed for the first file to allow selecting
+  the link format.
+
+### Version 2.3.3
 
 * Paste Images from clipboard directly into Markdown documents to inserts an image link or
   update links and save PNG image file thanks image utils library from
@@ -117,11 +137,7 @@ Bug and compatibility fixes you can find in [Version Notes].
     * change color (with margin of tolerance) to transparent
     * round corners with corner radius setting
     * add border with border width option
-
-  ![Screen Shot Paste Image](assets/images/faq/ScreenShot_PasteImage.png)
-
 * PDF export action, menu and toolbar item added
-
 * GitHub Collapse Markdown script, which converts headings in the document to collapsible
   sections in preview, with state persistence for initializing the open/close state of headings.
   Now collapsed heading are preserved between page refreshes and when opening markdown files.
