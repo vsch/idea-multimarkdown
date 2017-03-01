@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.3.6 - Bug Fix & Enhancement Release](#2336---bug-fix--enhancement-release)
+- [2.3.4 - Bug Fix & Enhancement Release](#234---bug-fix--enhancement-release)
 - [2.3.3 - Bug Fix & Enhancement Release](#233---bug-fix--enhancement-release)
 - [2.3.2 - Compatibility & Bug Fix Release](#232---compatibility--bug-fix-release)
 - [2.3.1 - Compatibility & Enhancement Release](#231---compatibility--enhancement-release)
@@ -45,17 +45,20 @@
 
 &nbsp;</details>
 
-### 2.3.3.6 - Bug Fix & Enhancement Release
+### 2.3.4 - Bug Fix & Enhancement Release
 
+* Fix: incorrect parsing in GitHub Doc compatibility mode, #401, Parser fails if code chunks
+  contain markdown header elements
 * Add: Link Format option to `Paste Image` and `Copy Image` dialogs
   * Page Relative
   * Repo Relative (`/...`)
   * Absolute (`http://`)
   * Absolute (`file://`)
 
-  ![ScreenShot_PasteImages_sm](../../assets/images/ScreenShot_PasteImages_sm.png)
+  ![ScreenShot_PasteImages_sm](https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/ScreenShot_PasteImages_sm.png)
 * Add: Link Format option to drag & drop non-image files if copy dragging (Ctrl on
-  Linux/Windows, ⌥ on OS X)
+  Linux/Windows, ⌥ on OS X) dialog is presented before the first file link is created and the
+  same format is used for the rest of the files.
 * Add: File drag and drop into markdown document to create links, image files create image links
   the rest create inline links. Each file link will be added as a separately undoable command.
 

@@ -9,7 +9,7 @@
     - [Features](#features)
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
-    - [Next Release: Version 2.3.4](#next-release-version-234)
+    - [Version 2.3.4](#version-234)
     - [Version 2.3.3](#version-233)
     - [Version 2.3.2](#version-232)
     - [Version 2.3.1](#version-231)
@@ -103,7 +103,7 @@ for:
 Release Road Map
 ----------------
 
-### Next Release: Version 2.3.4
+### Version 2.3.4
 
 Bug and compatibility fixes you can find in [Version Notes].
 
