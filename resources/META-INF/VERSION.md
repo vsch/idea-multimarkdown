@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.4.2 - Bug Fix & Enhancement Release](#2342---bug-fix--enhancement-release)
+- [2.3.4.4 - Bug Fix & Enhancement Release](#2344---bug-fix--enhancement-release)
 - [2.3.4 - Bug Fix & Enhancement Release](#234---bug-fix--enhancement-release)
 - [2.3.3 - Bug Fix & Enhancement Release](#233---bug-fix--enhancement-release)
 - [2.3.2 - Compatibility & Bug Fix Release](#232---compatibility--bug-fix-release)
@@ -46,8 +46,18 @@
 
 &nbsp;</details>
 
-### 2.3.4.2 - Bug Fix & Enhancement Release
+### 2.3.4.4 - Bug Fix & Enhancement Release
 
+* Fix: text drag/drop not working because of MarkdownPasteHandler
+* Add: option to enable drag/drop handler replacement to allow "Copy" extended file drag/drop
+  action at the expense of text drag/drop. Disabled by default in settings `Languages &
+  Frameworks > Markdown`
+* Fix: loosen/tighten list action to not mark a list as loose when blank line precedes the first
+  list item.
+* Fix: #404, Conversion from CommonMark or FixedIndent to GitHub does not properly indent code
+  blocks in list items
+* Fix: #403, Indented code in list items not indented enough with GitHub list parser option
+* Change: link color in Preview and Editor Colors to match new GitHub colors
 * Fix: #400, Better code color consistency needed. Now same as Fenced Code/Verbatim. Also change
   copy Markdown as HTML formatted text and PDF export to align inline code color with indented
   and fenced code.

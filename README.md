@@ -63,6 +63,7 @@ for:
 * Convert HTML content to Markdown by pasting it into a Markdown document.
 * Export as HTML or PDF to share with others
 * Paste images from clipboard into markdown documents for fast screenshot based documentation
+* Drag & Drop files from Project tree into markdown documents for fast link insertion
 
 ### Features
 
@@ -88,6 +89,7 @@ for:
   * round corners
   * add border
   * transparent color
+* Drag & Drop of files and images into documents
 
 ### Two tier model
 
