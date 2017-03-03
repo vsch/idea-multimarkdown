@@ -15,7 +15,7 @@
 - [2.0.0 - New Parser Release](#200---new-parser-release)
 
 
-&nbsp;<details id="todo" open><summary>**To Do List**</summary>
+&nbsp;<details id="todo"><summary>**To Do List**</summary>
 
 ##### To Do
 
@@ -47,10 +47,12 @@
 
 &nbsp;</details>
 
-### 2.3.4.6 - Bug Fix & Enhancement Release
+### 2.3.4.8 - Bug Fix & Enhancement Release
 
-* Add: #399, Highlight search results in preview, option in preview `Show source search
-  highlights in preview` to disable this feature. Otherwise preview highlights the search matches.
+* Add: highlight selection in preview, `Show source selection in preview` enabled by default.
+  Wraps selection in `<span>` with `selection-highlight` class.
+* Add: #399, Highlight search results in preview, `Show source search highlights in preview`
+  enabled by default. Wraps highlights in `<span>` with `search-highlight` class.
 * Fix: text drag/drop not working because of MarkdownPasteHandler
 * Add: option to enable drag/drop handler replacement to allow "Copy" extended file drag/drop
   action at the expense of text drag/drop. Disabled by default in settings `Languages &

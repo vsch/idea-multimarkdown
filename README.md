@@ -110,8 +110,11 @@ Release Road Map
 
 Bug and compatibility fixes you can find in [Version Notes].
 
+* Add: highlight selection in preview, `Show source selection in preview` enabled by default.
+  Wraps selection in `<span>` with `selection-highlight` class.
+
 * Add: option to highlight search results in preview, `Show source search highlights in preview`
-  enabled by default.
+  enabled by default. Wraps search highlights in `<span>` with `search-highlight` class.
 
 * Add: option to vertically align synchronized position in Preview Settings, selected by default
   in Preview settings.
