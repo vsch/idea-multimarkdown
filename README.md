@@ -110,6 +110,9 @@ Release Road Map
 
 Bug and compatibility fixes you can find in [Version Notes].
 
+* Add: option to highlight search results in preview, `Show source search highlights in preview`
+  enabled by default.
+
 * Add: option to vertically align synchronized position in Preview Settings, selected by default
   in Preview settings.
 
@@ -126,8 +129,8 @@ Bug and compatibility fixes you can find in [Version Notes].
   the rest create inline links. Each file link will be added as a separately undoable command.
 
   If copy dragging files (Ctrl on Linux/Windows, ⌥ on OS X) then for image files the `Copy
-  Image` dialog will open (like Paste Image dialog) that will allow you to modify the image and choose
-  the location where to store the copy.
+  Image` dialog will open (like Paste Image dialog) that will allow you to modify the image and
+  choose the location where to store the copy.
 
   For non-image files a link format dialog is displayed for the first file to allow selecting
   the link format.

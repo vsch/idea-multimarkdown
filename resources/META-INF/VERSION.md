@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.4.4 - Bug Fix & Enhancement Release](#2344---bug-fix--enhancement-release)
+- [2.3.4.6 - Bug Fix & Enhancement Release](#2346---bug-fix--enhancement-release)
 - [2.3.4 - Bug Fix & Enhancement Release](#234---bug-fix--enhancement-release)
 - [2.3.3 - Bug Fix & Enhancement Release](#233---bug-fix--enhancement-release)
 - [2.3.2 - Compatibility & Bug Fix Release](#232---compatibility--bug-fix-release)
@@ -43,11 +43,14 @@
 * [ ] Add: source synchronization for Swing preview window
 * [ ] Add: source synchronization for HTML plain text previews
 * [ ] Add: detection for **GitHub** issue completions when no task servers are defined.
+* Add: transpose table, best to add `copy to clipboard transposed table`
 
 &nbsp;</details>
 
-### 2.3.4.4 - Bug Fix & Enhancement Release
+### 2.3.4.6 - Bug Fix & Enhancement Release
 
+* Add: #399, Highlight search results in preview, option in preview `Show source search
+  highlights in preview` to disable this feature. Otherwise preview highlights the search matches.
 * Fix: text drag/drop not working because of MarkdownPasteHandler
 * Add: option to enable drag/drop handler replacement to allow "Copy" extended file drag/drop
   action at the expense of text drag/drop. Disabled by default in settings `Languages &
