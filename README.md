@@ -35,39 +35,49 @@ platform**
 
 **A Markdown plugin** with GFM and a **matching** preview style.
 
+**Get Markdown Navigator [enhanced edition][Markdown Navigator] to unlock all productivity
+features.**
+
 ### Document with pleasure!
 
 Work with [Markdown] files like you do with other languages in the IDE, by getting full support
 for:
 
-* completions to reduce typing
+* **Paste images** from clipboard into **Markdown documents** for fast screen capture based
+  documentation
+* **Drag & Drop files and images** into **Markdown documents** for fast link insertion
+* **Completions** to reduce typing
   * link address ⇐ files
   * ref anchors ⇐ headings
   * footnote refs ⇐ footnotes
   * ref links/ref images ⇐ references
   * link text ⇐ ref anchor/link address
-* error and warning annotations to help catch mistakes early
-* intention actions for fast results with less effort
-* wrap on typing to keep it nicely formatted as you edit
-* formatting to change format with a key stroke
-* navigation and find usages to find references without effort
-* refactoring of all referencing elements: to keep it all in sync while evolving
+* **Error and Warning** annotations to help catch mistakes early
+* **Intention actions** for fast results with less effort
+* **Wrap on Typing** to keep it nicely formatted as you edit
+* **Formatting** to cleanup documents with a key stroke
+* **Navigation and Find Usages** to find references without effort
+* **Refactoring** of all referencing elements: to keep it all in sync while evolving
   * files ⟺ links
   * headings ⟺ ref anchors
   * footnotes ⟺ footnote refs
   * references ⟺ ref links/ref images
-* GitHub style rendering that you are used to, out of the box
-* Fast typing response for distraction free editing
+* **GitHub style rendering** that you are used to, out of the box
+* **Fast typing response** for distraction free editing
+* **Copy Markdown** as **JIRA**, **YouTrack** or **HTML** formatted text
+* Convert **HTML to Markdown by pasting** it into a Markdown document.
+* **Export** to **HTML** or **PDF** to share with others
 * Fully customizable to adjust to your project's needs and your preferences
-* Copy Markdown as JIRA, YouTrack or HTML formatted text
-* Convert HTML content to Markdown by pasting it into a Markdown document.
-* Export as HTML or PDF to share with others
-* Paste images from clipboard into markdown documents for fast screenshot based documentation
-* Drag & Drop files from Project tree into markdown documents for fast link insertion
 
 ### Features
 
 * **<span style="color:#b200c2">Split Editor</span>**
+* **Drag & Drop files and images** into documents to **create links**
+* **Paste Image** into Markdown documents with basic image transformations:
+  * crop image
+  * round corners
+  * add border
+  * transparent color
 * **Fast** typing response in large files
 * **HTML text** preview and export
 * Soft Wrap **on right margin**
@@ -79,17 +89,12 @@ for:
 * **Bidirectional** Source and Preview synchronization
   * **Scrolls** preview to show source element at caret
   * **Moves caret** to source line of element clicked in preview
-* Also does **completions, refactoring, validation, language injections, code folding**
+  * **Displays** source search highlights and selections in preview
+* **Completions, refactoring, validation, language injections, code folding**
 * **Fully configurable** by project with support for scopes
 * Understands **GitHub wiki** nuances
-* Conversion between HTML and Markdown
-* Export to PDF
-* Paste Image into Markdown documents with basic image transformations:
-  * crop image
-  * round corners
-  * add border
-  * transparent color
-* Drag & Drop of files and images into documents
+* **Convert** between **HTML** and **Markdown**
+* **Export to PDF**
 
 ### Two tier model
 

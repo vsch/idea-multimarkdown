@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.4.6 - Bug Fix & Enhancement Release](#2346---bug-fix--enhancement-release)
+- [2.3.4.9  - Bug Fix & Enhancement Release](#2349----bug-fix--enhancement-release)
 - [2.3.4 - Bug Fix & Enhancement Release](#234---bug-fix--enhancement-release)
 - [2.3.3 - Bug Fix & Enhancement Release](#233---bug-fix--enhancement-release)
 - [2.3.2 - Compatibility & Bug Fix Release](#232---compatibility--bug-fix-release)
@@ -47,8 +47,14 @@
 
 &nbsp;</details>
 
-### 2.3.4.8 - Bug Fix & Enhancement Release
+### 2.3.4.9  - Bug Fix & Enhancement Release
 
+* Fix: absolute `http://..../wiki` link to wiki home page would to resolve as a file reference.
+* Fix: drag/drop wiki page files would ignore link address format and always insert page
+  relative link.
+* Fix: style auto wrapping when caret at end of word that is at end of file without trailing EOL. 
+* Add: future API for drag/drop handling code to eliminate the need for replacing editor
+  drag/drop handler.
 * Add: highlight selection in preview, `Show source selection in preview` enabled by default.
   Wraps selection in `<span>` with `selection-highlight` class.
 * Add: #399, Highlight search results in preview, `Show source search highlights in preview`
@@ -625,4 +631,3 @@
   to increase compatibility with existing markdown parsers.
 
 [holgerbrandl/pasteimages]: https://github.com/holgerbrandl/pasteimages
-
