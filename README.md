@@ -163,11 +163,11 @@ Bug and compatibility fixes you can find in [Version Notes].
 
 ### Version 2.3.2
 
-* Fix bugs in HTML to Markdown converter
+* Fix: bugs in HTML to Markdown converter
 
-* Fix bugs in Markdown formatting
+* Fix: bugs in Markdown formatting
 
-* Fix bugs in Copy Markdown as HTML mime content
+* Fix: bugs in Copy Markdown as HTML mime content
 
 ### Version 2.3.1
 
@@ -541,7 +541,7 @@ with a simple desire for a Markdown preview that looked like GitHub's.
 \* This plugin was originally based on the [nicoulaj/idea-markdown plugin] by [nicoulaj], which
 was based on [pegdown] library by [sirthias].
 
-Markdown Navigator, Copyright (c) 2015-2016, V. Schneider, <http://vladsch.com> All Rights
+Markdown Navigator, Copyright (c) 2015-2017, V. Schneider, <http://vladsch.com> All Rights
 Reserved.
 
 [CommonMark]: http://commonmark.org/
