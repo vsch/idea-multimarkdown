@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.4.12 - Bug Fix & Enhancement Release](#23412---bug-fix--enhancement-release)
+- [2.3.4.14 - Bug Fix & Enhancement Release](#23414---bug-fix--enhancement-release)
 - [2.3.4 - Bug Fix & Enhancement Release](#234---bug-fix--enhancement-release)
 - [2.3.3 - Bug Fix & Enhancement Release](#233---bug-fix--enhancement-release)
 - [2.3.2 - Compatibility & Bug Fix Release](#232---compatibility--bug-fix-release)
@@ -47,15 +47,18 @@
 
 &nbsp;</details>
 
-### 2.3.4.12 - Bug Fix & Enhancement Release
+### 2.3.4.14 - Bug Fix & Enhancement Release
 
-* Add: Markdown application settings for: 
+* Fix: link resolution logic to work for multi-vcs-root projects and modules not under project
+  root.
+* Fix: update to flexmark-java 18.1, HTML to Markdown adds space after empty list items.
+* Add: Markdown application settings for:
   * `Use clipboard text/html content when available` disabled by default, enabling it will allow
     pasting text/html when available
   * `Convert HTML content to Markdown` enabled by default, disabling will paste text/html
     content without conversion to Markdown
-  
-  ![Settings_PasteControl](https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/faq/Settings_PasteControl.png)
+
+  ![Settings_PasteControl](/assets/images/faq/Settings_PasteControl.png)
 * Add: `Delete empty list items`
 * Fix: HTML to Markdown converter to not ignore text in lists which is not included in list item
   but instead to put this text into a new list item.
@@ -68,7 +71,8 @@
 * Fix: absolute `http://..../wiki` link to wiki home page would to resolve as a file reference.
 * Fix: drag/drop wiki page files would ignore link address format and always insert page
   relative link.
-* Fix: style auto wrapping when caret at end of word that is at end of file without trailing EOL.
+* Fix: style auto wrapping when caret at end of word that is at end of file without trailing
+  EOL.
 * Add: future API for drag/drop handling code to eliminate the need for replacing editor
   drag/drop handler.
 * Add: highlight selection in preview, `Show source selection in preview` enabled by default.
@@ -647,3 +651,4 @@
   to increase compatibility with existing markdown parsers.
 
 [holgerbrandl/pasteimages]: https://github.com/holgerbrandl/pasteimages
+
