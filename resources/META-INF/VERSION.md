@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.4.14 - Bug Fix & Enhancement Release](#23414---bug-fix--enhancement-release)
+- [2.3.4.16 - Bug Fix & Enhancement Release](#23416---bug-fix--enhancement-release)
 - [2.3.4 - Bug Fix & Enhancement Release](#234---bug-fix--enhancement-release)
 - [2.3.3 - Bug Fix & Enhancement Release](#233---bug-fix--enhancement-release)
 - [2.3.2 - Compatibility & Bug Fix Release](#232---compatibility--bug-fix-release)
@@ -47,8 +47,10 @@
 
 &nbsp;</details>
 
-### 2.3.4.14 - Bug Fix & Enhancement Release
+### 2.3.4.16 - Bug Fix & Enhancement Release
 
+* Fix: update to flexmark-java 18.2, HTML to Markdown hang fix and MS-Word and MS-Excel HTML
+  quirks handling fixed.
 * Fix: link resolution logic to work for multi-vcs-root projects and modules not under project
   root.
 * Fix: update to flexmark-java 18.1, HTML to Markdown adds space after empty list items.
