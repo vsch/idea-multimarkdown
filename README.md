@@ -115,13 +115,28 @@ Release Road Map
 
 Bug and compatibility fixes you can find in [Version Notes].
 
-* Add: highlight selection in preview, `Show source selection in preview` enabled by default.
+* `Copy Modified Image to Clipboard` in Copy/Paste Image Dialog to replace clipboard image
+  contents with modified image, can use it to replace image on clipboard then Cancel dialog to
+  not modify the Markdown document but still have the modified image on the clipboard.
+
+  ![Screen Shot Paste Image](/assets/images/faq/ScreenShot_PasteImage_sm.png)
+* Copy/Modify Image intention that will open the Image Copy/Paste Dialog for the image
+  content of the image link element at caret position. Works with local files and URLs. Get the
+  option to change directory, file name and modify the image.
+* Markdown application settings for:
+  * `Use clipboard text/html content when available` disabled by default, enabling it will allow
+    pasting text/html when available
+  * `Convert HTML content to Markdown` enabled by default, disabling will paste text/html
+    content without conversion to Markdown
+
+  ![Settings_PasteControl](/assets/images/faq/Settings_PasteControl_sm.png)
+* Option highlight selection in preview, `Show source selection in preview` enabled by default.
   Wraps selection in `<span>` with `selection-highlight` class.
 
-* Add: option to highlight search results in preview, `Show source search highlights in preview`
+* Option to highlight search results in preview, `Show source search highlights in preview`
   enabled by default. Wraps search highlights in `<span>` with `search-highlight` class.
 
-* Add: option to vertically align synchronized position in Preview Settings, selected by default
+* Option to vertically align synchronized position in Preview Settings, selected by default
   in Preview settings.
 
 ### Version 2.3.4
@@ -131,8 +146,6 @@ Bug and compatibility fixes you can find in [Version Notes].
   * Repo Relative (`/...`)
   * Absolute (`http://`)
   * Absolute (`file://`)
-
-  ![Screen Shot Paste Image](assets/images/faq/ScreenShot_PasteImage.png)
 * Add: File drag and drop into markdown document to create links, image files create image links
   the rest create inline links. Each file link will be added as a separately undoable command.
 

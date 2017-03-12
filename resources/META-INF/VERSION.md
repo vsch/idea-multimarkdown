@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.4.16 - Bug Fix & Enhancement Release](#23416---bug-fix--enhancement-release)
+- [2.3.4.18 - Bug Fix & Enhancement Release](#23418---bug-fix--enhancement-release)
 - [2.3.4 - Bug Fix & Enhancement Release](#234---bug-fix--enhancement-release)
 - [2.3.3 - Bug Fix & Enhancement Release](#233---bug-fix--enhancement-release)
 - [2.3.2 - Compatibility & Bug Fix Release](#232---compatibility--bug-fix-release)
@@ -47,8 +47,16 @@
 
 &nbsp;</details>
 
-### 2.3.4.16 - Bug Fix & Enhancement Release
+### 2.3.4.18 - Bug Fix & Enhancement Release
 
+* Add: `Copy Modified Image to Clipboard` in Copy/Paste Image Dialog to replace clipboard image
+  contents with modified image, can use it to replace image on clipboard then Cancel dialog to
+  not modify the Markdown document but still have the modified image on the clipboard.
+* Add: Copy/Modify Image intention that will open the Image Copy/Paste Dialog for the image
+  content of the image link element at caret position. Works with local files and URLs. Get the
+  option to change directory, file name and modify the image.
+* Fix: `http://` and `https://` addresses to project files would be ignored due to a typo in the
+  code.
 * Fix: update to flexmark-java 18.2, HTML to Markdown hang fix and MS-Word and MS-Excel HTML
   quirks handling fixed.
 * Fix: link resolution logic to work for multi-vcs-root projects and modules not under project
@@ -59,9 +67,7 @@
     pasting text/html when available
   * `Convert HTML content to Markdown` enabled by default, disabling will paste text/html
     content without conversion to Markdown
-
-  ![Settings_PasteControl](/assets/images/faq/Settings_PasteControl.png)
-* Add: `Delete empty list items`
+* Add: `Delete empty list items` intention on lists to delete all empty list items
 * Fix: HTML to Markdown converter to not ignore text in lists which is not included in list item
   but instead to put this text into a new list item.
 * Add: aside extension which uses leading pipe `|` to mark an aside block just like block quote
