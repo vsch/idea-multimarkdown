@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.4.20 - Bug Fix & Enhancement Release](#23420---bug-fix--enhancement-release)
+- [2.3.4.22 - Bug Fix & Enhancement Release](#23422---bug-fix--enhancement-release)
 - [2.3.4 - Bug Fix & Enhancement Release](#234---bug-fix--enhancement-release)
 - [2.3.3 - Bug Fix & Enhancement Release](#233---bug-fix--enhancement-release)
 - [2.3.2 - Compatibility & Bug Fix Release](#232---compatibility--bug-fix-release)
@@ -47,10 +47,11 @@
 
 &nbsp;</details>
 
-### 2.3.4.20 - Bug Fix & Enhancement Release
+### 2.3.4.22 - Bug Fix & Enhancement Release
 
+* Fix: clipboard mime text/html now has higher priority than file list and image on the
+  clipboard.
 * Add: operation options for non-image drop/paste file based on caret location
-  ![File_DropOptions](/assets/images/faq/File_DropOptions.png)
 * Add: `Copy Modified Image to Clipboard` in Copy/Paste Image Dialog to replace clipboard image
   contents with modified image, can use it to replace image on clipboard then Cancel dialog to
   not modify the Markdown document but still have the modified image on the clipboard.
