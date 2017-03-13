@@ -115,6 +115,8 @@ Release Road Map
 
 Bug and compatibility fixes you can find in [Version Notes].
 
+* File Drop/Paste operation options based on caret location
+  ![File_DropOptions](/assets/images/faq/File_DropOptions.png)
 * `Copy Modified Image to Clipboard` in Copy/Paste Image Dialog to replace clipboard image
   contents with modified image, can use it to replace image on clipboard then Cancel dialog to
   not modify the Markdown document but still have the modified image on the clipboard.

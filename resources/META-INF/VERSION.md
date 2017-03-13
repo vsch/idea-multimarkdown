@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.4.18 - Bug Fix & Enhancement Release](#23418---bug-fix--enhancement-release)
+- [2.3.4.20 - Bug Fix & Enhancement Release](#23420---bug-fix--enhancement-release)
 - [2.3.4 - Bug Fix & Enhancement Release](#234---bug-fix--enhancement-release)
 - [2.3.3 - Bug Fix & Enhancement Release](#233---bug-fix--enhancement-release)
 - [2.3.2 - Compatibility & Bug Fix Release](#232---compatibility--bug-fix-release)
@@ -47,13 +47,15 @@
 
 &nbsp;</details>
 
-### 2.3.4.18 - Bug Fix & Enhancement Release
+### 2.3.4.20 - Bug Fix & Enhancement Release
 
+* Add: operation options for non-image drop/paste file based on caret location
+  ![File_DropOptions](/assets/images/faq/File_DropOptions.png)
 * Add: `Copy Modified Image to Clipboard` in Copy/Paste Image Dialog to replace clipboard image
   contents with modified image, can use it to replace image on clipboard then Cancel dialog to
   not modify the Markdown document but still have the modified image on the clipboard.
 * Add: Copy/Modify Image intention that will open the Image Copy/Paste Dialog for the image
-  content of the image link element at caret position. Works with local files and URLs. Get the
+  content of a link element at caret position. Works with local files and URLs. Get the
   option to change directory, file name and modify the image.
 * Fix: `http://` and `https://` addresses to project files would be ignored due to a typo in the
   code.
