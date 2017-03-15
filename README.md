@@ -28,7 +28,7 @@
 
 ## Overview
 
-![Screenshot](assets/images/capabilities2.png)
+![Screenshot](/assets/images/capabilities2.png)
 
 **[<span style="color:#30A0D8;">Markdown</span>][Markdown] language support for IntelliJ
 platform**

@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.4.22 - Bug Fix & Enhancement Release](#23422---bug-fix--enhancement-release)
+- [2.3.4.24 - Bug Fix & Enhancement Release](#23424---bug-fix--enhancement-release)
 - [2.3.4 - Bug Fix & Enhancement Release](#234---bug-fix--enhancement-release)
 - [2.3.3 - Bug Fix & Enhancement Release](#233---bug-fix--enhancement-release)
 - [2.3.2 - Compatibility & Bug Fix Release](#232---compatibility--bug-fix-release)
@@ -47,8 +47,10 @@
 
 &nbsp;</details>
 
-### 2.3.4.22 - Bug Fix & Enhancement Release
+### 2.3.4.24 - Bug Fix & Enhancement Release
 
+* Add: plugin exception reporting to `vladsch.com` without effort.
+* Fix: wiki to main repo links would not resolve. Erroneously treated two vcs repos as separate.
 * Fix: clipboard mime text/html now has higher priority than file list and image on the
   clipboard.
 * Add: operation options for non-image drop/paste file based on caret location
