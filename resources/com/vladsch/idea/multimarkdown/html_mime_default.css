@@ -1,4 +1,5 @@
-blockquote                   { margin:0;padding:0 0 0 10;border-left:2pt solid #bbb;color:#666; }
+aside                        { margin:0;padding:0 0 0 10pt;border-left:2pt solid #C80010; }
+blockquote                   { margin:0;padding:0 0 0 10pt;border-left:2pt solid #bbb;color:#666; }
 blockquote h1                { margin:1.3em 0 1em;padding:0;font-weight:bold;font-size:1.6em;border-bottom:1pt solid #ddd;color:#666; }
 blockquote h2                { margin:1.3em 0 1em;padding:0;font-weight:bold;font-size:1.5em;border-bottom:1px solid #eee;color:#666; }
 blockquote h3                { margin:1.0em 0 1em;padding:0;font-weight:bold;font-size:1.4em;color:#666; }
@@ -13,7 +14,7 @@ blockquote th                { text-align:left;font-size:1em;border:1px solid #d
 blockquote tr                { color:#666; }
 blockquote tr.even           { border-right:0 none;border-width:1px 0 0;border-style:solid none none;border-color:#ccc;margin:0;padding:0;background-color:#f8f8f8;color:#666; }
 blockquote tr.odd            { border-right:0 none;border-width:1px 0 0;border-style:solid none none;border-color:#ccc;background-color:white;margin:0;padding:0;color:#666; }
-code                         { background-color:#ffe8f8;border-radius:2px;padding:1px 2px 0 2px;border:1px solid #eec5e1;font-family:Consolas,Inconsolata,Courier,monospace;font-size:0.9em;color:#b00042; }
+code                         { background-color:#f8f8f8;border-radius:2px;padding:1px 2px 0 2px;border:1px solid #e0e0e0;font-family:Consolas,Inconsolata,Courier,monospace;font-size:0.9em;color:#444; }
 h1                           { margin:1.3em 0 1em;padding:0;font-weight:bold;font-size:1.6em;border-bottom:1pt solid #ddd; }
 h2                           { margin:1.3em 0 1em;padding:0;font-weight:bold;font-size:1.5em;border-bottom:1px solid #eee; }
 h3                           { margin:1.0em 0 1em;padding:0;font-weight:bold;font-size:1.4em; }

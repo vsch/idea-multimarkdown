@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.4.26 - Bug Fix & Enhancement Release](#23426---bug-fix--enhancement-release)
+- [2.3.4.28 - Bug Fix & Enhancement Release](#23428---bug-fix--enhancement-release)
 - [2.3.4 - Bug Fix & Enhancement Release](#234---bug-fix--enhancement-release)
 - [2.3.3 - Bug Fix & Enhancement Release](#233---bug-fix--enhancement-release)
 - [2.3.2 - Compatibility & Bug Fix Release](#232---compatibility--bug-fix-release)
@@ -47,8 +47,13 @@
 
 &nbsp;</details>
 
-### 2.3.4.26 - Bug Fix & Enhancement Release
+### 2.3.4.28 - Bug Fix & Enhancement Release
 
+* Fix: #415, Setting default right margin in code style markdown settings disables wrapping
+* Fix: #414, Exception when starting IDEA
+* Fix: do not hide wrap on typing and table auto format buttons even when these are disabled.
+* Fix: drag/drop image files should only show copy dialog if no drop action information or it is
+  a drop copy action
 * Add: plugin exception reporting to `vladsch.com` without effort.
 * Fix: wiki to main repo links would not resolve. Erroneously treated two vcs repos as separate.
 * Fix: clipboard mime text/html now has higher priority than file list and image on the
