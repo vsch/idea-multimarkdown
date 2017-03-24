@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.4.28 - Bug Fix & Enhancement Release](#23428---bug-fix--enhancement-release)
+- [2.3.4.30 - Bug Fix & Enhancement Release](#23430---bug-fix--enhancement-release)
 - [2.3.4 - Bug Fix & Enhancement Release](#234---bug-fix--enhancement-release)
 - [2.3.3 - Bug Fix & Enhancement Release](#233---bug-fix--enhancement-release)
 - [2.3.2 - Compatibility & Bug Fix Release](#232---compatibility--bug-fix-release)
@@ -43,12 +43,17 @@
 * [ ] Add: source synchronization for Swing preview window
 * [ ] Add: source synchronization for HTML plain text previews
 * [ ] Add: detection for **GitHub** issue completions when no task servers are defined.
-* Add: transpose table, best to add `copy to clipboard transposed table`
+* [ ] Add: transpose table, best to add `copy to clipboard transposed table`
 
 &nbsp;</details>
 
-### 2.3.4.28 - Bug Fix & Enhancement Release
+### 2.3.4.30 - Bug Fix & Enhancement Release
 
+* Fix: bread crumbs broken in 2017.1
+* Fix: licensed features highlight now full balloon notification.
+* Fix: detection when containing file and target file of a link are not under the same VCS root
+  when the containing file is in a sub-directory of target VCS root but has its own root.
+* Fix: #416, NPE version 2.3.4 (w/license)
 * Fix: #415, Setting default right margin in code style markdown settings disables wrapping
 * Fix: #414, Exception when starting IDEA
 * Fix: do not hide wrap on typing and table auto format buttons even when these are disabled.
@@ -126,7 +131,7 @@
   * Absolute (`http://`)
   * Absolute (`file://`)
 
-  ![ScreenShot_PasteImages_sm](../../assets/images/ScreenShot_PasteImages_sm.png)
+  ![ScreenShot_PasteImages_sm](/assets/images/ScreenShot_PasteImages_sm.png)
 * Add: Link Format option to drag & drop non-image files if copy dragging (Ctrl on
   Linux/Windows, ⌥ on OS X) dialog is presented before the first file link is created and the
   same format is used for the rest of the files.

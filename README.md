@@ -6,7 +6,6 @@
 ### Table of Contents
 - [Overview](#overview)
     - [Document with pleasure!](#document-with-pleasure)
-    - [Features](#features)
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
     - [Next Release: Version 2.3.5](#next-release-version-235)
@@ -43,10 +42,19 @@ features.**
 Work with [Markdown] files like you do with other languages in the IDE, by getting full support
 for:
 
-* **Paste images** from clipboard into **Markdown documents** for fast screen capture based
-  documentation
-* **Drag & Drop files and images** into **Markdown documents** for fast link insertion
-* **Completions** to reduce typing
+* **Paste images** into documents for fast screen capture links
+* **Drag & Drop files and images** for fast link insertion
+* **Formatting** to cleanup documents with a key stroke
+* **Navigation and Find Usages** to find references without effort
+* **Copy Markdown** as **JIRA**, **YouTrack** or **HTML** formatted text
+* Convert **HTML to Markdown by pasting** it into a Markdown document.
+* **Export** to **HTML** or **PDF** to share with others
+* **Refactoring** of all referencing elements:
+  * files ⟺ links
+  * headings ⟺ ref anchors
+  * footnotes ⟺ footnote refs
+  * references ⟺ ref links/ref images
+* **Completions** to reduce typing:
   * link address ⇐ files
   * ref anchors ⇐ headings
   * footnote refs ⇐ footnotes
@@ -55,46 +63,9 @@ for:
 * **Error and Warning** annotations to help catch mistakes early
 * **Intention actions** for fast results with less effort
 * **Wrap on Typing** to keep it nicely formatted as you edit
-* **Formatting** to cleanup documents with a key stroke
-* **Navigation and Find Usages** to find references without effort
-* **Refactoring** of all referencing elements: to keep it all in sync while evolving
-  * files ⟺ links
-  * headings ⟺ ref anchors
-  * footnotes ⟺ footnote refs
-  * references ⟺ ref links/ref images
 * **GitHub style rendering** that you are used to, out of the box
 * **Fast typing response** for distraction free editing
-* **Copy Markdown** as **JIRA**, **YouTrack** or **HTML** formatted text
-* Convert **HTML to Markdown by pasting** it into a Markdown document.
-* **Export** to **HTML** or **PDF** to share with others
-* Fully customizable to adjust to your project's needs and your preferences
-
-### Features
-
-* **<span style="color:#b200c2">Split Editor</span>**
-* **Drag & Drop files and images** into documents to **create links**
-* **Paste Image** into Markdown documents with basic image transformations:
-  * crop image
-  * round corners
-  * add border
-  * transparent color
-* **Fast** typing response in large files
-* **HTML text** preview and export
-* Soft Wrap **on right margin**
-* **Format** with code style:
-  * **Multi-byte** support with mixed character width
-  * **Table** justification
-  * **Wrap on typing** auto format of element
-  * **Renumbering** of list items
-* **Bidirectional** Source and Preview synchronization
-  * **Scrolls** preview to show source element at caret
-  * **Moves caret** to source line of element clicked in preview
-  * **Displays** source search highlights and selections in preview
-* **Completions, refactoring, validation, language injections, code folding**
-* **Fully configurable** by project with support for scopes
-* Understands **GitHub wiki** nuances
-* **Convert** between **HTML** and **Markdown**
-* **Export to PDF**
+* **Fully customizable** to adjust to your preferences and project needs
 
 ### Two tier model
 
