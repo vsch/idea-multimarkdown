@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.4.30 - Bug Fix & Enhancement Release](#23430---bug-fix--enhancement-release)
+- [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 - [2.3.4 - Bug Fix & Enhancement Release](#234---bug-fix--enhancement-release)
 - [2.3.3 - Bug Fix & Enhancement Release](#233---bug-fix--enhancement-release)
 - [2.3.2 - Compatibility & Bug Fix Release](#232---compatibility--bug-fix-release)
@@ -47,9 +47,11 @@
 
 &nbsp;</details>
 
-### 2.3.4.30 - Bug Fix & Enhancement Release
+### 2.3.5 - Bug Fix & Enhancement Release
 
-* Fix: bread crumbs broken in 2017.1
+* Fix: #420, java.lang.IllegalStateException: node.treeNext must not be null
+* Fix: do not un-escape HTML entities in HTML, let the browser handle that.
+* Fix: #419, Bread crumbs broken when running in 2017.1
 * Fix: licensed features highlight now full balloon notification.
 * Fix: detection when containing file and target file of a link are not under the same VCS root
   when the containing file is in a sub-directory of target VCS root but has its own root.

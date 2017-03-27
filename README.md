@@ -8,7 +8,7 @@
     - [Document with pleasure!](#document-with-pleasure)
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
-    - [Next Release: Version 2.3.5](#next-release-version-235)
+    - [Version 2.3.5](#version-235)
     - [Version 2.3.4](#version-234)
     - [Version 2.3.3](#version-233)
     - [Version 2.3.2](#version-232)
@@ -82,7 +82,7 @@ for:
 Release Road Map
 ----------------
 
-### Next Release: Version 2.3.5
+### Version 2.3.5
 
 Bug and compatibility fixes you can find in [Version Notes].
 
