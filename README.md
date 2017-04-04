@@ -8,6 +8,7 @@
     - [Document with pleasure!](#document-with-pleasure)
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
+    - [Next Release Version 2.3.6](#next-release-version-236)
     - [Version 2.3.5](#version-235)
     - [Version 2.3.4](#version-234)
     - [Version 2.3.3](#version-233)
@@ -82,11 +83,16 @@ for:
 Release Road Map
 ----------------
 
-### Version 2.3.5
+### Next Release Version 2.3.6
 
 Bug and compatibility fixes you can find in [Version Notes].
 
-* File Drop/Paste operation options based on caret location
+* Add Heading anchor ID display in editor
+
+### Version 2.3.5
+
+* File Drop/Paste operation options based on caret location.
+
   ![File_DropOptions](/assets/images/faq/File_DropOptions.png)
 * `Copy Modified Image to Clipboard` in Copy/Paste Image Dialog to replace clipboard image
   contents with modified image, can use it to replace image on clipboard then Cancel dialog to

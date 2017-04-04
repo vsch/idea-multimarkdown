@@ -3,6 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
+- [2.3.5.2 - Bug Fix & Enhancement Release](#2352---bug-fix--enhancement-release)
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 - [2.3.4 - Bug Fix & Enhancement Release](#234---bug-fix--enhancement-release)
 - [2.3.3 - Bug Fix & Enhancement Release](#233---bug-fix--enhancement-release)
@@ -13,7 +14,6 @@
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
-
 
 &nbsp;<details id="todo"><summary>**To Do List**</summary>
 
@@ -47,9 +47,17 @@
 
 &nbsp;</details>
 
+### 2.3.5.2 - Bug Fix & Enhancement Release
+
+* Add: #425, Add Heading anchor ID display in editor
+* Fix: #424, NoClassDefFoundError in WS 2017.1
+* Fix: #421, NoSuchFieldError on startup after upgrading plugin on IDEs version 2016.1
+* Fix: image link from non-wiki page to image in wiki would show as unresolved by annotator when
+  it was resolved by line marker and preview.
+
 ### 2.3.5 - Bug Fix & Enhancement Release
 
-* Fix: #420, java.lang.IllegalStateException: node.treeNext must not be null
+* Fix: #420, java.lang.IllegalStateException: node.treeNext must not be null.
 * Fix: do not un-escape HTML entities in HTML, let the browser handle that.
 * Fix: #419, Bread crumbs broken when running in 2017.1
 * Fix: licensed features highlight now full balloon notification.
