@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.5.2 - Bug Fix & Enhancement Release](#2352---bug-fix--enhancement-release)
+- [2.3.5.4 - Bug Fix & Enhancement Release](#2354---bug-fix--enhancement-release)
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 - [2.3.4 - Bug Fix & Enhancement Release](#234---bug-fix--enhancement-release)
 - [2.3.3 - Bug Fix & Enhancement Release](#233---bug-fix--enhancement-release)
@@ -47,8 +47,13 @@
 
 &nbsp;</details>
 
-### 2.3.5.2 - Bug Fix & Enhancement Release
+### 2.3.5.4 - Bug Fix & Enhancement Release
 
+* Add: Global page zoom for JavaFX preview in application settings so that project preview zoom
+  does not need to be changed when project is opened on a machine with different HIDPI. Now can
+  leave project zoom to 1.00 and change global zoom to desired value.
+* Fix: #426, Cannot add images from clipboard or drag and drop under Windows
+* Fix: Setext heading to not show heading id on marker line
 * Add: #425, Add Heading anchor ID display in editor
 * Fix: #424, NoClassDefFoundError in WS 2017.1
 * Fix: #421, NoSuchFieldError on startup after upgrading plugin on IDEs version 2016.1
