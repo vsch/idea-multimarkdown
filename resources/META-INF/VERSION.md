@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.5.6 - Bug Fix & Enhancement Release](#2356---bug-fix--enhancement-release)
+- [2.3.5.8 - Bug Fix & Enhancement Release](#2358---bug-fix--enhancement-release)
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 - [2.3.4 - Bug Fix & Enhancement Release](#234---bug-fix--enhancement-release)
 - [2.3.3 - Bug Fix & Enhancement Release](#233---bug-fix--enhancement-release)
@@ -47,8 +47,12 @@
 
 &nbsp;</details>
 
-### 2.3.5.6 - Bug Fix & Enhancement Release
+### 2.3.5.8 - Bug Fix & Enhancement Release
 
+* Fix: drag/drop without copy modifier of image files uses last non-image link format instead of
+  last used image link format.
+* Fix: diagnostic id:208, invalid virtual file in line painter
+* Add: option to break definition list on two or more blank lines
 * Fix: #428, Lack of encoding declaration when exporting in html
 * Add: Global page zoom for JavaFX preview in application settings so that project preview zoom
   does not need to be changed when project is opened on a machine with different HIDPI. Now can
