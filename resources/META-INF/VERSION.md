@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.5.8 - Bug Fix & Enhancement Release](#2358---bug-fix--enhancement-release)
+- [2.3.5.10 - Bug Fix & Enhancement Release](#23510---bug-fix--enhancement-release)
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 - [2.3.4 - Bug Fix & Enhancement Release](#234---bug-fix--enhancement-release)
 - [2.3.3 - Bug Fix & Enhancement Release](#233---bug-fix--enhancement-release)
@@ -47,8 +47,13 @@
 
 &nbsp;</details>
 
-### 2.3.5.8 - Bug Fix & Enhancement Release
+### 2.3.5.10 - Bug Fix & Enhancement Release
 
+* Fix: #411, Network drives links are not resolved correctly, for `file://` which is outside the
+  project and any module directory structure.
+* Fix: NPE in settings under rare conditions
+* Fix: assertion failure in settings under rare timing conditions
+* Fix: paste NPE when pasting into link with empty address
 * Fix: drag/drop without copy modifier of image files uses last non-image link format instead of
   last used image link format.
 * Fix: diagnostic id:208, invalid virtual file in line painter
