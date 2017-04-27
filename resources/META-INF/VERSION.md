@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.5.12 - Bug Fix & Enhancement Release](#23512---bug-fix--enhancement-release)
+- [2.3.5.14 - Bug Fix & Enhancement Release](#23514---bug-fix--enhancement-release)
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 - [2.3.4 - Bug Fix & Enhancement Release](#234---bug-fix--enhancement-release)
 - [2.3.3 - Bug Fix & Enhancement Release](#233---bug-fix--enhancement-release)
@@ -47,8 +47,9 @@
 
 &nbsp;</details>
 
-### 2.3.5.12 - Bug Fix & Enhancement Release
+### 2.3.5.14 - Bug Fix & Enhancement Release
 
+* Fix: #432, Add a way to disable the startup notification 
 * Fix: #436, Header link results in bad Table of Contents entry formatting
 * Fix: #411, Network drives links are not resolved correctly, for `file://` which is outside the
   project and any module directory structure.
