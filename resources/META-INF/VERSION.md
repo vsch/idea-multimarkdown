@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.5.14 - Bug Fix & Enhancement Release](#23514---bug-fix--enhancement-release)
+- [2.3.5.16 - Bug Fix & Enhancement Release](#23516---bug-fix--enhancement-release)
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 - [2.3.4 - Bug Fix & Enhancement Release](#234---bug-fix--enhancement-release)
 - [2.3.3 - Bug Fix & Enhancement Release](#233---bug-fix--enhancement-release)
@@ -47,8 +47,10 @@
 
 &nbsp;</details>
 
-### 2.3.5.14 - Bug Fix & Enhancement Release
+### 2.3.5.16 - Bug Fix & Enhancement Release
 
+* Fix: #438, Markdown Syntax Change looses TOC element in source
+* Add: annotation to detect when list syntax is set to GitHub
 * Fix: #432, Add a way to disable the startup notification 
 * Fix: #436, Header link results in bad Table of Contents entry formatting
 * Fix: #411, Network drives links are not resolved correctly, for `file://` which is outside the
