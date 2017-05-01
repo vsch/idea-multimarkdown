@@ -8,7 +8,7 @@
     - [Document with pleasure!](#document-with-pleasure)
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
-    - [Next Release Version 2.3.6](#next-release-version-236)
+    - [Version 2.3.6](#version-236)
     - [Version 2.3.5](#version-235)
     - [Version 2.3.4](#version-234)
     - [Version 2.3.3](#version-233)
@@ -83,11 +83,16 @@ for:
 Release Road Map
 ----------------
 
-### Next Release Version 2.3.6
+### Version 2.3.6
 
 Bug and compatibility fixes you can find in [Version Notes].
 
+:warning: GitHub has changed its Markdown document parsing to CommonMark which mostly affects
+the parsing and results of lists. You may need to change list syntax in parser options to
+`CommonMark` from `GitHub`
+
 * Add Heading anchor ID display in editor
+* Add annotation to detect when list syntax is set to GitHub
 
 ### Version 2.3.5
 
