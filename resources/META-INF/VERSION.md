@@ -3,6 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
+- [2.3.7 - Bug Fix Release](#237---bug-fix-release)
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 - [2.3.4 - Bug Fix & Enhancement Release](#234---bug-fix--enhancement-release)
@@ -46,6 +47,12 @@
 * [ ] Add: transpose table, best to add `copy to clipboard transposed table`
 
 &nbsp;</details>
+
+
+### 2.3.7 - Bug Fix Release
+
+* Fix: parser erroneously processing escape `\` is encountered in fenced code and causing a
+  parsing exception.
 
 ### 2.3.6 - Bug Fix & Enhancement Release
 
