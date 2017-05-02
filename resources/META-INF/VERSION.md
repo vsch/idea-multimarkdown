@@ -3,6 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
+- [2.3.7.2 - Bug Fix Release](#2372---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
@@ -15,6 +16,7 @@
 - [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
 - [2.1.0 - Bug Fix Release](#210---bug-fix-release)
 - [2.0.0 - New Parser Release](#200---new-parser-release)
+
 
 &nbsp;<details id="todo"><summary>**To Do List**</summary>
 
@@ -48,6 +50,15 @@
 
 &nbsp;</details>
 
+### 2.3.7.2 - Bug Fix Release
+
+* Fix: #440, Autolinks should not appear in fenced code
+
+* Add: #411, Network drives links are not resolved correctly, URI links outside of project now
+  error highlighted if the file does not exist
+
+* Add: #433, Support external links for the Link Map (eg. JIRA link), Reference to Link Map to
+  allow creating automatic reference URLs from Reference IDs
 
 ### 2.3.7 - Bug Fix Release
 
@@ -106,8 +117,8 @@
   contents with modified image, can use it to replace image on clipboard then Cancel dialog to
   not modify the Markdown document but still have the modified image on the clipboard.
 * Add: Copy/Modify Image intention that will open the Image Copy/Paste Dialog for the image
-  content of a link element at caret position. Works with local files and URLs. Get the
-  option to change directory, file name and modify the image.
+  content of a link element at caret position. Works with local files and URLs. Get the option
+  to change directory, file name and modify the image.
 * Fix: `http://` and `https://` addresses to project files would be ignored due to a typo in the
   code.
 * Fix: update to flexmark-java 18.2, HTML to Markdown hang fix and MS-Word and MS-Excel HTML

@@ -8,6 +8,7 @@
     - [Document with pleasure!](#document-with-pleasure)
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
+    - [Version 2.3.7](#version-237)
     - [Version 2.3.6](#version-236)
     - [Version 2.3.5](#version-235)
     - [Version 2.3.4](#version-234)
@@ -83,9 +84,14 @@ for:
 Release Road Map
 ----------------
 
-### Version 2.3.6
+### Version 2.3.7
 
 Bug and compatibility fixes you can find in [Version Notes].
+
+* Fix erroneous escape sequence processing in fenced code block content causing parser exception
+  in some circumstances.
+
+### Version 2.3.6
 
 :warning: GitHub has changed its Markdown document parsing to CommonMark which mostly affects
 the parsing and results of lists. You may need to change list syntax in parser options to
