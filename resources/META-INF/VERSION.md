@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.7.4 - Bug Fix Release](#2374---bug-fix-release)
+- [2.3.7.6 - Bug Fix Release](#2376---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
@@ -50,15 +50,15 @@
 
 &nbsp;</details>
 
-### 2.3.7.4 - Bug Fix Release
 
+### 2.3.7.6 - Bug Fix Release
+
+* Add: Insert table column on right actions and changed description of previous action to insert
+  table column on left.
 * Fix: exception when exporting PDF or Copy HTML Mime
-
 * Fix: #440, Autolinks should not appear in fenced code
-
 * Add: #411, Network drives links are not resolved correctly, URI links outside of project now
   error highlighted if the file does not exist
-
 * Add: #433, Support external links for the Link Map (eg. JIRA link), Reference to Link Map to
   allow creating automatic reference URLs from Reference IDs
 
