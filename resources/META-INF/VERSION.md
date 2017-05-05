@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.7.6 - Bug Fix Release](#2376---bug-fix-release)
+- [2.3.7.8 - Bug Fix Release](#2378---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
@@ -51,8 +51,9 @@
 &nbsp;</details>
 
 
-### 2.3.7.6 - Bug Fix Release
+### 2.3.7.8 - Bug Fix Release
 
+* Fix: #442, Image Paste in Windows always pastes absolute file:// regardless of selection
 * Add: Insert table column on right actions and changed description of previous action to insert
   table column on left.
 * Fix: exception when exporting PDF or Copy HTML Mime
