@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.7.14 - Bug Fix Release](#23714---bug-fix-release)
+- [2.3.7.16 - Bug Fix Release](#23716---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
@@ -51,8 +51,13 @@
 &nbsp;</details>
 
 
-### 2.3.7.14 - Bug Fix Release
+### 2.3.7.16 - Bug Fix Release
 
+* Fix: completions broken on Windows
+* Fix: document format erroneously creates column spans for some tables.
+* Fix: diagnostics/531, line painter provider passed line number > document line count.
+* Fix: diagnostics/498, highlight in preview causing exception
+* Fix: diagnostics/497, flexmark-java lib erroneous assert failure
 * Fix: #447, Exported HTML has unexpected CSS and JS URLs
 * Fix: #445, there should no be default language injection in bare code chunks
 * Add: handling of optional quotes for jekyll include tags. Either single `'` or double `"`
