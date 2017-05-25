@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.7.16 - Bug Fix Release](#23716---bug-fix-release)
+- [2.3.7.18 - Bug Fix Release](#23718---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
@@ -51,8 +51,12 @@
 &nbsp;</details>
 
 
-### 2.3.7.16 - Bug Fix Release
+### 2.3.7.18 - Bug Fix Release
 
+* Add: Gitbook compatible include tags when `GitBook compatibility mode` is enabled in `Parser`
+  options.
+* Fix: Nested stub index exception in reference search
+* Fix: breadcrumb tooltip of task items would be missing the task item marker
 * Fix: completions broken on Windows
 * Fix: document format erroneously creates column spans for some tables.
 * Fix: diagnostics/531, line painter provider passed line number > document line count.
