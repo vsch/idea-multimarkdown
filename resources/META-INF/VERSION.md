@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.7.20 - Bug Fix Release](#23720---bug-fix-release)
+- [2.3.7.22 - Bug Fix Release](#23722---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
@@ -51,13 +51,16 @@
 &nbsp;</details>
 
 
-### 2.3.7.20 - Bug Fix Release
+### 2.3.7.22 - Bug Fix Release
 
+* Add: #74, Launching external URLs inside the browser, now `navigate to declaration` opens url
+  in browser, ftp or mail client depending on the link. Can also use line markers for navigation
+  of these elements.
 * Fix: parsing of lists in fixed 4 spaces mode would not allow last item to be loose
 * Fix: reference to non-image but not used as image target warning not raw.
 * Fix: exception when navigating next/previous table cells in editor without an associated
   virtual file.
-* Fix: #461, TOC with HTML generated content causes exception if skipping heading levels 
+* Fix: #461, TOC with HTML generated content causes exception if skipping heading levels
 * Fix: #460, TOC options do not change default Heading level
 * Fix: #459, PDF export does not resolve local ref anchors
 * Fix: #456, Register r markdown code chunk prefix
