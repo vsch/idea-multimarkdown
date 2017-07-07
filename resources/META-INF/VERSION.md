@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.7.18 - Bug Fix Release](#23718---bug-fix-release)
+- [2.3.7.20 - Bug Fix Release](#23720---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
@@ -51,9 +51,21 @@
 &nbsp;</details>
 
 
-### 2.3.7.18 - Bug Fix Release
+### 2.3.7.20 - Bug Fix Release
 
-* Add: Gitbook compatible include tags when `GitBook compatibility mode` is enabled in `Parser`
+* Fix: parsing of lists in fixed 4 spaces mode would not allow last item to be loose
+* Fix: reference to non-image but not used as image target warning not raw.
+* Fix: exception when navigating next/previous table cells in editor without an associated
+  virtual file.
+* Fix: #461, TOC with HTML generated content causes exception if skipping heading levels 
+* Fix: #460, TOC options do not change default Heading level
+* Fix: #459, PDF export does not resolve local ref anchors
+* Fix: #456, Register r markdown code chunk prefix
+* Fix: #453, Option to hide toolbar
+* Fix: #454, Incorrect filename inspection error, weak warning now only for wiki link targets
+  that contain spaces in resolved link.
+* Fix: flexmark-java issue 109, image ref loosing title tag.
+* Add: GitBook compatible include tags when `GitBook compatibility mode` is enabled in `Parser`
   options.
 * Fix: Nested stub index exception in reference search
 * Fix: breadcrumb tooltip of task items would be missing the task item marker
