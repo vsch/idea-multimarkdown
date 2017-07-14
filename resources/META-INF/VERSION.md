@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.7.26 - Bug Fix Release](#23726---bug-fix-release)
+- [2.3.7.28 - Bug Fix Release](#23728---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
@@ -50,9 +50,15 @@
 
 &nbsp;</details>
 
+### 2.3.7.28 - Bug Fix Release
 
-### 2.3.7.26 - Bug Fix Release
-
+* Add: Apply all '...' in file intentions where these make sense.
+* Add: intention to convert between typographic symbols and markdown smarts/quotes extension
+  text.
+* Add: `HTML block deep parsing` parser option to allow better handling of raw text tag parsing
+  when they are not the first tag on the first line of the block.
+* Add: split inline code class `line-spliced` for code elements split across multiple lines not
+  to appear as two inline code elements in preview.
 * Fix: HTML generation with line source line highlighting when inline styling spans source lines
 * Add: #74, Launching external URLs inside the browser, now `navigate to declaration` opens url
   in browser, ftp or mail client depending on the link. Can also use line markers for navigation

@@ -8,6 +8,7 @@
     - [Document with pleasure!](#document-with-pleasure)
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
+    - [Next Release: Version 2.3.8](#next-release-version-238)
     - [Version 2.3.7](#version-237)
     - [Version 2.3.6](#version-236)
     - [Version 2.3.5](#version-235)
@@ -84,9 +85,42 @@ for:
 Release Road Map
 ----------------
 
-### Version 2.3.7
+### Next Release: Version 2.3.8
 
 Bug and compatibility fixes you can find in [Version Notes].
+
+* Add Apply all '...' in file intentions where these make sense.
+* Add intention to convert between typographic symbols and markdown smarts/quotes extension
+  text.
+* Add `HTML block deep parsing` parser option to allow better handling of raw text tag parsing
+  when they are not the first tag on the first line of the block.
+* Add Launching external URLs inside the browser, now `navigate to declaration` opens url
+  in browser, ftp or mail client depending on the link. Can also use line markers for navigation
+  of these elements.
+* Add GitBook compatible include tags when `GitBook compatibility mode` is enabled in `Parser`
+  options.
+* Add handling of optional quotes for jekyll include tags. Either single `'` or double `"`
+  quotes will be ignored if the file name is wrapped in them.
+* Add Insert table column on right actions and changed description of previous action to insert
+  table column on left.
+* Add #411, Network drives links are not resolved correctly, URI links outside of project now
+  error highlighted if the file does not exist
+* Add #433, Support external links for the Link Map (eg. JIRA link), Reference to Link Map to
+  allow creating automatic reference URLs from Reference IDs
+* Fix HTML generation with line source line highlighting when inline styling spans source lines
+* Fix #459, PDF export does not resolve local ref anchors
+* Fix #456, Register r markdown code chunk prefix
+* Fix #453, Option to hide toolbar
+* Fix breadcrumb tooltip of task items would be missing the task item marker
+* Fix #447, Exported HTML has unexpected CSS and JS URLs
+* Fix #445, there should no be default language injection in bare code chunks
+* Fix #444, Markdown Navigator 2.3.7 breaks paste of github checkout url
+* Fix #441, false positive typo annotation in header, caused by using IdentifierSplitter
+  instead of TextSplitter to handle elements that can have references.
+* Fix #442, Image Paste in Windows always pastes absolute file:// regardless of selection
+* Fix #440, Auto links should not appear in fenced code
+
+### Version 2.3.7
 
 * Fix erroneous escape sequence processing in fenced code block content causing parser exception
   in some circumstances.
