@@ -89,6 +89,8 @@ Release Road Map
 
 Bug and compatibility fixes you can find in [Version Notes].
 
+* Add clicking on task item box in preview toggles open/closed task status in source (JavaFX
+  browser).
 * Add Apply all '...' in file intentions where these make sense.
 * Add intention to convert between typographic symbols and markdown smarts/quotes extension
   text.
