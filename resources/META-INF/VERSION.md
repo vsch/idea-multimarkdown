@@ -3,6 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
+- [2.3.8.2 - Bug Fix Release](#2382---bug-fix-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
@@ -49,6 +50,13 @@
 * [ ] Add: transpose table, best to add `copy to clipboard transposed table`
 
 &nbsp;</details>
+
+### 2.3.8.2 - Bug Fix Release
+
+* Add: paste of file reference with or without line number converted to paste of link with
+  GitHub line ref anchor added if line number is part of the reference. This will insert/replace
+  link.
+* Fix: non-vcs projects links without a path would show unresolved even when files exist.
 
 ### 2.3.8 - Bug Fix Release
 
