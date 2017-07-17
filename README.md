@@ -8,7 +8,7 @@
     - [Document with pleasure!](#document-with-pleasure)
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
-    - [Next Release: Version 2.3.8](#next-release-version-238)
+    - [Version 2.3.8](#version-238)
     - [Version 2.3.7](#version-237)
     - [Version 2.3.6](#version-236)
     - [Version 2.3.5](#version-235)
@@ -85,10 +85,13 @@ for:
 Release Road Map
 ----------------
 
-### Next Release: Version 2.3.8
+### Version 2.3.8
 
 Bug and compatibility fixes you can find in [Version Notes].
 
+* Add GitHub Line reference anchors in the form `L#` or `L#-L#` for line ranges. Now navigating
+  to such an anchor in a project file will move the caret to the line and if second form is used
+  select the lines.
 * Add clicking on task item box in preview toggles open/closed task status in source (JavaFX
   browser).
 * Add Apply all '...' in file intentions where these make sense.
