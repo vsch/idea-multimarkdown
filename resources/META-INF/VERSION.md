@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.8.2 - Bug Fix Release](#2382---bug-fix-release)
+- [2.3.8.4 - Bug Fix Release](#2384---bug-fix-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
@@ -51,8 +51,12 @@
 
 &nbsp;</details>
 
-### 2.3.8.2 - Bug Fix Release
+### 2.3.8.4 - Bug Fix Release
 
+* Add: use QualifiedNameProviders to resolve reference to link conversion
+* Add: logic to not convert qualified string to link when caret is inside inline code, fenced
+  code or between two back-ticks.
+* Fix: HTTP links with anchor refs should not highlight anchor links as unresolved.
 * Add: paste of file reference with or without line number converted to paste of link with
   GitHub line ref anchor added if line number is part of the reference. This will insert/replace
   link.
