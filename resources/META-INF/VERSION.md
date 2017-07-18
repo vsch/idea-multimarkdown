@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.8.4 - Bug Fix Release](#2384---bug-fix-release)
+- [2.3.8.6 - Bug Fix Release](#2386---bug-fix-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
@@ -51,9 +51,13 @@
 
 &nbsp;</details>
 
-### 2.3.8.4 - Bug Fix Release
+### 2.3.8.6 - Bug Fix Release
 
-* Add: use QualifiedNameProviders to resolve reference to link conversion
+* Fix: paste reference past end of line will insert spaces to caret column before inserting link.
+* Fix: links from FQN references with spaces did not url encode the link.
+* Fix: reference to link conversion for PhpStorm to truncate the reference at the `:` since
+  PhpStorm is not able to convert FQN strings with class method names.
+* Add: use QualifiedNameProviders to resolve reference to link conversion.
 * Add: logic to not convert qualified string to link when caret is inside inline code, fenced
   code or between two back-ticks.
 * Fix: HTTP links with anchor refs should not highlight anchor links as unresolved.
