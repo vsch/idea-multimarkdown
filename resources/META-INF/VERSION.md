@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.8.8 - Bug Fix Release](#2388---bug-fix-release)
+- [2.3.8.10 - Bug Fix Release](#23810---bug-fix-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
@@ -51,15 +51,17 @@
 
 &nbsp;</details>
 
-### 2.3.8.8 - Bug Fix Release
+### 2.3.8.10 - Bug Fix Release
 
-* Fix: #468, Move (refactoring) of .md files breaks links to sections in same file
+* Fix: preview navigation to links with anchor refs and line anchor refs
+* Fix: dropping a file in a document appends `null` string to the file name in error.
+* Fix: #468, Move (refactoring) of .md files breaks links to sections in same file.
 * Fix: reference paste with line ref anchor would always paste page relative format URL
   regardless of the link paste format (set with file copy drop action).
 * Fix: diagnostics/713, tree view icon update before `FileManager` has been initialized will to
-  return markdown file type (without resolving sub-type)
-* MultiMarkdownParserDefinition.LINE_BREAK_AFTER `MultiMarkdownParserDefinition.LINE_BREAK_AFTER`
-* Add: Convert markdown to HTML intention for fenced code and indented code blocks
+  return markdown file type (without resolving sub-type).
+* MultiMarkdownParserDefinition.LINE_BREAK_AFTER `MultiMarkdownParserDefinition.LINE_BREAK_AFTER`.
+* Add: Convert markdown to HTML intention for fenced code and indented code blocks.
 * Fix: unresolved link references would be rendered in HTML instead of being treated as plain
   text. Broken by `Reference` link map code.
 * Fix: paste reference past end of line will insert spaces to caret column before inserting link.

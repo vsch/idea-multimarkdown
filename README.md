@@ -99,9 +99,9 @@ Bug and compatibility fixes you can find in [Version Notes].
   text.
 * Add `HTML block deep parsing` parser option to allow better handling of raw text tag parsing
   when they are not the first tag on the first line of the block.
-* Add Launching external URLs inside the browser, now `navigate to declaration` opens url
-  in browser, ftp or mail client depending on the link. Can also use line markers for navigation
-  of these elements.
+* Add Launching external URLs inside the browser, now `navigate to declaration` opens url in
+  browser, ftp or mail client depending on the link. Can also use line markers for navigation of
+  these elements.
 * Add GitBook compatible include tags when `GitBook compatibility mode` is enabled in `Parser`
   options.
 * Add handling of optional quotes for jekyll include tags. Either single `'` or double `"`
@@ -120,8 +120,8 @@ Bug and compatibility fixes you can find in [Version Notes].
 * Fix #447, Exported HTML has unexpected CSS and JS URLs
 * Fix #445, there should no be default language injection in bare code chunks
 * Fix #444, Markdown Navigator 2.3.7 breaks paste of github checkout url
-* Fix #441, false positive typo annotation in header, caused by using IdentifierSplitter
-  instead of TextSplitter to handle elements that can have references.
+* Fix #441, false positive typo annotation in header, caused by using IdentifierSplitter instead
+  of TextSplitter to handle elements that can have references.
 * Fix #442, Image Paste in Windows always pastes absolute file:// regardless of selection
 * Fix #440, Auto links should not appear in fenced code
 
@@ -144,14 +144,17 @@ the parsing and results of lists. You may need to change list syntax in parser o
 * File Drop/Paste operation options based on caret location.
 
   ![File_DropOptions](/assets/images/faq/File_DropOptions.png)
+
 * `Copy Modified Image to Clipboard` in Copy/Paste Image Dialog to replace clipboard image
   contents with modified image, can use it to replace image on clipboard then Cancel dialog to
   not modify the Markdown document but still have the modified image on the clipboard.
 
   ![Screen Shot Paste Image](/assets/images/faq/ScreenShot_PasteImage_sm.png)
-* Copy/Modify Image intention that will open the Image Copy/Paste Dialog for the image
-  content of the image link element at caret position. Works with local files and URLs. Get the
-  option to change directory, file name and modify the image.
+
+* Copy/Modify Image intention that will open the Image Copy/Paste Dialog for the image content
+  of the image link element at caret position. Works with local files and URLs. Get the option
+  to change directory, file name and modify the image.
+
 * Markdown application settings for:
   * `Use clipboard text/html content when available` disabled by default, enabling it will allow
     pasting text/html when available
@@ -159,14 +162,15 @@ the parsing and results of lists. You may need to change list syntax in parser o
     content without conversion to Markdown
 
   ![Settings_PasteControl](/assets/images/faq/Settings_PasteControl_sm.png)
+
 * Option highlight selection in preview, `Show source selection in preview` enabled by default.
   Wraps selection in `<span>` with `selection-highlight` class.
 
 * Option to highlight search results in preview, `Show source search highlights in preview`
   enabled by default. Wraps search highlights in `<span>` with `search-highlight` class.
 
-* Option to vertically align synchronized position in Preview Settings, selected by default
-  in Preview settings.
+* Option to vertically align synchronized position in Preview Settings, selected by default in
+  Preview settings.
 
 ### Version 2.3.4
 
