@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.8.10 - Bug Fix Release](#23810---bug-fix-release)
+- [2.3.8.12 - Bug Fix Release](#23812---bug-fix-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
@@ -51,8 +51,11 @@
 
 &nbsp;</details>
 
-### 2.3.8.10 - Bug Fix Release
+### 2.3.8.12 - Bug Fix Release
 
+* Fix: image reference links to references with base64 encoded images would show as unresolved
+* Add: intentions to convert images to base64 encoding and vice-versa
+* Fix: base64 encoded embedded images did not display in JavaFX preview
 * Fix: preview navigation to links with anchor refs and line anchor refs
 * Fix: dropping a file in a document appends `null` string to the file name in error.
 * Fix: #468, Move (refactoring) of .md files breaks links to sections in same file.
