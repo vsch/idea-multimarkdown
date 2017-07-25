@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.8.12 - Bug Fix Release](#23812---bug-fix-release)
+- [2.3.8.14 - Bug Fix Release](#23814---bug-fix-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
@@ -51,8 +51,11 @@
 
 &nbsp;</details>
 
-### 2.3.8.12 - Bug Fix Release
+### 2.3.8.14 - Bug Fix Release
 
+* Add: `Base64 Encoded` as a link format for pasted images and dropped files to the Paste Image
+  dialog.
+* Fix: base64 encode intention would keep path of url if it was present
 * Fix: image reference links to references with base64 encoded images would show as unresolved
 * Add: intentions to convert images to base64 encoding and vice-versa
 * Fix: base64 encoded embedded images did not display in JavaFX preview

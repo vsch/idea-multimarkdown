@@ -8,6 +8,7 @@
     - [Document with pleasure!](#document-with-pleasure)
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
+    - [Next Release: Version 2.4.0](#next-release-version-240)
     - [Version 2.3.8](#version-238)
     - [Version 2.3.7](#version-237)
     - [Version 2.3.6](#version-236)
@@ -84,6 +85,16 @@ for:
 
 Release Road Map
 ----------------
+
+### Next Release: Version 2.4.0
+
+Bug and compatibility fixes you can find in [Version Notes].
+
+* Navigate using links with **GitHub Line Reference** anchor refs
+* **Copy Reference** then Paste to get **link with line reference**
+* **Encode/Decode Base64 Images** Intention
+* Paste Images with **Base64 Encoded** embedded image links
+* **Convert Markdown to HTML** for fenced code elements
 
 ### Version 2.3.8
 
