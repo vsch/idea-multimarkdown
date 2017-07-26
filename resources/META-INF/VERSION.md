@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.8.16 - Bug Fix Release](#23816---bug-fix-release)
+- [2.3.8.18 - Bug Fix Release](#23818---bug-fix-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
@@ -51,8 +51,11 @@
 
 &nbsp;</details>
 
-### 2.3.8.16 - Bug Fix Release
+### 2.3.8.18 - Bug Fix Release
 
+* Add: Show "Apply all '...'" intention on any element option to allow showing file level
+  intentions to be available on any element. Otherwise only shown on elements which they affect.
+* Add: enable image intentions on multi-line URL image links
 * Add: Code Folding option in settings for embedded image links
 * Add: HTML generation options to convert image links to embedded images, with separate option
   for http:// and https:// image urls.
