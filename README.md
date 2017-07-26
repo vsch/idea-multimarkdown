@@ -94,7 +94,10 @@ Bug and compatibility fixes you can find in [Version Notes].
 * **Copy Reference** then Paste to get **link with line reference**
 * **Encode/Decode Base64 Images** Intention
 * Paste Images with **Base64 Encoded** embedded image links
-* **Convert Markdown to HTML** for fenced code elements
+* **Embed Images** HTML generation option
+* **Base64 embedded image** display in **Swing browser**
+* **Convert Markdown to HTML** intention for fenced code elements
+* **Code Folding** option in settings for **embedded image links**
 
 ### Version 2.3.8
 

@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.8.14 - Bug Fix Release](#23814---bug-fix-release)
+- [2.3.8.16 - Bug Fix Release](#23816---bug-fix-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
@@ -51,8 +51,12 @@
 
 &nbsp;</details>
 
-### 2.3.8.14 - Bug Fix Release
+### 2.3.8.16 - Bug Fix Release
 
+* Add: Code Folding option in settings for embedded image links
+* Add: HTML generation options to convert image links to embedded images, with separate option
+  for http:// and https:// image urls.
+* Add: base64 embedded image display in Swing Preview browser
 * Add: `Base64 Encoded` as a link format for pasted images and dropped files to the Paste Image
   dialog.
 * Fix: base64 encode intention would keep path of url if it was present
