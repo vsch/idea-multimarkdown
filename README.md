@@ -90,6 +90,7 @@ Release Road Map
 
 Bug and compatibility fixes you can find in [Version Notes].
 
+* [CommonMark (spec 0.28)] compliant
 * Navigate using links with **GitHub Line Reference** anchor refs
 * **Copy Reference** then Paste to get **link with line reference**
 * **Encode/Decode Base64 Images** Intention
@@ -650,3 +651,6 @@ Reserved.
 [WebStorm]: http://www.jetbrains.com/webstorm
 [Wiki]: https://github.com/vsch/idea-multimarkdown/wiki
 
+
+
+[CommonMark (spec 0.28)]: http://spec.commonmark.org/0.28/

@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.8.18 - Bug Fix Release](#23818---bug-fix-release)
+- [2.3.8.20 - Bug Fix Release's](#23820---bug-fix-releases)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
@@ -51,8 +51,15 @@
 
 &nbsp;</details>
 
-### 2.3.8.18 - Bug Fix Release
+### 2.3.8.20 - Bug Fix Release's
 
+* Fix: #481, Will not allow me to crop beyond 200px, now limits are derived from the image
+  dimensions and image operations.
+* Fix: Update to latest flexmark-java supporting CommonMark Spec 0.28.
+* Fix: TOC entries would exclude typographic characters when "text only" option was used with
+  typographic parser extension enabled.
+* Fix: HTML to Markdown not adding HTML comment between consecutive lists
+* Fix: #479, Multi-line URL images are not converted in PDF export or Copy HTML Mime
 * Add: Show "Apply all '...'" intention on any element option to allow showing file level
   intentions to be available on any element. Otherwise only shown on elements which they affect.
 * Add: enable image intentions on multi-line URL image links
@@ -73,11 +80,11 @@
   regardless of the link paste format (set with file copy drop action).
 * Fix: diagnostics/713, tree view icon update before `FileManager` has been initialized will to
   return markdown file type (without resolving sub-type).
-* MultiMarkdownParserDefinition.LINE_BREAK_AFTER `MultiMarkdownParserDefinition.LINE_BREAK_AFTER`.
 * Add: Convert markdown to HTML intention for fenced code and indented code blocks.
 * Fix: unresolved link references would be rendered in HTML instead of being treated as plain
   text. Broken by `Reference` link map code.
-* Fix: paste reference past end of line will insert spaces to caret column before inserting link.
+* Fix: paste reference past end of line will insert spaces to caret column before inserting
+  link.
 * Fix: links from FQN references with spaces did not url encode the link.
 * Fix: reference to link conversion for PhpStorm to truncate the reference at the `:` since
   PhpStorm is not able to convert FQN strings with class method names.
