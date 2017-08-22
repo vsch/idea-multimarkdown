@@ -22,3 +22,7 @@ src/main/java/com/vladsch/idea/multimarkdown/annotator/RenameToQuickFix.java
 src/main/java/com/vladsch/idea/multimarkdown/annotator/ShowSuggestions.java
 src/test/resources/GitHubIssues/Issue-46
 /.idea/workspace.xml
+/.idea/codeStyles
+/.idea/libraries/R_User_Library.xml
+/.idea/markdown-navigator
+/.idea/markdown-navigator.xml

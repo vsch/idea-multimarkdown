@@ -606,6 +606,7 @@ Markdown Navigator, Copyright (c) 2015-2017, V. Schneider, <http://vladsch.com> 
 Reserved.
 
 [CommonMark]: http://commonmark.org/
+[CommonMark (spec 0.28)]: http://spec.commonmark.org/0.28/
 [commonmark-java]: https://github.com/atlassian/commonmark-java
 [Copy Jira]: https://github.com/vsch/idea-multimarkdown/raw/master/resources/icons/editor_actions/Copy_jira.png
 [Copy Markdown to HTML formatted text]: https://github.com/vsch/idea-multimarkdown/wiki/Enhanced-Features#copy-markdown-to-html-formatted-text
@@ -651,6 +652,3 @@ Reserved.
 [WebStorm]: http://www.jetbrains.com/webstorm
 [Wiki]: https://github.com/vsch/idea-multimarkdown/wiki
 
-
-
-[CommonMark (spec 0.28)]: http://spec.commonmark.org/0.28/
