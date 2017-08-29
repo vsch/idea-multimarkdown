@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.8.22 - Bug Fix Release](#23822---bug-fix-release)
+- [2.3.8.24 - Bug Fix Release](#23824---bug-fix-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
@@ -51,8 +51,9 @@
 
 &nbsp;</details>
 
-### 2.3.8.22 - Bug Fix Release
+### 2.3.8.24 - Bug Fix Release
 
+* Fix: #484, Open links in preview, not browser
 * Fix: #486, Multi-line links do not preview correctly, when in `Line` preview element highlight
   mode.
 * Fix: #481, Will not allow me to crop beyond 200px, now limits are derived from the image
