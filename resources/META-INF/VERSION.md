@@ -3,7 +3,8 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.3.8.24 - Bug Fix Release](#23824---bug-fix-release)
+- [High Priority](#high-priority)
+- [2.3.8.26 - Bug Fix Release](#23826---bug-fix-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
@@ -38,7 +39,7 @@
 * [ ] Add: GitHub links should offer the same change relative/http: intention as the rest of the
       links.
 * [ ] Fix: Link Map
-      * [ ] implement `ExpandedItemRendererComponentWrapper` for table cells so that the
+     * [ ] implement `ExpandedItemRendererComponentWrapper` for table cells so that the
             extended tooltip does not hide an error tooltip.
 * [ ] Add: ability to move a lookup-up to the start of an element's location so that completions
       for emoji shortcuts and links located in heading elements can be properly aligned.
@@ -49,11 +50,41 @@
 * [ ] Add: detection for **GitHub** issue completions when no task servers are defined.
 * [ ] Add: transpose table, best to add `copy to clipboard transposed table`
 
+### High Priority
+
+* Format as you type
+  * [ ] Fix: splitting a list item when the caret is on a "list marker" causes double list item to
+        be added. Check if what follows the caret is a "list marker" and do not insert one.
+  * [ ] Fix: typing spaces at paragraph start does not insert space to let the paragraph be
+        indented to next level
+  * [ ] Fix: inserting block quote marker before block mark gets confused```
+
+* HTML Conversion
+
+  * [ ] apple mail text gets converted to long lines with hard breaks instead of paragraphs.
+
+* [ ] Fix: don't show emoji completions in linkref part ( http: triggers it)
+* [ ] Fix: line markers to register for leaf elements only
+* [ ] Add: nested heading outline collapsing
+* [ ] Fix: wiki links from main repo don't resolve if the file is in a sub-directory and access
+      is without extension or sub-directory. (Was probably broken when non-github rules were
+      added to resolver).
 &nbsp;</details>
 
-### 2.3.8.24 - Bug Fix Release
+### 2.3.8.26 - Bug Fix Release
 
-* Fix: #484, Open links in preview, not browser
+* Fix: swing preview on linux not showing fixed pitch font for code
+* Fix: Task list items now require indent at task item marker not item content, to match GitHub
+  parsing rules. Indenting to content column treats children as inline code and child list items
+  not separated by a blank line as lazy continuation lines.
+* Fix: formatter for new task item indentation rules.
+* Fix: remove `Replace File Content` option from non-image target ref dropdowns in paste/modify
+  image dialog, and all link options from copy/drop image dialog and link drop/paste ref options
+  dialog.
+* Fix: #489, Paste Image does not create file if parent directory does not exist.
+* Fix: #484, Open links in preview, not browser. Option added to preview settings to have page
+  relative and repo relative links resolve to GitHub files when selected. When not selected they
+  resolve to local project files.
 * Fix: #486, Multi-line links do not preview correctly, when in `Line` preview element highlight
   mode.
 * Fix: #481, Will not allow me to crop beyond 200px, now limits are derived from the image
