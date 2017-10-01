@@ -92,13 +92,14 @@ Bug and compatibility fixes you can find in [Version Notes].
 
 * [CommonMark (spec 0.28)] compliant
 * Navigate using links with **GitHub Line Reference** anchor refs
+* **Code Folding** of Headings
+* **Code Folding** option in settings for **embedded image links**
 * **Copy Reference** then Paste to get **link with line reference**
 * **Encode/Decode Base64 Images** Intention
 * Paste Images with **Base64 Encoded** embedded image links
 * **Embed Images** HTML generation option
 * **Base64 embedded image** display in **Swing browser**
 * **Convert Markdown to HTML** intention for fenced code elements
-* **Code Folding** option in settings for **embedded image links**
 
 ### Version 2.3.8
 

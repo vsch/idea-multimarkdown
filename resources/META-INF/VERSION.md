@@ -4,7 +4,6 @@
 
 ### Version History
 - [High Priority](#high-priority)
-- [2.3.8.26 - Bug Fix Release](#23826---bug-fix-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
@@ -57,28 +56,31 @@
         be added. Check if what follows the caret is a "list marker" and do not insert one.
   * [ ] Fix: typing spaces at paragraph start does not insert space to let the paragraph be
         indented to next level
-  * [ ] Fix: inserting block quote marker before block mark gets confused```
+  * [ ] Fix: inserting block quote marker before block mark gets confused
 
-* HTML Conversion
 
-  * [ ] apple mail text gets converted to long lines with hard breaks instead of paragraphs.
-
-* [ ] Fix: don't show emoji completions in linkref part ( http: triggers it)
-* [ ] Fix: line markers to register for leaf elements only
-* [ ] Add: nested heading outline collapsing
 * [ ] Fix: wiki links from main repo don't resolve if the file is in a sub-directory and access
       is without extension or sub-directory. (Was probably broken when non-github rules were
       added to resolver).
+* [ ] Fix: conversion from raw explicit link to wiki page looses the raw reference and results
+      in rendered markdown reference
+
 &nbsp;</details>
 
-### 2.3.8.26 - Bug Fix Release
+2.3.8.28 - Bug Fix Release
+--------------------------
 
+* Add: nested heading outline collapsing
+* Fix: improved HTML to markdown conversion from Apple Mail copied text.
+* Fix: don't show emoji completions in link address part ( http: triggers it)
+* Fix: abbreviation navigation and refactoring was not implemented
+* Fix: line markers generate for leaf elements only, performance improvement
 * Fix: swing preview on linux not showing fixed pitch font for code
 * Fix: Task list items now require indent at task item marker not item content, to match GitHub
   parsing rules. Indenting to content column treats children as inline code and child list items
   not separated by a blank line as lazy continuation lines.
 * Fix: formatter for new task item indentation rules.
-* Fix: remove `Replace File Content` option from non-image target ref dropdowns in paste/modify
+* Fix: remove `Replace File Content` option from non-image target ref drop downs in paste/modify
   image dialog, and all link options from copy/drop image dialog and link drop/paste ref options
   dialog.
 * Fix: #489, Paste Image does not create file if parent directory does not exist.
