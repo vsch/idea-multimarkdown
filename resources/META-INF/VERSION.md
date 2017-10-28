@@ -4,6 +4,7 @@
 
 ### Version History
 - [High Priority](#high-priority)
+- [2.3.8.30 - Bug Fix Release](#23830---bug-fix-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
@@ -38,8 +39,8 @@
 * [ ] Add: GitHub links should offer the same change relative/http: intention as the rest of the
       links.
 * [ ] Fix: Link Map
-     * [ ] implement `ExpandedItemRendererComponentWrapper` for table cells so that the
-            extended tooltip does not hide an error tooltip.
+  * [ ] implement `ExpandedItemRendererComponentWrapper` for table cells so that the extended
+        tooltip does not hide an error tooltip.
 * [ ] Add: ability to move a lookup-up to the start of an element's location so that completions
       for emoji shortcuts and links located in heading elements can be properly aligned.
 * [ ] Fix: take a look at the toolbar implementation to see if it can be made to put in a drop
@@ -52,24 +53,30 @@
 ### High Priority
 
 * Format as you type
-  * [ ] Fix: splitting a list item when the caret is on a "list marker" causes double list item to
-        be added. Check if what follows the caret is a "list marker" and do not insert one.
+  * [ ] Fix: splitting a list item when the caret is on a "list marker" causes double list item
+        to be added. Check if what follows the caret is a "list marker" and do not insert one.
   * [ ] Fix: typing spaces at paragraph start does not insert space to let the paragraph be
         indented to next level
   * [ ] Fix: inserting block quote marker before block mark gets confused
 
-
 * [ ] Fix: wiki links from main repo don't resolve if the file is in a sub-directory and access
       is without extension or sub-directory. (Was probably broken when non-github rules were
       added to resolver).
+
 * [ ] Fix: conversion from raw explicit link to wiki page looses the raw reference and results
       in rendered markdown reference
 
 &nbsp;</details>
 
-2.3.8.28 - Bug Fix Release
---------------------------
+### 2.3.8.30 - Bug Fix Release
 
+* Add: #507, How to be sure that HTML auto generated link will have unchanged url. Link format
+  option for HTML export: page relative, project relative, http: absolute, file: absolute if
+  option `Link to exported HTML` is not selected.
+* Add: #466, Indents with 4 spaces instead of 2 as I like and #482, Pressing Tab in fenced
+      code blocks inserts 4 spaces instead. Code style option for indent size added sets number
+      of spaces to insert when pressing tab.
+* Change: Remove attribute and settings migration from pre 2.3.0 versions.
 * Add: nested heading outline collapsing
 * Fix: improved HTML to markdown conversion from Apple Mail copied text.
 * Fix: don't show emoji completions in link address part ( http: triggers it)
