@@ -4,7 +4,7 @@
 
 ### Version History
 - [High Priority](#high-priority)
-- [2.3.8.30 - Bug Fix Release](#23830---bug-fix-release)
+- [2.3.8.32 - Bug Fix Release](#23832---bug-fix-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
@@ -68,14 +68,18 @@
 
 &nbsp;</details>
 
-### 2.3.8.30 - Bug Fix Release
+### 2.3.8.32 - Bug Fix Release
 
+* [ ] Add: change logic for exported link format to use the link format for non-exported files,
+      even when "Link to exported HTML" option is selected.
+* Change: #520, Not working: As you type automation: Double of bold/emphasis markers and remove
+  inserted ones if a space is typed. Enable these options in code style, disabled by default.
+* Fix: #509, Text with colons is incorrectly interpreted as an invalid emoji shortcut
 * Add: #507, How to be sure that HTML auto generated link will have unchanged url. Link format
   option for HTML export: page relative, project relative, http: absolute, file: absolute if
   option `Link to exported HTML` is not selected.
-* Add: #466, Indents with 4 spaces instead of 2 as I like and #482, Pressing Tab in fenced
-      code blocks inserts 4 spaces instead. Code style option for indent size added sets number
-      of spaces to insert when pressing tab.
+* Add: #466, Indents with 4 spaces instead of 2 as I like. Code style option for indent size
+  added sets number of spaces to insert when pressing tab.
 * Change: Remove attribute and settings migration from pre 2.3.0 versions.
 * Add: nested heading outline collapsing
 * Fix: improved HTML to markdown conversion from Apple Mail copied text.
