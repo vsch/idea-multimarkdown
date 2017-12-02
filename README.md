@@ -38,6 +38,8 @@ platform**
 
 **A Markdown plugin** with GFM and a **matching** preview style.
 
+**You can download it on the [JetBrains plugin page].**
+
 **Get Markdown Navigator [enhanced edition][Markdown Navigator] to unlock all productivity
 features.**
 

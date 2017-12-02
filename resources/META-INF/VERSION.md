@@ -4,7 +4,7 @@
 
 ### Version History
 - [High Priority](#high-priority)
-- [2.3.8.32 - Bug Fix Release](#23832---bug-fix-release)
+- [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
@@ -66,12 +66,14 @@
 * [ ] Fix: conversion from raw explicit link to wiki page looses the raw reference and results
       in rendered markdown reference
 
-&nbsp;</details>
-
-### 2.3.8.32 - Bug Fix Release
-
 * [ ] Add: change logic for exported link format to use the link format for non-exported files,
       even when "Link to exported HTML" option is selected.
+
+&nbsp;</details>
+
+### 2.4.0 - Bug Fix & Enhancement Release
+
+* Fix: #517, Invalid tool tip for "Show Breadcrumb text"
 * Change: #520, Not working: As you type automation: Double of bold/emphasis markers and remove
   inserted ones if a space is typed. Enable these options in code style, disabled by default.
 * Fix: #509, Text with colons is incorrectly interpreted as an invalid emoji shortcut
