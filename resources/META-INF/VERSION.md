@@ -4,6 +4,7 @@
 
 ### Version History
 - [High Priority](#high-priority)
+- [2.4.0.2 - Bug Fix & Enhancement Release](#2402---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
@@ -70,6 +71,13 @@
       even when "Link to exported HTML" option is selected.
 
 &nbsp;</details>
+
+### 2.4.0.2 - Bug Fix & Enhancement Release
+
+* Fix: diagnostic 1030, when bread-crumb provider steps up to file level while looking for
+  headings.
+
+* Fix: diagnostic 1033, paste handler exception `IllegalStateException: Clipboard is busy`
 
 ### 2.4.0 - Bug Fix & Enhancement Release
 
