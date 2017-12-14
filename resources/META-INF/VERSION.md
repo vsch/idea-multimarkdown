@@ -4,7 +4,7 @@
 
 ### Version History
 - [High Priority](#high-priority)
-- [2.4.0.4 - Bug Fix & Enhancement Release](#2404---bug-fix--enhancement-release)
+- [2.4.0.6 - Bug Fix & Enhancement Release](#2406---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
@@ -72,10 +72,10 @@
 
 &nbsp;</details>
 
-### 2.4.0.4 - Bug Fix & Enhancement Release
+### 2.4.0.6 - Bug Fix & Enhancement Release
 
 * Add: option to add serial query suffix to CSS URI when the css file changes (only file://
-  URI's) supported.
+  URI's and document relative URLs are supported.)
 
 * Fix: diagnostic 1030, when bread-crumb provider steps up to file level while looking for
   headings.
