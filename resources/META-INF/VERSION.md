@@ -4,7 +4,7 @@
 
 ### Version History
 - [High Priority](#high-priority)
-- [2.4.0.6 - Bug Fix & Enhancement Release](#2406---bug-fix--enhancement-release)
+- [2.4.0.8 - Bug Fix & Enhancement Release](#2408---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
@@ -72,10 +72,22 @@
 
 &nbsp;</details>
 
-### 2.4.0.6 - Bug Fix & Enhancement Release
+### 2.4.0.8 - Bug Fix & Enhancement Release
 
-* Add: option to add serial query suffix to CSS URI when the css file changes (only file://
-  URI's and document relative URLs are supported.)
+* Add: error/unused annotations for enumerated reference, enumerated format and attribute id
+
+* Add: refactoring/navigation for Enumerated Reference format id's, Attribute Id's, Enumerated Reference
+  link/text.
+
+* Add: parser options for
+  [Attributes Extension](https://github.com/vsch/flexmark-java/wiki/Extensions#attributes) and
+  [Enumerated Reference](https://github.com/vsch/flexmark-java/wiki/Extensions#enumerated-reference)
+  of flexmark-java.
+
+* Fix: diagnostic: 1055, sometimes virtual file == null for a PsiFile causing an exception.
+
+* Add: option to add serial query suffix to CSS URI which increments when the css file changes
+  (only file:// URI's and document relative URLs are supported.)
 
 * Fix: diagnostic 1030, when bread-crumb provider steps up to file level while looking for
   headings.
