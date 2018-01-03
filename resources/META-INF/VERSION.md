@@ -4,7 +4,7 @@
 
 ### Version History
 - [High Priority](#high-priority)
-- [2.4.0.10 - Bug Fix & Enhancement Release](#24010---bug-fix--enhancement-release)
+- [2.4.0.12 - Bug Fix & Enhancement Release](#24012---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
@@ -72,13 +72,17 @@
 
 &nbsp;</details>
 
-### 2.4.0.10 - Bug Fix & Enhancement Release
+### 2.4.0.12 - Bug Fix & Enhancement Release
+
+* Fix: #544, Export to PDF greyed out. Editor actions would be disabled if the text editor was
+  not visible.
 
 * Add: parser options for
   [Attributes Extension](https://github.com/vsch/flexmark-java/wiki/Extensions#attributes) and
   [Enumerated Reference](https://github.com/vsch/flexmark-java/wiki/Extensions#enumerated-reference)
   of flexmark-java.
 
+  * [ ] Add: completions for link anchors to id attribute values
   * Add: completions for enumerated references and reference formats
   * Add: formatting options and formatting for Enumerated References
   * Add: error/unused annotations for enumerated reference, enumerated format and attribute id
