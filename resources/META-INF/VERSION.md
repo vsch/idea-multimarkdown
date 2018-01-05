@@ -4,7 +4,7 @@
 
 ### Version History
 - [High Priority](#high-priority)
-- [2.4.0.14 - Bug Fix & Enhancement Release](#24014---bug-fix--enhancement-release)
+- [2.4.0.16 - Bug Fix & Enhancement Release](#24016---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
@@ -72,7 +72,9 @@
 
 &nbsp;</details>
 
-### 2.4.0.14 - Bug Fix & Enhancement Release
+### 2.4.0.16 - Bug Fix & Enhancement Release
+
+* Add: parser option to not generate duplicate dashes `-` in heading ids
 
 * Fix: fenced code content erroneously processed GitHub issue marker `#`.
 
@@ -84,6 +86,7 @@
   [Enumerated Reference](https://github.com/vsch/flexmark-java/wiki/Extensions#enumerated-reference)
   of flexmark-java.
 
+  * Add: heading intentions to add/remove explicit id
   * Add: completions for link anchors to id attribute values
   * Add: completions for enumerated references and reference formats
   * Add: formatting options and formatting for Enumerated References
