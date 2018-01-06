@@ -4,7 +4,7 @@
 
 ### Version History
 - [High Priority](#high-priority)
-- [2.4.0.18 - Bug Fix & Enhancement Release](#24018---bug-fix--enhancement-release)
+- [2.4.0.20 - Bug Fix & Enhancement Release](#24020---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
@@ -72,7 +72,14 @@
 
 &nbsp;</details>
 
-### 2.4.0.18 - Bug Fix & Enhancement Release
+### 2.4.0.20 - Bug Fix & Enhancement Release
+
+* Fix: clicking on a link with anchor ref by name of element would not scroll element into view
+
+* Add: #391, #anchor tags not working. Added anchors of the form `<a .... attr=anchorId
+  ...>...</a>` where `attr` is `id` or `name` to be treated as anchor ref targets. NOTE: the
+  first name or id attribute will be treated as the "anchor target" the other as a reference to
+  the anchor target. If both have the same string value then renaming one will rename the other.
 
 * Fix: regex error flexmark-java attributes parser which could cause a parsing loop
 
