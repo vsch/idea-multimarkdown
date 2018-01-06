@@ -4,7 +4,7 @@
 
 ### Version History
 - [High Priority](#high-priority)
-- [2.4.0.16 - Bug Fix & Enhancement Release](#24016---bug-fix--enhancement-release)
+- [2.4.0.18 - Bug Fix & Enhancement Release](#24018---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
@@ -72,7 +72,9 @@
 
 &nbsp;</details>
 
-### 2.4.0.16 - Bug Fix & Enhancement Release
+### 2.4.0.18 - Bug Fix & Enhancement Release
+
+* Fix: regex error flexmark-java attributes parser which could cause a parsing loop
 
 * Add: parser option to not generate duplicate dashes `-` in heading ids
 
