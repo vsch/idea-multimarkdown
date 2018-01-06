@@ -4,7 +4,7 @@
 
 ### Version History
 - [High Priority](#high-priority)
-- [2.4.0.20 - Bug Fix & Enhancement Release](#24020---bug-fix--enhancement-release)
+- [2.4.0.22 - Bug Fix & Enhancement Release](#24022---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
@@ -72,7 +72,31 @@
 
 &nbsp;</details>
 
-### 2.4.0.20 - Bug Fix & Enhancement Release
+### 2.4.0.22 - Bug Fix & Enhancement Release
+
+* Fix: #260, Add horizontal split editor option to allow preview below the text editor. Added
+  option in Languages & Frameworks > Markdown: `Vertical Text/Preview Split`, default not
+  selected.
+
+* Fix: #524, Dedent shortcut not working properly.
+
+* Fix: #539, Big local images (e.g. .gif) referred to in an open .md file get locked and cause
+  merge conflicts and issues on checkout. Now swing implements disable GIF images option.
+
+* Fix: #512, Add keyboard shortcut to `Cycle between Preview only and Editor only`. Instead
+  added application setting to select text/split or text/preview toggle for the toggle editor
+  layout action.
+
+* Fix: #511, `Cycle split layout` shortcut stop working when `Preview Only` is selected.
+
+* Fix: #527, How to use *italics* instead of _italics_ when pressing `Ctrl+I`. Option added to
+  Languages & Frameworks > Markdown: `Use asterisks (*) for italic text`, enabled by default.
+  When enabled italic action will use only asterisks for as markers.
+
+* Fix: #535, Documentation for link maps and mapping groups. Documentation link added to Link
+  Map settings panel.
+
+* Fix: diagnostic/1100, start/end offset on paste beyond end of document
 
 * Fix: clicking on a link with anchor ref by name of element would not scroll element into view
 
