@@ -4,7 +4,7 @@
 
 ### Version History
 - [High Priority](#high-priority)
-- [2.4.0.22 - Bug Fix & Enhancement Release](#24022---bug-fix--enhancement-release)
+- [2.4.0.24 - Bug Fix & Enhancement Release](#24024---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
@@ -72,7 +72,9 @@
 
 &nbsp;</details>
 
-### 2.4.0.22 - Bug Fix & Enhancement Release
+### 2.4.0.24 - Bug Fix & Enhancement Release
+
+* Fix: #546, Panel is guaranteed to be not null Regression.
 
 * Fix: #260, Add horizontal split editor option to allow preview below the text editor. Added
   option in Languages & Frameworks > Markdown: `Vertical Text/Preview Split`, default not
