@@ -8,7 +8,8 @@
     - [Document with pleasure!](#document-with-pleasure)
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
-    - [Next Release: Version 2.4.0](#next-release-version-240)
+    - [Next Release: Version 2.5.0](#next-release-version-250)
+    - [Version 2.4.0](#version-240)
     - [Version 2.3.8](#version-238)
     - [Version 2.3.7](#version-237)
     - [Version 2.3.6](#version-236)
@@ -88,9 +89,72 @@ for:
 Release Road Map
 ----------------
 
-### Next Release: Version 2.4.0
+### Next Release: Version 2.5.0
 
 Bug and compatibility fixes you can find in [Version Notes].
+
+* Add: anchors of the form `<a .... attr=anchorId ...>...</a>` where `attr` is `id` or `name` to
+  be treated as anchor ref targets. NOTE: the first `name` or `id` attribute will be treated as
+  the "anchor target" the other as a reference to the anchor target. If both have the same
+  string value then renaming one will rename the other.
+* Add: Attributes extension to parses HTML attributes of the form `{attr=value}`,
+  `{attr='value'}`, `{attr="value"}`, `{.class-name}` or `{#element-id}`
+* Add: Enumerated Reference extension which allows enumerated reference links and text. For
+  example:
+
+  ```
+  ![Fig](http://example.com/test.png){#fig:test}
+  [#fig:test]
+
+  ![Fig](http://example.com/test.png){#fig:test2}
+  [#fig:test2]
+
+  | table |
+  |-------|
+  | data  |
+  [[#tbl:test] caption]
+  {#tbl:test}
+
+  See [@fig:test2]
+
+  See [@fig:test]
+
+  See [@tbl:test]
+
+
+  [@fig]: Figure [#].
+
+  [@tbl]: Table [#].
+  ```
+
+  is equivalent to the following without having to manually keep track of numbering of
+  individual elements:
+
+  ```
+  ![Fig](http://example.com/test.png){#fig:test}
+  Figure 1.
+
+  ![Fig](http://example.com/test.png){#fig:test2}
+  Figure 2.
+
+  | table |
+  |-------|
+  | data  |
+  [Table 1. caption]
+  {#tbl:test}
+
+  See [Figure 2.](#fig:test2)
+
+  See [Figure 1.](#fig:test)
+
+  See [Table 1.](#tbl:test)
+
+  ```
+
+  :exclamation: Note that attributes extension is needed in order for the references to be
+  properly resolved for rendering.
+
+### Version 2.4.0
 
 * [CommonMark (spec 0.28)] compliant
 * Navigate using links with **GitHub Line Reference** anchor refs
@@ -104,8 +168,6 @@ Bug and compatibility fixes you can find in [Version Notes].
 * **Convert Markdown to HTML** intention for fenced code elements
 
 ### Version 2.3.8
-
-Bug and compatibility fixes you can find in [Version Notes].
 
 * Add GitHub Line reference anchors in the form `L#` or `L#-L#` for line ranges. Now navigating
   to such an anchor in a project file will move the caret to the line and if second form is used
@@ -619,6 +681,7 @@ Reserved.
 [GitHub-userscripts]: https://github.com/Mottie/GitHub-userscripts
 [holgerbrandl/pasteimages]: https://github.com/holgerbrandl/pasteimages
 [intellij-markdown]: https://github.com/valich/intellij-markdown
+[JetBrains plugin page]: https://plugins.jetbrains.com/plugin?pr=&pluginId=7896
 [Markdown]: http://daringfireball.net/projects/markdown
 [Markdown Navigator]: http://vladsch.com/product/markdown-navigator
 [Markdown Support]: https://plugins.jetbrains.com/plugin/7793?pr=
@@ -642,7 +705,6 @@ Reserved.
 [IntelliJ IDEA]: http://www.jetbrains.com/idea
 [Jekyll]: https://jekyllrb.com
 [JetBrains plugin comment and rate page]: https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896
-[JetBrains plugin page]: https://plugins.jetbrains.com/plugin?pr=&pluginId=7896
 [Kotlin]: http://kotlinlang.org
 [Kramdown]: http://kramdown.gettalong.org/
 [PhpExtra]: https://michelf.ca/projects/php-markdown/extra/

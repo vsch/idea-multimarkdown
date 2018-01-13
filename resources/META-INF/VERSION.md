@@ -4,7 +4,7 @@
 
 ### Version History
 - [High Priority](#high-priority)
-- [2.4.0.24 - Bug Fix & Enhancement Release](#24024---bug-fix--enhancement-release)
+- [2.4.0.26 - Bug Fix & Enhancement Release](#24026---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
@@ -72,7 +72,13 @@
 
 &nbsp;</details>
 
-### 2.4.0.24 - Bug Fix & Enhancement Release
+### 2.4.0.26 - Bug Fix & Enhancement Release
+
+* Add: option in settings to enable editor paste handler registration so that paste handler is
+  enabled by default. Because the IDE has a lot of formatter exceptions on paste which get
+  erroneously attributed to the plugin when it delegates paste action to previous handler. Now a
+  notification balloon will inform of the IDE exception and offer a link to disable paste
+  handler customization.
 
 * Fix: #546, Panel is guaranteed to be not null Regression.
 
