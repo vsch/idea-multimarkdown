@@ -4,7 +4,7 @@
 
 ### Version History
 - [High Priority](#high-priority)
-- [2.4.0.26 - Bug Fix & Enhancement Release](#24026---bug-fix--enhancement-release)
+- [2.4.0.28 - Bug Fix & Enhancement Release](#24028---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
@@ -72,7 +72,12 @@
 
 &nbsp;</details>
 
-### 2.4.0.26 - Bug Fix & Enhancement Release
+### 2.4.0.28 - Bug Fix & Enhancement Release
+
+* Fix: #548, When "Autoscroll to source" is enabled in project view, markdown navigator editor
+  steals focus when moving through project view with keyboard arrows
+
+* Fix: #542, Typographical Error in PHPStorm Preferences > Editor > Code Style > Markdown
 
 * Add: option in settings to enable editor paste handler registration so that paste handler is
   enabled by default. Because the IDE has a lot of formatter exceptions on paste which get
