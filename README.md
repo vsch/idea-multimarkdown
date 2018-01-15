@@ -93,6 +93,8 @@ Release Road Map
 
 Bug and compatibility fixes you can find in [Version Notes].
 
+* Add: settings management: Copy project settings to/from project defaults and import/export
+  project settings.
 * Add: anchors of the form `<a .... attr=anchorId ...>...</a>` where `attr` is `id` or `name` to
   be treated as anchor ref targets. NOTE: the first `name` or `id` attribute will be treated as
   the "anchor target" the other as a reference to the anchor target. If both have the same
