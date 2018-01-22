@@ -4,7 +4,7 @@
 
 ### Version History
 - [High Priority](#high-priority)
-- [2.4.0.30 - Bug Fix & Enhancement Release](#24030---bug-fix--enhancement-release)
+- [2.4.0.32 - Bug Fix & Enhancement Release](#24032---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
@@ -72,7 +72,11 @@
 
 &nbsp;</details>
 
-### 2.4.0.30 - Bug Fix & Enhancement Release
+### 2.4.0.32 - Bug Fix & Enhancement Release
+
+* Fix: diagnostic/1140, NPE in flexmark-java core node renderer
+
+* Fix: diagnostic/1141, null editor causes exception in toolbar button test
 
 * Add: #549, Add settings management functionality. Now in main settings panel there is a
   "Manage..." button in top-right corner, clicking it pops up a menu with the following options:
@@ -80,13 +84,14 @@
   * `Copy from Project Defaults`
   * `Export Settings`
   * `Import Settings`
-  
+
   These actions copy from current unsaved project settings and to current unsaved project
   settings therefore you can modify settings, copy to project defaults (or export) and then
-  cancel, result will be project defaults (or exported settings) having modified settings while project
-  settings being those before modification.
-  
-  If you copy from defaults or import a file followed by `Cancel` then no settings will be modified.
+  cancel, result will be project defaults (or exported settings) having modified settings while
+  project settings being those before modification.
+
+  If you copy from defaults or import a file followed by `Cancel` then no settings will be
+  modified.
 
 * Fix: #548, When "Autoscroll to source" is enabled in project view, markdown navigator editor
   steals focus when moving through project view with keyboard arrows
