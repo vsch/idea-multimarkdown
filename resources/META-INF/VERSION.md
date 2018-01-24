@@ -4,7 +4,7 @@
 
 ### Version History
 - [High Priority](#high-priority)
-- [2.4.0.32 - Bug Fix & Enhancement Release](#24032---bug-fix--enhancement-release)
+- [2.4.0.34 - Bug Fix & Enhancement Release](#24034---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
@@ -72,7 +72,9 @@
 
 &nbsp;</details>
 
-### 2.4.0.32 - Bug Fix & Enhancement Release
+### 2.4.0.34 - Bug Fix & Enhancement Release
+
+* Add: allow source/preview synchronization and search/selection highlighting in basic version
 
 * Fix: diagnostic/1140, NPE in flexmark-java core node renderer
 
