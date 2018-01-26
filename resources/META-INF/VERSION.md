@@ -4,7 +4,7 @@
 
 ### Version History
 - [High Priority](#high-priority)
-- [2.4.0.36 - Bug Fix & Enhancement Release](#24036---bug-fix--enhancement-release)
+- [2.4.0.38 - Bug Fix & Enhancement Release](#24038---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
@@ -72,7 +72,10 @@
 
 &nbsp;</details>
 
-### 2.4.0.36 - Bug Fix & Enhancement Release
+### 2.4.0.38 - Bug Fix & Enhancement Release
+
+* Fix: files not under VCS root would show no completions for relative addressing, only had
+  completions for `file://` format completions.
 
 * Add: recall of the last imported settings file to make it easier to reset settings to a known
   value.
