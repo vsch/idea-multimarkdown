@@ -4,7 +4,7 @@
 
 ### Version History
 - [High Priority](#high-priority)
-- [2.4.0.34 - Bug Fix & Enhancement Release](#24034---bug-fix--enhancement-release)
+- [2.4.0.36 - Bug Fix & Enhancement Release](#24036---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
@@ -72,13 +72,20 @@
 
 &nbsp;</details>
 
-### 2.4.0.34 - Bug Fix & Enhancement Release
+### 2.4.0.36 - Bug Fix & Enhancement Release
 
-* Add: allow source/preview synchronization and search/selection highlighting in basic version
+* Add: recall of the last imported settings file to make it easier to reset settings to a known
+  value.
 
-* Fix: diagnostic/1140, NPE in flexmark-java core node renderer
+* Add: markdown Application settings to exported and imported settings.
 
-* Fix: diagnostic/1141, null editor causes exception in toolbar button test
+* Fix: disable local only status for links and annotation when the link is to the file itself.
+
+* Add: allow source/preview synchronization and search/selection highlighting in basic version.
+
+* Fix: diagnostic/1140, NPE in flexmark-java core node renderer.
+
+* Fix: diagnostic/1141, null editor causes exception in toolbar button test.
 
 * Add: #549, Add settings management functionality. Now in main settings panel there is a
   "Manage..." button in top-right corner, clicking it pops up a menu with the following options:
@@ -86,6 +93,8 @@
   * `Copy from Project Defaults`
   * `Export Settings`
   * `Import Settings`
+  * `Reset Settings` to reset settings to default. Project defaults, current project settings
+    and markdown navigator application settings.
 
   These actions copy from current unsaved project settings and to current unsaved project
   settings therefore you can modify settings, copy to project defaults (or export) and then
@@ -96,7 +105,7 @@
   modified.
 
 * Fix: #548, When "Autoscroll to source" is enabled in project view, markdown navigator editor
-  steals focus when moving through project view with keyboard arrows
+  steals focus when moving through project view with keyboard arrows.
 
 * Fix: #542, Typographical Error in PHPStorm Preferences > Editor > Code Style > Markdown
 
