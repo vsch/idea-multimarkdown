@@ -93,15 +93,17 @@ Release Road Map
 
 Bug and compatibility fixes you can find in [Version Notes].
 
-* Add: settings management: Copy project settings to/from project defaults and import/export
+* **Directories** as link targets for completion, validation, navigation and drag/drop or
+  copy/paste to create links
+* **Settings management**: Copy project settings to/from project defaults and import/export
   project settings.
-* Add: anchors of the form `<a .... attr=anchorId ...>...</a>` where `attr` is `id` or `name` to
+* **Anchors** of the form `<a .... attr=anchorId ...>...</a>` where `attr` is `id` or `name` to
   be treated as anchor ref targets. NOTE: the first `name` or `id` attribute will be treated as
   the "anchor target" the other as a reference to the anchor target. If both have the same
   string value then renaming one will rename the other.
-* Add: Attributes extension to parses HTML attributes of the form `{attr=value}`,
+* **Attributes extension** to parses HTML attributes of the form `{attr=value}`,
   `{attr='value'}`, `{attr="value"}`, `{.class-name}` or `{#element-id}`
-* Add: Enumerated Reference extension which allows enumerated reference links and text. For
+* **Enumerated Reference extension** which allows enumerated reference links and text. For
   example:
 
   ```
@@ -129,8 +131,7 @@ Bug and compatibility fixes you can find in [Version Notes].
   [@tbl]: Table [#].
   ```
 
-  is equivalent to the following without having to manually keep track of numbering of
-  individual elements:
+  is equivalent to the following without manual numbering of individual elements:
 
   ```
   ![Fig](http://example.com/test.png){#fig:test}
@@ -153,7 +154,7 @@ Bug and compatibility fixes you can find in [Version Notes].
 
   ```
 
-  :exclamation: Note that attributes extension is needed in order for the references to be
+  :exclamation: Attributes extension must be enabled in order for enumerated references to be
   properly resolved for rendering.
 
 ### Version 2.4.0

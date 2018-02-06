@@ -4,7 +4,7 @@
 
 ### Version History
 - [High Priority](#high-priority)
-- [2.4.0.38 - Bug Fix & Enhancement Release](#24038---bug-fix--enhancement-release)
+- [2.4.0.40 - Bug Fix & Enhancement Release](#24040---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
@@ -59,37 +59,100 @@
   * [ ] Fix: typing spaces at paragraph start does not insert space to let the paragraph be
         indented to next level
   * [ ] Fix: inserting block quote marker before block mark gets confused
-
 * [ ] Fix: wiki links from main repo don't resolve if the file is in a sub-directory and access
       is without extension or sub-directory. (Was probably broken when non-github rules were
       added to resolver).
-
 * [ ] Fix: conversion from raw explicit link to wiki page looses the raw reference and results
       in rendered markdown reference
-
 * [ ] Add: change logic for exported link format to use the link format for non-exported files,
       even when "Link to exported HTML" option is selected.
+* [ ] Add option to disable images in preview for files that have more than N images on typing
+      and re-enabling them after M ms. With N & M user definable, to address update delay in
+      files with many images causing typing delay.
+* [ ] Add inspection for improper indentation of sub-items, where they are indented more than
+      the previous item but not enough to be its child.
+* [ ] Add option to configure a directory as a GitHub special link: ie. `issues` would treat
+      files in that directory as issues, so that links would resolve in them the same way they
+      do in a GitHub issue comment.
 
-&nbsp;</details>
+  * [ ] optionaly convert to "Hard Wraps" mode on copy from these issue files so the text can be
+        wrapped in IDEA and pasted as unwrapped into an issue. Effectively, remove any
+        soft-breaks before copying to the clipboard.
+  * [ ] option to display a list of issues or pull in an issue as a file in an issues directory
+        for editing and responding.
+  * [ ] Figure out a multi-part markdown format that would work well for displaying an issues
+        thread. No hierarchy. Just the facts and user names. See if can intersperse editable and
+        non-editable parts in one file. Would be nice to have text and preview of the issues in
+        split editor.
+    * [ ] add ability to select and post the selection/current editing part to the issue that
+          this file represents to save on the app switching and clicking and cut/pasting.
+    * [ ] See if there is a plugin to integrate GitHub issues into IDEA sort of like Bee for mac
+          but more IntelliJ friendly and Markdown Navigator editing friendly.
+  * [ ] handle GitHub `#`, `@` and other short cut links. Preferably via completions the way it
+        is done on GitHub.
+* [ ] Add flexible link resolvers
+* [ ] Add: option to mark a directory as representing GitHub repo issues link. This will allow
+      to create markdown for issues with the right relative links.
+* [ ] Add: ability to display GitHub issue list for importing as files into issues directory
+* [ ] Add: option to push a file as a new issue or a reply to an existing one
+* [ ] Add: view of github issues as a tool window with 'edit' or 'reply' options that open a
+      markdown editor window in the tool window to have all comforts of IDEA for GitHub issue
+      editing. Make preview split vertical by default. Allow multiple tabs so more than one
+      github repo's issues could be displayed in a project.
 
-### 2.4.0.38 - Bug Fix & Enhancement Release
+#### Cleanup up consistency of new features
 
+* [ ] Handle multiple attributes per heading and take last? first?, figure out what flexmark
+      does with the id attribute.
+* [ ] Do not extend setext heading markers on trailing attributes
+  * [ ] Format
+  * [ ] Intentions
+  * [ ] On typing
+  * [ ] Refactoring
+* [ ] Format optionally to combine consecutive attributes elements into a single list
+* [ ] Add Table Caption formatting options: as is, trim spaces, always add, remove if empty,
+      always remove; space around text check box. &nbsp;</details>
+
+### 2.4.0.40 - Bug Fix & Enhancement Release
+
+* Add: settings option to allow directories as link targets. Allows directories to be used in
+  links. This functionality affects operation to completions, annotations, drag/drop link
+  creation and navigation.
+* Add: Drag/Drop link creation in Wiki should have wiki option for link format.
+* Fix: `http://` link to wiki home without the file shows as unresolved by annotator
+* Fix: change explicit to wiki not showing if link format is http:// or https:// absolute
+* Fix: when converting explicit to wiki don't generate text & page ref if the explicit link text
+  is the same as the file part of the target: `[Page-Ref](Page-Ref.md)` -> `[[Page Ref]]`, not
+  `[[Page-Ref|Page Ref]]`
+* Fix: Allow links to directories under the repo not to show them as unresolved. Create ref to
+  directory object if it is under VCS
+* Fix: drag/drop directories to create a link to the directory
+* Fix: document format would remove table caption element
+* Add: Query user for new id on explicit id to heading intention to save a step of rename
+  refactoring it.
+* Add: if a heading has explicit id attributes, rename refactoring for it is disabled since the
+  id is not part of attributes.
+* Add parser option to parse inline HTML for `<a id="...">` for anchor targets
+* Update to flexmark-java-0.30.0
+* Fix abbreviation definition with empty abbreviation would cause an exception
+* Add Option to enable/disable use of image URI query serial, used to force preview update of
+  image when the image file changes. Disabled by default to reduce java image caching memory
+  issues.
+* Fix: custom paste handling into scratch files was not handled in CLion, possibly other
+  non-Java IDEs.
+* Fix: #554, Settings, Import and Copy from project do not get applied until corresponding
+  settings pane is viewed. The settings would be changed but not applied until the settings pane
+  was clicked on first.
+* Fix: diagnostic/1159, Inserting table rows could cause an index out bounds exception
 * Fix: files not under VCS root would show no completions for relative addressing, only had
   completions for `file://` format completions.
-
 * Add: recall of the last imported settings file to make it easier to reset settings to a known
   value.
-
 * Add: markdown Application settings to exported and imported settings.
-
 * Fix: disable local only status for links and annotation when the link is to the file itself.
-
 * Add: allow source/preview synchronization and search/selection highlighting in basic version.
-
 * Fix: diagnostic/1140, NPE in flexmark-java core node renderer.
-
 * Fix: diagnostic/1141, null editor causes exception in toolbar button test.
-
 * Add: #549, Add settings management functionality. Now in main settings panel there is a
   "Manage..." button in top-right corner, clicking it pops up a menu with the following options:
   * `Copy to Project Defaults`
@@ -106,60 +169,41 @@
 
   If you copy from defaults or import a file followed by `Cancel` then no settings will be
   modified.
-
 * Fix: #548, When "Autoscroll to source" is enabled in project view, markdown navigator editor
   steals focus when moving through project view with keyboard arrows.
-
 * Fix: #542, Typographical Error in PHPStorm Preferences > Editor > Code Style > Markdown
-
 * Add: option in settings to enable editor paste handler registration so that paste handler is
   enabled by default. Because the IDE has a lot of formatter exceptions on paste which get
   erroneously attributed to the plugin when it delegates paste action to previous handler. Now a
   notification balloon will inform of the IDE exception and offer a link to disable paste
   handler customization.
-
 * Fix: #546, Panel is guaranteed to be not null Regression.
-
 * Fix: #260, Add horizontal split editor option to allow preview below the text editor. Added
   option in Languages & Frameworks > Markdown: `Vertical Text/Preview Split`, default not
   selected.
-
 * Fix: #524, Dedent shortcut not working properly.
-
 * Fix: #539, Big local images (e.g. .gif) referred to in an open .md file get locked and cause
   merge conflicts and issues on checkout. Now swing implements disable GIF images option.
-
 * Fix: #512, Add keyboard shortcut to `Cycle between Preview only and Editor only`. Instead
   added application setting to select text/split or text/preview toggle for the toggle editor
   layout action.
-
 * Fix: #511, `Cycle split layout` shortcut stop working when `Preview Only` is selected.
-
 * Fix: #527, How to use *italics* instead of _italics_ when pressing `Ctrl+I`. Option added to
   Languages & Frameworks > Markdown: `Use asterisks (*) for italic text`, enabled by default.
   When enabled italic action will use only asterisks for as markers.
-
 * Fix: #535, Documentation for link maps and mapping groups. Documentation link added to Link
   Map settings panel.
-
 * Fix: diagnostic/1100, start/end offset on paste beyond end of document
-
 * Fix: clicking on a link with anchor ref by name of element would not scroll element into view
-
 * Add: #391, #anchor tags not working. Added anchors of the form `<a .... attr=anchorId
   ...>...</a>` where `attr` is `id` or `name` to be treated as anchor ref targets. NOTE: the
   first name or id attribute will be treated as the "anchor target" the other as a reference to
   the anchor target. If both have the same string value then renaming one will rename the other.
-
 * Fix: regex error flexmark-java attributes parser which could cause a parsing loop
-
 * Add: parser option to not generate duplicate dashes `-` in heading ids
-
 * Fix: fenced code content erroneously processed GitHub issue marker `#`.
-
 * Fix: #544, Export to PDF greyed out. Editor actions would be disabled if the text editor was
   not visible.
-
 * Add: parser options for
   [Attributes Extension](https://github.com/vsch/flexmark-java/wiki/Extensions#attributes) and
   [Enumerated Reference](https://github.com/vsch/flexmark-java/wiki/Extensions#enumerated-reference)
@@ -172,23 +216,16 @@
   * Add: error/unused annotations for enumerated reference, enumerated format and attribute id
   * Add: refactoring/navigation for Enumerated Reference format id's, Attribute Id's, Enumerated
     Reference link/text.
-
 * Fix: diagnostic: 1055, sometimes virtual file == null for a PsiFile causing an exception.
-
 * Add: option to add serial query suffix to CSS URI which increments when the css file changes
   (only file:// URI's and document relative URLs are supported.)
-
 * Fix: diagnostic 1030, when bread-crumb provider steps up to file level while looking for
   headings.
-
 * Fix: diagnostic: 1032, sometimes an exception is thrown "AssertionError: Unexpected content
   storage modification"
-
 * Fix: diagnostic 1033, paste handler exception `IllegalStateException: Clipboard is busy`
-
 * Fix: diagnostic 1035, null pointer exception in Swing preview when image tag has no `src`
   attribute.
-
 * Fix: diagnostic 1047, sometimes an IOException is generated if markdown sub-type is requested
   during indexing operation.
 
