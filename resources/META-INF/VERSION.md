@@ -4,7 +4,7 @@
 
 ### Version History
 - [High Priority](#high-priority)
-- [2.4.0.40 - Bug Fix & Enhancement Release](#24040---bug-fix--enhancement-release)
+- [2.4.0.42 - Bug Fix & Enhancement Release](#24042---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
@@ -75,8 +75,8 @@
       files in that directory as issues, so that links would resolve in them the same way they
       do in a GitHub issue comment.
 
-  * [ ] optionaly convert to "Hard Wraps" mode on copy from these issue files so the text can be
-        wrapped in IDEA and pasted as unwrapped into an issue. Effectively, remove any
+  * [ ] optionally convert to "Hard Wraps" mode on copy from these issue files so the text can
+        be wrapped in IDEA and pasted as unwrapped into an issue. Effectively, remove any
         soft-breaks before copying to the clipboard.
   * [ ] option to display a list of issues or pull in an issue as a file in an issues directory
         for editing and responding.
@@ -113,8 +113,48 @@
 * [ ] Add Table Caption formatting options: as is, trim spaces, always add, remove if empty,
       always remove; space around text check box. &nbsp;</details>
 
-### 2.4.0.40 - Bug Fix & Enhancement Release
+### 2.4.0.42 - Bug Fix & Enhancement Release
 
+* Add: "Toggle Editor Split Orientation" action to toggle Vertical/Horizontal split orientation
+* Add: drag/drop file inside inline, fenced or indented code to insert file name.
+* Add: dropping file after end of line with virtual spaces enabled, will insert spaces to fill
+  virtual spaces.
+* Fix: Adding explicit attribute to heading did not put space between text and attributes
+  element.
+* Add: file/ref anchor target search/explore intention on unresolved link anchor ref.
+  * [ ] Fix: launching on an anchor and cancelling, does not show intention until file is
+        edited.
+  * [ ] Add: clicking on an anchor or any anchor target should update the file anchor list
+        selection.
+  * [ ] Add: add highlight of selected anchor target. Editor identifier highlight only works if
+        caret is moved.
+  * Add: do a partial match for anchor when no anchors match exactly.
+  * Add: filter text box to filter anchor list (show all partials, the rest hidden)
+        otherwise too many in the list.
+* Fix: Github collapse headers script not working in 2018.1
+* Fix: intermittent position not highlighting in preview.
+* Fix: Drag/Drop copy files does not save link drop options.Always resets or gets them wrong.
+* Add: buttons for link and image drop/paste options in markdown settings
+* Add: Updated emoji to include full set of GitHub supported ones
+  * Add: option to select which shortcuts to recognize:
+    * Emoji Cheat Sheet
+    * GitHub
+    * Both: Emoji Cheat Sheet, GitHub (in order of preference for URL generation in HTML)
+    * Both: GitHub, Emoji Cheat Sheet (in order of preference for URL generation in HTML)
+  * Add: option to select what type of image to use:
+    * Images: image files only
+    * Unicode and Images: use Unicode characters when available, image file otherwise
+    * Unicode Only: only use unicode characters, don't recognize shortcuts which have no unicode
+      equivalent.
+  * Add: option to preview settings to replace Unicode emoji characters which have a
+    corresponding image file with the image file. This allows preview browser to display Unicode
+    emoji for which the browser would display unrecognized character symbol instead.
+* Update to flexmark-java-0.32.2
+  * Fix: java-flexmark API changes
+  * Fix: java-flexmark Attributes processing changes
+  * Add: Parser option for Attributes assignment to text
+  * Add: Parser option for Emoji Shortcut Type, Emoji Image Type
+  * Add: Preview option for replacing Emoji unicode with image
 * Add: settings option to allow directories as link targets. Allows directories to be used in
   links. This functionality affects operation to completions, annotations, drag/drop link
   creation and navigation.
@@ -133,7 +173,6 @@
 * Add: if a heading has explicit id attributes, rename refactoring for it is disabled since the
   id is not part of attributes.
 * Add parser option to parse inline HTML for `<a id="...">` for anchor targets
-* Update to flexmark-java-0.30.0
 * Fix abbreviation definition with empty abbreviation would cause an exception
 * Add Option to enable/disable use of image URI query serial, used to force preview update of
   image when the image file changes. Disabled by default to reduce java image caching memory
@@ -208,7 +247,6 @@
   [Attributes Extension](https://github.com/vsch/flexmark-java/wiki/Extensions#attributes) and
   [Enumerated Reference](https://github.com/vsch/flexmark-java/wiki/Extensions#enumerated-reference)
   of flexmark-java.
-
   * Add: heading intentions to add/remove explicit id
   * Add: completions for link anchors to id attribute values
   * Add: completions for enumerated references and reference formats

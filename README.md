@@ -105,6 +105,8 @@ Bug and compatibility fixes you can find in [Version Notes].
   `{attr='value'}`, `{attr="value"}`, `{.class-name}` or `{#element-id}`
 * **Enumerated Reference extension** which allows enumerated reference links and text. For
   example:
+* **Ref Anchor** search in project, intention on unresolved anchors
+* **Vertical Split** text/preview option
 
   ```
   ![Fig](http://example.com/test.png){#fig:test}
