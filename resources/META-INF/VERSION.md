@@ -4,22 +4,21 @@
 
 ### Version History
 - [High Priority](#high-priority)
-- [2.4.0.42 - Bug Fix & Enhancement Release](#24042---bug-fix--enhancement-release)
-- [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
-- [2.3.8 - Bug Fix Release](#238---bug-fix-release)
-- [2.3.7 - Bug Fix Release](#237---bug-fix-release)
-- [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
-- [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
-- [2.3.4 - Bug Fix & Enhancement Release](#234---bug-fix--enhancement-release)
-- [2.3.3 - Bug Fix & Enhancement Release](#233---bug-fix--enhancement-release)
-- [2.3.2 - Compatibility & Bug Fix Release](#232---compatibility--bug-fix-release)
-- [2.3.1 - Compatibility & Enhancement Release](#231---compatibility--enhancement-release)
-- [2.3.0 - Compatibility & Enhancement Release](#230---compatibility--enhancement-release)
-- [2.2.0 - Compatibility & Enhancement Release](#220---compatibility--enhancement-release)
-- [2.1.1 - Bug Fix & Enhancement Release](#211---bug-fix--enhancement-release)
-- [2.1.0 - Bug Fix Release](#210---bug-fix-release)
-- [2.0.0 - New Parser Release](#200---new-parser-release)
-
+- [2.4.0.44 - Bug Fix & Enhancement Release](#24044-bug-fix-enhancement-release)
+- [2.4.0 - Bug Fix & Enhancement Release](#240-bug-fix-enhancement-release)
+- [2.3.8 - Bug Fix Release](#238-bug-fix-release)
+- [2.3.7 - Bug Fix Release](#237-bug-fix-release)
+- [2.3.6 - Bug Fix & Enhancement Release](#236-bug-fix-enhancement-release)
+- [2.3.5 - Bug Fix & Enhancement Release](#235-bug-fix-enhancement-release)
+- [2.3.4 - Bug Fix & Enhancement Release](#234-bug-fix-enhancement-release)
+- [2.3.3 - Bug Fix & Enhancement Release](#233-bug-fix-enhancement-release)
+- [2.3.2 - Compatibility & Bug Fix Release](#232-compatibility-bug-fix-release)
+- [2.3.1 - Compatibility & Enhancement Release](#231-compatibility-enhancement-release)
+- [2.3.0 - Compatibility & Enhancement Release](#230-compatibility-enhancement-release)
+- [2.2.0 - Compatibility & Enhancement Release](#220-compatibility-enhancement-release)
+- [2.1.1 - Bug Fix & Enhancement Release](#211-bug-fix-enhancement-release)
+- [2.1.0 - Bug Fix Release](#210-bug-fix-release)
+- [2.0.0 - New Parser Release](#200-new-parser-release)
 
 &nbsp;<details id="todo"><summary>**To Do List**</summary>
 
@@ -113,8 +112,18 @@
 * [ ] Add Table Caption formatting options: as is, trim spaces, always add, remove if empty,
       always remove; space around text check box. &nbsp;</details>
 
-### 2.4.0.42 - Bug Fix & Enhancement Release
+* file/ref anchor target search/explore intention on unresolved link anchor ref.
+  * [ ] Add: clicking on an anchor or any anchor target should update the file anchor list
+        selection.
+  * [ ] Add: add highlight of selected anchor target. Editor identifier highlight only works if
+        caret is moved.
+* [ ] Add: #556, Default editor layout > Use last selected layout, option to have layout follow
+      last editor layout change action.
 
+### 2.4.0.44 - Bug Fix & Enhancement Release
+
+* Remove: FirebugLite script option for JavaFX. It never worked for debugging and Chrome Dev
+  Tools work really well with JavaFX WebView.
 * Add: "Toggle Editor Split Orientation" action to toggle Vertical/Horizontal split orientation
 * Add: drag/drop file inside inline, fenced or indented code to insert file name.
 * Add: dropping file after end of line with virtual spaces enabled, will insert spaces to fill
@@ -122,12 +131,8 @@
 * Fix: Adding explicit attribute to heading did not put space between text and attributes
   element.
 * Add: file/ref anchor target search/explore intention on unresolved link anchor ref.
-  * [ ] Fix: launching on an anchor and cancelling, does not show intention until file is
+  * Fix: launching on an anchor and cancelling, does not show intention until file is
         edited.
-  * [ ] Add: clicking on an anchor or any anchor target should update the file anchor list
-        selection.
-  * [ ] Add: add highlight of selected anchor target. Editor identifier highlight only works if
-        caret is moved.
   * Add: do a partial match for anchor when no anchors match exactly.
   * Add: filter text box to filter anchor list (show all partials, the rest hidden)
         otherwise too many in the list.

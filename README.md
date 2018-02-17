@@ -101,12 +101,13 @@ Bug and compatibility fixes you can find in [Version Notes].
   be treated as anchor ref targets. NOTE: the first `name` or `id` attribute will be treated as
   the "anchor target" the other as a reference to the anchor target. If both have the same
   string value then renaming one will rename the other.
+* Project **Ref Anchor** explorer intention
+* **Vertical Split** text/preview option
+* **Text/Preview** toggle action option
 * **Attributes extension** to parses HTML attributes of the form `{attr=value}`,
   `{attr='value'}`, `{attr="value"}`, `{.class-name}` or `{#element-id}`
 * **Enumerated Reference extension** which allows enumerated reference links and text. For
   example:
-* **Ref Anchor** search in project, intention on unresolved anchors
-* **Vertical Split** text/preview option
 
   ```
   ![Fig](http://example.com/test.png){#fig:test}
