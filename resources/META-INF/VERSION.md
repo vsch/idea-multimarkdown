@@ -4,7 +4,7 @@
 
 ### Version History
 - [High Priority](#high-priority)
-- [2.4.0.44 - Bug Fix & Enhancement Release](#24044-bug-fix-enhancement-release)
+- [2.4.0.46 - Bug Fix & Enhancement Release](#24046-bug-fix-enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240-bug-fix-enhancement-release)
 - [2.3.8 - Bug Fix Release](#238-bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237-bug-fix-release)
@@ -120,8 +120,10 @@
 * [ ] Add: #556, Default editor layout > Use last selected layout, option to have layout follow
       last editor layout change action.
 
-### 2.4.0.44 - Bug Fix & Enhancement Release
+### 2.4.0.46 - Bug Fix & Enhancement Release
 
+* Fix: Chrome dev tools console evals and console logging from JavFX WebView scripts.
+* Fix: #561, Scroll sync and highlight preview element broken in EAP 2.4.0.44
 * Remove: FirebugLite script option for JavaFX. It never worked for debugging and Chrome Dev
   Tools work really well with JavaFX WebView.
 * Add: "Toggle Editor Split Orientation" action to toggle Vertical/Horizontal split orientation
