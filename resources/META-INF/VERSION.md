@@ -3,8 +3,8 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [High Priority](#high-priority)
-- [2.4.0.46 - Bug Fix & Enhancement Release](#24046-bug-fix-enhancement-release)
+- [To Do](#to-do)
+- [2.4.0.48 - Bug Fix & Enhancement Release](#24048-bug-fix-enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240-bug-fix-enhancement-release)
 - [2.3.8 - Bug Fix Release](#238-bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237-bug-fix-release)
@@ -20,9 +20,8 @@
 - [2.1.0 - Bug Fix Release](#210-bug-fix-release)
 - [2.0.0 - New Parser Release](#200-new-parser-release)
 
-&nbsp;<details id="todo"><summary>**To Do List**</summary>
 
-##### To Do
+### To Do
 
 * [ ] Add: when typing in the text field for change link to reference, automatically enable the
       add reference text if reference id is different from original
@@ -50,7 +49,7 @@
 * [ ] Add: detection for **GitHub** issue completions when no task servers are defined.
 * [ ] Add: transpose table, best to add `copy to clipboard transposed table`
 
-### High Priority
+#### High Priority
 
 * Format as you type
   * [ ] Fix: splitting a list item when the caret is on a "list marker" causes double list item
@@ -103,25 +102,45 @@
 
 * [ ] Handle multiple attributes per heading and take last? first?, figure out what flexmark
       does with the id attribute.
+
 * [ ] Do not extend setext heading markers on trailing attributes
   * [ ] Format
   * [ ] Intentions
   * [ ] On typing
   * [ ] Refactoring
+
 * [ ] Format optionally to combine consecutive attributes elements into a single list
+
 * [ ] Add Table Caption formatting options: as is, trim spaces, always add, remove if empty,
-      always remove; space around text check box. &nbsp;</details>
+      always remove; space around text check box.
 
 * file/ref anchor target search/explore intention on unresolved link anchor ref.
   * [ ] Add: clicking on an anchor or any anchor target should update the file anchor list
         selection.
   * [ ] Add: add highlight of selected anchor target. Editor identifier highlight only works if
         caret is moved.
+
 * [ ] Add: #556, Default editor layout > Use last selected layout, option to have layout follow
       last editor layout change action.
 
-### 2.4.0.46 - Bug Fix & Enhancement Release
+* [ ] Add: intention to view markdown as flexmark-spec-example with HTML and AST results in a
+      regular markdown editor. A button to copy to clipboard or insert into the file. Later add
+      modules and options configurable in the dialog. For now just use the current file's
+      flexmark options.
+* [ ] Fix: typographic `'` breaking words for spell checker generates erroneous spelling errors.
+* [ ] Add: code style settings and editor colors to settings import/export for markdown.
+* [ ] Fix: for debugging only point links to debug URL server if the file actually exist on it,
+      otherwise use the default URL.
 
+### 2.4.0.48 - Bug Fix & Enhancement Release
+
+* Fix: Project Default settings not being copied to new projects
+* Fix: intermittent preview element highlight stopped working until page refresh
+* Fix: pasting a page relative URL would be mistaken for FQN reference and always paste a link
+  instead of text
+* Fix: renaming rendering profile would not be saved properly.
+* Fix: copy action on rendering profiles caused exception
+* Add: all console commands work with Chrome dev tools.
 * Fix: Chrome dev tools console evals and console logging from JavFX WebView scripts.
 * Fix: #561, Scroll sync and highlight preview element broken in EAP 2.4.0.44
 * Remove: FirebugLite script option for JavaFX. It never worked for debugging and Chrome Dev
@@ -133,11 +152,10 @@
 * Fix: Adding explicit attribute to heading did not put space between text and attributes
   element.
 * Add: file/ref anchor target search/explore intention on unresolved link anchor ref.
-  * Fix: launching on an anchor and cancelling, does not show intention until file is
-        edited.
+  * Fix: launching on an anchor and cancelling, does not show intention until file is edited.
   * Add: do a partial match for anchor when no anchors match exactly.
-  * Add: filter text box to filter anchor list (show all partials, the rest hidden)
-        otherwise too many in the list.
+  * Add: filter text box to filter anchor list (show all partials, the rest hidden) otherwise
+    too many in the list.
 * Fix: Github collapse headers script not working in 2018.1
 * Fix: intermittent position not highlighting in preview.
 * Fix: Drag/Drop copy files does not save link drop options.Always resets or gets them wrong.

@@ -8,6 +8,7 @@
     - [Document with pleasure!](#document-with-pleasure)
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
+    - [Future Release: Version 2.6.0](#future-release-version-260)
     - [Next Release: Version 2.5.0](#next-release-version-250)
     - [Version 2.4.0](#version-240)
     - [Version 2.3.8](#version-238)
@@ -88,6 +89,18 @@ for:
 
 Release Road Map
 ----------------
+
+### Future Release: Version 2.6.0
+
+**Major Enhancement Release**
+
+* Google **Chrome Dev Tools** integrated for **JavaFX WebView** browser script debugging.
+* New Markdown Extensions:
+  * [Admonition PyMdown Extension]
+  * GitLab syntax Extension
+* Faster rendering solution to get around WebView caching issues and many large images slowing
+  performance and overflowing memory.
+* Plus the usual bug fixes that come up between now and the release.
 
 ### Next Release: Version 2.5.0
 
@@ -676,6 +689,7 @@ was based on [pegdown] library by [sirthias].
 Markdown Navigator, Copyright (c) 2015-2017, V. Schneider, <http://vladsch.com> All Rights
 Reserved.
 
+[Admonition PyMdown Extension]: https://squidfunk.github.io/mkdocs-material/extensions/admonition/
 [CommonMark]: http://commonmark.org/
 [CommonMark (spec 0.28)]: http://spec.commonmark.org/0.28/
 [commonmark-java]: https://github.com/atlassian/commonmark-java
