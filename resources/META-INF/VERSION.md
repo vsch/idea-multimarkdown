@@ -4,7 +4,7 @@
 
 ### Version History
 - [To Do](#to-do)
-- [2.4.0.48 - Bug Fix & Enhancement Release](#24048-bug-fix-enhancement-release)
+- [2.4.0.50 - Bug Fix & Enhancement Release](#24050-bug-fix-enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240-bug-fix-enhancement-release)
 - [2.3.8 - Bug Fix Release](#238-bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237-bug-fix-release)
@@ -132,8 +132,18 @@
 * [ ] Fix: for debugging only point links to debug URL server if the file actually exist on it,
       otherwise use the default URL.
 
-### 2.4.0.48 - Bug Fix & Enhancement Release
+* [ ] Add: history to CSS settings URI text box.
 
+* [ ] Fix: Rendering profiles, validate export HTML and HTML preview in javafx, seems
+      inconsistent when exporting file with embedded css text.
+* [ ] Fix: links to wiki pages with anchor refs show as "Not on GitHub" in the preview.
+* [ ] Fix: default completion for explicit links to wiki pages uses the extension
+
+### 2.4.0.50 - Bug Fix & Enhancement Release
+
+* Fix: remove the "canDebug" field and replace with dynamic value.
+* Fix: remove all break points on connection shutdown.
+* Fix: JavaFX debugger core dumping if turning off debugging while it is paused.
 * Fix: Project Default settings not being copied to new projects
 * Fix: intermittent preview element highlight stopped working until page refresh
 * Fix: pasting a page relative URL would be mistaken for FQN reference and always paste a link
