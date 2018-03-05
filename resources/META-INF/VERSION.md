@@ -4,7 +4,7 @@
 
 ### Version History
 - [To Do](#to-do)
-- [2.4.0.50 - Bug Fix & Enhancement Release](#24050-bug-fix-enhancement-release)
+- [2.4.0.52 - Bug Fix & Enhancement Release](#24052-bug-fix-enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240-bug-fix-enhancement-release)
 - [2.3.8 - Bug Fix Release](#238-bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237-bug-fix-release)
@@ -120,27 +120,31 @@
   * [ ] Add: add highlight of selected anchor target. Editor identifier highlight only works if
         caret is moved.
 
-* [ ] Add: #556, Default editor layout > Use last selected layout, option to have layout follow
-      last editor layout change action.
-
 * [ ] Add: intention to view markdown as flexmark-spec-example with HTML and AST results in a
       regular markdown editor. A button to copy to clipboard or insert into the file. Later add
       modules and options configurable in the dialog. For now just use the current file's
       flexmark options.
+
+* [ ] Add: #556, Default editor layout > Use last selected layout, option to have layout follow
+      last editor layout change action.
 * [ ] Fix: typographic `'` breaking words for spell checker generates erroneous spelling errors.
 * [ ] Add: code style settings and editor colors to settings import/export for markdown.
 * [ ] Fix: for debugging only point links to debug URL server if the file actually exist on it,
       otherwise use the default URL.
-
 * [ ] Add: history to CSS settings URI text box.
-
 * [ ] Fix: Rendering profiles, validate export HTML and HTML preview in javafx, seems
       inconsistent when exporting file with embedded css text.
 * [ ] Fix: links to wiki pages with anchor refs show as "Not on GitHub" in the preview.
 * [ ] Fix: default completion for explicit links to wiki pages uses the extension
+* [ ] Add: copy resources button to debug pane, to copy jar resource files to directory for
+      debugging.
 
-### 2.4.0.50 - Bug Fix & Enhancement Release
+### 2.4.0.52 - Bug Fix & Enhancement Release
 
+* Add: Admonition parser extension.
+  [Admonition Extension](https://github.com/vsch/flexmark-java/wiki/Extensions#admonition) To
+  create block-styled side content.
+* Fix: JavaFX WebView debug page reload in Not on FX application thread exception.
 * Fix: remove the "canDebug" field and replace with dynamic value.
 * Fix: remove all break points on connection shutdown.
 * Fix: JavaFX debugger core dumping if turning off debugging while it is paused.

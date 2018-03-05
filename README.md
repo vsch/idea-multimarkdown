@@ -96,7 +96,6 @@ Release Road Map
 
 * Google **Chrome Dev Tools** integrated for **JavaFX WebView** browser script debugging.
 * New Markdown Extensions:
-  * [Admonition PyMdown Extension]
   * GitLab syntax Extension
 * Faster rendering solution to get around WebView caching issues and many large images slowing
   performance and overflowing memory.
@@ -106,6 +105,7 @@ Release Road Map
 
 Bug and compatibility fixes you can find in [Version Notes].
 
+* **Admonition parser extension** [Admonition Extension, Material for MkDocs]
 * **Directories** as link targets for completion, validation, navigation and drag/drop or
   copy/paste to create links
 * **Settings management**: Copy project settings to/from project defaults and import/export
@@ -689,7 +689,7 @@ was based on [pegdown] library by [sirthias].
 Markdown Navigator, Copyright (c) 2015-2017, V. Schneider, <http://vladsch.com> All Rights
 Reserved.
 
-[Admonition PyMdown Extension]: https://squidfunk.github.io/mkdocs-material/extensions/admonition/
+[Admonition Extension, Material for MkDocs]: https://squidfunk.github.io/mkdocs-material/extensions/admonition/
 [CommonMark]: http://commonmark.org/
 [CommonMark (spec 0.28)]: http://spec.commonmark.org/0.28/
 [commonmark-java]: https://github.com/atlassian/commonmark-java
