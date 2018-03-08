@@ -4,7 +4,7 @@
 
 ### Version History
 - [To Do](#to-do)
-- [2.4.0.52 - Bug Fix & Enhancement Release](#24052-bug-fix-enhancement-release)
+- [2.4.0.54 - Bug Fix & Enhancement Release](#24054-bug-fix-enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240-bug-fix-enhancement-release)
 - [2.3.8 - Bug Fix Release](#238-bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237-bug-fix-release)
@@ -48,31 +48,9 @@
 * [ ] Add: source synchronization for HTML plain text previews
 * [ ] Add: detection for **GitHub** issue completions when no task servers are defined.
 * [ ] Add: transpose table, best to add `copy to clipboard transposed table`
-
-#### High Priority
-
-* Format as you type
-  * [ ] Fix: splitting a list item when the caret is on a "list marker" causes double list item
-        to be added. Check if what follows the caret is a "list marker" and do not insert one.
-  * [ ] Fix: typing spaces at paragraph start does not insert space to let the paragraph be
-        indented to next level
-  * [ ] Fix: inserting block quote marker before block mark gets confused
-* [ ] Fix: wiki links from main repo don't resolve if the file is in a sub-directory and access
-      is without extension or sub-directory. (Was probably broken when non-github rules were
-      added to resolver).
-* [ ] Fix: conversion from raw explicit link to wiki page looses the raw reference and results
-      in rendered markdown reference
-* [ ] Add: change logic for exported link format to use the link format for non-exported files,
-      even when "Link to exported HTML" option is selected.
-* [ ] Add option to disable images in preview for files that have more than N images on typing
-      and re-enabling them after M ms. With N & M user definable, to address update delay in
-      files with many images causing typing delay.
-* [ ] Add inspection for improper indentation of sub-items, where they are indented more than
-      the previous item but not enough to be its child.
 * [ ] Add option to configure a directory as a GitHub special link: ie. `issues` would treat
       files in that directory as issues, so that links would resolve in them the same way they
       do in a GitHub issue comment.
-
   * [ ] optionally convert to "Hard Wraps" mode on copy from these issue files so the text can
         be wrapped in IDEA and pasted as unwrapped into an issue. Effectively, remove any
         soft-breaks before copying to the clipboard.
@@ -100,20 +78,6 @@
 
 #### Cleanup up consistency of new features
 
-* [ ] Handle multiple attributes per heading and take last? first?, figure out what flexmark
-      does with the id attribute.
-
-* [ ] Do not extend setext heading markers on trailing attributes
-  * [ ] Format
-  * [ ] Intentions
-  * [ ] On typing
-  * [ ] Refactoring
-
-* [ ] Format optionally to combine consecutive attributes elements into a single list
-
-* [ ] Add Table Caption formatting options: as is, trim spaces, always add, remove if empty,
-      always remove; space around text check box.
-
 * file/ref anchor target search/explore intention on unresolved link anchor ref.
   * [ ] Add: clicking on an anchor or any anchor target should update the file anchor list
         selection.
@@ -125,22 +89,84 @@
       modules and options configurable in the dialog. For now just use the current file's
       flexmark options.
 
-* [ ] Add: #556, Default editor layout > Use last selected layout, option to have layout follow
-      last editor layout change action.
-* [ ] Fix: typographic `'` breaking words for spell checker generates erroneous spelling errors.
 * [ ] Add: code style settings and editor colors to settings import/export for markdown.
+
 * [ ] Fix: for debugging only point links to debug URL server if the file actually exist on it,
       otherwise use the default URL.
-* [ ] Add: history to CSS settings URI text box.
+
 * [ ] Fix: Rendering profiles, validate export HTML and HTML preview in javafx, seems
       inconsistent when exporting file with embedded css text.
-* [ ] Fix: links to wiki pages with anchor refs show as "Not on GitHub" in the preview.
-* [ ] Fix: default completion for explicit links to wiki pages uses the extension
+
 * [ ] Add: copy resources button to debug pane, to copy jar resource files to directory for
       debugging.
 
-### 2.4.0.52 - Bug Fix & Enhancement Release
+* [ ] Fix: add spellchecking intention for Markdown that handles embedded inline markup in text
+      and provides proper underlining and change to: intention actions.
 
+#### High Priority
+
+* [ ] Fix: wiki links from main repo don't resolve if the file is in a sub-directory and access
+      is without extension or sub-directory. (Was probably broken when non-github rules were
+      added to resolver).
+* [ ] Fix: conversion from raw explicit link to wiki page looses the raw reference and results
+      in rendered markdown reference
+* [ ] Add: change logic for exported link format to use the link format for non-exported files,
+      even when "Link to exported HTML" option is selected.
+* [ ] Add option to disable images in preview for files that have more than N images on typing
+      and re-enabling them after M ms. With N & M user definable, to address update delay in
+      files with many images causing typing delay.
+* [ ] Add inspection for improper indentation of sub-items, where they are indented more than
+      the previous item but not enough to be its child.
+
+##### Format Element/Document
+
+* [ ] Handle multiple attributes per heading and take last? first?, figure out what flexmark
+      does with the id attribute.
+* [ ] Do not extend setext heading markers on trailing attributes
+  * [ ] Format
+  * [ ] Intentions
+  * [ ] On typing
+  * [ ] Refactoring
+* Format as you type
+  * [ ] Fix: splitting a list item when the caret is on a "list marker" causes double list item
+        to be added. Check if what follows the caret is a "list marker" and do not insert one.
+  * [ ] Fix: typing spaces at paragraph start does not insert space to let the paragraph be
+        indented to next level
+  * [ ] Fix: inserting block quote marker before block mark gets confused
+
+### 2.4.0.54 - Bug Fix & Enhancement Release
+
+* Fix: remove old project settings handling and replace with IDE provided method. Old settings
+  copied to default project settings on first plugin initialization after upgrade. Now default
+  project settings support having defaults for Rendering > Profiles
+* Add: Format options for Attributes:
+  * space inside braces: no change, add, remove
+  * space around attribute equal sign: no change, add, remove
+  * attribute value quotes:
+    * No Change,
+    * None, double, single preferred,
+    * None, single, double preferred,
+    * Double, single preferred,
+    * Double quotes always,
+    * Single, double preferred,
+    * Single quotes always,
+* Fix: table formatting would disable wrap on typing unnecessarily because it failed to properly
+  detect table at caret offset.
+* Add Table Caption formatting options:
+  * Caption: no change, always add, remove if empty, always remove;
+  * Caption space: no change, space around text, trim spaces check box.
+* Add: #556, Default editor layout > Use last selected layout, option to have layout follow last
+  editor layout change action.
+* Fix: typographic `'` breaking words for spell checker generates erroneous spelling errors.
+* Fix: spell checking now done across inline markup. Error underline and Change to: intention do
+  not work well because of interspersed markup messing up offsets but at least spelling errors
+  will be highlighted. For example `do**sn't**` will now show a spelling error because the
+  effective text is `dosn't`.
+* Add: history to CSS settings URI text box.
+* Fix: default completion for explicit `http://` absolute links to wiki pages uses the extension
+* Fix: `file://` links to wiki pages with anchor refs showed as "Only resolving locally" in the
+  preview, all `file://` links show as resolving only locally.
+* Fix: Admonition extension would be disabled if Attributes extension was not enabled.
 * Add: Admonition parser extension.
   [Admonition Extension](https://github.com/vsch/flexmark-java/wiki/Extensions#admonition) To
   create block-styled side content.

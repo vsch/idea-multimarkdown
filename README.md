@@ -94,18 +94,17 @@ Release Road Map
 
 **Major Enhancement Release**
 
-* Google **Chrome Dev Tools** integrated for **JavaFX WebView** browser script debugging.
-* New Markdown Extensions:
-  * GitLab syntax Extension
 * Faster rendering solution to get around WebView caching issues and many large images slowing
   performance and overflowing memory.
+* Improved Multiple Module Support
+* Link resolution support for non-GitHub VCS providers 
 * Plus the usual bug fixes that come up between now and the release.
 
 ### Next Release: Version 2.5.0
 
 Bug and compatibility fixes you can find in [Version Notes].
 
-* **Admonition parser extension** [Admonition Extension, Material for MkDocs]
+* Google **Chrome Dev Tools** integrated for **JavaFX WebView** browser script debugging.
 * **Directories** as link targets for completion, validation, navigation and drag/drop or
   copy/paste to create links
 * **Settings management**: Copy project settings to/from project defaults and import/export
@@ -117,6 +116,7 @@ Bug and compatibility fixes you can find in [Version Notes].
 * Project **Ref Anchor** explorer intention
 * **Vertical Split** text/preview option
 * **Text/Preview** toggle action option
+* **Admonition parser extension**, [Admonition Extension, Material for MkDocs]
 * **Attributes extension** to parses HTML attributes of the form `{attr=value}`,
   `{attr='value'}`, `{attr="value"}`, `{.class-name}` or `{#element-id}`
 * **Enumerated Reference extension** which allows enumerated reference links and text. For
