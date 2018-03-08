@@ -4,7 +4,7 @@
 
 ### Version History
 - [To Do](#to-do)
-- [2.4.0.54 - Bug Fix & Enhancement Release](#24054-bug-fix-enhancement-release)
+- [2.4.0.56 - Bug Fix & Enhancement Release](#24056-bug-fix-enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240-bug-fix-enhancement-release)
 - [2.3.8 - Bug Fix Release](#238-bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237-bug-fix-release)
@@ -83,23 +83,17 @@
         selection.
   * [ ] Add: add highlight of selected anchor target. Editor identifier highlight only works if
         caret is moved.
-
 * [ ] Add: intention to view markdown as flexmark-spec-example with HTML and AST results in a
       regular markdown editor. A button to copy to clipboard or insert into the file. Later add
       modules and options configurable in the dialog. For now just use the current file's
       flexmark options.
-
 * [ ] Add: code style settings and editor colors to settings import/export for markdown.
-
 * [ ] Fix: for debugging only point links to debug URL server if the file actually exist on it,
       otherwise use the default URL.
-
 * [ ] Fix: Rendering profiles, validate export HTML and HTML preview in javafx, seems
       inconsistent when exporting file with embedded css text.
-
 * [ ] Add: copy resources button to debug pane, to copy jar resource files to directory for
       debugging.
-
 * [ ] Fix: add spellchecking intention for Markdown that handles embedded inline markup in text
       and provides proper underlining and change to: intention actions.
 
@@ -134,8 +128,13 @@
         indented to next level
   * [ ] Fix: inserting block quote marker before block mark gets confused
 
-### 2.4.0.54 - Bug Fix & Enhancement Release
+### 2.4.0.56 - Bug Fix & Enhancement Release
 
+* Fix: NoSuchMethodError for IDE versions < 2018
+* Fix: image paste/modify dialog to not add _# suffix to file name if pasting on image target
+  ref and on paste action is "Replace file content" for link-ref targeting an image, since the
+  name should be the same as the link-ref in order to replace file content. Changing the name
+  will save it under a new file and change the link-ref.
 * Fix: remove old project settings handling and replace with IDE provided method. Old settings
   copied to default project settings on first plugin initialization after upgrade. Now default
   project settings support having defaults for Rendering > Profiles
