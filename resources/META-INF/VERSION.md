@@ -4,7 +4,7 @@
 
 ### Version History
 - [To Do](#to-do)
-- [2.4.0.56 - Bug Fix & Enhancement Release](#24056-bug-fix-enhancement-release)
+- [2.4.0.58 - Bug Fix & Enhancement Release](#24058-bug-fix-enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240-bug-fix-enhancement-release)
 - [2.3.8 - Bug Fix Release](#238-bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237-bug-fix-release)
@@ -128,8 +128,16 @@
         indented to next level
   * [ ] Fix: inserting block quote marker before block mark gets confused
 
-### 2.4.0.56 - Bug Fix & Enhancement Release
+### 2.4.0.58 - Bug Fix & Enhancement Release
 
+* [ ] Fix: GitHub wiki home link resolution now same as other wiki pages.
+* Fix: reverse fix for "WebView should be available by now", was causing deadlock if
+  Accessibility features were enabled.
+* Fix: JavaFX preview was using project profile parser settings, not scope based rendering
+  profile parser settings.
+* Fix: Formatting default table column alignment when no alignment marker is specified, header
+  columns are centered, body columns are left aligned.
+* Add: Export to treat emoji images as image linked files.
 * Fix: NoSuchMethodError for IDE versions < 2018
 * Fix: image paste/modify dialog to not add _# suffix to file name if pasting on image target
   ref and on paste action is "Replace file content" for link-ref targeting an image, since the
