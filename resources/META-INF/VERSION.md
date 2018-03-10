@@ -4,7 +4,7 @@
 
 ### Version History
 - [To Do](#to-do)
-- [2.4.0.60 - Bug Fix & Enhancement Release](#24060-bug-fix-enhancement-release)
+- [2.4.0.62 - Bug Fix & Enhancement Release](#24062-bug-fix-enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240-bug-fix-enhancement-release)
 - [2.3.8 - Bug Fix Release](#238-bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237-bug-fix-release)
@@ -128,8 +128,10 @@
         indented to next level
   * [ ] Fix: inserting block quote marker before block mark gets confused
 
-### 2.4.0.60 - Bug Fix & Enhancement Release
+### 2.4.0.62 - Bug Fix & Enhancement Release
 
+* Fix: manually exporting a file from the toolbar now treats this as if `Export on Save` was set
+  for the file.
 * Fix: update GitHub wiki home link resolution for image links. Changed recently by GitHub
 * Fix: trailing spaces filter behavior changed, postponed trailing spaces would all be deleted.
 * Fix: reverse fix for "WebView should be available by now", was causing deadlock if
