@@ -92,12 +92,12 @@ Release Road Map
 
 ### Future Release: Version 2.6.0
 
-**Major Enhancement Release**
+**Major Refactoring Release**
 
 * Faster rendering solution to get around WebView caching issues and many large images slowing
   performance and overflowing memory.
 * Improved Multiple Module Support
-* Link resolution support for non-GitHub VCS providers 
+* Link resolution support for non-GitHub VCS providers
 * Plus the usual bug fixes that come up between now and the release.
 
 ### Next Release: Version 2.5.0
@@ -568,7 +568,7 @@ Rogues Gallery of Features
 
 * **Table of Contents** tag that works with basic markdown syntax and is updated by the plugin.
   The table of contents at the top of this page is an example. For more information see the
-  [wiki](../../wiki/Adding-a-Table-of-Contents#enabling-table-of-contents)
+  [wiki](../../wiki/Adding-Table-of-Contents#enabling-table-of-contents)
 
 * Java class, method and field completions in inline code. Great if you need to reference code
   elements in your project from a markdown document.
