@@ -4,7 +4,7 @@
 
 ### Version History
 - [To Do](#to-do)
-- [2.4.0.58 - Bug Fix & Enhancement Release](#24058-bug-fix-enhancement-release)
+- [2.4.0.60 - Bug Fix & Enhancement Release](#24060-bug-fix-enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240-bug-fix-enhancement-release)
 - [2.3.8 - Bug Fix Release](#238-bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237-bug-fix-release)
@@ -128,9 +128,10 @@
         indented to next level
   * [ ] Fix: inserting block quote marker before block mark gets confused
 
-### 2.4.0.58 - Bug Fix & Enhancement Release
+### 2.4.0.60 - Bug Fix & Enhancement Release
 
-* [ ] Fix: GitHub wiki home link resolution now same as other wiki pages.
+* Fix: update GitHub wiki home link resolution for image links. Changed recently by GitHub
+* Fix: trailing spaces filter behavior changed, postponed trailing spaces would all be deleted.
 * Fix: reverse fix for "WebView should be available by now", was causing deadlock if
   Accessibility features were enabled.
 * Fix: JavaFX preview was using project profile parser settings, not scope based rendering
