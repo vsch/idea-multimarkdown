@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.4.0.63 - Bug Fix & Enhancement Release](#24063-bug-fix-enhancement-release)
+- [2.4.0.64 - Bug Fix & Enhancement Release](#24064-bug-fix-enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240-bug-fix-enhancement-release)
 - [2.3.8 - Bug Fix Release](#238-bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237-bug-fix-release)
@@ -11,9 +11,12 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235-bug-fix-enhancement-release)
 
 
-### 2.4.0.63 - Bug Fix & Enhancement Release
+### 2.4.0.64 - Bug Fix & Enhancement Release
 
-* Fix: wiki page file name rename refactoring. Broken in 2.4.0 release
+* Fix: COPY_HTML_MIME and PDF stylesheets now combine user provided attributes with defaults so
+  only difference has to be added to custom CSS.
+* Add: emoji images to COPY_HTML_MIME and PDF stylesheets so emoji display properly.
+* Fix: wiki page file name rename refactoring. Broken since 2.4.0 release
 * Fix: manually exporting a file from the toolbar now treats this as if `Export on Save` was set
   for the file.
 * Fix: update GitHub wiki home link resolution for image links. Changed recently by GitHub
