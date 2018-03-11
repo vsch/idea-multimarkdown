@@ -104,6 +104,8 @@ Release Road Map
 
 Bug and compatibility fixes you can find in [Version Notes].
 
+* Support for IDE versions 2016.3 or newer. Older IDEs can only use plugin versions 2.4.0 and
+  older.
 * Google **Chrome Dev Tools** integrated for **JavaFX WebView** browser script debugging.
 * **Directories** as link targets for completion, validation, navigation and drag/drop or
   copy/paste to create links
