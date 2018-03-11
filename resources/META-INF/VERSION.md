@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.4.0.66 - Bug Fix & Enhancement Release](#24066-bug-fix-enhancement-release)
+- [2.4.0.68 - Bug Fix & Enhancement Release](#24068-bug-fix-enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240-bug-fix-enhancement-release)
 - [2.3.8 - Bug Fix Release](#238-bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237-bug-fix-release)
@@ -11,8 +11,9 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235-bug-fix-enhancement-release)
 
 
-### 2.4.0.66 - Bug Fix & Enhancement Release
+### 2.4.0.68 - Bug Fix & Enhancement Release
 
+* Fix: improve spelling error alignment in text with many embedded inline markers
 * Fix: compatibility with IDE versions 2016.3, limit since version to 163.15529
 * Fix: COPY_HTML_MIME and PDF stylesheets now combine user provided attributes with defaults so
   only difference has to be added to custom CSS.
