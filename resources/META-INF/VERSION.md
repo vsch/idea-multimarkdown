@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.4.0.70 - Bug Fix & Enhancement Release](#24070-bug-fix-enhancement-release)
+- [2.4.0.72 - Bug Fix & Enhancement Release](#24072-bug-fix-enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240-bug-fix-enhancement-release)
 - [2.3.8 - Bug Fix Release](#238-bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237-bug-fix-release)
@@ -11,8 +11,13 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235-bug-fix-enhancement-release)
 
 
-### 2.4.0.70 - Bug Fix & Enhancement Release
+### 2.4.0.72 - Bug Fix & Enhancement Release
 
+* Fix: #564, Some problems with "Copy / Drop Image" dialog. Modify image directory history drop
+  down to include, in order of priority:
+  * last used image directory of the current file
+  * image directories of images in the current file, ordered by count of occurrence
+  * image directories in the current project, ordered by count of occurrence
 * Fix: absolute `http://` link from main repo to wiki page which is located in a sub-directory
   would show as unresolved
 * Add: help topics for all settings panels
