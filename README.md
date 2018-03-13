@@ -117,63 +117,14 @@ Bug and compatibility fixes you can find in [Version Notes].
   string value then renaming one will rename the other.
 * Project **Ref Anchor** explorer intention
 * **Vertical Split** text/preview option
+* **Help** topics for all settings panes
 * **Text/Preview** toggle action option
-* **Admonition parser extension**, [Admonition Extension, Material for MkDocs]
-* **Attributes extension** to parses HTML attributes of the form `{attr=value}`,
-  `{attr='value'}`, `{attr="value"}`, `{.class-name}` or `{#element-id}`
-* **Enumerated Reference extension** which allows enumerated reference links and text. For
-  example:
-
-  ```
-  ![Fig](http://example.com/test.png){#fig:test}
-  [#fig:test]
-
-  ![Fig](http://example.com/test.png){#fig:test2}
-  [#fig:test2]
-
-  | table |
-  |-------|
-  | data  |
-  [[#tbl:test] caption]
-  {#tbl:test}
-
-  See [@fig:test2]
-
-  See [@fig:test]
-
-  See [@tbl:test]
-
-
-  [@fig]: Figure [#].
-
-  [@tbl]: Table [#].
-  ```
-
-  is equivalent to the following without manual numbering of individual elements:
-
-  ```
-  ![Fig](http://example.com/test.png){#fig:test}
-  Figure 1.
-
-  ![Fig](http://example.com/test.png){#fig:test2}
-  Figure 2.
-
-  | table |
-  |-------|
-  | data  |
-  [Table 1. caption]
-  {#tbl:test}
-
-  See [Figure 2.](#fig:test2)
-
-  See [Figure 1.](#fig:test)
-
-  See [Table 1.](#tbl:test)
-
-  ```
-
-  :exclamation: Attributes extension must be enabled in order for enumerated references to be
-  properly resolved for rendering.
+* **[Attributes](https://github.com/vsch/idea-multimarkdown/wiki/Attributes-Extension)** Parser
+  extension
+* **[Enumerated References](https://github.com/vsch/idea-multimarkdown/wiki/Enumerated-References-Extension)**
+  Parser extension
+* **[Admonition](https://github.com/vsch/idea-multimarkdown/wiki/Admonition-Extension)**, Parser
+  extension based on [Admonition Extension, Material for MkDocs]
 
 ### Version 2.4.0
 
@@ -570,7 +521,7 @@ Rogues Gallery of Features
 
 * **Table of Contents** tag that works with basic markdown syntax and is updated by the plugin.
   The table of contents at the top of this page is an example. For more information see the
-  [wiki](../../wiki/Adding-Table-of-Contents#enabling-table-of-contents)
+  [wiki](../../wiki/Table-of-Contents-Extension#enabling-table-of-contents)
 
 * Java class, method and field completions in inline code. Great if you need to reference code
   elements in your project from a markdown document.
@@ -594,7 +545,7 @@ Rogues Gallery of Features
     ![Screenshot Structure Document](assets/images/faq/structure/Screenshot_Structure_Document.png)
 
 * **Document format** toolbar button and action to format the document to code style settings.
-  [Document Format Options](../../wiki/Document-Format-Options)
+  [Document Format Options](../../wiki/Document-Format-Settings)
 
 * Dynamically created syntax highlighting attributes to simulate overlay of element style with
   transparency. This creates consistent colors when multiple attributes are combined, such as
@@ -707,7 +658,7 @@ Reserved.
 [Markdown]: http://daringfireball.net/projects/markdown
 [Markdown Navigator]: http://vladsch.com/product/markdown-navigator
 [Markdown Support]: https://plugins.jetbrains.com/plugin/7793?pr=
-[Modifying Link Processing]: https://github.com/vsch/idea-multimarkdown/wiki/Modifying-Link-Processing
+[Modifying Link Processing]: https://github.com/vsch/idea-multimarkdown/wiki/Link-Map-Settings
 [MultiMarkdown]: http://fletcherpenney.net/multimarkdown/
 [nicoulaj]: https://github.com/nicoulaj
 [nicoulaj/idea-markdown plugin]: https://github.com/nicoulaj/idea-markdown

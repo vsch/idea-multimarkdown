@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.4.0.68 - Bug Fix & Enhancement Release](#24068-bug-fix-enhancement-release)
+- [2.4.0.70 - Bug Fix & Enhancement Release](#24070-bug-fix-enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240-bug-fix-enhancement-release)
 - [2.3.8 - Bug Fix Release](#238-bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237-bug-fix-release)
@@ -11,8 +11,11 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235-bug-fix-enhancement-release)
 
 
-### 2.4.0.68 - Bug Fix & Enhancement Release
+### 2.4.0.70 - Bug Fix & Enhancement Release
 
+* Fix: absolute `http://` link from main repo to wiki page which is located in a sub-directory
+  would show as unresolved
+* Add: help topics for all settings panels
 * Fix: improve spelling error alignment in text with many embedded inline markers
 * Fix: compatibility with IDE versions 2016.3, limit since version to 163.15529
 * Fix: COPY_HTML_MIME and PDF stylesheets now combine user provided attributes with defaults so
@@ -42,13 +45,13 @@
   * space inside braces: no change, add, remove
   * space around attribute equal sign: no change, add, remove
   * attribute value quotes:
-    * No Change,
-    * None, double, single preferred,
-    * None, single, double preferred,
-    * Double, single preferred,
-    * Double quotes always,
-    * Single, double preferred,
-    * Single quotes always,
+    * No Change
+    * None, double, single
+    * None, single, double
+    * Double, single
+    * Double quotes
+    * Single, double
+    * Single quotes
 * Fix: table formatting would disable wrap on typing unnecessarily because it failed to properly
   detect table at caret offset.
 * Add Table Caption formatting options:
@@ -67,8 +70,9 @@
   preview, all `file://` links show as resolving only locally.
 * Fix: Admonition extension would be disabled if Attributes extension was not enabled.
 * Add: Admonition parser extension.
-  [Admonition Extension](https://github.com/vsch/flexmark-java/wiki/Extensions#admonition) To
-  create block-styled side content.
+  **[Admonition](https://github.com/vsch/flexmark-java/wiki/Admonition-Extension)**, Parser
+  extension based on [Admonition Extension, Material for MkDocs] to create block-styled side
+  content.
 * Fix: JavaFX WebView debug page reload in Not on FX application thread exception.
 * Fix: remove the "canDebug" field and replace with dynamic value.
 * Fix: remove all break points on connection shutdown.
@@ -172,7 +176,7 @@
 
   If you copy from defaults or import a file followed by `Cancel` then no settings will be
   modified.
-* Fix: #548, When "Autoscroll to source" is enabled in project view, markdown navigator editor
+* Fix: #548, When "Auto-scroll to source" is enabled in project view, markdown navigator editor
   steals focus when moving through project view with keyboard arrows.
 * Fix: #542, Typographical Error in PHPStorm Preferences > Editor > Code Style > Markdown
 * Add: option in settings to enable editor paste handler registration so that paste handler is
@@ -208,9 +212,9 @@
 * Fix: #544, Export to PDF greyed out. Editor actions would be disabled if the text editor was
   not visible.
 * Add: parser options for
-  [Attributes Extension](https://github.com/vsch/flexmark-java/wiki/Extensions#attributes) and
-  [Enumerated Reference](https://github.com/vsch/flexmark-java/wiki/Extensions#enumerated-reference)
-  of flexmark-java.
+  * **[Attributes](https://github.com/vsch/flexmark-java/wiki/Attributes-Extension)** and
+  * **[Enumerated References](https://github.com/vsch/flexmark-java/wiki/Enumerated-References-Extension)**
+    parser extensions
   * Add: heading intentions to add/remove explicit id
   * Add: completions for link anchors to id attribute values
   * Add: completions for enumerated references and reference formats
@@ -477,4 +481,6 @@
   exporting the full document.
 
 [holgerbrandl/pasteimages]: https://github.com/holgerbrandl/pasteimages
+[Admonition Extension, Material for MkDocs]: https://squidfunk.github.io/mkdocs-material/extensions/admonition/
+
 
