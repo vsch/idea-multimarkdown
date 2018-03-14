@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.4.0.72 - Bug Fix & Enhancement Release](#24072-bug-fix-enhancement-release)
+- [2.4.0.74 - Bug Fix & Enhancement Release](#24074-bug-fix-enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240-bug-fix-enhancement-release)
 - [2.3.8 - Bug Fix Release](#238-bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237-bug-fix-release)
@@ -11,8 +11,9 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235-bug-fix-enhancement-release)
 
 
-### 2.4.0.72 - Bug Fix & Enhancement Release
+### 2.4.0.74 - Bug Fix & Enhancement Release
 
+* Fix: paste handler using 2018 api `getSelectedEditor()`
 * Fix: #564, Some problems with "Copy / Drop Image" dialog. Modify image directory history drop
   down to include, in order of priority:
   * last used image directory of the current file
