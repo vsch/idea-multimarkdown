@@ -15,14 +15,6 @@
     - [Version 2.3.7](#version-237)
     - [Version 2.3.6](#version-236)
     - [Version 2.3.5](#version-235)
-    - [Version 2.3.4](#version-234)
-    - [Version 2.3.3](#version-233)
-    - [Version 2.3.2](#version-232)
-    - [Version 2.3.1](#version-231)
-    - [Version 2.3.0](#version-230)
-    - [Version 2.2.0](#version-220)
-    - [Version 2.1.1](#version-211)
-    - [Version 2.1.0](#version-210)
     - [Source Update is Long Overdue](#source-update-is-long-overdue)
 - [Older Versions](#older-versions)
     - [Version 1.8.4](#version-184)
@@ -224,229 +216,6 @@ the parsing and results of lists. You may need to change list syntax in parser o
 * Option to vertically align synchronized position in Preview Settings, selected by default in
   Preview settings.
 
-### Version 2.3.4
-
-* Add: link format option to Paste Images & Copy Images
-  * Page Relative
-  * Repo Relative (`/...`)
-  * Absolute (`http://`)
-  * Absolute (`file://`)
-* Add: File drag and drop into markdown document to create links, image files create image links
-  the rest create inline links. Each file link will be added as a separately undoable command.
-
-  If copy dragging files (Ctrl on Linux/Windows, ⌥ on OS X) then for image files the `Copy
-  Image` dialog will open (like Paste Image dialog) that will allow you to modify the image and
-  choose the location where to store the copy.
-
-  For non-image files a link format dialog is displayed for the first file to allow selecting
-  the link format.
-
-### Version 2.3.3
-
-* Paste Images from clipboard directly into Markdown documents to inserts an image link or
-  update links and save PNG image file thanks image utils library from
-  [holgerbrandl/pasteimages]
-  * caret context ops: insert image link, replace link, replace link target, replace image file
-    content
-  * image processing options with preview:
-    * crop left, right, top, bottom settings
-    * scale image 10% to 200% with interpolation options:nearest neighbour, bilinear, bicubic
-    * change color (with margin of tolerance) to transparent
-    * round corners with corner radius setting
-    * add border with border width option
-* PDF export action, menu and toolbar item added
-* GitHub Collapse Markdown script, which converts headings in the document to collapsible
-  sections in preview, with state persistence for initializing the open/close state of headings.
-  Now collapsed heading are preserved between page refreshes and when opening markdown files.
-
-### Version 2.3.2
-
-* Fix: bugs in HTML to Markdown converter
-
-* Fix: bugs in Markdown formatting
-
-* Fix: bugs in Copy Markdown as HTML mime content
-
-### Version 2.3.1
-
-This release adds HTML to Markdown conversion capability allowing you to Copy HTML from the
-browser and get Markdown when you paste it in your Markdown document.
-
-* Conversion between HTML and Markdown
-  * Automatic mime `text/html` conversion to markdown on paste in Markdown documents.
-  * Markdown To Html intention action to convert some markdown elements to HTML in your document
-    so they can be rendered on processors that do not support these Markdown extensions:
-    * Tables
-    * Image Links (Multi-line URL images for inserting UML, LaTex, etc)
-    * Definitions List
-  * Html to Markdown intention action to convert html in Markdown
-
-* Annotations and Quick Fixes:
-  * for TOC with empty title string. GitHub does not accept this so an empty title needs at
-    least one space in the title string of the TOC element.
-  * for list items that need a blank line before them or empty items that need a space after
-    them to be processed by target markdown processor.
-
-* Jekyll Support:
-  * include Jekyll tag parsing and processing the include, if markdown will be parsed to HTML
-    and rendered in the view, if not markdown will be included in the HTML
-    * Markdown referenceable elements such as footnotes, references and headings from files
-      included through Jekyll include tags are now recognized for: find usages, completions,
-      navigation and refactoring.
-  * enable parsing of jekyll macros in urls with spaces between braces when Jekyll Front matter
-    parsing.
-
-* Escape/Unescape `Special Characters` when these wrap to start of line or unescape them when
-  they are wrapped away from the start of line. This prevents accidental lists, heading and
-  definition lists. Code style options:
-  * `Escape when wrapped to start of line`
-  * `Unescape when wrapped away from start of line`
-
-### Version 2.3.0
-
-* Now list processing option can be set to one of the following:
-  * GitHub: [Markdown], GitHub and GitBook documents, GitHub Wiki Pages
-  * CommonMark: [CommonMark] and GitHub Comments
-  * Fixed 4 Indent: [MultiMarkdown], [pegdown], [pandoc].
-
-  :warning: Changing the list processing option can change the formatting of the document since
-  element indentation will be interpreted differently.
-
-* Format element, document and list indent/un-indent actions respect the list processing
-  configuration.
-
-* Actions to navigate and select table cells added with permutations of next/prev table
-  cell/cell-start/cell-end with/without selection. Assign to shortcuts in Keymap > Plug-ins >
-  Markdown Navigator
-
-* Code Style option to sort task items based on their done/not done status:
-  * `No Change`: leave all as is
-  * `Incomplete first`: put incomplete tasks first, followed by the rest
-  * `Has incomplete first`: put incomplete tasks and list items that contain incomplete tasks
-    first followed by the rest
-  * `Incomplete first, complete to non-task`: put incomplete tasks first, followed by the rest
-    and convert complete tasks to non-task items.
-  * `Has incomplete, complete to non-task`: put incomplete tasks and list items that contain
-    incomplete tasks first followed by the rest and convert complete tasks to non-task items.
-
-* Code Style options for Table of Contents to control generated TOC format and new style
-  keywords in the `[TOC]` element:
-  * `hierarchy`: as before hierarchical list of headings in document order
-  * `flat`: flat list of headings in document order
-  * `reversed`: flat reversed list of headings in reverse document order
-  * `increasing`: flat, alphabetically increasing by heading text
-  * `decreasing`: flat, alphabetically decreasing by heading text
-
-* Inline toggling actions take punctuation characters that they will not wrap by default if
-  caret is on them or the current word to wrap ends on them. Default punctuation symbols in
-  settings: `.,;:!?`. If the caret is right after one of them then default behavior is to wrap
-  the word immediately before the punctuation characters in the corresponding style.
-
-* `@formatter:off` / `@formatter:on`, or configured Code Style: Formatter Control Markers, in
-  comments can be used to disable auto-formatting and wrap on typing for sections of a document
-
-* `Copy Markdown as HTML formatted text` action that will copy document or selection to the
-  clipboard in HTML mime format that will paste as formatted HTML into applications that
-  recognize this format. Useful for pasting rendered markdown into e-mails or word processor
-  applications. To override the default styles and parser options create a profile named
-  `COPY_HTML_MIME` and override `Parser` and/or `Stylesheet` CSS Text. See:
-  [Copy Markdown to HTML formatted text]
-
-* Option in Main Settings `Inline code toggle like other text style actions` to change inline
-  code action to work like other style toggle actions: bold, italic and strike through, instead
-  of continuously adding back ticks when at the end of word. Enabled by default. To get previous
-  behavior disable this option.
-
-* Add: Parser extensions and options for:
-  * Ins: `++inserted text++` results in underlined text
-  * Subscript: `~subscript~`
-  * Superscript: `^superscript^`
-
-### Version 2.2.0
-
-The goal of zero latency typing in 1000+ line files with preview showing is now a reality. This
-release is a rewrite of JavaFX WebView integration code with changes to the style sheet to
-eliminate all typing response typing delays.
-
-It is now possible, should you need it, to edit a 500k file with 11,000+ lines with an easily
-tolerable typing delay.
-
-In addition to a long list of bug fixes you can find in [Version Notes], this release was a
-major tie up of user feature requests:
-
-* Basic version now with split editor and HTML text preview
-* Live template for collapsible details <details><summary>under mnemonic `.collapsed`</summary>
-  must first be enabled in <kbd>LiveTemplates > Markdown</kbd>. To keep all `detail` tags open
-  after preview update, add JavaFX WebView script `Details tag opener` so the content can be
-  seen while editing &nbsp;</details>
-* Option to hide disabled toolbar buttons makes better use of screen real-estate
-* Display line numbers in fenced code by enabling `Prism.js` script in Stylesheet settings
-* All markdown settings affecting rendering are now per project with support for scoped
-  rendering profiles allowing different settings down to file level granularity to be defined
-  for a project
-* Multi-line URL image links are back since upgrade to [flexmark-java] parser
-* Collapsible headers script adapted from [GitHub-userscripts] by Rob Garrison. Enable `GitHub
-  Collapse Markdown` in Stylesheet settings
-* HTML Export with optional auto-export on document save or project open, with Tools menu
-  `Markdown Navigator` items and all the fixings for the generated HTML which can be different
-  from ones used for rendering the document in preview
-* Link pre and post processing replacements to allow refactoring, completion, validation and
-  navigation for links decorated with non-github parameters, like Jekyll's macros. See:
-  [Modifying Link Processing]
-* Jekyll front matter pre and post processing replacements to allow refactoring, completion,
-  validation and navigation for key values that contain file references. See:
-  [Modifying Link Processing]
-* Swing browser options now support embedding stylesheet contents into the HTML
-* Swing browser now supports displaying HTML documents `Show Split Editor for HTML documents`
-* Soft Wrap at right margin option with:
-  * option to disable wrap on typing when soft wrap is enabled
-  * option for document format when soft wrap is enabled:
-    * disable format
-    * leave enabled
-    * infinite margins. This will effectively remove all soft breaks when formatting the
-      document.
-* Link text completion for GitHub issue titles now do issue title lookup
-* `Copy Jira Formatted text` ![Copy Jira] action improved to add blank lines for loosely spaced
-  lists and after the last list item of the outer-most list and the next element; and now adds
-  `:lang=` for fenced code that specifies the language
-* Move caret to line of element clicked in preview
-* Scroll and optionally Highlight element in preview at source caret position
-* Print HTML preview for JavaFx
-* Markdown syntax and context aware trailing space trimming when enabled
-
-### Version 2.1.1
-
-All parsing and rendering is now done by the new parser. Performance and typing response is
-simply amazing. For small files, about 100k and less than a thousand lines, you can set the
-syntax highlighter to "Lexer". For larger files or when you want fastest typing response, then
-syntax highlighter should be set to "Annotator", which is the default. For best typing response
-in very large files, you can turn off the preview while editing.
-
-* Add: Smart copy/paste between files
-  * change relative links/references to reflect destination file's location
-  * change relative links/references to absolute if relative format will cannot be resolved
-  * append footnotes/references that are not included but are referenced in the copied text
-* Add: Breadcrumbs support for markdown documents
-* Add: Structure View elements now compatible with text search
-
-### Version 2.1.0
-
-* Add: GFM table rendering option to render tables text that GFM would render as text.
-* Add: JavaFX preview scroll to source position
-* Add: JavaFX highlight preview element at caret position, with detail down to source line
-* Add: flexmark parser for all parsing and rendering.
-* Some elements still missing but they are not supported by GFM:
-  * Definitions
-  * Typographic: Quotes, Smarts
-  * Multi-Line Image URLs
-* Add: Languages & Settings > Markdown > Debug settings for which parser is to be used for:
-  lexer, parser, annotator and HTML renderer. Highly recommended these are all set to "flexmark"
-  but if you want to compare or need pegdown parsing then set them to how it used to be, set one
-  or all to pegdown.
-
-  :warning: Pegdown version is no longer supported so you are on your own for any issues and
-  problems caused by using pegdown parser. :smiling_imp: I couldn't wait to be able to say that.
-
 ### Source Update is Long Overdue
 
 Now that I unified the display between the licensed and unlicensed versions by removing support
@@ -639,30 +408,22 @@ with a simple desire for a Markdown preview that looked like GitHub's.
 \* This plugin was originally based on the [nicoulaj/idea-markdown plugin] by [nicoulaj], which
 was based on [pegdown] library by [sirthias].
 
-Markdown Navigator, Copyright (c) 2015-2017, V. Schneider, <http://vladsch.com> All Rights
+Markdown Navigator, Copyright (c) 2015-2018, V. Schneider, <http://vladsch.com> All Rights
 Reserved.
 
 [Admonition Extension, Material for MkDocs]: https://squidfunk.github.io/mkdocs-material/extensions/admonition/
-[CommonMark]: http://commonmark.org/
 [CommonMark (spec 0.28)]: http://spec.commonmark.org/0.28/
 [commonmark-java]: https://github.com/atlassian/commonmark-java
-[Copy Jira]: https://github.com/vsch/idea-multimarkdown/raw/master/resources/icons/editor_actions/Copy_jira.png
-[Copy Markdown to HTML formatted text]: https://github.com/vsch/idea-multimarkdown/wiki/Enhanced-Features#copy-markdown-to-html-formatted-text
 [Craig's List]: http://montreal.en.craigslist.ca/
 [flexmark-java]: https://github.com/vsch/flexmark-java
 [GitHub]: https://github.com/vsch/laravel-translation-manager
-[GitHub-userscripts]: https://github.com/Mottie/GitHub-userscripts
-[holgerbrandl/pasteimages]: https://github.com/holgerbrandl/pasteimages
 [intellij-markdown]: https://github.com/valich/intellij-markdown
 [JetBrains plugin page]: https://plugins.jetbrains.com/plugin?pr=&pluginId=7896
 [Markdown]: http://daringfireball.net/projects/markdown
 [Markdown Navigator]: http://vladsch.com/product/markdown-navigator
 [Markdown Support]: https://plugins.jetbrains.com/plugin/7793?pr=
-[Modifying Link Processing]: https://github.com/vsch/idea-multimarkdown/wiki/Link-Map-Settings
-[MultiMarkdown]: http://fletcherpenney.net/multimarkdown/
 [nicoulaj]: https://github.com/nicoulaj
 [nicoulaj/idea-markdown plugin]: https://github.com/nicoulaj/idea-markdown
-[Pandoc]: http://pandoc.org/MANUAL.html#pandocs-markdown
 [pegdown]: http://pegdown.org
 [sirthias]: https://github.com/sirthias
 [Version Notes]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/META-INF/VERSION.md
@@ -670,16 +431,24 @@ Reserved.
 [Android Studio]: http://developer.android.com/sdk/installing/studio.html
 [AppCode]: http://www.jetbrains.com/objc
 [CLion]: https://www.jetbrains.com/clion
+[CommonMark]: http://commonmark.org/
+[Copy Jira]: https://github.com/vsch/idea-multimarkdown/raw/master/resources/icons/editor_actions/Copy_jira.png
+[Copy Markdown to HTML formatted text]: https://github.com/vsch/idea-multimarkdown/wiki/Enhanced-Features#copy-markdown-to-html-formatted-text
 [DataGrip]: https://www.jetbrains.com/datagrip
 [GitHub Issues]: https://github.com/vsch/idea-multimarkdown/issues
 [GitHub Issues page]: https://github.com/vsch/idea-multimarkdown/issues/
 [GitHub wiki in IntelliJ IDE]: https://github.com/vsch/idea-multimarkdown/wiki/Adding-GitHub-Wiki-to-IntelliJ-Project
 [GitHub Wiki pages]: https://github.com/vsch/idea-multimarkdown/wiki
+[GitHub-userscripts]: https://github.com/Mottie/GitHub-userscripts
+[holgerbrandl/pasteimages]: https://github.com/holgerbrandl/pasteimages
 [IntelliJ IDEA]: http://www.jetbrains.com/idea
 [Jekyll]: https://jekyllrb.com
 [JetBrains plugin comment and rate page]: https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896
 [Kotlin]: http://kotlinlang.org
 [Kramdown]: http://kramdown.gettalong.org/
+[Modifying Link Processing]: https://github.com/vsch/idea-multimarkdown/wiki/Link-Map-Settings
+[MultiMarkdown]: http://fletcherpenney.net/multimarkdown/
+[Pandoc]: http://pandoc.org/MANUAL.html#pandocs-markdown
 [PhpExtra]: https://michelf.ca/projects/php-markdown/extra/
 [PhpStorm]: http://www.jetbrains.com/phpstorm
 [Pipe Table Formatter]: https://github.com/anton-dev-ua/PipeTableFormatter
