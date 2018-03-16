@@ -9,7 +9,7 @@
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
     - [Future Release: Version 2.6.0](#future-release-version-260)
-    - [Version 2.5.0](#version-250)
+    - [Version 2.5.2](#version-252)
     - [Version 2.4.0](#version-240)
     - [Version 2.3.8](#version-238)
     - [Version 2.3.7](#version-237)
@@ -92,7 +92,7 @@ Release Road Map
 * Link resolution support for non-GitHub VCS providers
 * Plus the usual bug fixes that come up between now and the release.
 
-### Version 2.5.0
+### Version 2.5.2
 
 Bug and compatibility fixes you can find in [Version Notes].
 
