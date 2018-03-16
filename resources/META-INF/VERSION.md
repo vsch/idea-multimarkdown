@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.4.0.78 - Bug Fix & Enhancement Release](#24078---bug-fix--enhancement-release)
+- [2.5.0 - Bug Fix & Enhancement Release](#250---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
 - [2.3.7 - Bug Fix Release](#237---bug-fix-release)
@@ -11,7 +11,7 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.4.0.78 - Bug Fix & Enhancement Release
+### 2.5.0 - Bug Fix & Enhancement Release
 
 * Add: link and image paste/drop options to exported/imported settings management
 * Fix: preview window would show links resolved after link map transformation to `http://` as
