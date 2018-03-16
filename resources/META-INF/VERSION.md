@@ -3,16 +3,19 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.4.0.76 - Bug Fix & Enhancement Release](#24076-bug-fix-enhancement-release)
-- [2.4.0 - Bug Fix & Enhancement Release](#240-bug-fix-enhancement-release)
-- [2.3.8 - Bug Fix Release](#238-bug-fix-release)
-- [2.3.7 - Bug Fix Release](#237-bug-fix-release)
-- [2.3.6 - Bug Fix & Enhancement Release](#236-bug-fix-enhancement-release)
-- [2.3.5 - Bug Fix & Enhancement Release](#235-bug-fix-enhancement-release)
+- [2.4.0.78 - Bug Fix & Enhancement Release](#24078---bug-fix--enhancement-release)
+- [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
+- [2.3.8 - Bug Fix Release](#238---bug-fix-release)
+- [2.3.7 - Bug Fix Release](#237---bug-fix-release)
+- [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
+- [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.4.0.76 - Bug Fix & Enhancement Release
+### 2.4.0.78 - Bug Fix & Enhancement Release
 
+* Add: link and image paste/drop options to exported/imported settings management
+* Fix: preview window would show links resolved after link map transformation to `http://` as
+  `local only`.
 * Fix: #567, '_'s are replaced by '-'s in TOC, GitHub now preserves `_` in heading anchor refs
 * Fix: paste handler using 2018 api `getSelectedEditor()`
 * Fix: #564, Some problems with "Copy / Drop Image" dialog. Modify image directory history drop
