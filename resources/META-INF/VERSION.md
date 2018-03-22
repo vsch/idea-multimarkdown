@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.5.2.4 - Bug Fix & Enhancement Release](#2524---bug-fix--enhancement-release)
+- [2.5.2.6 - Bug Fix & Enhancement Release](#2526---bug-fix--enhancement-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
@@ -12,8 +12,10 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.5.2.4 - Bug Fix & Enhancement Release
+### 2.5.2.6 - Bug Fix & Enhancement Release
 
+* Fix: #575, Broken Spell Checker, spell checking not working on paragraph text for basic
+  plugin.
 * Fix: JavaFX detection with Android Studio 3.0
 * Fix: #434, Spellchecker context menu is duplicated
 * Add: `Use rename for spelling error intention` to allow turning off `Rename to:` spellchecking
@@ -22,8 +24,6 @@
 
 ### 2.5.2 - Bug Fix & Enhancement Release
 
-* [ ] Fix: #573, Preview Horizontal / Vertical should be toolbar buttons
-* [ ] Fix: export silently fails if project path contains `(` or `)` somewhere in the path.
 * Fix: newer API use which causes exceptions in 2017.3 IDE versions.
 * Add: link and image paste/drop options to exported/imported settings management
 * Fix: preview window would show links resolved after link map transformation to `http://` as
