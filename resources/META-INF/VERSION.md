@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.5.2.6 - Bug Fix & Enhancement Release](#2526---bug-fix--enhancement-release)
+- [2.5.2.8 - Bug Fix & Enhancement Release](#2528---bug-fix--enhancement-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
@@ -12,8 +12,13 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.5.2.6 - Bug Fix & Enhancement Release
+### 2.5.2.8 - Bug Fix & Enhancement Release
 
+* Fix: file types by specific extension completion did not work
+* Fix: link resolution would not find files with nested extensions like `blade.php`
+* Change: toggle inline attribute when the caret is at the end of a non-space span now restores
+  the caret position when applying the style instead of end of the span, inside the markers.
+  More natural when inlining a word to continue typing.
 * Fix: #575, Broken Spell Checker, spell checking not working on paragraph text for basic
   plugin.
 * Fix: JavaFX detection with Android Studio 3.0
