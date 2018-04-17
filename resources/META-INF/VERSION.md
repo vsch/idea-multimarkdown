@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.5.2.10 - Bug Fix & Enhancement Release](#25210---bug-fix--enhancement-release)
+- [2.5.2.14 - Bug Fix & Enhancement Release](#25214---bug-fix--enhancement-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
@@ -12,8 +12,9 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.5.2.10 - Bug Fix & Enhancement Release
+### 2.5.2.14 - Bug Fix & Enhancement Release
 
+* Add: option to disable gutter margin for markdown documents
 * Add: option to disable line markers to main settings panel.
 * Fix: file types by specific extension completion did not work
 * Fix: link resolution would not find files with nested extensions like `blade.php`
