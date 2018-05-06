@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.5.2.14 - Bug Fix & Enhancement Release](#25214---bug-fix--enhancement-release)
+- [2.5.2.16 - Bug Fix & Enhancement Release](#25216---bug-fix--enhancement-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
@@ -12,8 +12,23 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.5.2.14 - Bug Fix & Enhancement Release
+### 2.5.2.16 - Bug Fix & Enhancement Release
 
+* Fix: shorten toolbar by moving more rare actions to popup menus: list, table, misc and copy
+* Fix: wrap on typing `>` to insert block quote level into existing block quote or using
+  backspace to remove a block quote level
+* Fix: wrap on typing backspace in footnote definition would replicate the first line prefix on
+  continuation lines
+* Fix: inserting an EOL in a list item before text matching bullet list marker or numbered would
+  double the list marker on the resulting line
+* Add: option for escape/unescape all numbered list lead-in of `number.` when wrapping text.
+* Fix: diagnostic java.lang.RuntimeException in ImageUtils.getImageFromTransferable when pasting
+  an image
+* Fix: java.lang.Throwable: Invalid file: DB VirtualFile: table when caused sometimes by file
+  watcher requesting markdown files be re-parsed
+* Fix: diagnostic java.lang.IllegalArgumentException: Argument for @NotNull parameter 'project'
+* Fix: accept license code when extra spaces are added before EOL in e-mail.
+* Fix: diagnostic/ prevSibling should not be null.
 * Add: option to disable gutter margin for markdown documents
 * Add: option to disable line markers to main settings panel.
 * Fix: file types by specific extension completion did not work
