@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.5.2.16 - Bug Fix & Enhancement Release](#25216---bug-fix--enhancement-release)
+- [2.5.2.18 - Bug Fix & Enhancement Release](#25218---bug-fix--enhancement-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
@@ -12,8 +12,10 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.5.2.16 - Bug Fix & Enhancement Release
+### 2.5.2.18 - Bug Fix & Enhancement Release
 
+* Fix: #591, uncomment does not remove leading space, removed padding spaces from comment
+  prefix/suffix.
 * Fix: shorten toolbar by moving more rare actions to popup menus: list, table, misc and copy
 * Fix: wrap on typing `>` to insert block quote level into existing block quote or using
   backspace to remove a block quote level
