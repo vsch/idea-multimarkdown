@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.5.2.20 - Bug Fix & Enhancement Release](#25220---bug-fix--enhancement-release)
+- [2.5.2.22 - Bug Fix & Enhancement Release](#25222---bug-fix--enhancement-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
@@ -12,8 +12,16 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.5.2.20 - Bug Fix & Enhancement Release
+### 2.5.2.22 - Bug Fix & Enhancement Release
 
+* Fix: High Sierra JavaFx issue, implement JavaFX initialization as per Markdown Support.
+* Add: Document Translation using Yandex.Translate and flexmark-java translation helper API,
+  configured in debug settings. This is a temporary implementation which will be moved to its
+  own plugin in the future.
+* Fix: diagnostic/NPE on JavaFX WebView save editor state.
+* Add: conversion of emoji from HTML mime copied back from Apple mail.
+* Fix: paste image file name from link name would not be URI decoded.
+* Add: folding of list items longer than one line of text
 * Fix: #590, "Create directories and folder" does only create directory on first hit.
 * Fix: #591, uncomment does not remove leading space, removed padding spaces from comment
   prefix/suffix.
