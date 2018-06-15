@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.5.2.23 - Bug Fix & Enhancement Release](#25223---bug-fix--enhancement-release)
+- [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
 - [2.3.8 - Bug Fix Release](#238---bug-fix-release)
@@ -12,7 +12,7 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.5.2.23 - Bug Fix & Enhancement Release
+### 2.5.4 - Bug Fix Release
 
 * Fix: High Sierra JavaFx issue, implement JavaFX initialization as per Markdown Support.
 * Add: Document Translation using Yandex.Translate and flexmark-java translation helper API,

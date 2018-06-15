@@ -9,6 +9,7 @@
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
     - [Future Release: Version 2.6.0](#future-release-version-260)
+    - [Version 2.5.4](#version-254)
     - [Version 2.5.2](#version-252)
     - [Version 2.4.0](#version-240)
     - [Version 2.3.8](#version-238)
@@ -92,9 +93,17 @@ Release Road Map
 * Link resolution support for non-GitHub VCS providers
 * Plus the usual bug fixes that come up between now and the release.
 
-### Version 2.5.2
+### Version 2.5.4
 
 Bug and compatibility fixes you can find in [Version Notes].
+
+* **Shorten toolbar** by moving actions to popup menus
+* **Folding of list items** when longer than one line of text
+* **Options to disable gutter** margin and icons for markdown documents
+* **Option to disable Rename To:** on spelling fix intention
+* Experimental **Translate Document** [Powered by Yandex.Translate](http://translate.yandex.com/)
+
+### Version 2.5.2
 
 * Support for IDE versions 2016.3.8 or newer. Older IDEs can only use plugin version 2.4.0 and
   older.
