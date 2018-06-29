@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.5.4.2 - Bug Fix Release](#2542---bug-fix-release)
+- [2.5.4.4 - Bug Fix Release](#2544---bug-fix-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
@@ -13,8 +13,9 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.5.4.2 - Bug Fix Release
+### 2.5.4.4 - Bug Fix Release
 
+* Fix: wrong range calculation for #612 fix
 * Fix: #611, Backspace in empty checkmark box deletes checkmark
 * Fix: #612, Code folding eats one character for underline headers
 * Add: HTML comment folding and options
