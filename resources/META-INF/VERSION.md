@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.5.4.4 - Bug Fix Release](#2544---bug-fix-release)
+- [2.5.4.6 - Bug Fix Release](#2546---bug-fix-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
@@ -13,8 +13,15 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.5.4.4 - Bug Fix Release
+### 2.5.4.6 - Bug Fix Release
 
+* Fix: #615, Plugin can't initialize in multi-user setup, now temp directory
+  `.markdownNavigator` is created under the user's home directory
+* Fix: #620, Check keyboard shortcut changes wrong list item
+* Fix: #619, Create unchecked list item when pressing enter next to a line with a checked list item
+* Fix: reference paste to add line references to link text in the form: `: Line #` or `: Lines
+  #-#`
+* Fix: diagnostic/1575, `node.treeNext must not be null`
 * Fix: wrong range calculation for #612 fix
 * Fix: #611, Backspace in empty checkmark box deletes checkmark
 * Fix: #612, Code folding eats one character for underline headers
