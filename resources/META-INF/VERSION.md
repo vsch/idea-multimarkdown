@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.5.4.8 - Bug Fix Release](#2548---bug-fix-release)
+- [2.5.4.10 - Bug Fix Release](#25410---bug-fix-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
@@ -13,7 +13,7 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.5.4.8 - Bug Fix Release
+### 2.5.4.10 - Bug Fix Release
 
 * Fix: #621, plugin oom in goland, potential memory leak
 * Fix: #615, Plugin can't initialize in multi-user setup, now temp directory
