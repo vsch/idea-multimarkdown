@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.5.4.16 - Bug Fix Release](#25416---bug-fix-release)
+- [2.5.4.18 - Bug Fix Release](#25418---bug-fix-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
@@ -13,8 +13,11 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.5.4.16 - Bug Fix Release
+### 2.5.4.18 - Bug Fix Release
 
+* Fix: #610, hope can have more paste option, add HTML paste options to suppress conversion of
+  inline and heading elements
+* Fix: #623, Directory linking occasionally broken
 * Fix: compatibility with versions 2017.
 * Fix: possibly fix diagnostic pycharm exception on migrate code settings
 * Change: update deprecated API usage

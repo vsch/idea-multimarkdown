@@ -8,7 +8,8 @@
     - [Document with pleasure!](#document-with-pleasure)
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
-    - [Future Release: Version 2.6.0](#future-release-version-260)
+    - [Future Release: Version 3.0.0](#future-release-version-300)
+    - [Next Version 2.6.0](#next-version-260)
     - [Version 2.5.4](#version-254)
     - [Version 2.5.2](#version-252)
     - [Version 2.4.0](#version-240)
@@ -83,7 +84,7 @@ for:
 Release Road Map
 ----------------
 
-### Future Release: Version 2.6.0
+### Future Release: Version 3.0.0
 
 **Major Refactoring Release**
 
@@ -92,6 +93,13 @@ Release Road Map
 * Improved Multiple Module Support
 * Link resolution support for non-GitHub VCS providers
 * Plus the usual bug fixes that come up between now and the release.
+
+### Next Version 2.6.0
+
+Bug and compatibility fixes you can find in [Version Notes].
+
+* Add **HTML Paste Options** to suppress generation of some markdown elements
+* Add: **HTML comment folding** and options
 
 ### Version 2.5.4
 
