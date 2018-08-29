@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.5.4.18 - Bug Fix Release](#25418---bug-fix-release)
+- [2.5.4.20 - Bug Fix Release](#25420---bug-fix-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
@@ -13,8 +13,13 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.5.4.18 - Bug Fix Release
+### 2.5.4.20 - Bug Fix Release
 
+* Fix: GitHub issue completions for 2018.3 EAP
+* Fix: #577, Add feature to move table columns, added Move table column left/right
+* Fix: remove line/search highlights from plain HTML preview
+* Fix: remove auto links from spellchecking elements
+* Fix: partial fix for list item needs blank line annotation for list in block quotes
 * Fix: #610, hope can have more paste option, add HTML paste options to suppress conversion of
   inline and heading elements
 * Fix: #623, Directory linking occasionally broken
@@ -33,7 +38,7 @@
   #-#`
 * Fix: diagnostic/1575, `node.treeNext must not be null`
 * Fix: wrong range calculation for #612 fix
-* Fix: #611, Backspace in empty checkmark box deletes checkmark
+* Fix: #611, Backspace in empty check mark box deletes check mark
 * Fix: #612, Code folding eats one character for underline headers
 * Add: HTML comment folding and options
 * Fix: diagnostic, parent already disposed
