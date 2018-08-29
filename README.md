@@ -98,6 +98,7 @@ Release Road Map
 
 Bug and compatibility fixes you can find in [Version Notes].
 
+* Add: **Tab/Backtab** overrides for table navigation and list indent/unindent actions
 * Add: **Move Table Column** left/right actions
 * Add **HTML Paste Options** to suppress generation of some markdown elements
 * Add: **HTML comment folding** and options

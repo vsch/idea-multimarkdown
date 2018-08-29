@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.5.4.20 - Bug Fix Release](#25420---bug-fix-release)
+- [2.5.4.22 - Bug Fix Release](#25422---bug-fix-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
@@ -13,8 +13,14 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.5.4.20 - Bug Fix Release
+### 2.5.4.22 - Bug Fix Release
 
+* Fix: #469, pressing tab in a empty list item should indent the list
+  * added option "List item indentation" under "Tab/Backtab Overrides" which enables using
+    tab/backtab to change list item indentation
+* Fix: #541, using tab to move to the next table cell
+  * added option "Table Navigation" under "Tab/Backtab Overrides" which enables using
+    tab/backtab to navigate table cells
 * Fix: GitHub issue completions for 2018.3 EAP
 * Fix: #577, Add feature to move table columns, added Move table column left/right
 * Fix: remove line/search highlights from plain HTML preview
