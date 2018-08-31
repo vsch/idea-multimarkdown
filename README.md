@@ -98,6 +98,14 @@ Release Road Map
 
 Bug and compatibility fixes you can find in [Version Notes].
 
+* Add: **GitLab Flavoured Markdown** extensions
+  * Math inline using ```$``$``` and fenced code blocks with info of `math` using
+    [Katex](https://github.com/Khan/KaTeX)
+  * Charts fenced code blocks with info of `mermaid` using
+    [Mermaid](https://github.com/knsv/mermaid)
+  * Ins/Del via `{++}` and `[++]`/`{--}` and `[--]`
+  * Multi-line block quotes
+  * Video image link rendering
 * Add: **Tab/Backtab** overrides for table navigation and list indent/unindent actions
 * Add: **Move Table Column** left/right actions
 * Add **HTML Paste Options** to suppress generation of some markdown elements

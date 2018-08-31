@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.5.4.24 - Bug Fix Release](#25424---bug-fix-release)
+- [2.5.4.26 - Bug Fix Release](#25426---bug-fix-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
@@ -12,9 +12,19 @@
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
+### 2.5.4.26 - Bug Fix Release
 
-### 2.5.4.24 - Bug Fix Release
-
+* Add: GitLab parsing and rendering functionality
+  * Math inline using ```$``$``` and fenced code blocks with info of `math` using
+    [Katex](https://github.com/Khan/KaTeX)
+  * Charts fenced code blocks with info of `mermaid` using
+    [Mermaid](https://github.com/knsv/mermaid)
+  * Ins/Del via `{++}` and `[++]`/`{--}` and `[--]`
+  * Multi-line block quotes
+  * Video image link rendering
+* Fix: disable tab override when popup is showing to allow tab to be used for completions.
+* Fix: with CommonMark list type bullet list item after ordered list and vice versa, would allow
+  indentation in error.
 * Fix: #469, pressing tab in a empty list item should indent the list
   * added option "List item indentation" under "Tab/Backtab Overrides" which enables using
     tab/backtab to change list item indentation
