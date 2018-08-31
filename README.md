@@ -98,7 +98,7 @@ Release Road Map
 
 Bug and compatibility fixes you can find in [Version Notes].
 
-* Add: **GitLab Flavoured Markdown** extensions
+* Add: **[GitLab Flavoured Markdown](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/user/markdown.md)** extensions
   * Math inline using ```$``$``` and fenced code blocks with info of `math` using
     [Katex](https://github.com/Khan/KaTeX)
   * Charts fenced code blocks with info of `mermaid` using
