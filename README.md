@@ -101,11 +101,14 @@ Bug and compatibility fixes you can find in [Version Notes].
 * Add: **[GitLab Flavoured Markdown](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/user/markdown.md)** extensions
   * Math inline using ```$``$``` and fenced code blocks with info of `math` using
     [Katex](https://github.com/Khan/KaTeX)
-  * Charts fenced code blocks with info of `mermaid` using
+  * Chart fenced code blocks with info of `mermaid` using
     [Mermaid](https://github.com/knsv/mermaid)
-  * Ins/Del via `{++}` and `[++]`/`{--}` and `[--]`
-  * Multi-line block quotes
-  * Video image link rendering
+  * Inserted text (underlined) via `{+text+}` or `[+text+]`
+  * Deleted text (strike through) via `{-text-}` or `[-text-]`
+  * Multiline block quotes using `>>>` at start of line to mark block start and `<<<` at start
+    of line to mark block end.
+    [GFM: Multiline Blockquote](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/user/markdown.md##multiline-blockquote)
+  * Video image link rendering [GFM: Videos](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/user/markdown.md##videos)
 * Add: **Tab/Backtab** overrides for table navigation and list indent/unindent actions
 * Add: **Move Table Column** left/right actions
 * Add **HTML Paste Options** to suppress generation of some markdown elements

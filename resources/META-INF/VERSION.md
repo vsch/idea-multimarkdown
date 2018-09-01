@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.5.4.26 - Bug Fix Release](#25426---bug-fix-release)
+- [2.5.4.27 - Bug Fix Release](#25427---bug-fix-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
@@ -12,18 +12,31 @@
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
-### 2.5.4.26 - Bug Fix Release
+### 2.5.4.27 - Bug Fix Release
 
+* [ ] Update Enhanced Features
+  * [ ] Update road map 
+  * [ ] Update feature comparison
+* Add: HTML Settings option `Add <!DOCTYPE html>` to enable/disable having doc type at top of
+  document. Required by Katex to work.
+* Fix: update emoji icons
+* Fix: GitLab math blocks to display as blocks instead of inlines 
+* Fix: disable tab overrides if there is a selection in the editor or multiple carets
+* Change: split math and chart options from GitLab so that each can be selected without GitLab
+  extensions if GitLab extensions are not selected.
 * Add:
   [GitLab Flavoured Markdown](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/user/markdown.md)
   parsing and rendering functionality
   * Math inline using ```$``$``` and fenced code blocks with info of `math` using
     [Katex](https://github.com/Khan/KaTeX)
-  * Charts fenced code blocks with info of `mermaid` using
+  * Chart fenced code blocks with info of `mermaid` using
     [Mermaid](https://github.com/knsv/mermaid)
-  * Ins/Del via `{++}` and `[++]`/`{--}` and `[--]`
-  * Multi-line block quotes
-  * Video image link rendering
+  * Inserted text (underlined) via `{+text+}` or `[+text+]`
+  * Deleted text (strike through) via `{-text-}` or `[-text-]`
+  * Multiline block quotes using `>>>` at start of line to mark block start and `<<<` at start
+    of line to mark block end.
+    [GFM: Multiline Blockquote](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/user/markdown.md##multiline-blockquote)
+  * Video image link rendering [GFM: Videos](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/user/markdown.md##videos)
 * Fix: disable tab override when popup is showing to allow tab to be used for completions.
 * Fix: with CommonMark list type bullet list item after ordered list and vice versa, would allow
   indentation in error.
