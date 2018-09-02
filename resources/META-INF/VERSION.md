@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.5.4.27 - Bug Fix Release](#25427---bug-fix-release)
+- [2.5.4.28 - Bug Fix Release](#25428---bug-fix-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
@@ -12,11 +12,11 @@
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
-### 2.5.4.27 - Bug Fix Release
+### 2.5.4.28 - Bug Fix Release
 
-* [ ] Update Enhanced Features
-  * [ ] Update road map 
-  * [ ] Update feature comparison
+* Fix: 2016.3 compatibility
+* Fix: markdown code style settings to be created from file when available to allow IDE scope
+  based resolution for markdown files to work properly.
 * Add: HTML Settings option `Add <!DOCTYPE html>` to enable/disable having doc type at top of
   document. Required by Katex to work.
 * Fix: update emoji icons
