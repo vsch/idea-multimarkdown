@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.5.4.28 - Bug Fix Release](#25428---bug-fix-release)
+- [2.5.4.30 - Bug Fix Release](#25430---bug-fix-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
@@ -12,15 +12,20 @@
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
-### 2.5.4.28 - Bug Fix Release
+### 2.5.4.30 - Bug Fix Release
 
+* Fix: scroll sync not working in 2018.3 EAP
+* Fix: change lambdas to functions to have `arguments` available (causing exception in JetBrains
+  Open JDK 1.8.0_152-release-1293-b10 x86_64
+* Add: extra diagnostic information for Swing Browser `EmptyStackException`
+* Fix: diagnostic/1759, kotlin arguments erroneously defined as not nullable.
 * Fix: 2016.3 compatibility
 * Fix: markdown code style settings to be created from file when available to allow IDE scope
   based resolution for markdown files to work properly.
 * Add: HTML Settings option `Add <!DOCTYPE html>` to enable/disable having doc type at top of
   document. Required by Katex to work.
 * Fix: update emoji icons
-* Fix: GitLab math blocks to display as blocks instead of inlines 
+* Fix: GitLab math blocks to display as blocks instead of inlines
 * Fix: disable tab overrides if there is a selection in the editor or multiple carets
 * Change: split math and chart options from GitLab so that each can be selected without GitLab
   extensions if GitLab extensions are not selected.
