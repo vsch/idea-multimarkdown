@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.5.4.30 - Bug Fix Release](#25430---bug-fix-release)
+- [2.5.4.32 - Bug Fix Release](#25432---bug-fix-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
@@ -12,8 +12,17 @@
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
-### 2.5.4.30 - Bug Fix Release
+### 2.5.4.32 - Bug Fix Release
 
+* Fix: clean up code style formatting and preview of style changes
+  * style changes are now highlighted to properly reflect the last change, not whole document
+    reformat changes
+  * prefix changes would not be applied (or formatted) if text wrap for paragraphs was disabled,
+    affected list items, definitions, block quotes
+  * block quote prefix (compact with space) always inserted space after firs `>` instead of last `>`
+  * TOC with html language option would not update preview
+* Add: link text suggestion for user label `@username` for GitHub user links of the form: `https://github.com/username` 
+* Change: remove runtime null assertions for function arguments
 * Fix: scroll sync not working in 2018.3 EAP
 * Fix: change lambdas to functions to have `arguments` available (causing exception in JetBrains
   Open JDK 1.8.0_152-release-1293-b10 x86_64
