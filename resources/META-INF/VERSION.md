@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.5.4.32 - Bug Fix Release](#25432---bug-fix-release)
+- [2.5.4.34 - Bug Fix & Enhancement Release](#25434---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
@@ -12,8 +12,11 @@
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
-### 2.5.4.32 - Bug Fix Release
+### 2.5.4.34 - Bug Fix & Enhancement Release
 
+* Fix: JavaFx Browser initialization bug introduced by 2016.3 compatibility fix.
+* Add: "Paste HTML" button to HTML Paste Options dialog to paste HTML without conversion to
+  markdown.
 * Fix: clean up code style formatting and preview of style changes
   * style changes are now highlighted to properly reflect the last change, not whole document
     reformat changes
@@ -21,7 +24,8 @@
     affected list items, definitions, block quotes
   * block quote prefix (compact with space) always inserted space after firs `>` instead of last `>`
   * TOC with html language option would not update preview
-* Add: link text suggestion for user label `@username` for GitHub user links of the form: `https://github.com/username` 
+  * Remove unused list formatting options
+* Add: link text suggestion for user label `@username` for GitHub user links of the form: `https://github.com/username`
 * Change: remove runtime null assertions for function arguments
 * Fix: scroll sync not working in 2018.3 EAP
 * Fix: change lambdas to functions to have `arguments` available (causing exception in JetBrains
