@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.5.4.36 - Bug Fix & Enhancement Release](#25436---bug-fix--enhancement-release)
+- [2.5.4.38 - Bug Fix & Enhancement Release](#25438---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
@@ -12,7 +12,8 @@
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
-### 2.5.4.36 - Bug Fix & Enhancement Release
+
+### 2.5.4.38 - Bug Fix & Enhancement Release
 
 * Fix: change code style sample parsing flags to modify parser flags to allow formatting all
   sample elements.
@@ -37,10 +38,12 @@
     reformat changes
   * prefix changes would not be applied (or formatted) if text wrap for paragraphs was disabled,
     affected list items, definitions, block quotes
-  * block quote prefix (compact with space) always inserted space after firs `>` instead of last `>`
+  * block quote prefix (compact with space) always inserted space after firs `>` instead of last
+    `>`
   * TOC with html language option would not update preview
   * Remove unused list formatting options
-* Add: link text suggestion for user label `@username` for GitHub user links of the form: `https://github.com/username`
+* Add: link text suggestion for user label `@username` for GitHub user links of the form:
+  `https://github.com/username`
 * Change: remove runtime null assertions for function arguments
 * Fix: scroll sync not working in 2018.3 EAP
 * Fix: change lambdas to functions to have `arguments` available (causing exception in JetBrains
@@ -69,7 +72,8 @@
   * Multiline block quotes using `>>>` at start of line to mark block start and `<<<` at start
     of line to mark block end.
     [GFM: Multiline Blockquote](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/user/markdown.md##multiline-blockquote)
-  * Video image link rendering [GFM: Videos](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/user/markdown.md##videos)
+  * Video image link rendering
+    [GFM: Videos](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/user/markdown.md##videos)
 * Fix: disable tab override when popup is showing to allow tab to be used for completions.
 * Fix: with CommonMark list type bullet list item after ordered list and vice versa, would allow
   indentation in error.
