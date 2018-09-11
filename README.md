@@ -98,6 +98,8 @@ Release Road Map
 
 Bug and compatibility fixes you can find in [Version Notes].
 
+* Fix: style changes are now highlighted to properly reflect the last change, not whole document
+  reformat changes
 * Add: **[GitLab Flavoured Markdown](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/user/markdown.md)** extensions
   * Math inline using ```$``$``` and fenced code blocks with info of `math` using
     [Katex](https://github.com/Khan/KaTeX)

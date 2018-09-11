@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.5.4.34 - Bug Fix & Enhancement Release](#25434---bug-fix--enhancement-release)
+- [2.5.4.36 - Bug Fix & Enhancement Release](#25436---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
@@ -12,8 +12,23 @@
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
-### 2.5.4.34 - Bug Fix & Enhancement Release
+### 2.5.4.36 - Bug Fix & Enhancement Release
 
+* Fix: change code style sample parsing flags to modify parser flags to allow formatting all
+  sample elements.
+* Fix: settings "Manage..." exception in DataGrip without an open project. Now uses user home
+  dir as default directory without an open project.
+* Fix: fenced code and indented code indented with tabs would not minimize indent during
+  formatting.
+* Fix: HTML to markdown conversion
+  * Fix: #268, Pipe characters are not escaped in Table (FlexmarkHtmlParser)
+    * Fix: escape pipe characters in text (to avoid accidental use as table or other markup)
+      when not inline code nor fenced code
+    * Fix: escape back ticks when inside code
+    * Fix: disable escaping of `[]` when inside code
+    * Fix: disable escaping of `\` when inside code
+    * Fix: replace non-break space with space when inside code
+* Fix: `FlexmarkHtmlParser.BR_AS_EXTRA_BLANK_LINES` now adds `<br />` followed by blank line
 * Fix: JavaFx Browser initialization bug introduced by 2016.3 compatibility fix.
 * Add: "Paste HTML" button to HTML Paste Options dialog to paste HTML without conversion to
   markdown.
