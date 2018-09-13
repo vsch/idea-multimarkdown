@@ -3,7 +3,7 @@
 [TOC levels=3,6]: # "Version History"
 
 ### Version History
-- [2.5.4.38 - Bug Fix & Enhancement Release](#25438---bug-fix--enhancement-release)
+- [2.5.4.40 - Bug Fix & Enhancement Release](#25440---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
@@ -13,8 +13,12 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.5.4.38 - Bug Fix & Enhancement Release
+### 2.5.4.40 - Bug Fix & Enhancement Release
 
+* Add: option to remove prefixes when joining lines
+* Fix: move code style `Continuation Lines` indent into `Text` code style panel.
+* Add: `Left Justified` option to ordered list style options
+* Fix: force code style parser settings to CommonMark
 * Fix: change code style sample parsing flags to modify parser flags to allow formatting all
   sample elements.
 * Fix: settings "Manage..." exception in DataGrip without an open project. Now uses user home
@@ -27,7 +31,7 @@
       when not inline code nor fenced code
     * Fix: escape back ticks when inside code
     * Fix: disable escaping of `[]` when inside code
-    * Fix: disable escaping of `\` when inside code
+      * Fix: disable escaping of `\` when inside code
     * Fix: replace non-break space with space when inside code
 * Fix: `FlexmarkHtmlParser.BR_AS_EXTRA_BLANK_LINES` now adds `<br />` followed by blank line
 * Fix: JavaFx Browser initialization bug introduced by 2016.3 compatibility fix.

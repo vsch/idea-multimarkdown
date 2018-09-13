@@ -98,6 +98,7 @@ Release Road Map
 
 Bug and compatibility fixes you can find in [Version Notes].
 
+* Add: Join Lines option to **Remove Prefixes**
 * Fix: style changes are now highlighted to properly reflect the last change, not whole document
   reformat changes
 * Add: **[GitLab Flavoured Markdown](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/user/markdown.md)** extensions
