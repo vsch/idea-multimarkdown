@@ -1,9 +1,9 @@
 ## Markdown Navigator
 
-[TOC levels=3,6]: # "Version History"
+[TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.5.4.40 - Bug Fix & Enhancement Release](#25440---bug-fix--enhancement-release)
+- [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
 - [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
@@ -13,8 +13,12 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.5.4.40 - Bug Fix & Enhancement Release
+### 2.6.0 - Bug Fix & Enhancement Release
 
+* Fix: change definition indent maximum to 4, beyond which it converts the text to indented
+  code.
+* Fix: definition formatting would not add indent removal causing contained block quote prefix
+  to be doubled
 * Add: option to remove prefixes when joining lines
 * Fix: move code style `Continuation Lines` indent into `Text` code style panel.
 * Add: `Left Justified` option to ordered list style options
