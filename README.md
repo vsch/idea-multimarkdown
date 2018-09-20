@@ -9,6 +9,7 @@
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
     - [Future Release: Version 3.0.0](#future-release-version-300)
+    - [Next Version 2.7.0](#next-version-270)
     - [Version 2.6.0](#version-260)
     - [Version 2.5.4](#version-254)
     - [Version 2.5.2](#version-252)
@@ -94,14 +95,39 @@ Release Road Map
 * Link resolution support for non-GitHub VCS providers
 * Plus the usual bug fixes that come up between now and the release.
 
-### Version 2.6.0
+### Next Version 2.7.0
 
 Bug and compatibility fixes you can find in [Version Notes].
+
+* Add: option to enable validation of remote links (annotates unresolved link if server returns
+  error)
+* Add: error annotation for links to HTML files in project with anchor refs which do not link to
+  `a` or `h1` through `h6` html tags with `name` or `id` attribute given by anchor ref
+* Add: anchor link completion for links to HTML files in project to `a` or `h1` through `h6`
+  html tags with `name` or `id` attribute giving the anchor ref
+* Add: anchor link completion on external URLs which do not resolve to a project file.
+  * Special handling if file extension matches a Markdown Language extension, will download
+    the markdown file and will render it as HTML to extract anchor definitions
+  * Special handling for GitHub (ones starting with http:// or https:// followed by github.com)
+    * markdown files: If the link is to a `blob` type then will use `raw` type URL to get
+    Markdown so it can be correctly rendered as HTML to extract anchor definitions.
+    * html content:
+      * remove `user-content-` prefix from anchor refs (GitHub adds these automatically)
+      * remove `[0-9a-fA-F]{32}-[0-9a-fA-F]{40}` looking anchor ids
+  * Special handling for GitLab (ones starting with http:// or https:// followed by gitlab.com)
+    * markdown files: If the link is to a `blob` type then will use `raw` type URL to get
+    Markdown so it can be correctly rendered as HTML to extract anchor definitions.
+    * html content:
+      * remove `[0-9a-fA-F]{32}-[0-9a-fA-F]{40}` looking anchor ids
+
+### Version 2.6.0
 
 * Add: Join Lines option to **Remove Prefixes**
 * Fix: style changes are now highlighted to properly reflect the last change, not whole document
   reformat changes
-* Add: **[GitLab Flavoured Markdown](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/user/markdown.md)** extensions
+* Add:
+  **[GitLab Flavoured Markdown](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/user/markdown.md)**
+  extensions
   * Math inline using ```$``$``` and fenced code blocks with info of `math` using
     [Katex](https://github.com/Khan/KaTeX)
   * Chart fenced code blocks with info of `mermaid` using
@@ -110,11 +136,12 @@ Bug and compatibility fixes you can find in [Version Notes].
   * Deleted text (strike through) via `{-text-}` or `[-text-]`
   * Multiline block quotes using `>>>` at start of line to mark block start and `<<<` at start
     of line to mark block end.
-    [GFM: Multiline Blockquote](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/user/markdown.md##multiline-blockquote)
-  * Video image link rendering [GFM: Videos](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/user/markdown.md##videos)
+    [GFM: Multiline Blockquote](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/user/markdown.md#multiline-blockquote)
+  * Video image link rendering
+    [GFM: Videos](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/user/markdown.md#videos)
 * Add: **Tab/Backtab** overrides for table navigation and list indent/unindent actions
 * Add: **Move Table Column** left/right actions
-* Add **HTML Paste Options** to suppress generation of some markdown elements
+* Add: **HTML Paste Options** to suppress generation of some markdown elements
 * Add: **HTML comment folding** and options
 
 ### Version 2.5.4
@@ -125,7 +152,8 @@ Bug and compatibility fixes you can find in [Version Notes].
 * **Folding of list items** when longer than one line of text
 * **Options to disable gutter** margin and icons for markdown documents
 * **Option to disable Rename To:** on spelling fix intention
-* Experimental **Translate Document** [Powered by Yandex.Translate](http://translate.yandex.com/)
+* Experimental **Translate Document**
+  [Powered by Yandex.Translate](http://translate.yandex.com/)
 
 ### Version 2.5.2
 

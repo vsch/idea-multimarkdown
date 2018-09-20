@@ -3,6 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
+- [2.6.0.2 - Bug Fix & Enhancement Release](#2602---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
@@ -12,6 +13,32 @@
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
+
+### 2.6.0.2 - Bug Fix & Enhancement Release
+
+* Add: remote link content cache to use for validating remote content links and anchor refs
+* Add: option to enable validation of remote links (annotates unresolved link if server returns
+  error)
+* Fix: remove anchor ref error annotation for links which do not resolve to a project file or do
+  not exist if validating remote link anchor refs
+* Add: error annotation for links to HTML files in project with anchor refs which do not link to
+  `a` or `h1` through `h6` html tags with `name` or `id` attribute given by anchor ref
+* Add: anchor link completion for links to HTML files in project to `a` or `h1` through `h6`
+  html tags with `name` or `id` attribute giving the anchor ref
+* Add: anchor link completion on external URLs which do not resolve to a project file.
+  * Special handling if file extension matches a Markdown Language extension, will download
+    the markdown file and will render it as HTML to extract anchor definitions
+  * Special handling for GitHub (ones starting with http:// or https:// followed by github.com)
+    * markdown files: If the link is to a `blob` type then will use `raw` type URL to get
+    Markdown so it can be correctly rendered as HTML to extract anchor definitions.
+    * html content:
+      * remove `user-content-` prefix from anchor refs (GitHub adds these automatically)
+      * remove `[0-9a-fA-F]{32}-[0-9a-fA-F]{40}` looking anchor ids
+  * Special handling for GitLab (ones starting with http:// or https:// followed by gitlab.com)
+    * markdown files: If the link is to a `blob` type then will use `raw` type URL to get
+    Markdown so it can be correctly rendered as HTML to extract anchor definitions.
+    * html content:
+      * remove `[0-9a-fA-F]{32}-[0-9a-fA-F]{40}` looking anchor ids
 
 ### 2.6.0 - Bug Fix & Enhancement Release
 
@@ -79,9 +106,9 @@
   * Deleted text (strike through) via `{-text-}` or `[-text-]`
   * Multiline block quotes using `>>>` at start of line to mark block start and `<<<` at start
     of line to mark block end.
-    [GFM: Multiline Blockquote](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/user/markdown.md##multiline-blockquote)
+    [GFM: Multiline Blockquote](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/user/markdown.md#multiline-blockquote)
   * Video image link rendering
-    [GFM: Videos](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/user/markdown.md##videos)
+    [GFM: Videos](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/user/markdown.md#videos)
 * Fix: disable tab override when popup is showing to allow tab to be used for completions.
 * Fix: with CommonMark list type bullet list item after ordered list and vice versa, would allow
   indentation in error.
