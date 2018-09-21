@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.6.0.2 - Bug Fix & Enhancement Release](#2602---bug-fix--enhancement-release)
+- [2.6.0.4 - Bug Fix & Enhancement Release](#2604---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
@@ -14,8 +14,10 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.6.0.2 - Bug Fix & Enhancement Release
+### 2.6.0.4 - Bug Fix & Enhancement Release
 
+* Fix: only cache remote content when it is needed for anchor ref validation. For remote link
+  validation only store the fact that it exists.
 * Add: remote link content cache to use for validating remote content links and anchor refs
 * Add: option to enable validation of remote links (annotates unresolved link if server returns
   error)
