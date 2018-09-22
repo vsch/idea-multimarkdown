@@ -99,6 +99,9 @@ Release Road Map
 
 Bug and compatibility fixes you can find in [Version Notes].
 
+[Install EAP plugin](https://github.com/vsch/idea-multimarkdown/wiki/EAP-Update-Channel) version
+to preview next release.
+
 * Add: option to enable validation of remote links (annotates unresolved link if server returns
   error)
 * Add: error annotation for links to HTML files in project with anchor refs which do not link to
