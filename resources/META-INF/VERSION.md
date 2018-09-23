@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.6.0.6 - Bug Fix & Enhancement Release](#2606---bug-fix--enhancement-release)
+- [2.6.0.8 - Bug Fix & Enhancement Release](#2608---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
@@ -14,8 +14,17 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.6.0.6 - Bug Fix & Enhancement Release
+### 2.6.0.8 - Bug Fix & Enhancement Release
 
+* Fix: for remote content cache only store list of anchors instead of content, more compact and
+  provides the needed data
+* Fix: remove directories from link completions to reduce noise in completions
+* Fix: remote image links showed as unresolved, now IOExceptions during fetching treated as
+  resolved.
+* Fix: remove links returning image data now treated as resolved.
+* Fix: #637, Links from main project repository to files in a sub-directory repository show
+  unresolved
+* Add: unresolved remote link address annotation error.
 * Add: in settings total remote link count and memory use for remote content.
 * Fix: only cache remote content when it is needed for anchor ref validation. For remote link
   validation only store the fact that it exists.
