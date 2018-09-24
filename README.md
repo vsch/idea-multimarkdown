@@ -482,7 +482,7 @@ Reserved.
 [flexmark-java]: https://github.com/vsch/flexmark-java
 [GitHub]: https://github.com/vsch/laravel-translation-manager
 [intellij-markdown]: https://github.com/valich/intellij-markdown
-[JetBrains plugin page]: https://plugins.jetbrains.com/plugin?pr=&pluginId=7896
+[JetBrains plugin page]: https://plugins.jetbrains.com/plugin/7896-markdown-navigator
 [Markdown]: http://daringfireball.net/projects/markdown
 [Markdown Navigator]: http://vladsch.com/product/markdown-navigator
 [Markdown Support]: https://plugins.jetbrains.com/plugin/7793?pr=
@@ -507,7 +507,7 @@ Reserved.
 [holgerbrandl/pasteimages]: https://github.com/holgerbrandl/pasteimages
 [IntelliJ IDEA]: http://www.jetbrains.com/idea
 [Jekyll]: https://jekyllrb.com
-[JetBrains plugin comment and rate page]: https://plugins.jetbrains.com/plugin/writeComment?pr=&pluginId=7896
+[JetBrains plugin comment and rate page]: https://plugins.jetbrains.com/plugin/7896-markdown-navigator
 [Kotlin]: http://kotlinlang.org
 [Kramdown]: http://kramdown.gettalong.org/
 [Modifying Link Processing]: https://github.com/vsch/idea-multimarkdown/wiki/Link-Map-Settings
