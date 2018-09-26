@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.6.0.10 - Bug Fix & Enhancement Release](#26010---bug-fix--enhancement-release)
+- [2.6.0.12 - Bug Fix & Enhancement Release](#26012---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
@@ -14,8 +14,9 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.6.0.10 - Bug Fix & Enhancement Release
+### 2.6.0.12 - Bug Fix & Enhancement Release
 
+* Fix: invalid anchor refs not annotated for local links (broken by remote link validation)
 * Add: intention for unresolved link addresses starting with `www.` to prefix with `https://`
   and `http://`. If remote link validation is enabled then only prefix which results in valid
   link address will be shown in the intention. If the resulting address reports as permanently
