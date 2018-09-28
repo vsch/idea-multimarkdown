@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.6.0.24 - Bug Fix & Enhancement Release](#26024---bug-fix--enhancement-release)
+- [2.6.0.26 - Bug Fix & Enhancement Release](#26026---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
@@ -14,8 +14,12 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.6.0.24 - Bug Fix & Enhancement Release
+### 2.6.0.26 - Bug Fix & Enhancement Release
 
+* Fix: #605, Support for system specific protocol handlers. Pass through custom protocols to IDE
+  browser launcher.
+* Fix: to not highlight external URL links which consist of only the protocol at the end of the
+  line.
 * Add: color scheme export to save only non-synthetic attributes: `Intellij IDEA color scheme,
   reduced markdown (.icls)`
 * Add: validation to auto-link remote url and completion/validation to anchor ref
