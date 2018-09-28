@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.6.0.22 - Bug Fix & Enhancement Release](#26022---bug-fix--enhancement-release)
+- [2.6.0.24 - Bug Fix & Enhancement Release](#26024---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
@@ -14,8 +14,10 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.6.0.22 - Bug Fix & Enhancement Release
+### 2.6.0.24 - Bug Fix & Enhancement Release
 
+* Add: color scheme export to save only non-synthetic attributes: `Intellij IDEA color scheme,
+  reduced markdown (.icls)`
 * Add: validation to auto-link remote url and completion/validation to anchor ref
 * Add: url based parser settings for remote link markdown parsing. For now hardcoded for GitHub,
   GitLab and legacy GitBook compatibility. New GitBook anchor links not supported yet.
