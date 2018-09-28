@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.6.0.18 - Bug Fix & Enhancement Release](#26018---bug-fix--enhancement-release)
+- [2.6.0.20 - Bug Fix & Enhancement Release](#26020---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
@@ -14,8 +14,11 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.6.0.18 - Bug Fix & Enhancement Release
+### 2.6.0.20 - Bug Fix & Enhancement Release
 
+* Add: url based parser settings for remote link markdown parsing. For now hardcoded for GitHub,
+  GitLab and legacy GitBook compatibility. New GitBook anchor links not supported yet.
+* Fix: diagnostic/1827, Empty collection can't be reduced.
 * Fix: broken remote URL links to markdown files validation and anchor ref completions
 * Add: quick fix intention for fixing unresolved anchor refs when a match can be made by
   ignoring case and removing duplicated `-`
