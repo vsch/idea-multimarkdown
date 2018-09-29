@@ -102,6 +102,8 @@ Bug and compatibility fixes you can find in [Version Notes].
 [Install EAP plugin](https://github.com/vsch/idea-multimarkdown/wiki/EAP-Update-Channel) version
 to preview next release.
 
+* Add: Parser
+  [Macros Extension](https://github.com/vsch/idea-multimarkdown/wiki/Macros-Extension)
 * Add: option to enable validation of remote links (annotates unresolved link if server returns
   error)
 * Add: error annotation for links to HTML files in project with anchor refs which do not link to
@@ -109,17 +111,17 @@ to preview next release.
 * Add: anchor link completion for links to HTML files in project to `a` or `h1` through `h6`
   html tags with `name` or `id` attribute giving the anchor ref
 * Add: anchor link completion on external URLs which do not resolve to a project file.
-  * Special handling if file extension matches a Markdown Language extension, will download
-    the markdown file and will render it as HTML to extract anchor definitions
+  * Special handling if file extension matches a Markdown Language extension, will download the
+    markdown file and will render it as HTML to extract anchor definitions
   * Special handling for GitHub (ones starting with http:// or https:// followed by github.com)
     * markdown files: If the link is to a `blob` type then will use `raw` type URL to get
-    Markdown so it can be correctly rendered as HTML to extract anchor definitions.
+      Markdown so it can be correctly rendered as HTML to extract anchor definitions.
     * html content:
       * remove `user-content-` prefix from anchor refs (GitHub adds these automatically)
       * remove `[0-9a-fA-F]{32}-[0-9a-fA-F]{40}` looking anchor ids
   * Special handling for GitLab (ones starting with http:// or https:// followed by gitlab.com)
     * markdown files: If the link is to a `blob` type then will use `raw` type URL to get
-    Markdown so it can be correctly rendered as HTML to extract anchor definitions.
+      Markdown so it can be correctly rendered as HTML to extract anchor definitions.
     * html content:
       * remove `[0-9a-fA-F]{32}-[0-9a-fA-F]{40}` looking anchor ids
 
