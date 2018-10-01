@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.6.0.30 - Bug Fix & Enhancement Release](#26030---bug-fix--enhancement-release)
+- [2.6.0.32 - Bug Fix & Enhancement Release](#26032---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
@@ -14,8 +14,9 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.6.0.30 - Bug Fix & Enhancement Release
+### 2.6.0.32 - Bug Fix & Enhancement Release
 
+* Fix: do not highlight auto links as errors if remote link validation is disabled
 * Fix: remote link annotation disabled by custom URI scheme handler
 * Fix: #640, java.lang.NullPointerException with HtmlPasteOptionsForm
 * Add: Parser [Macros Extension](https://github.com/vsch/idea-multimarkdown/wiki/Macros-Extension)

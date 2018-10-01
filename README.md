@@ -478,14 +478,14 @@ Markdown Navigator, Copyright (c) 2015-2018, V. Schneider, <http://vladsch.com> 
 Reserved.
 
 [Admonition Extension, Material for MkDocs]: https://squidfunk.github.io/mkdocs-material/extensions/admonition/
-[CommonMark (spec 0.28)]: http://spec.commonmark.org/0.28/
+[CommonMark (spec 0.28)]: https://spec.commonmark.org/0.28
 [commonmark-java]: https://github.com/atlassian/commonmark-java
-[Craig's List]: http://montreal.en.craigslist.ca/
+[Craig's List]: https://montreal.craigslist.ca/?lang=en&cc=us
 [flexmark-java]: https://github.com/vsch/flexmark-java
 [GitHub]: https://github.com/vsch/laravel-translation-manager
 [intellij-markdown]: https://github.com/valich/intellij-markdown
 [JetBrains plugin page]: https://plugins.jetbrains.com/plugin/7896-markdown-navigator
-[Markdown]: http://daringfireball.net/projects/markdown
+[Markdown]: https://daringfireball.net/projects/markdown
 [Markdown Navigator]: http://vladsch.com/product/markdown-navigator
 [Markdown Support]: https://plugins.jetbrains.com/plugin/7793?pr=
 [nicoulaj]: https://github.com/nicoulaj
@@ -494,10 +494,10 @@ Reserved.
 [sirthias]: https://github.com/sirthias
 [Version Notes]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/META-INF/VERSION.md
 [.gitignore]: http://hsz.mobi
-[Android Studio]: http://developer.android.com/sdk/installing/studio.html
+[Android Studio]: https://developer.android.com/sdk/installing/studio.html
 [AppCode]: http://www.jetbrains.com/objc
 [CLion]: https://www.jetbrains.com/clion
-[CommonMark]: http://commonmark.org/
+[CommonMark]: https://commonmark.org
 [Copy Jira]: https://github.com/vsch/idea-multimarkdown/raw/master/resources/icons/editor_actions/Copy_jira.png
 [Copy Markdown to HTML formatted text]: https://github.com/vsch/idea-multimarkdown/wiki/Enhanced-Features#copy-markdown-to-html-formatted-text
 [DataGrip]: https://www.jetbrains.com/datagrip
@@ -513,7 +513,7 @@ Reserved.
 [Kotlin]: http://kotlinlang.org
 [Kramdown]: http://kramdown.gettalong.org/
 [Modifying Link Processing]: https://github.com/vsch/idea-multimarkdown/wiki/Link-Map-Settings
-[MultiMarkdown]: http://fletcherpenney.net/multimarkdown/
+[MultiMarkdown]: https://fletcherpenney.net/multimarkdown
 [Pandoc]: http://pandoc.org/MANUAL.html#pandocs-markdown
 [PhpExtra]: https://michelf.ca/projects/php-markdown/extra/
 [PhpStorm]: http://www.jetbrains.com/phpstorm
