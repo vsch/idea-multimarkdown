@@ -102,6 +102,8 @@ Bug and compatibility fixes you can find in [Version Notes].
 [Install EAP plugin](https://github.com/vsch/idea-multimarkdown/wiki/EAP-Update-Channel) version
 to preview next release.
 
+* Add: inspection for validation which used to be implemented as annotations. This allows
+  customizing and running inspection profiles against markdown files for validation.
 * Add: Parser
   [Macros Extension](https://github.com/vsch/idea-multimarkdown/wiki/Macros-Extension)
 * Add: option to enable validation of remote links (annotates unresolved link if server returns

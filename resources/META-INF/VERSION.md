@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.6.0.32 - Bug Fix & Enhancement Release](#26032---bug-fix--enhancement-release)
+- [2.6.0.34 - Bug Fix & Enhancement Release](#26034---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
@@ -14,12 +14,48 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.6.0.32 - Bug Fix & Enhancement Release
+### 2.6.0.34 - Bug Fix & Enhancement Release
 
+* Fix: image reference links to references with wrong file type or not raw would not register as
+  references to the reference definition. Added `getExactReference()` to return reference only
+  if it is an exact match, `getReference()` not matches strictly by id since it is used for
+  navigation and usages.
+* Add: `Use Style Attribute` option to HTML Export settings. When enabled will apply stylesheet
+  via `style` attribute of each element as done for `Copy Markdown as HTML mime content`.
+
+  :warning: stylesheet is expected to be in the same format as `COPY_HTML_MIME` stylesheet. See
+  [Copy Markdown to HTML formatted Text Profile](https://github.com/vsch/idea-multimarkdown/wiki/Rendering-Profiles-Settings#copy-markdown-to-html-formatted-text-profile)
+
+  :information_source: if `No Stylesheets, No Scripts` is selected then only styles explicitly
+  defined by the profile will be used. If this option is not selected then `COPY_HTML_MIME`
+  profile stylesheet will be used or if the `COPY_HTML_MIME` profile is not defined then the
+  [default stylesheet for `COPY_HTML_MIME`][html_mime_default.css] will be used.
+* Fix: move annotations for `Reference Links` to inspections
+* Fix: move annotations for `References` to inspections
+* Fix: move annotations for `Emoji` to inspections
+* Fix: move annotations for `Anchor` to inspections
+* Fix: move annotations for `Headings` to inspections
+* Fix: move annotations for `Tables` to inspections and add quick fix for column spans
+* Fix: move annotations for `List Items` and `Possible list items` to inspections
+* Add: Html Generation option to not wrap paragraphs in `<p>` and use `<br>` between paragraphs
+  instead. Useful for HTML exported files for use in Swing panels
+* Add: Html Export target file path options to add to target directory. Useful if need to
+  flatten directory structure of markdown files to a single directory for exported HTML
+  * Add path relative to project
+  * Add path relative to parent directory
+  * Add file name only
+* Add: same file path type options as target path for export image copied file path.
+* Fix: IDE hangs when copying text containing the macro references which contained recursive
+  macros.
+* Fix: document format to ensure one blank line after macro definition
+* Fix: `<>` wrapped auto links would prevent following bare auto-links from being parsed.
+* Add: all elements intention to select element if intention displays dialog to give user
+  feedback on which element is being used.
 * Fix: do not highlight auto links as errors if remote link validation is disabled
 * Fix: remote link annotation disabled by custom URI scheme handler
 * Fix: #640, java.lang.NullPointerException with HtmlPasteOptionsForm
-* Add: Parser [Macros Extension](https://github.com/vsch/idea-multimarkdown/wiki/Macros-Extension)
+* Add: Parser
+  [Macros Extension](https://github.com/vsch/idea-multimarkdown/wiki/Macros-Extension)
 * Fix: list item indent/unindent could insert `&nbsp;` inserted/removed during wrapping but do
   not perform wrapping, causing the `&nbsp;` to be left in the text.
 * Add: intention for auto link to explicit link conversion and vice-versa
@@ -70,17 +106,17 @@
 * Add: anchor link completion for links to HTML files in project to `a` or `h1` through `h6`
   html tags with `name` or `id` attribute giving the anchor ref
 * Add: anchor link completion on external URLs which do not resolve to a project file.
-  * Special handling if file extension matches a Markdown Language extension, will download
-    the markdown file and will render it as HTML to extract anchor definitions
+  * Special handling if file extension matches a Markdown Language extension, will download the
+    markdown file and will render it as HTML to extract anchor definitions
   * Special handling for GitHub (ones starting with http:// or https:// followed by github.com)
     * markdown files: If the link is to a `blob` type then will use `raw` type URL to get
-    Markdown so it can be correctly rendered as HTML to extract anchor definitions.
+      Markdown so it can be correctly rendered as HTML to extract anchor definitions.
     * html content:
       * remove `user-content-` prefix from anchor refs (GitHub adds these automatically)
       * remove `[0-9a-fA-F]{32}-[0-9a-fA-F]{40}` looking anchor ids
   * Special handling for GitLab (ones starting with http:// or https:// followed by gitlab.com)
     * markdown files: If the link is to a `blob` type then will use `raw` type URL to get
-    Markdown so it can be correctly rendered as HTML to extract anchor definitions.
+      Markdown so it can be correctly rendered as HTML to extract anchor definitions.
     * html content:
       * remove `[0-9a-fA-F]{32}-[0-9a-fA-F]{40}` looking anchor ids
 
@@ -714,5 +750,6 @@
   exporting the full document.
 
 [Admonition Extension, Material for MkDocs]: https://squidfunk.github.io/mkdocs-material/extensions/admonition/
+[html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
 [holgerbrandl/pasteimages]: https://github.com/holgerbrandl/pasteimages
 
