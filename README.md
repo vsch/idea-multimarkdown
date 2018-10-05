@@ -513,7 +513,7 @@ Reserved.
 [Jekyll]: https://jekyllrb.com
 [JetBrains plugin comment and rate page]: https://plugins.jetbrains.com/plugin/7896-markdown-navigator
 [Kotlin]: http://kotlinlang.org
-[Kramdown]: http://kramdown.gettalong.org/
+[Kramdown]: https://kramdown.gettalong.org/
 [Modifying Link Processing]: https://github.com/vsch/idea-multimarkdown/wiki/Link-Map-Settings
 [MultiMarkdown]: https://fletcherpenney.net/multimarkdown
 [Pandoc]: http://pandoc.org/MANUAL.html#pandocs-markdown

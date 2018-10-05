@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.6.0.34 - Bug Fix & Enhancement Release](#26034---bug-fix--enhancement-release)
+- [2.6.0.36 - Bug Fix & Enhancement Release](#26036---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
@@ -14,8 +14,11 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.6.0.34 - Bug Fix & Enhancement Release
+### 2.6.0.36 - Bug Fix & Enhancement Release
 
+* Fix: optimize parser PSI generation by using hash map for type to factory function
+* Fix: diagnostic/1849, ClassCastException: LeafPsiElement cannot be cast to
+  MultiMarkdownLinkElement
 * Fix: image reference links to references with wrong file type or not raw would not register as
   references to the reference definition. Added `getExactReference()` to return reference only
   if it is an exact match, `getReference()` not matches strictly by id since it is used for
@@ -23,12 +26,12 @@
 * Add: `Use Style Attribute` option to HTML Export settings. When enabled will apply stylesheet
   via `style` attribute of each element as done for `Copy Markdown as HTML mime content`.
 
-  :warning: stylesheet is expected to be in the same format as `COPY_HTML_MIME` stylesheet. See
+  **NOTE:** stylesheet is expected to be in the same format as `COPY_HTML_MIME` stylesheet. See
   [Copy Markdown to HTML formatted Text Profile](https://github.com/vsch/idea-multimarkdown/wiki/Rendering-Profiles-Settings#copy-markdown-to-html-formatted-text-profile)
 
-  :information_source: if `No Stylesheets, No Scripts` is selected then only styles explicitly
-  defined by the profile will be used. If this option is not selected then `COPY_HTML_MIME`
-  profile stylesheet will be used or if the `COPY_HTML_MIME` profile is not defined then the
+  **NOTE:** if `No Stylesheets, No Scripts` is selected then only styles explicitly defined by the
+  profile will be used. If this option is not selected then `COPY_HTML_MIME` profile stylesheet
+  will be used or if the `COPY_HTML_MIME` profile is not defined then the
   [default stylesheet for `COPY_HTML_MIME`][html_mime_default.css] will be used.
 * Fix: move annotations for `Reference Links` to inspections
 * Fix: move annotations for `References` to inspections
