@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.6.0.36 - Bug Fix & Enhancement Release](#26036---bug-fix--enhancement-release)
+- [2.6.0.38 - Bug Fix & Enhancement Release](#26038---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
@@ -14,8 +14,9 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.6.0.36 - Bug Fix & Enhancement Release
+### 2.6.0.38 - Bug Fix & Enhancement Release
 
+* Add: `Simple structure view` option to display only heading hierarchy in the structure view
 * Fix: optimize parser PSI generation by using hash map for type to factory function
 * Fix: diagnostic/1849, ClassCastException: LeafPsiElement cannot be cast to
   MultiMarkdownLinkElement
