@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.6.0.40 - Bug Fix & Enhancement Release](#26040---bug-fix--enhancement-release)
+- [2.6.0.42 - Bug Fix & Enhancement Release](#26042---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
@@ -14,8 +14,12 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.6.0.40 - Bug Fix & Enhancement Release
+### 2.6.0.42 - Bug Fix & Enhancement Release
 
+* Fix: catch exception when github tasks request fails
+* Fix: settings for HTML paste are not dependent on paste handler override.
+* Fix: when ask on paste for html paste options would cause subsequent undo to fail due to
+  temporary file modification.
 * Fix: reverse the order of split editor configuration for "Show editor and preview" and "Show
   editor only"
 * Fix: for API change in 2019.1 EAP.
