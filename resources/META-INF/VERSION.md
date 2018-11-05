@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.6.0.44 - Bug Fix & Enhancement Release](#26044---bug-fix--enhancement-release)
+- [2.6.0.46 - Bug Fix & Enhancement Release](#26046---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
@@ -14,8 +14,10 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.6.0.44 - Bug Fix & Enhancement Release
+### 2.6.0.46 - Bug Fix & Enhancement Release
 
+* Fix: intentions missing groupKey were not showing up or being run
+* Fix: update for 2019.1 eap
 * Fix: make hex text dialog a licensed feature instead of dev feature.
 * Fix: diagnostic/1931, possible fix for intermittent based sequence index out of bounds fix
 * Fix: catch exception when github tasks request fails
