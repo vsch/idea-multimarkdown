@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.6.0.48 - Bug Fix & Enhancement Release](#26048---bug-fix--enhancement-release)
+- [2.6.0.50 - Bug Fix & Enhancement Release](#26050---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
@@ -14,8 +14,14 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.6.0.48 - Bug Fix & Enhancement Release
+### 2.6.0.50 - Bug Fix & Enhancement Release
 
+* Fix: #647, md to html link conversion not working for exported files on Windows
+* Fix: exported files without stylesheet should not decorate link with resolved status
+      class.
+* Fix: `{% include ` link resolution does not work without a VCS root.
+* Fix: Jekyll `{% include "" %}` completions would not work unless there was an `.html`
+  extension between the strings.
 * Fix: update for 2019.1 eap
 * Fix: intentions missing groupKey were not showing up or being run
 * Fix: make hex text dialog a licensed feature instead of dev feature.
