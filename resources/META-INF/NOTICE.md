@@ -6,7 +6,7 @@ respective licenses.
 
 * translations [Powered by Yandex.Translate](http://translate.yandex.com/).
 * based on open source idea-multimarkdown - markdown plugin for IntelliJ products  
-  Copyright (c) 2015-2016 Vladimir Schneider <https://github.com/vsch/idea-multimarkdown>  
+  Copyright (c) 2015-2018 Vladimir Schneider <https://github.com/vsch/idea-multimarkdown>  
   <http://www.apache.org/licenses/LICENSE-2.0>
   * based on idea-markdown - markdown plugin for IntelliJ products  
     Copyright (c) 2011-2014 Julien Nicoulaud <https://github.com/nicoulaj/idea-markdown>  
@@ -52,7 +52,7 @@ respective licenses.
     <https://github.com/robinst/autolink-java/blob/master/LICENSE>  
     <https://opensource.org/licenses/MIT>
 * includes flexmark-java software library  
-  Copyright (c) 2016-2017 Vladimir Schneider <https://github.com/vsch/flexmark-java>  
+  Copyright (c) 2016-2018 Vladimir Schneider <https://github.com/vsch/flexmark-java>  
   <https://github.com/vsch/flexmark-java/blob/master/LICENSE.txt>
   * parts based on commonmark-java  
     Copyright (c) 2015-2016, Atlassian Pty Ltd, <https://github.com/atlassian/commonmark-java>  
@@ -77,6 +77,12 @@ respective licenses.
 * includes a modified Markdown-Mark <https://github.com/dcurtis/markdown-mark>  
   DEDICATED TO THE PUBLIC DOMAIN BY Dustin Curtis <https://dcurt.is/the-markdown-mark>  
   <https://github.com/dcurtis/markdown-mark/blob/master/LICENSE>
+* includes Katex  
+  Copyright (c) 2013 - 2018 Khan Academy <https://github.com/Khan/KaTeX>  
+  <https://github.com/Khan/KaTeX/blob/master/LICENSE>
+* includes Mermaid  
+  Copyright (c) 2014 - 2018 Knut Sveidqvist <https://github.com/knsv>  
+  <https://github.com/knsv/mermaid/blob/master/LICENSE>
 * includes Open HTML to PDF software library  
   Copyright (C) 2016 Patrick Wright and others <https://openhtmltopdf.com>  
   <https://github.com/danfickle/openhtmltopdf/blob/open-dev-v1/LICENSE>

@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.6.0.50 - Bug Fix & Enhancement Release](#26050---bug-fix--enhancement-release)
+- [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
 - [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
@@ -14,8 +14,10 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.6.0.50 - Bug Fix & Enhancement Release
+### 2.7.0 - Bug Fix & Enhancement Release
 
+* Fix: jekyll parser option notification would not use the file's scope based profile.
+* Fix: bump up dependencies to newer versions
 * Fix: #647, md to html link conversion not working for exported files on Windows
 * Fix: exported files without stylesheet should not decorate link with resolved status
       class.
