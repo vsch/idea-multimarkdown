@@ -3,6 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
+- [2.7.0.2 - Bug Fix & Enhancement Release](#2702---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -13,6 +14,16 @@
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
+
+### 2.7.0.2 - Bug Fix & Enhancement Release
+
+* [ ] Fix: copy fixed utils from Arduino Support plugin.
+* Add: option to disable synthetic highlight attributes.
+  * Fix: #648, too many element types registered, Option for full syntax highlighter
+    combinations, disabling creates minimal set to reduce the limit of short index for these in
+    the IDE.
+* Add: Code Style option to treat `Hard Wraps` parser option as if soft-wraps are enabled.
+* Add: Main option to force soft-wraps mode for file when opening if `Hard Wraps` are enabled
 
 ### 2.7.0 - Bug Fix & Enhancement Release
 
