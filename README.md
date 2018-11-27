@@ -9,6 +9,7 @@
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
     - [Future Release: Version 3.0.0](#future-release-version-300)
+    - [Next Version 2.7.2](#next-version-272)
     - [Version 2.7.0](#version-270)
     - [Version 2.6.0](#version-260)
     - [Version 2.5.4](#version-254)
@@ -95,12 +96,19 @@ Release Road Map
 * Link resolution support for non-GitHub VCS providers
 * Plus the usual bug fixes that come up between now and the release.
 
-### Version 2.7.0
+### Next Version 2.7.2
 
 Bug and compatibility fixes you can find in [Version Notes].
 
 [Install EAP plugin](https://github.com/vsch/idea-multimarkdown/wiki/EAP-Update-Channel) version
 to preview next release.
+
+* Add: Image Paste highlight option to annotate an area of the image.  
+  ![Screenshot_PasteImage_Highlight](assets/images/faq/ScreenShot_PasteImage_sm_h.png)
+* Add: option for full highlight attributes, enabled takes 3700 attributes out of the pool,
+  while disabled less than 300.
+
+### Version 2.7.0
 
 * Add: inspection for validation which used to be implemented as annotations. This allows
   customizing and running inspection profiles against markdown files for validation.

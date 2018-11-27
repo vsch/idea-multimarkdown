@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.2 - Bug Fix & Enhancement Release](#2702---bug-fix--enhancement-release)
+- [2.7.0.4 - Bug Fix & Enhancement Release](#2704---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,9 +15,23 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.2 - Bug Fix & Enhancement Release
+### 2.7.0.4 - Bug Fix & Enhancement Release
 
 * [ ] Fix: copy fixed utils from Arduino Support plugin.
+* Fix: for #651, Drop image with dialog issues
+  * Spaces in file name were url encoded
+  * Copy dragging a file leaves its original directory instead of setting it to the closest
+        or best guess based on the destination file. Should be the same as if the image was
+        pasted into the file. If the destination directory is the same as the source then a new
+        name should be generated to uniquify it.
+* Add: in Paste/Modify Image if dragging the highlight selection without having highlight
+  enabled or no border, inner nor outer fill enabled, will enable highlight and border to
+  provide feedback otherwise it is confusing.
+  * Add: drag selection can be used for cropping if image tab is selected and `Use mouse
+    selection only for highlight` is not selected.
+  * Fix: only copy image to transparent if Image tab is selected. The rest leave as is.
+  * Add: restart notification if changing full highlight combinations 
+* Add: Image Paste highlight option to annotate an area of the image.  
 * Add: option to disable synthetic highlight attributes.
   * Fix: #648, too many element types registered, Option for full syntax highlighter
     combinations, disabling creates minimal set to reduce the limit of short index for these in
