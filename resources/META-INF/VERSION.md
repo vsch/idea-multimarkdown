@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.4 - Bug Fix & Enhancement Release](#2704---bug-fix--enhancement-release)
+- [2.7.0.6 - Bug Fix & Enhancement Release](#2706---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,9 +15,10 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.4 - Bug Fix & Enhancement Release
+### 2.7.0.6 - Bug Fix & Enhancement Release
 
 * [ ] Fix: copy fixed utils from Arduino Support plugin.
+* Fix: Paste Image: old crop settings out of bounds for new image caused exception
 * Fix: for #651, Drop image with dialog issues
   * Spaces in file name were url encoded
   * Copy dragging a file leaves its original directory instead of setting it to the closest
