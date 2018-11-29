@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.6 - Bug Fix & Enhancement Release](#2706---bug-fix--enhancement-release)
+- [2.7.0.8 - Bug Fix & Enhancement Release](#2708---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,24 +15,32 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.6 - Bug Fix & Enhancement Release
+### 2.7.0.8 - Bug Fix & Enhancement Release
 
 * [ ] Fix: copy fixed utils from Arduino Support plugin.
+* Fix: nasty bug introducing typing delay with preview enabled.
+* Fix: optimize link resolution to for HTML rendering by a factor of 5+ for image and markdown
+  links. Now can handle 100+ links in the same time it used to take to resolve 20 links.
+* Fix: Preview option replace emoji unicode with emoji image would take a whopping 180ms to
+  process 90k rendered HTML with no emoji in the text. So much for RegEx speed. Hand rolled code
+  does it in 0.5 ms. Even if the file contains all available emoji characters it is still under
+  1 ms to process.
+* Fix: diagnostic-2012, kotlin NPE.
 * Fix: Paste Image: old crop settings out of bounds for new image caused exception
 * Fix: for #651, Drop image with dialog issues
   * Spaces in file name were url encoded
-  * Copy dragging a file leaves its original directory instead of setting it to the closest
-        or best guess based on the destination file. Should be the same as if the image was
-        pasted into the file. If the destination directory is the same as the source then a new
-        name should be generated to uniquify it.
+  * Copy dragging a file leaves its original directory instead of setting it to the closest or
+    best guess based on the destination file. Should be the same as if the image was pasted into
+    the file. If the destination directory is the same as the source then a new name should be
+    generated to uniquify it.
 * Add: in Paste/Modify Image if dragging the highlight selection without having highlight
   enabled or no border, inner nor outer fill enabled, will enable highlight and border to
   provide feedback otherwise it is confusing.
   * Add: drag selection can be used for cropping if image tab is selected and `Use mouse
     selection only for highlight` is not selected.
   * Fix: only copy image to transparent if Image tab is selected. The rest leave as is.
-  * Add: restart notification if changing full highlight combinations 
-* Add: Image Paste highlight option to annotate an area of the image.  
+  * Add: restart notification if changing full highlight combinations
+* Add: Image Paste highlight option to annotate an area of the image.
 * Add: option to disable synthetic highlight attributes.
   * Fix: #648, too many element types registered, Option for full syntax highlighter
     combinations, disabling creates minimal set to reduce the limit of short index for these in
@@ -45,8 +53,7 @@
 * Fix: jekyll parser option notification would not use the file's scope based profile.
 * Fix: bump up dependencies to newer versions
 * Fix: #647, md to html link conversion not working for exported files on Windows
-* Fix: exported files without stylesheet should not decorate link with resolved status
-      class.
+* Fix: exported files without stylesheet should not decorate link with resolved status class.
 * Fix: `{% include ` link resolution does not work without a VCS root.
 * Fix: Jekyll `{% include "" %}` completions would not work unless there was an `.html`
   extension between the strings.
@@ -75,9 +82,9 @@
   **NOTE:** stylesheet is expected to be in the same format as `COPY_HTML_MIME` stylesheet. See
   [Copy Markdown to HTML formatted Text Profile](https://github.com/vsch/idea-multimarkdown/wiki/Rendering-Profiles-Settings#copy-markdown-to-html-formatted-text-profile)
 
-  **NOTE:** if `No Stylesheets, No Scripts` is selected then only styles explicitly defined by the
-  profile will be used. If this option is not selected then `COPY_HTML_MIME` profile stylesheet
-  will be used or if the `COPY_HTML_MIME` profile is not defined then the
+  **NOTE:** if `No Stylesheets, No Scripts` is selected then only styles explicitly defined by
+  the profile will be used. If this option is not selected then `COPY_HTML_MIME` profile
+  stylesheet will be used or if the `COPY_HTML_MIME` profile is not defined then the
   [default stylesheet for `COPY_HTML_MIME`][html_mime_default.css] will be used.
 * Fix: move annotations for `Reference Links` to inspections
 * Fix: move annotations for `References` to inspections
