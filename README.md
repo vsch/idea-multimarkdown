@@ -104,7 +104,13 @@ Bug and compatibility fixes you can find in [Version Notes].
 to preview next release.
 
 * Add: Image Paste highlight option to annotate an area of the image.  
-  ![Screenshot_PasteImage_Highlight](assets/images/faq/ScreenShot_PasteImage_sm_h.png)
+  ![Screenshot_PasteImage_Highlight](/assets/images/faq/ScreenShot_PasteImage_sm_h.png)
+* Add: `Copy markdown without soft line breaks` copies document or selection to the clipboard
+  eliminating soft line breaks. Useful when copying wrapped markdown to GitHub comments.
+* Add: All copy markdown actions: `CopyHtmlMimeFormattedAction`, `CopyJiraFormattedAction`,
+  `CopyNoSoftLineBreaksAction` and `CopyYouTrackFormattedAction`, now include all reference
+  defining elements which were referenced from the copied part. All links and other elements
+  resolve without needing to include their reference definitions.
 * Add: option for full highlight attributes, enabled takes 3700 attributes out of the pool,
   while disabled less than 300.
 

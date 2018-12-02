@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.8 - Bug Fix & Enhancement Release](#2708---bug-fix--enhancement-release)
+- [2.7.0.10 - Bug Fix & Enhancement Release](#27010---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,9 +15,26 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.8 - Bug Fix & Enhancement Release
+### 2.7.0.10 - Bug Fix & Enhancement Release
 
 * [ ] Fix: copy fixed utils from Arduino Support plugin.
+* [ ] Add: create `COPY_HTML_MIME` rendering profile with a copy of the default template as an
+      option
+* [ ] Fix: drag/drop file after physical space mistakenly takes previous element. Insert actual
+      spaces at drop point to avoid an issue.
+* Add: multiple highlights editing in paste/modify image dialog
+* Fix: drag/drop file after end of file causes exception. Most likely will be fixed by above.
+* Fix: pasting an image and selecting non-existent directory path would not save image but only
+  create directories.
+* Add: `Copy markdown without soft line breaks` copies document or selection to the clipboard
+  eliminating soft line breaks. Useful when copying wrapped markdown to GitHub comments.
+* Add: All copy markdown actions: `CopyHtmlMimeFormattedAction`, `CopyJiraFormattedAction`,
+  `CopyNoSoftLineBreaksAction` and `CopyYouTrackFormattedAction`, now include all reference
+  defining elements which were referenced from the copied part. All links and other elements
+  resolve without needing to include their reference definitions.
+* Fix: add missing handling of `abbr` in html mime formatted copy
+* Fix: diagnostic/2119, Double cannot be cast to Integer exception
+* Fix: When cropping using selection if crop is not enabled, then select it on mouse release.
 * Fix: nasty bug introducing typing delay with preview enabled.
 * Fix: optimize link resolution to for HTML rendering by a factor of 5+ for image and markdown
   links. Now can handle 100+ links in the same time it used to take to resolve 20 links.

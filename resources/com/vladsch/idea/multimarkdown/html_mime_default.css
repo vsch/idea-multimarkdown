@@ -1,3 +1,4 @@
+abbr                         { border-bottom: 1px dashed #0366d6 }
 aside                        { margin:0;padding:0 0 0 10pt;border-left:2pt solid #C80010; }
 blockquote                   { margin:0;padding:0 0 0 10pt;border-left:2pt solid #bbb;color:#666; }
 blockquote h1                { margin:1.3em 0 1em;padding:0;font-weight:bold;font-size:1.6em;border-bottom:1pt solid #ddd;color:#666; }
@@ -80,4 +81,4 @@ div.adm-block.adm-tip > div.adm-heading       { background: #E9F9F6;color: #01BF
 div.adm-block.adm-warning                     { display: block;width: 99%;border-radius: 6px;padding-left: 10px;margin-bottom: 1em;border: 1px solid;border-left-width: 4px;border-color: #ebebeb;border-bottom-color: #bfbfbf;box-shadow: 2px 2px 6px #cdcdcd;border-left-color: #FF9001; }
 div.adm-block.adm-warning > div.adm-heading   { background: #FEF3E8;color: #FF9001;display: block;font-weight: bold;font-size: 0.9em;height: 1.8em;padding-top: 0.3em;padding-bottom: 0.2em;border-bottom: solid 1px #Fef3e8;padding-left: 10px;margin-left: -10px; }
 img.emoji                                     { width: 1.2em; height: 1.2em; vertical-align: text-bottom; }
-img                          { max-width:$MAX_WIDTH$; }
+img                                           { max-width:$MAX_WIDTH$; }
