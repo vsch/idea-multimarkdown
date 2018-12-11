@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.10 - Bug Fix & Enhancement Release](#27010---bug-fix--enhancement-release)
+- [2.7.0.12 - Bug Fix & Enhancement Release](#27012---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,13 +15,52 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.10 - Bug Fix & Enhancement Release
+### 2.7.0.12 - Bug Fix & Enhancement Release
 
-* [ ] Fix: copy fixed utils from Arduino Support plugin.
+Release To Do:
 * [ ] Add: create `COPY_HTML_MIME` rendering profile with a copy of the default template as an
       option
+* [ ] Add: copy HTML Mime from Exported HTML Profile Action to allow customizing HTML Mime for
+      other uses such as pasting it to websites which handle HTML paste conversion, like
+      JetBrains forums.
 * [ ] Fix: drag/drop file after physical space mistakenly takes previous element. Insert actual
       spaces at drop point to avoid an issue.
+* [ ] Fix: multi-file move refactoring does not update page relative links in files being moved
+      to other files being moved.
+* [ ] Add: #657, Add ability to navigate to text in the editor from preview, figure out how to
+      find text clicked on and use search in editor block/line to find the exact location or use
+      the offset of index of clicked position to find index withing line/block in editor text
+* [ ] Add: #641, creating list from selection
+* [ ] Add: #660, Reformat documents before commit, VCS Pre-Commit action
+* [ ] Add: #658, Verify local links before commit, VCS Pre-Commit action
+* [ ] Add: #633, Invoke renumbering ordered lists, option to formatter to reset first list item.
+* [ ] Add: #663, Convert code block type from indent to triple-quoted
+* [ ] Fix: file move refactoring removing link address for self referencing page relative link
+      without an anchor. should add empty anchor `#` to make the link valid.
+* [ ] Change: #662, Add `change to file relative` and `change to project relative`, `page`
+      relative to `file` relative and `repo` relative to `module` or `VCS root` relative
+
+Complete:
+* Add: table navigation for:
+  * header/body/caption with selection option
+  * separator stops at start and end of cell to allow editing of alignment
+* Fix: table manipulation/navigation with format as you type to eliminate caret position
+  idiosyncrasies.
+* Fix: Rewrite table format as you type code to reduce typing lag for wide tables (120+
+  characters wide). Now can comfortably type with 200+ line by 120 character tables with table
+  format as you type enabled.
+* Fix: paste image highlight showing selection ring when saving changes to clipboard
+* Fix: back tab changes indent to wrong prefix, causing to mess up the list
+* Fix: list item indent/un-indent did not adjust for change in ordered list prefix size when
+  adjusting caret position
+* Fix: back-tab override was not invoked consistently
+* Fix: tab override or list indent on empty (only space after marker) with sub-items, missing
+  EOL after item, causing sub-items to be joined to parent item as indented code.
+* Fix: fenced code has extra blank line in preview but looks fine in HTML text.
+* Fix: mixedColor now is too dark for script table in style sheet settings.
+* Add: oval and circle shape types to highlights in paste/modify image dialog
+* Change: factor out util library to plugin-util
+* Fix: copy fixed utils from Arduino Support plugin.
 * Add: multiple highlights editing in paste/modify image dialog
 * Fix: drag/drop file after end of file causes exception. Most likely will be fixed by above.
 * Fix: pasting an image and selecting non-existent directory path would not save image but only
@@ -49,7 +88,7 @@
   * Copy dragging a file leaves its original directory instead of setting it to the closest or
     best guess based on the destination file. Should be the same as if the image was pasted into
     the file. If the destination directory is the same as the source then a new name should be
-    generated to uniquify it.
+    generated to avoid overwriting it.
 * Add: in Paste/Modify Image if dragging the highlight selection without having highlight
   enabled or no border, inner nor outer fill enabled, will enable highlight and border to
   provide feedback otherwise it is confusing.
@@ -821,6 +860,7 @@
   default.
 * Fix: #402, PDF Export action fails silently if no text is selected in document instead of
   exporting the full document.
+
 
 [Admonition Extension, Material for MkDocs]: https://squidfunk.github.io/mkdocs-material/extensions/admonition/
 [html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
