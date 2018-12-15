@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.14 - Bug Fix & Enhancement Release](#27014---bug-fix--enhancement-release)
+- [2.7.0.16 - Bug Fix & Enhancement Release](#27016---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -23,21 +23,30 @@ Release To Do:
       JetBrains forums.
 * [ ] Fix: drag/drop file after physical space mistakenly takes previous element. Insert actual
       spaces at drop point to avoid the issue.
-* [ ] Fix: multi-file move refactoring does not update page relative links in files being moved
-      to other files being moved.
 * [ ] Add: #657, Add ability to navigate to text in the editor from preview, figure out how to
       find text clicked on and use search in editor block/line to find the exact location or use
       the offset of index of clicked position to find index withing line/block in editor text
 * [ ] Add: #660, Reformat documents before commit, VCS Pre-Commit action
 * [ ] Add: #658, Verify local links before commit, VCS Pre-Commit action
-* [ ] Add: #663, Convert code block type from indent to triple-quoted
-* [ ] Fix: file move refactoring removing link address for self referencing page relative link
-      without an anchor. should add empty anchor `#` to make the link valid.
 * [ ] Change: #662, Add `change to file relative` and `change to project relative`, `page`
       relative to `file` relative and `repo` relative to `module` or `VCS root` relative
 
-### 2.7.0.14 - Bug Fix & Enhancement Release
+### 2.7.0.16 - Bug Fix & Enhancement Release
 
+* Add: #663, Convert code block type from indent to triple-quoted
+* Fix: file move refactoring did not preserve self reference link file name if it was used in
+  the link and always optimized it to `#`
+* Fix: file move refactoring conversion of wiki links to explicit links would not preserve link
+  text of wiki link if only page ref was given
+* Fix: file move refactoring was not preserving `file://` addressing format of links
+* Fix: file move refactoring removing link address for self referencing page relative link
+  without an anchor. should add empty anchor `#` to make the link valid.
+* Fix: multi-file move refactoring does not update page relative links in files being moved to
+  other files being moved.
+* Fix: `file://` addressing format to wiki pages with file ext should not warn of raw vs
+  rendered markdown
+* Fix: un-indenting task item would change child items to siblings
+* Fix: wrong caret offset when indenting empty list item with caret located in trailing spaces
 * Fix: for smart edit asterisk, underscore and tilde add removal of one with mirror on
   backspace.
 * Add: tab option for skipping smart edit enabled character sequences.
