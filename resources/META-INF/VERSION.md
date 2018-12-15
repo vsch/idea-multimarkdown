@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.12 - Bug Fix & Enhancement Release](#27012---bug-fix--enhancement-release)
+- [2.7.0.14 - Bug Fix & Enhancement Release](#27014---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,8 +15,6 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.12 - Bug Fix & Enhancement Release
-
 Release To Do:
 * [ ] Add: create `COPY_HTML_MIME` rendering profile with a copy of the default template as an
       option
@@ -24,23 +22,60 @@ Release To Do:
       other uses such as pasting it to websites which handle HTML paste conversion, like
       JetBrains forums.
 * [ ] Fix: drag/drop file after physical space mistakenly takes previous element. Insert actual
-      spaces at drop point to avoid an issue.
+      spaces at drop point to avoid the issue.
 * [ ] Fix: multi-file move refactoring does not update page relative links in files being moved
       to other files being moved.
 * [ ] Add: #657, Add ability to navigate to text in the editor from preview, figure out how to
       find text clicked on and use search in editor block/line to find the exact location or use
       the offset of index of clicked position to find index withing line/block in editor text
-* [ ] Add: #641, creating list from selection
 * [ ] Add: #660, Reformat documents before commit, VCS Pre-Commit action
 * [ ] Add: #658, Verify local links before commit, VCS Pre-Commit action
-* [ ] Add: #633, Invoke renumbering ordered lists, option to formatter to reset first list item.
 * [ ] Add: #663, Convert code block type from indent to triple-quoted
 * [ ] Fix: file move refactoring removing link address for self referencing page relative link
       without an anchor. should add empty anchor `#` to make the link valid.
 * [ ] Change: #662, Add `change to file relative` and `change to project relative`, `page`
       relative to `file` relative and `repo` relative to `module` or `VCS root` relative
 
-Complete:
+### 2.7.0.14 - Bug Fix & Enhancement Release
+
+* Fix: for smart edit asterisk, underscore and tilde add removal of one with mirror on
+  backspace.
+* Add: tab option for skipping smart edit enabled character sequences.
+* Add: Smart Edit back ticks option
+* Add: #641, creating list from selection, as a special case if the selection contains a single
+  paragraph then all lines in the paragraph will be converted to list items, toggling list item
+  markers again will convert them back to a block of lines. Removal of list item prefixes will
+  convert a block of selected list items which consist of a single line of text and no
+  intervening blank lines to a block of text. In all other cases the selected elements will be
+  converted to list item per paragraph and removal of list item prefixes will add blank lines
+  between resulting paragraphs.
+* Add: #633, Invoke renumbering ordered lists, option to formatter to reset first list item.
+  Addressed by fix to formatter.
+* Fix: formatting always reset the first ordered list item to 1. Now it is a code style option.
+* Update code style settings wiki
+* Update application settings wiki
+* Add: reopening of editors when settings or associated file type changes for plugin supported
+  file types to eliminate user confusion by the file not reflecting their expectations.
+* Add: resetting of gutter size when settings remove some line marker icons from showing up.
+* Change: code style settings' smart keys to `Editor` settings pane, under Languages &
+  Frameworks > Markdown. These settings are not migrated because they are moving from per
+  project to application settings.
+  * backspace remove empty list item
+  * enter remove list item
+  * enter add list item
+  * table delete empty columns
+  * table delete empty rows
+  * table insert new rows
+  * smart edit asterisks
+  * smart edit tildes
+  * smart edit underscores
+* Change: move application settings to separate `Editor` settings pane, under Languages &
+  Frameworks > Markdown.
+* Change: move markdown code style settings to separate tabs instead of a single tab with 100
+  foot scroll of options.
+* Fix: backspace in empty table cell did not move caret left.
+* Add: enter with caret at leading pipe of table now inserts row above.
+* Fix: enter on table caption line inserted table row
 * Add: table navigation for:
   * header/body/caption with selection option
   * separator stops at start and end of cell to allow editing of alignment
@@ -860,7 +895,6 @@ Complete:
   default.
 * Fix: #402, PDF Export action fails silently if no text is selected in document instead of
   exporting the full document.
-
 
 [Admonition Extension, Material for MkDocs]: https://squidfunk.github.io/mkdocs-material/extensions/admonition/
 [html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
