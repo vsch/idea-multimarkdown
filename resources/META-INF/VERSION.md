@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.16 - Bug Fix & Enhancement Release](#27016---bug-fix--enhancement-release)
+- [2.7.0.18 - Bug Fix & Enhancement Release](#27018---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -30,9 +30,24 @@ Release To Do:
 * [ ] Add: #658, Verify local links before commit, VCS Pre-Commit action
 * [ ] Change: #662, Add `change to file relative` and `change to project relative`, `page`
       relative to `file` relative and `repo` relative to `module` or `VCS root` relative
+* [ ] Add: #528, `Header level up` should create H1 when there is no heading
 
-### 2.7.0.16 - Bug Fix & Enhancement Release
+### 2.7.0.18 - Bug Fix & Enhancement Release
 
+* Add: for readonly editors for Markdown, reset highlighter to lexer after editor creation since
+  annotator never runs for these files.
+* Fix: adding a list item with ENTER with first list item start > 1 would insert the wrong item
+  number. 
+* Add: when list items are inserted with ENTER and list code style spacing is set to `No Change`
+  will use the loose status of the current list item to insert loose/tight list item. This means
+  that if a blank line follows a list item then inserted list item will also have blank lines
+  around it.
+* Add: selecting lines in the file should allow adding block quotes, block quote level will now
+  allow selecting arbitrary lines in the file and will add block quote prefix to elements which
+  span the selected lines. Adding block quotes will not split an element into two parts so all
+  lines of the element will be prefixed. For example, selecting a part of a list's items will
+  prefix all items in the list. Similarly, selecting some lines of a paragraph will prefix all
+  lines of the paragraph.
 * Add: #663, Convert code block type from indent to triple-quoted
 * Fix: file move refactoring did not preserve self reference link file name if it was used in
   the link and always optimized it to `#`
