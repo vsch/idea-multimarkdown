@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.18 - Bug Fix & Enhancement Release](#27018---bug-fix--enhancement-release)
+- [2.7.0.20 - Bug Fix & Enhancement Release](#27020---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -32,8 +32,9 @@ Release To Do:
       relative to `file` relative and `repo` relative to `module` or `VCS root` relative
 * [ ] Add: #528, `Header level up` should create H1 when there is no heading
 
-### 2.7.0.18 - Bug Fix & Enhancement Release
+### 2.7.0.20 - Bug Fix & Enhancement Release
 
+* Fix: add `editorReleased` method to listener for 2018.2 and earlier compatibility
 * Add: for readonly editors for Markdown, reset highlighter to lexer after editor creation since
   annotator never runs for these files.
 * Fix: adding a list item with ENTER with first list item start > 1 would insert the wrong item
