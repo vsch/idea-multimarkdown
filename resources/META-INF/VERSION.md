@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.20 - Bug Fix & Enhancement Release](#27020---bug-fix--enhancement-release)
+- [2.7.0.22 - Bug Fix & Enhancement Release](#27022---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -32,8 +32,18 @@ Release To Do:
       relative to `file` relative and `repo` relative to `module` or `VCS root` relative
 * [ ] Add: #528, `Header level up` should create H1 when there is no heading
 
-### 2.7.0.20 - Bug Fix & Enhancement Release
+### 2.7.0.22 - Bug Fix & Enhancement Release
 
+* Fix: 2016.3 compatibility
+* Add: svg image support to swing browser
+* Add: debug option `Reinitialize editors on settings change` to allow turning off this feature.
+  Affects reduction of icon gutter area when some gutter icons are disabled. Without
+  reinitialization the editor gutter remains wider until the editor is closed or reinitialized
+  by the IDE.
+* Add: debug option `Reload open editors when the underlying file type changes` to allow turning
+  off this feature.
+* Add: debug option `Change editor highlighter to Lexer based for all read-only editors` to
+  allow turning off this feature.
 * Fix: add `editorReleased` method to listener for 2018.2 and earlier compatibility
 * Add: for readonly editors for Markdown, reset highlighter to lexer after editor creation since
   annotator never runs for these files.
