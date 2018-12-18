@@ -9,7 +9,7 @@
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
     - [Future Release: Version 3.0.0](#future-release-version-300)
-    - [Next Version 2.7.2](#next-version-272)
+    - [Next Version 2.8.0](#next-version-280)
     - [Version 2.7.0](#version-270)
     - [Version 2.6.0](#version-260)
     - [Version 2.5.4](#version-254)
@@ -90,13 +90,11 @@ Release Road Map
 
 **Major Refactoring Release**
 
-* Faster rendering solution to get around WebView caching issues and many large images slowing
-  performance and overflowing memory.
 * Improved Multiple Module Support
 * Link resolution support for non-GitHub VCS providers
 * Plus the usual bug fixes that come up between now and the release.
 
-### Next Version 2.7.2
+### Next Version 2.8.0
 
 Bug and compatibility fixes you can find in [Version Notes].
 

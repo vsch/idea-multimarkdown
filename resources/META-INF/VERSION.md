@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.22 - Bug Fix & Enhancement Release](#27022---bug-fix--enhancement-release)
+- [2.7.0.24 - Bug Fix & Enhancement Release](#27024---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -32,8 +32,10 @@ Release To Do:
       relative to `file` relative and `repo` relative to `module` or `VCS root` relative
 * [ ] Add: #528, `Header level up` should create H1 when there is no heading
 
-### 2.7.0.22 - Bug Fix & Enhancement Release
+### 2.7.0.24 - Bug Fix & Enhancement Release
 
+* Add: plugin icon
+* Fix: move file refactoring failing when non-markdown file is moved
 * Fix: 2016.3 compatibility
 * Add: svg image support to swing browser
 * Add: debug option `Reinitialize editors on settings change` to allow turning off this feature.
