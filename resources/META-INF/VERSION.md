@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.26 - Bug Fix & Enhancement Release](#27026---bug-fix--enhancement-release)
+- [2.7.0.28 - Bug Fix & Enhancement Release](#27028---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -16,24 +16,33 @@
 
 
 Release To Do:
-* [ ] Add: create `COPY_HTML_MIME` rendering profile with a copy of the default template as an
-      option
-* [ ] Add: copy HTML Mime from Exported HTML Profile Action to allow customizing HTML Mime for
-      other uses such as pasting it to websites which handle HTML paste conversion, like
-      JetBrains forums.
-* [ ] Fix: drag/drop file after physical space mistakenly takes previous element. Insert actual
-      spaces at drop point to avoid the issue.
-* [ ] Add: #657, Add ability to navigate to text in the editor from preview, figure out how to
-      find text clicked on and use search in editor block/line to find the exact location or use
-      the offset of index of clicked position to find index withing line/block in editor text
-* [ ] Add: #660, Reformat documents before commit, VCS Pre-Commit action
-* [ ] Add: #658, Verify local links before commit, VCS Pre-Commit action
-* [ ] Change: #662, Add `change to file relative` and `change to project relative`, `page`
-      relative to `file` relative and `repo` relative to `module` or `VCS root` relative
-* [ ] Add: #528, `Header level up` should create H1 when there is no heading
+* [ ] Add: ENTER smart key option to insert block quote prefix when inserting line in block
+      quote
 
-### 2.7.0.26 - Bug Fix & Enhancement Release
+### 2.7.0.28 - Bug Fix & Enhancement Release
 
+* Add: Heading formatting option for preferred heading style:
+  * No Change - leave all ATX and Setext headings as they are
+  * ATX - change all Setext to ATX
+  * Setext - change all ATX level 1 & 2 headings to Setext
+* Fix: heading type changes to work with arbitrary parent prefixes
+* Fix: Setext marker equalization as you type to work with arbitrary parent prefixes
+* Add: `Heading level up` now changes Setext to ATX to allow increase of heading levels
+* Fix: ATX to Setext heading change to add blank line before ATX heading if it is not there,
+  otherwise preceding text is interpreted as part of the Setext heading
+* Fix: change `Header` to `Heading` in localizations for consistency when referring to markdown
+  heading elements
+* Add: #528, `Header level up` should create H1 when there is no heading, also `Header level
+  down` removes heading when level 1 heading.
+* Add: `Format Markdown` to `Markdown Navigator` tools menu, with format element and format
+  document actions
+* Add: `Copy Exported as HTML Mime Content` Action to copy HTML export text as HTML mime content
+  to allow customizing HTML Mime for other uses such as pasting it to websites which handle HTML
+  paste conversion, like JetBrains forums, which do not need all the extra formatting provided
+  by `Copy Markdown as HTML Mime Content`
+* Add: create `COPY_HTML_MIME` rendering profile with a copy of the default template as css text
+* Fix: drag/drop file after physical space mistakenly takes previous element. Insert actual
+  spaces at drop point to avoid the issue.
 * Fix: table as you type formatting broken by refactoring in version 2.7.0.14
 * Add: plugin icon
 * Fix: move file refactoring failing when non-markdown file is moved
@@ -51,7 +60,7 @@ Release To Do:
 * Add: for readonly editors for Markdown, reset highlighter to lexer after editor creation since
   annotator never runs for these files.
 * Fix: adding a list item with ENTER with first list item start > 1 would insert the wrong item
-  number. 
+  number.
 * Add: when list items are inserted with ENTER and list code style spacing is set to `No Change`
   will use the loose status of the current list item to insert loose/tight list item. This means
   that if a blank line follows a list item then inserted list item will also have blank lines
