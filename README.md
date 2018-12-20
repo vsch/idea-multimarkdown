@@ -1,5 +1,5 @@
-<img src="https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/MNLogo.png" height="48" width="48" align="absmiddle"> Markdown Navigator 2.0
-==========================================================================================================================================================
+<img src="https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/MNLogo.png" height="64" width="64" align="absmiddle"> Markdown Navigator 2.0
+=========================================================================================================================================================
 
 [TOC levels=2,3]: # "Table of Contents"
 
