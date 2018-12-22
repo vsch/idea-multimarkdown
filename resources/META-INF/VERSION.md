@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.28 - Bug Fix & Enhancement Release](#27028---bug-fix--enhancement-release)
+- [2.7.0.30 - Bug Fix & Enhancement Release](#27030---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,12 +15,13 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-Release To Do:
-* [ ] Add: ENTER smart key option to insert block quote prefix when inserting line in block
-      quote
+### 2.7.0.30 - Bug Fix & Enhancement Release
 
-### 2.7.0.28 - Bug Fix & Enhancement Release
-
+* Fix: list type toggle actions without selection would erroneously toggle child items   
+* Add: ENTER smart key option to insert block quote prefix when inserting line in block quote
+* Fix: formatter would not strip block quote prefix if it was preceded by non-indenting spaces  
+* Fix: block quote prefix handling in complex nested markdown elements
+* Fix: Setext marker equalization glitches during fast typing 
 * Add: Heading formatting option for preferred heading style:
   * No Change - leave all ATX and Setext headings as they are
   * ATX - change all Setext to ATX
@@ -126,7 +127,7 @@ Release To Do:
 * Add: table navigation for:
   * header/body/caption with selection option
   * separator stops at start and end of cell to allow editing of alignment
-* Fix: table manipulation/navigation with format as you type to eliminate caret position
+7* Fix: table manipulation/navigation with format as you type to eliminate caret position
   idiosyncrasies.
 * Fix: Rewrite table format as you type code to reduce typing lag for wide tables (120+
   characters wide). Now can comfortably type with 200+ line by 120 character tables with table
