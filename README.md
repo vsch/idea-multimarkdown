@@ -100,7 +100,7 @@ Bug and compatibility fixes you can find in [Version Notes].
 
 [Install EAP plugin](../../wiki/EAP-Update-Channel) version to preview next release.
 
-* Add: Enhanced edition features added to basic edition:
+* Add: Enhanced edition features migrated to basic edition:
   * **Extensions**: Abbreviations, Jekyll Front Matter
   * **Inspections**: GitHub Table, Jekyll Front Matter, Emoji Shortcut
   * **Completions**: Emoji shortcuts, Links, References, Fenced code language
