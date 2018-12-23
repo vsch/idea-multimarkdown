@@ -1,4 +1,4 @@
-<img src="https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/MNLogo.png" height="64" width="64" align="absmiddle"> Markdown Navigator 2.0
+<img src="https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/MNLogo.png" height="64" width="64" align="absmiddle"> Markdown Navigator 2.8
 ==========================================================================================================================================================
 
 [TOC levels=2,3]: # "Table of Contents"
@@ -73,15 +73,13 @@ for:
 
 ### Two tier model
 
-1. Previewing and syntax highlighting functionality with a split editor is available in the
-   Basic open source edition. Intended for mostly previewing markdown documents and unaided
-   editing. Wiki link refactoring and completions are also available in the basic edition to
-   ease the task of wiki maintenance.
+1. Previewing, syntax highlighting, basic editing functionality with link completions with split
+   editor preview is available in the basic open source edition. Intended for mostly previewing
+   and editing of markdown documents without full document format.
 
 2. Advanced features used for creating and maintaining markdown documents: refactoring, find
-   usages, validation, auto formatting and HTML page customizations are only available in the
-   Enhanced licensed version. 15-day free trial licenses are available from [Markdown Navigator]
-   page on my website.
+   usages, validation and auto formatting are only available in the Enhanced licensed version.
+   15-day free trial licenses are available from [Markdown Navigator] page on my website.
 
 Release Road Map
 ----------------
@@ -100,8 +98,8 @@ Bug and compatibility fixes you can find in [Version Notes].
 
 [Install EAP plugin](../../wiki/EAP-Update-Channel) version to preview next release.
 
-* Add: Enhanced edition features migrated to basic edition:
-  * **Extensions**: Abbreviations, Jekyll Front Matter
+* Enhanced edition features migrated to basic edition:
+  * **Extensions**: Jekyll Front Matter
   * **Inspections**: GitHub Table, Jekyll Front Matter, Emoji Shortcut
   * **Completions**: Emoji shortcuts, Links, References, Fenced code language
   * **Editor Settings**: Language Injections, Remove prefix when joining lines, Simple structure
