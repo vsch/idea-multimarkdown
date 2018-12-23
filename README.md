@@ -104,6 +104,8 @@ to preview next release.
 * Improve: toolbar actions dealing with block quotes, list items, heading level up/down to
   handle conversion to/from plain text.
 * Add: heading style conversion during document format  
+* Add: Convert fenced code to indented code intention
+* Add: `Copy Exported as HTML Mime Content` Action to copy HTML export text as HTML mime content
 * Add: Image Paste highlight option to annotate an area of the image.  
   ![Screenshot_PasteImage_Highlight](/assets/images/faq/ScreenShot_PasteImage_sm_h.png)
 * Add: `Copy markdown without soft line breaks` copies document or selection to the clipboard

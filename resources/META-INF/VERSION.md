@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.30 - Bug Fix & Enhancement Release](#27030---bug-fix--enhancement-release)
+- [2.7.0.32 - Bug Fix & Enhancement Release](#27032---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,20 +15,34 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.30 - Bug Fix & Enhancement Release
+### 2.7.0.32 - Bug Fix & Enhancement Release
 
-* Fix: list type toggle actions without selection would erroneously toggle child items   
+* Fix: image file move link refactoring broken by multi-file move fix.
+* Add: to `HTML Paste Option` dialog
+  * `Paste Plain Text` button to allow ignoring HTML content for a particular paste operation.
+  * `Suppress` option for `Fenced Code`. When enabled will use indented code instead of fenced
+    code.
+  * `Suppress` option for `Escaping Special Characters`. When enabled will not escape any
+    special characters in converted markdown code.
+  * Preview of text which would be pasted when mouse over the `Paste Plain Text` or `Paste HTML`
+    buttons
+* Fix: if reload affected editors is refused, then these files will not trigger reload editor
+  prompt until reloaded by other files' prompt or reset to not needing reloading. Avoids
+  multiple prompts when already refused.
+* Fix: table parser to render table separator char (`|`) embedded in inline elements as text.
+* Fix: list type toggle actions without selection would erroneously toggle child items
 * Add: ENTER smart key option to insert block quote prefix when inserting line in block quote
-* Fix: formatter would not strip block quote prefix if it was preceded by non-indenting spaces  
+* Fix: formatter would not strip block quote prefix if it was preceded by non-indenting spaces
 * Fix: block quote prefix handling in complex nested markdown elements
-* Fix: Setext marker equalization glitches during fast typing 
+* Fix: Setext marker equalization glitches during fast typing
 * Add: Heading formatting option for preferred heading style:
   * No Change - leave all ATX and Setext headings as they are
   * ATX - change all Setext to ATX
   * Setext - change all ATX level 1 & 2 headings to Setext
 * Fix: heading type changes to work with arbitrary parent prefixes
 * Fix: Setext marker equalization as you type to work with arbitrary parent prefixes
-* Add: `Heading level up` now changes Setext to ATX to allow increase of heading levels
+* Add: `Heading level up` now changes Setext to ATX to allow increase of heading levels beyond 2
+  available for setext headings.
 * Fix: ATX to Setext heading change to add blank line before ATX heading if it is not there,
   otherwise preceding text is interpreted as part of the Setext heading
 * Fix: change `Header` to `Heading` in localizations for consistency when referring to markdown
@@ -126,9 +140,8 @@
 * Fix: enter on table caption line inserted table row
 * Add: table navigation for:
   * header/body/caption with selection option
-  * separator stops at start and end of cell to allow editing of alignment
-7* Fix: table manipulation/navigation with format as you type to eliminate caret position
-  idiosyncrasies.
+  * separator stops at start and end of cell to allow editing of alignment 7* Fix: table
+    manipulation/navigation with format as you type to eliminate caret position idiosyncrasies.
 * Fix: Rewrite table format as you type code to reduce typing lag for wide tables (120+
   characters wide). Now can comfortably type with 200+ line by 120 character tables with table
   format as you type enabled.
