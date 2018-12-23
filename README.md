@@ -1,5 +1,5 @@
 <img src="https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/MNLogo.png" height="64" width="64" align="absmiddle"> Markdown Navigator 2.0
-=========================================================================================================================================================
+==========================================================================================================================================================
 
 [TOC levels=2,3]: # "Table of Contents"
 
@@ -98,12 +98,24 @@ Release Road Map
 
 Bug and compatibility fixes you can find in [Version Notes].
 
-[Install EAP plugin](../../wiki/EAP-Update-Channel) version
-to preview next release.
+[Install EAP plugin](../../wiki/EAP-Update-Channel) version to preview next release.
 
+* Add: Enhanced edition features added to basic edition:
+  * **Extensions**: Abbreviations, Jekyll Front Matter
+  * **Inspections**: GitHub Table, Jekyll Front Matter, Emoji Shortcut
+  * **Completions**: Emoji shortcuts, Links, References, Fenced code language
+  * **Editor Settings**: Language Injections, Remove prefix when joining lines, Simple structure
+    view
+  * **Actions and Toolbar buttons**:
+    * Toggle inline styles
+    * Block quote actions
+    * List actions
+    * Insert table action
+    * Format Element
+  * **Wrap on typing**
 * Improve: toolbar actions dealing with block quotes, list items, heading level up/down to
   handle conversion to/from plain text.
-* Add: heading style conversion during document format  
+* Add: heading style conversion during document format
 * Add: Convert fenced code to indented code intention
 * Add: `Copy Exported as HTML Mime Content` Action to copy HTML export text as HTML mime content
 * Add: Image Paste highlight option to annotate an area of the image.  
@@ -121,8 +133,7 @@ to preview next release.
 
 * Add: inspection for validation which used to be implemented as annotations. This allows
   customizing and running inspection profiles against markdown files for validation.
-* Add: Parser
-  [Macros Extension](../../wiki/Macros-Extension)
+* Add: Parser [Macros Extension](../../wiki/Macros-Extension)
 * Add: option to enable validation of remote links (annotates unresolved link if server returns
   error)
 * Add: error annotation for links to HTML files in project with anchor refs which do not link to
