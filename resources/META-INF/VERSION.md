@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.34 - Bug Fix & Enhancement Release](#27034---bug-fix--enhancement-release)
+- [2.7.0.36 - Bug Fix & Enhancement Release](#27036---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,8 +15,11 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.34 - Bug Fix & Enhancement Release
+### 2.7.0.36 - Bug Fix & Enhancement Release
 
+* Fix: update for `flexmark-java` 0.40.0
+* Fix: editor setting `Remove prefix when joining lines` was disabled in basic version and `Use
+  rename for spelling error text` was enabled. Reverse of what is intended.
 * Add: #668, Enhanced Edition Features migrating to Basic Edition
 * Fix: make copy html mime exported to handle partial selections with reference transfer from
   full document.
