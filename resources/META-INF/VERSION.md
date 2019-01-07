@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.38 - Bug Fix & Enhancement Release](#27038---bug-fix--enhancement-release)
+- [2.7.0.40 - Bug Fix & Enhancement Release](#27040---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,10 +15,10 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.38 - Bug Fix & Enhancement Release
+### 2.7.0.40 - Bug Fix & Enhancement Release
 
+* Fix: update for `flexmark-java` 0.40.2
 * Fix: restore lib apache commons-io 2.4, in PHP storm 2018.3 the library is missing. 
-* Fix: update for `flexmark-java` 0.40.0
 * Fix: editor setting `Remove prefix when joining lines` was disabled in basic version and `Use
   rename for spelling error text` was enabled. Reverse of what is intended.
 * Add: #668, Enhanced Edition Features migrating to Basic Edition
@@ -44,7 +44,7 @@
 * Fix: Setext marker equalization glitches during fast typing
 * Add: Heading formatting option for preferred heading style:
   * No Change - leave all ATX and Setext headings as they are
-  * ATX - change all Setext to ATX
+  * ATX - change all Setext to ATX  
   * Setext - change all ATX level 1 & 2 headings to Setext
 * Fix: heading type changes to work with arbitrary parent prefixes
 * Fix: Setext marker equalization as you type to work with arbitrary parent prefixes
