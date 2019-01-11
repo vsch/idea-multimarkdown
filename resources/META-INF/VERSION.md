@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.42 - Bug Fix & Enhancement Release](#27042---bug-fix--enhancement-release)
+- [2.7.0.44 - Bug Fix & Enhancement Release](#27044---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,8 +15,11 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.42 - Bug Fix & Enhancement Release
+### 2.7.0.44 - Bug Fix & Enhancement Release
 
+* Add: Change link to text intention
+* Add: HTMLOption to suppress links (convert them to their plain text equivalent)
+* Fix: NPE when trying to open HTMLOptions dialog from settings
 * Fix: #605, allow uppercase letters in custom URI protocols
 * Fix: table format as you type would loose leading table prefix spaces
 * Fix: diagnostic/2216, trailing spaces filter index out of document text range
