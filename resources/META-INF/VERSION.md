@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.44 - Bug Fix & Enhancement Release](#27044---bug-fix--enhancement-release)
+- [2.7.0.46 - Bug Fix & Enhancement Release](#27046---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,8 +15,17 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.44 - Bug Fix & Enhancement Release
+### 2.7.0.46 - Bug Fix & Enhancement Release
 
+* Fix: #672, Refactoring does not update reference to file after renaming package
+  * Fix: find usages to find directory references in links
+  * Fix: find usages to find package references in links
+  * Fix: find usages to find java class file references in links
+  * Fix: directory renaming to trigger link refactoring
+  * Fix: package renaming to trigger link refactoring
+  * Fix: java class renaming to trigger link refactoring
+  * Fix: java class move to trigger link refactoring
+* Add: missing elements to HTMLOptions simulated sample (when invoked from settings)
 * Add: Change link to text intention
 * Add: HTMLOption to suppress links (convert them to their plain text equivalent)
 * Fix: NPE when trying to open HTMLOptions dialog from settings
