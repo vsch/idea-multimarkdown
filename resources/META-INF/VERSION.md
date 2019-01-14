@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.46 - Bug Fix & Enhancement Release](#27046---bug-fix--enhancement-release)
+- [2.7.0.48 - Bug Fix & Enhancement Release](#27048---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,8 +15,14 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.46 - Bug Fix & Enhancement Release
+### 2.7.0.48 - Bug Fix & Enhancement Release
 
+* Fix: library bundled with IDEA missing from CLion
+* Add: file drag/drop and image paste option to preserve existing link format. Applies when file
+  is dropped on existing link or image pasted on existing link and `preserve existing format`
+  option is selected in the corresponding options dialog.
+* Fix: Java PsiClass and PsiPackage dependencies for non-java IDEs
+* Fix: file move link adjustments caused by directory move of parent
 * Fix: #672, Refactoring does not update reference to file after renaming package
   * Fix: find usages to find directory references in links
   * Fix: find usages to find package references in links
@@ -25,6 +31,9 @@
   * Fix: package renaming to trigger link refactoring
   * Fix: java class renaming to trigger link refactoring
   * Fix: java class move to trigger link refactoring
+  
+  :warning: Because of the way RubyMine implemented directory rename refactoring .Directory
+  renaming does not update files and sub-directories located under the renamed directory.
 * Add: missing elements to HTMLOptions simulated sample (when invoked from settings)
 * Add: Change link to text intention
 * Add: HTMLOption to suppress links (convert them to their plain text equivalent)
