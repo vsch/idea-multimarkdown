@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.50 - Bug Fix & Enhancement Release](#27050---bug-fix--enhancement-release)
+- [2.7.0.52 - Bug Fix & Enhancement Release](#27052---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,9 +15,17 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.50 - Bug Fix & Enhancement Release
+### 2.7.0.52 - Bug Fix & Enhancement Release
 
-* Fix: re-implement package/directory move/rename refactoring to make it compatible with Antroid
+* Fix: image was not embedded if the image URI had query suffix added  
+* Fix: fenced code injected fragment editing when contained in parent with prefix.
+* Add: multi-line image URL language injection
+  * Add: hard-coded `gravizo.com` that starts with `@startuml` to default to `puml` language
+    type if `PlantUML` plugin is installed. Otherwise, defaults to plain text.
+  * [ ] Add: configuration for determining language by URL regex and content regex 
+  * [ ] Add: configuration for suffix removal/restoration and suffix exclusion characters
+* Fix: update for `flexmark-java` 0.40.6
+* Fix: re-implement package/directory move/rename refactoring to make it compatible with Android
   Studio and RubyMine
 * Fix: library bundled with IDEA missing from CLion
 * Add: file drag/drop and image paste option to preserve existing link format. Applies when file
@@ -40,7 +48,6 @@
 * Fix: #605, allow uppercase letters in custom URI protocols
 * Fix: table format as you type would loose leading table prefix spaces
 * Fix: diagnostic/2216, trailing spaces filter index out of document text range
-* Fix: update for `flexmark-java` 0.40.2
 * Fix: restore lib apache commons-io 2.4, in PHP storm 2018.3 the library is missing. 
 * Fix: editor setting `Remove prefix when joining lines` was disabled in basic version and `Use
   rename for spelling error text` was enabled. Reverse of what is intended.
