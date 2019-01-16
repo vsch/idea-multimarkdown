@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.52 - Bug Fix & Enhancement Release](#27052---bug-fix--enhancement-release)
+- [2.7.0.54 - Bug Fix & Enhancement Release](#27054---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,8 +15,20 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.52 - Bug Fix & Enhancement Release
+### 2.7.0.54 - Bug Fix & Enhancement Release
 
+* Add: border to images when focus-highlighted in preview
+* Add: intentions to convert between multi-line URL Gravizo and PlantUML fenced code intentions 
+* Add: PlantUML/DOT rendering for `puml` and `plantuml` fenced code as options
+  * Requires enabling parser extensions for `PlantUML` and `DOT` fenced code rendering 
+  * Selecting type of rendering in HTML Generation settings: `Embedded` using PlantUML jar, `Gravizo PNG` or
+    `Gravizo SVG` using gravizo.com
+  
+  :warning: Swing does not display `Gravizo PNG`
+  
+  :warning: JavaFX may not display `Gravizo SVG` correctly
+* Fix: language injections to default to plain-text if specific language is not found to allow
+  editing fragment in separate editor
 * Fix: image was not embedded if the image URI had query suffix added  
 * Fix: fenced code injected fragment editing when contained in parent with prefix.
 * Add: multi-line image URL language injection
