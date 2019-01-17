@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.56 - Bug Fix & Enhancement Release](#27056---bug-fix--enhancement-release)
+- [2.7.0.58 - Bug Fix & Enhancement Release](#27058---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,29 +15,36 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.56 - Bug Fix & Enhancement Release
+### 2.7.0.58 - Bug Fix & Enhancement Release
 
+* Fix: update for `flexmark-java` 0.40.8
+* Fix: #676, Text colouring is missing in commit file preview window
+* Add: `Copy PlantUML Image intention` to copy resulting image to the clipboard
+* Fix: PlantUML to gravizo.com image link intention method not found exception on Android Studio
+* Fix: change PlantUML to gravizo.com image link intention to generate SVG for Swing and PNG for
+  JavaFX so both display correctly by default.
+* Fix: auto-link refactoring not to loose angle wrapping
+* Add: `puml` and `plantuml` to fenced code language completion when corresponding parser
+  PlantUML extension is enabled.
+* Add: intentions to change between anchor ref HTML and Markdown attributes element
 * Fix: plant uml fenced code rendering to work with HTML mime copy and export
 * Add: border to images when focus-highlighted in preview
-* Add: intentions to convert between multi-line URL Gravizo and PlantUML fenced code intentions 
+* Add: intentions to convert between multi-line URL Gravizo and PlantUML fenced code intentions
 * Add: PlantUML/DOT rendering for `puml` and `plantuml` fenced code as options
-  * Requires enabling parser extensions for `PlantUML` and `DOT` fenced code rendering 
-  * Selecting type of rendering in HTML Generation settings: `Embedded` using PlantUML jar, `Gravizo PNG` or
-    `Gravizo SVG` using gravizo.com
-  
+  * Requires enabling parser extensions for `PlantUML` and `DOT` fenced code rendering
+  * Selecting type of rendering in HTML Generation settings: `Embedded` using PlantUML jar,
+    `Gravizo PNG` or `Gravizo SVG` using gravizo.com
+
   :warning: Swing does not display `Gravizo PNG`
-  
+
   :warning: JavaFX may not display `Gravizo SVG` correctly
 * Fix: language injections to default to plain-text if specific language is not found to allow
   editing fragment in separate editor
-* Fix: image was not embedded if the image URI had query suffix added  
+* Fix: image was not embedded if the image URI had query suffix added
 * Fix: fenced code injected fragment editing when contained in parent with prefix.
 * Add: multi-line image URL language injection
   * Add: hard-coded `gravizo.com` that starts with `@startuml` to default to `puml` language
     type if `PlantUML` plugin is installed. Otherwise, defaults to plain text.
-  * [ ] Add: configuration for determining language by URL regex and content regex 
-  * [ ] Add: configuration for suffix removal/restoration and suffix exclusion characters
-* Fix: update for `flexmark-java` 0.40.6
 * Fix: re-implement package/directory move/rename refactoring to make it compatible with Android
   Studio and RubyMine
 * Fix: library bundled with IDEA missing from CLion
@@ -61,7 +68,7 @@
 * Fix: #605, allow uppercase letters in custom URI protocols
 * Fix: table format as you type would loose leading table prefix spaces
 * Fix: diagnostic/2216, trailing spaces filter index out of document text range
-* Fix: restore lib apache commons-io 2.4, in PHP storm 2018.3 the library is missing. 
+* Fix: restore lib apache commons-io 2.4, in PHP storm 2018.3 the library is missing.
 * Fix: editor setting `Remove prefix when joining lines` was disabled in basic version and `Use
   rename for spelling error text` was enabled. Reverse of what is intended.
 * Add: #668, Enhanced Edition Features migrating to Basic Edition
@@ -87,7 +94,7 @@
 * Fix: Setext marker equalization glitches during fast typing
 * Add: Heading formatting option for preferred heading style:
   * No Change - leave all ATX and Setext headings as they are
-  * ATX - change all Setext to ATX  
+  * ATX - change all Setext to ATX
   * Setext - change all ATX level 1 & 2 headings to Setext
 * Fix: heading type changes to work with arbitrary parent prefixes
 * Fix: Setext marker equalization as you type to work with arbitrary parent prefixes

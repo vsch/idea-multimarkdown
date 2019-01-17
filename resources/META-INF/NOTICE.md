@@ -16,7 +16,7 @@ respective licenses.
     https://www.jetbrains.com/idea/
   * parts based on code from IntelliJ IDEA open source Plugins  
     Copyright (c) JetBrains s.r.o.  
-    https://github.com/vsch/intellij-plugins
+    https://github.com/JetBrains/intellij-plugins
   * includes highlight.js  
     Copyright (c) 2006, Ivan Sagalaev, <https://github.com/isagalaev/highlight.js>  
     <https://github.com/isagalaev/highlight.js/blob/master/LICENSE>
@@ -25,7 +25,7 @@ respective licenses.
     <https://github.com/PrismJS/prism/blob/gh-pages/LICENSE>
   * includes asm-all-4.1.jar  
     Copyright (c) 2012 France Télécom, All rights reserved.  
-    <http://asm.ow2.org/asmdex-license.html>
+    <https://asm.ow2.io>
   * parts based on https://github.com/sindresorhus/github-markdown-css  
     Copyright (c) 2014-2015 Sindre Sorhus <http://sindresorhus.com>  
     <https://opensource.org/licenses/MIT>
@@ -65,14 +65,14 @@ respective licenses.
   <https://github.com/vlivanov/translate-me/blob/master/LICENSE> All rights reserved.
 * includes syntax extensions from MultiMarkdown by Fletcher T. Penney  
   MultiMarkdown changes Copyright (c) 2005-2009 Fletcher T. Penney  
-  <http://fletcherpenney.net/> All rights reserved.
+  <https://fletcherpenney.net/> All rights reserved.
 * Original Markdown Code Copyright (c) 2003-2007 John Gruber  
-  <http://daringfireball.net/> All rights reserved.
+  <https://daringfireball.net/> All rights reserved.
 * includes GitHub-userscripts by Rob Garrison  
   Creative Commons Attribution-ShareAlike 4.0 International  
-  <https://github.com/Mottie/GitHub-userscripts/blob/master/LICENCE>
+  <https://github.com/Mottie/GitHub-userscripts/blob/master/LICENSE>
 * includes jsoup HTML parser software library  
-  Copyright (c) 2009 - 2016 Jonathan Hedley <http://jonathanhedley.com/>  
+  Copyright (c) 2009 - 2016 Jonathan Hedley <https://jhy.io>  
   <https://jsoup.org/license>
 * includes a modified Markdown-Mark <https://github.com/dcurtis/markdown-mark>  
   DEDICATED TO THE PUBLIC DOMAIN BY Dustin Curtis <https://dcurt.is/the-markdown-mark>  
@@ -86,7 +86,10 @@ respective licenses.
 * includes Open HTML to PDF software library  
   Copyright (C) 2016 Patrick Wright and others <https://openhtmltopdf.com>  
   <https://github.com/danfickle/openhtmltopdf/blob/open-dev-v1/LICENSE>
-* includes Emoji-Cheat-Sheet.com http://www.emoji-cheat-sheet.com/  
+* includes PlantUML software library  
+  (C) Copyright 2009-2017, Arnaud Roques <http://plantuml.com>  
+  <https://opensource.org/licenses/MIT>
+* includes Emoji-Cheat-Sheet.com <https://www.webfx.com/tools/emoji-cheat-sheet>  
   <https://github.com/arvida/emoji-cheat-sheet.com>
 
   All emoji images (unless listed below) are Copyright (c) 2012 Apple Inc. All rights

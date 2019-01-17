@@ -111,6 +111,7 @@ Bug and compatibility fixes you can find in [Version Notes].
     * Insert table action
     * Format Element
   * **Wrap on typing**
+* **Copy PlantUML image** intention to copy diagram to clipboard
 * Convert between **gravizo.com images** and **PlantUML fenced code**
 * **PlantUML fenced code** rendering via PlantUML library or gravizo.com
 * **Multi-Line Image URL** language injections
