@@ -111,6 +111,10 @@ Bug and compatibility fixes you can find in [Version Notes].
     * Insert table action
     * Format Element
   * **Wrap on typing**
+* Convert between **gravizo.com images** and **PlantUML fenced code**
+* **PlantUML fenced code** rendering via PlantUML library or gravizo.com
+* **Multi-Line Image URL** language injections
+* **Improved Directory/Package Refactoring** for all IDEs
 * Improve: toolbar actions dealing with block quotes, list items, heading level up/down to
   handle conversion to/from plain text.
 * Add: heading style conversion during document format

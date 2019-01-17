@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.54 - Bug Fix & Enhancement Release](#27054---bug-fix--enhancement-release)
+- [2.7.0.56 - Bug Fix & Enhancement Release](#27056---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,8 +15,9 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.54 - Bug Fix & Enhancement Release
+### 2.7.0.56 - Bug Fix & Enhancement Release
 
+* Fix: plant uml fenced code rendering to work with HTML mime copy and export
 * Add: border to images when focus-highlighted in preview
 * Add: intentions to convert between multi-line URL Gravizo and PlantUML fenced code intentions 
 * Add: PlantUML/DOT rendering for `puml` and `plantuml` fenced code as options
