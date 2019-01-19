@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.58 - Bug Fix & Enhancement Release](#27058---bug-fix--enhancement-release)
+- [2.7.0.60 - Bug Fix & Enhancement Release](#27060---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,9 +15,23 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.58 - Bug Fix & Enhancement Release
+### 2.7.0.60 - Bug Fix & Enhancement Release
 
 * Fix: update for `flexmark-java` 0.40.8
+* Fix: file move handler exception if only directory was moved without files.
+* Fix: diagnostic/2245, IndexNotReadyException: Please change caller according to
+  IndexNotReadyException documentation caused by pasting possible reference while indexing is in
+  progress.
+* Fix: ENTER would insert loose list item in tight list if code style setting for lists was
+  `Loosen if has loose item`.
+* Fix: do not highlight PlantUML images in preview as local only.
+* Fix: index out of bounds when using TAB to skip trailing auto characters located at end of
+  file not terminated by EOL.
+* Fix: html generation embed remote images to handle SVG and gravizo images.
+* Fix: `Copy/Modify Image` to use gravizo.com SVG link for images with PNG link because Swing
+  cannot load gravizo PNG images.
+* Fix: `Copy/Modify Image` intention on multi-line image URL to remove URL content when
+  replacing link address.
 * Fix: #676, Text colouring is missing in commit file preview window
 * Add: `Copy PlantUML Image intention` to copy resulting image to the clipboard
 * Fix: PlantUML to gravizo.com image link intention method not found exception on Android Studio
