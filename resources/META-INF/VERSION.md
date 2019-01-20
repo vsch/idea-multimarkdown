@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.62 - Bug Fix & Enhancement Release](#27062---bug-fix--enhancement-release)
+- [2.7.0.64 - Bug Fix & Enhancement Release](#27064---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,9 +15,12 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.62 - Bug Fix & Enhancement Release
+### 2.7.0.64 - Bug Fix & Enhancement Release
 
 * Fix: update for `flexmark-java` 0.40.10
+* Add: editor option to limit wrap on typing to only occur after typing a space, by default wrap
+  on typing is now performed for all characters. Disable if wrap on typing causes unacceptable
+  typing response.
 * Add: intentions to convert between inline or block math elements and `latex.codecogs.com`
   multi-line image URL links. 
 * Add: html generation options for rendering math inline/block elements using
