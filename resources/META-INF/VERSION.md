@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.60 - Bug Fix & Enhancement Release](#27060---bug-fix--enhancement-release)
+- [2.7.0.62 - Bug Fix & Enhancement Release](#27062---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,9 +15,15 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.60 - Bug Fix & Enhancement Release
+### 2.7.0.62 - Bug Fix & Enhancement Release
 
-* Fix: update for `flexmark-java` 0.40.8
+* Fix: update for `flexmark-java` 0.40.10
+* Add: intentions to convert between inline or block math elements and `latex.codecogs.com`
+  multi-line image URL links. 
+* Add: html generation options for rendering math inline/block elements using
+  `latex.codecogs.com`.
+* Fix: if default link format for drag/drop is Wiki Link but wiki links are not available for
+  the document then use page relative format.
 * Fix: file move handler exception if only directory was moved without files.
 * Fix: diagnostic/2245, IndexNotReadyException: Please change caller according to
   IndexNotReadyException documentation caused by pasting possible reference while indexing is in
@@ -27,7 +33,7 @@
 * Fix: do not highlight PlantUML images in preview as local only.
 * Fix: index out of bounds when using TAB to skip trailing auto characters located at end of
   file not terminated by EOL.
-* Fix: html generation embed remote images to handle SVG and gravizo images.
+* Fix: html generation embed remote images to handle SVG, gravizo and codecogs images.
 * Fix: `Copy/Modify Image` to use gravizo.com SVG link for images with PNG link because Swing
   cannot load gravizo PNG images.
 * Fix: `Copy/Modify Image` intention on multi-line image URL to remove URL content when
@@ -820,10 +826,10 @@
 * Fix: TOC entries would exclude typographic characters when "text only" option was used with
   typographic parser extension enabled.
 * Fix: HTML to Markdown not adding HTML comment between consecutive lists
-* Fix: #479, Multi-line URL images are not converted in PDF export or Copy HTML Mime
+* Fix: #479, multi-line image URLs are not converted in PDF export or Copy HTML Mime
 * Add: Show "Apply all '...'" intention on any element option to allow showing file level
   intentions to be available on any element. Otherwise only shown on elements which they affect.
-* Add: enable image intentions on multi-line URL image links
+* Add: enable image intentions on multi-line image URL links
 * Add: Code Folding option in settings for embedded image links
 * Add: HTML generation options to convert image links to embedded images, with separate option
   for http:// and https:// image urls.

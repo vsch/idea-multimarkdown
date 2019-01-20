@@ -112,7 +112,9 @@ Bug and compatibility fixes you can find in [Version Notes].
     * Format Element
   * **Wrap on typing**
 * **Copy PlantUML image** intention to copy diagram to clipboard
+* Convert between **codecogs.com images** and **Math block and inline**
 * Convert between **gravizo.com images** and **PlantUML fenced code**
+* **Math block and inline** rendering by [Katex] or [codecogs.com]
 * **PlantUML fenced code** rendering via PlantUML library or gravizo.com
 * **Multi-Line Image URL** language injections
 * **Improved Directory/Package Refactoring** for all IDEs
@@ -558,3 +560,7 @@ Reserved.
 [WebStorm]: http://www.jetbrains.com/webstorm
 [Wiki]: https://github.com/vsch/idea-multimarkdown/wiki
 
+
+
+[codecogs.com]: https://codecogs.com
+[Katex]: https://github.com/Khan/KaTeX
