@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.68 - Bug Fix & Enhancement Release](#27068---bug-fix--enhancement-release)
+- [2.7.0.70 - Bug Fix & Enhancement Release](#27070---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,9 +15,14 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.68 - Bug Fix & Enhancement Release
+### 2.7.0.70 - Bug Fix & Enhancement Release
 
 * Fix: update for `flexmark-java` 0.40.14
+* Fix: remove case sensitivity from link address and link text suggestions
+* Add: type information and priority for some link text suggestions to improve their placement
+* Add: link text suggestions 
+  * based on file name and first heading in the file if it is Markdown
+  * first heading: anchor ref heading based link text
 * Fix: with wrap on all characters, do not wrap when typing or backspacing setext heading marker
   line
 * Fix: diagnostic/2273, index out of bounds exception
