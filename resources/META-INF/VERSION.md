@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.66 - Bug Fix & Enhancement Release](#27066---bug-fix--enhancement-release)
+- [2.7.0.68 - Bug Fix & Enhancement Release](#27068---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,12 +15,15 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.66 - Bug Fix & Enhancement Release
+### 2.7.0.68 - Bug Fix & Enhancement Release
 
-* Fix: update for `flexmark-java` 0.40.10
+* Fix: update for `flexmark-java` 0.40.14
+* Fix: with wrap on all characters, do not wrap when typing or backspacing setext heading marker
+  line
+* Fix: diagnostic/2273, index out of bounds exception
 * Add: logic in wrap on typing to disable wrapping if caret is at left text edge and typing a
-  special char (`*`, `-`, `+`, `>`) or space after a special character to prevent potentially
-  new element being typed from wrapping as plain text.
+  special char (`*`, `-`, `+`, `>`, `:`) or space after a special character to prevent
+  potentially new element being typed from wrapping as plain text.
 * Add: editor option to limit wrap on typing to only occur after typing a space, by default wrap
   on typing is now performed for all characters. Disable if wrap on typing causes unacceptable
   typing response.
