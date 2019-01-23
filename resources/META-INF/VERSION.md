@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.74 - Bug Fix & Enhancement Release](#27074---bug-fix--enhancement-release)
+- [2.7.0.76 - Bug Fix & Enhancement Release](#27076---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,7 +15,7 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.74 - Bug Fix & Enhancement Release
+### 2.7.0.76 - Bug Fix & Enhancement Release
 
 * Fix: for case-insensitive completions the IDE changes the case of inserted text to match typed
   text.
