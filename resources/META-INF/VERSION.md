@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.78 - Bug Fix & Enhancement Release](#27078---bug-fix--enhancement-release)
+- [2.7.0.80 - Bug Fix & Enhancement Release](#27080---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,18 +15,31 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.78 - Bug Fix & Enhancement Release
+### 2.7.0.80 - Bug Fix & Enhancement Release
 
+* Add: Create PDF Export Profile button to Rendering > Profiles
+* Fix: Rendering settings would reset PDF export profile to default if Rendering > Profiles were
+  modified.
+* Fix: #533, export to pdf error (when Chinese in content). Requires adding CSS embedded font.
+  Instructions added to Wiki
+  [Rendering-Profiles-Settings](https://github.com/vsch/idea-multimarkdown/wiki/Rendering-Profiles-Settings).
+* Fix: #578, Change setext to atx header fails if title starts with <number>.
+  * Fix: equalize setext header marker implementation to properly handle parent indent
+  * Fix: toggle header type to properly indent setext header marker based on parent element
+  * Fix: setext header level up/down to properly handle parent indent
+* Fix: #595, PDF Generation Silently Fails when PDF file locked
+* Fix: do not wrap when typing space after last non-blank of the line if the line does not need
+  wrapping, to allow typing hard break at end of line.
 * Fix: #624, emoji suggestions do not filter as you type, when emoji shortcut not terminated by
   `:`
 * Fix: GitHub issue completions in text to remove text to EOL if using TAB completion.
 * Fix: for case-insensitive completions the IDE changes the case of inserted text to match typed
   text.
 * Fix: update for `flexmark-java` 0.40.14
-* Add: drag/drop & file paste option to use first heading in markdown file for link text 
+* Add: drag/drop & file paste option to use first heading in markdown file for link text
 * Fix: remove case sensitivity from link address and link text suggestions
 * Add: type information and priority for some link text suggestions to improve their placement
-* Add: link text suggestions 
+* Add: link text suggestions
   * based on file name and first heading in the file if it is Markdown
   * first heading: anchor ref heading based link text
 * Fix: with wrap on all characters, do not wrap when typing or backspacing setext heading marker
@@ -39,7 +52,7 @@
   on typing is now performed for all characters. Disable if wrap on typing causes unacceptable
   typing response.
 * Add: intentions to convert between inline or block math elements and `latex.codecogs.com`
-  multi-line image URL links. 
+  multi-line image URL links.
 * Add: html generation options for rendering math inline/block elements using
   `latex.codecogs.com`.
 * Fix: if default link format for drag/drop is Wiki Link but wiki links are not available for
