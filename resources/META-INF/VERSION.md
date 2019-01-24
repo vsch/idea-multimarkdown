@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.76 - Bug Fix & Enhancement Release](#27076---bug-fix--enhancement-release)
+- [2.7.0.78 - Bug Fix & Enhancement Release](#27078---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,8 +15,11 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.76 - Bug Fix & Enhancement Release
+### 2.7.0.78 - Bug Fix & Enhancement Release
 
+* Fix: #624, emoji suggestions do not filter as you type, when emoji shortcut not terminated by
+  `:`
+* Fix: GitHub issue completions in text to remove text to EOL if using TAB completion.
 * Fix: for case-insensitive completions the IDE changes the case of inserted text to match typed
   text.
 * Fix: update for `flexmark-java` 0.40.14
