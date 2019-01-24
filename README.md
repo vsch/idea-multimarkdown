@@ -111,6 +111,7 @@ Bug and compatibility fixes you can find in [Version Notes].
     * Insert table action
     * Format Element
   * **Wrap on typing**
+* Create **PDF Export** profile [for non-Latin character sets][Rendering Profiles Settings]
 * **Copy PlantUML image** intention to copy diagram to clipboard
 * Convert between **codecogs.com images** and **Math block and inline**
 * Convert between **gravizo.com images** and **PlantUML fenced code**
@@ -513,6 +514,7 @@ Markdown Navigator, Copyright (c) 2015-2018, V. Schneider, <http://vladsch.com> 
 Reserved.
 
 [Admonition Extension, Material for MkDocs]: https://squidfunk.github.io/mkdocs-material/extensions/admonition/
+[codecogs.com]: https://codecogs.com
 [CommonMark (spec 0.28)]: https://spec.commonmark.org/0.28
 [commonmark-java]: https://github.com/atlassian/commonmark-java
 [Craig's List]: https://montreal.craigslist.ca/?lang=en&cc=us
@@ -520,12 +522,14 @@ Reserved.
 [GitHub]: https://github.com/vsch/laravel-translation-manager
 [intellij-markdown]: https://github.com/valich/intellij-markdown
 [JetBrains plugin page]: https://plugins.jetbrains.com/plugin/7896-markdown-navigator
+[Katex]: https://github.com/Khan/KaTeX
 [Markdown]: https://daringfireball.net/projects/markdown
 [Markdown Navigator]: http://vladsch.com/product/markdown-navigator
 [Markdown Support]: https://plugins.jetbrains.com/plugin/7793?pr=
 [nicoulaj]: https://github.com/nicoulaj
 [nicoulaj/idea-markdown plugin]: https://github.com/nicoulaj/idea-markdown
 [pegdown]: http://pegdown.org
+[Rendering Profiles Settings]: https://github.com/vsch/idea-multimarkdown/wiki/Rendering-Profiles-Settings#configuring-for-non-latin-character-sets
 [sirthias]: https://github.com/sirthias
 [Version Notes]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/META-INF/VERSION.md
 [.gitignore]: http://hsz.mobi
@@ -560,7 +564,3 @@ Reserved.
 [WebStorm]: http://www.jetbrains.com/webstorm
 [Wiki]: https://github.com/vsch/idea-multimarkdown/wiki
 
-
-
-[codecogs.com]: https://codecogs.com
-[Katex]: https://github.com/Khan/KaTeX
