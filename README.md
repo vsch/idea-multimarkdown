@@ -510,7 +510,7 @@ with a simple desire for a Markdown preview that looked like GitHub's.
 \* This plugin was originally based on the [nicoulaj/idea-markdown plugin] by [nicoulaj], which
 was based on [pegdown] library by [sirthias].
 
-Markdown Navigator, Copyright (c) 2015-2018, V. Schneider, <http://vladsch.com> All Rights
+Markdown Navigator, Copyright (c) 2015-2019, V. Schneider, <http://vladsch.com> All Rights
 Reserved.
 
 [Admonition Extension, Material for MkDocs]: https://squidfunk.github.io/mkdocs-material/extensions/admonition/
