@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.80 - Bug Fix & Enhancement Release](#27080---bug-fix--enhancement-release)
+- [2.7.0.82 - Bug Fix & Enhancement Release](#27082---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,8 +15,10 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.80 - Bug Fix & Enhancement Release
+### 2.7.0.82 - Bug Fix & Enhancement Release
 
+* Fix: package rename to sub-package did not adjust links to subdirectories of original package.
+  ie. rename package `abc` to `abc.xyz` would not refactor links for `abc/def` to `abc/xyz/def`.
 * Add: Create PDF Export Profile button to Rendering > Profiles
 * Fix: Rendering settings would reset PDF export profile to default if Rendering > Profiles were
   modified.
