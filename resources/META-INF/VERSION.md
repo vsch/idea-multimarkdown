@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.82 - Bug Fix & Enhancement Release](#27082---bug-fix--enhancement-release)
+- [2.7.0.84 - Bug Fix & Enhancement Release](#27084---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,8 +15,24 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.82 - Bug Fix & Enhancement Release
+### 2.7.0.84 - Bug Fix & Enhancement Release
 
+* Fix: GitHub issue completions in text to remove text to EOL (less line break spaces) if using
+  TAB completion.
+* Fix: GitHub issue completions to escape special characters in inserted summary
+* Fix: setext heading marker equalization for multi-line setext headings now equalizes marker to
+  length of last line.
+* Fix: GitHub issue completion in link text element
+* Fix: GitHub issue completions in links if the url is referencing issues/ and Task server
+  exists for the given repo URL
+* Fix: GitHub issue completions for page relative issues/ URL only if there is Task server for
+  GitHub repo given by the VCS root for the containing file.
+* Fix: escape possible leading markdown element markers when converting from Atx to Setext
+  headings, with unescaping for the reverse conversion. Otherwise, a valid Atx heading can be
+  converted to an invalid setext but confusingly looking like it should be valid. For example
+  `## 1. Heading` without escaping will be converted to ordered list `1. Heading` item with
+  `--------` lazy continuation and not a setext heading marker.
+* Add: header text escaping/unescaping to formatter induced header conversions
 * Fix: package rename to sub-package did not adjust links to subdirectories of original package.
   ie. rename package `abc` to `abc.xyz` would not refactor links for `abc/def` to `abc/xyz/def`.
 * Add: Create PDF Export Profile button to Rendering > Profiles
@@ -25,7 +41,7 @@
 * Fix: #533, export to pdf error (when Chinese in content). Requires adding CSS embedded font.
   Instructions added to Wiki
   [Rendering-Profiles-Settings](https://github.com/vsch/idea-multimarkdown/wiki/Rendering-Profiles-Settings).
-* Fix: #578, Change setext to atx header fails if title starts with <number>.
+* Fix: #578, Change setext to atx header fails if title starts with \<number>.
   * Fix: equalize setext header marker implementation to properly handle parent indent
   * Fix: toggle header type to properly indent setext header marker based on parent element
   * Fix: setext header level up/down to properly handle parent indent
@@ -34,7 +50,6 @@
   wrapping, to allow typing hard break at end of line.
 * Fix: #624, emoji suggestions do not filter as you type, when emoji shortcut not terminated by
   `:`
-* Fix: GitHub issue completions in text to remove text to EOL if using TAB completion.
 * Fix: for case-insensitive completions the IDE changes the case of inserted text to match typed
   text.
 * Fix: update for `flexmark-java` 0.40.14
