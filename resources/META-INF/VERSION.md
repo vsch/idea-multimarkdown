@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.84 - Bug Fix & Enhancement Release](#27084---bug-fix--enhancement-release)
+- [2.7.0.86 - Bug Fix & Enhancement Release](#27086---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,8 +15,9 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.84 - Bug Fix & Enhancement Release
+### 2.7.0.86 - Bug Fix & Enhancement Release
 
+* Fix: URL for generated PlantUML image files on Windows
 * Fix: GitHub issue completions in text to remove text to EOL (less line break spaces) if using
   TAB completion.
 * Fix: GitHub issue completions to escape special characters in inserted summary

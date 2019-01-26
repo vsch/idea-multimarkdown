@@ -68,6 +68,11 @@ for:
 * **Intention actions** for fast results with less effort
 * **Wrap on Typing** to keep it nicely formatted as you edit
 * **GitHub style rendering** that you are used to, out of the box
+* **GitLab parsing and rendering** extensions
+  * **Math** extension using [Katex](https://github.com/Khan/KaTeX)
+  * **Charts** extension using [Mermaid](https://github.com/knsv/mermaid)
+* **Math block and inline** rendering by [Katex] or [codecogs.com]
+* **PlantUML fenced code** rendering by [PlantUML] or [gravizo.com]
 * **Fast typing response** for distraction free editing
 * **Fully customizable** to adjust to your preferences and project needs
 
@@ -520,6 +525,7 @@ Reserved.
 [Craig's List]: https://montreal.craigslist.ca/?lang=en&cc=us
 [flexmark-java]: https://github.com/vsch/flexmark-java
 [GitHub]: https://github.com/vsch/laravel-translation-manager
+[gravizo.com]: http://gravizo.com
 [intellij-markdown]: https://github.com/valich/intellij-markdown
 [JetBrains plugin page]: https://plugins.jetbrains.com/plugin/7896-markdown-navigator
 [Katex]: https://github.com/Khan/KaTeX
@@ -529,6 +535,7 @@ Reserved.
 [nicoulaj]: https://github.com/nicoulaj
 [nicoulaj/idea-markdown plugin]: https://github.com/nicoulaj/idea-markdown
 [pegdown]: http://pegdown.org
+[PlantUML]: http://plantuml.com
 [Rendering Profiles Settings]: https://github.com/vsch/idea-multimarkdown/wiki/Rendering-Profiles-Settings#configuring-for-non-latin-character-sets
 [sirthias]: https://github.com/sirthias
 [Version Notes]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/META-INF/VERSION.md
