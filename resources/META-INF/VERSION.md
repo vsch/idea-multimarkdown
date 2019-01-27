@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.86 - Bug Fix & Enhancement Release](#27086---bug-fix--enhancement-release)
+- [2.7.0.88 - Bug Fix & Enhancement Release](#27088---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,19 +15,45 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.86 - Bug Fix & Enhancement Release
+### 2.7.0.88 - Bug Fix & Enhancement Release
 
-* Fix: URL for generated PlantUML image files on Windows
-* Fix: GitHub issue completions in text to remove text to EOL (less line break spaces) if using
-  TAB completion.
-* Fix: GitHub issue completions to escape special characters in inserted summary
+* Fix: update for `flexmark-java` 0.40.16
+* Fix: [#690, Link title should not be selected when pressing space], disable auto-popup
+  completion for link text.
+* Add: Editor setting `Show page content as documentation for URLs`, when enabled will show
+  documentation (F1 by default) will load the URL content and show it as the documentation for
+  the link/URL
+* Fix: ref link referenceId did not trim spaces inside would not resolve to reference because
+  reference trimmed spaces.
+* Add: `Change link to text` intention to Reference Links
+* Fix: missing emoji cheat sheet `simple_smile` shortcut.
+* Add: quick documentation popup for links display the full path or URL for the link. Navigation
+  for these links will navigate to file if target is part of the project or URL via external
+  browser
+* GitHub issue related:
+  * Fix: GitHub issue completion start with showing all issues, ^Space cycles -> open only ->
+    reload tasks from server -> all issues -> open only -> all issues -> ...
+  * Add: Editor settings `GitHub issue completions insert` option to make GitHub Issue
+    completion insert: text, explicit link or ref link. Default is text, if set to link then can
+    use `Change link to text` intention to get text or set option to text.
+  * Add: Editor settings `Force reload max issues:` to give max issues to load from server when
+    forcing reload through triple completion invocation of GitHub completions. 
+  * Add: for URL links to GitHub issues/pull will fetch page when documentation is requested on
+    the link (F1 key) and show comments for the issue.
+  * Fix: link text completion for links to a GitHub issue/pull now add the issue completion to
+    list of completion strings, if the target repository is configured as a Task server.
+  * Fix: page relative links to GitHub links like `issues` navigate to GitHub URL for the link.
+  * Fix: GitHub issue completions in text to remove text to EOL (less line break spaces) if using
+    TAB completion.
+  * Fix: GitHub issue completions to escape special characters in inserted summary
+  * Fix: GitHub issue completion in link text element
+  * Fix: GitHub issue completions in links if the url is referencing issues/ and Task server
+    exists for the given repo URL
+  * Fix: GitHub issue completions for page relative issues/ URL only if there is Task server for
+    GitHub repo given by the VCS root for the containing file.
 * Fix: setext heading marker equalization for multi-line setext headings now equalizes marker to
   length of last line.
-* Fix: GitHub issue completion in link text element
-* Fix: GitHub issue completions in links if the url is referencing issues/ and Task server
-  exists for the given repo URL
-* Fix: GitHub issue completions for page relative issues/ URL only if there is Task server for
-  GitHub repo given by the VCS root for the containing file.
+* Fix: URL for generated PlantUML image files on Windows
 * Fix: escape possible leading markdown element markers when converting from Atx to Setext
   headings, with unescaping for the reverse conversion. Otherwise, a valid Atx heading can be
   converted to an invalid setext but confusingly looking like it should be valid. For example
@@ -53,7 +79,6 @@
   `:`
 * Fix: for case-insensitive completions the IDE changes the case of inserted text to match typed
   text.
-* Fix: update for `flexmark-java` 0.40.14
 * Add: drag/drop & file paste option to use first heading in markdown file for link text
 * Fix: remove case sensitivity from link address and link text suggestions
 * Add: type information and priority for some link text suggestions to improve their placement
@@ -1088,4 +1113,6 @@
 [Admonition Extension, Material for MkDocs]: https://squidfunk.github.io/mkdocs-material/extensions/admonition/
 [html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
 [holgerbrandl/pasteimages]: https://github.com/holgerbrandl/pasteimages
+
+[#690, Link title should not be selected when pressing space]: https://github.com/vsch/idea-multimarkdown/issues/690
 

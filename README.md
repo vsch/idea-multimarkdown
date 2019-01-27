@@ -123,6 +123,8 @@ Bug and compatibility fixes you can find in [Version Notes].
 * **Math block and inline** rendering by [Katex] or [codecogs.com]
 * **PlantUML fenced code** rendering via PlantUML library or gravizo.com
 * **Multi-Line Image URL** language injections
+* **GitHub Issue** completions insert link to issue
+* **Show HTML page as Documentation** for GitHub issues and optionally for URLs
 * **Improved Directory/Package Refactoring** for all IDEs
 * Improved: toolbar actions dealing with block quotes, list items, heading level up/down to
   handle conversion to/from plain text.
