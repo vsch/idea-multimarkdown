@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.88 - Bug Fix & Enhancement Release](#27088---bug-fix--enhancement-release)
+- [2.7.0.90 - Bug Fix & Enhancement Release](#27090---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,9 +15,45 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.88 - Bug Fix & Enhancement Release
+### 2.7.0.90 - Bug Fix & Enhancement Release
 
-* Fix: update for `flexmark-java` 0.40.16
+* Fix: update for `flexmark-java` 0.40.18
+* Fix: link to file with an extension to registered to a specific file type in the IDE would
+  show as unresolved.
+* Fix: changed dropped file links now spaced by blank line in blocks of 20 files to eliminate
+  creating very long paragraphs when many files are dropped. Was causing update to be very slow
+  with lots of files dropped.
+* Fix: wrap on typing is not invoked if typing at left edge of paragraph and what could be start
+  of an element prefix:
+  * `-` or `=` : setext heading marker
+  * ordered list item `\\d+[.)] `
+  * bullet list item `[+*-] `
+  * definition item `[:] `
+  * block quote and aside markers are handled by inserting these into the text
+* Fix: improve link resolution for markdown and image files. 5000 links was 7 sec, now 4.5
+  seconds.
+* Fix: slow reference resolution performance for large documents with many reference elements
+  checked for unused state. 5k line file with 100 references took 35 seconds to format, then 14
+  more seconds to annotate. Now takes less 2 seconds for both operations.
+* Fix: escaping of possible item marker characters when splitting a list item to prevent text
+  from being interpreted as a markdown element after inserting EOL. ie. `* item |1. text`, split
+  after `|` would interpret as an ordered list item. Now the `1.` is changed to `1\.`
+* Fix: aside block to behave the same as block quotes for formatting, wrap on typing, CSS
+  layout, etc.
+* Fix: list in block quote trailing item renumbering would not be applied for CommonMark list
+  parsing rules
+* Fix: block quote ENTER handling to happen before list item ENTER if the block quote is the
+  last prefix marker for the element then block quote ENTER has priority.
+* Fix: task item markers are dropped from list item prefixes with new implementation
+* Fix: typing prefix/spaces before text now allows pushing left text edge of paragraph
+* Fix: list manipulation and wrap on typing for complex nested lists/block quotes, with nested
+  empty list items
+* Fix: format of nested empty list items duplicated list item marker
+* Fix: nested empty list items would duplicate all item markers on ENTER
+* Fix: typing space at start of text item would not indent paragraph
+* Fix: BACKSPACE in empty item with immediate child block item would delete non-list item prefix
+  of the child item (as if it was task item marker)
+* Fix: parser combined markers of consecutive empty list items into single leaf element
 * Fix: [#690, Link title should not be selected when pressing space], disable auto-popup
   completion for link text.
 * Add: Editor setting `Show page content as documentation for URLs`, when enabled will show
@@ -37,14 +73,14 @@
     completion insert: text, explicit link or ref link. Default is text, if set to link then can
     use `Change link to text` intention to get text or set option to text.
   * Add: Editor settings `Force reload max issues:` to give max issues to load from server when
-    forcing reload through triple completion invocation of GitHub completions. 
+    forcing reload through triple completion invocation of GitHub completions.
   * Add: for URL links to GitHub issues/pull will fetch page when documentation is requested on
     the link (F1 key) and show comments for the issue.
   * Fix: link text completion for links to a GitHub issue/pull now add the issue completion to
     list of completion strings, if the target repository is configured as a Task server.
   * Fix: page relative links to GitHub links like `issues` navigate to GitHub URL for the link.
-  * Fix: GitHub issue completions in text to remove text to EOL (less line break spaces) if using
-    TAB completion.
+  * Fix: GitHub issue completions in text to remove text to EOL (less line break spaces) if
+    using TAB completion.
   * Fix: GitHub issue completions to escape special characters in inserted summary
   * Fix: GitHub issue completion in link text element
   * Fix: GitHub issue completions in links if the url is referencing issues/ and Task server
@@ -1110,9 +1146,8 @@
 * Fix: #402, PDF Export action fails silently if no text is selected in document instead of
   exporting the full document.
 
+[#690, Link title should not be selected when pressing space]: https://github.com/vsch/idea-multimarkdown/issues/690
 [Admonition Extension, Material for MkDocs]: https://squidfunk.github.io/mkdocs-material/extensions/admonition/
 [html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
 [holgerbrandl/pasteimages]: https://github.com/holgerbrandl/pasteimages
-
-[#690, Link title should not be selected when pressing space]: https://github.com/vsch/idea-multimarkdown/issues/690
 
