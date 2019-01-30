@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.90 - Bug Fix & Enhancement Release](#27090---bug-fix--enhancement-release)
+- [2.7.0.92 - Bug Fix & Enhancement Release](#27092---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,9 +15,12 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.90 - Bug Fix & Enhancement Release
+### 2.7.0.92 - Bug Fix & Enhancement Release
 
 * Fix: update for `flexmark-java` 0.40.18
+* Fix: paste/drop image adding numeric sequence would remove all characters after the first `.` 
+* Fix: computation of paste/drop image file, directory priority which caused image directories
+  with most images to override most used image directory in current file.
 * Fix: link to file with an extension to registered to a specific file type in the IDE would
   show as unresolved.
 * Fix: changed dropped file links now spaced by blank line in blocks of 20 files to eliminate
