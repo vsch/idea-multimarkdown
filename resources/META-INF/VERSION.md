@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.92 - Bug Fix & Enhancement Release](#27092---bug-fix--enhancement-release)
+- [2.7.0.94 - Bug Fix & Enhancement Release](#27094---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,17 +15,31 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.92 - Bug Fix & Enhancement Release
+### 2.7.0.94 - Bug Fix & Enhancement Release
 
 * Fix: update for `flexmark-java` 0.40.18
+* Add: allow editing (type/backspace) first ordered list item and update the rest of the items
+  to reflect first item change if list item renumbering is enabled and style not set to always
+  reset first list item.
+* Fix: deleting first ordered list item would renumber subsequent items as if first item was
+  there.
+* Fix: backspace not to delete list item prefix unless removing the character makes it no longer
+  a list item.
+* Fix: any renumbering of list items required indentation change of child elements otherwise
+  they could fall out of parent indent scope. ie. `9. text` changing to `10. text` requires
+  adding 1 space to child indents or they would no longer be under the parent, according to
+  CommonMark.
+* Fix: indent/unindent list item messed up if had empty list item ancestor
+* Fix: double marker inserted when typing first `>` or `|` after list item prefix
+* Fix: copy/paste between files and between projects to properly adjust link path/format
 * Fix: paste/drop image adding numeric sequence would remove all characters after the first `.` 
 * Fix: computation of paste/drop image file, directory priority which caused image directories
   with most images to override most used image directory in current file.
-* Fix: link to file with an extension to registered to a specific file type in the IDE would
+* Fix: link to file with an extension not registered to a specific file type in the IDE would
   show as unresolved.
 * Fix: changed dropped file links now spaced by blank line in blocks of 20 files to eliminate
   creating very long paragraphs when many files are dropped. Was causing update to be very slow
-  with lots of files dropped.
+  if a lot of files were dropped. 1000 hung the IDE.
 * Fix: wrap on typing is not invoked if typing at left edge of paragraph and what could be start
   of an element prefix:
   * `-` or `=` : setext heading marker
