@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.94 - Bug Fix & Enhancement Release](#27094---bug-fix--enhancement-release)
+- [2.7.0.96 - Bug Fix & Enhancement Release](#27096---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,9 +15,22 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.94 - Bug Fix & Enhancement Release
+### 2.7.0.96 - Bug Fix & Enhancement Release
 
 * Fix: update for `flexmark-java` 0.40.18
+* Fix: atx<-->setext not add blank line before if contained as first element in parent item: ie.
+  `* ## Text Heading In List Item`
+* Fix: indenting/unindent messed up with all the list editing changes.
+* Fix: footnotes did not format correctly if they contained anything other than a single
+  paragraph of text.
+* Fix: definition extension parser caused list items to require 1 extra space for child content.
+* Fix: parent prefix handling for prefix marker item elements when there first element is not
+  text and the first block element is possibly on the next line:
+  * footnotes
+  * list item
+  * definitions
+* Add: Inspection for missing macro and footnote definitions. The were missing since missing
+  link ref definitions were moved to inspections from combined error annotations.
 * Add: allow editing (type/backspace) first ordered list item and update the rest of the items
   to reflect first item change if list item renumbering is enabled and style not set to always
   reset first list item.
@@ -32,7 +45,7 @@
 * Fix: indent/unindent list item messed up if had empty list item ancestor
 * Fix: double marker inserted when typing first `>` or `|` after list item prefix
 * Fix: copy/paste between files and between projects to properly adjust link path/format
-* Fix: paste/drop image adding numeric sequence would remove all characters after the first `.` 
+* Fix: paste/drop image adding numeric sequence would remove all characters after the first `.`
 * Fix: computation of paste/drop image file, directory priority which caused image directories
   with most images to override most used image directory in current file.
 * Fix: link to file with an extension not registered to a specific file type in the IDE would
