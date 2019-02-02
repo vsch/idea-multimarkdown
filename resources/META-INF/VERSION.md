@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.98 - Bug Fix & Enhancement Release](#27098---bug-fix--enhancement-release)
+- [2.7.0.100 - Bug Fix & Enhancement Release](#270100---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -14,10 +14,19 @@
 - [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
+* [ ] Fix: add new icon variations and possible options to choose what styles to use for
+      markdown files/wiki.
 
-### 2.7.0.98 - Bug Fix & Enhancement Release
+### 2.7.0.100 - Bug Fix & Enhancement Release
 
 * Fix: update for `flexmark-java` 0.40.18
+* Fix: line marker icons for darcula
+* Add: definition list and definition terms added to structure view
+* Add: markdown navigator overlay to wiki directory
+* Fix: change wiki link to explicit link when containing file is not a wiki page and wiki link
+  is not resolved.
+* Fix: wiki links were not part of processed links for copy/paste
+* Add: wiki link to explicit link conversion on paste if original does not resolve
 * Fix: [#695, Click on structure view does not update preview]. If highlight mode was not
   `Line`.
 * Fix: [#697, Autoscroll from source does not work in simplified structure view]
