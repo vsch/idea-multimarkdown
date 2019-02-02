@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.96 - Bug Fix & Enhancement Release](#27096---bug-fix--enhancement-release)
+- [2.7.0.98 - Bug Fix & Enhancement Release](#27098---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -15,9 +15,12 @@
 - [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 
-### 2.7.0.96 - Bug Fix & Enhancement Release
+### 2.7.0.98 - Bug Fix & Enhancement Release
 
 * Fix: update for `flexmark-java` 0.40.18
+* Fix: [#695, Click on structure view does not update preview]. If highlight mode was not
+  `Line`.
+* Fix: [#697, Autoscroll from source does not work in simplified structure view]
 * Fix: atx<-->setext not add blank line before if contained as first element in parent item: ie.
   `* ## Text Heading In List Item`
 * Fix: indenting/unindent messed up with all the list editing changes.
@@ -1180,4 +1183,8 @@
 [Admonition Extension, Material for MkDocs]: https://squidfunk.github.io/mkdocs-material/extensions/admonition/
 [html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
 [holgerbrandl/pasteimages]: https://github.com/holgerbrandl/pasteimages
+
+[#695, Click on structure view does not update preview]: https://github.com/vsch/idea-multimarkdown/issues/695
+
+[#697, Autoscroll from source does not work in simplified structure view]: https://github.com/vsch/idea-multimarkdown/issues/697
 
