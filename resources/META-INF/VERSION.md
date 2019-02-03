@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.7.0.100 - Bug Fix & Enhancement Release](#270100---bug-fix--enhancement-release)
+- [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 - [2.5.4 - Bug Fix Release](#254---bug-fix-release)
@@ -17,9 +17,14 @@
 * [ ] Fix: add new icon variations and possible options to choose what styles to use for
       markdown files/wiki.
 
-### 2.7.0.100 - Bug Fix & Enhancement Release
+### 2.8.0 - Bug Fix & Enhancement Release
 
 * Fix: update for `flexmark-java` 0.40.18
+* Fix: HTML Options dialog for editor kit used for swing preview. Enables rendering of svg
+  images if these are contained in pasted HTML.
+* Add: suppress `math` tag or convert to text in HTML Past options dialog
+* Add: drag/drop text from applications into page to insert it, if mime content is
+  `text/uri-list` then create a link, if `text/html` then handle like html paste
 * Fix: line marker icons for darcula
 * Add: definition list and definition terms added to structure view
 * Add: markdown navigator overlay to wiki directory

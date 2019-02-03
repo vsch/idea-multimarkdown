@@ -9,7 +9,7 @@
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
     - [Future Release: Version 3.0.0](#future-release-version-300)
-    - [Next Version 2.8.0](#next-version-280)
+    - [Version 2.8.0](#version-280)
     - [Source Update is Long Overdue](#source-update-is-long-overdue)
 - [Background](#background)
 
@@ -35,6 +35,7 @@ for:
 
 * **Paste images** into documents for fast screen capture links
 * **Drag & Drop files and images** for fast link insertion
+* **Drag and Drop** text, HTML or links from other applications
 * **Formatting** to cleanup documents with a key stroke
 * **Navigation and Find Usages** to find references without effort
 * **Copy Markdown** as **JIRA**, **YouTrack** or **HTML** formatted text
@@ -84,7 +85,7 @@ Release Road Map
 * Link resolution support for non-GitHub VCS providers
 * Plus the usual bug fixes that come up between now and the release.
 
-### Next Version 2.8.0
+### Version 2.8.0
 
 Bug and compatibility fixes you can find in [Version Notes].
 
@@ -104,6 +105,7 @@ Bug and compatibility fixes you can find in [Version Notes].
     * Format Element
   * **Wrap on typing**
 * Create **PDF Export** profile [for non-Latin character sets][Rendering Profiles Settings]
+* **Drag and Drop** text, HTML or links from other applications
 * **Copy PlantUML image** intention to copy diagram to clipboard
 * Convert between **codecogs.com images** and **Math block and inline**
 * Convert between **gravizo.com images** and **PlantUML fenced code**
