@@ -3,6 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
+- [2.8.0.2 - Bug Fix & Enhancement Release](#2802---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
@@ -16,6 +17,24 @@
 
 * [ ] Fix: add new icon variations and possible options to choose what styles to use for
       markdown files/wiki.
+
+### 2.8.0.2 - Bug Fix & Enhancement Release
+
+* Fix: icon sizes for non-hdpi displays
+* Add: option to insert references instead of links, if there is no name conflict, no dialog is
+  brought up and the reference is simply inserted into the text.
+* Fix: backspace on a blank line after the first bullet list item text deletes list item prefix.
+* Add: All in file intentions for image <--> code convesions:
+  * codecogs math to multi-line url image
+  * gravizo uml to multi-line url image 
+  * image to fenced code math
+  * image to inline math
+  * image to plant uml fenced code
+* Add: Condition to codecogs image to fenced code intention to only do conversions if the image
+  is the only element in a paragraph and the reverse condition to convert to inline math. This
+  way apply to all will only convert elements which can be converted back to images without
+  changing the file layout.
+
 
 ### 2.8.0 - Bug Fix & Enhancement Release
 
