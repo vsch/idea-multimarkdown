@@ -3,7 +3,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.0.2 - Bug Fix & Enhancement Release](#2802---bug-fix--enhancement-release)
+- [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
@@ -18,7 +18,7 @@
 * [ ] Fix: add new icon variations and possible options to choose what styles to use for
       markdown files/wiki.
 
-### 2.8.0.2 - Bug Fix & Enhancement Release
+### 2.8.2 - Bug Fix & Enhancement Release
 
 * Fix: icon sizes for non-hdpi displays
 * Add: option to insert references instead of links, if there is no name conflict, no dialog is
