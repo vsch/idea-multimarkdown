@@ -3,20 +3,54 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
+- [ Critical](#critical)
+- [2.8.2.2 - Bug Fix & Enhancement Release](#2822---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
-- [2.5.4 - Bug Fix Release](#254---bug-fix-release)
-- [2.5.2 - Bug Fix & Enhancement Release](#252---bug-fix--enhancement-release)
-- [2.4.0 - Bug Fix & Enhancement Release](#240---bug-fix--enhancement-release)
-- [2.3.8 - Bug Fix Release](#238---bug-fix-release)
-- [2.3.7 - Bug Fix Release](#237---bug-fix-release)
-- [2.3.6 - Bug Fix & Enhancement Release](#236---bug-fix--enhancement-release)
-- [2.3.5 - Bug Fix & Enhancement Release](#235---bug-fix--enhancement-release)
 
 * [ ] Fix: add new icon variations and possible options to choose what styles to use for
       markdown files/wiki.
+* [ ] Add: Investigate latex Swing based editor to include for editing math.
+* [ ] Add: Setup Plugin Update chanel to open settings config: Main
+* [ ] Add: link on notifications to EAP Update chanel to open settings config Main
+* [ ] Add: link on notification for paste handler exception to open editor settings
+ 
+#### :warning: Critical
+ 
+* [ ] Add: missing attribute keys for new elements added to extensions:
+  * [ ] Add: GitHub Inline Math
+    * [ ] Add: preserving single space after \ at end of line in inline math element if keeping
+          trailing line spaces
+  * [ ] Add: elements to sample documents
+  * [ ] Fix: default sample document to include any elements newly available in basic edition
+* [ ] Fix: ENTER completion of emoji shortcut in heading adds `:` and tail of heading line
+* [ ] Add: Enumerated Reference Format to Inspections for missing/duplicate id
+* [ ] Fix: clean up completions based on emoji completion code base
+* [ ] Fix: GitHub Issue to complete in link ref and add a new reference. Previous reference can
+      be removed if not used or left for cleanup using intentions.
+* [ ] Add: apply to all in file intention to `Delete unused reference`
+* [ ] Add: Delete unused checkbox to all applicable elements or add `Sort - Delete Unused` and
+      `Unsorted - Delete Unused`
+
+### 2.8.2.2 - Bug Fix & Enhancement Release
+
+* Fix: emoji completions to work properly and in all elements
+* Fix: emoji intention not going into inline elements
+* Fix: visitor base impl was not visiting children of inline elements
+* Add: disable indent on paste for markdown documents
+* Fix: HTML Export with `Use style attribute` not to add `<meta http-equiv="content-type"
+  content="text/html; charset=UTF-8">`
+* Fix: ENTER after empty task item inserts extra blank line
+* Fix: move refactoring not updating some links
+* Fix: remove query string from link text suggestions
+* Fix: block quote and list items should not be inserted while in multi-line non-wrapping inline
+  elements like inline math and multi-line url image
+* Fix: Do not allow wrapping of inline math. Otherwise wrapping on `\` without a following space
+  this creates issues with rendering. For now math inline elements are treated like explicit
+  links and images. If they don't fit on a line, they are moved to a line by themselves and
+  never wrapped.
 
 ### 2.8.2 - Bug Fix & Enhancement Release
 
@@ -26,15 +60,14 @@
 * Fix: backspace on a blank line after the first bullet list item text deletes list item prefix.
 * Add: All in file intentions for image <--> code convesions:
   * codecogs math to multi-line url image
-  * gravizo uml to multi-line url image 
+  * gravizo uml to multi-line url image
   * image to fenced code math
   * image to inline math
-  * image to plant uml fenced code
+  * image to plant uml fenced code 
 * Add: Condition to codecogs image to fenced code intention to only do conversions if the image
   is the only element in a paragraph and the reverse condition to convert to inline math. This
   way apply to all will only convert elements which can be converted back to images without
   changing the file layout.
-
 
 ### 2.8.0 - Bug Fix & Enhancement Release
 
@@ -689,535 +722,12 @@
 * Add: HTML comment folding and options
 * Fix: diagnostic, parent already disposed
 
-### 2.5.4 - Bug Fix Release
-
-* Fix: High Sierra JavaFx issue, implement JavaFX initialization as per Markdown Support.
-* Add: Document Translation using Yandex.Translate and flexmark-java translation helper API,
-  configured in debug settings. This is a temporary implementation which will be moved to its
-  own plugin in the future.
-* Fix: diagnostic/NPE on JavaFX WebView save editor state.
-* Add: conversion of emoji from HTML mime copied back from Apple mail.
-* Fix: paste image file name from link name would not be URI decoded.
-* Add: folding of list items longer than one line of text
-* Fix: #590, "Create directories and folder" does only create directory on first hit.
-* Fix: #591, uncomment does not remove leading space, removed padding spaces from comment
-  prefix/suffix.
-* Fix: shorten toolbar by moving more rare actions to popup menus: list, table, misc and copy
-* Fix: wrap on typing `>` to insert block quote level into existing block quote or using
-  backspace to remove a block quote level
-* Fix: wrap on typing backspace in footnote definition would replicate the first line prefix on
-  continuation lines
-* Fix: inserting an EOL in a list item before text matching bullet list marker or numbered would
-  double the list marker on the resulting line
-* Add: option for escape/unescape all numbered list lead-in of `number.` when wrapping text.
-* Fix: diagnostic java.lang.RuntimeException in ImageUtils.getImageFromTransferable when pasting
-  an image
-* Fix: java.lang.Throwable: Invalid file: DB VirtualFile: table when caused sometimes by file
-  watcher requesting markdown files be re-parsed
-* Fix: diagnostic java.lang.IllegalArgumentException: Argument for @NotNull parameter 'project'
-* Fix: accept license code when extra spaces are added before EOL in e-mail.
-* Fix: diagnostic/ prevSibling should not be null.
-* Add: option to disable gutter margin for markdown documents
-* Add: option to disable line markers to main settings panel.
-* Fix: file types by specific extension completion did not work
-* Fix: link resolution would not find files with nested extensions like `blade.php`
-* Change: toggle inline attribute when the caret is at the end of a non-space span now restores
-  the caret position when applying the style instead of end of the span, inside the markers.
-  More natural when inlining a word to continue typing.
-* Fix: #575, Broken Spell Checker, spell checking not working on paragraph text for basic
-  plugin.
-* Fix: JavaFX detection with Android Studio 3.0
-* Fix: #434, Spellchecker context menu is duplicated
-* Add: `Use rename for spelling error intention` to allow turning off `Rename to:` spellchecking
-  intention and use the regular `Change to:` intention.
-* Fix: remove old storage macros
-
-### 2.5.2 - Bug Fix & Enhancement Release
-
-* Fix: newer API use which causes exceptions in 2017.3 IDE versions.
-* Add: link and image paste/drop options to exported/imported settings management
-* Fix: preview window would show links resolved after link map transformation to `http://` as
-  `local only`.
-* Fix: #567, '_'s are replaced by '-'s in TOC, GitHub now preserves `_` in heading anchor refs
-* Fix: paste handler using 2018 api `getSelectedEditor()`
-* Fix: #564, Some problems with "Copy / Drop Image" dialog. Modify image directory history drop
-  down to include, in order of priority:
-  * last used image directory of the current file
-  * image directories of images in the current file, ordered by count of occurrence
-  * image directories in the current project, ordered by count of occurrence
-* Fix: absolute `http://` link from main repo to wiki page which is located in a sub-directory
-  would show as unresolved
-* Add: help topics for all settings panels
-* Fix: improve spelling error alignment in text with many embedded inline markers
-* Fix: compatibility with IDE versions 2016.3, limit since version to 163.15529
-* Fix: COPY_HTML_MIME and PDF stylesheets now combine user provided attributes with defaults so
-  only difference has to be added to custom CSS.
-* Add: emoji images to COPY_HTML_MIME and PDF stylesheets so emoji display properly.
-* Fix: wiki page file name rename refactoring. Broken since 2.4.0 release
-* Fix: manually exporting a file from the toolbar now treats this as if `Export on Save` was set
-  for the file.
-* Fix: update GitHub wiki home link resolution for image links. Changed recently by GitHub
-* Fix: trailing spaces filter behavior changed, postponed trailing spaces would all be deleted.
-* Fix: reverse fix for "WebView should be available by now", was causing deadlock if
-  Accessibility features were enabled.
-* Fix: JavaFX preview was using project profile parser settings, not scope based rendering
-  profile parser settings.
-* Fix: Formatting default table column alignment when no alignment marker is specified, header
-  columns are centered, body columns are left aligned.
-* Add: Export to treat emoji images as image linked files.
-* Fix: NoSuchMethodError for IDE versions < 2018
-* Fix: image paste/modify dialog to not add _# suffix to file name if pasting on image target
-  ref and on paste action is "Replace file content" for link-ref targeting an image, since the
-  name should be the same as the link-ref in order to replace file content. Changing the name
-  will save it under a new file and change the link-ref.
-* Fix: remove old project settings handling and replace with IDE provided method. Old settings
-  copied to default project settings on first plugin initialization after upgrade. Now default
-  project settings support having defaults for Rendering > Profiles
-* Add: Format options for Attributes:
-  * space inside braces: no change, add, remove
-  * space around attribute equal sign: no change, add, remove
-  * attribute value quotes:
-    * No Change
-    * None, double, single
-    * None, single, double
-    * Double, single
-    * Double quotes
-    * Single, double
-    * Single quotes
-* Fix: table formatting would disable wrap on typing unnecessarily because it failed to properly
-  detect table at caret offset.
-* Add Table Caption formatting options:
-  * Caption: no change, always add, remove if empty, always remove;
-  * Caption space: no change, space around text, trim spaces check box.
-* Add: #556, Default editor layout > Use last selected layout, option to have layout follow last
-  editor layout change action.
-* Fix: typographic `'` breaking words for spell checker generates erroneous spelling errors.
-* Fix: spell checking now done across inline markup. Error underline and Change to: intention do
-  not work well because of interspersed markup messing up offsets but at least spelling errors
-  will be highlighted. For example `do**sn't**` will now show a spelling error because the
-  effective text is `dosn't`.
-* Add: history to CSS settings URI text box.
-* Fix: default completion for explicit `http://` absolute links to wiki pages uses the extension
-* Fix: `file://` links to wiki pages with anchor refs showed as "Only resolving locally" in the
-  preview, all `file://` links show as resolving only locally.
-* Fix: Admonition extension would be disabled if Attributes extension was not enabled.
-* Add: Admonition parser extension.
-  **[Admonition](https://github.com/vsch/flexmark-java/wiki/Admonition-Extension)**, Parser
-  extension based on [Admonition Extension, Material for MkDocs] to create block-styled side
-  content.
-* Fix: JavaFX WebView debug page reload in Not on FX application thread exception.
-* Fix: remove the "canDebug" field and replace with dynamic value.
-* Fix: remove all break points on connection shutdown.
-* Fix: JavaFX debugger core dumping if turning off debugging while it is paused.
-* Fix: Project Default settings not being copied to new projects
-* Fix: intermittent preview element highlight stopped working until page refresh
-* Fix: pasting a page relative URL would be mistaken for FQN reference and always paste a link
-  instead of text
-* Fix: renaming rendering profile would not be saved properly.
-* Fix: copy action on rendering profiles caused exception
-* Add: all console commands work with Chrome dev tools.
-* Fix: Chrome dev tools console evals and console logging from JavFX WebView scripts.
-* Fix: #561, Scroll sync and highlight preview element broken in EAP 2.4.0.44
-* Remove: FirebugLite script option for JavaFX. It never worked for debugging and Chrome Dev
-  Tools work really well with JavaFX WebView.
-* Add: "Toggle Editor Split Orientation" action to toggle Vertical/Horizontal split orientation
-* Add: drag/drop file inside inline, fenced or indented code to insert file name.
-* Add: dropping file after end of line with virtual spaces enabled, will insert spaces to fill
-  virtual spaces.
-* Fix: Adding explicit attribute to heading did not put space between text and attributes
-  element.
-* Add: file/ref anchor target search/explore intention on unresolved link anchor ref.
-  * Fix: launching on an anchor and cancelling, does not show intention until file is edited.
-  * Add: do a partial match for anchor when no anchors match exactly.
-  * Add: filter text box to filter anchor list (show all partials, the rest hidden) otherwise
-    too many in the list.
-* Fix: Github collapse headers script not working in 2018.1
-* Fix: intermittent position not highlighting in preview.
-* Fix: Drag/Drop copy files does not save link drop options.Always resets or gets them wrong.
-* Add: buttons for link and image drop/paste options in markdown settings
-* Add: Updated emoji to include full set of GitHub supported ones
-  * Add: option to select which shortcuts to recognize:
-    * Emoji Cheat Sheet
-    * GitHub
-    * Both: Emoji Cheat Sheet, GitHub (in order of preference for URL generation in HTML)
-    * Both: GitHub, Emoji Cheat Sheet (in order of preference for URL generation in HTML)
-  * Add: option to select what type of image to use:
-    * Images: image files only
-    * Unicode and Images: use Unicode characters when available, image file otherwise
-    * Unicode Only: only use unicode characters, don't recognize shortcuts which have no unicode
-      equivalent.
-  * Add: option to preview settings to replace Unicode emoji characters which have a
-    corresponding image file with the image file. This allows preview browser to display Unicode
-    emoji for which the browser would display unrecognized character symbol instead.
-* Update to flexmark-java-0.32.2
-  * Fix: java-flexmark API changes
-  * Fix: java-flexmark Attributes processing changes
-  * Add: Parser option for Attributes assignment to text
-  * Add: Parser option for Emoji Shortcut Type, Emoji Image Type
-  * Add: Preview option for replacing Emoji unicode with image
-* Add: settings option to allow directories as link targets. Allows directories to be used in
-  links. This functionality affects operation to completions, annotations, drag/drop link
-  creation and navigation.
-* Add: Drag/Drop link creation in Wiki should have wiki option for link format.
-* Fix: `http://` link to wiki home without the file shows as unresolved by annotator
-* Fix: change explicit to wiki not showing if link format is http:// or https:// absolute
-* Fix: when converting explicit to wiki don't generate text & page ref if the explicit link text
-  is the same as the file part of the target: `[Page-Ref](Page-Ref.md)` -> `[[Page Ref]]`, not
-  `[[Page-Ref|Page Ref]]`
-* Fix: Allow links to directories under the repo not to show them as unresolved. Create ref to
-  directory object if it is under VCS
-* Fix: drag/drop directories to create a link to the directory
-* Fix: document format would remove table caption element
-* Add: Query user for new id on explicit id to heading intention to save a step of rename
-  refactoring it.
-* Add: if a heading has explicit id attributes, rename refactoring for it is disabled since the
-  id is not part of attributes.
-* Add parser option to parse inline HTML for `<a id="...">` for anchor targets
-* Fix abbreviation definition with empty abbreviation would cause an exception
-* Add Option to enable/disable use of image URI query serial, used to force preview update of
-  image when the image file changes. Disabled by default to reduce java image caching memory
-  issues.
-* Fix: custom paste handling into scratch files was not handled in CLion, possibly other
-  non-Java IDEs.
-* Fix: #554, Settings, Import and Copy from project do not get applied until corresponding
-  settings pane is viewed. The settings would be changed but not applied until the settings pane
-  was clicked on first.
-* Fix: diagnostic/1159, Inserting table rows could cause an index out bounds exception
-* Fix: files not under VCS root would show no completions for relative addressing, only had
-  completions for `file://` format completions.
-* Add: recall of the last imported settings file to make it easier to reset settings to a known
-  value.
-* Add: markdown Application settings to exported and imported settings.
-* Fix: disable local only status for links and annotation when the link is to the file itself.
-* Add: allow source/preview synchronization and search/selection highlighting in basic version.
-* Fix: diagnostic/1140, NPE in flexmark-java core node renderer.
-* Fix: diagnostic/1141, null editor causes exception in toolbar button test.
-* Add: #549, Add settings management functionality. Now in main settings panel there is a
-  "Manage..." button in top-right corner, clicking it pops up a menu with the following options:
-  * `Copy to Project Defaults`
-  * `Copy from Project Defaults`
-  * `Export Settings`
-  * `Import Settings`
-  * `Reset Settings` to reset settings to default. Project defaults, current project settings
-    and markdown navigator application settings.
-
-  These actions copy from current unsaved project settings and to current unsaved project
-  settings therefore you can modify settings, copy to project defaults (or export) and then
-  cancel, result will be project defaults (or exported settings) having modified settings while
-  project settings being those before modification.
-
-  If you copy from defaults or import a file followed by `Cancel` then no settings will be
-  modified.
-* Fix: #548, When "Auto-scroll to source" is enabled in project view, markdown navigator editor
-  steals focus when moving through project view with keyboard arrows.
-* Fix: #542, Typographical Error in PHPStorm Preferences > Editor > Code Style > Markdown
-* Add: option in settings to enable editor paste handler registration so that paste handler is
-  enabled by default. Because the IDE has a lot of formatter exceptions on paste which get
-  erroneously attributed to the plugin when it delegates paste action to previous handler. Now a
-  notification balloon will inform of the IDE exception and offer a link to disable paste
-  handler customization.
-* Fix: #546, Panel is guaranteed to be not null Regression.
-* Fix: #260, Add horizontal split editor option to allow preview below the text editor. Added
-  option in Languages & Frameworks > Markdown: `Vertical Text/Preview Split`, default not
-  selected.
-* Fix: #524, Dedent shortcut not working properly.
-* Fix: #539, Big local images (e.g. .gif) referred to in an open .md file get locked and cause
-  merge conflicts and issues on checkout. Now swing implements disable GIF images option.
-* Fix: #512, Add keyboard shortcut to `Cycle between Preview only and Editor only`. Instead
-  added application setting to select text/split or text/preview toggle for the toggle editor
-  layout action.
-* Fix: #511, `Cycle split layout` shortcut stop working when `Preview Only` is selected.
-* Fix: #527, How to use *italics* instead of _italics_ when pressing `Ctrl+I`. Option added to
-  Languages & Frameworks > Markdown: `Use asterisks (*) for italic text`, enabled by default.
-  When enabled italic action will use only asterisks for as markers.
-* Fix: #535, Documentation for link maps and mapping groups. Documentation link added to Link
-  Map settings panel.
-* Fix: diagnostic/1100, start/end offset on paste beyond end of document
-* Fix: clicking on a link with anchor ref by name of element would not scroll element into view
-* Add: #391, #anchor tags not working. Added anchors of the form `<a .... attr=anchorId
-  ...>...</a>` where `attr` is `id` or `name` to be treated as anchor ref targets. NOTE: the
-  first name or id attribute will be treated as the "anchor target" the other as a reference to
-  the anchor target. If both have the same string value then renaming one will rename the other.
-* Fix: regex error flexmark-java attributes parser which could cause a parsing loop
-* Add: parser option to not generate duplicate dashes `-` in heading ids
-* Fix: fenced code content erroneously processed GitHub issue marker `#`.
-* Fix: #544, Export to PDF greyed out. Editor actions would be disabled if the text editor was
-  not visible.
-* Add: parser options for
-  * **[Attributes](https://github.com/vsch/flexmark-java/wiki/Attributes-Extension)** and
-  * **[Enumerated References](https://github.com/vsch/flexmark-java/wiki/Enumerated-References-Extension)**
-    parser extensions
-  * Add: heading intentions to add/remove explicit id
-  * Add: completions for link anchors to id attribute values
-  * Add: completions for enumerated references and reference formats
-  * Add: formatting options and formatting for Enumerated References
-  * Add: error/unused annotations for enumerated reference, enumerated format and attribute id
-  * Add: refactoring/navigation for Enumerated Reference format id's, Attribute Id's, Enumerated
-    Reference link/text.
-* Fix: diagnostic: 1055, sometimes virtual file == null for a PsiFile causing an exception.
-* Add: option to add serial query suffix to CSS URI which increments when the css file changes
-  (only file:// URI's and document relative URLs are supported.)
-* Fix: diagnostic 1030, when bread-crumb provider steps up to file level while looking for
-  headings.
-* Fix: diagnostic: 1032, sometimes an exception is thrown "AssertionError: Unexpected content
-  storage modification"
-* Fix: diagnostic 1033, paste handler exception `IllegalStateException: Clipboard is busy`
-* Fix: diagnostic 1035, null pointer exception in Swing preview when image tag has no `src`
-  attribute.
-* Fix: diagnostic 1047, sometimes an IOException is generated if markdown sub-type is requested
-  during indexing operation.
-
-### 2.4.0 - Bug Fix & Enhancement Release
-
-* Fix: #517, Invalid tool tip for "Show Breadcrumb text"
-* Change: #520, Not working: As you type automation: Double of bold/emphasis markers and remove
-  inserted ones if a space is typed. Enable these options in code style, disabled by default.
-* Fix: #509, Text with colons is incorrectly interpreted as an invalid emoji shortcut
-* Add: #507, How to be sure that HTML auto generated link will have unchanged url. Link format
-  option for HTML export: page relative, project relative, http: absolute, file: absolute if
-  option `Link to exported HTML` is not selected.
-* Add: #466, Indents with 4 spaces instead of 2 as I like. Code style option for indent size
-  added sets number of spaces to insert when pressing tab.
-* Change: Remove attribute and settings migration from pre 2.3.0 versions.
-* Add: nested heading outline collapsing
-* Fix: improved HTML to markdown conversion from Apple Mail copied text.
-* Fix: don't show emoji completions in link address part ( http: triggers it)
-* Fix: abbreviation navigation and refactoring was not implemented
-* Fix: line markers generate for leaf elements only, performance improvement
-* Fix: swing preview on linux not showing fixed pitch font for code
-* Fix: Task list items now require indent at task item marker not item content, to match GitHub
-  parsing rules. Indenting to content column treats children as inline code and child list items
-  not separated by a blank line as lazy continuation lines.
-* Fix: formatter for new task item indentation rules.
-* Fix: remove `Replace File Content` option from non-image target ref drop downs in paste/modify
-  image dialog, and all link options from copy/drop image dialog and link drop/paste ref options
-  dialog.
-* Fix: #489, Paste Image does not create file if parent directory does not exist.
-* Fix: #484, Open links in preview, not browser. Option added to preview settings to have page
-  relative and repo relative links resolve to GitHub files when selected. When not selected they
-  resolve to local project files.
-* Fix: #486, Multi-line links do not preview correctly, when in `Line` preview element highlight
-  mode.
-* Fix: #481, Will not allow me to crop beyond 200px, now limits are derived from the image
-  dimensions and image operations.
-* Fix: Update to latest flexmark-java supporting CommonMark Spec 0.28.
-* Fix: TOC entries would exclude typographic characters when "text only" option was used with
-  typographic parser extension enabled.
-* Fix: HTML to Markdown not adding HTML comment between consecutive lists
-* Fix: #479, multi-line image URLs are not converted in PDF export or Copy HTML Mime
-* Add: Show "Apply all '...'" intention on any element option to allow showing file level
-  intentions to be available on any element. Otherwise only shown on elements which they affect.
-* Add: enable image intentions on multi-line image URL links
-* Add: Code Folding option in settings for embedded image links
-* Add: HTML generation options to convert image links to embedded images, with separate option
-  for http:// and https:// image urls.
-* Add: base64 embedded image display in Swing Preview browser
-* Add: `Base64 Encoded` as a link format for pasted images and dropped files to the Paste Image
-  dialog.
-* Fix: base64 encode intention would keep path of url if it was present
-* Fix: image reference links to references with base64 encoded images would show as unresolved
-* Add: intentions to convert images to base64 encoding and vice-versa
-* Fix: base64 encoded embedded images did not display in JavaFX preview
-* Fix: preview navigation to links with anchor refs and line anchor refs
-* Fix: dropping a file in a document appends `null` string to the file name in error.
-* Fix: #468, Move (refactoring) of .md files breaks links to sections in same file.
-* Fix: reference paste with line ref anchor would always paste page relative format URL
-  regardless of the link paste format (set with file copy drop action).
-* Fix: diagnostics/713, tree view icon update before `FileManager` has been initialized will to
-  return markdown file type (without resolving sub-type).
-* Add: Convert markdown to HTML intention for fenced code and indented code blocks.
-* Fix: unresolved link references would be rendered in HTML instead of being treated as plain
-  text. Broken by `Reference` link map code.
-* Fix: paste reference past end of line will insert spaces to caret column before inserting
-  link.
-* Fix: links from FQN references with spaces did not url encode the link.
-* Fix: reference to link conversion for PhpStorm to truncate the reference at the `:` since
-  PhpStorm is not able to convert FQN strings with class method names.
-* Add: use QualifiedNameProviders to resolve reference to link conversion.
-* Add: logic to not convert qualified string to link when caret is inside inline code, fenced
-  code or between two back-ticks.
-* Fix: HTTP links with anchor refs should not highlight anchor links as unresolved.
-* Add: paste of file reference with or without line number converted to paste of link with
-  GitHub line ref anchor added if line number is part of the reference. This will insert/replace
-  link.
-* Fix: non-vcs projects links without a path would show unresolved even when files exist.
-
-### 2.3.8 - Bug Fix Release
-
-* Add: GitHub Line reference anchors in the form `L#` or `L#-L#` for line ranges. Now navigating
-  to such an anchor in a project file will move the caret to the line and if second form is used
-  select the lines.
-* Add: with JavaFX browser clicking on task item box in preview toggles open/closed task status
-  in source.
-* Fix: image refs and image links to non-raw GitHub image files to show as warning. Only show
-  warning for references not in raw when referenced by image refs.
-* Add: Apply all '...' in file intentions where these make sense.
-* Add: intention to convert between typographic symbols and markdown smarts/quotes extension
-  text.
-* Add: `HTML block deep parsing` parser option to allow better handling of raw text tag parsing
-  when they are not the first tag on the first line of the block.
-* Add: split inline code class `line-spliced` for code elements split across multiple lines not
-  to appear as two inline code elements in preview.
-* Fix: HTML generation with line source line highlighting when inline styling spans source lines
-* Add: #74, Launching external URLs inside the browser, now `navigate to declaration` opens url
-  in browser, ftp or mail client depending on the link. Can also use line markers for navigation
-  of these elements.
-* Fix: parsing of lists in fixed 4 spaces mode would not allow last item to be loose
-* Fix: reference to non-image but not used as image target warning not raw.
-* Fix: exception when navigating next/previous table cells in editor without an associated
-  virtual file.
-* Fix: #461, TOC with HTML generated content causes exception if skipping heading levels
-* Fix: #460, TOC options do not change default Heading level
-* Fix: #459, PDF export does not resolve local ref anchors
-* Fix: #456, Register r markdown code chunk prefix
-* Fix: #453, Option to hide toolbar
-* Fix: #454, Incorrect filename inspection error, weak warning now only for wiki link targets
-  that contain spaces in resolved link.
-* Fix: flexmark-java issue 109, image ref loosing title tag.
-* Add: GitBook compatible include tags when `GitBook compatibility mode` is enabled in `Parser`
-  options.
-* Fix: Nested stub index exception in reference search
-* Fix: breadcrumb tooltip of task items would be missing the task item marker
-* Fix: completions broken on Windows
-* Fix: document format erroneously creates column spans for some tables.
-* Fix: diagnostics/531, line painter provider passed line number > document line count.
-* Fix: diagnostics/498, highlight in preview causing exception
-* Fix: diagnostics/497, flexmark-java lib erroneous assert failure
-* Fix: #447, Exported HTML has unexpected CSS and JS URLs
-* Fix: #445, there should no be default language injection in bare code chunks
-* Add: handling of optional quotes for jekyll include tags. Either single `'` or double `"`
-  quotes will be ignored if the file name is wrapped in them.
-* Fix: API break with version 2016.2.3 by using EditorModificationUtil methods missing from that
-  version.
-* Fix: #444, Markdown Navigator 2.3.7 breaks paste of github checkout url
-* Fix: #441, false positive typo annotation in header, caused by using IdentifierSplitter
-  instead of TextSplitter to handle elements that can have references.
-* Fix: #442, Image Paste in Windows always pastes absolute file:// regardless of selection
-* Add: Insert table column on right actions and changed description of previous action to insert
-  table column on left.
-* Fix: exception when exporting PDF or Copy HTML Mime
-* Fix: #440, Auto links should not appear in fenced code
-* Add: #411, Network drives links are not resolved correctly, URI links outside of project now
-  error highlighted if the file does not exist
-* Add: #433, Support external links for the Link Map (eg. JIRA link), Reference to Link Map to
-  allow creating automatic reference URLs from Reference IDs
-
-### 2.3.7 - Bug Fix Release
-
-* Fix: parser erroneously processing escape `\` is encountered in fenced code and causing a
-  parsing exception.
-
-### 2.3.6 - Bug Fix & Enhancement Release
-
-* Fix: intermittent index out of bounds exception if document is edited after parsing but before
-  AST is built.
-* Fix: #438, Markdown Syntax Change looses TOC element in source
-* Add: annotation to detect when list syntax is set to GitHub
-* Fix: #432, Add a way to disable the startup notification
-* Fix: #436, Header link results in bad Table of Contents entry formatting
-* Fix: #411, Network drives links are not resolved correctly, for `file://` which is outside the
-  project and any module directory structure.
-* Fix: NPE in settings under rare conditions
-* Fix: assertion failure in settings under rare timing conditions
-* Fix: paste NPE when pasting into link with empty address
-* Fix: drag/drop without copy modifier of image files uses last non-image link format instead of
-  last used image link format.
-* Fix: diagnostic id:208, invalid virtual file in line painter
-* Add: option to break definition list on two or more blank lines
-* Fix: #428, Lack of encoding declaration when exporting in html
-* Add: Global page zoom for JavaFX preview in application settings so that project preview zoom
-  does not need to be changed when project is opened on a machine with different HIDPI. Now can
-  leave project zoom to 1.00 and change global zoom to desired value.
-* Fix: #426, Cannot add images from clipboard or drag and drop under Windows
-* Fix: Setext heading to not show heading id on marker line
-* Add: #425, Add Heading anchor ID display in editor
-* Fix: #424, NoClassDefFoundError in WS 2017.1
-* Fix: #421, NoSuchFieldError on startup after upgrading plugin on IDEs version 2016.1
-* Fix: image link from non-wiki page to image in wiki would show as unresolved by annotator when
-  it was resolved by line marker and preview.
-
-### 2.3.5 - Bug Fix & Enhancement Release
-
-* Fix: #420, java.lang.IllegalStateException: node.treeNext must not be null.
-* Fix: do not un-escape HTML entities in HTML, let the browser handle that.
-* Fix: #419, Bread crumbs broken when running in 2017.1
-* Fix: licensed features highlight now full balloon notification.
-* Fix: detection when containing file and target file of a link are not under the same VCS root
-  when the containing file is in a sub-directory of target VCS root but has its own root.
-* Fix: #416, NPE version 2.3.4 (w/license)
-* Fix: #415, Setting default right margin in code style markdown settings disables wrapping
-* Fix: #414, Exception when starting IDEA
-* Fix: do not hide wrap on typing and table auto format buttons even when these are disabled.
-* Fix: drag/drop image files should only show copy dialog if no drop action information or it is
-  a drop copy action
-* Add: plugin exception reporting to `vladsch.com` without effort.
-* Fix: wiki to main repo links would not resolve. Erroneously treated two vcs repos as separate.
-* Fix: clipboard mime text/html now has higher priority than file list and image on the
-  clipboard.
-* Add: operation options for non-image drop/paste file based on caret location
-* Add: `Copy Modified Image to Clipboard` in Copy/Paste Image Dialog to replace clipboard image
-  contents with modified image, can use it to replace image on clipboard then Cancel dialog to
-  not modify the Markdown document but still have the modified image on the clipboard.
-* Add: Copy/Modify Image intention that will open the Image Copy/Paste Dialog for the image
-  content of a link element at caret position. Works with local files and URLs. Get the option
-  to change directory, file name and modify the image.
-* Fix: `http://` and `https://` addresses to project files would be ignored due to a typo in the
-  code.
-* Fix: update to flexmark-java 18.2, HTML to Markdown hang fix and MS-Word and MS-Excel HTML
-  quirks handling fixed.
-* Fix: link resolution logic to work for multi-vcs-root projects and modules not under project
-  root.
-* Fix: update to flexmark-java 18.1, HTML to Markdown adds space after empty list items.
-* Add: Markdown application settings for:
-  * `Use clipboard text/html content when available` disabled by default, enabling it will allow
-    pasting text/html when available
-  * `Convert HTML content to Markdown` enabled by default, disabling will paste text/html
-    content without conversion to Markdown
-* Add: `Delete empty list items` intention on lists to delete all empty list items
-* Fix: HTML to Markdown converter to not ignore text in lists which is not included in list item
-  but instead to put this text into a new list item.
-* Add: aside extension which uses leading pipe `|` to mark an aside block just like block quote
-  uses leading greater than `>` to mark a block quote element
-* Add: pasting file list into markdown document inserts links the same as dropping files with
-  copy action.
-* Add: confirmation dialog when original markdown file is going to be overwritten with
-  transformed content when pasting file list or drag and dropping files.
-* Fix: absolute `http://..../wiki` link to wiki home page would to resolve as a file reference.
-* Fix: drag/drop wiki page files would ignore link address format and always insert page
-  relative link.
-* Fix: style auto wrapping when caret at end of word that is at end of file without trailing
-  EOL.
-* Add: future API for drag/drop handling code to eliminate the need for replacing editor
-  drag/drop handler.
-* Add: highlight selection in preview, `Show source selection in preview` enabled by default.
-  Wraps selection in `<span>` with `selection-highlight` class.
-* Add: #399, Highlight search results in preview, `Show source search highlights in preview`
-  enabled by default. Wraps highlights in `<span>` with `search-highlight` class.
-* Fix: text drag/drop not working because of MarkdownPasteHandler
-* Add: option to enable drag/drop handler replacement to allow "Copy" extended file drag/drop
-  action at the expense of text drag/drop. Disabled by default in settings `Languages &
-  Frameworks > Markdown`
-* Fix: loosen/tighten list action to not mark a list as loose when blank line precedes the first
-  list item.
-* Fix: #404, Conversion from CommonMark or FixedIndent to GitHub does not properly indent code
-  blocks in list items
-* Fix: #403, Indented code in list items not indented enough with GitHub list parser option
-* Change: link color in Preview and Editor Colors to match new GitHub colors
-* Fix: #400, Better code color consistency needed. Now same as Fenced Code/Verbatim. Also change
-  copy Markdown as HTML formatted text and PDF export to align inline code color with indented
-  and fenced code.
-* Fix: #398, Poor alignment between source and preview when using "Sync source to preview". Now
-  there is an option to vertically align synchronized position in Preview Settings, selected by
-  default.
-* Fix: #402, PDF Export action fails silently if no text is selected in document instead of
-  exporting the full document.
-
 [#690, Link title should not be selected when pressing space]: https://github.com/vsch/idea-multimarkdown/issues/690
-[Admonition Extension, Material for MkDocs]: https://squidfunk.github.io/mkdocs-material/extensions/admonition/
+[#695, Click on structure view does not update preview]: https://github.com/vsch/idea-multimarkdown/issues/695
+[#697, Autoscroll from source does not work in simplified structure view]: https://github.com/vsch/idea-multimarkdown/issues/697
 [html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
+[Admonition Extension, Material for MkDocs]: https://squidfunk.github.io/mkdocs-material/extensions/admonition/
 [holgerbrandl/pasteimages]: https://github.com/holgerbrandl/pasteimages
 
-[#695, Click on structure view does not update preview]: https://github.com/vsch/idea-multimarkdown/issues/695
-
-[#697, Autoscroll from source does not work in simplified structure view]: https://github.com/vsch/idea-multimarkdown/issues/697
+[#699, Version 2.8 Released!]: https://github.com/vsch/idea-multimarkdown/issues/699
 
