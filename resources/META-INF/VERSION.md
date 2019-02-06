@@ -4,11 +4,12 @@
 
 ### Version History
 - [ Critical](#critical)
-- [2.8.2.2 - Bug Fix & Enhancement Release](#2822---bug-fix--enhancement-release)
+- [2.8.2.4 - Bug Fix & Enhancement Release](#2824---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
+
 
 * [ ] Fix: add new icon variations and possible options to choose what styles to use for
       markdown files/wiki.
@@ -16,28 +17,75 @@
 * [ ] Add: Setup Plugin Update chanel to open settings config: Main
 * [ ] Add: link on notifications to EAP Update chanel to open settings config Main
 * [ ] Add: link on notification for paste handler exception to open editor settings
- 
+
+* [ ] Add: Insert References action to open dialog with list of all links in the project, their
+      resolved status and ability to select some and insert into the current file and add to
+      favourites.
+* [ ] Add: index for all other reference types: footnotes, macros, abbreviations
+* [ ] Add: plain text completions for favourite references. Put favourites between in file and
+      in project priority
+  * [ ] Add: favorite links dictionary and ability to quickly select and insert a link or
+        reference link to one or to add a reference definition to favorites.
+    * [ ] Add: plain text common string from file to completions. Best if it was automatically
+          determined from file contents on a weighting algorithm or one used for smart phone
+          auto-correct.
+
 #### :warning: Critical
- 
+
+* [ ] Fix: clean up completions based on emoji completion code base
+* [ ] Fix: GitHub Issue to complete in link ref and add a new reference. Previous reference can
+      be removed if not used or left for cleanup using intentions.
 * [ ] Add: missing attribute keys for new elements added to extensions:
   * [ ] Add: GitHub Inline Math
     * [ ] Add: preserving single space after \ at end of line in inline math element if keeping
           trailing line spaces
   * [ ] Add: elements to sample documents
   * [ ] Fix: default sample document to include any elements newly available in basic edition
-* [ ] Fix: ENTER completion of emoji shortcut in heading adds `:` and tail of heading line
 * [ ] Add: Enumerated Reference Format to Inspections for missing/duplicate id
-* [ ] Fix: clean up completions based on emoji completion code base
-* [ ] Fix: GitHub Issue to complete in link ref and add a new reference. Previous reference can
-      be removed if not used or left for cleanup using intentions.
-* [ ] Add: apply to all in file intention to `Delete unused reference`
-* [ ] Add: Delete unused checkbox to all applicable elements or add `Sort - Delete Unused` and
-      `Unsorted - Delete Unused`
+* [ ] Add: configuration for gutter icons by type to standard IDE icons configuration.
+* [ ] Add: log of reported exception diagnostics in plugin and add API on the server to query
+      for status/resolution.
+  * [ ] Add: configurable to display list of logged exceptions and their status
+  * [ ] Add: user ability to provide their e-mail for feedback and request update on issue
+  * [ ] Add: `vladsch.com` server to respond to diagnostic queries with resolution status
+  * [ ] Add: functionality for error server to parse reports and provide response to ones that
+        match pattern for a resolved diagnostic.
+* [ ] Add: light caret context class and string manipulation based on reverse regex so text
+      range can be easily manipulated and tested for conditions.
+* [ ] Add: link drag/drop behavior and replacement options same as file drops
+* [ ] Add: list of non-validating links to highlight with different color then validated and add
+      intention to unresolved to add them to project/global validated link database.
+  * [ ] Add: project and global validated link dictionary, allow regex same as link map.
+    * [ ] Add: `example.com` domain by default.
+* [ ] Add: toolbar action to go to current file's profile page (project or if has scoped profile
+      then specific profile).
 
-### 2.8.2.2 - Bug Fix & Enhancement Release
+### 2.8.2.4 - Bug Fix & Enhancement Release
 
+* Add: `Not Sorted, delete unused` and `Sorted, delete unused` options to all applicable
+  elements to remove unused references during document format.
+* Add: option to validation inspections to ignore elements in fenced code
+* Add: plain text completions for references defined in file and references in the project.
+  * Add: Editor settings option to control plain text auto-popup, disabled by default. Will make
+    default false when can disable completions on typing space for plain text completions.
+* Fix: disable automatic completion for link text and plain text completions of references.
+  Leave them for all delimited elements
+* Fix: emoji completions to only auto popup if lowercase or _ is preceding the caret.
+* Add: apply to all in file intention to `Delete unused reference`
+* Fix: rename file quick fixes failing with illegal file name.
+* Fix: diagnostic/2335, `java.lang.NoSuchMethodError: com.intellij.util.KotlinUtils.`, must have
+  been a new addition to the library.
+* Fix: diagnostic/2348, `Parameter specified as non-null is null: method` for drag/drop files
+* Add: error annotations to error highlight project view files
+* Add: Inspection for Unicode
+  ['LINE SEPARATOR' (U+2028)](https://www.fileformat.info/info/unicode/char/2028/index.htm)
+  which is used to force line separator which will not wrap.
+* Fix: diagnostic/2344 illegal access `EditorWindow.INITIAL_INDEX_KEY`, static field was
+  temporarily made package private between 2016/10 and 2018/06 in the API.
+* Fix: GitHub issue completion to escape `[]` in issue text
 * Fix: emoji completions to work properly and in all elements
-* Fix: emoji intention not going into inline elements
+* Fix: ENTER completion of emoji shortcut in heading adds `:` and tail of heading line
+* Fix: emoji inspection not going into inline elements
 * Fix: visitor base impl was not visiting children of inline elements
 * Add: disable indent on paste for markdown documents
 * Fix: HTML Export with `Use style attribute` not to add `<meta http-equiv="content-type"
@@ -48,9 +96,8 @@
 * Fix: block quote and list items should not be inserted while in multi-line non-wrapping inline
   elements like inline math and multi-line url image
 * Fix: Do not allow wrapping of inline math. Otherwise wrapping on `\` without a following space
-  this creates issues with rendering. For now math inline elements are treated like explicit
-  links and images. If they don't fit on a line, they are moved to a line by themselves and
-  never wrapped.
+  creates issues with rendering. For now math inline elements are treated like explicit links
+  and images. If they do not fit on a line, they are moved to a line by themselves.
 
 ### 2.8.2 - Bug Fix & Enhancement Release
 
@@ -63,7 +110,7 @@
   * gravizo uml to multi-line url image
   * image to fenced code math
   * image to inline math
-  * image to plant uml fenced code 
+  * image to plant uml fenced code
 * Add: Condition to codecogs image to fenced code intention to only do conversions if the image
   is the only element in a paragraph and the reverse condition to convert to inline math. This
   way apply to all will only convert elements which can be converted back to images without
@@ -726,8 +773,3 @@
 [#695, Click on structure view does not update preview]: https://github.com/vsch/idea-multimarkdown/issues/695
 [#697, Autoscroll from source does not work in simplified structure view]: https://github.com/vsch/idea-multimarkdown/issues/697
 [html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
-[Admonition Extension, Material for MkDocs]: https://squidfunk.github.io/mkdocs-material/extensions/admonition/
-[holgerbrandl/pasteimages]: https://github.com/holgerbrandl/pasteimages
-
-[#699, Version 2.8 Released!]: https://github.com/vsch/idea-multimarkdown/issues/699
-
