@@ -121,7 +121,7 @@ Bug and compatibility fixes you can find in [Version Notes].
 * New: Convert fenced code to indented code intention
 * New: `Copy Exported as HTML Mime Content` Action to copy HTML export text as HTML mime content
 * New: Image Paste highlight option to annotate an area of the image.  
-  ![Screenshot_PasteImage_Highlight](/assets/images/faq/ScreenShot_PasteImage_sm_h.png)
+  ![Screenshot_PasteImage_Highlight]
 * New: `Copy markdown without soft line breaks` copies document or selection to the clipboard
   eliminating soft line breaks. Useful when copying wrapped markdown to GitHub comments.
 * New: All copy markdown actions: `CopyHtmlMimeFormattedAction`, `CopyJiraFormattedAction`,
@@ -258,4 +258,5 @@ Reserved.
 [vsch/pegdown]: https://github.com/vsch/pegdown/tree/develop
 [WebStorm]: http://www.jetbrains.com/webstorm
 [Wiki]: https://github.com/vsch/idea-multimarkdown/wiki
+[Screenshot_PasteImage_Highlight]: /assets/images/faq/ScreenShot_PasteImage_sm_h.png
 

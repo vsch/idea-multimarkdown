@@ -3,68 +3,20 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [ Critical](#critical)
-- [2.8.2.4 - Bug Fix & Enhancement Release](#2824---bug-fix--enhancement-release)
+- [2.8.2.6 - Bug Fix & Enhancement Release](#2826---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-* [ ] Fix: add new icon variations and possible options to choose what styles to use for
-      markdown files/wiki.
-* [ ] Add: Investigate latex Swing based editor to include for editing math.
-* [ ] Add: Setup Plugin Update chanel to open settings config: Main
-* [ ] Add: link on notifications to EAP Update chanel to open settings config Main
-* [ ] Add: link on notification for paste handler exception to open editor settings
+### 2.8.2.6 - Bug Fix & Enhancement Release
 
-* [ ] Add: Insert References action to open dialog with list of all links in the project, their
-      resolved status and ability to select some and insert into the current file and add to
-      favourites.
-* [ ] Add: index for all other reference types: footnotes, macros, abbreviations
-* [ ] Add: plain text completions for favourite references. Put favourites between in file and
-      in project priority
-  * [ ] Add: favorite links dictionary and ability to quickly select and insert a link or
-        reference link to one or to add a reference definition to favorites.
-    * [ ] Add: plain text common string from file to completions. Best if it was automatically
-          determined from file contents on a weighting algorithm or one used for smart phone
-          auto-correct.
-
-#### :warning: Critical
-
-* [ ] Fix: clean up completions based on emoji completion code base
-* [ ] Fix: GitHub Issue to complete in link ref and add a new reference. Previous reference can
-      be removed if not used or left for cleanup using intentions.
-* [ ] Add: missing attribute keys for new elements added to extensions:
-  * [ ] Add: GitHub Inline Math
-    * [ ] Add: preserving single space after \ at end of line in inline math element if keeping
-          trailing line spaces
-  * [ ] Add: elements to sample documents
-  * [ ] Fix: default sample document to include any elements newly available in basic edition
-* [ ] Add: Enumerated Reference Format to Inspections for missing/duplicate id
-* [ ] Add: configuration for gutter icons by type to standard IDE icons configuration.
-* [ ] Add: log of reported exception diagnostics in plugin and add API on the server to query
-      for status/resolution.
-  * [ ] Add: configurable to display list of logged exceptions and their status
-  * [ ] Add: user ability to provide their e-mail for feedback and request update on issue
-  * [ ] Add: `vladsch.com` server to respond to diagnostic queries with resolution status
-  * [ ] Add: functionality for error server to parse reports and provide response to ones that
-        match pattern for a resolved diagnostic.
-* [ ] Add: light caret context class and string manipulation based on reverse regex so text
-      range can be easily manipulated and tested for conditions.
-* [ ] Add: link drag/drop behavior and replacement options same as file drops
-* [ ] Add: list of non-validating links to highlight with different color then validated and add
-      intention to unresolved to add them to project/global validated link database.
-  * [ ] Add: project and global validated link dictionary, allow regex same as link map.
-    * [ ] Add: `example.com` domain by default.
-* [ ] Add: toolbar action to go to current file's profile page (project or if has scoped profile
-      then specific profile).
-
-### 2.8.2.4 - Bug Fix & Enhancement Release
-
+* Fix: [#702, Setext header marker equalization on ENTER broken]
+* Add: dropped link insert as option: `Link`, `Ref Link & Reference`, `Reference Only`
 * Add: `Not Sorted, delete unused` and `Sorted, delete unused` options to all applicable
   elements to remove unused references during document format.
-* Add: option to validation inspections to ignore elements in fenced code
+* Add: option to validation inspections to ignore elements in fenced code, ignored by default.
 * Add: plain text completions for references defined in file and references in the project.
   * Add: Editor settings option to control plain text auto-popup, disabled by default. Will make
     default false when can disable completions on typing space for plain text completions.
@@ -773,3 +725,10 @@
 [#695, Click on structure view does not update preview]: https://github.com/vsch/idea-multimarkdown/issues/695
 [#697, Autoscroll from source does not work in simplified structure view]: https://github.com/vsch/idea-multimarkdown/issues/697
 [html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
+[Html Modified]: ../icons/layout/Html_modified.png
+[Copy Jira]: https://github.com/vsch/idea-multimarkdown/raw/master/resources/icons/editor_actions/Copy_jira.png
+[#702, Setext header marker equalization on ENTER broken]: https://github.com/vsch/idea-multimarkdown/issues/702
+
+
+
+
