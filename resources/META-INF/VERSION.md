@@ -1,7 +1,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.2.28 - Bug Fix & Enhancement Release](#28228---bug-fix--enhancement-release)
+- [2.8.2.30 - Bug Fix & Enhancement Release](#28230---bug-fix--enhancement-release)
     - [Unclassified](#unclassified)
     - [New Features](#new-features)
     - [Formatter, Wrap on Typing, Smart Keys](#formatter-wrap-on-typing-smart-keys)
@@ -22,7 +22,165 @@
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.2.28 - Bug Fix & Enhancement Release
+### 2.8.2.30 - Bug Fix & Enhancement Release
+
+* Fix: list item's second paragraph children get the item prefix, converting them to items.
+  Introduced by a fix for the culprit below.
+  * Fix: List item whose first child is block quote, on format/wrap on typing looses its item
+    prefixes and becomes indented text.
+* Add: HTML paste option to convert links to references, add pasted link types:
+  * None - skip element generating no text
+  * Text - just text or alt text
+  * Explicit - explicit link/image
+  * Reference - reference link/image with reference definition
+  * HTML - paste HTML as is
+* Add: Intention on auto-link looking text to Wrap in `<>` so `Auto links` parser option could
+  be disabled and still get annotations for auto-link text.
+* Fix: [#708, Empty element in simplified structure view when using just url as header text],
+  now falls back to using the heading as is if plain text gathering results in empty text
+* Add: task list option to simple structure view to display task list items under the heading
+  section with filter options:
+  * Add: structure view type combo in settings:
+    * simple - headings only
+    * simple tasks - headings and tasks
+      * only headings with tasks
+      * to show completed tasks,
+      * incomplete tasks,
+      * empty item tasks (either complete or incomplete)
+    * detailed - all elements and sections
+  * Fix: Badge filter should filter out any headings without tasks
+  * Fix: empty tasks should not add to count but should affect the badge color and badge display
+  * Fix: navigation from editor to list item should be based on position at the end of the line
+    but for empty items on the last non-blank of the line.
+* **Link text completions**
+  * disable automatic completion on char typed if auto-popped-up.
+  * remove query string from link text suggestions
+* **emoji completions**
+  * only auto popup if lowercase or _ is preceding the caret.
+  * work properly and in all elements
+  * ENTER completion of emoji shortcut in heading adds `:` and tail of heading line
+* Add: `Not Sorted, delete unused` and `Sorted, delete unused` options to all applicable
+  elements to remove unused references during document format.
+* Fix: formatting list sort by task completion status broken in 2.8.0/2.8.2
+* Fix: [#702, Setext header marker equalization on ENTER broken]
+* Fix: block quote and list items should not be inserted while in multi-line non-wrapping inline
+  elements like inline math and multi-line url image
+* Fix: Do not allow wrapping of inline math. Otherwise wrapping on `\` without a following space
+  creates issues with rendering. For now math inline elements are treated like explicit links
+  and images. If they do not fit on a line, they are moved to a line by themselves.
+* Fix: visitor base impl was not visiting children of inline elements
+* Fix: ENTER after empty task item inserts extra blank line
+* Add: disable indent on paste for markdown documents
+* Fix: Lexer based syntax highlighter to work correctly for restarted lexing. This is still slow
+  because re-parse can only be done starting with file level items. Annotator is still be best
+  choice for markdown syntax highlighting.
+* Add: GitLab inline math elements to distinguish them from inline code.
+* Fix: reverse the lexer/annotator editor swapping. Start all files with lexer, then switch
+  write enabled ones to annotator. This way syntax highlighting gets performed immediately but
+  the greatest benefit is to have Markdown syntax highlighting in injected language elements
+  which use lexer syntax highlighting.
+* Fix: Remove swap readonly editor highlighter option it is no longer used.
+* Fix: re-parse markdown editors when annotator type is changed.
+* Add: GitLab inline math attributes to distinguish from inline code
+* Add: Task item complete text attribute
+* Fix: GitHub file line selection anchors not to validate except for form: `L#-L#`.
+* Fix: GitLab file line selection anchors not to validate except for form: `L#-#`.
+* Add: Anchor quick fix to convert between GitHub and GitLab line selection anchors when the
+  wrong form is used. ie. GitHub with GitLab form and vice versa.
+* Add: Editor option Annotator: `Ignore fenced code content`
+* Fix: unresolved link annotation shows up 2x in inspection results
+* Fix: https:// link to issues of another module in a project showing as unresolved
+* Add: option to validation inspections to ignore elements in fenced code, ignored by default.
+* Add: apply to all in file intention to `Delete unused reference`
+* Fix: rename file quick fixes failing with illegal file name.
+* Add: error annotations to error highlight project view files
+* Add: Inspection for Unicode
+  ['LINE SEPARATOR' (U+2028)](https://www.fileformat.info/info/unicode/char/2028/index.htm)
+  which is used to force line separator which will not wrap.
+* Fix: doubling of TODO items and spelling errors, was caused by having comment nodes in HTML
+  blocks which had HTML language injected. Causing comments to be processed twice: once for each
+  language.
+* Fix: Enable in-place renaming of all elements where possible.
+* Fix: file move refactoring to handle IDE and refactoring listener both calling move handler
+  for the same file. Happens when directories are moved. This was causing unadjusted link
+  because the IDE called the prepMove **after** the file was already moved, useless because all
+  the relative links are now not guaranteed to work. Now works because IDE gets results computed
+  for refactoring listener before file is moved.
+* Fix: line markers for ref links and images don't show up in gutter, broken by element type
+  cleanup.
+* Fix: node class refactoring for list and list item left some code testing for unordered list
+  item when generic list item was intended.
+  * Renumber list items in formatting always resets the first item to 1. even when that option
+    is not selected.
+  * BACKSPACE gets rid off the ordered item prefix when editing any non-first list item, works
+    fine if `Backspace removes empty item setting` is off.
+* Fix: completed task items on ordered items get converted to simple ordered items on ENTER
+  insertion of another item.
+* Add: Splitting a paragraph in the middle (not list item) should automatically add hard break
+  spaces at the end of the old line so it is not wrapped.
+  * Add: smart key option for ENTER to add hard-break spaces when splitting a line
+* Fix: Add awareness to formatter for `<!-- IGNORE PREVIOUS -->` comment being associated with a
+  reference and move it with the reference when formatting.
+* Fix: loose list with empty item not recognized as double spaced
+* Fix: ENTER on empty task list item inserts blank line after deleting task item prefix
+* Fix: typing before indented paragraph swallows characters instead of inserting them before the
+  paragraph.
+* Fix: typing right at first character of indented text doubles the typed character. Cannot
+  reproduce.
+* Fix: weird behavior when ENTER hit at end of bullet item with ordered item children. Get
+  spliced new first item `1. X` followed by old item `2.` on the same line. Cannot reproduce.
+* Fix: insert line item on ENTER **after the end of the item text** should insert child item if
+  original item has children. ie. as if insert before was done on first child item
+  * Fix: inserting when the first child is an empty item removes the child and inserts blank
+    lines.
+* Fix: ENTER when inserting new task item above the current one should clear the task done
+  marker in the new task item and leave the done marker for the old item. Right now it does the
+  reverse.
+* Fix: task item prefix was not handled on ordered list items for insert/renumber
+* Fix: insert after end of ordered list item with child task item splits the next line in two
+  but does not add prefix
+* Fix: in fixed indent mode BACKSPACE indents ignoring fixed indent config.
+* Fix: reference sort to be done on normalized id not actual id
+* Fix: [#715, Completed task list items not rendered with checkmark]
+* Fix: `AUTOLINKS` extension is now an option for annotation syntax highlighter. Previously, it
+  was always enabled regardless of parser settings.
+* Fix: inline reference intention only appears on the reference part of `[reference
+  text][reference]`, it should appear for the whole element.
+* Add: Intention to match ref link case to reference id case when the two don't match, with All
+  in file intention option
+* Fix: remove separate line icon for link and anchor. Only add combined navigate to header.
+* Add: Intention on selected text or word to add Abbreviation if this parser option is selected.
+* Add: File inspection for large files with auto-links parser option enabled.
+* Add: convert all auto-links to <http://> which work without needing to parse all text for
+  possible link.
+* Add: Inspection to find possible unwrapped auto-links in text and convert them to `<>` wrapped
+  auto-links
+* Add: intention to remove ref link text when it matches the id, also offer to do the same after
+  refactoring the ref id and it matches text
+* Add: to line marker tooltip the element's identifying characteristics so can see which element
+  from the line is being referred to by the line icon.
+* Fix: initialization issues in paste options form and dialog
+* Add: HTML options from editor settings to show disabled paste plain text and paste html
+  buttons.
+* Add: dropped link insert as option: `Link`, `Ref Link & Reference`, `Reference Only`
+* Fix: remote content first heading makes no sense, use title with fallback to first heading
+* Fix: [#704, NoClassDefFoundError on 2019.1 EAP with JBRE], JRE 11 support
+* Fix: diagnostic/2477, Desktop API not supported on the current platform
+* Fix: [#710, Memory leak in HTML preview window], swing HTML preview had a memory leak.
+* Add: [#709, New Icon looks bad on dark background], option to use old document icons.
+* Fix: ignore rendering profiles with no name. Do not know how it occurred but when it did it
+  was incomplete and caused headaches to figure out why the plugin was screwing up parser
+  settings.
+* Fix: HTML Export with `Use style attribute` not to add `<meta http-equiv="content-type"
+  content="text/html; charset=UTF-8">`
+* Fix: diagnostic/2335, `java.lang.NoSuchMethodError: com.intellij.util.KotlinUtils.`, must have
+  been a new addition to the library.
+* Fix: diagnostic/2348, `Parameter specified as non-null is null: method` for drag/drop files
+* Fix: diagnostic/2344 illegal access `EditorWindow.INITIAL_INDEX_KEY`, static field was
+  temporarily made package private between 2016/10 and 2018/06 in the API.
+* Fix: [#711, Editor -> Toggle Editor Layout setting is not saved.]
+* Fix: [diagnostic/2556](http://vladsch.com/admin/diagnostics/2556) Index out of Bounds.
+* Fix: Toggle task item done does not work for ordered task list items
 
 #### Unclassified
 
@@ -40,6 +198,11 @@
   * [ ] Allow to select one or more and insert references in file. That way plain text
         completion can show refs in file.
   * [ ] With preview for file/image of the selected link
+* [ ] Add: custom new markdown file handler
+  * [ ] with configuration for multiple Name: Directory -> File Template links.
+  * [ ] Use the list of names in a drop down (with current directory if available as an option)
+        to create file from template for: issues, forum responses, bug reports, etc. without
+        having to pre-select directory and a specific markdown template.
 
 #### Formatter, Wrap on Typing, Smart Keys
 
@@ -56,48 +219,6 @@
       items similar to list item renumbering.
 * [ ] Add: review all wrap on typing and smart key implementation for changes to low level Psi
       tree whitespace nodes
-* [x] Fix: completed task items on ordered items get converted to simple ordered items on ENTER
-      insertion of another item.
-* [x] Fix: List item whose first child is block quote, on format/wrap on typing looses its item
-      prefixes and becomes indented text.
-* [x] Add: Splitting a paragraph in the middle (not list item) should automatically add hard
-      break spaces at the end of the old line so it is not wrapped.
-  * [x] Add: smart key option for ENTER to add hard-break spaces when splitting a line
-* [x] Fix: Add awareness to formatter for `<!-- IGNORE PREVIOUS -->` comment being associated
-      with a reference and move it with the reference when formatting.
-* [x] Fix: loose list with empty item not recognized as double spaced
-* [x] Fix: ENTER on empty task list item inserts blank line after deleting task item prefix
-* [x] Fix: typing before indented paragraph swallows characters instead of inserting them before
-      the paragraph.
-* [x] Fix: typing right at first character of indented text doubles the typed character. Cannot
-      reproduce.
-* [x] Fix: weird behavior when ENTER hit at end of bullet item with ordered item children. Get
-      spliced new first item `1. X` followed by old item `2.` on the same line. Cannot
-      reproduce.
-* [x] Fix: insert line item on ENTER **after the end of the item text** should insert child item
-      if original item has children. ie. as if insert before was done on first child item
-  * [x] Fix: inserting when the first child is an empty item removes the child and inserts blank
-        lines.
-* [x] Fix: ENTER when inserting new task item above the current one should clear the task done
-      marker in the new task item and leave the done marker for the old item. Right now it does
-      the reverse.
-* [x] Fix: task item prefix was not handled on ordered list items for insert/renumber
-* [x] Fix: insert after end of ordered list item with child task item splits the next line in
-      two but does not add prefix
-* [x] Fix: in fixed indent mode BACKSPACE indents ignoring fixed indent config.
-* [x] Fix: reference sort to be done on normalized id not actual id
-* Add: `Not Sorted, delete unused` and `Sorted, delete unused` options to all applicable
-  elements to remove unused references during document format.
-* Fix: formatting list sort by task completion status broken in 2.8.0/2.8.2
-* Fix: [#702, Setext header marker equalization on ENTER broken]
-* Fix: block quote and list items should not be inserted while in multi-line non-wrapping inline
-  elements like inline math and multi-line url image
-* Fix: Do not allow wrapping of inline math. Otherwise wrapping on `\` without a following space
-  creates issues with rendering. For now math inline elements are treated like explicit links
-  and images. If they do not fit on a line, they are moved to a line by themselves.
-* Fix: visitor base impl was not visiting children of inline elements
-* Fix: ENTER after empty task item inserts extra blank line
-* Add: disable indent on paste for markdown documents
 
 #### HTML Export, Generation/Preview
 
@@ -110,9 +231,6 @@
     * [ ] Add per file cache mapping image link to resolved URL so that preview will only lookup
           the image URL and get resolved link.
   * [x] Fix: resolve HTML links in preview only upon clicking to eliminate rendering delays
-* [x] Fix: [#715, Completed task list items not rendered with checkmark]
-* [x] Fix: `AUTOLINKS` extension is now an option for annotation syntax highlighter. Previously,
-      it was always enabled regardless of parser settings.
 
 #### Completion issues
 
@@ -123,8 +241,8 @@
   * Fix: change to work with new implementation classes
   * escape `[]` in issue text
 * [ ] Fix: Remove before completion from all elements and use completion decorator to adjust
-      `replacementOffset` to allow different completion element to affect different parts of
-      replaced text. Mostly to allow plain text and github completions in the same elements.
+      `replacementOffset` to allow different completion elements to affect different parts of
+      replaced text. Mostly to allow plain text and github completions to play nice together.
       which have concrete element which they complete and cannot allow plain text completion
       inserts
 * Add: **plain text completions** for references defined in file and references in the project.
@@ -140,23 +258,15 @@
   * plain text auto popup to show only if prefix is 3 or more alphabetic characters, and not to
     complete on typed character, only tab or enter
   * disable automatic completion on char typed if auto-popped-up.
-* link anchor completion
-  * [x] Fix: replacement end to be end of link ref caused by plain text adjusting
-        `replacementOffset`.
-* **Link text completions**
-  * disable automatic completion on char typed if auto-popped-up.
-  * remove query string from link text suggestions
-* **emoji completions**
-  * only auto popup if lowercase or _ is preceding the caret.
-  * work properly and in all elements
-  * ENTER completion of emoji shortcut in heading adds `:` and tail of heading line
+  * link anchor completion
+    * Fix: replacement end to be end of link ref caused by plain text adjusting
+      `replacementOffset`.
 
 #### Structure/Project Views  
 
 * [ ] Fix: flexmark-example option `NO_FILE_EOL` shows up as an unknown option icon in structure
       view:  
       ![StructureView_WrongIcon_FlexmarkOption](../../assets/doc/images/StructureView_WrongIcon_FlexmarkOption.png)
-* [ ] Fix: [#708, Empty element in simplified structure view when using just url as header text]
 * [ ] Use Heading Text as todo category and allow assigning a different category, using context
       menu which will move the item under a different heading.
 * [ ] Add: clickable check box for task items which will check/uncheck tasks (also need to make
@@ -164,38 +274,12 @@
 * [ ] Add: option to settings drop down menu to switch structure view type
 * [ ] Add: display headings without tasks if no tasks in file
 * [ ] Fix: [#705, Show navigable headings as file members inside project view]
-* Add: task list option to simple structure view to display task list items under the heading
-  section with filter options:
-  * Add: structure view type combo in settings:
-    * simple - headings only
-    * simple tasks - headings and tasks
-      * only headings with tasks
-      * to show completed tasks,
-      * incomplete tasks,
-      * empty item tasks (either complete or incomplete)
-    * detailed - all elements and sections
-  * Fix: Badge filter should filter out any headings without tasks
-  * Fix: empty tasks should not add to count but should affect the badge color and badge display
-  * Fix: navigation from editor to list item should be based on position at the end of the line
-    but for empty items on the last non-blank of the line.
 
 #### Syntax Highlighter, Color Settings
 
 * [ ] Fix: remove trailing space from list and task item markers for better representation if
       background is set to different from document.
 * [ ] Fix: punch out parent prefix text from child elements
-* Fix: Lexer based syntax highlighter to work correctly for restarted lexing. This is still slow
-  because re-parse can only be done starting with file level items. Annotator is still be best
-  choice for markdown syntax highlighting.
-* Add: GitLab inline math elements to distinguish them from inline code.
-* Fix: reverse the lexer/annotator editor swapping. Start all files with lexer, then switch
-  write enabled ones to annotator. This way syntax highlighting gets performed immediately but
-  the greatest benefit is to have Markdown syntax highlighting in injected language elements
-  which use lexer syntax highlighting.
-* Fix: Remove swap readonly editor highlighter option it is no longer used.
-* Fix: re-parse markdown editors when annotator type is changed.
-* Add: GitLab inline math attributes to distinguish from inline code
-* Add: Task item complete text attribute
 
 #### Annotation, Inspection, Intention, Line Marker issues
 
@@ -213,15 +297,12 @@
 * [ ] Add: check box line marker icon for task items which will check/uncheck tasks
 * [ ] Add: line marker action for task items to show their `Category` based on heading and allow
       to change to other heading, which will move the task item.
-* [ ] Fix: implement an auto-links extension which can be incorporated into the core parser as
-      an option and automatically convert text to auto-links without the extra offset conversion
-      and parsing.
 * [ ] Add: inspection for duplicated references with the same URL
 * [ ] Add: option to replace reference when converting link to reference and a reference url
       exists but with a different name.
   * [ ] Fix: Use reference insert code from completions to add references on paste
-* [ ] Add: replace link with reference dialog similar to refactoring rename related to allow
-      doing bulk conversion.
+* [ ] Add: replace link with reference dialog, similar to refactoring rename related dialog, to
+      allow doing bulk conversion.
 * [ ] Add: Cleanup Document to apply all safe quick fixes:
   * Remote address has moved permanently quick fixes
 * Add: ignore option markup in comment: `<!-- @IGNORE PREVIOUS: option, option,... -->` to mark
@@ -240,39 +321,6 @@
 * [ ] Add: conversion between multi-line URL and single line URL encoded link
 * [ ] Add: language injection to single line URL encoded link
 * [ ] Add: conversion between fenced code or inline math/uml and single line URL encoded link
-* [x] Fix: inline reference intention only appears on the reference part of `[reference
-      text][reference]`, it should appear for the whole element.
-* [x] Add: Intention to match ref link case to reference id case when the two don't match, with
-      All in file intention option
-* [x] Fix: remove separate line icon for link and anchor. Only add combined navigate to header.
-* [x] Add: Intention on selected text or word to add Abbreviation if this parser option is
-      selected.
-* [x] Add: File inspection for large files with auto-links parser option enabled.
-* [x] Add: convert all auto-links to <http://> which work without needing to parse all text for
-      possible link.
-* [x] Add: Inspection to find possible unwrapped auto-links in text and convert them to `<>`
-      wrapped auto-links
-* [x] Add: intention to remove ref link text when it matches the id, also offer to do the same
-      after refactoring the ref id and it matches text
-* [x] Add: to line marker tooltip the element's identifying characteristics so can see which
-      element from the line is being referred to by the line icon.
-* Fix: GitHub file line selection anchors not to validate except for form: `L#-L#`.
-* Fix: GitLab file line selection anchors not to validate except for form: `L#-#`.
-* Add: Anchor quick fix to convert between GitHub and GitLab line selection anchors when the
-  wrong form is used. ie. GitHub with GitLab form and vice versa.
-* Add: Editor option Annotator: `Ignore fenced code content`
-* Fix: unresolved link annotation shows up 2x in inspection results
-* Fix: https:// link to issues of another module in a project showing as unresolved
-* Add: option to validation inspections to ignore elements in fenced code, ignored by default.
-* Add: apply to all in file intention to `Delete unused reference`
-* Fix: rename file quick fixes failing with illegal file name.
-* Add: error annotations to error highlight project view files
-* Add: Inspection for Unicode
-  ['LINE SEPARATOR' (U+2028)](https://www.fileformat.info/info/unicode/char/2028/index.htm)
-  which is used to force line separator which will not wrap.
-* Fix: doubling of TODO items and spelling errors, was caused by having comment nodes in HTML
-  blocks which had HTML language injected. Causing comments to be processed twice: once for each
-  language.
 
 #### Refactoring
 
@@ -286,20 +334,6 @@
       [NestedVisitResult.java](/src/com/vladsch/idea/multimarkdown/psi/NestedVisitResult.java)
       and [NestedConsumer.java](/src/com/vladsch/idea/multimarkdown/psi/NestedConsumer.java) and
       replace with new TreeIterator implementations.
-* [x] Fix: line markers for ref links and images don't show up in gutter, broken by element type
-      cleanup.
-* [x] Fix: node class refactoring for list and list item left some code testing for unordered
-      list item when generic list item was intended.
-  * Renumber list items in formatting always resets the first item to 1. even when that option
-    is not selected.
-  * BACKSPACE gets rid off the ordered item prefix when editing any non-first list item, works
-    fine if `Backspace removes empty item setting` is off.
-* Fix: Enable in-place renaming of all elements where possible.
-* Fix: file move refactoring to handle IDE and refactoring listener both calling move handler
-  for the same file. Happens when directories are moved. This was causing unadjusted link
-  because the IDE called the prepMove **after** the file was already moved, useless because all
-  the relative links are now not guaranteed to work. Now works because IDE gets results computed
-  for refactoring listener before file is moved.
 
 #### Drag & Drop, Paste
 
@@ -309,7 +343,14 @@
       `![Screenshot_Parser_Settings](../raw/master/assets/images/faq/Screenshot_Parser_Settings.png)`
       from wiki page and pasting to asset/comms file messes up the link `../` count and creates
       a wrong link.
-* [ ] Add: HTML paste option to convert links to references
+* [x] Add: HTML paste option to convert links to references, add pasted link types:
+  * [ ] Add: document information so already existing reference definition can be re-used
+        instead of creating duplicates.
+  * None - skip element generating no text
+  * Text - just text or alt text
+  * Explicit - explicit link/image
+  * Reference - reference link/image with reference definition
+  * HTML - paste HTML as is
 * [ ] Fix: dropping/pasting a link as link ref with reference in a table messes up the table
   * [ ] Fix: if pasting in table automatically remove trailing EOL if single line is pasted
   * [ ] Fix: Use reference insert code from completions to add references on paste
@@ -321,11 +362,6 @@
       line selection to clipboard in `uri-links` mime format.
 * [ ] Add: smart copy/paste which removes parent prefixes on copy and adds them on paste
 * [ ] Add: option to auto-format pasted markdown after pasting text
-* Fix: initialization issues in paste options form and dialog
-* Add: HTML options from editor settings to show disabled paste plain text and paste html
-  buttons.
-* Add: dropped link insert as option: `Link`, `Ref Link & Reference`, `Reference Only`
-* Fix: remote content first heading makes no sense, use title with fallback to first heading
 
 #### Actions
 
@@ -342,33 +378,16 @@
   * selecting columns using shift+left/shift+right showing the full table columns selected,
   * moving selected columns left/right using alt+left/alt+right and updating the table after the
     move, with or without re-formatting.
-* [x] Fix: [diagnostic/2556](http://vladsch.com/admin/diagnostics/2556) Index out of Bounds.
-* [x] Fix: Toggle task item done does not work for ordered task list items
 
 #### Settings/Configuration  
 
 * [ ] Add: Annotation settings panel
   * [ ] Fix: [#712, Target file is not on github annotation]
-* [x] Fix: [#711, Editor -> Toggle Editor Layout setting is not saved.]
 
 #### Other Issues
 
 * [ ] Fix: diagnostic reports doubled by having reports sent to main server and fallback server
       in almost all cases.
-* [x] Fix: [#704, NoClassDefFoundError on 2019.1 EAP with JBRE], JRE 11 support
-* [x] Fix: diagnostic/2477, Desktop API not supported on the current platform
-* [x] Fix: [#710, Memory leak in HTML preview window], swing HTML preview had a memory leak.
-* [x] Add: [#709, New Icon looks bad on dark background], option to use old document icons.
-* [x] Fix: ignore rendering profiles with no name. Do not know how it occurred but when it did
-      it was incomplete and caused headaches to figure out why the plugin was screwing up parser
-      settings.
-* Fix: HTML Export with `Use style attribute` not to add `<meta http-equiv="content-type"
-  content="text/html; charset=UTF-8">`
-* Fix: diagnostic/2335, `java.lang.NoSuchMethodError: com.intellij.util.KotlinUtils.`, must have
-  been a new addition to the library.
-* Fix: diagnostic/2348, `Parameter specified as non-null is null: method` for drag/drop files
-* Fix: diagnostic/2344 illegal access `EditorWindow.INITIAL_INDEX_KEY`, static field was
-  temporarily made package private between 2016/10 and 2018/06 in the API.
 
 #### Documentation 
 
