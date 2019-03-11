@@ -1,7 +1,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.2.32 - Bug Fix & Enhancement Release](#28232---bug-fix--enhancement-release)
+- [2.8.2.34 - Bug Fix & Enhancement Release](#28234---bug-fix--enhancement-release)
     - [Formatter, Wrap on Typing, Smart Keys](#formatter-wrap-on-typing-smart-keys)
     - [HTML Export, Generation/Preview](#html-export-generationpreview)
     - [Completion issues](#completion-issues)
@@ -20,8 +20,17 @@
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.2.32 - Bug Fix & Enhancement Release
+### 2.8.2.34 - Bug Fix & Enhancement Release
 
+* Fix: [#720, Indentation in a numbered list 'flickers' when typing and deleting text], caused
+  by BACKSPACE ignoring the list indentation type of "Fixed 4 spaces"
+* Fix: ENTER insert hard-break to not insert spaces if caret is at first column or preceded by
+  all spaces.
+* Fix: HTML to Markdown on paste adding extra line breaks if `div` is used to wrap text for `li`
+  tags.
+* Add: inspection for links whose link text does not match the heading text referenced by the
+  link anchor ref, quick fix to change/add link text, remove text use ref id or remove
+  text/rename ref id.
 * Fix: FakeURLPsiElement could cause not awt thread exception in 2019.2 EAP.
 * Fix: inserting characters before or between block quote markers does not work. Now disable
   wrap when typing in prefix with block quote or aside markers
@@ -260,6 +269,7 @@
 
 #### Annotation, Inspection, Intention, Line Marker issues
 
+* [ ] Add: annotation to detect and correct `[TOC]` to proper sim toc syntax. [TOC-Syntax](../../assets/doc/comms/support/TOC-Syntax.md)
 * [ ] Fix: for text to auto-link use RegEx and logic from flexmark auto-link
       `inlineTextProcessor`.
 * [ ] Fix: github link shows as unresolved with module vcs root out of project tree. All other
@@ -314,6 +324,8 @@
 
 #### Drag & Drop, Paste, Markdown Refactoring
 
+* [ ] Fix: copy without line breaks of full document text with references, adds a single
+      duplicate reference at the bottom of the copy.
 * [ ] Add: Notification when heading text cannot be renamed because the id is provided by
       attributes. ie. Heading text is no longer a pseudo identifier.
 * [ ] Add: copy file handler otherwise does not update reference links when copying file(s) to
@@ -1078,4 +1090,6 @@
 [CommonMark Spec]: https://spec.commonmark.org/0.28/ "CommonMark Spec"
 [Copy Jira]: https://github.com/vsch/idea-multimarkdown/raw/master/resources/icons/editor_actions/Copy_jira.png
 [Html Modified]: ../icons/layout/Html_modified.png
+[#720, Indentation in a numbered list 'flickers' when typing and deleting text]: https://github.com/vsch/idea-multimarkdown/issues/720
+
 
