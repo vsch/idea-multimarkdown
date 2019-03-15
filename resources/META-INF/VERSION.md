@@ -1,14 +1,14 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.2.42 - Bug Fix & Enhancement Release](#28242---bug-fix--enhancement-release)
+- [2.8.2.44 - Bug Fix & Enhancement Release](#28244---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.2.42 - Bug Fix & Enhancement Release
+### 2.8.2.44 - Bug Fix & Enhancement Release
 
 * Fix: copying/pasting image links from wiki to main repo file messes up the link `../` count
   and creates a wrong link.
