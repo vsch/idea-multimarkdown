@@ -1,27 +1,49 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.2.34 - Bug Fix & Enhancement Release](#28234---bug-fix--enhancement-release)
-    - [Formatter, Wrap on Typing, Smart Keys](#formatter-wrap-on-typing-smart-keys)
-    - [HTML Export, Generation/Preview](#html-export-generationpreview)
-    - [Completion issues](#completion-issues)
-    - [Structure/Project Views](#structureproject-views)
-    - [Syntax Highlighter, Color Settings](#syntax-highlighter-color-settings)
-    - [Annotation, Inspection, Intention, Line Marker issues](#annotation-inspection-intention-line-marker-issues)
-    - [Refactoring Code](#refactoring-code)
-    - [Drag & Drop, Paste, Markdown Refactoring](#drag--drop-paste-markdown-refactoring)
-    - [Actions](#actions)
-    - [Settings/Configuration](#settingsconfiguration)
-    - [Other Issues](#other-issues)
-    - [Documentation](#documentation)
+- [2.8.2.42 - Bug Fix & Enhancement Release](#28242---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.2.34 - Bug Fix & Enhancement Release
+### 2.8.2.42 - Bug Fix & Enhancement Release
 
+* Fix: copying/pasting image links from wiki to main repo file messes up the link `../` count
+  and creates a wrong link.
+* Fix: absolute http:// links from main repo files to wiki pages were not recognized as wiki
+  pages of the project
+* Add: clear link cache when any repository is pushed so any remote links which become valid are
+  updated.
+* Add: Notification settings panel to enable/disable notification messages
+* Fix: Some notification disable links did not work or disabled the wrong message
+* Fix: ref links and images would generate multiple line markers if the ref contained
+  typographic or escaped characters
+* Fix: do not show Yaml Front matter notification if flexmark front matter parser extension is
+  enabled.
+* Fix: flexmark-example option `NO_FILE_EOL` shows up as an unknown option icon in structure
+  view.
+* Add: **plain text completions** for completing references and headings defined in the file and
+  references/links in the project.
+  * Add: documentation about including too many files in the scope. Only the first 1000
+    suggestions will be collected. Too many files may cause some suggestions not to be shown.
+  * Fix: plain text completions don't work in table cells
+  * Add: current file's headers to link ref completions.
+  * Editor settings option to control plain text auto-popup, disabled by default. Will make
+    default false when can disable completions on typing space for plain text completions.
+  * plain text search scope defined in rendering settings: `Plain text suggestion search
+    scope:`, default is taken as `Project Files` which is too wide to be useful.
+  * plain text auto popup to show only if prefix is 3 or more alphabetic characters, and not to
+    complete on typed character, only tab or enter
+  * disable automatic completion on char typed if auto-popped-up.
+  * link anchor completion
+    * Fix: replacement end to be end of link ref caused by plain text adjusting
+      `replacementOffset`.
+* Add: Document the fact that auto-links extension is not usable for very large documents and
+  introduces significant typing delays.
+* Fix: copy without line breaks of full document text with references, adds duplicate references
+  if they are used and included in the partial copy selection.
 * Fix: [#720, Indentation in a numbered list 'flickers' when typing and deleting text], caused
   by BACKSPACE ignoring the list indentation type of "Fixed 4 spaces"
 * Fix: ENTER insert hard-break to not insert spaces if caret is at first column or preceded by
@@ -45,6 +67,8 @@
   * Fix: List item whose first child is block quote, on format/wrap on typing looses its item
     prefixes and becomes indented text.
 * Add: HTML paste option to convert links to references, add pasted link types:
+  * Add: document information so existing reference definitions can be re-used instead of
+    creating duplicates.
   * None - skip element generating no text
   * Text - just text or alt text
   * Explicit - explicit link/image
@@ -197,213 +221,6 @@
 * Fix: [#711, Editor -> Toggle Editor Layout setting is not saved.]
 * Fix: [diagnostic/2556](http://vladsch.com/admin/diagnostics/2556) Index out of Bounds.
 * Fix: Toggle task item done does not work for ordered task list items
-
-#### Formatter, Wrap on Typing, Smart Keys
-
-* [ ] Add: delete identical duplicated references without questions all the time. Add to
-      `MdReferenceElement` a method to compare it to be identical to another reference
-      definition.
-* [ ] Add: tab handler to skip over closing markers of inline elements to next non-blank space
-      after the marker or end of line, if at end of line insert space after marker if there is
-      not any.
-* [ ] Add: List new bullet item prefix option: `as sibling or +`, `as sibling or -`, `as sibling
-      or *` to use nearest sibling prefix or one given by selection when a new list is started.
-* [ ] Add: conversion from bullet to ordered and vice versa, requires an indent change on child
-      items similar to list item renumbering.
-* [ ] Add: review all wrap on typing and smart key implementation for changes to low level Psi
-      tree whitespace nodes
-
-#### HTML Export, Generation/Preview
-
-* [ ] Fix: [#653, Preview is not in sync with editor and keeps moving to beginning], add
-      position storage for Swing Preview and restore it after page load
-
-#### Completion issues
-
-* GitHub issue completions
-  * [ ] Fix: finish migration to new completion implementation.
-  * [x] Fix: after inserting Ref Link move caret past the link ref instead of leaving inside
-  * [x] Fix: link ref insert does not include summary text in ref
-  * Fix: change to work with new implementation classes
-  * escape `[]` in issue text
-* [ ] Fix: Remove before completion from all elements and use completion decorator to adjust
-      `replacementOffset` to allow different completion elements to affect different parts of
-      replaced text. Mostly to allow plain text and github completions to play nice together.
-      which have concrete element which they complete and cannot allow plain text completion
-      inserts
-* Add: **plain text completions** for references defined in file and references in the project.
-  * [ ] Add: documentation about including too many files in the scope. Only the first 1000
-        suggestions will be collected. Too many files may cause some suggestions not to be
-        shown.
-  * [ ] Fix: plain text completions don't work in table cells
-  * [ ] Add: current file's headers should be available for link ref completions.
-  * Editor settings option to control plain text auto-popup, disabled by default. Will make
-    default false when can disable completions on typing space for plain text completions.
-  * plain text search scope defined in rendering settings: `Plain text suggestion search
-    scope:`, default is taken as `Project Files` which is too wide to be useful.
-  * plain text auto popup to show only if prefix is 3 or more alphabetic characters, and not to
-    complete on typed character, only tab or enter
-  * disable automatic completion on char typed if auto-popped-up.
-  * link anchor completion
-    * Fix: replacement end to be end of link ref caused by plain text adjusting
-      `replacementOffset`.
-
-#### Structure/Project Views  
-
-* [ ] Fix: flexmark-example option `NO_FILE_EOL` shows up as an unknown option icon in structure
-      view:  
-      ![StructureView_WrongIcon_FlexmarkOption](../../assets/doc/images/StructureView_WrongIcon_FlexmarkOption.png)
-* [ ] Use Heading Text as todo category and allow assigning a different category, using context
-      menu which will move the item under a different heading.
-* [ ] Add: clickable check box for task items which will check/uncheck tasks (also need to make
-      sure these tasks don't disappear because completed tasks are filtered out???)
-* [ ] Add: option to settings drop down menu to switch structure view type
-* [ ] Add: display headings without tasks if no tasks in file
-* [ ] Fix: [#705, Show navigable headings as file members inside project view]
-
-#### Syntax Highlighter, Color Settings
-
-* [ ] Fix: remove trailing space from list and task item markers for better representation if
-      background is set to different from document.
-* [ ] Fix: punch out parent prefix text from child elements
-
-#### Annotation, Inspection, Intention, Line Marker issues
-
-* [ ] Add: annotation to detect and correct `[TOC]` to proper sim toc syntax. [TOC-Syntax](../../assets/doc/comms/support/TOC-Syntax.md)
-* [ ] Fix: for text to auto-link use RegEx and logic from flexmark auto-link
-      `inlineTextProcessor`.
-* [ ] Fix: github link shows as unresolved with module vcs root out of project tree. All other
-      formats resolve correctly.
-      `https://github.com/vsch/kotlin-jdbc/blob/master/extensions/com.intellij.database/schema/Generate%20Kotlin-Model.groovy`
-* [ ] Add: GitHub line range anchor format is really `^#(?:L(\\d+).*){1,2}$`, add lookup table
-      for valid list range selection formats by host prefix.
-* [ ] Fix: enable anchor explorer intention on all links which can have anchors, not just
-      invalid anchors.
-* [ ] Fix: navigation for link mapped links (wiki links) goes to URL not project file. (Check if
-      link mapping is applied to navigation URLs)
-* [ ] Add: Quick Fix to unresolved reference intention to create reference and popup dialog to
-      fill in all details.
-* [ ] Add: check box line marker icon for task items which will check/uncheck tasks
-* [ ] Add: line marker action for task items to show their `Category` based on heading and allow
-      to change to other heading, which will move the task item.
-* [ ] Add: inspection for duplicated references with the same URL
-* [ ] Add: option to replace reference when converting link to reference and a reference url
-      exists but with a different name.
-  * [ ] Fix: Use reference insert code from completions to add references on paste
-* [ ] Add: replace link with reference dialog, similar to refactoring rename related dialog, to
-      allow doing bulk conversion.
-* [ ] Add: Cleanup Document to apply all safe quick fixes:
-  * Remote address has moved permanently quick fixes
-* Add: ignore option markup in comment: `<!-- @IGNORE PREVIOUS: option, option,... -->` to mark
-  elements as ignored.
-  * Fix: make inline HTML comments non-wrapping elements and EOL preserving so they don't get
-    messed up by format and wrap on typing.
-    * [ ] Add: option to make comments other than `@IGNORE` comments wrapping
-  * [ ] Add: remove `@IGNORE` intention annotation for ignore comments and remove it from
-        annotator
-  * [x] Fix: ignore link comment added on same line for references when no EOL terminating last
-        reference.
-  * [x] Fix: ignore link comment also taken when separated from link by another link
-  * [x] Fix: do not validate any link for `example.com` domain, include sub-domains.
-  * `anchor` do not annotate anchor
-  * `link` do not annotate link
-* [ ] Add: conversion between multi-line URL and single line URL encoded link
-* [ ] Add: language injection to single line URL encoded link
-* [ ] Add: conversion between fenced code or inline math/uml and single line URL encoded link
-
-#### Refactoring Code
-
-* [ ] Fix: need bullet proof method for recovering caret position after wrapping and
-      reformatting text. Embedded 0 width char would be most reliable.
-* [ ] Fix: add `MdPsiImplUtil` `TreeIterator` based functions equivalent to `NestedVisitResult`
-      and `NestedConsumer`
-* [ ] Fix: remove
-      [NestedVisitResult.java](/src/com/vladsch/idea/multimarkdown/psi/NestedVisitResult.java)
-      and [NestedConsumer.java](/src/com/vladsch/idea/multimarkdown/psi/NestedConsumer.java) and
-      replace with new TreeIterator implementations.
-
-#### Drag & Drop, Paste, Markdown Refactoring
-
-* [ ] Fix: copy without line breaks of full document text with references, adds a single
-      duplicate reference at the bottom of the copy.
-* [ ] Add: Notification when heading text cannot be renamed because the id is provided by
-      attributes. ie. Heading text is no longer a pseudo identifier.
-* [ ] Add: copy file handler otherwise does not update reference links when copying file(s) to
-      another directory.
-* [ ] Fix: copying/pasting
-      `![Screenshot_Parser_Settings](../raw/master/assets/images/faq/Screenshot_Parser_Settings.png)`
-      from wiki page and pasting to asset/comms file messes up the link `../` count and creates
-      a wrong link.
-* [ ] Add: copy markdown should put another flavour on clipboard to allow Markdown Navigator
-      running in another IDE instance to make use of appended references
-* [x] Add: HTML paste option to convert links to references, add pasted link types:
-  * [ ] Add: document information so already existing reference definition can be re-used
-        instead of creating duplicates.
-  * None - skip element generating no text
-  * Text - just text or alt text
-  * Explicit - explicit link/image
-  * Reference - reference link/image with reference definition
-  * HTML - paste HTML as is
-* [ ] Fix: dropping/pasting a link as link ref with reference in a table messes up the table
-  * [ ] Fix: if pasting in table automatically remove trailing EOL if single line is pasted
-  * [ ] Fix: Use reference insert code from completions to add references on paste
-* [ ] Fix: dropping a `uri-link` at bottom for link-ref with reference when the file has no
-      blank lines needs to add a blank line and adjust the drop location, otherwise the dropped
-      link goes right before the reference definition.
-* [ ] Add: Copy reference on a markdown heading should copy link with anchor.
-* [ ] Add: Copy line/line selection reference on selection/line in any file to copy a link with
-      line selection to clipboard in `uri-links` mime format.
-* [ ] Add: smart copy/paste which removes parent prefixes on copy and adds them on paste
-* [ ] Add: option to auto-format pasted markdown after pasting text
-
-#### Actions
-
-* [ ] Fix: Add Block Quote level removes ordered item prefix:
-
-  ```markdown
-  1. CSS passthrough - for example, if HTML element has specific `class` or `style` - output it's
-     text as bold/italic.
-  ```
-* [ ] Add: Table select column to create multi-caret selection of column text with or without
-      header and separator. Offer popup menu like database tools does for queries.
-* [ ] Add: move table columns action which allows:
-  * moving to column using left/right keys, shows full column selection
-  * selecting columns using shift+left/shift+right showing the full table columns selected,
-  * moving selected columns left/right using alt+left/alt+right and updating the table after the
-    move, with or without re-formatting.
-
-#### Settings/Configuration  
-
-* [ ] Add: Annotation settings panel
-  * [ ] Fix: [#712, Target file is not on github annotation]
-* [ ] Add: Notifications configuration or move all "was shown" settings to their own groups to
-      allow user to set/clear those flags.
-* [ ] Add: Setup Plugin Update chanel action to open settings config: Main
-* [ ] Add: link on notifications to EAP Update chanel to open settings config Main
-* [ ] Add: toolbar action to go to current file's profile page (project or if has scoped profile
-      then specific profile).
-* [ ] Add: list of non-validating links to highlight with different color than validated and add
-      intention to unresolved to add them to project/global validated link database.
-  * [ ] Add: project and global validated link dictionary, allow regex same as link map.
-    * [ ] Add: `example.com` domain by default.
-
-#### Other Issues
-
-* [ ] Fix: diagnostic reports doubled by having reports sent to main server and fallback server
-      in almost all cases.
-* [x] Fix: [#707, does check all link when render ?]
-  * [ ] Add: per file cache mapping link to resolved URL so that preview will only lookup the
-        URL and get resolved absolute link instead of doing a full search.
-  * [x] Fix: resolve HTML links in preview only upon clicking to eliminate rendering delays
-    * [ ] Add: HTML Generation option to enable link color rendering and associated link
-          resolution. Turn it off by default.
-  * Image links still need to be resolved for preview otherwise images are not displayed.
-
-#### Documentation 
-
-* [ ] Add: What's new documentation per version summary of features and fixes
-* Add: Document the fact that auto-links extension is not usable for very large documents and
-  introduces large typing delays.
 
 ### 2.8.2 - Bug Fix & Enhancement Release
 
@@ -1071,25 +888,24 @@
 * Add: HTML comment folding and options
 * Fix: diagnostic, parent already disposed
 
-[#653, Preview is not in sync with editor and keeps moving to beginning]: https://github.com/vsch/idea-multimarkdown/issues/653
 [#690, Link title should not be selected when pressing space]: https://github.com/vsch/idea-multimarkdown/issues/690
 [#695, Click on structure view does not update preview]: https://github.com/vsch/idea-multimarkdown/issues/695
 [#697, Autoscroll from source does not work in simplified structure view]: https://github.com/vsch/idea-multimarkdown/issues/697
 [#702, Setext header marker equalization on ENTER broken]: https://github.com/vsch/idea-multimarkdown/issues/702
 [#704, NoClassDefFoundError on 2019.1 EAP with JBRE]: https://github.com/vsch/idea-multimarkdown/issues/704
-[#705, Show navigable headings as file members inside project view]: https://github.com/vsch/idea-multimarkdown/issues/705
-[#707, does check all link when render ?]: https://github.com/vsch/idea-multimarkdown/issues/707
 [#708, Empty element in simplified structure view when using just url as header text]: https://github.com/vsch/idea-multimarkdown/issues/708
 [#709, New Icon looks bad on dark background]: https://github.com/vsch/idea-multimarkdown/issues/709
 [#710, Memory leak in HTML preview window]: https://github.com/vsch/idea-multimarkdown/issues/710
 [#711, Editor -> Toggle Editor Layout setting is not saved.]: https://github.com/vsch/idea-multimarkdown/issues/711
-[#712, Target file is not on github annotation]: https://github.com/vsch/idea-multimarkdown/issues/712
 [#715, Completed task list items not rendered with checkmark]: https://github.com/vsch/idea-multimarkdown/issues/715
 [#719, Wrap links in <> Do Not Show does not hide the inspection]: https://github.com/vsch/idea-multimarkdown/issues/719
+[#720, Indentation in a numbered list 'flickers' when typing and deleting text]: https://github.com/vsch/idea-multimarkdown/issues/720
 [html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
+[#653, Preview is not in sync with editor and keeps moving to beginning]: https://github.com/vsch/idea-multimarkdown/issues/653
+[#705, Show navigable headings as file members inside project view]: https://github.com/vsch/idea-multimarkdown/issues/705
+[#707, does check all link when render ?]: https://github.com/vsch/idea-multimarkdown/issues/707
+[#712, Target file is not on github annotation]: https://github.com/vsch/idea-multimarkdown/issues/712
 [CommonMark Spec]: https://spec.commonmark.org/0.28/ "CommonMark Spec"
 [Copy Jira]: https://github.com/vsch/idea-multimarkdown/raw/master/resources/icons/editor_actions/Copy_jira.png
 [Html Modified]: ../icons/layout/Html_modified.png
-[#720, Indentation in a numbered list 'flickers' when typing and deleting text]: https://github.com/vsch/idea-multimarkdown/issues/720
-
 
