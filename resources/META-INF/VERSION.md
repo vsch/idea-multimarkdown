@@ -1,15 +1,23 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.2.44 - Bug Fix & Enhancement Release](#28244---bug-fix--enhancement-release)
+- [2.8.2.48 - Bug Fix & Enhancement Release](#28248---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.2.44 - Bug Fix & Enhancement Release
+### 2.8.2.48 - Bug Fix & Enhancement Release
 
+* Fix: disable wrapping when typing `<<<` at beginning of line to allow typing macro closing
+  marker.
+* Fix: Performing Cut/Paste on markdown code results in all contained elements becoming invalid.
+  * Implemented Psi independent format for reference information
+  * Add: abbreviation and enumerated references to copied elements if they are referenced but
+    not part of the copied text
+  * Add: copy markdown to clipboard to share link/reference information to allow Markdown
+    Navigator running in another IDE instance to make use of appended references and links
 * Fix: copying/pasting image links from wiki to main repo file messes up the link `../` count
   and creates a wrong link.
 * Fix: absolute http:// links from main repo files to wiki pages were not recognized as wiki

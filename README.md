@@ -9,7 +9,8 @@
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
     - [Future Release: Version 3.0.0](#future-release-version-300)
-    - [Version 2.8.0](#version-280)
+    - [Next: Version 2.8.4](#next-version-284)
+    - [Version 2.8.2](#version-282)
     - [Source Update is Long Overdue](#source-update-is-long-overdue)
 - [Background](#background)
 
@@ -85,7 +86,32 @@ Release Road Map
 * Link resolution support for non-GitHub VCS providers
 * Plus the usual bug fixes that come up between now and the release.
 
-### Version 2.8.0
+### Next: Version 2.8.4
+
+Bug and compatibility fixes you can find in [Version Notes].
+
+[Install EAP plugin](../../wiki/EAP-Update-Channel) version to preview next release.
+
+* **Java 11 JRE Support**
+* **Improved Preview and Typing** response
+* **Cut/Copy/Paste Improved** to handle Macros, Enumerated References and Link adjustments.
+* Copy/Paste **between IDE instances** with all references and links properly included and adjusted.
+* **Plain Text Completions** to insert references defined in file and in project scope. See:
+  [Plain Text Suggestion Scope](../../wiki/Rendering-Profiles-Settings)
+* **New Inspections** to match link to heading text, unicode LINE SEPARATOR in file,  
+* **New Intentions** to wrap auto-link looking text in `<>`
+* **New HTML Paste Options** convert links to: references, text, HTML or explicit links
+* **New Structure View Option** Show Headings & Tasks
+* **Format Document** option to remove unused reference element definitions.
+* **In-place Rename** of headings, references and other elements
+* **Dropped Links** insert options: `Link`, `Ref Link & Reference`, `Reference Only`
+* **Annotator Errors** to show underline for file in project tree
+* **Syntax Highlighter Attributes** for GitLab extension elements
+* **Inspection Option** to ignore markdown text in fenced code
+* Comment directive to **Ignore invalid link or anchor** for annotation
+* Create **PDF Export** profile, see [Configuring for Non-Latin Character Sets]
+
+### Version 2.8.2
 
 Bug and compatibility fixes you can find in [Version Notes].
 
@@ -225,7 +251,7 @@ Reserved.
 [Rendering Profiles Settings]: https://github.com/vsch/idea-multimarkdown/wiki/Rendering-Profiles-Settings#configuring-for-non-latin-character-sets
 [Screenshot_PasteImage_Highlight]: /assets/images/faq/ScreenShot_PasteImage_sm_h.png
 [sirthias]: https://github.com/sirthias
-[Version Notes]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/META-INF/VERSION.md
+[Version Notes]: https://github.com/vsch/idea-multimarkdown/blob/master/VERSION.md
 [.gitignore]: http://ignore.hsz.mobi/
 [Admonition Extension, Material for MkDocs]: https://squidfunk.github.io/mkdocs-material/extensions/admonition/
 [Android Studio]: https://developer.android.com/sdk/installing/studio.html
@@ -260,3 +286,5 @@ Reserved.
 [WebStorm]: http://www.jetbrains.com/webstorm
 [Wiki]: https://github.com/vsch/idea-multimarkdown/wiki
 
+
+[Configuring for Non-Latin Character Sets]: https://github.com/vsch/idea-multimarkdown/wiki/Rendering-Profiles-Settings#configuring-for-non-latin-character-sets
