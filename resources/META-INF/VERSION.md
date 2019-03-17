@@ -1,17 +1,20 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.2.48 - Bug Fix & Enhancement Release](#28248---bug-fix--enhancement-release)
+- [2.8.2.52 - Bug Fix & Enhancement Release](#28252---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.2.48 - Bug Fix & Enhancement Release
+### 2.8.2.52 - Bug Fix & Enhancement Release
 
+* Fix: markdown file move result of package move with no sub-directories and only markdown files
+  affected would not adjust links.
+* Fix: [#721, EAP: QuickFix for "Wrap Links" shows the message-key instead of description] 
 * Fix: disable wrapping when typing `<<<` at beginning of line to allow typing macro closing
-  marker.
+  marker. [Adding To Do Items](../../assets/doc/comms/forums/plugin-dev/Adding-To-Do-Items.md) 
 * Fix: Performing Cut/Paste on markdown code results in all contained elements becoming invalid.
   * Implemented Psi independent format for reference information
   * Add: abbreviation and enumerated references to copied elements if they are referenced but
@@ -55,7 +58,7 @@
 * Fix: [#720, Indentation in a numbered list 'flickers' when typing and deleting text], caused
   by BACKSPACE ignoring the list indentation type of "Fixed 4 spaces"
 * Fix: ENTER insert hard-break to not insert spaces if caret is at first column or preceded by
-  all spaces.
+  all spaces.  
 * Fix: HTML to Markdown on paste adding extra line breaks if `div` is used to wrap text for `li`
   tags.
 * Add: inspection for links whose link text does not match the heading text referenced by the
@@ -916,4 +919,6 @@
 [CommonMark Spec]: https://spec.commonmark.org/0.28/ "CommonMark Spec"
 [Copy Jira]: https://github.com/vsch/idea-multimarkdown/raw/master/resources/icons/editor_actions/Copy_jira.png
 [Html Modified]: ../icons/layout/Html_modified.png
+[#721, EAP: QuickFix for "Wrap Links" shows the message-key instead of description]: https://github.com/vsch/idea-multimarkdown/issues/721
+
 
