@@ -1,20 +1,23 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.2.52 - Bug Fix & Enhancement Release](#28252---bug-fix--enhancement-release)
+- [2.8.2.54 - Bug Fix & Enhancement Release](#28254---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.2.52 - Bug Fix & Enhancement Release
+### 2.8.2.54 - Bug Fix & Enhancement Release
 
+* [ ] Fix: remove underline from auto-link markers in custom scheme.
+* [ ] Fix: disable "wrap in `<>` inspection" for text in link text element.
+* Fix: [#726, unable to show ref anchor link explorer] 
 * Fix: markdown file move result of package move with no sub-directories and only markdown files
   affected would not adjust links.
 * Fix: [#721, EAP: QuickFix for "Wrap Links" shows the message-key instead of description] 
 * Fix: disable wrapping when typing `<<<` at beginning of line to allow typing macro closing
-  marker. [Adding To Do Items](../../assets/doc/comms/forums/plugin-dev/Adding-To-Do-Items.md) 
+  marker. [Adding To Do Items](../../assets/doc/comms/forums/plugin-dev/Adding-To-Do-Items.md#)
 * Fix: Performing Cut/Paste on markdown code results in all contained elements becoming invalid.
   * Implemented Psi independent format for reference information
   * Add: abbreviation and enumerated references to copied elements if they are referenced but
@@ -920,5 +923,7 @@
 [Copy Jira]: https://github.com/vsch/idea-multimarkdown/raw/master/resources/icons/editor_actions/Copy_jira.png
 [Html Modified]: ../icons/layout/Html_modified.png
 [#721, EAP: QuickFix for "Wrap Links" shows the message-key instead of description]: https://github.com/vsch/idea-multimarkdown/issues/721
+[#726, unable to show ref anchor link explorer]: https://github.com/vsch/idea-multimarkdown/issues/726
+
 
 
