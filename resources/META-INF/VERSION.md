@@ -1,17 +1,20 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.2.54 - Bug Fix & Enhancement Release](#28254---bug-fix--enhancement-release)
+- [2.8.2.56 - Bug Fix & Enhancement Release](#28256---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.2.54 - Bug Fix & Enhancement Release
+### 2.8.2.56 - Bug Fix & Enhancement Release
 
 * [ ] Fix: remove underline from auto-link markers in custom scheme.
 * [ ] Fix: disable "wrap in `<>` inspection" for text in link text element.
+* Fix: [#727, css files not created in export folder] 
+  * Fix: if css/js dir is blank or empty in settings then default to css/js sub-directory in
+    target dir
 * Fix: [#726, unable to show ref anchor link explorer] 
 * Fix: markdown file move result of package move with no sub-directories and only markdown files
   affected would not adjust links.
@@ -924,6 +927,8 @@
 [Html Modified]: ../icons/layout/Html_modified.png
 [#721, EAP: QuickFix for "Wrap Links" shows the message-key instead of description]: https://github.com/vsch/idea-multimarkdown/issues/721
 [#726, unable to show ref anchor link explorer]: https://github.com/vsch/idea-multimarkdown/issues/726
+[#727, css files not created in export folder]: https://github.com/vsch/idea-multimarkdown/issues/727
+
 
 
 
