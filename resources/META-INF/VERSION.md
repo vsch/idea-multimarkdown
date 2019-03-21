@@ -1,17 +1,18 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.2.56 - Bug Fix & Enhancement Release](#28256---bug-fix--enhancement-release)
+- [2.8.2.58 - Bug Fix & Enhancement Release](#28258---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.2.56 - Bug Fix & Enhancement Release
+### 2.8.2.58 - Bug Fix & Enhancement Release
 
 * [ ] Fix: remove underline from auto-link markers in custom scheme.
 * [ ] Fix: disable "wrap in `<>` inspection" for text in link text element.
+* Fix: [#728, Loading indicator in settings doesn't disappear after loading] 
 * Fix: [#727, css files not created in export folder] 
   * Fix: if css/js dir is blank or empty in settings then default to css/js sub-directory in
     target dir
@@ -928,6 +929,8 @@
 [#721, EAP: QuickFix for "Wrap Links" shows the message-key instead of description]: https://github.com/vsch/idea-multimarkdown/issues/721
 [#726, unable to show ref anchor link explorer]: https://github.com/vsch/idea-multimarkdown/issues/726
 [#727, css files not created in export folder]: https://github.com/vsch/idea-multimarkdown/issues/727
+[#728, Loading indicator in settings doesn't disappear after loading]: https://github.com/vsch/idea-multimarkdown/issues/728
+
 
 
 
