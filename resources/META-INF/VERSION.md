@@ -1,25 +1,27 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.2.58 - Bug Fix & Enhancement Release](#28258---bug-fix--enhancement-release)
+- [2.8.2.60 - Bug Fix & Enhancement Release](#28260---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.2.58 - Bug Fix & Enhancement Release
+### 2.8.2.60 - Bug Fix & Enhancement Release
 
-* [ ] Fix: remove underline from auto-link markers in custom scheme.
-* [ ] Fix: disable "wrap in `<>` inspection" for text in link text element.
-* Fix: [#728, Loading indicator in settings doesn't disappear after loading] 
-* Fix: [#727, css files not created in export folder] 
+* Fix: [#730, Can not configure toc anymore], NPE on get rendering profile with project = null.
+* Fix: [#729, Can't disable 'Add query suffix to URI which increments when file changes' option] 
+* Fix: disable paste post processing when multi-caret paste is used. Messes up pasted text.
+* Fix: remove underline from auto-link markers in custom scheme.
+* Fix: [#728, Loading indicator in settings doesn't disappear after loading]
+* Fix: [#727, css files not created in export folder]
   * Fix: if css/js dir is blank or empty in settings then default to css/js sub-directory in
     target dir
-* Fix: [#726, unable to show ref anchor link explorer] 
+* Fix: [#726, unable to show ref anchor link explorer]
 * Fix: markdown file move result of package move with no sub-directories and only markdown files
   affected would not adjust links.
-* Fix: [#721, EAP: QuickFix for "Wrap Links" shows the message-key instead of description] 
+* Fix: [#721, EAP: QuickFix for "Wrap Links" shows the message-key instead of description]
 * Fix: disable wrapping when typing `<<<` at beginning of line to allow typing macro closing
   marker. [Adding To Do Items](../../assets/doc/comms/forums/plugin-dev/Adding-To-Do-Items.md#)
 * Fix: Performing Cut/Paste on markdown code results in all contained elements becoming invalid.
@@ -65,7 +67,7 @@
 * Fix: [#720, Indentation in a numbered list 'flickers' when typing and deleting text], caused
   by BACKSPACE ignoring the list indentation type of "Fixed 4 spaces"
 * Fix: ENTER insert hard-break to not insert spaces if caret is at first column or preceded by
-  all spaces.  
+  all spaces.
 * Fix: HTML to Markdown on paste adding extra line breaks if `div` is used to wrap text for `li`
   tags.
 * Add: inspection for links whose link text does not match the heading text referenced by the
@@ -918,6 +920,10 @@
 [#715, Completed task list items not rendered with checkmark]: https://github.com/vsch/idea-multimarkdown/issues/715
 [#719, Wrap links in <> Do Not Show does not hide the inspection]: https://github.com/vsch/idea-multimarkdown/issues/719
 [#720, Indentation in a numbered list 'flickers' when typing and deleting text]: https://github.com/vsch/idea-multimarkdown/issues/720
+[#721, EAP: QuickFix for "Wrap Links" shows the message-key instead of description]: https://github.com/vsch/idea-multimarkdown/issues/721
+[#726, unable to show ref anchor link explorer]: https://github.com/vsch/idea-multimarkdown/issues/726
+[#727, css files not created in export folder]: https://github.com/vsch/idea-multimarkdown/issues/727
+[#728, Loading indicator in settings doesn't disappear after loading]: https://github.com/vsch/idea-multimarkdown/issues/728
 [html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
 [#653, Preview is not in sync with editor and keeps moving to beginning]: https://github.com/vsch/idea-multimarkdown/issues/653
 [#705, Show navigable headings as file members inside project view]: https://github.com/vsch/idea-multimarkdown/issues/705
@@ -926,12 +932,8 @@
 [CommonMark Spec]: https://spec.commonmark.org/0.28/ "CommonMark Spec"
 [Copy Jira]: https://github.com/vsch/idea-multimarkdown/raw/master/resources/icons/editor_actions/Copy_jira.png
 [Html Modified]: ../icons/layout/Html_modified.png
-[#721, EAP: QuickFix for "Wrap Links" shows the message-key instead of description]: https://github.com/vsch/idea-multimarkdown/issues/721
-[#726, unable to show ref anchor link explorer]: https://github.com/vsch/idea-multimarkdown/issues/726
-[#727, css files not created in export folder]: https://github.com/vsch/idea-multimarkdown/issues/727
-[#728, Loading indicator in settings doesn't disappear after loading]: https://github.com/vsch/idea-multimarkdown/issues/728
-
-
+[#729, Can't disable 'Add query suffix to URI which increments when file changes' option]: https://github.com/vsch/idea-multimarkdown/issues/729
+[#730, Can not configure toc anymore]: https://github.com/vsch/idea-multimarkdown/issues/730
 
 
 
