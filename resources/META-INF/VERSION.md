@@ -1,15 +1,25 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.2.60 - Bug Fix & Enhancement Release](#28260---bug-fix--enhancement-release)
+- [2.8.2.62 - Bug Fix & Enhancement Release](#28262---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.2.60 - Bug Fix & Enhancement Release
+### 2.8.2.62 - Bug Fix & Enhancement Release
 
+* Add: annotation to detect and correct the processor updated `[TOC]` element to proper
+  simulated toc syntax `[TOC]: #`, updated by plugin and not processor dependent.
+* Fix: [#706, URLs with a fragment identifier are treated as syntax errors], 
+  * GitHub line selection anchors use permissive GitHub format to enable quick fix corrections.
+* Add: Annotation settings panel
+  * Fix: [#712, Target file is not on github annotation]
+  * Links
+  * Link Anchors
+  * Table of Contents 
+  * Enumerated References
 * Fix: [#730, Can not configure toc anymore], NPE on get rendering profile with project = null.
 * Fix: [#729, Can't disable 'Add query suffix to URI which increments when file changes' option] 
 * Fix: disable paste post processing when multi-caret paste is used. Messes up pasted text.
@@ -24,7 +34,7 @@
 * Fix: [#721, EAP: QuickFix for "Wrap Links" shows the message-key instead of description]
 * Fix: disable wrapping when typing `<<<` at beginning of line to allow typing macro closing
   marker. [Adding To Do Items](../../assets/doc/comms/forums/plugin-dev/Adding-To-Do-Items.md#)
-* Fix: Performing Cut/Paste on markdown code results in all contained elements becoming invalid.
+* Fix: Cut/Paste on markdown text results in all contained elements becoming invalid.
   * Implemented Psi independent format for reference information
   * Add: abbreviation and enumerated references to copied elements if they are referenced but
     not part of the copied text
@@ -934,6 +944,8 @@
 [Html Modified]: ../icons/layout/Html_modified.png
 [#729, Can't disable 'Add query suffix to URI which increments when file changes' option]: https://github.com/vsch/idea-multimarkdown/issues/729
 [#730, Can not configure toc anymore]: https://github.com/vsch/idea-multimarkdown/issues/730
+[#706, URLs with a fragment identifier are treated as syntax errors]: https://github.com/vsch/idea-multimarkdown/issues/706
+
 
 
 
