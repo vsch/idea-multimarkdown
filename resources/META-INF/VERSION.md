@@ -1,15 +1,16 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.2.62 - Bug Fix & Enhancement Release](#28262---bug-fix--enhancement-release)
+- [2.8.2.64 - Bug Fix & Enhancement Release](#28264---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.2.62 - Bug Fix & Enhancement Release
+### 2.8.2.64 - Bug Fix & Enhancement Release
 
+* Add: [#705, Show navigable headings as file members inside project view]
 * Add: annotation to detect and correct the processor updated `[TOC]` element to proper
   simulated toc syntax `[TOC]: #`, updated by plugin and not processor dependent.
 * Fix: [#706, URLs with a fragment identifier are treated as syntax errors], 
