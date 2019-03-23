@@ -1,28 +1,30 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.2.64 - Bug Fix & Enhancement Release](#28264---bug-fix--enhancement-release)
+- [2.8.2.66 - Bug Fix & Enhancement Release](#28266---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.2.64 - Bug Fix & Enhancement Release
+### 2.8.2.66 - Bug Fix & Enhancement Release
 
+* Add: to Stylesheet `Apply CSS from URI` browse button, validation and error message when
+  invalid URI is given.
 * Add: [#705, Show navigable headings as file members inside project view]
 * Add: annotation to detect and correct the processor updated `[TOC]` element to proper
   simulated toc syntax `[TOC]: #`, updated by plugin and not processor dependent.
-* Fix: [#706, URLs with a fragment identifier are treated as syntax errors], 
+* Fix: [#706, URLs with a fragment identifier are treated as syntax errors],
   * GitHub line selection anchors use permissive GitHub format to enable quick fix corrections.
 * Add: Annotation settings panel
   * Fix: [#712, Target file is not on github annotation]
   * Links
   * Link Anchors
-  * Table of Contents 
+  * Table of Contents
   * Enumerated References
 * Fix: [#730, Can not configure toc anymore], NPE on get rendering profile with project = null.
-* Fix: [#729, Can't disable 'Add query suffix to URI which increments when file changes' option] 
+* Fix: [#729, Can't disable 'Add query suffix to URI which increments when file changes' option]
 * Fix: disable paste post processing when multi-caret paste is used. Messes up pasted text.
 * Fix: remove underline from auto-link markers in custom scheme.
 * Fix: [#728, Loading indicator in settings doesn't disappear after loading]
@@ -34,7 +36,7 @@
   affected would not adjust links.
 * Fix: [#721, EAP: QuickFix for "Wrap Links" shows the message-key instead of description]
 * Fix: disable wrapping when typing `<<<` at beginning of line to allow typing macro closing
-  marker. [Adding To Do Items](../../assets/doc/comms/forums/plugin-dev/Adding-To-Do-Items.md#)
+  marker.
 * Fix: Cut/Paste on markdown text results in all contained elements becoming invalid.
   * Implemented Psi independent format for reference information
   * Add: abbreviation and enumerated references to copied elements if they are referenced but
@@ -924,10 +926,13 @@
 [#697, Autoscroll from source does not work in simplified structure view]: https://github.com/vsch/idea-multimarkdown/issues/697
 [#702, Setext header marker equalization on ENTER broken]: https://github.com/vsch/idea-multimarkdown/issues/702
 [#704, NoClassDefFoundError on 2019.1 EAP with JBRE]: https://github.com/vsch/idea-multimarkdown/issues/704
+[#705, Show navigable headings as file members inside project view]: https://github.com/vsch/idea-multimarkdown/issues/705
+[#706, URLs with a fragment identifier are treated as syntax errors]: https://github.com/vsch/idea-multimarkdown/issues/706
 [#708, Empty element in simplified structure view when using just url as header text]: https://github.com/vsch/idea-multimarkdown/issues/708
 [#709, New Icon looks bad on dark background]: https://github.com/vsch/idea-multimarkdown/issues/709
 [#710, Memory leak in HTML preview window]: https://github.com/vsch/idea-multimarkdown/issues/710
 [#711, Editor -> Toggle Editor Layout setting is not saved.]: https://github.com/vsch/idea-multimarkdown/issues/711
+[#712, Target file is not on github annotation]: https://github.com/vsch/idea-multimarkdown/issues/712
 [#715, Completed task list items not rendered with checkmark]: https://github.com/vsch/idea-multimarkdown/issues/715
 [#719, Wrap links in <> Do Not Show does not hide the inspection]: https://github.com/vsch/idea-multimarkdown/issues/719
 [#720, Indentation in a numbered list 'flickers' when typing and deleting text]: https://github.com/vsch/idea-multimarkdown/issues/720
@@ -935,18 +940,7 @@
 [#726, unable to show ref anchor link explorer]: https://github.com/vsch/idea-multimarkdown/issues/726
 [#727, css files not created in export folder]: https://github.com/vsch/idea-multimarkdown/issues/727
 [#728, Loading indicator in settings doesn't disappear after loading]: https://github.com/vsch/idea-multimarkdown/issues/728
-[html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
-[#653, Preview is not in sync with editor and keeps moving to beginning]: https://github.com/vsch/idea-multimarkdown/issues/653
-[#705, Show navigable headings as file members inside project view]: https://github.com/vsch/idea-multimarkdown/issues/705
-[#707, does check all link when render ?]: https://github.com/vsch/idea-multimarkdown/issues/707
-[#712, Target file is not on github annotation]: https://github.com/vsch/idea-multimarkdown/issues/712
-[CommonMark Spec]: https://spec.commonmark.org/0.28/ "CommonMark Spec"
-[Copy Jira]: https://github.com/vsch/idea-multimarkdown/raw/master/resources/icons/editor_actions/Copy_jira.png
-[Html Modified]: ../icons/layout/Html_modified.png
 [#729, Can't disable 'Add query suffix to URI which increments when file changes' option]: https://github.com/vsch/idea-multimarkdown/issues/729
 [#730, Can not configure toc anymore]: https://github.com/vsch/idea-multimarkdown/issues/730
-[#706, URLs with a fragment identifier are treated as syntax errors]: https://github.com/vsch/idea-multimarkdown/issues/706
-
-
-
+[html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
 
