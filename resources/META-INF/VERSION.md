@@ -1,14 +1,14 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.2.68 - Bug Fix & Enhancement Release](#28268---bug-fix--enhancement-release)
+- [2.8.2.70 - Bug Fix & Enhancement Release](#28270---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.2.68 - Bug Fix & Enhancement Release
+### 2.8.2.70 - Bug Fix & Enhancement Release
 
 * Add: to Stylesheet `Apply CSS from URI` browse button, validation and error message when
   invalid URI is given.
