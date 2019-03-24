@@ -1,15 +1,22 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.2.72 - Bug Fix & Enhancement Release](#28272---bug-fix--enhancement-release)
+- [2.8.2.74 - Bug Fix & Enhancement Release](#28274---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.2.72 - Bug Fix & Enhancement Release
+### 2.8.2.74 - Bug Fix & Enhancement Release
 
+* Fix: [#713, Autocomplete links as "repository relative" by default]
+  * Add: Languages & Frameworks > Markdown > Editor option `Default link completion format`,
+    sets the starting format for link completions. Use multiple invocation to cycle to other
+    formats.
+* Fix: resolve link on click for optimized rendering which does not resolve links for preview
+  HTML until they are clicked.
+* Add: editor hint when document formatting is disabled with soft wraps on.
 * Add: to Stylesheet `Apply CSS from URI` browse button, validation and error message when
   invalid URI is given.
 * Add: [#705, Show navigable headings as file members inside project view]
@@ -943,4 +950,6 @@
 [#729, Can't disable 'Add query suffix to URI which increments when file changes' option]: https://github.com/vsch/idea-multimarkdown/issues/729
 [#730, Can not configure toc anymore]: https://github.com/vsch/idea-multimarkdown/issues/730
 [html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
+[#713, Autocomplete links as "repository relative" by default]: https://github.com/vsch/idea-multimarkdown/issues/713
+
 
