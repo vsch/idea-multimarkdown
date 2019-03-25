@@ -1,15 +1,19 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.2.74 - Bug Fix & Enhancement Release](#28274---bug-fix--enhancement-release)
+- [2.8.2.76 - Bug Fix & Enhancement Release](#28276---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.2.74 - Bug Fix & Enhancement Release
+### 2.8.2.76 - Bug Fix & Enhancement Release
 
+* Add: annotator config for reference elements
+* Fix: move inspections for reference elements back to annotator to allow file in project view
+  to show errors
+* Fix: [#731, apache pdfbox vulnerability], update to flexmark-java 0.40.26 
 * Fix: [#713, Autocomplete links as "repository relative" by default]
   * Add: Languages & Frameworks > Markdown > Editor option `Default link completion format`,
     sets the starting format for link completions. Use multiple invocation to cycle to other
@@ -951,5 +955,5 @@
 [#730, Can not configure toc anymore]: https://github.com/vsch/idea-multimarkdown/issues/730
 [html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
 [#713, Autocomplete links as "repository relative" by default]: https://github.com/vsch/idea-multimarkdown/issues/713
-
+[#731, apache pdfbox vulnerability]: https://github.com/vsch/idea-multimarkdown/issues/731
 
