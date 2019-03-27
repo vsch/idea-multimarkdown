@@ -1,19 +1,25 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.2.76 - Bug Fix & Enhancement Release](#28276---bug-fix--enhancement-release)
+- [2.8.2.80 - Bug Fix & Enhancement Release](#28280---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.2.76 - Bug Fix & Enhancement Release
+### 2.8.2.80 - Bug Fix & Enhancement Release
 
+* Fix: pasting markdown with link information would not move caret to end of pasted text
+* Add: compound enumerated references for implementing legal numbering
+* Add: enumerated reference text without element id in headings to use for heading numbering 
+* Fix: typing enumerated reference or reference definition deletes the prefix.
+* Add: Inspection for list items which are indented to other list items but not enough to be a
+  sub-item.
 * Add: annotator config for reference elements
 * Fix: move inspections for reference elements back to annotator to allow file in project view
   to show errors
-* Fix: [#731, apache pdfbox vulnerability], update to flexmark-java 0.40.26 
+* Fix: [#731, apache pdfbox vulnerability], update to flexmark-java 0.40.26
 * Fix: [#713, Autocomplete links as "repository relative" by default]
   * Add: Languages & Frameworks > Markdown > Editor option `Default link completion format`,
     sets the starting format for link completions. Use multiple invocation to cycle to other
@@ -944,6 +950,7 @@
 [#710, Memory leak in HTML preview window]: https://github.com/vsch/idea-multimarkdown/issues/710
 [#711, Editor -> Toggle Editor Layout setting is not saved.]: https://github.com/vsch/idea-multimarkdown/issues/711
 [#712, Target file is not on github annotation]: https://github.com/vsch/idea-multimarkdown/issues/712
+[#713, Autocomplete links as "repository relative" by default]: https://github.com/vsch/idea-multimarkdown/issues/713
 [#715, Completed task list items not rendered with checkmark]: https://github.com/vsch/idea-multimarkdown/issues/715
 [#719, Wrap links in <> Do Not Show does not hide the inspection]: https://github.com/vsch/idea-multimarkdown/issues/719
 [#720, Indentation in a numbered list 'flickers' when typing and deleting text]: https://github.com/vsch/idea-multimarkdown/issues/720
@@ -953,7 +960,6 @@
 [#728, Loading indicator in settings doesn't disappear after loading]: https://github.com/vsch/idea-multimarkdown/issues/728
 [#729, Can't disable 'Add query suffix to URI which increments when file changes' option]: https://github.com/vsch/idea-multimarkdown/issues/729
 [#730, Can not configure toc anymore]: https://github.com/vsch/idea-multimarkdown/issues/730
-[html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
-[#713, Autocomplete links as "repository relative" by default]: https://github.com/vsch/idea-multimarkdown/issues/713
 [#731, apache pdfbox vulnerability]: https://github.com/vsch/idea-multimarkdown/issues/731
+[html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
 
