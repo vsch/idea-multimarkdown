@@ -120,10 +120,6 @@ Bug and compatibility fixes you can find in [Version Notes].
 
 ### Version 2.8.2
 
-Bug and compatibility fixes you can find in [Version Notes].
-
-[Install EAP plugin](../../wiki/EAP-Update-Channel) version to preview next release.
-
 * Enhanced edition features migrated to basic edition:
   * **Extensions**: Jekyll Front Matter
   * **Inspections**: GitHub Table, Jekyll Front Matter, Emoji Shortcut
