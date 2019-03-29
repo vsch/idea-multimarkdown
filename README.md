@@ -95,21 +95,28 @@ Bug and compatibility fixes you can find in [Version Notes].
 * **Java 11 JRE Support**
 * **Improved Preview and Typing** response
 * **Cut/Copy/Paste Improved** to handle Macros, Enumerated References and Link adjustments.
-* Copy/Paste **between IDE instances** with all references and links properly included and adjusted.
+* Copy/Paste **between IDE instances** with all references and links properly included and
+  adjusted.
 * **Plain Text Completions** to insert references defined in file and in project scope. See:
-  [Plain Text Suggestion Scope](../../wiki/Rendering-Profiles-Settings)
-* **New Inspections** to match link to heading text, unicode LINE SEPARATOR in file,  
+  [Plain Text Suggestion Scope]
+* **Inspection Option** to ignore markdown text in fenced code
+* **New Inspections**
+  * mismatch of link to heading text for anchor refs to headings
+  * unicode LINE SEPARATOR in file
+  * when a list item needs more indentation to be a sub-item
+* **Annotator Settings** to customize enabled annotations
+* **Annotator Errors** to show underline for file in project tree
 * **New Intentions** to wrap auto-link looking text in `<>`
 * **New HTML Paste Options** convert links to: references, text, HTML or explicit links
 * **New Structure View Option** Show Headings & Tasks
+* **Show Members** in project view to show headings
 * **Format Document** option to remove unused reference element definitions.
 * **In-place Rename** of headings, references and other elements
 * **Dropped Links** insert options: `Link`, `Ref Link & Reference`, `Reference Only`
-* **Annotator Errors** to show underline for file in project tree
 * **Syntax Highlighter Attributes** for GitLab extension elements
-* **Inspection Option** to ignore markdown text in fenced code
 * Comment directive to **Ignore invalid link or anchor** for annotation
 * Create **PDF Export** profile, see [Configuring for Non-Latin Character Sets]
+* Default **Completion format** setting to change starting link address format.
 
 ### Version 2.8.2
 
@@ -288,3 +295,5 @@ Reserved.
 
 
 [Configuring for Non-Latin Character Sets]: https://github.com/vsch/idea-multimarkdown/wiki/Rendering-Profiles-Settings#configuring-for-non-latin-character-sets
+
+[Plain Text Suggestion Scope]: https://github.com/vsch/idea-multimarkdown/wiki/Rendering-Profiles-Settings#plain-text-suggestion-scope

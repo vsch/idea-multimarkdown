@@ -1,15 +1,16 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.2.80 - Bug Fix & Enhancement Release](#28280---bug-fix--enhancement-release)
+- [2.8.2.84 - Bug Fix & Enhancement Release](#28284---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.2.80 - Bug Fix & Enhancement Release
+### 2.8.2.84 - Bug Fix & Enhancement Release
 
+* Fix: single spaced list item remove on ENTER deletes the line not just list item prefix
 * Fix: pasting markdown with link information would not move caret to end of pasted text
 * Add: compound enumerated references for implementing legal numbering
 * Add: enumerated reference text without element id in headings to use for heading numbering 
