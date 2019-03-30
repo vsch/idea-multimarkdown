@@ -9,7 +9,7 @@
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
     - [Future Release: Version 3.0.0](#future-release-version-300)
-    - [Next: Version 2.8.4](#next-version-284)
+    - [Version 2.8.4](#version-284)
     - [Version 2.8.2](#version-282)
     - [Source Update is Long Overdue](#source-update-is-long-overdue)
 - [Background](#background)
@@ -86,7 +86,7 @@ Release Road Map
 * Link resolution support for non-GitHub VCS providers
 * Plus the usual bug fixes that come up between now and the release.
 
-### Next: Version 2.8.4
+### Version 2.8.4
 
 Bug and compatibility fixes you can find in [Version Notes].
 
@@ -274,7 +274,7 @@ Reserved.
 [IntelliJ IDEA]: http://www.jetbrains.com/idea
 [Jekyll]: https://jekyllrb.com
 [JetBrains plugin comment and rate page]: https://plugins.jetbrains.com/plugin/7896-markdown-navigator
-[Kotlin]: http://kotlinlang.org
+[Kotlin]: https://kotlinlang.org
 [Kramdown]: https://kramdown.gettalong.org/
 [Modifying Link Processing]: https://github.com/vsch/idea-multimarkdown/wiki/Link-Map-Settings
 [MultiMarkdown]: https://fletcherpenney.net/multimarkdown

@@ -1,14 +1,14 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.2.88 - Bug Fix & Enhancement Release](#28288---bug-fix--enhancement-release)
+- [2.8.4 - Bug Fix & Enhancement Release](#284---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.2.88 - Bug Fix & Enhancement Release
+### 2.8.4 - Bug Fix & Enhancement Release
 
 * Fix: indent/unindent ordered list items with FIXED 4 list indentation parser setting
 * Fix: single spaced list item remove on ENTER deletes the line not just list item prefix
