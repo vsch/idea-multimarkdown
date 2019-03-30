@@ -1,15 +1,16 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.2.84 - Bug Fix & Enhancement Release](#28284---bug-fix--enhancement-release)
+- [2.8.2.88 - Bug Fix & Enhancement Release](#28288---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.2.84 - Bug Fix & Enhancement Release
+### 2.8.2.88 - Bug Fix & Enhancement Release
 
+* Fix: indent/unindent ordered list items with FIXED 4 list indentation parser setting
 * Fix: single spaced list item remove on ENTER deletes the line not just list item prefix
 * Fix: pasting markdown with link information would not move caret to end of pasted text
 * Add: compound enumerated references for implementing legal numbering
@@ -51,6 +52,7 @@
     target dir
 * Fix: [#726, unable to show ref anchor link explorer]
 * Fix: markdown file move result of package move with no sub-directories and only markdown files
+  affected would not adjust links.
   affected would not adjust links.
 * Fix: [#721, EAP: QuickFix for "Wrap Links" shows the message-key instead of description]
 * Fix: disable wrapping when typing `<<<` at beginning of line to allow typing macro closing
