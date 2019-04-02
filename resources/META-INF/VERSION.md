@@ -1,12 +1,27 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
+- [2.8.4.4 - Bug Fix & Enhancement Release](#2844---bug-fix--enhancement-release)
 - [2.8.4 - Bug Fix & Enhancement Release](#284---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
+
+### 2.8.4.4 - Bug Fix & Enhancement Release
+
+* Fix: [#733, PlantUML include path] 
+* Fix: Upgrade to `plantuml.asl.1.2019.4` 
+* Add: `resources/search/searchableOptions.xml` for full text search across all
+  configuration settings.
+* Fix: 2017.3 loads .svg icons if available even when .png icon is requested, while its .svg
+  loader results in grey scale icons resulting in mostly black icons.
+  * Fix: put svg and png icons into separate directories to prevent png load request loading svg
+    files.
+* Fix: diagnostic/2846
+* Fix: diagnostic/2846
+* Fix: diagnostic/2858
 
 ### 2.8.4 - Bug Fix & Enhancement Release
 
@@ -965,4 +980,8 @@
 [#730, Can not configure toc anymore]: https://github.com/vsch/idea-multimarkdown/issues/730
 [#731, apache pdfbox vulnerability]: https://github.com/vsch/idea-multimarkdown/issues/731
 [html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
+[#732, ditaa support]: https://github.com/vsch/idea-multimarkdown/issues/732
+[#733, PlantUML include path]: https://github.com/vsch/idea-multimarkdown/issues/733
+
+
 
