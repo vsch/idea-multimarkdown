@@ -1,7 +1,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.4.4 - Bug Fix & Enhancement Release](#2844---bug-fix--enhancement-release)
+- [2.8.4.6 - Bug Fix & Enhancement Release](#2846---bug-fix--enhancement-release)
 - [2.8.4 - Bug Fix & Enhancement Release](#284---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
@@ -9,8 +9,16 @@
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.4.4 - Bug Fix & Enhancement Release
+### 2.8.4.6 - Bug Fix & Enhancement Release
 
+* Fix: add `!include` parsing for plantUML diagrams and invalidate generated image if include
+  file content changes
+* Fix: diagnostic/2896, NPE Json write of editor state
+* Fix: diagnostic/2423, parser exception
+* Fix: diagnostic/2612, SubSequence assertion error. Use Document `immutableCharSequence`
+  instead of `charSequence` which can change between parse tree generation and rendering.
+* Fix: diagnostic/2773
+* Fix: diagnostic/2889
 * Fix: [#733, PlantUML include path] 
 * Fix: Upgrade to `plantuml.asl.1.2019.4` 
 * Add: `resources/search/searchableOptions.xml` for full text search across all
