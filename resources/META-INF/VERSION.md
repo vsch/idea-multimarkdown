@@ -1,7 +1,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.4.6 - Bug Fix & Enhancement Release](#2846---bug-fix--enhancement-release)
+- [2.8.4.10 - Bug Fix & Enhancement Release](#28410---bug-fix--enhancement-release)
 - [2.8.4 - Bug Fix & Enhancement Release](#284---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
@@ -9,16 +9,24 @@
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.4.6 - Bug Fix & Enhancement Release
+### 2.8.4.10 - Bug Fix & Enhancement Release
 
+* Add: Diagnostic report tracking.
+* Fix: possible fix for diagnostic/2876, NoClassDefFoundError: Could not initialize class
+  icons.MdIcons
+* Fix: diagnostic/2374, Assertion: TableContext.getTable(TableContext.kt)
+* Fix: diagnostic/2879, ClassCastException: PsiPlainTextFileImpl cannot be cast to PsiDirectory
+* Fix: possible fix for diagnostic/2830, KNPE MdPlugin$Companion.getProjectComponent
+* Fix: possible fix for diagnostic/2883, java.lang.IllegalStateException: cannot open system
+  clipboard
 * Fix: add `!include` parsing for plantUML diagrams and invalidate generated image if include
   file content changes
 * Fix: diagnostic/2896, NPE Json write of editor state
-* Fix: diagnostic/2423, parser exception
+* Fix: diagnostic/2423, parser exception, `AutolinkNodePostProcessor`
 * Fix: diagnostic/2612, SubSequence assertion error. Use Document `immutableCharSequence`
   instead of `charSequence` which can change between parse tree generation and rendering.
-* Fix: diagnostic/2773
-* Fix: diagnostic/2889
+* Fix: diagnostic/2773, Wrong line separators
+* Fix: diagnostic/2889, NPE `TableParagraphPreProcessor.cleanUpInlinedSeparators`
 * Fix: [#733, PlantUML include path] 
 * Fix: Upgrade to `plantuml.asl.1.2019.4` 
 * Add: `resources/search/searchableOptions.xml` for full text search across all
@@ -27,9 +35,8 @@
   loader results in grey scale icons resulting in mostly black icons.
   * Fix: put svg and png icons into separate directories to prevent png load request loading svg
     files.
-* Fix: diagnostic/2846
-* Fix: diagnostic/2846
-* Fix: diagnostic/2858
+* Fix: diagnostic/2846, Empty PSI elements
+* Fix: diagnostic/2858, Project Already Disposed: JavaFxHtmlPanel
 
 ### 2.8.4 - Bug Fix & Enhancement Release
 
@@ -41,7 +48,7 @@
 * Fix: typing enumerated reference or reference definition deletes the prefix.
 * Add: Inspection for list items which are indented to other list items but not enough to be a
   sub-item.
-* Add: annotator config for reference elements
+* Add: annotator config for reference elements                
 * Fix: move inspections for reference elements back to annotator to allow file in project view
   to show errors
 * Fix: [#731, apache pdfbox vulnerability], update to flexmark-java 0.40.26
@@ -62,7 +69,7 @@
 * Add: Annotation settings panel
   * Fix: [#712, Target file is not on github annotation]
   * Links
-  * Link Anchors
+  * Link Anchors                                       
   * Table of Contents
   * Enumerated References
 * Fix: [#730, Can not configure toc anymore], NPE on get rendering profile with project = null.
