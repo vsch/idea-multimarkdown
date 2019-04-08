@@ -1,7 +1,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.4.10 - Bug Fix & Enhancement Release](#28410---bug-fix--enhancement-release)
+- [2.8.4.12 - Bug Fix & Enhancement Release](#28412---bug-fix--enhancement-release)
 - [2.8.4 - Bug Fix & Enhancement Release](#284---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
@@ -9,8 +9,10 @@
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.4.10 - Bug Fix & Enhancement Release
+### 2.8.4.12 - Bug Fix & Enhancement Release
 
+* Add: Diagnostic report tracking description for identified reports.
+* Fix: diagnostic/2940, project is already disposed
 * Add: Diagnostic report tracking.
 * Fix: possible fix for diagnostic/2876, NoClassDefFoundError: Could not initialize class
   icons.MdIcons
@@ -27,10 +29,10 @@
   instead of `charSequence` which can change between parse tree generation and rendering.
 * Fix: diagnostic/2773, Wrong line separators
 * Fix: diagnostic/2889, NPE `TableParagraphPreProcessor.cleanUpInlinedSeparators`
-* Fix: [#733, PlantUML include path] 
-* Fix: Upgrade to `plantuml.asl.1.2019.4` 
-* Add: `resources/search/searchableOptions.xml` for full text search across all
-  configuration settings.
+* Fix: [#733, PlantUML include path]
+* Fix: Upgrade to `plantuml.asl.1.2019.4`
+* Add: `resources/search/searchableOptions.xml` for full text search across all configuration
+  settings.
 * Fix: 2017.3 loads .svg icons if available even when .png icon is requested, while its .svg
   loader results in grey scale icons resulting in mostly black icons.
   * Fix: put svg and png icons into separate directories to prevent png load request loading svg
@@ -44,11 +46,11 @@
 * Fix: single spaced list item remove on ENTER deletes the line not just list item prefix
 * Fix: pasting markdown with link information would not move caret to end of pasted text
 * Add: compound enumerated references for implementing legal numbering
-* Add: enumerated reference text without element id in headings to use for heading numbering 
+* Add: enumerated reference text without element id in headings to use for heading numbering
 * Fix: typing enumerated reference or reference definition deletes the prefix.
 * Add: Inspection for list items which are indented to other list items but not enough to be a
   sub-item.
-* Add: annotator config for reference elements                
+* Add: annotator config for reference elements
 * Fix: move inspections for reference elements back to annotator to allow file in project view
   to show errors
 * Fix: [#731, apache pdfbox vulnerability], update to flexmark-java 0.40.26
@@ -69,7 +71,7 @@
 * Add: Annotation settings panel
   * Fix: [#712, Target file is not on github annotation]
   * Links
-  * Link Anchors                                       
+  * Link Anchors
   * Table of Contents
   * Enumerated References
 * Fix: [#730, Can not configure toc anymore], NPE on get rendering profile with project = null.
@@ -82,7 +84,6 @@
     target dir
 * Fix: [#726, unable to show ref anchor link explorer]
 * Fix: markdown file move result of package move with no sub-directories and only markdown files
-  affected would not adjust links.
   affected would not adjust links.
 * Fix: [#721, EAP: QuickFix for "Wrap Links" shows the message-key instead of description]
 * Fix: disable wrapping when typing `<<<` at beginning of line to allow typing macro closing
@@ -994,9 +995,7 @@
 [#729, Can't disable 'Add query suffix to URI which increments when file changes' option]: https://github.com/vsch/idea-multimarkdown/issues/729
 [#730, Can not configure toc anymore]: https://github.com/vsch/idea-multimarkdown/issues/730
 [#731, apache pdfbox vulnerability]: https://github.com/vsch/idea-multimarkdown/issues/731
+[#733, PlantUML include path]: https://github.com/vsch/idea-multimarkdown/issues/733
 [html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
 [#732, ditaa support]: https://github.com/vsch/idea-multimarkdown/issues/732
-[#733, PlantUML include path]: https://github.com/vsch/idea-multimarkdown/issues/733
-
-
 
