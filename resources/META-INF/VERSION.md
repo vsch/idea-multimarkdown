@@ -1,7 +1,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.4.12 - Bug Fix & Enhancement Release](#28412---bug-fix--enhancement-release)
+- [2.8.4.14 - Bug Fix & Enhancement Release](#28414---bug-fix--enhancement-release)
 - [2.8.4 - Bug Fix & Enhancement Release](#284---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
@@ -9,8 +9,15 @@
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.4.12 - Bug Fix & Enhancement Release
+### 2.8.4.14 - Bug Fix & Enhancement Release
 
+* Fix: minimum build version changed to `173.2463` corresponding to 2017.3 
+* Fix: [#737, "Hard-break" Trailing Spaces Removed on Manual Save] 
+* Add: diagnostic/2952 to fixed list: Preview to use immutable document char sequence 
+* Fix: diagnostic/2951, Illegal group reference, ChangeTextToAutoLinkIntention.visitNode
+* Fix: diagnostic/2949, IllegalStateException: frame must not be null
+* Fix: diagnostic/2945, IndexOutOfBoundsException: `MdOnSaveFileUpdater$updateToc`
+* Fix: plantUML (puml language) parser settings change is not detected
 * Add: Diagnostic report tracking description for identified reports.
 * Fix: diagnostic/2940, project is already disposed
 * Add: Diagnostic report tracking.
@@ -998,4 +1005,6 @@
 [#733, PlantUML include path]: https://github.com/vsch/idea-multimarkdown/issues/733
 [html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
 [#732, ditaa support]: https://github.com/vsch/idea-multimarkdown/issues/732
+[#737, "Hard-break" Trailing Spaces Removed on Manual Save]: https://github.com/vsch/idea-multimarkdown/issues/737
+
 
