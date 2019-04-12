@@ -11,9 +11,10 @@
 
 ### 2.8.4.14 - Bug Fix & Enhancement Release
 
-* Fix: minimum build version changed to `173.2463` corresponding to 2017.3 
-* Fix: [#737, "Hard-break" Trailing Spaces Removed on Manual Save] 
-* Add: diagnostic/2952 to fixed list: Preview to use immutable document char sequence 
+* Fix: diagnostic/2976, Must not modify PSI inside save: Update TOC on Save
+* Fix: minimum build version changed to `173.2463` corresponding to 2017.3
+* Fix: [#737, "Hard-break" Trailing Spaces Removed on Manual Save]
+* Add: diagnostic/2952 to fixed list: Preview to use immutable document char sequence
 * Fix: diagnostic/2951, Illegal group reference, ChangeTextToAutoLinkIntention.visitNode
 * Fix: diagnostic/2949, IllegalStateException: frame must not be null
 * Fix: diagnostic/2945, IndexOutOfBoundsException: `MdOnSaveFileUpdater$updateToc`
@@ -1003,8 +1004,7 @@
 [#730, Can not configure toc anymore]: https://github.com/vsch/idea-multimarkdown/issues/730
 [#731, apache pdfbox vulnerability]: https://github.com/vsch/idea-multimarkdown/issues/731
 [#733, PlantUML include path]: https://github.com/vsch/idea-multimarkdown/issues/733
+[#737, "Hard-break" Trailing Spaces Removed on Manual Save]: https://github.com/vsch/idea-multimarkdown/issues/737
 [html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
 [#732, ditaa support]: https://github.com/vsch/idea-multimarkdown/issues/732
-[#737, "Hard-break" Trailing Spaces Removed on Manual Save]: https://github.com/vsch/idea-multimarkdown/issues/737
-
 
