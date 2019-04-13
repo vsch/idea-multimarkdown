@@ -1,7 +1,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.4.14 - Bug Fix & Enhancement Release](#28414---bug-fix--enhancement-release)
+- [2.8.4.16 - Bug Fix & Enhancement Release](#28416---bug-fix--enhancement-release)
 - [2.8.4 - Bug Fix & Enhancement Release](#284---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
@@ -9,8 +9,12 @@
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.4.14 - Bug Fix & Enhancement Release
+### 2.8.4.16 - Bug Fix & Enhancement Release
 
+* Add: filter out links consisting of only URI/URL prefixes from line markers
+* Fix: line marker provider to filter out plain auto-links not wrapped in `<>`
+* Add: on Windows OS use of `file://` URI prefix instead of `file:/` http://
+* Fix: diagnostic/2966, IllegalArgumentException: path must be canonical but got: '//..'
 * Fix: diagnostic/2976, Must not modify PSI inside save: Update TOC on Save
 * Fix: minimum build version changed to `173.2463` corresponding to 2017.3
 * Fix: [#737, "Hard-break" Trailing Spaces Removed on Manual Save]
@@ -1006,5 +1010,3 @@
 [#733, PlantUML include path]: https://github.com/vsch/idea-multimarkdown/issues/733
 [#737, "Hard-break" Trailing Spaces Removed on Manual Save]: https://github.com/vsch/idea-multimarkdown/issues/737
 [html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
-[#732, ditaa support]: https://github.com/vsch/idea-multimarkdown/issues/732
-
