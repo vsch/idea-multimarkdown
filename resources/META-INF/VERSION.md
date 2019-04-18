@@ -1,7 +1,11 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.4.16 - Bug Fix & Enhancement Release](#28416---bug-fix--enhancement-release)
+- [2.8.4.18 - EAP Release](#28418---eap-release)
+    - [2.8.4.16 - EAP Release](#28416---eap-release)
+    - [2.8.4.12 - EAP Release](#28412---eap-release)
+    - [2.8.4.10 - EAP Release](#28410---eap-release)
+    - [2.8.4.6 - EAP Release](#2846---eap-release)
 - [2.8.4 - Bug Fix & Enhancement Release](#284---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
@@ -9,11 +13,16 @@
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.4.16 - Bug Fix & Enhancement Release
+### 2.8.4.18 - EAP Release
+
+* Fix: regression [#727, css files not created in export folder]
+* Fix: for duplicate heading ids and id attributes, remove navigate to element at caret
+
+#### 2.8.4.16 - EAP Release
 
 * Add: filter out links consisting of only URI/URL prefixes from line markers
 * Fix: line marker provider to filter out plain auto-links not wrapped in `<>`
-* Add: on Windows OS use of `file://` URI prefix instead of `file:/` http://
+* Add: on Windows OS use of `file://` URI prefix instead of `file:/`
 * Fix: diagnostic/2966, IllegalArgumentException: path must be canonical but got: '//..'
 * Fix: diagnostic/2976, Must not modify PSI inside save: Update TOC on Save
 * Fix: minimum build version changed to `173.2463` corresponding to 2017.3
@@ -23,8 +32,14 @@
 * Fix: diagnostic/2949, IllegalStateException: frame must not be null
 * Fix: diagnostic/2945, IndexOutOfBoundsException: `MdOnSaveFileUpdater$updateToc`
 * Fix: plantUML (puml language) parser settings change is not detected
+
+#### 2.8.4.12 - EAP Release
+
 * Add: Diagnostic report tracking description for identified reports.
 * Fix: diagnostic/2940, project is already disposed
+
+#### 2.8.4.10 - EAP Release
+
 * Add: Diagnostic report tracking.
 * Fix: possible fix for diagnostic/2876, NoClassDefFoundError: Could not initialize class
   icons.MdIcons
@@ -33,6 +48,9 @@
 * Fix: possible fix for diagnostic/2830, KNPE MdPlugin$Companion.getProjectComponent
 * Fix: possible fix for diagnostic/2883, java.lang.IllegalStateException: cannot open system
   clipboard
+
+#### 2.8.4.6 - EAP Release
+
 * Fix: add `!include` parsing for plantUML diagrams and invalidate generated image if include
   file content changes
 * Fix: diagnostic/2896, NPE Json write of editor state
