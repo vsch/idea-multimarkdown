@@ -1,8 +1,10 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.4.18 - EAP Release](#28418---eap-release)
+- [2.8.4.20 - EAP Release](#28420---eap-release)
+    - [2.8.4.18 - EAP Release](#28418---eap-release)
     - [2.8.4.16 - EAP Release](#28416---eap-release)
+    - [2.8.4.14 - Bug Fix & Enhancement Release](#28414---bug-fix--enhancement-release)
     - [2.8.4.12 - EAP Release](#28412---eap-release)
     - [2.8.4.10 - EAP Release](#28410---eap-release)
     - [2.8.4.6 - EAP Release](#2846---eap-release)
@@ -13,7 +15,18 @@
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.4.18 - EAP Release
+### 2.8.4.20 - EAP Release
+
+* Fix: copy/modify image intention to work with base64 encoded images
+* Fix: diagnostic/3023, NoClassDefFoundError: sun/misc/BASE64Encoder
+* Fix: add block quote action toggled existing block quote marker instead of adding one.
+  * Fix: add/remove block quote actions for better control where block quote is added/removed
+    based on caret position.
+* Fix: add whitespace parsing to external annotator per lexer processing
+* Fix: leave individual text parts of a paragraph separate to allow block quote and aside block
+  white space prefixes to be syntax highlighted.
+
+#### 2.8.4.18 - EAP Release
 
 * Fix: regression [#727, css files not created in export folder]
 * Fix: for duplicate heading ids and id attributes, remove navigate to element at caret
@@ -28,6 +41,9 @@
 * Fix: minimum build version changed to `173.2463` corresponding to 2017.3
 * Fix: [#737, "Hard-break" Trailing Spaces Removed on Manual Save]
 * Add: diagnostic/2952 to fixed list: Preview to use immutable document char sequence
+
+#### 2.8.4.14 - Bug Fix & Enhancement Release
+
 * Fix: diagnostic/2951, Illegal group reference, ChangeTextToAutoLinkIntention.visitNode
 * Fix: diagnostic/2949, IllegalStateException: frame must not be null
 * Fix: diagnostic/2945, IndexOutOfBoundsException: `MdOnSaveFileUpdater$updateToc`
@@ -46,8 +62,7 @@
 * Fix: diagnostic/2374, Assertion: TableContext.getTable(TableContext.kt)
 * Fix: diagnostic/2879, ClassCastException: PsiPlainTextFileImpl cannot be cast to PsiDirectory
 * Fix: possible fix for diagnostic/2830, KNPE MdPlugin$Companion.getProjectComponent
-* Fix: possible fix for diagnostic/2883, java.lang.IllegalStateException: cannot open system
-  clipboard
+* Fix: possible fix for diagnostic/2883, IllegalStateException: cannot open system clipboard
 
 #### 2.8.4.6 - EAP Release
 
