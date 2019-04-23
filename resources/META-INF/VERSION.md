@@ -1,10 +1,11 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.4.20 - EAP Release](#28420---eap-release)
+- [2.8.4.22 - EAP Release](#28422---eap-release)
+    - [2.8.4.20 - EAP Release](#28420---eap-release)
     - [2.8.4.18 - EAP Release](#28418---eap-release)
     - [2.8.4.16 - EAP Release](#28416---eap-release)
-    - [2.8.4.14 - Bug Fix & Enhancement Release](#28414---bug-fix--enhancement-release)
+    - [2.8.4.14 - EAP Release](#28414---eap-release)
     - [2.8.4.12 - EAP Release](#28412---eap-release)
     - [2.8.4.10 - EAP Release](#28410---eap-release)
     - [2.8.4.6 - EAP Release](#2846---eap-release)
@@ -15,7 +16,14 @@
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.4.20 - EAP Release
+### 2.8.4.22 - EAP Release
+
+* Fix: diagnostic/3038, NPE: MdEditorKit MarkdownImageView.getImageURL
+* Fix: diagnostic/3037, assertion error
+* Fix: copy/modify image intention to work with base64 encoded images
+* Fix: update flexmark-java 0.50.0
+
+#### 2.8.4.20 - EAP Release
 
 * Fix: copy/modify image intention to work with base64 encoded images
 * Fix: diagnostic/3023, NoClassDefFoundError: sun/misc/BASE64Encoder
@@ -42,7 +50,7 @@
 * Fix: [#737, "Hard-break" Trailing Spaces Removed on Manual Save]
 * Add: diagnostic/2952 to fixed list: Preview to use immutable document char sequence
 
-#### 2.8.4.14 - Bug Fix & Enhancement Release
+#### 2.8.4.14 - EAP Release
 
 * Fix: diagnostic/2951, Illegal group reference, ChangeTextToAutoLinkIntention.visitNode
 * Fix: diagnostic/2949, IllegalStateException: frame must not be null
@@ -1043,3 +1051,4 @@
 [#733, PlantUML include path]: https://github.com/vsch/idea-multimarkdown/issues/733
 [#737, "Hard-break" Trailing Spaces Removed on Manual Save]: https://github.com/vsch/idea-multimarkdown/issues/737
 [html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
+
