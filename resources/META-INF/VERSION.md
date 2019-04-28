@@ -1,7 +1,8 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.4.22 - EAP Release](#28422---eap-release)
+- [2.8.4.24 - EAP Release](#28424---eap-release)
+    - [2.8.4.22 - EAP Release](#28422---eap-release)
     - [2.8.4.20 - EAP Release](#28420---eap-release)
     - [2.8.4.18 - EAP Release](#28418---eap-release)
     - [2.8.4.16 - EAP Release](#28416---eap-release)
@@ -16,7 +17,15 @@
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.4.22 - EAP Release
+### 2.8.4.24 - EAP Release
+
+* Fix: possible fix for [#743, auto-move in preview to match source code cursor position]
+* Fix: update flexmark-java 0.50.2
+* Fix: diagnostic/3062, NPE Json write
+  * Fix: `boxed-json` add deep `null` to `JsonValue.NULL` replacement for `MutableJsArray` and
+    `MutableJsObject` `toString()` calls to eliminate null pointer exceptions on `toString()`.
+
+#### 2.8.4.22 - EAP Release
 
 * Fix: diagnostic/3038, NPE: MdEditorKit MarkdownImageView.getImageURL
 * Fix: diagnostic/3037, assertion error
@@ -1051,4 +1060,6 @@
 [#733, PlantUML include path]: https://github.com/vsch/idea-multimarkdown/issues/733
 [#737, "Hard-break" Trailing Spaces Removed on Manual Save]: https://github.com/vsch/idea-multimarkdown/issues/737
 [html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
+[#743, auto-move in preview to match source code cursor position]: https://github.com/vsch/idea-multimarkdown/issues/743
+
 
