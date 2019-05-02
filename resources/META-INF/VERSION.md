@@ -1,7 +1,8 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.4.24 - EAP Release](#28424---eap-release)
+- [2.8.4.26 - EAP Release](#28426---eap-release)
+    - [2.8.4.24 - EAP Release](#28424---eap-release)
     - [2.8.4.22 - EAP Release](#28422---eap-release)
     - [2.8.4.20 - EAP Release](#28420---eap-release)
     - [2.8.4.18 - EAP Release](#28418---eap-release)
@@ -17,7 +18,16 @@
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.4.24 - EAP Release
+### 2.8.4.26 - EAP Release
+
+* Fix: [#745, Exception from AppUtils.isAppVersionGreaterThan when running on development build of IntelliJ IDEA]
+* Fix: diagnostic/3095, StringIndexOutOfBoundsException: EMPTY subSequence,
+  TableRow.fillMissingColumns
+* Fix: diagnostic/3079, Java 11 - Flexmark parser exception: Illegal repetition near index
+* Fix: remove trailing EOL from html to markdown converted text for new HTML parser code.
+* Add: code-stream sponsor banner
+
+#### 2.8.4.24 - EAP Release
 
 * Fix: possible fix for [#743, auto-move in preview to match source code cursor position]
 * Fix: update flexmark-java 0.50.2
@@ -1059,7 +1069,8 @@
 [#731, apache pdfbox vulnerability]: https://github.com/vsch/idea-multimarkdown/issues/731
 [#733, PlantUML include path]: https://github.com/vsch/idea-multimarkdown/issues/733
 [#737, "Hard-break" Trailing Spaces Removed on Manual Save]: https://github.com/vsch/idea-multimarkdown/issues/737
-[html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
 [#743, auto-move in preview to match source code cursor position]: https://github.com/vsch/idea-multimarkdown/issues/743
+[html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
+[#745, Exception from AppUtils.isAppVersionGreaterThan when running on development build of IntelliJ IDEA]: https://github.com/vsch/idea-multimarkdown/issues/745
 
 
