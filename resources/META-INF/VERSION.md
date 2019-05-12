@@ -1,7 +1,8 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.4.26 - EAP Release](#28426---eap-release)
+- [2.8.4.28 - EAP Release](#28428---eap-release)
+    - [2.8.4.26 - EAP Release](#28426---eap-release)
     - [2.8.4.24 - EAP Release](#28424---eap-release)
     - [2.8.4.22 - EAP Release](#28422---eap-release)
     - [2.8.4.20 - EAP Release](#28420---eap-release)
@@ -18,9 +19,21 @@
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.4.26 - EAP Release
+### 2.8.4.28 - EAP Release
 
-* Fix: [#745, Exception from AppUtils.isAppVersionGreaterThan when running on development build of IntelliJ IDEA]
+* Fix: html to markdown converter set default to wrapped auto-links
+* Fix: header up action disabled if text is inline element (bold, italic, etc.)
+* Fix: diagnostic/3147 Throwable: Invalid file: MdProjectComponent.reparseMarkdown
+* Fix: diagnostic/3144 caused by conversion of empty ATX to setext
+* Fix: [#747, Useless "Markdown Export On Settings Change" notifications]
+* Fix: [#746, Plugin creates files under .idea with default settings], removed
+  `markdown-navigator.xml` and `markdown-navigator/` if defaults are used.
+* Fix: diagnostic/3117, ClassCastException: cannot be cast to MdLinkElement
+
+#### 2.8.4.26 - EAP Release
+
+* Fix:
+  [#745, Exception from AppUtils.isAppVersionGreaterThan when running on development build of IntelliJ IDEA]
 * Fix: diagnostic/3095, StringIndexOutOfBoundsException: EMPTY subSequence,
   TableRow.fillMissingColumns
 * Fix: diagnostic/3079, Java 11 - Flexmark parser exception: Illegal repetition near index
@@ -1070,7 +1083,10 @@
 [#733, PlantUML include path]: https://github.com/vsch/idea-multimarkdown/issues/733
 [#737, "Hard-break" Trailing Spaces Removed on Manual Save]: https://github.com/vsch/idea-multimarkdown/issues/737
 [#743, auto-move in preview to match source code cursor position]: https://github.com/vsch/idea-multimarkdown/issues/743
-[html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
 [#745, Exception from AppUtils.isAppVersionGreaterThan when running on development build of IntelliJ IDEA]: https://github.com/vsch/idea-multimarkdown/issues/745
+[html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
+[#747, Useless "Markdown Export On Settings Change" notifications]: https://github.com/vsch/idea-multimarkdown/issues/747
+[#746, Plugin creates files under .idea with default settings]: https://github.com/vsch/idea-multimarkdown/issues/746
+
 
 
