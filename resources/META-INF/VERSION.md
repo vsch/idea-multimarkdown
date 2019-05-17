@@ -1,6 +1,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
+- [2.8.4.30 - EAP Release](#28430---eap-release)
 - [2.8.4.28 - EAP Release](#28428---eap-release)
     - [2.8.4.26 - EAP Release](#28426---eap-release)
     - [2.8.4.24 - EAP Release](#28424---eap-release)
@@ -18,6 +19,14 @@
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
+
+### 2.8.4.30 - EAP Release
+
+* Fix: [#741, Links], file without extension would sometimes not show up in completion or show
+  as unresolved.
+* Fix: diagnostic/3203, Throwable: Icon cannot be found in
+  '/icons/application-flexmark-extension.svg'
+* Add: missing svg application icons
 
 ### 2.8.4.28 - EAP Release
 
@@ -1084,9 +1093,9 @@
 [#737, "Hard-break" Trailing Spaces Removed on Manual Save]: https://github.com/vsch/idea-multimarkdown/issues/737
 [#743, auto-move in preview to match source code cursor position]: https://github.com/vsch/idea-multimarkdown/issues/743
 [#745, Exception from AppUtils.isAppVersionGreaterThan when running on development build of IntelliJ IDEA]: https://github.com/vsch/idea-multimarkdown/issues/745
-[html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
-[#747, Useless "Markdown Export On Settings Change" notifications]: https://github.com/vsch/idea-multimarkdown/issues/747
 [#746, Plugin creates files under .idea with default settings]: https://github.com/vsch/idea-multimarkdown/issues/746
-
+[#747, Useless "Markdown Export On Settings Change" notifications]: https://github.com/vsch/idea-multimarkdown/issues/747
+[html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
+[#741, Links]: https://github.com/vsch/idea-multimarkdown/issues/741
 
 
