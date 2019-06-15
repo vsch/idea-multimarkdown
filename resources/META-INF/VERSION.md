@@ -1,8 +1,9 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.4.30 - EAP Release](#28430---eap-release)
-- [2.8.4.28 - EAP Release](#28428---eap-release)
+- [2.8.4.32 - EAP Release](#28432---eap-release)
+    - [2.8.4.30 - EAP Release](#28430---eap-release)
+    - [2.8.4.28 - EAP Release](#28428---eap-release)
     - [2.8.4.26 - EAP Release](#28426---eap-release)
     - [2.8.4.24 - EAP Release](#28424---eap-release)
     - [2.8.4.22 - EAP Release](#28422---eap-release)
@@ -20,7 +21,17 @@
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.4.30 - EAP Release
+### 2.8.4.32 - EAP Release
+
+* Fix: [#757, Gitlab multi-line blockquote syntax incorrect]
+* Fix: diagnostic/3359, IllegalStateException: projectPlainTextFileTypeManager must not be null
+* Fix: compatibility with 2019.2 IDEs
+* Fix: update to flexmark-java 0.50.13
+* Fix: diagnostic/3251, NullPointerException: MdProjectComponent$exportAllHtmlRaw
+* Fix: link map settings to sort entries by group name when saving to fix order of entries
+* Fix: diagnostic/3224, NullPointerException: MdProjectComponent$exportAllHtmlRaw
+
+#### 2.8.4.30 - EAP Release
 
 * Fix: [#741, Links], file without extension would sometimes not show up in completion or show
   as unresolved.
@@ -28,7 +39,7 @@
   '/icons/application-flexmark-extension.svg'
 * Add: missing svg application icons
 
-### 2.8.4.28 - EAP Release
+#### 2.8.4.28 - EAP Release
 
 * Fix: html to markdown converter set default to wrapped auto-links
 * Fix: header up action disabled if text is inline element (bold, italic, etc.)
@@ -1091,11 +1102,12 @@
 [#731, apache pdfbox vulnerability]: https://github.com/vsch/idea-multimarkdown/issues/731
 [#733, PlantUML include path]: https://github.com/vsch/idea-multimarkdown/issues/733
 [#737, "Hard-break" Trailing Spaces Removed on Manual Save]: https://github.com/vsch/idea-multimarkdown/issues/737
+[#741, Links]: https://github.com/vsch/idea-multimarkdown/issues/741
 [#743, auto-move in preview to match source code cursor position]: https://github.com/vsch/idea-multimarkdown/issues/743
 [#745, Exception from AppUtils.isAppVersionGreaterThan when running on development build of IntelliJ IDEA]: https://github.com/vsch/idea-multimarkdown/issues/745
 [#746, Plugin creates files under .idea with default settings]: https://github.com/vsch/idea-multimarkdown/issues/746
 [#747, Useless "Markdown Export On Settings Change" notifications]: https://github.com/vsch/idea-multimarkdown/issues/747
 [html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
-[#741, Links]: https://github.com/vsch/idea-multimarkdown/issues/741
+[#757, Gitlab multi-line blockquote syntax incorrect]: https://github.com/vsch/idea-multimarkdown/issues/757
 
 
