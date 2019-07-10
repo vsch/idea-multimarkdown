@@ -1,7 +1,8 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.4.32 - EAP Release](#28432---eap-release)
+- [2.8.4.34 - EAP Release](#28434---eap-release)
+    - [2.8.4.32 - EAP Release](#28432---eap-release)
     - [2.8.4.30 - EAP Release](#28430---eap-release)
     - [2.8.4.28 - EAP Release](#28428---eap-release)
     - [2.8.4.26 - EAP Release](#28426---eap-release)
@@ -21,7 +22,17 @@
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.4.32 - EAP Release
+### 2.8.4.34 - EAP Release
+
+* Fix: Split plugin into 192 and pre-192 versions
+* Fix: update to flexmark-java 0.50.18, including new HTML converter
+* Fix: hard break inside inline elements were not preserved on save.
+* Fix: pasting HTML with image URLs starting with `//` without `https:` or `http:` protocol
+  prefix would cause UI to hang while attempting to download image. Now only non-image
+  extensions or `.svg` links which have protocol extension or non-absolute links will attempt to
+  convert svg to png.
+
+#### 2.8.4.32 - EAP Release
 
 * Fix: [#757, Gitlab multi-line blockquote syntax incorrect]
 * Fix: diagnostic/3359, IllegalStateException: projectPlainTextFileTypeManager must not be null
