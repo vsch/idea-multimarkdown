@@ -1,6 +1,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
+- [2.8.9.38 - EAP Release](#28938---eap-release)
 - [2.8.9.36 - EAP Release](#28936---eap-release)
     - [2.8.9.34 - EAP Release](#28934---eap-release)
     - [2.8.4.32 - EAP Release](#28432---eap-release)
@@ -22,6 +23,12 @@
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
+
+### 2.8.9.38 - EAP Release
+
+* Fix: [#761, html paste option can't save]
+* Fix: diagnostic/3638 AssertionError: MdProjectComponent.reloadMarkdownEditors
+* Fix: diagnostic/3425 Assertion: MdPasteHandler.getFilePathAnchorFromFqn
 
 ### 2.8.9.36 - EAP Release
 
@@ -1126,4 +1133,6 @@
 [#757, Gitlab multi-line blockquote syntax incorrect]: https://github.com/vsch/idea-multimarkdown/issues/757
 [#760, Attributes support is broken/incompatible with fenced code blocks]: https://github.com/vsch/idea-multimarkdown/issues/760
 [html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
+[#761, html paste option can't save]: https://github.com/vsch/idea-multimarkdown/issues/761
+
 
