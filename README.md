@@ -84,7 +84,7 @@ Release Road Map
 **Major Refactoring Release**
 
 * Extensibility API
-* Enhanced functionality to be provided by a separate plugin(s).
+* Enhanced functionality to be provided by separate plugin(s).
 * Improved Multiple Module Support
 * Link resolution support for non-GitHub VCS providers
 * Plus the usual bug fixes that come up between now and the release.
