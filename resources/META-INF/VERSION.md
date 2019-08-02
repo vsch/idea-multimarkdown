@@ -1,22 +1,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.8.9.38 - EAP Release](#28938---eap-release)
-- [2.8.9.36 - EAP Release](#28936---eap-release)
-    - [2.8.9.34 - EAP Release](#28934---eap-release)
-    - [2.8.4.32 - EAP Release](#28432---eap-release)
-    - [2.8.4.30 - EAP Release](#28430---eap-release)
-    - [2.8.4.28 - EAP Release](#28428---eap-release)
-    - [2.8.4.26 - EAP Release](#28426---eap-release)
-    - [2.8.4.24 - EAP Release](#28424---eap-release)
-    - [2.8.4.22 - EAP Release](#28422---eap-release)
-    - [2.8.4.20 - EAP Release](#28420---eap-release)
-    - [2.8.4.18 - EAP Release](#28418---eap-release)
-    - [2.8.4.16 - EAP Release](#28416---eap-release)
-    - [2.8.4.14 - EAP Release](#28414---eap-release)
-    - [2.8.4.12 - EAP Release](#28412---eap-release)
-    - [2.8.4.10 - EAP Release](#28410---eap-release)
-    - [2.8.4.6 - EAP Release](#2846---eap-release)
+- [2.9.0/2.9.5 - Bug Fix & Compatibility Release](#290295---bug-fix--compatibility-release)
 - [2.8.4 - Bug Fix & Enhancement Release](#284---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
@@ -24,17 +9,26 @@
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.8.9.38 - EAP Release
+### 2.9.0/2.9.5 - Bug Fix & Compatibility Release
+
+* Fix: diagnostic/3761,
+* Fix: Formatter adding `LINE_SEPARATOR` after images and links when they are at start of line
+* Fix: Add attribute formatting code style settings
+* Fix: attributes code style settings in headings were not applied when formatting
+* Fix: diagnostic reporting fixed version to handle split plugin versions for IDE versions < 192
+  and >= 192.
+
+##### 2.8.4.38/2.8.9.38 - EAP Release
 
 * Fix: [#761, html paste option can't save]
 * Fix: diagnostic/3638 AssertionError: MdProjectComponent.reloadMarkdownEditors
 * Fix: diagnostic/3425 Assertion: MdPasteHandler.getFilePathAnchorFromFqn
 
-### 2.8.9.36 - EAP Release
+##### 2.8.4.36/2.8.9.36 - EAP Release
 
 * Fix: [#760, Attributes support is broken/incompatible with fenced code blocks]
 
-#### 2.8.9.34 - EAP Release
+##### 2.8.4.34/2.8.9.34 - EAP Release
 
 * Fix: Split plugin into 192 and pre-192 versions
 * Fix: update to flexmark-java 0.50.18, including new HTML converter
@@ -44,7 +38,7 @@
   extensions or `.svg` links which have protocol extension or non-absolute links will attempt to
   convert svg to png.
 
-#### 2.8.4.32 - EAP Release
+##### 2.8.4.32 - EAP Release
 
 * Fix: [#757, Gitlab multi-line blockquote syntax incorrect]
 * Fix: diagnostic/3359, IllegalStateException: projectPlainTextFileTypeManager must not be null
@@ -54,7 +48,7 @@
 * Fix: link map settings to sort entries by group name when saving to fix order of entries
 * Fix: diagnostic/3224, NullPointerException: MdProjectComponent$exportAllHtmlRaw
 
-#### 2.8.4.30 - EAP Release
+##### 2.8.4.30 - EAP Release
 
 * Fix: [#741, Links], file without extension would sometimes not show up in completion or show
   as unresolved.
@@ -62,7 +56,7 @@
   '/icons/application-flexmark-extension.svg'
 * Add: missing svg application icons
 
-#### 2.8.4.28 - EAP Release
+##### 2.8.4.28 - EAP Release
 
 * Fix: html to markdown converter set default to wrapped auto-links
 * Fix: header up action disabled if text is inline element (bold, italic, etc.)
@@ -73,7 +67,7 @@
   `markdown-navigator.xml` and `markdown-navigator/` if defaults are used.
 * Fix: diagnostic/3117, ClassCastException: cannot be cast to MdLinkElement
 
-#### 2.8.4.26 - EAP Release
+##### 2.8.4.26 - EAP Release
 
 * Fix:
   [#745, Exception from AppUtils.isAppVersionGreaterThan when running on development build of IntelliJ IDEA]
@@ -83,7 +77,7 @@
 * Fix: remove trailing EOL from html to markdown converted text for new HTML parser code.
 * Add: code-stream sponsor banner
 
-#### 2.8.4.24 - EAP Release
+##### 2.8.4.24 - EAP Release
 
 * Fix: possible fix for [#743, auto-move in preview to match source code cursor position]
 * Fix: update flexmark-java 0.50.2
@@ -91,14 +85,14 @@
   * Fix: `boxed-json` add deep `null` to `JsonValue.NULL` replacement for `MutableJsArray` and
     `MutableJsObject` `toString()` calls to eliminate null pointer exceptions on `toString()`.
 
-#### 2.8.4.22 - EAP Release
+##### 2.8.4.22 - EAP Release
 
 * Fix: diagnostic/3038, NPE: MdEditorKit MarkdownImageView.getImageURL
 * Fix: diagnostic/3037, assertion error
 * Fix: copy/modify image intention to work with base64 encoded images
 * Fix: update flexmark-java 0.50.0
 
-#### 2.8.4.20 - EAP Release
+##### 2.8.4.20 - EAP Release
 
 * Fix: copy/modify image intention to work with base64 encoded images
 * Fix: diagnostic/3023, NoClassDefFoundError: sun/misc/BASE64Encoder
@@ -109,12 +103,12 @@
 * Fix: leave individual text parts of a paragraph separate to allow block quote and aside block
   white space prefixes to be syntax highlighted.
 
-#### 2.8.4.18 - EAP Release
+##### 2.8.4.18 - EAP Release
 
 * Fix: regression [#727, css files not created in export folder]
 * Fix: for duplicate heading ids and id attributes, remove navigate to element at caret
 
-#### 2.8.4.16 - EAP Release
+##### 2.8.4.16 - EAP Release
 
 * Add: filter out links consisting of only URI/URL prefixes from line markers
 * Fix: line marker provider to filter out plain auto-links not wrapped in `<>`
@@ -125,19 +119,19 @@
 * Fix: [#737, "Hard-break" Trailing Spaces Removed on Manual Save]
 * Add: diagnostic/2952 to fixed list: Preview to use immutable document char sequence
 
-#### 2.8.4.14 - EAP Release
+##### 2.8.4.14 - EAP Release
 
 * Fix: diagnostic/2951, Illegal group reference, ChangeTextToAutoLinkIntention.visitNode
 * Fix: diagnostic/2949, IllegalStateException: frame must not be null
 * Fix: diagnostic/2945, IndexOutOfBoundsException: `MdOnSaveFileUpdater$updateToc`
 * Fix: plantUML (puml language) parser settings change is not detected
 
-#### 2.8.4.12 - EAP Release
+##### 2.8.4.12 - EAP Release
 
 * Add: Diagnostic report tracking description for identified reports.
 * Fix: diagnostic/2940, project is already disposed
 
-#### 2.8.4.10 - EAP Release
+##### 2.8.4.10 - EAP Release
 
 * Add: Diagnostic report tracking.
 * Fix: possible fix for diagnostic/2876, NoClassDefFoundError: Could not initialize class
@@ -147,7 +141,7 @@
 * Fix: possible fix for diagnostic/2830, KNPE MdPlugin$Companion.getProjectComponent
 * Fix: possible fix for diagnostic/2883, IllegalStateException: cannot open system clipboard
 
-#### 2.8.4.6 - EAP Release
+##### 2.8.4.6 - EAP Release
 
 * Fix: add `!include` parsing for plantUML diagrams and invalidate generated image if include
   file content changes
@@ -1132,7 +1126,6 @@
 [#747, Useless "Markdown Export On Settings Change" notifications]: https://github.com/vsch/idea-multimarkdown/issues/747
 [#757, Gitlab multi-line blockquote syntax incorrect]: https://github.com/vsch/idea-multimarkdown/issues/757
 [#760, Attributes support is broken/incompatible with fenced code blocks]: https://github.com/vsch/idea-multimarkdown/issues/760
-[html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
 [#761, html paste option can't save]: https://github.com/vsch/idea-multimarkdown/issues/761
-
+[html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
 

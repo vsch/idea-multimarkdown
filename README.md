@@ -9,6 +9,7 @@
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
     - [Future Release: Version 3.0.0](#future-release-version-300)
+    - [Version 2.9.0/2.9.5](#version-290295)
     - [Version 2.8.4](#version-284)
     - [Version 2.8.2](#version-282)
     - [Source Update is Long Overdue](#source-update-is-long-overdue)
@@ -82,15 +83,24 @@ Release Road Map
 
 **Major Refactoring Release**
 
+* Extensibility API
+* Enhanced functionality to be provided by a separate plugin(s).
 * Improved Multiple Module Support
 * Link resolution support for non-GitHub VCS providers
 * Plus the usual bug fixes that come up between now and the release.
 
-### Version 2.8.4
+### Version 2.9.0/2.9.5
 
-Bug and compatibility fixes you can find in [Version Notes].
+Long list of Bug and compatibility fixes you can find in [Version Notes].
 
 [Install EAP plugin](../../wiki/EAP-Update-Channel) version to preview next release.
+
+* **Split plugin versions**: 2.9.0 for pre 2019.2 IDEs and 2.9.5 for 2019.2 and later
+* **Configuration Search** in all configuration panes
+* **Exception Report** tracking with notification of fixes
+* **Java 11 JRE Support**
+
+### Version 2.8.4
 
 * **Java 11 JRE Support**
 * **Improved Preview and Typing** response
@@ -149,7 +159,7 @@ Bug and compatibility fixes you can find in [Version Notes].
 * New: heading style conversion during document format
 * New: Convert fenced code to indented code intention
 * New: `Copy Exported as HTML Mime Content` Action to copy HTML export text as HTML mime content
-* New: Image Paste highlight option to annotate an area of the image.  
+* New: Image Paste highlight option to annotate an area of the image.
   ![Screenshot_PasteImage_Highlight]
 * New: `Copy markdown without soft line breaks` copies document or selection to the clipboard
   eliminating soft line breaks. Useful when copying wrapped markdown to GitHub comments.
@@ -278,7 +288,7 @@ Reserved.
 [Kramdown]: https://kramdown.gettalong.org/
 [Modifying Link Processing]: https://github.com/vsch/idea-multimarkdown/wiki/Link-Map-Settings
 [MultiMarkdown]: https://fletcherpenney.net/multimarkdown
-[Pandoc]: http://pandoc.org/MANUAL.html#pandocs-markdown
+[Pandoc]: https://pandoc.org/MANUAL.html#pandocs-markdown
 [PhpExtra]: https://michelf.ca/projects/php-markdown/extra/
 [PhpStorm]: http://www.jetbrains.com/phpstorm
 [Pipe Table Formatter]: https://github.com/anton-dev-ua/PipeTableFormatter
