@@ -9,7 +9,7 @@
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
     - [Future Release: Version 3.0.0](#future-release-version-300)
-    - [Version 2.9.0/2.9.6](#version-290296)
+    - [Version 2.9.0/2.9.7](#version-290297)
     - [Version 2.8.4](#version-284)
     - [Version 2.8.2](#version-282)
     - [Source Update is Long Overdue](#source-update-is-long-overdue)
@@ -89,7 +89,7 @@ Release Road Map
 * Link resolution support for non-GitHub VCS providers
 * Plus the usual bug fixes that come up between now and the release.
 
-### Version 2.9.0/2.9.6
+### Version 2.9.0/2.9.7
 
 Long list of Bug and compatibility fixes you can find in [Version Notes].
 
