@@ -1,6 +1,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
+- [2.9.6 - Bug Fix & Compatibility Release](#296---bug-fix--compatibility-release)
 - [2.9.0/2.9.5 - Bug Fix & Compatibility Release](#290295---bug-fix--compatibility-release)
 - [2.8.4 - Bug Fix & Enhancement Release](#284---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
@@ -9,9 +10,13 @@
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
+### 2.9.6 - Bug Fix & Compatibility Release
+
+* Fix: compatibility with 193.SNAPSHOT
+
 ### 2.9.0/2.9.5 - Bug Fix & Compatibility Release
 
-* Fix: diagnostic/3761,
+* Fix: diagnostic/3761, NoClassDefFoundError: ArraysKt$asSequence
 * Fix: Formatter adding `LINE_SEPARATOR` after images and links when they are at start of line
 * Fix: Add attribute formatting code style settings
 * Fix: attributes code style settings in headings were not applied when formatting
