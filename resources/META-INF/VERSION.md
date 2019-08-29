@@ -1,6 +1,7 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
+- [2.9.0.2/2.9.7.2 - EAP Release](#29022972---eap-release)
 - [2.9.7 - Bug Fix & Compatibility Release](#297---bug-fix--compatibility-release)
 - [2.9.0/2.9.5 - Bug Fix & Compatibility Release](#290295---bug-fix--compatibility-release)
 - [2.8.4 - Bug Fix & Enhancement Release](#284---bug-fix--enhancement-release)
@@ -9,6 +10,30 @@
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
+
+### 2.9.0.2/2.9.7.2 - EAP Release
+
+* Fix: incorrect determination of loose list items in lists
+* Add: Markdown code style settings to import/export settings action.
+* Fix: inspection for list item needs more indentation to work with CommonMark list rules when
+  mixed ordered/unordered list items are mixed and the list item has non-indenting spaces but
+  not enough to become a sub-item of previous list's last item.
+* Fix: diagnostic/3922, PsiInvalidElementAccessException: Element: class invalidated,
+  MdInjector.getLanguagesToInject
+* Fix: diagnostic/3923, StringIndexOutOfBoundsException: String index: 0 out of range: 0, 0,
+  highlight
+* Fix: preview links did not preserve anchor ref when launching external browser
+* Fix: disable HTML Preview missing link highlighting if corresponding annotation is
+      disabled.
+* Fix: Copy as HTML Mime action image file names with spaces do not get converted to
+      embedded images during export.
+* Fix: emoji image files are copied on export but generated HTML has link to absolute location
+      instead of a relative link to copied file.
+* Fix: when linking to exported HTML, allow default link format to remain enabled and use it
+      for generating links to exported files.
+* Fix: dropping file reference on empty back-ticks to insert file name not link
+* Fix: formatting of ATX heading in list items would double leading markers
+* Fix: diagnostic/3872, IllegalStateException: frame must not be null, MdPlugin.checkFixes
 
 ### 2.9.7 - Bug Fix & Compatibility Release
 
@@ -430,7 +455,7 @@
 * Fix: diagnostic/2344 illegal access `EditorWindow.INITIAL_INDEX_KEY`, static field was
   temporarily made package private between 2016/10 and 2018/06 in the API.
 * Fix: [#711, Editor -> Toggle Editor Layout setting is not saved.]
-* Fix: [diagnostic/2556](http://vladsch.com/admin/diagnostics/2556) Index out of Bounds.
+* Fix: [diagnostic/2556](https://vladsch.com/admin/diagnostics/2556) Index out of Bounds.
 * Fix: Toggle task item done does not work for ordered task list items
 
 ### 2.8.2 - Bug Fix & Enhancement Release

@@ -264,7 +264,7 @@ Reserved.
 [Rendering Profiles Settings]: https://github.com/vsch/idea-multimarkdown/wiki/Rendering-Profiles-Settings#configuring-for-non-latin-character-sets
 [Screenshot_PasteImage_Highlight]: /assets/images/faq/ScreenShot_PasteImage_sm_h.png
 [sirthias]: https://github.com/sirthias
-[Version Notes]: https://github.com/vsch/idea-multimarkdown/blob/master/VERSION.md
+[Version Notes]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/META-INF/VERSION.md
 [.gitignore]: http://ignore.hsz.mobi/
 [Admonition Extension, Material for MkDocs]: https://squidfunk.github.io/mkdocs-material/extensions/admonition/
 [Android Studio]: https://developer.android.com/sdk/installing/studio.html
