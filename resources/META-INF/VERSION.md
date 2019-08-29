@@ -1,7 +1,8 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.9.0.4/2.9.7.4 - EAP Release](#29042974---eap-release)
+- [2.9.0.6/2.9.7.6 - EAP Release](#29062976---eap-release)
+    - [2.9.0.4/2.9.7.4 - EAP Release](#29042974---eap-release)
     - [2.9.0.2/2.9.7.2 - EAP Release](#29022972---eap-release)
 - [2.9.7 - Bug Fix & Compatibility Release](#297---bug-fix--compatibility-release)
 - [2.9.0/2.9.5 - Bug Fix & Compatibility Release](#290295---bug-fix--compatibility-release)
@@ -12,7 +13,13 @@
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.9.0.4/2.9.7.4 - EAP Release
+### 2.9.0.6/2.9.7.6 - EAP Release
+
+* Fix: [#771, macOS: Paste doesn't work when copying link from Safari's context menu], will no
+  longer paste HTML link since OS X 10.14.6 does not provide HTML on Copy Link from Safari but
+  will paste the address.
+
+#### 2.9.0.4/2.9.7.4 - EAP Release
 
 * Add: [#768, Copy as reference copies invalid link], now handles copy reference of markdown
   anchor ref target elements so paste will paste link to element
@@ -1167,3 +1174,5 @@
 
 
 [#768, Copy as reference copies invalid link]: https://github.com/vsch/idea-multimarkdown/issues/768
+
+[#771, macOS: Paste doesn't work when copying link from Safari's context menu]: https://github.com/vsch/idea-multimarkdown/issues/771
