@@ -1,7 +1,8 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.9.0.2/2.9.7.2 - EAP Release](#29022972---eap-release)
+- [2.9.0.4/2.9.7.4 - EAP Release](#29042974---eap-release)
+    - [2.9.0.2/2.9.7.2 - EAP Release](#29022972---eap-release)
 - [2.9.7 - Bug Fix & Compatibility Release](#297---bug-fix--compatibility-release)
 - [2.9.0/2.9.5 - Bug Fix & Compatibility Release](#290295---bug-fix--compatibility-release)
 - [2.8.4 - Bug Fix & Enhancement Release](#284---bug-fix--enhancement-release)
@@ -11,7 +12,12 @@
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.9.0.2/2.9.7.2 - EAP Release
+### 2.9.0.4/2.9.7.4 - EAP Release
+
+* Add: [#768, Copy as reference copies invalid link], now handles copy reference of markdown
+  anchor ref target elements so paste will paste link to element
+
+#### 2.9.0.2/2.9.7.2 - EAP Release
 
 * Fix: incorrect determination of loose list items in lists
 * Add: Markdown code style settings to import/export settings action.
@@ -1159,3 +1165,5 @@
 [#761, html paste option can't save]: https://github.com/vsch/idea-multimarkdown/issues/761
 [html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
 
+
+[#768, Copy as reference copies invalid link]: https://github.com/vsch/idea-multimarkdown/issues/768
