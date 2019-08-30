@@ -1,7 +1,8 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.9.0.6/2.9.7.6 - EAP Release](#29062976---eap-release)
+- [2.9.0.8/2.9.7.8 - EAP Release](#29082978---eap-release)
+    - [2.9.0.6/2.9.7.6 - EAP Release](#29062976---eap-release)
     - [2.9.0.4/2.9.7.4 - EAP Release](#29042974---eap-release)
     - [2.9.0.2/2.9.7.2 - EAP Release](#29022972---eap-release)
 - [2.9.7 - Bug Fix & Compatibility Release](#297---bug-fix--compatibility-release)
@@ -13,7 +14,16 @@
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.9.0.6/2.9.7.6 - EAP Release
+### 2.9.0.8/2.9.7.8 - EAP Release
+
+* Fix: export of plantuml, puml and math generated images
+* Fix: force export of HTML files which contain generated images because the image name changes
+  between exports regardless whether markdown content changes or not.
+* Fix: `RestartableLexer` implementation for 2019.2
+* Fix: flexmark spec case options search to handle options defined in super classes
+* Fix: merge split settings changes
+
+#### 2.9.0.6/2.9.7.6 - EAP Release
 
 * Fix: [#771, macOS: Paste doesn't work when copying link from Safari's context menu], will no
   longer paste HTML link since OS X 10.14.6 does not provide HTML on Copy Link from Safari but
