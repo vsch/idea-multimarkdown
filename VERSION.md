@@ -1,6 +1,11 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
+- [2.9.0.12/2.9.7.12 - EAP Release](#2901229712---eap-release)
+    - [2.9.0.8/2.9.7.8 - EAP Release](#29082978---eap-release)
+    - [2.9.0.6/2.9.7.6 - EAP Release](#29062976---eap-release)
+    - [2.9.0.4/2.9.7.4 - EAP Release](#29042974---eap-release)
+    - [2.9.0.2/2.9.7.2 - EAP Release](#29022972---eap-release)
 - [2.9.7 - Bug Fix & Compatibility Release](#297---bug-fix--compatibility-release)
 - [2.9.0/2.9.5 - Bug Fix & Compatibility Release](#290295---bug-fix--compatibility-release)
 - [2.8.4 - Bug Fix & Enhancement Release](#284---bug-fix--enhancement-release)
@@ -9,6 +14,78 @@
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
+
+### 2.9.0.12/2.9.7.12 - EAP Release
+
+* Fix: single space list action would delete blank line and next list item marker. Broken in
+  2.9.0.8/2.9.7.8.
+* Fix: disable wrap on typing and auto-format table actions when caret is in non-formatting
+  region to provide some feedback that no auto format actions will be taken
+* Fix: backspace and typing to respect format control markers
+* Fix: parser `StackOverflowError` exception with spaces in link urls enabled when parsing long
+  URLs.
+* Fix: [#776, JavaFx Preview displays cached image for deleted file]
+* Fix: [#777, No query suffix is added to image links if absolute file:/ format is used]
+* Fix: consolidate history and exported files settings into `markdown-navigator.xml` project
+  settings file to reduce settings files in `.idea` directory.
+* Add: `Copy Table as JSON` action to convert table data to JSON array/object.
+  * Add: auto-selection of last settings used to copy JSON for the table from history either
+    named or auto-saved.
+  * Add: button to reset column order to markdown column order
+  * Add: button to include all columns
+  * Add: history based on match based on table header text. Sorted by closest match.
+  * Add: user definable presets with names and recall saved with project settings.
+  * Add: extraction of link ref and image ref URL not just inline link elements.
+* Fix: line markers not showing for elements in tables.
+* Fix: uppercase image extensions showed as unresolved in preview and would not show in
+  completions or refactor/navigate to file.
+* Add: `Space in link URLs` parser option to allow spaces in URLs which will be URL encoded for
+  HTML preview and export.
+
+#### 2.9.0.8/2.9.7.8 - EAP Release
+
+* Fix: export of plantuml, puml and math generated images
+* Fix: force export of HTML files which contain generated images because the image name changes
+  between exports regardless whether markdown content changes or not.
+* Fix: `RestartableLexer` implementation for 2019.2
+* Fix: flexmark spec case options search to handle options defined in super classes
+* Fix: merge split settings changes
+
+#### 2.9.0.6/2.9.7.6 - EAP Release
+
+* Fix: partial fix for
+  [#771, macOS: Paste doesn't work when copying link from Safari's context menu], will no longer
+  paste HTML link since OS X 10.14.6 does not provide HTML on Copy Link from Safari but will
+  paste the address.
+
+#### 2.9.0.4/2.9.7.4 - EAP Release
+
+* Add: [#768, Copy as reference copies invalid link], now handles copy reference of markdown
+  anchor ref target elements so paste will paste link to element
+
+#### 2.9.0.2/2.9.7.2 - EAP Release
+
+* Fix: incorrect determination of loose list items in lists
+* Add: Markdown code style settings to import/export settings action.
+* Fix: inspection for list item needs more indentation to work with CommonMark list rules when
+  mixed ordered/unordered list items are mixed and the list item has non-indenting spaces but
+  not enough to become a sub-item of previous list's last item.
+* Fix: diagnostic/3922, PsiInvalidElementAccessException: Element: class invalidated,
+  MdInjector.getLanguagesToInject
+* Fix: diagnostic/3923, StringIndexOutOfBoundsException: String index: 0 out of range: 0, 0,
+  highlight
+* Fix: preview links did not preserve anchor ref when launching external browser
+* Fix: disable HTML Preview missing link highlighting if corresponding annotation is disabled.
+* Fix: Copy as HTML Mime action image file names with spaces do not get converted to embedded
+  images during export.
+* Fix: emoji image files are copied on export but generated HTML has link to absolute location
+  instead of a relative link to copied file.
+* Fix: when linking to exported HTML, allow default link format to remain enabled and use it for
+  generating links to exported files.
+* Fix: dropping file reference on empty back-ticks to insert file name not link
+* Fix: formatting of ATX heading in list items would double leading markers
+* Fix: diagnostic/3872, IllegalStateException: frame must not be null, MdPlugin.checkFixes
+* Fix: diagnostic/3872, IllegalStateException: frame must not be null, MdPlugin.checkFixes
 
 ### 2.9.7 - Bug Fix & Compatibility Release
 
@@ -430,7 +507,7 @@
 * Fix: diagnostic/2344 illegal access `EditorWindow.INITIAL_INDEX_KEY`, static field was
   temporarily made package private between 2016/10 and 2018/06 in the API.
 * Fix: [#711, Editor -> Toggle Editor Layout setting is not saved.]
-* Fix: [diagnostic/2556](http://vladsch.com/admin/diagnostics/2556) Index out of Bounds.
+* Fix: [diagnostic/2556](https://vladsch.com/admin/diagnostics/2556) Index out of Bounds.
 * Fix: Toggle task item done does not work for ordered task list items
 
 ### 2.8.2 - Bug Fix & Enhancement Release
@@ -1132,5 +1209,10 @@
 [#757, Gitlab multi-line blockquote syntax incorrect]: https://github.com/vsch/idea-multimarkdown/issues/757
 [#760, Attributes support is broken/incompatible with fenced code blocks]: https://github.com/vsch/idea-multimarkdown/issues/760
 [#761, html paste option can't save]: https://github.com/vsch/idea-multimarkdown/issues/761
+[#768, Copy as reference copies invalid link]: https://github.com/vsch/idea-multimarkdown/issues/768
+[#771, macOS: Paste doesn't work when copying link from Safari's context menu]: https://github.com/vsch/idea-multimarkdown/issues/771
+[#776, JavaFx Preview displays cached image for deleted file]: https://github.com/vsch/idea-multimarkdown/issues/776
+[#777, No query suffix is added to image links if absolute file:/ format is used]: https://github.com/vsch/idea-multimarkdown/issues/777
 [html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
+[#773, Pasting URL from chrome pastes meta-data]: https://github.com/vsch/idea-multimarkdown/issues/773
 
