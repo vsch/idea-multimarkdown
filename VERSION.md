@@ -1,7 +1,8 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.9.0.12/2.9.7.12 - EAP Release](#2901229712---eap-release)
+- [2.9.0.18/2.9.7.18 - EAP Release](#2901829718---eap-release)
+    - [2.9.0.12/2.9.7.12 - EAP Release](#2901229712---eap-release)
     - [2.9.0.8/2.9.7.8 - EAP Release](#29082978---eap-release)
     - [2.9.0.6/2.9.7.6 - EAP Release](#29062976---eap-release)
     - [2.9.0.4/2.9.7.4 - EAP Release](#29042974---eap-release)
@@ -15,7 +16,25 @@
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.9.0.12/2.9.7.12 - EAP Release
+### 2.9.0.18/2.9.7.18 - EAP Release
+
+* Fix: [#773, Pasting URL from chrome pastes meta-data] on Windows Chrome. Data contained Chrome
+  HTML segment information.
+* Fix: [#768, Copy as reference copies invalid link] on Windows
+* Fix: not fixable at this time.
+  [#771, macOS: Paste doesn't work when copying link from Safari's context menu], new Safari
+  copy link does not put HTML on the clipboard and Java cannot access url/url-name data
+  flavours.
+* Add: option `Adjust Links on Paste` and `Confirm on Paste` to allow not adjusting links when
+  pasting
+  * Add: dialog with preview of links and checkbox next to each link to allow selecting which
+    links should be adjusted with ability to edit adjusted text
+* Fix: use "image" for file name in image paste dialog if it is empty and link format is not
+  embedded.
+* Fix: image paste now saves highlights in original image coordinates so crop/scale does not
+  affect the highlighted image region.
+
+#### 2.9.0.12/2.9.7.12 - EAP Release
 
 * Fix: single space list action would delete blank line and next list item marker. Broken in
   2.9.0.8/2.9.7.8.
@@ -1211,8 +1230,8 @@
 [#761, html paste option can't save]: https://github.com/vsch/idea-multimarkdown/issues/761
 [#768, Copy as reference copies invalid link]: https://github.com/vsch/idea-multimarkdown/issues/768
 [#771, macOS: Paste doesn't work when copying link from Safari's context menu]: https://github.com/vsch/idea-multimarkdown/issues/771
+[#773, Pasting URL from chrome pastes meta-data]: https://github.com/vsch/idea-multimarkdown/issues/773
 [#776, JavaFx Preview displays cached image for deleted file]: https://github.com/vsch/idea-multimarkdown/issues/776
 [#777, No query suffix is added to image links if absolute file:/ format is used]: https://github.com/vsch/idea-multimarkdown/issues/777
 [html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
-[#773, Pasting URL from chrome pastes meta-data]: https://github.com/vsch/idea-multimarkdown/issues/773
 
