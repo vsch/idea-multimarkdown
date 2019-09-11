@@ -1,7 +1,8 @@
 [TOC levels=3,4]: # "Version History"
 
 ### Version History
-- [2.9.0.18/2.9.7.18 - EAP Release](#2901829718---eap-release)
+- [2.9.0.20/2.9.7.20 - EAP Release](#2902029720---eap-release)
+    - [2.9.0.18/2.9.7.18 - EAP Release](#2901829718---eap-release)
     - [2.9.0.12/2.9.7.12 - EAP Release](#2901229712---eap-release)
     - [2.9.0.8/2.9.7.8 - EAP Release](#29082978---eap-release)
     - [2.9.0.6/2.9.7.6 - EAP Release](#29062976---eap-release)
@@ -16,7 +17,14 @@
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
 
 
-### 2.9.0.18/2.9.7.18 - EAP Release
+### 2.9.0.20/2.9.7.20 - EAP Release
+
+* Add: Paste image dialog checkered background for transparency.
+* Fix: line navigation for line selection anchor to not use default file navigation
+* Fix: duplicate line marker navigation for links
+* Add: `Copy Selection Reference` for 2019.3 and prior versions
+
+#### 2.9.0.18/2.9.7.18 - EAP Release
 
 * Fix: [#773, Pasting URL from chrome pastes meta-data] on Windows Chrome. Data contained Chrome
   HTML segment information.
@@ -29,10 +37,12 @@
   pasting
   * Add: dialog with preview of links and checkbox next to each link to allow selecting which
     links should be adjusted with ability to edit adjusted text
-* Fix: use "image" for file name in image paste dialog if it is empty and link format is not
-  embedded.
-* Fix: image paste now saves highlights in original image coordinates so crop/scale does not
-  affect the highlighted image region.
+* Fix: Paste Image dialog:
+  * Fix: use "image" for file name in image paste dialog if it is empty and link format is not
+    embedded.
+  * Fix: image paste now saves highlights in original image coordinates so crop/scale does not
+    affect the highlighted image region.
+  * Add: checkered background to show image transparency
 
 #### 2.9.0.12/2.9.7.12 - EAP Release
 
