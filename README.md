@@ -247,6 +247,7 @@ Reserved.
 
 [codecogs.com]: https://codecogs.com
 [commonmark-java]: https://github.com/atlassian/commonmark-java
+[Configuring for Non-Latin Character Sets]: https://github.com/vsch/idea-multimarkdown/wiki/Rendering-Profiles-Settings#configuring-for-non-latin-character-sets
 [Craig's List]: https://montreal.craigslist.ca/?lang=en&cc=us
 [flexmark-java]: https://github.com/vsch/flexmark-java
 [GitHub]: https://github.com/vsch/laravel-translation-manager
@@ -260,12 +261,13 @@ Reserved.
 [nicoulaj]: https://github.com/nicoulaj
 [nicoulaj/idea-markdown plugin]: https://github.com/nicoulaj/idea-markdown
 [pegdown]: http://pegdown.org
+[Plain Text Suggestion Scope]: https://github.com/vsch/idea-multimarkdown/wiki/Rendering-Profiles-Settings#plain-text-suggestion-scope
 [PlantUML]: http://plantuml.com
 [Rendering Profiles Settings]: https://github.com/vsch/idea-multimarkdown/wiki/Rendering-Profiles-Settings#configuring-for-non-latin-character-sets
 [Screenshot_PasteImage_Highlight]: /assets/images/faq/ScreenShot_PasteImage_sm_h.png
 [sirthias]: https://github.com/sirthias
 [Version Notes]: https://github.com/vsch/idea-multimarkdown/blob/master/VERSION.md
-[.gitignore]: http://ignore.hsz.mobi/
+[.gitignore]: https://plugins.jetbrains.com/plugin/7495--ignore
 [Admonition Extension, Material for MkDocs]: https://squidfunk.github.io/mkdocs-material/extensions/admonition/
 [Android Studio]: https://developer.android.com/sdk/installing/studio.html
 [AppCode]: http://www.jetbrains.com/objc
@@ -299,7 +301,3 @@ Reserved.
 [WebStorm]: http://www.jetbrains.com/webstorm
 [Wiki]: https://github.com/vsch/idea-multimarkdown/wiki
 
-
-[Configuring for Non-Latin Character Sets]: https://github.com/vsch/idea-multimarkdown/wiki/Rendering-Profiles-Settings#configuring-for-non-latin-character-sets
-
-[Plain Text Suggestion Scope]: https://github.com/vsch/idea-multimarkdown/wiki/Rendering-Profiles-Settings#plain-text-suggestion-scope
