@@ -40,56 +40,56 @@ THE SOFTWARE.
   font-family: 'noto-serif';
   src: url('NotoSerif-Regular.ttf');
   font-weight: normal;
-  font-style: normal;	
+  font-style: normal;
 }
 
 @font-face {
   font-family: 'noto-serif';
   src: url('NotoSerif-Bold.ttf');
   font-weight: bold;
-  font-style: normal;	
+  font-style: normal;
 }
 
 @font-face {
   font-family: 'noto-serif';
   src: url('NotoSerif-BoldItalic.ttf');
   font-weight: bold;
-  font-style: italic;	
+  font-style: italic;
 }
 
 @font-face {
   font-family: 'noto-serif';
   src: url('NotoSerif-Italic.ttf');
   font-weight: normal;
-  font-style: italic;	
+  font-style: italic;
 }
 
 @font-face {
   font-family: 'noto-sans';
   src: url('NotoSans-Regular.ttf');
   font-weight: normal;
-  font-style: normal;	
+  font-style: normal;
 }
 
 @font-face {
   font-family: 'noto-sans';
   src: url('NotoSans-Bold.ttf');
   font-weight: bold;
-  font-style: normal;	
+  font-style: normal;
 }
 
 @font-face {
   font-family: 'noto-sans';
   src: url('NotoSans-BoldItalic.ttf');
   font-weight: bold;
-  font-style: italic;	
+  font-style: italic;
 }
 
 @font-face {
   font-family: 'noto-sans';
   src: url('NotoSans-Italic.ttf');
   font-weight: normal;
-  font-style: italic;	
+  font-style: italic;
 }
 
 
@@ -97,7 +97,7 @@ THE SOFTWARE.
   font-family: 'noto-mono';
   src: url('NotoMono-Regular.ttf');
   font-weight: normal;
-  font-style: normal;	
+  font-style: normal;
 }
 
 .container {
@@ -483,7 +483,7 @@ h6 .anchor {
     line-height: 1.1;
 }
 
-blockquote, 
+blockquote,
 aside {
     margin: 0;
 }
@@ -663,13 +663,13 @@ dl dd {
     padding: 0 16px;
 }
 
-blockquote, 
+blockquote,
 aside {
 
     padding: 0 15px;
 }
 
-blockquote > :first-child, 
+blockquote > :first-child,
 aside > :first-child {
     margin-top: 0;
 }
@@ -709,8 +709,8 @@ img {
 }
 
 img.emoji {
-    width: 1.2em;
-    height: 1.2em;
-    vertical-align: text-bottom;
+    width: 1.1em;
+    height: 1.1em;
+    vertical-align: middle /*text-bottom*/;
 }
 

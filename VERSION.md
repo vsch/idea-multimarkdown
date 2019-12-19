@@ -1,83 +1,8 @@
 [TOC levels=2,3,4]: # "Version History"
 
 ### Version History
-- [Flexmark Plugin](#flexmark-plugin)
-    - [Wish List](#wish-list)
-    - [Issues](#issues)
-- [Enhanced](#enhanced)
-    - [Refactoring - Split Plugin](#refactoring---split-plugin)
-    - [Wish List](#wish-list)
-    - [Issues](#issues)
-- [EAP Release](#eap-release)
-    - [Next 2.9.0.2xx/2.9.7.2xx - Dev Build](#next-2902xx2972xx---dev-build)
-    - [2.9.0.233/2.9.7.233 - EAP Build](#290233297233---eap-build)
-        - [2.9.0.231/2.9.7.231 - Dev Build](#290231297231---dev-build)
-        - [2.9.0.229/2.9.7.229 - Dev Build](#290229297229---dev-build)
-        - [2.9.0.227/2.9.7.227 - Dev Build](#290227297227---dev-build)
-        - [2.9.0.225/2.9.7.225 - Dev Build](#290225297225---dev-build)
-        - [2.9.0.223/2.9.7.223 - Dev Build](#290223297223---dev-build)
-        - [2.9.0.221/2.9.7.221 - Dev Build](#290221297221---dev-build)
-        - [2.9.0.219/2.9.7.219 - Dev Build](#290219297219---dev-build)
-        - [2.9.0.217/2.9.7.217 - Dev Build](#290217297217---dev-build)
-        - [2.9.0.215/2.9.7.215 - Dev Build](#290215297215---dev-build)
-        - [2.9.0.213/2.9.7.213 - Dev Build](#290213297213---dev-build)
-        - [2.9.0.211/2.9.7.211 - Dev Build](#290211297211---dev-build)
-        - [2.9.0.209/2.9.7.209 - Dev Build](#290209297209---dev-build)
-        - [2.9.0.207/2.9.7.207 - Dev Build](#290207297207---dev-build)
-        - [2.9.0.205/2.9.7.205 - Dev Build](#290205297205---dev-build)
-        - [2.9.0.203/2.9.7.203 - Dev Build](#290203297203---dev-build)
-        - [2.9.0.201/2.9.7.201 - Dev Build](#290201297201---dev-build)
-        - [2.9.0.199/2.9.7.199 - Dev Build](#290199297199---dev-build)
-        - [2.9.0.197/2.9.7.197 - Dev Build](#290197297197---dev-build)
-        - [2.9.0.195/2.9.7.195 - Dev Build](#290195297195---dev-build)
-        - [2.9.0.193/2.9.7.193 - Dev Build](#290193297193---dev-build)
-        - [2.9.0.191/2.9.7.191 - Dev Build](#290191297191---dev-build)
-        - [2.9.0.189/2.9.7.189 - Dev Build](#290189297189---dev-build)
-        - [2.9.0.187/2.9.7.187 - Dev Build](#290187297187---dev-build)
-        - [2.9.0.185/2.9.7.185 - Dev Build](#290185297185---dev-build)
-        - [2.9.0.183/2.9.7.183 - Dev Build](#290183297183---dev-build)
-        - [2.9.0.181/2.9.7.181 - Dev Build](#290181297181---dev-build)
-        - [2.9.0.179/2.9.7.179 - Dev Build](#290179297179---dev-build)
-        - [2.9.0.177/2.9.7.177 - Dev Build](#290177297177---dev-build)
-        - [2.9.0.175/2.9.7.175 - Dev Build](#290175297175---dev-build)
-        - [2.9.0.173/2.9.7.173 - Dev Build](#290173297173---dev-build)
-        - [2.9.0.171/2.9.7.171 - Dev Build](#290171297171---dev-build)
-        - [2.9.0.169/2.9.7.169 - Dev Build](#290169297169---dev-build)
-        - [2.9.0.167/2.9.7.167 - Dev Build](#290167297167---dev-build)
-        - [2.9.0.165/2.9.7.165 - Dev Build](#290165297165---dev-build)
-        - [2.9.0.163/2.9.7.163 - Dev Build](#290163297163---dev-build)
-        - [2.9.0.161/2.9.7.161 - Dev Build](#290161297161---dev-build)
-        - [2.9.0.159/2.9.7.159 - Dev Build](#290159297159---dev-build)
-        - [2.9.0.157/2.9.7.157 - Dev Build](#290157297157---dev-build)
-        - [2.9.0.155/2.9.7.155 - Dev Build](#290155297155---dev-build)
-        - [2.9.0.153/2.9.7.153 - Dev Build](#290153297153---dev-build)
-        - [2.9.0.151/2.9.7.151 - Dev Build](#290151297151---dev-build)
-        - [2.9.0.149/2.9.7.149 - Dev Build](#290149297149---dev-build)
-        - [2.9.0.147/2.9.7.147 - Dev Build](#290147297147---dev-build)
-        - [2.9.0.145/2.9.7.145 - Dev Build](#290145297145---dev-build)
-        - [2.9.0.143/2.9.7.143 - Dev Build](#290143297143---dev-build)
-        - [2.9.0.141/2.9.7.141 - Dev Build](#290141297141---dev-build)
-        - [2.9.0.139/2.9.7.139 - Dev Build](#290139297139---dev-build)
-        - [2.9.0.137/2.9.7.137 - Dev Build](#290137297137---dev-build)
-        - [2.9.0.135/2.9.7.135 - Dev Build](#290135297135---dev-build)
-        - [2.9.0.133/2.9.7.133 - Dev Build](#290133297133---dev-build)
-        - [2.9.0.131/2.9.7.131 - Dev Build](#290131297131---dev-build)
-        - [2.9.0.129/2.9.7.129 - Dev Build](#290129297129---dev-build)
-        - [2.9.0.127/2.9.7.127 - Dev Build](#290127297127---dev-build)
-        - [2.9.0.125/2.9.7.125 - Dev Build](#290125297125---dev-build)
-        - [2.9.0.123/2.9.7.123 - Dev Build](#290123297123---dev-build)
-        - [2.9.0.121/2.9.7.121 - Dev Build](#290121297121---dev-build)
-        - [2.9.0.119/2.9.7.119 - Dev Build](#290119297119---dev-build)
-        - [2.9.0.117/2.9.7.117 - Dev Build](#290117297117---dev-build)
-        - [2.9.0.115/2.9.7.115 - Dev Build](#290115297115---dev-build)
-        - [2.9.0.113/2.9.7.113 - Dev Build](#290113297113---dev-build)
-        - [2.9.0.20/2.9.7.20 - EAP Release](#2902029720---eap-release)
-        - [2.9.0.18/2.9.7.18 - EAP Release](#2901829718---eap-release)
-        - [2.9.0.12/2.9.7.12 - EAP Release](#2901229712---eap-release)
-        - [2.9.0.8/2.9.7.8 - EAP Release](#29082978---eap-release)
-        - [2.9.0.6/2.9.7.6 - EAP Release](#29062976---eap-release)
-        - [2.9.0.4/2.9.7.4 - EAP Release](#29042974---eap-release)
-        - [2.9.0.2/2.9.7.2 - EAP Release](#29022972---eap-release)
+- [2.9.8 - 2019.3 Compatibility Release](#298---20193-compatibility-release)
+    - [2.9.0.20/2.9.7.20 - EAP Release](#2902029720---eap-release)
 - [2.9.7 - Bug Fix & Compatibility Release](#297---bug-fix--compatibility-release)
 - [2.9.0/2.9.5 - Bug Fix & Compatibility Release](#290295---bug-fix--compatibility-release)
     - [2.8.4.38/2.8.9.38 - EAP Release](#2843828938---eap-release)
@@ -100,316 +25,22 @@
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 
 
-## Flexmark Plugin
+### 2.9.8 - 2019.3 Compatibility Release
 
-### Wish List
-
-* [ ] Fix: add reference contributor for `SPEC_RESOURCE` strings otherwise relative resource
-      names are not renamed.
-  + [ ] TEST: add rename tests
-* [ ] Add: inspection & quick fixes for Java
-  * [ ] use of getChar().xxx() instead of available delegated methods
-* [ ] Add: flexmark spec file:
-  * [ ] parse `margin` option to display vertical guide at set margin
-  * [ ] parse and use extension of spec example
-  * actions:
-    * [ ] Convert carets to caret markup
-    * [ ] Convert caret markup to carets
-    * [ ] Copy Node-AST for source using flexmark-test-utils AST rendering
-    * [ ] Copy Psi-AST for source using `PsiTreeAstRenderer` rendering
-* [ ] Add: Java inspection for `<? extends DataHolder>.get(DataKey<?>)` and offer quick fix to
-      change it to `DataKey<?>.get(<? extends DataHolder>)` to make it null immune.
-* [ ] Add:completion contributor for `SPEC_RESOURCE` strings which provides spec md files in
-      module.
-* [ ] Fix: Handle variable spec example sections with front matter configuration. If not
-      provided default to 1-Markdown, 2-Html, 3-Ast for 1
-* [ ] Add: validation for unused SPEC_RESOURCE, some absolute spec resource line markers show as
-      missing in `flexmark-java`, cause was a spurious spec name declaration but never used for
-      tests in that class, overridden by subclass.
-* [ ] Add: separate color option for flexmark option names which are not built in and are all
-      caps.
-* [ ] Fix: flexmark ast highlight ranges should adjust highlight range for embedded caret and
-      selection markers so that start/end properly reflect text positions after markers are
-      removed.
-- [ ] Add: inspection for Java classes which define builtin option names, they will be ignored
-      so should not be used.
-- [ ] Add: reverse highlight lookup for AST based on source caret position. Choose first
-      smallest range that contains the caret in source.
-
-### Issues
-
-+ [ ] Add: completion for custom option should add `[]` and place caret inside
-- [ ] Fix: cached data for flexmark java info should be resolved during computation. Related
-      files will be invalidated if modified anyway. If precomputed then no access to related
-      Java files' cache will be needed.
-  - [ ] `resolvedSpecFiles`
-  - [ ] `resolvedOptionDefinitions`
-  - [ ] `BasedSequence.subSequence(0, 0)` instead of `BasedSequence.getEmptyPrefix()`
-  - [ ] `BasedSequence.subSequence(length(), length())` instead of
-        `BasedSequence.getEmptySuffix()`
-
-## Enhanced
-
-### Refactoring - Split Plugin
-
-* [ ] Add: Extension API for enhanced features
-  * Add: generic settings extension points:
-    * [ ] Add: extension point for language based inline code completions
-      * [ ] Needed functions:
-        * to have completions for class and nested identifiers
-        * to have these provide references to classes in question
-        * to be able to navigate to these
-        * be able to refactor these (Validate that enabling text search for refactoring already
-          does this.)
-      * To Be done:
-        * [ ] Fix: move Java completion for inline code to extension
-        * [ ] Add: PhpStorm completions for inline code to extension
-        * [ ] Add: WebStorm completions for inline code to extension
-    * [ ] Fix: all html provider extensions to be usable from Java, get rid of Pachinko
-          inheritance and implementation code
-      * [ ] Fix: Move all HTML generation helpers to utils library
-      * [ ] Add: extension points for modifying generated HTML by HTML providers
-      * [ ] Add: extension points for modifying fenced code rendering
-    * [ ] Add: ability to list, download, install and uninstall Markdown Navigator extension
-          plugins.
-* [ ] Add: move all link and image options (for address format) to rendering profile settings
-      not under application settings. This will allow setting default formats based on scope to
-      customize for different files.
-* [ ] Fix: Review `TODO`, `HACK` and `IMPORTANT` comments to be mapped for clarification of
-      urgency of action, todo is too generic, hack is a cautionary label, does not mean fix. If
-      it does, then use `FIX: hack`. `IMPORTANT` should be used on important fixes not
-      cautionary notes, use `CAUTION` or less critical `NOTE` for that.
-  * Actionable:
-    * `IMPORTANT` - broken needs fix ASAP.
-    * `FIX` - broken or limited for edge cases, works for common uses
-    * `FEATURE` - improvement on existing or new functionality,
-    * `OPTIMIZE` - no real changes but improve performance or user response,
-    * `REFACTOR` - no real change but improve implementation by cleanup,
-    * `DEPRECATED` - deprecated in IDE, add note when can migrate to new API and preferably
-      commented out migration code,
-  * Informational:
-    * `CAUTION` - important things to keep in mind before adding or changing code, otherwise
-      high probability of breaking without immediate errors
-    * `ISSUE` - code changes related to specific issue
-    * `NOTE` - additional information that may not be obvious and good to know.
-    * `HACK` - mark kludged solution that does not need immediate addressing because it is a
-      working kludge or has no easy workaround.
-    * `QUERY` - unresolved curiosity, probably unnecessary or buggy code. Add enough detail to
-      make sense of it 3 months from time of writing.
-    * `NOT USED:` - unused class, or function, consider removing
-  * Not to be used:
-    * `TODO` - overused and ambiguous, replace with actionable labels
-* [ ] Fix: consolidate basic/enh for wrap on typing, keep verbatim trailing, keep trailing
-      spaces settings.
-* [ ] Fix: use cached definition count map in intentions, inspections and annotator to quickly
-      determine if need to search for actual reference definitions for multi-defined references
-      or can skip expensive search since only 1 is defined.
-* Fix: ListItem actions to handle basic/enhanced variations
-  * [ ] Test: list item actions, licensed/unlicensed
-* Add: Element format API `MdFormatElementHandler`
-  * [ ] Test: element format licensed/unlicensed
-* Fix: add custom element injection of css resources for rendering API in `MdParserExtension`
-  * [ ] Test: admonition rendering
-  * Fix: move admonition resource injection to admonition parser extension
-* Fix: separate error reporting into installable extension for basic version, bundle in enhanced
-  version.
-* Add: ability to download and install markdown navigator extensions
-
-### Wish List
-
-+ [ ] Fix: alternative GitHub raw link format shows as undefined:
-      `https://github.com/igorwojda/android-showcase/blob/master/misc/image/module_dependencies.png?raw=true`
-  + [ ] Fix: handle alternative GitHub raw link format:
-        `https://github.com/igorwojda/android-showcase/blob/master/misc/image/module_dependencies.png?raw=true`
-  - [ ] Add: intention to convert between raw link formats
-+ [ ] Fix: [#748, Toolbar is completely hidden when window is not wide enough]
-* [ ] Fix: list item context for easy list modifications which always result in correct list:
-  * [ ] Fix: rewrite list ENTER & BACKSPACE handlers in terms of list action being performed
-        rather than pachinko text manipulation:
-    * [ ] add new item before: with params `loose`, `isTask` and `itemText`
-    * [ ] add new item after: with params `loose`, `isTask` and `itemText`
-    * [ ] remove item prefix: with params `taskOnly` true if only removing task prefix,
-          `isolate` if true and removing all prefixes will isolate resulting paragraph from
-          previous/next task items with blank lines.
-    * [ ] change item prefix: for ordered items changes the first item's numbering, for
-          unordered changes the bullet character used.
-  * [ ] Fix: list item indentation quick-fixes/actions should change the indentation of child
-        elements otherwise it messes up the list structure.
-  * [ ] Fix: task toggle on last line of file without EOL does not work properly
-  * ordinal changes for items:
-    * [ ] always adjust child element indentation to parent item indentation
-    * [ ] optionally renumber sibling items
-    * [ ] optionally wrap text to reflect new indentation for item and child items
-* [ ] Add: Markdown Nav debug trace config page with all debug traces and description
-  * [ ] Add: debug trace registration/definition with description for each and nesting
-* [ ] Add: translation options dialog to Translate Document action to allow selecting
-      translation criteria.
-  * [ ] Add: translate to clipboard option.
-* [ ] Fix: flexmark example options edit dialog:
-  * use check box searchable list
-  * use dimension size key
-  * place selected options at the top of the list, followed by any options used in the file,
-    then built in options, then all available options
-  * options used in file, built in and available should be alphabetically sorted within their
-    category.
-* [ ] Fix: Add Markdown file templates as per
-      [fileTemplates.j2ee](jetbrains://idea/navigate/reference?project=intellij-community.master&fqn=fileTemplates.j2ee)
-      and
-      [DevKitFileTemplatesFactory](jetbrains://idea/navigate/reference?project=intellij-community.master&fqn=org.jetbrains.idea.devkit.DevKitFileTemplatesFactory)
-
-  ```xml
-  <fileTemplateGroup implementation="org.jetbrains.idea.devkit.DevKitFileTemplatesFactory"/>
-  ```
-* [ ] Fix: style toggle action should work on styling spans and take which elements could be
-      wrapped by which into account. For example inline code cannot wrap any style because there
-      are no styles inside inline code. So inline code should wrap all text nodes inside the
-      style being wrapped instead. Similarly, italic inside bold when their contents match will
-      result in bold inside italic instead because Italic is always on the outside. ie. need
-      more sophisticated style toggle logic.
-* [ ] Add: folding to replace typographic characters.
-* [ ] Fix: shuffling of repository files invalidates links in old issue comments to files. See
-      if it is possible to find all comments with links so they can be updated.
-* [ ] Fix: Move preview settings which are Monitor specific (Grey scale font smoothing) to
-      Application settings. Review others that may need moving to IDE shared settings from
-      project settings.
-* [ ] Add: HTML Export option to select an alternate profile to use for exported text. This way
-      export and rendering can have completely different profiles for generated HTML. Will only
-      apply to export and when selected all export settings will come from the HTML Export of
-      the selected profile.
-* [ ] Fix: When pasting into fenced code (non-markdown) or indented code or any other
-      non-markdown content element, do not convert HTML content or ask.
-* [ ] Add: project configuration to add new file context menu items to create files from
-      templates in specific directories.
-- [ ] Add: configuration for repeated prefixes in items, which would be copied when
-      adding/splitting an item. In other words they would be treated equivalent to task item
-      marker prefix. That way standard: `Add: `, `Fix: `, `Break: ` and `Deprecate: ` prefixes
-      would be automatically copied.
-  - [ ] Add: option for treating these as part of the list item's suffix, ie. continuation lines
-        aligned to text after this suffix.
-- [ ] Fix: markdown test file loader:
-  - [ ] Fix: use task with progress in background
-  - [ ] Add: file range, file list and max files to load
-  - [ ] Add: generate stats and save them with project
-- [ ] Add: inspection for unnecessary URL encoding of link and link anchor with quick fix to
-      `urlDecode()`.
-  - [ ] test using `linkRef.fileToLink(linkRef.linkToFile()) != linkRef.getFilePath()` means
-  - [ ] allow fix in file option there are unnecessary URL encoded chars in address.
-- [ ] Add: option for auto injection of inline code language with language selection
-- [ ] Add: json to table extractor.
-- [ ] Add: plain paragraph folding when > 1 line and not list item text or footnote text, leave
-      trailing blank line but include EOL
-- [ ] Fix: see if can make change all intentions on a sub-menu same way as IDE in intentions
-- [ ] Fix: disable the non-ascii characters in identifier inspection for markdown documents
-- [ ] Add: option to disable list item re-ordering setting and toggle action that would override
-      code style settings when this option is selected.
-- [ ] Fix: add IDE action to invoke after HTML export in the profile.
-      [#739, Suggestion: Option add a generated a tree view of files and folders to HTML export],
-- [ ] Add: [#665, Add support to render code from links like GitHub web UI does], add links with
-      special title string to use for embedding link in file.
-- [ ] Fix: :red_circle:
-      [#774, Add formatter option to add blank lines around fenced-code blocks]
-
-### Issues
-
-+ [ ] Test: type handler tests basic/enh
-+ [ ] Doc: moved translation options to editor settings (from Debug)
-+ [ ] Doc: moved flexmark rendering options. (from Debug)
-+ [ ] Doc: added option for text hex dialog to Debug
-+ [ ] Doc: added option for size preferences dialog to Debug
-+ [ ] Fix: format/wrap on typing for task items with tab after marker changes first character of
-      text and inserts space after it. ???
-+ [ ] Doc: changed markdown live template element shortcuts to start with `,,` instead of `.` to
-      remove accidental live template insertion when typing text.
-+ [ ] [StackTraces_ToDo.txt](StackTraces_ToDo.txt)
-+ [ ] Test: complete formatter tests for all elements
-+ [ ] Fix: [#780, False positive for "Unresolved link reference"]
-  * Allow `Reference` link map entry to map to empty string. This should be used to remove the
-    undefined reference error while not rendering the reference in preview but treating it as
-    plain text.
-+ [ ] Add: [#779, Ignore character casing when checking for matching header]
-+ [ ] Fix: fixture tests do not restore enhanced document settings between tests.
-      [StructureViewSpecTest.java](test/src/com/vladsch/idea/multimarkdown/language/structure/enh/StructureViewSpecTest.java)
-+ [ ] Fix: [#764, Styling the preview pane], add toolbar button to go to settings/profile for
-      the file.
-+ [ ] Doc: Attributes extension space between **inline**, not just plain text, and attribute
-      attaches attribute to parent.
-* [ ] Reproduce: table element formatting fails with "table is no longer a markdown table".
-* [ ] Test: sim toc blank line spacer flag was coming from project defaults not profile of the
-      file containing the toc.
-* [ ] Fix: wrap on typing `* [ ]` causes the last `]` to move caret to next line
-* [ ] Add: ability to enter authentication information on a per site basis to allow JavaFX to
-      access content on such sites for preview.
-* [ ] Add: intention to sort ordered list by item number
-
-## EAP Release
-
-### Next 2.9.0.2xx/2.9.7.2xx - Dev Build
-
-+ [ ] Fix: `Add spec test caret selection` should paste caret position with selection if there
-      is a selection and remove any caret/selection markup in or immediately around the
-      selection.
-+ [ ] Fix: `Add spec test caret selection` remove any caret/selection markup in or immediately
-      around the selection.
-+ [ ] Fix: Add spec test selection is not available in list items
-+ [ ] Fix: Remove unused static `LOG` in classes
-+ [ ] Add: Option on paste link ref to update line references and link text when selection
-      reference is pasted and text matches old link/anchor selection ref, then replace the whole
-      link
-+ [ ] Add: HTML panel update on settings change, now EnhDocumentSettings change does not cause
-      markdown re-highlight nor preview update. Possibly, notifications on EnhDoc changes are
-      not working.
-+ [ ] Fix: check if HTML rendering in background thread improves typing response. In large
-      documents there is a small but noticeable lag, which does not exist when preview is
-      disabled. This is mitigated by setting update delay to 150 ms or higher. However, the
-      response is still a tiny bit sluggish with preview on.
-+ [ ] Fix: Add config to use GitLab config for remote link cache for links to configured VCS
-      GitHub repositories.
-+ [ ] Fix: Add config to use authentication information in requests for remote content for
-      preview, remote link cache and intentions.
-+ [ ] Add: generic methods to convert between PSI and flexmark nodes:
-  + [ ] Take any `MdElement` and get a flexmark `Node` for it.
-  + [ ] Take replace `MdElement` with flexmark `Node` by replacing its text the same way
-        verbatim content is replaced.
-  + [ ] Psi to flexmark must handle adding any references from the main file to the snippet for
-        parsing to flexmark node so nothing is lost.
-  + [ ] Fix: change all markdown manipulations to: convert to flexmark, manipulate, convert to
-        psi.
-+ [ ] Fix: Register post startup activity in services that need this:
-  + [ ] `MdLinkResolverManager`
-+ [ ] Add: `MdTabOverride`/`MdBackTabOverride` should treat empty items differently:
-  + [ ] treat empty items as having no children, should only indent/unindent the item in all
-        cases.
-  + [ ] should roll-over to highest parent indentation level when the item can no longer be
-        indented to allow tab to be used to adjust sub-item to parent item
-  + [ ] Non-Empty items on indent should show a pop-up with:
-    + [ ] Item Only: select as default if the item's recent child content is empty
-    + [ ] Item with Children before un-indent: select as default and only show if item was
-          un-indented and acquired more children because of it and its recent child content is
-          not empty.
-      + [ ] Tab/BackTab of item with recent child content only should reset the timestamp on
-            recent child content cache information in the file.
-    + [ ] Item with Children: select as default if the item has not recently acquired children
-          on un-indent. This option will indent item with children.
-    + [ ] Add: recent child content for items which are un-indented and acquire more children
-          because of it.
-      + [ ] cached by item's line number in the file,
-      + [ ] total file lines at creation
-      + [ ] Undo/Redo should clear this value.
-      + [ ] Only one item per file is kept track.
-      + [ ] Clear if total file line count is different from actual file line count
-* [ ] Fix: remove formatter and use flexmark formatter for document format to eliminate
-      duplicate code.
-* [ ] Add: reverse task list item sort order on format. To keep high priority items at the
-      bottom of the list.
-
-### 2.9.0.233/2.9.7.233 - EAP Build
-
+* Add: enable enhanced features for Community and Educational IDEs.
+* Fix: diagnostic/4369, IllegalStateException: NotNull method InlineParserImpl.parseCustom must
+  not return null
+* Fix: `JavaFxPreviewAvailable` to only show for project rendering profile
+* Fix: Merge `MdEnhCodeStyleSettings` into `MdCodeStyleSettings` and remove all API and code
+  related to the distinction.
+* Fix: un-escape link addresses before resolving links or caching
+* Fix: convert flexmark reference search for example option to use `FlexmarkSpecCachedData`
+* Fix: flexmark example options highlight would highlight unrelated ranges.
+  `FlexmarkReferenceSearch` did not check if references were in scope for super class
+  definitions.
 * Fix: wrap on typing caret adjustment on space between spliced words
 * Fix: wrap on typing caret adjustment on space after non-space and before keep at start of line
   elements.
-
-#### 2.9.0.231/2.9.7.231 - Dev Build
-
 * Add: Add visible LS intention action `➥`
 * Fix: remove log4j dependency from `JavaFx-WebView-Debugger`
 * Fix: link mapped image links showed unresolved in edge case conditions. Easiest way to
@@ -420,14 +51,8 @@
 * Fix: wrap on typing caret adjustment on backspace in continuation indent prefix
 * Fix: wrap on typing caret adjustment on backspace when on first non-blank of continuation line
   to splice to last word of previous line.
-
-#### 2.9.0.229/2.9.7.229 - Dev Build
-
 * Fix: conversion from Smart to based to extract more source information from segmented sequence
   and mapped sequence.
-
-#### 2.9.0.227/2.9.7.227 - Dev Build
-
 * Fix: enable table formatting in document formatter as temp measure to make formatter feature
   complete.
 * Fix: wrap on typing with new library use.
@@ -436,9 +61,6 @@
   a `PsiFile`.
 * Fix: use `FlexmarkSpecCachedData` for annotations of spec example options.
 * Fix: missed disposable in plugin application settings
-
-#### 2.9.0.225/2.9.7.225 - Dev Build
-
 * Add: flexmark spec line marker option definition data to cached file data.
 * Remove: from plugin-test-util/lib and plugin-util/lib from git, they are duplicated in Mia and
   Md
@@ -462,9 +84,6 @@
 * Fix: document format messes up table because it does not include the table prefix for the
   first line.
 * Fix: project disposed checking in ProjectFileMonitor.
-
-#### 2.9.0.223/2.9.7.223 - Dev Build
-
 * Add: option to alias `latex` and `math` for GitLab math if `latex` is an available language.
   * `latex` fenced code gets rendered by Katex if extension enabled
   * `math` block and inline elements get `latex` language injection
@@ -472,28 +91,16 @@
 * Add: GitLab inline math as language injection host
 * Add: `MdLanguageProvider` extension point to add aliases and resolve language info to
   language.
-
-#### 2.9.0.221/2.9.7.221 - Dev Build
-
 * Fix: diagnostic/4355, invalid regex for invalid link address
 * Fix: formatter to use max task item from item or descendants for sorting (not item
   priority*10+descendant).
-
-#### 2.9.0.219/2.9.7.219 - Dev Build
-
 * Fix: move components to services
 * Fix: missed dispose disposables
-
-#### 2.9.0.217/2.9.7.217 - Dev Build
-
 * Add: Goto Rendering profile settings button
 * Add: Goto Rendering profile link to show rendering profile/scope dialog
 * Add: Code style margin override to rendering profile.
 * Fix: pasting selection reference (with anchor) on link address which already has a ref anchor
   causes ref anchors to be duplicated. Ref anchor should be replaced when pasted link has one.
-
-#### 2.9.0.215/2.9.7.215 - Dev Build
-
 * Fix: pasting selection reference (with anchor) on link address which already has a ref anchor
   causes ref anchors to be duplicated. Ref anchor should be replaced when pasted link has one.
 * Fix: `Remove caret and selection markup` does not remove markup in selection.
@@ -503,11 +110,8 @@
   removed.
 * Fix: formatter to not change bullet item marker for task items when prioritized task option is
   enabled.
-
-#### 2.9.0.213/2.9.7.213 - Dev Build
-
 * Add: task list item priority by type of bullet list marker. Change task item icon in structure
-  view to reflect this. Only applies to incomplete tasks:
+  view to reflect this. Only applies to incomplete tasks.
   * Add: sorting on format to take priority into account if `Enable Task List Item Priority` is
     enabled. `Has Incomplete First` will use priority of item and max priority of its sub-items
     and sort in order of descending priority.
@@ -516,32 +120,14 @@
   * `-`: low priority, normal blank icon
   * empty tasks have normal grey icon regardless of priority
   * complete tasks have normal grey checked icon regardless of priority
-
-#### 2.9.0.211/2.9.7.211 - Dev Build
-
 * Fix: preview editor initialized to default typing delay instead of one in settings.
-
-#### 2.9.0.209/2.9.7.209 - Dev Build
-
 * Add: `As URL` option for `Copy Upsource Reference`
 * Fix: [#762, freeze when target link is a big file (16mb)]
 * Fix: [#786, Do not show Clipboard contains markdown  warning in same document]
-
-#### 2.9.0.207/2.9.7.207 - Dev Build
-
 * Fix: Use `com.intellij.testFramework.builders.JavaModuleFixtureBuilder#addJdk` for test JDK
   builders
 * Add: `Add test spec example` intention
-
-#### 2.9.0.205/2.9.7.205 - Dev Build
-
 * Add: `Copy Upsource Reference` for copying upsource refs in intellij-community sources.
-  Selection start/end offsets can be used for nav highlight Upsource uses git path for source
-  file. ie. relative to project base directory
-  `upsource://platform/platform-api/src/com/intellij/ide/browsers/BrowserLauncherAppless.kt?nav=3717:3923:focused&line=114&preview=false`
-  * nav=startOffset:endOffset,
-  * line appears to be line number,
-  * preview=false no idea.
 * Fix: Add custom protocol to line marker and `MdUrlFakePsiElement` for navigation
   * Add: icon for `jetbrains://` custom protocol
   * Add: icon for `upsource://` custom protocol
@@ -555,9 +141,6 @@
 * Fix: line selection anchors to files not updated when files are edited only when saved.
   Applies to all links to other files. Now on any change the links to that file are removed from
   the cache so they get recomputed.
-
-#### 2.9.0.203/2.9.7.203 - Dev Build
-
 * Fix: optimize link resolver to pre-filter files by name, then by fixed prefix before applying
   the regex for full match test. 2x-4x faster link resolution with large number of files.
 * Fix: use `linkRef.linkToFile()` in `MdCachedResolvedLinks` instead of `urlDecode()` which does
@@ -572,24 +155,15 @@
 * Add: per file resolved link cache. Amazing speed up for preview and all functions which
   require resolved links.
 * Fix: url encoded links do not resolve if they have sub-directories in the link address.
-
-#### 2.9.0.201/2.9.7.201 - Dev Build
-
 * Add: Paste Image option to checker transparency background
 * Add: Flexmark Example Option gutter icon option for SPEC_EXAMPLE
 * Fix: use singleton list cell renderer for Java line marker spec options.
 * Fix: use singleton or class for list cell renderers for markdown line markers: TOC, spec
   option, emoji, referencing and file elements
-
-#### 2.9.0.199/2.9.7.199 - Dev Build
-
 * Fix: spec resource resolving in resources.
 * Fix: remove `&nbsp;` use in flexmark spec examples. No longer needed for GitHub, since it
   switched to CommonMark processor.
 * Fix: HTML escape quotes in line marker tooltip description in rendered spec actual output.
-
-#### 2.9.0.197/2.9.7.197 - Dev Build
-
 * Fix: flexmark option definitions not showing line markers for interfaces defining options with
   rendering subclasses far down the class hierarchy
 * Fix: flexmark option definitions are not found if defined in interfaces instead of direct
@@ -598,64 +172,16 @@
   navigation quick fix to class(es) missing definition.
 * Fix: store file cached data in IDE Key<> for each file instead of a `PsiMap` keyed on the
   file.
-
-#### 2.9.0.195/2.9.7.195 - Dev Build
-
 * Fix: split `base/` platform/java test cases to `plugin-test-util` module.
 * Fix: complete flexmark java line marker test code using java test spec case.
-
-#### 2.9.0.193/2.9.7.193 - Dev Build
-
 * Fix: NPE in `FlexmarkPsiImplUtils` on resolution of supers
 * Fix: refactor platform spec test case impl to have platform/java versions and to have a
   re-usable base for use in other plugins.
-
-#### 2.9.0.191/2.9.7.191 - Dev Build
-
 * Fix: add new built-in options to edit example options dialog
 * Add: gutter icon configuration with the IDE `Editor > General > Gutter Icons`.
-  * Markdown line marker options
-    * Emoji,
-      * disabled by default
-      * remove editor config option for emoji gutter icons
-    * Jekyll include Tests:
-      * JEKYLL_INCLUDE
-    * Links and anchors Tests:
-      * LINK_REF_FILE
-        * LINK_ANCHOR_LINE_SELECTION
-      * LINK_REF_WEB
-      * LINK_REF_FTP
-      * LINK_REF_MAIL
-      * LINK_REF_GITHUB
-    * Toc
 * Fix: flexmark example `options` keyword completion to work like normal completions and add
   `()` with caret between `()`
-
-#### 2.9.0.189/2.9.7.189 - Dev Build
-
 * Add: gutter icon configuration with the IDE `Editor > General > Gutter Icons`.
-  * Markdown line marker options
-    * Jekyll include
-    * Links and anchors
-      * LINK_REF_MARKDOWN
-        * LINK_ANCHOR_LINE_SELECTION
-        * LINK_ANCHOR_A_TAG
-        * LINK_ANCHOR_ID_ATTRIBUTE
-        * LINK_ANCHOR_HEADING
-      * LINK_REF_FILE
-        * LINK_ANCHOR_LINE_SELECTION
-      * LINK_REF_WEB
-      * LINK_REF_FTP
-      * LINK_REF_MAIL
-      * LINK_REF_GITHUB
-    * References
-      * REFERENCE_REF_LINK
-      * REFERENCE_REF_IMAGE
-      * REFERENCE_REF_FOOTNOTE
-      * REFERENCE_REF_MACRO
-  * Flexmark Java line markers
-    * FLEXMARK_SPEC_FILE
-    * FLEXMARK_SPEC_EXAMPLE_OPTION
 * Fix: `MdLineMarkerProvider` no gutter icon for link address and one for anchor. Only anchor
   icon.
 * Fix: fake psi navigation elements to return `null` for `getContainingFile()` to disable
@@ -664,9 +190,6 @@
   * Fix: `MdLineSelectionFakePsiElement`
 * Fix: rebuild for new snapshot build of IDE.
 * Fix: update GitHub link resolver tests
-
-#### 2.9.0.187/2.9.7.187 - Dev Build
-
 * Fix: after format document scroll caret into view.
 * Add: option to disable list item smarts if wrap on typing is disabled to allow quick disabling
   of list smart keys without adding extra shortcuts or actions.
@@ -678,14 +201,8 @@
 * Fix: use `MdUrlFakePsiElement.copyForLineMarkerNavigation()` to create fake URL which returns
   null for containing file so line marker navigation uses `navigate()` instead of default
   implementation.
-
-#### 2.9.0.185/2.9.7.185 - Dev Build
-
 * Fix: missing partial link refs from copy because of typographic extension messing with
   undefined ref link as if it was text.
-
-#### 2.9.0.183/2.9.7.183 - Dev Build
-
 * Add: disabled reasons as extra text to menu actions to show why an item is disabled.
 * Fix: change link to reference modified and committed document before creating reference which
   uses an element from the pre-mod psi file causing invalid element access.
@@ -709,58 +226,25 @@
   was with link map not code. Needed to map only to actual git repo URL not local file directory
   name based URL. Had mapping to markdown3.wiki as per wiki directory name in project instead of
   markdown2.wiki as per git remote URL for the project wiki.
-
-#### 2.9.0.181/2.9.7.181 - Dev Build
-
 * Fix: message bus wrapper disposed test error.
 * Fix: spec files no longer render HTML when option selected. This is making all spec test
   examples fail because the contained text is plain text.
 * Fix: flexmark example option completions are missing all but built-in options, for completions
   need to use `PsiFile.getOriginalFile()` for cached data access since the element is a
   stand-in, its file is a copy of the original and no cache information for it is available.
-
-#### 2.9.0.179/2.9.7.179 - Dev Build
-
 * Fix: compatibility break in community master branch, MessageBusFactory, RestartableLexer
-
-#### 2.9.0.177/2.9.7.177 - Dev Build
-
 * Add: intention to change HTML entities to text, for example `&lt;` to `<`
 * Add: intention to change text to HTML entities, reverse of HTML entities to text
-* Add: Actions to for action test text generation:
-  * add selection markup
-  * add position markup
-  * add section break
-  * remove markup
-  * convert markup to carets and remove markup
-  * add visible tab
-  * add visible intellij dummy identifier
-  * add visible CR
-  * add test spec example break `…`
+* Add: Actions to for action test text generation.
 * Fix: mixed task and non-task items, toggle prefix adds it to all instead of removing only task
   item prefix or adding to only list items. Test is done.
-
-#### 2.9.0.175/2.9.7.175 - Dev Build
-
 * Fix: wiki links from main repo show as unresolved. All vcs roots in SNAPSHOT build of IDE were
   not seen at initialization.
 * Fix: diagnostic/4280, editor is disposed.
-
-#### 2.9.0.173/2.9.7.173 - Dev Build
-
 * Fix: update `flexmark-java` to reworked rich char impl.
-
-#### 2.9.0.171/2.9.7.171 - Dev Build
-
 * Fix: update `flexmark-java` to reworked rich char impl.
-
-#### 2.9.0.169/2.9.7.169 - Dev Build
-
 * Fix: update to fixed reverse-regex
 * Fix: update to latest flexmark-java
-
-#### 2.9.0.167/2.9.7.167 - Dev Build
-
 * Fix: spec examples without options have no line marker to Java test case file.
 * Fix: spec file link refs contain `&nbsp;` after document format
 * Fix: spec file once references show unused, they don't change to used, cache invalidation
@@ -777,42 +261,21 @@
 * Fix: format with wrap text disabled would double the indent of continuations every time.
 * Fix: paragraph wrapping now working in document format
 * Fix: enabled wrap on typing. Caret position tracking is off. Needs attention.
-
-#### 2.9.0.165/2.9.7.165 - Dev Build
-
 * Fix: clean up use of smart data lib where char sequences are not involved
 * Fix: clean up psi edit adjustment use, eliminate null adjustment and always provide file/chars
   for the instance.
-
-#### 2.9.0.163/2.9.7.163 - Dev Build
-
 * Fix: localize lex parser state access
 * Fix: disable all use of smart data, no table formatting, no wrapping until fixed
-
-#### 2.9.0.161/2.9.7.161 - Dev Build
-
 * Fix: Beta 2019.3 surprises. SmartData library not compatible with Kotlin 1.3.60 and needs to
   be removed.
-
-#### 2.9.0.159/2.9.7.159 - Dev Build
-
 * Fix: formatter control ignored when child of list item. Was by design. removed test for top
   level element.
 * Fix: html comment was improperly parsed to PSI if had leading whitespace which CommonMark
   passes on as is, with leading non-indenting whitespace.
-
-#### 2.9.0.157/2.9.7.157 - Dev Build
-
 * Fix: update flexmark-java 0.59.42, refactored and renamed `RichSequence`
 * Fix: format would loose custom option params on flex example options
-
-#### 2.9.0.155/2.9.7.155 - Dev Build
-
 * Fix: wrong offset use in MdInlineCode for offset in parent. Not handling multi-line content
   with prefixed parents.
-
-#### 2.9.0.153/2.9.7.153 - Dev Build
-
 * Fix: `UrlExtractingTextCollectingVisitor` did not collect typographic node text
 * Fix: plain text (JSON) was asking about HTML to markdown conversion.
 * Fix: HTML paste, if plain text == HTML then disable HTML paste button
@@ -822,9 +285,6 @@
   than 3 marker chars `` ` `` at beginning of a paragraph. Now for the latter, inserts `&nbsp;`
   before the inline-code.
 * Fix: `PsiSet` and `PsiMap` to not check equivalency of keys for `PsiFile`
-
-#### 2.9.0.151/2.9.7.151 - Dev Build
-
 * Add: compound spec-example sections, to combine previous lower level headings via `splice(" -
   ")` to allow hierarchical structure view for spec files
 * Fix: formatter to properly generate spec example section names for compound sections
@@ -832,9 +292,6 @@
   java classes from class super/sub class defining the same option.
 * Fix: structure view for spec files to allow hierarchies of sections, same as headings
 * Fix: make undefined example options resolve to test class for the spec file for navigation.
-
-#### 2.9.0.149/2.9.7.149 - Dev Build
-
 * Fix: annotator for example options
 * Fix: flexmark project data cache to have super/subclass and super nesting information resolved
   at data computation time. `RenderingTestCase` and first implementor of `SpecExampleProcessor`
@@ -843,23 +300,14 @@
   deeper subclass overrides super classes.
 * Fix: resolved literals should have literal name with sorted by class hierarchy literal
   expressions for all classes in the hierarchy which define the literal of that name.
-
-#### 2.9.0.147/2.9.7.147 - Dev Build
-
 * Fix: cached data dependencies rewrite. Now done like the IDE cached data management but with
   transactions and automatic data key dependency additions.
-
-#### 2.9.0.145/2.9.7.145 - Dev Build
-
 * Fix: spec-example spec file name resolution should use class relative for non absolute
   resource paths like the tests themselves.
 * Fix: Add proper spec resource string to spec file resolution using module and module roots
 * Fix: flexmark html settings to provide default sections if no sections are defined in
   persisted state
 * Fix: enable in place rename for Java side options.
-
-#### 2.9.0.143/2.9.7.143 - Dev Build
-
 * Add: add global invalidation lock to use for all dataKey invalidation actions
 * Add: invalidation nesting for invalidation log indentations
 * Fix: `CachedDataSet` was not removing invalidated keys, only propagating invalidation to their
@@ -873,32 +321,17 @@
 * Fix: all cachedData add/remove/test are synchronized to map instance for access only. For
   computations a lock per dataKey/dataCache is used to lock get/compute to ensure consistency
   from different threads.
-
-#### 2.9.0.141/2.9.7.141 - Dev Build
-
 * Fix: remove erroneous optimization when registering dependencies which caused dependencies to
   be missed
 * Fix: add callback to monitors that all container dependencies were removed, as occurs on
   `CachedDataSet.clearCachedData()`
 * Fix: remove cache clearing on `updateContainerState()` call. Only restart highlights is
   needed.
-
-#### 2.9.0.139/2.9.7.139 - Dev Build
-
 * Fix: custom options highlight red for super classes of test without their own `SPEC_RESOURCE`
   definition.
 * Fix: rename of options with custom param preserves custom params
-
-#### 2.9.0.137/2.9.7.137 - Dev Build
-
 * Fix: data key dependency version should have data key as the instance
 * Fix: add transactions for getting cached key values, without transaction can `getOrNull()`
-  * invalidation occurs outside of transactions so removing a key is not transactional, neither
-    is dependency checking
-  * key set is not available
-  * transactions deal with adding dependencies, when `get` is invoked transaction it
-    automatically adds the key to its parent transaction
-  * cached data set not linked to container or its type, completely generic
 * Fix: add validation to all cached data and recompute if has invalid elements and log error.
 * Fix: flexmark options do not resolve all the way to base class, base class show as unresolved
   and java file has no line markers. Bug in flexmark option stub creation
@@ -913,70 +346,34 @@
   invalid data used for highlighting.
 * Fix: Psi Monitor now subscribes to `VirtualFileManager.VFS_CHANGES.after`. Checks if virtual
   file corresponds to `PsiFile` for invalidation, in `Application.invokeLater`. asdfasf
-
-#### 2.9.0.135/2.9.7.135 - Dev Build
-
 * Add: cached dependencies and management
-
-#### 2.9.0.133/2.9.7.133 - Dev Build
-
 * Fix: `DataKey` used for nullable value in `HtmlMimeExtension` causing `@NotNull` exception
   when trying to copy HTML mime content.
 * Fix: convert inspection to use file cached element data.
-
-#### 2.9.0.131/2.9.7.131 - Dev Build
-
 * Fix: remove synchronization. Issue was with using computeIfAbsent and passing it the data key
   factory which could and does add other keys as it retrieves data to compute its value. This
   was causing concurrent modification exception. Now computing value then adding it.
-
-#### 2.9.0.129/2.9.7.129 - Dev Build
-
 * Fix: make `MutableDataSet` synchronize all access to `HashMap` to make it thread safe for
   lexing/parsing during indexing.
-
-#### 2.9.0.127/2.9.7.127 - Dev Build
-
 * Add: `CachedDataSet<>` and `CachedDataKey` to have caching of data in `MdFile` and automatic
   invalidation on cache clear
-
-#### 2.9.0.125/2.9.7.125 - Dev Build
-
 * Fix: flexmark spec file:
   * use section config for range highlights in editor
   * config for sections in `HTML Generation`
     * languages text boxes for: source, html ast
     * `AST offsets for` checkboxes: `source`, `html`
 * Fix: nullable/notnull annotations to flexmark-java library
-
-#### 2.9.0.123/2.9.7.123 - Dev Build
-
 * Add: allow all in file intention for change link to text
 * Fix: `#` to escaped leading chars
 * Fix: escaping of leading chars when changing link to text.
-
-#### 2.9.0.121/2.9.7.121 - Dev Build
-
 * Fix: keep only settings action keys without the instance keys.
 * Fix: test settings, add compare and diff settings for non-default at end of test case.
-
-#### 2.9.0.119/2.9.7.119 - Dev Build
-
 * Fix: flexmark spec options to recognize options based on type being `Map<String, ? extends
   DataHolder>`.
-
-#### 2.9.0.117/2.9.7.117 - Dev Build
-
 * Fix: flexmark resource location/resolver manager class initialization conflict
 * Fix: full spec expected to use original spec example opening line
-
-#### 2.9.0.115/2.9.7.115 - Dev Build
-
 * Fix: flexmark custom options now recognized.
 * Fix: no highlighting is done because it was disabled with `Highlighting Level` set to none.
-
-#### 2.9.0.113/2.9.7.113 - Dev Build
-
 * Fix: update to new spec-example tests
 * Fix: task item done toggle replaces item prefix with task marker
 * Fix: trailing spaces filter and tests
@@ -1077,9 +474,6 @@
 * Fix: line navigation for line selection anchor to not use default file navigation
 * Fix: duplicate line marker navigation for links
 * Add: `Copy Selection Reference` for 2019.3 and prior versions
-
-#### 2.9.0.18/2.9.7.18 - EAP Release
-
 * Fix: [#773, Pasting URL from chrome pastes meta-data] on Windows Chrome. Data contained Chrome
   HTML segment information.
 * Fix: [#768, Copy as reference copies invalid link] on Windows
@@ -1097,9 +491,6 @@
   * Fix: image paste now saves highlights in original image coordinates so crop/scale does not
     affect the highlighted image region.
   * Add: checkered background to show image transparency
-
-#### 2.9.0.12/2.9.7.12 - EAP Release
-
 * Fix: single space list action would delete blank line and next list item marker. Broken in
   2.9.0.8/2.9.7.8.
 * Fix: disable wrap on typing and auto-format table actions when caret is in non-formatting
@@ -1124,30 +515,18 @@
   completions or refactor/navigate to file.
 * Add: `Space in link URLs` parser option to allow spaces in URLs which will be URL encoded for
   HTML preview and export.
-
-#### 2.9.0.8/2.9.7.8 - EAP Release
-
 * Fix: export of plantuml, puml and math generated images
 * Fix: force export of HTML files which contain generated images because the image name changes
   between exports regardless whether markdown content changes or not.
 * Fix: `RestartableLexer` implementation for 2019.2
 * Fix: flexmark spec case options search to handle options defined in super classes
 * Fix: merge split settings changes
-
-#### 2.9.0.6/2.9.7.6 - EAP Release
-
 * Fix: partial fix for
   [#771, macOS: Paste doesn't work when copying link from Safari's context menu], will no longer
   paste HTML link since OS X 10.14.6 does not provide HTML on Copy Link from Safari but will
   paste the address.
-
-#### 2.9.0.4/2.9.7.4 - EAP Release
-
 * Add: [#768, Copy as reference copies invalid link], now handles copy reference of markdown
   anchor ref target elements so paste will paste link to element
-
-#### 2.9.0.2/2.9.7.2 - EAP Release
-
 * Fix: incorrect determination of loose list items in lists
 * Add: Markdown code style settings to import/export settings action.
 * Fix: inspection for list item needs more indentation to work with CommonMark list rules when

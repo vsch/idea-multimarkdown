@@ -1,5 +1,5 @@
-<img src="https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/MNLogo.png" height="64" width="64" align="absmiddle"> Markdown Navigator 2.8
-==========================================================================================================================================================
+<img src="https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/MNLogo.png" height="64" width="64" align="absmiddle"> Markdown Navigator 2.9.8
+============================================================================================================================================================
 
 [TOC levels=2,3]: # "Table of Contents"
 
@@ -9,6 +9,7 @@
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
     - [Future Release: Version 3.0.0](#future-release-version-300)
+    - [Version 2.9.8](#version-298)
     - [Version 2.9.0/2.9.7](#version-290297)
     - [Version 2.8.4](#version-284)
     - [Version 2.8.2](#version-282)
@@ -23,12 +24,9 @@
 **[<span style="color:#30A0D8;">Markdown</span>][Markdown] language support for IntelliJ
 platform**
 
-**A Markdown plugin** with GFM and a **matching** preview style.
-
 **You can download it on the [JetBrains plugin page].**
 
-**Get Markdown Navigator [enhanced edition][Markdown Navigator] to unlock all productivity
-features.**
+Markdown Navigator [enhanced edition][Markdown Navigator] features **unlocked for Community and Educational IDEs**
 
 ### Document with pleasure!
 
@@ -73,8 +71,9 @@ for:
    and editing of markdown documents without full document format.
 
 2. Advanced features used for creating and maintaining markdown documents: refactoring, find
-   usages, validation and auto formatting are only available in the Enhanced licensed version.
-   15-day free trial licenses are available from [Markdown Navigator] page on my website.
+   usages, validation and auto formatting are available free for Community or Educational IDEs
+   or with the Enhanced licensed version. 15-day free trial licenses are available from
+   [Markdown Navigator] page on my website.
 
 Release Road Map
 ----------------
@@ -89,11 +88,38 @@ Release Road Map
 * Link resolution support for non-GitHub VCS providers
 * Plus the usual bug fixes that come up between now and the release.
 
-### Version 2.9.0/2.9.7
+### Version 2.9.8
 
 Long list of Bug and compatibility fixes you can find in [Version Notes].
 
-[Install EAP plugin](../../wiki/EAP-Update-Channel) version to preview next release.
+* **2019.3 Compatibility Release** for IDE versions 2019.3 and later
+* Enhanced features unlocked for Community and Educational IDE products
+* **Optimized Performance** gains of up to 40x
+* **Copy Table as JSON** action to convert markdown table to JSON structure
+* **Adjust Links on Paste** and **Confirm on Paste** options for selective link URL adjustments
+* **Space in link URLs** parser option
+* **Copy Reference** of heading and paste to get link with anchor ref
+* **Copy Selection Reference** in any file and paste to get line selection link
+* **Exception Report** tracking with notification of fixes
+* **Task Item Priority** based on bullet of item:
+  * `+ [ ]` high priority
+  * `* [ ]` normal priority
+  * `- [ ]` low priority
+* **Gutter Icons** configuration
+* Show **Scope and Profile** matches for file.
+* **Rendering Profile Settings** toolbar button
+* **Paste Image**:
+  * Improved destination directory selection
+  * Highlights adjust to scale and cropping changes
+  * Checkered transparent background option
+* **Convert to/from HTML entities** intentions
+* **Admonition Type Completions**
+* **Common TOC Errors** inspections
+* **Right Margin** override in scoped rendering profile
+* Optionally alias **`latex`** and **`math`** languages to use [TeXiFy IDEA plugin] for GitLab
+  math elements
+
+### Version 2.9.0/2.9.7
 
 * **Split plugin versions**: 2.9.0 for pre 2019.2 IDEs and 2.9.5 for 2019.2 and later
 * **Configuration Search** in all configuration panes
@@ -172,12 +198,9 @@ Long list of Bug and compatibility fixes you can find in [Version Notes].
 
 ### Source Update is Long Overdue
 
-Now that I unified the display between the licensed and unlicensed versions by removing support
-for preview tabs in favour of split editor as the only option, I will be updating the open
-source with a new version much easier.
-
-The update will be more like a replacement of the source than an evolution of it. The directory
-structure has changed significantly and a lot of Java has been converted to Kotlin.
+The upcoming OSS update will be more like a replacement of the source than an evolution of it.
+The directory structure has changed significantly and a lot of Java has been converted to
+Kotlin.
 
 The enhanced version is now 120k lines of code so my goal is to separate the open source
 functionality from the proprietary code with a clean boundary to make open source releases
@@ -266,6 +289,7 @@ Reserved.
 [Rendering Profiles Settings]: https://github.com/vsch/idea-multimarkdown/wiki/Rendering-Profiles-Settings#configuring-for-non-latin-character-sets
 [Screenshot_PasteImage_Highlight]: /assets/images/faq/ScreenShot_PasteImage_sm_h.png
 [sirthias]: https://github.com/sirthias
+[TeXiFy IDEA plugin]: https://plugins.jetbrains.com/plugin/9473-texify-idea/
 [Version Notes]: https://github.com/vsch/idea-multimarkdown/blob/master/VERSION.md
 [.gitignore]: https://plugins.jetbrains.com/plugin/7495--ignore
 [Admonition Extension, Material for MkDocs]: https://squidfunk.github.io/mkdocs-material/extensions/admonition/
