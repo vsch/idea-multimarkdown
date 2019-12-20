@@ -1,6 +1,7 @@
 [TOC levels=2,3,4]: # "Version History"
 
 ### Version History
+- [2.9.9 - 2019.3 Compatibility Release](#299---20193-compatibility-release)
 - [2.9.8 - 2019.3 Compatibility Release](#298---20193-compatibility-release)
     - [2.9.0.20/2.9.7.20 - EAP Release](#2902029720---eap-release)
 - [2.9.7 - Bug Fix & Compatibility Release](#297---bug-fix--compatibility-release)
@@ -24,6 +25,11 @@
 - [2.8.4 - Bug Fix & Enhancement Release](#284---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 
+
+### 2.9.9 - 2019.3 Compatibility Release
+
+* Fix: diagnostic/4375, Erroneous use of `javafx.util.Pair` instead of
+  `com.vladsch.flexmark.util.Pair` in `MdCodeStyleSettings`
 
 ### 2.9.8 - 2019.3 Compatibility Release
 
