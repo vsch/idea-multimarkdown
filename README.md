@@ -1,5 +1,5 @@
-<img src="https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/MNLogo.png" height="64" width="64" align="absmiddle"> Markdown Navigator 2.9.9
-============================================================================================================================================================
+<img src="https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/MNLogo.png" height="64" width="64" align="absmiddle"> Markdown Navigator 2.9.10
+=============================================================================================================================================================
 
 [TOC levels=2,3]: # "Table of Contents"
 
@@ -9,6 +9,7 @@
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
     - [Future Release: Version 3.0.0](#future-release-version-300)
+    - [Version 2.9.10](#version-2910)
     - [Version 2.9.9](#version-299)
     - [Version 2.9.0/2.9.7](#version-290297)
     - [Version 2.8.4](#version-284)
@@ -88,9 +89,14 @@ Release Road Map
 * Link resolution support for non-GitHub VCS providers
 * Plus the usual bug fixes that come up between now and the release.
 
-### Version 2.9.9
+### Version 2.9.10
 
-Long list of Bug and compatibility fixes you can find in [Version Notes].
+Complete list of bug and compatibility fixes in [Version Notes].
+
+* **Table Sort** action
+* **Table Transpose** action
+
+### Version 2.9.9
 
 * **2019.3 Compatibility Release** for IDE versions 2019.3 and later
 * Enhanced features unlocked for Community and Educational IDE products

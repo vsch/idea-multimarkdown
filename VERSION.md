@@ -1,6 +1,7 @@
 [TOC levels=2,3,4]: # "Version History"
 
 ### Version History
+- [2.9.10 - 2019.3 Compatibility Release](#2910---20193-compatibility-release)
 - [2.9.9 - 2019.3 Compatibility Release](#299---20193-compatibility-release)
 - [2.9.8 - 2019.3 Compatibility Release](#298---20193-compatibility-release)
     - [2.9.0.20/2.9.7.20 - EAP Release](#2902029720---eap-release)
@@ -25,6 +26,52 @@
 - [2.8.4 - Bug Fix & Enhancement Release](#284---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 
+
+### 2.9.10 - 2019.3 Compatibility Release
+
+* Fix: table to JSON to collect link element text if not extracting URL
+* Fix: table to JSON to collect link URL not percent decoding
+* Fix: table sort moving column up/down deselects it, preventing repeated use of shortcuts to
+  arrange column order.
+* Add: Copy Transposed Table
+* Fix: implement `EditorHighlighterProvider` to provide syntax highlighter based on profile for
+  the file and syntax highlighter type to eliminate the need to reset editor highlighter on
+  creation to plain text lexer for annotator syntax highlighter.
+* Fix:
+  [#801, Latest version : All options in plugin settings cleared. Reset to defaults does not work.]
+* Add: [#759, Table sorting \[Feature request\]]
+* Add: Transpose Table
+* Fix: indented fenced code content change not adding trailing EOL to content before replacing.
+  Causes trailing close marker to be appended to last line of content.
+* Fix: [#799, Reload editor on underlying file change is not working]
+* Fix: [#800, Slow typing response caused by Lexer syntax highlighter]
+* Add: `SplitEditor` timing and clean up updates
+* Fix: Parser settings to remove extension flags that are set by code and not available in the
+  UI: `INTELLIJ_DUMMY_IDENTIFIER`, `MULTI_LINE_IMAGE_URLS`, `EXTANCHORLINKS`,
+  `EXTANCHORLINKS_WRAP` when saving extensions and option flags. Also to not compare these in
+  equals or include in hash code.
+* Fix: update profile recognition by removing
+* Fix: diagnostic/4386, Throwable: Too many element types registered.
+  [#797, Syntax Highlight Permutations can cause: Too many element types exception]
+* Fix: [#798, Remote content link validation can exceed its max simultaneous fetch threads]
+* Fix: consolidate all context parameters into `PsiEditContext` for all methods. Remove
+  styleSettings, parserSettings, etc.
+* Fix: add `MdCodeStyleSettings` to `MdRenderingProfile`, no UI yet for profile code style
+  settings but the code is ready.
+* Fix: Spec example with no option was still formatting with `options()` keyword
+* Fix: diagnostic/4388, IndexOutOfBounds in link resolver manager
+* Fix: `ProjectFileMonitor` to not restart code analyzer for a file that was invalidated by its
+  own code analyzer run.
+* Fix: use flexmark `CharWidthProvider` instead of `SmartData` one.
+* Fix: add context logging with timing information to isolate typing response lag after extended
+  use.
+* Fix: option leak between test spec example
+* Fix: should not escape of plain `.` at start of continuation.
+* Fix: file move/rename refactoring adjusting links when search for references is not selected.
+* Fix: index exception on paragraph wrapping
+* Fix: backspace after typing a char should not remove spaces which surrounded the char
+* Fix: Should be called at least in the state COMPONENTS_LOADED exception on initialization for
+  2020.1 compatibility.
 
 ### 2.9.9 - 2019.3 Compatibility Release
 
@@ -1040,3 +1087,10 @@
 [#780, False positive for "Unresolved link reference"]: https://github.com/vsch/idea-multimarkdown/issues/780
 [#786, Do not show Clipboard contains markdown  warning in same document]: https://github.com/vsch/idea-multimarkdown/issues/786
 
+
+[#798, Remote content link validation can exceed its max simultaneous fetch threads]: https://github.com/vsch/idea-multimarkdown/issues/798
+[#797, Syntax Highlight Permutations can cause: Too many element types exception]: https://github.com/vsch/idea-multimarkdown/issues/797
+[#800, Slow typing response caused by Lexer syntax highlighter]: https://github.com/vsch/idea-multimarkdown/issues/800
+[#799, Reload editor on underlying file change is not working]: https://github.com/vsch/idea-multimarkdown/issues/799
+[#759, Table sorting \[Feature request\]]: https://github.com/vsch/idea-multimarkdown/issues/759
+[#801, Latest version : All options in plugin settings cleared. Reset to defaults does not work.]: https://github.com/vsch/idea-multimarkdown/issues/801
