@@ -1,6 +1,8 @@
-[TOC levels=2,3,4]: # "Version History"
+&nbsp;<details id="version-history"><summary>**Table of Contents**</summary>
 
-### Version History
+[TOC levels=2,3,4]: # " "
+
+- [2.9.11 - 2019.3 Compatibility Release](#2911---20193-compatibility-release)
 - [2.9.10 - 2019.3 Compatibility Release](#2910---20193-compatibility-release)
 - [2.9.9 - 2019.3 Compatibility Release](#299---20193-compatibility-release)
 - [2.9.8 - 2019.3 Compatibility Release](#298---20193-compatibility-release)
@@ -26,6 +28,19 @@
 - [2.8.4 - Bug Fix & Enhancement Release](#284---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 
+
+&nbsp;</details>
+
+### 2.9.11 - 2019.3 Compatibility Release
+
+* Fix: [#804, Parser settings always setting default options when loading settings.]
+* Fix: profile settings could be deleted if markdown code style settings changed and applied if
+  profiles pane was opened before changing markdown code style.
+* Fix: changing profiles and applying would cause export on settings change to be triggered for
+  every changed profile, instead of once for all changes.
+* Fix: wrap on typing caret jumping to end of next line if typing replaces selection.
+* Fix: separate out test requiring java plugin into intellij test suite
+* Fix: add test run config for PhpStorm and PyCharm Community
 
 ### 2.9.10 - 2019.3 Compatibility Release
 
@@ -1042,7 +1057,6 @@
   way apply to all will only convert elements which can be converted back to images without
   changing the file layout.
 
-[#665, Add support to render code from links like GitHub web UI does]: https://github.com/vsch/idea-multimarkdown/issues/665
 [#702, Setext header marker equalization on ENTER broken]: https://github.com/vsch/idea-multimarkdown/issues/702
 [#704, NoClassDefFoundError on 2019.1 EAP with JBRE]: https://github.com/vsch/idea-multimarkdown/issues/704
 [#705, Show navigable headings as file members inside project view]: https://github.com/vsch/idea-multimarkdown/issues/705
@@ -1065,32 +1079,33 @@
 [#731, apache pdfbox vulnerability]: https://github.com/vsch/idea-multimarkdown/issues/731
 [#733, PlantUML include path]: https://github.com/vsch/idea-multimarkdown/issues/733
 [#737, "Hard-break" Trailing Spaces Removed on Manual Save]: https://github.com/vsch/idea-multimarkdown/issues/737
-[#739, Suggestion: Option add a generated a tree view of files and folders to HTML export]: https://github.com/vsch/idea-multimarkdown/issues/739
 [#741, Links]: https://github.com/vsch/idea-multimarkdown/issues/741
 [#743, auto-move in preview to match source code cursor position]: https://github.com/vsch/idea-multimarkdown/issues/743
 [#745, Exception from AppUtils.isAppVersionGreaterThan when running on development build of IntelliJ IDEA]: https://github.com/vsch/idea-multimarkdown/issues/745
 [#746, Plugin creates files under .idea with default settings]: https://github.com/vsch/idea-multimarkdown/issues/746
 [#747, Useless "Markdown Export On Settings Change" notifications]: https://github.com/vsch/idea-multimarkdown/issues/747
-[#748, Toolbar is completely hidden when window is not wide enough]: https://github.com/vsch/idea-multimarkdown/issues/748
 [#757, Gitlab multi-line blockquote syntax incorrect]: https://github.com/vsch/idea-multimarkdown/issues/757
+[#759, Table sorting \[Feature request\]]: https://github.com/vsch/idea-multimarkdown/issues/759
 [#760, Attributes support is broken/incompatible with fenced code blocks]: https://github.com/vsch/idea-multimarkdown/issues/760
 [#761, html paste option can't save]: https://github.com/vsch/idea-multimarkdown/issues/761
 [#762, freeze when target link is a big file (16mb)]: https://github.com/vsch/idea-multimarkdown/issues/762
-[#764, Styling the preview pane]: https://github.com/vsch/idea-multimarkdown/issues/764
 [#768, Copy as reference copies invalid link]: https://github.com/vsch/idea-multimarkdown/issues/768
 [#771, macOS: Paste doesn't work when copying link from Safari's context menu]: https://github.com/vsch/idea-multimarkdown/issues/771
 [#773, Pasting URL from chrome pastes meta-data]: https://github.com/vsch/idea-multimarkdown/issues/773
-[#774, Add formatter option to add blank lines around fenced-code blocks]: https://github.com/vsch/idea-multimarkdown/issues/774
 [#776, JavaFx Preview displays cached image for deleted file]: https://github.com/vsch/idea-multimarkdown/issues/776
 [#777, No query suffix is added to image links if absolute file:/ format is used]: https://github.com/vsch/idea-multimarkdown/issues/777
+[#786, Do not show Clipboard contains markdown  warning in same document]: https://github.com/vsch/idea-multimarkdown/issues/786
+[#797, Syntax Highlight Permutations can cause: Too many element types exception]: https://github.com/vsch/idea-multimarkdown/issues/797
+[#798, Remote content link validation can exceed its max simultaneous fetch threads]: https://github.com/vsch/idea-multimarkdown/issues/798
+[#799, Reload editor on underlying file change is not working]: https://github.com/vsch/idea-multimarkdown/issues/799
+[#800, Slow typing response caused by Lexer syntax highlighter]: https://github.com/vsch/idea-multimarkdown/issues/800
+[#801, Latest version : All options in plugin settings cleared. Reset to defaults does not work.]: https://github.com/vsch/idea-multimarkdown/issues/801
+[#804, Parser settings always setting default options when loading settings.]: https://github.com/vsch/idea-multimarkdown/issues/804
+[#665, Add support to render code from links like GitHub web UI does]: https://github.com/vsch/idea-multimarkdown/issues/665
+[#739, Suggestion: Option add a generated a tree view of files and folders to HTML export]: https://github.com/vsch/idea-multimarkdown/issues/739
+[#748, Toolbar is completely hidden when window is not wide enough]: https://github.com/vsch/idea-multimarkdown/issues/748
+[#764, Styling the preview pane]: https://github.com/vsch/idea-multimarkdown/issues/764
+[#774, Add formatter option to add blank lines around fenced-code blocks]: https://github.com/vsch/idea-multimarkdown/issues/774
 [#779, Ignore character casing when checking for matching header]: https://github.com/vsch/idea-multimarkdown/issues/779
 [#780, False positive for "Unresolved link reference"]: https://github.com/vsch/idea-multimarkdown/issues/780
-[#786, Do not show Clipboard contains markdown  warning in same document]: https://github.com/vsch/idea-multimarkdown/issues/786
 
-
-[#798, Remote content link validation can exceed its max simultaneous fetch threads]: https://github.com/vsch/idea-multimarkdown/issues/798
-[#797, Syntax Highlight Permutations can cause: Too many element types exception]: https://github.com/vsch/idea-multimarkdown/issues/797
-[#800, Slow typing response caused by Lexer syntax highlighter]: https://github.com/vsch/idea-multimarkdown/issues/800
-[#799, Reload editor on underlying file change is not working]: https://github.com/vsch/idea-multimarkdown/issues/799
-[#759, Table sorting \[Feature request\]]: https://github.com/vsch/idea-multimarkdown/issues/759
-[#801, Latest version : All options in plugin settings cleared. Reset to defaults does not work.]: https://github.com/vsch/idea-multimarkdown/issues/801

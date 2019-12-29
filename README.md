@@ -1,4 +1,4 @@
-<img src="https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/MNLogo.png" height="64" width="64" align="absmiddle"> Markdown Navigator 2.9.10
+<img src="https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/MNLogo.png" height="64" width="64" align="absmiddle"> Markdown Navigator 2.9.11
 =============================================================================================================================================================
 
 [TOC levels=2,3]: # "Table of Contents"
@@ -9,6 +9,7 @@
     - [Two tier model](#two-tier-model)
 - [Release Road Map](#release-road-map)
     - [Future Release: Version 3.0.0](#future-release-version-300)
+    - [Version 2.9.11](#version-2911)
     - [Version 2.9.10](#version-2910)
     - [Version 2.9.9](#version-299)
     - [Version 2.9.0/2.9.7](#version-290297)
@@ -27,7 +28,8 @@ platform**
 
 **You can download it on the [JetBrains plugin page].**
 
-Markdown Navigator [enhanced edition][Markdown Navigator] features **unlocked for Community and Educational IDEs**
+Markdown Navigator [enhanced edition][Markdown Navigator] features **unlocked for Community and
+Educational IDEs**
 
 ### Document with pleasure!
 
@@ -72,8 +74,8 @@ for:
    and editing of markdown documents without full document format.
 
 2. Advanced features used for creating and maintaining markdown documents: refactoring, find
-   usages, validation and auto formatting are available free for Community or Educational IDEs
-   or with the Enhanced licensed version. 15-day free trial licenses are available from
+   usages, validation and auto formatting are available **free for Community or Educational**
+   IDEs or with the Enhanced licensed version. 15-day free trial licenses are available from
    [Markdown Navigator] page on my website.
 
 Release Road Map
@@ -89,9 +91,19 @@ Release Road Map
 * Link resolution support for non-GitHub VCS providers
 * Plus the usual bug fixes that come up between now and the release.
 
-### Version 2.9.10
+### Version 2.9.11
 
 Complete list of bug and compatibility fixes in [Version Notes].
+
+* Fix settings related bugs
+  * Fix: [#804, Parser settings always setting default options when loading settings.]
+  * Fix: profile settings could be deleted if markdown code style settings changed and applied
+    if profiles pane was opened before changing markdown code style.
+  * Fix: changing profiles and applying would cause export on settings change to be triggered
+    for every changed profile, instead of once for all changes.
+  * Fix: wrap on typing caret jumping to end of next line if typing replaces selection.
+
+### Version 2.9.10
 
 * **Table Sort** action
 * **Table Transpose** action
@@ -274,6 +286,7 @@ was based on [pegdown] library by [sirthias].
 Markdown Navigator, Copyright (c) 2015-2019, V. Schneider, <http://vladsch.com> All Rights
 Reserved.
 
+[#804, Parser settings always setting default options when loading settings.]: https://github.com/vsch/idea-multimarkdown/issues/804
 [codecogs.com]: https://codecogs.com
 [commonmark-java]: https://github.com/atlassian/commonmark-java
 [Configuring for Non-Latin Character Sets]: https://github.com/vsch/idea-multimarkdown/wiki/Rendering-Profiles-Settings#configuring-for-non-latin-character-sets
@@ -291,7 +304,7 @@ Reserved.
 [nicoulaj/idea-markdown plugin]: https://github.com/nicoulaj/idea-markdown
 [pegdown]: http://pegdown.org
 [Plain Text Suggestion Scope]: https://github.com/vsch/idea-multimarkdown/wiki/Rendering-Profiles-Settings#plain-text-suggestion-scope
-[PlantUML]: http://plantuml.com
+[PlantUML]: https://plantuml.com
 [Rendering Profiles Settings]: https://github.com/vsch/idea-multimarkdown/wiki/Rendering-Profiles-Settings#configuring-for-non-latin-character-sets
 [Screenshot_PasteImage_Highlight]: /assets/images/faq/ScreenShot_PasteImage_sm_h.png
 [sirthias]: https://github.com/sirthias
