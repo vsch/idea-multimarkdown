@@ -1,35 +1,69 @@
 &nbsp;<details id="version-history"><summary>**Table of Contents**</summary>
 
-[TOC levels=2,3,4]: # " "
+[TOC]: # " "
 
+- [2.9.11.14 - 2019.3 Compatibility EAP Release](#291114---20193-compatibility-eap-release)
 - [2.9.11 - 2019.3 Compatibility Release](#2911---20193-compatibility-release)
 - [2.9.10 - 2019.3 Compatibility Release](#2910---20193-compatibility-release)
 - [2.9.9 - 2019.3 Compatibility Release](#299---20193-compatibility-release)
 - [2.9.8 - 2019.3 Compatibility Release](#298---20193-compatibility-release)
-    - [2.9.0.20/2.9.7.20 - EAP Release](#2902029720---eap-release)
+  - [2.9.0.20/2.9.7.20 - EAP Release](#2902029720---eap-release)
 - [2.9.7 - Bug Fix & Compatibility Release](#297---bug-fix--compatibility-release)
 - [2.9.0/2.9.5 - Bug Fix & Compatibility Release](#290295---bug-fix--compatibility-release)
-    - [2.8.4.38/2.8.9.38 - EAP Release](#2843828938---eap-release)
-    - [2.8.4.36/2.8.9.36 - EAP Release](#2843628936---eap-release)
-    - [2.8.4.34/2.8.9.34 - EAP Release](#2843428934---eap-release)
-    - [2.8.4.32 - EAP Release](#28432---eap-release)
-    - [2.8.4.30 - EAP Release](#28430---eap-release)
-    - [2.8.4.28 - EAP Release](#28428---eap-release)
-    - [2.8.4.26 - EAP Release](#28426---eap-release)
-    - [2.8.4.24 - EAP Release](#28424---eap-release)
-    - [2.8.4.22 - EAP Release](#28422---eap-release)
-    - [2.8.4.20 - EAP Release](#28420---eap-release)
-    - [2.8.4.18 - EAP Release](#28418---eap-release)
-    - [2.8.4.16 - EAP Release](#28416---eap-release)
-    - [2.8.4.14 - EAP Release](#28414---eap-release)
-    - [2.8.4.12 - EAP Release](#28412---eap-release)
-    - [2.8.4.10 - EAP Release](#28410---eap-release)
-    - [2.8.4.6 - EAP Release](#2846---eap-release)
+  - [2.8.4.38/2.8.9.38 - EAP Release](#2843828938---eap-release)
+  - [2.8.4.36/2.8.9.36 - EAP Release](#2843628936---eap-release)
+  - [2.8.4.34/2.8.9.34 - EAP Release](#2843428934---eap-release)
+  - [2.8.4.32 - EAP Release](#28432---eap-release)
+  - [2.8.4.30 - EAP Release](#28430---eap-release)
+  - [2.8.4.28 - EAP Release](#28428---eap-release)
+  - [2.8.4.26 - EAP Release](#28426---eap-release)
+  - [2.8.4.24 - EAP Release](#28424---eap-release)
+  - [2.8.4.22 - EAP Release](#28422---eap-release)
+  - [2.8.4.20 - EAP Release](#28420---eap-release)
+  - [2.8.4.18 - EAP Release](#28418---eap-release)
+  - [2.8.4.16 - EAP Release](#28416---eap-release)
+  - [2.8.4.14 - EAP Release](#28414---eap-release)
+  - [2.8.4.12 - EAP Release](#28412---eap-release)
+  - [2.8.4.10 - EAP Release](#28410---eap-release)
+  - [2.8.4.6 - EAP Release](#2846---eap-release)
 - [2.8.4 - Bug Fix & Enhancement Release](#284---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 
 
 &nbsp;</details>
+
+### 2.9.11.14 - 2019.3 Compatibility EAP Release
+
+* Fix: fix TOC update on save to use parser defined list indent instead of 4 fixed.
+* Fix: change `EAP` update channel to JetBrains plugin repository EAP channel
+* Fix: add task item prefix to disable wrap prefix patterns to allow typing task item with wrap
+  on typing enabled.
+* Fix: `LineAppendable` should not remove leading EOL with 0 flags nor do any space trimming
+  when appending content to an appendable. Was causing injected language processing to generate
+  exception.
+* Fix: wrap on typing caret position recovery.
+* Fix: missing typing disabled pattern for ATX heading
+* Fix: assertion failure in `MdCodeStyleSettings` which could cause settings load issues.
+* Fix: preserve task items and spec example order in structure view
+* Fix: use `EditorScrollingPositionKeeper` to restore caret vertical position after doc format.
+* Fix: replace formatter with flexmark-java format module
+* Fix: replace wrap on typing with flexmark-java document format for paragraph
+* Fix: replace use of `BasedSequence` by `BasedSequence` and accumulate lines in
+  `LineAppendable`
+* Fix: ` * [ ] d|` backspace of last char after indented task item, caret jumps to start of
+  line.
+* Fix: move remote content fetch to background tasks.
+* Fix: NPE on virtualFile being null for formatting documents in code style settings.
+* Fix: `MdRemoteContentCache`, wrong setting used for remote content cache limit causing content
+  fetch task limit to be exceeded. This also addresses diagnostic/4425.
+* Fix: show editor tooltip when format document or element results in no changes.
+* Fix: `getEditorTextWithCaretMarkup` is broken for selection with caret pos.
+* Fix: formatting of flexmark spec files
+  * Fix: example with ast not adding EOL before example break
+  * Fix: example number not incremented
+  * Fix: set min keep blank lines to 2 for spec test files
+* Fix: replace Psi based formatter with flexmark formatter.
+* Fix: caret tracking for multi-caret mode doc format
 
 ### 2.9.11 - 2019.3 Compatibility Release
 
