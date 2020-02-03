@@ -2,6 +2,7 @@
 
 [TOC]: # ""
 
+- [3.0.197.62 - 2019.3 Compatibility Release](#3019762---20193-compatibility-release)
 - [3.0.193.60 - 2019.3 Compatibility Release](#3019360---20193-compatibility-release)
 - [2.9.11 - 2019.3 Compatibility Release](#2911---20193-compatibility-release)
 - [2.9.10 - 2019.3 Compatibility Release](#2910---20193-compatibility-release)
@@ -30,6 +31,11 @@
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 
 &nbsp;</details>
+
+### 3.0.197.62 - 2019.3 Compatibility Release
+
+* Fix: change version numbers to be compatible between marketplace and legacy versions.
+* Fix: marketplace licensed plugin for EAP IDE versions.
 
 ### 3.0.193.60 - 2019.3 Compatibility Release
 
