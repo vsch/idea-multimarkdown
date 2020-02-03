@@ -1,8 +1,8 @@
 &nbsp;<details id="version-history"><summary>**Table of Contents**</summary>
 
-[TOC]: # " "
+[TOC]: # ""
 
-- [2.9.11.14 - 2019.3 Compatibility EAP Release](#291114---20193-compatibility-eap-release)
+- [3.0.193.60 - 2019.3 Compatibility Release](#3019360---20193-compatibility-release)
 - [2.9.11 - 2019.3 Compatibility Release](#2911---20193-compatibility-release)
 - [2.9.10 - 2019.3 Compatibility Release](#2910---20193-compatibility-release)
 - [2.9.9 - 2019.3 Compatibility Release](#299---20193-compatibility-release)
@@ -29,11 +29,83 @@
 - [2.8.4 - Bug Fix & Enhancement Release](#284---bug-fix--enhancement-release)
 - [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 
-
 &nbsp;</details>
 
-### 2.9.11.14 - 2019.3 Compatibility EAP Release
+### 3.0.193.60 - 2019.3 Compatibility Release
 
+* Add: lic dist versions for marketplace licensing
+* Fix: move licensing to own class
+* Fix: broken Markdown to HTML intention
+* Fix: change references keep to first so sort unused last does not toggle references
+* Fix: for `Copy Markdown as HTML Mime Content` action to use current file's profile parser
+  settings instead of the `COPY_HTML_MIME` profile parser settings
+* Fix: use own icons for table dialogs
+* Fix: Formatter equalize trailing marker should not add marker if there is none
+* Fix: toc dropping apostrophe from heading text if text only TOC option and typographic
+  apostrophes are enabled.
+* Fix: update to cleaned up flexmark-java
+* Fix: missing add ignore annotation to links and reference definitions
+* Fix: missing prepare file for write in quick fixes
+* Fix: Add spec test selection is not available in list items
+* Fix: GitHub page displayed in preview without option being selected
+* Fix: flexmark debug extensions settings not saved.
+* Fix: [#767, Do not highlight \[DONE\] as error], adding a reference map to empty text will
+  disable these references from being unresolved and also render them as text.
+* Add: [#779, Ignore character casing when checking for matching header]
+* Fix: change `MdProjectRemoteContentCache` to project component
+* Fix: typing before/after table caption
+* Fix: convert parser tests to light platform test case
+* Fix: remove tail blank line generation in formatter after fenced code when last child item
+* Fix: Remove unused static `LOG` in classes
+* Fix: document removed free features from basic version. Intentions are mostly enhanced.
+* Fix: GitHub issue completion when `#` is at start of line, parsed as header level not
+  paragraph text.
+* Fix: move references to enh implementation from basic sources
+* Fix: complete remove move refs to enh sources from basic psi dir
+* Fix: remove flexmark plugin refs from enh and basic sources
+  * Add: flexmark document and structure view icons to basic icons
+* Fix: make `MdHighlighterColors` a service to prevent multiple instance in the application
+* Fix: restore `GitHubTableInspection` and add tests
+* Fix: split basic/enh resources
+* Fix: table element formatting
+* Fix: format document with actual char width
+* Fix: code style settings preview with actual char width
+* Fix: cleanup unused icons
+* Fix: move flexmark intention icon to flexmark icons
+* Fix: sort extensions by name and add extension name to settings forms based on extension
+  provided name
+* Fix: add md nav enh heading to exception reports settings
+* Fix: move all intentions using enh features to enh plugin.
+* Fix: split plugin.xml into components and add `xmlmerge` java utility to merge them into
+  single plugin.xml file to allow sharing parts between enh and basic plugins.
+* Fix: rename dir `idea/multimarkdown` to `md/nav`
+* Fix: message bus creation compatibility with 2020.1 and 2019.3.
+* Fix: typing `>` in prefix removes first x characters where x is the size of indentation before
+  `>`
+* Fix: backspacing over `>` after list item prefix should remove block quote not the list item
+* Fix: typing space at start of indented child paragraph would unindent the paragraph instead of
+  indenting it.
+* Fix: doubling of typed character when typing at start of indented child paragraph.
+* Fix: on file save toc update did not resolve duped heading ids.
+* Fix: add 250ms delay to `ProjectFileMonitor` invoking file test to allow the IDE to detect and
+  sync modified jars.
+* Fix: diagnostic/4450, Write access is allowed inside write-action only, inside
+  `MdPasteHandler`
+* Fix: diagnostic/4462, IndexOutOfBoundsException: MdStripTrailingSpacesSmartFilter
+* Fix: split parser settings into extensions
+* Fix: split flexmark debug settings to extension
+* Fix: split enh and flexmark color settings into extensions
+* Fix: when pasting selection reference over the link address of link whose text matches
+  selection link ref text pattern then replace the link element not just the address and anchor
+  ref.
+* Fix: remove `SimToc` annotation for title string needs space. No longer true for updated
+  flexmark-java parser.
+* Add: `MdTabOverride`/`MdBackTabOverride` option to treat empty items differently:
+  * treat empty items as having no children, should only indent/unindent the item in all cases.
+  * should roll-over between highest and lowest indentation level when the item can no longer be
+    indented to allow tab to be used to adjust sub-item to parent item
+* Fix: replace Psi based TOC update on save by flexmark-java library based update.
+* Add: `MdOnSaveFileUpdater` test
 * Fix: fix TOC update on save to use parser defined list indent instead of 4 fixed.
 * Fix: change `EAP` update channel to JetBrains plugin repository EAP channel
 * Fix: add task item prefix to disable wrap prefix patterns to allow typing task item with wrap
@@ -1123,11 +1195,13 @@
 [#760, Attributes support is broken/incompatible with fenced code blocks]: https://github.com/vsch/idea-multimarkdown/issues/760
 [#761, html paste option can't save]: https://github.com/vsch/idea-multimarkdown/issues/761
 [#762, freeze when target link is a big file (16mb)]: https://github.com/vsch/idea-multimarkdown/issues/762
+[#767, Do not highlight \[DONE\] as error]: https://github.com/vsch/idea-multimarkdown/issues/767
 [#768, Copy as reference copies invalid link]: https://github.com/vsch/idea-multimarkdown/issues/768
 [#771, macOS: Paste doesn't work when copying link from Safari's context menu]: https://github.com/vsch/idea-multimarkdown/issues/771
 [#773, Pasting URL from chrome pastes meta-data]: https://github.com/vsch/idea-multimarkdown/issues/773
 [#776, JavaFx Preview displays cached image for deleted file]: https://github.com/vsch/idea-multimarkdown/issues/776
 [#777, No query suffix is added to image links if absolute file:/ format is used]: https://github.com/vsch/idea-multimarkdown/issues/777
+[#779, Ignore character casing when checking for matching header]: https://github.com/vsch/idea-multimarkdown/issues/779
 [#786, Do not show Clipboard contains markdown  warning in same document]: https://github.com/vsch/idea-multimarkdown/issues/786
 [#797, Syntax Highlight Permutations can cause: Too many element types exception]: https://github.com/vsch/idea-multimarkdown/issues/797
 [#798, Remote content link validation can exceed its max simultaneous fetch threads]: https://github.com/vsch/idea-multimarkdown/issues/798
@@ -1140,6 +1214,5 @@
 [#748, Toolbar is completely hidden when window is not wide enough]: https://github.com/vsch/idea-multimarkdown/issues/748
 [#764, Styling the preview pane]: https://github.com/vsch/idea-multimarkdown/issues/764
 [#774, Add formatter option to add blank lines around fenced-code blocks]: https://github.com/vsch/idea-multimarkdown/issues/774
-[#779, Ignore character casing when checking for matching header]: https://github.com/vsch/idea-multimarkdown/issues/779
 [#780, False positive for "Unresolved link reference"]: https://github.com/vsch/idea-multimarkdown/issues/780
 

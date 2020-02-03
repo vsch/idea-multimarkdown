@@ -1,23 +1,19 @@
-<img src="https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/MNLogo.png" height="64" width="64" align="absmiddle"> Markdown Navigator 2.9.11
-=============================================================================================================================================================
+<img src="https://github.com/vsch/idea-multimarkdown/raw/master/assets/images/MNLogo.png" height="64" width="64" align="absmiddle"> Markdown Navigator 3.0
+==========================================================================================================================================================
 
-[TOC levels=2,3]: # "Table of Contents"
+[TOC levels=3,3]: #
 
 ### Table of Contents
-- [Overview](#overview)
-    - [Document with pleasure!](#document-with-pleasure)
-    - [Two tier model](#two-tier-model)
-- [Release Road Map](#release-road-map)
-    - [Future Release: Version 3.0.0](#future-release-version-300)
-    - [Version 2.9.11](#version-2911)
-    - [Version 2.9.10](#version-2910)
-    - [Version 2.9.9](#version-299)
-    - [Version 2.9.0/2.9.7](#version-290297)
-    - [Version 2.8.4](#version-284)
-    - [Version 2.8.2](#version-282)
-    - [Source Update is Long Overdue](#source-update-is-long-overdue)
-- [Background](#background)
-
+- [Document with pleasure!](#document-with-pleasure)
+- [Two tier model](#two-tier-model)
+- [Version 3.0](#version-30)
+- [Version 2.9.11](#version-2911)
+- [Version 2.9.10](#version-2910)
+- [Version 2.9.9](#version-299)
+- [Version 2.9.0/2.9.7](#version-290297)
+- [Version 2.8.4](#version-284)
+- [Version 2.8.2](#version-282)
+- [Source Update is Long Overdue](#source-update-is-long-overdue)
 
 ## Overview
 
@@ -27,9 +23,6 @@
 platform**
 
 **You can download it on the [JetBrains plugin page].**
-
-Markdown Navigator [enhanced edition][Markdown Navigator] features **unlocked for Community and
-Educational IDEs**
 
 ### Document with pleasure!
 
@@ -74,22 +67,18 @@ for:
    and editing of markdown documents without full document format.
 
 2. Advanced features used for creating and maintaining markdown documents: refactoring, find
-   usages, validation and auto formatting are available **free for Community or Educational**
-   IDEs or with the Enhanced licensed version. 15-day free trial licenses are available from
-   [Markdown Navigator] page on my website.
+   usages, validation and auto formatting are available with the Enhanced license available from
+   the [JetBrains Marketplace].
 
 Release Road Map
 ----------------
 
-### Future Release: Version 3.0.0
+### Version 3.0.193.60 - 2019.3 Compatibility Release
 
 **Major Refactoring Release**
 
+* JetBrains Marketplace Licensing
 * Extensibility API
-* Enhanced functionality to be provided by separate plugin(s).
-* Improved Multiple Module Support
-* Link resolution support for non-GitHub VCS providers
-* Plus the usual bug fixes that come up between now and the release.
 
 ### Version 2.9.11
 
@@ -287,29 +276,29 @@ Markdown Navigator, Copyright (c) 2015-2019, V. Schneider, <http://vladsch.com> 
 Reserved.
 
 [#804, Parser settings always setting default options when loading settings.]: https://github.com/vsch/idea-multimarkdown/issues/804
+[JetBrains Marketplace]: https://plugins.jetbrains.com/idea/plugin/7896-markdown-navigator-enhanced
 [codecogs.com]: https://codecogs.com
 [commonmark-java]: https://github.com/atlassian/commonmark-java
 [Configuring for Non-Latin Character Sets]: https://github.com/vsch/idea-multimarkdown/wiki/Rendering-Profiles-Settings#configuring-for-non-latin-character-sets
 [Craig's List]: https://montreal.craigslist.ca/?lang=en&cc=us
-[flexmark-java]: https://github.com/vsch/flexmark-java
 [GitHub]: https://github.com/vsch/laravel-translation-manager
-[gravizo.com]: http://gravizo.com
-[intellij-markdown]: https://github.com/valich/intellij-markdown
-[JetBrains plugin page]: https://plugins.jetbrains.com/plugin/7896-markdown-navigator
+[JetBrains plugin page]: https://plugins.jetbrains.com/plugin/7896-markdown-navigator-enhanced
 [Katex]: https://github.com/Khan/KaTeX
 [Markdown]: https://daringfireball.net/projects/markdown
-[Markdown Navigator]: http://vladsch.com/product/markdown-navigator
 [Markdown Support]: https://plugins.jetbrains.com/plugin/7793?pr=
-[nicoulaj]: https://github.com/nicoulaj
-[nicoulaj/idea-markdown plugin]: https://github.com/nicoulaj/idea-markdown
-[pegdown]: http://pegdown.org
 [Plain Text Suggestion Scope]: https://github.com/vsch/idea-multimarkdown/wiki/Rendering-Profiles-Settings#plain-text-suggestion-scope
 [PlantUML]: https://plantuml.com
 [Rendering Profiles Settings]: https://github.com/vsch/idea-multimarkdown/wiki/Rendering-Profiles-Settings#configuring-for-non-latin-character-sets
 [Screenshot_PasteImage_Highlight]: /assets/images/faq/ScreenShot_PasteImage_sm_h.png
-[sirthias]: https://github.com/sirthias
 [TeXiFy IDEA plugin]: https://plugins.jetbrains.com/plugin/9473-texify-idea/
 [Version Notes]: https://github.com/vsch/idea-multimarkdown/blob/master/VERSION.md
+[flexmark-java]: https://github.com/vsch/flexmark-java
+[gravizo.com]: http://gravizo.com
+[intellij-markdown]: https://github.com/valich/intellij-markdown
+[nicoulaj]: https://github.com/nicoulaj
+[nicoulaj/idea-markdown plugin]: https://github.com/nicoulaj/idea-markdown
+[pegdown]: http://pegdown.org
+[sirthias]: https://github.com/sirthias
 [.gitignore]: https://plugins.jetbrains.com/plugin/7495--ignore
 [Admonition Extension, Material for MkDocs]: https://squidfunk.github.io/mkdocs-material/extensions/admonition/
 [Android Studio]: https://developer.android.com/sdk/installing/studio.html
@@ -325,12 +314,12 @@ Reserved.
 [GitHub wiki in IntelliJ IDE]: https://github.com/vsch/idea-multimarkdown/wiki/Adding-GitHub-Wiki-to-IntelliJ-Project
 [GitHub Wiki pages]: https://github.com/vsch/idea-multimarkdown/wiki
 [GitHub-userscripts]: https://github.com/Mottie/GitHub-userscripts
-[holgerbrandl/pasteimages]: https://github.com/holgerbrandl/pasteimages
 [IntelliJ IDEA]: http://www.jetbrains.com/idea
 [Jekyll]: https://jekyllrb.com
 [JetBrains plugin comment and rate page]: https://plugins.jetbrains.com/plugin/7896-markdown-navigator
 [Kotlin]: https://kotlinlang.org
 [Kramdown]: https://kramdown.gettalong.org/
+[Markdown Navigator]: http://vladsch.com/product/markdown-navigator
 [Modifying Link Processing]: https://github.com/vsch/idea-multimarkdown/wiki/Link-Map-Settings
 [MultiMarkdown]: https://fletcherpenney.net/multimarkdown
 [Pandoc]: https://pandoc.org/MANUAL.html#pandocs-markdown
@@ -339,8 +328,9 @@ Reserved.
 [Pipe Table Formatter]: https://github.com/anton-dev-ua/PipeTableFormatter
 [PyCharm]: http://www.jetbrains.com/pycharm
 [RubyMine]: http://www.jetbrains.com/ruby
-[sirthias/pegdown]: https://github.com/sirthias/pegdown
-[vsch/pegdown]: https://github.com/vsch/pegdown/tree/develop
 [WebStorm]: http://www.jetbrains.com/webstorm
 [Wiki]: https://github.com/vsch/idea-multimarkdown/wiki
+[holgerbrandl/pasteimages]: https://github.com/holgerbrandl/pasteimages
+[sirthias/pegdown]: https://github.com/sirthias/pegdown
+[vsch/pegdown]: https://github.com/vsch/pegdown/tree/develop
 
