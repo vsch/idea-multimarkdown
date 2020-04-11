@@ -6,7 +6,7 @@
 ### Table of Contents
 - [Document with pleasure!](#document-with-pleasure)
 - [Two tier model](#two-tier-model)
-- [Version 3.0.193.60 - 2019.3 Compatibility Release](#version-3019360---20193-compatibility-release)
+- [Version 3.0.19x.64 - 2019.x Compatibility Release](#version-3019x64---2019x-compatibility-release)
 - [Version 2.9.11](#version-2911)
 - [Version 2.9.10](#version-2910)
 - [Version 2.9.9](#version-299)
@@ -73,7 +73,7 @@ for:
 Release Road Map
 ----------------
 
-### Version 3.0.193.60 - 2019.3 Compatibility Release
+### Version 3.0.19x.64 - 2019.x Compatibility Release
 
 **Major Refactoring Release**
 
