@@ -2,8 +2,9 @@
 
 [TOC]: # ""
 
-- [3.0.xxx.79 - 2020.1 EAP Bug Fix & Enhancement Release](#30xxx79---20201-eap-bug-fix--enhancement-release)
-- [3.0.xxx.75 - 2020.1 EAP Bug Fix Release](#30xxx75---20201-eap-bug-fix-release)
+- [3.0.201.81 - 2020.1 Bug Fix EAP Release](#3020181---20201-bug-fix-eap-release)
+- [3.0.201.79 - 2020.1 EAP Bug Fix & Enhancement EAP Release](#3020179---20201-eap-bug-fix--enhancement-eap-release)
+- [3.0.201.75 - 2020.1 EAP Bug Fix EAP Release](#3020175---20201-eap-bug-fix-eap-release)
 - [3.0.xxx.72 - 2019.x Bug Fix Release](#30xxx72---2019x-bug-fix-release)
 - [3.0.192.66 - 2019.2 Compatibility Release](#3019266---20192-compatibility-release)
 - [3.0.197.64 - 2019.3 Compatibility Release](#3019764---20193-compatibility-release)
@@ -20,7 +21,16 @@
 
 &nbsp;</details>
 
-### 3.0.xxx.79 - 2020.1 EAP Bug Fix & Enhancement Release
+### 3.0.201.81 - 2020.1 Bug Fix EAP Release
+
+* Fix: multiline URL image links should not wrap
+* Fix: for image-to-fenced code and image-to-inline math conversion, accept `http://` url prefix
+  as equivalent to `https://`
+* Fix: GitHub header id generation compatibility:
+  * Add Emoji shortcuts 
+  * Fix ref link images should not trim trailing spaces in reference or
+
+### 3.0.201.79 - 2020.1 EAP Bug Fix & Enhancement EAP Release
 
 * Fix: wiki links should not be wrapped during formatting.
 * Fix: Link map default map content for Link Address Element
@@ -36,7 +46,7 @@
 * Fix: change Math rendering to use fenced code image rendering EP
 * Fix: change HTML Settings to use new fenced code image rendering EP
 
-### 3.0.xxx.75 - 2020.1 EAP Bug Fix Release
+### 3.0.201.75 - 2020.1 EAP Bug Fix EAP Release
 
 * Add: `GrammarCheckingStrategy` for `Grazie` support in Markdown files.
 * Add: `Ignore casing of simple list item text` in editor settings to ignore capitalization of
