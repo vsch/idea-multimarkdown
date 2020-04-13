@@ -2,9 +2,10 @@
 
 [TOC]: # ""
 
-- [3.0.201.81 - 2020.1 Bug Fix EAP Release](#3020181---20201-bug-fix-eap-release)
-- [3.0.201.79 - 2020.1 EAP Bug Fix & Enhancement EAP Release](#3020179---20201-eap-bug-fix--enhancement-eap-release)
-- [3.0.201.75 - 2020.1 EAP Bug Fix EAP Release](#3020175---20201-eap-bug-fix-eap-release)
+- [3.0.xxx.83 - Bug Fix Release](#30xxx83---bug-fix-release)
+- [3.0.xxx.81 - 2020.1 Bug Fix EAP Release](#30xxx81---20201-bug-fix-eap-release)
+- [3.0.xxx.79 - 2020.1 EAP Bug Fix & Enhancement EAP Release](#30xxx79---20201-eap-bug-fix--enhancement-eap-release)
+- [3.0.xxx.75 - 2020.1 EAP Bug Fix EAP Release](#30xxx75---20201-eap-bug-fix-eap-release)
 - [3.0.xxx.72 - 2019.x Bug Fix Release](#30xxx72---2019x-bug-fix-release)
 - [3.0.192.66 - 2019.2 Compatibility Release](#3019266---20192-compatibility-release)
 - [3.0.197.64 - 2019.3 Compatibility Release](#3019764---20193-compatibility-release)
@@ -14,23 +15,27 @@
 - [2.9.10 - 2019.3 Compatibility Release](#2910---20193-compatibility-release)
 - [2.9.9 - 2019.3 Compatibility Release](#299---20193-compatibility-release)
 - [2.9.8 - 2019.3 Compatibility Release](#298---20193-compatibility-release)
-- [2.9.7 - Bug Fix & Compatibility Release](#297---bug-fix--compatibility-release)
-- [2.9.0/2.9.5 - Bug Fix & Compatibility Release](#290295---bug-fix--compatibility-release)
-- [2.8.4 - Bug Fix & Enhancement Release](#284---bug-fix--enhancement-release)
-- [2.8.2 - Bug Fix & Enhancement Release](#282---bug-fix--enhancement-release)
 
 &nbsp;</details>
 
-### 3.0.201.81 - 2020.1 Bug Fix EAP Release
+### 3.0.xxx.83 - Bug Fix Release
+
+* Fix: diagnostic/4707
+* Fix: diagnostic/4640
+* Fix: diagnostic/4550
+* Fix: reversed line marker for flexmark spec example `FILE_EOL` and `NO_FILE_EOL` options.
+* Fix: update `Show heading id` label text on license state change
+
+### 3.0.xxx.81 - 2020.1 Bug Fix EAP Release
 
 * Fix: multiline URL image links should not wrap
 * Fix: for image-to-fenced code and image-to-inline math conversion, accept `http://` url prefix
   as equivalent to `https://`
 * Fix: GitHub header id generation compatibility:
-  * Add Emoji shortcuts 
+  * Add Emoji shortcuts
   * Fix ref link images should not trim trailing spaces in reference or
 
-### 3.0.201.79 - 2020.1 EAP Bug Fix & Enhancement EAP Release
+### 3.0.xxx.79 - 2020.1 EAP Bug Fix & Enhancement EAP Release
 
 * Fix: wiki links should not be wrapped during formatting.
 * Fix: Link map default map content for Link Address Element
@@ -46,14 +51,14 @@
 * Fix: change Math rendering to use fenced code image rendering EP
 * Fix: change HTML Settings to use new fenced code image rendering EP
 
-### 3.0.201.75 - 2020.1 EAP Bug Fix EAP Release
+### 3.0.xxx.75 - 2020.1 EAP Bug Fix EAP Release
 
 * Add: `GrammarCheckingStrategy` for `Grazie` support in Markdown files.
 * Add: `Ignore casing of simple list item text` in editor settings to ignore capitalization of
   single line text for list item and definition paragraphs.
 * Fix: compatibility for 2020.2 snapshot
 * Fix: Project file monitor not checking that alarm is disposed.
-* Fix: use of IDE resource bundle in code style 
+* Fix: use of IDE resource bundle in code style
 * Fix: update to flexmark-java 0.61.0
 
 ### 3.0.xxx.72 - 2019.x Bug Fix Release
@@ -770,429 +775,7 @@
 * Fix: diagnostic/3872, IllegalStateException: frame must not be null, MdPlugin.checkFixes
 * Fix: diagnostic/3872, IllegalStateException: frame must not be null, MdPlugin.checkFixes
 
-## 2.9.7 - Bug Fix & Compatibility Release
-
-* Fix: compatibility with 193.SNAPSHOT
-
-## 2.9.0/2.9.5 - Bug Fix & Compatibility Release
-
-* Fix: diagnostic/3761, NoClassDefFoundError: ArraysKt$asSequence
-* Fix: Formatter adding `LINE_SEPARATOR` after images and links when they are at start of line
-* Fix: Add attribute formatting code style settings
-* Fix: attributes code style settings in headings were not applied when formatting
-* Fix: diagnostic reporting fixed version to handle split plugin versions for IDE versions < 192
-  and >= 192.
-* Fix: [#761, html paste option can't save]
-* Fix: diagnostic/3638 AssertionError: MdProjectComponent.reloadMarkdownEditors
-* Fix: diagnostic/3425 Assertion: MdPasteHandler.getFilePathAnchorFromFqn
-* Fix: [#760, Attributes support is broken/incompatible with fenced code blocks]
-* Fix: Split plugin into 192 and pre-192 versions
-* Fix: update to flexmark-java 0.50.18, including new HTML converter
-* Fix: hard break inside inline elements were not preserved on save.
-* Fix: pasting HTML with image URLs starting with `//` without `https:` or `http:` protocol
-  prefix would cause UI to hang while attempting to download image. Now only non-image
-  extensions or `.svg` links which have protocol extension or non-absolute links will attempt to
-  convert svg to png.
-* Fix: [#757, Gitlab multi-line blockquote syntax incorrect]
-* Fix: diagnostic/3359, IllegalStateException: projectPlainTextFileTypeManager must not be null
-* Fix: compatibility with 2019.2 IDEs
-* Fix: update to flexmark-java 0.50.13
-* Fix: diagnostic/3251, NullPointerException: MdProjectComponent$exportAllHtmlRaw
-* Fix: link map settings to sort entries by group name when saving to fix order of entries
-* Fix: diagnostic/3224, NullPointerException: MdProjectComponent$exportAllHtmlRaw
-* Fix: [#741, Links], file without extension would sometimes not show up in completion or show
-  as unresolved.
-* Fix: diagnostic/3203, Throwable: Icon cannot be found in
-  '/icons/application-flexmark-extension.svg'
-* Add: missing svg application icons
-* Fix: html to markdown converter set default to wrapped auto-links
-* Fix: header up action disabled if text is inline element (bold, italic, etc.)
-* Fix: diagnostic/3147 Throwable: Invalid file: MdProjectComponent.reparseMarkdown
-* Fix: diagnostic/3144 caused by conversion of empty ATX to setext
-* Fix: [#747, Useless "Markdown Export On Settings Change" notifications]
-* Fix: [#746, Plugin creates files under .idea with default settings], removed
-  `markdown-navigator.xml` and `markdown-navigator/` if defaults are used.
-* Fix: diagnostic/3117, ClassCastException: cannot be cast to MdLinkElement
-* Fix:
-  [#745, Exception from AppUtils.isAppVersionGreaterThan when running on development build of IntelliJ IDEA]
-* Fix: diagnostic/3095, StringIndexOutOfBoundsException: EMPTY subSequence,
-  TableRow.fillMissingColumns
-* Fix: diagnostic/3079, Java 11 - Flexmark parser exception: Illegal repetition near index
-* Fix: remove trailing EOL from html to markdown converted text for new HTML parser code.
-* Add: code-stream sponsor banner
-* Fix: possible fix for [#743, auto-move in preview to match source code cursor position]
-* Fix: update flexmark-java 0.50.2
-* Fix: diagnostic/3062, NPE Json write
-  * Fix: `boxed-json` add deep `null` to `JsonValue.NULL` replacement for `MutableJsArray` and
-    `MutableJsObject` `toString()` calls to eliminate null pointer exceptions on `toString()`.
-* Fix: diagnostic/3038, NPE: MdEditorKit MarkdownImageView.getImageURL
-* Fix: diagnostic/3037, assertion error
-* Fix: copy/modify image intention to work with base64 encoded images
-* Fix: update flexmark-java 0.50.0
-* Fix: copy/modify image intention to work with base64 encoded images
-* Fix: diagnostic/3023, NoClassDefFoundError: sun/misc/BASE64Encoder
-* Fix: add block quote action toggled existing block quote marker instead of adding one.
-  * Fix: add/remove block quote actions for better control where block quote is added/removed
-    based on caret position.
-* Fix: add whitespace parsing to external annotator per lexer processing
-* Fix: leave individual text parts of a paragraph separate to allow block quote and aside block
-  white space prefixes to be syntax highlighted.
-* Fix: regression [#727, css files not created in export folder]
-* Fix: for duplicate heading ids and id attributes, remove navigate to element at caret
-* Add: filter out links consisting of only URI/URL prefixes from line markers
-* Fix: line marker provider to filter out plain auto-links not wrapped in `<>`
-* Add: on Windows OS use of `file://` URI prefix instead of `file:/`
-* Fix: diagnostic/2966, IllegalArgumentException: path must be canonical but got: '//..'
-* Fix: diagnostic/2976, Must not modify PSI inside save: Update TOC on Save
-* Fix: minimum build version changed to `173.2463` corresponding to 2017.3
-* Fix: [#737, "Hard-break" Trailing Spaces Removed on Manual Save]
-* Add: diagnostic/2952 to fixed list: Preview to use immutable document char sequence
-* Fix: diagnostic/2951, Illegal group reference, ChangeTextToAutoLinkIntention.visitNode
-* Fix: diagnostic/2949, IllegalStateException: frame must not be null
-* Fix: diagnostic/2945, IndexOutOfBoundsException: `MdOnSaveFileUpdater$updateToc`
-* Fix: plantUML (puml language) parser settings change is not detected
-* Add: Diagnostic report tracking description for identified reports.
-* Fix: diagnostic/2940, project is already disposed
-* Add: Diagnostic report tracking.
-* Fix: possible fix for diagnostic/2876, NoClassDefFoundError: Could not initialize class
-  icons.MdIcons
-* Fix: diagnostic/2374, Assertion: TableContext.getTable(TableContext.kt)
-* Fix: diagnostic/2879, ClassCastException: PsiPlainTextFileImpl cannot be cast to PsiDirectory
-* Fix: possible fix for diagnostic/2830, KNPE MdPlugin$Companion.getProjectComponent
-* Fix: possible fix for diagnostic/2883, IllegalStateException: cannot open system clipboard
-* Fix: add `!include` parsing for plantUML diagrams and invalidate generated image if include
-  file content changes
-* Fix: diagnostic/2896, NPE Json write of editor state
-* Fix: diagnostic/2423, parser exception, `AutolinkNodePostProcessor`
-* Fix: diagnostic/2612, SubSequence assertion error. Use Document `immutableCharSequence`
-  instead of `charSequence` which can change between parse tree generation and rendering.
-* Fix: diagnostic/2773, Wrong line separators
-* Fix: diagnostic/2889, NPE `TableParagraphPreProcessor.cleanUpInlinedSeparators`
-* Fix: [#733, PlantUML include path]
-* Fix: Upgrade to `plantuml.asl.1.2019.4`
-* Add: `resources/search/searchableOptions.xml` for full text search across all configuration
-  settings.
-* Fix: 2017.3 loads .svg icons if available even when .png icon is requested, while its .svg
-  loader results in grey scale icons resulting in mostly black icons.
-  * Fix: put svg and png icons into separate directories to prevent png load request loading svg
-    files.
-* Fix: diagnostic/2846, Empty PSI elements
-* Fix: diagnostic/2858, Project Already Disposed: JavaFxHtmlPanel
-
-## 2.8.4 - Bug Fix & Enhancement Release
-
-* Fix: indent/unindent ordered list items with FIXED 4 list indentation parser setting
-* Fix: single spaced list item remove on ENTER deletes the line not just list item prefix
-* Fix: pasting markdown with link information would not move caret to end of pasted text
-* Add: compound enumerated references for implementing legal numbering
-* Add: enumerated reference text without element id in headings to use for heading numbering
-* Fix: typing enumerated reference or reference definition deletes the prefix.
-* Add: Inspection for list items which are indented to other list items but not enough to be a
-  sub-item.
-* Add: annotator config for reference elements
-* Fix: move inspections for reference elements back to annotator to allow file in project view
-  to show errors
-* Fix: [#731, apache pdfbox vulnerability], update to flexmark-java 0.40.26
-* Fix: [#713, Autocomplete links as "repository relative" by default]
-  * Add: Languages & Frameworks > Markdown > Editor option `Default link completion format`,
-    sets the starting format for link completions. Use multiple invocation to cycle to other
-    formats.
-* Fix: resolve link on click for optimized rendering which does not resolve links for preview
-  HTML until they are clicked.
-* Add: editor hint when document formatting is disabled with soft wraps on.
-* Add: to Stylesheet `Apply CSS from URI` browse button, validation and error message when
-  invalid URI is given.
-* Add: [#705, Show navigable headings as file members inside project view]
-* Add: annotation to detect and correct the processor updated `[TOC]` element to proper
-  simulated toc syntax `[TOC]: #`, updated by plugin and not processor dependent.
-* Fix: [#706, URLs with a fragment identifier are treated as syntax errors],
-  * GitHub line selection anchors use permissive GitHub format to enable quick fix corrections.
-* Add: Annotation settings panel
-  * Fix: [#712, Target file is not on github annotation]
-  * Links
-  * Link Anchors
-  * Table of Contents
-  * Enumerated References
-* Fix: [#730, Can not configure toc anymore], NPE on get rendering profile with project = null.
-* Fix: [#729, Can't disable 'Add query suffix to URI which increments when file changes' option]
-* Fix: disable paste post processing when multi-caret paste is used. Messes up pasted text.
-* Fix: remove underline from auto-link markers in custom scheme.
-* Fix: [#728, Loading indicator in settings doesn't disappear after loading]
-* Fix: [#727, css files not created in export folder]
-  * Fix: if css/js dir is blank or empty in settings then default to css/js sub-directory in
-    target dir
-* Fix: [#726, unable to show ref anchor link explorer]
-* Fix: markdown file move result of package move with no sub-directories and only markdown files
-  affected would not adjust links.
-* Fix: [#721, EAP: QuickFix for "Wrap Links" shows the message-key instead of description]
-* Fix: disable wrapping when typing `<<<` at beginning of line to allow typing macro closing
-  marker.
-* Fix: Cut/Paste on markdown text results in all contained elements becoming invalid.
-  * Implemented Psi independent format for reference information
-  * Add: abbreviation and enumerated references to copied elements if they are referenced but
-    not part of the copied text
-  * Add: copy markdown to clipboard to share link/reference information to allow Markdown
-    Navigator running in another IDE instance to make use of appended references and links
-* Fix: copying/pasting image links from wiki to main repo file messes up the link `../` count
-  and creates a wrong link.
-* Fix: absolute http:// links from main repo files to wiki pages were not recognized as wiki
-  pages of the project
-* Add: clear link cache when any repository is pushed so any remote links which become valid are
-  updated.
-* Add: Notification settings panel to enable/disable notification messages
-* Fix: Some notification disable links did not work or disabled the wrong message
-* Fix: ref links and images would generate multiple line markers if the ref contained
-  typographic or escaped characters
-* Fix: do not show Yaml Front matter notification if flexmark front matter parser extension is
-  enabled.
-* Fix: flexmark-example option `NO_FILE_EOL` shows up as an unknown option icon in structure
-  view.
-* Add: **plain text completions** for completing references and headings defined in the file and
-  references/links in the project.
-  * Add: documentation about including too many files in the scope. Only the first 1000
-    suggestions will be collected. Too many files may cause some suggestions not to be shown.
-  * Fix: plain text completions don't work in table cells
-  * Add: current file's headers to link ref completions.
-  * Editor settings option to control plain text auto-popup, disabled by default. Will make
-    default false when can disable completions on typing space for plain text completions.
-  * plain text search scope defined in rendering settings: `Plain text suggestion search
-    scope:`, default is taken as `Project Files` which is too wide to be useful.
-  * plain text auto popup to show only if prefix is 3 or more alphabetic characters, and not to
-    complete on typed character, only tab or enter
-  * disable automatic completion on char typed if auto-popped-up.
-  * link anchor completion
-    * Fix: replacement end to be end of link ref caused by plain text adjusting
-      `replacementOffset`.
-* Add: Document the fact that auto-links extension is not usable for very large documents and
-  introduces significant typing delays.
-* Fix: copy without line breaks of full document text with references, adds duplicate references
-  if they are used and included in the partial copy selection.
-* Fix: [#720, Indentation in a numbered list 'flickers' when typing and deleting text], caused
-  by BACKSPACE ignoring the list indentation type of "Fixed 4 spaces"
-* Fix: ENTER insert hard-break to not insert spaces if caret is at first column or preceded by
-  all spaces.
-* Fix: HTML to Markdown on paste adding extra line breaks if `div` is used to wrap text for `li`
-  tags.
-* Add: inspection for links whose link text does not match the heading text referenced by the
-  link anchor ref, quick fix to change/add link text, remove text use ref id or remove
-  text/rename ref id.
-* Fix: FakeURLPsiElement could cause not awt thread exception in 2019.2 EAP.
-* Fix: inserting characters before or between block quote markers does not work. Now disable
-  wrap when typing in prefix with block quote or aside markers
-* Fix: disable IDE caused paste handling errors and divert them to log as info, having had
-  enough of these spurious bug reports.
-* Fix: line marker for reference links/images but navigate to the destination as if it was an
-  explicit link and not reference link.
-* Fix: [#719, Wrap links in <> Do Not Show does not hide the inspection], same for Unicode line
-  separator inspection.
-* Fix: list item's second paragraph children get the item prefix, converting them to items.
-  Introduced by a fix for the culprit below.
-  * Fix: List item whose first child is block quote, on format/wrap on typing looses its item
-    prefixes and becomes indented text.
-* Add: HTML paste option to convert links to references, add pasted link types:
-  * Add: document information so existing reference definitions can be re-used instead of
-    creating duplicates.
-  * None - skip element generating no text
-  * Text - just text or alt text
-  * Explicit - explicit link/image
-  * Reference - reference link/image with reference definition
-  * HTML - paste HTML as is
-* Add: Intention on auto-link looking text to Wrap in `<>` so `Auto links` parser option could
-  be disabled and still get annotations for auto-link text.
-* Fix: [#708, Empty element in simplified structure view when using just url as header text],
-  now falls back to using the heading as is if plain text gathering results in empty text
-* Add: task list option to simple structure view to display task list items under the heading
-  section with filter options:
-  * Add: structure view type combo in settings:
-    * simple - headings only
-    * simple tasks - headings and tasks
-      * only headings with tasks
-      * to show completed tasks,
-      * incomplete tasks,
-      * empty item tasks (either complete or incomplete)
-    * detailed - all elements and sections
-  * Fix: Badge filter should filter out any headings without tasks
-  * Fix: empty tasks should not add to count but should affect the badge color and badge display
-  * Fix: navigation from editor to list item should be based on position at the end of the line
-    but for empty items on the last non-blank of the line.
-* **Link text completions**
-  * disable automatic completion on char typed if auto-popped-up.
-  * remove query string from link text suggestions
-* **emoji completions**
-  * only auto popup if lowercase or _ is preceding the caret.
-  * work properly and in all elements
-  * ENTER completion of emoji shortcut in heading adds `:` and tail of heading line
-* Add: `Not Sorted, delete unused` and `Sorted, delete unused` options to all applicable
-  elements to remove unused references during document format.
-* Fix: formatting list sort by task completion status broken in 2.8.0/2.8.2
-* Fix: [#702, Setext header marker equalization on ENTER broken]
-* Fix: block quote and list items should not be inserted while in multi-line non-wrapping inline
-  elements like inline math and multi-line url image
-* Fix: Do not allow wrapping of inline math. Otherwise wrapping on `\` without a following space
-  creates issues with rendering. For now math inline elements are treated like explicit links
-  and images. If they do not fit on a line, they are moved to a line by themselves.
-* Fix: visitor base impl was not visiting children of inline elements
-* Fix: ENTER after empty task item inserts extra blank line
-* Add: disable indent on paste for markdown documents
-* Fix: Lexer based syntax highlighter to work correctly for restarted lexing. This is still slow
-  because re-parse can only be done starting with file level items. Annotator is still be best
-  choice for markdown syntax highlighting.
-* Add: GitLab inline math elements to distinguish them from inline code.
-* Fix: reverse the lexer/annotator editor swapping. Start all files with lexer, then switch
-  write enabled ones to annotator. This way syntax highlighting gets performed immediately but
-  the greatest benefit is to have Markdown syntax highlighting in injected language elements
-  which use lexer syntax highlighting.
-* Fix: Remove swap readonly editor highlighter option it is no longer used.
-* Fix: re-parse markdown editors when annotator type is changed.
-* Add: GitLab inline math attributes to distinguish from inline code
-* Add: Task item complete text attribute
-* Fix: GitHub file line selection anchors not to validate except for form: `L#-L#`.
-* Fix: GitLab file line selection anchors not to validate except for form: `L#-#`.
-* Add: Anchor quick fix to convert between GitHub and GitLab line selection anchors when the
-  wrong form is used. ie. GitHub with GitLab form and vice versa.
-* Add: Editor option Annotator: `Ignore fenced code content`
-* Fix: unresolved link annotation shows up 2x in inspection results
-* Fix: https:// link to issues of another module in a project showing as unresolved
-* Add: option to validation inspections to ignore elements in fenced code, ignored by default.
-* Add: apply to all in file intention to `Delete unused reference`
-* Fix: rename file quick fixes failing with illegal file name.
-* Add: error annotations to error highlight project view files
-* Add: Inspection for Unicode
-  ['LINE SEPARATOR' (U+2028)](https://www.fileformat.info/info/unicode/char/2028/index.htm)
-  which is used to force line separator which will not wrap.
-* Fix: doubling of TODO items and spelling errors, was caused by having comment nodes in HTML
-  blocks which had HTML language injected. Causing comments to be processed twice: once for each
-  language.
-* Fix: Enable in-place renaming of all elements where possible.
-* Fix: file move refactoring to handle IDE and refactoring listener both calling move handler
-  for the same file. Happens when directories are moved. This was causing unadjusted link
-  because the IDE called the prepMove **after** the file was already moved, useless because all
-  the relative links are now not guaranteed to work. Now works because IDE gets results computed
-  for refactoring listener before file is moved.
-* Fix: line markers for ref links and images don't show up in gutter, broken by element type
-  cleanup.
-* Fix: node class refactoring for list and list item left some code testing for unordered list
-  item when generic list item was intended.
-  * Renumber list items in formatting always resets the first item to 1. even when that option
-    is not selected.
-  * BACKSPACE gets rid off the ordered item prefix when editing any non-first list item, works
-    fine if `Backspace removes empty item setting` is off.
-* Fix: completed task items on ordered items get converted to simple ordered items on ENTER
-  insertion of another item.
-* Add: Splitting a paragraph in the middle (not list item) should automatically add hard break
-  spaces at the end of the old line so it is not wrapped.
-  * Add: smart key option for ENTER to add hard-break spaces when splitting a line
-* Fix: Add awareness to formatter for `<!-- IGNORE PREVIOUS -->` comment being associated with a
-  reference and move it with the reference when formatting.
-* Fix: loose list with empty item not recognized as double spaced
-* Fix: ENTER on empty task list item inserts blank line after deleting task item prefix
-* Fix: typing before indented paragraph swallows characters instead of inserting them before the
-  paragraph.
-* Fix: typing right at first character of indented text doubles the typed character. Cannot
-  reproduce.
-* Fix: weird behavior when ENTER hit at end of bullet item with ordered item children. Get
-  spliced new first item `1. X` followed by old item `2.` on the same line. Cannot reproduce.
-* Fix: insert line item on ENTER **after the end of the item text** should insert child item if
-  original item has children. ie. as if insert before was done on first child item
-  * Fix: inserting when the first child is an empty item removes the child and inserts blank
-    lines.
-* Fix: ENTER when inserting new task item above the current one should clear the task done
-  marker in the new task item and leave the done marker for the old item. Right now it does the
-  reverse.
-* Fix: task item prefix was not handled on ordered list items for insert/renumber
-* Fix: insert after end of ordered list item with child task item splits the next line in two
-  but does not add prefix
-* Fix: in fixed indent mode BACKSPACE indents ignoring fixed indent config.
-* Fix: reference sort to be done on normalized id not actual id
-* Fix: [#715, Completed task list items not rendered with checkmark]
-* Fix: `AUTOLINKS` extension is now an option for annotation syntax highlighter. Previously, it
-  was always enabled regardless of parser settings.
-* Fix: inline reference intention only appears on the reference part of `[reference
-  text][reference]`, it should appear for the whole element.
-* Add: Intention to match ref link case to reference id case when the two don't match, with All
-  in file intention option
-* Fix: remove separate line icon for link and anchor. Only add combined navigate to header.
-* Add: Intention on selected text or word to add Abbreviation if this parser option is selected.
-* Add: File inspection for large files with auto-links parser option enabled.
-* Add: convert all auto-links to <http://> which work without needing to parse all text for
-  possible link.
-* Add: Inspection to find possible unwrapped auto-links in text and convert them to `<>` wrapped
-  auto-links
-* Add: intention to remove ref link text when it matches the id, also offer to do the same after
-  refactoring the ref id and it matches text
-* Add: to line marker tooltip the element's identifying characteristics so can see which element
-  from the line is being referred to by the line icon.
-* Fix: initialization issues in paste options form and dialog
-* Add: HTML options from editor settings to show disabled paste plain text and paste html
-  buttons.
-* Add: dropped link insert as option: `Link`, `Ref Link & Reference`, `Reference Only`
-* Fix: remote content first heading makes no sense, use title with fallback to first heading
-* Fix: [#704, NoClassDefFoundError on 2019.1 EAP with JBRE], JRE 11 support
-* Fix: diagnostic/2477, Desktop API not supported on the current platform
-* Fix: [#710, Memory leak in HTML preview window], swing HTML preview had a memory leak.
-* Add: [#709, New Icon looks bad on dark background], option to use old document icons.
-* Fix: ignore rendering profiles with no name. Do not know how it occurred but when it did it
-  was incomplete and caused headaches to figure out why the plugin was screwing up parser
-  settings.
-* Fix: HTML Export with `Use style attribute` not to add `<meta http-equiv="content-type"
-  content="text/html; charset=UTF-8">`
-* Fix: diagnostic/2335, `java.lang.NoSuchMethodError: com.intellij.util.KotlinUtils.`, must have
-  been a new addition to the library.
-* Fix: diagnostic/2348, `Parameter specified as non-null is null: method` for drag/drop files
-* Fix: diagnostic/2344 illegal access `EditorWindow.INITIAL_INDEX_KEY`, static field was
-  temporarily made package private between 2016/10 and 2018/06 in the API.
-* Fix: [#711, Editor -> Toggle Editor Layout setting is not saved.]
-* Fix: [diagnostic/2556](https://vladsch.com/admin/diagnostics/2556) Index out of Bounds.
-* Fix: Toggle task item done does not work for ordered task list items
-
-## 2.8.2 - Bug Fix & Enhancement Release
-
-* Fix: icon sizes for non-hdpi displays
-* Add: option to insert references instead of links, if there is no name conflict, no dialog is
-  brought up and the reference is simply inserted into the text.
-* Fix: backspace on a blank line after the first bullet list item text deletes list item prefix.
-* Add: All in file intentions for image <--> code convesions:
-  * codecogs math to multi-line url image
-  * gravizo uml to multi-line url image
-  * image to fenced code math
-  * image to inline math
-  * image to plant uml fenced code
-* Add: Condition to codecogs image to fenced code intention to only do conversions if the image
-  is the only element in a paragraph and the reverse condition to convert to inline math. This
-  way apply to all will only convert elements which can be converted back to images without
-  changing the file layout.
-
-[#702, Setext header marker equalization on ENTER broken]: https://github.com/vsch/idea-multimarkdown/issues/702
-[#704, NoClassDefFoundError on 2019.1 EAP with JBRE]: https://github.com/vsch/idea-multimarkdown/issues/704
-[#705, Show navigable headings as file members inside project view]: https://github.com/vsch/idea-multimarkdown/issues/705
-[#706, URLs with a fragment identifier are treated as syntax errors]: https://github.com/vsch/idea-multimarkdown/issues/706
-[#708, Empty element in simplified structure view when using just url as header text]: https://github.com/vsch/idea-multimarkdown/issues/708
-[#709, New Icon looks bad on dark background]: https://github.com/vsch/idea-multimarkdown/issues/709
-[#710, Memory leak in HTML preview window]: https://github.com/vsch/idea-multimarkdown/issues/710
-[#711, Editor -> Toggle Editor Layout setting is not saved.]: https://github.com/vsch/idea-multimarkdown/issues/711
-[#712, Target file is not on github annotation]: https://github.com/vsch/idea-multimarkdown/issues/712
-[#713, Autocomplete links as "repository relative" by default]: https://github.com/vsch/idea-multimarkdown/issues/713
-[#715, Completed task list items not rendered with checkmark]: https://github.com/vsch/idea-multimarkdown/issues/715
-[#719, Wrap links in <> Do Not Show does not hide the inspection]: https://github.com/vsch/idea-multimarkdown/issues/719
-[#720, Indentation in a numbered list 'flickers' when typing and deleting text]: https://github.com/vsch/idea-multimarkdown/issues/720
-[#721, EAP: QuickFix for "Wrap Links" shows the message-key instead of description]: https://github.com/vsch/idea-multimarkdown/issues/721
-[#726, unable to show ref anchor link explorer]: https://github.com/vsch/idea-multimarkdown/issues/726
-[#727, css files not created in export folder]: https://github.com/vsch/idea-multimarkdown/issues/727
-[#728, Loading indicator in settings doesn't disappear after loading]: https://github.com/vsch/idea-multimarkdown/issues/728
-[#729, Can't disable 'Add query suffix to URI which increments when file changes' option]: https://github.com/vsch/idea-multimarkdown/issues/729
-[#730, Can not configure toc anymore]: https://github.com/vsch/idea-multimarkdown/issues/730
-[#731, apache pdfbox vulnerability]: https://github.com/vsch/idea-multimarkdown/issues/731
-[#733, PlantUML include path]: https://github.com/vsch/idea-multimarkdown/issues/733
-[#737, "Hard-break" Trailing Spaces Removed on Manual Save]: https://github.com/vsch/idea-multimarkdown/issues/737
-[#741, Links]: https://github.com/vsch/idea-multimarkdown/issues/741
-[#743, auto-move in preview to match source code cursor position]: https://github.com/vsch/idea-multimarkdown/issues/743
-[#745, Exception from AppUtils.isAppVersionGreaterThan when running on development build of IntelliJ IDEA]: https://github.com/vsch/idea-multimarkdown/issues/745
-[#746, Plugin creates files under .idea with default settings]: https://github.com/vsch/idea-multimarkdown/issues/746
-[#747, Useless "Markdown Export On Settings Change" notifications]: https://github.com/vsch/idea-multimarkdown/issues/747
-[#757, Gitlab multi-line blockquote syntax incorrect]: https://github.com/vsch/idea-multimarkdown/issues/757
 [#759, Table sorting \[Feature request\]]: https://github.com/vsch/idea-multimarkdown/issues/759
-[#760, Attributes support is broken/incompatible with fenced code blocks]: https://github.com/vsch/idea-multimarkdown/issues/760
-[#761, html paste option can't save]: https://github.com/vsch/idea-multimarkdown/issues/761
 [#762, freeze when target link is a big file (16mb)]: https://github.com/vsch/idea-multimarkdown/issues/762
 [#767, Do not highlight \[DONE\] as error]: https://github.com/vsch/idea-multimarkdown/issues/767
 [#768, Copy as reference copies invalid link]: https://github.com/vsch/idea-multimarkdown/issues/768
@@ -1208,12 +791,5 @@
 [#800, Slow typing response caused by Lexer syntax highlighter]: https://github.com/vsch/idea-multimarkdown/issues/800
 [#801, Latest version : All options in plugin settings cleared. Reset to defaults does not work.]: https://github.com/vsch/idea-multimarkdown/issues/801
 [#804, Parser settings always setting default options when loading settings.]: https://github.com/vsch/idea-multimarkdown/issues/804
-[#665, Add support to render code from links like GitHub web UI does]: https://github.com/vsch/idea-multimarkdown/issues/665
-[#739, Suggestion: Option add a generated a tree view of files and folders to HTML export]: https://github.com/vsch/idea-multimarkdown/issues/739
-[#748, Toolbar is completely hidden when window is not wide enough]: https://github.com/vsch/idea-multimarkdown/issues/748
-[#764, Styling the preview pane]: https://github.com/vsch/idea-multimarkdown/issues/764
-[#774, Add formatter option to add blank lines around fenced-code blocks]: https://github.com/vsch/idea-multimarkdown/issues/774
-[#780, False positive for "Unresolved link reference"]: https://github.com/vsch/idea-multimarkdown/issues/780
 [#818, broken TOC links]: https://github.com/vsch/idea-multimarkdown/issues/818
-
 
