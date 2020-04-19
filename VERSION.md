@@ -2,7 +2,9 @@
 
 [TOC]: # ""
 
-- [3.0.xxx.83 - Bug Fix Release](#30xxx83---bug-fix-release)
+- [3.0.xxx.87 - Bug Fix Release](#30xxx87---bug-fix-release)
+- [3.0.xxx.85 - Bug Fix EAP Release](#30xxx85---bug-fix-eap-release)
+- [3.0.xxx.83 - Bug Fix EAP Release](#30xxx83---bug-fix-eap-release)
 - [3.0.xxx.81 - 2020.1 Bug Fix EAP Release](#30xxx81---20201-bug-fix-eap-release)
 - [3.0.xxx.79 - 2020.1 EAP Bug Fix & Enhancement EAP Release](#30xxx79---20201-eap-bug-fix--enhancement-eap-release)
 - [3.0.xxx.75 - 2020.1 EAP Bug Fix EAP Release](#30xxx75---20201-eap-bug-fix-eap-release)
@@ -18,7 +20,24 @@
 
 &nbsp;</details>
 
-### 3.0.xxx.83 - Bug Fix Release
+### 3.0.xxx.87 - Bug Fix Release
+
+* Add: Inspections for math, mermaid and plantuml to enable required
+  settings if with code fenced elements for these are found in the file.
+* Fix: diagnostic/4843, tracked position mismatch after wrapping.
+* Fix:
+  [#840, Edit Table of Contents style intention dialog has no effect],
+  missing update of title level in form
+
+### 3.0.xxx.85 - Bug Fix EAP Release
+
+* Fix: [#840, Edit Table of Contents style intention dialog has no effect], introduced in code
+  refactoring
+* Fix: CSS Script requirement validation done by image converter extensions
+* Add: GitLab mermaid link from Parser mermaid to fenced code `mermaid`
+* Add: GitLab math link from Parser math to fenced code `math`
+
+### 3.0.xxx.83 - Bug Fix EAP Release
 
 * Fix: diagnostic/4707
 * Fix: diagnostic/4640
@@ -793,3 +812,5 @@
 [#804, Parser settings always setting default options when loading settings.]: https://github.com/vsch/idea-multimarkdown/issues/804
 [#818, broken TOC links]: https://github.com/vsch/idea-multimarkdown/issues/818
 
+
+[#840, Edit Table of Contents style intention dialog has no effect]: https://github.com/vsch/idea-multimarkdown/issues/840
