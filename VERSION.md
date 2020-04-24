@@ -2,6 +2,7 @@
 
 [TOC]: # ""
 
+- [3.0.xxx.89 - Bug Fix Release](#30xxx89---bug-fix-release)
 - [3.0.xxx.87 - Bug Fix Release](#30xxx87---bug-fix-release)
 - [3.0.xxx.85 - Bug Fix EAP Release](#30xxx85---bug-fix-eap-release)
 - [3.0.xxx.83 - Bug Fix EAP Release](#30xxx83---bug-fix-eap-release)
@@ -19,6 +20,17 @@
 - [2.9.8 - 2019.3 Compatibility Release](#298---20193-compatibility-release)
 
 &nbsp;</details>
+
+### 3.0.xxx.89 - Bug Fix Release
+
+* Fix: diagnostic/4558, concurrent modification in fenced code
+  conversion manager.
+* Fix:
+  [#840, Edit Table of Contents style intention dialog has no effect],
+  toc style edit ignores title level setting if title text has leading
+  `#` chars.
+* Fix: wrap on typing removing footnote and definition prefix, resulting
+  in indented code instead of the original element.
 
 ### 3.0.xxx.87 - Bug Fix Release
 
