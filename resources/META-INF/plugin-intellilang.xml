@@ -1,0 +1,5 @@
+<idea-plugin>
+  <extensions defaultExtensionNs="com.intellij">
+    <multiHostInjector implementation="com.vladsch.md.nav.language.injection.MdTemporaryLanguageInjector"/>
+  </extensions>
+</idea-plugin>

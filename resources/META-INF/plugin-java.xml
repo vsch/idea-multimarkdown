@@ -1,0 +1,14 @@
+<idea-plugin>
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Flexmark stuff -->
+        <moduleType id="FLEXMARK_JAVA_EXTENSION" implementationClass="com.vladsch.md.nav.flex.FlexmarkExtModuleType"/>
+        <psi.referenceContributor language="JAVA" implementation="com.vladsch.md.nav.flex.language.FlexmarkReferenceContributor"/>
+        <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.vladsch.md.nav.flex.language.FlexmarkLineMarkerProvider"/>
+        <completion.contributor language="JAVA" implementationClass="com.vladsch.md.nav.flex.language.FlexmarkJavaCompletion"/>
+        <referencesSearch implementation="com.vladsch.md.nav.flex.language.FlexmarkReferenceSearch"/>
+        <lang.elementManipulator forClass="com.intellij.psi.PsiLiteralExpression" implementationClass="com.vladsch.md.nav.flex.language.FlexmarkExampleOptionLiteralManipulator"/>
+        <lang.elementManipulator forClass="com.vladsch.md.nav.flex.psi.FakePsiLiteralExpression" implementationClass="com.vladsch.md.nav.flex.language.FlexmarkExampleOptionFakeLiteralManipulator"/>
+        <elementDescriptionProvider implementation="com.vladsch.md.nav.flex.language.FlexmarkElementDescriptionProvider"/>
+        <moduleService serviceImplementation="com.vladsch.md.nav.flex.FlexmarkExtModuleBuildConfiguration"/>
+    </extensions>
+</idea-plugin>

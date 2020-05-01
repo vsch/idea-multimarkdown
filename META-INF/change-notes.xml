@@ -1,0 +1,219 @@
+<idea-plugin>
+    <change-notes><![CDATA[
+        <div xmlns="http://www.w3.org/1999/html">
+            <h3>3.0.201.89 - Bug Fix Release</h3>
+            <ul>
+                <li>Fix: diagnostic/4558, concurrent modification in fenced code
+                    conversion manager.</li>
+                <li>Fix:
+                    <a href="https://github.com/vsch/idea-multimarkdown/issues/840">#840, Edit Table of Contents style intention dialog has no effect</a>,
+                    toc style edit ignores title level setting if title text has leading
+                    <code>#</code> chars.</li>
+                <li>Fix: wrap on typing removing footnote and definition prefix, resulting
+                    in indented code instead of the original element.</li>
+            </ul>
+            <h3>3.0.201.87 - Bug Fix Release</h3>
+            <ul>
+                <li>Add: Inspections for math, mermaid and plantuml to enable required
+                    settings if with code fenced elements for these are found in the file.</li>
+                <li>Fix: diagnostic/4843, tracked position mismatch after wrapping.</li>
+                <li>Fix:
+                    <a href="https://github.com/vsch/idea-multimarkdown/issues/840">#840, Edit Table of Contents style intention dialog has no effect</a>,
+                    missing update of title level in form</li>
+            </ul>
+            <h3>3.0.201.85 - Bug Fix EAP Release</h3>
+            <ul>
+                <li>Fix: <a href="https://github.com/vsch/idea-multimarkdown/issues/840">#840, Edit Table of Contents style intention dialog has no effect</a>, introduced in code
+                    refactoring</li>
+                <li>Fix: CSS Script requirement validation done by image converter extensions</li>
+                <li>Add: GitLab mermaid link from Parser mermaid to fenced code <code>mermaid</code></li>
+                <li>Add: GitLab math link from Parser math to fenced code <code>math</code></li>
+            </ul>
+            <h3>3.0.201.83 - Bug Fix EAP Release</h3>
+            <ul>
+                <li>Fix: diagnostic/4707</li>
+                <li>Fix: diagnostic/4550</li>
+                <li>Fix: diagnostic/4640</li>
+                <li>Fix: reversed line marker for flexmark spec example <code>FILE_EOL</code> and <code>NO_FILE_EOL</code> options.</li>
+                <li>Fix: update <code>Show heading id</code> label text on license state change</li>
+            </ul>
+            <h3>3.0.201.81 - 2020.1 Bug Fix EAP Release</h3>
+            <ul>
+                <li>Fix: multiline URL image links should not wrap</li>
+                <li>Fix: for image-to-fenced code and image-to-inline math conversion, accept <code>http://</code> url prefix
+                    as equivalent to <code>https://</code></li>
+                <li>Fix: GitHub header id generation compatibility:
+                    <ul>
+                        <li>Add Emoji shortcuts</li>
+                        <li>Fix ref link images should not trim trailing spaces in reference or</li>
+                    </ul>
+                </li>
+            </ul>
+            <h3>3.0.201.79 - 2020.1 EAP Bug Fix &amp; Enhancement EAP Release</h3>
+            <ul>
+                <li>Fix: wiki links should not be wrapped during formatting.</li>
+                <li>Fix: Link map default map content for Link Address Element</li>
+                <li>Add: Preferences dialog <code>Menu Split</code> proportion for configurable tree menu to allow full
+                    control of preferences dialog layout for screenshot capture.</li>
+                <li>Fix: exception report settings saved twice in plugin shared settings.</li>
+                <li>Add: <code>kroki.io</code> fenced code rendering extension</li>
+                <li>Fix: update plantuml to version <code>asl-1.2020.6</code></li>
+                <li>Add: <a href="https://github.com/opencollab/jlatexmath">JLatexMath</a> library and option to math image
+                    rendering.</li>
+                <li>Fix: add <code>Fenced Code</code> settings pane under <code>HTML Generation</code></li>
+                <li>Fix: change UML rendering to use fenced code image rendering EP</li>
+                <li>Fix: change Math rendering to use fenced code image rendering EP</li>
+                <li>Fix: change HTML Settings to use new fenced code image rendering EP</li>
+            </ul>
+            <h3>3.0.201.75 - 2020.1 EAP Bug Fix EAP Release</h3>
+            <ul>
+                <li>Add: <code>GrammarCheckingStrategy</code> for <code>Grazie</code> support in Markdown files.</li>
+                <li>Add: <code>Ignore casing of simple list item text</code> in editor settings to ignore capitalization of
+                    single line text for list item and definition paragraphs.</li>
+                <li>Fix: compatibility for 2020.2 snapshot</li>
+                <li>Fix: Project file monitor not checking that alarm is disposed.</li>
+                <li>Fix: use of IDE resource bundle in code style</li>
+                <li>Fix: update to flexmark-java 0.61.0</li>
+            </ul>
+            <h3>3.0.xxx.72 - 2019.x Bug Fix Release</h3>
+            <ul>
+                <li>Fix: add border around legacy license code text area to identify it in settings</li>
+                <li>Fix: diagnostic/4566, IndexOutOfBoundsException: MdLanguageInjector.getLanguagesToInject</li>
+                <li>Add: ability to collapse extension settings sections to allow to minimize needed real-estate
+                    in settings dialog.</li>
+                <li>Fix: <code>HTML Generation</code>, <code>Head Top</code> checkbox does not change settings and does not save.</li>
+                <li>Fix: <code>HTML Generation</code> sections should have scroll pane, otherwise section are hidden if
+                    dialog is not big enough</li>
+                <li>Fix: repo relative images do not get resolved in preview</li>
+            </ul>
+            <h3>3.0.xxx.68 - EAP Release</h3>
+            <ul>
+                <li>Fix: regression bug, <a href="https://github.com/vsch/idea-multimarkdown/issues/818">#818, broken TOC links</a></li>
+            </ul>
+            <h3>3.0.197.64 - 2019.3 Compatibility Release</h3>
+            <ul>
+                <li>Add: div based HTML tables based on hard-coded class names</li>
+            </ul>
+            <h3>3.0.197.62 - 2019.3 Compatibility Release</h3>
+            <ul>
+                <li>Fix: change version numbers to be compatible between marketplace and legacy versions.</li>
+                <li>Fix: marketplace licensed plugin for EAP IDE versions.</li>
+            </ul>
+            <h3>3.0.193.60 - 2019.3 Compatibility Release</h3>
+            <ul>
+                <li>Add: lic dist versions for marketplace licensing</li>
+                <li>Fix: move licensing to own class</li>
+                <li>Fix: broken Markdown to HTML intention</li>
+                <li>Fix: change references keep to first so sort unused last does not toggle references</li>
+                <li>Fix: for <code>Copy Markdown as HTML Mime Content</code> action to use current file&rsquo;s profile parser
+                    settings instead of the <code>COPY_HTML_MIME</code> profile parser settings</li>
+                <li>Fix: use own icons for table dialogs</li>
+                <li>Fix: Formatter equalize trailing marker should not add marker if there is none</li>
+                <li>Fix: toc dropping apostrophe from heading text if text only TOC option and typographic
+                    apostrophes are enabled.</li>
+                <li>Fix: update to cleaned up flexmark-java</li>
+                <li>Fix: missing add ignore annotation to links and reference definitions</li>
+                <li>Fix: missing prepare file for write in quick fixes</li>
+                <li>Fix: Add spec test selection is not available in list items</li>
+                <li>Fix: GitHub page displayed in preview without option being selected</li>
+                <li>Fix: flexmark debug extensions settings not saved.</li>
+                <li>Fix: <a href="https://github.com/vsch/idea-multimarkdown/issues/767">#767, Do not highlight [DONE] as error</a>, adding a reference map to empty text will
+                    disable these references from being unresolved and also render them as text.</li>
+                <li>Add: <a href="https://github.com/vsch/idea-multimarkdown/issues/779">#779, Ignore character casing when checking for matching header</a></li>
+                <li>Fix: change <code>MdProjectRemoteContentCache</code> to project component</li>
+                <li>Fix: typing before/after table caption</li>
+                <li>Fix: convert parser tests to light platform test case</li>
+                <li>Fix: remove tail blank line generation in formatter after fenced code when last child item</li>
+                <li>Fix: Remove unused static <code>LOG</code> in classes</li>
+                <li>Fix: document removed free features from basic version. Intentions are mostly enhanced.</li>
+                <li>Fix: GitHub issue completion when <code>#</code> is at start of line, parsed as header level not
+                    paragraph text.</li>
+                <li>Fix: move references to enh implementation from basic sources</li>
+                <li>Fix: complete remove move refs to enh sources from basic psi dir</li>
+                <li>Fix: remove flexmark plugin refs from enh and basic sources
+                    <ul>
+                        <li>Add: flexmark document and structure view icons to basic icons</li>
+                    </ul>
+                </li>
+                <li>Fix: make <code>MdHighlighterColors</code> a service to prevent multiple instance in the application</li>
+                <li>Fix: restore <code>GitHubTableInspection</code> and add tests</li>
+                <li>Fix: split basic/enh resources</li>
+                <li>Fix: table element formatting</li>
+                <li>Fix: format document with actual char width</li>
+                <li>Fix: code style settings preview with actual char width</li>
+                <li>Fix: cleanup unused icons</li>
+                <li>Fix: move flexmark intention icon to flexmark icons</li>
+                <li>Fix: sort extensions by name and add extension name to settings forms based on extension
+                    provided name</li>
+                <li>Fix: add md nav enh heading to exception reports settings</li>
+                <li>Fix: move all intentions using enh features to enh plugin.</li>
+                <li>Fix: split plugin.xml into components and add <code>xmlmerge</code> java utility to merge them into
+                    single plugin.xml file to allow sharing parts between enh and basic plugins.</li>
+                <li>Fix: rename dir <code>idea/multimarkdown</code> to <code>md/nav</code></li>
+                <li>Fix: message bus creation compatibility with 2020.1 and 2019.3.</li>
+                <li>Fix: typing <code>&gt;</code> in prefix removes first x characters where x is the size of indentation before
+                    <code>&gt;</code></li>
+                <li>Fix: backspacing over <code>&gt;</code> after list item prefix should remove block quote not the list item</li>
+                <li>Fix: typing space at start of indented child paragraph would unindent the paragraph instead of
+                    indenting it.</li>
+                <li>Fix: doubling of typed character when typing at start of indented child paragraph.</li>
+                <li>Fix: on file save toc update did not resolve duped heading ids.</li>
+                <li>Fix: add 250ms delay to <code>ProjectFileMonitor</code> invoking file test to allow the IDE to detect and
+                    sync modified jars.</li>
+                <li>Fix: diagnostic/4450, Write access is allowed inside write-action only, inside
+                    <code>MdPasteHandler</code></li>
+                <li>Fix: diagnostic/4462, IndexOutOfBoundsException: MdStripTrailingSpacesSmartFilter</li>
+                <li>Fix: split parser settings into extensions</li>
+                <li>Fix: split flexmark debug settings to extension</li>
+                <li>Fix: split enh and flexmark color settings into extensions</li>
+                <li>Fix: when pasting selection reference over the link address of link whose text matches
+                    selection link ref text pattern then replace the link element not just the address and anchor
+                    ref.</li>
+                <li>Fix: remove <code>SimToc</code> annotation for title string needs space. No longer true for updated
+                    flexmark-java parser.</li>
+                <li>Add: <code>MdTabOverride</code>/<code>MdBackTabOverride</code> option to treat empty items differently:
+                    <ul>
+                        <li>treat empty items as having no children, should only indent/unindent the item in all cases.</li>
+                        <li>should roll-over between highest and lowest indentation level when the item can no longer be
+                            indented to allow tab to be used to adjust sub-item to parent item</li>
+                    </ul>
+                </li>
+                <li>Fix: replace Psi based TOC update on save by flexmark-java library based update.</li>
+                <li>Add: <code>MdOnSaveFileUpdater</code> test</li>
+                <li>Fix: fix TOC update on save to use parser defined list indent instead of 4 fixed.</li>
+                <li>Fix: change <code>EAP</code> update channel to JetBrains plugin repository EAP channel</li>
+                <li>Fix: add task item prefix to disable wrap prefix patterns to allow typing task item with wrap
+                    on typing enabled.</li>
+                <li>Fix: <code>LineAppendable</code> should not remove leading EOL with 0 flags nor do any space trimming
+                    when appending content to an appendable. Was causing injected language processing to generate
+                    exception.</li>
+                <li>Fix: wrap on typing caret position recovery.</li>
+                <li>Fix: missing typing disabled pattern for ATX heading</li>
+                <li>Fix: assertion failure in <code>MdCodeStyleSettings</code> which could cause settings load issues.</li>
+                <li>Fix: preserve task items and spec example order in structure view</li>
+                <li>Fix: use <code>EditorScrollingPositionKeeper</code> to restore caret vertical position after doc format.</li>
+                <li>Fix: replace formatter with flexmark-java format module</li>
+                <li>Fix: replace wrap on typing with flexmark-java document format for paragraph</li>
+                <li>Fix: replace use of <code>BasedSequence</code> by <code>BasedSequence</code> and accumulate lines in
+                    <code>LineAppendable</code></li>
+                <li>Fix: <code>* [ ] d|</code> backspace of last char after indented task item, caret jumps to start of
+                    line.</li>
+                <li>Fix: move remote content fetch to background tasks.</li>
+                <li>Fix: NPE on virtualFile being null for formatting documents in code style settings.</li>
+                <li>Fix: <code>MdRemoteContentCache</code>, wrong setting used for remote content cache limit causing content
+                    fetch task limit to be exceeded. This also addresses diagnostic/4425.</li>
+                <li>Fix: show editor tooltip when format document or element results in no changes.</li>
+                <li>Fix: <code>getEditorTextWithCaretMarkup</code> is broken for selection with caret pos.</li>
+                <li>Fix: formatting of flexmark spec files
+                    <ul>
+                        <li>Fix: example with ast not adding EOL before example break</li>
+                        <li>Fix: example number not incremented</li>
+                        <li>Fix: set min keep blank lines to 2 for spec test files</li>
+                    </ul>
+                </li>
+                <li>Fix: replace Psi based formatter with flexmark formatter.</li>
+                <li>Fix: caret tracking for multi-caret mode doc format</li>
+            </ul>
+        </div>
+        ]]></change-notes>
+</idea-plugin>

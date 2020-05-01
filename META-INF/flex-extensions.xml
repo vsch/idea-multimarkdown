@@ -1,0 +1,38 @@
+<idea-plugin>
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService serviceImplementation="com.vladsch.md.nav.flex.FlexmarkModuleLocalSettings"/>
+        <projectService serviceImplementation="com.vladsch.md.nav.flex.settings.FlexmarkProjectSettingsManager"/>
+
+        <lang.elementManipulator forClass="com.vladsch.md.nav.flex.psi.FlexmarkFrontMatterBlock" implementationClass="com.vladsch.md.nav.flex.psi.FlexmarkFrontMatterBlockManipulator"/>
+        <stubIndex implementation="com.vladsch.md.nav.flex.psi.index.FlexmarkExampleOptionIndex"/>
+        <fileBasedIndex implementation="com.vladsch.md.nav.flex.psi.index.FlexmarkFileIndex"/>
+        <applicationService serviceImplementation="com.vladsch.md.nav.flex.language.folding.MdFlexmarkFoldingSettings"/>
+    </extensions>
+
+    <extensions defaultExtensionNs="com.vladsch.idea.multimarkdown">
+        <settingsExtension implementation="com.vladsch.md.nav.flex.settings.FlexmarkHtmlSettingsExtensionProvider"/>
+        <settingsExtension implementation="com.vladsch.md.nav.flex.settings.FlexmarkDebugSettingsExtensionProvider"/>
+        <projectSettingsExtension implementation="com.vladsch.md.nav.flex.settings.FlexmarkProjectSettingsExtensionProvider"/>
+
+        <settingsConfigurableExtension implementation="com.vladsch.md.nav.flex.settings.FlexmarkHtmlSettingsFormProvider"/>
+        <settingsConfigurableExtension implementation="com.vladsch.md.nav.flex.settings.FlexmarkParserSettingsFormProvider"/>
+        <settingsConfigurableExtension implementation="com.vladsch.md.nav.flex.settings.FlexmarkDebugSettingsFormProvider"/>
+
+        <colorSettingsExtension implementation="com.vladsch.md.nav.flex.highlighter.FlexmarkColorSettingsExtension"/>
+
+        <!-- Parser Extensions -->
+        <parserExtension id="MdSpecExampleParserExtension" implementation="com.vladsch.md.nav.flex.parser.MdSpecExampleParserExtension" order="after MdJekyllExtension"/>
+        <textMapElementTypeProvider implementation="com.vladsch.md.nav.flex.psi.util.FlexTextMapElementTypeProvider"/>
+
+        <!--Line Marker Provider Extension-->
+        <lineMarkerExtension implementation="com.vladsch.md.nav.flex.language.MdFlexmarkLineMarkerExtension"/>
+
+        <foldingBuilderProvider id="MdEnhFoldingBuilderProvider" implementation="com.vladsch.md.nav.flex.language.folding.MdFlexmarkFoldingBuilderProvider"/>
+
+        <stripTrailingSpacesExtension implementation="com.vladsch.md.nav.flex.parser.MdSpecExampleStripTrailingSpacesExtension"/>
+
+        <editorCustomizationProvider implementation="com.vladsch.md.nav.flex.editor.FlexmarkEditorRangeHighlighterProvider"/>
+
+        <element.completionProvider implementation="com.vladsch.md.nav.flex.language.FlexmarkOptionsKeywordCompletion"/>
+    </extensions>
+</idea-plugin>

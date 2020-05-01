@@ -1,0 +1,78 @@
+<idea-plugin>
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationConfigurable id="MarkdownNavigator.Settings.Application"
+                                 bundle="com.vladsch.md.nav.localization.strings"
+                                 groupId="language"
+                                 key="language.name"
+                                 instance="com.vladsch.md.nav.settings.MdApplicationConfigurable">
+        </applicationConfigurable>
+
+        <applicationConfigurable id="MarkdownNavigator.Settings.Editor"
+                                 parentId="MarkdownNavigator.Settings.Application"
+                                 groupWeight="0"
+                                 bundle="com.vladsch.md.nav.localization.strings"
+                                 key="settings.markdown.editor.name"
+                                 instance="com.vladsch.md.nav.settings.MdEditorConfigurable"/>
+
+        <projectConfigurable id="MarkdownNavigator.Settings.Preview"
+                             parentId="MarkdownNavigator.Settings.Application"
+                             groupWeight="-1"
+                             bundle="com.vladsch.md.nav.localization.strings"
+                             key="settings.markdown.preview.name"
+                             nonDefaultProject="false"
+                             instance="com.vladsch.md.nav.settings.MdPreviewConfigurable"/>
+
+        <projectConfigurable id="MarkdownNavigator.Settings.Parser"
+                             parentId="MarkdownNavigator.Settings.Application"
+                             groupWeight="-2"
+                             bundle="com.vladsch.md.nav.localization.strings"
+                             key="settings.markdown.parser.name"
+                             nonDefaultProject="false"
+                             instance="com.vladsch.md.nav.settings.MdParserConfigurable"/>
+
+        <projectConfigurable id="MarkdownNavigator.Settings.Css"
+                             parentId="MarkdownNavigator.Settings.Application"
+                             groupWeight="-3"
+                             bundle="com.vladsch.md.nav.localization.strings"
+                             key="settings.markdown.css.name"
+                             nonDefaultProject="false"
+                             instance="com.vladsch.md.nav.settings.MdCssConfigurable"/>
+
+        <projectConfigurable id="MarkdownNavigator.Settings.Html"
+                             parentId="MarkdownNavigator.Settings.Application"
+                             groupWeight="-4"
+                             bundle="com.vladsch.md.nav.localization.strings"
+                             key="settings.markdown.html.name"
+                             nonDefaultProject="false"
+                             instance="com.vladsch.md.nav.settings.MdHtmlConfigurable"/>
+
+        <projectConfigurable id="MarkdownNavigator.Settings.Html.FencedCode"
+                             parentId="MarkdownNavigator.Settings.Html"
+                             groupWeight="-4"
+                             bundle="com.vladsch.md.nav.localization.strings"
+                             key="settings.markdown.html.fenced-code.name"
+                             nonDefaultProject="false"
+                             instance="com.vladsch.md.nav.settings.MdFencedCodeConfigurable"/>
+
+        <applicationConfigurable id="MarkdownNavigator.Settings.Notifications"
+                                 parentId="MarkdownNavigator.Settings.Application"
+                                 groupWeight="-10"
+                                 bundle="com.vladsch.md.nav.localization.strings"
+                                 key="settings.markdown.notification.name"
+                                 instance="com.vladsch.md.nav.settings.MdNotificationConfigurable"/>
+
+        <applicationConfigurable id="MarkdownNavigator.Settings.Debug"
+                                 parentId="MarkdownNavigator.Settings.Application"
+                                 groupWeight="-20"
+                                 bundle="com.vladsch.md.nav.localization.strings"
+                                 key="settings.markdown.debug.name"
+                                 instance="com.vladsch.md.nav.settings.MdDebugConfigurable"/>
+
+        <applicationConfigurable id="MarkdownNavigator.Settings.Notices"
+                                 parentId="MarkdownNavigator.Settings.Application"
+                                 groupWeight="-31"
+                                 bundle="com.vladsch.md.nav.localization.strings"
+                                 key="settings.markdown.notices.name"
+                                 instance="com.vladsch.md.nav.settings.MdNoticesConfigurable"/>
+    </extensions>
+</idea-plugin>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templateSet group="Markdown">
+  <template name=",,abbreviation" value="*[$ABBR$]: $TEXT$&#10;$END$" description="Abbreviation *[]:" toReformat="false" toShortenFQNames="false">
+    <variable name="ABBR" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="TEXT" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="MARKDOWN" value="true" />
+    </context>
+  </template>
+  <template name=",,link" value="[$LABEL$]($ADDRESS$) $END$" description="Explicit Link []()" toReformat="false" toShortenFQNames="false">
+    <variable name="ADDRESS" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="LABEL" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="MARKDOWN" value="true" />
+    </context>
+  </template>
+  <template name=",,codefence" value="```$LANGUAGE$&#10;$END$&#10;```&#10;" description="Code Fence" toReformat="false" toShortenFQNames="false">
+    <variable name="LANGUAGE" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="MARKDOWN" value="true" />
+    </context>
+  </template>
+  <template name=",,image" value="![$LABEL$]($ADDRESS$) $END$" description="Image Link ![]()" toReformat="false" toShortenFQNames="false">
+    <variable name="ADDRESS" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="LABEL" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="MARKDOWN" value="true" />
+    </context>
+  </template>
+  <template name=",,rlink" value="[$LABEL$][$REFERENCE$] $END$" description="Reference Link [][]" toReformat="false" toShortenFQNames="false">
+    <variable name="REFERENCE" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="LABEL" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="MARKDOWN" value="true" />
+    </context>
+  </template>
+  <template name=",,rimage" value="![$LABEL$][$REFERENCE$] $END$" description="Reference Image ![][]" toReformat="false" toShortenFQNames="false">
+    <variable name="REFERENCE" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="LABEL" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="MARKDOWN" value="true" />
+    </context>
+  </template>
+  <template name=",,reference" value="[$REFERENCE$]: $ADDRESS$&#10;$END$" description="Reference []:" toReformat="false" toShortenFQNames="false">
+    <variable name="ADDRESS" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="REFERENCE" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="MARKDOWN" value="true" />
+    </context>
+  </template>
+  <template name=",,footnote" value="[^$REFERENCE$]: $TEXT$&#10;$END$" description="Footnote [^]:" toReformat="false" toShortenFQNames="false">
+    <variable name="TEXT" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="REFERENCE" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="MARKDOWN" value="true" />
+    </context>
+  </template>
+  <template name=",,rfootnote" value="[^$REFERENCE$] $END$" description="Footnote Reference [^]" toReformat="false" toShortenFQNames="false">
+    <variable name="REFERENCE" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="MARKDOWN" value="true" />
+    </context>
+  </template>
+  <template name=",,task" value="- [$STATUS$] $END$" description="Task Item - [ ]" toReformat="false" toShortenFQNames="false">
+    <variable name="STATUS" expression="" defaultValue=" " alwaysStopAt="true" />
+    <context>
+      <option name="MARKDOWN" value="true" />
+    </context>
+  </template>
+  <template name=",,table" value="&#10;&#10;| $END$ |&#10;|---|&#10;|  |&#10;&#10;" description="Markdown Table |Hdr|---|  |" toReformat="false" toShortenFQNames="false">
+    <context>
+      <option name="MARKDOWN" value="true" />
+    </context>
+  </template>
+  <template name=",,toc" value="[TOC]: # &quot; $END$&quot;&#10;&#10;&#10;" description="Table of Contents [TOC]: #" toReformat="false" toShortenFQNames="false">
+    <context>
+      <option name="MARKDOWN" value="true" />
+    </context>
+  </template>
+  <template name=",,wikilink" value="[[$REFERENCE$]] $END$" description="Wiki link [[]]" toReformat="false" toShortenFQNames="false">
+    <variable name="REFERENCE" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="MARKDOWN" value="true" />
+    </context>
+  </template>
+  <template name=",,emoji" value=":$SHORTCUT$: $END$" description=":shortcut:" toReformat="false" toShortenFQNames="false">
+    <variable name="SHORTCUT" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="MARKDOWN" value="true" />
+    </context>
+  </template>
+  <template name=",,collapsed" value="&#10;&amp;nbsp;&lt;details open&gt;&lt;summary&gt;$SUMMARY$&lt;/summary&gt;&#10;$END$&#10;&amp;nbsp;&lt;/details&gt;&#10;" description="Collapsed Markdown Section" toReformat="false" toShortenFQNames="true" deactivated="true">
+    <variable name="SUMMARY" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="MARKDOWN" value="true" />
+    </context>
+  </template>
+</templateSet>

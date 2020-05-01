@@ -1,0 +1,38 @@
+ol                           { margin: 5px 0 5px 0;padding-left: 30px;list-style-type: decimal; }
+ul                           { margin: 5px 0 5px 0;padding-left: 30px;list-style-type: disc; }
+ol ol                        { margin: 5px 0 5px 0;padding-left: 30px;list-style-type: decimal;list-style-type:lower-roman; }
+ol ol ol                     { margin: 5px 0 5px 0;padding-left: 30px;list-style-type: decimal;list-style-type:lower-alpha; }
+ol ol ul                     { margin: 5px 0 5px 0;padding-left: 30px;list-style-type: decimal;list-style-type:square; }
+ol ul                        { margin: 5px 0 5px 0;padding-left: 30px;list-style-type: decimal;list-style-type:circle; }
+ol ul ol                     { margin: 5px 0 5px 0;padding-left: 30px;list-style-type: decimal;list-style-type:lower-alpha; }
+ol ul ul                     { margin: 5px 0 5px 0;padding-left: 30px;list-style-type: decimal;list-style-type:square; }
+ul ol                        { margin: 5px 0 5px 0;padding-left: 30px;list-style-type: decimal;list-style-type:lower-roman; }
+ul ol ol                     { margin: 5px 0 5px 0;padding-left: 30px;list-style-type: decimal;list-style-type:lower-alpha; }
+ul ol ul                     { margin: 5px 0 5px 0;padding-left: 30px;list-style-type: decimal;list-style-type:square; }
+ul ul                        { margin: 5px 0 5px 0;padding-left: 30px;list-style-type: decimal;list-style-type:circle; }
+ul ul ol                     { margin: 5px 0 5px 0;padding-left: 30px;list-style-type: decimal;list-style-type:lower-alpha; }
+ul ul ul                     { margin: 5px 0 5px 0;padding-left: 30px;list-style-type: decimal;list-style-type:square; }
+
+li                           { margin: 2px 0 3px 0; }
+li.loose                     { margin: 2px 0 5px 0; }
+li.loose p.first             { margin: 0; }
+li.loose p                   { margin: 0; }
+
+p                            { margin: 5px 0 5px 0; }
+
+dl                           { margin: 5px 0 5px 0;padding:0; }
+dl dt                        { font-size: 1.05em;font-weight: bold;font-style: italic;padding: 0;margin: 5px 0 5px; }
+dl dd                        { font-size: 11px;margin: 0 0 5px;padding: 0 20px; }
+dd > p                       { margin: 5px 0 5px 0; }
+
+pre                          { margin-right: 10px; }
+pre > code                   { }
+code                         { color: #C04040; }
+
+table                        { margin:5px 0;padding:0;border-collapse:collapse;border-spacing:0;font:inherit;border:0px none; }
+table caption                { font-weight: bold;padding: 5px 0 5px 10px;text-align: left; }
+tbody                        { margin:0;padding:0;border:0px none; }
+td                           { text-align:left;font-size:1em;border:1px solid #808080;margin:0;padding:5px 5px; }
+th                           { text-align:left;font-size:1em;border:1px solid #808080;margin:0;padding:5px 5px;font-weight:bold; }
+tr.even                      { border: 0px none;border-top: 1px solid;margin:0;padding:0; }
+tr.odd                       { border: 0px none;border-top: 1px solid;margin:0;padding:0; }

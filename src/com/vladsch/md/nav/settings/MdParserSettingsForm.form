@@ -1,0 +1,658 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.vladsch.md.nav.settings.MdParserSettingsForm">
+  <grid id="27dc6" binding="myMainPanel" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="20" y="20" width="763" height="1043"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <grid id="b7e2a" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <grid id="d9467" layout-manager="GridLayoutManager" row-count="13" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <grid id="a1a9" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="1" hsize-policy="1" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <grid id="7c840" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="1" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="79081" class="com.intellij.openapi.ui.ComboBox" binding="myParserProfileComboBox" custom-create="true">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <requestFocusEnabled value="true"/>
+                          <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.parser.profile.description"/>
+                        </properties>
+                      </component>
+                      <component id="2cd23" class="javax.swing.JLabel">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.parser.compatibility-profile.label"/>
+                          <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.parser.profile.description"/>
+                        </properties>
+                      </component>
+                      <hspacer id="121e5">
+                        <constraints>
+                          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </hspacer>
+                    </children>
+                  </grid>
+                </children>
+              </grid>
+              <grid id="a8f72" layout-manager="GridLayoutManager" row-count="5" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="1" hsize-policy="1" anchor="1" fill="1" indent="0" use-parent-layout="true"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="b52d1" class="com.intellij.ui.components.JBCheckBox" binding="autoLinksCheckBox">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.auto-links.label"/>
+                      <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.auto-links.description"/>
+                    </properties>
+                  </component>
+                  <component id="b47a9" class="com.intellij.ui.components.JBCheckBox" binding="anchorLinksCheckBox">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.anchor-links.label"/>
+                      <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.anchor-links.description"/>
+                    </properties>
+                  </component>
+                  <component id="9f875" class="com.intellij.ui.components.JBCheckBox" binding="emojiShortcutsCheckBox">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.emoji.label"/>
+                      <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.emoji.description"/>
+                    </properties>
+                  </component>
+                  <component id="745d0" class="com.intellij.ui.components.JBCheckBox" binding="fencedCodeBlocksCheckBox">
+                    <constraints>
+                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.fenced-code-block.label"/>
+                      <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.fenced-code-block.description"/>
+                    </properties>
+                  </component>
+                  <grid id="47bcd" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="2" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="ae849" class="javax.swing.JComboBox" binding="myEmojiShortcutsType" custom-create="true">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <requestFocusEnabled value="true"/>
+                          <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.list.description"/>
+                        </properties>
+                      </component>
+                      <component id="a7c72" class="javax.swing.JComboBox" binding="myEmojiImagesType" custom-create="true">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <requestFocusEnabled value="true"/>
+                          <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.list.description"/>
+                        </properties>
+                      </component>
+                    </children>
+                  </grid>
+                  <component id="9d097" class="com.intellij.ui.components.JBCheckBox" binding="strikethroughCheckBox">
+                    <constraints>
+                      <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.strikethrough.label"/>
+                      <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.strikethrough.description"/>
+                    </properties>
+                  </component>
+                  <component id="ce9cf" class="com.intellij.ui.components.JBCheckBox" binding="taskListsCheckBox">
+                    <constraints>
+                      <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.task-lists.label"/>
+                      <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.task-lists.description"/>
+                    </properties>
+                  </component>
+                  <component id="243de" class="com.intellij.ui.components.JBCheckBox" binding="hardWrapsCheckBox">
+                    <constraints>
+                      <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.hard-wraps.label"/>
+                      <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.hard-wraps.description"/>
+                    </properties>
+                  </component>
+                  <component id="99875" class="com.intellij.ui.components.JBCheckBox" binding="tablesCheckBox">
+                    <constraints>
+                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.tables.label"/>
+                      <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.tables.description"/>
+                    </properties>
+                  </component>
+                  <component id="a56e4" class="com.intellij.ui.components.JBCheckBox" binding="wikiLinksCheckBox">
+                    <constraints>
+                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.wiki-links.label"/>
+                      <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.wiki-links.description"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+              <grid id="2c3ea" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="4" column="0" row-span="1" col-span="2" vsize-policy="1" hsize-policy="1" anchor="1" fill="1" indent="0" use-parent-layout="true"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <grid id="3b931" layout-manager="GridLayoutManager" row-count="6" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="3db52" class="com.intellij.ui.components.JBCheckBox" binding="headerSpaceCheckBox">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.header-space.label"/>
+                          <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.header-space.description"/>
+                        </properties>
+                      </component>
+                      <component id="2dc0" class="com.intellij.ui.components.JBCheckBox" binding="relaxedHRulesCheckBox">
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.relaxed-hrules.label"/>
+                          <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.relaxed-hrules.description"/>
+                        </properties>
+                      </component>
+                      <component id="7c86" class="com.intellij.ui.components.JBCheckBox" binding="githubTablesCheckBox">
+                        <constraints>
+                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.github.tables.label"/>
+                          <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.github.tables.description"/>
+                        </properties>
+                      </component>
+                      <component id="5ea5e" class="com.intellij.ui.components.JBCheckBox" binding="githubWikiLinksCheckBox">
+                        <constraints>
+                          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.wiki-link-syntax.label"/>
+                          <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.wiki-links-github.description"/>
+                        </properties>
+                      </component>
+                      <component id="b0c89" class="com.intellij.ui.components.JBCheckBox" binding="spaceInLinkUrls">
+                        <constraints>
+                          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.spaces-in-links.label"/>
+                          <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.spaces-in-links.description"/>
+                        </properties>
+                      </component>
+                      <component id="4d0cc" class="com.intellij.ui.components.JBCheckBox" binding="htmlDeepParser">
+                        <constraints>
+                          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.parser.html-deep-parser.label"/>
+                          <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.parser.html-deep-parser.description"/>
+                        </properties>
+                      </component>
+                    </children>
+                  </grid>
+                  <grid id="36c30" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <grid id="59650" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="213b7" class="javax.swing.JComboBox" binding="myListIndentationComboBox" custom-create="true">
+                            <constraints>
+                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <requestFocusEnabled value="true"/>
+                              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.list.description"/>
+                            </properties>
+                          </component>
+                          <component id="7c4e4" class="javax.swing.JLabel">
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.list"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                      <component id="a0ffb" class="com.intellij.ui.components.JBCheckBox" binding="gfmLooseBlankLineAfterItemPara">
+                        <constraints>
+                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.gfm-loose-blank-line-after-item-para.label"/>
+                          <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.gfm-loose-blank-line-after-item-para.description"/>
+                        </properties>
+                      </component>
+                      <grid id="73687" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none" title-resource-bundle="com/vladsch/md/nav/localization/strings" title-key="settings.parser.header_Id.title"/>
+                        <children>
+                          <component id="74fcb" class="com.intellij.ui.components.JBCheckBox" binding="headerIdNoDupedDashes">
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.parser.header-id-no-duped-dashes.label"/>
+                              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.parser.header-id-no-duped-dashes.description"/>
+                            </properties>
+                          </component>
+                          <component id="52a61" class="com.intellij.ui.components.JBCheckBox" binding="headerIdNonAsciiToLowercase">
+                            <constraints>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.parser.header_id_non_ascii_to_lowercase.label"/>
+                              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.parser.header_id_generator_non_ascii_to_lowercase.description"/>
+                            </properties>
+                          </component>
+                          <component id="4333f" class="com.intellij.ui.components.JBCheckBox" binding="headerIdRefTextTrimTrailingSpaces">
+                            <constraints>
+                              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.parser.header_Id_ref_text_trim_trailing_spaces.label"/>
+                              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.parser.header_id_generator_non_ascii_to_lowercase.description"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                    </children>
+                  </grid>
+                </children>
+              </grid>
+              <grid id="ad1da" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="true" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="10" column="0" row-span="1" col-span="2" vsize-policy="1" hsize-policy="1" anchor="1" fill="1" indent="0" use-parent-layout="true"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="49813" class="com.intellij.ui.components.JBCheckBox" binding="suppressHTMLBlocksCheckBox">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.parser.suppress.html-blocks.label"/>
+                      <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.suppress-html-blocks.description"/>
+                    </properties>
+                  </component>
+                  <component id="419ef" class="com.intellij.ui.components.JBCheckBox" binding="suppressInlineHTMLCheckBox">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.parser.suppress.inline-html.label"/>
+                      <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.suppress-inline-html.description"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+              <grid id="945b" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="true" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="8" column="0" row-span="1" col-span="2" vsize-policy="1" hsize-policy="1" anchor="1" fill="1" indent="0" use-parent-layout="true"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="dc9e7" class="com.intellij.ui.components.JBCheckBox" binding="quotesCheckBox">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.parser.typographic.quotes.label"/>
+                      <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.quotes.description"/>
+                    </properties>
+                  </component>
+                  <component id="e5710" class="com.intellij.ui.components.JBCheckBox" binding="smartsCheckBox">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.parser.typographic.smarts.label"/>
+                      <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.smarts.description"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+              <grid id="62c66" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="6" column="0" row-span="1" col-span="2" vsize-policy="1" hsize-policy="1" anchor="1" fill="1" indent="0" use-parent-layout="true"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="bde37" class="com.intellij.ui.components.JBCheckBox" binding="abbreviationsCheckBox">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.abbreviations.label"/>
+                      <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.abbreviations.description"/>
+                    </properties>
+                  </component>
+                  <component id="a630a" class="com.intellij.ui.components.JBCheckBox" binding="definitionsCheckBox">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.definitions.label"/>
+                      <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.definitions.description"/>
+                    </properties>
+                  </component>
+                  <component id="a519b" class="com.intellij.ui.components.JBCheckBox" binding="insertedCheckBox">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <selected value="false"/>
+                      <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.inserted.label"/>
+                      <toolTipText value=""/>
+                    </properties>
+                  </component>
+                  <component id="d9cfa" class="com.intellij.ui.components.JBCheckBox" binding="subscriptCheckBox">
+                    <constraints>
+                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <selected value="false"/>
+                      <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.subscript.label"/>
+                      <toolTipText value=""/>
+                    </properties>
+                  </component>
+                  <component id="742" class="com.intellij.ui.components.JBCheckBox" binding="superscriptCheckBox">
+                    <constraints>
+                      <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <selected value="false"/>
+                      <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.superscript.label"/>
+                      <toolTipText value=""/>
+                    </properties>
+                  </component>
+                  <component id="e844b" class="com.intellij.ui.components.JBCheckBox" binding="definitionBreakDoubleBlankLine">
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <selected value="false"/>
+                      <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.definition-break-blank-lines.label"/>
+                      <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.definition-break-blank-lines.description"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+              <grid id="73aeb" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="5" column="0" row-span="1" col-span="2" vsize-policy="1" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="70194" class="javax.swing.JSeparator">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="b336" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.parser.non-github.label"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+              <grid id="702c6" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="7" column="0" row-span="1" col-span="2" vsize-policy="1" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="18f9a" class="javax.swing.JSeparator">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="5948d" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.parser.typographic.label"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+              <grid id="27bf8" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="9" column="0" row-span="1" col-span="2" vsize-policy="1" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="6b34" class="javax.swing.JSeparator">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="91db2" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.parser.suppress"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+              <grid id="39a67" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="1" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="c10b3" class="javax.swing.JSeparator">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="14ed4" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.parser.extensions"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+              <grid id="f52b3" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="1" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="f8d1b" class="javax.swing.JSeparator">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="57a48" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.parser.syntax-extensions"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+              <grid id="371fe" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="11" column="0" row-span="1" col-span="2" vsize-policy="1" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="d0681" class="javax.swing.JSeparator">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="10411" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.parser.processors"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+              <grid id="40c0c" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="12" column="0" row-span="1" col-span="2" vsize-policy="1" hsize-policy="1" anchor="1" fill="1" indent="0" use-parent-layout="true"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="87db" class="com.intellij.ui.components.JBCheckBox" binding="jekyllFrontMatterCheckBox">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.parser.jekyll.front-matter.label"/>
+                      <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.parser.jekyl.front-matter.description"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+            </children>
+          </grid>
+          <hspacer id="be506">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </hspacer>
+        </children>
+      </grid>
+      <vspacer id="7306">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </vspacer>
+      <grid id="db46e" binding="myExtensionsPanel" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children/>
+      </grid>
+    </children>
+  </grid>
+</form>

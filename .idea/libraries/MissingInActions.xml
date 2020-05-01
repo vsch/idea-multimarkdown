@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="MissingInActions">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../MissingInActions/out/artifacts/MissingInActions.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../MissingInActions/src" />
+    </SOURCES>
+  </library>
+</component>

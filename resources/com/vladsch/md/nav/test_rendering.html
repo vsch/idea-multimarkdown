@@ -1,0 +1,822 @@
+<head>
+  <title>VERSION.md</title>
+  <link rel="stylesheet" href="file:/Users/vlad/src/idea-multimarkdown2/resources/com/vladsch/md/nav/layout-fx.css">
+  <style>
+    .container { width: 100%; }
+    .wiki-container { width: 100%; }
+    .wiki-body { width: 100%; }
+  </style>
+  <link rel="stylesheet" href="file:/Users/vlad/src/idea-multimarkdown2/resources/com/vladsch/md/nav/default-fx.css">
+  <style>
+    /* Code blocks */
+    pre[class*="language-"] {
+      padding: 1em;
+      margin: .5em 0;
+      overflow: auto;
+      border: .1em solid hsl(30, 20%, 40%);
+      border-radius: .5em;
+      box-shadow: none;
+    }
+
+    #readme .markdown-body {
+      border-radius: 0;
+    }
+
+  </style>
+</head>
+<body>
+<div class="container">
+  <div id="readme" class="boxed-group">
+    <h3>
+      <a href="https://github.com/vsch/MarkdownTest/blob/master/UserIssues/VERSION.md" name="markdown-page" id="markdown-page" class="page-anchor"><span class="bookicon octicon-book"></span>
+      </a>  VERSION.md
+    </h3>
+    <article class="markdown-body">
+      <h2 id="markdown-navigator" md-pos="0-21"><span md-pos="3-21"><a href="#markdown-navigator" name="markdown-navigator" class="anchor"><span class="octicon octicon-link"></span></a>Markdown Navigator</span></h2>
+      <div md-pos="23-1490">
+        <h1>Version History</h1>
+        <ul>
+          <li><a href="#211---bug-fix--enhancement-release">2.1.1 - Bug Fix &amp; Enhancement Release</a></li>
+          <li><a href="#210---bug-fix-release">2.1.0 - Bug Fix Release</a></li>
+          <li><a href="#200---new-parser-release">2.0.0 - New Parser Release</a></li>
+          <li><a href="#184---bug-fixes-and-enhancements">1.8.4 - Bug Fixes and Enhancements</a></li>
+          <li><a href="#183---bug-fixes-and-enhancements">1.8.3 - Bug Fixes and Enhancements</a></li>
+          <li><a href="#182---bug-fixes-and-enhancements">1.8.2 - Bug Fixes and Enhancements</a></li>
+          <li><a href="#180---bug-fixes-and-enhancements">1.8.0 - Bug Fixes and Enhancements</a></li>
+          <li><a href="#171---bug-fixes-and-enhancements">1.7.1 - Bug Fixes and Enhancements</a></li>
+          <li><a href="#170---full-psitree-parser-doc-structure-view--doc-formatting">1.7.0 - Full PsiTree Parser, Doc Structure View &amp; Doc Formatting</a></li>
+          <li><a href="#1633---bug-fix-patch-release">1.6.3.3 - Bug Fix Patch Release</a></li>
+          <li><a href="#161---name-change-release">1.6.1 - Name Change Release</a></li>
+          <li><a href="#150---bug-fix--optimization-release">1.5.0 - Bug Fix &amp; Optimization Release</a></li>
+          <li><a href="#1410---bug-fix--optimization-release">1.4.10 - Bug Fix &amp; Optimization Release</a></li>
+          <li><a href="#149---bug-fix--optimization-release">1.4.9 - Bug Fix &amp; Optimization Release</a></li>
+          <li><a href="#148---bug-fix--optimization-release">1.4.8 - Bug Fix &amp; Optimization Release</a></li>
+          <li><a href="#147---bug-fix--optimization-release">1.4.7 - Bug Fix &amp; Optimization Release</a></li>
+          <li><a href="#146---bug-fix-release">1.4.6 - Bug Fix Release</a></li>
+        </ul>
+      </div>
+      <h1 id="-this-version-requires-boot-jdk-18-" md-pos="4398-4440"><span md-pos="4400-4440"><a href="#-this-version-requires-boot-jdk-18-" name="-this-version-requires-boot-jdk-18-" class="anchor"><span class="octicon octicon-link"></span></a>** This version requires Boot JDK 1.8 **</span></h1>
+      <h3 id="211---bug-fix--enhancement-release" md-pos="8652-8693"><span md-pos="8656-8693"><a href="#211---bug-fix--enhancement-release" name="211---bug-fix--enhancement-release" class="anchor"><span class="octicon octicon-link"></span></a>2.1.1 - Bug Fix &amp; Enhancement Release</span></h3>
+      <h4 id="basic--enhanced-editions-s" md-pos="8743-8775"><span md-pos="8748-8775"><a href="#basic--enhanced-editions-s" name="basic--enhanced-editions-s" class="anchor"><span class="octicon octicon-link"></span></a>Basic &amp; Enhanced Editions s</span></h4>
+      <ul>
+        <li md-pos="8777-8838"><span md-pos="8779-8837">Fix: #299, Tables not syntax highlighted in basic version.</span></li>
+        <li md-pos="8838-8893"><span md-pos="8840-8892">Add: List syntax options: CommonMark, Fixed, Issues.</span></li>
+        <li md-pos="8893-9041"><span md-pos="8895-8988">Add: #301, License activation not working for some network security configurations, Option to</span>
+          <span md-pos="8991-9040">use non-secure connection for license activation.</span></li>
+        <li md-pos="9041-9105"><span md-pos="9043-9104">Fix: #302, IndexOutOfBoundsException: Index out of range: 190</span></li>
+        <li md-pos="9105-9180"><span md-pos="9107-9179">Fix: #307, NegativeArraySizeException when opening .md.erb file, IDE bug</span></li>
+        <li md-pos="9180-9213"><span md-pos="9182-9212">Change: update Kotlin to 1.0.4</span></li>
+      </ul>
+      <h4 id="enhanced-edition-1" md-pos="9214-9235"><span md-pos="9219-9235"><a href="#enhanced-edition-1" name="enhanced-edition-1" class="anchor"><span class="octicon octicon-link"></span></a>Enhanced Edition</span></h4>
+      <ul>
+        <li md-pos="9237-9315"><span md-pos="9239-9314">Fix: #305, Document Format indents Footmarks converting them to code blocks</span></li>
+        <li md-pos="9315-9439"><span md-pos="9317-9401">Add: #306, Copy/Cut of reference links, images or footnote references to include the</span>
+          <span md-pos="9404-9438">references and footnotes on paste.</span></li>
+        <li md-pos="9439-9495"><span md-pos="9441-9494">Add: #300, Breadcrumbs support for Markdown documents</span></li>
+        <li md-pos="9495-9638"><span md-pos="9497-9590">Fix: breadcrumbs to show heading hierarchy as parents, including headings nested within other</span>
+          <span md-pos="9593-9637">elements like list items, block quotes, etc.</span></li>
+        <li md-pos="9638-9755"><span md-pos="9640-9731">Add: breadcrumb option to show element text and maximum number of characters of text to use</span>
+          <span md-pos="9734-9754">(10-60, 30 default).</span></li>
+        <li md-pos="9755-9815"><span md-pos="9757-9814">Fix: breadcrumb setext heading to use atx equivalent text</span></li>
+        <li md-pos="9815-9881"><span md-pos="9817-9880">Fix: breadcrumbs to show paragraph text instead of <code md-pos="9869-9879">Text Block</code></span></li>
+        <li md-pos="9881-9996"><span md-pos="9883-9977">Add: Copy as JIRA formatted text action. Copy selection or whole document to clipboard as JIRA</span>
+          <span md-pos="9980-9995">formatted text.</span></li>
+        <li md-pos="9996-10166"><span md-pos="9998-10087">Fix: #308, Wiki vcs repo not recognized in 2016.3 due to API changes. Affects to http:...</span>
+          <span md-pos="10090-10165">absolute link conversion from non wiki markdown files to wiki target files.</span></li>
+        <li md-pos="10166-10240"><span md-pos="10168-10239">Add: on paste reference link format resolution for new destination file</span></li>
+        <li md-pos="10240-10304"><span md-pos="10242-10303">Add: on paste link format resolution for new destination file</span></li>
+      </ul>
+      <h3 id="210---bug-fix-release" md-pos="10305-10332"><span md-pos="10309-10332"><a href="#210---bug-fix-release" name="210---bug-fix-release" class="anchor"><span class="octicon octicon-link"></span></a>2.1.0 - Bug Fix Release</span></h3>
+      <h4 id="basic--enhanced-editions-1" md-pos="10334-10364"><span md-pos="10339-10364"><a href="#basic--enhanced-editions-1" name="basic--enhanced-editions-1" class="anchor"><span class="octicon octicon-link"></span></a>Basic &amp; Enhanced Editions</span></h4>
+      <ul>
+        <li md-pos="10366-10432"><span md-pos="10368-10431">Change: update source for flexmark-java refactored file layout.</span></li>
+        <li md-pos="10432-10470"><span md-pos="10434-10469">Fix: #287, tables stopped rendering</span></li>
+        <li md-pos="10470-10554"><span md-pos="10472-10553">Fix: #286, PyCharm 2016.2.1, unterminated fenced code causing too many exceptions</span></li>
+        <li md-pos="10554-10597"><span md-pos="10556-10596">Fix: #285, Not able to parse .md.erbfile</span></li>
+        <li md-pos="10597-10671"><span md-pos="10599-10670">Fix: #287, tables stopped rendering part 2, tables not rendering at all</span></li>
+        <li md-pos="10671-10751"><span md-pos="10673-10750">Fix: #291, on open idea load multimarkdown failure some time!, tentative fix.</span></li>
+        <li md-pos="10751-10822"><span md-pos="10753-10821">Change: remove Lobo Evolution library and other unused dependencies.</span></li>
+        <li md-pos="10822-10878"><span md-pos="10824-10877">Fix: #293, Cannot adjust settings for &quot;Explicit Link&quot;</span></li>
+      </ul>
+      <h4 id="enhanced-edition-2" md-pos="10879-10900"><span md-pos="10884-10900"><a href="#enhanced-edition-2" name="enhanced-edition-2" class="anchor"><span class="octicon octicon-link"></span></a>Enhanced Edition</span></h4>
+      <ul>
+        <li md-pos="10902-10961"><span md-pos="10904-10960">Fix: remove e-mail validation from fetch license dialog.</span></li>
+        <li md-pos="10961-11102"><span md-pos="10963-11053">Fix: typing at the start of text of a numbered list item with wrap on typing enabled would</span>
+          <span md-pos="11056-11101">delete the character as soon as it was typed.</span></li>
+        <li md-pos="11102-11271"><span md-pos="11104-11198">Fix: wrap on typing would stop wrapping text when space was typed. Caused by the IDE no longer</span>
+          <span md-pos="11201-11270">generating pre-char typed handler calls for some yet unknown reasons.</span></li>
+        <li md-pos="11271-11408"><span md-pos="11273-11363">Fix: remove wrap on typing disabling when typing back ticks or back slashes because it was</span>
+          <span md-pos="11366-11407">only needed due to pegdown parser quirks.</span></li>
+        <li md-pos="11408-11447"><span md-pos="11410-11446">Fix: #288, IndexOutOfBoundsException</span></li>
+        <li md-pos="11447-12083"><span md-pos="11449-11512">Fix: #294, Structure view text not compatible with text search.</span>
+          <ol>
+            <li md-pos="11519-11666">
+              <p md-pos="11522-11608"><span md-pos="11522-11607">Headings: searchable text is the heading text, greyed out text is the heading id with</span></p>
+              <h1 id="prefixed-showing-the-ref-anchor-for-the-heading" md-pos="11617-11666"><span md-pos="11619-11666"><a href="#prefixed-showing-the-ref-anchor-for-the-heading" name="prefixed-showing-the-ref-anchor-for-the-heading" class="anchor"><span class="octicon octicon-link"></span></a>prefixed showing the ref anchor for the heading</span></h1>
+            </li>
+            <li md-pos="11681-11759">
+              <p md-pos="11684-11759"><span md-pos="11684-11758">Images: searchable text is the image link, greyed out text is the alt text</span></p>
+            </li>
+            <li md-pos="11765-11831">
+              <p md-pos="11768-11831"><span md-pos="11768-11830">List Items: searchable text is the first line of the item text</span></p>
+            </li>
+            <li md-pos="11837-11913">
+              <p md-pos="11840-11913"><span md-pos="11840-11912">Links: searchable text is the link url, greyed out text is the link text</span></p>
+            </li>
+            <li md-pos="11919-12003">
+              <p md-pos="11922-12003"><span md-pos="11922-12002">Footnotes: searchable text is footnote reference <code md-pos="11972-11973">:</code> first line of footnote text</span></p>
+            </li>
+            <li md-pos="12009-12083">
+              <p md-pos="12012-12083"><span md-pos="12012-12082">References: searchable text is the reference id <code md-pos="12061-12062">:</code> reference link url</span></p>
+            </li>
+          </ol>
+        </li>
+        <li md-pos="12083-12193"><span md-pos="12085-12174">Fix: #296, License expiration not handled properly by plugin for versions released before</span>
+          <span md-pos="12177-12192">license expired</span></li>
+        <li md-pos="12193-12288"><span md-pos="12195-12287">Fix: #297, Code Fence only minimizes leading spaces of the first code line during formatting</span></li>
+        <li md-pos="12288-12410"><span md-pos="12290-12378">Fix: #298, Formatting list items with empty text and first item a Atx heading, moves the</span>
+          <span md-pos="12381-12409">heading before the list item</span></li>
+      </ul>
+      <h3 id="200---new-parser-release" md-pos="12411-12441"><span md-pos="12415-12441"><a href="#200---new-parser-release" name="200---new-parser-release" class="anchor"><span class="octicon octicon-link"></span></a>2.0.0 - New Parser Release</span></h3>
+      <h4 id="basic--enhanced-editions-2" md-pos="12443-12473"><span md-pos="12448-12473"><a href="#basic--enhanced-editions-2" name="basic--enhanced-editions-2" class="anchor"><span class="octicon octicon-link"></span></a>Basic &amp; Enhanced Editions</span></h4>
+      <ul>
+        <li md-pos="12475-12607"><span md-pos="12477-12565">Fix: #282, Child paragraphs of tight list items are merged into the item text in preview</span>
+          <span md-pos="12568-12606">instead of being a separate paragraph.</span></li>
+        <li md-pos="12607-12850"><span md-pos="12609-12796">Change: Component name for Markdown Navigator application shared settings changed to <code md-pos="12695-12715">Markdown Navigator</code> from a confusing <code md-pos="12735-12752">ApplicationShared</code>. Did't realize that the component name was</span>
+          <span md-pos="12799-12849">used for display in import/export settings dialog.</span></li>
+        <li md-pos="12850-12917"><span md-pos="12852-12916">Fix: JavaFX and Swing stylesheets to better match GFM rendering.</span></li>
+        <li md-pos="12917-13003"><span md-pos="12919-13002">Add: Flexmark parser used for Swing preview rendering and plain HTML text previews.</span></li>
+        <li md-pos="13003-13110"><span md-pos="13005-13093">Add: allow task list items from ordered list items like GitHub, rendering is the same as</span>
+          <span md-pos="13096-13109">bullet items.</span></li>
+        <li md-pos="13110-13189"><span md-pos="13112-13188">Fix: emoji renderer was not setting image height, width nor align attributes</span></li>
+        <li md-pos="13189-13254"><span md-pos="13191-13253">Fix: emoji parser flags were not being passed to HTML Renderer</span></li>
+        <li md-pos="13254-13317"><span md-pos="13256-13316">Add: Flexmark parser used for JavaFX Html preview rendering.</span></li>
+        <li md-pos="13317-13424"><span md-pos="13319-13411">Add: Debug setting to allow switching to pegdown for HTML rendering for debug and comparison</span>
+          <span md-pos="13414-13423">purposes.</span></li>
+        <li md-pos="13424-13512"><span md-pos="13426-13511">Change: update flexmark-java parser to spec 0.26 with more intuitive emphasis parsing</span></li>
+        <li md-pos="13512-13655"><span md-pos="13514-13604">Add: skeleton error reporter to make reporting plugin errors more convenient and also more</span>
+          <span md-pos="13607-13654">complete. No server code yet. For now disabled.</span></li>
+        <li md-pos="13655-13816"><span md-pos="13657-13745">Fix: With lexer as syntax highlighter deleting the last space after <code md-pos="13726-13729">[ ]</code> would cause an</span>
+          <span md-pos="13748-13815">exception that was trapped but it would mess up syntax highlighting</span></li>
+        <li md-pos="13816-13902"><span md-pos="13818-13901">Fix: parser would accept ordered lists using <code md-pos="13864-13865">)</code> delimiter, as per commonmark spec.</span></li>
+        <li md-pos="13902-14128"><span md-pos="13904-13995">Add: flexmark parser as the default option for lexer, parser and external annotator. Typing</span>
+          <span md-pos="13998-14047">response is amazing. Some elements still missing:</span>
+          <ul>
+            <li md-pos="14052-14066"><span md-pos="14054-14065">Definitions</span></li>
+            <li md-pos="14070-14100"><span md-pos="14072-14099">Typographic: Quotes, Smarts</span></li>
+            <li md-pos="14104-14128"><span md-pos="14106-14127">Multi-Line Image URLs</span></li>
+          </ul>
+        </li>
+      </ul>
+      <h4 id="enhanced-edition-3" md-pos="14129-14150"><span md-pos="14134-14150"><a href="#enhanced-edition-3" name="enhanced-edition-3" class="anchor"><span class="octicon octicon-link"></span></a>Enhanced Edition</span></h4>
+      <ul>
+        <li md-pos="14152-14234"><span md-pos="14154-14233">Change: Move pegdown timeout from parser settings to debug settings. <img src="file:/Users/vlad/Library/Caches/IdeaIC2016-3.7743/plugins-sandbox-mn/plugins/idea-multimarkdown/emojis/grinning.png" alt="emoji people:grinning" height="20" width="20" align="absmiddle" /></span></li>
+        <li md-pos="14234-14344"><span md-pos="14236-14326">Add: use actual char width to fix for wrap on typing fix when typing right before start of</span>
+          <span md-pos="14329-14343">line elements.</span></li>
+        <li md-pos="14344-14431"><span md-pos="14346-14430">Add: GFM table rendering option to render tables text that GFM would render as text.</span></li>
+        <li md-pos="14431-14797"><span md-pos="14433-14524">Fix: wrap on typing right before an element set to always be at the beginning of line would</span>
+          <span md-pos="14527-14619">always put the caret right before the element after wrapping, typing the next word and space</span>
+          <span md-pos="14622-14711">would wrap the word to the previous line, leaving the caret at the start of line. Now the</span>
+          <span md-pos="14714-14796">caret is kept at the end of the previous line making caret behaviour more natural.</span></li>
+        <li md-pos="14797-15035"><span md-pos="14799-14891">Fix: split editor layout change actions and preview content change actions now restore focus</span>
+          <span md-pos="14894-14982">back to the text editor. Now they can be used in keyboard shortcuts without interrupting</span>
+          <span md-pos="14985-15034">typing by needing a mouse click to restore focus.</span></li>
+        <li md-pos="15035-15085"><span md-pos="15037-15084">Add: source position information to list items.</span></li>
+        <li md-pos="15085-15162"><span md-pos="15087-15161">Fix: link text suggestion provider to remove any <code md-pos="15137-15139">..</code> directory references</span></li>
+        <li md-pos="15162-15342"><span md-pos="15164-15258">Fix: Refine JavaFX scroll preview to source position and highlighting to work more intuitively</span>
+          <span md-pos="15261-15341">for block elements, images and address JavaFX WebView DOM element offset quirks.</span></li>
+        <li md-pos="15342-15469"><span md-pos="15344-15433">Add: JavaFX scroll preview to source position and various highlight options to show which</span>
+          <span md-pos="15436-15468">element in the source has focus.</span></li>
+        <li md-pos="15469-15556"><span md-pos="15471-15555">Add: flexmark spec example rendering options: fenced code, sections, definition list</span></li>
+        <li md-pos="15556-15644"><span md-pos="15558-15643">Change: simulated TOC to allow <code md-pos="15590-15592">''</code> for titles to match what is allowed in references</span></li>
+        <li md-pos="15644-15769"><span md-pos="15646-15732">Add: list annotation and quick fixes when list items are inconsistent. i.e. bullet and</span>
+          <span md-pos="15735-15768">numbered items mixed in one list.</span></li>
+        <li md-pos="15769-15817"><span md-pos="15771-15816">Add: table annotations and reformat quick fix</span></li>
+        <li md-pos="15817-15974"><span md-pos="15819-15913">Add: parser option for generated TOC to include a blank line spacer after the <code md-pos="15898-15905">[TOC]:#</code> marker</span>
+          <span md-pos="15916-15973">to increase compatibility with existing markdown parsers.</span></li>
+      </ul>
+      <h3 id="184---bug-fixes-and-enhancements" md-pos="15975-16013"><span md-pos="15979-16013"><a href="#184---bug-fixes-and-enhancements" name="184---bug-fixes-and-enhancements" class="anchor"><span class="octicon octicon-link"></span></a>1.8.4 - Bug Fixes and Enhancements</span></h3>
+      <h4 id="basic--enhanced-editions-3" md-pos="16015-16045"><span md-pos="16020-16045"><a href="#basic--enhanced-editions-3" name="basic--enhanced-editions-3" class="anchor"><span class="octicon octicon-link"></span></a>Basic &amp; Enhanced Editions</span></h4>
+      <ul>
+        <li md-pos="16047-16189"><span md-pos="16049-16143">Fix: #278, After upgrading to 1.8.3. IntelliJ IDEA 2016.2 hangs immediately after startup. One</span>
+          <span md-pos="16146-16188">more effing pegdown parsing related issue.</span></li>
+      </ul>
+      <h3 id="183---bug-fixes-and-enhancements" md-pos="16190-16228"><span md-pos="16194-16228"><a href="#183---bug-fixes-and-enhancements" name="183---bug-fixes-and-enhancements" class="anchor"><span class="octicon octicon-link"></span></a>1.8.3 - Bug Fixes and Enhancements</span></h3>
+      <h4 id="basic--enhanced-editions-4" md-pos="16230-16260"><span md-pos="16235-16260"><a href="#basic--enhanced-editions-4" name="basic--enhanced-editions-4" class="anchor"><span class="octicon octicon-link"></span></a>Basic &amp; Enhanced Editions</span></h4>
+      <ul>
+        <li md-pos="16262-16373"><span md-pos="16264-16358">Fix: if remote url in git config lacked a .git extension then the repo would not resolve links</span>
+          <span md-pos="16361-16372">in preview.</span></li>
+        <li md-pos="16373-16514"><span md-pos="16375-16469">Fix: #263, AssertionError while indexing .md file and probably a few others. pegdown bug would</span>
+          <span md-pos="16472-16513">cause some AST nodes to have start &gt; end.</span></li>
+      </ul>
+      <h4 id="enhanced-edition-4" md-pos="16515-16536"><span md-pos="16520-16536"><a href="#enhanced-edition-4" name="enhanced-edition-4" class="anchor"><span class="octicon octicon-link"></span></a>Enhanced Edition</span></h4>
+      <ul>
+        <li md-pos="16538-16593"><span md-pos="16540-16592">Add: project module names to inline code completions</span></li>
+        <li md-pos="16593-16656"><span md-pos="16595-16655">Fix: range assertion fail in folding builder for empty range</span></li>
+        <li md-pos="16656-16728"><span md-pos="16658-16727">Fix: #274, Default Editor layout always reset to &quot;editor and preview&quot;</span></li>
+        <li md-pos="16728-16823"><span md-pos="16730-16822">Fix: #273, Loosen list action IndexOutOfBoundsException when not all list items are selected</span></li>
+        <li md-pos="16823-17134"><span md-pos="16825-16918">Fix: Reformat document and reformat element actions now remove unnecessary trailing spaces at</span>
+          <span md-pos="16921-17014">end of text blocks. Reformat element will only remove trailing spaces located after the caret</span>
+          <span md-pos="17017-17111">to prevent the caret from hanging off the end of the text block after reformatting or changing</span>
+          <span md-pos="17114-17133">the caret position.</span></li>
+        <li md-pos="17134-17245"><span md-pos="17136-17228">Fix: caret placed one character left of a space if wrapping after a typed space with a space</span>
+          <span md-pos="17231-17244">before caret.</span></li>
+        <li md-pos="17245-17320"><span md-pos="17247-17319">Add: flexmark spec line markers for option missing in some test classes.</span></li>
+        <li md-pos="17320-17560"><span md-pos="17322-17414">Add: more flexible inline code completions, will allow qualified class names and multi-class</span>
+          <span md-pos="17417-17508">name matches when completing members. If more than one class name matches then the combined</span>
+          <span md-pos="17511-17559">set of members is used from all matched classes.</span></li>
+      </ul>
+      <h3 id="182---bug-fixes-and-enhancements" md-pos="17561-17599"><span md-pos="17565-17599"><a href="#182---bug-fixes-and-enhancements" name="182---bug-fixes-and-enhancements" class="anchor"><span class="octicon octicon-link"></span></a>1.8.2 - Bug Fixes and Enhancements</span></h3>
+      <h4 id="basic--enhanced-editions-5" md-pos="17601-17631"><span md-pos="17606-17631"><a href="#basic--enhanced-editions-5" name="basic--enhanced-editions-5" class="anchor"><span class="octicon octicon-link"></span></a>Basic &amp; Enhanced Editions</span></h4>
+      <ul>
+        <li md-pos="17633-17815"><span md-pos="17635-17729">Fix: #268, Installed exception on webstorm load V1.80, caused by attempt to use a Java support</span>
+          <span md-pos="17732-17814">class that does not exist on WebStorm. Causes exception on any refactoring action.</span></li>
+      </ul>
+      <h4 id="enhanced-edition-5" md-pos="17816-17837"><span md-pos="17821-17837"><a href="#enhanced-edition-5" name="enhanced-edition-5" class="anchor"><span class="octicon octicon-link"></span></a>Enhanced Edition</span></h4>
+      <ul>
+        <li md-pos="17839-17969"><span md-pos="17841-17935">Fix: #271, ClassNotFoundError with Latest PhpStorm update and other locations where Java based</span>
+          <span md-pos="17938-17968">refactoring classes were used.</span></li>
+        <li md-pos="17969-18050"><span md-pos="17971-18049">Fix: toc element post parsing bug that caused assertion failure during parsing</span></li>
+        <li md-pos="18050-18110"><span md-pos="18052-18109">Fix: annotator showing reference used when it is not used</span></li>
+        <li md-pos="18110-18157"><span md-pos="18112-18156">Fix: unnecessary no issue token type logging</span></li>
+        <li md-pos="18157-18231"><span md-pos="18159-18230">Add: tooltip to flexmark option checkbox in edit example options dialog</span></li>
+        <li md-pos="18231-18311"><span md-pos="18233-18310">Fix: list loose/tight formatting when last item of nested list has blank line</span></li>
+        <li md-pos="18311-18423"><span md-pos="18313-18405">Fix: list loose/tight formatting when tight option is selected and have multiple blank lines</span>
+          <span md-pos="18408-18422">between items.</span></li>
+        <li md-pos="18423-18514"><span md-pos="18425-18513">Fix: insert loose list item on ENTER with <code md-pos="18468-18492">loosen if has loose item</code> list spacing option</span></li>
+        <li md-pos="18514-18631"><span md-pos="18516-18608">Fix: improper flexmark ext rename processor implementation disabled test spec class/file and</span>
+          <span md-pos="18611-18630">spec file renaming.</span></li>
+        <li md-pos="18631-18677"><span md-pos="18633-18676">Add: flexmark-java spec example FAIL option</span></li>
+        <li md-pos="18677-19045"><span md-pos="18679-18764">Change: inline code now treated as literal so that classes, methods and fields can be</span>
+          <span md-pos="18767-18860">refactored with search in strings. <img src="file:/Users/vlad/Library/Caches/IdeaIC2016-3.7743/plugins-sandbox-mn/plugins/idea-multimarkdown/emojis/warning.png" alt="emoji places:warning" height="20" width="20" align="absmiddle" /> this only works if syntax highlighting is set to</span>
+          <span md-pos="18863-18957">lexer not annotator. Lexer used with annotator syntax highlighting only distinguishes text and</span>
+          <span md-pos="18960-19044">html comments. The latter so that TODO processing will work with either highlighter.</span></li>
+        <li md-pos="19045-19823"><span md-pos="19047-19140">Change: markdown inside code fence or verbatim with markdown injected language gets all types</span>
+          <span md-pos="19143-19235">of references from the outer file. Outer references see their inner referencing elements and</span>
+          <span md-pos="19238-19332">will be marked as used if there are any inner or outer references. Refactoring will rename all</span>
+          <span md-pos="19335-19427">referring elements. Outer reference elements do not see inner duplicates, but inner ones see</span>
+          <span md-pos="19430-19441">outer ones.</span>
+          <p md-pos="19447-19823"><span md-pos="19447-19535"><img src="file:/Users/vlad/Library/Caches/IdeaIC2016-3.7743/plugins-sandbox-mn/plugins/idea-multimarkdown/emojis/warning.png" alt="emoji places:warning" height="20" width="20" align="absmiddle" /> Exception to outer reference access is a <code md-pos="19499-19506">[TOC]:#</code> element. It only uses outer</span>
+            <span md-pos="19540-19632">context headings if none are defined within the injected context. An inner <code md-pos="19616-19623">[TOC]:#</code> element</span>
+            <span md-pos="19637-19727">is not updated automatically on file save or format. <strong md-pos="19692-19710">Only manual update</strong> via the update</span>
+            <span md-pos="19732-19822">table of contents quick fix to prevent inadvertent changes to code fence or verbatim text.</span></p>
+        </li>
+        <li md-pos="19823-19894"><span md-pos="19825-19893">Prep: for sim toc parsing to be done by flexmark-java options parser</span></li>
+        <li md-pos="19894-19984"><span md-pos="19896-19983">Add: flexmark-java extension to convert module camel case to dot for extension package.</span></li>
+        <li md-pos="19984-20071"><span md-pos="19986-20070">Add: flexmark-java extension to convert module camel case to dashed for: module name</span></li>
+        <li md-pos="20071-20211"><span md-pos="20073-20162">Add: flexmark-java extension module config common profiles to select common combinations:</span>
+          <ul>
+            <li md-pos="20167-20193"><span md-pos="20169-20192">Select None/All Buttons</span></li>
+            <li md-pos="20197-20211"><span md-pos="20199-20210">BlockParser</span></li>
+          </ul>
+        </li>
+      </ul>
+      <h3 id="180---bug-fixes-and-enhancements" md-pos="20212-20250"><span md-pos="20216-20250"><a href="#180---bug-fixes-and-enhancements" name="180---bug-fixes-and-enhancements" class="anchor"><span class="octicon octicon-link"></span></a>1.8.0 - Bug Fixes and Enhancements</span></h3>
+      <h4 id="basic--enhanced-editions-6" md-pos="20252-20282"><span md-pos="20257-20282"><a href="#basic--enhanced-editions-6" name="basic--enhanced-editions-6" class="anchor"><span class="octicon octicon-link"></span></a>Basic &amp; Enhanced Editions</span></h4>
+      <ul>
+        <li md-pos="20284-20414"><span md-pos="20286-20378">Fix: add tests for project being disposed in a few places to catch when later invocation may</span>
+          <span md-pos="20381-20413">occur after a project is closed.</span></li>
+        <li md-pos="20414-20475"><span md-pos="20416-20474">Fix: make emoji shortcut into a non spell checking element</span></li>
+        <li md-pos="20475-20505"><span md-pos="20477-20504">Add: <code md-pos="20483-20489">.emoji</code> live template</span></li>
+        <li md-pos="20505-20606"><span md-pos="20507-20597">Fix: wiki link syntax parser option was being taken from old settings in some parts of the</span>
+          <span md-pos="20600-20605">code.</span></li>
+        <li md-pos="20606-20636"><span md-pos="20608-20635">Fix: #262, NPE opening file</span></li>
+        <li md-pos="20636-20742"><span md-pos="20638-20730">Fix: clicking on links anchor referencing links did not move the element into view in JavaFX</span>
+          <span md-pos="20733-20741">preview.</span></li>
+      </ul>
+      <h4 id="enhanced-edition-6" md-pos="20743-20764"><span md-pos="20748-20764"><a href="#enhanced-edition-6" name="enhanced-edition-6" class="anchor"><span class="octicon octicon-link"></span></a>Enhanced Edition</span></h4>
+      <ul>
+        <li md-pos="20766-20941"><span md-pos="20768-20862">Change: Now disabling table formatting also disables row insert on ENTER and delete row/column</span>
+          <span md-pos="20865-20940">on BACKSPACE to make it easier to turn off side-effects for manual editing.</span></li>
+        <li md-pos="20941-21061"><span md-pos="20943-20985">Fix: #252, update failed for AnAction with</span>
+          <span md-pos="20988-21060">ID=com.vladsch.md.nav.actions.styling.ListTightAction</span></li>
+        <li md-pos="21061-21079"><span md-pos="21063-21078">Fix: #253, null</span></li>
+        <li md-pos="21079-21189"><span md-pos="21081-21174">Fix: occasional fast typing with wrap as you type would insert a copy of previously typed few</span>
+          <span md-pos="21177-21188">characters.</span></li>
+        <li md-pos="21189-21292"><span md-pos="21191-21278">Fix: reformat element action added an extra prefix and duplicated last character of the</span>
+          <span md-pos="21281-21291">paragraph.</span></li>
+        <li md-pos="21292-21477"><span md-pos="21294-21385">Fix: Task item toggle action to preserve <code md-pos="21336-21337">-</code> or <code md-pos="21343-21344">*</code> prefix of the item and only use the new</span>
+          <span md-pos="21388-21476">bullet item prefix code style setting when converting paragraphs or numbered list items.</span></li>
+        <li md-pos="21477-21664"><span md-pos="21479-21572">Fix: Bullet item toggle action to preserve <code md-pos="21523-21524">-</code> or <code md-pos="21530-21531">*</code> prefix of the item and only use the new</span>
+          <span md-pos="21575-21663">bullet item prefix code style setting when converting paragraphs or numbered list items.</span></li>
+        <li md-pos="21664-21734"><span md-pos="21666-21733">Fix: add missing <code md-pos="21684-21685">+</code> prefix for bullet lists in code style settings</span></li>
+        <li md-pos="21734-21794"><span md-pos="21736-21793">Fix: exception in paragraph context with empty paragraph.</span></li>
+        <li md-pos="21794-21902"><span md-pos="21796-21888">Fix: wrap on typing turns off intermittently when typing in a paragraph immediately followed</span>
+          <span md-pos="21891-21901">by a table</span></li>
+        <li md-pos="21902-22005"><span md-pos="21904-21992">Add: flexmark-java test spec file format handling with flexmark front matter and example</span>
+          <span md-pos="21995-22004">elements.</span></li>
+        <li md-pos="22005-22097"><span md-pos="22007-22096">Add: flexmark-java test spec option completions, references, annotations and quick fixes.</span></li>
+        <li md-pos="22097-22155"><span md-pos="22099-22154">Add: flexmark-java test spec options keyword completion</span></li>
+        <li md-pos="22155-22217"><span md-pos="22157-22216">Fix: spell checking of text had identifier setting in error</span></li>
+        <li md-pos="22217-22279"><span md-pos="22219-22278">Add: implement stub elements and index for flexmark options</span></li>
+        <li md-pos="22279-22314"><span md-pos="22281-22313">Fix: flexmark option refactoring</span></li>
+        <li md-pos="22314-22443"><span md-pos="22316-22408">Add: debug actions to collect unique markdown files and to open all of them one at a time to</span>
+          <span md-pos="22411-22442">check for WebView crashing bug.</span></li>
+        <li md-pos="22443-22493"><span md-pos="22445-22492">Add: List spacing option to code style settings</span></li>
+        <li md-pos="22493-22627"><span md-pos="22495-22586">Add: add list item on ENTER will add a blank line above/below a new item if list spacing is</span>
+          <span md-pos="22589-22626">set to Loosen or Loose in code style.</span></li>
+        <li md-pos="22627-22677"><span md-pos="22629-22676">Add: flexmark edit options intention and dialog</span></li>
+        <li md-pos="22677-22744"><span md-pos="22679-22743">Add: flexmark refactoring of options. Needs work but functional.</span></li>
+        <li md-pos="22744-22819"><span md-pos="22746-22818">Fix: invalid regex in wrap on typing before markdown element prefix text</span></li>
+        <li md-pos="22819-22965"><span md-pos="22821-22914">Add: flexmark options completion to show actual <code md-pos="22870-22877">DataKey</code> and value assigned making it easier</span>
+          <span md-pos="22917-22964">to figure out which option is the one you want.</span></li>
+        <li md-pos="22965-23054"><span md-pos="22967-23053">Add: flexmark java completion contributor to handle option string literal completions.</span></li>
+        <li md-pos="23054-23105"><span md-pos="23056-23104">Add: inline code to be a language injection host</span></li>
+        <li md-pos="23105-23391"><span md-pos="23107-23198">Add: completion in inline code will attempt to complete a Java references separated by <code md-pos="23195-23196">.</code>.</span>
+          <span md-pos="23201-23294">First classes, then: methods, fields and inner classes. Methods complete with their parameter</span>
+          <span md-pos="23297-23390">type signature. Fields, methods and inner classes will continue completion if a <code md-pos="23378-23379">.</code> is typed.</span></li>
+        <li md-pos="23391-23568"><span md-pos="23393-23486">Fix: self referencing links in scratch files with would not resolve because scratch files are</span>
+          <span md-pos="23489-23567">not part of the project. Now a self referencing link in any file will resolve.</span></li>
+        <li md-pos="23568-23678"><span md-pos="23570-23662">Fix: Reference refactoring of reference name would not work if the link reference was self ß</span>
+          <span md-pos="23665-23677">referencing.</span></li>
+        <li md-pos="23678-23879"><span md-pos="23680-23771">Add: Table of Contents element that works with basic Markdown processors. Updated on format</span>
+          <span md-pos="23774-23802">element format document when</span>
+          <span md-pos="23805-23878"><a href="../../../../wiki/Enhanced-Features#table-of-contents" md-pos="23805-23878" class="absent">Table Of Contents</a></span></li>
+        <li md-pos="23879-24003"><span md-pos="23881-23975">Change: toggle task list item now changes items to bullet list items if all selected items are</span>
+          <span md-pos="23978-24002">already task list items.</span></li>
+        <li md-pos="24003-24134"><span md-pos="24005-24095">Add: flexmark-java feature to work with unicode invisible characters. Dialog to show, add.</span>
+          <span md-pos="24098-24133">clean or remove from selected text.</span></li>
+        <li md-pos="24134-24420"><span md-pos="24136-24228">Fix: toc to check there is a blank line between it and the first child. Also need to split a</span>
+          <span md-pos="24231-24324">list at first loose item or one that is not a TOC style list item since it is not part of the</span>
+          <span md-pos="24327-24419">toc. Very important. Otherwise accidentally blows away list items that follow a TOC element.</span></li>
+        <li md-pos="24420-24641"><span md-pos="24422-24510">Fix: TOC element to accept <code md-pos="24450-24462">[TOC ....]:#</code> anything after the space in the tag as a valid</span>
+          <span md-pos="24513-24604"><code md-pos="24514-24521">[TOC]:#</code> tag. Otherwise partial edits may cause the elements to be chewed up since the TOC</span>
+          <span md-pos="24607-24640">element disappears on formatting.</span></li>
+        <li md-pos="24641-24914"><span md-pos="24643-24701">Add: TOC levels to select which heading levels to include:</span>
+          <ul>
+            <li md-pos="24706-24753"><span md-pos="24708-24752">a single number: levels accepted 2 to number</span></li>
+            <li md-pos="24757-24824"><span md-pos="24759-24823">a list of numbers: heading accepted if its number is in the list</span></li>
+            <li md-pos="24828-24914"><span md-pos="24830-24913">a list of ranges #-#: heading accepted if its number is in one of the listed ranges</span></li>
+          </ul>
+        </li>
+        <li md-pos="24914-25005"><span md-pos="24916-25004">Fix: TOC option to not create missing empty header levels. ie. collapse missing headers.</span></li>
+        <li md-pos="25005-25080"><span md-pos="25007-25079">Fix: task list item action not to change closed task items to open ones.</span></li>
+        <li md-pos="25080-25185"><span md-pos="25082-25176">Add: combination syntax attributes for abbreviations in quotes, tables, headers and definition</span>
+          <span md-pos="25179-25184">term.</span></li>
+        <li md-pos="25185-25295"><span md-pos="25187-25281">Add: code style option to sort abbreviations, footnotes and references, with or without unused</span>
+          <span md-pos="25284-25294">ones last.</span></li>
+        <li md-pos="25295-25363"><span md-pos="25297-25362">Add: test for TOC option in parser settings before parsing SimToc</span></li>
+        <li md-pos="25363-25420"><span md-pos="25365-25419">Add: annotation for TOC needs updating and a quick fix</span></li>
+        <li md-pos="25420-25491"><span md-pos="25422-25490">Add: intention to edit TOC options, with preview and all the fixings</span></li>
+        <li md-pos="25491-25566"><span md-pos="25493-25565">Add: dedicated license server with two fallback URLs in case of failure.</span></li>
+        <li md-pos="25566-25660"><span md-pos="25568-25659">Add: TOC options refactoring will use dummy headings if the current file does not have any.</span></li>
+        <li md-pos="25660-25750"><span md-pos="25662-25749">Fix: issues when inserting characters and backspacing right after numbered item prefix.</span></li>
+        <li md-pos="25750-25889"><span md-pos="25752-25845">Fix: characters typed on a blank line right above a paragraph would insert a duplicate of the</span>
+          <span md-pos="25848-25888">character at the start of the next line.</span></li>
+        <li md-pos="25889-25955"><span md-pos="25891-25954">Fix: anchor ref links should not check if the file is on GitHub</span></li>
+        <li md-pos="25955-26013"><span md-pos="25957-26012">Fix: completions for emoji and GitHub issues in headers</span></li>
+        <li md-pos="26013-26070"><span md-pos="26015-26069">Add: TOC line marker to navigate to toc listed headers</span></li>
+        <li md-pos="26070-26096"><span md-pos="26072-26095">Add: update TOC on save</span></li>
+        <li md-pos="26096-26169"><span md-pos="26098-26168">Fix: TOC element with empty title <code md-pos="26133-26135">&quot;&quot;</code> would use default title setting</span></li>
+        <li md-pos="26169-26230"><span md-pos="26171-26229">Add: format list loose/tight style setting implementation.</span></li>
+        <li class="task-list-item" md-pos="26230-26384"><span class="taskitem">O</span><span md-pos="26236-26323">Fix: typing on a line with the next text stretch too long to fit, should keep cursor on</span>
+          <span md-pos="26330-26383">the same line after space, add extra space if needed.</span></li>
+        <li class="task-list-item" md-pos="26384-26567"><span class="taskitem">O</span><span md-pos="26390-26475">Add: intelligent nested children find function that understands which elements can be</span>
+          <span md-pos="26482-26566">inside others. Generic function too slow because it dives into unnecessary elements.</span></li>
+        <li class="task-list-item" md-pos="26567-26868"><span class="taskitem">O</span><span md-pos="26573-26655">Add: Toggle emphasis action config for end of region punctuations to be treated as</span>
+          <span md-pos="26662-26744">whitespace when the caret is immediately to the left of one and is at the end of a</span>
+          <span md-pos="26751-26834">non-space region, to allow the toggle actions to work when at the end of a word but</span>
+          <span md-pos="26841-26867">followed by a punctuation.</span></li>
+      </ul>
+      <h3 id="171---bug-fixes-and-enhancements" md-pos="26869-26907"><span md-pos="26873-26907"><a href="#171---bug-fixes-and-enhancements" name="171---bug-fixes-and-enhancements" class="anchor"><span class="octicon octicon-link"></span></a>1.7.1 - Bug Fixes and Enhancements</span></h3>
+      <h4 id="basic--enhanced-editions-7" md-pos="26909-26939"><span md-pos="26914-26939"><a href="#basic--enhanced-editions-7" name="basic--enhanced-editions-7" class="anchor"><span class="octicon octicon-link"></span></a>Basic &amp; Enhanced Editions</span></h4>
+      <ul>
+        <li md-pos="26941-26992"><span md-pos="26943-26991">Fix: #244, NPE upon opening simple markdown file</span></li>
+        <li md-pos="26992-27102"><span md-pos="26994-27072">Fix: scratch files not recognized as Markdown during editor creation in latest</span>
+          <span md-pos="27075-27101">intellij-community builds.</span></li>
+      </ul>
+      <h4 id="enhanced-edition-7" md-pos="27103-27124"><span md-pos="27108-27124"><a href="#enhanced-edition-7" name="enhanced-edition-7" class="anchor"><span class="octicon octicon-link"></span></a>Enhanced Edition</span></h4>
+      <ul>
+        <li md-pos="27126-27221"><span md-pos="27128-27220">Fix: #245, Inserting an ordered list item on ENTER with renumbering enabled causes exception</span></li>
+        <li md-pos="27221-27337"><span md-pos="27223-27311">Fix: #246, Auto scroll to source. Swing preview would always scroll to top of page after</span>
+          <span md-pos="27314-27336">document modification.</span></li>
+        <li md-pos="27337-27419"><span md-pos="27339-27418">Add: preview setting for <code md-pos="27365-27398">Scroll preview to source position</code> for Swing preview.</span></li>
+        <li md-pos="27419-27497"><span md-pos="27421-27496">Fix: #247, Error and corrupting files, pegdown source position out of range</span></li>
+        <li md-pos="27497-27613"><span md-pos="27499-27592">Add: Loosen/Tighten list toolbar buttons and action to make all items in a list double spaces</span>
+          <span md-pos="27595-27612">or single spaced.</span></li>
+        <li md-pos="27613-27698"><span md-pos="27615-27697">Fix: add list item will now add task item marker if the current list item has one.</span></li>
+        <li md-pos="27698-27784"><span md-pos="27700-27783">Add: task list item toggle done intention, button and action for caret or selection</span></li>
+        <li md-pos="27784-28116"><span md-pos="27786-27878">Add: change list item or selection elements to: bullet, ordered, task list button and action</span>
+          <span md-pos="27881-27974">for caret or selection. If election contains nothing but paragraphs then convert them to list</span>
+          <span md-pos="27977-28069">items. If the selection contains nothing but list items which match the action type then the</span>
+          <span md-pos="28072-28115">list items will be converted to paragraphs.</span></li>
+        <li md-pos="28116-28319"><span md-pos="28118-28208">Change: bold/italic/strikethrough buttons and actions when removing their markers will not</span>
+          <span md-pos="28211-28301">create a selection if the action automatically would automatically select the same text if</span>
+          <span md-pos="28304-28318">invoked again.</span></li>
+        <li md-pos="28319-28430"><span md-pos="28321-28414">Fix: first paragraph of a file would not be recognized for list actions unless it had a blank</span>
+          <span md-pos="28417-28429">line before.</span></li>
+        <li md-pos="28430-28513"><span md-pos="28432-28512">Fix: memory use going high in 2016.3 IDEA and probably other versions of the IDE</span></li>
+        <li md-pos="28513-28591"><span md-pos="28515-28590">Add: code style option for unordered list prefix: no change, dash, asterisk</span></li>
+        <li md-pos="28591-28698"><span md-pos="28593-28683">Add: code style option for new unordered list prefix: dash, asterisk, used for bullet list</span>
+          <span md-pos="28686-28697">item action</span></li>
+        <li md-pos="28698-28769"><span md-pos="28700-28768">Fix: reference link completions, broken by moving to full parse tree</span></li>
+        <li md-pos="28769-28880"><span md-pos="28771-28862">Fix: intermittent backspace at end of paragraph would duplicate last non-space character of</span>
+          <span md-pos="28865-28879">the paragraph.</span></li>
+        <li md-pos="28880-28954"><span md-pos="28882-28953">Fix: exception when creating a code fence element with an empty content</span></li>
+        <li md-pos="28954-29102"><span md-pos="28956-29045">Fix: pegdown parsing code fence with first line containing three or more <code md-pos="29030-29031">-</code> or <code md-pos="29037-29038">=</code> would</span>
+          <span md-pos="29048-29101">parse code fence opening sequence as a Setext header.</span></li>
+        <li md-pos="29102-29181"><span md-pos="29104-29180">Fix: show preview for HTML documents would not recognize HTML scratch files.</span></li>
+        <li md-pos="29181-29315"><span md-pos="29183-29270">Change: backspace to delete row/column when backspacing in an empty cell. Previously it</span>
+          <span md-pos="29273-29314">deleted these when the cell became empty.</span></li>
+        <li md-pos="29315-29466"><span md-pos="29317-29409">Change: bold/italic/strikethrough/code actions now will apply to the next word when caret is</span>
+          <span md-pos="29412-29465">at the beginning of a word and there is no selection.</span></li>
+        <li md-pos="29466-29570"><span md-pos="29468-29554">Fix: insert link action with no selection would not move the caret inside the link URL</span>
+          <span md-pos="29557-29569">parentheses.</span></li>
+        <li md-pos="29570-29634"><span md-pos="29572-29633">Add: develop feature flexmark-java spec file format handling.</span></li>
+      </ul>
+      <h3 id="170---full-psitree-parser-doc-structure-view--doc-formatting" md-pos="29635-29703"><span md-pos="29639-29703"><a href="#170---full-psitree-parser-doc-structure-view--doc-formatting" name="170---full-psitree-parser-doc-structure-view--doc-formatting" class="anchor"><span class="octicon octicon-link"></span></a>1.7.0 - Full PsiTree Parser, Doc Structure View &amp; Doc Formatting</span></h3>
+      <h4 id="basic--enhanced-editions-8" md-pos="29705-29735"><span md-pos="29710-29735"><a href="#basic--enhanced-editions-8" name="basic--enhanced-editions-8" class="anchor"><span class="octicon octicon-link"></span></a>Basic &amp; Enhanced Editions</span></h4>
+      <ul>
+        <li md-pos="29737-30254"><span md-pos="29739-29831">Add: Now combination syntax attributes are created on load to simulate overlay with alpha of</span>
+          <span md-pos="29834-29922">various attribute combinations. Colors for these combination attributes are updated when</span>
+          <span md-pos="29925-30015">current scheme changes. Changing colors within a color scheme does not generate and update</span>
+          <span md-pos="30018-30112">event so if you are changing a color scheme and need the computed combination attribute colors</span>
+          <span md-pos="30115-30204">re-computed, select another color scheme, press <kbd>Apply</kbd>, now select your desired</span>
+          <span md-pos="30207-30253">color scheme and close the preferences dialog.</span></li>
+        <li md-pos="30254-30433"><span md-pos="30256-30349">Change: Inserting a link when there is a selection in the document will use the selected text</span>
+          <span md-pos="30352-30432">as the link text and put the caret ready for typing or auto-completing the link.</span></li>
+        <li md-pos="30433-30609"><span md-pos="30435-30529">Change: Bold/Italic/Strikethrough actions now will wrap the word if caret is at the end of the</span>
+          <span md-pos="30532-30608">word. Easier to make emphasis by typing a word and then invoking the action.</span></li>
+        <li md-pos="30609-30762"><span md-pos="30611-30701">Change: Bold/Italic/Strikethrough actions now will un-wrap their corresponding emphasis if</span>
+          <span md-pos="30704-30761">caret is right after the trailing marker of the emphasis.</span></li>
+        <li md-pos="30762-30817"><span md-pos="30764-30816">Change: removed Lobo browser preview browser option.</span></li>
+        <li md-pos="30817-31319"><span md-pos="30819-30911">Fix: #100, invalidate JavaFX WebView image cache on reload, currently images are not updated</span>
+          <span md-pos="30914-31003">if they change on disk. Not able to clear the cache but have a workaround. JavaFX WebView</span>
+          <span md-pos="31006-31093">preview now adds a query parameter to modified image files so that each modification is</span>
+          <span md-pos="31096-31188">treated as a different file by the WebView file cache. This fixes the problem of the preview</span>
+          <span md-pos="31191-31282">displaying a cached image after modification but will cause WebView to cache more files, an</span>
+          <span md-pos="31285-31318">extra copy for each modification.</span></li>
+        <li md-pos="31319-31402"><span md-pos="31321-31401">Fix: Markdown Application settings to handle null for UIManager.LookAndFeelInfo.</span></li>
+        <li md-pos="31402-31487"><span md-pos="31404-31486">Fix: pegdown parser error in abbreviation definition that contains trailing spaces</span></li>
+        <li md-pos="31487-31560"><span md-pos="31489-31559">Add: combination attributes for definition term and inline attributes.</span></li>
+      </ul>
+      <h4 id="enhanced-edition-8" md-pos="31561-31582"><span md-pos="31566-31582"><a href="#enhanced-edition-8" name="enhanced-edition-8" class="anchor"><span class="octicon octicon-link"></span></a>Enhanced Edition</span></h4>
+      <ul>
+        <li md-pos="31584-32118"><span md-pos="31586-31669">Change: implemented full PsiTree building from pegdown AST as transition to pegdown</span>
+          <span md-pos="31672-31707">replacement. Introduced bugs fixed:</span>
+          <ul>
+            <li md-pos="31712-31761"><span md-pos="31714-31760">Move refactoring of contained links was broken</span></li>
+            <li md-pos="31765-31791"><span md-pos="31767-31790">Completions were broken</span></li>
+            <li md-pos="31795-31847"><span md-pos="31797-31846">Completions of elements in header text was broken</span></li>
+            <li md-pos="31851-31889"><span md-pos="31853-31888">Completions of link text was broken</span></li>
+            <li md-pos="31893-31932"><span md-pos="31895-31931">Completions of wiki links was broken</span></li>
+            <li md-pos="31936-31972"><span md-pos="31938-31971">Wiki link anchor refs were broken</span></li>
+            <li md-pos="31976-32009"><span md-pos="31978-32008">Definition wrapping was broken</span></li>
+            <li md-pos="32013-32057"><span md-pos="32015-32056">Multi-line image URL injection was broken</span></li>
+            <li md-pos="32061-32118"><span md-pos="32063-32117">Editing injected language fragment of verbatim element</span></li>
+          </ul>
+        </li>
+        <li md-pos="32118-32236"><span md-pos="32120-32212">Fix: Header ids of headers that contained link or ref links or images would not be generated</span>
+          <span md-pos="32215-32235">identical to Issues.</span></li>
+        <li md-pos="32236-32279"><span md-pos="32238-32278">Add: block quote increase/decrease level</span></li>
+        <li md-pos="32279-32371"><span md-pos="32281-32370">Change: list item indent/unindent now affects sub-items and renumbers ordered list items.</span></li>
+        <li md-pos="32371-32479"><span md-pos="32373-32466">Add: document structure view with Headers, Images, Tables, References, Footnotes sections and</span>
+          <span md-pos="32469-32478">Document.</span></li>
+        <li md-pos="32479-32618"><span md-pos="32481-32575">Add: image link text suggestions now strip out file ending of @2x and @2x_dark before building</span>
+          <span md-pos="32578-32617">the suggestion list from the file name.</span></li>
+        <li md-pos="32618-32679"><span md-pos="32620-32678">Fix: table auto-format to handle arbitrary parent prefixes</span></li>
+        <li md-pos="32679-32728"><span md-pos="32681-32727">Fix: fenced code to use proper prefix handling</span></li>
+        <li md-pos="32728-32786"><span md-pos="32730-32785">Fix: multi-line image URL to use proper prefix handling</span></li>
+        <li md-pos="32786-32908"><span md-pos="32788-32879">Fix: #223, Wrap on typing and Table format do not take actual character widths into account</span>
+          <span md-pos="32882-32907">for multi-byte characters</span></li>
+        <li md-pos="32908-33015"><span md-pos="32910-33003">Add: Code style option to use actual character width for wrapping and table formatting. On by</span>
+          <span md-pos="33006-33014">default.</span></li>
+        <li md-pos="33015-33108"><span md-pos="33017-33107">Fix: table insert row on ENTER with soft wrap on would not place the caret on the new row.</span></li>
+        <li md-pos="33108-33226"><span md-pos="33110-33202">Fix: table auto-format on typing was not formatting when using keyboard input for multi-byte</span>
+          <span md-pos="33205-33225">character sequences.</span></li>
+        <li md-pos="33226-33313"><span md-pos="33228-33312">Add: document format action to reformat and re-arrange elements in current document.</span></li>
+        <li md-pos="33313-33369"><span md-pos="33315-33368">Add: abbreviations section to document structure view</span></li>
+        <li md-pos="33369-33443"><span md-pos="33371-33442">Fix: ordered list item renumbering was off by blank lines between items</span></li>
+        <li md-pos="33443-33566"><span md-pos="33445-33535">Add: definition marker code style option: any, colon, tilde to affect the markers used for</span>
+          <span md-pos="33538-33565">definitions in the document</span></li>
+        <li md-pos="33566-33629"><span md-pos="33568-33628">Fix: block quote indent must always be multiple of 4 spaces.</span></li>
+        <li md-pos="33629-33685"><span md-pos="33631-33684">Fix: formatter was not outputting jekyll front matter</span></li>
+        <li md-pos="33685-33771"><span md-pos="33687-33770">Fix: formatter with wrap text option disabled would leave non-break spaces in file.</span></li>
+      </ul>
+      <h3 id="1633---bug-fix-patch-release" md-pos="33772-33807"><span md-pos="33776-33807"><a href="#1633---bug-fix-patch-release" name="1633---bug-fix-patch-release" class="anchor"><span class="octicon octicon-link"></span></a>1.6.3.3 - Bug Fix Patch Release</span></h3>
+      <h4 id="basic--enhanced-editions-9" md-pos="33809-33839"><span md-pos="33814-33839"><a href="#basic--enhanced-editions-9" name="basic--enhanced-editions-9" class="anchor"><span class="octicon octicon-link"></span></a>Basic &amp; Enhanced Editions</span></h4>
+      <ul>
+        <li md-pos="33841-33897"><span md-pos="33843-33896">Fix: #233, links to file names with + do not resolve.</span></li>
+        <li md-pos="33897-34062"><span md-pos="33899-33989">Fix: #234, blurry text in preview mode, now using IDE Editor setting for font smoothing by</span>
+          <span md-pos="33992-34061">default and basic version has grey scale font smoothing as an option.</span></li>
+      </ul>
+      <h4 id="enhanced-edition-9" md-pos="34063-34084"><span md-pos="34068-34084"><a href="#enhanced-edition-9" name="enhanced-edition-9" class="anchor"><span class="octicon octicon-link"></span></a>Enhanced Edition</span></h4>
+      <ul>
+        <li md-pos="34086-34173"><span md-pos="34088-34172">Add: parser option to not encode/decode <code md-pos="34129-34130">+</code> in links for compatibility with GitBook.</span></li>
+        <li md-pos="34173-34242"><span md-pos="34175-34241">Add: quick fix to create missing file and directories in the path.</span></li>
+        <li md-pos="34242-34329"><span md-pos="34244-34328">Fix: quick fixes that create file or retarget link to display url decoded file path.</span></li>
+        <li md-pos="34329-34408"><span md-pos="34331-34407">Change: inline HTML to not split across lines when wrapping text to margins.</span></li>
+        <li md-pos="34408-34489"><span md-pos="34410-34488">Fix: link format change intentions to account for GitBook URL encoding setting</span></li>
+        <li md-pos="34489-34556"><span md-pos="34491-34555">Fix: remove URL encoding from URI based format (<code md-pos="34540-34547">file://</code>) links</span></li>
+      </ul>
+      <h3 id="161---name-change-release" md-pos="34557-34588"><span md-pos="34561-34588"><a href="#161---name-change-release" name="161---name-change-release" class="anchor"><span class="octicon octicon-link"></span></a>1.6.1 - Name Change Release</span></h3>
+      <h4 id="basic--enhanced-editions-10" md-pos="34590-34620"><span md-pos="34595-34620"><a href="#basic--enhanced-editions-10" name="basic--enhanced-editions-10" class="anchor"><span class="octicon octicon-link"></span></a>Basic &amp; Enhanced Editions</span></h4>
+      <ul>
+        <li md-pos="34622-34674"><span md-pos="34624-34673">Change: plugin name changed to Markdown Navigator</span></li>
+        <li md-pos="34674-34993"><span md-pos="34676-34728">Add: emoji text to icon conversion for preview, see:</span>
+          <span md-pos="34731-34822"><a href="http://emoji-cheat-sheet.com/" md-pos="34731-34781">Emoji Cheat Sheet</a>. Default is enabled. Optionally can have</span>
+          <span md-pos="34825-34918">image url point to GitHub for those that want to generate a stand alone file from the preview</span>
+          <span md-pos="34921-34992">HTML text and don't want to lug the 860+ icons for emoji with the file.</span></li>
+        <li md-pos="34993-35055"><span md-pos="34995-35054">Fix: emoji shortcut non_potable_water to non-potable_water.</span></li>
+        <li md-pos="35055-35107"><span md-pos="35057-35106">Fix: emoji not being translated in Swing preview.</span></li>
+      </ul>
+      <h4 id="enhanced-edition-10" md-pos="35108-35129"><span md-pos="35113-35129"><a href="#enhanced-edition-10" name="enhanced-edition-10" class="anchor"><span class="octicon octicon-link"></span></a>Enhanced Edition</span></h4>
+      <ul>
+        <li md-pos="35131-35299"><span md-pos="35133-35224">Fix: inline elements were not syntax highlighted in footnote text. This also resulted in no</span>
+          <span md-pos="35227-35298">completions, validation or intentions being available in footnote text.</span></li>
+        <li md-pos="35299-35460"><span md-pos="35301-35390">Change: toolbar table actions will not be updated for enable/disable state if the current</span>
+          <span md-pos="35393-35459">table is &gt;100 lines, to prevent excessive cursor movement delays.</span></li>
+        <li md-pos="35460-35528"><span md-pos="35462-35527">Fix: Load license from server dialog had get trial license title.</span></li>
+        <li md-pos="35528-35636"><span md-pos="35530-35622">Fix: #233, Usages of files are not found if the link url encoding did not equal the original</span>
+          <span md-pos="35625-35635">file name.</span></li>
+        <li md-pos="35636-35720"><span md-pos="35638-35719">Fix: image links and ref images in a link text element would not show completions</span></li>
+        <li md-pos="35720-35799"><span md-pos="35722-35798">Add: Emoji completions and annotations of invalid or ones missing on Issues.</span></li>
+        <li md-pos="35799-35857"><span md-pos="35801-35856">Fix: valid emoji text characters to include <code md-pos="35846-35847">+</code> and <code md-pos="35854-35855">-</code></span></li>
+        <li md-pos="35857-35934"><span md-pos="35859-35933">Add: code style settings migration from MultiMarkdown to MarkdownNavigator</span></li>
+      </ul>
+      <h3 id="150---bug-fix--optimization-release" md-pos="35935-35977"><span md-pos="35939-35977"><a href="#150---bug-fix--optimization-release" name="150---bug-fix--optimization-release" class="anchor"><span class="octicon octicon-link"></span></a>1.5.0 - Bug Fix &amp; Optimization Release</span></h3>
+      <h4 id="basic--enhanced-editions-11" md-pos="35979-36009"><span md-pos="35984-36009"><a href="#basic--enhanced-editions-11" name="basic--enhanced-editions-11" class="anchor"><span class="octicon octicon-link"></span></a>Basic &amp; Enhanced Editions</span></h4>
+      <ul>
+        <li md-pos="36011-36055"><span md-pos="36013-36054">Add: patch release and eap update streams</span></li>
+        <li md-pos="36055-36117"><span md-pos="36057-36116">Fix: syntax highlighting inline elements in definition text</span></li>
+        <li md-pos="36117-36157"><span md-pos="36119-36156">Add: HTML entity syntax highlighting.</span></li>
+        <li md-pos="36157-36363"><span md-pos="36159-36253">Fix: Comments with todo items would not show up in to do list when syntax highlighting was set</span>
+          <span md-pos="36256-36346">to annotator. Now comments are parsed by the plain text lexer used to disable lexer syntax</span>
+          <span md-pos="36349-36362">highlighting.</span></li>
+        <li md-pos="36363-36444"><span md-pos="36365-36443">Fix: update highlight.js to version 9.3.0 and include all available languages.</span></li>
+        <li md-pos="36444-37857"><span md-pos="36446-36483">Add: live templates starting with <code md-pos="36481-36482">.</code></span>
+          <table md-pos="36489-37857">
+            <thead>
+              <tr md-pos="36489-36582"><th md-pos="36490-36505"> Element       </th><th md-pos="36506-36523"> Abbreviation    </th><th md-pos="36524-36581"> Expansion                                               </th></tr>
+            </thead>
+            <tbody>
+              <tr md-pos="36685-36778"><td md-pos="36686-36701"> Abbreviation  </td><td md-pos="36702-36719"> <code md-pos="36704-36717">.abbreviation</code> </td><td md-pos="36720-36777"> <code md-pos="36722-36727">*[]:</code>                                                 </td></tr>
+              <tr md-pos="36783-36876"><td md-pos="36784-36799"> Code fence    </td><td md-pos="36800-36817"> <code md-pos="36802-36812">.codefence</code>    </td><td md-pos="36818-36875"> ``` ... ```                                       </td></tr>
+              <tr md-pos="36881-36974"><td md-pos="36882-36897"> Explicit link </td><td md-pos="36898-36915"> <code md-pos="36900-36905">.link</code>         </td><td md-pos="36916-36973"> <code md-pos="36918-36922">[]()</code>                                                  </td></tr>
+              <tr md-pos="36979-37072"><td md-pos="36980-36995"> Footnote      </td><td md-pos="36996-37013"> <code md-pos="36998-37007">.footnote</code>     </td><td md-pos="37014-37071"> <code md-pos="37016-37021">[^]:</code>                                                 </td></tr>
+              <tr md-pos="37077-37170"><td md-pos="37078-37093"> Footnote Ref  </td><td md-pos="37094-37111"> <code md-pos="37096-37106">.rfootnote</code>    </td><td md-pos="37112-37169"> <code md-pos="37114-37117">[^]</code>                                                   </td></tr>
+              <tr md-pos="37175-37268"><td md-pos="37176-37191"> Image         </td><td md-pos="37192-37209"> <code md-pos="37194-37200">.image</code>        </td><td md-pos="37210-37267"> <code md-pos="37212-37217">![]()</code>                                                 </td></tr>
+              <tr md-pos="37273-37366"><td md-pos="37274-37289"> Ref image     </td><td md-pos="37290-37307"> <code md-pos="37292-37299">.rimage</code>       </td><td md-pos="37308-37365"> <code md-pos="37310-37315">![][]</code>                                                 </td></tr>
+              <tr md-pos="37371-37464"><td md-pos="37372-37387"> Ref link      </td><td md-pos="37388-37405"> <code md-pos="37390-37396">.rlink</code>        </td><td md-pos="37406-37463"> <code md-pos="37408-37412">[][]</code>                                                  </td></tr>
+              <tr md-pos="37469-37562"><td md-pos="37470-37485"> Reference     </td><td md-pos="37486-37503"> <code md-pos="37488-37498">.reference</code>    </td><td md-pos="37504-37561"> <code md-pos="37506-37510">[]:</code>                                                  </td></tr>
+              <tr md-pos="37567-37660"><td md-pos="37568-37583"> Table         </td><td md-pos="37584-37601"> <code md-pos="37586-37592">.table</code>        </td><td md-pos="37602-37659"> <pre><code><code md-pos="37615-37620">| |</code>
+        <code md-pos="37627-37632">|---|</code>
+        <code md-pos="37639-37644">| |</code></code></pre> </td></tr>
+              <tr md-pos="37665-37758"><td md-pos="37666-37681"> Task          </td><td md-pos="37682-37699"> <code md-pos="37684-37689">.task</code>         </td><td md-pos="37700-37757"> <code md-pos="37702-37708">- [ ]</code>                                                </td></tr>
+              <tr md-pos="37763-37856"><td md-pos="37764-37779"> Wiki link     </td><td md-pos="37780-37797"> <code md-pos="37782-37791">.wikilink</code>     </td><td md-pos="37798-37855"> <code md-pos="37800-37804">[[]]</code>                                                  </td></tr>
+            </tbody>
+          </table>
+        </li>
+      </ul>
+      <h4 id="enhanced-edition-11" md-pos="37858-37879"><span md-pos="37863-37879"><a href="#enhanced-edition-11" name="enhanced-edition-11" class="anchor"><span class="octicon octicon-link"></span></a>Enhanced Edition</span></h4>
+      <ul>
+        <li md-pos="37881-37966">
+          <p md-pos="37883-37966"><span md-pos="37883-37965">Fix: #195, License activation being reset when no network connection is available.</span></p>
+        </li>
+        <li md-pos="37967-38026">
+          <p md-pos="37969-38026"><span md-pos="37969-38025">Fix: #196, Incorrect parsing of compound reference links</span></p>
+        </li>
+        <li md-pos="38027-38309">
+          <p md-pos="38029-38309"><span md-pos="38029-38122">Fix: #198, Image links that don't end with an extension don't get recognized. Now image links</span>
+            <span md-pos="38125-38219">without extension are assumed to be correct. No error or warning is generated for these links.</span>
+            <span md-pos="38222-38308">Query strings are also stripped from the link address before looking for an extension.</span></p>
+        </li>
+        <li md-pos="38310-38447">
+          <p md-pos="38312-38447"><span md-pos="38312-38405">Fix: #199, Multi-line image URLs not parsed correctly when terminating ) is followed by white</span>
+            <span md-pos="38408-38446">space characters file and without EOL.</span></p>
+        </li>
+        <li md-pos="38448-38523">
+          <p md-pos="38450-38523"><span md-pos="38450-38522">Fix: #201, Image link completion in wiki pages leaves out subdirectories</span></p>
+        </li>
+        <li md-pos="38524-38599">
+          <p md-pos="38526-38599"><span md-pos="38526-38598">Fix: #211, Completions for some empty link elements show no suggestions.</span></p>
+        </li>
+        <li md-pos="38600-38696">
+          <p md-pos="38602-38696"><span md-pos="38602-38695">Add: highlighting of auto-inserted <code md-pos="38638-38639">*</code>, <code md-pos="38643-38644">_</code> or <code md-pos="38650-38651">~</code> that would be deleted if a space is typed.</span></p>
+        </li>
+        <li md-pos="38697-38787">
+          <p md-pos="38699-38787"><span md-pos="38699-38786">Change: Auto-format table on typing and smart <code md-pos="38746-38747">*</code> <code md-pos="38750-38751">~</code> duplication to be off by default.</span></p>
+        </li>
+        <li md-pos="38788-38969">
+          <p md-pos="38790-38969"><span md-pos="38790-38883">Add: Auto inserted <code md-pos="38810-38811">*</code>, <code md-pos="38815-38816">_</code> and <code md-pos="38823-38824">~</code> that will be deleted by typing a space are now colored in</span>
+            <span md-pos="38886-38968">the scheme's comment color to highlight that they can be deleted by typing a space</span></p>
+        </li>
+        <li md-pos="38970-39164">
+          <p md-pos="38972-39164"><span md-pos="38972-39056">Fix: block quote prefix on fenced code would not be stripped off. Prefix needs to be</span>
+            <span md-pos="39059-39151">consistent on all the lines for the prefix to be properly stripped for the injected language</span>
+            <span md-pos="39154-39163">fragment.</span></p>
+        </li>
+        <li md-pos="39165-39561">
+          <p md-pos="39167-39193"><span md-pos="39167-39192"><strong md-pos="39169-39190">List editing features</strong></span></p>
+          <ul>
+            <li md-pos="39197-39357"><span md-pos="39199-39276">Add: #210, List item un-indent/indent toolbar buttons, and actions. List item</span>
+              <span md-pos="39283-39356">un-indent/indent toolbar buttons, assigned to Ctrl-Y/Ctrl-U respectively.</span></li>
+            <li md-pos="39361-39491"><span md-pos="39363-39451">Fix: #209, lines ending in <code md-pos="39391-39393">*</code> or <code md-pos="39399-39401">-</code> would be erroneously handled as empty list items</span>
+              <span md-pos="39458-39490">by <kbd>BACKSPACE</kbd> handler.</span></li>
+            <li md-pos="39495-39561"><span md-pos="39497-39560">Fix: second list items would not enable the indent list action.</span></li>
+          </ul>
+        </li>
+        <li md-pos="39562-41508">
+          <p md-pos="39564-39591"><span md-pos="39564-39590"><strong md-pos="39566-39588">Table editing features</strong></span></p>
+          <ul>
+            <li md-pos="39595-39709"><span md-pos="39597-39685">Fix: #212, Table formatting while typing sometimes causes the cursor to jump erratically</span>
+              <span md-pos="39692-39708">to end of table.</span></li>
+            <li md-pos="39713-39767"><span md-pos="39715-39766">Add: #214, Feature: add insert table toolbar button</span></li>
+            <li md-pos="39771-39840"><span md-pos="39773-39839">Add: #215, Feature: table insert/delete row/column toolbar buttons</span></li>
+            <li md-pos="39844-39921"><span md-pos="39846-39920">Add: #216, On <kbd>ENTER</kbd> insert table row with configuration options</span></li>
+            <li md-pos="39925-40025"><span md-pos="39927-40010">Add: #217, On <kbd>BACKSPACE</kbd> delete empty table row/column with configuration</span>
+              <span md-pos="40017-40024">options</span></li>
+            <li md-pos="40029-40118"><span md-pos="40031-40117">Add: Syntax highlighting colors for table header cells separate from table body cells.</span></li>
+            <li md-pos="40122-40272"><span md-pos="40124-40208">Fix: as you type table parsing changed to use pegdown instead of hand rolled parser.</span>
+              <span md-pos="40215-40271">Handles escaped pipes and pipes in code spans correctly.</span></li>
+            <li md-pos="40276-40385"><span md-pos="40278-40366">Fix: toggle actions: bold, italic, code, strikethrough; to select text when toggling the</span>
+              <span md-pos="40373-40384">effect off.</span></li>
+            <li md-pos="40389-40714"><span md-pos="40391-40481">Add: logic to disable <code md-pos="40414-40441">auto-format table on typing</code> when modifying a table causes it to no</span>
+              <span md-pos="40488-40578">longer have the same number of columns on all rows for editing actions that may be partial</span>
+              <span md-pos="40585-40670">modifications and if <code md-pos="40607-40626">Add missing columns</code> is enabled. ie. backspacing or typing back</span>
+              <span md-pos="40677-40713">ticks, backslash or pipe characters.</span></li>
+            <li md-pos="40718-40918"><span md-pos="40720-40808">Fix: reformatting tables without lead/trail pipes would loose the last columns that were</span>
+              <span md-pos="40815-40904">blank. Now a trailing pipe is added if the column is blank to preserve the correct column</span>
+              <span md-pos="40911-40917">count.</span></li>
+            <li md-pos="40922-41046"><span md-pos="40924-41013">Fix: reformatting tables that were not terminated by a blank line would delete text after</span>
+              <span md-pos="41020-41045">table up to a blank line.</span></li>
+            <li md-pos="41050-41330"><span md-pos="41052-41138">Fix: Mitigate effects of table cell containing unterminated strong, emphasis or strike</span>
+              <span md-pos="41145-41233">through markers which absorb all text until a blank line. Now this condition is detected</span>
+              <span md-pos="41240-41329">and wrap on typing and auto-format table are turned off to prevent messing up the format.</span></li>
+            <li md-pos="41334-41508"><span md-pos="41336-41421">Fix: Adjust caret to be at the pipe symbol when typing before the first table column.</span>
+              <span md-pos="41428-41507">Otherwise indentation could be changed causing the table to no longer be valid.</span></li>
+          </ul>
+        </li>
+        <li md-pos="41509-43689">
+          <p md-pos="41511-41555"><span md-pos="41511-41554"><strong md-pos="41513-41552">Auto-format and Wrap on typing features</strong></span></p>
+          <ul>
+            <li md-pos="41559-41632"><span md-pos="41561-41631">Add: Toolbar buttons for toggle Auto-format and toggle wrap on typing.</span></li>
+            <li md-pos="41636-41747"><span md-pos="41638-41727">Fix: #202, Plain text paragraphs that have indentation spaces do not get properly wrapped</span>
+              <span md-pos="41734-41746">as you type.</span></li>
+            <li md-pos="41751-41838"><span md-pos="41753-41837">Fix: made wiki link elements non-wrap so that they will not be wrapped across lines.</span></li>
+            <li md-pos="41842-41904"><span md-pos="41844-41903">Fix: intermittent wrap on typing failure to wrap paragraphs</span></li>
+            <li md-pos="41908-42158"><span md-pos="41910-42000">Fix: #205, Wrap on typing of paragraphs with embedded multi-line image URLs will only wrap</span>
+              <span md-pos="42007-42094">text before the image. Now for the purpose of wrapping these image links are treated as</span>
+              <span md-pos="42101-42157">paragraph breaks and each segment is wrapped separately.</span></li>
+            <li md-pos="42162-42286"><span md-pos="42164-42252">Fix: extra spaces added at end of wrapped text lines. Now only hard break spaces will be</span>
+              <span md-pos="42259-42285">kept at end of text lines.</span></li>
+            <li md-pos="42290-42809"><span md-pos="42292-42376">Add: #206, Wrap on typing continuation line indenting now has the following options:</span>
+              <ul>
+                <li md-pos="42385-42436"><span md-pos="42387-42435">None - continuation lines will start at column 1</span></li>
+                <li md-pos="42444-42549"><span md-pos="42446-42527"><strong md-pos="42448-42473">Align text edge - default</strong>. Will align continuation lines with the text of the</span>
+                  <span md-pos="42538-42548">first line</span></li>
+                <li md-pos="42557-42622"><span md-pos="42559-42621">Indent - continuation lines will start at indent of first line</span></li>
+                <li md-pos="42630-42715"><span md-pos="42632-42714">Indent +1 level - continuation lines will start at indent of first line + 4 spaces</span></li>
+                <li md-pos="42723-42809"><span md-pos="42725-42808">Indent +2 levels - continuation lines will start at indent of first line + 8 spaces</span></li>
+              </ul>
+            </li>
+            <li md-pos="42813-42914"><span md-pos="42815-42896">Fix: #207, Markdown hard break spaces are not always be preserved when formatting</span>
+              <span md-pos="42903-42913">paragraphs</span></li>
+            <li md-pos="42918-43024"><span md-pos="42920-43001">Fix: #208, Auto links are not recognized as inline elements during wrap on typing</span>
+              <span md-pos="43008-43023">reformatting op</span></li>
+            <li md-pos="43028-43291"><span md-pos="43030-43116">Fix: #213, Enabling HARD WRAPS in parser options prevents wrap on typing of list items</span>
+              <span md-pos="43123-43208">that span multiple lines. HARD WRAPS parser extension is now disabled for purposes of</span>
+              <span md-pos="43215-43290">syntax highlighting and PSI generation. It is only used for HTML rendering.</span></li>
+            <li md-pos="43295-43414"><span md-pos="43297-43386">Add: logic to disable <code md-pos="43320-43334">wrap on typing</code> when modifying a table causes it to no longer be a</span>
+              <span md-pos="43393-43413">valid markdown table</span></li>
+            <li md-pos="43418-43521"><span md-pos="43420-43504">Add: tooltip when <code md-pos="43439-43453">wrap on typing</code> or <code md-pos="43459-43486">auto-format table on typing</code> is automatically</span>
+              <span md-pos="43511-43520">disabled.</span></li>
+            <li md-pos="43525-43689"><span md-pos="43527-43616">Add: logic to disable <code md-pos="43550-43564">wrap on typing</code> when a block is not terminated by a blank line and</span>
+              <span md-pos="43623-43688">the following block can be potentially merged into the paragraph.</span></li>
+          </ul>
+        </li>
+        <li md-pos="43690-44540">
+          <p md-pos="43692-43726"><span md-pos="43692-43725"><strong md-pos="43694-43723">Typing response optimizations</strong></span></p>
+          <ul>
+            <li md-pos="43730-43817"><span md-pos="43732-43816">Fix: #19, Optimize typing response with or without wrap on typing and table reformat</span></li>
+            <li md-pos="43821-43885"><span md-pos="43823-43884">minimize updates to unchanged parts of the paragraph or table</span></li>
+            <li md-pos="43889-43991"><span md-pos="43891-43973">handle IDE skipping calls to handlers when fast typing (or rolling forehead on the</span>
+              <span md-pos="43980-43990">keyboard).</span></li>
+            <li md-pos="43995-44080"><span md-pos="43997-44079">HTML generation was not disabled when only main editor was shown. This would cause</span></li>
+            <li md-pos="44084-44288"><span md-pos="44086-44175">Changed default syntax highlighter to external annotator based to reduce typing delay. If</span>
+              <span md-pos="44182-44259">you want to use lexer based syntax highlighting you will need to change it in</span>
+              <span md-pos="44266-44287">settings/preferences.</span></li>
+            <li md-pos="44292-44345"><span md-pos="44294-44344">disabled html generation when preview is not shown</span></li>
+          </ul>
+          <p md-pos="44350-44392"><span md-pos="44350-44391">Fastest typing response is achieved when:</span></p>
+          <ul>
+            <li md-pos="44397-44433">
+              <p md-pos="44399-44433"><span md-pos="44399-44432">syntax highlighting is turned off</span></p>
+            </li>
+            <li md-pos="44438-44467">
+              <p md-pos="44440-44467"><span md-pos="44440-44466">wrap on typing is disabled</span></p>
+            </li>
+            <li md-pos="44472-44505">
+              <p md-pos="44474-44505"><span md-pos="44474-44504">auto-format tables is disabled</span></p>
+            </li>
+            <li md-pos="44510-44540">
+              <p md-pos="44512-44540"><span md-pos="44512-44539">all previews are turned off</span></p>
+            </li>
+          </ul>
+        </li>
+        <li md-pos="44541-45000">
+          <p md-pos="44543-44576"><span md-pos="44543-44575"><strong md-pos="44545-44573">Jekyll front matter handling</strong></span></p>
+          <ul>
+            <li md-pos="44580-44686"><span md-pos="44582-44670">Fix: #200, Jekyll front matter is not recognized if the terminating marker is at the end</span>
+              <span md-pos="44677-44685">of file.</span></li>
+            <li md-pos="44690-44805"><span md-pos="44692-44780">Fix: # 222 Inspection to detect Jekyll front matter presence in the file, with option to</span>
+              <span md-pos="44787-44804">enable or ignore.</span></li>
+            <li md-pos="44809-45000"><span md-pos="44811-44894">Code style option to not splice image and explicit links which are start of line to</span>
+              <span md-pos="44901-44986">previous line during paragraph reformatting. * Jekyll front matter folding region and</span>
+              <span md-pos="44993-44999">config</span></li>
+          </ul>
+        </li>
+      </ul>
+      <h3 id="1410---bug-fix--optimization-release" md-pos="45001-45044"><span md-pos="45005-45044"><a href="#1410---bug-fix--optimization-release" name="1410---bug-fix--optimization-release" class="anchor"><span class="octicon octicon-link"></span></a>1.4.10 - Bug Fix &amp; Optimization Release</span></h3>
+      <h4 id="basic--enhanced-editions-12" md-pos="45046-45076"><span md-pos="45051-45076"><a href="#basic--enhanced-editions-12" name="basic--enhanced-editions-12" class="anchor"><span class="octicon octicon-link"></span></a>Basic &amp; Enhanced Editions</span></h4>
+      <ul>
+        <li md-pos="45078-45141"><span md-pos="45080-45140">Fix: book icon in preview would not open document in browser</span></li>
+        <li md-pos="45141-45247"><span md-pos="45143-45219">Fix: incorrect HTML rendering of undefined reference link <code md-pos="45202-45215">[some-text][]</code> as</span>
+          <span md-pos="45222-45246"><code md-pos="45223-45245">[some-text][some-text]</code></span></li>
+      </ul>
+      <h4 id="enhanced-edition-12" md-pos="45248-45269"><span md-pos="45253-45269"><a href="#enhanced-edition-12" name="enhanced-edition-12" class="anchor"><span class="octicon octicon-link"></span></a>Enhanced Edition</span></h4>
+      <ul>
+        <li md-pos="45271-45617"><span md-pos="45273-45364">Add: list item handling on <kbd>ENTER</kbd> and <kbd>BACKSPACE</kbd>. <kbd>ENTER</kbd> will</span>
+          <span md-pos="45367-45448">add unordered item or ordered item depending on what is preceding caret location.</span>
+          <span md-pos="45451-45539"><kbd>ENTER</kbd> and <kbd>BACKSPACE</kbd> will remove empty list items. Configuration to</span>
+          <span md-pos="45542-45616">enable/disable in <em md-pos="45561-45596">Editor &gt; Code Style &gt; MultiMarkdown</em> under <code md-pos="45605-45615">List Items</code></span></li>
+        <li md-pos="45617-45702"><span md-pos="45619-45701">Improve: auto format handling on typing, <kbd>ENTER</kbd> and <kbd>BACKSPACE</kbd></span></li>
+        <li md-pos="45702-45756"><span md-pos="45704-45755">Add: table formatting via the format toolbar button</span></li>
+        <li md-pos="45756-45833"><span md-pos="45758-45832">Add: table formatting option to format as you type in table separator line</span></li>
+      </ul>
+      <h3 id="149---bug-fix--optimization-release" md-pos="45834-45876"><span md-pos="45838-45876"><a href="#149---bug-fix--optimization-release" name="149---bug-fix--optimization-release" class="anchor"><span class="octicon octicon-link"></span></a>1.4.9 - Bug Fix &amp; Optimization Release</span></h3>
+      <h4 id="basic--enhanced-editions-13" md-pos="45878-45908"><span md-pos="45883-45908"><a href="#basic--enhanced-editions-13" name="basic--enhanced-editions-13" class="anchor"><span class="octicon octicon-link"></span></a>Basic &amp; Enhanced Editions</span></h4>
+      <ul>
+        <li md-pos="45910-45936"><span md-pos="45912-45935">Add: formatting buttons</span></li>
+        <li md-pos="45936-46258"><span md-pos="45938-46025">Add: markdown specific soft-wrap setting. This only affects the editor when it is first</span>
+          <span md-pos="46028-46095">opened. Thereafter use keyboard shortcuts to toggle soft wrap mode.</span>
+          <ul>
+            <li md-pos="46100-46132"><span md-pos="46102-46131">default - uses global setting</span></li>
+            <li md-pos="46136-46196"><span md-pos="46138-46195">disabled - always opens editor with soft-wraps turned off</span></li>
+            <li md-pos="46200-46258"><span md-pos="46202-46257">enabled - always opens editor with soft-wraps turned on</span></li>
+          </ul>
+        </li>
+        <li md-pos="46258-46367"><span md-pos="46260-46351">Fix #190, Incorrect parsing of HTML blocks. This also fixes improper handling of HTML block</span>
+          <span md-pos="46354-46366">suppression.</span></li>
+      </ul>
+      <h4 id="enhanced-edition-13" md-pos="46368-46389"><span md-pos="46373-46389"><a href="#enhanced-edition-13" name="enhanced-edition-13" class="anchor"><span class="octicon octicon-link"></span></a>Enhanced Edition</span></h4>
+      <ul>
+        <li md-pos="46391-46575"><span md-pos="46393-46487">Add: handling of Jekyll front matter in markdown documents. Document must start with <code md-pos="46479-46482">---</code> and</span>
+          <span md-pos="46490-46574">have another <code md-pos="46504-46507">---</code> terminating the front matter for it not to be parsed as Markdown.</span></li>
+        <li md-pos="46575-46656"><span md-pos="46577-46655">Add: option to embed CSS resources into the HTML document instead of URL links</span></li>
+      </ul>
+      <h3 id="148---bug-fix--optimization-release" md-pos="46657-46699"><span md-pos="46661-46699"><a href="#148---bug-fix--optimization-release" name="148---bug-fix--optimization-release" class="anchor"><span class="octicon octicon-link"></span></a>1.4.8 - Bug Fix &amp; Optimization Release</span></h3>
+      <h4 id="basic--enhanced-editions-14" md-pos="46701-46731"><span md-pos="46706-46731"><a href="#basic--enhanced-editions-14" name="basic--enhanced-editions-14" class="anchor"><span class="octicon octicon-link"></span></a>Basic &amp; Enhanced Editions</span></h4>
+      <ul>
+        <li md-pos="46733-46830"><span md-pos="46735-46829">Add: option for syntax highlighting type either lexer based, external annotator or none at all</span></li>
+        <li md-pos="46830-46893"><span md-pos="46832-46892">Fix: #176, Exception: Panel is guaranteed to be not null now</span></li>
+        <li md-pos="46893-46978"><span md-pos="46895-46977">Fix: #180, code syntax highlighting has border around code blocks in HTML preview.</span></li>
+        <li md-pos="46978-47045"><span md-pos="46980-47044">Fix: #183, Incomplete Tasks in Task list not rendering correctly</span></li>
+        <li md-pos="47045-47148"><span md-pos="47047-47137">Fix: #182, Light scroll bars showing in dark theme. Added CSS to change WebView scroll bar</span>
+          <span md-pos="47140-47147">colors.</span></li>
+        <li md-pos="47148-47273"><span md-pos="47150-47242">Fix: #178, Chinese character display problem. Headings would be empty if they contained only</span>
+          <span md-pos="47245-47272">non-ascii alpha characters.</span></li>
+        <li md-pos="47273-47397"><span md-pos="47275-47363">Fix: #184, Smooth scroll issues with preview. Reduce frequency of on scroll callbacks to</span>
+          <span md-pos="47366-47396">reduce delay during scrolling.</span></li>
+        <li md-pos="47397-47598"><span md-pos="47399-47491">Fix: #185, IntelliJ IDEA performance is heavily affected by this plug-in. Pegdown bug causes</span>
+          <span md-pos="47494-47581">exponential parse time for markdown with unclosed HTML tags and fenced code blocks that</span>
+          <span md-pos="47584-47597">contain HTML.</span></li>
+      </ul>
+      <h4 id="enhanced-edition-14" md-pos="47599-47620"><span md-pos="47604-47620"><a href="#enhanced-edition-14" name="enhanced-edition-14" class="anchor"><span class="octicon octicon-link"></span></a>Enhanced Edition</span></h4>
+      <ul>
+        <li md-pos="47622-47830"><span md-pos="47624-47717">Add: parsing of HTML anchor elements with id for resolving, annotating duplicates and finding</span>
+          <span md-pos="47720-47829">usages for ref anchors. Only the opening tag is significant: <code md-pos="47782-47801">&lt;a id='ref-anchor'&gt;</code> or <code md-pos="47807-47828">&lt;a id=&quot;ref-anchor&quot;&gt;</code></span></li>
+        <li md-pos="47830-47936"><span md-pos="47832-47921">Change: anchor ref completion shows header level and text, for ref anchors shows complete</span>
+          <span md-pos="47924-47935">opening tag</span></li>
+        <li md-pos="47936-48038"><span md-pos="47938-48026">Fix: optimizations that skip reformatting to be less optimistic improving wrap on typing</span>
+          <span md-pos="48029-48037">results.</span></li>
+        <li md-pos="48038-48202"><span md-pos="48040-48128">Add: handling of non-wrap inline elements that cannot handle being wrapped across lines.</span>
+          <span md-pos="48131-48201">Embedded spaces in these elements are now treated as non-break spaces.</span></li>
+        <li md-pos="48202-48279"><span md-pos="48204-48278">Add: reformat document action which for now formats the current paragraph.</span></li>
+      </ul>
+      <h3 id="147---bug-fix--optimization-release" md-pos="48280-48322"><span md-pos="48284-48322"><a href="#147---bug-fix--optimization-release" name="147---bug-fix--optimization-release" class="anchor"><span class="octicon octicon-link"></span></a>1.4.7 - Bug Fix &amp; Optimization Release</span></h3>
+      <h4 id="basic--enhanced-editions-15" md-pos="48324-48354"><span md-pos="48329-48354"><a href="#basic--enhanced-editions-15" name="basic--enhanced-editions-15" class="anchor"><span class="octicon octicon-link"></span></a>Basic &amp; Enhanced Editions</span></h4>
+      <ul>
+        <li md-pos="48356-48463"><span md-pos="48358-48447">Fix: #164, PyCharm &amp; RubyMine highlight a single space at the end of the line as Markdown</span>
+          <span md-pos="48450-48462"><code md-pos="48451-48461">HARD BREAK</code></span></li>
+        <li md-pos="48463-48511"><span md-pos="48465-48510">Fix: #167, NoSuchMethodError when typing text</span></li>
+        <li md-pos="48511-48593"><span md-pos="48513-48592">Fix: #169, <code md-pos="48525-48591">IndexOutOfBoundsException chars sequence.length:5, start:-1, end:5</code></span></li>
+        <li md-pos="48593-48643"><span md-pos="48595-48642">Add: external annotator to reduce typing delay.</span></li>
+      </ul>
+      <h4 id="enhanced-edition-15" md-pos="48644-48665"><span md-pos="48649-48665"><a href="#enhanced-edition-15" name="enhanced-edition-15" class="anchor"><span class="octicon octicon-link"></span></a>Enhanced Edition</span></h4>
+      <ul>
+        <li md-pos="48667-48755"><span md-pos="48669-48754">Fix: #165, Reference Images and Links split across a line boundary show as unresolved</span></li>
+        <li md-pos="48755-48858"><span md-pos="48757-48846">Fix: #166, Image Links embedded in text are not recognized as inline elements that can be</span>
+          <span md-pos="48849-48857">wrapped.</span></li>
+        <li md-pos="48858-48947"><span md-pos="48860-48946">Fix: #168, Optimize wrap on typing to not reformat text block on every typed character</span></li>
+      </ul>
+      <h3 id="146---bug-fix-release" md-pos="48948-48975"><span md-pos="48952-48975"><a href="#146---bug-fix-release" name="146---bug-fix-release" class="anchor"><span class="octicon octicon-link"></span></a>1.4.6 - Bug Fix Release</span></h3>
+      <h4 id="basic--enhanced-editions-16" md-pos="48977-49007"><span md-pos="48982-49007"><a href="#basic--enhanced-editions-16" name="basic--enhanced-editions-16" class="anchor"><span class="octicon octicon-link"></span></a>Basic &amp; Enhanced Editions</span></h4>
+      <ul>
+        <li md-pos="49009-49056"><span md-pos="49011-49055">Fix: #163, NullPointerException on new files</span></li>
+      </ul>
+
+    </article>
+  </div>
+</div>
+</body>

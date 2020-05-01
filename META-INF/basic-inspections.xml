@@ -1,0 +1,15 @@
+<idea-plugin>
+    <extensions defaultExtensionNs="com.intellij">
+        <localInspection groupPath="Markdown" language="Markdown" shortName="GitHubTable" bundle="com.vladsch.md.nav.localization.inspections" key="inspection.github.tables"
+                         id="markdown.github.tables"
+                         enabledByDefault="true" level="WEAK WARNING" runForWholeFile="false"
+                         groupKey="group.names.github"
+                         implementationClass="com.vladsch.md.nav.inspections.table.GitHubTableInspection"/>
+
+        <localInspection groupPath="Markdown" language="Markdown" shortName="InvalidEmojiShortcut" bundle="com.vladsch.md.nav.localization.inspections" key="inspection.emoji-shortcuts"
+                         id="markdown.invalid-emoji-shortcut"
+                         enabledByDefault="true" level="ERROR" runForWholeFile="false"
+                         groupKey="group.names.reference-issues"
+                         implementationClass="com.vladsch.md.nav.inspections.emoji.InvalidEmojiShortcutInspection"/>
+    </extensions>
+</idea-plugin>

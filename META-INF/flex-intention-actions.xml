@@ -1,0 +1,80 @@
+<idea-plugin>
+    <extensions defaultExtensionNs="com.intellij">
+        <intentionAction>
+            <className>com.vladsch.md.nav.flex.intentions.ToggleFlexmarkExampleIgnoreIntention</className>
+            <bundleName>com.vladsch.md.nav.flex.localization.intentions</bundleName>
+            <categoryKey>intention.category.flexmark</categoryKey>
+            <descriptionDirectoryName>flex/ToggleFlexmarkExampleIgnoreIntention</descriptionDirectoryName>
+        </intentionAction>
+
+        <intentionAction>
+            <className>com.vladsch.md.nav.flex.intentions.EditFlexmarkExampleOptionsIntention</className>
+            <bundleName>com.vladsch.md.nav.flex.localization.intentions</bundleName>
+            <categoryKey>intention.category.flexmark</categoryKey>
+            <descriptionDirectoryName>flex/EditFlexmarkExampleOptionsIntention</descriptionDirectoryName>
+        </intentionAction>
+
+        <intentionAction>
+            <className>com.vladsch.md.nav.flex.intentions.AddCaretSelectionMarkupIntention</className>
+            <bundleName>com.vladsch.md.nav.flex.localization.intentions</bundleName>
+            <categoryKey>intention.category.flexmark</categoryKey>
+            <descriptionDirectoryName>flex/AddCaretSelectionMarkupIntention</descriptionDirectoryName>
+        </intentionAction>
+
+        <intentionAction>
+            <className>com.vladsch.md.nav.flex.intentions.AddTestSpecExampleSectionBreakIntention</className>
+            <bundleName>com.vladsch.md.nav.flex.localization.intentions</bundleName>
+            <categoryKey>intention.category.flexmark</categoryKey>
+            <descriptionDirectoryName>flex/AddTestSpecExampleSectionBreakIntention</descriptionDirectoryName>
+        </intentionAction>
+
+        <intentionAction>
+            <className>com.vladsch.md.nav.flex.intentions.AddTestSpecExampleIntention</className>
+            <bundleName>com.vladsch.md.nav.flex.localization.intentions</bundleName>
+            <categoryKey>intention.category.flexmark</categoryKey>
+            <descriptionDirectoryName>flex/AddTestSpecExampleIntention</descriptionDirectoryName>
+        </intentionAction>
+
+        <intentionAction>
+            <className>com.vladsch.md.nav.flex.intentions.AddVisibleSpecCRIntention</className>
+            <bundleName>com.vladsch.md.nav.flex.localization.intentions</bundleName>
+            <categoryKey>intention.category.flexmark</categoryKey>
+            <descriptionDirectoryName>flex/AddVisibleSpecCRIntention</descriptionDirectoryName>
+        </intentionAction>
+
+        <intentionAction>
+            <className>com.vladsch.md.nav.flex.intentions.AddVisibleSpecLSIntention</className>
+            <bundleName>com.vladsch.md.nav.flex.localization.intentions</bundleName>
+            <categoryKey>intention.category.flexmark</categoryKey>
+            <descriptionDirectoryName>flex/AddVisibleSpecLSIntention</descriptionDirectoryName>
+        </intentionAction>
+
+        <intentionAction>
+            <className>com.vladsch.md.nav.flex.intentions.AddVisibleSpecIntelliJDummyIdentifierIntention</className>
+            <bundleName>com.vladsch.md.nav.flex.localization.intentions</bundleName>
+            <categoryKey>intention.category.flexmark</categoryKey>
+            <descriptionDirectoryName>flex/AddVisibleSpecIntelliJDummyIdentifierIntention</descriptionDirectoryName>
+        </intentionAction>
+
+        <intentionAction>
+            <className>com.vladsch.md.nav.flex.intentions.AddVisibleSpecTabIntention</className>
+            <bundleName>com.vladsch.md.nav.flex.localization.intentions</bundleName>
+            <categoryKey>intention.category.flexmark</categoryKey>
+            <descriptionDirectoryName>flex/AddVisibleSpecTabIntention</descriptionDirectoryName>
+        </intentionAction>
+
+        <intentionAction>
+            <className>com.vladsch.md.nav.flex.intentions.AddCaretPositionMarkupIntention</className>
+            <bundleName>com.vladsch.md.nav.flex.localization.intentions</bundleName>
+            <categoryKey>intention.category.flexmark</categoryKey>
+            <descriptionDirectoryName>flex/AddCaretPositionMarkupIntention</descriptionDirectoryName>
+        </intentionAction>
+
+        <intentionAction>
+            <className>com.vladsch.md.nav.flex.intentions.RemoveCaretMarkupIntention</className>
+            <bundleName>com.vladsch.md.nav.flex.localization.intentions</bundleName>
+            <categoryKey>intention.category.flexmark</categoryKey>
+            <descriptionDirectoryName>flex/RemoveCaretMarkupIntention</descriptionDirectoryName>
+        </intentionAction>
+    </extensions>
+</idea-plugin>

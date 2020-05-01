@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.vladsch.md.nav.settings.MdPreviewSettingsForm">
+  <grid id="27dc6" binding="myMainPanel" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="20" y="20" width="517" height="523"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <grid id="32160" binding="myExtensionsPanel" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children/>
+      </grid>
+      <vspacer id="9bf64">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </vspacer>
+      <grid id="cb8b" layout-manager="GridLayoutManager" row-count="15" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="1" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="e3ef5" class="com.intellij.openapi.ui.ComboBox" binding="myDefaultSplitLayout" custom-create="true">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+          </component>
+          <component id="7ddf0" class="com.intellij.openapi.ui.ComboBox" binding="myPreviewProvider" custom-create="true">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+          </component>
+          <component id="a7f38" class="com.intellij.ui.components.JBLabel" binding="myDefaultSplitLayoutLabel">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.default.layout.label"/>
+            </properties>
+          </component>
+          <component id="d284a" class="com.intellij.ui.components.JBLabel">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.browser.label"/>
+            </properties>
+          </component>
+          <component id="6fdb6" class="com.intellij.ui.components.JBLabel" binding="myDefaultSplitPreviewLabel">
+            <constraints>
+              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.default-preview.label"/>
+              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.default-split.description"/>
+            </properties>
+          </component>
+          <component id="705f6" class="com.intellij.openapi.ui.ComboBox" binding="myDefaultSplitPreview" custom-create="true">
+            <constraints>
+              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.default-split.description"/>
+            </properties>
+          </component>
+          <component id="e6311" class="javax.swing.JSpinner" binding="myZoomFactor" custom-create="true">
+            <constraints>
+              <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="75" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <focusCycleRoot value="true"/>
+              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.zoom.description"/>
+            </properties>
+          </component>
+          <component id="af85c" class="javax.swing.JLabel" binding="myPageZoomLabel">
+            <constraints>
+              <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font style="2"/>
+              <inheritsPopupMenu value="false"/>
+              <labelFor value="e6311"/>
+              <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.zoom.label"/>
+              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.zoom.description"/>
+            </properties>
+          </component>
+          <component id="e4e48" class="javax.swing.JSpinner" binding="myMaxImageWidth">
+            <constraints>
+              <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="75" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.max-image-width.description"/>
+            </properties>
+          </component>
+          <component id="5dc46" class="javax.swing.JLabel" binding="myMaxImgWidthLabel">
+            <constraints>
+              <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font style="2"/>
+              <labelFor value="e4e48"/>
+              <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.max-image-width.label"/>
+              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.max-image-width.description"/>
+            </properties>
+          </component>
+          <component id="25d2b" class="com.intellij.ui.components.JBCheckBox" binding="myUseGrayscaleRendering">
+            <constraints>
+              <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <horizontalAlignment value="2"/>
+              <horizontalTextPosition value="2"/>
+              <text value=""/>
+              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.form.use-gray-scale.description"/>
+            </properties>
+          </component>
+          <component id="24e9d" class="javax.swing.JLabel" binding="myUseGrayscaleRenderingLabel">
+            <constraints>
+              <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.form.use-gray-scale.label"/>
+              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.form.use-gray-scale.description"/>
+            </properties>
+          </component>
+          <component id="91689" class="javax.swing.JLabel" binding="myHighlightPreviewTypeLabel">
+            <constraints>
+              <grid row="11" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.form.sync-highlight.label"/>
+              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.default-split.description"/>
+              <visible value="true"/>
+            </properties>
+          </component>
+          <component id="f1b24" class="com.intellij.openapi.ui.ComboBox" binding="myHighlightPreviewType" custom-create="true">
+            <constraints>
+              <grid row="11" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.default-split.description"/>
+            </properties>
+          </component>
+          <component id="13d5c" class="javax.swing.JLabel" binding="myHighlightFadeOutLabel">
+            <constraints>
+              <grid row="12" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="2" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font style="2"/>
+              <labelFor value="e4e48"/>
+              <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.form.sync-highlight-fadeout.label"/>
+              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.form.sync-highlight-fadeout.description"/>
+            </properties>
+          </component>
+          <component id="d476c" class="javax.swing.JSpinner" binding="myHighlightFadeOut" custom-create="true">
+            <constraints>
+              <grid row="12" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="75" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.form.sync-highlight-fadeout.description"/>
+            </properties>
+          </component>
+          <component id="bd523" class="javax.swing.JLabel" binding="myHighlightOnTypingLabel">
+            <constraints>
+              <grid row="13" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="2" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.form.highlight-on-typing.label"/>
+              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.form.highlight-on-typing.description"/>
+              <visible value="true"/>
+            </properties>
+          </component>
+          <component id="dfdf" class="com.intellij.ui.components.JBCheckBox" binding="myHighlightOnTyping">
+            <constraints>
+              <grid row="13" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.form.highlight-on-typing.description"/>
+              <visible value="true"/>
+            </properties>
+          </component>
+          <component id="8cd98" class="javax.swing.JLabel" binding="mySynchronizeSourcePositionOnClickLabel">
+            <constraints>
+              <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.form.sync-position-on-click.label"/>
+              <visible value="true"/>
+            </properties>
+          </component>
+          <component id="da7af" class="com.intellij.ui.components.JBCheckBox" binding="mySynchronizeSourcePositionOnClick">
+            <constraints>
+              <grid row="10" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <visible value="true"/>
+            </properties>
+          </component>
+          <component id="5a30d" class="javax.swing.JLabel" binding="myVerticallyAlignSourceAndPreviewSyncPositionLabel">
+            <constraints>
+              <grid row="14" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="2" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.form.vertially-align-source-preview.label"/>
+              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.form.vertially-align-source-preview.description"/>
+              <visible value="true"/>
+            </properties>
+          </component>
+          <component id="74aab" class="com.intellij.ui.components.JBCheckBox" binding="myVerticallyAlignSourceAndPreviewSyncPosition">
+            <constraints>
+              <grid row="14" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.form.vertially-align-source-preview.description"/>
+              <visible value="true"/>
+            </properties>
+          </component>
+          <component id="b0097" class="javax.swing.JLabel" binding="myShowSearchHighlightsInPreviewLabel">
+            <constraints>
+              <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.form.show-search-in-preview.label"/>
+              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.form.show-search-in-preview.description"/>
+              <visible value="true"/>
+            </properties>
+          </component>
+          <component id="71889" class="com.intellij.ui.components.JBCheckBox" binding="myShowSearchHighlightsInPreview">
+            <constraints>
+              <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.form.show-search-in-preview.description"/>
+              <visible value="true"/>
+            </properties>
+          </component>
+          <component id="9048a" class="javax.swing.JLabel" binding="myShowSelectionInPreviewLabel">
+            <constraints>
+              <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.form.show-selection-in-preview.label"/>
+              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.form.show-selection-in-preview.description"/>
+              <visible value="true"/>
+            </properties>
+          </component>
+          <component id="df2b5" class="com.intellij.ui.components.JBCheckBox" binding="myShowSelectionInPreview">
+            <constraints>
+              <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.form.show-selection-in-preview.description"/>
+              <visible value="true"/>
+            </properties>
+          </component>
+          <component id="932a7" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.form.last-layout-sets-default.label"/>
+              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.form.last-layout-sets-default.description"/>
+            </properties>
+          </component>
+          <component id="b8f36" class="com.intellij.ui.components.JBCheckBox" binding="myLastLayoutSetsDefault">
+            <constraints>
+              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <horizontalAlignment value="2"/>
+              <horizontalTextPosition value="2"/>
+              <text value=""/>
+              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.form.last-layout-sets-default.description"/>
+            </properties>
+          </component>
+          <component id="4bf9f" class="javax.swing.JLabel" binding="mySynchronizePreviewPositionLabel">
+            <constraints>
+              <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.form.sync-position.label"/>
+              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.form.sync-position.description"/>
+              <visible value="true"/>
+            </properties>
+          </component>
+          <component id="ca05b" class="com.intellij.ui.components.JBCheckBox" binding="mySynchronizePreviewPosition">
+            <constraints>
+              <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.preview.form.sync-position.description"/>
+              <visible value="true"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+    </children>
+  </grid>
+</form>

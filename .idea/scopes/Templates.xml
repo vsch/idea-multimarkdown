@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Templates" pattern="file[idea-multimarkdown]:src/com/vladsch/md/nav/language/template//*" />
+</component>

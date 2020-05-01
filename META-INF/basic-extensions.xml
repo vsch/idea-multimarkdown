@@ -1,0 +1,162 @@
+<idea-plugin>
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService serviceImplementation="com.vladsch.md.nav.MdImageCache"/>
+        <applicationService serviceImplementation="com.vladsch.md.nav.MdResourceResolverImpl"/>
+        <applicationService serviceImplementation="com.vladsch.md.nav.parser.cache.CachedData"/>
+        <applicationService serviceImplementation="com.vladsch.md.nav.settings.MdApplicationLocalSettings"/>
+        <applicationService serviceImplementation="com.vladsch.md.nav.settings.MdApplicationSettings"/>
+        <applicationService serviceImplementation="com.vladsch.md.nav.settings.MdApplicationSharedSettings"/>
+        <applicationService serviceImplementation="com.vladsch.md.nav.util.MdCancelableJobScheduler"/>
+        <applicationService serviceImplementation="com.vladsch.md.nav.highlighter.MdHighlighterColors"/>
+        <applicationService serviceImplementation="com.vladsch.md.nav.parser.LexParserState"/>
+
+        <projectService serviceImplementation="com.vladsch.md.nav.parser.cache.data.ProjectCachedData"/>
+        <projectService serviceImplementation="com.vladsch.md.nav.parser.cache.ProjectFileMonitor"/>
+        <projectService serviceImplementation="com.vladsch.md.nav.settings.MdProjectSettingsManager"/>
+        <projectService serviceImplementation="com.vladsch.md.nav.settings.MdRenderingProfileManager"/>
+        <projectService serviceImplementation="com.vladsch.md.nav.settings.RenderingProfileSynchronizer"/>
+        <projectService serviceImplementation="com.vladsch.md.nav.parser.flexmark.MdFencedCodeImageConversionManager"/>
+
+        <!-- FIX: register post startup activity handlers here -->
+        <!--        <postStartupActivity implementation="com."/>-->
+        <projectService serviceImplementation="com.vladsch.md.nav.vcs.MdLinkResolverManager"/>
+
+        <schemeExporter
+              name="Intellij IDEA color scheme, reduced markdown (.icls)"
+              schemeClass="com.intellij.openapi.editor.colors.EditorColorsScheme"
+              implementationClass="com.vladsch.md.nav.highlighter.MdColorSchemeExporter"
+              order="first"/>
+
+        <lang.elementManipulator forClass="com.vladsch.md.nav.psi.element.MdAttributeIdValue" implementationClass="com.vladsch.md.nav.psi.manipulator.MdAttributeIdValueManipulator"/>
+        <lang.elementManipulator forClass="com.vladsch.md.nav.psi.element.MdEnumeratedReferenceId" implementationClass="com.vladsch.md.nav.psi.manipulator.MdEnumeratedReferenceTypeManipulator"/>
+        <lang.elementManipulator forClass="com.vladsch.md.nav.psi.element.MdImageMultiLineUrlContentImpl" implementationClass="com.vladsch.md.nav.psi.manipulator.MdImageMultiLineUrlContentManipulator"/>
+        <lang.elementManipulator forClass="com.vladsch.md.nav.psi.element.MdHtmlBlock" implementationClass="com.vladsch.md.nav.psi.manipulator.MdHtmlBlockManipulator"/>
+        <lang.elementManipulator forClass="com.vladsch.md.nav.psi.element.MdVerbatim" implementationClass="com.vladsch.md.nav.psi.manipulator.MdVerbatimManipulator"/>
+        <lang.elementManipulator forClass="com.vladsch.md.nav.psi.element.MdJekyllFrontMatterBlock" implementationClass="com.vladsch.md.nav.psi.manipulator.MdJekyllFrontMatterBlockManipulator"/>
+        <lang.elementManipulator forClass="com.vladsch.md.nav.psi.element.MdInlineGitLabMath" implementationClass="com.vladsch.md.nav.psi.manipulator.MdInlineGitLabMathManipulator"/>
+        <lang.elementManipulator forClass="com.vladsch.md.nav.psi.element.MdInlineCode" implementationClass="com.vladsch.md.nav.psi.manipulator.MdInlineCodeManipulator"/>
+        <lang.elementManipulator forClass="com.vladsch.md.nav.psi.element.MdReference" implementationClass="com.vladsch.md.nav.psi.manipulator.MdReferenceManipulator"/>
+        <lang.elementManipulator forClass="com.vladsch.md.nav.psi.element.MdFootnote" implementationClass="com.vladsch.md.nav.psi.manipulator.MdReferenceManipulator"/>
+        <lang.elementManipulator forClass="com.vladsch.md.nav.psi.element.MdMacro" implementationClass="com.vladsch.md.nav.psi.manipulator.MdReferenceManipulator"/>
+        <lang.elementManipulator forClass="com.vladsch.md.nav.psi.element.MdReferencingElementReference" implementationClass="com.vladsch.md.nav.psi.manipulator.MdReferencingElementManipulator"/>
+        <lang.elementManipulator forClass="com.vladsch.md.nav.psi.text.MdPlainTextElementImpl" implementationClass="com.vladsch.md.nav.psi.text.MdPlainTextElementManipulator"/>
+
+        <stubIndex implementation="com.vladsch.md.nav.psi.index.MdLinkElementIndex"/>
+        <stubIndex implementation="com.vladsch.md.nav.psi.index.MdPlainTextElementIndex"/>
+        <stubIndex implementation="com.vladsch.md.nav.psi.index.MdReferenceableTextIndex"/>
+
+        <vetoRenameCondition implementation="com.vladsch.md.nav.psi.manipulator.MdNamedElementVetoRename"/>
+
+        <stripTrailingSpacesFilterFactory implementation="com.vladsch.md.nav.language.MdStripTrailingSpacesFilterFactory"/>
+        <multiHostInjector implementation="com.vladsch.md.nav.language.injection.MdLanguageInjector"/>
+
+        <webHelpProvider implementation="com.vladsch.md.nav.settings.MdWebHelpTopicProvider"/>
+
+        <fileEditorProvider implementation="com.vladsch.md.nav.editor.MdSplitEditorProvider"/>
+
+        <editorNotificationProvider implementation="com.vladsch.md.nav.inspections.JekyllFrontMatterFoundNotificationProvider"/>
+        <editorNotificationProvider implementation="com.vladsch.md.nav.inspections.LineSeparatorFoundNotificationProvider"/>
+        <editorNotificationProvider implementation="com.vladsch.md.nav.inspections.AutoLinksEnabledInLargeFileNotificationProvider"/>
+        <editorNotificationProvider implementation="com.vladsch.md.nav.inspections.PlantUmlParserExtensionNotificationProvider"/>
+
+        <editorHighlighterProvider filetype="Markdown" implementationClass="com.vladsch.md.nav.highlighter.MdEditorHighlighterProvider"/>
+
+        <liveTemplateContext implementation="com.vladsch.md.nav.language.template.MarkdownTemplateContextType$Generic"/>
+        <defaultLiveTemplatesProvider implementation="com.vladsch.md.nav.language.template.MarkdownTemplatesProvider"/>
+
+        <lang.foldingBuilder language="Markdown" implementationClass="com.vladsch.md.nav.language.folding.MdFoldingBuilder"/>
+        <codeFoldingOptionsProvider instance="com.vladsch.md.nav.language.folding.MdCodeFoldingOptionsProvider"/>
+        <applicationService serviceImplementation="com.vladsch.md.nav.language.folding.MdFoldingSettings"/>
+
+        <langCodeStyleSettingsProvider implementation="com.vladsch.md.nav.language.MdLanguageCodeStyleSettingsProvider"/>
+        <codeStyleSettingsProvider implementation="com.vladsch.md.nav.language.MdNavigatorCodeStyleSettingsProvider"/>
+        <lookup.charFilter implementation="com.vladsch.md.nav.language.completion.util.MdCompletionCharFilter" order="first" id="md_navigator_no_char_completion"/>
+
+        <typedHandler implementation="com.vladsch.md.nav.actions.handlers.TypedCharHandler" order="first"/>
+        <backspaceHandlerDelegate implementation="com.vladsch.md.nav.actions.handlers.BackspaceHandler" order="first"/>
+        <joinLinesHandler implementation="com.vladsch.md.nav.actions.handlers.JoinLinesHandler" order="first"/>
+
+        <externalAnnotator language="Markdown" implementationClass="com.vladsch.md.nav.annotator.MdExternalAnnotator"/>
+        <braceMatcher filetype="Markdown" implementationClass="com.vladsch.md.nav.language.MdBraceMatcher"/>
+        <todoIndexer filetype="Markdown" implementationClass="com.vladsch.md.nav.todo.MdTodoIndexer"/>
+
+        <colorSettingsPage implementation="com.vladsch.md.nav.highlighter.MdColorSettingsPage"/>
+        <completion.contributor language="Markdown" implementationClass="com.vladsch.md.nav.language.completion.MdCompletionContributor"/>
+        <fileTypeFactory implementation="com.vladsch.md.nav.MdFileTypeFactory"/>
+        <lang.commenter language="Markdown" implementationClass="com.vladsch.md.nav.language.MdCommenter"/>
+        <lang.findUsagesProvider language="Markdown" implementationClass="com.vladsch.md.nav.language.MdFindUsagesProvider"/>
+        <lang.namesValidator language="Markdown" implementationClass="com.vladsch.md.nav.language.MdNamesValidator"/>
+        <lang.parserDefinition language="Markdown" implementationClass="com.vladsch.md.nav.parser.MdParserDefinition"/>
+        <lang.refactoringSupport language="Markdown" implementationClass="com.vladsch.md.nav.language.MdRefactoringSupportProvider"/>
+        <lang.syntaxHighlighterFactory key="Markdown" language="Markdown" implementationClass="com.vladsch.md.nav.highlighter.MdSyntaxHighlighterFactory"/>
+        <spellchecker.support language="Markdown" implementationClass="com.vladsch.md.nav.spellchecking.MdSpellcheckingStrategy"/>
+        <fileIconProvider implementation="com.vladsch.md.nav.MdFileIconProvider"/>
+
+        <codeInsight.lineMarkerProvider language="Markdown" implementationClass="com.vladsch.md.nav.language.MdLineMarkerProvider"/>
+        <lang.psiStructureViewFactory language="Markdown" id="MdStructureViewFactory" implementationClass="com.vladsch.md.nav.language.structure.MdStructureViewFactory"/>
+        <iconLayerProvider implementation="com.vladsch.md.nav.MdWikiDirectoryOverlayProvider" order="last"/>
+        <problemFileHighlightFilter implementation="com.vladsch.md.nav.language.MdProblemFileHighlightFilter"/>
+
+        <treeStructureProvider implementation="com.vladsch.md.nav.language.projectView.MdTreeStructureProvider"/>
+
+        <qualifiedNameProvider implementation="com.vladsch.md.nav.language.MdQualifiedNameProvider"/>
+
+        <additionalTextAttributes scheme="Darcula" file="com/vladsch/md/nav/colorSchemes/MarkdownDarcula.xml"/>
+        <additionalTextAttributes scheme="Default" file="com/vladsch/md/nav/colorSchemes/MarkdownDefault.xml"/>
+    </extensions>
+
+    <application-components>
+        <component>
+            <implementation-class>com.vladsch.md.nav.MdPlugin</implementation-class>
+        </component>
+        <component>
+            <implementation-class>com.vladsch.md.nav.settings.MdApplicationRestartManager</implementation-class>
+        </component>
+    </application-components>
+
+    <project-components>
+        <component>
+            <implementation-class>com.vladsch.md.nav.MdProjectComponent</implementation-class>
+        </component>
+    </project-components>
+
+    <extensions defaultExtensionNs="com.vladsch.idea.multimarkdown">
+        <!-- Parser Extensions -->
+        <parserExtension id="MdEmojiParserExtension" implementation="com.vladsch.md.nav.parser.parserExtensions.MdEmojiParserExtension"/>
+        <parserExtension id="MdJekyllExtension" implementation="com.vladsch.md.nav.parser.parserExtensions.MdJekyllExtension"/>
+        <parserExtension id="MdWikiLinkParserExtension" implementation="com.vladsch.md.nav.parser.parserExtensions.MdWikiLinkParserExtension"/>
+        <textMapElementTypeProvider implementation="com.vladsch.md.nav.psi.util.BasicTextMapElementTypeProvider"/>
+        <renderingProfileValidator implementation="com.vladsch.md.nav.parser.flexmark.MdPlantUmlConversionSettingsMigration"/>
+        <renderingProfileValidator implementation="com.vladsch.md.nav.parser.flexmark.MdFencedCodeImageProfileValidator" order="last"/>
+        <codeFenceImageConverter implementation="com.vladsch.md.nav.parser.flexmark.MdFencedCodePlantUmlConverter"/>
+        <editorCustomizationProvider implementation="com.vladsch.md.nav.editor.MdEditorCustomizationProvider"/>
+
+        <applicationRestartRequired implementation="com.vladsch.md.nav.settings.MdHighlighterChangedRestartProvider"/>
+        <editorCustomizationProvider implementation="com.vladsch.md.nav.actions.handlers.util.SmartInsertEditorRangeHighlighterProvider"/>
+
+        <html.panel.provider implementation="com.vladsch.md.nav.editor.swing.SwingHtmlPanelProvider"/>
+        <html.panel.provider implementation="com.vladsch.md.nav.editor.javafx.JavaFxHtmlPanelProvider"/>
+        <html.panel.provider implementation="com.vladsch.md.nav.editor.text.TextHtmlPanelProvider"/>
+
+        <html.generator.provider implementation="com.vladsch.md.nav.editor.resources.SwingHtmlGeneratorProvider"/>
+        <html.generator.provider implementation="com.vladsch.md.nav.editor.resources.JavaFxHtmlGeneratorProvider"/>
+        <html.generator.provider implementation="com.vladsch.md.nav.editor.resources.TextHtmlGeneratorProvider"/>
+
+        <html.css.provider implementation="com.vladsch.md.nav.editor.resources.SwingHtmlCssProvider"/>
+        <html.css.provider implementation="com.vladsch.md.nav.editor.resources.JavaFxHtmlCssProvider"/>
+        <html.css.provider implementation="com.vladsch.md.nav.editor.resources.TextHtmlCssProvider"/>
+        <html.css.provider implementation="com.vladsch.md.nav.editor.resources.HljsHtmlCssProvider"/>
+        <html.css.provider implementation="com.vladsch.md.nav.editor.resources.PrismHtmlCssProvider"/>
+        <html.css.provider implementation="com.vladsch.md.nav.editor.resources.GitHubCollapseMarkdownCssProvider"/>
+
+        <html.script.provider implementation="com.vladsch.md.nav.editor.resources.GitHubCollapseInCommentScriptProvider"/>
+        <html.script.provider implementation="com.vladsch.md.nav.editor.resources.HljsScriptProvider"/>
+        <html.script.provider implementation="com.vladsch.md.nav.editor.resources.PrismScriptProvider"/>
+        <html.script.provider implementation="com.vladsch.md.nav.editor.resources.GitHubCollapseMarkdownScriptProvider"/>
+
+        <element.completionProvider implementation="com.vladsch.md.nav.language.completion.CodeFenceLanguageCompletion"/>
+        <element.completionProvider implementation="com.vladsch.md.nav.language.completion.EmojiShortcutCompletion"/>
+        <element.completionProvider implementation="com.vladsch.md.nav.language.completion.LinkRefCompletion"/>
+        <element.completionProvider implementation="com.vladsch.md.nav.language.completion.ReferenceLinkCompletion"/>
+    </extensions>
+</idea-plugin>

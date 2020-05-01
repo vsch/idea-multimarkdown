@@ -140,14 +140,14 @@
 * Add: collapsed by default config under settings **Editor** > **General** > **Code Folding**, for:
     * verbatim blocks
     * code fence blocks
-    * multi-line URL images
+    * multi-line image URLs
     * references
     * explicit links
     * explicit image links
 * Fix: ANCHORLINKS parser option only affects unmodified HTML text preview and should not be changed by parser profile
   changes.
 * Fix: unmodified HTML text preview should not generate header tag ids if ANCHORLINKS parser option is not selected.
-* Fix: multi-line url images with `http://gravizo?`
+* Fix: multi-line image URLs with `http://gravizo?`
     * prefix were adding `;` after `{`
     * all trailing `;` are removed, not just one when editing injected code fragment
 * Add: view document on GitHub option when file is under vcs and is not modified. No checking is done if changes were
@@ -259,7 +259,7 @@
 * Fix: URI format links would leave out the anchor reference in preview
 * Add: intention actions for switching explicit and reference links.
 * Add: footnote and footnote reference refactoring, navigation, completions and find usages.
-* Add: multi-line url images so gravizo.com can be used for UML diagrams.
+* Add: multi-line image URLs so gravizo.com can be used for UML diagrams.
 * Add: language injections to multi-line image url content for comfortable editing of url content part.
 * Change: link completions improved for extensions: any extension text given will match files whose extension starts
   with the given fragment: ie. .j will match .js, .java etc.
@@ -337,7 +337,7 @@
 * Add: intention actions to convert link formats between: relative /absolute, https:// absolute and file:// absolute
 * Add: Lobo Evolution browser option, currently experimental and is not fully supported with its own stylesheets and
   scripts
-* Add: Table of Contents markdown extension `[TOC]` with optional level specification `[TOC level=n` where n is the
+* Add: Table of Contents markdown extension `[TOC]` with optional level specification `[TOC levels=n` where n is the
   maximum header level to include in the table of contents
 * Fix: https://github.com/user/repository/raw/... would produce https://github.com/user/repository/blob/... urls in HTML
   Preview and HTML Text tabs

@@ -1,0 +1,23 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="EnhPluginTestSuite IntelliJ" type="JUnit" factoryName="JUnit">
+    <module name="idea-multimarkdown" />
+    <useClassPathOnly />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="com.vladsch.md.nav.language.inspection.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <option name="ALTERNATIVE_JRE_PATH" value="IDEA Plugin jdk MN" />
+    <option name="PACKAGE_NAME" value="com.vladsch.md.nav.enh" />
+    <option name="MAIN_CLASS_NAME" value="com.vladsch.md.nav.enh.PluginTestSuite" />
+    <option name="METHOD_NAME" value="" />
+    <option name="TEST_OBJECT" value="class" />
+    <option name="PARAMETERS" value="" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+      <option name="ToolBeforeRunTask" enabled="true" actionId="Tool_External Tools_Update Sandboxes" />
+    </method>
+  </configuration>
+</component>

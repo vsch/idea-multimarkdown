@@ -1,8 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="JavadocGenerationManager">
+    <option name="OUTPUT_DIRECTORY" value="$USER_HOME$/Bureau" />
+    <option name="OPTION_SCOPE" value="protected" />
+    <option name="OPTION_HIERARCHY" value="true" />
+    <option name="OPTION_NAVIGATOR" value="true" />
+    <option name="OPTION_INDEX" value="true" />
+    <option name="OPTION_SEPARATE_INDEX" value="true" />
+    <option name="OPTION_DOCUMENT_TAG_USE" value="false" />
+    <option name="OPTION_DOCUMENT_TAG_AUTHOR" value="true" />
+    <option name="OPTION_DOCUMENT_TAG_VERSION" value="true" />
+    <option name="OPTION_DOCUMENT_TAG_DEPRECATED" value="true" />
+    <option name="OPTION_DEPRECATED_LIST" value="true" />
+    <option name="OTHER_OPTIONS" />
+    <option name="HEAP_SIZE" />
+    <option name="LOCALE" />
+    <option name="OPEN_IN_BROWSER" value="true" />
+    <option name="OPTION_INCLUDE_LIBS" value="false" />
+    <option name="OPTION_LINK_TO_JDK_DOCS" value="false" />
+  </component>
+  <component name="LanguageInjectionConfiguration">
+    <injection language="HTML" injector-id="xml">
+      <display-name>change-notes</display-name>
+      <place>xmlTag().withLocalName(string().equalTo(&quot;change-notes&quot;)).withNamespace(string().equalTo(&quot;http://plugins.intellij.net/plugin.dtd&quot;))</place>
+    </injection>
+  </component>
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/XmlMerge/XmlMerge.iml" filepath="$PROJECT_DIR$/XmlMerge/XmlMerge.iml" />
       <module fileurl="file://$PROJECT_DIR$/idea-multimarkdown.iml" filepath="$PROJECT_DIR$/idea-multimarkdown.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugin-test-util/plugin-test-util.iml" filepath="$PROJECT_DIR$/plugin-test-util/plugin-test-util.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugin-util/plugin-util.iml" filepath="$PROJECT_DIR$/plugin-util/plugin-util.iml" />
     </modules>
+  </component>
+  <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/test/src/com/vladsch/idea/multimarkdown/KotlinBug_01.kt.fixed" />
+  </component>
+  <component name="ProjectResources">
+    <default-html-doctype>http://www.w3.org/1999/xhtml</default-html-doctype>
   </component>
 </project>

@@ -1,23 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="PLUGIN_MODULE" version="4">
-  <component name="DevKit.ModuleBuildProperties" url="file://$MODULE_DIR$/src/main/resources/META-INF/plugin.xml" manifest="file://$MODULE_DIR$/src/main/java/META-INF/MANIFEST.MF" />
+  <component name="DevKit.ModuleBuildProperties" url="file://$MODULE_DIR$/resources-enh/META-INF/plugin.xml" />
+  <component name="FacetManager">
+    <facet type="NBMindMap" name="NB Mind Map">
+      <configuration />
+    </facet>
+  </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/test/src" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/test/data" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/test/testData" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/test/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/resources-enh" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/resources-flex" type="java-resource" />
+      <excludeFolder url="file://$MODULE_DIR$/assets/emojis2" />
+      <excludeFolder url="file://$MODULE_DIR$/emojis" />
+      <excludeFolder url="file://$MODULE_DIR$/libprep" />
+      <excludeFolder url="file://$MODULE_DIR$/misc" />
+      <excludeFolder url="file://$MODULE_DIR$/out.191" />
+      <excludeFolder url="file://$MODULE_DIR$/src copy" />
+      <excludeFolder url="file://$MODULE_DIR$/test/src/com/vladsch/idea/multimarkdown/issues/documentRevertContents" />
+      <excludeFolder url="file://$MODULE_DIR$/test/src/com/vladsch/idea/multimarkdown/util/smart" />
     </content>
+    <orderEntry type="library" scope="PROVIDED" name="MissingInActions" level="project" />
+    <orderEntry type="library" name="flexmark-util" level="project" />
+    <orderEntry type="module" module-name="plugin-util" />
+    <orderEntry type="module" module-name="plugin-test-util" scope="TEST" />
     <orderEntry type="inheritedJdk" />
+    <orderEntry type="library" name="jsoup-1.10.2" level="project" />
+    <orderEntry type="library" name="OpenHtmlToPDF" level="project" />
+    <orderEntry type="library" name="org.glassfish:javax.json:1.1.4" level="project" />
+    <orderEntry type="library" name="Kotlin" level="project" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="KotlinJavaRuntime" level="application" />
-    <orderEntry type="library" scope="TEST" name="kotlin-test" level="application" />
-    <orderEntry type="library" name="jfxrt" level="application" />
-    <orderEntry type="library" name="asm-all-asm4" level="project" />
-    <orderEntry type="library" name="commons-io-2.4" level="project" />
-    <orderEntry type="library" name="parboiled-core-asm4" level="project" />
-    <orderEntry type="library" name="parboiled-java-asm4" level="project" />
-    <orderEntry type="library" name="pegdown-1.6.7" level="project" />
+    <orderEntry type="library" scope="TEST" name="hamcrest-core-1.3" level="project" />
+    <orderEntry type="library" name="flexmark-parent" level="project" />
+    <orderEntry type="library" name="commons-io:commons-io:2.4" level="project" />
+    <orderEntry type="library" name="com.jgoodies:jgoodies-common:1.4.0" level="project" />
+    <orderEntry type="library" name="plantuml" level="project" />
+    <orderEntry type="library" name="org.nibor.autolink:autolink:0.6.0" level="project" />
+    <orderEntry type="library" name="flexmark-test-util" level="project" />
+    <orderEntry type="library" scope="TEST" name="junit" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="jfxrt.1.8" level="project" />
+    <orderEntry type="library" name="org.scilab.forge:jlatexmath:1.0.7" level="project" />
+    <orderEntry type="library" name="com.vladsch.reverse-regex:reverse-regex-util:0.3.2" level="project" />
+    <orderEntry type="library" name="com.vladsch.javafx-webview-debugger:javafx-webview-debugger:0.8.0" level="project" />
   </component>
 </module>

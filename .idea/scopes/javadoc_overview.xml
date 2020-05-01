@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="javadoc-overview" pattern="file[boxed-json]:main/javadoc/overview.md||file[boxed-json]:main/javadoc/overview.html||file[JavaFx-WebView-Debugger]:main/javadoc/overview.md||file[JavaFx-WebView-Debugger]:main/javadoc//*||file[boxed-json]:main/javadoc//*" />
+</component>

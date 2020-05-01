@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="InspectionDescriptions" pattern="file[idea-multimarkdown]:src/com/vladsch/md/nav/inspections//*&amp;&amp;!file[idea-multimarkdown]:resources/inspectionDescriptions/*||file[idea-multimarkdown]:resources/inspectionDescriptions//*" />
+</component>

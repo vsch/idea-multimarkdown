@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="No Markdown" pattern="!file[idea-multimarkdown]:*.md" />
+</component>

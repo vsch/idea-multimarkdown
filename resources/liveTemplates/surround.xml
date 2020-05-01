@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templateSet group="surround">
+    <template name="MM" value="```$END$&#10;$SELECTION$&#10;```&#10;" description="Surround with Markdown Fenced Code" toReformat="true" toShortenFQNames="true" useStaticImport="true">
+        <context>
+            <option name="MARKDOWN" value="true" />
+        </context>
+    </template>
+    <template name="CM" value="$END$&#10;&amp;nbsp;&lt;details open&gt;&lt;summary&gt;$SUMMARY$&lt;/summary&gt;&#10;&#10;$SELECTION$&#10;&#10;&amp;nbsp;&lt;/details&gt;&#10;" description="Surround with Markdown Collapsible" toReformat="true" toShortenFQNames="true" useStaticImport="true">
+        <variable name="SUMMARY" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="MARKDOWN" value="true" />
+        </context>
+    </template>
+    <template name="EM" value="&lt;!-- @formatter:off --&gt;&#10;&#10;$SELECTION$&#10;&lt;!-- @formatter:on --&gt;&#10;" description="Surround with @formatter:off/on comment" toReformat="false" toShortenFQNames="false">
+        <variable name="SUMMARY" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="MARKDOWN" value="true" />
+        </context>
+    </template>
+</templateSet>

@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="HTML Notice" pattern="file[idea-multimarkdown]:resources/com/vladsch/md/nav/NOTICE.html||file[idea-multimarkdown]:resources/META-INF/NOTICE.md||file[idea-multimarkdown]:resources/META-INF/FEATURES.md||file[idea-multimarkdown]:resources/com/vladsch/md/nav/FEATURES.html" />
+</component>

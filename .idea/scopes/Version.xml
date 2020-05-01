@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Version" pattern="file[idea-multimarkdown]:VERSION.md||file[idea-multimarkdown]:VERSION-TODO.md" />
+</component>

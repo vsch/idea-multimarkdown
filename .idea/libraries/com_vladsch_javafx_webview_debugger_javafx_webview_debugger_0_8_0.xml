@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="com.vladsch.javafx-webview-debugger:javafx-webview-debugger:0.8.0" type="repository">
+    <properties maven-id="com.vladsch.javafx-webview-debugger:javafx-webview-debugger:0.8.0" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/javafx-webview-debugger-0.8.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/boxed-json-0.5.30.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javax.json-1.1.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Java-WebSocket-1.3.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/annotations-15.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

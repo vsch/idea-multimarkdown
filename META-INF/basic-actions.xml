@@ -1,0 +1,292 @@
+<idea-plugin>
+    <actions>
+        <action class="com.vladsch.md.nav.actions.styling.ToggleWrapOnTypingAction"
+                id="MarkdownNavigator.ToggleWrapOnTyping"
+                text="Wrap on Typing"
+                description="Toggles wrap on typing mode"
+                icon="MdIcons.EditorActions.Wrap_on_typing">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.styling.ToggleBoldAction"
+                id="MarkdownNavigator.ToggleBold"
+                text="Toggle Bold Mode"
+                description="Toggles bold mode on caret/selection"
+                icon="MdIcons.EditorActions.Bold">
+            <keyboard-shortcut first-keystroke="meta b" keymap="$default"/>
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.styling.ToggleItalicAction"
+                id="MarkdownNavigator.ToggleItalic"
+                text="Toggle Italic Mode"
+                description="Toggles italic mode on caret/selection"
+                icon="MdIcons.EditorActions.Italic">
+            <keyboard-shortcut first-keystroke="meta i" keymap="$default"/>
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.styling.ToggleStrikeThroughAction"
+                id="MarkdownNavigator.ToggleStrikeThrough"
+                text="Toggle Strike Through Mode"
+                description="Toggles strike through mode on caret/selection"
+                icon="MdIcons.EditorActions.Strike_through">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.styling.ToggleUnderlineAction"
+                id="MarkdownNavigator.ToggleUnderline"
+                text="Toggle Underline Mode"
+                description="Toggles underline mode on caret/selection"
+                icon="MdIcons.EditorActions.Underline">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.styling.ToggleSuperscriptAction"
+                id="MarkdownNavigator.ToggleSuperscript"
+                text="Toggle Superscript Mode"
+                description="Toggles superscript mode on caret/selection"
+                icon="MdIcons.EditorActions.Superscript">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.styling.ToggleSubscriptAction"
+                id="MarkdownNavigator.ToggleSubscript"
+                text="Toggle Subscript Mode"
+                description="Toggles subscript mode on caret/selection"
+                icon="MdIcons.EditorActions.Subscript">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.styling.ToggleCodeSpanAction"
+                id="MarkdownNavigator.ToggleCodeSpan"
+                text="Toggle Monospaced (Code Span) Mode"
+                description="Toggles monospaced mode (rendered as code span) on caret/selection"
+                icon="MdIcons.EditorActions.Code_span">
+            <keyboard-shortcut first-keystroke="meta o" keymap="$default"/>
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.styling.InsertLinkAction"
+                id="MarkdownNavigator.InsertLink"
+                text="Insert Link"
+                description="Insert link on caret/selection"
+                icon="MdIcons.EditorActions.Link">
+            <keyboard-shortcut first-keystroke="meta l" keymap="$default"/>
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.styling.BlockQuoteRemoveAction"
+                id="MarkdownNavigator.BlockQuoteRemove"
+                text="Decrease Quote Level"
+                description="Decrease quote level for item or selection"
+                icon="MdIcons.EditorActions.Quote_remove">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.styling.BlockQuoteAddAction"
+                id="MarkdownNavigator.BlockQuoteAdd"
+                text="Increase Quote Level"
+                description="Increase quote level for item or selection"
+                icon="MdIcons.EditorActions.Quote_add">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.styling.HeaderLevelUpAction"
+                id="MarkdownNavigator.HeaderLevelUp"
+                text="Heading Level up"
+                description="Increases the heading level on caret/selection"
+                icon="MdIcons.EditorActions.Header_level_up">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.styling.HeaderLevelDownAction"
+                id="MarkdownNavigator.HeaderLevelDown"
+                text="Heading Level down"
+                description="Increases the heading level on caret/selection"
+                icon="MdIcons.EditorActions.Header_level_down">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.styling.HeaderToggleTypeAction"
+                id="MarkdownNavigator.HeaderToggleType"
+                text="Toggle Heading Type"
+                description="Toggle heading type between setext and atx"
+                icon="MdIcons.EditorActions.Header_toggle_type">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.styling.ListUnIndentAction"
+                id="MarkdownNavigator.ListUnIndent"
+                text="Decrease List Level"
+                description="Decrease list item's level"
+                icon="MdIcons.EditorActions.List_unindent">
+            <keyboard-shortcut first-keystroke="meta y" keymap="$default"/>
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.styling.ListIndentAction"
+                id="MarkdownNavigator.ListIndent"
+                text="Increase List Level"
+                description="Increase a list item's level"
+                icon="MdIcons.EditorActions.List_indent">
+            <keyboard-shortcut first-keystroke="meta u" keymap="$default"/>
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.styling.ListTightAction"
+                id="MarkdownNavigator.ListTight"
+                text="Single Space List"
+                description="Single space list items"
+                icon="MdIcons.EditorActions.List_tight">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.styling.ListLooseAction"
+                id="MarkdownNavigator.ListLoose"
+                text="Double Space List"
+                description="Double space list items"
+                icon="MdIcons.EditorActions.List_loose">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.styling.ListBulletItemsAction"
+                id="MarkdownNavigator.ListBulletItems"
+                text="Toggle Bullet List Item"
+                description="Make into bullet list"
+                icon="MdIcons.EditorActions.List_bullet_items">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.styling.ListOrderedItemsAction"
+                id="MarkdownNavigator.ListOrderedItems"
+                text="Toggle Ordered List Item"
+                description="Make into an ordered list"
+                icon="MdIcons.EditorActions.List_ordered_items">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.styling.ListTaskItemsAction"
+                id="MarkdownNavigator.ListTaskItems"
+                text="Toggle Task List Item"
+                description="Make into a task list"
+                icon="MdIcons.EditorActions.List_task_items">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.styling.ListToggleTaskItemDoneAction"
+                id="MarkdownNavigator.ListToggleTaskItemDone"
+                text="Toggle Task Item Done"
+                description="Toggle task list item's done status"
+                icon="MdIcons.EditorActions.List_toggle_item_done">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.styling.InsertTableAction"
+                id="MarkdownNavigator.InsertTable"
+                text="Insert Table"
+                description="Insert table on caret/selection"
+                icon="MdIcons.EditorActions.Insert_table">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.styling.ReformatElementAction"
+                id="MarkdownNavigator.ReformatElement"
+                text="Format Element"
+                description="Format current paragraph, table or table of contents"
+                icon="MdIcons.EditorActions.Reformat_element">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.styling.ShowTextHexAction"
+                id="MarkdownNavigator.ShowTextHex"
+                text="Show Hex for Selection"
+                description="Show hex character view of selected text"
+                icon="MdIcons.EditorActions.Show_text_hex">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.styling.SizePreferencesDialogAction"
+                id="MarkdownNavigator.SizePreferencesDialog"
+                text="Size Preferences Dialog"
+                description="Sets preferences dialog to the configured size."
+                icon="MdIcons.EditorActions.Preferences_size">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.styling.DebugTextBoundsToggleStateAction"
+                id="MarkdownNavigator.DebugTextBoundsToggleState"
+                text="Show Text Bounds"
+                description="Shows the text bounds for formatting at caret position."
+                icon="MdIcons.EditorActions.Debug_text_bounds">
+            <!--<keyboard-shortcut first-keystroke="ctrl shift b" keymap="$default"/>-->
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.styling.TranslateDocumentAction"
+                id="MarkdownNavigator.TranslateDocument"
+                text="Translate Document"
+                description="Translate document powered by yandex.translate"
+                icon="MdIcons.EditorActions.Yandex_document">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.editorLayout.CyclicSplitLayoutChangeAction"
+                id="MarkdownNavigator.CyclicSplitLayoutChange"
+                text="Cycle Split Layout"
+                description="Toggle markdown editor layout through different values (editor only, preview only, wysiwyg split)"
+                icon="MdIcons.Layout.Cycle_editor_preview">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.editorLayout.ToggleEditorLayoutChangeAction"
+                text="Toggle Editor Layout"
+                id="MarkdownNavigator.ToggleSplitLayoutChange"
+                description="Toggle between editor only and editor &amp; preview"
+                icon="MdIcons.Layout.Toggle_editor_preview">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl p"/>
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.editorLayout.EditorOnlyLayoutChangeAction"
+                id="MarkdownNavigator.EditorOnlyLayoutChange"
+                text="Show Editor Only"
+                description="Sets markdown editor layout to show editor only"
+                icon="MdIcons.Layout.Editor_only">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.editorLayout.PreviewOnlyLayoutChangeAction"
+                id="MarkdownNavigator.PreviewOnlyLayoutChange"
+                text="Show Preview Only"
+                description="Sets markdown editor layout to show preview only"
+                icon="MdIcons.Layout.Preview_only">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.editorLayout.EditorAndPreviewLayoutChangeAction"
+                id="MarkdownNavigator.EditorAndPreviewLayoutChange"
+                text="Show Editor and Preview"
+                description="Sets markdown editor layout to show editor and preview in split"
+                icon="MdIcons.Layout.Editor_preview">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.editorLayout.ToggleEditorSplitLayoutAction"
+                id="MarkdownNavigator.ToggleEditorSplitLayout"
+                text="Toggle Editor Split Orientation"
+                description="Toggle editor split orientation"
+                icon="MdIcons.Layout.Split_preview_horizontal">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.editorLayout.HtmlPreviewChangeAction"
+                id="MarkdownNavigator.HtmlPreviewChange"
+                text="Show HTML Preview"
+                description="Sets preview pane to show rendered HTML"
+                icon="MdIcons.Layout.Html_preview">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.editorLayout.ModifiedHtmlTextChangeAction"
+                id="MarkdownNavigator.ModifiedHtmlTextChange"
+                text="Show HTML Text Used for Browser"
+                description="Sets preview pane to show HTML text as used in browser rendered preview"
+                icon="MdIcons.Layout.Html_modified">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.editorLayout.UnmodifiedHtmlTextChangeAction"
+                id="MarkdownNavigator.UnmodifiedHtmlTextChange"
+                text="Show Plain HTML as Generated by Parser"
+                description="Sets preview pane to show plain HTML text as generated by parser"
+                icon="MdIcons.Layout.Html_unmodified">
+        </action>
+
+        <action class="com.vladsch.md.nav.actions.editorLayout.CyclicPreviewChangeAction"
+                id="MarkdownNavigator.CyclicPreviewChange"
+                text="Cycle Preview Content"
+                description="Cycle markdown editor preview through different HTML previews (rendered, browser, plain)"
+                icon="MdIcons.Layout.Cycle_html">
+        </action>
+
+        <action id="MarkdownNavigator.CopyUpsourceSelectionReference"
+                class="com.vladsch.md.nav.actions.ide.CopyUpsourceSelectionReference"
+                text="Copy Reference With Selection Line Numbers"
+                icon="MdIcons.LinkTypes.Upsource">
+            <add-to-group group-id="CutCopyPasteGroup" anchor="after" relative-to-action="CopyReference"/>
+            <add-to-group group-id="EditorTabPopupMenu" anchor="after" relative-to-action="CopyReference"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="CopyReference"/>
+        </action>
+
+        <action id="MarkdownNavigator.CopySelectionReference" class="com.vladsch.md.nav.actions.ide.CopySelectionReference" text="Copy Reference With Selection Line Numbers">
+            <add-to-group group-id="CutCopyPasteGroup" anchor="after" relative-to-action="CopyReference"/>
+            <add-to-group group-id="EditorTabPopupMenu" anchor="after" relative-to-action="CopyReference"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="CopyReference"/>
+        </action>
+    </actions>
+</idea-plugin>

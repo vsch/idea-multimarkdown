@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.vladsch.md.nav.flex.settings.FlexmarkHtmlSettingsForm">
+  <grid id="27dc6" binding="myMainPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="20" y="20" width="503" height="269"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <grid id="f295" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <grid id="568cf" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="5" bottom="0" right="0"/>
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="true"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <grid id="90c44" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="2" indent="0" use-parent-layout="true"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="3f9f2" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text resource-bundle="com/vladsch/md/nav/flex/localization/strings" key="flexmark-spec-example.html.section.label"/>
+                    </properties>
+                  </component>
+                  <grid id="62c94" layout-manager="GridLayoutManager" row-count="4" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="2" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="5777c" class="javax.swing.JLabel">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text resource-bundle="com/vladsch/md/nav/flex/localization/strings" key="flexmark-spec-example.html.language.label"/>
+                        </properties>
+                      </component>
+                      <grid id="5ea7b" layout-manager="GridLayoutManager" row-count="3" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <grid row="1" column="2" row-span="3" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="1bb3" class="com.intellij.ui.components.JBCheckBox" binding="myFlexmarkSectionLanguageAstForSource">
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <hideActionText value="false"/>
+                              <horizontalAlignment value="2"/>
+                              <horizontalTextPosition value="11"/>
+                              <text resource-bundle="com/vladsch/md/nav/flex/localization/strings" key="flexmark-spec-example.html.section-language-is-ast.label"/>
+                            </properties>
+                          </component>
+                          <component id="e2ce2" class="com.intellij.ui.components.JBCheckBox" binding="myFlexmarkAstOffsetsSourceForHtml">
+                            <constraints>
+                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <hideActionText value="false"/>
+                              <horizontalAlignment value="2"/>
+                              <horizontalTextPosition value="11"/>
+                              <text resource-bundle="com/vladsch/md/nav/flex/localization/strings" key="flexmark-spec-example.html.section-language-ast-offsets-for-html.label"/>
+                            </properties>
+                          </component>
+                          <component id="25964" class="com.intellij.ui.components.JBCheckBox" binding="myFlexmarkAstOffsetsSourceForAst">
+                            <constraints>
+                              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <hideActionText value="false"/>
+                              <horizontalAlignment value="2"/>
+                              <horizontalTextPosition value="11"/>
+                              <text resource-bundle="com/vladsch/md/nav/flex/localization/strings" key="flexmark-spec-example.html.section-language-ast-offsets-for-ast.label"/>
+                              <toolTipText resource-bundle="com/vladsch/md/nav/flex/localization/strings" key="flexmark-spec-example.html.section-language-ast-offsets-for-html.description"/>
+                            </properties>
+                          </component>
+                          <component id="85c31" class="com.intellij.ui.components.JBCheckBox" binding="myFlexmarkAstOffsetsHtmlForSource">
+                            <constraints>
+                              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <hideActionText value="false"/>
+                              <horizontalAlignment value="2"/>
+                              <horizontalTextPosition value="11"/>
+                              <text resource-bundle="com/vladsch/md/nav/flex/localization/strings" key="flexmark-spec-example.html.section-language-ast-offsets-for-source.label"/>
+                              <toolTipText resource-bundle="com/vladsch/md/nav/flex/localization/strings" key="flexmark-spec-example.html.section-language-ast-offsets-for-html.description"/>
+                            </properties>
+                          </component>
+                          <component id="31e73" class="com.intellij.ui.components.JBCheckBox" binding="myFlexmarkSectionLanguageAstForHtml">
+                            <constraints>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <hideActionText value="false"/>
+                              <horizontalAlignment value="2"/>
+                              <horizontalTextPosition value="11"/>
+                              <text resource-bundle="com/vladsch/md/nav/flex/localization/strings" key="flexmark-spec-example.html.section-language-is-ast.label"/>
+                            </properties>
+                          </component>
+                          <component id="4c059" class="com.intellij.ui.components.JBCheckBox" binding="myFlexmarkSectionLanguageAstForAst">
+                            <constraints>
+                              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <hideActionText value="false"/>
+                              <horizontalAlignment value="2"/>
+                              <horizontalTextPosition value="11"/>
+                              <text resource-bundle="com/vladsch/md/nav/flex/localization/strings" key="flexmark-spec-example.html.section-language-is-ast.label"/>
+                            </properties>
+                          </component>
+                          <component id="8b778" class="com.intellij.ui.components.JBCheckBox" binding="myFlexmarkAstOffsetsAstForSource">
+                            <constraints>
+                              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <hideActionText value="false"/>
+                              <horizontalAlignment value="2"/>
+                              <horizontalTextPosition value="11"/>
+                              <text resource-bundle="com/vladsch/md/nav/flex/localization/strings" key="flexmark-spec-example.html.section-language-ast-offsets-for-source.label"/>
+                              <toolTipText resource-bundle="com/vladsch/md/nav/flex/localization/strings" key="flexmark-spec-example.html.section-language-ast-offsets-for-html.description"/>
+                            </properties>
+                          </component>
+                          <component id="40afd" class="com.intellij.ui.components.JBCheckBox" binding="myFlexmarkAstOffsetsHtmlForAst">
+                            <constraints>
+                              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <hideActionText value="false"/>
+                              <horizontalAlignment value="2"/>
+                              <horizontalTextPosition value="11"/>
+                              <text resource-bundle="com/vladsch/md/nav/flex/localization/strings" key="flexmark-spec-example.html.section-language-ast-offsets-for-ast.label"/>
+                              <toolTipText resource-bundle="com/vladsch/md/nav/flex/localization/strings" key="flexmark-spec-example.html.section-language-ast-offsets-for-html.description"/>
+                            </properties>
+                          </component>
+                          <component id="440ed" class="com.intellij.ui.components.JBCheckBox" binding="myFlexmarkAstOffsetsAstForHtml">
+                            <constraints>
+                              <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <hideActionText value="false"/>
+                              <horizontalAlignment value="2"/>
+                              <horizontalTextPosition value="11"/>
+                              <text resource-bundle="com/vladsch/md/nav/flex/localization/strings" key="flexmark-spec-example.html.section-language-ast-offsets-for-html.label"/>
+                              <toolTipText resource-bundle="com/vladsch/md/nav/flex/localization/strings" key="flexmark-spec-example.html.section-language-ast-offsets-for-html.description"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                      <component id="e8209" class="javax.swing.JLabel">
+                        <constraints>
+                          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <horizontalAlignment value="2"/>
+                          <horizontalTextPosition value="11"/>
+                          <text resource-bundle="com/vladsch/md/nav/flex/localization/strings" key="flexmark-spec-example.html.section-offsets.label"/>
+                          <toolTipText resource-bundle="com/vladsch/md/nav/flex/localization/strings" key="flexmark-spec-example.html.section-offsets.description"/>
+                        </properties>
+                      </component>
+                      <component id="946b1" class="com.intellij.util.textCompletion.TextFieldWithCompletion" binding="myFlexmarkSectionLanguageForSource" custom-create="true">
+                        <constraints>
+                          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                            <minimum-size width="200" height="-1"/>
+                            <preferred-size width="200" height="-1"/>
+                          </grid>
+                        </constraints>
+                        <properties/>
+                      </component>
+                      <component id="a0d55" class="com.intellij.util.textCompletion.TextFieldWithCompletion" binding="myFlexmarkSectionLanguageForHtml" custom-create="true">
+                        <constraints>
+                          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                            <minimum-size width="200" height="-1"/>
+                            <preferred-size width="200" height="-1"/>
+                          </grid>
+                        </constraints>
+                        <properties/>
+                      </component>
+                      <component id="c76fe" class="com.intellij.util.textCompletion.TextFieldWithCompletion" binding="myFlexmarkSectionLanguageForAst" custom-create="true">
+                        <constraints>
+                          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                            <minimum-size width="200" height="-1"/>
+                            <preferred-size width="200" height="-1"/>
+                          </grid>
+                        </constraints>
+                        <properties/>
+                      </component>
+                      <component id="20365" class="javax.swing.JLabel">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties/>
+                      </component>
+                      <component id="56ee4" class="javax.swing.JLabel">
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text resource-bundle="com/vladsch/md/nav/flex/localization/strings" key="flexmark-spec-example.html.section-language.source.label"/>
+                        </properties>
+                      </component>
+                      <component id="641e9" class="javax.swing.JLabel">
+                        <constraints>
+                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text resource-bundle="com/vladsch/md/nav/flex/localization/strings" key="flexmark-spec-example.html.section-language.html.label"/>
+                        </properties>
+                      </component>
+                      <component id="8af9f" class="javax.swing.JLabel">
+                        <constraints>
+                          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text resource-bundle="com/vladsch/md/nav/flex/localization/strings" key="flexmark-spec-example.html.section-language.ast.label"/>
+                        </properties>
+                      </component>
+                    </children>
+                  </grid>
+                  <component id="3949d" class="javax.swing.JSeparator">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                </children>
+              </grid>
+              <grid id="7b2f6" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="2" indent="0" use-parent-layout="true"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="f69aa" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text resource-bundle="com/vladsch/md/nav/flex/localization/strings" key="debug.flexmark-spec-example.rendering.label"/>
+                    </properties>
+                  </component>
+                  <grid id="92d7c" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="8" fill="2" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="11ca" class="javax.swing.JComboBox" binding="myFlexmarkSpecExampleRendering" custom-create="true">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties/>
+                      </component>
+                      <component id="6137b" class="com.intellij.ui.components.JBCheckBox" binding="myFlexmarkSpecExampleRenderHtml">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <hideActionText value="false"/>
+                          <horizontalAlignment value="2"/>
+                          <horizontalTextPosition value="11"/>
+                          <text resource-bundle="com/vladsch/md/nav/flex/localization/strings" key="debug.flexmark-spec-example.render-html.label"/>
+                        </properties>
+                      </component>
+                    </children>
+                  </grid>
+                </children>
+              </grid>
+            </children>
+          </grid>
+        </children>
+      </grid>
+    </children>
+  </grid>
+</form>

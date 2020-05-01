@@ -1,0 +1,52 @@
+<idea-plugin>
+    <extensions defaultExtensionNs="com.intellij">
+        <intentionAction>
+            <className>com.vladsch.md.nav.intentions.wiki.ChangeExplicitToWikiLinkIntention</className>
+            <bundleName>com.vladsch.md.nav.localization.intentions</bundleName>
+            <categoryKey>intention.category.links</categoryKey>
+            <descriptionDirectoryName>basic/ChangeExplicitToWikiLinkIntention</descriptionDirectoryName>
+        </intentionAction>
+
+        <intentionAction>
+            <className>com.vladsch.md.nav.intentions.wiki.ChangeWikiToExplicitLinkIntention</className>
+            <bundleName>com.vladsch.md.nav.localization.intentions</bundleName>
+            <categoryKey>intention.category.wiki</categoryKey>
+            <descriptionDirectoryName>basic/ChangeWikiToExplicitLinkIntention</descriptionDirectoryName>
+        </intentionAction>
+
+        <intentionAction>
+            <className>com.vladsch.md.nav.intentions.wiki.DeleteUnusedWikiLinkTextIntention</className>
+            <bundleName>com.vladsch.md.nav.localization.intentions</bundleName>
+            <categoryKey>intention.category.wiki</categoryKey>
+            <descriptionDirectoryName>basic/DeleteUnusedWikiLinkTextIntention</descriptionDirectoryName>
+        </intentionAction>
+
+        <intentionAction>
+            <className>com.vladsch.md.nav.intentions.wiki.DeleteResolvableWikiLinkTextIntention</className>
+            <bundleName>com.vladsch.md.nav.localization.intentions</bundleName>
+            <categoryKey>intention.category.wiki</categoryKey>
+            <descriptionDirectoryName>basic/DeleteResolvableWikiLinkTextIntention</descriptionDirectoryName>
+        </intentionAction>
+
+        <intentionAction>
+            <className>com.vladsch.md.nav.intentions.wiki.DeleteWikiLinkRefIntention</className>
+            <bundleName>com.vladsch.md.nav.localization.intentions</bundleName>
+            <categoryKey>intention.category.wiki</categoryKey>
+            <descriptionDirectoryName>basic/DeleteWikiLinkRefIntention</descriptionDirectoryName>
+        </intentionAction>
+
+        <intentionAction>
+            <className>com.vladsch.md.nav.intentions.wiki.SwapWikiLinkTextAndRefIntention</className>
+            <bundleName>com.vladsch.md.nav.localization.intentions</bundleName>
+            <categoryKey>intention.category.wiki</categoryKey>
+            <descriptionDirectoryName>basic/SwapWikiLinkTextAndRefIntention</descriptionDirectoryName>
+        </intentionAction>
+
+        <intentionAction>
+            <className>com.vladsch.md.nav.intentions.link.ChangeAutoToExplicitLinkIntention</className>
+            <bundleName>com.vladsch.md.nav.localization.intentions</bundleName>
+            <categoryKey>intention.category.links</categoryKey>
+            <descriptionDirectoryName>basic/ChangeAutoToExplicitLinkIntention</descriptionDirectoryName>
+        </intentionAction>
+    </extensions>
+</idea-plugin>

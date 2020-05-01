@@ -1,0 +1,43 @@
+<idea-plugin>
+    <extensionPoints>
+        <extensionPoint interface="com.vladsch.md.nav.editor.util.HtmlPanelProvider" name="html.panel.provider"/>
+        <extensionPoint interface="com.vladsch.md.nav.editor.util.HtmlGeneratorProvider" name="html.generator.provider"/>
+        <extensionPoint interface="com.vladsch.md.nav.editor.util.HtmlScriptResourceProvider" name="html.script.provider"/>
+        <extensionPoint interface="com.vladsch.md.nav.editor.util.HtmlCssResourceProvider" name="html.css.provider"/>
+        <extensionPoint interface="com.vladsch.md.nav.actions.api.MdCaretContextInfoHandler" name="caretContextInfoHandler"/>
+        <extensionPoint interface="com.vladsch.md.nav.editor.api.MdEditorCustomizationProvider" name="editorCustomizationProvider"/>
+        <extensionPoint interface="com.vladsch.md.nav.editor.api.MdHtmlGeneratorExtension" name="htmlGeneratorExtension"/>
+        <extensionPoint interface="com.vladsch.md.nav.language.completion.MdElementCompletion" name="element.completionProvider"/>
+        <extensionPoint interface="com.vladsch.md.nav.settings.api.MdSettingsExtensionProvider" name="settingsExtension"/>
+        <extensionPoint interface="com.vladsch.md.nav.settings.api.MdProjectSettingsExtensionProvider" name="projectSettingsExtension"/>
+        <extensionPoint interface="com.vladsch.md.nav.settings.api.MdProjectSettingsExtensionHandler" name="projectSettingsHandler"/>
+        <extensionPoint interface="com.vladsch.md.nav.settings.api.MdApplicationSettingsExtensionProvider" name="applicationSettingsExtension"/>
+        <extensionPoint interface="com.vladsch.md.nav.settings.api.MdApplicationRestartRequiredProvider" name="applicationRestartRequired"/>
+        <extensionPoint interface="com.vladsch.md.nav.settings.api.MdSettingsFormExtensionProvider" name="settingsConfigurableExtension"/>
+        <extensionPoint interface="com.vladsch.md.nav.settings.api.MdExtensionInfoProvider" name="extensionInfoProvider"/>
+        <extensionPoint interface="com.vladsch.md.nav.settings.api.MdRenderingProfileManagerFactory" name="renderingProfileManagerFactory"/>
+        <extensionPoint interface="com.vladsch.md.nav.language.api.MdCodeStyleConfigurableProvider" name="codeStyleConfigurableProvider"/>
+        <extensionPoint interface="com.vladsch.md.nav.language.api.MdLanguageProvider" name="languageProvider"/>
+        <extensionPoint interface="com.vladsch.md.nav.highlighter.api.MdColorSettingsExtension" name="colorSettingsExtension"/>
+        <extensionPoint interface="com.vladsch.md.nav.language.api.MdFoldingBuilderProvider" name="foldingBuilderProvider"/>
+        <extensionPoint interface="com.vladsch.md.nav.spellchecking.api.MdSpellcheckingIdentifierTokenizer" name="spellcheckingIdentifierTokenizer"/>
+        <extensionPoint interface="com.vladsch.md.nav.psi.api.MdBlockPrefixProvider" name="blockPrefixProvider"/>
+        <extensionPoint interface="com.vladsch.md.nav.psi.api.MdTypeFactory" name="elementTypeFactory"/>
+        <extensionPoint interface="com.vladsch.md.nav.psi.api.MdElementTextProvider" name="elementTextProvider"/>
+        <extensionPoint interface="com.vladsch.md.nav.parser.api.MdParserExtension" name="parserExtension"/>
+        <extensionPoint interface="com.vladsch.md.nav.parser.cache.data.dependency.DataDependencyProvider" name="dataDependencyProvider"/>
+        <extensionPoint interface="com.vladsch.md.nav.language.api.MdStripTrailingSpacesExtension" name="stripTrailingSpacesExtension"/>
+        <extensionPoint interface="com.vladsch.md.nav.language.api.MdLineMarkerExtension" name="lineMarkerExtension"/>
+        <extensionPoint interface="com.vladsch.md.nav.vcs.api.MdOnProjectSettingsChangedActivityProvider" name="projectSettingsChangedActivity"/>
+        <extensionPoint interface="com.vladsch.md.nav.actions.api.MdElementContextInfoProvider" name="elementContextInfoProvider"/>
+        <extensionPoint interface="com.vladsch.md.nav.actions.api.MdFormatElementHandler" name="formatElementHandler"/>
+        <extensionPoint interface="com.vladsch.md.nav.language.api.MdLinkRefCompletionExtension" name="linkRefCompletionExtension"/>
+        <extensionPoint interface="com.vladsch.md.nav.editor.api.MdPreviewCustomizationProvider" name="previewCustomizationProvider"/>
+        <extensionPoint interface="com.vladsch.md.nav.psi.api.MdTextMapElementTypeProvider" name="textMapElementTypeProvider"/>
+        <extensionPoint interface="com.vladsch.md.nav.parser.api.MdLinkMapProvider" name="linkMapProvider"/>
+        <extensionPoint interface="com.vladsch.md.nav.settings.api.MdRenderingProfileSynchronizerExtension" name="renderingProfileSynchronizerExtension"/>
+        <extensionPoint interface="com.vladsch.md.nav.editor.api.MdFormatCustomizationProvider" name="formatCustomizationProvider"/>
+        <extensionPoint interface="com.vladsch.md.nav.parser.api.MdFencedCodeImageConverter" name="codeFenceImageConverter"/>
+        <extensionPoint interface="com.vladsch.md.nav.settings.api.MdRenderingProfileValidator" name="renderingProfileValidator"/>
+    </extensionPoints>
+</idea-plugin>

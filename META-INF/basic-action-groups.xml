@@ -1,0 +1,102 @@
+<idea-plugin>
+    <actions>
+        <group id="MarkdownNavigator.Toolbar.Left" text="Markdown Navigator Editor Actions">
+            <reference id="MarkdownNavigator.ToggleWrapOnTyping"/>
+            <reference id="MarkdownNavigator.ToggleBold"/>
+            <reference id="MarkdownNavigator.ToggleItalic"/>
+            <reference id="MarkdownNavigator.ToggleStrikeThrough"/>
+            <reference id="MarkdownNavigator.ToggleUnderline"/>
+            <reference id="MarkdownNavigator.ToggleSuperscript"/>
+            <reference id="MarkdownNavigator.ToggleSubscript"/>
+
+            <separator/>
+
+            <reference id="MarkdownNavigator.ToggleCodeSpan"/>
+            <reference id="MarkdownNavigator.InsertLink"/>
+            <reference id="MarkdownNavigator.BlockQuoteRemove"/>
+            <reference id="MarkdownNavigator.BlockQuoteAdd"/>
+
+            <separator/>
+
+            <reference id="MarkdownNavigator.HeaderLevelUp"/>
+            <reference id="MarkdownNavigator.HeaderLevelDown"/>
+            <reference id="MarkdownNavigator.HeaderToggleType"/>
+
+            <separator/>
+
+            <reference id="MarkdownNavigator.ListUnIndent"/>
+            <reference id="MarkdownNavigator.ListIndent"/>
+
+            <group id="MarkdownNavigator.MarkdownListMenu"
+                   text="Markdown List Actions"
+                   popup="true"
+                   icon="MdIcons.EditorActions.Menu_list">
+
+                <reference id="MarkdownNavigator.ListTight"/>
+                <reference id="MarkdownNavigator.ListLoose"/>
+                <reference id="MarkdownNavigator.ListBulletItems"/>
+                <reference id="MarkdownNavigator.ListOrderedItems"/>
+                <reference id="MarkdownNavigator.ListTaskItems"/>
+                <reference id="MarkdownNavigator.ListToggleTaskItemDone"/>
+            </group>
+
+            <separator/>
+
+            <reference id="MarkdownNavigator.ReformatElement"/>
+
+            <separator/>
+
+            <group id="MarkdownNavigator.MarkdownMiscellaneousMenu"
+                   text="Markdown Miscellaneous Actions"
+                   popup="true"
+                   icon="MdIcons.EditorActions.Menu_misc">
+
+                <reference id="MarkdownNavigator.ShowTextHex"/>
+                <reference id="MarkdownNavigator.SizePreferencesDialog"/>
+                <reference id="MarkdownNavigator.DebugTextBoundsToggleState"/>
+            </group>
+
+            <group id="MarkdownNavigator.MarkdownCopyMenu"
+                   text="Markdown Copy Actions"
+                   popup="true"
+                   icon="MdIcons.EditorActions.Menu_copy">
+
+                <reference id="MarkdownNavigator.TranslateDocument"/>
+            </group>
+
+        </group>
+
+        <group id="MarkdownNavigator.ToolsMenu" text="Markdown Navigator" popup="true" icon="MdIcons.Document.MARKDOWN_NAVIGATOR_LOGO">
+            <add-to-group group-id="ToolsMenu" anchor="after" relative-to-action="ExternalToolsGroup"/>
+            <group id="MarkdownNavigator.ExportMarkdownMenu" text="Export Markdown" popup="true">
+                <reference id="MarkdownNavigator.TranslateDocument"/>
+            </group>
+        </group>
+
+        <group id="MarkdownNavigator.FormatMarkdownMenu" text="Format Markdown" popup="true">
+            <add-to-group group-id="MarkdownNavigator.ToolsMenu" anchor="after" relative-to-action="MarkdownNavigator.CopyMarkdownMenu"/>
+            <reference id="MarkdownNavigator.ReformatElement"/>
+        </group>
+
+        <reference id="MarkdownNavigator.CyclicSplitLayoutChange"/>
+        <reference id="MarkdownNavigator.ToggleSplitLayoutChange"/>
+
+        <group id="MarkdownNavigator.Toolbar.Right" class="com.intellij.openapi.actionSystem.DefaultActionGroup"
+               text="Markdown Navigator Editor Layout Actions">
+
+            <reference id="MarkdownNavigator.EditorOnlyLayoutChange"/>
+            <reference id="MarkdownNavigator.PreviewOnlyLayoutChange"/>
+            <reference id="MarkdownNavigator.EditorAndPreviewLayoutChange"/>
+
+            <separator/>
+
+            <reference id="MarkdownNavigator.ToggleEditorSplitLayout"/>
+
+            <separator/>
+
+            <reference id="MarkdownNavigator.HtmlPreviewChange"/>
+            <reference id="MarkdownNavigator.ModifiedHtmlTextChange"/>
+            <reference id="MarkdownNavigator.UnmodifiedHtmlTextChange"/>
+        </group>
+    </actions>
+</idea-plugin>

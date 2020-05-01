@@ -1,0 +1,137 @@
+/*
+ * Copyright (c) 2015-2019 Vladimir Schneider <vladimir.schneider@gmail.com>, all rights reserved.
+ *
+ * This code is private property of the copyright holder and cannot be used without
+ * having obtained a license or prior written permission of the copyright holder.
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ */
+
+package com.vladsch.md.nav.util.format
+
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiFile
+import com.vladsch.md.nav.psi.element.*
+import com.vladsch.md.nav.psi.flexmark.FlexmarkExample
+import com.vladsch.md.nav.psi.flexmark.FlexmarkExampleOptions
+import com.vladsch.md.nav.psi.flexmark.FlexmarkFrontMatterBlock
+
+
+import java.util.*
+
+abstract class FormattingVisitorBase(val psiFile: PsiFile) : FormattingVisitor {
+    private val myControlProcessor = FormatControlProcessor(psiFile)
+
+    override fun format(element: PsiElement, segments: ArrayList<BasedSequence>) {
+        myControlProcessor.processFormatControl(element)
+
+        if (myControlProcessor.isFormattingOff) {
+            segments.add(SmartCharArraySequence(element.text))
+        } else {
+            formatElement(this, element, segments)
+        }
+    }
+
+    companion object {
+        fun formatElement(visitor: FormattingVisitor, element: PsiElement, segments: ArrayList<BasedSequence>) {
+            when (element) {
+// @formatter:off
+                is FlexmarkExample -> visitor.formatFlexmarkExample(element, segments)
+                is FlexmarkExampleOptions -> { }
+                is FlexmarkFrontMatterBlock -> visitor.formatFlexmarkFrontMatter(element, segments)
+                is MdAbbreviatedText -> { }
+                is MdAbbreviation -> visitor.formatAbbreviation(element, segments)
+                is MdAdmonition -> visitor.formatAdmonitionBlock(element, segments)
+                is MdAnchorLink -> visitor.formatAnchorLink(element, segments)
+                is MdAsideBlock -> visitor.formatAsideBlock(element, segments)
+                is MdAttribute -> { }
+                is MdAttributes -> visitor.formatAttributes(element, segments)
+                is MdAtxHeader -> visitor.formatAtxHeader(element, segments)
+                is MdAutoLink -> visitor.formatAutoLink(element, segments)
+                is MdBlankLine -> visitor.formatBlankLine(element, segments)
+                is MdBlockComment -> visitor.formatBlockComment(element, segments)
+                is MdBlockQuote -> visitor.formatBlockQuote(element, segments)
+                is MdDefinition -> visitor.formatDefinition(element, segments)
+                is MdDefinitionList -> visitor.formatDefinitionList(element, segments)
+                is MdDefinitionTerm -> visitor.formatDefinitionTerm(element, segments)
+                is MdEmoji -> visitor.formatEmoji(element, segments)
+                is MdEnumeratedReferenceFormat -> visitor.formatEnumeratedReferenceFormat(element, segments)
+                is MdEnumeratedReferenceFormatText -> visitor.formatText(element, segments)
+                is MdEnumeratedReferenceLink -> visitor.formatEnumeratedReferenceLink(element, segments)
+                is MdEnumeratedReferenceText -> visitor.formatEnumeratedReferenceText(element, segments)
+                is MdExplicitLink -> visitor.formatExplicitLink(element, segments)
+                is MdFootnote -> visitor.formatFootnote(element, segments)
+                is MdFootnoteRef -> visitor.formatFootnoteRef(element, segments)
+                is MdFootnoteText -> visitor.formatFootnoteText(element, segments)
+                is MdGitLabBlockQuote -> visitor.formatGitLabBlockQuote(element, segments)
+                is MdHRule -> visitor.formatHRule(element, segments)
+                is MdHtmlBlock -> visitor.formatHtmlBlock(element, segments)
+                is MdImageLink -> visitor.formatExplicitImage(element, segments)
+                is MdInlineBold -> visitor.formatBold(element, segments)
+                is MdInlineCode -> visitor.formatCode(element, segments)
+                is MdInlineComment -> visitor.formatComment(element, segments)
+                is MdInlineGitLabDel -> visitor.formatGitLabDel(element, segments)
+                is MdInlineGitLabIns -> visitor.formatGitLabIns(element, segments)
+                is MdInlineGitLabMath -> visitor.formatGitLabMath(element, segments)
+                is MdInlineHardBreak -> visitor.formatHardBreak(element, segments)
+                is MdInlineHtml -> visitor.formatInlineHtml(element, segments)
+                is MdInlineHtmlEntity -> visitor.formatHtmlEntity(element, segments)
+                is MdInlineItalic -> visitor.formatItalic(element, segments)
+                is MdInlineMailLink -> visitor.formatMailLink(element, segments)
+                is MdInlineQuoted -> visitor.formatQuoted(element, segments)
+                is MdInlineSpecialText -> visitor.formatSpecialText(element, segments)
+                is MdInlineStrikethrough -> visitor.formatStrikethrough(element, segments)
+                is MdInlineSubscript -> visitor.formatSubscript(element, segments)
+                is MdInlineSuperscript -> visitor.formatSuperscript(element, segments)
+                is MdInlineTypographic -> visitor.formatTypographic(element, segments)
+                is MdInlineUnderline -> visitor.formatUnderline(element, segments)
+                is MdJekyllFrontMatterBlock -> visitor.formatJekyllFrontMatter(element, segments)
+                is MdMacro -> visitor.formatMacro(element, segments)
+                is MdMacroRef -> visitor.formatMacroRef(element, segments)
+                is MdOrderedList -> visitor.formatOrderedList(element, segments)
+                is MdOrderedListItem -> visitor.formatOrderedListItem(element, segments)
+                is MdParagraph -> visitor.formatParagraph(element, segments)
+                is MdRefAnchor -> {}
+                is MdReference -> visitor.formatReference(element, segments)
+                is MdReferenceImage -> visitor.formatReferenceImage(element, segments)
+                is MdReferenceLink -> visitor.formatReferenceLink(element, segments)
+                is MdSetextHeader -> visitor.formatSetextHeader(element, segments)
+                is MdSimToc -> visitor.formatSimToc(element, segments)
+                is MdSimTocContent -> {}
+                is MdTable -> visitor.formatTable(element, segments)
+                is MdTableBody -> { }
+                is MdTableCaption -> { }
+                is MdTableCell -> { }
+                is MdTableHeader -> { }
+                is MdTableRow -> { }
+                is MdTableSeparator -> { }
+                is MdTextBlock -> visitor.formatText(element, segments)
+                is MdToc -> visitor.formatToc(element, segments)
+                is MdUnorderedList -> visitor.formatBulletList(element, segments)
+                is MdUnorderedListItem -> visitor.formatBulletListItem(element, segments)
+                is MdVerbatim -> visitor.formatVerbatim(element, segments)
+                is MdVerbatimContent -> {}
+                is MdWikiLink -> visitor.formatWikiLink(element, segments)
+                is PsiFile -> visitor.formatFile(element, segments)
+// @formatter:on
+
+                is MdComposite -> {
+                    when (element.node.elementType) {
+                        else -> {
+                            @Suppress("UNUSED_VARIABLE")
+                            val tmp = 0
+                        }
+                    }
+                }
+                else -> {
+                }
+            }
+        }
+    }
+}

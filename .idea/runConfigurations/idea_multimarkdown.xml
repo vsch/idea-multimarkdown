@@ -1,9 +1,20 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="idea-multimarkdown" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+  <configuration default="false" name="idea-multimarkdown" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType">
     <module name="idea-multimarkdown" />
-    <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+    <option name="VM_PARAMETERS" value="-Xmx4096m -Xms1024m -ea -Didea.ProcessCanceledException=disabled -Didea.is.internal=true -Didea.platform.prefix=Idea --add-exports=java.base/jdk.internal.vm=ALL-UNNAMED" />
     <option name="PROGRAM_PARAMETERS" value="" />
-    <log_file path="$USER_HOME$/Library/Caches/IdeaIC2016.1/plugins-sandbox/system/log/idea.log" checked="false" skipped="true" show_all="false" alias="IDEA LOG" />
-    <method />
+    <alternative-path path="IDEA Plugin jdk MN Build" alternative-path-enabled="false" />
+    <log_file checked="false" alias="IDEA LOG" path="$USER_HOME$/Library/Caches/IdeaIC2016.2/plugins-sandbox-mn/system/log/idea.log" show_all="true" />
+    <predefined_log_file enabled="true" id="idea.log" />
+    <RunnerSettings RunnerId="Debug with VisualVM">
+      <option name="visualVMId" value="5914421609106" />
+    </RunnerSettings>
+    <RunnerSettings RunnerId="Profile ">
+      <option name="myExternalizedOptions" value="additional-options2=onexit\=snapshot&#10;startup=12" />
+    </RunnerSettings>
+    <method v="2">
+      <option name="Make" enabled="true" />
+      <option name="ToolBeforeRunTask" enabled="true" actionId="Tool_External Tools_Update Sandboxes" />
+    </method>
   </configuration>
 </component>

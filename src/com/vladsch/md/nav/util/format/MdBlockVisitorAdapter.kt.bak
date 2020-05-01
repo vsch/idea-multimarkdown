@@ -1,0 +1,106 @@
+/*
+ * Copyright (c) 2015-2019 Vladimir Schneider <vladimir.schneider@gmail.com>, all rights reserved.
+ *
+ * This code is private property of the copyright holder and cannot be used without
+ * having obtained a license or prior written permission of the copyright holder.
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ */
+
+package com.vladsch.md.nav.util.format
+
+import com.intellij.psi.PsiElement
+import com.vladsch.md.nav.psi.element.*
+import com.vladsch.md.nav.psi.flexmark.FlexmarkExample
+import com.vladsch.md.nav.psi.flexmark.FlexmarkFrontMatterBlock
+
+open class MdBlockVisitorAdapter {
+
+    fun visitChildren(element: PsiElement) {
+    }
+
+    // block elements which have no children to visit
+    fun visitVerbatim(element: MdVerbatim) {}
+
+    fun visitToc(element: MdToc) {}
+    fun visitHRule(element: MdHRule) {}
+    fun visitBlankLine(element: MdBlankLine) {}
+    fun visitBlockComment(element: MdBlockComment) {}
+
+    // block elements with children
+    fun visitAbbreviation(element: MdAbbreviation) = visitChildren(element)
+
+    fun visitAdmonitionBlock(element: MdAdmonition) = visitChildren(element)
+    fun visitAsideBlock(element: MdAsideBlock) = visitChildren(element)
+    fun visitAtxHeader(element: MdAtxHeader) = visitChildren(element)
+    fun visitBlockQuote(element: MdBlockQuote) = visitChildren(element)
+    fun visitBulletList(element: MdUnorderedList) = visitChildren(element)
+    fun visitBulletListItem(element: MdUnorderedListItem) = visitChildren(element)
+    fun visitDefinition(element: MdDefinition) = visitChildren(element)
+    fun visitDefinitionList(element: MdDefinitionList) = visitChildren(element)
+    fun visitDefinitionTerm(element: MdDefinitionTerm) = visitChildren(element)
+    fun visitEnumeratedReferenceFormat(element: MdEnumeratedReferenceFormat) = visitChildren(element)
+    fun visitFlexmarkExample(element: FlexmarkExample) = visitChildren(element)
+    fun visitFlexmarkFrontMatter(element: FlexmarkFrontMatterBlock) = visitChildren(element)
+    fun visitFootnote(element: MdFootnote) = visitChildren(element)
+    fun visitFootnoteText(element: MdFootnoteText) = visitChildren(element)
+    fun visitGitLabBlockQuote(element: MdGitLabBlockQuote) = visitChildren(element)
+    fun visitHtmlBlock(element: MdHtmlBlock) = visitChildren(element)
+    fun visitJekyllFrontMatter(element: MdJekyllFrontMatterBlock) = visitChildren(element)
+    fun visitMacro(element: MdMacro) = visitChildren(element)
+    fun visitOrderedList(element: MdOrderedList) = visitChildren(element)
+    fun visitOrderedListItem(element: MdOrderedListItem) = visitChildren(element)
+    fun visitParagraph(element: MdParagraph) = visitChildren(element)
+    fun visitReference(element: MdReference) = visitChildren(element)
+    fun visitSetextHeader(element: MdSetextHeader) = visitChildren(element)
+    fun visitSimToc(element: MdSimToc) = visitChildren(element)
+    fun visitTable(element: MdTable) = visitChildren(element)
+    fun visitTableBody(element: MdTableBody) = visitChildren(element)
+    fun visitTableCaption(element: MdTableCaption) = visitChildren(element)
+    fun visitTableCell(element: MdTableCell) = visitChildren(element)
+    fun visitTableHeader(element: MdTableHeader) = visitChildren(element)
+    fun visitTableRow(element: MdTableRow) = visitChildren(element)
+    fun visitTableSeparator(element: MdTableSeparator) = visitChildren(element)
+    fun visitText(element: MdTextBlock) = visitChildren(element)
+
+    // inline elements
+    fun visitAnchorLink(element: MdAnchorLink) {}
+
+    fun visitAttributes(element: MdAttributes) {}
+    fun visitAutoLink(element: MdAutoLink) {}
+    fun visitBold(element: MdInlineBold) {}
+    fun visitCode(element: MdInlineCode) {}
+    fun visitComment(element: MdInlineComment) {}
+    fun visitEmoji(element: MdEmoji) {}
+    fun visitEnumeratedReferenceLink(element: MdEnumeratedReferenceLink) {}
+    fun visitEnumeratedReferenceText(element: MdEnumeratedReferenceText) {}
+    fun visitExplicitImage(element: MdImageLink) {}
+    fun visitExplicitLink(element: MdExplicitLink) {}
+    fun visitFootnoteRef(element: MdFootnoteRef) {}
+    fun visitGitLabDel(element: MdInlineGitLabDel) {}
+    fun visitGitLabIns(element: MdInlineGitLabIns) {}
+    fun visitGitLabMath(element: MdInlineGitLabMath) {}
+    fun visitHardBreak(element: MdInlineHardBreak) {}
+    fun visitHtmlEntity(element: MdInlineHtmlEntity) {}
+    fun visitInlineHtml(element: MdInlineHtml) {}
+    fun visitItalic(element: MdInlineItalic) {}
+    fun visitMacroRef(element: MdMacroRef) {}
+    fun visitMailLink(element: MdInlineMailLink) {}
+    fun visitQuoted(element: MdInlineQuoted) {}
+    fun visitRefAnchor(element: MdRefAnchor) {}
+    fun visitReferenceImage(element: MdReferenceImage) {}
+    fun visitReferenceLink(element: MdReferenceLink) {}
+    fun visitSpecialText(element: MdInlineSpecialText) {}
+    fun visitStrikethrough(element: MdInlineStrikethrough) {}
+    fun visitSubscript(element: MdInlineSubscript) {}
+    fun visitSuperscript(element: MdInlineSuperscript) {}
+    fun visitTypographic(element: MdInlineTypographic) {}
+    fun visitUnderline(element: MdInlineUnderline) {}
+    fun visitWikiLink(element: MdWikiLink) {}
+}

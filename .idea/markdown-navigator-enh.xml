@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="MarkdownEnhProjectSettings">
+    <EnhPreviewSettings allowBrowsingInPreview="false" openRemoteLinks="false" replaceUnicodeEmoji="false" showGitHubPageIfSynced="false" />
+    <EnhHtmlSettings embedUrlContent="false" embedImages="false" embedHttpImages="false" migratedMathConversion="true" mathConversion="-1" />
+    <AnnotatorSettings targetHasSpaces="true" linkCaseMismatch="true" wikiCaseMismatch="true" wikiLinkHasDashes="true" notUnderWikiHome="true" targetNotWikiPageExt="true" notUnderSourceWikiHome="true" targetNameHasAnchor="true" targetPathHasAnchor="true" wikiLinkHasSlash="true" wikiLinkHasSubdir="true" wikiLinkHasOnlyAnchor="true" linkTargetsWikiHasExt="true" linkTargetsWikiHasBadExt="true" notUnderSameRepo="true" targetNotUnderVcs="false" linkNeedsExt="true" linkHasBadExt="true" linkTargetNeedsExt="true" linkTargetHasBadExt="true" wikiLinkNotInWiki="true" imageTargetNotInRaw="true" repoRelativeAcrossVcsRoots="true" multipleWikiTargetsMatch="true" unresolvedLinkReference="true" linkIsIgnored="true" anchorIsIgnored="true" anchorIsUnresolved="true" anchorLineReferenceIsUnresolved="true" anchorLineReferenceFormat="true" anchorHasDuplicates="true" abbreviationDuplicates="true" abbreviationNotUsed="true" attributeIdDuplicateDefinition="true" attributeIdNotUsed="true" footnoteDuplicateDefinition="true" footnoteUnresolved="true" footnoteDuplicates="true" footnoteNotUsed="true" macroDuplicateDefinition="true" macroUnresolved="true" macroDuplicates="true" macroNotUsed="true" referenceDuplicateDefinition="true" referenceUnresolved="false" referenceDuplicates="true" referenceNotUsed="true" referenceUnresolvedNumericId="true" enumRefDuplicateDefinition="true" enumRefUnresolved="true" enumRefDuplicates="true" enumRefNotUsed="true" enumRefLinkUnresolved="true" enumRefLinkDuplicates="true" simTocUpdateNeeded="true" simTocTitleSpaceNeeded="true" />
+    <HtmlExportSettings updateOnSave="false" parentDir="" targetDir="" cssDir="css" scriptDir="js" plainHtml="false" imageDir="img" copyLinkedImages="false" imagePathType="0" targetPathType="2" targetExt="" useTargetExt="false" noCssNoScripts="false" useElementStyleAttribute="false" linkToExportedHtml="true" exportOnSettingsChange="true" regenerateOnProjectOpen="false" linkFormatType="HTTP_ABSOLUTE" />
+    <LinkMapSettings>
+      <textMaps>
+        <textMapGroup groupName="Jekyll .md to .html" elementType="NONE" paramText="" textSample="/dir/file.html" fileRefSample="/dir/subDir/file.md">
+          <textMap>
+            <linkEntry isRegEx="true">
+              <pattern>\.html$</pattern>
+              <replaceWith>.md</replaceWith>
+            </linkEntry>
+          </textMap>
+          <fileRefMap>
+            <linkEntry isRegEx="true">
+              <pattern>\.md$</pattern>
+              <replaceWith>.html</replaceWith>
+            </linkEntry>
+            <linkEntry isRegEx="true">
+              <pattern>\.mkd$</pattern>
+              <replaceWith>.html</replaceWith>
+            </linkEntry>
+            <linkEntry isRegEx="true">
+              <pattern>\.markdown$</pattern>
+              <replaceWith>.html</replaceWith>
+            </linkEntry>
+          </fileRefMap>
+        </textMapGroup>
+        <textMapGroup groupName="Jekyll Link Macro" elementType="NONE" paramText="" textSample="{{ static_root }}/img/test.png" fileRefSample="/img/picture.png">
+          <textMap>
+            <linkEntry isRegEx="false">
+              <pattern>{{ static_root }}/</pattern>
+              <replaceWith>/</replaceWith>
+            </linkEntry>
+          </textMap>
+          <fileRefMap>
+            <linkEntry isRegEx="false">
+              <pattern>file://$PROJECT_DIR$/</pattern>
+              <replaceWith>{{ static_root }}/</replaceWith>
+            </linkEntry>
+            <linkEntry isRegEx="false">
+              <pattern>/</pattern>
+              <replaceWith>{{ static_root }}/</replaceWith>
+            </linkEntry>
+          </fileRefMap>
+        </textMapGroup>
+        <textMapGroup groupName="Jekyll Permalink" elementType="JEKYLL_FRONT_MATTER" paramText="" textSample="permalink: /pages/mon/day/test.html" fileRefSample="/test/sample/jekyll.md">
+          <textMap>
+            <linkEntry isRegEx="true">
+              <pattern>(?:^|\n)permalink:\s*(?:(?:.*)/)*([^\s]+)\.html(?:\s|$)</pattern>
+              <replaceWith>$1.md</replaceWith>
+            </linkEntry>
+          </textMap>
+          <fileRefMap>
+            <linkEntry isRegEx="true">
+              <pattern>(?:(?:.*)/)*([^/]+)\.md(?:\s|$)</pattern>
+              <replaceWith>$1</replaceWith>
+            </linkEntry>
+          </fileRefMap>
+        </textMapGroup>
+        <textMapGroup groupName="Jira Reference" elementType="NONE" paramText="" textSample="ITS-0123" fileRefSample="issue-111">
+          <textMap>
+            <linkEntry isRegEx="true">
+              <pattern>ITS-(\d{1,5})</pattern>
+              <replaceWith>http://jira.somedomain.com/browse/ITS-$1</replaceWith>
+            </linkEntry>
+          </textMap>
+          <fileRefMap>
+            <linkEntry isRegEx="true">
+              <pattern />
+              <replaceWith />
+            </linkEntry>
+          </fileRefMap>
+        </textMapGroup>
+        <textMapGroup groupName="Non-References" elementType="NONE" paramText="" textSample="DONE" fileRefSample="issue-111">
+          <textMap>
+            <linkEntry isRegEx="true">
+              <pattern>DONE</pattern>
+              <replaceWith>#</replaceWith>
+            </linkEntry>
+          </textMap>
+          <fileRefMap>
+            <linkEntry isRegEx="true">
+              <pattern />
+              <replaceWith />
+            </linkEntry>
+          </fileRefMap>
+        </textMapGroup>
+        <textMapGroup groupName="OSS LinkRef Map" elementType="LINK_ADDRESS" paramText="" textSample="https://github.com/vsch/idea-multimarkdown/raw/png" fileRefSample="https://github.com/vsch/idea-multimarkdown2/ref/png">
+          <textMap>
+            <linkEntry isRegEx="false">
+              <pattern>https://github.com/vsch/idea-multimarkdown/</pattern>
+              <replaceWith>https://github.com/vsch/idea-multimarkdown2/</replaceWith>
+            </linkEntry>
+            <linkEntry isRegEx="false">
+              <pattern>https://raw.githubusercontent.com/vsch/idea-multimarkdown/</pattern>
+              <replaceWith>https://raw.githubusercontent.com/vsch/idea-multimarkdown2/</replaceWith>
+            </linkEntry>
+            <linkEntry isRegEx="true">
+              <pattern>:[A-Z]</pattern>
+              <replaceWith>https://github.com</replaceWith>
+            </linkEntry>
+          </textMap>
+          <fileRefMap>
+            <linkEntry isRegEx="false">
+              <pattern>https://github.com/vsch/idea-multimarkdown2/</pattern>
+              <replaceWith>https://github.com/vsch/idea-multimarkdown/</replaceWith>
+            </linkEntry>
+            <linkEntry isRegEx="false">
+              <pattern>https://raw.githubusercontent.com/vsch/idea-multimarkdown2/</pattern>
+              <replaceWith>https://raw.githubusercontent.com/vsch/idea-multimarkdown/</replaceWith>
+            </linkEntry>
+          </fileRefMap>
+        </textMapGroup>
+      </textMaps>
+    </LinkMapSettings>
+  </component>
+  <component name="MarkdownExportedFiles">
+    <htmlFiles>
+      <exportedFile path="$PROJECT_DIR$/resources/inspectionDescriptions/LineSeparatorFound.html" settingsVersion="ED6B5B75-7468131B" />
+      <exportedFile path="$PROJECT_DIR$/assets/markdown/plugin-description.html" settingsVersion="ED6B5B75-7468131B" />
+      <exportedFile path="$PROJECT_DIR$/resources/inspectionDescriptions/GitHubTable.html" settingsVersion="ED6B5B75-7468131B" />
+      <exportedFile path="$PROJECT_DIR$/resources/inspectionDescriptions/JekyllFrontMatterFound.html" settingsVersion="ED6B5B75-7468131B" />
+      <exportedFile path="$PROJECT_DIR$/resources/com/vladsch/md/nav/NOTICE.html" settingsVersion="ED6B5B75-7468131B" />
+      <exportedFile path="$PROJECT_DIR$/resources/com/vladsch/md/nav/FEATURES.html" settingsVersion="ED6B5B75-7468131B" />
+      <exportedFile path="$PROJECT_DIR$/resources/inspectionDescriptions/InvalidEmojiShortcut.html" settingsVersion="ED6B5B75-7468131B" />
+    </htmlFiles>
+    <imageFiles />
+    <otherFiles />
+  </component>
+  <component name="MarkdownNavigatorHistory">
+    <PasteImageHistory checkeredTransparentBackground="false" filename="Screenshot_FencedCode" directory="$PROJECT_DIR$/resources/icons/emojis" onPasteImageTargetRef="3" onPasteLinkText="0" onPasteImageElement="2" onPasteLinkElement="2" onPasteReferenceElement="0" cornerRadius="10" borderColor="-4342339" transparentColor="-1" borderWidth="1" trimTop="0" trimBottom="1" trimLeft="2" trimRight="1" transparent="false" roundCorners="true" showPreview="true" bordered="true" scaled="true" cropped="true" hideInapplicableOperations="true" preserveLinkFormat="true" scale="80" scalingInterpolation="1" transparentTolerance="16" saveAsDefaultOnOK="true" linkFormat="0" addHighlights="false" showHighlightCoordinates="true" showHighlights="true" mouseSelectionAddsHighlight="true" outerFilled="true" outerFillColor="-16777216" outerFillTransparent="true" outerFillAlpha="30">
+      <highlightList>
+        <ImageHighlight top="551" left="260" right="490" bottom="574" roundCorners="true" cornerRadius="10" bordered="true" borderColor="-2752436" borderWidth="2" innerFilled="false" innerFillColor="-256" innerFillTransparent="true" innerFillAlpha="30" shape="1" />
+      </highlightList>
+      <directories>
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/transformListTest/expected" />
+        <option name="$PROJECT_DIR$/assets/images/faq/refactoring" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/simpleShapeTest/actual" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/cropTransformTest/expected" />
+        <option name="$PROJECT_DIR$/resources/icons/emojis" />
+        <option name="$PROJECT_DIR$/assets/Faq/Structure" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/transformListTest/actual" />
+        <option name="$PROJECT_DIR$/assets/doc/comms/forums/plugin-dev" />
+        <option name="$PROJECT_DIR$/assets/images/faq/codestyle" />
+        <option name="$PROJECT_DIR$/WebViewDebugSample/public" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/borderedShapeTest/expected" />
+        <option name="$PROJECT_DIR$/resources/com/vladsch/md/nav" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/cropTransformTest/original" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/drawShapesTransformTest/original" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/borderTransformTest/actual" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/checkeredBackgroundTransformTest/expected" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/scaleTransformTest/expected" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/simpleShapeTest/original" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/borderedShapeTest/actual" />
+        <option name="$PROJECT_DIR$/assets/adm" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/checkeredBackgroundTransformTest/actual" />
+        <option name="$PROJECT_DIR$/assets/emojis" />
+        <option name="$PROJECT_DIR$/assets/doc/images" />
+        <option name="$PROJECT_DIR$/resources-flex/icons/png" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/drawShapesTransformTest/expected" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/transparencyTransformTest/actual" />
+        <option name="$PROJECT_DIR$/resources-enh/com/vladsch/md/nav/enh" />
+        <option name="$PROJECT_DIR$/resources/icons/svg" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/borderedShapeTest/original" />
+        <option name="$PROJECT_DIR$/assets/images/faq/support" />
+        <option name="$PROJECT_DIR$/WebViewDebugSample/assets/images" />
+        <option name="$PROJECT_DIR$/resources/icons/editor_actions" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/transparencyTransformTest/original" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/borderTransformTest/expected" />
+        <option name="$PROJECT_DIR$/assets/Faq/Menu" />
+        <option name="$PROJECT_DIR$/assets/images/faq" />
+        <option name="$PROJECT_DIR$/JavaFx-WebView-Debugger/assets" />
+        <option name="$PROJECT_DIR$/assets/adm/misc" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/drawShapesTransformTest/actual" />
+        <option name="$PROJECT_DIR$/assets/doc/comms/youtrack" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/rubberBandShapeTest/actual" />
+        <option name="$PROJECT_DIR$/resources/icons/intention_actions" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/rubberBandShapeTest/expected" />
+        <option name="$PROJECT_DIR$/assets/images/faq/structure" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image" />
+        <option name="$PROJECT_DIR$/assets/images/noload" />
+        <option name="$PROJECT_DIR$/ZKM/images" />
+        <option name="$PROJECT_DIR$/assets/images/faq/menu" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/transparencyTransformTest/expected" />
+        <option name="$PROJECT_DIR$/resources-enh/META-INF" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/rubberBandShapeTest/original" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/checkeredBackgroundTransformTest/original" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/borderTransformTest/original" />
+        <option name="$PROJECT_DIR$/assets/images/faq/jira" />
+        <option name="$PROJECT_DIR$/idea-multimarkdown3.wiki/img" />
+        <option name="$PROJECT_DIR$/resources-flex/icons/svg" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/scaleTransformTest/original" />
+        <option name="$PROJECT_DIR$/assets/doc/comms/Issues" />
+        <option name="$PROJECT_DIR$/assets/images/completions" />
+        <option name="$PROJECT_DIR$/WebViewDebugSample/target/classes" />
+        <option name="$PROJECT_DIR$/JavaFx-WebView-Debugger/images" />
+        <option name="$PROJECT_DIR$/assets/Faq" />
+        <option name="$PROJECT_DIR$/WebViewDebugSample/src/main/resources" />
+        <option name="$PROJECT_DIR$/test/src/com/vladsch/md/nav/enh/language/inspection" />
+        <option name="$PROJECT_DIR$/assets/images" />
+        <option name="$PROJECT_DIR$/test/src/com/vladsch/md/nav/enh/action/styling" />
+        <option name="$PROJECT_DIR$/assets/doc/comms/support" />
+        <option name="$PROJECT_DIR$/resources/icons/png" />
+        <option name="$PROJECT_DIR$/test/src/com/vladsch/md/nav/enh/language/lineMarker" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/cropTransformTest/actual" />
+        <option name="$PROJECT_DIR$/resources/META-INF" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/transformListTest/original" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/scaleTransformTest/actual" />
+        <option name="$PROJECT_DIR$/plugin-util/test-resources/com/vladsch/plugin/util/image/simpleShapeTest/expected" />
+        <option name="$PROJECT_DIR$/resources/icons/layout" />
+      </directories>
+      <filenames />
+    </PasteImageHistory>
+    <CopyImageHistory checkeredTransparentBackground="false" filename="RunConfiguration2" directory="$PROJECT_DIR$/assets/doc/comms/youtrack" onPasteImageTargetRef="2" onPasteLinkText="0" onPasteImageElement="1" onPasteLinkElement="1" onPasteReferenceElement="1" cornerRadius="8" borderColor="-4934476" transparentColor="-1250068" borderWidth="1" trimTop="0" trimBottom="0" trimLeft="0" trimRight="0" transparent="false" roundCorners="false" showPreview="true" bordered="false" scaled="true" cropped="false" hideInapplicableOperations="true" preserveLinkFormat="false" scale="50" scalingInterpolation="1" transparentTolerance="0" saveAsDefaultOnOK="true" linkFormat="0" addHighlights="false" showHighlightCoordinates="true" showHighlights="false" mouseSelectionAddsHighlight="false" outerFilled="true" outerFillColor="-16777216" outerFillTransparent="true" outerFillAlpha="30">
+      <highlightList>
+        <ImageHighlight top="81" left="479" right="772" bottom="111" roundCorners="true" cornerRadius="20" bordered="true" borderColor="-2752436" borderWidth="2" innerFilled="false" innerFillColor="-1" innerFillTransparent="false" innerFillAlpha="0" shape="1" />
+      </highlightList>
+      <directories>
+        <option name="$PROJECT_DIR$/assets/Faq/Menu" />
+        <option name="$PROJECT_DIR$/assets/images/faq/refactoring" />
+        <option name="$PROJECT_DIR$/JavaFx-WebView-Debugger/assets" />
+        <option name="$PROJECT_DIR$/assets/images/faq" />
+        <option name="$PROJECT_DIR$/resources/icons/emojis" />
+        <option name="$PROJECT_DIR$/test/src/com/vladsch/idea/multimarkdown" />
+        <option name="$PROJECT_DIR$/assets/Faq/Structure" />
+        <option name="$PROJECT_DIR$/assets/doc/comms/youtrack" />
+        <option name="$PROJECT_DIR$/assets/doc/comms/forums/plugin-dev" />
+        <option name="$PROJECT_DIR$/resources/icons/intention_actions" />
+        <option name="$PROJECT_DIR$/assets/images/faq/structure" />
+        <option name="$PROJECT_DIR$/assets/images/faq/codestyle" />
+        <option name="$PROJECT_DIR$/assets/images/noload" />
+        <option name="$PROJECT_DIR$/WebViewDebugSample/public" />
+        <option name="$PROJECT_DIR$/assets/images/faq/menu" />
+        <option name="$PROJECT_DIR$/assets/images/faq/jira" />
+        <option name="$PROJECT_DIR$/idea-multimarkdown3.wiki/img" />
+        <option name="$PROJECT_DIR$/assets/images/misc" />
+        <option name="$PROJECT_DIR$/assets/doc/comms/Issues" />
+        <option name="$PROJECT_DIR$/assets/images/completions" />
+        <option name="$PROJECT_DIR$/WebViewDebugSample/target/classes" />
+        <option name="$PROJECT_DIR$/JavaFx-WebView-Debugger/images" />
+        <option name="$PROJECT_DIR$/assets/Faq" />
+        <option name="$PROJECT_DIR$/WebViewDebugSample/src/main/resources" />
+        <option name="$PROJECT_DIR$/test/src/com/vladsch/idea/multimarkdown/language/lineMarker" />
+        <option name="$PROJECT_DIR$/assets/images" />
+        <option name="$PROJECT_DIR$/resources/icons/application" />
+        <option name="$PROJECT_DIR$/assets/doc/images" />
+        <option name="$PROJECT_DIR$/assets/emojis" />
+        <option name="$PROJECT_DIR$/assets/doc/comms/support" />
+        <option name="$PROJECT_DIR$/resources/intentionDescriptions/CopyPlantUmlImageIntention" />
+        <option name="$PROJECT_DIR$/resources/icons/png" />
+        <option name="$PROJECT_DIR$/resources/com/vladsch/idea/multimarkdown" />
+        <option name="$PROJECT_DIR$/resources/icons/svg" />
+        <option name="$PROJECT_DIR$/assets/images/faq/support" />
+        <option name="$PROJECT_DIR$/resources/META-INF" />
+        <option name="$PROJECT_DIR$/WebViewDebugSample/assets/images" />
+        <option name="$PROJECT_DIR$/resources/icons/editor_actions" />
+        <option name="$PROJECT_DIR$/assets/images/adm" />
+        <option name="$PROJECT_DIR$/resources/icons/layout" />
+      </directories>
+      <filenames />
+    </CopyImageHistory>
+    <PasteLinkHistory onPasteImageTargetRef="2" onPasteTargetRef="2" onPasteLinkText="0" onPasteImageElement="2" onPasteLinkElement="2" onPasteWikiElement="1" onPasteReferenceElement="2" hideInapplicableOperations="false" preserveLinkFormat="false" useHeadingForLinkText="false" linkFormat="0" saveAsDefaultOnOK="true" />
+    <TableToJsonHistory>
+      <entries>
+        <TableToJsonHistoryEntry jsonType="1" name="" keyColumn="1: name">
+          <columns>
+            <TableToJsonColumn index="0" isIncluded="true" isIncludeNull="false" isIncludeEmpty="false" isExtractUrl="false" headerText="name" jsonProperty="name" />
+            <TableToJsonColumn index="4" isIncluded="true" isIncludeNull="false" isIncludeEmpty="false" isExtractUrl="true" headerText="picture" jsonProperty="picture" />
+            <TableToJsonColumn index="1" isIncluded="true" isIncludeNull="false" isIncludeEmpty="false" isExtractUrl="false" headerText="email" jsonProperty="email" />
+            <TableToJsonColumn index="2" isIncluded="true" isIncludeNull="false" isIncludeEmpty="false" isExtractUrl="false" headerText="phone" jsonProperty="phone" />
+            <TableToJsonColumn index="3" isIncluded="true" isIncludeNull="false" isIncludeEmpty="false" isExtractUrl="false" headerText="location" jsonProperty="location" />
+          </columns>
+          <usedInFiles>
+            <option name="Markdown Fragment (Enhanced-Features.md:19813).md" />
+          </usedInFiles>
+        </TableToJsonHistoryEntry>
+        <TableToJsonHistoryEntry jsonType="0" name="" keyColumn="1: name">
+          <columns>
+            <TableToJsonColumn index="0" isIncluded="true" isIncludeNull="false" isIncludeEmpty="false" isExtractUrl="false" headerText="name" jsonProperty="name" />
+            <TableToJsonColumn index="4" isIncluded="true" isIncludeNull="false" isIncludeEmpty="false" isExtractUrl="true" headerText="picture" jsonProperty="picture" />
+            <TableToJsonColumn index="1" isIncluded="true" isIncludeNull="false" isIncludeEmpty="false" isExtractUrl="false" headerText="email" jsonProperty="email" />
+            <TableToJsonColumn index="2" isIncluded="true" isIncludeNull="false" isIncludeEmpty="false" isExtractUrl="false" headerText="phone" jsonProperty="phone" />
+            <TableToJsonColumn index="3" isIncluded="true" isIncludeNull="false" isIncludeEmpty="false" isExtractUrl="false" headerText="location" jsonProperty="location" />
+          </columns>
+          <usedInFiles>
+            <option name="Markdown Fragment (Enhanced-Features.md:19813).md" />
+          </usedInFiles>
+        </TableToJsonHistoryEntry>
+      </entries>
+    </TableToJsonHistory>
+    <TableSortHistory>
+      <entries>
+        <TableSortHistoryEntry name="JBM" sortNumericSuffix="true">
+          <columns>
+            <TableSortColumn index="0" isIncluded="true" isDescending="false" isNumeric="true" isNumericLast="false" headerText="Date" />
+            <TableSortColumn index="1" isIncluded="false" isDescending="false" isNumeric="true" isNumericLast="false" headerText="Amount" />
+            <TableSortColumn index="2" isIncluded="false" isDescending="false" isNumeric="false" isNumericLast="false" headerText="Currency" />
+            <TableSortColumn index="3" isIncluded="false" isDescending="false" isNumeric="true" isNumericLast="false" headerText="Customer code" />
+            <TableSortColumn index="4" isIncluded="false" isDescending="false" isNumeric="false" isNumericLast="false" headerText="Country" />
+            <TableSortColumn index="5" isIncluded="false" isDescending="false" isNumeric="false" isNumericLast="false" headerText="Name" />
+            <TableSortColumn index="6" isIncluded="false" isDescending="false" isNumeric="false" isNumericLast="false" headerText="Type" />
+            <TableSortColumn index="7" isIncluded="false" isDescending="false" isNumeric="false" isNumericLast="false" headerText="Ref Num" />
+          </columns>
+          <usedInFiles>
+            <option name="JBM.md" />
+          </usedInFiles>
+        </TableSortHistoryEntry>
+        <TableSortHistoryEntry name="" sortNumericSuffix="true">
+          <columns>
+            <TableSortColumn index="0" isIncluded="true" isDescending="false" isNumeric="true" isNumericLast="false" headerText="Date" />
+            <TableSortColumn index="1" isIncluded="false" isDescending="false" isNumeric="true" isNumericLast="false" headerText="Amount" />
+            <TableSortColumn index="2" isIncluded="false" isDescending="false" isNumeric="false" isNumericLast="false" headerText="Currency" />
+            <TableSortColumn index="3" isIncluded="false" isDescending="false" isNumeric="true" isNumericLast="false" headerText="Customer code" />
+            <TableSortColumn index="4" isIncluded="false" isDescending="false" isNumeric="false" isNumericLast="false" headerText="Country" />
+            <TableSortColumn index="5" isIncluded="false" isDescending="false" isNumeric="false" isNumericLast="false" headerText="Name" />
+            <TableSortColumn index="6" isIncluded="false" isDescending="false" isNumeric="false" isNumericLast="false" headerText="Type" />
+            <TableSortColumn index="7" isIncluded="false" isDescending="false" isNumeric="false" isNumericLast="false" headerText="Ref Num" />
+          </columns>
+          <usedInFiles>
+            <option name="JBM.md" />
+          </usedInFiles>
+        </TableSortHistoryEntry>
+      </entries>
+    </TableSortHistory>
+  </component>
+</project>
