@@ -20,6 +20,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+        CountingBagTest.class,
+        
         TestPathInfo.class,
         TestFileInfo.class,
         TestLinkRef_from.class,

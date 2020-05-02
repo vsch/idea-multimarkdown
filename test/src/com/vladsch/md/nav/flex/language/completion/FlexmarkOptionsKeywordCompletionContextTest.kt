@@ -18,20 +18,15 @@ package com.vladsch.md.nav.flex.language.completion
 import com.vladsch.md.nav.flex.language.FlexmarkOptionsKeywordCompletion
 import com.vladsch.md.nav.language.completion.CompletionContextTestBase
 import com.vladsch.md.nav.language.completion.CompletionTestParamRowGenerator
-import org.junit.Assert.assertEquals
+import com.vladsch.md.nav.language.completion.util.MdCompletionContext
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
 @RunWith(value = Parameterized::class)
-class FlexmarkOptionsKeywordCompletionContextTest constructor(
-    val location: String
-    , val type: String
-    , val expected: String?
-    , val input: String
-    , val isDefault: Boolean
-    , val isAuto: Boolean
-) : CompletionContextTestBase(FlexmarkOptionsKeywordCompletion.completionContext) {
+class FlexmarkOptionsKeywordCompletionContextTest : CompletionContextTestBase() {
+
+    override val context: MdCompletionContext get() = FlexmarkOptionsKeywordCompletion.completionContext
 
     companion object {
         @Parameterized.Parameters(name = "{1}")

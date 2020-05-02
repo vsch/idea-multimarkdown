@@ -258,7 +258,7 @@ class MdLinkResolverManager(override val project: Project) : Disposable, Project
     }
 
     private fun updateVcsRoots() {
-        if (project.isDisposed || MdPlugin.RUNNING_TESTS) return
+        if (project.isDisposed) return
 
         // this should really be the place that creates gitHubVcsRoots
         val gitHubVcsMap = ConcurrentHashMap<String, GitHubVcsRoot>()

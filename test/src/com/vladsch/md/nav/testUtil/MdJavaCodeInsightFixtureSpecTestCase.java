@@ -17,7 +17,6 @@ package com.vladsch.md.nav.testUtil;
 
 import com.vladsch.flexmark.util.data.DataHolder;
 import com.vladsch.flexmark.util.data.MutableDataSet;
-import com.vladsch.md.nav.MdPlugin;
 import com.vladsch.md.nav.testUtil.cases.MdCodeInsightFixtureSpecTestCase;
 import com.vladsch.plugin.test.util.JavaCodeInsightFixtureSpecTestCase;
 import com.vladsch.plugin.test.util.cases.CodeInsightFixtureSpecTestCase;
@@ -45,7 +44,6 @@ public abstract class MdJavaCodeInsightFixtureSpecTestCase extends JavaCodeInsig
 
     @Override
     public void setUp() throws Exception {
-        MdPlugin.RUNNING_TESTS = false;
         super.setUp();
     }
 

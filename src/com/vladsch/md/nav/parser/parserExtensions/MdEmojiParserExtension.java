@@ -64,7 +64,7 @@ public class MdEmojiParserExtension implements MdParserExtension {
             EmojiShortcutType emojiShortcutType = renderingProfile.getParserSettings().getEmojiShortcutsType().flexmarkType;
             options.addExtension(EmojiExtension.class, EmojiExtension::create)
                     .addExtension(MdNavigatorEmojiExtension.class, MdNavigatorEmojiExtension::create)
-                    .set(EmojiExtension.ROOT_IMAGE_PATH, emojiInstallDirectory(MdPlugin.RUNNING_TESTS))
+                    .set(EmojiExtension.ROOT_IMAGE_PATH, emojiInstallDirectory(false))
                     .set(EmojiExtension.USE_SHORTCUT_TYPE, emojiShortcutType)
                     .set(EmojiExtension.USE_IMAGE_TYPE, emojiImageType);
 

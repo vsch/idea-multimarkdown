@@ -19,7 +19,7 @@ import com.vladsch.flexmark.test.util.spec.ResourceLocation;
 import com.vladsch.flexmark.test.util.spec.SpecExample;
 import com.vladsch.flexmark.util.data.DataHolder;
 import com.vladsch.flexmark.util.data.MutableDataSet;
-import com.vladsch.md.nav.enh.testUtil.cases.MdEnhSpecTest;
+import com.vladsch.md.nav.testUtil.cases.MdEnhSpecTest;
 import com.vladsch.md.nav.flex.testUtil.cases.FlexOptionsForStyleSettings;
 import com.vladsch.md.nav.testUtil.MdLightPlatformCodeInsightFixtureSpecTestCase;
 import com.vladsch.plugin.test.util.cases.CodeInsightFixtureSpecTestCase;
@@ -33,7 +33,6 @@ import org.junit.runners.Parameterized;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @RunWith(value = Parameterized.class)
 public class FlexmarkStripTrailingSpacesFilterFactoryTest extends MdLightPlatformCodeInsightFixtureSpecTestCase implements FlexOptionsForStyleSettings {

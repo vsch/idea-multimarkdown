@@ -21,7 +21,7 @@ import com.vladsch.flexmark.test.util.spec.SpecExample;
 import com.vladsch.flexmark.util.ast.Node;
 import com.vladsch.flexmark.util.data.DataHolder;
 import com.vladsch.flexmark.util.data.MutableDataSet;
-import com.vladsch.md.nav.enh.testUtil.MdEnhLightPlatformCodeInsightFixtureSpecTestCase;
+import com.vladsch.md.nav.testUtil.MdEnhLightPlatformCodeInsightFixtureSpecTestCase;
 import com.vladsch.md.nav.flex.testUtil.cases.FlexOptionsForStyleSettings;
 import com.vladsch.md.nav.parser.util.FlexmarkLexParser;
 import com.vladsch.md.nav.parser.util.FlexmarkLexRenderer;

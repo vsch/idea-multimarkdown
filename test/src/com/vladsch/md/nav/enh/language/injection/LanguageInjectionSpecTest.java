@@ -18,7 +18,7 @@ package com.vladsch.md.nav.enh.language.injection;
 import com.vladsch.flexmark.test.util.spec.ResourceLocation;
 import com.vladsch.flexmark.test.util.spec.SpecExample;
 import com.vladsch.flexmark.util.data.DataHolder;
-import com.vladsch.md.nav.enh.testUtil.MdEnhLightPlatformActionSpecTestCase;
+import com.vladsch.md.nav.testUtil.MdEnhLightPlatformActionSpecTestCase;
 import com.vladsch.plugin.test.util.cases.CodeInsightFixtureSpecTestCase;
 import com.vladsch.plugin.test.util.renderers.ActionSpecRenderer;
 import org.jetbrains.annotations.NotNull;

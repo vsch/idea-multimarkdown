@@ -3,7 +3,6 @@
 package com.vladsch.md.nav.flex.settings;
 
 import com.vladsch.flexmark.util.data.DataKey;
-import com.vladsch.md.nav.settings.MdApplicationLocalSettings;
 import com.vladsch.md.nav.settings.MdDebugSettings;
 import com.vladsch.md.nav.settings.api.MdSettingsExtensionProvider;
 import org.jetbrains.annotations.NotNull;

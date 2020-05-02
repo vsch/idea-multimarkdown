@@ -15,14 +15,41 @@
 
 package com.vladsch.md.nav.language.completion
 
+import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
+import com.vladsch.md.nav.MdFileType
 import com.vladsch.md.nav.language.completion.util.MdCompletionContext
 import com.vladsch.md.nav.language.completion.util.TextContext
-import com.vladsch.md.nav.enh.testUtil.MdEnhSpecTestSetup
 import com.vladsch.plugin.util.TestUtils
-import com.vladsch.plugin.util.toBased
 import com.vladsch.plugin.util.indexOrNull
+import com.vladsch.plugin.util.toBased
+import org.junit.After
+import org.junit.Before
+import org.junit.runners.Parameterized
 
-open class CompletionContextTestBase(val context: MdCompletionContext) {
+abstract class CompletionContextTestBase : LightPlatformCodeInsightFixtureTestCase() {
+    abstract val context: MdCompletionContext
+
+// @formatter:off
+
+    @Parameterized.Parameter(0) @JvmField var location: String = ""
+    @Parameterized.Parameter(1) @JvmField var type: String = ""
+    @Parameterized.Parameter(2) @JvmField var expected: String? = null
+    @Parameterized.Parameter(3) @JvmField var input: String = ""
+    @Parameterized.Parameter(4) @JvmField var isDefault: Boolean = false
+    @Parameterized.Parameter(5) @JvmField var isAuto: Boolean = false 
+    // @formatter:on
+
+    @Before
+    fun before() {
+        super.setUp()
+        myFixture.configureByText(MdFileType.INSTANCE, "dummy")
+    }
+
+    @After
+    fun after() {
+        super.tearDown()
+    }
+
     fun String.params(): TextContext? {
         val pos = indexOf('|')
         return context.getContext(substring(0, pos) + TestUtils.DUMMY_IDENTIFIER + substring(pos + 1), 0, pos, false)
@@ -59,12 +86,6 @@ open class CompletionContextTestBase(val context: MdCompletionContext) {
             afterCaretChars.toBased(),
             hasEndMarker
         )
-    }
-
-    companion object {
-        init {
-            MdEnhSpecTestSetup.RUNNING_TESTS()
-        }
     }
 }
 

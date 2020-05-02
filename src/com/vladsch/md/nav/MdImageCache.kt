@@ -22,7 +22,6 @@ import com.vladsch.plugin.util.suffixWith
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 import java.util.function.Consumer
-import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 class MdImageCache : Disposable {
     companion object {
@@ -43,23 +42,14 @@ class MdImageCache : Disposable {
                         ?: throw IllegalStateException()
                 }
             }
-
-        val testTempDirPath: String by lazy {
-            if (MdPlugin.RUNNING_TESTS) {
-                val tempDir = File(System.getProperty("user.home")).plus(".markdownNavigator").plus("image-cache")
-                tempDir.absolutePath.suffixWith('/')
-            } else {
-                ""
-            }
-        }
     }
 
     val imageMD5PathMap = ConcurrentHashMap<String, String>()
     val cachedImagesMap = ConcurrentHashMap<String, String>()
-    var tempDirPath: String = testTempDirPath
+    var tempDirPath: String = ""
         private set
-    
-    val fileWriterLock:Any = Object();
+
+    val fileWriterLock: Any = Object();
 
     init {
         initComponent()

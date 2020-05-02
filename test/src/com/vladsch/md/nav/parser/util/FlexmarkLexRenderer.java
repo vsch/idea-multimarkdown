@@ -24,7 +24,7 @@ import com.vladsch.flexmark.util.data.DataHolder;
 import com.vladsch.flexmark.util.data.DataKey;
 import com.vladsch.flexmark.util.data.ScopedDataSet;
 import com.vladsch.flexmark.util.misc.Ref;
-import com.vladsch.md.nav.enh.testUtil.MdEnhSpecTestSetup;
+import com.vladsch.md.nav.testUtil.MdEnhSpecTestSetup;
 import com.vladsch.md.nav.parser.PegdownOptionsAdapter;
 import com.vladsch.md.nav.parser.api.HtmlPurpose;
 import com.vladsch.md.nav.parser.api.ParserPurpose;

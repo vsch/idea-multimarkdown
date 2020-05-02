@@ -52,10 +52,6 @@ class TestLinkResolver_Completion constructor(
     }
 
     companion object {
-        init {
-            MdPlugin.RUNNING_TESTS = true
-        }
-
         class RowGenerator(private val lineProvider: LineProvider? = null) : ParamRowGenerator() {
             fun row(
                 containingFile: String

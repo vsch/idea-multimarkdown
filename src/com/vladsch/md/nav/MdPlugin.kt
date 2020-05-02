@@ -448,19 +448,9 @@ class MdPlugin : BaseComponent, Disposable {
             return null
         }
 
-        private val _instance: MdPlugin by lazy { MdPlugin() }
-
         @JvmStatic
         val instance: MdPlugin
-            get() = if (RUNNING_TESTS) {
-                _instance;
-            } else {
-                ApplicationManager.getApplication().getComponent(MdPlugin::class.java) ?: throw IllegalStateException()
-            }
-
-        // FIX: remove this setting and use platform tests instead
-        @JvmField
-        var RUNNING_TESTS: Boolean = false
+            get() = ApplicationManager.getApplication().getComponent(MdPlugin::class.java) ?: throw IllegalStateException()
 
         @JvmStatic
         val testExtensions: TestExtensionProvider by lazy { TestExtensionProvider() }

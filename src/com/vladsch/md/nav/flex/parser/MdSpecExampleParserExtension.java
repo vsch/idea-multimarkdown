@@ -71,7 +71,7 @@ public class MdSpecExampleParserExtension implements MdParserExtension {
                 Supplier<? extends MdLinkResolver> supplier = MdNavigatorExtension.LINK_RESOLVER.get(options);
                 MdLinkResolver resolver = supplier == null ? null: supplier.get();
                 boolean productionSpecParserMode = renderingProfile.getParserSettings().anyOptions(MdLexParser.PRODUCTION_SPEC_PARSER);
-                boolean testSpecParserMode = !productionSpecParserMode && (MdPlugin.RUNNING_TESTS || ApplicationManager.getApplication().isUnitTestMode());
+                boolean testSpecParserMode = !productionSpecParserMode && (ApplicationManager.getApplication().isUnitTestMode());
 
                 if (resolver != null && resolver.getContainingFile() instanceof ProjectFileRef) {
                     PsiFile psiFile = ((ProjectFileRef) resolver.getContainingFile()).getPsiFile();

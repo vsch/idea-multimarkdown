@@ -44,12 +44,6 @@ public abstract class MdLightPlatformCodeInsightFixtureSpecTestCase extends Ligh
     }
 
     @Override
-    public void setUp() throws Exception {
-        MdPlugin.RUNNING_TESTS = false;
-        super.setUp();
-    }
-
-    @Override
     @Nullable
     public StringBuilder getCacheLogs() {
         return myCacheLogs;

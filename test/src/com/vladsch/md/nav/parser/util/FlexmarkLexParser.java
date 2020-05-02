@@ -27,7 +27,7 @@ import com.vladsch.md.nav.parser.MockPsiBuilderFillingVisitor;
 import com.vladsch.md.nav.parser.ast.MdASTCompositeNode;
 import com.vladsch.md.nav.psi.util.MdTypes;
 import com.vladsch.md.nav.settings.MdRenderingProfile;
-import com.vladsch.md.nav.enh.testUtil.MdEnhSpecTestSetup;
+import com.vladsch.md.nav.testUtil.MdEnhSpecTestSetup;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

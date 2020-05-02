@@ -132,7 +132,7 @@ public class LexParserFlexmarkASTVisitor implements MdParser,
     public LexParserFlexmarkASTVisitor(final Document document) {
         this.myDocument = document;
         this.length = document.getEndOffset();
-        this.rootASTNode = new MdASTCompositeNode(MdPlugin.RUNNING_TESTS ? MdTypes.FILE : MdParserDefinition.MARKDOWN_FILE, 0, this.length);
+        this.rootASTNode = new MdASTCompositeNode(MdParserDefinition.MARKDOWN_FILE, 0, this.length);
         this.currentASTNode = this.rootASTNode;
         myLexParserState = LexParserState.getInstance();
 

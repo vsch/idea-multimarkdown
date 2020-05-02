@@ -114,10 +114,6 @@ class TestLinkResolver_Basic_wiki_normal_file constructor(
     }
 
     companion object {
-        init {
-            MdPlugin.RUNNING_TESTS = true
-        }
-
         fun resolveRelativePath(filePathInfo: PathInfo, filePath: String?): PathInfo? {
             return if (filePath == null) null else PathInfo.appendParts(filePathInfo.path, filePath.splitToSequence("/"))
         }

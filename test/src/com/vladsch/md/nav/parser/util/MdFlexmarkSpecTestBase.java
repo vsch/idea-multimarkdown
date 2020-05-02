@@ -24,7 +24,7 @@ import com.vladsch.flexmark.test.util.spec.SpecExample;
 import com.vladsch.flexmark.util.data.DataHolder;
 import com.vladsch.flexmark.util.data.DataKey;
 import com.vladsch.flexmark.util.data.MutableDataSet;
-import com.vladsch.md.nav.enh.testUtil.MdEnhSpecTestSetup;
+import com.vladsch.md.nav.testUtil.MdEnhSpecTestSetup;
 import com.vladsch.md.nav.language.MdCodeStyleSettings;
 import com.vladsch.md.nav.settings.MdApplicationSettings;
 import com.vladsch.md.nav.settings.MdHtmlSettings;
@@ -38,10 +38,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public abstract class MdFlexmarkSpecTestBase extends ComboSpecTestCase {
-    static {
-        MdEnhSpecTestSetup.RUNNING_TESTS();
-    }
-
     public static final DataKey<Boolean> IGNORE = TestUtils.IGNORE;
     public static final DataKey<Boolean> FAIL = TestUtils.FAIL;
     public static final DataKey<Boolean> NO_FILE_EOL = TestUtils.NO_FILE_EOL;

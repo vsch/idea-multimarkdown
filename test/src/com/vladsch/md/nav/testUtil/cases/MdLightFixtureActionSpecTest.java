@@ -28,12 +28,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.vladsch.md.nav.enh.testUtil.MdEnhTestActions.ListBulletItems;
-import static com.vladsch.md.nav.enh.testUtil.MdEnhTestActions.ListOrderedItems;
-import static com.vladsch.md.nav.enh.testUtil.MdEnhTestActions.ListTaskItems;
-import static com.vladsch.md.nav.enh.testUtil.MdEnhTestActions.ListToggleTaskItemDone;
-import static com.vladsch.md.nav.enh.testUtil.MdEnhTestActions.ReformatDocument;
-import static com.vladsch.md.nav.enh.testUtil.MdEnhTestActions.ReformatElement;
+import static com.vladsch.md.nav.testUtil.MdEnhTestActions.ListBulletItems;
+import static com.vladsch.md.nav.testUtil.MdEnhTestActions.ListOrderedItems;
+import static com.vladsch.md.nav.testUtil.MdEnhTestActions.ListTaskItems;
+import static com.vladsch.md.nav.testUtil.MdEnhTestActions.ListToggleTaskItemDone;
+import static com.vladsch.md.nav.testUtil.MdEnhTestActions.ReformatElement;
 
 public interface MdLightFixtureActionSpecTest extends MdCodeInsightFixtureSpecTestCase, LightFixtureActionSpecTest {
 

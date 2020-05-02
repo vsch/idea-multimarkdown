@@ -22,7 +22,8 @@ import com.vladsch.plugin.test.util.ParamRowGenerator.Decorator
 class CompletionTestParamRowGenerator(private val lineProvider: LineProvider? = null) : ParamRowGenerator() {
     fun row(type: String, expected: String?, input: String, isDefault: Boolean, isAuto: Boolean): CompletionTestParamRowGenerator {
         val escaped = input.replace("\n", "\\n").replace("\"", "\\\"")
-        super.row(1, arrayOf("$type - \"$escaped\"", expected, input, isDefault, isAuto),
+        super.row(1, arrayOf(
+            "$type - \"$escaped\"", expected, input, isDefault, isAuto),
             Decorator { _, prefix, suffix -> "$prefix$type - \"$escaped\"\n$suffix" },
             lineProvider,
             ColumnProvider { 26 + type.length + 1 + (expected?.length ?: 3) })

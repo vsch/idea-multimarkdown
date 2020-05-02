@@ -39,7 +39,7 @@ class FlexmarkDebugSettings : StateHolderImpl({ FlexmarkDebugSettings() }), MdSe
 
     companion object {
         @JvmField
-        val KEY = DataKey("MdEnhDebugSettings") { FlexmarkDebugSettings() }
+        val KEY = DataKey("FlexmarkDebugSettings") { FlexmarkDebugSettings() }
 
         @JvmField
         val DEFAULT = FlexmarkDebugSettings()

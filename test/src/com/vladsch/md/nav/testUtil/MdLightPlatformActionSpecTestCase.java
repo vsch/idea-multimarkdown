@@ -18,8 +18,6 @@ package com.vladsch.md.nav.testUtil;
 import com.vladsch.flexmark.test.util.spec.SpecExample;
 import com.vladsch.flexmark.util.data.DataHolder;
 import com.vladsch.flexmark.util.sequence.BasedSequence;
-import com.vladsch.md.nav.enh.testUtil.renderers.MdEnhActionSpecRenderer;
-import com.vladsch.md.nav.testUtil.MdLightPlatformCodeInsightFixtureSpecTestCase;
 import com.vladsch.md.nav.testUtil.cases.MdLightFixtureActionSpecTest;
 import com.vladsch.md.nav.testUtil.renderers.MdActionSpecRenderer;
 import com.vladsch.plugin.test.util.cases.CodeInsightFixtureSpecTestCase;

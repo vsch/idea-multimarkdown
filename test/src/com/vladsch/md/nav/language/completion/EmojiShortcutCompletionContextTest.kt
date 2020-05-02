@@ -15,20 +15,15 @@
 
 package com.vladsch.md.nav.language.completion
 
-import org.junit.Assert.assertEquals
+import com.vladsch.md.nav.language.completion.util.MdCompletionContext
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
 @RunWith(value = Parameterized::class)
-class EmojiShortcutCompletionContextTest constructor(
-    val location: String
-    , val type: String
-    , val expected: String?
-    , val input: String
-    , val isDefault: Boolean
-    , val isAuto: Boolean
-) : CompletionContextTestBase(EmojiShortcutCompletion.completionContext) {
+class EmojiShortcutCompletionContextTest : CompletionContextTestBase() {
+
+    override val context: MdCompletionContext get() = EmojiShortcutCompletion.completionContext
 
     companion object {
         @Parameterized.Parameters(name = "{1}")

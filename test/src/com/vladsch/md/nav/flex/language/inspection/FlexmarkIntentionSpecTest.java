@@ -18,7 +18,7 @@ package com.vladsch.md.nav.flex.language.inspection;
 import com.vladsch.flexmark.test.util.spec.ResourceLocation;
 import com.vladsch.flexmark.util.data.DataHolder;
 import com.vladsch.flexmark.util.data.MutableDataSet;
-import com.vladsch.md.nav.enh.testUtil.cases.MdEnhSpecTest;
+import com.vladsch.md.nav.testUtil.cases.MdEnhSpecTest;
 import com.vladsch.md.nav.flex.settings.FlexmarkDebugSettings;
 import com.vladsch.md.nav.flex.testUtil.cases.FlexOptionsForStyleSettings;
 import com.vladsch.md.nav.testUtil.MdLightPlatformIntentionSpecTestCase;

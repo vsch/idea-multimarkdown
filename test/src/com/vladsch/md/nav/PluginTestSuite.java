@@ -12,9 +12,9 @@
  * under the License.
  *
  */
-package com.vladsch.md.nav.enh;
+package com.vladsch.md.nav;
 
-import com.vladsch.md.nav.TestSuite;
+import com.vladsch.md.nav.editor.util.HtmlCompatibilityTest;
 import com.vladsch.md.nav.enh.action.EnhActionsTestSuite;
 import com.vladsch.md.nav.enh.language.MdStripTrailingSpacesFilterFactoryTest;
 import com.vladsch.md.nav.enh.language.injection.LanguageInjectionSpecTest;
@@ -23,12 +23,29 @@ import com.vladsch.md.nav.enh.language.lineMarker.LineMarkerSpecTest;
 import com.vladsch.md.nav.enh.parser.MdEnhFlexmarkParserTest;
 import com.vladsch.md.nav.enh.parser.cache.MdEnhCachedFileElementsTest;
 import com.vladsch.md.nav.flex.FlexmarkPluginTestSuite;
+import com.vladsch.md.nav.language.completion.EmojiShortcutCompletionContextTest;
+import com.vladsch.md.nav.parser.MdParserTest;
+import com.vladsch.md.nav.parser.MdPlainTextLexerTest;
+import com.vladsch.md.nav.parser.cache.MdCachedFileElementsTest;
+import com.vladsch.md.nav.settings.SerializersTest;
+import com.vladsch.md.nav.spellchecking.SpellcheckingTestSuite;
+import com.vladsch.md.nav.util.UtilTestSuite;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestSuite.class,
+        UtilTestSuite.class,
+        HtmlCompatibilityTest.class,
+        SpellcheckingTestSuite.class,
+        SerializersTest.class,
+
+        MdPlainTextLexerTest.class,
+
+        EmojiShortcutCompletionContextTest.class,
+
+        MdParserTest.class,
+        MdCachedFileElementsTest.class,
 
         MdStripTrailingSpacesFilterFactoryTest.class,
         MdEnhCachedFileElementsTest.class,

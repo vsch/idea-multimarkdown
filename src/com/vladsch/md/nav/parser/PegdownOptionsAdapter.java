@@ -111,8 +111,6 @@ public class PegdownOptionsAdapter {
             @Nullable MdLinkResolver linkResolver,
             @NotNull MdRenderingProfile renderingProfile
     ) {
-        boolean inTest = MdPlugin.RUNNING_TESTS;
-
         if (myParserOptions != null) renderingProfile.getParserSettings().setOptionsFlags(myParserOptions);
         if (myPegdownExtensions != null) renderingProfile.getParserSettings().setPegdownFlags(myPegdownExtensions);
 

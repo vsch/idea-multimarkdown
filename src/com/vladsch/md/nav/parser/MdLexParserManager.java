@@ -57,7 +57,7 @@ public class MdLexParserManager {
         // use an immutable copy so it does not change in the process of being parsed
         final BasedSequence input = buffer instanceof BasedSequence ? (BasedSequence) buffer : BasedSequence.of(ImmutableCharSequence.asImmutable(buffer));
 
-        if (MdPlugin.RUNNING_TESTS || ApplicationManager.getApplication().isUnitTestMode()) {
+        if (ApplicationManager.getApplication().isUnitTestMode()) {
             rootNode = parser.parse(input);
         } else {
             try {
@@ -95,7 +95,7 @@ public class MdLexParserManager {
         // use an immutable copy so it does not change in the process of being parsed
         final BasedSequence input = BasedSequence.of(ImmutableCharSequence.asImmutable(buffer));
 
-        if (MdPlugin.RUNNING_TESTS || MdApplicationSettings.getInstance().getDebugSettings().getGenerateParserExceptions()) {
+        if (MdApplicationSettings.getInstance().getDebugSettings().getGenerateParserExceptions()) {
             rootNode = parser.parse(input);
         } else {
             try {

@@ -15,46 +15,20 @@
 
 package com.vladsch.md.nav.testUtil;
 
-import com.intellij.psi.PsiFile;
 import com.vladsch.flexmark.test.util.SettableExtractedInstance;
 import com.vladsch.flexmark.test.util.SettableInstance;
 import com.vladsch.flexmark.util.data.DataHolder;
 import com.vladsch.flexmark.util.data.DataKey;
 import com.vladsch.flexmark.util.data.DataKeyAggregator;
 import com.vladsch.flexmark.util.data.DataSet;
-import com.vladsch.md.nav.MdPlugin;
-import com.vladsch.md.nav.actions.api.MdCaretContextInfoHandler;
-import com.vladsch.md.nav.actions.api.MdElementContextInfoProvider;
-import com.vladsch.md.nav.actions.api.MdFormatElementHandler;
-import com.vladsch.md.nav.editor.api.MdEditorCustomizationProvider;
 import com.vladsch.md.nav.language.MdCodeStyleSettings;
-import com.vladsch.md.nav.language.api.MdCodeStyleConfigurableProvider;
-import com.vladsch.md.nav.language.api.MdFoldingBuilderProvider;
-import com.vladsch.md.nav.language.api.MdStripTrailingSpacesExtension;
 import com.vladsch.md.nav.parser.Extensions;
 import com.vladsch.md.nav.parser.MdLexParser;
-import com.vladsch.md.nav.parser.api.MdParserExtension;
-import com.vladsch.md.nav.parser.parserExtensions.MdEmojiParserExtension;
-import com.vladsch.md.nav.parser.parserExtensions.MdJekyllExtension;
-import com.vladsch.md.nav.parser.parserExtensions.MdWikiLinkParserExtension;
-import com.vladsch.md.nav.psi.api.MdBlockPrefixProvider;
-import com.vladsch.md.nav.psi.api.MdElementTextProvider;
-import com.vladsch.md.nav.psi.api.MdTypeFactory;
 import com.vladsch.md.nav.settings.MdApplicationSettings;
 import com.vladsch.md.nav.settings.MdHtmlSettings;
 import com.vladsch.md.nav.settings.MdParserSettings;
 import com.vladsch.md.nav.settings.MdPreviewSettings;
 import com.vladsch.md.nav.settings.MdRenderingProfile;
-import com.vladsch.md.nav.settings.api.MdApplicationRestartRequiredProvider;
-import com.vladsch.md.nav.settings.api.MdApplicationSettingsExtensionProvider;
-import com.vladsch.md.nav.settings.api.MdExtensionInfoProvider;
-import com.vladsch.md.nav.settings.api.MdProjectSettingsExtensionHandler;
-import com.vladsch.md.nav.settings.api.MdProjectSettingsExtensionProvider;
-import com.vladsch.md.nav.settings.api.MdRenderingProfileManagerFactory;
-import com.vladsch.md.nav.settings.api.MdSettingsExtensionProvider;
-import com.vladsch.md.nav.settings.api.MdSettingsFormExtensionProvider;
-import com.vladsch.md.nav.spellchecking.api.MdSpellcheckingIdentifierTokenizer;
-import com.vladsch.md.nav.vcs.api.MdOnProjectSettingsChangedActivityProvider;
 import com.vladsch.plugin.test.util.SpecTestSetup;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -66,69 +40,6 @@ import java.util.function.Consumer;
 public class MdSpecTestSetup extends SpecTestSetup {
     static {
         MdResourceUrlResolvers.registerResourceUrlResolvers();
-    }
-    public static void RUNNING_TESTS() {
-        MdPlugin.RUNNING_TESTS = true;
-        MdPlugin.getTestExtensions()
-                .addExtensions(MdParserExtension.EP_NAME, () -> new MdParserExtension[] {
-                        new MdEmojiParserExtension(),
-                        new MdJekyllExtension(),
-                        new MdWikiLinkParserExtension(),
-                })
-
-                .addExtensions(MdSettingsExtensionProvider.EP_NAME, () -> new MdSettingsExtensionProvider[] {
-                })
-
-                .addExtensions(MdBlockPrefixProvider.EP_NAME, () -> new MdBlockPrefixProvider[] {
-                })
-
-                .addExtensions(MdCaretContextInfoHandler.EP_NAME, () -> new MdCaretContextInfoHandler[] {
-                })
-                .addExtensions(MdEditorCustomizationProvider.EP_NAME, () -> new MdEditorCustomizationProvider[] {
-
-                })
-                .addExtensions(MdProjectSettingsExtensionProvider.EP_NAME, () -> new MdProjectSettingsExtensionProvider[] {
-                })
-                .addExtensions(MdProjectSettingsExtensionHandler.EP_NAME, () -> new MdProjectSettingsExtensionHandler[] {
-
-                })
-                .addExtensions(MdApplicationSettingsExtensionProvider.EP_NAME, () -> new MdApplicationSettingsExtensionProvider[] {
-
-                })
-                .addExtensions(MdApplicationRestartRequiredProvider.EP_NAME, () -> new MdApplicationRestartRequiredProvider[] {
-
-                })
-                .addExtensions(MdSettingsFormExtensionProvider.EP_NAME, () -> new MdSettingsFormExtensionProvider[] {
-
-                })
-                .addExtensions(MdExtensionInfoProvider.EP_NAME, () -> new MdExtensionInfoProvider[] {
-
-                })
-                .addExtensions(MdRenderingProfileManagerFactory.EP_NAME, () -> new MdRenderingProfileManagerFactory[] {
-                })
-                .addExtensions(MdCodeStyleConfigurableProvider.EP_NAME, () -> new MdCodeStyleConfigurableProvider[] {
-
-                })
-                .addExtensions(MdFoldingBuilderProvider.EP_NAME, () -> new MdFoldingBuilderProvider[] {
-
-                })
-                .addExtensions(MdSpellcheckingIdentifierTokenizer.EP_NAME, () -> new MdSpellcheckingIdentifierTokenizer[] {
-
-                })
-                .addExtensions(MdTypeFactory.EP_NAME, () -> new MdTypeFactory[] {
-                })
-                .addExtensions(MdElementTextProvider.EP_NAME, () -> new MdElementTextProvider[] {
-                })
-                .addExtensions(MdStripTrailingSpacesExtension.EP_NAME, () -> new MdStripTrailingSpacesExtension[] {
-                })
-                .addExtensions(MdOnProjectSettingsChangedActivityProvider.EP_NAME, () -> new MdOnProjectSettingsChangedActivityProvider[] {
-
-                })
-                .addExtensions(MdElementContextInfoProvider.EP_NAME, () -> new MdElementContextInfoProvider[] {
-                })
-                .addExtensions(MdFormatElementHandler.EP_NAME, () -> new MdFormatElementHandler[] {
-                })
-        ;
     }
 
     // @formatter:off

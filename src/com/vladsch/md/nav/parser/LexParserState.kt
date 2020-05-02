@@ -310,7 +310,7 @@ class LexParserState {
         LOG.info(s)
         System.out.println(s)
 
-        if (!MdPlugin.RUNNING_TESTS) MdSyntaxHighlighter.computeMergedAttributes(false)
+        MdSyntaxHighlighter.computeMergedAttributes(false)
 
         return State(
             TYPOGRAPHIC_MARKER_SET,

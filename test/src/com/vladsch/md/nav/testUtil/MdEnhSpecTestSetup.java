@@ -1,57 +1,13 @@
-/*
- * Copyright (c) 2015-2020 Vladimir Schneider <vladimir.schneider@gmail.com>, all rights reserved.
- *
- * This code is private property of the copyright holder and cannot be used without
- * having obtained a license or prior written permission of the copyright holder.
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- *
- */
+// Copyright (c) 2015-2020 Vladimir Schneider <vladimir.schneider@gmail.com> Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 
-package com.vladsch.md.nav.enh.testUtil;
+package com.vladsch.md.nav.testUtil;
 
-import com.vladsch.flexmark.test.util.SettableInstance;
 import com.vladsch.flexmark.util.data.DataHolder;
-import com.vladsch.flexmark.util.data.DataKey;
 import com.vladsch.flexmark.util.data.DataKeyAggregator;
 import com.vladsch.flexmark.util.data.DataSet;
-import com.vladsch.md.nav.MdPlugin;
-import com.vladsch.md.nav.actions.api.MdCaretContextInfoHandler;
-import com.vladsch.md.nav.actions.api.MdElementContextInfoProvider;
-import com.vladsch.md.nav.actions.api.MdFormatElementHandler;
-import com.vladsch.md.nav.editor.api.MdEditorCustomizationProvider;
-import com.vladsch.md.nav.flex.parser.MdSpecExampleParserExtension;
-import com.vladsch.md.nav.flex.parser.MdSpecExampleStripTrailingSpacesExtension;
-import com.vladsch.md.nav.flex.settings.FlexmarkHtmlSettingsExtensionProvider;
-import com.vladsch.md.nav.flex.settings.FlexmarkProjectSettingsExtensionProvider;
-import com.vladsch.md.nav.language.api.MdCodeStyleConfigurableProvider;
-import com.vladsch.md.nav.language.api.MdFoldingBuilderProvider;
-import com.vladsch.md.nav.language.api.MdStripTrailingSpacesExtension;
 import com.vladsch.md.nav.parser.Extensions;
 import com.vladsch.md.nav.parser.MdLexParser;
-import com.vladsch.md.nav.parser.api.MdParserExtension;
-import com.vladsch.md.nav.psi.api.MdBlockPrefixProvider;
-import com.vladsch.md.nav.psi.api.MdElementTextProvider;
-import com.vladsch.md.nav.psi.api.MdTypeFactory;
-import com.vladsch.md.nav.settings.MathConversionType;
 import com.vladsch.md.nav.settings.MdRenderingProfile;
-import com.vladsch.md.nav.settings.api.MdApplicationRestartRequiredProvider;
-import com.vladsch.md.nav.settings.api.MdApplicationSettingsExtensionProvider;
-import com.vladsch.md.nav.settings.api.MdExtensionInfoProvider;
-import com.vladsch.md.nav.settings.api.MdProjectSettingsExtensionHandler;
-import com.vladsch.md.nav.settings.api.MdProjectSettingsExtensionProvider;
-import com.vladsch.md.nav.settings.api.MdRenderingProfileManagerFactory;
-import com.vladsch.md.nav.settings.api.MdSettingsExtensionProvider;
-import com.vladsch.md.nav.settings.api.MdSettingsFormExtensionProvider;
-import com.vladsch.md.nav.spellchecking.api.MdSpellcheckingIdentifierTokenizer;
-import com.vladsch.md.nav.testUtil.MdResourceUrlResolvers;
-import com.vladsch.md.nav.testUtil.MdSpecTestSetup;
-import com.vladsch.md.nav.vcs.api.MdOnProjectSettingsChangedActivityProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -59,72 +15,6 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 public class MdEnhSpecTestSetup extends MdSpecTestSetup {
-    public static void RUNNING_TESTS() {
-        MdSpecTestSetup.RUNNING_TESTS();
-        MdPlugin.getTestExtensions()
-                .addExtensions(MdParserExtension.EP_NAME, () -> new MdParserExtension[] {
-                        // extensions
-                        new MdSpecExampleParserExtension(),
-                })
-
-                .addExtensions(MdSettingsExtensionProvider.EP_NAME, () -> new MdSettingsExtensionProvider[] {
-                        new FlexmarkHtmlSettingsExtensionProvider(),
-                })
-
-                .addExtensions(MdBlockPrefixProvider.EP_NAME, () -> new MdBlockPrefixProvider[] {
-                })
-
-                .addExtensions(MdCaretContextInfoHandler.EP_NAME, () -> new MdCaretContextInfoHandler[] {
-                })
-                .addExtensions(MdEditorCustomizationProvider.EP_NAME, () -> new MdEditorCustomizationProvider[] {
-
-                })
-                .addExtensions(MdProjectSettingsExtensionProvider.EP_NAME, () -> new MdProjectSettingsExtensionProvider[] {
-                        new FlexmarkProjectSettingsExtensionProvider(),
-                })
-                .addExtensions(MdProjectSettingsExtensionHandler.EP_NAME, () -> new MdProjectSettingsExtensionHandler[] {
-
-                })
-                .addExtensions(MdApplicationSettingsExtensionProvider.EP_NAME, () -> new MdApplicationSettingsExtensionProvider[] {
-
-                })
-                .addExtensions(MdApplicationRestartRequiredProvider.EP_NAME, () -> new MdApplicationRestartRequiredProvider[] {
-
-                })
-                .addExtensions(MdSettingsFormExtensionProvider.EP_NAME, () -> new MdSettingsFormExtensionProvider[] {
-
-                })
-                .addExtensions(MdExtensionInfoProvider.EP_NAME, () -> new MdExtensionInfoProvider[] {
-
-                })
-                .addExtensions(MdRenderingProfileManagerFactory.EP_NAME, () -> new MdRenderingProfileManagerFactory[] {
-                })
-                .addExtensions(MdCodeStyleConfigurableProvider.EP_NAME, () -> new MdCodeStyleConfigurableProvider[] {
-
-                })
-                .addExtensions(MdFoldingBuilderProvider.EP_NAME, () -> new MdFoldingBuilderProvider[] {
-
-                })
-                .addExtensions(MdSpellcheckingIdentifierTokenizer.EP_NAME, () -> new MdSpellcheckingIdentifierTokenizer[] {
-
-                })
-                .addExtensions(MdTypeFactory.EP_NAME, () -> new MdTypeFactory[] {
-                })
-                .addExtensions(MdElementTextProvider.EP_NAME, () -> new MdElementTextProvider[] {
-                })
-                .addExtensions(MdStripTrailingSpacesExtension.EP_NAME, () -> new MdStripTrailingSpacesExtension[] {
-                        new MdSpecExampleStripTrailingSpacesExtension(),
-                })
-                .addExtensions(MdOnProjectSettingsChangedActivityProvider.EP_NAME, () -> new MdOnProjectSettingsChangedActivityProvider[] {
-
-                })
-                .addExtensions(MdElementContextInfoProvider.EP_NAME, () -> new MdElementContextInfoProvider[] {
-                })
-                .addExtensions(MdFormatElementHandler.EP_NAME, () -> new MdFormatElementHandler[] {
-                })
-        ;
-    }
-
     private final static SettingsKeyAggregator INSTANCE = new SettingsKeyAggregator();
     static {
         DataSet.registerDataKeyAggregator(INSTANCE);

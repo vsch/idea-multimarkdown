@@ -324,7 +324,7 @@ class MdProjectComponent(val project: Project) : ProjectComponent {
                     if (log) LOG.debug("reparse open file end")
                 }
 
-                if (MdApplicationSettings.instance.debugSettings.reloadEditorsOnFileTypeChange && !MdPlugin.RUNNING_TESTS) {
+                if (MdApplicationSettings.instance.debugSettings.reloadEditorsOnFileTypeChange) {
                     reopenChangedFileTypeEditors()
                 }
             }
@@ -392,7 +392,7 @@ class MdProjectComponent(val project: Project) : ProjectComponent {
                         // this is file type change when no name changes or PSI is re-parsed
                         reloadMarkdownEditors(reInitMarkdownEditors = false, swapHighlighter = true)
 
-                        if (MdApplicationSettings.instance.debugSettings.reloadEditorsOnFileTypeChange && !MdPlugin.RUNNING_TESTS) {
+                        if (MdApplicationSettings.instance.debugSettings.reloadEditorsOnFileTypeChange) {
                             reopenChangedFileTypeEditors()
                         }
                     }
