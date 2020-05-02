@@ -53,7 +53,6 @@ import com.vladsch.md.nav.settings.SettingsChangedListener
 import com.vladsch.md.nav.settings.api.MdExtensionInfoProvider
 import com.vladsch.md.nav.util.DynamicNotificationText
 import com.vladsch.md.nav.util.MdCancelableJobScheduler
-import com.vladsch.md.nav.util.TestExtensionProvider
 import com.vladsch.plugin.util.*
 import org.jetbrains.jps.service.SharedThreadPool
 import java.awt.Color
@@ -451,8 +450,5 @@ class MdPlugin : BaseComponent, Disposable {
         @JvmStatic
         val instance: MdPlugin
             get() = ApplicationManager.getApplication().getComponent(MdPlugin::class.java) ?: throw IllegalStateException()
-
-        @JvmStatic
-        val testExtensions: TestExtensionProvider by lazy { TestExtensionProvider() }
     }
 }

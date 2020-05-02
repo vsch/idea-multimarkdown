@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="PLUGIN_MODULE" version="4">
-  <component name="DevKit.ModuleBuildProperties" url="file://$MODULE_DIR$/resources-enh/META-INF/plugin.xml" />
+  <component name="DevKit.ModuleBuildProperties" url="file://$MODULE_DIR$/resources/META-INF/plugin.xml" />
   <component name="FacetManager">
     <facet type="NBMindMap" name="NB Mind Map">
       <configuration />
@@ -13,23 +13,11 @@
       <sourceFolder url="file://$MODULE_DIR$/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/test/src" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/test/data" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/test/testData" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/test/resources" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/resources-enh" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/resources-flex" type="java-resource" />
-      <excludeFolder url="file://$MODULE_DIR$/assets/emojis2" />
-      <excludeFolder url="file://$MODULE_DIR$/emojis" />
-      <excludeFolder url="file://$MODULE_DIR$/libprep" />
-      <excludeFolder url="file://$MODULE_DIR$/misc" />
-      <excludeFolder url="file://$MODULE_DIR$/out.191" />
-      <excludeFolder url="file://$MODULE_DIR$/src copy" />
-      <excludeFolder url="file://$MODULE_DIR$/test/src/com/vladsch/idea/multimarkdown/issues/documentRevertContents" />
-      <excludeFolder url="file://$MODULE_DIR$/test/src/com/vladsch/idea/multimarkdown/util/smart" />
+      <excludeFolder url="file://$MODULE_DIR$/plugin-xml" />
     </content>
     <orderEntry type="library" scope="PROVIDED" name="MissingInActions" level="project" />
     <orderEntry type="library" name="flexmark-util" level="project" />
-    <orderEntry type="module" module-name="plugin-util" />
-    <orderEntry type="module" module-name="plugin-test-util" scope="TEST" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="library" name="jsoup-1.10.2" level="project" />
     <orderEntry type="library" name="OpenHtmlToPDF" level="project" />
@@ -48,5 +36,7 @@
     <orderEntry type="library" name="org.scilab.forge:jlatexmath:1.0.7" level="project" />
     <orderEntry type="library" name="com.vladsch.reverse-regex:reverse-regex-util:0.3.2" level="project" />
     <orderEntry type="library" name="com.vladsch.javafx-webview-debugger:javafx-webview-debugger:0.8.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="plugin-test-util" level="project" />
+    <orderEntry type="library" name="plugin-util" level="project" />
   </component>
 </module>

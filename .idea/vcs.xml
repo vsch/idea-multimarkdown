@@ -13,7 +13,5 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/idea-multimarkdown.wiki" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/plugin-test-util" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/plugin-util" vcs="Git" />
   </component>
 </project>

@@ -37,7 +37,8 @@ abstract class CompletionContextTestBase : LightPlatformCodeInsightFixtureTestCa
     @Parameterized.Parameter(3) @JvmField var input: String = ""
     @Parameterized.Parameter(4) @JvmField var isDefault: Boolean = false
     @Parameterized.Parameter(5) @JvmField var isAuto: Boolean = false 
-    // @formatter:on
+    
+// @formatter:on
 
     @Before
     fun before() {

@@ -13,7 +13,7 @@
     <target name="legacy">
         <zip destfile="idea-multimarkdown.zip">
             <zipfileset dir="." prefix="idea-multimarkdown" includes="lib/*.jar" excludes="lib/*sources*"/>
-            <zipfileset dir="out/artifacts" prefix="idea-multimarkdown/lib" includes="*.jar" />
+            <zipfileset dir="out/artifacts" prefix="idea-multimarkdown/lib" includes="*.jar" excludes="plugin-test-util.jar"/>
             <zipfileset dir="assets" prefix="idea-multimarkdown" includes="emojis/**"/>
         </zip>
     </target>
