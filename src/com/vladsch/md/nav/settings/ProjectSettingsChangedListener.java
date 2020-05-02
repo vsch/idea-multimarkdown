@@ -7,7 +7,7 @@ import com.intellij.util.messages.Topic;
 import org.jetbrains.annotations.NotNull;
 
 public interface ProjectSettingsChangedListener {
-    Topic<ProjectSettingsChangedListener> TOPIC = Topic.create("MarkdownNavigator.ProjectSettingsChanged", ProjectSettingsChangedListener.class);
+    Topic<ProjectSettingsChangedListener> TOPIC = Topic.create("MarkdownNavigator.ProjectSettingsChanged", ProjectSettingsChangedListener.class, Topic.BroadcastDirection.NONE);
 
     void onSettingsChange(@NotNull Project project, @NotNull MdProjectSettings settings);
 }

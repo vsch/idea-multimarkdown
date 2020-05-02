@@ -740,7 +740,7 @@ class MdProjectComponent(val project: Project) : ProjectComponent {
         fun onFilesChanged()
 
         companion object {
-            val TOPIC = Topic.create("ImageFileChanged", FileChangedListener::class.java)
+            val TOPIC = Topic.create("ImageFileChanged", FileChangedListener::class.java, Topic.BroadcastDirection.NONE)
         }
     }
 

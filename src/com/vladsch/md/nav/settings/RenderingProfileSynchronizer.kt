@@ -258,13 +258,13 @@ class RenderingProfileSynchronizer constructor(val project: Project) : MdRenderi
 
     companion object {
         @JvmField
-        val PANEL_PROVIDER_TOPIC: Topic<PanelProviderChanged> = Topic.create("MultiMarkdown.ConfigurablePanelProvider", PanelProviderChanged::class.java)
+        val PANEL_PROVIDER_TOPIC: Topic<PanelProviderChanged> = Topic.create("MultiMarkdown.ConfigurablePanelProvider", PanelProviderChanged::class.java, Topic.BroadcastDirection.NONE)
 
         @JvmField
-        val RENDERING_PROFILE_TOPIC: Topic<RenderingProfileChanged> = Topic.create("MultiMarkdown.ConfigurableRenderingProfileChanged", RenderingProfileChanged::class.java)
+        val RENDERING_PROFILE_TOPIC: Topic<RenderingProfileChanged> = Topic.create("MultiMarkdown.ConfigurableRenderingProfileChanged", RenderingProfileChanged::class.java, Topic.BroadcastDirection.NONE)
 
         @JvmField
-        val CSS_SETTINGS_TOPIC: Topic<CssSettingsChanged> = Topic.create("MultiMarkdown.CssSettingsChanged", CssSettingsChanged::class.java)
+        val CSS_SETTINGS_TOPIC: Topic<CssSettingsChanged> = Topic.create("MultiMarkdown.CssSettingsChanged", CssSettingsChanged::class.java, Topic.BroadcastDirection.NONE)
 
         private val NULL: LazyFunction<Project, RenderingProfileSynchronizer> = LazyFunction(Function {
             RenderingProfileSynchronizer(it)

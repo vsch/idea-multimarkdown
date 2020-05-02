@@ -6,7 +6,7 @@ import com.intellij.util.messages.Topic;
 import org.jetbrains.annotations.NotNull;
 
 public interface ProfileManagerChangeListener {
-    Topic<ProfileManagerChangeListener> TOPIC = Topic.create("MarkdownNavigator.ProfileManagerChange", ProfileManagerChangeListener.class);
+    Topic<ProfileManagerChangeListener> TOPIC = Topic.create("MarkdownNavigator.ProfileManagerChange", ProfileManagerChangeListener.class, Topic.BroadcastDirection.NONE);
 
     void onSettingsChange(@NotNull RenderingProfileManager manager);
 

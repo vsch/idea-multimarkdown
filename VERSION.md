@@ -2,6 +2,7 @@
 
 [TOC]: # ""
 
+- [3.0.xxx.91 - Bug Fix Release](#30xxx91---bug-fix-release)
 - [3.0.xxx.89 - Bug Fix Release](#30xxx89---bug-fix-release)
 - [3.0.xxx.87 - Bug Fix Release](#30xxx87---bug-fix-release)
 - [3.0.xxx.85 - Bug Fix EAP Release](#30xxx85---bug-fix-eap-release)
@@ -20,6 +21,12 @@
 - [2.9.8 - 2019.3 Compatibility Release](#298---20193-compatibility-release)
 
 &nbsp;</details>
+
+### 3.0.xxx.91 - Bug Fix Release
+
+* Fix: update basic plugin source to latest
+* [ ] Fix: move tests from `enh` package
+* [ ] Fix: convert to gradle plugin build
 
 ### 3.0.xxx.89 - Bug Fix Release
 

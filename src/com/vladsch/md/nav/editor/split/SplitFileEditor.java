@@ -36,7 +36,7 @@ import java.util.Map;
 
 public abstract class SplitFileEditor<E1 extends FileEditor, E2 extends FileEditor> extends UserDataHolderBase implements FileEditor {
     public static final Key<SplitFileEditor<?, ?>> PARENT_SPLIT_KEY = Key.create("parentSplit");
-    final public static Topic<SplitPreviewChangeListener> PREVIEW_CHANGE = Topic.create("MarkdownNavigator.SplitEditor.PreviewChange", SplitPreviewChangeListener.class);
+    final public static Topic<SplitPreviewChangeListener> PREVIEW_CHANGE = Topic.create("MarkdownNavigator.SplitEditor.PreviewChange", SplitPreviewChangeListener.class, Topic.BroadcastDirection.NONE);
 
     private static final String MY_PROPORTION_KEY = "SplitFileEditor.Proportion";
 

@@ -6,7 +6,7 @@ import com.intellij.util.messages.Topic;
 import org.jetbrains.annotations.NotNull;
 
 public interface SettingsChangedListener {
-    Topic<SettingsChangedListener> TOPIC = Topic.create("MarkdownNavigator.ApplicationSettingsChanged", SettingsChangedListener.class);
+    Topic<SettingsChangedListener> TOPIC = Topic.create("MarkdownNavigator.ApplicationSettingsChanged", SettingsChangedListener.class, Topic.BroadcastDirection.NONE);
 
     void onSettingsChange(@NotNull MdApplicationSettings settings);
 }

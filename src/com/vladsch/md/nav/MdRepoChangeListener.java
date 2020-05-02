@@ -20,5 +20,5 @@ import com.intellij.util.messages.Topic;
 public interface MdRepoChangeListener {
     void onRepoChanged();
 
-    Topic<MdRepoChangeListener> TOPIC = Topic.create("MdRepoChanged", MdRepoChangeListener.class);
+    Topic<MdRepoChangeListener> TOPIC = Topic.create("MdRepoChanged", MdRepoChangeListener.class, Topic.BroadcastDirection.NONE);
 }
