@@ -95,6 +95,24 @@
     <!-- Included from: change-notes.xml -->
     <change-notes><![CDATA[
         <div xmlns="http://www.w3.org/1999/html">
+            <h3>3.0.201.91 - Bug Fix Release</h3>
+            <ul>
+                <li>Add: editor visual guides field to code style wrapping tab</li>
+                <li>Fix:
+                    <a href="https://github.com/vsch/idea-multimarkdown/issues/848">#848, Markdown panel does not appear on scratch files - Pycharm 2020.1 Pro</a>,
+                    reverted file type test code for editor provider to file language type
+                    test which works for scratch files created via <code>New File</code> action in
+                    <code>Scratches</code> directory.</li>
+                <li>Fix: make all plugin topics to not broadcast to parent/child message
+                    buses.</li>
+                <li>Fix:
+                    <a href="https://github.com/vsch/idea-multimarkdown/issues/844">#844, Jekyll include elements do not show included content in preview</a></li>
+                <li>Fix:
+                    <a href="https://github.com/vsch/idea-multimarkdown/issues/828">#828, Memory leak when project is closed due to MdProjectSettings</a></li>
+                <li>Fix: Tab/Back-Tab list indentation for items at end of file, without
+                    an EOL and for empty list items with no space after marker.</li>
+                <li>Fix: paragraph wrapping context at end of line after editing.</li>
+            </ul>
             <h3>3.0.201.89 - Bug Fix Release</h3>
             <ul>
                 <li>Fix: diagnostic/4558, concurrent modification in fenced code
