@@ -31,9 +31,11 @@ import com.vladsch.md.nav.psi.util.MdTokenSets
 import com.vladsch.md.nav.psi.util.MdTypes
 import com.vladsch.md.nav.settings.MdApplicationSettings
 import com.vladsch.md.nav.util.format.FormatControlProcessor
-import com.vladsch.plugin.util.*
+import com.vladsch.plugin.util.maxLimit
+import com.vladsch.plugin.util.minLimit
+import com.vladsch.plugin.util.nullIf
 import com.vladsch.plugin.util.psi.isTypeOf
-
+import com.vladsch.plugin.util.rangeLimit
 import java.util.*
 import java.util.function.Consumer
 import javax.swing.event.HyperlinkEvent
@@ -87,7 +89,7 @@ open class CaretContextInfo private constructor(
         private set
 
     val wrappingContext: WrappingContext? by lazy {
-        wrappingContext(caretOffset)
+        wrappingContext(preEditOffset(caretOffset))
     }
 
     val formatterControlProcessor: FormatControlProcessor by lazy {
@@ -99,17 +101,20 @@ open class CaretContextInfo private constructor(
     }
 
     fun wrappingContext(offset: Int): WrappingContext? {
-        val offsetLineEnd = offsetLineEnd(offset) ?: return null
-        val offsetLineStart = offsetLineStart(offset) ?: return null
+        val useOffset = offset - if (charSequence.isBaseCharAt(offset, CharPredicate.ANY_EOL_NUL)) 1 else 0
+        val offsetLineEnd = offsetLineEnd(useOffset) ?: return null
+        val offsetLineStart = offsetLineStart(useOffset) ?: return null
         var startElement: PsiElement?
 
         // NOTE: need offset from line end of 2 if caret is at the end of line to find the right EOL
-        var delta = 1
+        var delta = if (useOffset >= offsetLineEnd - 1) 2 else 1
         while (true) {
             startElement = findElementAt((offsetLineEnd - delta).minLimit(offsetLineStart))
             if (offsetLineEnd - delta <= offsetLineStart ||
-                (startElement != null &&
-                    startElement.node.elementType != MdTypes.EOL
+                (startElement != null 
+                    && startElement.node.textRange.endOffset > offsetLineStart 
+                    && startElement.node.textRange.startOffset <= offsetLineEnd 
+                    && startElement.node.elementType != MdTypes.EOL
                     && startElement.node.elementType != MdTypes.WHITESPACE
                     && (startElement.node.elementType != MdTypes.BLANK_LINE || delta > 1))) break
             delta++
@@ -520,7 +525,7 @@ open class CaretContextInfo private constructor(
             }
             return if (char != null) {
 //                TimeIt.logTimedValue(contextLogger, "withContextOrNull c=$char, del=$isDeleted $runnable(null)") {
-                    runnable.invoke(null)
+                runnable.invoke(null)
 //                }
             } else {
                 runnable.invoke(null)

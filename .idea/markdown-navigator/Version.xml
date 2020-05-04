@@ -1,6 +1,6 @@
 <component name="MarkdownNavigator.ProfileManager">
   <profile>
-    <option name="myName" value="Version" profileName="Version" havePreviewSettings="true" haveParserSettings="true" haveHtmlSettings="true" haveCssSettings="true" haveStyleSettings="false" haveRightMargin="false" rightMargin="72" haveHtmlExportSettings="true" haveLinkMapSettings="false">
+    <option name="myName" value="Version" profileName="Version" havePreviewSettings="true" haveParserSettings="true" haveHtmlSettings="true" haveCssSettings="true" haveStyleSettings="false" haveRightMargin="true" rightMargin="72" haveHtmlExportSettings="true" haveLinkMapSettings="false">
       <PreviewSettings splitEditorLayout="FIRST" splitEditorPreview="PREVIEW" useGrayscaleRendering="false" zoomFactor="1.0" maxImageWidth="0" synchronizePreviewPosition="true" highlightPreviewType="LINE" highlightFadeOut="1" highlightOnTyping="false" synchronizeSourcePosition="true" verticallyAlignSourceAndPreviewSyncPosition="true" showSearchHighlightsInPreview="false" showSelectionInPreview="false" lastLayoutSetsDefault="false">
         <PanelProvider>
           <provider providerId="com.vladsch.md.nav.editor.javafx.html.panel" providerName="JavaFX WebView" />

@@ -35,7 +35,7 @@
     <resource-bundle>com.vladsch.md.nav.localization.strings</resource-bundle>
 
     <!-- Included from: version.xml -->
-    <version>3.0.201.90.Legacy</version>
+    <version>3.0.201.91.Legacy</version>
     <idea-version since-build="201"/>
 
     <!-- Included from: description.xml -->

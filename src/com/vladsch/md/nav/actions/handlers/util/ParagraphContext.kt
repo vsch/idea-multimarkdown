@@ -134,6 +134,7 @@ open class ParagraphContext(val context: CaretContextInfo, val paragraphInfo: Pa
         data class WrapSuspension(val name: String, val isFirstLineOnly: Boolean, val prefixPattern: RegExPattern?, val caretRegion: Boolean, val caretPattern: RegExPattern?)
 
         fun createContext(context: CaretContextInfo): ParagraphContext? {
+
             val wrappingContext = context.wrappingContext(context.caretOffset) ?: return null
             if (wrappingContext.formatElement == null) return null
 

@@ -2,7 +2,9 @@
 package com.vladsch.md.nav.editor;
 
 import com.intellij.ide.scratch.ScratchFileService;
+import com.intellij.ide.scratch.ScratchFileType;
 import com.intellij.lang.Language;
+import com.intellij.lang.LanguageUtil;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorPolicy;
 import com.intellij.openapi.fileEditor.FileEditorState;
@@ -29,7 +31,11 @@ public class MdPreviewFileEditorProvider extends WeighedFileEditorProvider {
         if (fileType instanceof MdFileType) return true;
 //        return fileType == ScratchFileType.INSTANCE && LanguageUtil.getLanguageForPsi(project, file) == MdLanguage.INSTANCE;
         Language language = ScratchFileService.getInstance().getScratchesMapping().getMapping(file);
-        return language == MdLanguage.INSTANCE;
+        boolean scratchMd = language == MdLanguage.INSTANCE;
+
+        // NOTE: scratch file mapping is only present using New Scratch File action and is not properly set if using New File action on Scratches directory
+        boolean oldScratchMd = scratchMd || LanguageUtil.getLanguageForPsi(project, file) == MdLanguage.INSTANCE;
+        return oldScratchMd;
     }
 
     @Override

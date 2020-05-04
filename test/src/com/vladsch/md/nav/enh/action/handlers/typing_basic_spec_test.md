@@ -642,6 +642,21 @@ BasedSegmentBuilder{[2, 105), s=0:0, u=0:0, t=4:10, l=107, sz=10, na=7: [2), '* 
 ````````````````````````````````
 
 
+```````````````````````````````` example(Typing Handler: 39) options(wrap, margin[72], type[ ])
+* Fix:
+  reverted file type test code for editor provider to file language type
+  test which works for scratch files created via `New File` action in `Scratches` directory.⦙
+* Fix: make all plugin topics to not broadcast to parent/child message
+  buses.
+.
+* Fix: reverted file type test code for editor provider to file language
+  type test which works for scratch files created via `New File` action
+  in `Scratches` directory. ⦙
+* Fix: make all plugin topics to not broadcast to parent/child message
+  buses.
+````````````````````````````````
+
+
 ## Block Quotes
 
 ### Add
@@ -919,4 +934,5 @@ BasedSegmentBuilder{[118, 217), s=0:0, u=0:0, t=2:3, l=101, sz=6, na=4: [118), '
 ---- SEGMENTS ----------------------------------------------------------
 BasedSegmentBuilder{[119, 219), s=0:0, u=0:0, t=3:6, l=105, sz=7, na=5: [119), '  > ', [119, 190), ' ', [191, 219), '\n', [219) }
 ````````````````````````````````
+
 

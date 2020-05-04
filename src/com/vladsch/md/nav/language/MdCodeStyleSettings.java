@@ -2,6 +2,7 @@
 package com.vladsch.md.nav.language;
 
 import com.intellij.application.options.CodeStyle;
+import com.intellij.lang.Language;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleConstraints;
@@ -11,6 +12,8 @@ import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.codeStyle.CustomCodeStyleSettings;
 import com.intellij.psi.tree.IElementType;
 import com.vladsch.flexmark.util.misc.Pair;
+import com.vladsch.flexmark.util.misc.Utils;
+import com.vladsch.flexmark.util.sequence.SequenceUtils;
 import com.vladsch.md.nav.MdLanguage;
 import com.vladsch.md.nav.language.api.MdStripTrailingSpacesExtension;
 import com.vladsch.md.nav.language.api.MdTrailingSpacesCodeStyleOption;
@@ -19,11 +22,14 @@ import com.vladsch.md.nav.psi.util.MdTypes;
 import com.vladsch.md.nav.settings.TrailingSpacesType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.function.IntFunction;
 
 public class MdCodeStyleSettings extends CustomCodeStyleSettings {
     protected static final String SETTINGS_TAG_NAME = "MarkdownNavigatorCodeStyleSettings";
@@ -175,7 +181,7 @@ public class MdCodeStyleSettings extends CustomCodeStyleSettings {
     protected void loadRightMargin() {
         if (MdBlockPrefixProvider.PROVIDER.getValue() != MdBlockPrefixProvider.DEFAULT.getValue()) {
             CommonCodeStyleSettings commonCodeStyleSettings = getContainer().getCommonSettings(MdLanguage.INSTANCE);
-            
+
             // KLUDGE: enhanced plugin test
             if (RIGHT_MARGIN != USE_DEFAULT_RIGHT_MARGIN_VALUE) {
                 commonCodeStyleSettings.RIGHT_MARGIN = RIGHT_MARGIN;
@@ -215,6 +221,23 @@ public class MdCodeStyleSettings extends CustomCodeStyleSettings {
 
     public int getRightMargin() {
         return RIGHT_MARGIN == -2 ? getContainer().getRightMargin(MdLanguage.INSTANCE) : RIGHT_MARGIN;
+    }
+
+    @NotNull
+    public String getSoftMargins() {
+        List<Integer> softMargins = getContainer().getSoftMargins(MdLanguage.INSTANCE);
+        return Utils.splice(softMargins.stream().map(String::valueOf).toArray(value -> new String[value]), ", ");
+    }
+
+    public void setSoftMargins(@NotNull String value) {
+        String[] softMargins = value.split(",");
+        List<Integer> integerList = new ArrayList<>();
+        for (String softMargin : softMargins) {
+            Integer integer = SequenceUtils.parseIntOrNull(softMargin.trim());
+            if (integer != null) integerList.add(integer);
+        }
+        
+        getContainer().setSoftMargins(MdLanguage.INSTANCE, integerList);
     }
 
     public static final int DEFAULT_KEEP_BLANK_LINES = 2;
