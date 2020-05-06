@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="idea-multimarkdown with ProcessCancelled" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType">
+    <module name="idea-multimarkdown" />
+    <option name="VM_PARAMETERS" value="-Xmx4096m -Xms1024m -ea -Didea.ProcessCanceledException=disabled -Didea.is.internal=true -Didea.platform.prefix=Idea --add-exports=java.base/jdk.internal.vm=ALL-UNNAMED" />
+    <option name="PROGRAM_PARAMETERS" value="" />
+    <log_file checked="false" alias="IDEA LOG" path="$USER_HOME$/Library/Caches/IdeaIC2016.2/plugins-sandbox-mn/system/log/idea.log" show_all="true" />
+    <predefined_log_file enabled="true" id="idea.log" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+      <option name="ToolBeforeRunTask" enabled="true" actionId="Tool_External Tools_Update Sandboxes" />
+    </method>
+  </configuration>
+</component>
