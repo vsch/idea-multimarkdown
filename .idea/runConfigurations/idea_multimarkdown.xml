@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="idea-multimarkdown" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType">
     <module name="idea-multimarkdown" />
-    <option name="VM_PARAMETERS" value="-Xmx4096m -Xms1024m -ea -Didea.ProcessCanceledException=disabled -Didea.is.internal=true -Didea.platform.prefix=Idea --add-exports=java.base/jdk.internal.vm=ALL-UNNAMED" />
+    <option name="VM_PARAMETERS" value="-Xmx4096m -Xms1024m -ea -Didea.is.internal=true -Didea.platform.prefix=Idea --add-exports=java.base/jdk.internal.vm=ALL-UNNAMED" />
     <option name="PROGRAM_PARAMETERS" value="" />
     <alternative-path path="IDEA Plugin jdk MN Build" alternative-path-enabled="false" />
     <log_file checked="false" alias="IDEA LOG" path="$USER_HOME$/Library/Caches/IdeaIC2016.2/plugins-sandbox-mn/system/log/idea.log" show_all="true" />

@@ -11,14 +11,12 @@ import com.vladsch.flexmark.util.misc.CharPredicate
 import com.vladsch.flexmark.util.sequence.BasedSequence
 import com.vladsch.md.nav.actions.handlers.util.CaretContextInfo
 import com.vladsch.md.nav.actions.handlers.util.PsiEditAdjustment
-import com.vladsch.md.nav.language.MdCodeStyleSettings
 import com.vladsch.md.nav.psi.element.MdFile
 import com.vladsch.md.nav.psi.element.MdIndentingComposite
 import com.vladsch.md.nav.psi.util.MdPsiImplUtil
 import com.vladsch.md.nav.psi.util.MdTokenSets
 import com.vladsch.md.nav.psi.util.MdTypes
 import com.vladsch.md.nav.settings.MdApplicationSettings
-import com.vladsch.md.nav.settings.MdRenderingProfileManager
 import com.vladsch.plugin.util.psi.isTypeOf
 import java.util.regex.Pattern
 
@@ -48,7 +46,7 @@ class JoinLinesHandler : JoinRawLinesHandlerDelegate {
                 if (editor != null) {
                     val chars = document.charsSequence
                     val psiNullAdjustment = PsiEditAdjustment(psiFile, chars)
-                    
+
                     result = CaretContextInfo.withContextOr(psiFile, editor, null, false, NOT_HANDLED, end) { caretContext ->
                         val wrappingContext = caretContext.wrappingContext
 
