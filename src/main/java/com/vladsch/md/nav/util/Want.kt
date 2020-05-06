@@ -335,21 +335,27 @@ object Local {
     @JvmStatic
     val NONE: Want.Options.Locals
         get() = Want.LocalNone
+
     @JvmStatic
     val REF: Want.Options.Locals
         get() = Want.LocalRef
+
     @JvmStatic
     val REL: Want.Options.Locals
         get() = Want.LocalRel
+
     @JvmStatic
     val ABS: Want.Options.Locals
         get() = Want.LocalAbs
+
     @JvmStatic
     val URI: Want.Options.Locals
         get() = Want.LocalUri
+
     @JvmStatic
     val URL: Want.Options.Locals
         get() = Want.LocalUrl
+
     @JvmStatic
     val RAW: Want.Options.Locals
         get() = Want.LocalRaw
@@ -371,21 +377,27 @@ object Remote {
     @JvmStatic
     val NONE: Want.Options.Remotes
         get() = Want.RemoteNone
+
     @JvmStatic
     val REF: Want.Options.Remotes
         get() = Want.RemoteRef
+
     @JvmStatic
     val REL: Want.Options.Remotes
         get() = Want.RemoteRel
+
     @JvmStatic
     val ABS: Want.Options.Remotes
         get() = Want.RemoteAbs
+
     @JvmStatic
     val URI: Want.Options.Remotes
         get() = Want.RemoteUri
+
     @JvmStatic
     val URL: Want.Options.Remotes
         get() = Want.RemoteUrl
+
     @JvmStatic
     val RAW: Want.Options.Remotes
         get() = Want.RemoteRaw
@@ -407,12 +419,15 @@ object Match {
     @JvmStatic
     val EXACT: Want.Options.Matches
         get() = Want.MatchExact
+
     @JvmStatic
     val LOOSE: Want.Options.Matches
         get() = Want.MatchLoose
+
     @JvmStatic
     val COMPLETION: Want.Options.Matches
         get() = Want.MatchCompletion
+
     @JvmStatic
     val LOOSE_COMPLETION: Want.Options.Matches
         get() = Want.MatchLooseCompletion
@@ -431,12 +446,15 @@ object Links {
     @JvmStatic
     val NONE: Want.Options.Links
         get() = Want.LinksNone
+
     @JvmStatic
     val REL: Want.Options.Links
         get() = Want.LinksRel
+
     @JvmStatic
     val ABS: Want.Options.Links
         get() = Want.LinksAbs
+
     @JvmStatic
     val URL: Want.Options.Links
         get() = Want.LinksUrl

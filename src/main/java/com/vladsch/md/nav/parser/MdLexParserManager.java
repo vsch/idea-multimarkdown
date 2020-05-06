@@ -2,13 +2,11 @@
 package com.vladsch.md.nav.parser;
 
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.text.ImmutableCharSequence;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.ast.Document;
 import com.vladsch.flexmark.util.data.DataHolder;
 import com.vladsch.flexmark.util.sequence.BasedSequence;
-import com.vladsch.md.nav.MdPlugin;
 import com.vladsch.md.nav.editor.api.MdPreviewCustomizationProvider;
 import com.vladsch.md.nav.parser.api.HtmlPurpose;
 import com.vladsch.md.nav.parser.api.ParserPurpose;
@@ -17,8 +15,6 @@ import com.vladsch.md.nav.settings.MdApplicationSettings;
 import com.vladsch.md.nav.settings.MdRenderingProfile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.concurrent.ConcurrentHashMap;
 
 public class MdLexParserManager {
     public static int LEXER_PEGDOWN_AND_MASK = ~0;

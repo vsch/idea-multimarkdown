@@ -82,7 +82,7 @@ public class MdFencedCodeImageConversionManager {
     public boolean updateCssSettings(@NotNull MdRenderingProfile renderingProfile) {
         return updateCssSettings(renderingProfile, null);
     }
-    
+
     public boolean updateCssSettings(@NotNull MdRenderingProfile renderingProfile, @Nullable Predicate<String> infoPredicate) {
         HashMap<HtmlScriptResourceProvider.Info, Boolean> scriptProviders = new HashMap<>();
         for (MdFencedCodeImageConverter converter : MdFencedCodeImageConverter.EXTENSIONS.getValue()) {

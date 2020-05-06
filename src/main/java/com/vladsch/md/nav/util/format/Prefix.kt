@@ -78,13 +78,16 @@ data class ItemIndents(val parent: ItemIndents?, val isFirstItemOnSameLine: Bool
     companion object {
         @JvmField
         val EMPTY_PREFIX = Prefix("")
+
         @JvmField
         val EMPTY_ITEM_INDENT = Indent(EMPTY_PREFIX)
+
         @JvmField
         val EMPTY = ItemIndents(null, false, EMPTY_ITEM_INDENT)
 
         @JvmField
         val BLOCK_QUOTE_PREFIX = Prefix(">", 1)
+
         @JvmField
         val ASIDE_BLOCK_PREFIX = Prefix("|", 1)
 

@@ -7,8 +7,8 @@ import com.intellij.psi.stubs.StubBase
 import com.intellij.psi.stubs.StubElement
 import com.vladsch.md.nav.psi.MdPlainText
 import com.vladsch.md.nav.psi.MdPlainTextStub
-import com.vladsch.md.nav.psi.util.TextMapMatch
 import com.vladsch.md.nav.psi.util.TextMapElementType
+import com.vladsch.md.nav.psi.util.TextMapMatch
 
 open class MdPlainTextStubImpl<Elem : MdPlainText<*>, Stub : MdPlainTextStub<Elem>>(
     parent: StubElement<*>,

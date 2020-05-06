@@ -6,7 +6,6 @@ import com.intellij.openapi.extensions.ExtensionPointName;
 import com.vladsch.md.nav.psi.util.TextMapElementType;
 import com.vladsch.md.nav.util.MdExtensions;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public interface MdTextMapElementTypeProvider {
     ExtensionPointName<MdTextMapElementTypeProvider> EP_NAME = ExtensionPointName.create("com.vladsch.idea.multimarkdown.textMapElementTypeProvider");

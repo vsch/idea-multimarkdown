@@ -98,8 +98,8 @@ public interface MdIndentingComposite extends MdComposite, MdIndentingContainer 
     /**
      * Get LinePrefixMatcher for this element
      *
-     *
      * @param editContext edit context for the operation
+     *
      * @return line prefix matcher
      */
     @NotNull

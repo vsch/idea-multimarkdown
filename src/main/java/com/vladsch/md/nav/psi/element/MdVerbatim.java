@@ -35,7 +35,7 @@ public interface MdVerbatim extends MdIndentingComposite, NavigationItem, MdPsiL
         int pos = SequenceUtils.indexOfAny(info, CharPredicate.SPACE_TAB);
         return pos < 0 ? info : info.substring(0, pos);
     }
-    
+
     @NotNull
     PsiElement setVerbatimLanguage(@Nullable String verbatimLanguageName);
 

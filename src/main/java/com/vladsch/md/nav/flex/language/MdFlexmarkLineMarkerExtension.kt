@@ -11,9 +11,6 @@ import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiLiteralExpression
 import com.vladsch.md.nav.flex.PluginBundle
-import com.vladsch.md.nav.language.MdLineMarkerProvider
-import com.vladsch.md.nav.language.api.MdLineMarkerExtension
-import com.vladsch.md.nav.language.api.MdLineMarkerExtension.LineMarkerProvider
 import com.vladsch.md.nav.flex.parser.FlexmarkSpecCachedData
 import com.vladsch.md.nav.flex.parser.FlexmarkSpecTestCaseCachedData
 import com.vladsch.md.nav.flex.psi.FakePsiLiteralExpression
@@ -21,6 +18,9 @@ import com.vladsch.md.nav.flex.psi.FlexmarkExample
 import com.vladsch.md.nav.flex.psi.FlexmarkExampleOptionDefinition
 import com.vladsch.md.nav.flex.psi.FlexmarkPsi
 import com.vladsch.md.nav.flex.psi.util.FlexmarkPsiImplUtils
+import com.vladsch.md.nav.language.MdLineMarkerProvider
+import com.vladsch.md.nav.language.api.MdLineMarkerExtension
+import com.vladsch.md.nav.language.api.MdLineMarkerExtension.LineMarkerProvider
 import com.vladsch.md.nav.psi.util.MdPsiImplUtil
 import com.vladsch.md.nav.psi.util.MdTypes
 import com.vladsch.md.nav.util.PsiMap

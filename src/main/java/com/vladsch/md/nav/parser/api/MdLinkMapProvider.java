@@ -55,5 +55,4 @@ public interface MdLinkMapProvider {
 
     @Nullable
     Map<String, String> getLinkExclusionMap(@Nullable MdRenderingProfile renderingProfile);
-
 }

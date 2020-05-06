@@ -2,7 +2,6 @@
 package com.vladsch.md.nav.psi.element
 
 import com.intellij.lang.ASTNode
-import com.intellij.openapi.diagnostic.Logger
 import com.intellij.psi.PsiElement
 import com.vladsch.flexmark.util.sequence.RepeatedSequence
 import com.vladsch.md.nav.actions.handlers.util.PsiEditContext

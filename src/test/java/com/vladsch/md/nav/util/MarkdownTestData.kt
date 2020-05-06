@@ -251,7 +251,7 @@ fun List<String>.asRemoteUriType(branchOrTag: String? = null, gitHubLink: String
             "file://$it"
         }
     }
-    return result.filterIndexed { index, s -> !result.subList(0,index).contains(s) }
+    return result.filterIndexed { index, s -> !result.subList(0, index).contains(s) }
 }
 
 val EMPTY_LIST = arrayListOf<String>()

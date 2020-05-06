@@ -4,9 +4,9 @@ package com.vladsch.md.nav.flex.intentions
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiPlainText
+import com.vladsch.md.nav.flex.psi.FlexmarkExampleSection
 import com.vladsch.md.nav.psi.element.MdBlankLine
 import com.vladsch.md.nav.psi.element.MdParagraph
-import com.vladsch.md.nav.flex.psi.FlexmarkExampleSection
 import com.vladsch.md.nav.psi.element.MdTextBlock
 import com.vladsch.md.nav.util.PsiElementPredicateWithEditor
 import com.vladsch.plugin.util.TestUtils

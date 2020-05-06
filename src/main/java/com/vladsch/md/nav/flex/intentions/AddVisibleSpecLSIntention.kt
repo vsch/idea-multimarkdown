@@ -6,9 +6,9 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiPlainText
 import com.vladsch.flexmark.test.util.TestUtils
 import com.vladsch.flexmark.util.sequence.SequenceUtils
+import com.vladsch.md.nav.flex.psi.FlexmarkExampleSection
 import com.vladsch.md.nav.psi.element.MdBlankLine
 import com.vladsch.md.nav.psi.element.MdParagraph
-import com.vladsch.md.nav.flex.psi.FlexmarkExampleSection
 import com.vladsch.md.nav.psi.element.MdTextBlock
 import com.vladsch.md.nav.util.PsiElementPredicateWithEditor
 

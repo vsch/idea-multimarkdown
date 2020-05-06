@@ -9,11 +9,11 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.stubs.IStubElementType
 import com.vladsch.flexmark.test.util.TestUtils
+import com.vladsch.md.nav.flex.psi.util.FlexmarkPsiImplUtils
 import com.vladsch.md.nav.parser.MdFactoryContext
 import com.vladsch.md.nav.parser.MdLexParser
 import com.vladsch.md.nav.psi.element.MdElementItemPresentation
 import com.vladsch.md.nav.psi.element.MdStructureViewPresentableItem
-import com.vladsch.md.nav.flex.psi.util.FlexmarkPsiImplUtils
 import com.vladsch.md.nav.psi.util.MdElementFactory
 import com.vladsch.md.nav.psi.util.MdPsiBundle
 import com.vladsch.md.nav.psi.util.MdPsiImplUtil

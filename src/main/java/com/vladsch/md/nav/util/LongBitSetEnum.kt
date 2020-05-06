@@ -69,7 +69,8 @@ import java.util.*
  * ```
  */
 
-open class LongBitSetEnum<T: Enum<T>>(enumClass: Class<T>, map: (T) -> Long) {
+open class LongBitSetEnum<T : Enum<T>>(enumClass: Class<T>, map: (T) -> Long) {
+
     val enumFlagMap = HashMap<T, Long>()
 
     init {
@@ -112,7 +113,9 @@ open class LongBitSetEnum<T: Enum<T>>(enumClass: Class<T>, map: (T) -> Long) {
     fun asFlags(collection: Map<T, Boolean>): Long {
         var flags = 0L
 //        collection.forEach() { if (it.value) flags = flags or (enumFlagMap.get(it.key) ?: 0) }
-        for (it in collection) { if (it.value) flags = flags or (enumFlagMap.get(it.key) ?: 0L) }
+        for (it in collection) {
+            if (it.value) flags = flags or (enumFlagMap.get(it.key) ?: 0L)
+        }
         return flags
     }
 
@@ -156,7 +159,7 @@ open class LongBitSetEnum<T: Enum<T>>(enumClass: Class<T>, map: (T) -> Long) {
         return asArrayList(asFlags(map))
     }
 
-    inline fun <reified T1: T> asArray(map: Map<T, Boolean>): Array<T1> {
+    inline fun <reified T1 : T> asArray(map: Map<T, Boolean>): Array<T1> {
         return asArray(asFlags(map))
     }
 
@@ -175,7 +178,7 @@ open class LongBitSetEnum<T: Enum<T>>(enumClass: Class<T>, map: (T) -> Long) {
         return null
     }
 
-    inline fun <reified T1: T> asArray(flags: Long): Array<T1> {
+    inline fun <reified T1 : T> asArray(flags: Long): Array<T1> {
         val collection = ArrayList<T1>()
         for (enumConstant in enumFlagMap.keys) {
             if (enumConstant.isIn(flags)) collection.add(enumConstant as T1)

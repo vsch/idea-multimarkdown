@@ -6,8 +6,8 @@ import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLanguageInjectionHost;
-import com.vladsch.md.nav.psi.element.MdBlockElementWithChildren;
 import com.vladsch.md.nav.psi.MdPlainText;
+import com.vladsch.md.nav.psi.element.MdBlockElementWithChildren;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -217,7 +217,7 @@ public interface MdTokenSets extends MdTypes {
     TokenSet TABLE_HDR_CELL_REVEN_CODD_SET = TokenSet.create(TABLE_HDR_CELL_REVEN_CODD);
     TokenSet TABLE_HDR_CELL_RODD_CEVEN_SET = TokenSet.create(TABLE_HDR_CELL_RODD_CEVEN);
     TokenSet TABLE_HDR_CELL_RODD_CODD_SET = TokenSet.create(TABLE_HDR_CELL_RODD_CODD);
-    
+
     TokenSet TABLE_TEXT_SET = TokenSet.create(
             TABLE_CELL_REVEN_CEVEN,
             TABLE_CELL_REVEN_CODD,

@@ -10,11 +10,11 @@ import com.intellij.psi.PsiPlainText
 import com.intellij.util.IncorrectOperationException
 import com.vladsch.flexmark.util.sequence.BasedSequence
 import com.vladsch.md.nav.actions.handlers.util.PsiEditContext
-import com.vladsch.md.nav.psi.element.MdParagraph
 import com.vladsch.md.nav.flex.psi.FlexmarkExampleSection
-import com.vladsch.md.nav.settings.MdApplicationSettings
 import com.vladsch.md.nav.flex.settings.FlexmarkDebugSettings
+import com.vladsch.md.nav.psi.element.MdParagraph
 import com.vladsch.md.nav.psi.element.MdTextBlock
+import com.vladsch.md.nav.settings.MdApplicationSettings
 import com.vladsch.md.nav.util.PsiElementPredicateWithEditor
 import com.vladsch.plugin.util.TestUtils
 import com.vladsch.plugin.util.minLimit

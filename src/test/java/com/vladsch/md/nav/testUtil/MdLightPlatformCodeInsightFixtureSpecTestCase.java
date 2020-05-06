@@ -17,7 +17,6 @@ package com.vladsch.md.nav.testUtil;
 
 import com.vladsch.flexmark.util.data.DataHolder;
 import com.vladsch.flexmark.util.data.MutableDataSet;
-import com.vladsch.md.nav.MdPlugin;
 import com.vladsch.md.nav.testUtil.cases.MdCodeInsightFixtureSpecTestCase;
 import com.vladsch.plugin.test.util.LightPlatformCodeInsightFixtureSpecTestCase;
 import com.vladsch.plugin.test.util.cases.CodeInsightFixtureSpecTestCase;

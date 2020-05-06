@@ -2,7 +2,6 @@
 package com.vladsch.md.nav.editor;
 
 import com.intellij.ide.scratch.ScratchFileService;
-import com.intellij.ide.scratch.ScratchFileType;
 import com.intellij.lang.Language;
 import com.intellij.lang.LanguageUtil;
 import com.intellij.openapi.fileEditor.FileEditor;

@@ -31,6 +31,7 @@ abstract class HtmlPanelProvider : HtmlProvider() {
 
         // QUERY: don't think so: revert back to checking for availability and downloading for Java9+?
         companion object {
+
             @JvmField
             val AVAILABLE: AvailabilityInfo = object : AvailabilityInfo() {
                 override fun checkAvailability(parentComponent: JComponent): Boolean {
@@ -64,6 +65,7 @@ abstract class HtmlPanelProvider : HtmlProvider() {
 
     companion object : HtmlProviderCompanion<HtmlPanelProvider>() {
         override val EP_NAME = ExtensionPointName.create<HtmlPanelProvider>("com.vladsch.idea.multimarkdown.html.panel.provider")
+
         @JvmStatic
         override fun getFromInfoOrDefault(providerInfo: HtmlProvider.Info): HtmlPanelProvider = super.getFromInfoOrDefault(providerInfo)
 

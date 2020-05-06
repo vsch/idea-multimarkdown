@@ -12,11 +12,11 @@ import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.vladsch.md.nav.flex.PluginBundle;
 import com.vladsch.md.nav.flex.parser.FlexmarkSpecTestCaseCachedData;
-import com.vladsch.md.nav.psi.element.MdFile;
 import com.vladsch.md.nav.flex.psi.FlexmarkExampleOption;
 import com.vladsch.md.nav.flex.psi.FlexmarkExampleOptionDefinition;
 import com.vladsch.md.nav.flex.psi.util.FlexmarkPsiImplUtils;
 import com.vladsch.md.nav.flex.psi.util.SpecResourceDefinition;
+import com.vladsch.md.nav.psi.element.MdFile;
 import com.vladsch.md.nav.util.PsiMap;
 import com.vladsch.md.nav.util.Result;
 import icons.FlexmarkIcons;
@@ -45,7 +45,7 @@ public class FlexmarkLineMarkerProvider extends RelatedItemLineMarkerProvider {
         return "Flexmark-Java";
     }
 
-// @formatter:off
+    // @formatter:off
     public static final Option FLEXMARK_SPEC_FILE = new Option(FlexmarkLineMarkerProvider.class.getName() + ".spec.file"                     , PluginBundle.message("linemarker.flexmark.spec-file")              , FlexmarkIcons.Element.FLEXMARK_SPEC);
     public static final Option FLEXMARK_SPEC_EXAMPLE_OPTION = new Option(FlexmarkLineMarkerProvider.class.getName() + ".spec.example.option" , PluginBundle.message("linemarker.flexmark.spec-example-option")   , FlexmarkIcons.Element.SPEC_EXAMPLE);
 

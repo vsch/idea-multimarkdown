@@ -8,14 +8,14 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiLiteralExpression
 import com.intellij.psi.util.PsiTreeUtil
 import com.vladsch.flexmark.util.misc.Pair
+import com.vladsch.md.nav.flex.psi.FlexmarkExampleOptionDefinition
+import com.vladsch.md.nav.flex.psi.util.FlexmarkPsiImplUtils
 import com.vladsch.md.nav.parser.cache.CachedData
 import com.vladsch.md.nav.parser.cache.PsiClassProcessor
 import com.vladsch.md.nav.parser.cache.data.CachedDataKey
 import com.vladsch.md.nav.parser.cache.data.PsiFileCachedData
 import com.vladsch.md.nav.parser.cache.data.transaction.CachedTransactionContext
 import com.vladsch.md.nav.psi.element.MdFile
-import com.vladsch.md.nav.flex.psi.FlexmarkExampleOptionDefinition
-import com.vladsch.md.nav.flex.psi.util.FlexmarkPsiImplUtils
 import com.vladsch.md.nav.util.*
 import com.vladsch.plugin.util.debug
 import com.vladsch.plugin.util.nullIf

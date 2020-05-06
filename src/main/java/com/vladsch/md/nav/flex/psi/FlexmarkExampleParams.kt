@@ -12,7 +12,7 @@ data class FlexmarkExampleParams(val section: String?,
     val html: String?,
     val ast: String?,
     val options: List<String>?,
-    val useTestExample:Boolean = false
+    val useTestExample: Boolean = false
 ) {
 
     companion object {

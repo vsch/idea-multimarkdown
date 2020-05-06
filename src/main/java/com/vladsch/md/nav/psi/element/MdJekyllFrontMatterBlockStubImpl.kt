@@ -3,9 +3,9 @@
 package com.vladsch.md.nav.psi.element
 
 import com.intellij.psi.stubs.StubElement
-import com.vladsch.md.nav.psi.util.TextMapMatch
 import com.vladsch.md.nav.psi.util.MdTypes
 import com.vladsch.md.nav.psi.util.TextMapElementType
+import com.vladsch.md.nav.psi.util.TextMapMatch
 
 class MdJekyllFrontMatterBlockStubImpl(parent: StubElement<*>, textMapElementType: TextMapElementType, textMapMatches: Array<TextMapMatch>, referenceableOffsetInParent: Int) :
     MdPlainTextStubImpl<MdJekyllFrontMatterBlock, MdJekyllFrontMatterBlockStub>(parent, MdTypes.JEKYLL_FRONT_MATTER_BLOCK_ELEM, textMapElementType, textMapMatches, referenceableOffsetInParent),

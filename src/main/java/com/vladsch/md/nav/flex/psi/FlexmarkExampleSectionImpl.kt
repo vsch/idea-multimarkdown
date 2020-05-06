@@ -8,15 +8,14 @@ import com.intellij.openapi.util.Pair
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.vladsch.flexmark.util.sequence.BasedSequence
+import com.vladsch.md.nav.flex.settings.FlexmarkHtmlSettings
 import com.vladsch.md.nav.parser.MdFactoryContext
 import com.vladsch.md.nav.psi.element.MdVerbatimBaseImpl
 import com.vladsch.md.nav.psi.util.MdElementFactory
 import com.vladsch.md.nav.psi.util.MdPsiImplUtil
 import com.vladsch.md.nav.settings.MdRenderingProfileManager
-import com.vladsch.md.nav.flex.settings.FlexmarkHtmlSettings
 import com.vladsch.plugin.util.minLimit
 import com.vladsch.plugin.util.nullIfBlank
-
 import icons.MdIcons
 import javax.swing.Icon
 
@@ -43,9 +42,9 @@ abstract class FlexmarkExampleSectionImpl(node: ASTNode) : MdVerbatimBaseImpl(no
 
     override fun getExampleSection(example: FlexmarkExample): FlexmarkExampleSection? {
         return when (sectionIndex) {
-            1-> example.source
-            2-> example.html
-            3-> example.ast
+            1 -> example.source
+            2 -> example.html
+            3 -> example.ast
             else -> throw IllegalStateException("Do not know how to convert sectionIndex: $sectionIndex to section element")
         }
     }

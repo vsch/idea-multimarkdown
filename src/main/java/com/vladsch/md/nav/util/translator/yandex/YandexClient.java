@@ -2,9 +2,7 @@
 
 package com.vladsch.md.nav.util.translator.yandex;
 
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.util.net.HttpConfigurable;
-import com.vladsch.plugin.util.AppUtils;
 import kotlin.Pair;
 import org.jetbrains.annotations.Nullable;
 

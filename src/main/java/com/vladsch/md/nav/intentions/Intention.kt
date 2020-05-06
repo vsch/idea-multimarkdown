@@ -38,6 +38,7 @@ import javax.swing.Icon
  * @noinspection AbstractMethodCallInConstructor, OverridableMethodCallInConstructor
  */
 abstract class Intention protected constructor() : IntentionAction, Iconable {
+
     var allInFileAdded: Boolean = false
 
     @Throws(IncorrectOperationException::class)

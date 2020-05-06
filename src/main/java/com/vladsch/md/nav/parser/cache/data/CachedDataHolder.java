@@ -13,6 +13,7 @@ public interface CachedDataHolder {
      * Invalidate the key if it was valid
      *
      * @param dataKey key
+     *
      * @return return true if key was valid before
      */
     boolean remove(@NotNull CachedDataKey<?, ?> dataKey);
@@ -20,7 +21,7 @@ public interface CachedDataHolder {
     /**
      * Test if key depends on dependent
      *
-     * @param dataKey   key
+     * @param dataKey    key
      * @param dependency dependent
      *
      * @return true if it does, null dependents and keys which are not in the data set always report false

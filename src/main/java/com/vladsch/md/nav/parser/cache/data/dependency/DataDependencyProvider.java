@@ -15,6 +15,7 @@ public interface DataDependencyProvider {
      * NOTE: when a provider supplies a non-null value for a class, it will always be used to create dependencies for objects of that exact class
      *
      * @param dependent dependent
+     *
      * @return data dependency for the dependent object or null if don't handle such object type
      */
     @Nullable

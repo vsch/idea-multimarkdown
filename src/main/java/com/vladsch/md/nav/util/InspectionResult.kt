@@ -16,6 +16,7 @@ class InspectionResult(
     val fixedLink: String? = null,
     val fixedFilePath: String? = null
 ) {
+
     var referenceId: Any? = location
 
     var handled: Boolean = false

@@ -69,7 +69,8 @@ import java.util.*
  * ```
  */
 
-open class BitSetEnum<T: Enum<T>>(enumClass: Class<T>, map: (T) -> Int) {
+open class BitSetEnum<T : Enum<T>>(enumClass: Class<T>, map: (T) -> Int) {
+
     val enumFlagMap = HashMap<T, Int>()
 
     init {
@@ -112,7 +113,9 @@ open class BitSetEnum<T: Enum<T>>(enumClass: Class<T>, map: (T) -> Int) {
     fun asFlags(collection: Map<T, Boolean>): Int {
         var flags = 0
 //        collection.forEach() { if (it.value) flags = flags or (enumFlagMap.get(it.key) ?: 0) }
-        for (it in collection) { if (it.value) flags = flags or (enumFlagMap[it.key] ?: 0) }
+        for (it in collection) {
+            if (it.value) flags = flags or (enumFlagMap[it.key] ?: 0)
+        }
         return flags
     }
 
@@ -156,7 +159,7 @@ open class BitSetEnum<T: Enum<T>>(enumClass: Class<T>, map: (T) -> Int) {
         return asArrayList(asFlags(map))
     }
 
-    inline fun <reified T1: T> asArray(map: Map<T, Boolean>): Array<T1> {
+    inline fun <reified T1 : T> asArray(map: Map<T, Boolean>): Array<T1> {
         return asArray(asFlags(map))
     }
 
@@ -175,7 +178,7 @@ open class BitSetEnum<T: Enum<T>>(enumClass: Class<T>, map: (T) -> Int) {
         return null
     }
 
-    inline fun <reified T1: T> asArray(flags: Int): Array<T1> {
+    inline fun <reified T1 : T> asArray(flags: Int): Array<T1> {
         val collection = ArrayList<T1>()
         for (enumConstant in enumFlagMap.keys) {
             if (enumConstant.isIn(flags)) collection.add(enumConstant as T1)

@@ -19,7 +19,6 @@ import com.vladsch.flexmark.test.util.TestUtils;
 import com.vladsch.flexmark.util.data.DataHolder;
 import com.vladsch.flexmark.util.data.MutableDataSet;
 import com.vladsch.md.nav.language.*;
-import com.vladsch.md.nav.parser.MdLexParser;
 import com.vladsch.md.nav.settings.TrailingSpacesType;
 import com.vladsch.plugin.test.util.cases.SpecTest;
 import org.jetbrains.annotations.Nullable;

@@ -10,13 +10,13 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.psi.PsiElement
 import com.intellij.util.ProcessingContext
 import com.vladsch.flexmark.util.misc.CharPredicate
+import com.vladsch.md.nav.flex.psi.FlexmarkExample
 import com.vladsch.md.nav.language.completion.MdElementCompletion
 import com.vladsch.md.nav.language.completion.util.MdCompletionContext
 import com.vladsch.md.nav.language.completion.util.MoveCaretAfterCompletionDecorator
 import com.vladsch.md.nav.language.completion.util.TextContext
 import com.vladsch.md.nav.language.completion.util.WrappingDecorator
 import com.vladsch.md.nav.psi.element.MdFile
-import com.vladsch.md.nav.flex.psi.FlexmarkExample
 import com.vladsch.plugin.util.TestUtils
 import com.vladsch.plugin.util.ifElse
 

@@ -14,6 +14,7 @@ import com.intellij.psi.PsiJavaFile
 import com.intellij.psi.impl.java.stubs.index.JavaFieldNameIndex
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.PsiTreeUtil
+import com.vladsch.md.nav.flex.psi.util.FlexmarkPsiImplUtils
 import com.vladsch.md.nav.parser.cache.CachedData
 import com.vladsch.md.nav.parser.cache.PsiClassProcessor
 import com.vladsch.md.nav.parser.cache.PsiFileProcessor
@@ -22,7 +23,6 @@ import com.vladsch.md.nav.parser.cache.data.ProjectCachedData
 import com.vladsch.md.nav.parser.cache.data.dependency.ProjectFilePredicate
 import com.vladsch.md.nav.parser.cache.data.transaction.CachedTransactionContext
 import com.vladsch.md.nav.psi.element.MdFile
-import com.vladsch.md.nav.flex.psi.util.FlexmarkPsiImplUtils
 import com.vladsch.md.nav.util.*
 import com.vladsch.plugin.util.debug
 

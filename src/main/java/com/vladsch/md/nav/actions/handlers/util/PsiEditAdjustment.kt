@@ -35,7 +35,7 @@ open class PsiEditAdjustment constructor(val caretOffset: Int, val file: PsiFile
     override fun getCharSequence(): BasedSequence = _charSequence
     override fun getHasFrontMatter(): Boolean = frontMatterOffset > 0
     override fun editOpDelta(): Int = editOpDelta
-    private val _editor:Editor? = editor
+    private val _editor: Editor? = editor
     override fun getEditor(): Editor? = _editor
 
     val frontMatterOffset: Int by lazy {

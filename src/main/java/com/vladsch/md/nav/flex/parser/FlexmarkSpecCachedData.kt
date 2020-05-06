@@ -4,15 +4,15 @@ package com.vladsch.md.nav.flex.parser
 
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.psi.PsiClass
+import com.vladsch.md.nav.flex.psi.FlexmarkExampleOption
+import com.vladsch.md.nav.flex.psi.FlexmarkExampleOptionDefinition
+import com.vladsch.md.nav.flex.psi.util.FlexmarkPsiImplUtils
 import com.vladsch.md.nav.parser.cache.CachedData
 import com.vladsch.md.nav.parser.cache.data.CachedDataKey
 import com.vladsch.md.nav.parser.cache.data.dependency.RestartableProjectFileDependency
 import com.vladsch.md.nav.parser.cache.data.transaction.CachedTransactionContext
 import com.vladsch.md.nav.parser.cache.data.transaction.IndentingLogger
 import com.vladsch.md.nav.psi.element.MdFile
-import com.vladsch.md.nav.flex.psi.FlexmarkExampleOption
-import com.vladsch.md.nav.flex.psi.FlexmarkExampleOptionDefinition
-import com.vladsch.md.nav.flex.psi.util.FlexmarkPsiImplUtils
 import com.vladsch.md.nav.util.PsiMap
 import com.vladsch.md.nav.util.PsiSet
 import com.vladsch.md.nav.util.Result

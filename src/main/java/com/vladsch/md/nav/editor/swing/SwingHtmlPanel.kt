@@ -15,8 +15,8 @@ import com.vladsch.md.nav.editor.*
 import com.vladsch.md.nav.editor.api.MdPreviewCustomizationProvider
 import com.vladsch.md.nav.editor.util.HtmlPanel
 import com.vladsch.md.nav.parser.flexmark.MdNavigatorExtension
-import com.vladsch.md.nav.settings.MdApplicationSettings
 import com.vladsch.md.nav.settings.HighlightPreviewType
+import com.vladsch.md.nav.settings.MdApplicationSettings
 import com.vladsch.md.nav.util.PathInfo
 import com.vladsch.plugin.util.debug
 import com.vladsch.plugin.util.image.ImageUtils
@@ -39,7 +39,6 @@ import javax.swing.text.DefaultCaret
 import javax.swing.text.html.HTMLEditorKit
 import javax.swing.text.html.StyleSheet
 import kotlin.text.startsWith
-import kotlin.text.toRegex
 
 internal class SwingHtmlPanel(project: Project, htmlPanelHost: HtmlPanelHost) : HtmlPanel(project, htmlPanelHost), ExternalLinkLauncher {
     private var myLastRenderedHtml = ""

@@ -8,13 +8,13 @@ import com.intellij.openapi.util.Pair
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 import com.vladsch.md.nav.editor.api.MdEditorRangeHighlighter
-import com.vladsch.md.nav.highlighter.MdHighlighterColors
-import com.vladsch.md.nav.psi.element.MdFile
 import com.vladsch.md.nav.flex.psi.FlexmarkExample
 import com.vladsch.md.nav.flex.psi.FlexmarkExampleSection
+import com.vladsch.md.nav.flex.settings.FlexmarkHtmlSettings
+import com.vladsch.md.nav.highlighter.MdHighlighterColors
+import com.vladsch.md.nav.psi.element.MdFile
 import com.vladsch.md.nav.psi.util.MdTypes
 import com.vladsch.md.nav.settings.MdRenderingProfileManager
-import com.vladsch.md.nav.flex.settings.FlexmarkHtmlSettings
 import com.vladsch.plugin.util.nullIf
 import com.vladsch.plugin.util.ui.highlight.EditorRangeHighlighterSet
 

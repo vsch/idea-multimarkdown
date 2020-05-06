@@ -49,7 +49,7 @@ public interface MdSpecTest extends SpecTest {
     SettableInstance<MdApplicationSettings> APPLICATION_SETTINGS_OPTION = MdSpecTestSetup.APPLICATION_SETTINGS_OPTION;
     SettableInstance<MdCodeStyleSettings> STYLE_SETTINGS_OPTION = MdSpecTestSetup.STYLE_SETTINGS_OPTION;
     SettableInstance<MdRenderingProfile> RENDERING_PROFILE_OPTION = MdSpecTestSetup.RENDERING_PROFILE_OPTION;
-    
+
     DataKey<Consumer<PsiFile>> CUSTOMIZE_FILE = MdSpecTestSetup.CUSTOMIZE_FILE;
     SettableInstance<PsiFile> CUSTOMIZE_FILE_OPTIONS = MdSpecTestSetup.CUSTOMIZE_FILE_OPTION;
 

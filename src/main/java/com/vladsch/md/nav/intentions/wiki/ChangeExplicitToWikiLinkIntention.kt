@@ -12,8 +12,8 @@ import com.vladsch.md.nav.intentions.Intention
 import com.vladsch.md.nav.psi.element.MdExplicitLink
 import com.vladsch.md.nav.psi.element.MdFile
 import com.vladsch.md.nav.psi.util.MdPsiImplUtil
-import com.vladsch.md.nav.util.PsiElementPredicate
 import com.vladsch.md.nav.util.FileRef
+import com.vladsch.md.nav.util.PsiElementPredicate
 
 class ChangeExplicitToWikiLinkIntention : Intention(), LowPriorityAction {
 

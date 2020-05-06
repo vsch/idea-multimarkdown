@@ -159,9 +159,9 @@ public interface MdFencedCodeImageConverter {
      * Get Required Script Providers based on profile
      *
      * @param renderingProfile rendering profile
+     * @param infoPredicate    null for all info strings or predicate to test
      *
-     * @param infoPredicate null for all info strings or predicate to test
-     * @return map of handled script provider info to true for include/false for exclude 
+     * @return map of handled script provider info to true for include/false for exclude
      */
     default Map<HtmlScriptResourceProvider.Info, Boolean> getRequiredScriptsProviders(@NotNull MdRenderingProfile renderingProfile, @Nullable Predicate<String> infoPredicate) {
         return Collections.emptyMap();

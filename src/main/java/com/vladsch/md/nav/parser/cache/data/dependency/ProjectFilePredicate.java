@@ -13,9 +13,11 @@ public interface ProjectFilePredicate extends Predicate<PsiFile> {
      * NOTE: not invoked on ADT nor inside read action, have to do all that manually
      * if false is returned then key for the dependency will be invalidated.
      * CachedDataSet and CachedDataKey determined by where dependency was added.
-     *
+     * <p>
      * Test dependency on given file and return true if still valid
+     *
      * @param psiFile file to test
+     *
      * @return true if still valid, false if dependent should be invalidated
      */
     @Override
@@ -23,6 +25,7 @@ public interface ProjectFilePredicate extends Predicate<PsiFile> {
 
     /**
      * Override and implement to restart daemon code analyzer for the file when this predicate is invalidated
+     *
      * @return file to restart analyzer on or null if none
      */
     @Nullable

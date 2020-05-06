@@ -82,7 +82,7 @@ public class FlexmarkLinkResolver implements LinkResolver, Disposable {
 
         Supplier<? extends MdRenderingProfile> profileSupplier = MdNavigatorExtension.RENDERING_PROFILE.get(options);
         MdRenderingProfile renderingProfile = profileSupplier == null ? null : profileSupplier.get();
-        
+
         MdFile file = null;
 
         if (resolver != null) {
@@ -97,7 +97,7 @@ public class FlexmarkLinkResolver implements LinkResolver, Disposable {
                 }
             }
         }
-        
+
         this.renderingProfile = renderingProfile;
         this.file = file;
 

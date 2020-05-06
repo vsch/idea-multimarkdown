@@ -10,7 +10,6 @@ import com.intellij.psi.PsiManager;
 import com.vladsch.flexmark.util.misc.DelimitedBuilder;
 import com.vladsch.flexmark.util.sequence.Escaping;
 import com.vladsch.md.nav.MdFileType;
-import com.vladsch.md.nav.psi.util.MdLinkType;
 import com.vladsch.md.nav.parser.cache.data.CachedDataKey;
 import com.vladsch.md.nav.parser.cache.data.ProjectCachedData;
 import com.vladsch.md.nav.parser.cache.data.dependency.RestartableProjectFileDependency;
@@ -20,6 +19,7 @@ import com.vladsch.md.nav.psi.element.MdFile;
 import com.vladsch.md.nav.psi.element.MdImageLinkRef;
 import com.vladsch.md.nav.psi.element.MdLinkRefElement;
 import com.vladsch.md.nav.psi.element.MdWikiLinkRef;
+import com.vladsch.md.nav.psi.util.MdLinkType;
 import com.vladsch.md.nav.settings.MdApplicationSettings;
 import com.vladsch.md.nav.settings.MdDebugSettings;
 import com.vladsch.md.nav.util.FileRef;
@@ -45,18 +45,18 @@ import static com.vladsch.md.nav.util.PathInfo.isFileURI;
 
 /**
  * Cache for resolved link address targets for links and images
- *
+ * <p>
  * There are two caches.
- *
+ * <p>
  * One does not add the file as dependency so is not cleared when the file is changed. This is used to allow re-use of links across file mods
- *
+ * <p>
  * The other is the current link cache which contains all resolved links in the current file and is re-computed when file is modified.
  * This cache uses {@link MdCachedFileElements} to scan for links and removes any persistent cached links which no longer match a link in the file
  * and adds any links which survived the mod
- *
+ * <p>
  * When a link target is resolved, the link type, address text and resolved target is added to the cache
  * subsequent requests for identical link type and address resolution returns cached value for resolved link
- *
+ * <p>
  * Only single resolve values can be cached this way. Multi resolve and completion has to use Link resolver as before
  */
 public class MdCachedResolvedLinks {

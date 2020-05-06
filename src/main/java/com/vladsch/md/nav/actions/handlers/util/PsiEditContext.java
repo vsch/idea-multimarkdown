@@ -66,16 +66,26 @@ public interface PsiEditContext {
 
     @NotNull
     default MdParserSettings getParserSettings() { return getRenderingProfile().getParserSettings(); }
+
     default boolean isAsideEnabled() { return (getParserSettings().getPegdownFlags() & PegdownExtensions.ASIDE.getFlags()) != 0; }
 
-    @NotNull default String getBlockQuoteStyleChars() { return isAsideEnabled() ? ">|" : ">"; }
-    @NotNull default CharPredicate getBlockQuoteStyleCharsSet() { return CharPredicate.anyOf(getBlockQuoteStyleChars()); }
-    @NotNull default String getIndentingChars() { return " \t" + getBlockQuoteStyleChars(); }
-    @NotNull default CharPredicate getIndentingCharsSet() { return CharPredicate.anyOf(getIndentingChars()); }
+    @NotNull
+    default String getBlockQuoteStyleChars() { return isAsideEnabled() ? ">|" : ">"; }
 
-    default boolean isBlockQuoteStyleChar(@Nullable Character c) { return  c != null && getBlockQuoteStyleCharsSet().test(c); }
-    default boolean isIndentingChar(@Nullable Character c) { return  c != null && getIndentingCharsSet().test(c); }
-    default boolean isWhitespaceChar(@Nullable Character c) { return  c != null && CharPredicate.SPACE_TAB.test(c); }
+    @NotNull
+    default CharPredicate getBlockQuoteStyleCharsSet() { return CharPredicate.anyOf(getBlockQuoteStyleChars()); }
+
+    @NotNull
+    default String getIndentingChars() { return " \t" + getBlockQuoteStyleChars(); }
+
+    @NotNull
+    default CharPredicate getIndentingCharsSet() { return CharPredicate.anyOf(getIndentingChars()); }
+
+    default boolean isBlockQuoteStyleChar(@Nullable Character c) { return c != null && getBlockQuoteStyleCharsSet().test(c); }
+
+    default boolean isIndentingChar(@Nullable Character c) { return c != null && getIndentingCharsSet().test(c); }
+
+    default boolean isWhitespaceChar(@Nullable Character c) { return c != null && CharPredicate.SPACE_TAB.test(c); }
 
     int preEditOffset(int postEditOffset);
 

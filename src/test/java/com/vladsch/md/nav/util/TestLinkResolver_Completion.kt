@@ -14,14 +14,13 @@
  */
 package com.vladsch.md.nav.util
 
-import com.vladsch.md.nav.MdPlugin
+import com.vladsch.md.nav.testUtil.TestCaseUtils.compareOrderedLists
+import com.vladsch.md.nav.vcs.GitHubLinkResolver
+import com.vladsch.md.nav.vcs.MdLinkResolver
 import com.vladsch.plugin.test.util.ParamRowGenerator
 import com.vladsch.plugin.test.util.ParamRowGenerator.ColumnProvider
 import com.vladsch.plugin.test.util.ParamRowGenerator.Decorator
-import com.vladsch.md.nav.vcs.GitHubLinkResolver
-import com.vladsch.md.nav.vcs.MdLinkResolver
 import com.vladsch.plugin.util.prefixWith
-import com.vladsch.md.nav.testUtil.TestCaseUtils.compareOrderedLists
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized

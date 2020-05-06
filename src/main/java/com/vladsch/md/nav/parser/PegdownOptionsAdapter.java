@@ -39,13 +39,19 @@ import com.vladsch.md.nav.settings.MdHtmlSettings;
 import com.vladsch.md.nav.settings.MdPreviewSettings;
 import com.vladsch.md.nav.settings.MdRenderingProfile;
 import com.vladsch.md.nav.settings.ParserOptions;
-import com.vladsch.md.nav.settings.PlantUmlConversionType;
 import com.vladsch.md.nav.vcs.MdLinkResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static com.vladsch.md.nav.parser.Extensions.*;
-import static com.vladsch.md.nav.parser.MdLexParser.*;
+import static com.vladsch.md.nav.parser.MdLexParser.COMMONMARK_LISTS;
+import static com.vladsch.md.nav.parser.MdLexParser.GFM_LOOSE_BLANK_LINE_AFTER_ITEM_PARA;
+import static com.vladsch.md.nav.parser.MdLexParser.GFM_TABLE_RENDERING;
+import static com.vladsch.md.nav.parser.MdLexParser.GITHUB_LISTS;
+import static com.vladsch.md.nav.parser.MdLexParser.HEADER_ID_NON_ASCII_TO_LOWERCASE;
+import static com.vladsch.md.nav.parser.MdLexParser.HEADER_ID_NO_DUPED_DASHES;
+import static com.vladsch.md.nav.parser.MdLexParser.HEADER_ID_REF_TEXT_TRIM_TRAILING_SPACES;
+import static com.vladsch.md.nav.parser.MdLexParser.SPACE_IN_LINK_URLS;
 import static com.vladsch.md.nav.parser.api.HtmlPurpose.EXPORT;
 import static com.vladsch.md.nav.parser.api.HtmlPurpose.RENDER;
 import static com.vladsch.md.nav.parser.api.ParserPurpose.HTML_MIME;
@@ -478,7 +484,7 @@ public class PegdownOptionsAdapter {
         }
 
         if (linkResolver != null) options.set(MdNavigatorExtension.LINK_RESOLVER, () -> linkResolver);
-        
+
         options.addExtension(MdNavigatorExtension.class, MdNavigatorExtension::create);
 
         // add extensions last

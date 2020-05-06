@@ -42,16 +42,19 @@ open class GitHubLinkMatcher(val projectResolver: MdLinkResolver.ProjectResolver
 
     var linkAllMatch: String? = null
         private set
+
     // extension set for all file matches
     var linkAllMatchExtensions: List<String>? = null
         private set
     var linkLooseMatch: String? = null
         private set
+
     // extension set for loose file matches
     var linkLooseMatchExtensions: List<String>? = null
         private set
     var linkCompletionMatch: String? = null
         private set
+
     // extension set for loose file matches
     var linkCompletionMatchExtensions: List<String>? = null
         private set
@@ -75,9 +78,11 @@ open class GitHubLinkMatcher(val projectResolver: MdLinkResolver.ProjectResolver
     // this will be one of the links including file links: raw, blob, wiki
     var gitHubLink: String? = null
         private set
+
     // this will be the above github link but with whatever followed the link in the linkRef
     var gitHubLinkWithParams: String? = null
         private set
+
     // this will be the whatever followed the link in the linkRef
     var gitHubLinkParams: String? = null
         private set
@@ -346,6 +351,7 @@ open class GitHubLinkMatcher(val projectResolver: MdLinkResolver.ProjectResolver
                 var destVcsRepo: GitHubVcsRoot? = vcsRepo
                 var destVcsRepoBasePath: String = vcsRepoBasePath
                 var destProjectDirName: String = projectDirName
+
                 @Suppress("NAME_SHADOWING")
                 var wikiPrefixIsOptional = wikiPrefixIsOptional
 

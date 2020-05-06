@@ -7,7 +7,6 @@ import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.TokenSet
-import com.vladsch.md.nav.MdPlugin
 import com.vladsch.md.nav.highlighter.MdHighlighterColors
 import com.vladsch.md.nav.highlighter.MdSyntaxHighlighter
 import com.vladsch.md.nav.psi.util.MdTokenSets
@@ -19,8 +18,9 @@ import java.util.*
 
 @Suppress("UNUSED_VARIABLE")
 class LexParserState {
+
     companion object {
-        private val DEFAULT:LexParserState by lazy { LexParserState() }
+        private val DEFAULT: LexParserState by lazy { LexParserState() }
         private val LOG: Logger = Logger.getInstance("com.vladsch.md.nav.parser")
 
         @JvmStatic
@@ -324,7 +324,7 @@ class LexParserState {
         )
     }
 
-    private class Combinator(val state:LexParserState) {
+    private class Combinator(val state: LexParserState) {
         private val highlighterColors = MdHighlighterColors.getInstance()
 
         /**

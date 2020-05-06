@@ -3,8 +3,8 @@
 package com.vladsch.md.nav.psi;
 
 import com.intellij.psi.stubs.StubElement;
-import com.vladsch.md.nav.psi.util.TextMapMatch;
 import com.vladsch.md.nav.psi.util.TextMapElementType;
+import com.vladsch.md.nav.psi.util.TextMapMatch;
 import org.jetbrains.annotations.NotNull;
 
 public interface MdPlainTextStub<Elem extends MdPlainText> extends StubElement<Elem> {

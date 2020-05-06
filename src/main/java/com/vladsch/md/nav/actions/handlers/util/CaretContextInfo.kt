@@ -111,9 +111,9 @@ open class CaretContextInfo private constructor(
         while (true) {
             startElement = findElementAt((offsetLineEnd - delta).minLimit(offsetLineStart))
             if (offsetLineEnd - delta <= offsetLineStart ||
-                (startElement != null 
-                    && startElement.node.textRange.endOffset > offsetLineStart 
-                    && startElement.node.textRange.startOffset <= offsetLineEnd 
+                (startElement != null
+                    && startElement.node.textRange.endOffset > offsetLineStart
+                    && startElement.node.textRange.startOffset <= offsetLineEnd
                     && startElement.node.elementType != MdTypes.EOL
                     && startElement.node.elementType != MdTypes.WHITESPACE
                     && (startElement.node.elementType != MdTypes.BLANK_LINE || delta > 1))) break

@@ -17,10 +17,10 @@ public interface MdLanguageProvider {
     MdExtensions<MdLanguageProvider> EXTENSIONS = new MdExtensions<>(EP_NAME, new MdLanguageProvider[0]);
 
     /**
-     * 
-     * @param languageName language info string
-     * @param languageMap  language name to language map
+     * @param languageName               language info string
+     * @param languageMap                language name to language map
      * @param embeddedTokenTypeProviders embedded token extension providers
+     *
      * @return language info to use for language lookup
      */
     @Nullable

@@ -12,10 +12,8 @@ import com.intellij.psi.PsiFile
 import com.intellij.ui.JBColor
 import com.intellij.util.IncorrectOperationException
 import com.vladsch.flexmark.util.collection.OrderedMap
-import com.vladsch.md.nav.flex.PluginBundle
 import com.vladsch.md.nav.actions.handlers.util.PsiEditContext
-import com.vladsch.md.nav.highlighter.MdHighlighterColors
-import com.vladsch.md.nav.parser.MdFactoryContext
+import com.vladsch.md.nav.flex.PluginBundle
 import com.vladsch.md.nav.flex.psi.FlexmarkExample
 import com.vladsch.md.nav.flex.psi.FlexmarkExampleParams
 import com.vladsch.md.nav.flex.psi.FlexmarkPsi.FLEXMARK_OPTION_EMBED_TIMED
@@ -25,9 +23,11 @@ import com.vladsch.md.nav.flex.psi.FlexmarkPsi.FLEXMARK_OPTION_IGNORE
 import com.vladsch.md.nav.flex.psi.FlexmarkPsi.FLEXMARK_OPTION_NO_FILE_EOL
 import com.vladsch.md.nav.flex.psi.FlexmarkPsi.FLEXMARK_OPTION_TIMED
 import com.vladsch.md.nav.flex.psi.util.FlexmarkPsiImplUtils
+import com.vladsch.md.nav.flex.settings.FlexmarkDebugSettings
+import com.vladsch.md.nav.highlighter.MdHighlighterColors
+import com.vladsch.md.nav.parser.MdFactoryContext
 import com.vladsch.md.nav.psi.util.MdElementFactory
 import com.vladsch.md.nav.settings.MdApplicationSettings
-import com.vladsch.md.nav.flex.settings.FlexmarkDebugSettings
 import com.vladsch.md.nav.util.PsiElementPredicate
 import java.awt.Color
 import java.util.*

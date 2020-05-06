@@ -25,12 +25,12 @@ public class PsiMap<K extends PsiElement, V> implements Map<K, V> {
     @NotNull
     public static <K extends PsiElement, V> PsiMap<K, V> toPsiMap(@NotNull Map<? extends K, ? extends V> other) {
         //noinspection unchecked
-        return other instanceof PsiMap<?, ?> ? (PsiMap<K, V>) other : new PsiMap<K,V>(other, HashMap::new);
+        return other instanceof PsiMap<?, ?> ? (PsiMap<K, V>) other : new PsiMap<K, V>(other, HashMap::new);
     }
 
     @NotNull
     public static <K extends PsiElement, V> PsiMap<K, V> toLinkedPsiMap(@NotNull Map<? extends K, ? extends V> other) {
-        return new PsiMap<K,V>(other, LinkedHashMap::new);
+        return new PsiMap<K, V>(other, LinkedHashMap::new);
     }
 
     @NotNull

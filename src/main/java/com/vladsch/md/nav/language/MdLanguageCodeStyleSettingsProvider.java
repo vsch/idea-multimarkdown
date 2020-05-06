@@ -17,9 +17,9 @@ import com.vladsch.md.nav.MdBundle;
 import com.vladsch.md.nav.MdFileType;
 import com.vladsch.md.nav.MdLanguage;
 import com.vladsch.md.nav.MdPlugin;
-import com.vladsch.md.nav.settings.TrailingSpacesType;
 import com.vladsch.md.nav.language.api.MdStripTrailingSpacesExtension;
 import com.vladsch.md.nav.language.api.MdTrailingSpacesCodeStyleOption;
+import com.vladsch.md.nav.settings.TrailingSpacesType;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -105,7 +105,7 @@ public class MdLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSettin
                         TrailingSpacesType.getOptionValues(option.getExcludedOptions())
                 );
             }
-            
+
             consumer.showCustomOption(MdCodeStyleSettings.class,
                     "KEEP_TRAILING_SPACES",
                     "Everything Else",

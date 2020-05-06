@@ -91,22 +91,24 @@ public class SmTestCaseUtils {
     public static class OrderedComparableComparison<T> extends OrderedComparisonCriteria<Comparable<T>> {
         @Override
         protected void assertElementsAreEqual(Comparable<T> o1, Comparable<T> o2) {
-            if (o1.compareTo((T)o2) != 0) failNotEquals("Elements not equal", o1, o2);
+            if (o1.compareTo((T) o2) != 0) failNotEquals("Elements not equal", o1, o2);
         }
+
         @Override
         protected boolean elementsAreEqual(Comparable<T> o1, Comparable<T> o2) {
-            return o1.compareTo((T)o2) == 0;
+            return o1.compareTo((T) o2) == 0;
         }
     }
 
     public static class UnorderedComparableComparison<T> extends UnorderedComparisonCriteria<Comparable<T>> {
         @Override
         protected void assertElementsAreEqual(Comparable<T> o1, Comparable<T> o2) {
-            if (o1.compareTo((T)o2) != 0) failNotEquals("Elements not equal", o1, o2);
+            if (o1.compareTo((T) o2) != 0) failNotEquals("Elements not equal", o1, o2);
         }
+
         @Override
         protected boolean elementsAreEqual(Comparable<T> o1, Comparable<T> o2) {
-            return o1.compareTo((T)o2) == 0;
+            return o1.compareTo((T) o2) == 0;
         }
     }
 
@@ -147,7 +149,7 @@ public class SmTestCaseUtils {
             else if (elem instanceof String) builder.append("\"").append(elem.toString().replace("\"", "\\\"")).append("\"");
             else if (elem instanceof DataPrinterAware) builder.append(((DataPrinterAware) elem).testData());
             else builder.append(elem.toString());
-            if (i+1 < length) builder.append(',');
+            if (i + 1 < length) builder.append(',');
             builder.append('\n');
         }
         builder.append("]\n");

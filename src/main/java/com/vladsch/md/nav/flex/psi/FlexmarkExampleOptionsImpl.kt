@@ -5,8 +5,8 @@ package com.vladsch.md.nav.flex.psi
 import com.intellij.lang.ASTNode
 import com.intellij.openapi.project.DumbService
 import com.intellij.psi.stubs.IStubElementType
-import com.vladsch.md.nav.parser.MdFactoryContext
 import com.vladsch.md.nav.flex.psi.util.FlexmarkPsiImplUtils
+import com.vladsch.md.nav.parser.MdFactoryContext
 import com.vladsch.md.nav.psi.util.MdElementFactory
 import com.vladsch.md.nav.psi.util.MdTypes
 import java.util.*

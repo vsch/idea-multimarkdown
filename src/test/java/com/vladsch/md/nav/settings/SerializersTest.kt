@@ -20,7 +20,6 @@
  */
 package com.vladsch.md.nav.settings
 
-
 import com.vladsch.md.nav.testUtil.TestCaseUtils
 import org.jdom.Element
 import org.junit.Test

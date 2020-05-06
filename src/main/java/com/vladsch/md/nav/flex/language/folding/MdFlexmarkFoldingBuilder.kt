@@ -5,8 +5,8 @@ package com.vladsch.md.nav.flex.language.folding
 import com.intellij.lang.folding.FoldingDescriptor
 import com.intellij.openapi.util.TextRange
 import com.vladsch.md.nav.flex.PluginBundle
-import com.vladsch.md.nav.language.api.MdFoldingVisitorHandler
 import com.vladsch.md.nav.flex.psi.*
+import com.vladsch.md.nav.language.api.MdFoldingVisitorHandler
 import com.vladsch.md.nav.psi.util.MdVisitHandler
 
 // FLEXMARK_PLUGIN

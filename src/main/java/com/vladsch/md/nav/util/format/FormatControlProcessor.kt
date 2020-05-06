@@ -31,7 +31,7 @@ class FormatControlProcessor(val psiFile: PsiFile) {
     val formatterOnPattern = settings.formatterOnPattern
     val formatterOffPattern = settings.formatterOffPattern
     var justTurnedOffFormatting = false
-    private set
+        private set
 
     private fun isFormatterOffTag(commentText: CharSequence?): Boolean? {
         val text = commentText?.toString()?.trim() ?: return null

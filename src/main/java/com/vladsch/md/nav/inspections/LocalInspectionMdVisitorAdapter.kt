@@ -3,10 +3,10 @@
 package com.vladsch.md.nav.inspections
 
 import com.intellij.psi.PsiFile
-import com.vladsch.md.nav.psi.element.MdVerbatim
 import com.vladsch.md.nav.flex.psi.FlexmarkExampleAst
 import com.vladsch.md.nav.flex.psi.FlexmarkExampleHtml
 import com.vladsch.md.nav.flex.psi.FlexmarkExampleSource
+import com.vladsch.md.nav.psi.element.MdVerbatim
 import com.vladsch.md.nav.psi.util.MdNodeVisitor
 import com.vladsch.md.nav.psi.util.MdVisitHandler
 

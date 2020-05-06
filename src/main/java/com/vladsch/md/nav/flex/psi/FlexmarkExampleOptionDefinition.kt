@@ -16,6 +16,7 @@ import com.vladsch.md.nav.flex.language.PsiReferenceOptionDefinitionLiteral
  * @param psiClass psiClass in which it is defined
  */
 class FlexmarkExampleOptionDefinition constructor(val psiClass: PsiClass, val element: PsiElement, val textRange: TextRange, val originalPsiClass: PsiClass) {
+
     val optionName: String get() = element.text.substring(textRange.startOffset, textRange.endOffset)
     val rangeInElement: TextRange get() = textRange
 
@@ -31,7 +32,7 @@ class FlexmarkExampleOptionDefinition constructor(val psiClass: PsiClass, val el
         return PsiReferenceOptionDefinitionLiteral(element as PsiLiteralExpression, textRange)
     }
 
-    val isDataValid:Boolean get() = psiClass.isValid && element.isValid && originalPsiClass.isValid
+    val isDataValid: Boolean get() = psiClass.isValid && element.isValid && originalPsiClass.isValid
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

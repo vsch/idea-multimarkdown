@@ -63,6 +63,6 @@ abstract class MdLinkResolver(val projectResolver: ProjectResolver, val containi
     abstract fun isAbsoluteUnchecked(linkRef: PathInfo): Boolean
     abstract fun isExternalUnchecked(linkRef: LinkRef): Boolean
     abstract fun linkEncodingExclusionMap(): Map<String, String>?
-    abstract fun renderingProfile():MdRenderingProfile?
+    abstract fun renderingProfile(): MdRenderingProfile?
 }
 

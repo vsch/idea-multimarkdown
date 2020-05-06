@@ -11,8 +11,8 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiJavaToken
 import com.intellij.util.ProcessingContext
 import com.vladsch.md.nav.flex.psi.util.FlexmarkPsiImplUtils.getFlexmarkExampleOptionDefinition
-import com.vladsch.md.nav.settings.MdApplicationSettings
 import com.vladsch.md.nav.flex.settings.FlexmarkDebugSettings
+import com.vladsch.md.nav.settings.MdApplicationSettings
 
 class FlexmarkJavaCompletion : CompletionContributor() {
     private val LOG = Logger.getInstance("com.vladsch.md.nav.language.completion")

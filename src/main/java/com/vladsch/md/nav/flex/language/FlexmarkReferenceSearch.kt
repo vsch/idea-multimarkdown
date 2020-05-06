@@ -10,14 +10,14 @@ import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.util.Processor
 import com.vladsch.md.nav.flex.parser.FlexmarkSpecCachedData
 import com.vladsch.md.nav.flex.parser.FlexmarkSpecTestCaseCachedData
-import com.vladsch.md.nav.psi.element.MdFile
 import com.vladsch.md.nav.flex.psi.FakePsiLiteralExpression
 import com.vladsch.md.nav.flex.psi.FlexmarkExampleOption
 import com.vladsch.md.nav.flex.psi.FlexmarkExampleOptionDefinition
 import com.vladsch.md.nav.flex.psi.util.FlexmarkPsiImplUtils
+import com.vladsch.md.nav.flex.settings.FlexmarkDebugSettings
+import com.vladsch.md.nav.psi.element.MdFile
 import com.vladsch.md.nav.psi.util.MdPsiImplUtil.inScope
 import com.vladsch.md.nav.settings.MdApplicationSettings
-import com.vladsch.md.nav.flex.settings.FlexmarkDebugSettings
 import com.vladsch.md.nav.util.PsiMap
 import com.vladsch.md.nav.util.PsiSet
 import com.vladsch.md.nav.util.Result

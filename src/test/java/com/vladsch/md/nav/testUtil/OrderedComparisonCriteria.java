@@ -41,14 +41,14 @@ public abstract class OrderedComparisonCriteria<T> extends TypedComparisonCriter
                     } catch (ArrayComparisonFailure var10) {
                         //var10.addDimension(i);
                         //throw var10;
-                        throw new ComparisonFailure(header + "array differed first at element [" + i + "]\n",  TestCaseUtils.arrayAsString(expected), TestCaseUtils.arrayAsString(actual));
+                        throw new ComparisonFailure(header + "array differed first at element [" + i + "]\n", TestCaseUtils.arrayAsString(expected), TestCaseUtils.arrayAsString(actual));
                     }
                 } else {
                     try {
                         this.assertElementsEqual(expected, actual);
                     } catch (AssertionError var11) {
                         //throw new ArrayComparisonFailure(header, var11, i);
-                        throw new ComparisonFailure(header + "array differed first at element [" + i + "]\n",  TestCaseUtils.arrayAsString(expecteds), TestCaseUtils.arrayAsString(actuals));
+                        throw new ComparisonFailure(header + "array differed first at element [" + i + "]\n", TestCaseUtils.arrayAsString(expecteds), TestCaseUtils.arrayAsString(actuals));
                     }
                 }
             }
@@ -71,7 +71,7 @@ public abstract class OrderedComparisonCriteria<T> extends TypedComparisonCriter
         int actualsLength = Array.getLength(actuals);
         int expectedsLength = Array.getLength(expecteds);
         if (actualsLength != expectedsLength) {
-            throw new ComparisonFailure(header + "array lengths differed, expected.length=" + expectedsLength + " actual.length=" + actualsLength,  TestCaseUtils.arrayAsString(expecteds), TestCaseUtils.arrayAsString(actuals));
+            throw new ComparisonFailure(header + "array lengths differed, expected.length=" + expectedsLength + " actual.length=" + actualsLength, TestCaseUtils.arrayAsString(expecteds), TestCaseUtils.arrayAsString(actuals));
         }
 
         return expectedsLength;

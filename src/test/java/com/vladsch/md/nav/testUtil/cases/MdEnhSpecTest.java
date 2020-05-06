@@ -3,8 +3,8 @@
 package com.vladsch.md.nav.testUtil.cases;
 
 import com.vladsch.flexmark.util.data.DataHolder;
-import com.vladsch.md.nav.testUtil.MdEnhSpecTestSetup;
 import com.vladsch.md.nav.settings.MdRenderingProfile;
+import com.vladsch.md.nav.testUtil.MdEnhSpecTestSetup;
 
 import java.util.HashMap;
 import java.util.Map;

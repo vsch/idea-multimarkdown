@@ -52,8 +52,8 @@ public class MdCodeFoldingOptionsProvider extends BeanConfigurable<MdFoldingSett
                 @Override
                 public void addCheckBox(@NotNull String title, @NotNull Getter<Boolean> getter, @NotNull Setter<Boolean> setter) {
                     if (first[0]) {
-                       addExtensionSeparator();
-                       first[0] = false;
+                        addExtensionSeparator();
+                        first[0] = false;
                     }
                     MdCodeFoldingOptionsProvider.this.checkBox(title, getter, setter);
                 }

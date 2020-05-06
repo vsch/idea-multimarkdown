@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class RestartableProjectFileDependency implements ProjectFilePredicate {
-    final protected  @NotNull PsiFile myFile;
+    final protected @NotNull PsiFile myFile;
 
     public RestartableProjectFileDependency(@NotNull PsiFile file) {
         myFile = file;
@@ -17,7 +17,7 @@ public class RestartableProjectFileDependency implements ProjectFilePredicate {
      * NOTE: not invoked on ADT nor inside read action, have to do all that manually
      * if false is returned then key for the dependency will be invalidated.
      * CachedDataSet and CachedDataKey determined by where dependency was added.
-     *
+     * <p>
      * Test dependency on given file and return true if still valid
      *
      * @param psiFile file to test

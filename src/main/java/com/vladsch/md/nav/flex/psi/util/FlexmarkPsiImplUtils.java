@@ -2,7 +2,6 @@
 
 package com.vladsch.md.nav.flex.psi.util;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
@@ -19,15 +18,15 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.vladsch.flexmark.util.misc.Pair;
 import com.vladsch.flexmark.util.misc.Ref;
-import com.vladsch.md.nav.parser.cache.MdCachedFileElements;
-import com.vladsch.md.nav.parser.cache.PsiClassProcessor;
 import com.vladsch.md.nav.flex.parser.FlexmarkProjectCachedData;
 import com.vladsch.md.nav.flex.parser.FlexmarkSpecTestCaseCachedData;
-import com.vladsch.md.nav.psi.element.MdFile;
 import com.vladsch.md.nav.flex.psi.FlexmarkExampleOption;
 import com.vladsch.md.nav.flex.psi.FlexmarkExampleOptionDefinition;
 import com.vladsch.md.nav.flex.psi.index.FlexmarkExampleOptionIndex;
 import com.vladsch.md.nav.flex.psi.index.FlexmarkFileIndex;
+import com.vladsch.md.nav.parser.cache.MdCachedFileElements;
+import com.vladsch.md.nav.parser.cache.PsiClassProcessor;
+import com.vladsch.md.nav.psi.element.MdFile;
 import com.vladsch.md.nav.util.NotNullBiConsumer;
 import com.vladsch.md.nav.util.NotNullBiFunction;
 import com.vladsch.md.nav.util.NotNullBiPredicate;
@@ -53,7 +52,6 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static com.intellij.openapi.diagnostic.Logger.getInstance;
 import static com.vladsch.flexmark.util.misc.Utils.prefixWith;
 import static com.vladsch.flexmark.util.misc.Utils.suffixWith;
 

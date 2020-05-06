@@ -10,7 +10,6 @@ import com.vladsch.md.nav.settings.MdRenderingProfile;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class MdNavigatorDiagramExtension implements /*Parser.ParserExtension,*/ HtmlRenderer.HtmlRendererExtension {
@@ -21,7 +20,8 @@ public class MdNavigatorDiagramExtension implements /*Parser.ParserExtension,*/ 
 
     /**
      * Used to allow fenced code converters to adjust flexmark options
-     * @param options flexmark options to check/modify
+     *
+     * @param options          flexmark options to check/modify
      * @param renderingProfile rendering profile
      */
     public static void addRenderingProfileOptions(@NotNull final MutableDataHolder options, @NotNull MdRenderingProfile renderingProfile) {

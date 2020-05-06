@@ -15,7 +15,7 @@ public class FlexmarkElementDescriptionProvider implements ElementDescriptionPro
     @Nullable
     @Override
     public String getElementDescription(@NotNull PsiElement element, @NotNull ElementDescriptionLocation location) {
-        if (element instanceof FakePsiLiteralExpression){
+        if (element instanceof FakePsiLiteralExpression) {
             if (location == UsageViewTypeLocation.INSTANCE) return PluginBundle.message("findusages.flexmark.example-option");
             if (location == UsageViewShortNameLocation.INSTANCE) return element.getText();
         }

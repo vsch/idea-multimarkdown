@@ -8,15 +8,14 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.vladsch.flexmark.util.sequence.RepeatedSequence
 import com.vladsch.md.nav.actions.api.MdElementContextInfoProvider
-import com.vladsch.md.nav.language.MdCodeStyleSettings
 import com.vladsch.md.nav.psi.element.*
+import com.vladsch.md.nav.psi.util.BlockPrefixes
 import com.vladsch.md.nav.psi.util.MdPsiImplUtil
 import com.vladsch.md.nav.psi.util.MdPsiImplUtil.isWhitespaceOrBlankLine
 import com.vladsch.md.nav.psi.util.MdTokenSets
 import com.vladsch.md.nav.psi.util.MdTypes
 import com.vladsch.md.nav.settings.ListIndentationType
 import com.vladsch.md.nav.settings.MdRenderingProfileManager
-import com.vladsch.md.nav.psi.util.BlockPrefixes
 import com.vladsch.md.nav.util.format.MdFormatter
 import com.vladsch.plugin.util.maxLimit
 import com.vladsch.plugin.util.minLimit
@@ -304,6 +303,7 @@ open class ListItemContext(
 
     companion object {
         private val LOG = Logger.getInstance("com.vladsch.md.nav.editor.handlers.list")
+
         @JvmField
         val TRACE_LIST_ITEM_EDIT: Boolean = false
 

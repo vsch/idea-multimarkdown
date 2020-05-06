@@ -19,8 +19,8 @@ import com.vladsch.md.nav.MdProjectComponent
 import com.vladsch.md.nav.MdRepoChangeListener
 import com.vladsch.md.nav.settings.MdProjectSettings
 import com.vladsch.md.nav.settings.ProfileManagerChangeListener
-import com.vladsch.md.nav.settings.RenderingProfileManager
 import com.vladsch.md.nav.settings.ProjectSettingsChangedListener
+import com.vladsch.md.nav.settings.RenderingProfileManager
 import com.vladsch.md.nav.util.FileRef
 import com.vladsch.md.nav.util.PathInfo
 import com.vladsch.md.nav.vcs.MdLinkResolver.ProjectResolver

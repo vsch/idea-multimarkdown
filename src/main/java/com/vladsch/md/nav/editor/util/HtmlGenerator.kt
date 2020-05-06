@@ -7,7 +7,6 @@ import com.intellij.psi.PsiFile
 import com.vladsch.flexmark.html.HtmlRenderer
 import com.vladsch.flexmark.parser.Parser
 import com.vladsch.flexmark.util.ast.Document
-import com.vladsch.flexmark.util.ast.Node
 import com.vladsch.flexmark.util.data.MutableDataHolder
 import com.vladsch.flexmark.util.sequence.TagRange
 import com.vladsch.md.nav.editor.api.MdHtmlGeneratorExtension
@@ -101,12 +100,12 @@ abstract class HtmlGenerator(val linkResolver: MdLinkResolver, val renderingProf
         addHtmlInjections(result, isByScript, HtmlPlacement.BODY_BOTTOMS, forHtmlExport, dataContext, exportMap)
     }
 
-    protected fun processIncludes(parser: Parser, renderer: HtmlRenderer, document: Document, file: PsiFile?):Document {
+    protected fun processIncludes(parser: Parser, renderer: HtmlRenderer, document: Document, file: PsiFile?): Document {
         for (handler in MdHtmlGeneratorExtension.EXTENSIONS.value) {
             val processed = handler.processIncludes(parser, renderer, document, file)
             if (processed !== document) return processed;
         }
-        
+
         return document
     }
 

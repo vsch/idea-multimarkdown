@@ -16,7 +16,9 @@ import com.vladsch.flexmark.util.ast.Node;
 import com.vladsch.flexmark.util.ast.Visitor;
 import com.vladsch.flexmark.util.data.DataKey;
 import com.vladsch.flexmark.util.sequence.BasedSequence;
-import com.vladsch.md.nav.MdPlugin;
+import com.vladsch.md.nav.flex.psi.FlexmarkOptionInfo;
+import com.vladsch.md.nav.flex.psi.FlexmarkPsi;
+import com.vladsch.md.nav.flex.settings.FlexmarkHtmlSettings;
 import com.vladsch.md.nav.parser.MdLexParser;
 import com.vladsch.md.nav.parser.MdParserOptions;
 import com.vladsch.md.nav.parser.SyntheticFlexmarkNodes;
@@ -24,12 +26,9 @@ import com.vladsch.md.nav.parser.api.MdParser;
 import com.vladsch.md.nav.parser.api.MdParserExtension;
 import com.vladsch.md.nav.parser.flexmark.MdNavigatorExtension;
 import com.vladsch.md.nav.parser.parserExtensions.MdParserHandlerBase;
-import com.vladsch.md.nav.flex.psi.FlexmarkOptionInfo;
-import com.vladsch.md.nav.flex.psi.FlexmarkPsi;
 import com.vladsch.md.nav.psi.util.MdPsiImplUtil;
 import com.vladsch.md.nav.settings.MdRenderingProfile;
 import com.vladsch.md.nav.settings.ParserOptions;
-import com.vladsch.md.nav.flex.settings.FlexmarkHtmlSettings;
 import com.vladsch.md.nav.util.ProjectFileRef;
 import com.vladsch.md.nav.vcs.MdLinkResolver;
 import org.jetbrains.annotations.NotNull;
@@ -69,7 +68,7 @@ public class MdSpecExampleParserExtension implements MdParserExtension {
                         .set(SpecExampleExtension.SPEC_EXAMPLE_RENDER_RAW_HTML, flexmarkHtmlSettings.getFlexmarkSpecExampleRenderHtml());
 
                 Supplier<? extends MdLinkResolver> supplier = MdNavigatorExtension.LINK_RESOLVER.get(options);
-                MdLinkResolver resolver = supplier == null ? null: supplier.get();
+                MdLinkResolver resolver = supplier == null ? null : supplier.get();
                 boolean productionSpecParserMode = renderingProfile.getParserSettings().anyOptions(MdLexParser.PRODUCTION_SPEC_PARSER);
                 boolean testSpecParserMode = !productionSpecParserMode && (ApplicationManager.getApplication().isUnitTestMode());
 

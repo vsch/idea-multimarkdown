@@ -21,15 +21,15 @@ public enum FormatWithSoftWrap implements ComboBoxAdaptable<FormatWithSoftWrap> 
     }
 
     public boolean isDisabled() {
-        return  this == DISABLED;
+        return this == DISABLED;
     }
 
     public boolean isEnabled() {
-        return  this == ENABLED;
+        return this == ENABLED;
     }
 
     public boolean isInfiniteMargin() {
-        return  this == INFINITE_MARGIN;
+        return this == INFINITE_MARGIN;
     }
 
     public static Static<FormatWithSoftWrap> ADAPTER = new Static<>(new ComboBoxAdapterImpl<>(DISABLED));

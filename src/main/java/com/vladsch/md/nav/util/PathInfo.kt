@@ -1,7 +1,6 @@
 // Copyright (c) 2015-2020 Vladimir Schneider <vladimir.schneider@gmail.com> Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.vladsch.md.nav.util
 
-import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.VirtualFileManager
@@ -9,7 +8,6 @@ import com.intellij.psi.PsiFile
 import com.vladsch.flexmark.util.misc.CharPredicate
 import com.vladsch.md.nav.MdFileTypeFactory
 import com.vladsch.plugin.util.*
-
 import java.io.File
 import kotlin.text.endsWith
 import kotlin.text.startsWith
@@ -24,8 +22,6 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
     constructor(__virtualFile: VirtualFile) : this(__virtualFile.path)
 
     constructor(psiFile: PsiFile) : this(psiFile.virtualFile.path)
-
-
 
     init {
         val cleanPath = cleanFullPath(fullPath)
@@ -260,31 +256,43 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
 
         @JvmField
         val IMAGE_EXTENSIONS: Array<String> = arrayOf("png", "jpg", "jpeg", "gif", "svg")
+
         @JvmField
         val MARKDOWN_EXTENSIONS: Array<String> = MdFileTypeFactory.EXTENSIONS
+
         @JvmField
         val WIKI_PAGE_EXTENSIONS: Array<String> = MdFileTypeFactory.EXTENSIONS
 
         @JvmField
         val URL_PREFIXES: Array<String> = arrayOf("http://", "https://")
+
         @JvmField
         val MAILTO_PREFIXES: Array<String> = arrayOf("mailto:")
+
         @JvmField
         val EXTERNAL_PREFIXES: Array<String> = arrayOf("ftp://", *MAILTO_PREFIXES, *URL_PREFIXES)
+
         @JvmField
         val WINDOWS_OS: Boolean = System.getProperty("os.name").startsWith("Windows", ignoreCase = true)
+
         @JvmField
         val FILE_URI_PREFIXES: Array<String> = arrayOf("file://", "file:/")
+
         @JvmField
         val URI_PREFIXES: Array<String> = arrayOf(*FILE_URI_PREFIXES, *EXTERNAL_PREFIXES)
+
         @JvmField
         val RELATIVE_PREFIXES: Array<String> = arrayOf<String>()
+
         @JvmField
         val LOCAL_PREFIXES: Array<String> = arrayOf("file:", "/", *RELATIVE_PREFIXES)
+
         @JvmField
         val ABSOLUTE_PREFIXES: Array<String> = arrayOf("/", "file://", *EXTERNAL_PREFIXES)
+
         @JvmField
         val CUSTOM_URI_SCHEME_PREFIXES: Regex = "^([a-zA-Z][a-zA-Z0-9+.-]*:/{1,2})".toRegex()
+
         @JvmField
         val WINDOWS_PATH_URI: Regex = "^([a-zA-Z]:)".toRegex()
 

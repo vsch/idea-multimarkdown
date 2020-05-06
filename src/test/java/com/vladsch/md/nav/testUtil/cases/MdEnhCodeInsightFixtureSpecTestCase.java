@@ -4,8 +4,6 @@ package com.vladsch.md.nav.testUtil.cases;
 
 import com.intellij.openapi.project.Project;
 import com.vladsch.flexmark.util.data.DataHolder;
-import com.vladsch.flexmark.util.data.MutableDataSet;
-import com.vladsch.md.nav.testUtil.cases.MdCodeInsightFixtureSpecTestCase;
 import com.vladsch.plugin.test.util.cases.CodeInsightFixtureSpecTestCase;
 import com.vladsch.plugin.test.util.renderers.LightFixtureSpecRenderer;
 import icons.FlexmarkIcons;

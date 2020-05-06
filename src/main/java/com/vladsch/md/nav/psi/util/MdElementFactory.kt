@@ -3,11 +3,9 @@ package com.vladsch.md.nav.psi.util
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.IElementType
-import com.vladsch.md.nav.psi.element.MdAttribute
-import com.vladsch.md.nav.psi.element.MdAttributes
+import com.vladsch.md.nav.flex.psi.*
 import com.vladsch.md.nav.parser.MdFactoryContext
 import com.vladsch.md.nav.psi.element.*
-import com.vladsch.md.nav.flex.psi.*
 
 object MdElementFactory {
 

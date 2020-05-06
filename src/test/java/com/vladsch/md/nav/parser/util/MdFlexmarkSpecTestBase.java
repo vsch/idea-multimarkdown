@@ -24,13 +24,13 @@ import com.vladsch.flexmark.test.util.spec.SpecExample;
 import com.vladsch.flexmark.util.data.DataHolder;
 import com.vladsch.flexmark.util.data.DataKey;
 import com.vladsch.flexmark.util.data.MutableDataSet;
-import com.vladsch.md.nav.testUtil.MdEnhSpecTestSetup;
 import com.vladsch.md.nav.language.MdCodeStyleSettings;
 import com.vladsch.md.nav.settings.MdApplicationSettings;
 import com.vladsch.md.nav.settings.MdHtmlSettings;
 import com.vladsch.md.nav.settings.MdParserSettings;
 import com.vladsch.md.nav.settings.MdPreviewSettings;
 import com.vladsch.md.nav.settings.MdRenderingProfile;
+import com.vladsch.md.nav.testUtil.MdEnhSpecTestSetup;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

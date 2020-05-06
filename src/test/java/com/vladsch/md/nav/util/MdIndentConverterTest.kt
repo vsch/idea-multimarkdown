@@ -27,7 +27,7 @@ class MdIndentConverterTest {
     }
 
     private fun lines(lines: String): List<BasedSequence> {
-            return LineAppendableImpl(0).append(lines).linesInfo.map { it.textNoEOL }.toList()
+        return LineAppendableImpl(0).append(lines).linesInfo.map { it.textNoEOL }.toList()
     }
 
     @Test

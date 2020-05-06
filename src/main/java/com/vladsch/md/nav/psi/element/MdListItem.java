@@ -20,8 +20,10 @@ public interface MdListItem extends MdTaskItemContainer, MdIndentingComposite, M
      * 0 - low priority '-' list item marker
      * 1 - normal priority '+' list item marker or ordered list item
      * 2 - high priority '*' list item marker
-     * @return priority of task item (based on list item marker type)
+     *
      * @param editContext
+     *
+     * @return priority of task item (based on list item marker type)
      */
     int getTaskItemPriority(@NotNull PsiEditContext editContext);
 

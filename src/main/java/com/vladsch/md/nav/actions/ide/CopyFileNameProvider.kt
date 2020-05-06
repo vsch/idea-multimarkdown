@@ -16,6 +16,7 @@ import com.vladsch.md.nav.settings.MdApplicationSettings
 
 // CopyPathProvider only available 2019.08.26, so 193+
 open class CopyFileNameProvider : CopyPathProvider() {
+
     override fun update(e: AnActionEvent) {
         super.update(e)
         e.presentation.text = MdBundle.message("message.file.name.label")

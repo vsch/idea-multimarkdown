@@ -32,9 +32,9 @@ public interface MdPreviewCustomizationProvider {
         }
     }
 
-    static void  parserErrorReport(int pegdownExtensions, long parserOptions, @NotNull DataHolder options, Throwable e, String text) {
+    static void parserErrorReport(int pegdownExtensions, long parserOptions, @NotNull DataHolder options, Throwable e, String text) {
         for (MdPreviewCustomizationProvider handler : EXTENSIONS.getValue()) {
-            if (handler.createParserErrorReport(pegdownExtensions,parserOptions, options, e, text)) break;
+            if (handler.createParserErrorReport(pegdownExtensions, parserOptions, options, e, text)) break;
         }
     }
 
@@ -49,12 +49,15 @@ public interface MdPreviewCustomizationProvider {
     boolean canLaunchExternalLink(@NotNull String myLastRenderedUrl, @NotNull String href, @NotNull MdRenderingProfile renderingProfile);
 
     // REFACTOR: move error related methods to Md error handler extension point
+
     /**
      * Generate error report for exception in HTML panel
-     * @param message message
-     * @param e exception
+     *
+     * @param message  message
+     * @param e        exception
      * @param textType attachment name
-     * @param text attachment
+     * @param text     attachment
+     *
      * @return true if handled
      */
     boolean createErrorReport(String message, Throwable e, String textType, String text);

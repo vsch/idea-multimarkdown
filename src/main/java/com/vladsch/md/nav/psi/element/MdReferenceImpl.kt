@@ -189,6 +189,7 @@ class MdReferenceImpl(stub: MdReferenceStub?, nodeType: IStubElementType<MdRefer
     companion object {
         @JvmField
         val REFERENCE_DISPLAY_NAME = MdBundle.message("reference.type.reference")
+
         @JvmField
         val REFERENCE_TYPE = MdTypes.REFERENCE
 

@@ -9,9 +9,9 @@ fun <K : PsiElement> Collection<K>.toLinkedPsiSet(): PsiSet<K> = PsiSet.toLinked
 fun <K : PsiElement, V> Map<K, V>.toPsiMap(): PsiMap<K, V> = PsiMap.toPsiMap(this)
 fun <K : PsiElement, V> Map<K, V>.toLinkedPsiMap(): PsiMap<K, V> = PsiMap.toLinkedPsiMap(this)
 
-fun <K: PsiElement, V> Collection<Map.Entry<K, V>>.toPsiMap(): PsiMap<K, V> = PsiMap.toPsiMap(this)
-fun <K: PsiElement, V> Collection<Map.Entry<K, V>>.toLinkedPsiMap(): PsiMap<K, V> = PsiMap.toLinkedPsiMap(this)
+fun <K : PsiElement, V> Collection<Map.Entry<K, V>>.toPsiMap(): PsiMap<K, V> = PsiMap.toPsiMap(this)
+fun <K : PsiElement, V> Collection<Map.Entry<K, V>>.toLinkedPsiMap(): PsiMap<K, V> = PsiMap.toLinkedPsiMap(this)
 
-fun <K: PsiElement, V> List<Pair<K, V>>.toPsiMap(): PsiMap<K, V> = PsiMap.toPsiMap(this.toMap())
-fun <K: PsiElement, V> List<Pair<K, V>>.toLinkedPsiMap(): PsiMap<K, V> = PsiMap.toLinkedPsiMap(this.toMap())
+fun <K : PsiElement, V> List<Pair<K, V>>.toPsiMap(): PsiMap<K, V> = PsiMap.toPsiMap(this.toMap())
+fun <K : PsiElement, V> List<Pair<K, V>>.toLinkedPsiMap(): PsiMap<K, V> = PsiMap.toLinkedPsiMap(this.toMap())
 

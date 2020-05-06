@@ -25,9 +25,9 @@ class ReformatElementAction : AnAction() {
                 it.and(!(editor.settings.isUseSoftWraps && styleSettings.formatWithSoftWrapType.isDisabled)
                     , "Wrap on typing is disabled when soft wraps are enabled (Editor > Code Style > Markdown)"
                 )
-                .and(FormatControlProcessor(psiFile).isFormattingRegion(editor.caretModel.primaryCaret.offset)
-                    , "Element is in a non-formatting region"
-                )
+                    .and(FormatControlProcessor(psiFile).isFormattingRegion(editor.caretModel.primaryCaret.offset)
+                        , "Element is in a non-formatting region"
+                    )
             }
         }.done()
     }

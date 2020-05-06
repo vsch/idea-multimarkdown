@@ -117,24 +117,34 @@ class PrefixMatcher(marker: String?, val maxLeadSpaces: Int, val minTrailSpaces:
     companion object {
         @JvmField
         val EMPTY = PrefixMatcher(null, 0, 0, 0)
+
         @JvmField
         val NON_INDENTING_SPACES = PrefixMatcher(null, 0, 0, 3)
+
         @JvmField
         val BLOCK_QUOTE = PrefixMatcher(">", 3, 0, 1)
+
         @JvmField
         val ASIDE_BLOCK = PrefixMatcher("|", 3, 0, 1)
+
         @JvmField
         val CONTENT_INDENT_1 = PrefixMatcher(null, 0, 1, 1)
+
         @JvmField
         val CONTENT_INDENT_2 = PrefixMatcher(null, 0, 2, 2)
+
         @JvmField
         val CONTENT_INDENT_3 = PrefixMatcher(null, 0, 3, 3)
+
         @JvmField
         val CONTENT_INDENT_4 = PrefixMatcher(null, 0, 4, 4)
+
         @JvmField
         val CONTENT_INDENT_5 = PrefixMatcher(null, 0, 5, 5)
+
         @JvmField
         val CONTENT_INDENT_6 = PrefixMatcher(null, 0, 6, 6)
+
         @JvmField
         val CONTENT_INDENT_7 = PrefixMatcher(null, 0, 7, 7)
 

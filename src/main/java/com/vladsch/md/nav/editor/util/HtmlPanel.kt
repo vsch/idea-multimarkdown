@@ -9,7 +9,6 @@ import com.intellij.util.Range
 import com.vladsch.flexmark.util.sequence.TagRange
 import com.vladsch.md.nav.editor.HtmlPanelHost
 import com.vladsch.md.nav.editor.PreviewEditorState
-import com.vladsch.md.nav.editor.api.MdPreviewCustomizationProvider
 import com.vladsch.md.nav.parser.flexmark.MdNavigatorExtension
 import org.w3c.dom.Node
 import javax.swing.JComponent

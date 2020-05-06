@@ -15,9 +15,9 @@ public class SpacePrefixMatcher implements LinePrefixMatcher {
     /**
      * Get the size of the prefix matched on the given line
      *
-     * @param lineChars      line characters
-     * @param indentColumn   column number of first character on the line
-     * @param editContext parser settings to use for determining the prefix removal pattern
+     * @param lineChars    line characters
+     * @param indentColumn column number of first character on the line
+     * @param editContext  parser settings to use for determining the prefix removal pattern
      *
      * @return column of first non-prefix line content
      */

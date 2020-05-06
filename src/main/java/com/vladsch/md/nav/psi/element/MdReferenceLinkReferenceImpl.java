@@ -2,7 +2,6 @@
 package com.vladsch.md.nav.psi.element;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
 import com.vladsch.md.nav.psi.util.MdTypes;

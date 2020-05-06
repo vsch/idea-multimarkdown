@@ -18,7 +18,6 @@ import com.vladsch.md.nav.psi.util.MdItemPresentation
 import com.vladsch.md.nav.psi.util.MdPsiImplUtil
 import com.vladsch.md.nav.psi.util.MdTypes
 import com.vladsch.md.nav.util.MdIndentConverter
-import com.vladsch.plugin.util.debug
 import com.vladsch.plugin.util.maxLimit
 import java.util.*
 

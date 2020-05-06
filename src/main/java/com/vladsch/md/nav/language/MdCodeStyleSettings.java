@@ -2,7 +2,6 @@
 package com.vladsch.md.nav.language;
 
 import com.intellij.application.options.CodeStyle;
-import com.intellij.lang.Language;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleConstraints;
@@ -29,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
-import java.util.function.IntFunction;
 
 public class MdCodeStyleSettings extends CustomCodeStyleSettings {
     protected static final String SETTINGS_TAG_NAME = "MarkdownNavigatorCodeStyleSettings";
@@ -236,7 +234,7 @@ public class MdCodeStyleSettings extends CustomCodeStyleSettings {
             Integer integer = SequenceUtils.parseIntOrNull(softMargin.trim());
             if (integer != null) integerList.add(integer);
         }
-        
+
         getContainer().setSoftMargins(MdLanguage.INSTANCE, integerList);
     }
 

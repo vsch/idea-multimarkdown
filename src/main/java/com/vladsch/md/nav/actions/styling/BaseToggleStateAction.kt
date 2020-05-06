@@ -250,6 +250,7 @@ abstract class BaseToggleStateAction : ToggleAction(), DumbAware {
             val YES: SelectionStateWithReason = SelectionStateWithReason(SelectionState.YES)
             val NULL: SelectionStateWithReason = SelectionStateWithReason(SelectionState.NULL)
             val INCONSISTENT: SelectionStateWithReason = SelectionStateWithReason(SelectionState.INCONSISTENT)
+
             @Suppress("FunctionName")
             fun NO(reason: String): SelectionStateWithReason = SelectionStateWithReason(SelectionState.NO, reason)
         }

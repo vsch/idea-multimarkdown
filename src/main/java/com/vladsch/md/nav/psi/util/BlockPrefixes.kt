@@ -37,8 +37,8 @@ class BlockPrefixes private constructor(
         return parent ?: this
     }
 
-    fun isEmpty():Boolean = this == EMPTY
-    fun isNotEmpty():Boolean = this != EMPTY
+    fun isEmpty(): Boolean = this == EMPTY
+    fun isNotEmpty(): Boolean = this != EMPTY
 
     fun append(isItem: Boolean, childPrefix: CharSequence, childContPrefix: CharSequence): BlockPrefixes {
         assert(!childPrefix.contains('>'))

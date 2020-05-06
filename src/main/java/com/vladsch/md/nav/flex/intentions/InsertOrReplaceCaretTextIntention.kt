@@ -10,8 +10,8 @@ import com.intellij.psi.PsiFile
 import com.intellij.util.IncorrectOperationException
 import com.vladsch.flexmark.util.misc.Utils.escapeJavaString
 import com.vladsch.md.nav.actions.handlers.util.PsiEditContext
-import com.vladsch.md.nav.settings.MdApplicationSettings
 import com.vladsch.md.nav.flex.settings.FlexmarkDebugSettings
+import com.vladsch.md.nav.settings.MdApplicationSettings
 import com.vladsch.md.nav.util.PsiElementPredicateWithEditor
 import com.vladsch.plugin.util.debug
 

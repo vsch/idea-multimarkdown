@@ -8,8 +8,8 @@ import com.intellij.ide.structureView.StructureViewModelBase
 import com.intellij.ide.structureView.StructureViewTreeElement
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiElement
-import com.vladsch.md.nav.psi.element.*
 import com.vladsch.md.nav.flex.psi.FlexmarkExample
+import com.vladsch.md.nav.psi.element.*
 import com.vladsch.md.nav.psi.util.MdTypes
 
 class MdStructureViewModel(psiFile: MdFile, editor: Editor?, root: MdStructureViewFile)

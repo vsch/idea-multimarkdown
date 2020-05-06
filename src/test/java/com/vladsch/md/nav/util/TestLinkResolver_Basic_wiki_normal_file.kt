@@ -14,7 +14,6 @@
  */
 package com.vladsch.md.nav.util
 
-import com.vladsch.md.nav.MdPlugin
 import com.vladsch.md.nav.testUtil.TestCaseUtils.assertEqualsMessage
 import com.vladsch.md.nav.testUtil.TestCaseUtils.compareUnorderedLists
 import com.vladsch.md.nav.vcs.GitHubLinkResolver

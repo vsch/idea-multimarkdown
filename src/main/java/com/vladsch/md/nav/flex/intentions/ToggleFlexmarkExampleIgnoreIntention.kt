@@ -8,13 +8,13 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.util.IncorrectOperationException
 import com.vladsch.md.nav.actions.handlers.util.PsiEditContext
-import com.vladsch.md.nav.parser.MdFactoryContext
 import com.vladsch.md.nav.flex.psi.FlexmarkExample
 import com.vladsch.md.nav.flex.psi.FlexmarkExampleParams
 import com.vladsch.md.nav.flex.psi.FlexmarkPsi
+import com.vladsch.md.nav.flex.settings.FlexmarkDebugSettings
+import com.vladsch.md.nav.parser.MdFactoryContext
 import com.vladsch.md.nav.psi.util.MdElementFactory
 import com.vladsch.md.nav.settings.MdApplicationSettings
-import com.vladsch.md.nav.flex.settings.FlexmarkDebugSettings
 import com.vladsch.md.nav.util.PsiElementPredicate
 import java.util.*
 

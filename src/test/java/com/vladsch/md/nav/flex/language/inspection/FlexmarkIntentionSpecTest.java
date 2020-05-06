@@ -18,10 +18,10 @@ package com.vladsch.md.nav.flex.language.inspection;
 import com.vladsch.flexmark.test.util.spec.ResourceLocation;
 import com.vladsch.flexmark.util.data.DataHolder;
 import com.vladsch.flexmark.util.data.MutableDataSet;
-import com.vladsch.md.nav.testUtil.cases.MdEnhSpecTest;
 import com.vladsch.md.nav.flex.settings.FlexmarkDebugSettings;
 import com.vladsch.md.nav.flex.testUtil.cases.FlexOptionsForStyleSettings;
 import com.vladsch.md.nav.testUtil.MdLightPlatformIntentionSpecTestCase;
+import com.vladsch.md.nav.testUtil.cases.MdEnhSpecTest;
 import com.vladsch.plugin.test.util.cases.CodeInsightFixtureSpecTestCase;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -36,13 +36,12 @@ public class FlexmarkIntentionSpecTest extends MdLightPlatformIntentionSpecTestC
     public static final ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(FlexmarkIntentionSpecTest.class, SPEC_RESOURCE);
 
     final private static DataHolder OPTIONS = new MutableDataSet()
-            .set(RENDERING_PROFILE, MdEnhSpecTest.ALL_ENHANCED_PARSER_OPTIONS)
-            ;
+            .set(RENDERING_PROFILE, MdEnhSpecTest.ALL_ENHANCED_PARSER_OPTIONS);
 
     final private static Map<String, DataHolder> optionsMap = new HashMap<>();
     static {
         optionsMap.putAll(FlexOptionsForStyleSettings.getOptionsMap());
-        optionsMap.put("flexmark-features", new MutableDataSet().set(APPLICATION_SETTINGS, s-> s.getDebugSettings().getExtension(FlexmarkDebugSettings.KEY).setEnableFlexmarkFeatures(true)));
+        optionsMap.put("flexmark-features", new MutableDataSet().set(APPLICATION_SETTINGS, s -> s.getDebugSettings().getExtension(FlexmarkDebugSettings.KEY).setEnableFlexmarkFeatures(true)));
     }
     public FlexmarkIntentionSpecTest() {
         super(optionsMap, OPTIONS);

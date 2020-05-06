@@ -5,8 +5,8 @@ package com.vladsch.md.nav.flex;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ide.util.projectWizard.WizardContext;
 import com.intellij.openapi.Disposable;
-import com.vladsch.md.nav.settings.MdApplicationSettings;
 import com.vladsch.md.nav.flex.settings.FlexmarkDebugSettings;
+import com.vladsch.md.nav.settings.MdApplicationSettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

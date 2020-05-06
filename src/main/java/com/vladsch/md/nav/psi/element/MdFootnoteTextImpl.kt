@@ -3,8 +3,6 @@ package com.vladsch.md.nav.psi.element
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.lang.ASTNode
-import com.intellij.psi.PsiElement
-import com.vladsch.md.nav.psi.util.MdPsiImplUtil
 
 class MdFootnoteTextImpl(node: ASTNode) : ASTWrapperPsiElement(node), MdFootnoteText, MdListDelimiter {
 //    override fun isFirstItemBlock(element: PsiElement): Boolean {

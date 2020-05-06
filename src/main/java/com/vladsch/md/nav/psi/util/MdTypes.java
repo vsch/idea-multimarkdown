@@ -2,9 +2,9 @@
 package com.vladsch.md.nav.psi.util;
 
 import com.intellij.psi.tree.IElementType;
+import com.vladsch.md.nav.flex.psi.*;
 import com.vladsch.md.nav.parser.api.MdTypeFactoryRegistry;
 import com.vladsch.md.nav.psi.element.*;
-import com.vladsch.md.nav.flex.psi.*;
 
 public interface MdTypes {
     //Key<String> HEADER_REF_ID_DATA_KEY = new Key<String>("MultiMarkdownHeaderReferenceId");

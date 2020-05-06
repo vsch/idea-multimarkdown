@@ -18,19 +18,25 @@ enum class HtmlPlacement(val htmlSection: HtmlSection, val isCss: Boolean, val i
     companion object {
         @JvmField
         val HEAD_TOPS = values().filter { it.htmlSection == HtmlSection.HEAD_TOP }
+
         @JvmField
         val HEAD_BOTTOMS = values().filter { it.htmlSection == HtmlSection.HEAD_BOTTOM }
+
         @JvmField
         val BODY_TOPS = values().filter { it.htmlSection == HtmlSection.BODY_TOP }
+
         @JvmField
         val BODY_BOTTOMS = values().filter { it.htmlSection == HtmlSection.BODY_BOTTOM }
 
         @JvmField
         val HEAD_TOPS_NO_CSS = values().filter { it.htmlSection == HtmlSection.HEAD_TOP && !it.isCss }
+
         @JvmField
         val HEAD_BOTTOMS_NO_CSS = values().filter { it.htmlSection == HtmlSection.HEAD_BOTTOM && !it.isCss }
+
         @JvmField
         val BODY_TOPS_NO_CSS = values().filter { it.htmlSection == HtmlSection.BODY_TOP && !it.isCss }
+
         @JvmField
         val BODY_BOTTOMS_NO_CSS = values().filter { it.htmlSection == HtmlSection.BODY_BOTTOM && !it.isCss }
     }

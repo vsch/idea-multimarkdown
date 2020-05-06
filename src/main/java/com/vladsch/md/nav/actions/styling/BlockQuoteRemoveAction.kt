@@ -8,10 +8,10 @@ import com.intellij.psi.PsiElement
 import com.vladsch.md.nav.actions.handlers.util.CaretContextInfo
 import com.vladsch.md.nav.actions.styling.util.DisabledConditionBuilder
 import com.vladsch.md.nav.psi.element.MdBlockQuote
+import com.vladsch.md.nav.psi.util.BlockQuotePrefix
 import com.vladsch.md.nav.psi.util.MdPsiImplUtil
 import com.vladsch.md.nav.psi.util.MdTokenSets
 import com.vladsch.md.nav.psi.util.MdTypes
-import com.vladsch.md.nav.psi.util.BlockQuotePrefix
 import com.vladsch.plugin.util.psi.isTypeOf
 
 class BlockQuoteRemoveAction : BlockQuoteItemAction() {

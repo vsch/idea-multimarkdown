@@ -9,11 +9,13 @@ import java.util.*
 class MdIndentConverter {
     // verbatim content node
     private val content: BasedSequence
+
     // offset in parent of the containing verbatim element
     private val startOffsetInParent: Int
 
     // range within document of original lines without indent removal
     private val originalLines: ArrayList<TextRange>
+
     // range within document of lines adjusted for editing of fragment
     private val convertedLines: ArrayList<TextRange>
 
@@ -22,9 +24,11 @@ class MdIndentConverter {
      */
     constructor(contentChars: CharSequence, startOffsetInParent: Int, prefixedLines: List<BasedSequence>, unprefixedLines: List<BasedSequence>?, unsuffixedLines: List<BasedSequence>?) {
         this.content = contentChars.toBased()
-        assert(content.builder.addAll(prefixedLines).toSequence() == content) { "Content not equal to lines\n" +
-            "content: '${content.toVisibleWhitespaceString()}'\n" +
-            "  lines: '${content.builder.addAll(prefixedLines).toSequence().toVisibleWhitespaceString()}'" }
+        assert(content.builder.addAll(prefixedLines).toSequence() == content) {
+            "Content not equal to lines\n" +
+                "content: '${content.toVisibleWhitespaceString()}'\n" +
+                "  lines: '${content.builder.addAll(prefixedLines).toSequence().toVisibleWhitespaceString()}'"
+        }
 
         this.startOffsetInParent = startOffsetInParent
 

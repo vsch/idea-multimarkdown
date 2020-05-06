@@ -19,8 +19,6 @@ import com.vladsch.md.nav.spellchecking.Suggestion;
 import com.vladsch.md.nav.spellchecking.SuggestionList;
 import com.vladsch.md.nav.util.InspectionResult;
 import com.vladsch.md.nav.util.PathInfo;
-
-
 import org.junit.internal.ArrayComparisonFailure;
 
 import java.util.ArrayList;
