@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
-    <property name="version" value="3.0.201.91"/>
+    <property name="version" value="3.0.201.92"/>
 
     <target name="clean">
         <delete file="idea-multimarkdown.zip"/>
