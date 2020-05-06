@@ -23,8 +23,8 @@
             <arg value="-v${version}"/>
             <arg value="-s"/>
             <arg value="product-descriptor.xml"/>
-            <arg value="META-INF/basic-plugin.xml"/>
-            <arg value="resources/META-INF/plugin.xml"/>
+            <arg value="src/main/META-INF/basic-plugin.xml"/>
+            <arg value="src/main/resources/META-INF/plugin.xml"/>
         </java>
     </target>
 </project>

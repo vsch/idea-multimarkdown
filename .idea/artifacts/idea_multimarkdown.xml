@@ -4,13 +4,13 @@
     <root id="archive" name="idea-multimarkdown.jar">
       <element id="module-output" name="idea-multimarkdown" />
       <element id="directory" name="icons">
-        <element id="dir-copy" path="$PROJECT_DIR$/resources/icons" />
+        <element id="dir-copy" path="$PROJECT_DIR$/src/main/resources/icons" />
       </element>
       <element id="directory" name="intentionDescriptions">
-        <element id="dir-copy" path="$PROJECT_DIR$/resources/intentionDescriptions" />
+        <element id="dir-copy" path="$PROJECT_DIR$/src/main/resources/intentionDescriptions" />
       </element>
       <element id="directory" name="liveTemplates">
-        <element id="dir-copy" path="$PROJECT_DIR$/resources/liveTemplates" />
+        <element id="dir-copy" path="$PROJECT_DIR$/src/main/resources/liveTemplates" />
       </element>
     </root>
   </artifact>
