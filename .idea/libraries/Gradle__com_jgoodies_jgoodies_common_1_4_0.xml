@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.jgoodies:jgoodies-common:1.4.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jgoodies/jgoodies-common/1.4.0/6f9364fafb8d8f467ddbab16dfcaadfecaea6bdd/jgoodies-common-1.4.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jgoodies/jgoodies-common/1.4.0/c671519e633b647827fbb55ec7753dade6ef01b6/jgoodies-common-1.4.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

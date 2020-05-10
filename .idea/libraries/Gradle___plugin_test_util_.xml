@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gradle: :plugin-test-util:">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/plugin-test-util.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

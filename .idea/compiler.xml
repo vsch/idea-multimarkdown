@@ -20,6 +20,11 @@
       <entry name="LICENSE" />
       <entry name="?*.txt" />
     </wildcardResourcePatterns>
+    <bytecodeTargetLevel>
+      <module name="idea-multimarkdown" target="1.8" />
+      <module name="idea-multimarkdown.main" target="1.8" />
+      <module name="idea-multimarkdown.test" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="PREFER_TARGET_JDK_COMPILER" value="false" />

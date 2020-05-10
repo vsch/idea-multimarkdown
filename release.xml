@@ -2,15 +2,15 @@
 <project>
     <property name="version" value="3.0.201.92"/>
 
-    <target name="clean">
+    <target name="releaseClean">
         <delete file="idea-multimarkdown.zip"/>
     </target>
 
-    <target name="update XmlMerge">
+    <target name="releaseUpdateXmlMerge">
         <copy file="out/artifacts/xmlmerge.jar" tofile="xmlmerge.jar"/>
     </target>
 
-    <target name="legacy">
+    <target name="releaseLegacy">
         <zip destfile="idea-multimarkdown.zip">
             <zipfileset dir="." prefix="idea-multimarkdown" includes="lib/*.jar" excludes="lib/*sources*"/>
             <zipfileset dir="out/artifacts" prefix="idea-multimarkdown/lib" includes="*.jar" excludes="plugin-test-util.jar"/>
@@ -18,7 +18,7 @@
         </zip>
     </target>
 
-    <target name="PluginXML">
+    <target name="releasePluginXML">
         <java jar="xmlmerge.jar" fork="true">
             <arg value="-v${version}"/>
             <arg value="-s"/>

@@ -91,12 +91,12 @@ public class MdNodeVisitor extends AstActionHandler<MdNodeVisitor, PsiElement, M
         super(AST_ADAPTER);
     }
 
-    public MdNodeVisitor(@NotNull MdVisitHandler... handlers) {
+    public MdNodeVisitor(MdVisitHandler... handlers) {
         super(AST_ADAPTER);
         super.addActionHandlers(handlers);
     }
 
-    public MdNodeVisitor(@NotNull MdVisitHandler[]... handlers) {
+    public MdNodeVisitor(MdVisitHandler[]... handlers) {
         super(AST_ADAPTER);
         //noinspection unchecked
         super.addActionHandlers(handlers);
@@ -114,12 +114,12 @@ public class MdNodeVisitor extends AstActionHandler<MdNodeVisitor, PsiElement, M
 
     // needed for backward compatibility with extension handler arrays typed as MdVisitHandler<?>[]
     @Override
-    final public MdNodeVisitor addHandlers(@NotNull MdVisitHandler... handlers) {
+    final public MdNodeVisitor addHandlers(MdVisitHandler... handlers) {
         return super.addActionHandlers(handlers);
     }
 
     @Override
-    final public MdNodeVisitor addHandlers(@NotNull MdVisitHandler[]... handlers) {
+    final public MdNodeVisitor addHandlers(MdVisitHandler[]... handlers) {
         //noinspection unchecked
         return super.addActionHandlers(handlers);
     }

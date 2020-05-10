@@ -23,7 +23,6 @@ public interface MdPreviewCustomizationProvider {
 
     boolean isAlternateUrlEnabled(@NotNull MdRenderingProfile renderingProfile);
 
-    @Nullable
     Want.Options[] getLinkOptions(@NotNull MdRenderingProfile renderingProfile);
 
     static void textErrorReport(String source, Throwable e, String textType, String text) {

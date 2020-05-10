@@ -123,7 +123,7 @@ class JavaFxHtmlPanel(project: Project, htmlPanelHost: HtmlPanelHost) : HtmlPane
             LogHandler.LOG_HANDLER = object : LogHandler() {
                 override fun trace(message: String) = LOG_JFX_DEBUGGER.debug(message)
 
-                override fun trace(message: String, t: Throwable) = LOG_JFX_DEBUGGER.debug(message, t)
+                override fun trace(message: String, t: Throwable) = LOG_JFX_DEBUGGER.debug(message, t as Throwable?)
 
                 override fun trace(t: Throwable) = LOG_JFX_DEBUGGER.debug(t)
 
@@ -131,7 +131,7 @@ class JavaFxHtmlPanel(project: Project, htmlPanelHost: HtmlPanelHost) : HtmlPane
 
                 override fun debug(message: String) = LOG_JFX_DEBUGGER.debug(message)
 
-                override fun debug(message: String, t: Throwable) = LOG_JFX_DEBUGGER.debug(message, t)
+                override fun debug(message: String, t: Throwable) = LOG_JFX_DEBUGGER.debug(message, t as Throwable?)
 
                 override fun debug(t: Throwable) = LOG_JFX_DEBUGGER.debug(t)
 

@@ -18,7 +18,7 @@ public interface MdLineMarkerExtension {
     MdExtensions<MdLineMarkerExtension> EXTENSIONS = new MdExtensions<>(EP_NAME, new MdLineMarkerExtension[0]);
 
     interface LineMarkerProvider {
-        void collectFileRefMarkers(@NotNull PsiElement leafElement, @NotNull PsiElement element, @Nullable ResolveResult[] resolveResults);
+        void collectFileRefMarkers(@NotNull PsiElement leafElement, @NotNull PsiElement element, ResolveResult[] resolveResults);
 
         boolean collectReferencingMarkers(@NotNull PsiElement leafElement, @NotNull Collection<? super RelatedItemLineMarkerInfo<?>> result, @Nullable String navigationText);
     }

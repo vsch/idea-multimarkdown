@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.vladsch.flexmark:flexmark-ext-macros:0.61.26">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-ext-macros/0.61.26/ca1e84e18c701d0a0719a685170933b1da4ce89b/flexmark-ext-macros-0.61.26.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-ext-macros/0.61.26/e8dab7040e64b888687401af1ea8882778975745/flexmark-ext-macros-0.61.26-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

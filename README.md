@@ -15,6 +15,7 @@
 - [Version 2.8.2](#version-282)
 - [Source Update is Long Overdue](#source-update-is-long-overdue)
 
+
 ## Overview
 
 ![Screenshot](/assets/images/capabilities2.png)
@@ -302,7 +303,7 @@ Reserved.
 [.gitignore]: https://plugins.jetbrains.com/plugin/7495--ignore
 [Admonition Extension, Material for MkDocs]: https://squidfunk.github.io/mkdocs-material/extensions/admonition/
 [Android Studio]: https://developer.android.com/sdk/installing/studio.html
-[AppCode]: http://www.jetbrains.com/objc
+[AppCode]: https://www.jetbrains.com/objc
 [CLion]: https://www.jetbrains.com/clion
 [CommonMark]: https://commonmark.org
 [CommonMark (spec 0.28)]: https://spec.commonmark.org/0.28
@@ -314,7 +315,7 @@ Reserved.
 [GitHub wiki in IntelliJ IDE]: https://github.com/vsch/idea-multimarkdown/wiki/Adding-GitHub-Wiki-to-IntelliJ-Project
 [GitHub Wiki pages]: https://github.com/vsch/idea-multimarkdown/wiki
 [GitHub-userscripts]: https://github.com/Mottie/GitHub-userscripts
-[IntelliJ IDEA]: http://www.jetbrains.com/idea
+[IntelliJ IDEA]: https://www.jetbrains.com/idea
 [Jekyll]: https://jekyllrb.com
 [JetBrains plugin comment and rate page]: https://plugins.jetbrains.com/plugin/7896-markdown-navigator
 [Kotlin]: https://kotlinlang.org
@@ -324,11 +325,11 @@ Reserved.
 [MultiMarkdown]: https://fletcherpenney.net/multimarkdown
 [Pandoc]: https://pandoc.org/MANUAL.html#pandocs-markdown
 [PhpExtra]: https://michelf.ca/projects/php-markdown/extra/
-[PhpStorm]: http://www.jetbrains.com/phpstorm
+[PhpStorm]: https://www.jetbrains.com/phpstorm
 [Pipe Table Formatter]: https://github.com/anton-dev-ua/PipeTableFormatter
-[PyCharm]: http://www.jetbrains.com/pycharm
-[RubyMine]: http://www.jetbrains.com/ruby
-[WebStorm]: http://www.jetbrains.com/webstorm
+[PyCharm]: https://www.jetbrains.com/pycharm
+[RubyMine]: https://www.jetbrains.com/ruby
+[WebStorm]: https://www.jetbrains.com/webstorm
 [Wiki]: https://github.com/vsch/idea-multimarkdown/wiki
 [holgerbrandl/pasteimages]: https://github.com/holgerbrandl/pasteimages
 [sirthias/pegdown]: https://github.com/sirthias/pegdown

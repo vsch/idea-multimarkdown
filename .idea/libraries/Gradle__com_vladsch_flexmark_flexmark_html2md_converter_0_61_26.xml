@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.vladsch.flexmark:flexmark-html2md-converter:0.61.26">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-html2md-converter/0.61.26/b0290f19bac8868ff543a2832b472ce1a359656c/flexmark-html2md-converter-0.61.26.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-html2md-converter/0.61.26/4f82069958c09d61c973fca02deed9f22bc81c32/flexmark-html2md-converter-0.61.26-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

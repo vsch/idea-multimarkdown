@@ -12,7 +12,7 @@ import java.util.ResourceBundle;
 
 public class WebHelpTopics extends BundleBase {
     @NonNls
-    public static final String BUNDLE = "com.vladsch.md.nav.settings.web-help-topics";
+    public static final String BUNDLE = "com.vladsch.md.nav.localization.web-help-topics";
 
     static String message(@PropertyKey(resourceBundle = BUNDLE) String key, Object... params) {
         return message(getBundle(), key, params);

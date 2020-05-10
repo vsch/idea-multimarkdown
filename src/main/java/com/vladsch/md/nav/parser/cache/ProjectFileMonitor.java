@@ -61,8 +61,13 @@ public class ProjectFileMonitor implements Disposable {
         MessageBusConnection messageBusConnection = project.getMessageBus().connect(this);
 
         messageBusConnection.subscribe(DaemonCodeAnalyzer.DAEMON_EVENT_TOPIC, new DaemonCodeAnalyzer.DaemonListener() {
+            /**
+             * Fired when the background code analysis is being scheduled for the specified set of files.
+             *
+             * @param fileEditors The list of files that will be analyzed during the current execution of the daemon.
+             */
             @Override
-            public void daemonStarting(@NotNull Collection<? extends FileEditor> fileEditors) {
+            public void daemonStarting(@NotNull Collection<FileEditor> fileEditors) {
                 PsiManager psiManager = PsiManagerEx.getInstance(myProject);
                 for (FileEditor fileEditor : fileEditors) {
                     VirtualFile virtualFile = fileEditor.getFile();

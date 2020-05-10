@@ -1,3 +1,3 @@
 <component name="DependencyValidationManager">
-  <scope name="Plugin Description" pattern="file[idea-multimarkdown]:assets/markdown/plugin-description.md||file[idea-multimarkdown]:assets/markdown/paste-handler-exception.md||file[mdnav-error-reporter]:plugin-description.md" />
+  <scope name="Plugin Description" pattern="file[idea-multimarkdown]:assets/markdown/plugin-description.md||file[idea-multimarkdown]:assets/markdown/paste-handler-exception.md" />
 </component>

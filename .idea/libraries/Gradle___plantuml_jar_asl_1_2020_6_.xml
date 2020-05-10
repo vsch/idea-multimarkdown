@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gradle: :plantuml-jar-asl-1.2020.6:">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/plantuml-jar-asl-1.2020.6.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

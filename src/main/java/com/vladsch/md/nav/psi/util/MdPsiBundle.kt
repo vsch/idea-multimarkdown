@@ -19,7 +19,7 @@ class MdPsiBundle {
         internal var ourBundle: Reference<ResourceBundle>? = null
 
         @NonNls
-        internal const val BUNDLE = "com.vladsch.md.nav.psi.util.MdPsiBundle"
+        internal const val BUNDLE = "com.vladsch.md.nav.localization.MdPsiBundle"
 
         internal val bundle: ResourceBundle
             get() {

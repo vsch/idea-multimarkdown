@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="AntConfiguration">
-    <buildFile url="file://$PROJECT_DIR$/release.xml">
-      <additionalClassPath>
-        <entry path="file://$PROJECT_DIR$/xmlmerge.jar" />
-      </additionalClassPath>
-      <executeOn event="afterCompilation" target="legacy" />
-      <executeOn event="beforeCompilation" target="PluginXML" />
-    </buildFile>
+    <buildFile url="file://$PROJECT_DIR$/../idea-multimarkdown3/release.xml" />
   </component>
 </project>

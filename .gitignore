@@ -26,3 +26,5 @@
 /test-data/Issues/Pegdown-219.psd
 /test-data/Issues/readme.md.zip
 /test-data/Issues/686.logs2.zip
+.gradle/
+build/

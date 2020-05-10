@@ -1,41 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module type="PLUGIN_MODULE" version="4">
+<module version="4">
   <component name="DevKit.ModuleBuildProperties" url="file://$MODULE_DIR$/src/main/resources/META-INF/plugin.xml" />
-  <component name="FacetManager">
-    <facet type="NBMindMap" name="NB Mind Map">
-      <configuration />
-    </facet>
-  </component>
-  <component name="NewModuleRootManager" inherit-compiler-output="true">
-    <exclude-output />
-    <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/test-data" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/main/resources-flex" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
-    </content>
-    <orderEntry type="library" scope="PROVIDED" name="MissingInActions" level="project" />
-    <orderEntry type="library" name="flexmark-util" level="project" />
-    <orderEntry type="inheritedJdk" />
-    <orderEntry type="library" name="jsoup-1.10.2" level="project" />
-    <orderEntry type="library" name="OpenHtmlToPDF" level="project" />
-    <orderEntry type="library" name="org.glassfish:javax.json:1.1.4" level="project" />
-    <orderEntry type="library" name="Kotlin" level="project" />
-    <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="TEST" name="hamcrest-core-1.3" level="project" />
-    <orderEntry type="library" name="flexmark-parent" level="project" />
-    <orderEntry type="library" name="commons-io:commons-io:2.4" level="project" />
-    <orderEntry type="library" name="com.jgoodies:jgoodies-common:1.4.0" level="project" />
-    <orderEntry type="library" name="plantuml" level="project" />
-    <orderEntry type="library" name="org.nibor.autolink:autolink:0.6.0" level="project" />
-    <orderEntry type="library" name="flexmark-test-util" level="project" />
-    <orderEntry type="library" scope="TEST" name="junit" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="jfxrt.1.8" level="project" />
-    <orderEntry type="library" name="org.scilab.forge:jlatexmath:1.0.7" level="project" />
-    <orderEntry type="library" name="com.vladsch.reverse-regex:reverse-regex-util:0.3.2" level="project" />
-    <orderEntry type="library" name="com.vladsch.javafx-webview-debugger:javafx-webview-debugger:0.8.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="plugin-test-util" level="project" />
-    <orderEntry type="library" name="plugin-util" level="project" />
-  </component>
 </module>

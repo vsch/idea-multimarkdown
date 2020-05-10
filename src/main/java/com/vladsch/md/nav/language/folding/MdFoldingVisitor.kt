@@ -65,8 +65,8 @@ class MdFoldingVisitor(
     }
 
     override fun addHandlers(handlers: MutableCollection<MdVisitHandler<PsiElement>>): MdNodeVisitor = myVisitor.addHandlers(handlers)
-    override fun addHandlers(vararg handlers: MdVisitHandler<*>?): MdNodeVisitor = myVisitor.addHandlers(handlers)
-    override fun addHandlers(vararg handlers: Array<out MdVisitHandler<PsiElement>>?): MdNodeVisitor = myVisitor.addHandlers(*handlers)
+    override fun addHandlers(vararg handlers: MdVisitHandler<*>): MdNodeVisitor = myVisitor.addHandlers(handlers)
+    override fun addHandlers(vararg handlers: Array<out MdVisitHandler<PsiElement>>): MdNodeVisitor = myVisitor.addHandlers(*handlers)
     override fun addHandler(handler: MdVisitHandler<*>): MdNodeVisitor = myVisitor.addHandler(handler)
     override fun visitNodeOnly(element: PsiElement): Unit = myVisitor.visitNodeOnly(element)
     override fun visit(element: PsiElement): Unit = myVisitor.visit(element)
