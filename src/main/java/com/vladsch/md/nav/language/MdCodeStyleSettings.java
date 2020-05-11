@@ -177,16 +177,23 @@ public class MdCodeStyleSettings extends CustomCodeStyleSettings {
     }
 
     protected void loadRightMargin() {
-        if (MdBlockPrefixProvider.PROVIDER.getValue() != MdBlockPrefixProvider.DEFAULT.getValue()) {
+        if (!isBasicPlugin()) {
             CommonCodeStyleSettings commonCodeStyleSettings = getContainer().getCommonSettings(MdLanguage.INSTANCE);
 
-            // KLUDGE: enhanced plugin test
             if (RIGHT_MARGIN != USE_DEFAULT_RIGHT_MARGIN_VALUE) {
                 commonCodeStyleSettings.RIGHT_MARGIN = RIGHT_MARGIN;
             } else {
                 RIGHT_MARGIN = commonCodeStyleSettings.RIGHT_MARGIN;
             }
+        } else if (KEEP_TRAILING_SPACES == TrailingSpacesType.KEEP_LINE_BREAK.intValue) {
+            // Fix defaults for basic plugin
+            KEEP_TRAILING_SPACES = TrailingSpacesType.KEEP_ALL.intValue;
         }
+    }
+
+    public static boolean isBasicPlugin() {
+        // KLUDGE: enhanced plugin test
+        return MdBlockPrefixProvider.PROVIDER.getValue() == MdBlockPrefixProvider.DEFAULT.getValue();
     }
 
     @SuppressWarnings("deprecation")

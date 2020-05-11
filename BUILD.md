@@ -10,28 +10,66 @@ git clone git://github.com/vsch/idea-multimarkdown.git
 Setting up the project in Intellij IDEA
 ---------------------------------------
 
-### IntelliJ IDEA plugin SDK setup
+### IntelliJ IDEA plugin Gradle Build
 
 * Open the project (<kbd>File > Open project</kbd>).
-* Open the module settings (<kbd>Ctrl + Alt + Shift + S</kbd> or <kbd>⌘,</kbd>).
-* Setup the project SDK with an *Intellij IDEA Plugin SDK*.
-* Edit your *Intellij IDEA Plugin SDK* and add `$IDEA_HOME/lib/idea.jar` to its classpath.
+
+* :information_source: Markdown Navigator conflicts with the bundled
+  Markdown plugin. The following only needs to be performed once per
+  sandbox creation:
+
+  * To disable the bundled plugin run the `prepareSandbox` task to
+    create the sandbox used for the plugin.
+  * create a file
+    [disabled_plugins.txt](build/idea-sandbox/config/disabled_plugins.txt)
+    with `org.intellij.plugins.markdown` as the only line.
 
 ### Building
 
-* Use the run configurations to run the plugin and JUnit tests.
-* Use *Build > Prepare plugin for deployment* to generate the release package.
+* Run gradle `buildPlugin` task from the IDE Gradle tool window or
+  `./gradlew buildPlugin` from the command line.
 
-Note
-----
+  `build/distributions` will contain `idea-multimarkdown.zip` plugin
+  installation file.
 
-This plug-in is using a modified version of [sirthias/pegdown](https://github.com/sirthias). The
-jar is included in the lib directory of this project.
 
-If you are not modifying pegdown then you can build idea-multimarkdown with the included pegdown
-.jar in the lib directory. Otherwise, you will need to get the pegdown source used in this
-plug-in from [vsch/pegdown](https://github.com/vsch/pegdown/tree/develop).
+### Testing
 
-I had had to be jarjar the parboiled libraries and asm4 library otherwise they would conflict in
-tests which would prevent running pegdown in test cases. The rules, script and original libraries
-are included in the `preplib` directory.
+* Run gradle `test` task from the IDE Gradle tool window or `./gradlew
+  test` from the command line.
+
+  :information_source: Some tests are not working with gradle build due to:
+
+       java.lang.IllegalArgumentException: Missing extension point: com.vladsch.idea.multimarkdown.settingsExtension in container Application
+
+  The cause is most likely the same for
+
+       java.lang.NoClassDefFoundError: Could not initialize class com.vladsch.md.nav.settings.MdRenderingProfile
+
+  I am still trying to figure out the cause of this error and how to fix
+  it. The tests when run as part of Plugin DevKit worked. So the issue
+  is in the configuration of the test sandbox not the tests.
+
+
+Notes
+-----
+
+The gradle build is a work in progress. The project was switched from
+Plugin DevKit to gradle. Not all gradle quirks have been resolved.
+
+1. JavaFX for Java 11 complains that
+   `com.sun.javafx.application.PlatformImpl` is not exported from
+   `javafx.graphics` module. The project is configured for Java 8 source
+   and target level. Trying to figure out how to get the right option
+   and where to set it in the `build.gradle` script hit a dead end.
+
+   One thing I tried was adding compiler option `--add-exports
+   javafx.graphics/com.sun.javafx.application=ALL-UNNAMED` with no
+   success.
+
+   I resorted to adding a copy of `jfxrt.jar` to `lib` directory and
+   adding it as compile only dependency to allow `JavaFxHtmlPanel` to
+   compile.
+
+   If you know how to fix this properly, please let me know.
+

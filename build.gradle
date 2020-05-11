@@ -41,7 +41,7 @@ dependencies {
 
     implementation name: "plantuml-jar-asl-1.2020.6"
     implementation name: "plugin-util"
-    testImplementation name: "plugin-test-util"
+    implementation name: "plugin-test-util"
 }
 
 ant.importBuild 'release.xml'

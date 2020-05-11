@@ -787,7 +787,7 @@
         <action class="com.vladsch.md.nav.actions.editorLayout.ToggleEditorLayoutChangeAction"
                 text="Toggle Editor Layout"
                 id="MarkdownNavigator.ToggleSplitLayoutChange"
-                description="Toggle between editor only and editor &amp; preview"
+                description="Toggle between editor only and editor with preview"
                 icon="MdIcons.Layout.Toggle_editor_preview">
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl p"/>
         </action>
