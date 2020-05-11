@@ -204,20 +204,15 @@ Complete list of bug and compatibility fixes in [Version Notes].
 * New: option for full highlight attributes, enabled takes 3700 attributes out of the pool,
   while disabled less than 300.
 
-### Source Update is Long Overdue
+### Source Updated to 3.0.201.91
 
-The upcoming OSS update will be more like a replacement of the source than an evolution of it.
-The directory structure has changed significantly and a lot of Java has been converted to
-Kotlin.
-
-The enhanced version is now 120k lines of code so my goal is to separate the open source
-functionality from the proprietary code with a clean boundary to make open source releases
-synchronized with plugin releases like they used to be but without the need for manual merging
-between the two.
+The update is more like a replacement of the source than an evolution of
+it. The directory structure has changed significantly, and a lot of Java
+has been converted to Kotlin.
 
 #### Working with the source
 
-IntelliJ Plugin SDK development environment.
+IntelliJ Gradle Plugin development environment. See [Building from sources](BUILD.md)
 
 #### Some internal details, should you care to know
 

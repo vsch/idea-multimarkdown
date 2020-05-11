@@ -18,8 +18,9 @@ Setting up the project in Intellij IDEA
   Markdown plugin. The following only needs to be performed once per
   sandbox creation:
 
-  * To disable the bundled plugin run the `prepareSandbox` task to
-    create the sandbox used for the plugin.
+  * To disable the bundled plugin run the `prepareSandbox` task from the
+    IDE Gradle tool window or `./gradlew prepareSandbox` from the
+    command line to create the sandbox used for the plugin.
   * create a file
     [disabled_plugins.txt](build/idea-sandbox/config/disabled_plugins.txt)
     with `org.intellij.plugins.markdown` as the only line.
@@ -38,7 +39,8 @@ Setting up the project in Intellij IDEA
 * Run gradle `test` task from the IDE Gradle tool window or `./gradlew
   test` from the command line.
 
-  :information_source: Some tests are not working with gradle build due to:
+  :information_source: Some tests are not working with gradle build due
+  to:
 
        java.lang.IllegalArgumentException: Missing extension point: com.vladsch.idea.multimarkdown.settingsExtension in container Application
 
