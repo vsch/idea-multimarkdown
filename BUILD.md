@@ -1,5 +1,4 @@
-Building from sources
-=====================
+# Building from sources
 
 First of all, clone the project:
 
@@ -7,12 +6,13 @@ First of all, clone the project:
 git clone git://github.com/vsch/idea-multimarkdown.git
 ```
 
-Setting up the project in Intellij IDEA
----------------------------------------
+## Setting up the project in Intellij IDEA
 
 ### IntelliJ IDEA plugin Gradle Build
 
-* Open the project (<kbd>File > Open project</kbd>).
+The plugin sources are for IDEA 2020.1, Community or Ultimate:
+
+* Open the project (<kbd>File > Open ...</kbd>).
 
 * :information_source: Markdown Navigator conflicts with the bundled
   Markdown plugin. The following only needs to be performed once per
@@ -32,7 +32,6 @@ Setting up the project in Intellij IDEA
   `build/distributions` will contain `idea-multimarkdown.zip` plugin
   installation file.
 
-
 ### Testing
 
 * Run gradle `test` task from the IDE Gradle tool window or `./gradlew
@@ -51,9 +50,7 @@ Setting up the project in Intellij IDEA
   it. The tests when run as part of Plugin DevKit worked. So the issue
   is in the configuration of the test sandbox not the tests.
 
-
-Notes
------
+## Notes
 
 The gradle build is a work in progress. The project was switched from
 Plugin DevKit to gradle. Not all gradle quirks have been resolved.
