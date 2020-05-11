@@ -21,9 +21,8 @@ Setting up the project in Intellij IDEA
   * To disable the bundled plugin run the `prepareSandbox` task from the
     IDE Gradle tool window or `./gradlew prepareSandbox` from the
     command line to create the sandbox used for the plugin.
-  * create a file
-    [disabled_plugins.txt](build/idea-sandbox/config/disabled_plugins.txt)
-    with `org.intellij.plugins.markdown` as the only line.
+  * create a file `build/idea-sandbox/config/disabled_plugins.txt` with
+    `org.intellij.plugins.markdown` as the only line.
 
 ### Building
 
