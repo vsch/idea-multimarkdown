@@ -3,7 +3,6 @@ package com.vladsch.md.nav.settings;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.diagnostic.Logger;
@@ -25,20 +24,8 @@ public class MdProjectSettingsManager implements PersistentStateComponent<Elemen
 
     final private @NotNull MdProjectSettings myProjectSettings;
     private boolean myProjectSettingsLoaded = false;
+    private Element myPendingState;
 
-    @SuppressWarnings("FieldCanBeLocal")
-    private final LazyFunction<MdProjectSettings, Boolean> myExtensionsInitialized = new LazyFunction<>(projectSettings -> {
-        for (MdProjectSettingsExtensionProvider provider : MdProjectSettingsExtensionProvider.EXTENSIONS.getValue()) {
-            provider.initializeProjectSettingsService(projectSettings);
-        }
-        return true;
-    });
-
-    /**
-     * Should not be called other than from service creation.
-     *
-     * @param project project
-     */
     public MdProjectSettingsManager(@NotNull Project project) {
         LOG.debug("MdProjectSettingsManager.constructor");
         myProjectSettings = new MdProjectSettings(project.isDefault() ? null : project);
@@ -66,7 +53,10 @@ public class MdProjectSettingsManager implements PersistentStateComponent<Elemen
                 if (!myProjectSettingsLoaded) {
                     LOG.debug("MdProjectSettingsManager.ensureExtensionsLoaded");
                     myProjectSettingsLoaded = true;
-                    myExtensionsInitialized.getValue(myProjectSettings);
+
+                    for (MdProjectSettingsExtensionProvider provider : MdProjectSettingsExtensionProvider.EXTENSIONS.getValue()) {
+                        provider.initializeProjectSettingsService(myProjectSettings);
+                    }
                 }
             }
         }
@@ -75,24 +65,36 @@ public class MdProjectSettingsManager implements PersistentStateComponent<Elemen
     @Nullable
     @Override
     public Element getState() {
-        LOG.debug("MdProjectSettingsManager.getState");
+        if (!myProjectSettingsLoaded) {
+            LOG.debug("MdProjectSettingsManager.getState delayed");
+            return myPendingState;
+        } else {
+            myPendingState = null;
 
-        if (myProjectSettings.getRenderingProfile().isDefault()) {
-            return new Element("settings");
+            if (myProjectSettings.getRenderingProfile().isDefault()) {
+                LOG.debug("MdProjectSettingsManager.getState default");
+                return new Element("settings");
+            } else {
+                LOG.debug("MdProjectSettingsManager.getState");
+                Element state = myProjectSettings.saveState(null);
+                return state;
+            }
         }
-
-        Element state = myProjectSettings.saveState(null);
-        return state;
     }
 
     @Override
-    public void loadState(Element state) {
-        LOG.debug("MdProjectSettingsManager.loadState");
+    public void loadState(@NotNull Element state) {
+        if (!myProjectSettingsLoaded) {
+            // need to save this state so we can return it when state is requested so as not to overwrite extension settings
+            myPendingState = state;
+        }
 
         if (state.getChildren().size() > 0) {
+            LOG.debug("MdProjectSettingsManager.loadState");
             myProjectSettings.loadState(state);
             ApplicationManager.getApplication().invokeLater(myProjectSettings::validateLoadedSettings);
         } else {
+            LOG.debug("MdProjectSettingsManager.loadState default");
             myProjectSettings.getRenderingProfile().setRenderingProfile(MdRenderingProfile.getDEFAULT());
         }
     }

@@ -40,6 +40,7 @@ import com.intellij.openapi.project.impl.ProjectLifecycleListener
 import com.intellij.openapi.roots.ModuleRootEvent
 import com.intellij.openapi.roots.ModuleRootListener
 import com.intellij.openapi.ui.Messages
+import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.util.Pair
 import com.intellij.openapi.vfs.*
 import com.intellij.openapi.vfs.newvfs.BulkFileListener
@@ -87,6 +88,7 @@ class MdProjectComponent(val project: Project) : ProjectComponent, Disposable {
 
     init {
         println("ProjectComponent created $time")
+        Disposer.register(project, this)
     }
 
     var refactoringRenameFlags = MdNamedElement.RENAME_NO_FLAGS
