@@ -10,14 +10,8 @@ import com.vladsch.md.nav.psi.element.MdComment
 import com.vladsch.md.nav.psi.util.MdTokenSets
 import com.vladsch.plugin.util.psi.isTypeIn
 
-// DEPRECATED: replacement CodeStyle#getSettings appeared in 2017-11-09
-@Suppress("DEPRECATION", "MemberVisibilityCanBePrivate")
 class FormatControlProcessor(val psiFile: PsiFile) {
-
     private var myFormatterOff = false
-
-    // DEPRECATED: when no longer supporting 2016.3 can change CodeStyleSettingsManager.getSettings to CodeStyle.getSettings
-    // class appeared in the API on 2017.11.09
 
     @Suppress("unused")
     val settings: CodeStyleSettings by lazy { CodeStyleSettingsManager.getSettings(psiFile.project) }

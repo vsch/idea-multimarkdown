@@ -3,7 +3,6 @@
 package com.vladsch.md.nav.settings;
 
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
@@ -29,10 +28,9 @@ public class MdRenderingProfileManager implements RenderingProfileManager, Dispo
         return project -> {
             if (project.isDefault()) {
                 return NULL.getValue(project);
+            } else {
+                return project.getService(MdRenderingProfileManager.class);
             }
-            // DEPRECATED: added 2019.08, when available change to
-//            return project.getService(MdRenderingProfileManager.class);
-            return ServiceManager.getService(project, MdRenderingProfileManager.class);
         };
     });
 

@@ -69,6 +69,7 @@ abstract class SettingsFormBase(@JvmField protected val myProfileSynchronizer: R
         initializeOnFormCreate()
 
         // DEPRECATED: this is only needed to update editors editable state on older IDEA's
+        // IMPORTANT: validate if this is still needed for 2019 and 2020
         if (mainFormPanel == null) {
             // must be not the last child form, it will be initialized when the last child of the main form initializes
             myDelayedInitPanels.add(this)

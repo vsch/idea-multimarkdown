@@ -5,7 +5,6 @@ import com.intellij.ide.ui.LafManager
 import com.intellij.ide.ui.LafManagerListener
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManager
 import com.intellij.openapi.util.Disposer
@@ -15,18 +14,17 @@ import com.vladsch.md.nav.language.MdCodeStyleSettings
 import com.vladsch.md.nav.settings.api.MdSettingsExtension
 import javax.swing.UIManager
 
-class MdProjectSettings constructor(project: Project?) : ComponentItemHolder()
+class MdProjectSettings constructor(val project: Project?) : ComponentItemHolder()
     , MdRenderingProfileHolder
     , LafManagerListener
     , Disposable {
 
-    private val myProject = project
     private val myRenderingProfile: MdRenderingProfile
 
     init {
         val profile = MdRenderingProfile()
-        if (myProject != null) {
-            profile.setProjectProfile(myProject)
+        if (project != null) {
+            profile.setProjectProfile(project)
         }
         myRenderingProfile = profile
     }
@@ -51,11 +49,11 @@ class MdProjectSettings constructor(project: Project?) : ComponentItemHolder()
     }
 
     init {
-        // DEPRECATED: replacement appeared in 2019-07-20
-        @Suppress("DEPRECATION")
-        if (myProject != null) {
-            LafManager.getInstance().addLafManagerListener(this, myProject)
-        }
+        @Suppress("IncorrectParentDisposable")
+        Disposer.register(project ?: ProjectManager.getInstance().defaultProject, this)
+
+        val settingsConnection = ApplicationManager.getApplication().messageBus.connect(this)
+        settingsConnection.subscribe(LafManagerListener.TOPIC, this)
 
         // let rendering profile add the unwrapped items which correspond to all settings and extensions
         myRenderingProfile.addUnwrappedItems(this, this)
@@ -103,7 +101,7 @@ class MdProjectSettings constructor(project: Project?) : ComponentItemHolder()
             myRenderingProfile.parserSettings = settings
             notifyOnSettingsChanged()
 
-            val project = myProject
+            val project = project
             if (project != null) {
                 MdProjectComponent.getInstance(project).reparseMarkdown(true)
             }
@@ -126,11 +124,11 @@ class MdProjectSettings constructor(project: Project?) : ComponentItemHolder()
         }
 
     override fun getStyleSettings(): MdCodeStyleSettings {
-        return MdCodeStyleSettings.getInstance(myProject ?: ProjectManager.getInstance().defaultProject)
+        return MdCodeStyleSettings.getInstance(project ?: ProjectManager.getInstance().defaultProject)
     }
 
     override fun setStyleSettings(styleSettings: MdCodeStyleSettings) {
-        MdCodeStyleSettings.getInstance(myProject ?: ProjectManager.getInstance().defaultProject).copyFrom(styleSettings)
+        MdCodeStyleSettings.getInstance(project ?: ProjectManager.getInstance().defaultProject).copyFrom(styleSettings)
     }
 
     override fun groupNotifications(runnable: Runnable) {
@@ -166,7 +164,7 @@ class MdProjectSettings constructor(project: Project?) : ComponentItemHolder()
     private fun notifyOnSettingsChanged() {
         if (groupNotifications > 0) havePendingSettingsChanged = true
         else {
-            val project = myProject
+            val project = project
             if (project == null) {
                 val defaultProject = ProjectManager.getInstance().defaultProject
                 defaultProject.messageBus.syncPublisher(ProjectSettingsChangedListener.TOPIC).onSettingsChange(defaultProject, this)
@@ -177,8 +175,6 @@ class MdProjectSettings constructor(project: Project?) : ComponentItemHolder()
     }
 
     companion object {
-        private val LOG = Logger.getInstance("com.vladsch.md.nav.settings.project")
-
         @JvmStatic
         fun isDarcula(laf: UIManager.LookAndFeelInfo?): Boolean {
             return laf?.name?.contains("Darcula") ?: false
@@ -187,10 +183,7 @@ class MdProjectSettings constructor(project: Project?) : ComponentItemHolder()
         @JvmStatic
         fun getInstance(project: Project): MdProjectSettings {
             val settingsManager = MdProjectSettingsManager.getInstance(project)
-            val settings = settingsManager.projectSettings
-            Disposer.register(project, settings)
-            settingsManager.isProjectSettingsLoaded = true
-            return settings
+            return settingsManager.projectSettings
         }
     }
 }

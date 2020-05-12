@@ -6,12 +6,14 @@ import com.intellij.configurationStore.SerializableScheme;
 import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.options.Scheme;
 import com.intellij.openapi.options.colors.AttributesDescriptor;
+import com.intellij.openapi.project.Project;
 import org.jdom.Content;
 import org.jdom.Element;
 import org.jdom.filter.Filter;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -29,10 +31,8 @@ public class MdColorSchemeExporter extends SerializableSchemeExporter {
         super();
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    // DEPRECATED: replacement appeared in 2019-04-10 change when 192.4205 is lowest supported version
-    public void exportScheme(@NotNull final Scheme scheme, @NotNull final OutputStream outputStream) throws Exception {
+    public void exportScheme(@Nullable Project project, @NotNull final Scheme scheme, @NotNull final OutputStream outputStream) throws Exception {
         if (scheme instanceof SerializableScheme) {
             final Element state = ((SerializableScheme) scheme).writeScheme();
             final Element attributes = state.getChild("attributes");
@@ -53,7 +53,7 @@ public class MdColorSchemeExporter extends SerializableSchemeExporter {
             });
             writeToStream(outputStream, state);
         } else {
-            super.exportScheme(scheme, outputStream);
+            super.exportScheme(project, scheme, outputStream);
         }
     }
 

@@ -35,9 +35,7 @@ public class FlexmarkProjectSettingsManager implements PersistentStateComponent<
     @NotNull
     public static FlexmarkProjectSettingsManager getInstance(@NotNull Project project) {
         if (project.isDefault()) return NULL.getValue(project);
-            // DEPRECATED: added 2019.08, when available change to
-//        project.getService(MdHistoryManager.class);
-        else return ServiceManager.getService(project, FlexmarkProjectSettingsManager.class);
+        else return project.getService(FlexmarkProjectSettingsManager.class);
     }
 
     @Nullable

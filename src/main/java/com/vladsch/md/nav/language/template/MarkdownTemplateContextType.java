@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class MarkdownTemplateContextType extends TemplateContextType {
-
     protected MarkdownTemplateContextType(
             @NotNull @NonNls String id,
             @NotNull String presentableName,

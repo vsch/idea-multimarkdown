@@ -1,10 +1,10 @@
-[TOC levels=3,4]: # "Version History"
+[TOC]: # "Version History"
 
 ### Version History
 - [2.9.0.8/2.9.7.8 - EAP Release](#29082978---eap-release)
-    - [2.9.0.6/2.9.7.6 - EAP Release](#29062976---eap-release)
-    - [2.9.0.4/2.9.7.4 - EAP Release](#29042974---eap-release)
-    - [2.9.0.2/2.9.7.2 - EAP Release](#29022972---eap-release)
+  - [2.9.0.6/2.9.7.6 - EAP Release](#29062976---eap-release)
+  - [2.9.0.4/2.9.7.4 - EAP Release](#29042974---eap-release)
+  - [2.9.0.2/2.9.7.2 - EAP Release](#29022972---eap-release)
 - [2.9.7 - Bug Fix & Compatibility Release](#297---bug-fix--compatibility-release)
 - [2.9.0/2.9.5 - Bug Fix & Compatibility Release](#290295---bug-fix--compatibility-release)
 - [2.8.4 - Bug Fix & Enhancement Release](#284---bug-fix--enhancement-release)
@@ -12,7 +12,6 @@
 - [2.8.0 - Bug Fix & Enhancement Release](#280---bug-fix--enhancement-release)
 - [2.7.0 - Bug Fix & Enhancement Release](#270---bug-fix--enhancement-release)
 - [2.6.0 - Bug Fix & Enhancement Release](#260---bug-fix--enhancement-release)
-
 
 ### 2.9.0.8/2.9.7.8 - EAP Release
 
@@ -46,14 +45,13 @@
 * Fix: diagnostic/3923, StringIndexOutOfBoundsException: String index: 0 out of range: 0, 0,
   highlight
 * Fix: preview links did not preserve anchor ref when launching external browser
-* Fix: disable HTML Preview missing link highlighting if corresponding annotation is
-      disabled.
-* Fix: Copy as HTML Mime action image file names with spaces do not get converted to
-      embedded images during export.
+* Fix: disable HTML Preview missing link highlighting if corresponding annotation is disabled.
+* Fix: Copy as HTML Mime action image file names with spaces do not get converted to embedded
+  images during export.
 * Fix: emoji image files are copied on export but generated HTML has link to absolute location
-      instead of a relative link to copied file.
-* Fix: when linking to exported HTML, allow default link format to remain enabled and use it
-      for generating links to exported files.
+  instead of a relative link to copied file.
+* Fix: when linking to exported HTML, allow default link format to remain enabled and use it for
+  generating links to exported files.
 * Fix: dropping file reference on empty back-ticks to insert file name not link
 * Fix: formatting of ATX heading in list items would double leading markers
 * Fix: diagnostic/3872, IllegalStateException: frame must not be null, MdPlugin.checkFixes
@@ -949,8 +947,8 @@
   [Copy Markdown to HTML formatted Text Profile](https://github.com/vsch/idea-multimarkdown/wiki/Rendering-Profiles-Settings#copy-markdown-to-html-formatted-text-profile)
 * **NOTE:** if `No Stylesheets, No Scripts` is selected then only styles explicitly defined by
   the profile will be used. If this option is not selected then `COPY_HTML_MIME` profile
-  stylesheet will be used or if the `COPY_HTML_MIME` profile is not defined then the
-  [default stylesheet for `COPY_HTML_MIME`][html_mime_default.css] will be used.
+  stylesheet will be used or if the `COPY_HTML_MIME` profile is not defined then the [default
+  stylesheet for `COPY_HTML_MIME`][html_mime_default.css] will be used.
 * Fix: move annotations for `Reference Links` to inspections
 * Fix: move annotations for `References` to inspections
 * Fix: move annotations for `Emoji` to inspections
@@ -1139,7 +1137,9 @@
 * Fix: #619, Create unchecked list item when pressing enter next to a line with a checked list
   item
 * Fix: reference paste to add line references to link text in the form: `: Line #` or `: Lines
-  #-#`
+
+  # -#`
+
 * Fix: diagnostic/1575, `node.treeNext must not be null`
 * Fix: wrong range calculation for #612 fix
 * Fix: #611, Backspace in empty check mark box deletes check mark
@@ -1180,9 +1180,7 @@
 [#757, Gitlab multi-line blockquote syntax incorrect]: https://github.com/vsch/idea-multimarkdown/issues/757
 [#760, Attributes support is broken/incompatible with fenced code blocks]: https://github.com/vsch/idea-multimarkdown/issues/760
 [#761, html paste option can't save]: https://github.com/vsch/idea-multimarkdown/issues/761
-[html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/resources/com/vladsch/idea/multimarkdown/html_mime_default.css
-
-
 [#768, Copy as reference copies invalid link]: https://github.com/vsch/idea-multimarkdown/issues/768
-
 [#771, macOS: Paste doesn't work when copying link from Safari's context menu]: https://github.com/vsch/idea-multimarkdown/issues/771
+[html_mime_default.css]: https://github.com/vsch/idea-multimarkdown/blob/master/src/main/resources/com/vladsch/md/nav/swing-embedded-style.css
+

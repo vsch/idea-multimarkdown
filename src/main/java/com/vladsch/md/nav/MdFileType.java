@@ -23,6 +23,8 @@ import javax.swing.Icon;
 
 public class MdFileType extends LanguageFileType {
     public static final MdFileType INSTANCE = new MdFileType();
+    final static public String DEFAULT_EXTENSION = "md";
+    final static public String[] EXTENSIONS = { DEFAULT_EXTENSION, "mkd", "markdown" };
 
     private MdFileType() {
         super(MdLanguage.INSTANCE);
@@ -43,7 +45,7 @@ public class MdFileType extends LanguageFileType {
     @NotNull
     @Override
     public String getDefaultExtension() {
-        return MdFileTypeFactory.DEFAULT_EXTENSION;
+        return DEFAULT_EXTENSION;
     }
 
     @Nullable

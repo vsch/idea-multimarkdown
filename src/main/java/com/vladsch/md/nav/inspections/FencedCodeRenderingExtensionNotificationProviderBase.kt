@@ -6,6 +6,7 @@ import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.fileEditor.TextEditor
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.DumbService
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiManager
 import com.intellij.ui.EditorNotificationPanel
@@ -53,9 +54,7 @@ abstract class FencedCodeRenderingExtensionNotificationProviderBase : EditorNoti
         conversionManager.updateCssSettings(renderingProfile) { it in getInfoStrings() }
     }
 
-    // DEPRECATED: replacement override createNotificationPanel(VirtualFile, FileEditor, Project) appeared in 2019-02-06
-    //    change when 191.5532 is lowest supported version
-    override fun createNotificationPanel(file: VirtualFile, fileEditor: FileEditor/*, project:Project*/): EditorNotificationPanel? {
+    override fun createNotificationPanel(file: VirtualFile, fileEditor: FileEditor, project:Project): EditorNotificationPanel? {
         if (wasShown) return null
 
         if (file.fileType !== MdFileType.INSTANCE || fileEditor !is TextEditor) {
@@ -63,7 +62,6 @@ abstract class FencedCodeRenderingExtensionNotificationProviderBase : EditorNoti
         }
 
         val editor = fileEditor.editor as? EditorEx ?: return null
-        val project = editor.project ?: return null
 
         if (DumbService.isDumb(project)) {
             return null

@@ -5,6 +5,7 @@ import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.fileEditor.TextEditor
 import com.intellij.openapi.project.DumbAware
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.ui.EditorNotificationPanel
@@ -14,6 +15,7 @@ import com.vladsch.md.nav.MdFileType
 import com.vladsch.md.nav.MdProjectComponent
 import com.vladsch.md.nav.psi.element.MdFile
 import com.vladsch.md.nav.settings.*
+import org.jetbrains.annotations.NotNull
 
 class JekyllFrontMatterFoundNotificationProvider : EditorNotifications.Provider<EditorNotificationPanel>(), DumbAware {
 
@@ -21,9 +23,7 @@ class JekyllFrontMatterFoundNotificationProvider : EditorNotifications.Provider<
         return KEY
     }
 
-    // DEPRECATED: replacement override createNotificationPanel(VirtualFile, FileEditor, Project) appeared in 2019-02-06
-    //    change when 191.5532 is lowest supported version
-    override fun createNotificationPanel(file: VirtualFile, fileEditor: FileEditor/*, @NotNull Project project*/): EditorNotificationPanel? {
+    override fun createNotificationPanel(file: VirtualFile, fileEditor: FileEditor, project:Project): EditorNotificationPanel? {
         if (file.fileType !== MdFileType.INSTANCE) {
             return null
         }
@@ -35,8 +35,6 @@ class JekyllFrontMatterFoundNotificationProvider : EditorNotifications.Provider<
         if (fileEditor !is TextEditor) {
             return null
         }
-
-        val project = fileEditor.editor.project ?: return null
 
         val profileManager = MdRenderingProfileManager.getInstance(project)
         val renderingProfile = profileManager.getRenderingProfile(file)

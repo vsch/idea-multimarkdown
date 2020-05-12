@@ -95,13 +95,6 @@ public class MdParserDefinition implements ParserDefinition {
     );
 
     @Override
-    // DEPRECATED: replacement override customizeSettings() appeared in 2018-06-18
-    //    change when 182.3341 is lowest supported version
-    public SpaceRequirements spaceExistanceTypeBetweenTokens(final ASTNode left, final ASTNode right) {
-        return spaceExistenceTypeBetweenTokens(left, right);
-    }
-
-    @Override
     public SpaceRequirements spaceExistenceTypeBetweenTokens(ASTNode left, ASTNode right) {
         return SpaceRequirements.MAY;
     }

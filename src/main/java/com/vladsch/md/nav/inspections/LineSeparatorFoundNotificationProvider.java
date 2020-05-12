@@ -31,9 +31,7 @@ public class LineSeparatorFoundNotificationProvider extends EditorNotifications.
 
     @Nullable
     @Override
-    // DEPRECATED: replacement override createNotificationPanel(VirtualFile, FileEditor, Project) appeared in 2019-02-06
-    //    change when 191.5532 is lowest supported version
-    public EditorNotificationPanel createNotificationPanel(@NotNull VirtualFile file, @NotNull final FileEditor fileEditor) {
+    public EditorNotificationPanel createNotificationPanel(@NotNull VirtualFile file, @NotNull final FileEditor fileEditor, @NotNull Project project) {
         if (MdApplicationSettings.getInstance().getWasShownSettings().getUnicodeLineSeparator()) return null;
 
         if (file.getFileType() != MdFileType.INSTANCE) {
@@ -41,11 +39,6 @@ public class LineSeparatorFoundNotificationProvider extends EditorNotifications.
         }
 
         if (!(fileEditor instanceof TextEditor)) {
-            return null;
-        }
-
-        Project project = ((TextEditor) fileEditor).getEditor().getProject();
-        if (project == null) {
             return null;
         }
 

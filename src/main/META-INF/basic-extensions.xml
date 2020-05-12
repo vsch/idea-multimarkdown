@@ -62,7 +62,6 @@
         <editorHighlighterProvider filetype="Markdown" implementationClass="com.vladsch.md.nav.highlighter.MdEditorHighlighterProvider"/>
 
         <liveTemplateContext implementation="com.vladsch.md.nav.language.template.MarkdownTemplateContextType$Generic"/>
-        <defaultLiveTemplatesProvider implementation="com.vladsch.md.nav.language.template.MarkdownTemplatesProvider"/>
 
         <lang.foldingBuilder language="Markdown" implementationClass="com.vladsch.md.nav.language.folding.MdFoldingBuilder"/>
         <codeFoldingOptionsProvider instance="com.vladsch.md.nav.language.folding.MdCodeFoldingOptionsProvider"/>
@@ -82,7 +81,6 @@
 
         <colorSettingsPage implementation="com.vladsch.md.nav.highlighter.MdColorSettingsPage"/>
         <completion.contributor language="Markdown" implementationClass="com.vladsch.md.nav.language.completion.MdCompletionContributor"/>
-        <fileTypeFactory implementation="com.vladsch.md.nav.MdFileTypeFactory"/>
         <lang.commenter language="Markdown" implementationClass="com.vladsch.md.nav.language.MdCommenter"/>
         <lang.findUsagesProvider language="Markdown" implementationClass="com.vladsch.md.nav.language.MdFindUsagesProvider"/>
         <lang.namesValidator language="Markdown" implementationClass="com.vladsch.md.nav.language.MdNamesValidator"/>
@@ -103,6 +101,10 @@
 
         <additionalTextAttributes scheme="Darcula" file="com/vladsch/md/nav/colorSchemes/MarkdownDarcula.xml"/>
         <additionalTextAttributes scheme="Default" file="com/vladsch/md/nav/colorSchemes/MarkdownDefault.xml"/>
+        
+        <defaultLiveTemplates file="liveTemplates/Markdown.xml"/>
+        <defaultLiveTemplates file="liveTemplates/surround.xml"/>
+        <fileType name="Markdown" extensions="md;markdown;mkd" language="Markdown" implementationClass="com.vladsch.md.nav.MdFileType" fieldName="INSTANCE"/>
     </extensions>
 
     <application-components>

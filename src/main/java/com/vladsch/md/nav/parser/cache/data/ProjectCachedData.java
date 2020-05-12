@@ -2,7 +2,6 @@
 
 package com.vladsch.md.nav.parser.cache.data;
 
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiFile;
@@ -13,9 +12,7 @@ public class ProjectCachedData implements CachedDataOwner {
 
     @NotNull
     public static ProjectCachedData getInstance(Project project) {
-        // DEPRECATED: added 2019.08, when available change to
-//        project.getService(ProjectCachedData.class);
-        return ServiceManager.getService(project, ProjectCachedData.class);
+        return project.getService(ProjectCachedData.class);
     }
 
     @NotNull

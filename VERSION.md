@@ -3,6 +3,7 @@ Contents**</summary>
 
 [TOC]: # ""
 
+- [3.0.xxx.93 - Bug Fix Release](#30xxx93---bug-fix-release)
 - [3.0.xxx.91 - Bug Fix Release](#30xxx91---bug-fix-release)
 - [3.0.xxx.89 - Bug Fix Release](#30xxx89---bug-fix-release)
 - [3.0.xxx.87 - Bug Fix Release](#30xxx87---bug-fix-release)
@@ -22,6 +23,13 @@ Contents**</summary>
 - [2.9.8 - 2019.3 Compatibility Release](#298---20193-compatibility-release)
 
 &nbsp;</details>
+
+### 3.0.xxx.93 - Bug Fix Release
+
+* Fix: multi-file drop could mess up links for files after the first
+  dropped file.
+* Fix: spurious reset of enhanced settings to defaults.
+* Fix: clean up deprecated API use.
 
 ### 3.0.xxx.91 - Bug Fix Release
 

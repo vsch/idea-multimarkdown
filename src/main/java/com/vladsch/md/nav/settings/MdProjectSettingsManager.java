@@ -6,6 +6,7 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.vladsch.md.nav.settings.api.MdProjectSettingsExtensionProvider;
 import com.vladsch.plugin.util.LazyFunction;
@@ -18,31 +19,32 @@ import org.jetbrains.annotations.Nullable;
                 @Storage(value = MdProjectSettingsManager.MARKDOWN_NAVIGATOR_XML)
         })
 public class MdProjectSettingsManager implements PersistentStateComponent<Element> {
+    private static final Logger LOG = Logger.getInstance("com.vladsch.md.nav.settings");
+
     public static final String MARKDOWN_NAVIGATOR_XML = "markdown-navigator.xml";
 
-    final private MdProjectSettings myProjectSettings;
+    final private @NotNull MdProjectSettings myProjectSettings;
     private boolean myProjectSettingsLoaded = false;
 
     @SuppressWarnings("FieldCanBeLocal")
-    private final LazyFunction<Project, Boolean> myExtensionsInitialized = new LazyFunction<>(project -> {
+    private final LazyFunction<MdProjectSettings, Boolean> myExtensionsInitialized = new LazyFunction<>(projectSettings -> {
         for (MdProjectSettingsExtensionProvider provider : MdProjectSettingsExtensionProvider.EXTENSIONS.getValue()) {
-            provider.initializeProjectSettingsService(project);
+            provider.initializeProjectSettingsService(projectSettings);
         }
         return true;
     });
 
-    public boolean isProjectSettingsLoaded() {
-        return myProjectSettingsLoaded;
-    }
-
-    public void setProjectSettingsLoaded(final boolean projectSettingsLoaded) {
-        myProjectSettingsLoaded = projectSettingsLoaded;
-    }
-
+    /**
+     * Should not be called other than from service creation.
+     *
+     * @param project project
+     */
     public MdProjectSettingsManager(@NotNull Project project) {
+        LOG.debug("MdProjectSettingsManager.constructor");
         myProjectSettings = new MdProjectSettings(project.isDefault() ? null : project);
     }
 
+    @NotNull
     public MdProjectSettings getProjectSettings() {
         return myProjectSettings;
     }
@@ -50,19 +52,31 @@ public class MdProjectSettingsManager implements PersistentStateComponent<Elemen
     public final static LazyFunction<Project, MdProjectSettingsManager> NULL = new LazyFunction<>(MdProjectSettingsManager::new);
 
     @NotNull
-    public static MdProjectSettingsManager getInstance(@NotNull Project project) {
+    static MdProjectSettingsManager getInstance(@NotNull Project project) {
         MdProjectSettingsManager service;
         if (project.isDefault()) service = NULL.getValue(project);
-            // DEPRECATED: added 2019.08, when available change to
-//        project.getService(MdProjectSettingsManager.class);
-        else service = ServiceManager.getService(project, MdProjectSettingsManager.class);
-        service.myExtensionsInitialized.getValue(project);
+        else service = project.getService(MdProjectSettingsManager.class);
+        service.ensureExtensionsLoaded();
         return service;
+    }
+
+    private void ensureExtensionsLoaded() {
+        if (!myProjectSettingsLoaded) {
+            synchronized (myProjectSettings) {
+                if (!myProjectSettingsLoaded) {
+                    LOG.debug("MdProjectSettingsManager.ensureExtensionsLoaded");
+                    myProjectSettingsLoaded = true;
+                    myExtensionsInitialized.getValue(myProjectSettings);
+                }
+            }
+        }
     }
 
     @Nullable
     @Override
     public Element getState() {
+        LOG.debug("MdProjectSettingsManager.getState");
+
         if (myProjectSettings.getRenderingProfile().isDefault()) {
             return new Element("settings");
         }
@@ -73,7 +87,9 @@ public class MdProjectSettingsManager implements PersistentStateComponent<Elemen
 
     @Override
     public void loadState(Element state) {
-        if (/*!myProject.isDefault() &&*/ state.getChildren().size() > 0) {
+        LOG.debug("MdProjectSettingsManager.loadState");
+
+        if (state.getChildren().size() > 0) {
             myProjectSettings.loadState(state);
             ApplicationManager.getApplication().invokeLater(myProjectSettings::validateLoadedSettings);
         } else {

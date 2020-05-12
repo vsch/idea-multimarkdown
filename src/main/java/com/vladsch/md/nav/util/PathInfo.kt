@@ -6,7 +6,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.VirtualFileManager
 import com.intellij.psi.PsiFile
 import com.vladsch.flexmark.util.misc.CharPredicate
-import com.vladsch.md.nav.MdFileTypeFactory
+import com.vladsch.md.nav.MdFileType
 import com.vladsch.plugin.util.*
 import java.io.File
 import kotlin.text.endsWith
@@ -258,10 +258,10 @@ open class PathInfo(fullPath: String) : Comparable<PathInfo> {
         val IMAGE_EXTENSIONS: Array<String> = arrayOf("png", "jpg", "jpeg", "gif", "svg")
 
         @JvmField
-        val MARKDOWN_EXTENSIONS: Array<String> = MdFileTypeFactory.EXTENSIONS
+        val MARKDOWN_EXTENSIONS: Array<String> = MdFileType.EXTENSIONS
 
         @JvmField
-        val WIKI_PAGE_EXTENSIONS: Array<String> = MdFileTypeFactory.EXTENSIONS
+        val WIKI_PAGE_EXTENSIONS: Array<String> = MdFileType.EXTENSIONS
 
         @JvmField
         val URL_PREFIXES: Array<String> = arrayOf("http://", "https://")

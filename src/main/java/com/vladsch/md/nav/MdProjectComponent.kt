@@ -20,6 +20,7 @@ import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer
 import com.intellij.codeInsight.lookup.LookupManager
 import com.intellij.codeInsight.lookup.impl.LookupImpl
 import com.intellij.ide.startup.StartupManagerEx
+import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.components.ProjectComponent
@@ -41,6 +42,8 @@ import com.intellij.openapi.roots.ModuleRootListener
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.Pair
 import com.intellij.openapi.vfs.*
+import com.intellij.openapi.vfs.newvfs.BulkFileListener
+import com.intellij.openapi.vfs.newvfs.events.*
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
 import com.intellij.testFramework.LightVirtualFile
@@ -69,7 +72,7 @@ import java.util.function.Function
 import kotlin.collections.ArrayList
 
 // FIX: make this a service
-class MdProjectComponent(val project: Project) : ProjectComponent {
+class MdProjectComponent(val project: Project) : ProjectComponent, Disposable {
 
     val creation = System.currentTimeMillis()
     private val time: Long get() = System.currentTimeMillis() - creation
@@ -104,6 +107,13 @@ class MdProjectComponent(val project: Project) : ProjectComponent {
     private var reopenChangedEditorsPending = false
     private var reopenRefusedByUser = HashSet<String>()
 
+    /**
+     * Usually not invoked directly, see class javadoc.
+     */
+    override fun dispose() {
+
+    }
+
     @Messages.YesNoResult
     fun showReopenFileTypeChangedEditorsDialog(title: String = MdBundle.message("reopen.changed-type.title")): Int {
         val message = MdBundle.message("update.editor-reopen.changed-type.message")
@@ -111,7 +121,7 @@ class MdProjectComponent(val project: Project) : ProjectComponent {
     }
 
     private fun reopenChangedFileTypeEditors() {
-        if (ApplicationManager.getApplication().isUnitTestMode) return;
+        if (ApplicationManager.getApplication().isUnitTestMode) return
 
         assert(MdApplicationSettings.instance.debugSettings.reloadEditorsOnFileTypeChange)
 
@@ -378,13 +388,35 @@ class MdProjectComponent(val project: Project) : ProjectComponent {
         }
     }
 
-    override fun projectOpened() {
-        println("projectOpened $time")
+    fun vfsFireAfter(event: VFileEvent) {
+        when (event) {
+            is VFileContentChangeEvent -> {
+                if (project.isDisposed) return
+                if (event.file.isDirectory) return
 
-        @Suppress("DEPRECATION")
-        // DEPRECATED: use VFS_CHANGES topic, available since 2017-11-07
-        VirtualFileManager.getInstance().addVirtualFileListener(object : VirtualFileListener {
-            override fun propertyChanged(event: VirtualFilePropertyEvent) {
+                fileContentChanged(event.file)
+            }
+            is VFileCopyEvent -> {
+                val copy = event.newParent.findChild(event.newChildName)
+                if (copy != null) {
+                    updateHighlighters()
+                }
+            }
+            is VFileCreateEvent -> {
+                val newChild = event.file
+                if (newChild != null) {
+                    updateHighlighters()
+                    if (!newChild.isDirectory) fileContentChanged(newChild)
+                }
+            }
+            is VFileDeleteEvent -> {
+                updateHighlighters()
+                if (!event.file.isDirectory) fileContentChanged(event.file)
+            }
+            is VFileMoveEvent -> {
+                updateHighlighters()
+            }
+            is VFilePropertyChangeEvent -> {
                 // NOTE: this also one fires often when document is modified with writeable property changing
                 if (!event.file.isDirectory) {
 //                    System.out.println("PropertyChanged: ${event.propertyName}: old: ${event.oldValue} new: ${event.newValue}")
@@ -398,37 +430,25 @@ class MdProjectComponent(val project: Project) : ProjectComponent {
                     }
                 }
             }
+        }
+    }
 
-            override fun contentsChanged(event: VirtualFileEvent) {
-                if (project.isDisposed) return
-                if (event.file.isDirectory) return
+    override fun projectOpened() {
+        println("projectOpened $time")
 
-                fileContentChanged(event.file)
+        val applicationMessageBusConnection = ApplicationManager.getApplication().messageBus.connect(this)
+        applicationMessageBusConnection.subscribe(VirtualFileManager.VFS_CHANGES, object : BulkFileListener {
+            override fun after(events: MutableList<out VFileEvent>) {
+                for (event in events) {
+                    vfsFireAfter(event)
+                }
             }
-
-            override fun fileCreated(event: VirtualFileEvent) {
-                updateHighlighters()
-                if (!event.file.isDirectory) fileContentChanged(event.file)
-            }
-
-            override fun fileDeleted(event: VirtualFileEvent) {
-                updateHighlighters()
-                if (!event.file.isDirectory) fileContentChanged(event.file)
-            }
-
-            override fun fileMoved(event: VirtualFileMoveEvent) {
-                updateHighlighters()
-            }
-
-            override fun fileCopied(event: VirtualFileCopyEvent) {
-                updateHighlighters()
-            }
-        }, project)
+        })
 
         // add lookup manager listener
-        LookupManager.getInstance(project).addPropertyChangeListener(PropertyChangeListener { evt -> this@MdProjectComponent.propertyChange(evt) }, project)
+        LookupManager.getInstance(project).addPropertyChangeListener(PropertyChangeListener { evt -> this@MdProjectComponent.propertyChange(evt) }, this)
 
-        val messageBusConnection = project.messageBus.connect(project)
+        val messageBusConnection = project.messageBus.connect(this)
 
         messageBusConnection.subscribe(ProjectTopics.PROJECT_ROOTS, object : ModuleRootListener {
             override fun rootsChanged(event: ModuleRootEvent) {
@@ -449,7 +469,6 @@ class MdProjectComponent(val project: Project) : ProjectComponent {
             }
         }, ModalityState.NON_MODAL)
 
-        val applicationMessageBusConnection = ApplicationManager.getApplication().messageBus.connect(project)
         val settingsChangeReloadReparseHandler = SettingsChangeReloadReparseHandler()
         applicationMessageBusConnection.subscribe(SettingsChangedListener.TOPIC, settingsChangeReloadReparseHandler)
 
@@ -509,7 +528,7 @@ class MdProjectComponent(val project: Project) : ProjectComponent {
                         if (LOG_EDITOR.isDebugEnabled) LOG_EDITOR.debug("editor created ${event.editor}, skipping not editorEx")
                     }
                 }
-            }, project)
+            }, this)
         }
     }
 
@@ -606,7 +625,7 @@ class MdProjectComponent(val project: Project) : ProjectComponent {
 
             if (editor == null) {
                 for (provider in MdEditorCustomizationProvider.EXTENSIONS.value) {
-                    editor = provider.getEditorEx(newEditor);
+                    editor = provider.getEditorEx(newEditor)
                     if (editor != null) {
                         break
                     }
@@ -700,7 +719,7 @@ class MdProjectComponent(val project: Project) : ProjectComponent {
 
     override fun initComponent() {
         println("initComponent $time")
-        val messageBusConnection = project.messageBus.connect(project)
+        val messageBusConnection = project.messageBus.connect(this)
 
         messageBusConnection.subscribe(ProjectLifecycleListener.TOPIC, object : ProjectLifecycleListener {
             override fun afterProjectClosed(project: Project) {

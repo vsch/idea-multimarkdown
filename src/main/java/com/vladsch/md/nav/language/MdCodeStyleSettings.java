@@ -160,7 +160,6 @@ public class MdCodeStyleSettings extends CustomCodeStyleSettings {
         this(SETTINGS_TAG_NAME, new CodeStyleSettings(false));
     }
 
-    @SuppressWarnings("deprecation")
     @NotNull
     public static MdCodeStyleSettings getInstance(@NotNull Project project) {
         MdCodeStyleSettings settings;
@@ -168,9 +167,7 @@ public class MdCodeStyleSettings extends CustomCodeStyleSettings {
         try {
             settings = CodeStyle.getSettings(project).getCustomSettings(MdCodeStyleSettings.class);
         } catch (NoClassDefFoundError ignored) {
-            // DEPRECATED: replacement CodeStyle#getSettings appeared in 2017-11-09
-            //    change when 2017.1 is no longer supported use CodeStyle
-            settings = com.intellij.psi.codeStyle.CodeStyleSettingsManager.getSettings(project).getCustomSettings(MdCodeStyleSettings.class);
+            settings = CodeStyle.getSettings(project).getCustomSettings(MdCodeStyleSettings.class);
         }
         settings.loadRightMargin();
         return settings;
@@ -196,7 +193,6 @@ public class MdCodeStyleSettings extends CustomCodeStyleSettings {
         return MdBlockPrefixProvider.PROVIDER.getValue() == MdBlockPrefixProvider.DEFAULT.getValue();
     }
 
-    @SuppressWarnings("deprecation")
     @NotNull
     public static MdCodeStyleSettings getInstance(@NotNull PsiFile psiFile) {
         MdCodeStyleSettings settings;
@@ -204,9 +200,7 @@ public class MdCodeStyleSettings extends CustomCodeStyleSettings {
         try {
             settings = CodeStyle.getCustomSettings(psiFile, MdCodeStyleSettings.class);
         } catch (NoClassDefFoundError ignored) {
-            // DEPRECATED: replacement CodeStyle#getSettings appeared in 2017-11-09
-            //    change when 2017.1 is no longer supported use CodeStyle
-            settings = com.intellij.psi.codeStyle.CodeStyleSettingsManager.getSettings(psiFile.getProject()).getCustomSettings(MdCodeStyleSettings.class);
+            settings = CodeStyle.getSettings(psiFile.getProject()).getCustomSettings(MdCodeStyleSettings.class);
         }
         settings.loadRightMargin();
         return settings;
@@ -231,7 +225,7 @@ public class MdCodeStyleSettings extends CustomCodeStyleSettings {
     @NotNull
     public String getSoftMargins() {
         List<Integer> softMargins = getContainer().getSoftMargins(MdLanguage.INSTANCE);
-        return Utils.splice(softMargins.stream().map(String::valueOf).toArray(value -> new String[value]), ", ");
+        return Utils.splice(softMargins.stream().map(String::valueOf).toArray(String[]::new), ", ");
     }
 
     public void setSoftMargins(@NotNull String value) {

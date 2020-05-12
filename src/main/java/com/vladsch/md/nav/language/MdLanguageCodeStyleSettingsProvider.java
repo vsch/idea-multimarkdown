@@ -43,21 +43,20 @@ public class MdLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSettin
         return MdBundle.message("colors.sample-loading-error");
     }
 
-    @SuppressWarnings("deprecation")
-    @NotNull
+    /**
+     * Customize default settings: set values which are different from the ones after {@code CommonCodeStyleSettings} initialization.
+     *
+     * @param commonSettings Customizable instance of  common settings for the language.
+     * @param indentOptions  Customizable instance of indent options for the language.
+     */
     @Override
-    // DEPRECATED: replacement override customizeSettings() appeared in 2018-09-04
-    //    change when 183.2207 is lowest supported version
-    public CommonCodeStyleSettings getDefaultCommonSettings() {
-        CommonCodeStyleSettings commonSettings = new CommonCodeStyleSettings(getLanguage());
-
+    protected void customizeDefaults(@NotNull CommonCodeStyleSettings commonSettings, @NotNull CommonCodeStyleSettings.IndentOptions indentOptions) {
         try {
             commonSettings.WRAP_ON_TYPING = WrapOnTyping.NO_WRAP.intValue;
         } catch (NoSuchFieldError ignored) {
         }
 
         commonSettings.RIGHT_MARGIN = 72;
-        CommonCodeStyleSettings.IndentOptions indentOptions = commonSettings.initIndentOptions();
         indentOptions.TAB_SIZE = 4;
         indentOptions.INDENT_SIZE = 4;
         indentOptions.CONTINUATION_INDENT_SIZE = 4;
@@ -65,7 +64,6 @@ public class MdLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSettin
         indentOptions.USE_TAB_CHARACTER = false;
         indentOptions.USE_RELATIVE_INDENTS = false;
         indentOptions.SMART_TABS = false;
-        return commonSettings;
     }
 
     @Override

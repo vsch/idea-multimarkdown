@@ -12,7 +12,6 @@
     <extensions defaultExtensionNs="com.vladsch.idea.multimarkdown">
         <settingsExtension implementation="com.vladsch.md.nav.flex.settings.FlexmarkHtmlSettingsExtensionProvider"/>
         <settingsExtension implementation="com.vladsch.md.nav.flex.settings.FlexmarkDebugSettingsExtensionProvider"/>
-        <projectSettingsExtension implementation="com.vladsch.md.nav.flex.settings.FlexmarkProjectSettingsExtensionProvider"/>
 
         <settingsConfigurableExtension implementation="com.vladsch.md.nav.flex.settings.FlexmarkHtmlSettingsFormProvider"/>
         <settingsConfigurableExtension implementation="com.vladsch.md.nav.flex.settings.FlexmarkParserSettingsFormProvider"/>

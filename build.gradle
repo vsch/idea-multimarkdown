@@ -7,9 +7,6 @@ plugins {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-//group 'com.vladsch'
-//version '3.0.201.92'
-
 repositories {
     mavenCentral()
     mavenLocal()
@@ -79,13 +76,5 @@ intellij {
     version '201.7223.91'
     plugins = [
             "IntelliLang", "git4idea", "java", "grazie",
-//            "com.vladsch.MissingInActions:1.8.193.4"
     ]
 }
-
-//patchPluginXml {
-//    changeNotes """
-//      Add change notes here.<br>
-//      <em>most HTML tags may be used</em>"""
-//}
-

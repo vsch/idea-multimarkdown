@@ -5,14 +5,16 @@ package com.vladsch.md.nav.vcs
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ModalityState
-import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.vcs.FileStatus
 import com.intellij.openapi.vcs.FileStatusManager
 import com.intellij.openapi.vcs.ProjectLevelVcsManager
 import com.intellij.openapi.vcs.VcsListener
-import com.intellij.openapi.vfs.*
+import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.openapi.vfs.VirtualFileManager
+import com.intellij.openapi.vfs.newvfs.BulkFileListener
+import com.intellij.openapi.vfs.newvfs.events.*
 import com.intellij.util.Alarm
 import com.vladsch.md.nav.MdPlugin
 import com.vladsch.md.nav.MdProjectComponent
@@ -46,11 +48,7 @@ class MdLinkResolverManager(override val project: Project) : Disposable, Project
         @JvmStatic
         fun getInstance(project: Project): MdLinkResolverManager {
             return if (project.isDefault) NULL.getValue(project)
-            else {
-                // DEPRECATED: added 2019.08, when available change to
-//                project.getComponent(MdLinkResolverManager::class.java)
-                return ServiceManager.getService(project, MdLinkResolverManager::class.java)
-            }
+            else project.getService(MdLinkResolverManager::class.java)
         }
     }
 
@@ -262,9 +260,7 @@ class MdLinkResolverManager(override val project: Project) : Disposable, Project
 
         // this should really be the place that creates gitHubVcsRoots
         val gitHubVcsMap = ConcurrentHashMap<String, GitHubVcsRoot>()
-        // DEPRECATED: added 2019.08, when available change to
-//        val repoManager: GitRepositoryManager = project.getService(GitRepositoryManager::class.java)
-        val repoManager: GitRepositoryManager = ServiceManager.getService(project, GitRepositoryManager::class.java)
+        val repoManager: GitRepositoryManager = project.getService(GitRepositoryManager::class.java)
         for (gitRepository in repoManager.repositories) {
             // create our GitHubVcsRoot
             val gitHubVcsRoot = GitHubVcsRoot.create(gitRepository)
@@ -288,39 +284,52 @@ class MdLinkResolverManager(override val project: Project) : Disposable, Project
         if (file.isDirectory) rescanProjectDirectories = true
     }
 
-    internal fun projectInitialized() {
-        @Suppress("DEPRECATION")
-        // DEPRECATED: use VFS_CHANGES topic, available since 2017-11-07
-        VirtualFileManager.getInstance().addVirtualFileListener(object : VirtualFileListener {
-            override fun propertyChanged(event: VirtualFilePropertyEvent) {
-                // NOTE: this one fires often when document is modified with writeable property changing
-                // fileSystemChanged(event.file)
-            }
-
-            override fun contentsChanged(event: VirtualFileEvent) {
+    fun vfsFireAfter(event: VFileEvent) {
+        when (event) {
+            is VFileContentChangeEvent -> {
                 fileSystemChanged(event.file)
             }
-
-            override fun fileCreated(event: VirtualFileEvent) {
-                fileSystemChanged(event.file)
+            is VFileCopyEvent -> {
+                val original = event.file
+                val copy = event.newParent.findChild(event.newChildName)
+                if (copy != null) {
+                    fileSystemChanged(original)
+                }
             }
-
-            override fun fileDeleted(event: VirtualFileEvent) {
+            is VFileCreateEvent -> {
+                val newChild = event.file
+                if (newChild != null) {
+                    fileSystemChanged(newChild)
+                }
+            }
+            is VFileDeleteEvent -> {
                 // issue #776, JavaFx Preview displays cached image for deleted file
                 fileSystemChanged(event.file)
             }
-
-            override fun fileMoved(event: VirtualFileMoveEvent) {
+            is VFileMoveEvent -> {
                 fileSystemChanged(event.file)
             }
-
-            override fun fileCopied(event: VirtualFileCopyEvent) {
-                fileSystemChanged(event.file)
+            is VFilePropertyChangeEvent -> {
+                // NOTE: this one fires often when document is modified with writeable property changing
+                // fileSystemChanged(event.file)
+                //            val pce = event
+                //            adapted.propertyChanged(
+                //                VirtualFilePropertyEvent(event.getRequestor(), pce.file, pce.propertyName, pce.oldValue, pce.newValue))
             }
-        }, project)
+        }
+    }
 
-        val messageBusConnection = project.messageBus.connect(project)
+    internal fun projectInitialized() {
+        val applicationMessageBusConnection = ApplicationManager.getApplication().messageBus.connect(this)
+        applicationMessageBusConnection.subscribe(VirtualFileManager.VFS_CHANGES, object : BulkFileListener {
+            override fun after(events: MutableList<out VFileEvent>) {
+                for (event in events) {
+                    vfsFireAfter(event)
+                }
+            }
+        })
 
+        val messageBusConnection = project.messageBus.connect(this)
         messageBusConnection.subscribe(GitRepository.GIT_REPO_CHANGE, GitRepositoryChangeListener { repository ->
             // diagnostic/
             if (project.isDisposed) return@GitRepositoryChangeListener

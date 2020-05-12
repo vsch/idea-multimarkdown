@@ -2,9 +2,10 @@
 
 package com.vladsch.md.nav.parser.flexmark;
 
-import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.util.messages.MessageBusConnection;
 import com.vladsch.flexmark.util.html.Attributes;
 import com.vladsch.md.nav.editor.util.HtmlScriptResourceProvider;
@@ -27,7 +28,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
-public class MdFencedCodeImageConversionManager {
+public class MdFencedCodeImageConversionManager implements Disposable {
     final private static LazyFunction<Project, MdFencedCodeImageConversionManager> NULL = new LazyFunction<>(MdFencedCodeImageConversionManager::new);
 
     @NotNull
@@ -36,24 +37,28 @@ public class MdFencedCodeImageConversionManager {
             Project defaultProject = ProjectManager.getInstance().getDefaultProject();
             return NULL.getValue(defaultProject);
         } else {
-            // DEPRECATED: added 2019.08, when available change to
-            //   return project.getService(MdRenderingProfileManager.class);
-            return ServiceManager.getService(project, MdFencedCodeImageConversionManager.class);
+            return project.getService(MdFencedCodeImageConversionManager.class);
         }
     }
 
-    @NotNull final private Project myProject;
     @NotNull final HashMap<String, LinkedHashMap<String, MdFencedCodeImageConverter>> infoVariantMap = new HashMap<>();
 
     public MdFencedCodeImageConversionManager(@NotNull Project project) {
-        myProject = project;
-
 //        // NOTE: if any global settings affect fenced code image rendering, then subscribe and clear        
 //        MessageBusConnection applicationMessageBusConnection = ApplicationManager.getApplication().getMessageBus().connect(project);
 //        applicationMessageBusConnection.subscribe(SettingsChangedListener.TOPIC, settings -> infoVariantMap.clear());
+        Disposer.register(project, this);
 
-        MessageBusConnection projectBusConnection = project.getMessageBus().connect(project);
+        MessageBusConnection projectBusConnection = project.getMessageBus().connect(this);
         projectBusConnection.subscribe(ProjectSettingsChangedListener.TOPIC, (project1, settings) -> infoVariantMap.clear());
+    }
+
+    /**
+     * Usually not invoked directly, see class javadoc.
+     */
+    @Override
+    public void dispose() {
+
     }
 
     @NotNull

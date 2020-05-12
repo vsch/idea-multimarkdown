@@ -4,7 +4,6 @@ package com.vladsch.md.nav.settings
 import com.intellij.ide.DataManager
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.actionSystem.DataContext
-import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.options.ex.Settings
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
@@ -273,9 +272,7 @@ class RenderingProfileSynchronizer constructor(val project: Project) : MdRenderi
         @JvmStatic
         fun getInstance(project: Project): RenderingProfileSynchronizer {
             return if (project.isDefault) NULL.getValue(project)
-            // DEPRECATED: added 2019.08, when available change to
-//        project.getService(RenderingProfileSynchronizer.class);
-            else ServiceManager.getService(project, RenderingProfileSynchronizer::class.java)
+            else project.getService(RenderingProfileSynchronizer::class.java)
         }
 
         @JvmStatic
@@ -288,17 +285,6 @@ class RenderingProfileSynchronizer constructor(val project: Project) : MdRenderi
                     }
                 }
                 .onError {}
-
-//            // DEPRECATED : replacement DataManager#getDataContextFromFocusAsync appeared in 2018-02-21
-//            //    change to new API when old api is removed
-//            //noinspection deprecation
-//            val context: DataContext? = DataManager.getInstance().dataContextFromFocus.result
-//            if (context != null) {
-//                val settings: Settings? = Settings.KEY.getData(context)
-//                if (settings != null) {
-//                    handler.accept(context, settings)
-//                }
-//            }
         }
 
         @JvmStatic

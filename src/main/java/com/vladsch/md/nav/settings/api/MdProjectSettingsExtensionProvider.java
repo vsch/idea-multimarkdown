@@ -3,7 +3,7 @@
 package com.vladsch.md.nav.settings.api;
 
 import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.project.Project;
+import com.vladsch.md.nav.settings.MdProjectSettings;
 import com.vladsch.md.nav.util.MdExtensions;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,5 +11,5 @@ public interface MdProjectSettingsExtensionProvider {
     ExtensionPointName<MdProjectSettingsExtensionProvider> EP_NAME = ExtensionPointName.create("com.vladsch.idea.multimarkdown.projectSettingsExtension");
     MdExtensions<MdProjectSettingsExtensionProvider> EXTENSIONS = new MdExtensions<>(EP_NAME, new MdProjectSettingsExtensionProvider[0]);
 
-    void initializeProjectSettingsService(@NotNull Project project);
+    void initializeProjectSettingsService(@NotNull MdProjectSettings projectSettings);
 }

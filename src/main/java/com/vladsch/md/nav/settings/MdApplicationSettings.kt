@@ -91,17 +91,8 @@ class MdApplicationSettings(val isUnitTestMode: Boolean) :
 
     init {
         if (!isUnitTestMode) {
-            val messageBus = ApplicationManager.getApplication().messageBus
-            val settingsConnection = messageBus.connect(messageBus)
-
-            try {
-                settingsConnection.subscribe(LafManagerListener.TOPIC, this)
-            } catch (ignored: NoSuchFieldError) {
-                // DEPRECATED: replacement appeared in 2019-07-20
-                @Suppress("DEPRECATION")
-                LafManager.getInstance().addLafManagerListener(this)
-            }
-
+            val settingsConnection = ApplicationManager.getApplication().messageBus.connect(this)
+            settingsConnection.subscribe(LafManagerListener.TOPIC, this)
             ApplicationManager.getApplication().invokeLater { notifyOnSettingsChangedRaw() }
         }
     }

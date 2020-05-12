@@ -40,13 +40,11 @@
           <option name="JEKYLL_FRONT_MATTER" value="true" />
           <option name="MACROS_EXT" value="true" />
           <option name="PARSE_HTML_ANCHOR_ID" value="true" />
-          <option name="PLANTUML_FENCED_CODE" value="true" />
           <option name="PRODUCTION_SPEC_PARSER" value="true" />
-          <option name="PUML_FENCED_CODE" value="true" />
           <option name="SIM_TOC_BLANK_LINE_SPACER" value="true" />
         </ParserOptions>
       </ParserSettings>
-      <HtmlSettings headerTopEnabled="false" headerBottomEnabled="false" bodyTopEnabled="false" bodyBottomEnabled="false" addPageHeader="false" imageUriSerials="false" addDocTypeHtml="true" noParaTags="false" migratedPlantUml="true" plantUmlConversion="0">
+      <HtmlSettings headerTopEnabled="false" headerBottomEnabled="false" bodyTopEnabled="false" bodyBottomEnabled="false" addPageHeader="false" imageUriSerials="false" addDocTypeHtml="true" noParaTags="false" migratedPlantUml="false" plantUmlConversion="0">
         <GeneratorProvider>
           <provider providerId="com.vladsch.md.nav.editor.javafx.html.generator" providerName="JavaFx HTML Generator" />
         </GeneratorProvider>

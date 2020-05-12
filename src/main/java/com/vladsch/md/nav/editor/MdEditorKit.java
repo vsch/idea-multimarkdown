@@ -5,6 +5,7 @@ import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.util.messages.MessageBusConnection;
+import com.intellij.util.ui.ImageUtil;
 import com.intellij.util.ui.UIUtil;
 import com.vladsch.flexmark.util.sequence.SequenceUtils;
 import com.vladsch.md.nav.psi.element.MdImageMultiLineUrlContentImpl;
@@ -297,8 +298,13 @@ public class MdEditorKit extends HTMLEditorKit implements Disposable {
                         Integer width = SequenceUtils.parseUnsignedIntOrNull(widthText);
                         Integer height = SequenceUtils.parseUnsignedIntOrNull(heightText);
 
-                        if (width == null && height != null) width = height;
-                        if (height == null && width != null) height = width;
+                        if (width == null && height != null) 
+                            //noinspection SuspiciousNameCombination
+                            width = height;
+                        
+                        if (height == null && width != null)
+                            //noinspection SuspiciousNameCombination
+                            height = width;
 
                         fileName = isSvgExt ? url.getFileName() : "markdownNavigator_svgImage";
 
@@ -315,9 +321,7 @@ public class MdEditorKit extends HTMLEditorKit implements Disposable {
 
                         if (width != null && taskItemImage) {
                             int type = BufferedImage.TYPE_INT_ARGB;  // other options
-                            // DEPRECATED: replacement ImageUtil.createImage() appeared in 2019-07-09 change when 193.2956 is lowest supported version
-                            //noinspection deprecation
-                            BufferedImage dest = UIUtil.createImage(width, height, type);
+                            BufferedImage dest = ImageUtil.createImage(width, height, type);
                             image = ImageUtils.overlayImage(dest, image, 0, 0);
                         }
                     }

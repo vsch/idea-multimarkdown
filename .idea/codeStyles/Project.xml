@@ -4,7 +4,7 @@
       <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
     </JetCodeStyleSettings>
     <MarkdownNavigatorCodeStyleSettings>
-      <option name="WRAP_ON_TYPING" value="1" />
+      <option name="TOC_HEADING_LEVELS" value="24" />
       <option name="TOC_TITLE_LEVEL" value="3" />
     </MarkdownNavigatorCodeStyleSettings>
     <codeStyleSettings language="kotlin">

@@ -41,9 +41,7 @@ internal class ToggleWrapOnTypingAction : AnAction(), DumbAware, Toggleable {
                 , "Soft wraps are enabled"
                 , "Wrap on typing is disabled when soft wraps are enabled (Editor > Code Style > Markdown)"
             )
-            // DEPRECATED: 2019-09-05, use Toggleable.setSelected(Presentation, value) when 2019.3 is latest supported version
-            @Suppress("UnstableApiUsage")
-            e.presentation.putClientProperty(Toggleable.SELECTED_PROPERTY, styleSettings.isWrapOnTyping)
+            Toggleable.setSelected(e.presentation, styleSettings.isWrapOnTyping)
         }
         conditionBuilder.done(true)
         super.update(e)

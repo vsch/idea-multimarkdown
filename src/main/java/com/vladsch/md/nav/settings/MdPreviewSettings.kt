@@ -2,9 +2,10 @@
 package com.vladsch.md.nav.settings
 
 import com.intellij.ide.ui.AntialiasingType
+import com.intellij.ide.ui.UISettings
 import com.intellij.openapi.application.Application
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.util.ui.JBUI
+import com.intellij.ui.scale.JBUIScale
 import com.vladsch.md.nav.editor.javafx.JavaFxHtmlPanelProvider
 import com.vladsch.md.nav.editor.split.SplitFileEditor.SplitEditorLayout
 import com.vladsch.md.nav.editor.split.SplitFileEditor.SplitEditorPreviewType
@@ -200,9 +201,7 @@ class MdPreviewSettings(private val mySettingsExtensions: MdExtendableSettingsIm
 
     companion object {
         // @formatter:off
-        //noinspection deprecation
-        // DEPRECATED: replacement JBUIScale#scale appeared in 2019-06-10
-        @JvmField val DEFAULT_ZOOM_FACTOR: Double = JBUI.scale(1f).toDouble()
+        @JvmField val DEFAULT_ZOOM_FACTOR: Double = JBUIScale.scale(1f).toDouble()
         
         const val MIN_ZOOM_FACTOR:Double = 0.1
         const val MAX_ZOOM_FACTOR:Double = 10.0
@@ -232,7 +231,7 @@ class MdPreviewSettings(private val mySettingsExtensions: MdExtendableSettingsIm
             return if (application?.isUnitTestMode != false) {
                 false
             } else {
-                UISettingsProvider.getInstance()?.editorAAType == AntialiasingType.GREYSCALE
+                UISettings.instance.editorAAType == AntialiasingType.GREYSCALE
             }
         }
 

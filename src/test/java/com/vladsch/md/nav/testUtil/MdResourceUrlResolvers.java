@@ -24,7 +24,8 @@ public class MdResourceUrlResolvers {
     }
 
     private static class OutTestClassUrlResolver implements ResourceUrlResolver {
-        static final String OUT_TEST = "/out/test/";
+        static final String OUT_TEST = "/build/resources/test/";
+        public static final String SRC_TEST_JAVA = "/src/test/java/";
 
         OutTestClassUrlResolver() {}
 
@@ -37,7 +38,7 @@ public class MdResourceUrlResolvers {
                 if (pos > 0) {
                     int pathPos = noFileProtocol.indexOf("/", pos + OUT_TEST.length());
                     if (pathPos > 0) {
-                        return noFileProtocol.substring(0, pos) /* + "/" + noFileProtocol.substring(pos + OUT_TEST.length(), pathPos)*/ + "/test/src/" + noFileProtocol.substring(pathPos + 1);
+                        return noFileProtocol.substring(0, pos) + SRC_TEST_JAVA + noFileProtocol.substring(pathPos + 1);
                     }
                 }
             }

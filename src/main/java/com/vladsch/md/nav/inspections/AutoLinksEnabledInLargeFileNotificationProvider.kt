@@ -8,6 +8,7 @@ import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.fileEditor.TextEditor
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.DumbService
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiDocumentManager
@@ -27,9 +28,7 @@ class AutoLinksEnabledInLargeFileNotificationProvider : EditorNotifications.Prov
         return KEY
     }
 
-    // DEPRECATED: replacement override createNotificationPanel(VirtualFile, FileEditor, Project) appeared in 2019-02-06
-    //    change when 191.5532 is lowest supported version
-    override fun createNotificationPanel(file: VirtualFile, fileEditor: FileEditor): EditorNotificationPanel? {
+    override fun createNotificationPanel(file: VirtualFile, fileEditor: FileEditor, project:Project): EditorNotificationPanel? {
         if (MdApplicationSettings.instance.wasShownSettings.autoLinksExtension) return null
 
         if (file.fileType !== MdFileType.INSTANCE) {
@@ -41,7 +40,6 @@ class AutoLinksEnabledInLargeFileNotificationProvider : EditorNotifications.Prov
         }
 
         val editor = fileEditor.editor as? EditorEx ?: return null
-        val project = editor.project ?: return null
 
         if (DumbService.isDumb(project)) {
             return null

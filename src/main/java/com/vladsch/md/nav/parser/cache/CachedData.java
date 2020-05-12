@@ -3,7 +3,7 @@
 package com.vladsch.md.nav.parser.cache;
 
 import com.intellij.openapi.application.Application;
-import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
@@ -33,9 +33,7 @@ public class CachedData {
 
     @NotNull
     public static CachedData getInstance() {
-        // DEPRECATED: added 2019.08, when available change to
-//        project.getService(MdHistoryManager.class);
-        return ServiceManager.getService(CachedData.class);
+        return ApplicationManager.getApplication().getService(CachedData.class);
     }
 
     private final Application myApplication = getApplication();

@@ -13,7 +13,7 @@
 - [Version 2.9.0/2.9.7](#version-290297)
 - [Version 2.8.4](#version-284)
 - [Version 2.8.2](#version-282)
-- [Source Update is Long Overdue](#source-update-is-long-overdue)
+- [Source Updated to 3.0.201.91](#source-updated-to-3020191)
 
 
 ## Overview
@@ -33,7 +33,7 @@ for:
 * **Paste images** into documents for fast screen capture links
 * **Drag & Drop files and images** for fast link insertion
 * **Drag and Drop** text, HTML or links from other applications
-* **Formatting** to cleanup documents with a key stroke
+* **Formatting** to clean up documents with a key stroke
 * **Navigation and Find Usages** to find references without effort
 * **Copy Markdown** as **JIRA**, **YouTrack** or **HTML** formatted text
 * Convert **HTML to Markdown by pasting** it into a Markdown document.
@@ -295,38 +295,4 @@ Reserved.
 [nicoulaj/idea-markdown plugin]: https://github.com/nicoulaj/idea-markdown
 [pegdown]: http://pegdown.org
 [sirthias]: https://github.com/sirthias
-[.gitignore]: https://plugins.jetbrains.com/plugin/7495--ignore
-[Admonition Extension, Material for MkDocs]: https://squidfunk.github.io/mkdocs-material/extensions/admonition/
-[Android Studio]: https://developer.android.com/sdk/installing/studio.html
-[AppCode]: https://www.jetbrains.com/objc
-[CLion]: https://www.jetbrains.com/clion
-[CommonMark]: https://commonmark.org
-[CommonMark (spec 0.28)]: https://spec.commonmark.org/0.28
-[Copy Jira]: https://github.com/vsch/idea-multimarkdown/raw/master/resources/icons/editor_actions/Copy_jira.png
-[Copy Markdown to HTML formatted text]: https://github.com/vsch/idea-multimarkdown/wiki/Enhanced-Features#copy-markdown-to-html-formatted-text
-[DataGrip]: https://www.jetbrains.com/datagrip
-[GitHub Issues]: https://github.com/vsch/idea-multimarkdown/issues
-[GitHub Issues page]: https://github.com/vsch/idea-multimarkdown/issues/
-[GitHub wiki in IntelliJ IDE]: https://github.com/vsch/idea-multimarkdown/wiki/Adding-GitHub-Wiki-to-IntelliJ-Project
-[GitHub Wiki pages]: https://github.com/vsch/idea-multimarkdown/wiki
-[GitHub-userscripts]: https://github.com/Mottie/GitHub-userscripts
-[IntelliJ IDEA]: https://www.jetbrains.com/idea
-[Jekyll]: https://jekyllrb.com
-[JetBrains plugin comment and rate page]: https://plugins.jetbrains.com/plugin/7896-markdown-navigator
-[Kotlin]: https://kotlinlang.org
-[Kramdown]: https://kramdown.gettalong.org/
-[Markdown Navigator]: http://vladsch.com/product/markdown-navigator
-[Modifying Link Processing]: https://github.com/vsch/idea-multimarkdown/wiki/Link-Map-Settings
-[MultiMarkdown]: https://fletcherpenney.net/multimarkdown
-[Pandoc]: https://pandoc.org/MANUAL.html#pandocs-markdown
-[PhpExtra]: https://michelf.ca/projects/php-markdown/extra/
-[PhpStorm]: https://www.jetbrains.com/phpstorm
-[Pipe Table Formatter]: https://github.com/anton-dev-ua/PipeTableFormatter
-[PyCharm]: https://www.jetbrains.com/pycharm
-[RubyMine]: https://www.jetbrains.com/ruby
-[WebStorm]: https://www.jetbrains.com/webstorm
-[Wiki]: https://github.com/vsch/idea-multimarkdown/wiki
-[holgerbrandl/pasteimages]: https://github.com/holgerbrandl/pasteimages
-[sirthias/pegdown]: https://github.com/sirthias/pegdown
-[vsch/pegdown]: https://github.com/vsch/pegdown/tree/develop
 
