@@ -22,6 +22,9 @@ class MdProjectSettings constructor(val project: Project?) : ComponentItemHolder
     private val myRenderingProfile: MdRenderingProfile
 
     val projectOrDefault: Project get() = project ?: ProjectManager.getInstance().defaultProject
+    val hashCodeId:String get() {
+        return "@" + super.hashCode().toString(16)
+    }
 
     init {
         val profile = MdRenderingProfile()

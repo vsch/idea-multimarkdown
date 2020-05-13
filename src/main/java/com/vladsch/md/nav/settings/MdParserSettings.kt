@@ -2,6 +2,7 @@
 package com.vladsch.md.nav.settings
 
 import com.intellij.openapi.diagnostic.Logger
+import com.intellij.openapi.diagnostic.debug
 import com.vladsch.md.nav.editor.util.HtmlPanelProvider
 import com.vladsch.md.nav.parser.Extensions
 import com.vladsch.md.nav.parser.MdLexParser
@@ -31,15 +32,37 @@ class MdParserSettings @JvmOverloads constructor(extensionFlags: Int,
     }
 
     override fun resetToDefaults() {
-        copyFrom(DEFAULT, false)
+        LOG.debug { "MdParserSettings:resetToDefaults:$hashCodeId" }
+        copyFrom(DEFAULT, withExtensions = false, validateReset = false)
     }
+
+    val hashCodeId: String get() = "@" + super.hashCode().toString(16)
 
     private var correctedInvalidSettings = false
 
+    private fun validateReset(_pegdownFlags: Int) {
+        if (LOG_TOC_RESET.isDebugEnabled) {
+            if (_pegdownFlags and Extensions.TOC == 0) {
+                // log stack trace
+                try {
+                    throw IllegalStateException("TOC reset")
+                } catch (e: IllegalStateException) {
+                    LOG_TOC_RESET.info(e)
+                }
+            }
+        }
+    }
+
     fun copyFrom(other: MdParserSettings, withExtensions: Boolean = true) {
+        copyFrom(other, withExtensions, validateReset = true)
+    }
+
+    private fun copyFrom(other: MdParserSettings, withExtensions: Boolean, validateReset: Boolean) {
         if (other._pegdownFlags == 0 && other._parserFlags == 0L) {
             LOG.error("Copying cleared Parser settings from $other to $this")
         }
+
+        if (validateReset) validateReset(other._pegdownFlags)
 
         this._pegdownFlags = other._pegdownFlags
         this._parserFlags = other._parserFlags
@@ -49,6 +72,8 @@ class MdParserSettings @JvmOverloads constructor(extensionFlags: Int,
 //        this.correctedInvalidSettings = other.correctedInvalidSettings
 
         if (withExtensions) mySettingsExtensions.copyFrom(other)
+
+        if (validateReset) validateReset(this._pegdownFlags)
     }
 
     private var _pegdownFlags = extensionFlags
@@ -56,13 +81,11 @@ class MdParserSettings @JvmOverloads constructor(extensionFlags: Int,
         get() = _pegdownFlags
         set(value) {
             _pegdownFlags = value
+            validateReset(this._pegdownFlags)
         }
 
     private val pegdownExtensions: Set<PegdownExtensions>
-        get() = PegdownExtensions.asSet(pegdownFlags)
-//        private set(value) {
-//            _extensionFlags = PegdownExtensions.asFlags(value)
-//        }
+        get() = PegdownExtensions.asSet(_pegdownFlags)
 
     fun anyExtensions(flags: Int): Boolean {
         return (_pegdownFlags and flags) != 0
@@ -70,6 +93,7 @@ class MdParserSettings @JvmOverloads constructor(extensionFlags: Int,
 
     override fun validateLoadedSettings() {
         mySettingsExtensions.validateLoadedSettings()
+        validateReset(this._pegdownFlags)
 
         // NOTE: if settings are cleared then this will reset them to defaults
         if (_pegdownFlags == 0 && _parserFlags == 0L) {
@@ -84,10 +108,7 @@ class MdParserSettings @JvmOverloads constructor(extensionFlags: Int,
             correctedInvalidSettings = false
         }
 
-        if ((_parserFlags and MdLexParser.HEADER_ID_NO_DUPED_DASHES) != 0L) {
-            // try and catch when settings are changed
-            val tmp = 0;
-        }
+        validateReset(this._pegdownFlags)
     }
 
     fun anyExtensions(vararg flags: PegdownExtensions): Boolean {
@@ -165,7 +186,10 @@ class MdParserSettings @JvmOverloads constructor(extensionFlags: Int,
                     val filtered = map.filter { it.value }.toMap()
                     filtered
                 },
-                { _pegdownFlags = PegdownExtensions.asFlags(it) },
+                {
+                    _pegdownFlags = PegdownExtensions.asFlags(it)
+                    validateReset(this._pegdownFlags)
+                },
                 { key, value -> Pair(key.name, value.toString()) },
                 { key, value ->
                     val enumConstant = PegdownExtensions.enumConstant(key)
@@ -230,7 +254,8 @@ class MdParserSettings @JvmOverloads constructor(extensionFlags: Int,
     }
 
     companion object {
-        private val LOG = Logger.getInstance("com.vladsch.md.nav.settings")
+        private val LOG = Logger.getInstance("com.vladsch.md.nav.settings.parser")
+        private val LOG_TOC_RESET = Logger.getInstance("com.vladsch.md.nav.settings.parser.tocReset")
 
         @JvmField
         val EXCLUDED_PEGDOWN_EXTENSIONS: Int =

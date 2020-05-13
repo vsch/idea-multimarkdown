@@ -30,6 +30,7 @@ Contents**</summary>
   dropped file.
 * Fix: spurious reset of enhanced settings to defaults.
 * Fix: clean up deprecated API use.
+* Fix: TOC levels parsing to match optimized `levels` syntax.
 
 ### 3.0.xxx.91 - Bug Fix Release
 

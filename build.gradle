@@ -21,12 +21,12 @@ dependencies {
     compileOnly name: "jfxrt"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 
-    implementation "com.vladsch.flexmark:flexmark-all:0.61.26"
-    implementation "com.vladsch.flexmark:flexmark-util:0.61.26"
-    implementation "com.vladsch.flexmark:flexmark-tree-iteration:0.61.26"
-    implementation "com.vladsch.flexmark:flexmark-test-util:0.61.26"
-    implementation "com.vladsch.flexmark:flexmark-ext-zzzzzz:0.61.26"
-    implementation "com.vladsch.flexmark:flexmark-ext-spec-example:0.61.26"
+    implementation "com.vladsch.flexmark:flexmark-all:$flexmarkVersion"
+    implementation "com.vladsch.flexmark:flexmark-util:$flexmarkVersion"
+    implementation "com.vladsch.flexmark:flexmark-tree-iteration:$flexmarkVersion"
+    implementation "com.vladsch.flexmark:flexmark-test-util:$flexmarkVersion"
+    implementation "com.vladsch.flexmark:flexmark-ext-zzzzzz:$flexmarkVersion"
+    implementation "com.vladsch.flexmark:flexmark-ext-spec-example:$flexmarkVersion"
 
     implementation "com.jgoodies:jgoodies-common:1.4.0"
     implementation "com.vladsch.javafx-webview-debugger:javafx-webview-debugger:0.8.2"
