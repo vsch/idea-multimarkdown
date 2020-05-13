@@ -101,8 +101,8 @@ code {
     background-color: #B5FFCE;
 }</cssText>
       <cssUriHistory>
-        <option name="$PROJECT_DIR$/resources/com/vladsch/idea/multimarkdown/darcula.css" />
         <option name="file://$PROJECT_DIR$/resources/com/vladsch/idea/multimarkdown/darcula.css" />
+        <option name="$PROJECT_DIR$/resources/com/vladsch/idea/multimarkdown/darcula.css" />
       </cssUriHistory>
     </CssSettings>
   </component>
