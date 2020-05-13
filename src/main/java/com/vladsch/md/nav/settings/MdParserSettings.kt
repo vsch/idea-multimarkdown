@@ -83,6 +83,11 @@ class MdParserSettings @JvmOverloads constructor(extensionFlags: Int,
         } else {
             correctedInvalidSettings = false
         }
+
+        if ((_parserFlags and MdLexParser.HEADER_ID_NO_DUPED_DASHES) != 0L) {
+            // try and catch when settings are changed
+            val tmp = 0;
+        }
     }
 
     fun anyExtensions(vararg flags: PegdownExtensions): Boolean {
@@ -279,24 +284,6 @@ class MdParserSettings @JvmOverloads constructor(extensionFlags: Int,
             ParserOptions.HEADER_ID_NO_DUPED_DASHES.flags or
             ParserOptions.HEADER_ID_NON_ASCII_TO_LOWERCASE.flags
 
-        private val DEFAULT_EXTENSION_FLAGS = mapOf(
-            PegdownExtensions.FENCED_CODE_BLOCKS to true,
-            PegdownExtensions.TABLES to true,
-//            PegdownExtensions.AUTOLINKS to true,
-            PegdownExtensions.ANCHORLINKS to true,
-            PegdownExtensions.TASKLISTITEMS to true,
-            PegdownExtensions.STRIKETHROUGH to true,
-            PegdownExtensions.ATXHEADERSPACE to true,
-            PegdownExtensions.RELAXEDHRULES to true,
-            PegdownExtensions.INTELLIJ_DUMMY_IDENTIFIER to true // added to make sure proper extensions are never 0
-        )
-
-        private val DEFAULT_OPTION_FLAGS = mapOf(
-            ParserOptions.EMOJI_SHORTCUTS to true,
-            ParserOptions.GFM_TABLE_RENDERING to true,
-            ParserOptions.PRODUCTION_SPEC_PARSER to true // added to make sure proper parser options are never 0
-        )
-
         @JvmStatic
         val DEFAULT: MdParserSettings by lazy { MdParserSettings(Extensions.GITHUB_DOCUMENT_COMPATIBLE and Extensions.AUTOLINKS.inv(), GITHUB_DOCUMENT_COMPATIBLE or MdLexParser.SIM_TOC_BLANK_LINE_SPACER, false, EmojiShortcutsType.GITHUB.intValue, EmojiImagesType.IMAGE_ONLY.intValue) }
 
@@ -325,6 +312,7 @@ class MdParserSettings @JvmOverloads constructor(extensionFlags: Int,
                     Extensions.SUPERSCRIPT or
                     Extensions.INSERTED
                 ) and (Extensions.ANCHORLINKS or Extensions.ATXHEADERSPACE).inv()
+
             val parserOptionsFlags = (
                 MdLexParser.ATTRIBUTES_EXT or
                     MdLexParser.COMMONMARK_LISTS or

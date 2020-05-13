@@ -21,6 +21,8 @@ class MdProjectSettings constructor(val project: Project?) : ComponentItemHolder
 
     private val myRenderingProfile: MdRenderingProfile
 
+    val projectOrDefault: Project get() = project ?: ProjectManager.getInstance().defaultProject
+
     init {
         val profile = MdRenderingProfile()
         if (project != null) {

@@ -20,35 +20,37 @@ import java.util.Arrays;
  * Lexer/Parser Combination that uses pegdown behind the scenes to do the heavy lifting here we just fake everything.
  */
 public class MdLexParser {
-    public static final long PUML_FENCED_CODE = 0x100000000L; // plant UML
-    public static final long PLANTUML_FENCED_CODE = 0x80000000L; // plant UML
-    public static final long GITHUB_WIKI_LINKS = 0x40000000L;
-    public static final long JEKYLL_FRONT_MATTER = 0x20000000L;
-    public static final long EMOJI_SHORTCUTS = 0x10000000L;
-    public static final long HEADER_ID_REF_TEXT_TRIM_TRAILING_SPACES = 0x08000000L; // trim trailing spaces in ref text in headings used for heading id 
-    public static final long GITBOOK_URL_ENCODING = 0x04000000L; //exclude + from link url encode/decode
-    public static final long FLEXMARK_FRONT_MATTER = 0x00200000L; //implements Lexer, PsiParser {
-    public static final long SPACE_IN_LINK_URLS = 0x00100000L; // allow spaces in urls and convert them to %20 in html
-    public static final long PRODUCTION_SPEC_PARSER = 0x000800000L; // override test mode for spec parsing and use production spec example settings
-    public static final long NOT_USED_3 = 0x000400000L; // THIS IS NOT USED
-    public static final long GFM_LOOSE_BLANK_LINE_AFTER_ITEM_PARA = 0x00020000L; //gfm loose item rules
-    public static final long SIM_TOC_BLANK_LINE_SPACER = 0x00010000L; //use sim toc blank line spacer
-    public static final long GFM_TABLE_RENDERING = 0x00008000L; //use gfm rules for table rendering
-    public static final long GITHUB_LISTS = 0x00004000L; //use fixed rules for list indentation
-    public static final long COMMONMARK_LISTS = 0x00002000L; //use commonmark rules for list indentation
-    public static final long JIRA_CONVERSION = 0x00001000L; //JIRA conversion
-    public static final long YOU_TRACK_CONVERSION = 0x00000800L; //JIRA conversion
-    public static final long ATTRIBUTES_EXT = 0x00000400L; // { } attributes extension
-    public static final long ENUMERATED_REFERENCES_EXT = 0x00000200L; // enumerated references [@type:id] & [#type:id]
-    public static final long HEADER_ID_NO_DUPED_DASHES = 0x00000100L; // generate heading ids without duplicated dashes
-    public static final long PARSE_HTML_ANCHOR_ID = 0x00000080L; // parse HTML <a> tags inlines for ID attribute
-    public static final long NO_TEXT_ATTRIBUTES = 0x00000040L; // no text attributes
-    public static final long ADMONITION_EXT = 0x00000020L; // admonition extension
-    public static final long GITLAB_EXT = 0x00000010L; // gitlab extension
-    public static final long GITLAB_MATH_EXT = 0x00000008L; // gitlab math extension
-    public static final long GITLAB_MERMAID_EXT = 0x00000004L; // gitlab mermaid extension
-    public static final long MACROS_EXT = 0x00000002L; // macros
-    public static final long HEADER_ID_NON_ASCII_TO_LOWERCASE = 0x00000001L; // heading id
+    
+// @formatter:off
+
+    public static final long HEADER_ID_NON_ASCII_TO_LOWERCASE           = 0x00000001L; // heading id
+    public static final long MACROS_EXT                                 = 0x00000002L; // macros
+    public static final long GITLAB_MERMAID_EXT                         = 0x00000004L; // gitlab mermaid extension
+    public static final long GITLAB_MATH_EXT                            = 0x00000008L; // gitlab math extension
+    public static final long GITLAB_EXT                                 = 0x00000010L; // gitlab extension
+    public static final long ADMONITION_EXT                             = 0x00000020L; // admonition extension
+    public static final long NO_TEXT_ATTRIBUTES                         = 0x00000040L; // no text attributes
+    public static final long PARSE_HTML_ANCHOR_ID                       = 0x00000080L; // parse HTML <a> tags inlines for ID attribute
+    public static final long HEADER_ID_NO_DUPED_DASHES                  = 0x00000100L; // generate heading ids without duplicated dashes
+    public static final long ENUMERATED_REFERENCES_EXT                  = 0x00000200L; // enumerated references [@type:id] & [#type:id]
+    public static final long ATTRIBUTES_EXT                             = 0x00000400L; // { } attributes extension
+    public static final long COMMONMARK_LISTS                           = 0x00000800L; //use commonmark rules for list indentation
+    public static final long GITHUB_LISTS                               = 0x00001000L; //use fixed rules for list indentation
+    public static final long GFM_TABLE_RENDERING                        = 0x00002000L; //use gfm rules for table rendering
+    public static final long SIM_TOC_BLANK_LINE_SPACER                  = 0x00004000L; //use sim toc blank line spacer
+    public static final long GFM_LOOSE_BLANK_LINE_AFTER_ITEM_PARA       = 0x00008000L; //gfm loose item rules
+    public static final long SPACE_IN_LINK_URLS                         = 0x00010000L; // allow spaces in urls and convert them to %20 in html
+    public static final long FLEXMARK_FRONT_MATTER                      = 0x00020000L; //implements Lexer, PsiParser {
+    public static final long PRODUCTION_SPEC_PARSER                     = 0x00040000L; // override test mode for spec parsing and use production spec example settings
+    public static final long GITBOOK_URL_ENCODING                       = 0x00080000L; //exclude + from link url encode/decode
+    public static final long HEADER_ID_REF_TEXT_TRIM_TRAILING_SPACES    = 0x00100000L; // trim trailing spaces in ref text in headings used for heading id 
+    public static final long EMOJI_SHORTCUTS                            = 0x00200000L;
+    public static final long JEKYLL_FRONT_MATTER                        = 0x00400000L;
+    public static final long GITHUB_WIKI_LINKS                          = 0x00800000L;
+    public static final long PLANTUML_FENCED_CODE                       = 0x01000000L; // plant UML
+    public static final long PUML_FENCED_CODE                           = 0x02000000L; // plant UML
+
+// @formatter:on
 
     public static final String EXAMPLE_END = "````````````````````````````````";
     public static final String EXAMPLE_START_PREFIX = EXAMPLE_END + " example";

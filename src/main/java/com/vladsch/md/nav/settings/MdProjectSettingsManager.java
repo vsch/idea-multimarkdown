@@ -8,8 +8,10 @@ import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.vladsch.md.nav.settings.api.MdProjectSettingsExtensionProvider;
+import com.vladsch.plugin.util.HelpersKt;
 import com.vladsch.plugin.util.LazyFunction;
 import org.jdom.Element;
+import org.jdom.output.XMLOutputter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,12 +24,14 @@ public class MdProjectSettingsManager implements PersistentStateComponent<Elemen
 
     public static final String MARKDOWN_NAVIGATOR_XML = "markdown-navigator.xml";
 
+    final private @NotNull Project myProject;
     final private @NotNull MdProjectSettings myProjectSettings;
     private boolean myProjectSettingsLoaded = false;
     private Element myPendingState;
 
     public MdProjectSettingsManager(@NotNull Project project) {
-        LOG.debug("MdProjectSettingsManager.constructor");
+        myProject = project;
+        LOG.debug("MdProjectSettingsManager.constructor:" + myProject.getName());
         myProjectSettings = new MdProjectSettings(project.isDefault() ? null : project);
     }
 
@@ -51,7 +55,7 @@ public class MdProjectSettingsManager implements PersistentStateComponent<Elemen
         if (!myProjectSettingsLoaded) {
             synchronized (myProjectSettings) {
                 if (!myProjectSettingsLoaded) {
-                    LOG.debug("MdProjectSettingsManager.ensureExtensionsLoaded");
+                    LOG.debug("MdProjectSettingsManager.ensureExtensionsLoaded:" + myProject.getName());
                     myProjectSettingsLoaded = true;
 
                     for (MdProjectSettingsExtensionProvider provider : MdProjectSettingsExtensionProvider.EXTENSIONS.getValue()) {
@@ -66,17 +70,18 @@ public class MdProjectSettingsManager implements PersistentStateComponent<Elemen
     @Override
     public Element getState() {
         if (!myProjectSettingsLoaded) {
-            LOG.debug("MdProjectSettingsManager.getState delayed");
+            LOG.debug("MdProjectSettingsManager.getState delayed:" + myProject.getName());
             return myPendingState;
         } else {
             myPendingState = null;
 
             if (myProjectSettings.getRenderingProfile().isDefault()) {
-                LOG.debug("MdProjectSettingsManager.getState default");
+                LOG.debug("MdProjectSettingsManager.getState default:" + myProject.getName());
                 return new Element("settings");
             } else {
-                LOG.debug("MdProjectSettingsManager.getState");
+                LOG.debug("MdProjectSettingsManager.getState:" + myProject.getName());
                 Element state = myProjectSettings.saveState(null);
+                HelpersKt.debug(LOG, () -> "MdProjectSettingsManager.getState savedState:" + myProject.getName() + "\n" + new XMLOutputter().outputString(state));
                 return state;
             }
         }
@@ -86,15 +91,27 @@ public class MdProjectSettingsManager implements PersistentStateComponent<Elemen
     public void loadState(@NotNull Element state) {
         if (!myProjectSettingsLoaded) {
             // need to save this state so we can return it when state is requested so as not to overwrite extension settings
-            myPendingState = state;
+            myPendingState = state.clone();
         }
 
         if (state.getChildren().size() > 0) {
-            LOG.debug("MdProjectSettingsManager.loadState");
+            HelpersKt.debug(LOG, () -> "MdProjectSettingsManager.loadState:" + myProject.getName() + "\n" + new XMLOutputter().outputString(state));
             myProjectSettings.loadState(state);
-            ApplicationManager.getApplication().invokeLater(myProjectSettings::validateLoadedSettings);
+
+            ApplicationManager.getApplication().invokeLater(() -> {
+                myProjectSettings.validateLoadedSettings();
+                HelpersKt.debug(LOG, () -> {
+                    Element savedState = myProjectSettings.saveState(null);
+                    return "MdProjectSettingsManager.loadState validated savedState:" + myProject.getName() + "\n" + new XMLOutputter().outputString(savedState);
+                });
+            });
+
+            HelpersKt.debug(LOG, () -> {
+                Element savedState = myProjectSettings.saveState(null);
+                return "MdProjectSettingsManager.loadState savedState:" + myProject.getName() + "\n" + new XMLOutputter().outputString(savedState);
+            });
         } else {
-            LOG.debug("MdProjectSettingsManager.loadState default");
+            HelpersKt.debug(LOG, () -> "MdProjectSettingsManager.loadState default:" + myProject.getName() + "\n" + new XMLOutputter().outputString(state));
             myProjectSettings.getRenderingProfile().setRenderingProfile(MdRenderingProfile.getDEFAULT());
         }
     }

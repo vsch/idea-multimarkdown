@@ -27,16 +27,16 @@ enum class ParserOptions(val flags: Long) {
     GITLAB_MERMAID_EXT(MdLexParser.GITLAB_MERMAID_EXT),
     MACROS_EXT(MdLexParser.MACROS_EXT),
     HEADER_ID_NON_ASCII_TO_LOWERCASE(MdLexParser.HEADER_ID_NON_ASCII_TO_LOWERCASE),
+    SPACE_IN_LINK_URLS(MdLexParser.SPACE_IN_LINK_URLS),
+    PRODUCTION_SPEC_PARSER(MdLexParser.PRODUCTION_SPEC_PARSER), // internal test, even when running tests use production spec parser instead of test spec parser
+    HEADER_ID_REF_TEXT_TRIM_TRAILING_SPACES(MdLexParser.HEADER_ID_REF_TEXT_TRIM_TRAILING_SPACES), // trim trailing spaces in ref text in headings used for heading id
+    DUMMY(0L), // dummy place holder
 
     @Deprecated("No longer used, migration purposes only")
     PUML_FENCED_CODE(MdLexParser.PUML_FENCED_CODE),
 
     @Deprecated("No longer used, migration purposes only")
-    PLANTUML_FENCED_CODE(MdLexParser.PLANTUML_FENCED_CODE),
-    SPACE_IN_LINK_URLS(MdLexParser.SPACE_IN_LINK_URLS),
-    PRODUCTION_SPEC_PARSER(MdLexParser.PRODUCTION_SPEC_PARSER), // internal test, even when running tests use production spec parser instead of test spec parser
-    HEADER_ID_REF_TEXT_TRIM_TRAILING_SPACES(MdLexParser.HEADER_ID_REF_TEXT_TRIM_TRAILING_SPACES), // trim trailing spaces in ref text in headings used for heading id
-    DUMMY(0L); // dummy place holder
-
+    PLANTUML_FENCED_CODE(MdLexParser.PLANTUML_FENCED_CODE);
+    
     companion object : LongBitSetEnum<ParserOptions>(ParserOptions::class.java, { it.flags })
 }

@@ -132,13 +132,6 @@ public class PegdownOptionsAdapter {
         MdHtmlSettings htmlSettings = renderingProfile.getHtmlSettings();
         boolean forHtmlExport = htmlPurpose == EXPORT;
 
-//            myOptions.clear();
-        if (haveOptions(MdLexParser.JIRA_CONVERSION))
-            parserPurpose = JIRA;
-
-        if (haveOptions(MdLexParser.YOU_TRACK_CONVERSION))
-            parserPurpose = YOU_TRACK;
-
         // don't unescape html entities
         options.set(HtmlRenderer.UNESCAPE_HTML_ENTITIES, false);
         options.set(Parser.SPACE_IN_LINK_URLS, haveOptions(SPACE_IN_LINK_URLS));

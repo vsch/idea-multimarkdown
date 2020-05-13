@@ -20,13 +20,6 @@ public interface Extensions {
     int QUOTES = 0x02;
 
     /**
-     * All of the smartypants prettyfications. Equivalent to SMARTS + QUOTES.
-     *
-     * @see <a href="http://daringfireball.net/projects/smartypants/">Smartypants</a>
-     */
-    int SMARTYPANTS = SMARTS + QUOTES;
-
-    /**
      * PHP Markdown Extra style abbreviations.
      *
      * @see <a href="http://michelf.com/projects/php-markdown/extra/#abbr">PHP Markdown Extra</a>
@@ -74,17 +67,21 @@ public interface Extensions {
      *
      * @see <a href="http://github.github.com/github-flavored-markdown">Github-flavored-Markdown</a>
      */
-    int WIKILINKS = 0x100;
+    int WIKILINKS = 0x0100;
 
     /**
      * Support ~~strikethroughs~~ as supported in Pandoc and Github.
      */
-    int STRIKETHROUGH = 0x200;
+    int STRIKETHROUGH = 0x0200;
 
     /**
      * Enables anchor links in headers.
      */
-    int ANCHORLINKS = 0x400;
+    int ANCHORLINKS = 0x0400;
+
+    int NOT_USED_1 = 0x0800;
+    int NOT_USED_2 = 0x1000;
+    int NOT_USED_3 = 0x2000;
 
     /**
      *
@@ -92,14 +89,14 @@ public interface Extensions {
     int HTML_DEEP_PARSER = 0x4000;
 
     /**
-     *
+     *  double break starts new definition list
      */
     int DEFINITION_BREAK_DOUBLE_BLANK_LINE = 0x8000;
 
     /**
      * All available extensions excluding the SUPPRESS_... options, ATXHEADERSPACE. FORCELISTITEMPARA
      */
-    int ALL = 0x0000FFFF & ~(DEFINITION_BREAK_DOUBLE_BLANK_LINE | HTML_DEEP_PARSER | AUTOLINKS);
+    int ALL = 0x0000FFFF & ~(DEFINITION_BREAK_DOUBLE_BLANK_LINE | HTML_DEEP_PARSER | AUTOLINKS | NOT_USED_1 | NOT_USED_2 | NOT_USED_3);
 
     /**
      * Suppresses HTML blocks. They will be accepted in the input but not be contained in the output.
