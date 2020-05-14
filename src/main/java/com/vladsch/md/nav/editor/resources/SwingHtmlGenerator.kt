@@ -15,7 +15,6 @@ import com.vladsch.flexmark.util.sequence.TagRange
 import com.vladsch.md.nav.MdBundle
 import com.vladsch.md.nav.editor.PreviewFileEditorBase
 import com.vladsch.md.nav.editor.util.HtmlGenerator
-import com.vladsch.md.nav.parser.Extensions
 import com.vladsch.md.nav.parser.PegdownOptionsAdapter
 import com.vladsch.md.nav.parser.api.HtmlPurpose
 import com.vladsch.md.nav.parser.api.ParserPurpose
@@ -30,9 +29,6 @@ import java.util.regex.Pattern
 
 class SwingHtmlGenerator(linkResolver: MdLinkResolver, renderingProfile: MdRenderingProfile) : HtmlGenerator(linkResolver, renderingProfile) {
     protected var tagRanges: List<TagRange> = listOf()
-
-    override val pegdownFlags: Int
-        get() = this.renderingProfile.parserSettings.pegdownFlags or Extensions.MULTI_LINE_IMAGE_URLS
 
     override val htmlTagRanges: List<TagRange>
         get() = tagRanges
@@ -49,11 +45,7 @@ class SwingHtmlGenerator(linkResolver: MdLinkResolver, renderingProfile: MdRende
 
         @Suppress("NAME_SHADOWING")
         var dataContext = dataContext
-        val parserSettings = renderingProfile.parserSettings
-
-        val parserOptions = parserSettings.optionsFlags
-        val addOns = if (!forHtmlExport || pegdownFlags and Extensions.ANCHORLINKS != 0) Extensions.EXTANCHORLINKS or Extensions.EXTANCHORLINKS_WRAP else 0
-        val optionAdapter = PegdownOptionsAdapter(pegdownFlags or addOns, parserOptions)
+        val optionAdapter = PegdownOptionsAdapter()
         val options = optionAdapter.getFlexmarkOptions(ParserPurpose.SWING, htmlPurpose, linkResolver, renderingProfile).toMutable()
         val project = linkResolver.project ?: ProjectManager.getInstance().defaultProject
 

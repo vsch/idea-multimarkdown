@@ -47,6 +47,8 @@ public class MdHtmlSettingsForm extends SettingsFormImpl {
     CustomizableEditorTextField myBodyTop;
     CustomizableEditorTextField myBodyBottom;
     JBCheckBox myAddPageHeader;
+    JBCheckBox myAddAnchorLinks;
+    JBCheckBox myAnchorLinksWrapText;
     JBCheckBox myImageUriSerials;
     JBCheckBox myNoParaTags;
     @SuppressWarnings("unused") private JPanel myExtensionsPanel;
@@ -82,6 +84,8 @@ public class MdHtmlSettingsForm extends SettingsFormImpl {
                         notrace("myBodyBottomEnabled", component(myBodyBottomEnabled, i::getBodyBottomEnabled, i::setBodyBottomEnabled)),
                         notrace("myAddDocTypeHtml", component(myAddDocTypeHtml, i::getAddDocTypeHtml, i::setAddDocTypeHtml)),
                         notrace("myAddPageHeader", component(myAddPageHeader, i::getAddPageHeader, i::setAddPageHeader)),
+                        notrace("myAddAnchorLinks", component(myAddAnchorLinks, i::getAddAnchorLinks, i::setAddAnchorLinks)),
+                        notrace("myAnchorLinksWrapText", component(myAnchorLinksWrapText, i::getAnchorLinksWrapText, i::setAnchorLinksWrapText)),
                         notrace("myImageUriSerials", component(myImageUriSerials, i::getImageUriSerials, i::setImageUriSerials)),
                         notrace("myNoParaTags", component(myNoParaTags, i::getNoParaTags, i::setNoParaTags)),
 

@@ -31,6 +31,7 @@ Contents**</summary>
 * Fix: spurious reset of enhanced settings to defaults.
 * Fix: clean up deprecated API use.
 * Fix: TOC levels parsing to match optimized `levels` syntax.
+* Fix: Move `Anchor links` option from `Parser` to `HTML` settings.
 
 ### 3.0.xxx.91 - Bug Fix Release
 

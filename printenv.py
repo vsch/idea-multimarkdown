@@ -9,12 +9,11 @@ import sys
 if len(sys.argv) != 2:
     raise Exception('Exactly one argument expected')
 
-f = open(sys.argv[1], 'wb')
+f = open(sys.argv[1], 'w')
 try:
     for key, value in os.environ.items():
-        s = '%s=%s\0' % (key, value)
         try:
-            f.write(s.encode('utf-8'))
+            f.writelines([key, '=', value, '\0'])
         except Exception as e:
             sys.stdout.write(key + '=' + value + '\n')
 finally:

@@ -19,7 +19,6 @@ import java.util.function.Consumer
 
 abstract class HtmlGenerator(val linkResolver: MdLinkResolver, val renderingProfile: MdRenderingProfile) {
 
-    abstract val pegdownFlags: Int
     abstract fun toHtml(file: PsiFile?, charSequence: CharSequence, htmlPurpose: HtmlPurpose, dataContext: DataContext?, exportMap: MutableMap<String, String>? = null, optionsAdjuster: Consumer<MutableDataHolder>?): String
     abstract fun makeHtmlPage(html: String, forHtmlExport: Boolean, dataContext: DataContext?, exportMap: MutableMap<String, String>? = null): String
     abstract val htmlTagRanges: List<TagRange>

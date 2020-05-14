@@ -1,9 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: com.vladsch.flexmark:flexmark-ext-anchorlink:0.61.28">
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/com/vladsch/flexmark/flexmark-ext-anchorlink/0.61.28/flexmark-ext-anchorlink-0.61.28.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-ext-anchorlink/0.61.28/3e965a7aae1d8c345900abb62d2dc0f43add86db/flexmark-ext-anchorlink-0.61.28.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-ext-anchorlink/0.61.28/20e6cb9cf84f3050c569220be731c1c5d83bf86b/flexmark-ext-anchorlink-0.61.28-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

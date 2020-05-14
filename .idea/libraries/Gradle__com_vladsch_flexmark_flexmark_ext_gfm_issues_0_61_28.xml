@@ -1,9 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: com.vladsch.flexmark:flexmark-ext-gfm-issues:0.61.28">
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/com/vladsch/flexmark/flexmark-ext-gfm-issues/0.61.28/flexmark-ext-gfm-issues-0.61.28.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-ext-gfm-issues/0.61.28/987238a0b2bec4f85b1a07069ae1c3a0d1206c4d/flexmark-ext-gfm-issues-0.61.28.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-ext-gfm-issues/0.61.28/303274e9fb6dcb9c8de497dd7fb5be2e2d4f59fb/flexmark-ext-gfm-issues-0.61.28-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

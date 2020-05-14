@@ -1,9 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: com.vladsch.flexmark:flexmark-ext-autolink:0.61.28">
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/com/vladsch/flexmark/flexmark-ext-autolink/0.61.28/flexmark-ext-autolink-0.61.28.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-ext-autolink/0.61.28/2894f162e53c56d25b62185e5ba7d008ec364797/flexmark-ext-autolink-0.61.28.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-ext-autolink/0.61.28/99d690c481559f00c413dd750e0a431cc0aa1f82/flexmark-ext-autolink-0.61.28-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

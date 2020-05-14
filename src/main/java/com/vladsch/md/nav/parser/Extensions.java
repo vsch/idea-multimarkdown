@@ -76,6 +76,7 @@ public interface Extensions {
 
     /**
      * Enables anchor links in headers.
+     * ANCHORLINKS
      */
     int ANCHORLINKS = 0x0400;
 
@@ -135,13 +136,17 @@ public interface Extensions {
 
     /**
      * Generate anchor links for headers using complete contents of the header. Spaces and non-alphanumerics replaced by `-`, multiple dashes trimmed to one. Anchor link is added as first element inside the header with empty content: `<h1><a name="header-a"></a>header a</h1>`
+     * EXTANCHORLINKS
+     * 
      */
     int EXTANCHORLINKS = 0x00400000;
 
     /**
-     * EXTANCHORLINKS should wrap header content instead of creating an empty anchor: `<h1><a name="header-a">header a</a></h1>`
+     * should wrap header content instead of creating an empty anchor: `<h1><a name="header-a">header a</a></h1>`
+     * EXTANCHORLINKS_WRAP
+     * 
      */
-    int EXTANCHORLINKS_WRAP = 0x00800000;
+    int NOT_USED_5 = 0x00800000;
 
     /**
      * Enables footnote processing [^1]: Text Paragraph with continuations and footnote reference [^1]
@@ -193,7 +198,7 @@ public interface Extensions {
     /**
      * These are GitHub main repo document processing compatibility flags
      */
-    int GITHUB_DOCUMENT_COMPATIBLE = (FENCED_CODE_BLOCKS | TABLES | AUTOLINKS | ANCHORLINKS | TASKLISTITEMS | STRIKETHROUGH | ATXHEADERSPACE | RELAXEDHRULES | INTELLIJ_DUMMY_IDENTIFIER);
+    int GITHUB_DOCUMENT_COMPATIBLE = (FENCED_CODE_BLOCKS | TABLES | AUTOLINKS | TASKLISTITEMS | STRIKETHROUGH | ATXHEADERSPACE | RELAXEDHRULES | INTELLIJ_DUMMY_IDENTIFIER);
 
     /**
      * These are GitHub wiki page processing compatibility flags

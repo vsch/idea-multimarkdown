@@ -85,11 +85,7 @@ public class FlexmarkFormatOptionsAdapter {
 
     @NotNull
     public MutableDataHolder getFormatOptions() {
-        MutableDataHolder options = PegdownOptionsAdapter.flexmarkOptions(
-                myRenderingProfile.getParserSettings().getPegdownFlags()
-                , myRenderingProfile.getParserSettings().getOptionsFlags()
-                , myRenderingProfile
-        ).toMutable();
+        MutableDataHolder options = PegdownOptionsAdapter.flexmarkOptions(myRenderingProfile).toMutable();
 
         // Plugin Only Settings
         // SMART_EDIT_TABLES

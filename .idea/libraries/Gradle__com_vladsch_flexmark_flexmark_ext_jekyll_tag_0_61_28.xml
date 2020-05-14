@@ -1,9 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: com.vladsch.flexmark:flexmark-ext-jekyll-tag:0.61.28">
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/com/vladsch/flexmark/flexmark-ext-jekyll-tag/0.61.28/flexmark-ext-jekyll-tag-0.61.28.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-ext-jekyll-tag/0.61.28/80b352922ceecc20a5a1b69c2b5670f47ec27108/flexmark-ext-jekyll-tag-0.61.28.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-ext-jekyll-tag/0.61.28/5f1d90dd437e073fafcccd84c0b18ca214d13332/flexmark-ext-jekyll-tag-0.61.28-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

@@ -1,9 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: com.vladsch.flexmark:flexmark-youtrack-converter:0.61.28">
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/com/vladsch/flexmark/flexmark-youtrack-converter/0.61.28/flexmark-youtrack-converter-0.61.28.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-youtrack-converter/0.61.28/8de694571bf07724d9005a13d41d7c81c0668612/flexmark-youtrack-converter-0.61.28.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-youtrack-converter/0.61.28/758ade25b9e99327e27fc625b2d24f43514fcd4d/flexmark-youtrack-converter-0.61.28-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

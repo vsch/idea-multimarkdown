@@ -66,7 +66,7 @@ public class MdLexParser {
     }
 
     @NotNull
-    public static LexerData parseFlexmarkMarkdown(@Nullable final Document document, final int extensionFlags, long parserOptions) {
+    public static LexerData parseFlexmarkMarkdown(@Nullable final Document document) {
         if (document == null) return EMPTY_DATA;
 
         LexParserFlexmarkASTVisitor visitor = new LexParserFlexmarkASTVisitor(document);

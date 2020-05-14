@@ -103,8 +103,6 @@ public class MdSpecTestSetup extends SpecTestSetup {
                         | Extensions.ATXHEADERSPACE
                         | Extensions.AUTOLINKS
 //                        | Extensions.DEFINITIONS
-                        | Extensions.EXTANCHORLINKS
-//                        | Extensions.EXTANCHORLINKS_WRAP
                         | Extensions.FENCED_CODE_BLOCKS
 //                        | Extensions.FOOTNOTES
 //                        | Extensions.FORCELISTITEMPARA
@@ -154,6 +152,8 @@ public class MdSpecTestSetup extends SpecTestSetup {
 //                        | MdLexParser.SIM_TOC_BLANK_LINE_SPACER
 //                        | MdLexParser.SPACE_IN_LINK_URLS
         );
+        
+        profile.getHtmlSettings().setAddAnchorLinks(true);
     };
 
     final public static Consumer<MdRenderingProfile> BASIC_LEGACY_OPTIONS = profile -> {
@@ -164,8 +164,6 @@ public class MdSpecTestSetup extends SpecTestSetup {
                 | Extensions.ATXHEADERSPACE
                 | Extensions.AUTOLINKS
                 | Extensions.DEFINITIONS
-                | Extensions.EXTANCHORLINKS
-//                        | Extensions.EXTANCHORLINKS_WRAP
                 | Extensions.FENCED_CODE_BLOCKS
                 | Extensions.FOOTNOTES
 //                        | Extensions.FORCELISTITEMPARA
@@ -220,5 +218,6 @@ public class MdSpecTestSetup extends SpecTestSetup {
 
         profile.getParserSettings().setOptionsFlags(optionsFlags);
         assert profile.getParserSettings().getOptionsFlags() == optionsFlags;
+        profile.getHtmlSettings().setAddAnchorLinks(true);
     };
 }

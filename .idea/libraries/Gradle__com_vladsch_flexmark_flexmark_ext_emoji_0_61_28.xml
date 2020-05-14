@@ -1,9 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: com.vladsch.flexmark:flexmark-ext-emoji:0.61.28">
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/com/vladsch/flexmark/flexmark-ext-emoji/0.61.28/flexmark-ext-emoji-0.61.28.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-ext-emoji/0.61.28/360550c73e19bfce35f00f9902d8eaa3387c1334/flexmark-ext-emoji-0.61.28.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-ext-emoji/0.61.28/c71c95060d4373c344daf91f6a7c3e17af636c8b/flexmark-ext-emoji-0.61.28-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

@@ -14,7 +14,6 @@ import com.vladsch.flexmark.util.sequence.Escaping
 import com.vladsch.flexmark.util.sequence.TagRange
 import com.vladsch.md.nav.editor.PreviewFileEditorBase
 import com.vladsch.md.nav.editor.util.HtmlGenerator
-import com.vladsch.md.nav.parser.Extensions
 import com.vladsch.md.nav.parser.PegdownOptionsAdapter
 import com.vladsch.md.nav.parser.api.HtmlPurpose
 import com.vladsch.md.nav.parser.api.ParserPurpose
@@ -29,9 +28,6 @@ import java.util.function.Supplier
 
 class JavaFxHtmlGenerator(linkResolver: MdLinkResolver, renderingProfile: MdRenderingProfile) : HtmlGenerator(linkResolver, renderingProfile) {
     protected var tagRanges: List<TagRange> = listOf()
-
-    override val pegdownFlags: Int
-        get() = (this.renderingProfile.parserSettings.pegdownFlags and Extensions.EXTANCHORLINKS_WRAP.inv()) or Extensions.MULTI_LINE_IMAGE_URLS
 
     override val htmlTagRanges: List<TagRange>
         get() = tagRanges
@@ -51,9 +47,7 @@ class JavaFxHtmlGenerator(linkResolver: MdLinkResolver, renderingProfile: MdRend
         val project = linkResolver.project ?: ProjectManager.getInstance().defaultProject
         val parserSettings = renderingProfile.parserSettings
 
-        val parserOptions = parserSettings.optionsFlags
-        val addOns = if (!forHtmlExport || pegdownFlags and Extensions.ANCHORLINKS != 0) Extensions.EXTANCHORLINKS else 0
-        val optionAdapter = PegdownOptionsAdapter(pegdownFlags or addOns, parserOptions)
+        val optionAdapter = PegdownOptionsAdapter()
         val options = optionAdapter.getFlexmarkOptions(ParserPurpose.JAVAFX, htmlPurpose, linkResolver, renderingProfile).toMutable()
 
         options.set(MdNavigatorExtension.RENDERING_PROFILE, Supplier { renderingProfile })

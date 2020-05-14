@@ -77,7 +77,7 @@ open class ParagraphContext(val context: CaretContextInfo, val paragraphInfo: Pa
 
             val renderingProfile = context.renderingProfile
             val parserSettings = renderingProfile.parserSettings
-            val optionsAdapter = PegdownOptionsAdapter(parserSettings.pegdownFlags, parserSettings.optionsFlags)
+            val optionsAdapter = PegdownOptionsAdapter()
             val formatOptionsAdapter = FlexmarkFormatOptionsAdapter(context, paragraphSeq.startOffset, paragraphSeq.endOffset)
 
             val parserOptions = optionsAdapter.getFlexmarkOptions(ParserPurpose.PARSER, HtmlPurpose.RENDER, null, renderingProfile)

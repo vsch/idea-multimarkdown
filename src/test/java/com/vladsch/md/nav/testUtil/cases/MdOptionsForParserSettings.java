@@ -32,9 +32,11 @@ public interface MdOptionsForParserSettings extends MdSpecTest {
             if (optionsMap.isEmpty()) {
                 optionsMap.putAll(MdSpecTest.getOptionsMap());
 
+                // NOTE: for historical reasons anchorlinks and anchorlinks-wrap options are in parser when these are HTML settings
                 // parser options: pegdown
                 optionsMap.put("parser-abbreviations", new MutableDataSet().set(PARSER_SETTINGS, settings -> settings.setPegdownFlags(settings.getPegdownFlags() | Extensions.ABBREVIATIONS)));
-                optionsMap.put("parser-anchorlinks", new MutableDataSet().set(PARSER_SETTINGS, settings -> settings.setPegdownFlags(settings.getPegdownFlags() | Extensions.ANCHORLINKS)));
+                optionsMap.put("parser-anchorlinks", new MutableDataSet().set(HTML_SETTINGS, settings -> settings.setAddAnchorLinks(true)));
+                optionsMap.put("parser-chorlinks-wrap", new MutableDataSet().set(HTML_SETTINGS, settings -> settings.setAnchorLinksWrapText(true)));
                 optionsMap.put("parser-aside", new MutableDataSet().set(PARSER_SETTINGS, settings -> settings.setPegdownFlags(settings.getPegdownFlags() | Extensions.ASIDE)));
                 optionsMap.put("parser-autolinks", new MutableDataSet().set(PARSER_SETTINGS, settings -> settings.setPegdownFlags(settings.getPegdownFlags() | Extensions.AUTOLINKS)));
                 optionsMap.put("parser-definitions", new MutableDataSet().set(PARSER_SETTINGS, settings -> settings.setPegdownFlags(settings.getPegdownFlags() | Extensions.DEFINITIONS)));
@@ -57,14 +59,12 @@ public interface MdOptionsForParserSettings extends MdSpecTest {
                 optionsMap.put("parser-toc", new MutableDataSet().set(PARSER_SETTINGS, settings -> settings.setPegdownFlags(settings.getPegdownFlags() | Extensions.TOC)));
                 optionsMap.put("parser-html-deep-parser", new MutableDataSet().set(PARSER_SETTINGS, settings -> settings.setPegdownFlags(settings.getPegdownFlags() | Extensions.HTML_DEEP_PARSER)));
                 optionsMap.put("parser-definition-break-double-blank-line", new MutableDataSet().set(PARSER_SETTINGS, settings -> settings.setPegdownFlags(settings.getPegdownFlags() | Extensions.DEFINITION_BREAK_DOUBLE_BLANK_LINE)));
-                optionsMap.put("parser-extanchorlinks", new MutableDataSet().set(PARSER_SETTINGS, settings -> settings.setPegdownFlags(settings.getPegdownFlags() | Extensions.EXTANCHORLINKS)));
-                optionsMap.put("parser-extanchorlinks-wrap", new MutableDataSet().set(PARSER_SETTINGS, settings -> settings.setPegdownFlags(settings.getPegdownFlags() | Extensions.EXTANCHORLINKS_WRAP)));
                 optionsMap.put("parser-multi-line-image-urls", new MutableDataSet().set(PARSER_SETTINGS, settings -> settings.setPegdownFlags(settings.getPegdownFlags() | Extensions.MULTI_LINE_IMAGE_URLS)));
                 optionsMap.put("parser-intellij-dummy-identifier", new MutableDataSet().set(PARSER_SETTINGS, settings -> settings.setPegdownFlags(settings.getPegdownFlags() | Extensions.INTELLIJ_DUMMY_IDENTIFIER)));
 
                 // parser off options
                 optionsMap.put("parser-no-abbreviations", new MutableDataSet().set(PARSER_SETTINGS, settings -> settings.setPegdownFlags(settings.getPegdownFlags() & ~Extensions.ABBREVIATIONS)));
-                optionsMap.put("parser-no-anchorlinks", new MutableDataSet().set(PARSER_SETTINGS, settings -> settings.setPegdownFlags(settings.getPegdownFlags() & ~Extensions.ANCHORLINKS)));
+                optionsMap.put("parser-no-anchorlinks", new MutableDataSet().set(HTML_SETTINGS, settings -> settings.setAddAnchorLinks(false)));
                 optionsMap.put("parser-no-aside", new MutableDataSet().set(PARSER_SETTINGS, settings -> settings.setPegdownFlags(settings.getPegdownFlags() & ~Extensions.ASIDE)));
                 optionsMap.put("parser-no-autolinks", new MutableDataSet().set(PARSER_SETTINGS, settings -> settings.setPegdownFlags(settings.getPegdownFlags() & ~Extensions.AUTOLINKS)));
                 optionsMap.put("parser-no-definitions", new MutableDataSet().set(PARSER_SETTINGS, settings -> settings.setPegdownFlags(settings.getPegdownFlags() & ~Extensions.DEFINITIONS)));
@@ -87,8 +87,7 @@ public interface MdOptionsForParserSettings extends MdSpecTest {
                 optionsMap.put("parser-no-toc", new MutableDataSet().set(PARSER_SETTINGS, settings -> settings.setPegdownFlags(settings.getPegdownFlags() & ~Extensions.TOC)));
                 optionsMap.put("parser-no-html-deep-parser", new MutableDataSet().set(PARSER_SETTINGS, settings -> settings.setPegdownFlags(settings.getPegdownFlags() & ~Extensions.HTML_DEEP_PARSER)));
                 optionsMap.put("parser-no-definition-break-double-blank-line", new MutableDataSet().set(PARSER_SETTINGS, settings -> settings.setPegdownFlags(settings.getPegdownFlags() & ~Extensions.DEFINITION_BREAK_DOUBLE_BLANK_LINE)));
-                optionsMap.put("parser-no-extanchorlinks", new MutableDataSet().set(PARSER_SETTINGS, settings -> settings.setPegdownFlags(settings.getPegdownFlags() & ~Extensions.EXTANCHORLINKS)));
-                optionsMap.put("parser-no-extanchorlinks-wrap", new MutableDataSet().set(PARSER_SETTINGS, settings -> settings.setPegdownFlags(settings.getPegdownFlags() & ~Extensions.EXTANCHORLINKS_WRAP)));
+                optionsMap.put("parser-no-anchorlinks-wrap", new MutableDataSet().set(HTML_SETTINGS, settings -> settings.setAnchorLinksWrapText(false)));
                 optionsMap.put("parser-no-multi-line-image-urls", new MutableDataSet().set(PARSER_SETTINGS, settings -> settings.setPegdownFlags(settings.getPegdownFlags() & ~Extensions.MULTI_LINE_IMAGE_URLS)));
                 optionsMap.put("parser-no-intellij-dummy-identifier", new MutableDataSet().set(PARSER_SETTINGS, settings -> settings.setPegdownFlags(settings.getPegdownFlags() & ~Extensions.INTELLIJ_DUMMY_IDENTIFIER)));
 

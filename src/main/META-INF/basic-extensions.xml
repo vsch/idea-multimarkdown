@@ -132,6 +132,7 @@
         <renderingProfileValidator implementation="com.vladsch.md.nav.parser.flexmark.MdFencedCodeImageProfileValidator" order="last"/>
         <codeFenceImageConverter implementation="com.vladsch.md.nav.parser.flexmark.MdFencedCodePlantUmlConverter"/>
         <editorCustomizationProvider implementation="com.vladsch.md.nav.editor.MdEditorCustomizationProvider"/>
+        <renderingProfileValidator implementation="com.vladsch.md.nav.parser.MdAnchorLinksSettingsMigration"/>
 
         <applicationRestartRequired implementation="com.vladsch.md.nav.settings.MdHighlighterChangedRestartProvider"/>
         <editorCustomizationProvider implementation="com.vladsch.md.nav.actions.handlers.util.SmartInsertEditorRangeHighlighterProvider"/>

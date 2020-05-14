@@ -1,4 +1,4 @@
-[TOC]: # "Version History"
+[TOC levels=4]: # "Version History"
 
 ### Version History
 - [2.9.0.8/2.9.7.8 - EAP Release](#29082978---eap-release)

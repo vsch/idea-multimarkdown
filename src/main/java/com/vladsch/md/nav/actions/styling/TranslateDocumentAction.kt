@@ -68,11 +68,7 @@ class TranslateDocumentAction : AnAction() {
             MdActionUtil.getProjectEditorPsiFile(e)?.let { (project, editor, psiFile) ->
                 val text = editor.document.text
                 val renderingProfile = MdRenderingProfileManager.getProfile(psiFile)
-                val parserSettings = renderingProfile.parserSettings
-                val parserOptions = parserSettings.optionsFlags
-                val addOns = 0
-                val pegdownFlags = (renderingProfile.parserSettings.pegdownFlags and Extensions.EXTANCHORLINKS_WRAP.inv()) or Extensions.MULTI_LINE_IMAGE_URLS
-                val optionAdapter = PegdownOptionsAdapter(pegdownFlags or addOns, parserOptions)
+                val optionAdapter = PegdownOptionsAdapter()
                 val options = optionAdapter.getFlexmarkOptions(ParserPurpose.JAVAFX, HtmlPurpose.RENDER, GitHubLinkResolver(psiFile), renderingProfile).toMutable()
 
                 options.set(Parser.BLANK_LINES_IN_AST, true)

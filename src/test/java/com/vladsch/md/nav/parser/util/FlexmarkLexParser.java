@@ -40,9 +40,7 @@ public class FlexmarkLexParser extends IParseBase {
         super(options);
 
         MdRenderingProfile renderingProfile = MdEnhSpecTestSetup.RENDERING_PROFILE_OPTION.setInstanceData(new MdRenderingProfile(), options);
-        int extensionFlags = renderingProfile.getParserSettings().getPegdownFlags();
-        long optionsFlags = renderingProfile.getParserSettings().getOptionsFlags();
-        myLexer = new MdLexer(renderingProfile, extensionFlags, optionsFlags);
+        myLexer = new MdLexer(renderingProfile);
     }
 
     @NotNull

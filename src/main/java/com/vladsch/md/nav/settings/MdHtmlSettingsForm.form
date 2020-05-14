@@ -70,38 +70,18 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <grid id="a55fd" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                        <margin top="0" left="0" bottom="0" right="5"/>
-                        <constraints>
-                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties/>
-                        <border type="etched" title-resource-bundle="com/vladsch/md/nav/localization/strings" title-key="html-generator.image-handling.title"/>
-                        <children>
-                          <component id="262d4" class="com.intellij.ui.components.JBCheckBox" binding="myImageUriSerials">
-                            <constraints>
-                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                            </constraints>
-                            <properties>
-                              <selected value="false"/>
-                              <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.markdown.html.image.serial.uri"/>
-                              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.markdown.html.image.serial.uri.description"/>
-                            </properties>
-                          </component>
-                        </children>
-                      </grid>
-                      <grid id="9a628" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                      <grid id="9a628" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                         <margin top="0" left="0" bottom="0" right="0"/>
                         <constraints>
-                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties/>
-                        <border type="etched" title-resource-bundle="com/vladsch/md/nav/localization/strings" title-key="html-generator.page-handling.title"/>
+                        <border type="none"/>
                         <children>
                           <grid id="ff74a" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                             <margin top="0" left="0" bottom="0" right="0"/>
                             <constraints>
-                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="1" fill="1" indent="1" use-parent-layout="false"/>
                             </constraints>
                             <properties/>
                             <border type="none"/>
@@ -141,6 +121,128 @@
                                 <properties>
                                   <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.markdown.html.no-p-tags.label"/>
                                   <toolTipText value=""/>
+                                </properties>
+                              </component>
+                            </children>
+                          </grid>
+                          <grid id="8de76" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                            <margin top="0" left="0" bottom="0" right="0"/>
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties/>
+                            <border type="none"/>
+                            <children>
+                              <component id="eb694" class="javax.swing.JSeparator">
+                                <constraints>
+                                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties/>
+                              </component>
+                              <component id="605ba" class="javax.swing.JLabel">
+                                <constraints>
+                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <text resource-bundle="com/vladsch/md/nav/localization/strings" key="html-generator.page-handling.title"/>
+                                </properties>
+                              </component>
+                            </children>
+                          </grid>
+                        </children>
+                      </grid>
+                      <grid id="b0f08" layout-manager="GridLayoutManager" row-count="4" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <grid id="4cb9" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                            <margin top="0" left="0" bottom="0" right="0"/>
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties/>
+                            <border type="none"/>
+                            <children>
+                              <component id="e6bdb" class="javax.swing.JSeparator">
+                                <constraints>
+                                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties/>
+                              </component>
+                              <component id="e5159" class="javax.swing.JLabel">
+                                <constraints>
+                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <text resource-bundle="com/vladsch/md/nav/localization/strings" key="html-generator.image-handling.title"/>
+                                </properties>
+                              </component>
+                            </children>
+                          </grid>
+                          <grid id="8c4ac" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                            <margin top="0" left="0" bottom="0" right="0"/>
+                            <constraints>
+                              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties/>
+                            <border type="none"/>
+                            <children>
+                              <component id="a91b8" class="javax.swing.JSeparator">
+                                <constraints>
+                                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties/>
+                              </component>
+                              <component id="ae6d1" class="javax.swing.JLabel">
+                                <constraints>
+                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <text resource-bundle="com/vladsch/md/nav/localization/strings" key="html-generator.headings.title"/>
+                                </properties>
+                              </component>
+                            </children>
+                          </grid>
+                          <component id="262d4" class="com.intellij.ui.components.JBCheckBox" binding="myImageUriSerials">
+                            <constraints>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <selected value="false"/>
+                              <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.markdown.html.image.serial.uri"/>
+                              <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.markdown.html.image.serial.uri.description"/>
+                            </properties>
+                          </component>
+                          <grid id="db747" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                            <margin top="0" left="0" bottom="0" right="0"/>
+                            <constraints>
+                              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="1" use-parent-layout="false"/>
+                            </constraints>
+                            <properties/>
+                            <border type="none"/>
+                            <children>
+                              <component id="affb7" class="com.intellij.ui.components.JBCheckBox" binding="myAddAnchorLinks">
+                                <constraints>
+                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <selected value="false"/>
+                                  <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.markdown.html.heading.add-anchor-links"/>
+                                  <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.markdown.html.heading.add-anchor-links.description"/>
+                                </properties>
+                              </component>
+                              <component id="7970f" class="com.intellij.ui.components.JBCheckBox" binding="myAnchorLinksWrapText">
+                                <constraints>
+                                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <selected value="false"/>
+                                  <text resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.markdown.html.heading.anchor-links-wrap"/>
+                                  <toolTipText resource-bundle="com/vladsch/md/nav/localization/strings" key="settings.markdown.html.heading.anchor-links-wrap.description"/>
                                 </properties>
                               </component>
                             </children>

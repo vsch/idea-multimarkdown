@@ -197,7 +197,7 @@ class MdParserSettings @JvmOverloads constructor(extensionFlags: Int,
                 }),
             MapItem("ParserOptions",
                 {
-                    val map = ParserOptions.asMap((_parserFlags and EXCLUDED_PARSER_OPTIONS.inv()) or ParserOptions.PRODUCTION_SPEC_PARSER.flags)
+                    val map = ParserOptions.asMap((_parserFlags and EXCLUDED_PARSER_OPTIONS.inv()) or MdLexParser.PRODUCTION_SPEC_PARSER)
                     val filtered = map.filter { it.value }.toMap()
                     filtered
                 },
@@ -257,57 +257,46 @@ class MdParserSettings @JvmOverloads constructor(extensionFlags: Int,
         private val LOG = Logger.getInstance("com.vladsch.md.nav.settings.parser")
         private val LOG_TOC_RESET = Logger.getInstance("com.vladsch.md.nav.settings.parser.tocReset")
 
-        @JvmField
-        val EXCLUDED_PEGDOWN_EXTENSIONS: Int =
-            PegdownExtensions.INTELLIJ_DUMMY_IDENTIFIER.flags or
-                PegdownExtensions.MULTI_LINE_IMAGE_URLS.flags or
-                PegdownExtensions.EXTANCHORLINKS.flags or
-                PegdownExtensions.EXTANCHORLINKS_WRAP.flags
+        const val EXCLUDED_PEGDOWN_EXTENSIONS: Int =
+            Extensions.INTELLIJ_DUMMY_IDENTIFIER or
+                Extensions.MULTI_LINE_IMAGE_URLS
 
-        @JvmField
-        val EXCLUDED_PARSER_OPTIONS: Long = ParserOptions.PRODUCTION_SPEC_PARSER.flags
+        const val EXCLUDED_PARSER_OPTIONS: Long = MdLexParser.PRODUCTION_SPEC_PARSER
 
-        @JvmField
-        val GITHUB_DOCUMENT_COMPATIBLE: Long = ParserOptions.EMOJI_SHORTCUTS.flags or
-            ParserOptions.GFM_TABLE_RENDERING.flags or
-            ParserOptions.COMMONMARK_LISTS.flags
+        const val GITHUB_DOCUMENT_COMPATIBLE: Long = MdLexParser.EMOJI_SHORTCUTS or
+            MdLexParser.GFM_TABLE_RENDERING or
+            MdLexParser.COMMONMARK_LISTS
 
-        @JvmField
-        val GITBOOK_DOCUMENT_COMPATIBLE: Long = ParserOptions.EMOJI_SHORTCUTS.flags or
-            ParserOptions.GFM_TABLE_RENDERING.flags or
-            ParserOptions.GITHUB_LISTS.flags or
-            ParserOptions.GFM_LOOSE_BLANK_LINE_AFTER_ITEM_PARA.flags or
-            ParserOptions.GITBOOK_URL_ENCODING.flags or
-            ParserOptions.ATTRIBUTES_EXT.flags or
-            ParserOptions.HEADER_ID_NO_DUPED_DASHES.flags or
-            ParserOptions.HEADER_ID_NON_ASCII_TO_LOWERCASE.flags
+        const val GITBOOK_DOCUMENT_COMPATIBLE: Long = MdLexParser.EMOJI_SHORTCUTS or
+            MdLexParser.GFM_TABLE_RENDERING or
+            MdLexParser.GITHUB_LISTS or
+            MdLexParser.GFM_LOOSE_BLANK_LINE_AFTER_ITEM_PARA or
+            MdLexParser.GITBOOK_URL_ENCODING or
+            MdLexParser.ATTRIBUTES_EXT or
+            MdLexParser.HEADER_ID_NO_DUPED_DASHES or
+            MdLexParser.HEADER_ID_NON_ASCII_TO_LOWERCASE
 
-        @JvmField
-        val GITHUB_WIKI_COMPATIBLE: Long = GITHUB_DOCUMENT_COMPATIBLE or ParserOptions.GITHUB_WIKI_LINKS.flags
+        const val GITHUB_WIKI_COMPATIBLE: Long = GITHUB_DOCUMENT_COMPATIBLE or MdLexParser.GITHUB_WIKI_LINKS
 
-        @JvmField
-        val COMMONMARK: Long = ParserOptions.COMMONMARK_LISTS.flags or
-            ParserOptions.HEADER_ID_NON_ASCII_TO_LOWERCASE.flags
+        const val COMMONMARK: Long = MdLexParser.COMMONMARK_LISTS or
+            MdLexParser.HEADER_ID_NON_ASCII_TO_LOWERCASE
 
-        @JvmField
-        val COMMONMARK_EXTENSIONS: Int = Extensions.FENCED_CODE_BLOCKS or
+        const val COMMONMARK_EXTENSIONS: Int = Extensions.FENCED_CODE_BLOCKS or
             Extensions.RELAXEDHRULES or
             Extensions.ATXHEADERSPACE
 
-        @JvmField
-        val GITHUB_COMMENT_COMPATIBLE: Long = ParserOptions.COMMONMARK_LISTS.flags or
-            ParserOptions.EMOJI_SHORTCUTS.flags or
-            ParserOptions.GFM_TABLE_RENDERING.flags
+        const val GITHUB_COMMENT_COMPATIBLE: Long = MdLexParser.COMMONMARK_LISTS or
+            MdLexParser.EMOJI_SHORTCUTS or
+            MdLexParser.GFM_TABLE_RENDERING
 
-        @JvmField
-        val GITLAB_DOCUMENT_COMPATIBLE: Long = ParserOptions.COMMONMARK_LISTS.flags or
-            ParserOptions.EMOJI_SHORTCUTS.flags or
-            ParserOptions.GFM_TABLE_RENDERING.flags or
-            ParserOptions.GITLAB_EXT.flags or
-            ParserOptions.GITLAB_MATH_EXT.flags or
-            ParserOptions.GITLAB_MERMAID_EXT.flags or
-            ParserOptions.HEADER_ID_NO_DUPED_DASHES.flags or
-            ParserOptions.HEADER_ID_NON_ASCII_TO_LOWERCASE.flags
+        const val GITLAB_DOCUMENT_COMPATIBLE: Long = MdLexParser.COMMONMARK_LISTS or
+            MdLexParser.EMOJI_SHORTCUTS or
+            MdLexParser.GFM_TABLE_RENDERING or
+            MdLexParser.GITLAB_EXT or
+            MdLexParser.GITLAB_MATH_EXT or
+            MdLexParser.GITLAB_MERMAID_EXT or
+            MdLexParser.HEADER_ID_NO_DUPED_DASHES or
+            MdLexParser.HEADER_ID_NON_ASCII_TO_LOWERCASE
 
         @JvmStatic
         val DEFAULT: MdParserSettings by lazy { MdParserSettings(Extensions.GITHUB_DOCUMENT_COMPATIBLE and Extensions.AUTOLINKS.inv(), GITHUB_DOCUMENT_COMPATIBLE or MdLexParser.SIM_TOC_BLANK_LINE_SPACER, false, EmojiShortcutsType.GITHUB.intValue, EmojiImagesType.IMAGE_ONLY.intValue) }
@@ -336,7 +325,7 @@ class MdParserSettings @JvmOverloads constructor(extensionFlags: Int,
                     Extensions.SUBSCRIPT or
                     Extensions.SUPERSCRIPT or
                     Extensions.INSERTED
-                ) and (Extensions.ANCHORLINKS or Extensions.ATXHEADERSPACE).inv()
+                ) and (Extensions.ATXHEADERSPACE).inv()
 
             val parserOptionsFlags = (
                 MdLexParser.ATTRIBUTES_EXT or
@@ -358,10 +347,10 @@ class MdParserSettings @JvmOverloads constructor(extensionFlags: Int,
 
         @JvmStatic
         fun listIndentationType(parserOptionsFlags: Long): ListIndentationType {
-            if (parserOptionsFlags and ParserOptions.COMMONMARK_LISTS.flags != 0L) {
+            if (parserOptionsFlags and MdLexParser.COMMONMARK_LISTS != 0L) {
                 return ListIndentationType.COMMONMARK
             }
-            if (parserOptionsFlags and ParserOptions.GITHUB_LISTS.flags != 0L) {
+            if (parserOptionsFlags and MdLexParser.GITHUB_LISTS != 0L) {
                 return ListIndentationType.GITHUB
             }
             return ListIndentationType.FIXED

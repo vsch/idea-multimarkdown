@@ -1,9 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: com.vladsch.flexmark:flexmark-ext-escaped-character:0.61.28">
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/com/vladsch/flexmark/flexmark-ext-escaped-character/0.61.28/flexmark-ext-escaped-character-0.61.28.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-ext-escaped-character/0.61.28/ef28a0abc5451e05c96d416f7ac91f9d054c9c14/flexmark-ext-escaped-character-0.61.28.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-ext-escaped-character/0.61.28/f6a161b65c5ff85ff8549c17508734965346fa1f/flexmark-ext-escaped-character-0.61.28-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

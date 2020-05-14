@@ -24,8 +24,6 @@ public class MdLexer extends Lexer implements RestartableLexer {
 
     protected MdLexemeProcessor myLexemeProcessor = null;
 
-    protected Integer pegdownExtensions = null;
-    protected Long parserOptions = null;
     protected LexerData lexerData = null;
     protected final @NotNull MdRenderingProfile renderingProfile;
     protected HashSet<Integer> myFileLevelLexemeStarts = null;
@@ -35,14 +33,8 @@ public class MdLexer extends Lexer implements RestartableLexer {
     }
 
     public MdLexer(final @NotNull MdRenderingProfile renderingProfile) {
-        this(renderingProfile, null, null);
-    }
-
-    public MdLexer(final @NotNull MdRenderingProfile renderingProfile, @Nullable Integer pegdownExtensions, @Nullable Long parserOptions) {
         super();
 
-        this.pegdownExtensions = pegdownExtensions;
-        this.parserOptions = parserOptions;
         this.renderingProfile = renderingProfile;
     }
 
@@ -74,7 +66,7 @@ public class MdLexer extends Lexer implements RestartableLexer {
         LexerToken[] lexerTokens = null;
 
         if (buffer.length() > 0) {
-            lexerData = MdLexParserManager.parseMarkdown(renderingProfile, buffer.subSequence(startOffset, endOffset), pegdownExtensions, parserOptions);
+            lexerData = MdLexParserManager.parseMarkdown(renderingProfile, buffer.subSequence(startOffset, endOffset));
             lexerTokens = lexerData.lexerTokens;
         }
 

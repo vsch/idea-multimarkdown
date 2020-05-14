@@ -1,9 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: com.vladsch.flexmark:flexmark-ext-yaml-front-matter:0.61.28">
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/com/vladsch/flexmark/flexmark-ext-yaml-front-matter/0.61.28/flexmark-ext-yaml-front-matter-0.61.28.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-ext-yaml-front-matter/0.61.28/6ffdf25389355caa0b890a4587901aee464e7c2a/flexmark-ext-yaml-front-matter-0.61.28.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-ext-yaml-front-matter/0.61.28/719ae1397f33bb64654f71d239b2e17a7db3b45a/flexmark-ext-yaml-front-matter-0.61.28-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

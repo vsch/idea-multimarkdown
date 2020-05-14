@@ -59,7 +59,7 @@ public class GitHubTableInspection extends LocalInspectionToolBase {
             tableChars.append(editContext.elementText(element)).line();
             MdPsiImplUtil.adjustLinePrefix(element, tableChars, editContext);
 
-            Document root = MdLexParserManager.parseFlexmarkDocument(renderingProfile, tableChars.toString(false), null, true);
+            Document root = MdLexParserManager.parseFlexmarkDocument(renderingProfile, tableChars.toString(false), true);
 
             if (root != null) {
                 BlockPrefixes prefixes = MdPsiImplUtil.getBlockPrefixes(element, null, editContext).finalizePrefixes(editContext);

@@ -1,9 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: com.vladsch.flexmark:flexmark-ext-xwiki-macros:0.61.28">
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/com/vladsch/flexmark/flexmark-ext-xwiki-macros/0.61.28/flexmark-ext-xwiki-macros-0.61.28.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-ext-xwiki-macros/0.61.28/9bb66e4ee7b2e3d381db02ec4b4d5d77c93c02d2/flexmark-ext-xwiki-macros-0.61.28.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-ext-xwiki-macros/0.61.28/46facc04fe06833238a8a8a6d89f4b4be147c7a5/flexmark-ext-xwiki-macros-0.61.28-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

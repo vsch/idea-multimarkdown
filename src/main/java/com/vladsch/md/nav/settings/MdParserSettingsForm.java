@@ -44,7 +44,6 @@ public class MdParserSettingsForm extends SettingsFormImpl {
     private JBCheckBox suppressInlineHTMLCheckBox;
     private JBCheckBox suppressHTMLBlocksCheckBox;
     private JBCheckBox fencedCodeBlocksCheckBox;
-    private JBCheckBox anchorLinksCheckBox;
     private JBCheckBox relaxedHRulesCheckBox;
     private JBCheckBox githubWikiLinksCheckBox;
     private JBCheckBox definitionBreakDoubleBlankLine;
@@ -102,7 +101,7 @@ public class MdParserSettingsForm extends SettingsFormImpl {
         final @Nullable EmojiShortcutsType emojiShortcutsType;
         final @Nullable EmojiImagesType emojiImagesType;
 
-        final static int PROFILE_PEGDOWN_OPTIONS = ~(Extensions.ANCHORLINKS | Extensions.TOC | MdParserSettings.EXCLUDED_PEGDOWN_EXTENSIONS);
+        final static int PROFILE_PEGDOWN_OPTIONS = ~(Extensions.TOC | MdParserSettings.EXCLUDED_PEGDOWN_EXTENSIONS);
         final static long PROFILE_PARSER_OPTIONS = ~(0x8000000000000000L | ParserOptions.NO_TEXT_ATTRIBUTES.getFlags() | ParserOptions.SIM_TOC_BLANK_LINE_SPACER.getFlags() | MdParserSettings.EXCLUDED_PARSER_OPTIONS);
 
         public String getDisplayName() {
@@ -221,7 +220,6 @@ public class MdParserSettingsForm extends SettingsFormImpl {
         checkBoxPegdownMap.put(suppressInlineHTMLCheckBox, PegdownExtensions.SUPPRESS_INLINE_HTML);
         checkBoxPegdownMap.put(suppressHTMLBlocksCheckBox, PegdownExtensions.SUPPRESS_HTML_BLOCKS);
         checkBoxPegdownMap.put(fencedCodeBlocksCheckBox, PegdownExtensions.FENCED_CODE_BLOCKS);
-        checkBoxPegdownMap.put(anchorLinksCheckBox, PegdownExtensions.ANCHORLINKS);
         checkBoxPegdownMap.put(relaxedHRulesCheckBox, PegdownExtensions.RELAXEDHRULES);
         checkBoxPegdownMap.put(subscriptCheckBox, PegdownExtensions.SUBSCRIPT);
         checkBoxPegdownMap.put(superscriptCheckBox, PegdownExtensions.SUPERSCRIPT);

@@ -116,11 +116,7 @@ public class MdParserDefinition implements ParserDefinition {
                 int tmp = 0;
             }
         }
-
-        MdParserSettings parserSettings = renderingProfile.getParserSettings();
-        int pegdownExtensionFlags = parserSettings.getPegdownFlags();
-        long parserOptionsFlags = parserSettings.getOptionsFlags();
-        return new MdLexer(renderingProfile, pegdownExtensionFlags, parserOptionsFlags);
+        return new MdLexer(renderingProfile);
     }
 
     @NotNull

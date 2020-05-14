@@ -28,6 +28,8 @@ class MdHtmlSettings(private val mySettingsExtensions: MdExtendableSettingsImpl 
     var bodyBottom: String = ""
     var bodyBottomEnabled: Boolean = false
     var addPageHeader: Boolean = false
+    var addAnchorLinks: Boolean = true
+    var anchorLinksWrapText: Boolean = false
     var imageUriSerials: Boolean = false
     var addDocTypeHtml: Boolean = true
     var noParaTags: Boolean = false
@@ -59,6 +61,8 @@ class MdHtmlSettings(private val mySettingsExtensions: MdExtendableSettingsImpl 
         this.bodyBottom = other.bodyBottom
         this.bodyBottomEnabled = other.bodyBottomEnabled
         this.addPageHeader = other.addPageHeader
+        this.addAnchorLinks = other.addAnchorLinks
+        this.anchorLinksWrapText = other.anchorLinksWrapText
         this.imageUriSerials = other.imageUriSerials
         this.addDocTypeHtml = other.addDocTypeHtml
         this.noParaTags = other.noParaTags
@@ -83,6 +87,8 @@ class MdHtmlSettings(private val mySettingsExtensions: MdExtendableSettingsImpl 
             BooleanAttribute("bodyTopEnabled", { bodyTopEnabled }, { bodyTopEnabled = it }),
             BooleanAttribute("bodyBottomEnabled", { bodyBottomEnabled }, { bodyBottomEnabled = it }),
             BooleanAttribute("addPageHeader", { addPageHeader }, { addPageHeader = it }),
+            BooleanAttribute("addAnchorLinks", { addAnchorLinks }, { addAnchorLinks = it }),
+            BooleanAttribute("anchorLinksWrapText", { anchorLinksWrapText }, { anchorLinksWrapText = it }),
             BooleanAttribute("imageUriSerials", { imageUriSerials }, { imageUriSerials = it }),
             BooleanAttribute("addDocTypeHtml", { addDocTypeHtml }, { addDocTypeHtml = it }),
             BooleanAttribute("noParaTags", { noParaTags }, { noParaTags = it }),
@@ -139,6 +145,8 @@ class MdHtmlSettings(private val mySettingsExtensions: MdExtendableSettingsImpl 
         this.bodyBottom = other.bodyBottom
         this.bodyBottomEnabled = other.bodyBottomEnabled
         this.addPageHeader = other.addPageHeader
+        this.addAnchorLinks = other.addAnchorLinks
+        this.anchorLinksWrapText = other.anchorLinksWrapText
         this.imageUriSerials = other.imageUriSerials
         this.addDocTypeHtml = other.addDocTypeHtml
         this.noParaTags = other.noParaTags
@@ -175,6 +183,8 @@ class MdHtmlSettings(private val mySettingsExtensions: MdExtendableSettingsImpl 
         if (bodyBottom != other.bodyBottom) return false
         if (bodyBottomEnabled != other.bodyBottomEnabled) return false
         if (addPageHeader != other.addPageHeader) return false
+        if (addAnchorLinks != other.addAnchorLinks) return false
+        if (anchorLinksWrapText != other.anchorLinksWrapText) return false
         if (imageUriSerials != other.imageUriSerials) return false
         if (addDocTypeHtml != other.addDocTypeHtml) return false
         if (noParaTags != other.noParaTags) return false
@@ -197,6 +207,8 @@ class MdHtmlSettings(private val mySettingsExtensions: MdExtendableSettingsImpl 
         result += 31 * result + bodyBottom.hashCode()
         result += 31 * result + bodyBottomEnabled.hashCode()
         result += 31 * result + addPageHeader.hashCode()
+        result += 31 * result + addAnchorLinks.hashCode()
+        result += 31 * result + anchorLinksWrapText.hashCode()
         result += 31 * result + imageUriSerials.hashCode()
         result += 31 * result + addDocTypeHtml.hashCode()
         result += 31 * result + noParaTags.hashCode()
@@ -227,7 +239,6 @@ class MdHtmlSettings(private val mySettingsExtensions: MdExtendableSettingsImpl 
 
         fun getDefaultSettings(htmlPanelProvider: HtmlPanelProvider.Info?): MdHtmlSettings {
             return when (htmlPanelProvider) {
-                //LoboHtmlPanelProvider.INFO,
                 null -> DEFAULT
                 JavaFxHtmlPanelProvider.INFO -> JAVAFX_DEFAULT
                 TextHtmlPanelProvider.INFO -> TEXT_DEFAULT

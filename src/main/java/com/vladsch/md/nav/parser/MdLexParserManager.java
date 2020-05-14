@@ -17,37 +17,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class MdLexParserManager {
-    public static int LEXER_PEGDOWN_AND_MASK = ~0;
-    public static int LEXER_PEGDOWN_OR_MASK = Extensions.MULTI_LINE_IMAGE_URLS;
-    public static int PARSER_PEGDOWN_AND_MASK = ~Extensions.HARDWRAPS;
-    public static int PARSER_PEGDOWN_OR_MASK = Extensions.MULTI_LINE_IMAGE_URLS | Extensions.INTELLIJ_DUMMY_IDENTIFIER;
-
-    public static Document parseFlexmarkDocument(@NotNull MdRenderingProfile renderingProfile, @NotNull final CharSequence buffer, boolean forParser) {
-        return parseFlexmarkDocument(renderingProfile, buffer, null, forParser);
-    }
-
-    public static Document parseFlexmarkDocument(@NotNull MdRenderingProfile renderingProfile, @NotNull final CharSequence buffer, @Nullable Integer pegdownExtensions, boolean forParser) {
-        int andMask = forParser ? PARSER_PEGDOWN_AND_MASK : LEXER_PEGDOWN_AND_MASK;
-        int orMask = forParser ? PARSER_PEGDOWN_OR_MASK : LEXER_PEGDOWN_OR_MASK;
-        return parseFlexmarkDocument(renderingProfile, buffer, pegdownExtensions, andMask, orMask);
-    }
-
-    public static Document parseFlexmarkDocument(@NotNull MdRenderingProfile renderingProfile, @NotNull final CharSequence buffer, @Nullable Integer pegdownExtensions, int andMask, int orMask) {
-        int pegdownExtensionFlags = renderingProfile.getParserSettings().getPegdownFlags();
-        long parserOptionsFlags = renderingProfile.getParserSettings().getOptionsFlags();
-
-        return parseFlexmarkDocument(buffer, pegdownExtensions, andMask, orMask, pegdownExtensionFlags, parserOptionsFlags, renderingProfile);
-    }
-
     @Nullable
-    public static Document parseFlexmarkDocument(@NotNull final CharSequence buffer, @Nullable Integer pegdownExtensions, int andMask, int orMask, int pegdownExtensionFlags, long parserOptionsFlags, @NotNull MdRenderingProfile renderingProfile) {
-        int actualPegdownExtensions = ((pegdownExtensions != null ? pegdownExtensions : pegdownExtensionFlags) & andMask) | orMask;
-        long actualParserOptions = parserOptionsFlags;
-
-        PegdownOptionsAdapter optionsAdapter = new PegdownOptionsAdapter(actualPegdownExtensions, actualParserOptions);
+    public static Document parseFlexmarkDocument(@NotNull MdRenderingProfile renderingProfile, @NotNull final CharSequence buffer, boolean forParser) {
+        PegdownOptionsAdapter optionsAdapter = new PegdownOptionsAdapter();
         Document rootNode = null;
 
-        DataHolder options = optionsAdapter.getFlexmarkOptions(ParserPurpose.PARSER, HtmlPurpose.RENDER, null, renderingProfile);
+        DataHolder options = optionsAdapter.getFlexmarkOptions(forParser ? ParserPurpose.PARSER : ParserPurpose.HTML, HtmlPurpose.RENDER, null, renderingProfile);
         Parser parser = Parser.builder(options).build();
         String exceptionText = null;
         // use an immutable copy so it does not change in the process of being parsed
@@ -69,21 +44,10 @@ public class MdLexParserManager {
 
     @NotNull
     public static LexerData parseMarkdown(@NotNull MdRenderingProfile renderingProfile, @NotNull final CharSequence buffer) {
-        return parseMarkdown(renderingProfile, buffer, null, null);
-    }
+        int pegdownExtensions = renderingProfile.getParserSettings().getPegdownFlags();
+        long parserOptions = renderingProfile.getParserSettings().getOptionsFlags();
 
-    /**
-     * @param renderingProfile
-     * @param buffer
-     * @param pegdownExtensions
-     * @param parserOptions
-     */
-    @NotNull
-    public static LexerData parseMarkdown(@NotNull MdRenderingProfile renderingProfile, @NotNull final CharSequence buffer, @Nullable Integer pegdownExtensions, @Nullable Long parserOptions) {
-        int actualPegdownExtensions = ((pegdownExtensions != null ? pegdownExtensions : renderingProfile.getParserSettings().getPegdownFlags()) & PARSER_PEGDOWN_AND_MASK) | PARSER_PEGDOWN_OR_MASK;
-        long actualParserOptions = parserOptions != null ? parserOptions : renderingProfile.getParserSettings().getOptionsFlags();
-
-        PegdownOptionsAdapter optionsAdapter = new PegdownOptionsAdapter(actualPegdownExtensions, actualParserOptions);
+        PegdownOptionsAdapter optionsAdapter = new PegdownOptionsAdapter();
         Document rootNode = null;
 
         DataHolder options = optionsAdapter.getFlexmarkOptions(ParserPurpose.PARSER, HtmlPurpose.RENDER, null, renderingProfile);
@@ -98,14 +62,14 @@ public class MdLexParserManager {
                 rootNode = parser.parse(input);
             } catch (Throwable e) {
                 for (MdPreviewCustomizationProvider provider : MdPreviewCustomizationProvider.EXTENSIONS.getValue()) {
-                    if (provider.createParserErrorReport(actualPegdownExtensions, actualParserOptions, options, e, buffer.toString())) break;
+                    if (provider.createParserErrorReport(pegdownExtensions, parserOptions, options, e, buffer.toString())) break;
                 }
 
                 return new LexerData(MdLexParser.EMPTY_TOKENS, new MdASTCompositeNode(MdParserDefinition.MARKDOWN_FILE, 0, buffer.length()));
             }
         }
 
-        LexerData lexerData = MdLexParser.parseFlexmarkMarkdown(rootNode, actualPegdownExtensions, actualParserOptions);
+        LexerData lexerData = MdLexParser.parseFlexmarkMarkdown(rootNode);
         return lexerData;
     }
 }

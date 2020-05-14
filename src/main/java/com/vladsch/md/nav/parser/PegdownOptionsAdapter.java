@@ -54,17 +54,19 @@ import static com.vladsch.md.nav.parser.MdLexParser.HEADER_ID_REF_TEXT_TRIM_TRAI
 import static com.vladsch.md.nav.parser.MdLexParser.SPACE_IN_LINK_URLS;
 import static com.vladsch.md.nav.parser.api.HtmlPurpose.EXPORT;
 import static com.vladsch.md.nav.parser.api.HtmlPurpose.RENDER;
+import static com.vladsch.md.nav.parser.api.ParserPurpose.HTML;
 import static com.vladsch.md.nav.parser.api.ParserPurpose.HTML_MIME;
 import static com.vladsch.md.nav.parser.api.ParserPurpose.JAVAFX;
 import static com.vladsch.md.nav.parser.api.ParserPurpose.JIRA;
 import static com.vladsch.md.nav.parser.api.ParserPurpose.PARSER;
+import static com.vladsch.md.nav.parser.api.ParserPurpose.SWING;
 import static com.vladsch.md.nav.parser.api.ParserPurpose.YOU_TRACK;
 
 public class PegdownOptionsAdapter {
 
     final private MdParserOptions options;
-    private @Nullable Integer myPegdownExtensions = null;
-    private @Nullable Long myParserOptions = null;
+    private int myPegdownExtensions;
+    private long myParserOptions;
 
     public PegdownOptionsAdapter() {
         this(null);
@@ -74,32 +76,22 @@ public class PegdownOptionsAdapter {
         options = new MdParserOptions(dataSet);
     }
 
-    public PegdownOptionsAdapter(int pegdownExtensions, long parserOptions) {
-        this(null);
-        myPegdownExtensions = pegdownExtensions;
-        myParserOptions = parserOptions;
-    }
-
     public PegdownOptionsAdapter withExtensions(Extension... extensions) {
         options.addExtensions(extensions);
         return this;
     }
 
-    public static DataHolder flexmarkOptions(
-            int pegdownExtensions,
-            long parserOptions,
-            @NotNull MdRenderingProfile renderingProfile
-    ) {
-        PegdownOptionsAdapter optionsAdapter = new PegdownOptionsAdapter(pegdownExtensions, parserOptions);
+    public static DataHolder flexmarkOptions(@NotNull MdRenderingProfile renderingProfile) {
+        PegdownOptionsAdapter optionsAdapter = new PegdownOptionsAdapter();
         return optionsAdapter.getFlexmarkOptions(PARSER, RENDER, null, renderingProfile);
     }
 
     public boolean haveExtensions(int mask) {
-        return myPegdownExtensions != null && (myPegdownExtensions & mask) != 0;
+        return (myPegdownExtensions & mask) != 0;
     }
 
     public boolean haveOptions(long mask) {
-        return myParserOptions != null && (myParserOptions & mask) != 0L;
+        return (myParserOptions & mask) != 0L;
     }
 
     public DataHolder getFlexmarkOptions(
@@ -117,16 +109,13 @@ public class PegdownOptionsAdapter {
             @Nullable MdLinkResolver linkResolver,
             @NotNull MdRenderingProfile renderingProfile
     ) {
-        if (myParserOptions != null) renderingProfile.getParserSettings().setOptionsFlags(myParserOptions);
-        if (myPegdownExtensions != null) renderingProfile.getParserSettings().setPegdownFlags(myPegdownExtensions);
+        myPegdownExtensions = renderingProfile.getParserSettings().getPegdownFlags();
+        myParserOptions = renderingProfile.getParserSettings().getOptionsFlags();
 
         RenderingOptions renderingOptions = new RenderingOptions(parserPurpose, htmlPurpose, renderingProfile, linkResolver);
         for (MdParserExtension extension : MdParserExtension.EXTENSIONS.getValue()) {
             extension.setRenderingOptions(renderingOptions);
         }
-
-        myPegdownExtensions = renderingProfile.getParserSettings().getPegdownFlags();
-        myParserOptions = renderingProfile.getParserSettings().getOptionsFlags();
 
         MdPreviewSettings previewSettings = renderingProfile.getPreviewSettings();
         MdHtmlSettings htmlSettings = renderingProfile.getHtmlSettings();
@@ -224,10 +213,8 @@ public class PegdownOptionsAdapter {
             ;
 
             options.setFrom(listOptions);
-
-            if (haveExtensions(INTELLIJ_DUMMY_IDENTIFIER)) {
-                options.set(Parser.INTELLIJ_DUMMY_IDENTIFIER, true);
-            }
+            
+            options.set(Parser.INTELLIJ_DUMMY_IDENTIFIER, true);
 
             // NOTE: need this or inserting a blank line, like before ENTER handler will
             //   cause a list in block quotes to be split and not properly renumbered.
@@ -236,9 +223,8 @@ public class PegdownOptionsAdapter {
             //options.set(Parser.BLOCK_QUOTE_IGNORE_BLANK_LINE, true);
         }
 
-        if (haveExtensions(Extensions.MULTI_LINE_IMAGE_URLS)) {
-            options.set(Parser.PARSE_MULTI_LINE_IMAGE_URLS, true);
-        }
+        // NOTE: these are always enabled
+        options.set(Parser.PARSE_MULTI_LINE_IMAGE_URLS, true);
 
         if (parserPurpose != JIRA && haveExtensions(ABBREVIATIONS)) {
             options.addExtension(AbbreviationExtension.class, AbbreviationExtension::create);
@@ -247,13 +233,9 @@ public class PegdownOptionsAdapter {
         }
 
         if (parserPurpose != JIRA && parserPurpose != YOU_TRACK && parserPurpose != HTML_MIME) {
-            if (haveExtensions(ANCHORLINKS | EXTANCHORLINKS | EXTANCHORLINKS_WRAP)) {
+            if (htmlSettings.getAddAnchorLinks()) {
                 options.addExtension(AnchorLinkExtension.class, AnchorLinkExtension::create);
-                if (haveExtensions(EXTANCHORLINKS) || parserPurpose == PARSER && haveExtensions(ANCHORLINKS)) {
-                    options.set(AnchorLinkExtension.ANCHORLINKS_WRAP_TEXT, haveExtensions(EXTANCHORLINKS_WRAP) && parserPurpose != PARSER);
-                } else if (haveExtensions(ANCHORLINKS)) {
-                    options.set(AnchorLinkExtension.ANCHORLINKS_WRAP_TEXT, true);
-                }
+                options.set(AnchorLinkExtension.ANCHORLINKS_WRAP_TEXT, htmlSettings.getAnchorLinksWrapText());
             }
         }
 
@@ -274,7 +256,7 @@ public class PegdownOptionsAdapter {
             }
         }
 
-        if (haveExtensions(HARDWRAPS)) {
+        if (parserPurpose != PARSER && haveExtensions(HARDWRAPS)) {
             options.set(HtmlRenderer.SOFT_BREAK, "<br />\n");
             options.set(HtmlRenderer.HARD_BREAK, "<br />\n<br />\n");
         }
@@ -386,7 +368,7 @@ public class PegdownOptionsAdapter {
                 options.set(HtmlRenderer.FENCED_CODE_LANGUAGE_CLASS_PREFIX, "");
             }
 
-            if (haveExtensions(ANCHORLINKS | EXTANCHORLINKS | EXTANCHORLINKS_WRAP)) {
+            if (htmlSettings.getAddAnchorLinks()) {
                 options.set(AnchorLinkExtension.ANCHORLINKS_SET_ID, false);
                 options.set(AnchorLinkExtension.ANCHORLINKS_ANCHOR_CLASS, "anchor");
                 options.set(AnchorLinkExtension.ANCHORLINKS_SET_NAME, true);
@@ -428,7 +410,7 @@ public class PegdownOptionsAdapter {
                 options.set(HtmlRenderer.FENCED_CODE_LANGUAGE_CLASS_PREFIX, "");
             }
 
-            if (haveExtensions(ANCHORLINKS | EXTANCHORLINKS | EXTANCHORLINKS_WRAP)) {
+            if (htmlSettings.getAddAnchorLinks()) {
                 options.set(AnchorLinkExtension.ANCHORLINKS_SET_ID, false);
                 options.set(AnchorLinkExtension.ANCHORLINKS_ANCHOR_CLASS, "");
                 options.set(AnchorLinkExtension.ANCHORLINKS_SET_NAME, true);
