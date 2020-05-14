@@ -9,7 +9,6 @@
       <ParserSettings gitHubSyntaxChange="false" correctedInvalidSettings="false" emojiShortcuts="3" emojiImages="0">
         <PegdownExtensions>
           <option name="ABBREVIATIONS" value="true" />
-          <option name="ANCHORLINKS" value="true" />
           <option name="ASIDE" value="true" />
           <option name="ATXHEADERSPACE" value="true" />
           <option name="AUTOLINKS" value="true" />
@@ -44,7 +43,7 @@
           <option name="SIM_TOC_BLANK_LINE_SPACER" value="true" />
         </ParserOptions>
       </ParserSettings>
-      <HtmlSettings headerTopEnabled="false" headerBottomEnabled="false" bodyTopEnabled="false" bodyBottomEnabled="false" addPageHeader="false" imageUriSerials="false" addDocTypeHtml="true" noParaTags="false" migratedPlantUml="false" plantUmlConversion="0">
+      <HtmlSettings headerTopEnabled="false" headerBottomEnabled="false" bodyTopEnabled="false" bodyBottomEnabled="false" addPageHeader="false" addAnchorLinks="true" anchorLinksWrapText="false" imageUriSerials="false" addDocTypeHtml="true" noParaTags="false" migratedPlantUml="false" plantUmlConversion="0">
         <GeneratorProvider>
           <provider providerId="com.vladsch.md.nav.editor.javafx.html.generator" providerName="JavaFx HTML Generator" />
         </GeneratorProvider>
