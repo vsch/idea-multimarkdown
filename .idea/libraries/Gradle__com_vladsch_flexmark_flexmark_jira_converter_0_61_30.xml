@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.vladsch.flexmark:flexmark-jira-converter:0.61.30">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-jira-converter/0.61.30/b40d35ca502ab1a49581c6e3decc76eb514cb0ff/flexmark-jira-converter-0.61.30.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-jira-converter/0.61.30/bcd72e85f51266a752113cdfe1b4631bb0fa84bb/flexmark-jira-converter-0.61.30-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

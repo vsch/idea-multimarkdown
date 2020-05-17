@@ -3,6 +3,8 @@ Contents**</summary>
 
 [TOC]: # ""
 
+- [3.0.xxx.97 - Bug Fix Release](#30xxx97---bug-fix-release)
+- [3.0.xxx.95 - Bug Fix Release](#30xxx95---bug-fix-release)
 - [3.0.xxx.93 - Bug Fix Release](#30xxx93---bug-fix-release)
 - [3.0.xxx.91 - Bug Fix Release](#30xxx91---bug-fix-release)
 - [3.0.xxx.89 - Bug Fix Release](#30xxx89---bug-fix-release)
@@ -23,6 +25,20 @@ Contents**</summary>
 - [2.9.8 - 2019.3 Compatibility Release](#298---20193-compatibility-release)
 
 &nbsp;</details>
+
+### 3.0.xxx.97 - Bug Fix Release
+
+* Fix: diagnostic/4988, `IndexOutOfBoundsException` in
+  `MoveColumnLeftAction`
+* Fix: diagnostic/4985, `IndexOutOfBoundsException` in
+  `MdFoldingVisitor.updateHeadingRanges()`
+* Fix: diagnostic/4975, `AlreadyDisposedException` in
+  `HtmlRendererExtension.addRenderingProfileOptions`
+* Fix: anchor links setting migration would reset new settings flag.
+
+### 3.0.xxx.95 - Bug Fix Release
+
+* Fix: remove 2020.1.2 API use
 
 ### 3.0.xxx.93 - Bug Fix Release
 

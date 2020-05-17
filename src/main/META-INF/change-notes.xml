@@ -1,6 +1,29 @@
 <idea-plugin>
     <change-notes><![CDATA[
         <div xmlns="http://www.w3.org/1999/html">
+            <h3>3.0.201.97 - Bug Fix Release</h3>
+            <ul>
+                <li>Fix: diagnostic/4988, <code>IndexOutOfBoundsException</code> in
+                    <code>MoveColumnLeftAction</code></li>
+                <li>Fix: diagnostic/4985, <code>IndexOutOfBoundsException</code> in
+                    <code>MdFoldingVisitor.updateHeadingRanges()</code></li>
+                <li>Fix: diagnostic/4975, <code>AlreadyDisposedException</code> in
+                    <code>HtmlRendererExtension.addRenderingProfileOptions</code></li>
+                <li>Fix: anchor links setting migration would reset new settings flag.</li>
+            </ul>
+            <h3>3.0.201.95 - Bug Fix Release</h3>
+            <ul>
+                <li>Fix: remove 2020.1.2 API use</li>
+            </ul>
+            <h3>3.0.201.93 - Bug Fix Release</h3>
+            <ul>
+                <li>Fix: multi-file drop could mess up links for files after the first
+                    dropped file.</li>
+                <li>Fix: spurious reset of enhanced settings to defaults.</li>
+                <li>Fix: clean up deprecated API use.</li>
+                <li>Fix: TOC levels parsing to match optimized <code>levels</code> syntax.</li>
+                <li>Fix: Move <code>Anchor links</code> option from <code>Parser</code> to <code>HTML</code> settings.</li>
+            </ul>
             <h3>3.0.201.91 - Bug Fix Release</h3>
             <ul>
                 <li>Add: editor visual guides field to code style wrapping tab</li>

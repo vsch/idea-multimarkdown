@@ -2,6 +2,7 @@
 
 package com.vladsch.md.nav.parser;
 
+import com.intellij.openapi.project.Project;
 import com.vladsch.flexmark.ext.abbreviation.AbbreviationExtension;
 import com.vladsch.flexmark.ext.anchorlink.AnchorLinkExtension;
 import com.vladsch.flexmark.ext.aside.AsideExtension;
@@ -54,12 +55,10 @@ import static com.vladsch.md.nav.parser.MdLexParser.HEADER_ID_REF_TEXT_TRIM_TRAI
 import static com.vladsch.md.nav.parser.MdLexParser.SPACE_IN_LINK_URLS;
 import static com.vladsch.md.nav.parser.api.HtmlPurpose.EXPORT;
 import static com.vladsch.md.nav.parser.api.HtmlPurpose.RENDER;
-import static com.vladsch.md.nav.parser.api.ParserPurpose.HTML;
 import static com.vladsch.md.nav.parser.api.ParserPurpose.HTML_MIME;
 import static com.vladsch.md.nav.parser.api.ParserPurpose.JAVAFX;
 import static com.vladsch.md.nav.parser.api.ParserPurpose.JIRA;
 import static com.vladsch.md.nav.parser.api.ParserPurpose.PARSER;
-import static com.vladsch.md.nav.parser.api.ParserPurpose.SWING;
 import static com.vladsch.md.nav.parser.api.ParserPurpose.YOU_TRACK;
 
 public class PegdownOptionsAdapter {
@@ -109,6 +108,9 @@ public class PegdownOptionsAdapter {
             @Nullable MdLinkResolver linkResolver,
             @NotNull MdRenderingProfile renderingProfile
     ) {
+        Project project = renderingProfile.getProject();
+        if (project != null && project.isDisposed()) return options;
+        
         myPegdownExtensions = renderingProfile.getParserSettings().getPegdownFlags();
         myParserOptions = renderingProfile.getParserSettings().getOptionsFlags();
 
@@ -213,7 +215,7 @@ public class PegdownOptionsAdapter {
             ;
 
             options.setFrom(listOptions);
-            
+
             options.set(Parser.INTELLIJ_DUMMY_IDENTIFIER, true);
 
             // NOTE: need this or inserting a blank line, like before ENTER handler will
@@ -337,7 +339,9 @@ public class PegdownOptionsAdapter {
             // FIX: this needs to be true for GitHub compatibility
             options.set(Parser.MATCH_CLOSING_FENCE_CHARACTERS, false);
             options.addExtension(MdNavigatorDiagramExtension.class, MdNavigatorDiagramExtension::create);
-            MdNavigatorDiagramExtension.addRenderingProfileOptions(options, renderingProfile);
+            if (project != null && !project.isDisposed()) {
+                MdNavigatorDiagramExtension.addRenderingProfileOptions(options, renderingProfile);
+            }
         }
 
         if (parserPurpose == JAVAFX) {
@@ -462,10 +466,12 @@ public class PegdownOptionsAdapter {
 
         options.addExtension(MdNavigatorExtension.class, MdNavigatorExtension::create);
 
-        // add extensions last
-        options.setExtensionOptions(parserPurpose, htmlPurpose, renderingProfile, linkResolver);
-        for (MdParserExtension extension : MdParserExtension.EXTENSIONS.getValue()) {
-            extension.setFlexmarkOptions(options);
+        if (project != null && !project.isDisposed()) {
+            // add extensions last
+            options.setExtensionOptions(parserPurpose, htmlPurpose, renderingProfile, linkResolver);
+            for (MdParserExtension extension : MdParserExtension.EXTENSIONS.getValue()) {
+                extension.setFlexmarkOptions(options);
+            }
         }
 
         return options;

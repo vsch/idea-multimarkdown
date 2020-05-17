@@ -16,6 +16,7 @@ import com.vladsch.md.nav.psi.util.MdVisitor
 import com.vladsch.md.nav.util.*
 import com.vladsch.md.nav.vcs.GitHubLinkResolver
 import com.vladsch.plugin.util.image.ImageUtils
+import com.vladsch.plugin.util.maxLimit
 import java.util.*
 
 class MdFoldingVisitor(
@@ -216,7 +217,8 @@ class MdFoldingVisitor(
             val openHeadingRange = myOpenHeadingRanges[i]
             val openHeading = myOpenHeadings[i]
             if (openHeadingRange != null && openHeading != null) {
-                updateHeadingRanges(openHeading, openHeadingRange, endOffset)
+                // diagnostic/4985
+                updateHeadingRanges(openHeading, openHeadingRange, endOffset.maxLimit(myRootText.length))
             }
         }
 

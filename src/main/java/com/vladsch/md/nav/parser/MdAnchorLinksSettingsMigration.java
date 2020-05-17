@@ -13,7 +13,7 @@ public class MdAnchorLinksSettingsMigration implements MdRenderingProfileValidat
         MdHtmlSettings htmlSettings = renderingProfile.getHtmlSettings();
         MdParserSettings parserSettings = renderingProfile.getParserSettings();
 
-        htmlSettings.setAddAnchorLinks(parserSettings.anyExtensions(Extensions.ANCHORLINKS | Extensions.EXTANCHORLINKS));
+        htmlSettings.setAddAnchorLinks(htmlSettings.getAddAnchorLinks() | parserSettings.anyExtensions(Extensions.ANCHORLINKS | Extensions.EXTANCHORLINKS));
         parserSettings.setPegdownFlags(parserSettings.getPegdownFlags() & ~(Extensions.ANCHORLINKS | Extensions.EXTANCHORLINKS));
     }
 }
