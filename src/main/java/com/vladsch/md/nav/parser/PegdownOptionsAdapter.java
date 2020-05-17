@@ -339,7 +339,7 @@ public class PegdownOptionsAdapter {
             // FIX: this needs to be true for GitHub compatibility
             options.set(Parser.MATCH_CLOSING_FENCE_CHARACTERS, false);
             options.addExtension(MdNavigatorDiagramExtension.class, MdNavigatorDiagramExtension::create);
-            if (project != null && !project.isDisposed()) {
+            if (project == null || !project.isDisposed()) {
                 MdNavigatorDiagramExtension.addRenderingProfileOptions(options, renderingProfile);
             }
         }
@@ -466,7 +466,7 @@ public class PegdownOptionsAdapter {
 
         options.addExtension(MdNavigatorExtension.class, MdNavigatorExtension::create);
 
-        if (project != null && !project.isDisposed()) {
+        if (project == null || !project.isDisposed()) {
             // add extensions last
             options.setExtensionOptions(parserPurpose, htmlPurpose, renderingProfile, linkResolver);
             for (MdParserExtension extension : MdParserExtension.EXTENSIONS.getValue()) {
