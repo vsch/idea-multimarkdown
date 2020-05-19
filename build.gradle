@@ -61,7 +61,7 @@ sourceSets {
     }
     test {
         resources {
-            srcDirs = ['src/main/resources', 'src/main/resources-flex', 'src/test/java']
+            srcDirs = ['src/main/resources', 'src/main/resources-flex', 'src/test/resources', 'src/test/java']
         }
     }
 }
@@ -71,6 +71,6 @@ intellij {
     updateSinceUntilBuild = false
     version '201.7223.91'
     plugins = [
-            "IntelliLang", "git4idea", "java", "grazie",
+            "IntelliLang", "git4idea", "java", "grazie", "platform-images"
     ]
 }
