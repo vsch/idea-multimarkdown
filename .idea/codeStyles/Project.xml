@@ -35,6 +35,7 @@
     <JetCodeStyleSettings>
       <option name="SPACE_AROUND_RANGE" value="true" />
       <option name="WRAP_ELVIS_EXPRESSIONS" value="0" />
+      <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
     </JetCodeStyleSettings>
     <MarkdownNavigatorCodeStyleSettings>
       <option name="WRAP_ON_TYPING" value="1" />
@@ -60,12 +61,12 @@
       <option name="TOC_TITLE_LEVEL" value="3" />
       <option name="RIGHT_MARGIN" value="96" />
     </MarkdownNavigatorCodeStyleSettings>
-    <MarkdownNavigatorEnhCodeStyleSettings>
-      <option name="TRAILING_SPACES_ID_1" value="flexmark-java-spec-example" />
-    </MarkdownNavigatorEnhCodeStyleSettings>
     <Properties>
       <option name="KEEP_BLANK_LINES" value="true" />
     </Properties>
+    <ScalaCodeStyleSettings>
+      <option name="MULTILINE_STRING_CLOSING_QUOTES_ON_NEW_LINE" value="true" />
+    </ScalaCodeStyleSettings>
     <XML>
       <option name="XML_ATTRIBUTE_WRAP" value="0" />
       <option name="XML_KEEP_BLANK_LINES" value="1" />
@@ -187,6 +188,7 @@
       </indentOptions>
     </codeStyleSettings>
     <codeStyleSettings language="kotlin">
+      <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
       <option name="KEEP_FIRST_COLUMN_COMMENT" value="false" />
       <option name="KEEP_BLANK_LINES_IN_DECLARATIONS" value="1" />
       <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
