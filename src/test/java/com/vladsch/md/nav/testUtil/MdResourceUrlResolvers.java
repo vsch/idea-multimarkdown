@@ -36,10 +36,9 @@ public class MdResourceUrlResolvers {
 
                 int pos = noFileProtocol.indexOf(OUT_TEST);
                 if (pos > 0) {
-                    int pathPos = noFileProtocol.indexOf("/", pos + OUT_TEST.length());
-                    if (pathPos > 0) {
-                        return noFileProtocol.substring(0, pos) + SRC_TEST_JAVA + noFileProtocol.substring(pathPos + 1);
-                    }
+                    int pathPos = pos + OUT_TEST.length();
+                    String s = noFileProtocol.substring(0, pos) + SRC_TEST_JAVA + noFileProtocol.substring(pathPos);
+                    return s;
                 }
             }
 

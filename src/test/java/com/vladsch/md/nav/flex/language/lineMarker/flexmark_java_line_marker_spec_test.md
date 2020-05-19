@@ -107,7 +107,10 @@ public class SampleTest extends ComboSpecTestCase {
         super(example, optionsMap, OPTIONS);
     }
 
-    public static DataHolder marginOption(String option, String params) {
+    public static DataHolder <lineMarker icon="/gutter/extAnnotation.svg" descr="<html><i>Inferred</i> annotations available. Full signature:<p>
+<b><i>@NotNull</i></b>&nbsp;
+DataHolder&nbsp;<b>marginOption</b>(String,
+                                                     String)</html>" >marginOption</lineMarker>(String option, String params) {
         int rightMargin = -1;
         if (params != null) {
             if (!params.matches("\\d*")) {
@@ -229,7 +232,10 @@ public class SampleTest extends ComboSpecTestCase {
         super(example, optionsMap, OPTIONS);
     }
 
-    public static DataHolder marginOption(String option, String params) {
+    public static DataHolder <lineMarker icon="/gutter/extAnnotation.svg" descr="<html><i>Inferred</i> annotations available. Full signature:<p>
+<b><i>@NotNull</i></b>&nbsp;
+DataHolder&nbsp;<b>marginOption</b>(String,
+                                                     String)</html>" >marginOption</lineMarker>(String option, String params) {
         int rightMargin = -1;
         if (params != null) {
             if (!params.matches("\\d*")) {
@@ -289,7 +295,10 @@ public class SampleTest extends ComboSpecTestCase {
         super(example, optionsMap, OPTIONS);
     }
 
-    public static DataHolder marginOption(String option, String params) {
+    public static DataHolder <lineMarker icon="/gutter/extAnnotation.svg" descr="<html><i>Inferred</i> annotations available. Full signature:<p>
+<b><i>@NotNull</i></b>&nbsp;
+DataHolder&nbsp;<b>marginOption</b>(String,
+                                                     String)</html>" >marginOption</lineMarker>(String option, String params) {
         int rightMargin = -1;
         if (params != null) {
             if (!params.matches("\\d*")) {

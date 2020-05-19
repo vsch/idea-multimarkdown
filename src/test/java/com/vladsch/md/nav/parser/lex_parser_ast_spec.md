@@ -1600,10 +1600,10 @@ text :warning: embedded
 :warning: embedded 
 text :warning: 
 .
-<p><img src="file:///Users/vlad/Library/Caches/JetBrains/IdeaIC2020-1-EAP/plugins-sandbox-mn/plugins/idea-multimarkdown/emojis/warning.png" alt="emoji places:warning" class="emoji" />
-text <img src="file:///Users/vlad/Library/Caches/JetBrains/IdeaIC2020-1-EAP/plugins-sandbox-mn/plugins/idea-multimarkdown/emojis/warning.png" alt="emoji places:warning" class="emoji" /> embedded
-<img src="file:///Users/vlad/Library/Caches/JetBrains/IdeaIC2020-1-EAP/plugins-sandbox-mn/plugins/idea-multimarkdown/emojis/warning.png" alt="emoji places:warning" class="emoji" /> embedded
-text <img src="file:///Users/vlad/Library/Caches/JetBrains/IdeaIC2020-1-EAP/plugins-sandbox-mn/plugins/idea-multimarkdown/emojis/warning.png" alt="emoji places:warning" class="emoji" /></p>
+<p><img src="file:///Users/vlad/src/projects/idea-multimarkdown/build/idea-sandbox/plugins-test/idea-multimarkdown/emojis/warning.png" alt="emoji places:warning" class="emoji" />
+text <img src="file:///Users/vlad/src/projects/idea-multimarkdown/build/idea-sandbox/plugins-test/idea-multimarkdown/emojis/warning.png" alt="emoji places:warning" class="emoji" /> embedded
+<img src="file:///Users/vlad/src/projects/idea-multimarkdown/build/idea-sandbox/plugins-test/idea-multimarkdown/emojis/warning.png" alt="emoji places:warning" class="emoji" /> embedded
+text <img src="file:///Users/vlad/src/projects/idea-multimarkdown/build/idea-sandbox/plugins-test/idea-multimarkdown/emojis/warning.png" alt="emoji places:warning" class="emoji" /></p>
 .
  MdFile:[0, 70, ":warn … ing:\ntext :warning: embedded \n:warning: embedded \ntext :warning: "]
    MdParagraphImpl:[0, 70, ":warn … ing:\ntext :warning: embedded \n:warning: embedded \ntext :warning: "]

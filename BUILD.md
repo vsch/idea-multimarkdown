@@ -21,8 +21,12 @@ The plugin sources are for IDEA 2020.1, Community or Ultimate:
   * To disable the bundled plugin run the `prepareSandbox` task from the
     IDE Gradle tool window or `./gradlew prepareSandbox` from the
     command line to create the sandbox used for the plugin.
-  * create a file `build/idea-sandbox/config/disabled_plugins.txt` with
+  * Create a file `build/idea-sandbox/config/disabled_plugins.txt` with
     `org.intellij.plugins.markdown` as the only line.
+
+    :information_source: As an alternative you can run the `runIde` task to run the plugin in
+    the IDE. In debug instance of the IDE, open plugins configuration and disable the
+    bundled Markdown plugin manually.
 
 ### Building
 
@@ -36,19 +40,6 @@ The plugin sources are for IDEA 2020.1, Community or Ultimate:
 
 * Run gradle `test` task from the IDE Gradle tool window or `./gradlew
   test` from the command line.
-
-  :information_source: Some tests are not working with gradle build due
-  to:
-
-       java.lang.IllegalArgumentException: Missing extension point: com.vladsch.idea.multimarkdown.settingsExtension in container Application
-
-  The cause is most likely the same for
-
-       java.lang.NoClassDefFoundError: Could not initialize class com.vladsch.md.nav.settings.MdRenderingProfile
-
-  I am still trying to figure out the cause of this error and how to fix
-  it. The tests when run as part of Plugin DevKit worked. So the issue
-  is in the configuration of the test sandbox not the tests.
 
 ## Notes
 
