@@ -41,6 +41,10 @@ The plugin sources are for IDEA 2020.1, Community or Ultimate:
 * Run gradle `test` task from the IDE Gradle tool window or `./gradlew
   test` from the command line.
 
+:information_source: Some tests contain absolute `file://` URL to images contained installation
+directory which will depend on the project directory. Actual and expected text for these tests
+will reflect difference in project location.
+
 ## Notes
 
 The gradle build is a work in progress. The project was switched from
