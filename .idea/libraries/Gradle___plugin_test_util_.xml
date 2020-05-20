@@ -4,6 +4,8 @@
       <root url="jar://$PROJECT_DIR$/lib/plugin-test-util.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../idea-multimarkdown3/plugin-test-util/src/main/java" />
+    </SOURCES>
   </library>
 </component>

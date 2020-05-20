@@ -936,3 +936,375 @@ BasedSegmentBuilder{[119, 219), s=0:0, u=0:0, t=3:6, l=105, sz=7, na=5: [119), '
 ````````````````````````````````
 
 
+## Smart Edit
+
+### Asterisks
+
+```````````````````````````````` example(Smart Edit - Asterisks: 1) options(type[*], smart-edit-asterisks)
+test ⦙
+.
+test *⦙*
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Asterisks: 2) options(backspace, smart-edit-asterisks)
+test *⦙*
+.
+test ⦙
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Asterisks: 3) options(type[ ], smart-edit-asterisks)
+test *⦙*
+.
+test * ⦙
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Asterisks: 4) options(margin[50], wrap, type[ ], smart-edit-asterisks)
+test *⦙* long line needing wrapping on space and should be wrapped.
+.
+test * ⦙ long line needing wrapping on space and
+should be wrapped.
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Asterisks: 5) options(margin[50], wrap, type[ ], smart-edit-asterisks, wrap-on-space)
+test *⦙* long line needing wrapping on space and should be wrapped.
+.
+test * ⦙ long line needing wrapping on space and
+should be wrapped.
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Asterisks: 6) options(margin[50], wrap, type[a], smart-edit-asterisks, wrap-on-space)
+test *⦙* long line needing wrapping on space and should be wrapped.
+.
+test *a⦙* long line needing wrapping on space and should be wrapped.
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Asterisks: 7) options(type[*], smart-edit-asterisks)
+test *⦙*
+.
+test **⦙**
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Asterisks: 8) options(backspace, smart-edit-asterisks)
+test **⦙**
+.
+test *⦙*
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Asterisks: 9) options(type[ ], smart-edit-asterisks)
+test **⦙**
+.
+test ** ⦙
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Asterisks: 10) options(type[*], smart-edit-asterisks)
+test **⦙**
+.
+test ***⦙***
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Asterisks: 11) options(backspace, smart-edit-asterisks)
+test ***⦙***
+.
+test **⦙**
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Asterisks: 12) options(type[ ], smart-edit-asterisks)
+test ***⦙***
+.
+test *** ⦙
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Asterisks: 13) options(type[*], smart-edit-asterisks)
+test ***⦙***
+.
+test ****⦙***
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Asterisks: 14) options(backspace, smart-edit-asterisks)
+test ****⦙***
+.
+test ***⦙***
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Asterisks: 15) options(type[ ], smart-edit-asterisks)
+test ****⦙***
+.
+test **** ⦙***
+````````````````````````````````
+
+
+### Underscores
+
+```````````````````````````````` example(Smart Edit - Underscores: 1) options(type[_], smart-edit-underscore)
+test ⦙
+.
+test _⦙_
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Underscores: 2) options(backspace, smart-edit-underscore)
+test _⦙_
+.
+test ⦙
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Underscores: 3) options(type[ ], smart-edit-underscore)
+test _⦙_
+.
+test _ ⦙
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Underscores: 4) options(margin[50], wrap, type[ ], smart-edit-underscore)
+test _⦙_ long line needing wrapping on space and should be wrapped.
+.
+test _ ⦙ long line needing wrapping on space and
+should be wrapped.
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Underscores: 5) options(type[_], smart-edit-underscore)
+test _⦙_
+.
+test __⦙__
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Underscores: 6) options(backspace, smart-edit-underscore)
+test __⦙__
+.
+test _⦙_
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Underscores: 7) options(type[ ], smart-edit-underscore)
+test __⦙__
+.
+test __ ⦙
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Underscores: 8) options(type[_], smart-edit-underscore)
+test __⦙__
+.
+test ___⦙___
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Underscores: 9) options(backspace, smart-edit-underscore)
+test ___⦙___
+.
+test __⦙__
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Underscores: 10) options(type[ ], smart-edit-underscore)
+test ___⦙___
+.
+test ___ ⦙
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Underscores: 11) options(type[_], smart-edit-underscore)
+test ___⦙___
+.
+test ____⦙___
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Underscores: 12) options(backspace, smart-edit-underscore)
+test ____⦙___
+.
+test ___⦙___
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Underscores: 13) options(type[ ], smart-edit-underscore)
+test ____⦙___
+.
+test ____ ⦙___
+````````````````````````````````
+
+
+### Tildes
+
+```````````````````````````````` example(Smart Edit - Tildes: 1) options(type[~], smart-edit-tildes)
+test ⦙
+.
+test ~⦙~
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Tildes: 2) options(backspace, smart-edit-tildes)
+test ~⦙~
+.
+test ⦙
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Tildes: 3) options(type[ ], smart-edit-tildes)
+test ~⦙~
+.
+test ~ ⦙
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Tildes: 4) options(margin[50], wrap, type[ ], smart-edit-tildes)
+test ~⦙~ long line needing wrapping on space and should be wrapped.
+.
+test ~ ⦙ long line needing wrapping on space and
+should be wrapped.
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Tildes: 5) options(type[~], smart-edit-tildes)
+test ~⦙~
+.
+test ~~⦙~~
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Tildes: 6) options(backspace, smart-edit-tildes)
+test ~~⦙~~
+.
+test ~⦙~
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Tildes: 7) options(type[ ], smart-edit-tildes)
+test ~~⦙~~
+.
+test ~~ ⦙
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Tildes: 8) options(type[~], smart-edit-tildes)
+test ~~⦙~~
+.
+test ~~~⦙~~
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Tildes: 9) options(backspace, smart-edit-tildes)
+test ~~~⦙~~
+.
+test ~~⦙~~
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Tildes: 10) options(type[ ], smart-edit-tildes)
+test ~~~⦙~~
+.
+test ~~~ ⦙~~
+````````````````````````````````
+
+
+### Back Tics
+
+```````````````````````````````` example(Smart Edit - Back Tics: 1) options(type[`], smart-edit-back-tics)
+test ⦙
+.
+test `⦙`
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Back Tics: 2) options(backspace, smart-edit-back-tics)
+test `⦙`
+.
+test ⦙
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Back Tics: 3) options(type[ ], smart-edit-back-tics)
+test `⦙`
+.
+test ` ⦙
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Back Tics: 4) options(margin[50], wrap, type[ ], smart-edit-back-tics)
+test `⦙` long line needing wrapping on space and should be wrapped.
+.
+test ` ⦙ long line needing wrapping on space and
+should be wrapped.
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Back Tics: 5) options(type[`], smart-edit-back-tics)
+test `⦙`
+.
+test ``⦙``
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Back Tics: 6) options(backspace, smart-edit-back-tics)
+test ``⦙``
+.
+test `⦙`
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Back Tics: 7) options(type[ ], smart-edit-back-tics)
+test ``⦙``
+.
+test `` ⦙
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Back Tics: 8) options(type[`], smart-edit-back-tics)
+test ``⦙``
+.
+test ```⦙```
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Back Tics: 9) options(backspace, smart-edit-back-tics)
+test ```⦙```
+.
+test ``⦙``
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Back Tics: 10) options(type[ ], smart-edit-back-tics)
+test ```⦙```
+.
+test ``` ⦙
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Back Tics: 11) options(type[`], smart-edit-back-tics)
+test ```⦙```
+.
+test ````⦙````
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Back Tics: 12) options(backspace, smart-edit-back-tics)
+test ````⦙````
+.
+test ```⦙```
+````````````````````````````````
+
+
+```````````````````````````````` example(Smart Edit - Back Tics: 13) options(type[ ], smart-edit-back-tics)
+test ````⦙````
+.
+test ```` ⦙````
+````````````````````````````````
+
+

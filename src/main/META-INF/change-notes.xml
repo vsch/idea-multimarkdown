@@ -1,6 +1,15 @@
 <idea-plugin>
     <change-notes><![CDATA[
         <div xmlns="http://www.w3.org/1999/html">
+            <h3>3.0.201.99 - Bug Fix Release</h3>
+            <ul>
+                <li>Fix: erroneous optimized TOC levels options for single level headings.</li>
+                <li>Fix: add anchor links settings migrated flag.</li>
+                <li>Fix: smart edit chars: <code>*</code>, <code>_</code>, <code>~</code> and <code>`</code>, on space to delete
+                    auto-inserted char and allow space processing to proceed. Otherwise,
+                    auto-wrap on space only does not wrap after auto-inserted character is
+                    replaced by a space.</li>
+            </ul>
             <h3>3.0.201.97 - Bug Fix Release</h3>
             <ul>
                 <li>Fix: diagnostic/4988, <code>IndexOutOfBoundsException</code> in

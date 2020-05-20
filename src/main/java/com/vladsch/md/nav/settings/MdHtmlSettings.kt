@@ -35,6 +35,7 @@ class MdHtmlSettings(private val mySettingsExtensions: MdExtendableSettingsImpl 
     var noParaTags: Boolean = false
     var plantUmlConversion: Int = PlantUmlConversionType.EMBEDDED.intValue
     var migratedPlantUml: Boolean = false
+    var migratedAnchorLinks: Boolean = false
 
     var plantUmlConversionType: PlantUmlConversionType
         get() = PlantUmlConversionType.ADAPTER.get(plantUmlConversion)
@@ -66,7 +67,6 @@ class MdHtmlSettings(private val mySettingsExtensions: MdExtendableSettingsImpl 
         this.imageUriSerials = other.imageUriSerials
         this.addDocTypeHtml = other.addDocTypeHtml
         this.noParaTags = other.noParaTags
-        this.migratedPlantUml = other.migratedPlantUml
         this.plantUmlConversion = other.plantUmlConversion
 
         this.fencedCodeConversions.clear()
@@ -93,6 +93,7 @@ class MdHtmlSettings(private val mySettingsExtensions: MdExtendableSettingsImpl 
             BooleanAttribute("addDocTypeHtml", { addDocTypeHtml }, { addDocTypeHtml = it }),
             BooleanAttribute("noParaTags", { noParaTags }, { noParaTags = it }),
             BooleanAttribute("migratedPlantUml", { migratedPlantUml }, { migratedPlantUml = it }),
+            BooleanAttribute("migratedAnchorLinks", { migratedAnchorLinks }, { migratedAnchorLinks = it }),
             IntAttribute("plantUmlConversion", { plantUmlConversion }, { plantUmlConversion = it }),
             MapItem("fencedCodeConversions",
                 { fencedCodeConversions },
@@ -151,6 +152,7 @@ class MdHtmlSettings(private val mySettingsExtensions: MdExtendableSettingsImpl 
         this.addDocTypeHtml = other.addDocTypeHtml
         this.noParaTags = other.noParaTags
         this.migratedPlantUml = other.migratedPlantUml
+        this.migratedAnchorLinks = other.migratedAnchorLinks
         this.plantUmlConversion = other.plantUmlConversion
 
         this.fencedCodeConversions.clear()
@@ -188,7 +190,6 @@ class MdHtmlSettings(private val mySettingsExtensions: MdExtendableSettingsImpl 
         if (imageUriSerials != other.imageUriSerials) return false
         if (addDocTypeHtml != other.addDocTypeHtml) return false
         if (noParaTags != other.noParaTags) return false
-        if (migratedPlantUml != other.migratedPlantUml) return false
         if (plantUmlConversion != other.plantUmlConversion) return false
         if (fencedCodeConversions != other.fencedCodeConversions) return false
 
@@ -212,7 +213,6 @@ class MdHtmlSettings(private val mySettingsExtensions: MdExtendableSettingsImpl 
         result += 31 * result + imageUriSerials.hashCode()
         result += 31 * result + addDocTypeHtml.hashCode()
         result += 31 * result + noParaTags.hashCode()
-        result += 31 * result + migratedPlantUml.hashCode()
         result += 31 * result + plantUmlConversion.hashCode()
         result += 31 * result + fencedCodeConversions.hashCode()
         return result

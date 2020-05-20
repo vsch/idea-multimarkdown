@@ -3,9 +3,11 @@ package com.vladsch.md.nav.actions.handlers
 
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
 import com.intellij.codeInsight.lookup.LookupManager
+import com.intellij.openapi.editor.Document
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.project.Project
+import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
 import com.vladsch.md.nav.actions.api.MdFormatElementHandler
 import com.vladsch.md.nav.actions.handlers.util.AutoCharsContext
@@ -26,6 +28,8 @@ class TypedCharHandler : TypedHandlerDelegate() {
         if (file is MdFile && editor.caretModel.caretCount == 1 && LookupManager.getInstance(file.project).activeLookup == null) {
             CaretContextInfo.withContext(file, editor, c, false) { caretContext ->
                 caretContext.charTypedHandler()
+                var useCaretContext = caretContext
+                val styleSettings = MdCodeStyleSettings.getInstance(file)
 
                 val isFormatRegion = caretContext.isFormatRegion(caretContext.caretOffset)
 
@@ -37,11 +41,16 @@ class TypedCharHandler : TypedHandlerDelegate() {
                         val autoTypeChar = if (isSp) nextC else c
 
                         if (autoCharsContext.isAutoTypeEnabled(autoTypeChar)) {
-                            val charDelta = autoCharsContext.autoTypeChar(c)
-                            if (charDelta != 0) {
-                                result = Result.STOP
+                            autoCharsContext.autoTypeChar(c)
+                            if (styleSettings.isWrapOnTyping) {
+                                PsiDocumentManager.getInstance(project).commitDocument(caretContext.document)
+                                CaretContextInfo.withContextOrNull(file,editor,c,false) { newCaretContext->
+                                    if (newCaretContext != null) {
+                                        caretContext.addSubContext(newCaretContext)
+                                        useCaretContext = newCaretContext
+                                    }
+                                }
                             }
-                            return@withContext
                         }
                     }
 
@@ -49,9 +58,8 @@ class TypedCharHandler : TypedHandlerDelegate() {
                         if (handler.skipWrapOnTyping()) return@withContext
                     }
 
-                    val styleSettings = MdCodeStyleSettings.getInstance(file)
                     if (styleSettings.isWrapOnTyping) {
-                        val paragraphContext = ParagraphContext.getContext(caretContext)
+                        val paragraphContext = ParagraphContext.getContext(useCaretContext)
                         if (paragraphContext != null) {
                             paragraphContext.adjustParagraph(true)
                             return@withContext

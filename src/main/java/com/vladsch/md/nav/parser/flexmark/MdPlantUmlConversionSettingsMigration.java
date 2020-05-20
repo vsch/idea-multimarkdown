@@ -18,33 +18,36 @@ public class MdPlantUmlConversionSettingsMigration implements MdRenderingProfile
         MdParserSettings parserSettings = renderingProfile.getParserSettings();
         MdHtmlSettings htmlSettings = renderingProfile.getHtmlSettings();
 
-        if (!htmlSettings.getMigratedPlantUml() && parserSettings.anyOptions(ParserOptions.PUML_FENCED_CODE, ParserOptions.PLANTUML_FENCED_CODE)) {
-            PlantUmlConversionType conversionType = htmlSettings.getPlantUmlConversionType();
-            HashMap<String, String> fencedCodeConversions = htmlSettings.getFencedCodeConversions();
+        if (!htmlSettings.getMigratedPlantUml()) {
             htmlSettings.setMigratedPlantUml(true);
+            
+            if (parserSettings.anyOptions(ParserOptions.PUML_FENCED_CODE, ParserOptions.PLANTUML_FENCED_CODE)) {
+                PlantUmlConversionType conversionType = htmlSettings.getPlantUmlConversionType();
+                HashMap<String, String> fencedCodeConversions = htmlSettings.getFencedCodeConversions();
 
-            for (MdFencedCodeImageConverter converter : MdFencedCodeImageConverter.EXTENSIONS.getValue()) {
-                String[] infoStrings = converter.getInfoStrings();
-                for (String infoString : infoStrings) {
-                    if (!fencedCodeConversions.containsKey(infoString)) {
-                        if (MdFencedCodePlantUmlConverter.PUML_LANGUAGE_INFO.equals(infoString)) {
-                            String variant = converter.migrateConversionVariant(infoString, conversionType);
-                            if (variant != null) {
-                                fencedCodeConversions.put(infoString, variant);
-                            }
-                        } else if (MdFencedCodePlantUmlConverter.PLANTUML_LANGUAGE_INFO.equals(infoString)) {
-                            String variant = converter.migrateConversionVariant(infoString, conversionType);
-                            if (variant != null) {
-                                fencedCodeConversions.put(infoString, variant);
+                for (MdFencedCodeImageConverter converter : MdFencedCodeImageConverter.EXTENSIONS.getValue()) {
+                    String[] infoStrings = converter.getInfoStrings();
+                    for (String infoString : infoStrings) {
+                        if (!fencedCodeConversions.containsKey(infoString)) {
+                            if (MdFencedCodePlantUmlConverter.PUML_LANGUAGE_INFO.equals(infoString)) {
+                                String variant = converter.migrateConversionVariant(infoString, conversionType);
+                                if (variant != null) {
+                                    fencedCodeConversions.put(infoString, variant);
+                                }
+                            } else if (MdFencedCodePlantUmlConverter.PLANTUML_LANGUAGE_INFO.equals(infoString)) {
+                                String variant = converter.migrateConversionVariant(infoString, conversionType);
+                                if (variant != null) {
+                                    fencedCodeConversions.put(infoString, variant);
+                                }
                             }
                         }
                     }
                 }
-            }
 
-//            // remove parser flags and conversion type, these are no longer used
-//            htmlSettings.setPlantUmlConversionType(PlantUmlConversionType.NONE);
-//            parserSettings.setOptionsFlags(parserSettings.getOptionsFlags() & ~(ParserOptions.PUML_FENCED_CODE.getFlags() | ParserOptions.PLANTUML_FENCED_CODE.getFlags()));
+                //            // remove parser flags and conversion type, these are no longer used
+                //            htmlSettings.setPlantUmlConversionType(PlantUmlConversionType.NONE);
+                //            parserSettings.setOptionsFlags(parserSettings.getOptionsFlags() & ~(ParserOptions.PUML_FENCED_CODE.getFlags() | ParserOptions.PLANTUML_FENCED_CODE.getFlags()));
+            }
         }
     }
 }

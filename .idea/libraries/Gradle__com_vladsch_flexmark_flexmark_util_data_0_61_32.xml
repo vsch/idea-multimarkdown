@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.vladsch.flexmark:flexmark-util-data:0.61.32">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-util-data/0.61.32/c41a60e26933562a5d3e4932c8f5ed9680bf001c/flexmark-util-data-0.61.32.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-util-data/0.61.32/ee019ce3db7738ecc4b8447aa2e053e44e1e36a8/flexmark-util-data-0.61.32-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

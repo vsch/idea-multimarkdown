@@ -40,6 +40,11 @@ public class TypingBasicHandlerSpecTest extends MdLightPlatformActionSpecTestCas
 
     final private static Map<String, DataHolder> optionsMap = new HashMap<>();
     static {
+        optionsMap.put("smart-edit-asterisks", new MutableDataSet().set(APPLICATION_SETTINGS, applicationSettings -> applicationSettings.getDocumentSettings().setSmartEditAsterisks(true)));
+        optionsMap.put("smart-edit-underscore", new MutableDataSet().set(APPLICATION_SETTINGS, applicationSettings -> applicationSettings.getDocumentSettings().setSmartEditUnderscore(true)));
+        optionsMap.put("smart-edit-tildes", new MutableDataSet().set(APPLICATION_SETTINGS, applicationSettings -> applicationSettings.getDocumentSettings().setSmartEditTildes(true)));
+        optionsMap.put("smart-edit-back-tics", new MutableDataSet().set(APPLICATION_SETTINGS, applicationSettings -> applicationSettings.getDocumentSettings().setSmartEditBackTicks(true)));
+        optionsMap.put("wrap-on-space", new MutableDataSet().set(APPLICATION_SETTINGS, applicationSettings -> applicationSettings.getDocumentSettings().setWrapOnlyOnTypingSpace(true)));
     }
     public TypingBasicHandlerSpecTest() {
         super(optionsMap, OPTIONS);
