@@ -3,6 +3,7 @@ Contents**</summary>
 
 [TOC]: # ""
 
+- [3.0.xxx.101 - Bug Fix Release](#30xxx101---bug-fix-release)
 - [3.0.xxx.99 - Bug Fix Release](#30xxx99---bug-fix-release)
 - [3.0.xxx.97 - Bug Fix Release](#30xxx97---bug-fix-release)
 - [3.0.xxx.95 - Bug Fix Release](#30xxx95---bug-fix-release)
@@ -26,6 +27,26 @@ Contents**</summary>
 - [2.9.8 - 2019.3 Compatibility Release](#298---20193-compatibility-release)
 
 &nbsp;</details>
+
+### 3.0.xxx.101 - Bug Fix Release
+
+* Fix: javafx tools debugger to handle failure when running Java 14 with
+  alternate JavaFX Implementation.
+
+  For example for Java 14 and installation of
+  [Gluon JavaFX](https://gluonhq.com/products/javafx/) to
+  `/Library/Java/Extensions/javafx-sdk-14.0.1` requires running the IDE
+  with additional vm options:
+
+  ```
+  --add-exports=java.base/jdk.internal.vm=ALL-UNNAMED
+  --add-exports=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
+  --add-exports=javafx.web/com.sun.javafx.scene.web=ALL-UNNAMED
+  --module-path /Library/Java/Extensions/javafx-sdk-14.0.1/lib
+  --add-modules javafx.controls
+  --add-modules javafx.web
+  --add-modules javafx.swing
+  ```
 
 ### 3.0.xxx.99 - Bug Fix Release
 

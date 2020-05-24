@@ -25,7 +25,7 @@ dependencies {
     implementation "com.vladsch.flexmark:flexmark-ext-spec-example:$flexmarkVersion"
 
     implementation "com.jgoodies:jgoodies-common:1.4.0"
-    implementation "com.vladsch.javafx-webview-debugger:javafx-webview-debugger:0.8.4"
+    implementation "com.vladsch.javafx-webview-debugger:javafx-webview-debugger:0.8.6"
     implementation "com.vladsch.boxed-json:boxed-json:0.5.32"
     implementation "com.vladsch.reverse-regex:reverse-regex-util:0.3.6"
     implementation "commons-io:commons-io:2.4"
