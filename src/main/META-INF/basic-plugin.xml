@@ -30,7 +30,7 @@
     <depends optional="true" config-file="plugin-intellilang.xml">org.intellij.intelliLang</depends>
     <depends optional="true" config-file="plugin-java.xml">com.intellij.java</depends>
     <depends optional="true" config-file="plugin-grazie.xml">tanvd.grazi</depends>
-    <depends>com.intellij.platform.images</depends>
+    <depends optional="true" config-file="plugin-images.xml">com.intellij.platform.images</depends>
 
     <resource-bundle>com.vladsch.md.nav.localization.strings</resource-bundle>
 
