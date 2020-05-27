@@ -1,0 +1,5 @@
+<idea-plugin>
+    <extensions defaultExtensionNs="com.intellij.grazie">
+        
+    </extensions>
+</idea-plugin>
