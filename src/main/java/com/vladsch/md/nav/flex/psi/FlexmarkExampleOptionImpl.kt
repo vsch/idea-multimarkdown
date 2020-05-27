@@ -12,7 +12,7 @@ import com.intellij.util.IncorrectOperationException
 import com.vladsch.flexmark.test.util.ExampleOption
 import com.vladsch.md.nav.parser.MdFactoryContext
 import com.vladsch.md.nav.psi.element.MdElementItemPresentation
-import com.vladsch.md.nav.psi.element.MdNamedElement
+import com.vladsch.md.nav.psi.element.MdRenameElement
 import com.vladsch.md.nav.psi.element.MdStructureViewPresentableElement
 import com.vladsch.md.nav.psi.element.MdStructureViewPresentableItem
 import com.vladsch.md.nav.psi.util.MdElementFactory
@@ -43,7 +43,7 @@ class FlexmarkExampleOptionImpl(stub: FlexmarkExampleOptionStub?, nodeType: IStu
 
     override fun setName(newName: String): FlexmarkExampleOption {
         // preserve params and disabled status
-        return setName(newName, MdNamedElement.REASON_FILE_RENAMED)
+        return setName(newName, MdRenameElement.REASON_FILE_RENAMED)
     }
 
     override fun handleContentChange(newContent: String): FlexmarkExampleOption {
