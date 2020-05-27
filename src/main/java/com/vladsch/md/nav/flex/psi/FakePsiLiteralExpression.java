@@ -13,6 +13,7 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.FakePsiElement;
 import com.intellij.util.IncorrectOperationException;
+import com.vladsch.md.nav.MdLanguage;
 import com.vladsch.md.nav.flex.psi.util.FlexmarkPsiImplUtils;
 import icons.FlexmarkIcons;
 import org.jetbrains.annotations.NotNull;
@@ -88,7 +89,7 @@ public class FakePsiLiteralExpression extends FakePsiElement {
     @NotNull
     @Override
     public Language getLanguage() {
-        return myElement.getLanguage();
+        return MdLanguage.INSTANCE;
     }
 
     @NotNull

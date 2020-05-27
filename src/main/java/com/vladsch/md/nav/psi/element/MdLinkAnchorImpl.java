@@ -9,7 +9,7 @@ import com.vladsch.md.nav.psi.util.MdPsiImplUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class MdLinkAnchorImpl extends MdNamedElementImpl implements MdLinkAnchor {
+public class MdLinkAnchorImpl extends MdRenameElementImpl implements MdLinkAnchor {
     public MdLinkAnchorImpl(ASTNode node) {
         super(node);
     }

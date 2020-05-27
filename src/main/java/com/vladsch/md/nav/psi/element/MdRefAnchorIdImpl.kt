@@ -11,7 +11,7 @@ import com.vladsch.md.nav.psi.util.MdPsiImplUtil
 import icons.MdIcons
 import javax.swing.Icon
 
-class MdRefAnchorIdImpl(node: ASTNode) : MdNamedElementImpl(node), MdRefAnchorId {
+class MdRefAnchorIdImpl(node: ASTNode) : MdRenameElementImpl(node), MdRefAnchorId {
 
     override fun getReferenceElement(): PsiElement {
         return parent

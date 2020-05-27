@@ -5,7 +5,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
 
-public interface MdReferencingElementReference extends MdNamedElement {
+public interface MdReferencingElementReference extends MdRenameElement {
     @NotNull
     IElementType getReferenceType();
 

@@ -4,6 +4,7 @@
         <projectService serviceImplementation="com.vladsch.md.nav.flex.settings.FlexmarkProjectSettingsManager"/>
 
         <lang.elementManipulator forClass="com.vladsch.md.nav.flex.psi.FlexmarkFrontMatterBlock" implementationClass="com.vladsch.md.nav.flex.psi.FlexmarkFrontMatterBlockManipulator"/>
+        <lang.elementManipulator forClass="com.vladsch.md.nav.flex.psi.FlexmarkExampleOption" implementationClass="com.vladsch.md.nav.flex.language.FlexmarkExampleOptionManipulator"/>
         <stubIndex implementation="com.vladsch.md.nav.flex.psi.index.FlexmarkExampleOptionIndex"/>
         <fileBasedIndex implementation="com.vladsch.md.nav.flex.psi.index.FlexmarkFileIndex"/>
         <applicationService serviceImplementation="com.vladsch.md.nav.flex.language.folding.MdFlexmarkFoldingSettings"/>

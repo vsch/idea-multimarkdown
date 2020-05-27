@@ -13,7 +13,7 @@ import com.intellij.psi.ResolveResult;
 import com.vladsch.md.nav.flex.parser.FlexmarkSpecTestCaseCachedData;
 import com.vladsch.md.nav.flex.psi.util.FlexmarkPsiImplUtils;
 import com.vladsch.md.nav.psi.element.MdFile;
-import com.vladsch.md.nav.psi.element.MdNamedElement;
+import com.vladsch.md.nav.psi.element.MdRenameElement;
 import com.vladsch.md.nav.psi.reference.MdPsiReference;
 import com.vladsch.md.nav.util.Result;
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +41,7 @@ public class FlexmarkPsiReferenceExampleOption extends MdPsiReference {
     @Override
     public PsiElement resolve() {
         ResolveResult[] resolveResults = multiResolve(false);
-        return resolveResults.length > 0 ? resolveResults[0].getElement() : null;
+        return resolveResults.length == 1 ? resolveResults[0].getElement() : null;
     }
 
     /**
@@ -56,12 +56,14 @@ public class FlexmarkPsiReferenceExampleOption extends MdPsiReference {
         FlexmarkExampleOption element = (FlexmarkExampleOption) getElement();
         MdFile mdFile = element.getMdFile();
         ArrayList<ResolveResult> results = new ArrayList<>();
+        HashSet<FlexmarkExampleOptionDefinition> definitionSet = new HashSet<>();
 
         TextRange textRange = getRangeInElement();
         FlexmarkPsiImplUtils.forOptionDefinitions(mdFile, element.getText().substring(textRange.getStartOffset(), textRange.getEndOffset()), true, (psiClass, definitions) -> {
             FlexmarkExampleOptionDefinition definition = definitions[0];
-            if (definition.isDefinitionFor(element)) {
-//                results.add(new PsiElementResolveResult(definitions.getLiteralExpressionElement()));
+            if (!definitionSet.contains(definition) && definition.isDefinitionFor(element)) {
+                //                results.add(new PsiElementResolveResult(definitions.getLiteralExpressionElement()));
+                definitionSet.add(definition);
                 FakePsiLiteralExpression fakePsiElement = new FakePsiLiteralExpression(definition.getLiteralExpressionElement(), definition.getTextRange());
                 results.add(new PsiElementResolveResult(fakePsiElement));
             }
@@ -91,7 +93,7 @@ public class FlexmarkPsiReferenceExampleOption extends MdPsiReference {
     @Override
     public Object[] getVariants() {
         // NOTE: find all Java Test Cases which define this option for this spec file
-        MdNamedElement element = getElement();
+        MdRenameElement element = getElement();
         List<LookupElement> variants = new ArrayList<>();
         HashMap<PsiFile, HashSet<String>> fileOptions = new HashMap<>();
 

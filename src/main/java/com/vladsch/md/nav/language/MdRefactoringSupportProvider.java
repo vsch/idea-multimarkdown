@@ -3,7 +3,7 @@ package com.vladsch.md.nav.language;
 
 import com.intellij.lang.refactoring.RefactoringSupportProvider;
 import com.intellij.psi.PsiElement;
-import com.vladsch.md.nav.psi.element.MdNamedElement;
+import com.vladsch.md.nav.psi.element.MdRenameElement;
 import org.jetbrains.annotations.NotNull;
 
 public class MdRefactoringSupportProvider extends RefactoringSupportProvider {
@@ -14,11 +14,11 @@ public class MdRefactoringSupportProvider extends RefactoringSupportProvider {
 
     @Override
     public boolean isInplaceRenameAvailable(@NotNull PsiElement element, PsiElement context) {
-        return element instanceof MdNamedElement && ((MdNamedElement) element).isInplaceRenameAvailable(context);
+        return element instanceof MdRenameElement && ((MdRenameElement) element).isInplaceRenameAvailable(context);
     }
 
     @Override
     public boolean isMemberInplaceRenameAvailable(@NotNull PsiElement element, PsiElement context) {
-        return element instanceof MdNamedElement && ((MdNamedElement) element).isMemberInplaceRenameAvailable(context);
+        return element instanceof MdRenameElement && ((MdRenameElement) element).isMemberInplaceRenameAvailable(context);
     }
 }

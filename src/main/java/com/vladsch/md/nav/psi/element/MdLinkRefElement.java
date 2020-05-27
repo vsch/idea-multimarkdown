@@ -3,7 +3,7 @@ package com.vladsch.md.nav.psi.element;
 
 import org.jetbrains.annotations.NotNull;
 
-public interface MdLinkRefElement extends MdNamedElement {
+public interface MdLinkRefElement extends MdRenameElement {
     @NotNull
     String getNameWithAnchor();
 

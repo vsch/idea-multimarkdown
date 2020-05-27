@@ -3,14 +3,14 @@
 package com.vladsch.md.nav.annotator;
 
 import com.vladsch.md.nav.MdBundle;
-import com.vladsch.md.nav.psi.element.MdNamedElement;
+import com.vladsch.md.nav.psi.element.MdRenameElement;
 
 import java.util.List;
 
 public interface FileDataCreator {
-    void fillData(final MdNamedElement element, List<FileChoiceData> fileData);
+    void fillData(final MdRenameElement element, List<FileChoiceData> fileData);
 
-    default boolean isAvailable(final MdNamedElement element) {
+    default boolean isAvailable(final MdRenameElement element) {
         return element.isValid();
     }
 

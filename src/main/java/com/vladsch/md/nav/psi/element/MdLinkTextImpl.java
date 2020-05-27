@@ -2,17 +2,13 @@
 package com.vladsch.md.nav.psi.element;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.tree.TokenSet;
-import com.vladsch.md.nav.psi.reference.MdPsiReference;
-import com.vladsch.md.nav.psi.util.MdPsiImplUtil;
 import com.vladsch.md.nav.psi.util.MdTypes;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class MdLinkTextImpl extends MdNamedElementImpl implements MdLinkText {
+public class MdLinkTextImpl extends MdPsiElementImpl implements MdLinkText {
     @Nullable
     @Override
     public PsiReference getReference() {
@@ -24,22 +20,6 @@ public class MdLinkTextImpl extends MdNamedElementImpl implements MdLinkText {
 
     public MdLinkTextImpl(ASTNode node) {
         super(node);
-    }
-
-    @Override
-    public MdPsiReference createReference(@NotNull TextRange textRange, final boolean exactReference) {
-        return new MdPsiReference(this, textRange, exactReference);
-    }
-
-    @NotNull
-    @Override
-    public String getDisplayName() {
-        return getParent() instanceof MdExplicitLink ? ((MdExplicitLink) getParent()).getDisplayName() : getName();
-    }
-
-    @Override
-    public PsiElement setName(@NotNull String newName, int reason) {
-        return MdPsiImplUtil.setName(this, newName, reason);
     }
 
     @Override

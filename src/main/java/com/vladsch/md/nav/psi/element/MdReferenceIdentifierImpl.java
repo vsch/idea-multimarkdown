@@ -5,18 +5,24 @@ import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.vladsch.md.nav.psi.reference.MdPsiReference;
+import com.vladsch.md.nav.psi.util.MdPsiImplUtil;
 import icons.MdIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.Icon;
 
-public class MdReferenceIdentifierImpl extends MdLinkTextImpl implements MdReferenceIdentifier {
+public class MdReferenceIdentifierImpl extends MdNamedElementImpl implements MdLinkText, MdReferenceIdentifier {
     @Override
     public PsiElement getReferenceElement() {
         return getParent();
     }
 
+    @Override
+    public PsiElement setName(@NotNull String newName, int reason) {
+        return MdPsiImplUtil.setName(this, newName, reason);
+    }
+    
     @Override
     public MdPsiReference createReference(@NotNull TextRange textRange, final boolean exactReference) {
         return null;

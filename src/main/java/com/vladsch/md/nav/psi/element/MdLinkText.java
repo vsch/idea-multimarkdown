@@ -5,9 +5,9 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.Nullable;
 
 //public interface MdLinkText extends MdPsiElement {
-public interface MdLinkText extends MdNamedElement {
-    @Override
-    default boolean isMemberInplaceRenameAvailable(@Nullable PsiElement context) {
-        return false;
-    }
+public interface MdLinkText extends MdPsiElement {
+    //@Override
+    //default boolean isMemberInplaceRenameAvailable(@Nullable PsiElement context) {
+    //    return false;
+    //}
 }

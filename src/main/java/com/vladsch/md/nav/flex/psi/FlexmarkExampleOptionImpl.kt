@@ -11,7 +11,10 @@ import com.intellij.psi.stubs.IStubElementType
 import com.intellij.util.IncorrectOperationException
 import com.vladsch.flexmark.test.util.ExampleOption
 import com.vladsch.md.nav.parser.MdFactoryContext
-import com.vladsch.md.nav.psi.element.*
+import com.vladsch.md.nav.psi.element.MdElementItemPresentation
+import com.vladsch.md.nav.psi.element.MdNamedElement
+import com.vladsch.md.nav.psi.element.MdStructureViewPresentableElement
+import com.vladsch.md.nav.psi.element.MdStructureViewPresentableItem
 import com.vladsch.md.nav.psi.util.MdElementFactory
 import com.vladsch.md.nav.psi.util.MdTokenSets
 import com.vladsch.plugin.util.nullIf
@@ -38,7 +41,7 @@ class FlexmarkExampleOptionImpl(stub: FlexmarkExampleOptionStub?, nodeType: IStu
         return nameIdentifier != null
     }
 
-    override fun setName(newName: String): PsiElement? {
+    override fun setName(newName: String): FlexmarkExampleOption {
         // preserve params and disabled status
         return setName(newName, MdNamedElement.REASON_FILE_RENAMED)
     }
@@ -73,14 +76,14 @@ class FlexmarkExampleOptionImpl(stub: FlexmarkExampleOptionStub?, nodeType: IStu
 
     override fun isInplaceRenameAvailable(context: PsiElement?): Boolean {
         return true
-//        val elementType = context?.node?.elementType
-//        return isRenameAvailable && (context is FlexmarkExampleOption)
+        //        val elementType = context?.node?.elementType
+        //        return isRenameAvailable && (context is FlexmarkExampleOption)
     }
 
     override fun isMemberInplaceRenameAvailable(context: PsiElement?): Boolean {
         return true
-//        val elementType = context?.node?.elementType
-//        return isRenameAvailable && (context is FlexmarkExampleOption)
+        //        val elementType = context?.node?.elementType
+        //        return isRenameAvailable && (context is FlexmarkExampleOption)
     }
 
     @Throws(IncorrectOperationException::class)
@@ -183,7 +186,7 @@ class FlexmarkExampleOptionImpl(stub: FlexmarkExampleOptionStub?, nodeType: IStu
         return optionName
     }
 
-    override fun setName(newName: String, reason: Int): PsiElement {
+    override fun setName(newName: String, reason: Int): FlexmarkExampleOption {
         return handleContentChange(newName)
     }
 
@@ -192,9 +195,9 @@ class FlexmarkExampleOptionImpl(stub: FlexmarkExampleOptionStub?, nodeType: IStu
     }
 
     override fun accept(visitor: PsiElementVisitor) {
-        if (visitor is MdPsiVisitor)
-            visitor.visitNamedElement(this)
-        else
-            super.accept(visitor)
+        //        if (visitor is MdPsiVisitor)
+        //            visitor.visitNamedElement(this)
+        //        else
+        super.accept(visitor)
     }
 }

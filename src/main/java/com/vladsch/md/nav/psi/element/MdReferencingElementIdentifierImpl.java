@@ -8,7 +8,7 @@ import com.vladsch.md.nav.psi.reference.MdPsiReference;
 import com.vladsch.md.nav.psi.util.MdPsiImplUtil;
 import org.jetbrains.annotations.NotNull;
 
-public class MdReferencingElementIdentifierImpl extends MdNamedElementImpl implements MdReferencingElementIdentifier {
+public class MdReferencingElementIdentifierImpl extends MdRenameElementImpl implements MdReferencingElementIdentifier {
     public MdReferencingElementIdentifierImpl(ASTNode node) {
         super(node);
     }

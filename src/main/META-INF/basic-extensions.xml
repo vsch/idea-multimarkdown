@@ -40,12 +40,14 @@
         <lang.elementManipulator forClass="com.vladsch.md.nav.psi.element.MdMacro" implementationClass="com.vladsch.md.nav.psi.manipulator.MdReferenceManipulator"/>
         <lang.elementManipulator forClass="com.vladsch.md.nav.psi.element.MdReferencingElementReference" implementationClass="com.vladsch.md.nav.psi.manipulator.MdReferencingElementManipulator"/>
         <lang.elementManipulator forClass="com.vladsch.md.nav.psi.text.MdPlainTextElementImpl" implementationClass="com.vladsch.md.nav.psi.text.MdPlainTextElementManipulator"/>
+        <lang.elementManipulator forClass="com.vladsch.md.nav.psi.element.MdRenameElement" implementationClass="com.vladsch.md.nav.psi.manipulator.MdRenameElementManipulator"/>
 
         <stubIndex implementation="com.vladsch.md.nav.psi.index.MdLinkElementIndex"/>
         <stubIndex implementation="com.vladsch.md.nav.psi.index.MdPlainTextElementIndex"/>
         <stubIndex implementation="com.vladsch.md.nav.psi.index.MdReferenceableTextIndex"/>
 
         <vetoRenameCondition implementation="com.vladsch.md.nav.psi.manipulator.MdNamedElementVetoRename"/>
+        <vetoRenameCondition implementation="com.vladsch.md.nav.psi.manipulator.MdRenameElementVetoRename"/>
 
         <stripTrailingSpacesFilterFactory implementation="com.vladsch.md.nav.language.MdStripTrailingSpacesFilterFactory"/>
         <multiHostInjector implementation="com.vladsch.md.nav.language.injection.MdLanguageInjector"/>

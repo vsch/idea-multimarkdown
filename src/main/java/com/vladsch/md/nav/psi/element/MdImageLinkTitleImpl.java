@@ -2,31 +2,10 @@
 package com.vladsch.md.nav.psi.element;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
-import com.vladsch.md.nav.psi.reference.MdPsiReference;
-import com.vladsch.md.nav.psi.util.MdPsiImplUtil;
-import org.jetbrains.annotations.NotNull;
 
-public class MdImageLinkTitleImpl extends MdNamedElementImpl implements MdImageLinkTitle {
+public class MdImageLinkTitleImpl extends MdPsiElementImpl implements MdImageLinkTitle {
     public MdImageLinkTitleImpl(ASTNode node) {
         super(node);
-    }
-
-    @Override
-    public MdPsiReference createReference(@NotNull TextRange textRange, final boolean exactReference) {
-        return new MdPsiReference(this, textRange, exactReference);
-    }
-
-    @NotNull
-    @Override
-    public String getDisplayName() {
-        return getParent() instanceof MdImageLink ? ((MdImageLink) getParent()).getDisplayName() : getName();
-    }
-
-    @Override
-    public PsiElement setName(@NotNull String newName, int reason) {
-        return MdPsiImplUtil.setName(this, newName, reason);
     }
 
     @Override

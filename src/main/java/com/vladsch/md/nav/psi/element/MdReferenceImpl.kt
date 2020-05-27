@@ -120,12 +120,12 @@ class MdReferenceImpl(stub: MdReferenceStub?, nodeType: IStubElementType<MdRefer
     }
 
     @Throws(IncorrectOperationException::class)
-    override fun handleContentChange(range: TextRange, newContent: String): MdNamedElement {
+    override fun handleContentChange(range: TextRange, newContent: String): MdRenameElement {
         return referenceNameElement?.handleContentChange(range, newContent) ?: this
     }
 
     @Throws(IncorrectOperationException::class)
-    override fun handleContentChange(newContent: String): MdNamedElement {
+    override fun handleContentChange(newContent: String): MdRenameElement {
         return referenceNameElement?.handleContentChange(newContent) ?: this
     }
 

@@ -5,12 +5,12 @@ package com.vladsch.md.nav.flex.psi;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.StubBasedPsiElement;
 import com.intellij.util.IncorrectOperationException;
-import com.vladsch.md.nav.psi.element.MdNamedElement;
+import com.vladsch.md.nav.psi.element.MdRenameElement;
 import com.vladsch.md.nav.psi.element.MdStructureViewPresentableItem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface FlexmarkExampleOption extends StubBasedPsiElement<FlexmarkExampleOptionStub>, MdNamedElement, MdStructureViewPresentableItem {
+public interface FlexmarkExampleOption extends StubBasedPsiElement<FlexmarkExampleOptionStub>, MdRenameElement, MdStructureViewPresentableItem {
     @NotNull
     String getOptionName();
 

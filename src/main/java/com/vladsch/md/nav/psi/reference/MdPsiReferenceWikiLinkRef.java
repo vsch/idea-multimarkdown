@@ -9,7 +9,7 @@ import com.intellij.util.IncorrectOperationException;
 import com.vladsch.md.nav.MdProjectComponent;
 import com.vladsch.md.nav.psi.element.MdExplicitLink;
 import com.vladsch.md.nav.psi.element.MdLinkElement;
-import com.vladsch.md.nav.psi.element.MdNamedElement;
+import com.vladsch.md.nav.psi.element.MdRenameElement;
 import com.vladsch.md.nav.psi.element.MdWikiLinkRef;
 import com.vladsch.md.nav.psi.util.MdPsiImplUtil;
 import com.vladsch.md.nav.psi.util.MdTypes;
@@ -44,7 +44,7 @@ public class MdPsiReferenceWikiLinkRef extends MdPsiReference {
                 ProjectFileRef targetRef = new ProjectFileRef(psiFile);
 
                 int renameFlags = MdProjectComponent.getInstance(myElement.getProject()).getRefactoringRenameFlags();
-                if (renameFlags != MdNamedElement.RENAME_NO_FLAGS && (renameFlags & MdNamedElement.RENAME_DROP_ANCHOR) != 0) {
+                if (renameFlags != MdRenameElement.RENAME_NO_FLAGS && (renameFlags & MdRenameElement.RENAME_DROP_ANCHOR) != 0) {
                     linkRef = linkRef.removeAnchor();
                 }
 
@@ -52,7 +52,7 @@ public class MdPsiReferenceWikiLinkRef extends MdPsiReference {
                 if (targetRef.isUnderWikiDir() && targetRef.getWikiDir().equals(containingFile.getWikiDir())) {
                     String linkAddress = new GitHubLinkResolver(myElement).linkAddress(linkRef, new FileRef(psiFile), null, null, null, true);
                     // this will create a new reference and loose connection to this one
-                    return myElement.setName(linkAddress, MdNamedElement.REASON_BIND_TO_FILE);
+                    return myElement.setName(linkAddress, MdRenameElement.REASON_BIND_TO_FILE);
                 } else {
                     // change to explicit link
                     GitHubLinkResolver resolver = new GitHubLinkResolver(myElement);

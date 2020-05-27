@@ -73,12 +73,12 @@ abstract class MdReferenceElementImpl(node: ASTNode) : ASTWrapperPsiElement(node
     //@Override
     //public ItemPresentation getPresentation() {return getReferenceIdentifier().getPresentation();}
     @Throws(IncorrectOperationException::class)
-    override fun handleContentChange(range: TextRange, newContent: String): MdNamedElement {
+    override fun handleContentChange(range: TextRange, newContent: String): MdRenameElement {
         return if (referenceIdentifier == null) this else referenceIdentifier!!.handleContentChange(range, newContent)
     }
 
     @Throws(IncorrectOperationException::class)
-    override fun handleContentChange(newContent: String): MdNamedElement {
+    override fun handleContentChange(newContent: String): MdRenameElement {
         return if (referenceIdentifier == null) this else referenceIdentifier!!.handleContentChange(newContent)
     }
 

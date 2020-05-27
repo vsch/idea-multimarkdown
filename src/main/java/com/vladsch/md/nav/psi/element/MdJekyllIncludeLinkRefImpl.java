@@ -12,7 +12,7 @@ import com.vladsch.md.nav.settings.MdRenderingProfileManager;
 import com.vladsch.md.nav.settings.ParserOptions;
 import org.jetbrains.annotations.NotNull;
 
-public class MdJekyllIncludeLinkRefImpl extends MdNamedElementImpl implements MdJekyllIncludeLinkRef {
+public class MdJekyllIncludeLinkRefImpl extends MdRenameElementImpl implements MdJekyllIncludeLinkRef {
 
     public MdJekyllIncludeLinkRefImpl(ASTNode node) {
         super(node);

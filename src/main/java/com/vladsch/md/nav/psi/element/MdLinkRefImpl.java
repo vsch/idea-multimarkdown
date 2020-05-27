@@ -11,7 +11,7 @@ import com.vladsch.md.nav.psi.util.MdPsiImplUtil;
 import com.vladsch.md.nav.util.PathInfo;
 import org.jetbrains.annotations.NotNull;
 
-public class MdLinkRefImpl extends MdNamedElementImpl implements MdLinkRef {
+public class MdLinkRefImpl extends MdRenameElementImpl implements MdLinkRef {
     public MdLinkRefImpl(ASTNode node) {
         super(node);
     }

@@ -3,6 +3,7 @@ Contents**</summary>
 
 [TOC]: # ""
 
+- [3.0.xxx.103 - Bug Fix Release](#30xxx103---bug-fix-release)
 - [3.0.xxx.101 - Bug Fix Release](#30xxx101---bug-fix-release)
 - [3.0.xxx.99 - Bug Fix Release](#30xxx99---bug-fix-release)
 - [3.0.xxx.97 - Bug Fix Release](#30xxx97---bug-fix-release)
@@ -27,6 +28,10 @@ Contents**</summary>
 - [2.9.8 - 2019.3 Compatibility Release](#298---20193-compatibility-release)
 
 &nbsp;</details>
+
+### 3.0.xxx.103 - Bug Fix Release
+
+* Fix: fix link refs to Java/Kotlin files for 2020.2 and AndroidStudio
 
 ### 3.0.xxx.101 - Bug Fix Release
 

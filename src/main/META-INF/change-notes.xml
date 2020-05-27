@@ -1,6 +1,10 @@
 <idea-plugin>
     <change-notes><![CDATA[
         <div xmlns="http://www.w3.org/1999/html">
+            <h3>3.0.201.103 - Bug Fix Release</h3>
+            <ul>
+                <li>Fix: fix link refs to Java/Kotlin files for 2020.2 and AndroidStudio</li>
+            </ul>
             <h3>3.0.201.101 - Bug Fix Release</h3>
             <ul>
                 <li>Fix: javafx tools debugger to handle failure when running Java 14 with

@@ -8,26 +8,26 @@ import com.vladsch.md.nav.psi.reference.MdPsiReference;
 import com.vladsch.md.nav.psi.util.MdPsiImplUtil;
 import org.jetbrains.annotations.NotNull;
 
-public class MdImageLinkTextImpl extends MdNamedElementImpl implements MdImageLinkText {
+public class MdImageLinkTextImpl extends MdPsiElementImpl implements MdImageLinkText {
     public MdImageLinkTextImpl(ASTNode node) {
         super(node);
     }
 
-    @Override
-    public MdPsiReference createReference(@NotNull TextRange textRange, final boolean exactReference) {
-        return new MdPsiReference(this, textRange, exactReference);
-    }
-
-    @NotNull
-    @Override
-    public String getDisplayName() {
-        return getParent() instanceof MdImageLink ? ((MdImageLink) getParent()).getDisplayName() : getName();
-    }
-
-    @Override
-    public PsiElement setName(@NotNull String newName, int reason) {
-        return MdPsiImplUtil.setName(this, newName, reason);
-    }
+    //@Override
+    //public MdPsiReference createReference(@NotNull TextRange textRange, final boolean exactReference) {
+    //    return new MdPsiReference(this, textRange, exactReference);
+    //}
+    //
+    //@NotNull
+    //@Override
+    //public String getDisplayName() {
+    //    return getParent() instanceof MdImageLink ? ((MdImageLink) getParent()).getDisplayName() : getName();
+    //}
+    //
+    //@Override
+    //public PsiElement setName(@NotNull String newName, int reason) {
+    //    return MdPsiImplUtil.setName(this, newName, reason);
+    //}
 
     @Override
     public String toString() {

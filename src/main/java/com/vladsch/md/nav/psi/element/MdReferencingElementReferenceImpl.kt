@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement
 import com.vladsch.md.nav.psi.reference.MdPsiReference
 import com.vladsch.md.nav.psi.util.MdPsiImplUtil
 
-abstract class MdReferencingElementReferenceImpl(node: ASTNode) : MdNamedElementImpl(node), MdReferencingElementReference {
+abstract class MdReferencingElementReferenceImpl(node: ASTNode) : MdRenameElementImpl(node), MdReferencingElementReference {
 
     override fun getText(): String? {
         val name = node.text

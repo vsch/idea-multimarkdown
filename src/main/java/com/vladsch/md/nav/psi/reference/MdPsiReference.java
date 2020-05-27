@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class MdPsiReference extends PsiReferenceBase<MdNamedElement> implements PsiPolyVariantReference, BindablePsiReference {
+public class MdPsiReference extends PsiReferenceBase<MdRenameElement> implements PsiPolyVariantReference, BindablePsiReference {
     public static final ResolveResult[] EMPTY_RESULTS = ResolveResult.EMPTY_ARRAY;
     protected ResolveResult[] resolveResults;
     protected String resolveResultsName;
@@ -51,7 +51,7 @@ public class MdPsiReference extends PsiReferenceBase<MdNamedElement> implements 
         return "Reference for " + myElement.toString();
     }
 
-    public MdPsiReference(@NotNull MdNamedElement element, @NotNull TextRange textRange, final boolean exactReference) {
+    public MdPsiReference(@NotNull MdRenameElement element, @NotNull TextRange textRange, final boolean exactReference) {
         super(element, textRange);
         this.exactReference = exactReference;
 
@@ -80,17 +80,17 @@ public class MdPsiReference extends PsiReferenceBase<MdNamedElement> implements 
                 ProjectFileRef targetRef = new ProjectFileRef(fileSystemItem);
                 LinkRef preservedLinkRef = resolver.preserveLinkFormat(linkRef, linkRef.replaceFilePath("", targetRef, false));
                 String mappedLinkRef = resolver.denormalizedLinkRef(preservedLinkRef.getFilePath());
-                return myElement.setName(mappedLinkRef, MdNamedElement.REASON_BIND_TO_FILE);
+                return myElement.setName(mappedLinkRef, MdRenameElement.REASON_BIND_TO_FILE);
             } else {
                 //skip silently, caused by multiple invocations of refactoring listener
                 return myElement;
             }
         } else if (element instanceof MdHeaderTextImpl && myElement instanceof MdLinkAnchorImpl) {
             String name = ((MdHeaderElementImpl) element.getParent()).getAnchorReferenceId();
-            if (name != null) return myElement.setName(name, MdNamedElement.REASON_FILE_MOVED);
+            if (name != null) return myElement.setName(name, MdRenameElement.REASON_FILE_MOVED);
         } else if (element.getClass() == myElement.getClass()) {
-            String name = ((MdNamedElement) element).getName();
-            if (!name.isEmpty()) return myElement.setName(name, MdNamedElement.REASON_FILE_MOVED);
+            String name = ((MdRenameElement) element).getName();
+            if (!name.isEmpty()) return myElement.setName(name, MdRenameElement.REASON_FILE_MOVED);
         }
         throw new IncorrectOperationException("Rebind cannot be performed for " + getClass());
     }

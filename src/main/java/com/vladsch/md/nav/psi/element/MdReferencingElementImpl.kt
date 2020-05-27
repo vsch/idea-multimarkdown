@@ -24,7 +24,7 @@ abstract class MdReferencingElementImpl(node: ASTNode) : ASTWrapperPsiElement(no
     }
 
     override fun getReferenceText(): String? {
-        return referenceTextElement?.name
+        return referenceTextElement?.text
     }
 
     override fun getReferenceTextElement(): MdReferencingElementText? {

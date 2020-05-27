@@ -8,7 +8,7 @@ import com.vladsch.md.nav.psi.reference.MdPsiReference;
 import com.vladsch.md.nav.psi.util.MdPsiImplUtil;
 import org.jetbrains.annotations.NotNull;
 
-public class MdWikiLinkTextImpl extends MdNamedElementImpl implements MdWikiLinkText {
+public class MdWikiLinkTextImpl extends MdRenameElementImpl implements MdWikiLinkText {
     public MdWikiLinkTextImpl(ASTNode node) {
         super(node);
     }

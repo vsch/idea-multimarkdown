@@ -52,12 +52,12 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import static com.vladsch.md.nav.psi.element.MdNamedElement.RENAME_ELEMENT_HANDLES_EXT;
-import static com.vladsch.md.nav.psi.element.MdNamedElement.RENAME_KEEP_ANCHOR;
-import static com.vladsch.md.nav.psi.element.MdNamedElement.RENAME_KEEP_NAME;
-import static com.vladsch.md.nav.psi.element.MdNamedElement.RENAME_KEEP_PATH;
-import static com.vladsch.md.nav.psi.element.MdNamedElement.RENAME_KEEP_TEXT;
-import static com.vladsch.md.nav.psi.element.MdNamedElement.RENAME_KEEP_TITLE;
+import static com.vladsch.md.nav.psi.element.MdRenameElement.RENAME_ELEMENT_HANDLES_EXT;
+import static com.vladsch.md.nav.psi.element.MdRenameElement.RENAME_KEEP_ANCHOR;
+import static com.vladsch.md.nav.psi.element.MdRenameElement.RENAME_KEEP_NAME;
+import static com.vladsch.md.nav.psi.element.MdRenameElement.RENAME_KEEP_PATH;
+import static com.vladsch.md.nav.psi.element.MdRenameElement.RENAME_KEEP_TEXT;
+import static com.vladsch.md.nav.psi.element.MdRenameElement.RENAME_KEEP_TITLE;
 import static com.vladsch.md.nav.psi.util.MdTokenSets.BLOCK_ELEMENT_SET;
 import static com.vladsch.md.nav.psi.util.MdTokenSets.BLOCK_QUOTE_LIKE_MARKER_SET;
 import static com.vladsch.md.nav.psi.util.MdTokenSets.NON_TEXT_INLINE_ELEMENTS;
@@ -1450,8 +1450,8 @@ public class MdPsiImplUtil {
     }
 
     @NotNull
-    public static MdNamedElement setName(
-            @NotNull MdNamedElement element,
+    public static MdRenameElement setName(
+            @NotNull MdRenameElement element,
             @NotNull String newName,
             int renameFlags
     ) {
@@ -1488,7 +1488,7 @@ public class MdPsiImplUtil {
                 assert newNode != null : "Unexpected, new ReferenceElement with null Reference child node";
 
                 parent.getNode().replaceChild(oldNode, newNode);
-                MdNamedElement newReference = (MdNamedElement) findChildByType(parent, parent.getReferenceChildType());
+                MdRenameElement newReference = (MdRenameElement) findChildByType(parent, parent.getReferenceChildType());
                 if (newReference != null) return newReference;
             }
             return element;
@@ -1499,8 +1499,8 @@ public class MdPsiImplUtil {
     }
 
     @NotNull
-    public static MdNamedElement setLinkRefName(
-            @NotNull MdNamedElement element,
+    public static MdRenameElement setLinkRefName(
+            @NotNull MdRenameElement element,
             @NotNull String newName,
             int renameFlags,
             @Nullable MdFile containingFile
@@ -1635,13 +1635,13 @@ public class MdPsiImplUtil {
                     parentAST.addChildren(newLinkRefChild, null, linkRefChild);
                     parentAST.removeRange(linkRefChild, null);
 
-                    MdNamedElement newElement = (MdNamedElement) findChildByType(parent, elementType);
+                    MdRenameElement newElement = (MdRenameElement) findChildByType(parent, elementType);
                     if (newElement != null) return newElement;
                 }
             } else {
-                MdNamedElement newElement = (MdNamedElement) findChildByType(newLink, elementType);
+                MdRenameElement newElement = (MdRenameElement) findChildByType(newLink, elementType);
                 if (newElement != null) {
-                    return (MdNamedElement) element.replace(newElement);
+                    return (MdRenameElement) element.replace(newElement);
                 }
             }
         }
