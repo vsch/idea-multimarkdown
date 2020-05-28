@@ -22,7 +22,7 @@ import com.vladsch.flexmark.util.ast.Node;
 import com.vladsch.flexmark.util.data.DataHolder;
 import com.vladsch.flexmark.util.data.DataKey;
 import com.vladsch.flexmark.util.html.Attribute;
-import com.vladsch.flexmark.util.html.Attributes;
+import com.vladsch.flexmark.util.html.MutableAttributes;
 import com.vladsch.flexmark.util.sequence.BasedSequence;
 import com.vladsch.md.nav.MdBundle;
 import com.vladsch.md.nav.parser.api.MdLinkMapProvider;
@@ -148,7 +148,7 @@ public class FlexmarkAttributeProvider implements AttributeProvider {
      * @param embedHttpImages embed http images
      */
     public static void embedImage(
-            Attributes attributes,
+            MutableAttributes attributes,
             final MdLinkResolver resolver,
             final boolean embedImages,
             final boolean embedHttpImages
@@ -166,7 +166,7 @@ public class FlexmarkAttributeProvider implements AttributeProvider {
                     boolean isGravizoPng = isUrlPath && bareUrl.startsWith(MdImageMultiLineUrlContentImpl.GRAVIZO_PNG_PREFIX_Q);
                     boolean isGravizoSvg = urlPath.isURI() && bareUrl.startsWith(MdImageMultiLineUrlContentImpl.GRAVIZO_SVG_PREFIX_Q);
                     boolean isCodeCogsSvg = isUrlPath && bareUrl.startsWith(MdImageMultiLineUrlContentImpl.CODECOGS_SVG_PREFIX_Q);
-//                    boolean isCodeCogsPng = urlPath.isURL() && bareUrl.startsWith(MdImageLinkRefUrlContentImpl.CODECOGS_PNG_PREFIX_Q);
+                    //                    boolean isCodeCogsPng = urlPath.isURL() && bareUrl.startsWith(MdImageLinkRefUrlContentImpl.CODECOGS_PNG_PREFIX_Q);
 
                     if (isGravizoPng) {
                         // change to SVG because PNG does not load
@@ -215,11 +215,11 @@ public class FlexmarkAttributeProvider implements AttributeProvider {
     }
 
     @Override
-    public void setAttributes(@NotNull Node node, @NotNull AttributablePart part, @NotNull Attributes attributes) {
+    public void setAttributes(@NotNull Node node, @NotNull AttributablePart part, @NotNull MutableAttributes attributes) {
         nodeAdapter.setAttributes(node, part, attributes);
     }
 
-    void setTableRowAttributes(TableRow node, AttributablePart part, Attributes attributes) {
+    void setTableRowAttributes(TableRow node, AttributablePart part, MutableAttributes attributes) {
         int rowNumber = node.getRowNumber();
         if (rowNumber != 0) {
             String rowType = node.getParent() instanceof TableHead ? "thead-" : "tbody-";
@@ -227,17 +227,17 @@ public class FlexmarkAttributeProvider implements AttributeProvider {
         }
     }
 
-    void setParagraphAttributes(Paragraph node, AttributablePart part, Attributes attributes) {
+    void setParagraphAttributes(Paragraph node, AttributablePart part, MutableAttributes attributes) {
         if (node.getParent() instanceof ListItem && ((ListItem) node.getParent()).isItemParagraph(node)) {
             attributes.replaceValue("class", "p");
         }
     }
 
-    void setListItemAttributes(ListItem node, AttributablePart part, Attributes attributes) {
+    void setListItemAttributes(ListItem node, AttributablePart part, MutableAttributes attributes) {
         attributes.replaceValue("class", part == LOOSE_LIST_ITEM ? "p" : "");
     }
 
-    void setTaskListItemAttributes(TaskListItem node, AttributablePart part, Attributes attributes) {
+    void setTaskListItemAttributes(TaskListItem node, AttributablePart part, MutableAttributes attributes) {
         if (useSwingAttributes) {
             if (part == TASK_ITEM_PARAGRAPH) {
                 attributes.replaceValue("class", "p");
@@ -259,30 +259,30 @@ public class FlexmarkAttributeProvider implements AttributeProvider {
         }
     }
 
-    void setHeadingAttributes(Heading node, AttributablePart part, Attributes attributes) {
+    void setHeadingAttributes(Heading node, AttributablePart part, MutableAttributes attributes) {
         if (isFirstH1 && node.getLevel() == 1) {
             isFirstH1 = false;
             attributes.replaceValue("class", "first-child");
         }
     }
 
-    void setWikiLinkAttributes(WikiLink node, AttributablePart part, Attributes attributes) {
+    void setWikiLinkAttributes(WikiLink node, AttributablePart part, MutableAttributes attributes) {
         setLinkAttributes(WIKI_LINK, part, attributes);
     }
 
-    void setFencedCodeAttributes(FencedCodeBlock node, AttributablePart part, Attributes attributes) {
+    void setFencedCodeAttributes(FencedCodeBlock node, AttributablePart part, MutableAttributes attributes) {
         if (!fencedCodePreTagClass.isEmpty() && part == NODE) {
             attributes.addValue("class", fencedCodePreTagClass);
         }
     }
 
-    void setIndentedCodeAttributes(IndentedCodeBlock node, AttributablePart part, Attributes attributes) {
+    void setIndentedCodeAttributes(IndentedCodeBlock node, AttributablePart part, MutableAttributes attributes) {
         if (!indentedCodePreTagClass.isEmpty() && part == NODE) {
             attributes.addValue("class", indentedCodePreTagClass);
         }
     }
 
-    void setImageAttributes(Image node, AttributablePart part, Attributes attributes) {
+    void setImageAttributes(Image node, AttributablePart part, MutableAttributes attributes) {
         if (!imageStyle.isEmpty()) {
             attributes.addValue(Attribute.STYLE_ATTR, imageStyle);
         }
@@ -290,12 +290,12 @@ public class FlexmarkAttributeProvider implements AttributeProvider {
         embedImage(attributes, resolver, embedImages, embedHttpImages);
     }
 
-    void setEmojiAttributes(Emoji node, AttributablePart part, Attributes attributes) {
+    void setEmojiAttributes(Emoji node, AttributablePart part, MutableAttributes attributes) {
         //setLinkAttributes(LinkType.IMAGE, part, attributes);
         embedImage(attributes, resolver, embedImages, embedHttpImages);
     }
 
-    void setImageRefAttributes(ImageRef node, AttributablePart part, Attributes attributes) {
+    void setImageRefAttributes(ImageRef node, AttributablePart part, MutableAttributes attributes) {
         if (!imageStyle.isEmpty()) {
             attributes.addValue(Attribute.STYLE_ATTR, imageStyle);
         }
@@ -303,15 +303,15 @@ public class FlexmarkAttributeProvider implements AttributeProvider {
         embedImage(attributes, resolver, embedImages, embedHttpImages);
     }
 
-    void setLinkAttributes(Link node, AttributablePart part, Attributes attributes) {
+    void setLinkAttributes(Link node, AttributablePart part, MutableAttributes attributes) {
         setLinkAttributes(LinkType.LINK, part, attributes);
     }
 
-    void setLinkRefAttributes(com.vladsch.flexmark.ast.LinkRef node, AttributablePart part, Attributes attributes) {
+    void setLinkRefAttributes(com.vladsch.flexmark.ast.LinkRef node, AttributablePart part, MutableAttributes attributes) {
         setLinkAttributes(LinkType.LINK, part, attributes);
     }
 
-    void setLinkAttributes(LinkType linkType, AttributablePart part, Attributes attributes) {
+    void setLinkAttributes(LinkType linkType, AttributablePart part, MutableAttributes attributes) {
         if (part == LINK) {
             String linkStatus = attributes.getValue(LINK_STATUS_ATTR);
 

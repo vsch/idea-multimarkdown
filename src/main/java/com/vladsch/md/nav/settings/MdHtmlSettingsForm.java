@@ -51,6 +51,7 @@ public class MdHtmlSettingsForm extends SettingsFormImpl {
     JBCheckBox myAnchorLinksWrapText;
     JBCheckBox myImageUriSerials;
     JBCheckBox myNoParaTags;
+    JBCheckBox myDefaultUrlTitle;
     @SuppressWarnings("unused") private JPanel myExtensionsPanel;
 
     @Nullable private ActionListener myUpdateListener;
@@ -88,6 +89,7 @@ public class MdHtmlSettingsForm extends SettingsFormImpl {
                         notrace("myAnchorLinksWrapText", component(myAnchorLinksWrapText, i::getAnchorLinksWrapText, i::setAnchorLinksWrapText)),
                         notrace("myImageUriSerials", component(myImageUriSerials, i::getImageUriSerials, i::setImageUriSerials)),
                         notrace("myNoParaTags", component(myNoParaTags, i::getNoParaTags, i::setNoParaTags)),
+                        trace("myDefaultUrlTitle", component(myDefaultUrlTitle, i::getDefaultUrlTitle, i::setDefaultUrlTitle)),
 
                         new Settable<ComboBox<HtmlGeneratorProvider.Info>>() {
                             @Override

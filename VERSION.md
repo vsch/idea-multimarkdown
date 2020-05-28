@@ -3,6 +3,7 @@ Contents**</summary>
 
 [TOC]: # ""
 
+- [3.0.xxx.105 - Bug Fix Release](#30xxx105---bug-fix-release)
 - [3.0.xxx.103 - Bug Fix Release](#30xxx103---bug-fix-release)
 - [3.0.xxx.101 - Bug Fix Release](#30xxx101---bug-fix-release)
 - [3.0.xxx.99 - Bug Fix Release](#30xxx99---bug-fix-release)
@@ -28,6 +29,11 @@ Contents**</summary>
 - [2.9.8 - 2019.3 Compatibility Release](#298---20193-compatibility-release)
 
 &nbsp;</details>
+
+### 3.0.xxx.105 - Bug Fix Release
+
+* Fix: HTML to Md converter to convert empty `a` tags to empty link text links.
+* Add: HTML Generation option `Use URL as default title`.
 
 ### 3.0.xxx.103 - Bug Fix Release
 

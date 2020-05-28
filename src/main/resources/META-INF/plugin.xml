@@ -30,12 +30,12 @@
     <depends optional="true" config-file="plugin-intellilang.xml">org.intellij.intelliLang</depends>
     <depends optional="true" config-file="plugin-java.xml">com.intellij.java</depends>
     <depends optional="true" config-file="plugin-grazie.xml">tanvd.grazi</depends>
-    <depends>com.intellij.platform.images</depends>
+    <depends optional="true" config-file="plugin-images.xml">com.intellij.platform.images</depends>
 
     <resource-bundle>com.vladsch.md.nav.localization.strings</resource-bundle>
 
     <!-- Included from: version.xml -->
-    <version>3.0.201.103.Legacy</version>
+    <version>3.0.201.105.Legacy</version>
     <idea-version since-build="201"/>
 
     <!-- Included from: description.xml -->
@@ -95,6 +95,11 @@
     <!-- Included from: change-notes.xml -->
     <change-notes><![CDATA[
         <div xmlns="http://www.w3.org/1999/html">
+            <h3>3.0.201.105 - Bug Fix Release</h3>
+            <ul>
+                <li>Fix: HTML to Md converter to convert empty <code>a</code> tags to empty link text links.</li>
+                <li>Add: HTML Generation option <code>Use URL as default title</code>.</li>
+            </ul>
             <h3>3.0.201.103 - Bug Fix Release</h3>
             <ul>
                 <li>Fix: fix link refs to Java/Kotlin files for 2020.2 and AndroidStudio</li>

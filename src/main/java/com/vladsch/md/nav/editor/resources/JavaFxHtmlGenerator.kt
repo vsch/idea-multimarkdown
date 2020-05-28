@@ -45,8 +45,6 @@ class JavaFxHtmlGenerator(linkResolver: MdLinkResolver, renderingProfile: MdRend
         @Suppress("NAME_SHADOWING")
         var dataContext = dataContext
         val project = linkResolver.project ?: ProjectManager.getInstance().defaultProject
-        val parserSettings = renderingProfile.parserSettings
-
         val optionAdapter = PegdownOptionsAdapter()
         val options = optionAdapter.getFlexmarkOptions(ParserPurpose.JAVAFX, htmlPurpose, linkResolver, renderingProfile).toMutable()
 

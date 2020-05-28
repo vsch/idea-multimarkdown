@@ -328,6 +328,11 @@ public class FlexmarkLinkResolver implements LinkResolver, Disposable {
                 } else {
                     result = result.withStatus(LinkStatus.UNCHECKED);
                 }
+                
+                // NOTE: add default title as URL
+                if (result.getTitle() == null && (renderingProfile != null && renderingProfile.getHtmlSettings().getDefaultUrlTitle())) {
+                    result = result.withTitle(result.getUrl());
+                }
             }
         }
 

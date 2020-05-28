@@ -80,10 +80,10 @@ public class FlexmarkJavaLineMarkerSpecTest extends MdJavaLineMarkerSpecTest {
     protected void tuneFixture(JavaModuleFixtureBuilder moduleBuilder) throws Exception {
         super.tuneFixture(moduleBuilder);
 
-        moduleBuilder.addJdk("/Applications/IntelliJ-IDEA-2019.3-CE-EAP.app/Contents/jbr/Contents/Home");
+        moduleBuilder.addJdk("/Applications/IntelliJ IDEA 2020.1 CE EAP.app.app/Contents/jbr/Contents/Home");
         moduleBuilder.setLanguageLevel(LanguageLevel.JDK_1_8);
         moduleBuilder.addLibrary("test_lib",
-                "/Users/vlad/src/projects/idea-multimarkdown3/WebViewDebugSample/lib/annotations-18.0.0.jar"
+                "/Users/vlad/src/projects/idea-multimarkdown3/WebViewDebugSample/lib/annotations-15.0.0.jar"
                 , "/Users/vlad/src/projects/idea-multimarkdown3/lib/flexmark-parent.jar"
                 , "/Users/vlad/src/projects/idea-multimarkdown3/lib/flexmark-util.jar"
                 , "/Users/vlad/src/projects/idea-multimarkdown3/lib/flexmark-test-util.jar"

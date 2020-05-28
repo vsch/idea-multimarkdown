@@ -1,7 +1,6 @@
 <component name="libraryTable">
   <library name="Gradle: com.vladsch.javafx-webview-debugger:javafx-webview-debugger:0.8.6">
     <CLASSES>
-      <root url="file:///Could not find com.vladsch.javafx-webview-debugger:javafx-webview-debugger:0.8.6.&#10;Required by:&#10;    project :" />
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.javafx-webview-debugger/javafx-webview-debugger/0.8.6/28f92a4fec9259176d895c24cca8dd9232298d6e/javafx-webview-debugger-0.8.6.jar!/" />
     </CLASSES>
     <JAVADOC />
