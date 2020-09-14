@@ -4,16 +4,20 @@
 [TOC levels=3,3]: #
 
 ### Table of Contents
-- [Document with pleasure!](#document-with-pleasure)
-- [Two tier model](#two-tier-model)
-- [Version 3.0.19x.64 - 2019.x Compatibility Release](#version-3019x64---2019x-compatibility-release)
-- [Version 2.9.11](#version-2911)
-- [Version 2.9.10](#version-2910)
-- [Version 2.9.9](#version-299)
-- [Version 2.9.0/2.9.7](#version-290297)
-- [Version 2.8.4](#version-284)
-- [Version 2.8.2](#version-282)
-- [Source Updated to 3.0.201.91](#source-updated-to-3020191)
+- [Overview](#overview)
+  - [Document with pleasure!](#document-with-pleasure)
+  - [Two tier model](#two-tier-model)
+- [Release Road Map](#release-road-map)
+  - [Version 3.0.xxx.108 - 2020.x Compatibility Release](#version-30xxx108---2020x-compatibility-release)
+  - [Version 3.0.19x.64 - 2019.x Compatibility Release](#version-3019x64---2019x-compatibility-release)
+  - [Version 2.9.11](#version-2911)
+  - [Version 2.9.10](#version-2910)
+  - [Version 2.9.9](#version-299)
+  - [Version 2.9.0/2.9.7](#version-290297)
+  - [Version 2.8.4](#version-284)
+  - [Version 2.8.2](#version-282)
+  - [Source Updated to 3.0.201.91](#source-updated-to-3020191)
+- [Background](#background)
 
 
 ## Overview
@@ -73,6 +77,15 @@ for:
 
 Release Road Map
 ----------------
+
+### Version 3.0.xxx.108 - 2020.x Compatibility Release
+
+* Long list of **Bug Fixes**, Full [Version Notes]
+* Compatibility with 2020.2 IDEs
+* Java Chromium Embedded Framework (JCEF) browser preview support
+* [Kroki.io] diagram rendering option for fenced code
+* [Fenced Code Rendering Settings]
+* Grazie grammar checker integration
 
 ### Version 3.0.19x.64 - 2019.x Compatibility Release
 
@@ -296,3 +309,6 @@ Reserved.
 [pegdown]: http://pegdown.org
 [sirthias]: https://github.com/sirthias
 
+
+[Kroki.io]: https://kroki.io
+[Fenced Code Rendering Settings]: https://github.com/vsch/idea-multimarkdown/wiki/Fenced-Code-Settings
