@@ -3,14 +3,11 @@
     <scope-profiles>
       <element scope="HTML Notice" profile="HTML Notice" />
       <element scope="Plugin Description" profile="Plugin Description" />
-      <element scope="launch-debug" profile="launch-debug" />
       <element scope="javadoc-overview" profile="javadoc-overview" />
       <element scope="Version" profile="Version" />
       <element scope="Support" profile="Support" />
       <element scope="InspectionDescriptions" profile="InspectionDescriptions" />
-      <element scope="Samples" profile="Samples" />
       <element scope="Wiki" profile="Wiki" />
-      <element scope="HTML Notice Enh" profile="HTML Notice Enh" />
     </scope-profiles>
   </settings>
 </component>
