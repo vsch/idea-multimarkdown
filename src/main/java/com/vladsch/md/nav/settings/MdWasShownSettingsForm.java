@@ -18,6 +18,7 @@ public class MdWasShownSettingsForm extends ApplicationSettingsContainer {
     private JPanel myMainPanel;
     JBCheckBox myLicensedAvailable;
     JBCheckBox myJavaFxAvailable;
+    JBCheckBox myJbCefAvailable;
     JBCheckBox myJekyllFrontMatter;
     JBCheckBox myUnicodeLineSeparator;
     JBCheckBox myGitHubSyntaxChange;
@@ -48,6 +49,7 @@ public class MdWasShownSettingsForm extends ApplicationSettingsContainer {
 // @formatter:off
                     component(myLicensedAvailable, i::getLicensedAvailable, i::setLicensedAvailable),
                     component(myJavaFxAvailable, i::getJavaFxAvailable, i::setJavaFxAvailable),
+                    component(myJbCefAvailable, i::getJbCefAvailable, i::setJbCefAvailable),
                     component(myJekyllFrontMatter, i::getJekyllFrontMatter, i::setJekyllFrontMatter),
                     component(myUnicodeLineSeparator, i::getUnicodeLineSeparator, i::setUnicodeLineSeparator),
                     component(myGitHubSyntaxChange, i::getGitHubSyntaxChange, i::setGitHubSyntaxChange),

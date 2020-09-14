@@ -133,8 +133,14 @@ abstract class PreviewFileEditorBase constructor(protected val myProject: Projec
     override fun toggleTask(pos: String) {
         // pos is start-end
         val taskOffset = pos.toIntOrNull() ?: return
+        if (myProject.isDisposed) return
+        
         ApplicationManager.getApplication().invokeLater {
+            if (myProject.isDisposed) return@invokeLater
+            
             WriteCommandAction.runWriteCommandAction(myProject) {
+                if (myProject.isDisposed) return@runWriteCommandAction
+                
                 val textLength = myDocument?.textLength ?: return@runWriteCommandAction
                 val charSequence = myDocument.charsSequence
                 if (taskOffset > 0 && taskOffset + 2 < textLength && charSequence[taskOffset - 1] == '[' && charSequence[taskOffset + 1] == ']') {
@@ -476,7 +482,7 @@ abstract class PreviewFileEditorBase constructor(protected val myProject: Projec
         var provider = HtmlPanelProvider.getFromInfoOrDefault(providerInfo)
 
         if (provider.isAvailable !== AvailabilityInfo.AVAILABLE && provider.isAvailable !== AvailabilityInfo.AVAILABLE_NOTUSED) {
-            val newSettings = myRenderingProfile.changeToProvider(providerInfo, null)
+            val newSettings = myRenderingProfile.changeToProvider(null, providerInfo)
             myRenderingProfile = newSettings
             provider = newSettings.previewSettings.htmPanelProvider
             val unavailableProviderInfo = providerInfo

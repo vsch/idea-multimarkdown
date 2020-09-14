@@ -1,4 +1,4 @@
 <idea-plugin>
     <version>${version}.Legacy</version>
-    <idea-version since-build="201"/>
+    <idea-version since-build="202"/>
 </idea-plugin>

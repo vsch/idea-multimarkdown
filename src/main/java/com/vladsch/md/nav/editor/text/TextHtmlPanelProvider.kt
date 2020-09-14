@@ -9,10 +9,10 @@ import com.vladsch.md.nav.editor.util.HtmlPanel
 import com.vladsch.md.nav.editor.util.HtmlPanelProvider
 
 object TextHtmlPanelProvider : HtmlPanelProvider() {
-    val NAME = MdBundle.message("editor.text.html.panel.provider.name")
-    val ID = "com.vladsch.md.nav.editor.text.html.panel"
-    override val INFO = Info(ID, NAME)
-    override val COMPATIBILITY = HtmlCompatibility(ID, null, null, null, arrayOf(), arrayOf())
+    val NAME: String = MdBundle.message("editor.text.html.panel.provider.name")
+    const val ID: String = "com.vladsch.md.nav.editor.text.html.panel"
+    override val INFO: Info = Info(ID, NAME)
+    override val COMPATIBILITY: HtmlCompatibility = HtmlCompatibility(ID, null, null, null, arrayOf(), arrayOf())
 
     override fun isSupportedSetting(settingName: String): Boolean {
         return false

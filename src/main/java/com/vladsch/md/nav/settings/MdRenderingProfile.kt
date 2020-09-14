@@ -416,13 +416,13 @@ class MdRenderingProfile(private val mySettingsExtensions: MdExtendableSettingsI
         return result
     }
 
-    fun changeToProvider(fromPanelProviderInfo: HtmlPanelProvider.Info?, toPanelProviderInfo: HtmlPanelProvider.Info?): MdRenderingProfile {
+    fun changeToProvider(fromPanelProviderInfo: HtmlPanelProvider.Info?, toPanelProviderInfo: HtmlPanelProvider.Info): MdRenderingProfile {
         val newRenderingProfile = MdRenderingProfile(this)
 
         newRenderingProfile.previewSettings.changeToProvider(fromPanelProviderInfo, toPanelProviderInfo)
-        newRenderingProfile.cssSettings.changeToProvider(fromPanelProviderInfo, newRenderingProfile.previewSettings.htmlPanelProviderInfo)
-        newRenderingProfile.htmlSettings.changeToProvider(fromPanelProviderInfo, newRenderingProfile.previewSettings.htmlPanelProviderInfo)
-        newRenderingProfile.parserSettings.changeToProvider(fromPanelProviderInfo, newRenderingProfile.previewSettings.htmlPanelProviderInfo)
+        newRenderingProfile.cssSettings.changeToProvider(fromPanelProviderInfo, toPanelProviderInfo)
+        newRenderingProfile.htmlSettings.changeToProvider(fromPanelProviderInfo, toPanelProviderInfo)
+        newRenderingProfile.parserSettings.changeToProvider(fromPanelProviderInfo, toPanelProviderInfo)
 
         mySettingsExtensions.containedExtensionKeys.forEach {
             it[newRenderingProfile.extensions].copyFrom(extensions)

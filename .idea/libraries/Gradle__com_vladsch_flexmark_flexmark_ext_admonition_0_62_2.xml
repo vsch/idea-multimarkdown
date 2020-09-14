@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.vladsch.flexmark:flexmark-ext-admonition:0.62.2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-ext-admonition/0.62.2/628cb037cd48eb96281377a9b0473e923353983c/flexmark-ext-admonition-0.62.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vladsch.flexmark/flexmark-ext-admonition/0.62.2/74f1d8da3bee7c571255a35c1289a6bc846c60f0/flexmark-ext-admonition-0.62.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

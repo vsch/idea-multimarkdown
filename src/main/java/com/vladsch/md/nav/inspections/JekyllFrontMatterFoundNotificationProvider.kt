@@ -15,7 +15,6 @@ import com.vladsch.md.nav.MdFileType
 import com.vladsch.md.nav.MdProjectComponent
 import com.vladsch.md.nav.psi.element.MdFile
 import com.vladsch.md.nav.settings.*
-import org.jetbrains.annotations.NotNull
 
 class JekyllFrontMatterFoundNotificationProvider : EditorNotifications.Provider<EditorNotificationPanel>(), DumbAware {
 
@@ -72,7 +71,7 @@ class JekyllFrontMatterFoundNotificationProvider : EditorNotifications.Provider<
             EditorNotifications.updateAll()
         }
 
-        panel.createActionLabel(MdBundle.message("editor.javafx.dont.show.again")) {
+        panel.createActionLabel(MdBundle.message("editor.dont.show.again")) {
             MdApplicationSettings.instance.wasShownSettings.jekyllFrontMatter = true
             EditorNotifications.updateAll()
         }

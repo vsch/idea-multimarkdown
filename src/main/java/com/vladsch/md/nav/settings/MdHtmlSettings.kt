@@ -2,6 +2,7 @@
 package com.vladsch.md.nav.settings
 
 import com.vladsch.md.nav.editor.javafx.JavaFxHtmlPanelProvider
+import com.vladsch.md.nav.editor.jbcef.JBCefHtmlPanelProvider
 import com.vladsch.md.nav.editor.resources.JavaFxHtmlGeneratorProvider
 import com.vladsch.md.nav.editor.resources.SwingHtmlGeneratorProvider
 import com.vladsch.md.nav.editor.resources.TextHtmlGeneratorProvider
@@ -230,9 +231,10 @@ class MdHtmlSettings(private val mySettingsExtensions: MdExtendableSettingsImpl 
     }
 
     companion object {
-        val DEFAULT: MdHtmlSettings by lazy { MdHtmlSettings(SwingHtmlGeneratorProvider.INFO, "", false, "", false, "", false, "", false, true, false, true, false, 0) }
-        val JAVAFX_DEFAULT: MdHtmlSettings by lazy { MdHtmlSettings(JavaFxHtmlGeneratorProvider.INFO, "", false, "", false, "", false, "", false, true, false, true, false, 0) }
-        val TEXT_DEFAULT: MdHtmlSettings by lazy { MdHtmlSettings(TextHtmlGeneratorProvider.INFO, "", false, "", false, "", false, "", false, false, false, false, false, 0) }
+        val DEFAULT: MdHtmlSettings by lazy { MdHtmlSettings(SwingHtmlGeneratorProvider.INFO, "", false, "", false, "", false, "", bodyBottomEnabled = false, addPageHeader = true, imageUriSerials = false, addDocTypeHtml = true, noParaTags = false, plantUmlConversion = 0) }
+        val JAVAFX_DEFAULT: MdHtmlSettings by lazy { MdHtmlSettings(JavaFxHtmlGeneratorProvider.INFO, "", false, "", false, "", false, "", bodyBottomEnabled = false, addPageHeader = true, imageUriSerials = false, addDocTypeHtml = true, noParaTags = false, plantUmlConversion = 0) }
+        val JBCEF_DEFAULT: MdHtmlSettings by lazy { MdHtmlSettings(JavaFxHtmlGeneratorProvider.INFO, "", false, "", false, "", false, "", bodyBottomEnabled = false, addPageHeader = true, imageUriSerials = false, addDocTypeHtml = true, noParaTags = false, plantUmlConversion = 0) }
+        val TEXT_DEFAULT: MdHtmlSettings by lazy { MdHtmlSettings(TextHtmlGeneratorProvider.INFO, "", false, "", false, "", false, "", bodyBottomEnabled = false, addPageHeader = false, imageUriSerials = false, addDocTypeHtml = false, noParaTags = false, plantUmlConversion = 0) }
         const val ADD_PAGE_HEADER: String = "html.addPageHeader"
         const val ADD_DOC_TYPE_HTML: String = "html.addDocTypeHtml"
 
@@ -247,6 +249,7 @@ class MdHtmlSettings(private val mySettingsExtensions: MdExtendableSettingsImpl 
             return when (htmlPanelProvider) {
                 null -> DEFAULT
                 JavaFxHtmlPanelProvider.INFO -> JAVAFX_DEFAULT
+                JBCefHtmlPanelProvider.INFO -> JBCEF_DEFAULT
                 TextHtmlPanelProvider.INFO -> TEXT_DEFAULT
                 else -> {
                     DEFAULT

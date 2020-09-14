@@ -54,7 +54,7 @@ var scrollToSourcePosition;  // if set then a function taking 1 element, see git
     };
 
     function scrollToSourcePositionRaw(verticalLocation, scrollTag, scrollAttribute, scrollReference, highlightEnabled, onTypingUpdate, highlightOnTyping, highlightFadeOut) {
-        //    markdownNavigator.debug('scrollToPosition(' + verticalLocation + ', ' + scrollTag + ', ' + scrollAttribute + ', ' + scrollReference + ')');
+        //    console.debug('scrollToPosition(' + verticalLocation + ', ' + scrollTag + ', ' + scrollAttribute + ', ' + scrollReference + ')');
         try {
             if (!(scrollTag !== '' && scrollAttribute !== '' && scrollReference !== '')) {
                 return;
@@ -106,7 +106,7 @@ var scrollToSourcePosition;  // if set then a function taking 1 element, see git
                     let style = window.getComputedStyle(elements),
                         position = style.getPropertyValue('position');
 
-                    //                markdownNavigator.debug("elems: offsetTop:" + elements.offsetTop + ' elementTag:' + tagName + ' position:' + position);
+                    // console.debug("elems: offsetTop:" + elements.offsetTop + ' elementTag:' + tagName + ' position:' + position);
 
                     if (!highlightElemSet && (!inTable || tagName === 'TR')) {
                         highlightElem = elements;
@@ -258,8 +258,8 @@ var scrollToSourcePosition;  // if set then a function taking 1 element, see git
             }
 
             let onLoadScroll = {x: window.pageXOffset, y: window.pageYOffset};
-            // markdownNavigator.debug("onLoadScroll" + JSON.stringify(onLoadScroll, null, "  "));
-            console.debug("onLoadScroll", onLoadScroll);
+            // console.debug("onLoadScroll" + JSON.stringify(onLoadScroll, null, "  "));
+            console.debug("scroll", onLoadScroll);
             markdownNavigator.setState("onLoadScroll", onLoadScroll);
             scrolledToSourcePosition = false;
         });

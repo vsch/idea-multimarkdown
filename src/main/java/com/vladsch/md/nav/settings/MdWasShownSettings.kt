@@ -12,6 +12,7 @@ class MdWasShownSettings(private val mySettingsExtensions: MdExtendableSettingsI
 
     var licensedAvailable: Boolean = false
     var javaFxAvailable: Boolean = false
+    var jbCefAvailable: Boolean = false
     private var _lastFeatureUpdateVersion: String = ""
 
     var lastFeatureUpdateVersion: String
@@ -46,6 +47,7 @@ class MdWasShownSettings(private val mySettingsExtensions: MdExtendableSettingsI
     fun copyFrom(other: MdWasShownSettings, withExtensions: Boolean = true) {
         licensedAvailable = other.licensedAvailable
         javaFxAvailable = other.javaFxAvailable
+        jbCefAvailable = other.jbCefAvailable
         _lastFeatureUpdateVersion = other._lastFeatureUpdateVersion
         jekyllFrontMatter = other.jekyllFrontMatter
         unicodeLineSeparator = other.unicodeLineSeparator
@@ -64,6 +66,7 @@ class MdWasShownSettings(private val mySettingsExtensions: MdExtendableSettingsI
         StringAttribute("lastFeatureUpdateVersion", { lastFeatureUpdateVersion }, { lastFeatureUpdateVersion = it }),
         StringAttribute("lastLicensedAvailableVersion", { lastLicensedAvailableVersion }, { lastLicensedAvailableVersion = it }),
         BooleanAttribute("javaFxAvailable", { javaFxAvailable }, { javaFxAvailable = it }),
+        BooleanAttribute("jbCefAvailable", { jbCefAvailable }, { jbCefAvailable = it }),
         BooleanAttribute("jekyllFrontMatter", { jekyllFrontMatter }, { jekyllFrontMatter = it }),
         BooleanAttribute("unicodeLineSeparator", { unicodeLineSeparator }, { unicodeLineSeparator = it }),
         BooleanAttribute("gitHubSyntaxChange", { gitHubSyntaxChange }, { gitHubSyntaxChange = it }),
@@ -85,6 +88,7 @@ class MdWasShownSettings(private val mySettingsExtensions: MdExtendableSettingsI
 
         if (licensedAvailable != other.licensedAvailable) return false
         if (javaFxAvailable != other.javaFxAvailable) return false
+        if (jbCefAvailable != other.jbCefAvailable) return false
         if (jekyllFrontMatter != other.jekyllFrontMatter) return false
         if (unicodeLineSeparator != other.unicodeLineSeparator) return false
         if (gitHubSyntaxChange != other.gitHubSyntaxChange) return false
@@ -102,6 +106,7 @@ class MdWasShownSettings(private val mySettingsExtensions: MdExtendableSettingsI
         var result = mySettingsExtensions.hashCode()
         result += 31 * result + licensedAvailable.hashCode()
         result += 31 * result + javaFxAvailable.hashCode()
+        result += 31 * result + jbCefAvailable.hashCode()
         result += 31 * result + jekyllFrontMatter.hashCode()
         result += 31 * result + unicodeLineSeparator.hashCode()
         result += 31 * result + gitHubSyntaxChange.hashCode()

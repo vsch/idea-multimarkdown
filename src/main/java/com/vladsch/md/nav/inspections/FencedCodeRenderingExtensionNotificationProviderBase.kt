@@ -110,7 +110,7 @@ abstract class FencedCodeRenderingExtensionNotificationProviderBase : EditorNoti
                 EditorNotifications.updateAll()
             }
 
-            panel.createActionLabel(MdBundle.message("editor.javafx.dont.show.again")) {
+            panel.createActionLabel(MdBundle.message("editor.dont.show.again")) {
                 wasShown = true
                 EditorNotifications.updateAll()
             }

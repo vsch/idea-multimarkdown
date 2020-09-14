@@ -84,7 +84,7 @@ public class FlexmarkLineMarkerProvider extends RelatedItemLineMarkerProvider {
     }
 
     @Override
-    protected void collectNavigationMarkers(@NotNull final PsiElement element1, @NotNull Collection<? super RelatedItemLineMarkerInfo> result) {
+    protected void collectNavigationMarkers(@NotNull final PsiElement element1, @NotNull Collection<? super RelatedItemLineMarkerInfo<?>> result) {
         if (element1 instanceof LeafPsiElement) {
             PsiElement element = element1.getParent();
 

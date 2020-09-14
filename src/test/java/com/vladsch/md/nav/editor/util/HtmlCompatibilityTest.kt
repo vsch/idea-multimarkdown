@@ -20,8 +20,14 @@
  */
 package com.vladsch.md.nav.editor.util
 
+import com.vladsch.md.nav.editor.jbcef.JBCefHtmlPanelProvider
+import com.vladsch.md.nav.editor.resources.GitHubCollapseInCommentScriptProvider
+import com.vladsch.md.nav.editor.resources.GitHubCollapseMarkdownScriptProvider
+import com.vladsch.md.nav.editor.resources.HljsScriptProvider
+import com.vladsch.md.nav.editor.resources.PrismScriptProvider
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import kotlin.test.assertTrue
 
 class HtmlCompatibilityTest {
 
@@ -87,6 +93,16 @@ class HtmlCompatibilityTest {
         assertEquals("Compatible failed", true, HtmlCompatibility(resource, 3f, 1f, 0f, arrayOf(), arrayOf()).isForAvailable(available))
         assertEquals("Compatible failed", true, HtmlCompatibility(resource, 2.9f, 1f, 0f, arrayOf(), arrayOf()).isForAvailable(available))
         assertEquals("Compatible failed", true, HtmlCompatibility(resource, 3f, 1f, null, arrayOf(), arrayOf()).isForAvailable(available))
+    }
+
+    @Test
+    fun test_JavaFxJbCef_Compatible() {
+        val panel = JBCefHtmlPanelProvider.COMPATIBILITY
+        
+        assertTrue(GitHubCollapseMarkdownScriptProvider.COMPATIBILITY.isForAvailable(panel))
+        assertTrue(GitHubCollapseInCommentScriptProvider.COMPATIBILITY.isForAvailable(panel))
+        assertTrue(HljsScriptProvider.COMPATIBILITY.isForAvailable(panel))
+        assertTrue(PrismScriptProvider.COMPATIBILITY.isForAvailable(panel))
     }
 }
 

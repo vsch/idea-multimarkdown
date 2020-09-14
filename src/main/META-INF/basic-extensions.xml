@@ -60,6 +60,8 @@
         <editorNotificationProvider implementation="com.vladsch.md.nav.inspections.LineSeparatorFoundNotificationProvider"/>
         <editorNotificationProvider implementation="com.vladsch.md.nav.inspections.AutoLinksEnabledInLargeFileNotificationProvider"/>
         <editorNotificationProvider implementation="com.vladsch.md.nav.inspections.PlantUmlParserExtensionNotificationProvider"/>
+        <editorNotificationProvider implementation="com.vladsch.md.nav.inspections.JavaFxCouldBeEnabledNotificationProvider"/>
+        <editorNotificationProvider implementation="com.vladsch.md.nav.inspections.JbCefCouldBeEnabledNotificationProvider"/>
 
         <editorHighlighterProvider filetype="Markdown" implementationClass="com.vladsch.md.nav.highlighter.MdEditorHighlighterProvider"/>
 
@@ -140,6 +142,7 @@
         <editorCustomizationProvider implementation="com.vladsch.md.nav.actions.handlers.util.SmartInsertEditorRangeHighlighterProvider"/>
 
         <html.panel.provider implementation="com.vladsch.md.nav.editor.swing.SwingHtmlPanelProvider"/>
+        <html.panel.provider implementation="com.vladsch.md.nav.editor.jbcef.JBCefHtmlPanelProvider"/>
         <html.panel.provider implementation="com.vladsch.md.nav.editor.javafx.JavaFxHtmlPanelProvider"/>
         <html.panel.provider implementation="com.vladsch.md.nav.editor.text.TextHtmlPanelProvider"/>
 

@@ -7,6 +7,7 @@ import com.intellij.openapi.application.Application
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.ui.scale.JBUIScale
 import com.vladsch.md.nav.editor.javafx.JavaFxHtmlPanelProvider
+import com.vladsch.md.nav.editor.jbcef.JBCefHtmlPanelProvider
 import com.vladsch.md.nav.editor.split.SplitFileEditor.SplitEditorLayout
 import com.vladsch.md.nav.editor.split.SplitFileEditor.SplitEditorPreviewType
 import com.vladsch.md.nav.editor.swing.SwingHtmlPanelProvider
@@ -190,7 +191,7 @@ class MdPreviewSettings(private val mySettingsExtensions: MdExtendableSettingsIm
     val htmPanelProvider: HtmlPanelProvider get() = HtmlPanelProvider.getFromInfoOrDefault(htmlPanelProviderInfo)
 
     @Suppress("UNUSED_PARAMETER")
-    fun changeToProvider(fromPanelProviderInfo: HtmlPanelProvider.Info?, toPanelProviderInfo: HtmlPanelProvider.Info?) {
+    fun changeToProvider(fromPanelProviderInfo: HtmlPanelProvider.Info?, toPanelProviderInfo: HtmlPanelProvider.Info) {
         val defaults = getDefaultSettings(toPanelProviderInfo)
         htmlPanelProviderInfo = defaults.htmlPanelProviderInfo
     }
@@ -221,6 +222,7 @@ class MdPreviewSettings(private val mySettingsExtensions: MdExtendableSettingsIm
         const val EXPERIMENTAL_WARNING:String = "preview.experimentalWarning"
 
         @JvmField val JAVAFX_DEFAULT:MdPreviewSettings = MdPreviewSettings(SplitEditorLayout.SPLIT, SplitEditorPreviewType.PREVIEW, JavaFxHtmlPanelProvider().INFO, false, DEFAULT_ZOOM_FACTOR, 0, true, HighlightPreviewType.LINE, DEFAULT_HIGHLIGHT_FADEOUT, true, true, true, false, true, false)
+        @JvmField val JBCEF_DEFAULT:MdPreviewSettings = MdPreviewSettings(SplitEditorLayout.SPLIT, SplitEditorPreviewType.PREVIEW, JBCefHtmlPanelProvider().INFO, false, DEFAULT_ZOOM_FACTOR, 0, true, HighlightPreviewType.LINE, DEFAULT_HIGHLIGHT_FADEOUT, true, true, true, false, true, false)
         @JvmField val DEFAULT:MdPreviewSettings = MdPreviewSettings(SplitEditorLayout.SPLIT, SplitEditorPreviewType.PREVIEW, SwingHtmlPanelProvider.INFO, false, DEFAULT_ZOOM_FACTOR, 0, true, HighlightPreviewType.NONE, DEFAULT_HIGHLIGHT_FADEOUT, true, true, true, false, true, false)
         @JvmField val TEXT_DEFAULT:MdPreviewSettings = MdPreviewSettings(SplitEditorLayout.SPLIT, SplitEditorPreviewType.PREVIEW, TextHtmlPanelProvider.INFO, false, DEFAULT_ZOOM_FACTOR, 0, true, HighlightPreviewType.NONE, DEFAULT_HIGHLIGHT_FADEOUT, true, true, true, false, true, false)
         // @formatter:on
@@ -237,9 +239,9 @@ class MdPreviewSettings(private val mySettingsExtensions: MdExtendableSettingsIm
 
         @JvmStatic
         fun getDefaultSettings(htmlPanelProvider: HtmlPanelProvider.Info?): MdPreviewSettings {
-            if (htmlPanelProvider == null) return DEFAULT
             if (htmlPanelProvider == SwingHtmlPanelProvider.INFO) return DEFAULT
             if (htmlPanelProvider == JavaFxHtmlPanelProvider().INFO) return JAVAFX_DEFAULT
+            if (htmlPanelProvider == JBCefHtmlPanelProvider().INFO) return JBCEF_DEFAULT
             if (htmlPanelProvider == TextHtmlPanelProvider.INFO) return TEXT_DEFAULT
             return DEFAULT
         }

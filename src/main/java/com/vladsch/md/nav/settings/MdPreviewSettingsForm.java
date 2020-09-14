@@ -201,10 +201,6 @@ public class MdPreviewSettingsForm extends SettingsFormImpl {
                         return null;
                     }
 
-                    if (!((provider.getINFO() == SwingHtmlPanelProvider.INSTANCE.getINFO() || provider.getINFO() == new JavaFxHtmlPanelProvider().getINFO()))) {
-                        return null;
-                    }
-
                     return provider.getINFO();
                 });
     }

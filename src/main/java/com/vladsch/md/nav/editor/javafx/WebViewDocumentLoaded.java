@@ -7,7 +7,7 @@ import com.intellij.util.messages.Topic;
 import org.jetbrains.annotations.NotNull;
 
 public interface WebViewDocumentLoaded {
-    Topic TOPIC = Topic.create("WebViewDocumentLoaded", WebViewDocumentLoaded.class, Topic.BroadcastDirection.NONE);
+    Topic<WebViewDocumentLoaded> TOPIC = Topic.create("WebViewDocumentLoaded", WebViewDocumentLoaded.class, Topic.BroadcastDirection.NONE);
 
     void onDocumentLoaded(@NotNull VirtualFile virtualFile);
 }

@@ -65,12 +65,16 @@ class JavaFxHtmlPanelProvider : HtmlPanelProvider() {
         }
 
     companion object {
-        val NAME = MdBundle.message("editor.javafx.html.panel.provider.name")
-        val ID = "com.vladsch.md.nav.editor.javafx.html.panel"
-        val INFO = HtmlPanelProvider.Info(ID, NAME)
-        val COMPATIBILITY = HtmlCompatibility(ID, 4f, 3f, 4f, arrayOf(), arrayOf())
+        @JvmField
+        val NAME: String = MdBundle.message("editor.javafx.html.panel.provider.name")
+        
+        const val ID = "com.vladsch.md.nav.editor.javafx.html.panel"
 
-        private var MY_CLASS_LOADER: ClassLoader? = null
+        @JvmField
+        val INFO: Info = HtmlPanelProvider.Info(ID, NAME)
+
+        @JvmField
+        val COMPATIBILITY: HtmlCompatibility = HtmlCompatibility(ID, 4f, 3f, 4f, arrayOf(), arrayOf())
 
         fun hasClass(classPath: String): Boolean {
             return try {

@@ -64,7 +64,7 @@ public class ProjectFileMonitor implements Disposable {
              * @param fileEditors The list of files that will be analyzed during the current execution of the daemon.
              */
             @Override
-            public void daemonStarting(@NotNull Collection<FileEditor> fileEditors) {
+            public void daemonStarting(@NotNull Collection<? extends FileEditor> fileEditors) {
                 PsiManager psiManager = PsiManagerEx.getInstance(myProject);
                 for (FileEditor fileEditor : fileEditors) {
                     VirtualFile virtualFile = fileEditor.getFile();

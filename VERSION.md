@@ -3,6 +3,7 @@ Contents**</summary>
 
 [TOC]: # ""
 
+- [3.0.xxx.108 - Bug Fix Release](#30xxx108---bug-fix-release)
 - [3.0.xxx.105 - Bug Fix Release](#30xxx105---bug-fix-release)
 - [3.0.xxx.103 - Bug Fix Release](#30xxx103---bug-fix-release)
 - [3.0.xxx.101 - Bug Fix Release](#30xxx101---bug-fix-release)
@@ -29,6 +30,14 @@ Contents**</summary>
 - [2.9.8 - 2019.3 Compatibility Release](#298---20193-compatibility-release)
 
 &nbsp;</details>
+
+### 3.0.xxx.108 - Bug Fix Release
+
+* Fix: update tests for 2020.2 EAP
+* Fix: update mermaid script to version `8.5.2`, from `7.0.5`
+* Fix: update `flexmark-java` to version `0.62.2`
+* Fix: add javaFX plugin dependency for 2020.2 compatibility
+* Add: Support for JCEF Browser
 
 ### 3.0.xxx.105 - Bug Fix Release
 

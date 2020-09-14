@@ -4,6 +4,7 @@ package com.vladsch.md.nav.editor.resources
 
 import com.vladsch.md.nav.MdBundle
 import com.vladsch.md.nav.editor.javafx.JavaFxHtmlPanelProvider
+import com.vladsch.md.nav.editor.util.HtmlCompatibility
 import com.vladsch.md.nav.editor.util.HtmlCssResource
 import com.vladsch.md.nav.editor.util.HtmlScriptResource
 import com.vladsch.md.nav.editor.util.HtmlScriptResourceProvider
@@ -11,11 +12,16 @@ import com.vladsch.md.nav.settings.MdPreviewSettings
 import org.intellij.lang.annotations.Language
 
 object GitHubCollapseInCommentScriptProvider : HtmlScriptResourceProvider() {
-    val NAME = MdBundle.message("editor.github-collapse-in-comment.html.script.provider.name")
-    val ID = "com.vladsch.md.nav.editor.github-collapse-in-comment.html.script"
-    override val HAS_PARENT = false
-    override val INFO = HtmlScriptResourceProvider.Info(ID, NAME)
-    override val COMPATIBILITY = JavaFxHtmlPanelProvider.COMPATIBILITY
+    @JvmField
+    val NAME: String = MdBundle.message("editor.github-collapse-in-comment.html.script.provider.name")
+    
+    const val ID: String = "com.vladsch.md.nav.editor.github-collapse-in-comment.html.script"
+
+    override val HAS_PARENT: Boolean = false
+
+    override val INFO: Info = Info(ID, NAME)
+
+    override val COMPATIBILITY: HtmlCompatibility = JavaFxHtmlPanelProvider.COMPATIBILITY
 
     @Language("HTML")
     override val scriptResource: HtmlScriptResource = GitHubCollapseInCommentsScriptResource(INFO, "", """

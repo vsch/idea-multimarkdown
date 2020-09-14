@@ -1,6 +1,14 @@
 <idea-plugin>
     <change-notes><![CDATA[
         <div xmlns="http://www.w3.org/1999/html">
+            <h3>3.0.202.108 - Bug Fix Release</h3>
+            <ul>
+                <li>Fix: update tests for 2020.2 EAP</li>
+                <li>Fix: update mermaid script to version <code>8.5.2</code>, from <code>7.0.5</code></li>
+                <li>Fix: update <code>flexmark-java</code> to version <code>0.62.2</code></li>
+                <li>Fix: add javaFX plugin dependency for 2020.2 compatibility</li>
+                <li>Add: Support for JCEF Browser</li>
+            </ul>
             <h3>3.0.201.105 - Bug Fix Release</h3>
             <ul>
                 <li>Fix: HTML to Md converter to convert empty <code>a</code> tags to empty link text links.</li>

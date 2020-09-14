@@ -6,6 +6,7 @@ import com.intellij.util.ui.UIUtil
 import com.vladsch.md.nav.MdBundle
 import com.vladsch.md.nav.MdProjectComponent
 import com.vladsch.md.nav.editor.javafx.JavaFxHtmlPanelProvider
+import com.vladsch.md.nav.editor.jbcef.JBCefHtmlPanelProvider
 import com.vladsch.md.nav.editor.resources.HljsScriptProvider
 import com.vladsch.md.nav.editor.resources.JavaFxHtmlCssProvider
 import com.vladsch.md.nav.editor.resources.SwingHtmlCssProvider
@@ -220,18 +221,22 @@ class MdCssSettings(private val mySettingsExtensions: MdExtendableSettingsImpl =
         @JvmField
         val DEFAULT: MdCssSettings = MdCssSettings(PreviewScheme.UI_SCHEME, SwingHtmlCssProvider.INFO, arrayListOf<HtmlScriptResourceProvider.Info>(), false, true, "", false, "", true, listOf())
 
-        //        @JvmField val LOBO_DEFAULT: MarkdownCssSettings = MarkdownCssSettings(PreviewScheme.UI_SCHEME, LoboHtmlCssProvider.INFO, arrayListOf<HtmlScriptResourceProvider.Info>(), false, true, "", false, "", true)
         @JvmField
         val JAVAFX_DEFAULT: MdCssSettings = MdCssSettings(PreviewScheme.UI_SCHEME, JavaFxHtmlCssProvider.INFO, arrayListOf(HljsScriptProvider.INFO), false, true, "", false, "", true, listOf())
 
-        @JvmField
-        val TEXT_DEFAULT: MdCssSettings = MdCssSettings(PreviewScheme.UI_SCHEME, TextHtmlCssProvider.INFO, arrayListOf<HtmlScriptResourceProvider.Info>(), false, true, "", false, "", true, listOf())
+        private val JBCEF_DEFAULT: MdCssSettings = MdCssSettings(PreviewScheme.UI_SCHEME, JavaFxHtmlCssProvider.INFO, arrayListOf(HljsScriptProvider.INFO), false, true, "", false, "", true, listOf())
 
         @JvmField
-        val UNLICENSED_DEFAULT: MdCssSettings = MdCssSettings(PreviewScheme.UI_SCHEME, SwingHtmlCssProvider.INFO, arrayListOf<HtmlScriptResourceProvider.Info>(), false, true, "", false, "", true, listOf())
+        val JAVAFX_JBCEF_PANEL_INFO: Array<HtmlPanelProvider.Info> = arrayOf(JavaFxHtmlPanelProvider.INFO, JBCefHtmlPanelProvider.INFO)
 
-        @JvmField
-        val UNLICENSED_JAVAFX_DEFAULT: MdCssSettings = MdCssSettings(PreviewScheme.UI_SCHEME, JavaFxHtmlCssProvider.INFO, arrayListOf<HtmlScriptResourceProvider.Info>(), false, true, "", false, "", true, listOf())
+        fun isJavaFxOrJbCefPanelProvider(panelProviderInfo: HtmlPanelProvider.Info): Boolean {
+            for (providerInfo in JAVAFX_JBCEF_PANEL_INFO) {
+                if (providerInfo.providerId == panelProviderInfo.providerId) {
+                    return true
+                }
+            }
+            return false
+        }
 
         fun injectHtmlResource(linkResolver: MdLinkResolver, renderingProfile: MdRenderingProfile, injections: ArrayList<InjectHtmlResource?>): Unit {
             val dataContext = SimpleDataContext.getSimpleContext(Collections.emptyMap(), null)
@@ -259,6 +264,7 @@ class MdCssSettings(private val mySettingsExtensions: MdExtendableSettingsImpl =
         fun getDefaultSettings(htmlPanelProvider: HtmlPanelProvider.Info?): MdCssSettings {
             return when (htmlPanelProvider) {
                 JavaFxHtmlPanelProvider.INFO -> JAVAFX_DEFAULT
+                JBCefHtmlPanelProvider.INFO -> JBCEF_DEFAULT
                 TextHtmlPanelProvider.INFO, null -> DEFAULT
                 else -> DEFAULT
             }
@@ -266,14 +272,11 @@ class MdCssSettings(private val mySettingsExtensions: MdExtendableSettingsImpl =
     }
 
     fun changeToProvider(fromPanelProviderInfo: HtmlPanelProvider.Info?, toPanelProviderInfo: HtmlPanelProvider.Info) {
-        if (fromPanelProviderInfo != null && fromPanelProviderInfo != toPanelProviderInfo) {
-            val previewSettings = MdPreviewSettings.getDefaultSettings(toPanelProviderInfo)
-//            val provider = previewSettings.htmlPanelProvider
-            val defaults = getDefaultSettings(previewSettings.htmlPanelProviderInfo)
+        //            val previewSettings = MdPreviewSettings.getDefaultSettings(toPanelProviderInfo)
+        val defaults = getDefaultSettings(toPanelProviderInfo)
 
-            cssProviderInfo = defaults.cssProviderInfo
-            htmlScriptProvidersInfo = defaults.htmlScriptProvidersInfo
-        }
+        cssProviderInfo = if (fromPanelProviderInfo == toPanelProviderInfo) cssProviderInfo else  defaults.cssProviderInfo
+        htmlScriptProvidersInfo = if (fromPanelProviderInfo == toPanelProviderInfo) htmlScriptProvidersInfo else defaults.htmlScriptProvidersInfo
     }
 
     private fun getCompatibleScriptProviders(htmlPanelProvider: HtmlPanelProvider, scriptProvidersInfo: ArrayList<HtmlScriptResourceProvider.Info>): ArrayList<HtmlScriptResourceProvider.Info> {

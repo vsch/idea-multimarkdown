@@ -337,6 +337,7 @@ class MdPlugin : BaseComponent, Disposable {
         const val PREVIEW_FX_STYLESHEET_DARK: String = "/com/vladsch/md/nav/darcula-fx.css"
 
         const val PREVIEW_FX_JS: String = "/com/vladsch/md/nav/markdown-navigator.js"
+        const val PREVIEW_JBCEF_JS: String = "/com/vladsch/md/nav/markdown-navigator-jcef.js"
 
         const val PREVIEW_FX_HLJS_STYLESHEET_LIGHT: String = "/com/vladsch/md/nav/hljs-default.css"
         const val PREVIEW_FX_HLJS_STYLESHEET_DARK: String = "/com/vladsch/md/nav/hljs-darcula.css"

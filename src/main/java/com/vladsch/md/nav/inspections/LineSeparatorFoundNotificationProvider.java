@@ -71,7 +71,7 @@ public class LineSeparatorFoundNotificationProvider extends EditorNotifications.
             });
         });
 
-        panel.createActionLabel(MdBundle.message("editor.javafx.dont.show.again"), () -> {
+        panel.createActionLabel(MdBundle.message("editor.dont.show.again"), () -> {
                     MdApplicationSettings.getInstance().getWasShownSettings().setUnicodeLineSeparator(true);
                     EditorNotifications.updateAll();
                 }

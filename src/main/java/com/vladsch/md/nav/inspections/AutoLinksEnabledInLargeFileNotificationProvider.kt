@@ -110,7 +110,7 @@ class AutoLinksEnabledInLargeFileNotificationProvider : EditorNotifications.Prov
             }
         }
 
-        panel.createActionLabel(MdBundle.message("editor.javafx.dont.show.again")) {
+        panel.createActionLabel(MdBundle.message("editor.dont.show.again")) {
             MdApplicationSettings.instance.wasShownSettings.autoLinksExtension = true
             EditorNotifications.updateAll()
         }

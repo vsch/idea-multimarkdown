@@ -31,7 +31,8 @@
     <depends optional="true" config-file="plugin-java.xml">com.intellij.java</depends>
     <depends optional="true" config-file="plugin-grazie.xml">tanvd.grazi</depends>
     <depends optional="true" config-file="plugin-images.xml">com.intellij.platform.images</depends>
-
+    <depends optional="true" config-file="plugin-javafx.xml">com.intellij.javafx</depends>
+    
     <resource-bundle>com.vladsch.md.nav.localization.strings</resource-bundle>
 
     <xi:include href="version.xml" xpointer="xpointer(/idea-plugin/*)"/>

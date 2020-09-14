@@ -11,10 +11,10 @@ import com.vladsch.md.nav.editor.util.HtmlPanelProvider
 import com.vladsch.md.nav.settings.MdPreviewSettings
 
 object SwingHtmlPanelProvider : HtmlPanelProvider() {
-    val NAME = MdBundle.message("editor.swing.html.panel.provider.name")
-    val ID = "com.vladsch.md.nav.editor.swing.html.panel"
-    override val INFO = HtmlPanelProvider.Info(ID, NAME)
-    override val COMPATIBILITY = HtmlCompatibility(ID, 3f, 1f, 0f, arrayOf(SwingHtmlGeneratorProvider.ID), arrayOf<String>())
+    val NAME: String = MdBundle.message("editor.swing.html.panel.provider.name")
+    const val ID: String = "com.vladsch.md.nav.editor.swing.html.panel"
+    override val INFO: Info = HtmlPanelProvider.Info(ID, NAME)
+    override val COMPATIBILITY: HtmlCompatibility = HtmlCompatibility(ID, 3f, 1f, 0f, arrayOf(SwingHtmlGeneratorProvider.ID), arrayOf<String>())
 
     override fun isSupportedSetting(settingName: String): Boolean {
         return when (settingName) {
