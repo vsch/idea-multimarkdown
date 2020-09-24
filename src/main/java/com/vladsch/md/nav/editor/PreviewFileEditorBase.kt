@@ -29,6 +29,7 @@ import com.vladsch.flexmark.util.sequence.TagRange
 import com.vladsch.md.nav.*
 import com.vladsch.md.nav.editor.api.MdPreviewCustomizationProvider
 import com.vladsch.md.nav.editor.javafx.JavaFxHtmlPanelProvider
+import com.vladsch.md.nav.editor.jbcef.JBCefHtmlPanelProvider
 import com.vladsch.md.nav.editor.resources.JavaFxHtmlCssProvider
 import com.vladsch.md.nav.editor.split.SplitFileEditor
 import com.vladsch.md.nav.editor.split.SplitPreviewChangeListener
@@ -39,6 +40,7 @@ import com.vladsch.md.nav.editor.util.HtmlPanel
 import com.vladsch.md.nav.editor.util.HtmlPanelProvider
 import com.vladsch.md.nav.editor.util.HtmlPanelProvider.AvailabilityInfo
 import com.vladsch.md.nav.settings.*
+import com.vladsch.md.nav.settings.MdProjectSettings.Companion.getInstance
 import com.vladsch.md.nav.util.*
 import com.vladsch.md.nav.vcs.GitHubLinkResolver
 import com.vladsch.plugin.util.TimeIt
@@ -55,6 +57,7 @@ import javax.swing.JComponent
 import javax.swing.JPanel
 
 abstract class PreviewFileEditorBase constructor(protected val myProject: Project, protected val myFile: VirtualFile) : UserDataHolderBase(), FileEditor, HtmlPanelHost {
+
     private val myHtmlPanelWrapper: JPanel = JPanel(BorderLayout())
     private var myPanel: HtmlPanel? = null
     protected var myLastPanelProviderInfo: HtmlPanelProvider.Info? = null
@@ -134,13 +137,13 @@ abstract class PreviewFileEditorBase constructor(protected val myProject: Projec
         // pos is start-end
         val taskOffset = pos.toIntOrNull() ?: return
         if (myProject.isDisposed) return
-        
+
         ApplicationManager.getApplication().invokeLater {
             if (myProject.isDisposed) return@invokeLater
-            
+
             WriteCommandAction.runWriteCommandAction(myProject) {
                 if (myProject.isDisposed) return@runWriteCommandAction
-                
+
                 val textLength = myDocument?.textLength ?: return@runWriteCommandAction
                 val charSequence = myDocument.charsSequence
                 if (taskOffset > 0 && taskOffset + 2 < textLength && charSequence[taskOffset - 1] == '[' && charSequence[taskOffset + 1] == ']') {
@@ -260,7 +263,7 @@ abstract class PreviewFileEditorBase constructor(protected val myProject: Projec
         val editorBase = this
         val previewChangedListener = SplitPreviewChangeListener { editorPreview, editorLayout, forEditor ->
             if (editorBase === forEditor) {
-//                val updateNeeded = getSplitEditorPreview(mySplitEditorPreviewType, mySplitEditorLayout) != getSplitEditorPreview(editorPreview, editorLayout)
+                //                val updateNeeded = getSplitEditorPreview(mySplitEditorPreviewType, mySplitEditorLayout) != getSplitEditorPreview(editorPreview, editorLayout)
                 mySplitEditorPreviewType = editorPreview
                 mySplitEditorLayout = editorLayout
                 layoutSettingValidation()
@@ -482,28 +485,39 @@ abstract class PreviewFileEditorBase constructor(protected val myProject: Projec
         var provider = HtmlPanelProvider.getFromInfoOrDefault(providerInfo)
 
         if (provider.isAvailable !== AvailabilityInfo.AVAILABLE && provider.isAvailable !== AvailabilityInfo.AVAILABLE_NOTUSED) {
-            val newSettings = myRenderingProfile.changeToProvider(null, providerInfo)
-            myRenderingProfile = newSettings
-            provider = newSettings.previewSettings.htmPanelProvider
             val unavailableProviderInfo = providerInfo
+
+            if (providerInfo === unavailableProviderInfo) {
+                // change to available provider
+                val jbCefProvider = HtmlPanelProvider.getFromInfoOrDefault(JBCefHtmlPanelProvider.INFO)
+                providerInfo = if (jbCefProvider.isAvailable !== AvailabilityInfo.UNAVAILABLE) jbCefProvider.INFO
+                else MdPreviewSettings.DEFAULT.htmlPanelProviderInfo
+            }
+
+            val newSettings = myRenderingProfile.changeToProvider(null, providerInfo)
             providerInfo = newSettings.previewSettings.htmlPanelProviderInfo
 
             PluginNotifications.makeNotification(MdBundle.message("editor.preview.file.no-javafx.message", unavailableProviderInfo.name),
                 MdBundle.message("editor.preview.file.no-javafx.title"), project = myProject)
 
-            // change globally so that all update
-            val renderingSettings = MdProjectSettings.getInstance(myProject).renderingProfile
+            val profileManager = RenderingProfileManagerEx.getInstance(myProject)
+            val renderingProfile = profileManager.getRenderingProfile(myFile)
 
-            if (renderingSettings.previewSettings.htmlPanelProviderInfo == unavailableProviderInfo) {
+            if (renderingProfile.previewSettings.htmlPanelProviderInfo == unavailableProviderInfo) {
                 try {
                     inSettingsChange = true
-                    val renderingProfile = renderingSettings.changeToProvider(unavailableProviderInfo, providerInfo)
-                    //MdApplicationSettings.instance.renderingProfile = renderingProfile
-                    MdProjectSettings.getInstance(myProject).renderingProfile = renderingProfile
+                    if (renderingProfile.getName().isEmpty()) {
+                        getInstance(myProject).renderingProfile = newSettings
+                    } else {
+                        profileManager.replaceProfile(newSettings.profileName, newSettings)
+                    }
                 } finally {
                     inSettingsChange = false
                 }
             }
+
+            myRenderingProfile = newSettings
+            provider = newSettings.previewSettings.htmPanelProvider
         }
 
         myLastPanelProviderInfo = providerInfo
@@ -791,6 +805,7 @@ abstract class PreviewFileEditorBase constructor(protected val myProject: Projec
     }
 
     companion object {
+
         val LOG = Logger.getInstance("com.vladsch.md.nav.editor.htmlPrep")
         val syncLogger = Logger.getInstance("com.vladsch.md.nav.editor.sync-details")
         private val detailLogger = Logger.getInstance("com.vladsch.md.nav.editor.htmlPrep-details")

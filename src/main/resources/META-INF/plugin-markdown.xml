@@ -1,0 +1,5 @@
+<idea-plugin>
+  <extensions defaultExtensionNs="com.intellij">
+    <pluginReplacement implementation="com.vladsch.md.nav.MdMarkdownPluginReplacement"/>
+  </extensions>
+</idea-plugin>

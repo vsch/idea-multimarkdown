@@ -47,8 +47,8 @@ class MdRenderingProfile(private val mySettingsExtensions: MdExtendableSettingsI
     private val _parserSettings: MdParserSettings = MdParserSettings()
     private val _htmlSettings: MdHtmlSettings = MdHtmlSettings()
     private val _cssSettings: MdCssSettings = MdCssSettings()
-    private val _styleSettings: MdCodeStyleSettings = MdCodeStyleSettings()
-
+    private val _styleSettings: MdCodeStyleSettings = MdCodeStyleSettings.getInstance()
+    
     // these are project style settings
     private var _project: Project? = null
 

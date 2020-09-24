@@ -32,6 +32,7 @@
     <depends optional="true" config-file="plugin-grazie.xml">tanvd.grazi</depends>
     <depends optional="true" config-file="plugin-images.xml">com.intellij.platform.images</depends>
     <depends optional="true" config-file="plugin-javafx.xml">com.intellij.javafx</depends>
+    <depends optional="true" config-file="plugin-markdown.xml">org.intellij.plugins.markdown</depends>
     
     <resource-bundle>com.vladsch.md.nav.localization.strings</resource-bundle>
 

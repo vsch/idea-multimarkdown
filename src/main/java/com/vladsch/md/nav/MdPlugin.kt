@@ -28,11 +28,13 @@ import com.intellij.openapi.actionSystem.Constraints
 import com.intellij.openapi.actionSystem.DefaultActionGroup
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.PathManager
+import com.intellij.openapi.application.ex.ApplicationManagerEx
 import com.intellij.openapi.components.BaseComponent
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.editor.colors.EditorColorsListener
 import com.intellij.openapi.editor.colors.EditorColorsManager
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.ui.popup.Balloon
 import com.intellij.openapi.util.Ref
 import com.intellij.openapi.vfs.LocalFileSystem
@@ -61,13 +63,14 @@ import java.util.function.Consumer
 import javax.swing.UIManager
 
 class MdPlugin : BaseComponent, Disposable {
+
     private var projectLoaded = false
 
     private val myNotificationRunnable: DelayedConsumerRunner<Project> = DelayedConsumerRunner()
     var startupDocumentSettings: MdDocumentSettings = MdDocumentSettings()
         private set
-//    var startupDebugSettings: MdDebugSettings = MdDebugSettings()
-//        private set
+    //    var startupDebugSettings: MdDebugSettings = MdDebugSettings()
+    //        private set
 
     private val restartRequiredChecker = object : AppRestartRequiredCheckerBase<MdApplicationSettings>(MdBundle.message("settings.restart-required.title")) {
         override fun getRestartNeededReasons(settings: MdApplicationSettings): Long {
@@ -77,6 +80,28 @@ class MdPlugin : BaseComponent, Disposable {
     }
 
     override fun initComponent() {
+        // see if JetBrains Markdown plugin is enabled.
+        val plugins = PluginManagerCore.getLoadedPlugins()
+        var descriptor: IdeaPluginDescriptor? = null
+
+        for (plugin in plugins) {
+            if (plugin.pluginId.idString == "org.intellij.plugins.markdown") {
+                descriptor = plugin
+                break
+            }
+        }
+
+        if (descriptor != null && descriptor.isEnabled) {
+            // need to disable the plugin
+            Messages.showMessageDialog(
+                MdBundle.message("plugin.markdown.conflict.text"),
+                MdBundle.message("plugin.markdown.conflict.title"),
+                Messages.getErrorIcon())
+            PluginManagerCore.disablePlugin(descriptor.pluginId)
+
+            ApplicationManagerEx.getApplicationEx().restart(true)
+        }
+
         val appSettings = MdApplicationSettings.instance
 
         ApplicationManager.getApplication().invokeLater {
@@ -109,12 +134,12 @@ class MdPlugin : BaseComponent, Disposable {
         // make a copy so we can inform when it changes
         val documentSettings = appSettings.documentSettings
         startupDocumentSettings = MdDocumentSettings(documentSettings)
-//        startupDebugSettings = MdDebugSettings(appSettings.debugSettings)
+        //        startupDebugSettings = MdDebugSettings(appSettings.debugSettings)
 
         LOG.info("Initializing Component: fullHighlights = ${documentSettings.fullHighlightCombinations}")
 
         // QUERY: do we still need to init default project settings just in case they don't exist?
-//        MdProjectSettings.getInstance(ProjectManager.getInstance().defaultProject)
+        //        MdProjectSettings.getInstance(ProjectManager.getInstance().defaultProject)
 
         val settingsChangedListener = SettingsChangedListener { applicationSettings ->
             ApplicationManager.getApplication().invokeLater {
@@ -308,11 +333,13 @@ class MdPlugin : BaseComponent, Disposable {
     }
 
     interface MdEnhancedExtensionInfoProvider : MdExtensionInfoProvider {
+
         fun showEnhancedPluginAvailable(): Boolean
         fun projectLoaded(project: Project)
     }
 
     companion object {
+
         private const val PLUGIN_ID = "com.vladsch.idea.multimarkdown"
         val LOG: Logger by lazy { Logger.getInstance(PLUGIN_ID) }
 
@@ -381,6 +408,7 @@ class MdPlugin : BaseComponent, Disposable {
             for (plugin in plugins) {
                 if (PLUGIN_ID == plugin.pluginId.idString) {
                     descriptor = plugin
+                    break
                 }
             }
 

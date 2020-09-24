@@ -19,8 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.Icon;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class MdColorSettingsPage implements ColorSettingsPage {
@@ -31,11 +30,13 @@ public class MdColorSettingsPage implements ColorSettingsPage {
     @NonNls
     public static final String SAMPLE_MARKDOWN_DOCUMENT_PATH = "/com/vladsch/md/nav/samples/sample-document.md";
 
-    protected static final List<AttributesDescriptor> attributeDescriptors = new LinkedList<>();
+    protected static final LinkedHashMap<String, AttributesDescriptor> attributeDescriptors = new LinkedHashMap<>();
     private static final AttributesDescriptor[] EMPTY_DESCRIPTORS = new AttributesDescriptor[0];
 
     private void addTextAttributesKey(String name, TextAttributesKey attributesKey) {
-        attributeDescriptors.add(new AttributesDescriptor(name, attributesKey));
+        if (!attributeDescriptors.containsKey(name)) {
+            attributeDescriptors.put(name, new AttributesDescriptor(name, attributesKey));
+        }
     }
 
     public MdColorSettingsPage() {
@@ -179,7 +180,7 @@ public class MdColorSettingsPage implements ColorSettingsPage {
      */
     @NotNull
     public AttributesDescriptor[] getAttributeDescriptors() {
-        return attributeDescriptors.toArray(EMPTY_DESCRIPTORS);
+        return attributeDescriptors.values().toArray(EMPTY_DESCRIPTORS);
     }
 
     /**

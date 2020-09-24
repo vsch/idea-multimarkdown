@@ -83,7 +83,7 @@ WikiLink: [[Link address and Link Text]]  Creole syntax: [[Link address|Link tex
 ### Updating Table of contents
 - [Second level atx title](#second-level-atx-title)
 - [Second level setext title](#second-level-setext-title)
-    - [Third level title](#third-level-title)
+  - [Third level title](#third-level-title)
 
 Term 1
 :   Definition 1.1

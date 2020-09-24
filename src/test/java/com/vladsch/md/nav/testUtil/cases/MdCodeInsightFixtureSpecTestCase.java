@@ -56,7 +56,8 @@ public interface MdCodeInsightFixtureSpecTestCase extends MdOptionsForStyleSetti
 
     static void resetSettings(@NotNull Project project) {
         MdApplicationSettings.getInstance().copyFrom(new MdApplicationSettings(true));
-        MdCodeStyleSettings.copySettings(new MdCodeStyleSettings(), MdCodeStyleSettings.getInstance(project));
+        MdCodeStyleSettings codeStyleSettings = MdCodeStyleSettings.getInstance();
+        MdCodeStyleSettings.copySettings(codeStyleSettings, MdCodeStyleSettings.getInstance(project));
         MdRenderingProfileManager.getProfile(project).copyFrom(new MdRenderingProfile(), true);
 
         validateDefaultSettings(project);
@@ -70,7 +71,7 @@ public interface MdCodeInsightFixtureSpecTestCase extends MdOptionsForStyleSetti
         assert renderingProfile.equals(new MdRenderingProfile());
 
         MdCodeStyleSettings styleSettings = MdCodeStyleSettings.getInstance(project);
-        MdCodeStyleSettings newCodeStyleSettings = new MdCodeStyleSettings();
+        MdCodeStyleSettings newCodeStyleSettings = MdCodeStyleSettings.getInstance();
         assert styleSettings.equals(newCodeStyleSettings) : MdCodeStyleSettings.getDiff(styleSettings, newCodeStyleSettings);
     }
 

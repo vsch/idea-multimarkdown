@@ -971,9 +971,9 @@ class JavaFxHtmlPanel(project: Project, htmlPanelHost: HtmlPanelHost) : HtmlPane
         val PAGE_SVG_REPLACE_PATTERN: Pattern = Pattern.compile("(<img[^>]+src=\"[^\"]+\\.)svg([^\"]*\"[^>]*>)")
         val PAGE_GIF_REPLACE_PATTERN: Pattern = Pattern.compile("(<img[^>]+src=\"[^\"]+\\.)gif([^\"]*\"[^>]*>)")
         val IMG_SVG_REPLACE_PATTERN: Pattern = Pattern.compile("([^\"]+\\.)svg([^\"]*)")
-        val SCRIPT_REPLACE_PATTERN = "(<script[^>]+src=\")([^\"]*)(\"[^>]*>)".toRegex()
-        val LINK_REPLACE_PATTERN = "(<(?:a|link)[^>]+href=\")([^\"]*)(\"[^>]*>)".toRegex()
-        val SCRIPT_STATE_NAME = "jsState"
+        val SCRIPT_REPLACE_PATTERN: Regex = "(<script[^>]+src=\")([^\"]*)(\"[^>]*>)".toRegex()
+        val LINK_REPLACE_PATTERN: Regex = "(<(?:a|link)[^>]+href=\")([^\"]*)(\"[^>]*>)".toRegex()
+        const val SCRIPT_STATE_NAME: String = "jsState"
         var useNewAPI: Boolean? = null
 
         @JvmStatic

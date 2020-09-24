@@ -1,6 +1,14 @@
 <idea-plugin>
     <change-notes><![CDATA[
         <div xmlns="http://www.w3.org/1999/html">
+            <h3>3.0.202.112 - Bug Fix Release</h3>
+            <ul>
+                <li>Fix: diagnostic/4949, NoClassDefFoundError: Could not initialize MdCodeStyleSettings.</li>
+                <li>Fix: add test for bundled Markdown being enabled. Disable it and restart IDE if needed.</li>
+                <li>Fix: code style settings intermittent class init failure</li>
+                <li>Add: Attributes element to sample document</li>
+                <li>Fix: intermittent double registration of color highlight attributes in color settings</li>
+            </ul>
             <h3>3.0.202.108 - Bug Fix Release</h3>
             <ul>
                 <li>Fix: update tests for 2020.2</li>

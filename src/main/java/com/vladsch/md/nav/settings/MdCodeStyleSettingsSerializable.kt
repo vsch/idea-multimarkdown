@@ -21,7 +21,7 @@ class MdCodeStyleSettingsSerializable(val settings: MdCodeStyleSettings) : State
         settings.copyFrom(styleSettings)
     }
 
-    constructor() : this(MdCodeStyleSettings())
+    constructor() : this(MdCodeStyleSettings.getInstance())
 
     override fun getStateHolder(): StateHolder = TagItemHolder(STATE_ELEMENT_NAME).addItems(
         BooleanAttribute("ATTRIBUTES_COMBINE_CONSECUTIVE", { settings.ATTRIBUTES_COMBINE_CONSECUTIVE }, { settings.ATTRIBUTES_COMBINE_CONSECUTIVE = it }),

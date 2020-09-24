@@ -31,7 +31,9 @@ import java.util.function.Function;
 
 public class MdCodeStyleSettings extends CustomCodeStyleSettings {
     protected static final String SETTINGS_TAG_NAME = "MarkdownNavigatorCodeStyleSettings";
-    final public static MdCodeStyleSettings DEFAULT = new MdCodeStyleSettings();
+
+    final public static MdCodeStyleSettings DEFAULT = getInstance();
+
     public static final int USE_DEFAULT_RIGHT_MARGIN_VALUE = -2;
 
     public interface Holder {
@@ -90,7 +92,7 @@ public class MdCodeStyleSettings extends CustomCodeStyleSettings {
         }
 
         @SuppressWarnings("unchecked") final Function<MdCodeStyleSettings, Pair<String, Integer>>[] ourGetters = new Function[] {
-// @formatter:off
+                // @formatter:off
                 (s)-> new Pair<>(((MdCodeStyleSettings)s).TRAILING_SPACES_ID_1, ((MdCodeStyleSettings)s).TRAILING_SPACES_OPTION_1),
                 (s)-> new Pair<>(((MdCodeStyleSettings)s).TRAILING_SPACES_ID_2, ((MdCodeStyleSettings)s).TRAILING_SPACES_OPTION_2),
                 (s)-> new Pair<>(((MdCodeStyleSettings)s).TRAILING_SPACES_ID_3, ((MdCodeStyleSettings)s).TRAILING_SPACES_OPTION_3),
@@ -116,7 +118,7 @@ public class MdCodeStyleSettings extends CustomCodeStyleSettings {
         };
 
         @SuppressWarnings("unchecked") final BiConsumer<MdCodeStyleSettings, Pair<String, Integer>>[] ourSetters = new BiConsumer[] {
-// @formatter:off
+                // @formatter:off
                 (s,p)-> {((MdCodeStyleSettings)s).TRAILING_SPACES_ID_1 = ((Pair<String, Integer>)p).getFirst(); ((MdCodeStyleSettings)s).TRAILING_SPACES_OPTION_1 = ((Pair<String, Integer>)p).getSecond(); },
                 (s,p)-> {((MdCodeStyleSettings)s).TRAILING_SPACES_ID_2 = ((Pair<String, Integer>)p).getFirst(); ((MdCodeStyleSettings)s).TRAILING_SPACES_OPTION_2 = ((Pair<String, Integer>)p).getSecond(); },
                 (s,p)-> {((MdCodeStyleSettings)s).TRAILING_SPACES_ID_3 = ((Pair<String, Integer>)p).getFirst(); ((MdCodeStyleSettings)s).TRAILING_SPACES_OPTION_3 = ((Pair<String, Integer>)p).getSecond(); },
@@ -148,7 +150,6 @@ public class MdCodeStyleSettings extends CustomCodeStyleSettings {
 
     protected MdCodeStyleSettings(String tagName, CodeStyleSettings settings) {
         super(tagName, settings);
-        afterLoaded();
     }
 
     public MdCodeStyleSettings(CodeStyleSettings settings) {
@@ -161,6 +162,13 @@ public class MdCodeStyleSettings extends CustomCodeStyleSettings {
     }
 
     @NotNull
+    public static MdCodeStyleSettings getInstance() {
+        MdCodeStyleSettings settings = new MdCodeStyleSettings();
+        settings.afterLoaded();
+        return settings;
+    }
+
+    @NotNull
     public static MdCodeStyleSettings getInstance(@NotNull Project project) {
         MdCodeStyleSettings settings;
 
@@ -169,7 +177,18 @@ public class MdCodeStyleSettings extends CustomCodeStyleSettings {
         } catch (NoClassDefFoundError ignored) {
             settings = CodeStyle.getSettings(project).getCustomSettings(MdCodeStyleSettings.class);
         }
-        settings.loadRightMargin();
+        return settings;
+    }
+
+    @NotNull
+    public static MdCodeStyleSettings getInstance(@NotNull PsiFile psiFile) {
+        MdCodeStyleSettings settings;
+
+        try {
+            settings = CodeStyle.getCustomSettings(psiFile, MdCodeStyleSettings.class);
+        } catch (NoClassDefFoundError ignored) {
+            settings = CodeStyle.getSettings(psiFile.getProject()).getCustomSettings(MdCodeStyleSettings.class);
+        }
         return settings;
     }
 
@@ -191,19 +210,6 @@ public class MdCodeStyleSettings extends CustomCodeStyleSettings {
     public static boolean isBasicPlugin() {
         // KLUDGE: enhanced plugin test
         return MdBlockPrefixProvider.PROVIDER.getValue() == MdBlockPrefixProvider.DEFAULT.getValue();
-    }
-
-    @NotNull
-    public static MdCodeStyleSettings getInstance(@NotNull PsiFile psiFile) {
-        MdCodeStyleSettings settings;
-
-        try {
-            settings = CodeStyle.getCustomSettings(psiFile, MdCodeStyleSettings.class);
-        } catch (NoClassDefFoundError ignored) {
-            settings = CodeStyle.getSettings(psiFile.getProject()).getCustomSettings(MdCodeStyleSettings.class);
-        }
-        settings.loadRightMargin();
-        return settings;
     }
 
     public boolean isWrapOnTyping() {
@@ -560,7 +566,7 @@ public class MdCodeStyleSettings extends CustomCodeStyleSettings {
     }
 
     @Override
-    protected void afterLoaded() {
+    public void afterLoaded() {
         // need to order them into extension order
         HashMap<String, Integer> currentOptions = new HashMap<>(getTrailingSpacesOptions());
         LinkedHashMap<String, Integer> orderedOptions = new LinkedHashMap<>();
@@ -820,7 +826,7 @@ public class MdCodeStyleSettings extends CustomCodeStyleSettings {
         if (!o1.TRAILING_SPACES_ID_19.equals(o2.TRAILING_SPACES_ID_19)) sb.append("TRAILING_SPACES_ID_19 (").append(o1.TRAILING_SPACES_ID_19).append(" != ").append(o2.TRAILING_SPACES_ID_19).append(")\n");
         if (!o1.TRAILING_SPACES_ID_20.equals(o2.TRAILING_SPACES_ID_20)) sb.append("TRAILING_SPACES_ID_20 (").append(o1.TRAILING_SPACES_ID_20).append(" != ").append(o2.TRAILING_SPACES_ID_20).append(")\n");
 
-// @formatter:off
+        // @formatter:off
 
         /*ABBREVIATIONS_PLACEMENT               */ if (o1.ABBREVIATIONS_PLACEMENT != o2.ABBREVIATIONS_PLACEMENT) sb.append("ABBREVIATIONS_PLACEMENT (").append(o1.ABBREVIATIONS_PLACEMENT).append(" != ").append(o2.ABBREVIATIONS_PLACEMENT).append(")\n");
         /*ABBREVIATIONS_SORT                    */ if (o1.ABBREVIATIONS_SORT != o2.ABBREVIATIONS_SORT) sb.append("ABBREVIATIONS_SORT (").append(o1.ABBREVIATIONS_SORT).append(" != ").append(o2.ABBREVIATIONS_SORT).append(")\n");
@@ -914,7 +920,7 @@ public class MdCodeStyleSettings extends CustomCodeStyleSettings {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-//        if (!super.equals(o)) return false;
+        //        if (!super.equals(o)) return false;
 
         MdCodeStyleSettings settings = (MdCodeStyleSettings) o;
         return compareEqual(this, settings);
@@ -1092,7 +1098,7 @@ public class MdCodeStyleSettings extends CustomCodeStyleSettings {
         result = 31 * result + TRAILING_SPACES_ID_19.hashCode();
         result = 31 * result + TRAILING_SPACES_ID_20.hashCode();
 
-// @formatter:off
+        // @formatter:off
 
         /*ABBREVIATIONS_PLACEMENT               */ result = 31 * result + ABBREVIATIONS_PLACEMENT;
         /*ABBREVIATIONS_SORT                    */ result = 31 * result + ABBREVIATIONS_SORT;

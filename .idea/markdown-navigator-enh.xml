@@ -117,6 +117,13 @@
       </textMaps>
     </LinkMapSettings>
   </component>
+  <component name="MarkdownExportedFiles">
+    <htmlFiles>
+      <exportedFile path="$PROJECT_DIR$/assets/markdown/plugin-description.html" settingsVersion="ED6B5B75-74681325" />
+    </htmlFiles>
+    <imageFiles />
+    <otherFiles />
+  </component>
   <component name="MarkdownNavigatorHistory">
     <PasteImageHistory checkeredTransparentBackground="false" filename="Screenshot_FontAwesome_1" directory="$PROJECT_DIR$/assets/doc/images" onPasteImageTargetRef="3" onPasteLinkText="0" onPasteImageElement="2" onPasteLinkElement="2" onPasteReferenceElement="0" cornerRadius="10" borderColor="-4342339" transparentColor="-1" borderWidth="1" trimTop="0" trimBottom="0" trimLeft="0" trimRight="0" transparent="false" roundCorners="true" showPreview="true" bordered="true" scaled="false" cropped="true" hideInapplicableOperations="true" preserveLinkFormat="true" scale="80" scalingInterpolation="1" transparentTolerance="16" saveAsDefaultOnOK="true" linkFormat="0" addHighlights="false" showHighlightCoordinates="true" showHighlights="false" mouseSelectionAddsHighlight="true" outerFilled="true" outerFillColor="-16777216" outerFillTransparent="true" outerFillAlpha="30">
       <highlightList>

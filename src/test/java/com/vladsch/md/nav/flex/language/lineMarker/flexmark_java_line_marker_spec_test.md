@@ -107,7 +107,7 @@ public class SampleTest extends ComboSpecTestCase {
         super(example, optionsMap, OPTIONS);
     }
 
-    public static DataHolder <lineMarker icon="/gutter/extAnnotation.svg" descr="<html><i>Inferred</i> annotations available. Full signature:<p>
+    public static DataHolder <lineMarker icon="IconWrapperWithTooltip:/gutter/extAnnotation.svg" descr="<html><i>Inferred</i> annotations available. Full signature:<p>
 <b><i>@NotNull</i></b>&nbsp;
 DataHolder&nbsp;<b>marginOption</b>(String,
                                                      String)</html>" >marginOption</lineMarker>(String option, String params) {
@@ -126,7 +126,11 @@ DataHolder&nbsp;<b>marginOption</b>(String,
 
     @Override
     @NotNull
-    final public SpecExampleRenderer <lineMarker icon="/gutter/implementingMethod.svg" descr="<html><body><p>Implements method in <a href=&quot;#element/com.vladsch.flexmark.test.util.SpecExampleProcessor#getSpecExampleRenderer&quot;><code>SpecExampleProcessor</code></a> <font color='#787878'><code>(com.vladsch.flexmark.test.util)</code></font></p><p style='margin-top:8px;'><font size='2' color='#787878'>Press ⌘U to navigate</font></p></body></html>" >getSpecExampleRenderer</lineMarker>(@NotNull SpecExample example, @Nullable DataHolder exampleOptions) {
+    final public SpecExampleRenderer <lineMarker icon="IconWrapperWithTooltip:/gutter/extAnnotation.svg" descr="<html><i>Inferred</i> annotations available. Full signature:<p>
+<font color=red>@NotNull</font>&nbsp;
+<b><i>@NotNull</i></b>&nbsp;
+SpecExampleRenderer&nbsp;<b>getSpecExampleRenderer</b>(<font color=red>@NotNull</font>&nbsp;SpecExample,
+                                                                                                              <font color=red>@Nullable</font>&nbsp;DataHolder)</html>" >getSpecExampleRenderer</lineMarker><lineMarker icon="IconWrapperWithTooltip:/gutter/implementingMethod.svg" descr="<html><body><p>Implements method in <a href=&quot;#element/com.vladsch.flexmark.test.util.SpecExampleProcessor#getSpecExampleRenderer&quot;><code>SpecExampleProcessor</code></a> <font color='#787878'><code>(com.vladsch.flexmark.test.util)</code></font></p><p style='margin-top:8px;'><font size='2' color='#787878'>Press ⌘U to navigate</font></p></body></html>" >getSpecExampleRenderer</lineMarker>(@NotNull SpecExample example, @Nullable DataHolder exampleOptions) {
         DataHolder OPTIONS = aggregate(myDefaultOptions, exampleOptions);
         return new FlexmarkSpecExampleRenderer(example, OPTIONS, Parser.builder(OPTIONS).build(), HtmlRenderer.builder(OPTIONS).build(), true);
     }
@@ -188,7 +192,7 @@ public class SampleTest extends ComboSpecTestCase {
 
     @Override
     @NotNull
-    final public SpecExampleRenderer getSpecExampleRenderer(@NotNull SpecExample example, @Nullable DataHolder exampleOptions) {
+    final public SpecExampleRenderer <lineMarker icon="IconWrapperWithTooltip:/gutter/implementingMethod.svg" descr="<html><body><p>Implements method in <a href=&quot;#element/com.vladsch.flexmark.test.util.SpecExampleProcessor#getSpecExampleRenderer&quot;><code>SpecExampleProcessor</code></a> <font color='#787878'><code>(com.vladsch.flexmark.test.util)</code></font></p><p style='margin-top:8px;'><font size='2' color='#787878'>Press ⌘U to navigate</font></p></body></html>" >getSpecExampleRenderer</lineMarker>(@NotNull SpecExample example, @Nullable DataHolder exampleOptions) {
         DataHolder OPTIONS = aggregate(myDefaultOptions, exampleOptions);
         return new FlexmarkSpecExampleRenderer(example, OPTIONS, Parser.builder(OPTIONS).build(), HtmlRenderer.builder(OPTIONS).build(), true);
     }
@@ -232,7 +236,7 @@ public class SampleTest extends ComboSpecTestCase {
         super(example, optionsMap, OPTIONS);
     }
 
-    public static DataHolder <lineMarker icon="/gutter/extAnnotation.svg" descr="<html><i>Inferred</i> annotations available. Full signature:<p>
+    public static DataHolder <lineMarker icon="IconWrapperWithTooltip:/gutter/extAnnotation.svg" descr="<html><i>Inferred</i> annotations available. Full signature:<p>
 <b><i>@NotNull</i></b>&nbsp;
 DataHolder&nbsp;<b>marginOption</b>(String,
                                                      String)</html>" >marginOption</lineMarker>(String option, String params) {
@@ -251,7 +255,7 @@ DataHolder&nbsp;<b>marginOption</b>(String,
 
     @Override
     @NotNull
-    final public SpecExampleRenderer <lineMarker icon="/gutter/implementingMethod.svg" descr="<html><body><p>Implements method in <a href=&quot;#element/com.vladsch.flexmark.test.util.SpecExampleProcessor#getSpecExampleRenderer&quot;><code>SpecExampleProcessor</code></a> <font color='#787878'><code>(com.vladsch.flexmark.test.util)</code></font></p><p style='margin-top:8px;'><font size='2' color='#787878'>Press ⌘U to navigate</font></p></body></html>" >getSpecExampleRenderer</lineMarker>(@NotNull SpecExample example, @Nullable DataHolder exampleOptions) {
+    final public SpecExampleRenderer <lineMarker icon="IconWrapperWithTooltip:/gutter/implementingMethod.svg" descr="<html><body><p>Implements method in <a href=&quot;#element/com.vladsch.flexmark.test.util.SpecExampleProcessor#getSpecExampleRenderer&quot;><code>SpecExampleProcessor</code></a> <font color='#787878'><code>(com.vladsch.flexmark.test.util)</code></font></p><p style='margin-top:8px;'><font size='2' color='#787878'>Press ⌘U to navigate</font></p></body></html>" >getSpecExampleRenderer</lineMarker>(@NotNull SpecExample example, @Nullable DataHolder exampleOptions) {
         DataHolder OPTIONS = aggregate(myDefaultOptions, exampleOptions);
         return new FlexmarkSpecExampleRenderer(example, OPTIONS, Parser.builder(OPTIONS).build(), HtmlRenderer.builder(OPTIONS).build(), true);
     }
@@ -295,7 +299,7 @@ public class SampleTest extends ComboSpecTestCase {
         super(example, optionsMap, OPTIONS);
     }
 
-    public static DataHolder <lineMarker icon="/gutter/extAnnotation.svg" descr="<html><i>Inferred</i> annotations available. Full signature:<p>
+    public static DataHolder <lineMarker icon="IconWrapperWithTooltip:/gutter/extAnnotation.svg" descr="<html><i>Inferred</i> annotations available. Full signature:<p>
 <b><i>@NotNull</i></b>&nbsp;
 DataHolder&nbsp;<b>marginOption</b>(String,
                                                      String)</html>" >marginOption</lineMarker>(String option, String params) {
@@ -314,7 +318,7 @@ DataHolder&nbsp;<b>marginOption</b>(String,
 
     @Override
     @NotNull
-    final public SpecExampleRenderer <lineMarker icon="/gutter/implementingMethod.svg" descr="<html><body><p>Implements method in <a href=&quot;#element/com.vladsch.flexmark.test.util.SpecExampleProcessor#getSpecExampleRenderer&quot;><code>SpecExampleProcessor</code></a> <font color='#787878'><code>(com.vladsch.flexmark.test.util)</code></font></p><p style='margin-top:8px;'><font size='2' color='#787878'>Press ⌘U to navigate</font></p></body></html>" >getSpecExampleRenderer</lineMarker>(@NotNull SpecExample example, @Nullable DataHolder exampleOptions) {
+    final public SpecExampleRenderer <lineMarker icon="IconWrapperWithTooltip:/gutter/implementingMethod.svg" descr="<html><body><p>Implements method in <a href=&quot;#element/com.vladsch.flexmark.test.util.SpecExampleProcessor#getSpecExampleRenderer&quot;><code>SpecExampleProcessor</code></a> <font color='#787878'><code>(com.vladsch.flexmark.test.util)</code></font></p><p style='margin-top:8px;'><font size='2' color='#787878'>Press ⌘U to navigate</font></p></body></html>" >getSpecExampleRenderer</lineMarker>(@NotNull SpecExample example, @Nullable DataHolder exampleOptions) {
         DataHolder OPTIONS = aggregate(myDefaultOptions, exampleOptions);
         return new FlexmarkSpecExampleRenderer(example, OPTIONS, Parser.builder(OPTIONS).build(), HtmlRenderer.builder(OPTIONS).build(), true);
     }

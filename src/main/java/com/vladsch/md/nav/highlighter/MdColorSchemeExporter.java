@@ -37,7 +37,7 @@ public class MdColorSchemeExporter extends SerializableSchemeExporter {
             final Element state = ((SerializableScheme) scheme).writeScheme();
             final Element attributes = state.getChild("attributes");
             Set<String> colorKeys = new HashSet<>();
-            for (AttributesDescriptor attr : MdColorSettingsPage.attributeDescriptors) {
+            for (AttributesDescriptor attr : MdColorSettingsPage.attributeDescriptors.values()) {
                 String externalName = attr.getKey().getExternalName();
                 colorKeys.add(externalName);
             }

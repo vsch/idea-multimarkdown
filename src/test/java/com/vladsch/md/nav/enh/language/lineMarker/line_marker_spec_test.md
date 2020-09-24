@@ -187,7 +187,7 @@ Test all others not affected
 ```````````````````````````````` example Links - Non-Markdown: 1
 [JavaFile.txt](JavaFile.txt) 
 .
-[JavaFile.txt](<lineMarker icon="Deferred. Base=Row icon. myIcons=[/fileTypes/text.svg, null]" descr="Navigate to target JavaFile.txt" >JavaFile.txt</lineMarker>) 
+[JavaFile.txt](<lineMarker icon="Deferred. Base=Row icon. myIcons=[IconWrapperWithTooltip:/fileTypes/text.svg, null]" descr="Navigate to target JavaFile.txt" >JavaFile.txt</lineMarker>) 
 ````````````````````````````````
 
 
@@ -203,7 +203,7 @@ Test all others not affected
 ```````````````````````````````` example Links - Image: 1
 ![](sample.png) 
 .
-![](<lineMarker icon="Deferred. Base=Row icon. myIcons=[/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to target sample.png" >sample.png</lineMarker>) 
+![](<lineMarker icon="Deferred. Base=Row icon. myIcons=[IconWrapperWithTooltip:/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to target sample.png" >sample.png</lineMarker>) 
 ````````````````````````````````
 
 
@@ -223,7 +223,7 @@ Image in table cell
 .
 |      Data       |
 |-----------------|
-| ![](<lineMarker icon="Deferred. Base=Row icon. myIcons=[/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to target sample.png" >sample.png</lineMarker>) |
+| ![](<lineMarker icon="Deferred. Base=Row icon. myIcons=[IconWrapperWithTooltip:/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to target sample.png" >sample.png</lineMarker>) |
 ````````````````````````````````
 
 
@@ -252,7 +252,7 @@ Test disabling anchor shows link ref marker
 ```````````````````````````````` example(Links - Image - Anchor - Line: 3) options(disable-link-anchor-line-selection)
 [JavaFile.txt](JavaFile.txt#L4-L6) 
 .
-[JavaFile.txt](<lineMarker icon="Deferred. Base=Row icon. myIcons=[/fileTypes/text.svg, null]" descr="Navigate to target JavaFile.txt" >JavaFile.txt</lineMarker>#L4-L6) 
+[JavaFile.txt](<lineMarker icon="Deferred. Base=Row icon. myIcons=[IconWrapperWithTooltip:/fileTypes/text.svg, null]" descr="Navigate to target JavaFile.txt" >JavaFile.txt</lineMarker>#L4-L6) 
 ````````````````````````````````
 
 
@@ -351,12 +351,12 @@ Test all others not affected
 .
 ---- Disabled: link-ref-markdown ---------------------------------------
 [MarkdownWithHeadings.md](MarkdownWithHeadings.md) 
-[JavaFile.txt](<lineMarker icon="Deferred. Base=Row icon. myIcons=[/fileTypes/text.svg, null]" descr="Navigate to target JavaFile.txt" >JavaFile.txt</lineMarker>) 
+[JavaFile.txt](<lineMarker icon="Deferred. Base=Row icon. myIcons=[IconWrapperWithTooltip:/fileTypes/text.svg, null]" descr="Navigate to target JavaFile.txt" >JavaFile.txt</lineMarker>) 
 [ftp](<lineMarker icon="MdIcons.LinkTypes.Ftp" descr="Navigate to target ftp://vladsch.com" >ftp://vladsch.com</lineMarker>) 
 [vladimir@vladsch.com](<lineMarker icon="MdIcons.LinkTypes.Mail" descr="Navigate to target mailto:vladimir@vladsch.com" >mailto:vladimir@vladsch.com</lineMarker>) 
 [markdown-navigator](<lineMarker icon="MdIcons.LinkTypes.GitHub" descr="Navigate to target https://github.com/vsch/idea-multimarkdown" >https://github.com/vsch/idea-multimarkdown</lineMarker>) 
 [markdown-navigator](<lineMarker icon="MdIcons.LinkTypes.Web" descr="Navigate to target https://vladsch.com/product/markdown-navigator" >https://vladsch.com/product/markdown-navigator</lineMarker>) 
-![](<lineMarker icon="Deferred. Base=Row icon. myIcons=[/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to target sample.png" >sample.png</lineMarker>) 
+![](<lineMarker icon="Deferred. Base=Row icon. myIcons=[IconWrapperWithTooltip:/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to target sample.png" >sample.png</lineMarker>) 
 
 ---- Disabled: link-ref-file -------------------------------------------
 [MarkdownWithHeadings.md](<lineMarker icon="MdIcons.Document.FILE" descr="Navigate to target MarkdownWithHeadings.md" >MarkdownWithHeadings.md</lineMarker>) 
@@ -365,20 +365,20 @@ Test all others not affected
 [vladimir@vladsch.com](<lineMarker icon="MdIcons.LinkTypes.Mail" descr="Navigate to target mailto:vladimir@vladsch.com" >mailto:vladimir@vladsch.com</lineMarker>) 
 [markdown-navigator](<lineMarker icon="MdIcons.LinkTypes.GitHub" descr="Navigate to target https://github.com/vsch/idea-multimarkdown" >https://github.com/vsch/idea-multimarkdown</lineMarker>) 
 [markdown-navigator](<lineMarker icon="MdIcons.LinkTypes.Web" descr="Navigate to target https://vladsch.com/product/markdown-navigator" >https://vladsch.com/product/markdown-navigator</lineMarker>) 
-![](<lineMarker icon="Deferred. Base=Row icon. myIcons=[/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to target sample.png" >sample.png</lineMarker>) 
+![](<lineMarker icon="Deferred. Base=Row icon. myIcons=[IconWrapperWithTooltip:/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to target sample.png" >sample.png</lineMarker>) 
 
 ---- Disabled: link-ref-github -----------------------------------------
 [MarkdownWithHeadings.md](<lineMarker icon="MdIcons.Document.FILE" descr="Navigate to target MarkdownWithHeadings.md" >MarkdownWithHeadings.md</lineMarker>) 
-[JavaFile.txt](<lineMarker icon="Deferred. Base=Row icon. myIcons=[/fileTypes/text.svg, null]" descr="Navigate to target JavaFile.txt" >JavaFile.txt</lineMarker>) 
+[JavaFile.txt](<lineMarker icon="Deferred. Base=Row icon. myIcons=[IconWrapperWithTooltip:/fileTypes/text.svg, null]" descr="Navigate to target JavaFile.txt" >JavaFile.txt</lineMarker>) 
 [ftp](<lineMarker icon="MdIcons.LinkTypes.Ftp" descr="Navigate to target ftp://vladsch.com" >ftp://vladsch.com</lineMarker>) 
 [vladimir@vladsch.com](<lineMarker icon="MdIcons.LinkTypes.Mail" descr="Navigate to target mailto:vladimir@vladsch.com" >mailto:vladimir@vladsch.com</lineMarker>) 
 [markdown-navigator](https://github.com/vsch/idea-multimarkdown) 
 [markdown-navigator](<lineMarker icon="MdIcons.LinkTypes.Web" descr="Navigate to target https://vladsch.com/product/markdown-navigator" >https://vladsch.com/product/markdown-navigator</lineMarker>) 
-![](<lineMarker icon="Deferred. Base=Row icon. myIcons=[/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to target sample.png" >sample.png</lineMarker>) 
+![](<lineMarker icon="Deferred. Base=Row icon. myIcons=[IconWrapperWithTooltip:/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to target sample.png" >sample.png</lineMarker>) 
 
 ---- Disabled: link-ref-image ------------------------------------------
 [MarkdownWithHeadings.md](<lineMarker icon="MdIcons.Document.FILE" descr="Navigate to target MarkdownWithHeadings.md" >MarkdownWithHeadings.md</lineMarker>) 
-[JavaFile.txt](<lineMarker icon="Deferred. Base=Row icon. myIcons=[/fileTypes/text.svg, null]" descr="Navigate to target JavaFile.txt" >JavaFile.txt</lineMarker>) 
+[JavaFile.txt](<lineMarker icon="Deferred. Base=Row icon. myIcons=[IconWrapperWithTooltip:/fileTypes/text.svg, null]" descr="Navigate to target JavaFile.txt" >JavaFile.txt</lineMarker>) 
 [ftp](<lineMarker icon="MdIcons.LinkTypes.Ftp" descr="Navigate to target ftp://vladsch.com" >ftp://vladsch.com</lineMarker>) 
 [vladimir@vladsch.com](<lineMarker icon="MdIcons.LinkTypes.Mail" descr="Navigate to target mailto:vladimir@vladsch.com" >mailto:vladimir@vladsch.com</lineMarker>) 
 [markdown-navigator](<lineMarker icon="MdIcons.LinkTypes.GitHub" descr="Navigate to target https://github.com/vsch/idea-multimarkdown" >https://github.com/vsch/idea-multimarkdown</lineMarker>) 
@@ -387,30 +387,30 @@ Test all others not affected
 
 ---- Disabled: link-ref-web --------------------------------------------
 [MarkdownWithHeadings.md](<lineMarker icon="MdIcons.Document.FILE" descr="Navigate to target MarkdownWithHeadings.md" >MarkdownWithHeadings.md</lineMarker>) 
-[JavaFile.txt](<lineMarker icon="Deferred. Base=Row icon. myIcons=[/fileTypes/text.svg, null]" descr="Navigate to target JavaFile.txt" >JavaFile.txt</lineMarker>) 
+[JavaFile.txt](<lineMarker icon="Deferred. Base=Row icon. myIcons=[IconWrapperWithTooltip:/fileTypes/text.svg, null]" descr="Navigate to target JavaFile.txt" >JavaFile.txt</lineMarker>) 
 [ftp](<lineMarker icon="MdIcons.LinkTypes.Ftp" descr="Navigate to target ftp://vladsch.com" >ftp://vladsch.com</lineMarker>) 
 [vladimir@vladsch.com](<lineMarker icon="MdIcons.LinkTypes.Mail" descr="Navigate to target mailto:vladimir@vladsch.com" >mailto:vladimir@vladsch.com</lineMarker>) 
 [markdown-navigator](<lineMarker icon="MdIcons.LinkTypes.GitHub" descr="Navigate to target https://github.com/vsch/idea-multimarkdown" >https://github.com/vsch/idea-multimarkdown</lineMarker>) 
 [markdown-navigator](https://vladsch.com/product/markdown-navigator) 
-![](<lineMarker icon="Deferred. Base=Row icon. myIcons=[/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to target sample.png" >sample.png</lineMarker>) 
+![](<lineMarker icon="Deferred. Base=Row icon. myIcons=[IconWrapperWithTooltip:/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to target sample.png" >sample.png</lineMarker>) 
 
 ---- Disabled: link-ref-ftp --------------------------------------------
 [MarkdownWithHeadings.md](<lineMarker icon="MdIcons.Document.FILE" descr="Navigate to target MarkdownWithHeadings.md" >MarkdownWithHeadings.md</lineMarker>) 
-[JavaFile.txt](<lineMarker icon="Deferred. Base=Row icon. myIcons=[/fileTypes/text.svg, null]" descr="Navigate to target JavaFile.txt" >JavaFile.txt</lineMarker>) 
+[JavaFile.txt](<lineMarker icon="Deferred. Base=Row icon. myIcons=[IconWrapperWithTooltip:/fileTypes/text.svg, null]" descr="Navigate to target JavaFile.txt" >JavaFile.txt</lineMarker>) 
 [ftp](ftp://vladsch.com) 
 [vladimir@vladsch.com](<lineMarker icon="MdIcons.LinkTypes.Mail" descr="Navigate to target mailto:vladimir@vladsch.com" >mailto:vladimir@vladsch.com</lineMarker>) 
 [markdown-navigator](<lineMarker icon="MdIcons.LinkTypes.GitHub" descr="Navigate to target https://github.com/vsch/idea-multimarkdown" >https://github.com/vsch/idea-multimarkdown</lineMarker>) 
 [markdown-navigator](<lineMarker icon="MdIcons.LinkTypes.Web" descr="Navigate to target https://vladsch.com/product/markdown-navigator" >https://vladsch.com/product/markdown-navigator</lineMarker>) 
-![](<lineMarker icon="Deferred. Base=Row icon. myIcons=[/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to target sample.png" >sample.png</lineMarker>) 
+![](<lineMarker icon="Deferred. Base=Row icon. myIcons=[IconWrapperWithTooltip:/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to target sample.png" >sample.png</lineMarker>) 
 
 ---- Disabled: link-ref-mail -------------------------------------------
 [MarkdownWithHeadings.md](<lineMarker icon="MdIcons.Document.FILE" descr="Navigate to target MarkdownWithHeadings.md" >MarkdownWithHeadings.md</lineMarker>) 
-[JavaFile.txt](<lineMarker icon="Deferred. Base=Row icon. myIcons=[/fileTypes/text.svg, null]" descr="Navigate to target JavaFile.txt" >JavaFile.txt</lineMarker>) 
+[JavaFile.txt](<lineMarker icon="Deferred. Base=Row icon. myIcons=[IconWrapperWithTooltip:/fileTypes/text.svg, null]" descr="Navigate to target JavaFile.txt" >JavaFile.txt</lineMarker>) 
 [ftp](<lineMarker icon="MdIcons.LinkTypes.Ftp" descr="Navigate to target ftp://vladsch.com" >ftp://vladsch.com</lineMarker>) 
 [vladimir@vladsch.com](mailto:vladimir@vladsch.com) 
 [markdown-navigator](<lineMarker icon="MdIcons.LinkTypes.GitHub" descr="Navigate to target https://github.com/vsch/idea-multimarkdown" >https://github.com/vsch/idea-multimarkdown</lineMarker>) 
 [markdown-navigator](<lineMarker icon="MdIcons.LinkTypes.Web" descr="Navigate to target https://vladsch.com/product/markdown-navigator" >https://vladsch.com/product/markdown-navigator</lineMarker>) 
-![](<lineMarker icon="Deferred. Base=Row icon. myIcons=[/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to target sample.png" >sample.png</lineMarker>) 
+![](<lineMarker icon="Deferred. Base=Row icon. myIcons=[IconWrapperWithTooltip:/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to target sample.png" >sample.png</lineMarker>) 
 ````````````````````````````````
 
 
@@ -429,9 +429,9 @@ Test all others not affected
 
 [Image]: sample.png
 .
-<lineMarker icon="Deferred. Base=Row icon. myIcons=[/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to referenced page sample.png" >![</lineMarker>Image]
+<lineMarker icon="Deferred. Base=Row icon. myIcons=[IconWrapperWithTooltip:/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to referenced page sample.png" >![</lineMarker>Image]
 
-[Image]: <lineMarker icon="Deferred. Base=Row icon. myIcons=[/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to target sample.png" >sample.png</lineMarker>
+[Image]: <lineMarker icon="Deferred. Base=Row icon. myIcons=[IconWrapperWithTooltip:/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to target sample.png" >sample.png</lineMarker>
 ````````````````````````````````
 
 
@@ -442,7 +442,7 @@ Test all others not affected
 .
 ![Image]
 
-[Image]: <lineMarker icon="Deferred. Base=Row icon. myIcons=[/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to target sample.png" >sample.png</lineMarker>
+[Image]: <lineMarker icon="Deferred. Base=Row icon. myIcons=[IconWrapperWithTooltip:/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to target sample.png" >sample.png</lineMarker>
 ````````````````````````````````
 
 
@@ -488,18 +488,18 @@ test [^Reference]
 test [^Reference]
 <<<Reference>>>
 
-[Image]: <lineMarker icon="Deferred. Base=Row icon. myIcons=[/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to target sample.png" >sample.png</lineMarker>
+[Image]: <lineMarker icon="Deferred. Base=Row icon. myIcons=[IconWrapperWithTooltip:/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to target sample.png" >sample.png</lineMarker>
 [Link]: <lineMarker icon="MdIcons.Document.FILE" descr="Navigate to target MarkdownWithAnchor.md" >MarkdownWithAnchor.md</lineMarker>
     
 
 
 ---- Disabled: reference-ref-link --------------------------------------
-<lineMarker icon="Deferred. Base=Row icon. myIcons=[/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to referenced page sample.png" >![</lineMarker>Image]
+<lineMarker icon="Deferred. Base=Row icon. myIcons=[IconWrapperWithTooltip:/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to referenced page sample.png" >![</lineMarker>Image]
 [Link]
 test [^Reference]
 <<<Reference>>>
 
-[Image]: <lineMarker icon="Deferred. Base=Row icon. myIcons=[/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to target sample.png" >sample.png</lineMarker>
+[Image]: <lineMarker icon="Deferred. Base=Row icon. myIcons=[IconWrapperWithTooltip:/org/intellij/images/icons/ImagesFileType.svg, null]" descr="Navigate to target sample.png" >sample.png</lineMarker>
 [Link]: <lineMarker icon="MdIcons.Document.FILE" descr="Navigate to target MarkdownWithAnchor.md" >MarkdownWithAnchor.md</lineMarker>
     
 ````````````````````````````````
