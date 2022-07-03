@@ -71,46 +71,51 @@ public class MdLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSettin
         if (settingsType == SettingsType.INDENT_SETTINGS) {
             consumer.showStandardOptions("INDENT_SIZE", "USE_TAB_CHARACTER", "TAB_SIZE");
         } else if (settingsType == SettingsType.WRAPPING_AND_BRACES_SETTINGS) {
-            consumer.showStandardOptions("RIGHT_MARGIN");
-            consumer.showCustomOption(MdCodeStyleSettings.class,
-                    "WRAP_ON_TYPING",
-                    "Wrap on typing",
-                    null,
-                    CodeStyleSettingsCustomizable.WRAP_ON_TYPING_OPTIONS,
-                    CodeStyleSettingsCustomizable.WRAP_ON_TYPING_VALUES);
-            consumer.showCustomOption(MdCodeStyleSettings.class,
-                    "FORMAT_WITH_SOFT_WRAP",
-                    "Disable wrap on typing when soft wraps enabled",
-                    null,
-                    new String[] { FormatWithSoftWrap.DISABLED.displayName, FormatWithSoftWrap.ENABLED.displayName, FormatWithSoftWrap.INFINITE_MARGIN.displayName },
-                    new int[] { FormatWithSoftWrap.DISABLED.intValue, FormatWithSoftWrap.ENABLED.intValue, FormatWithSoftWrap.INFINITE_MARGIN.intValue }
-            );
-            consumer.showCustomOption(MdCodeStyleSettings.class,
-                    "CODE_KEEP_TRAILING_SPACES",
-                    "Fenced/Indented Code",
-                    "Keep Trailing Spaces",
-                    new String[] { TrailingSpacesType.KEEP_ALL.displayName, TrailingSpacesType.KEEP_NONE.displayName },
-                    new int[] { TrailingSpacesType.KEEP_ALL.intValue, TrailingSpacesType.KEEP_NONE.intValue }
-            );
-
-            int i = 1;
-            for (MdTrailingSpacesCodeStyleOption option : MdStripTrailingSpacesExtension.getOptions()) {
+            try {
+                consumer.showStandardOptions("RIGHT_MARGIN");
                 consumer.showCustomOption(MdCodeStyleSettings.class,
-                        "TRAILING_SPACES_OPTION_" + i++,
-                        option.getOptionName(),
-                        "Keep Trailing Spaces",
-                        TrailingSpacesType.getDisplayNames(option.getExcludedOptions()),
-                        TrailingSpacesType.getOptionValues(option.getExcludedOptions())
+                        "WRAP_ON_TYPING",
+                        "Wrap on typing",
+                        null,
+                        CodeStyleSettingsCustomizable.WRAP_ON_TYPING_OPTIONS,
+                        CodeStyleSettingsCustomizable.WRAP_ON_TYPING_VALUES);
+                consumer.showCustomOption(MdCodeStyleSettings.class,
+                        "FORMAT_WITH_SOFT_WRAP",
+                        "Disable wrap on typing when soft wraps enabled",
+                        null,
+                        new String[] { FormatWithSoftWrap.DISABLED.displayName, FormatWithSoftWrap.ENABLED.displayName, FormatWithSoftWrap.INFINITE_MARGIN.displayName },
+                        new int[] { FormatWithSoftWrap.DISABLED.intValue, FormatWithSoftWrap.ENABLED.intValue, FormatWithSoftWrap.INFINITE_MARGIN.intValue }
                 );
-            }
+                consumer.showCustomOption(MdCodeStyleSettings.class,
+                        "CODE_KEEP_TRAILING_SPACES",
+                        "Fenced/Indented Code",
+                        "Keep Trailing Spaces",
+                        new String[] { TrailingSpacesType.KEEP_ALL.displayName, TrailingSpacesType.KEEP_NONE.displayName },
+                        new int[] { TrailingSpacesType.KEEP_ALL.intValue, TrailingSpacesType.KEEP_NONE.intValue }
+                );
 
-            consumer.showCustomOption(MdCodeStyleSettings.class,
-                    "KEEP_TRAILING_SPACES",
-                    "Everything Else",
-                    "Keep Trailing Spaces",
-                    new String[] { TrailingSpacesType.KEEP_ALL.displayName, TrailingSpacesType.KEEP_NONE.displayName },
-                    new int[] { TrailingSpacesType.KEEP_ALL.intValue, TrailingSpacesType.KEEP_NONE.intValue }
-            );
+                int i = 1;
+                for (MdTrailingSpacesCodeStyleOption option : MdStripTrailingSpacesExtension.getOptions()) {
+                    consumer.showCustomOption(MdCodeStyleSettings.class,
+                            "TRAILING_SPACES_OPTION_" + i++,
+                            option.getOptionName(),
+                            "Keep Trailing Spaces",
+                            TrailingSpacesType.getDisplayNames(option.getExcludedOptions()),
+                            TrailingSpacesType.getOptionValues(option.getExcludedOptions())
+                    );
+                }
+
+                consumer.showCustomOption(MdCodeStyleSettings.class,
+                        "KEEP_TRAILING_SPACES",
+                        "Everything Else",
+                        "Keep Trailing Spaces",
+                        new String[] { TrailingSpacesType.KEEP_ALL.displayName, TrailingSpacesType.KEEP_NONE.displayName },
+                        new int[] { TrailingSpacesType.KEEP_ALL.intValue, TrailingSpacesType.KEEP_NONE.intValue }
+                );
+            } catch (Exception e) {
+                // Do nothing with the exception.
+                // This error would be thrown by JetBrains when properties like "WRAP_ON_TYPING_OPTIONS" do not exist.
+            }
         }
     }
 
