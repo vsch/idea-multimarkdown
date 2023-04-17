@@ -8,13 +8,6 @@
       <value />
     </option>
     <option name="RIGHT_MARGIN" value="140" />
-    <option name="HTML_ATTRIBUTE_WRAP" value="0" />
-    <option name="HTML_TEXT_WRAP" value="0" />
-    <option name="HTML_KEEP_BLANK_LINES" value="1" />
-    <option name="HTML_ALIGN_ATTRIBUTES" value="false" />
-    <option name="HTML_ELEMENTS_TO_REMOVE_NEW_LINE_BEFORE" value="" />
-    <option name="HTML_DO_NOT_INDENT_CHILDREN_OF" value="html,body" />
-    <option name="HTML_DONT_ADD_BREAKS_IF_INLINE_CONTENT" value="title,h1,h2,h3,h4,h5,h6,p,li" />
     <option name="FORMATTER_TAGS_ENABLED" value="true" />
     <JavaCodeStyleSettings>
       <option name="FIELD_NAME_PREFIX" value="my" />
@@ -70,7 +63,6 @@
     <XML>
       <option name="XML_ATTRIBUTE_WRAP" value="0" />
       <option name="XML_KEEP_BLANK_LINES" value="1" />
-      <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
     </XML>
     <codeStyleSettings language="Blade">
       <indentOptions>

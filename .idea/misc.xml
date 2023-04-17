@@ -9,7 +9,7 @@
   <component name="ProjectResources">
     <resource url="http://www.w3.org/2005/xpath-functions" location="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="false" project-jdk-name="IDEA Plugin jdk MN Build" project-jdk-type="IDEA JDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="jbr-11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="idea.plugin.psiviewer.controller.project.PsiViewerProjectService">
