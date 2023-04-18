@@ -28,3 +28,8 @@
 /test-data/Issues/686.logs2.zip
 .gradle/
 build/
+/delete-sandbox-test.sh
+/.idea/modules/idea-multimarkdown.main.iml
+/.idea/modules.xml
+/update-plugin.sh
+/update-sandboxes.sh

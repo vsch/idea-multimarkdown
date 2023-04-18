@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PluginDevelopersToolboxSettings">
+    <option name="disablePluginGradleEditorTabNameExpansion" value="true" />
+    <option name="disablePluginGradleIfSingleFile" value="true" />
+    <option name="disablePluginXmlEditorTabNameExpansion" value="true" />
+    <option name="disablePluginXmlIfSingleFile" value="true" />
+  </component>
+</project>
