@@ -3,8 +3,8 @@
         <div xmlns="http://www.w3.org/1999/html">
             <p><a href="https://daringfireball.net/projects/markdown"><span style="color:#30A0D8;">Markdown</span></a> language support for IntelliJ platform</p>
             <p><br></p>
-            <p>Markdown Navigator <a href="https://vladsch.com/product/markdown-navigator">enhanced edition</a><br />
-                available in JetBrains Marketplace or with a legacy license.</p>
+            <p>Markdown Navigator <a href="https://plugins.jetbrains.com/plugin/7896-markdown-navigator-enhanced">enhanced edition</a><br/>
+                available in JetBrains Marketplace</p>
             <h2>Document with pleasure!</h2>
             <p>Work with <a href="https://daringfireball.net/projects/markdown">Markdown</a> files like you do with other languages in the IDE, by getting full support
                 for:</p>
@@ -44,11 +44,11 @@
                     </ul>
                 </li>
                 <li><strong>Math block and inline</strong> rendering by <a href="https://github.com/Khan/KaTeX">Katex</a> or <a href="https://codecogs.com">codecogs.com</a></li>
-                <li><strong>PlantUML fenced code</strong> rendering by <a href="https://plantuml.com">PlantUML</a> or <a href="http://gravizo.com">gravizo.com</a></li>
+                <li><strong>PlantUML fenced code</strong> rendering by <a href="https://plantuml.com">PlantUML</a> or <a href="https://gravizo.com">gravizo.com</a></li>
                 <li><strong>Fast typing response</strong> for distraction free editing</li>
                 <li><strong>Fully customizable</strong> to adjust to your preferences and project needs</li>
             </ul>
-            <p><img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/plugin_description_img2.png" alt="Screenshot" /></p>
+            <p><img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/plugin_description_img2.png" alt="Screenshot"/></p>
         </div>
         ]]></description>
 </idea-plugin>

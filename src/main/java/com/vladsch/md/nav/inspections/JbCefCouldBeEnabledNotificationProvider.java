@@ -1,4 +1,4 @@
-// Copyright (c) 2015-2020 Vladimir Schneider <vladimir.schneider@gmail.com>, all rights reserved.
+// Copyright (c) 2015-2023 Vladimir Schneider <vladimir.schneider@gmail.com>, all rights reserved.
 //
 // This code is private property of the copyright holder and cannot be used without
 // having obtained a license or prior written permission of the copyright holder.

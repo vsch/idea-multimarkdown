@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright (c) 2011-2014 Julien Nicoulaud <julien.nicoulaud@gmail.com>
-  ~ Copyright (c) 2015-2019 Vladimir Schneider <vladimir.schneider@gmail.com>
+  ~ Copyright (c) 2015-2023 Vladimir Schneider <vladimir.schneider@gmail.com>
   ~
   ~ Licensed to the Apache Software Foundation (ASF) under one
   ~ or more contributor license agreements.  See the NOTICE file
@@ -24,7 +24,7 @@
     <id>com.vladsch.idea.multimarkdown</id>
     <name>Markdown Navigator Basic</name>
     <category>Custom Languages</category>
-    <vendor email="vladimir.schneider@gmail.com" url="http://www.vladsch.com">Vladimir Schneider</vendor>
+    <vendor email="vladimir.schneider@gmail.com" url="http://github.com/vsch">Vladimir Schneider</vendor>
     <depends>com.intellij.modules.lang</depends>
     <depends>Git4Idea</depends>
     <depends optional="true" config-file="plugin-intellilang.xml">org.intellij.intelliLang</depends>

@@ -1,6 +1,12 @@
 <idea-plugin>
     <change-notes><![CDATA[
         <div xmlns="http://www.w3.org/1999/html">
+            <h3>3.0.203.115 - Bug Fix Release</h3>
+            <ul>
+                <li>Fix: JBCef panel not disposed on editor closing</li>
+                <li>Fix: deprecated EditorProvider api</li>
+                <li>Change: migrate to gradle 8.1 build</li>
+            </ul>
             <h3>3.0.202.112 - Bug Fix Release</h3>
             <ul>
                 <li>Fix: diagnostic/4949, NoClassDefFoundError: Could not initialize MdCodeStyleSettings.</li>

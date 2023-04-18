@@ -3,7 +3,7 @@
 <br>
 
 Markdown Navigator [enhanced edition][Markdown Navigator]  
-available in JetBrains Marketplace or with a legacy license.
+available in JetBrains Marketplace
 
 ## Document with pleasure!
 
@@ -43,9 +43,9 @@ for:
 ![Screenshot](https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/plugin_description_img2.png)
 
 [codecogs.com]: https://codecogs.com
-[gravizo.com]: http://gravizo.com
+[gravizo.com]: https://gravizo.com
 [Katex]: https://github.com/Khan/KaTeX
 [Markdown]: https://daringfireball.net/projects/markdown
-[Markdown Navigator]: https://vladsch.com/product/markdown-navigator
+[Markdown Navigator]: https://plugins.jetbrains.com/plugin/7896-markdown-navigator-enhanced
 [PlantUML]: https://plantuml.com
 

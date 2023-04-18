@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright (c) 2011-2014 Julien Nicoulaud <julien.nicoulaud@gmail.com>
-  ~ Copyright (c) 2015-2019 Vladimir Schneider <vladimir.schneider@gmail.com>
+  ~ Copyright (c) 2015-2023 Vladimir Schneider <vladimir.schneider@gmail.com>
   ~
   ~ Licensed to the Apache Software Foundation (ASF) under one
   ~ or more contributor license agreements.  See the NOTICE file
@@ -24,7 +24,7 @@
     <id>com.vladsch.idea.multimarkdown</id>
     <name>Markdown Navigator Basic</name>
     <category>Custom Languages</category>
-    <vendor email="vladimir.schneider@gmail.com" url="http://www.vladsch.com">Vladimir Schneider</vendor>
+    <vendor email="vladimir.schneider@gmail.com" url="http://github.com/vsch">Vladimir Schneider</vendor>
     <depends>com.intellij.modules.lang</depends>
     <depends>Git4Idea</depends>
     <depends optional="true" config-file="plugin-intellilang.xml">org.intellij.intelliLang</depends>
@@ -38,15 +38,15 @@
 
     <!-- Included from: version.xml -->
     <version>3.0.203.114.Legacy</version>
-    <idea-version since-build="203.*"/>
+    <idea-version since-build="203"/>
 
     <!-- Included from: description.xml -->
     <description><![CDATA[
         <div xmlns="http://www.w3.org/1999/html">
             <p><a href="https://daringfireball.net/projects/markdown"><span style="color:#30A0D8;">Markdown</span></a> language support for IntelliJ platform</p>
             <p><br></p>
-            <p>Markdown Navigator <a href="https://vladsch.com/product/markdown-navigator">enhanced edition</a><br />
-                available in JetBrains Marketplace or with a legacy license.</p>
+            <p>Markdown Navigator <a href="https://plugins.jetbrains.com/plugin/7896-markdown-navigator-enhanced">enhanced edition</a><br/>
+                available in JetBrains Marketplace</p>
             <h2>Document with pleasure!</h2>
             <p>Work with <a href="https://daringfireball.net/projects/markdown">Markdown</a> files like you do with other languages in the IDE, by getting full support
                 for:</p>
@@ -86,17 +86,23 @@
                     </ul>
                 </li>
                 <li><strong>Math block and inline</strong> rendering by <a href="https://github.com/Khan/KaTeX">Katex</a> or <a href="https://codecogs.com">codecogs.com</a></li>
-                <li><strong>PlantUML fenced code</strong> rendering by <a href="https://plantuml.com">PlantUML</a> or <a href="http://gravizo.com">gravizo.com</a></li>
+                <li><strong>PlantUML fenced code</strong> rendering by <a href="https://plantuml.com">PlantUML</a> or <a href="https://gravizo.com">gravizo.com</a></li>
                 <li><strong>Fast typing response</strong> for distraction free editing</li>
                 <li><strong>Fully customizable</strong> to adjust to your preferences and project needs</li>
             </ul>
-            <p><img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/plugin_description_img2.png" alt="Screenshot" /></p>
+            <p><img src="https://raw.githubusercontent.com/vsch/idea-multimarkdown/master/assets/images/plugin_description_img2.png" alt="Screenshot"/></p>
         </div>
         ]]></description>
 
     <!-- Included from: change-notes.xml -->
     <change-notes><![CDATA[
         <div xmlns="http://www.w3.org/1999/html">
+            <h3>3.0.203.115 - Bug Fix Release</h3>
+            <ul>
+                <li>Fix: JBCef panel not disposed on editor closing</li>
+                <li>Fix: deprecated EditorProvider api</li>
+                <li>Change: migrate to gradle 8.1 build</li>
+            </ul>
             <h3>3.0.202.112 - Bug Fix Release</h3>
             <ul>
                 <li>Fix: diagnostic/4949, NoClassDefFoundError: Could not initialize MdCodeStyleSettings.</li>

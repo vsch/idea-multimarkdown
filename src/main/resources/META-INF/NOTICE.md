@@ -7,10 +7,10 @@ respective licenses.
 * translations [Powered by Yandex.Translate](http://translate.yandex.com/).
 * based on open source idea-multimarkdown - markdown plugin for IntelliJ products  
   Copyright (c) 2015-2019 Vladimir Schneider <https://github.com/vsch/idea-multimarkdown>  
-  <http://www.apache.org/licenses/LICENSE-2.0>
+  <https://www.apache.org/licenses/LICENSE-2.0>
   * based on idea-markdown - markdown plugin for IntelliJ products  
     Copyright (c) 2011-2014 Julien Nicoulaud <https://github.com/nicoulaj/idea-markdown>  
-    <http://www.apache.org/licenses/LICENSE-2.0>
+    <https://www.apache.org/licenses/LICENSE-2.0>
   * This software includes code from IntelliJ IDEA Community Edition  
     Copyright (c) JetBrains s.r.o.  
     <https://www.jetbrains.com/idea/>
@@ -27,7 +27,7 @@ respective licenses.
     Copyright (c) 2012 France Télécom, All rights reserved.  
     <https://asm.ow2.io>
   * parts based on <https://github.com/sindresorhus/github-markdown-css>  
-    Copyright (c) 2014-2015 Sindre Sorhus <http://sindresorhus.com>  
+    Copyright (c) 2014-2015 Sindre Sorhus <https://sindresorhus.com>  
     <https://opensource.org/licenses/MIT>
   * parts based on gfm-plugin  
     Copyright (c) 2015 shyyko.serhiy <https://github.com/ShyykoSerhiy/gfm-plugin>  
@@ -38,15 +38,15 @@ respective licenses.
     No license information provided
   * parts based on LanguageTextField  
     Copyright (c) 2006 Sascha Weinreuter  
-    <http://www.apache.org/licenses/LICENSE-2.0>
+    <https://www.apache.org/licenses/LICENSE-2.0>
   * includes Apache Commons IO software developed by  
     Copyright (c) 2002-2012 The Apache Software Foundation  
-    The Apache Software Foundation (<http://www.apache.org/>).  
-    <http://www.apache.org/licenses/LICENSE-2.0>
+    The Apache Software Foundation (<https://www.apache.org/>).  
+    <https://www.apache.org/licenses/LICENSE-2.0>
   * includes Apache Commons Validator software developed by  
     Copyright (c) 2001-2014 The Apache Software Foundation  
-    The Apache Software Foundation (<http://www.apache.org/>).  
-    <http://www.apache.org/licenses/LICENSE-2.0>
+    The Apache Software Foundation (<https://www.apache.org/>).  
+    <https://www.apache.org/licenses/LICENSE-2.0>
   * includes autolink-java software library  
     Copyright (c) 2015 Robin Stocker
     <https://github.com/robinst/autolink-java/blob/master/LICENSE>  
@@ -87,11 +87,11 @@ respective licenses.
   Copyright (C) 2016 Patrick Wright and others <https://openhtmltopdf.com>  
   <https://github.com/danfickle/openhtmltopdf/blob/open-dev-v1/LICENSE>
 * includes Apache Software License Version of PlantUML software library  
-  (C) Copyright 2009-2017, Arnaud Roques <http://plantuml.com>  
-  <http://www.apache.org/licenses/LICENSE-2.0>
+  (C) Copyright 2009-2017, Arnaud Roques <https://plantuml.com>  
+  <https://www.apache.org/licenses/LICENSE-2.0>
 * includes Noto fonts  
   This Font Software is licensed under the SIL Open Font License, Version 1.1  
-  <https://opensource.org/licenses/OFL-1.1>
+  <https://opensource.org/license/openfont-html>
 * includes JLaTeXMath library <https://github.com/opencollab/jlatexmath>   
   Copyright (C) 2009-2011 DENIZET Calixte  
   Copyright (C) Kris Coolsaet  
