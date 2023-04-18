@@ -7,7 +7,7 @@
 - [Overview](#overview)
   - [Document with pleasure!](#document-with-pleasure)
   - [Two tier model](#two-tier-model)
-- [Release Road Map](#release-road-map)
+  - [Version 3.0.xxx.130 - 2023.1 Compatibility Release](#version-30xxx130---20231-compatibility-release)
   - [Version 3.0.xxx.108 - 2020.x Compatibility Release](#version-30xxx108---2020x-compatibility-release)
   - [Version 3.0.19x.64 - 2019.x Compatibility Release](#version-3019x64---2019x-compatibility-release)
   - [Version 2.9.11](#version-2911)
@@ -75,13 +75,17 @@ for:
    usages, validation and auto formatting are available with the Enhanced license available from
    the [JetBrains Marketplace].
 
-Release Road Map
-----------------
+### Version 3.0.xxx.130 - 2023.1 Compatibility Release
+
+* Long list of **Bug Fixes**, Full [Version Notes]
+* Compatibility with 2020.3 or newer IDEs
+* Java Chromium Embedded Framework (JCEF) browser preview fixes
+* Grazie grammar checker integration fix
 
 ### Version 3.0.xxx.108 - 2020.x Compatibility Release
 
 * Long list of **Bug Fixes**, Full [Version Notes]
-* Compatibility with 2020.2 IDEs
+* Compatibility with 2020.x IDEs
 * Java Chromium Embedded Framework (JCEF) browser preview support
 * [Kroki.io] diagram rendering option for fenced code
 * [Fenced Code Rendering Settings]
@@ -281,7 +285,7 @@ with a simple desire for a Markdown preview that looked like GitHub's.
 \* This plugin was originally based on the [nicoulaj/idea-markdown plugin] by [nicoulaj], which
 was based on [pegdown] library by [sirthias].
 
-Markdown Navigator, Copyright (c) 2015-2019, V. Schneider, <http://vladsch.com> All Rights
+Markdown Navigator, Copyright (c) 2015-2019, V. Schneider, All Rights
 Reserved.
 
 [#804, Parser settings always setting default options when loading settings.]: https://github.com/vsch/idea-multimarkdown/issues/804
@@ -302,11 +306,11 @@ Reserved.
 [TeXiFy IDEA plugin]: https://plugins.jetbrains.com/plugin/9473-texify-idea/
 [Version Notes]: https://github.com/vsch/idea-multimarkdown/blob/master/VERSION.md
 [flexmark-java]: https://github.com/vsch/flexmark-java
-[gravizo.com]: http://gravizo.com
+[gravizo.com]: https://gravizo.com
 [intellij-markdown]: https://github.com/valich/intellij-markdown
 [nicoulaj]: https://github.com/nicoulaj
 [nicoulaj/idea-markdown plugin]: https://github.com/nicoulaj/idea-markdown
-[pegdown]: http://pegdown.org
+[pegdown]: https://pegdown.org
 [sirthias]: https://github.com/sirthias
 
 
