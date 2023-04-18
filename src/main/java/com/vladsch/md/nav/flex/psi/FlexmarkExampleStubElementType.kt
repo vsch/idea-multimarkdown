@@ -18,7 +18,7 @@ class FlexmarkExampleStubElementType(debugName: String) : ILightStubElementType<
         return FlexmarkExampleImpl(stub, this)
     }
 
-    override fun createStub(psi: FlexmarkExample, parentStub: StubElement<PsiElement>): FlexmarkExampleStub {
+    override fun createStub(psi: FlexmarkExample, parentStub: StubElement<*>): FlexmarkExampleStub {
         return FlexmarkExampleStubImpl(parentStub, psi.sectionNode?.text ?: "", psi.numberNode?.text ?: "")
     }
 
@@ -49,7 +49,7 @@ class FlexmarkExampleStubElementType(debugName: String) : ILightStubElementType<
         //}
     }
 
-    override fun createStub(tree: LighterAST, node: LighterASTNode, parentStub: StubElement<PsiElement>): FlexmarkExampleStub {
+    override fun createStub(tree: LighterAST, node: LighterASTNode, parentStub: StubElement<*>): FlexmarkExampleStub {
         //LighterASTNode optionsListNode = LightTreeUtil.firstChildOfType(tree, node, MultiMarkdownTypes.FLEXMARK_EXAMPLE_OPTIONS);
         //String key = intern(tree.getCharTable(), optionsListNode);
         val children = tree.getChildren(node)
@@ -72,7 +72,7 @@ class FlexmarkExampleStubElementType(debugName: String) : ILightStubElementType<
     companion object {
 
         fun intern(table: CharTable, node: LighterASTNode): String {
-            assert(node is LighterASTTokenNode, { node })
+            assert(node is LighterASTTokenNode) { node }
             return table.intern((node as LighterASTTokenNode).text).toString()
         }
     }

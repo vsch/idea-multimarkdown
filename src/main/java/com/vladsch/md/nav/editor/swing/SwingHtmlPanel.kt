@@ -52,6 +52,9 @@ internal class SwingHtmlPanel(project: Project, htmlPanelHost: HtmlPanelHost) : 
     private var myHavePendingScroll = false
     private var myState = PreviewEditorState()
 
+    override fun dispose() {
+    }
+
     init {
         // Add a custom link listener which can resolve local link references.
         jEditorPane.addHyperlinkListener(MdLinkListener(jEditorPane, this))
@@ -355,9 +358,6 @@ internal class SwingHtmlPanel(project: Project, htmlPanelHost: HtmlPanelHost) : 
                 scrollToReference()
             }
         }
-    }
-
-    override fun dispose() {
     }
 
     companion object {

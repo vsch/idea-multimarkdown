@@ -16,20 +16,18 @@
 package com.vladsch.md.nav.language.completion
 
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
-import com.vladsch.md.nav.MdFileType
 import com.vladsch.md.nav.language.completion.util.MdCompletionContext
 import com.vladsch.md.nav.language.completion.util.TextContext
 import com.vladsch.plugin.util.TestUtils
 import com.vladsch.plugin.util.indexOrNull
 import com.vladsch.plugin.util.toBased
-import org.junit.After
-import org.junit.Before
 import org.junit.runners.Parameterized
 
 abstract class CompletionContextTestBase : LightPlatformCodeInsightFixtureTestCase() {
+
     abstract val context: MdCompletionContext
 
-// @formatter:off
+    // @formatter:off
 
     @Parameterized.Parameter(0) @JvmField var location: String = ""
     @Parameterized.Parameter(1) @JvmField var type: String = ""
@@ -39,17 +37,6 @@ abstract class CompletionContextTestBase : LightPlatformCodeInsightFixtureTestCa
     @Parameterized.Parameter(5) @JvmField var isAuto: Boolean = false 
     
 // @formatter:on
-
-    @Before
-    fun before() {
-        super.setUp()
-        myFixture.configureByText(MdFileType.INSTANCE, "dummy")
-    }
-
-    @After
-    fun after() {
-        super.tearDown()
-    }
 
     fun String.params(): TextContext? {
         val pos = indexOf('|')

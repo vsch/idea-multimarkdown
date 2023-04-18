@@ -838,6 +838,449 @@
     <option name="text" hit="Text//Underlined text (Inserted text)" />
     <option name="underlined" hit="Text//Underlined text (Inserted text)" />
   </configurable>
+  <configurable id="MarkdownNavigator.Settings.Application" configurable_name="Markdown">
+    <option name="0" hit="0: 0 B" />
+    <option name="b" hit="0: 0 B" />
+    <option name="0" hit="3.0.203.115" />
+    <option name="115" hit="3.0.203.115" />
+    <option name="203" hit="3.0.203.115" />
+    <option name="3" hit="3.0.203.115" />
+    <option name="add" hit="Add Copy Path" />
+    <option name="copy" hit="Add Copy Path" />
+    <option name="path" hit="Add Copy Path" />
+    <option name="add" hit="Add Copy Reference" />
+    <option name="copy" hit="Add Copy Reference" />
+    <option name="reference" hit="Add Copy Reference" />
+    <option name="application" hit="Application Settings" />
+    <option name="settings" hit="Application Settings" />
+    <option name="as" hit="As URL" />
+    <option name="url" hit="As URL" />
+    <option name="bare" hit="Bare File Name (filename, dir.ext)" />
+    <option name="dir" hit="Bare File Name (filename, dir.ext)" />
+    <option name="ext" hit="Bare File Name (filename, dir.ext)" />
+    <option name="file" hit="Bare File Name (filename, dir.ext)" />
+    <option name="filename" hit="Bare File Name (filename, dir.ext)" />
+    <option name="name" hit="Bare File Name (filename, dir.ext)" />
+    <option name="check" hit="Check updates for:" />
+    <option name="for" hit="Check updates for:" />
+    <option name="updates" hit="Check updates for:" />
+    <option name="cache" hit="Clear Image Cache" />
+    <option name="clear" hit="Clear Image Cache" />
+    <option name="image" hit="Clear Image Cache" />
+    <option name="copy" hit="Copy Selection Reference" />
+    <option name="reference" hit="Copy Selection Reference" />
+    <option name="selection" hit="Copy Selection Reference" />
+    <option name="copy" hit="Copy Upsource Reference" />
+    <option name="reference" hit="Copy Upsource Reference" />
+    <option name="upsource" hit="Copy Upsource Reference" />
+    <option name="display" hit="Do not display GIF images" />
+    <option name="do" hit="Do not display GIF images" />
+    <option name="gif" hit="Do not display GIF images" />
+    <option name="images" hit="Do not display GIF images" />
+    <option name="not" hit="Do not display GIF images" />
+    <option name="document" hit="Document Icon:" />
+    <option name="icon" hit="Document Icon:" />
+    <option name="access" hit="Early Access Program" />
+    <option name="early" hit="Early Access Program" />
+    <option name="program" hit="Early Access Program" />
+    <option name="dir" hit="File Name (filename.ext, dir.ext/)" />
+    <option name="ext" hit="File Name (filename.ext, dir.ext/)" />
+    <option name="file" hit="File Name (filename.ext, dir.ext/)" />
+    <option name="filename" hit="File Name (filename.ext, dir.ext/)" />
+    <option name="name" hit="File Name (filename.ext, dir.ext/)" />
+    <option name="0" hit="Global Page Zoom (0.1-10):" />
+    <option name="1-10" hit="Global Page Zoom (0.1-10):" />
+    <option name="global" hit="Global Page Zoom (0.1-10):" />
+    <option name="page" hit="Global Page Zoom (0.1-10):" />
+    <option name="zoom" hit="Global Page Zoom (0.1-10):" />
+    <option name="installed" hit="Installed Version:" />
+    <option name="version" hit="Installed Version:" />
+    <option name="-" hit="Legacy License - Early Access Program" />
+    <option name="access" hit="Legacy License - Early Access Program" />
+    <option name="early" hit="Legacy License - Early Access Program" />
+    <option name="legacy" hit="Legacy License - Early Access Program" />
+    <option name="license" hit="Legacy License - Early Access Program" />
+    <option name="program" hit="Legacy License - Early Access Program" />
+    <option name="-" hit="Legacy License - Official Plugin Releases" />
+    <option name="legacy" hit="Legacy License - Official Plugin Releases" />
+    <option name="license" hit="Legacy License - Official Plugin Releases" />
+    <option name="official" hit="Legacy License - Official Plugin Releases" />
+    <option name="plugin" hit="Legacy License - Official Plugin Releases" />
+    <option name="releases" hit="Legacy License - Official Plugin Releases" />
+    <option name="manage" hit="Manage ..." />
+    <option name="markdown" hit="Markdown" />
+    <option name="markdown" hit="Markdown Navigator" />
+    <option name="navigator" hit="Markdown Navigator" />
+    <option name="markdown" hit="Markdown Navigator Wiki" />
+    <option name="navigator" hit="Markdown Navigator Wiki" />
+    <option name="wiki" hit="Markdown Navigator Wiki" />
+    <option name="markdown" hit="Markdown Wiki" />
+    <option name="wiki" hit="Markdown Wiki" />
+    <option name="official" hit="Official Plugin Releases" />
+    <option name="plugin" hit="Official Plugin Releases" />
+    <option name="releases" hit="Official Plugin Releases" />
+    <option name="preview" hit="Preview Settings" />
+    <option name="settings" hit="Preview Settings" />
+    <option name="project" hit="Project View" />
+    <option name="view" hit="Project View" />
+    <option name="icon" hit="Wiki page Icon:" />
+    <option name="page" hit="Wiki page Icon:" />
+    <option name="wiki" hit="Wiki page Icon:" />
+  </configurable>
+  <configurable id="MarkdownNavigator.Settings.Editor" configurable_name="Editor">
+    <option name="annotator" hit="Annotator" />
+    <option name="asterisk" hit="Asterisk (Bold/Italic)" />
+    <option name="bold" hit="Asterisk (Bold/Italic)" />
+    <option name="italic" hit="Asterisk (Bold/Italic)" />
+    <option name="attrs" hit="Attrs:" />
+    <option name="back" hit="Back tick (Inline Code)" />
+    <option name="code" hit="Back tick (Inline Code)" />
+    <option name="inline" hit="Back tick (Inline Code)" />
+    <option name="tick" hit="Back tick (Inline Code)" />
+    <option name="detect" hit="Detect language" />
+    <option name="language" hit="Detect language" />
+    <option name="editor" hit="Editor" />
+    <option name="editor" hit="Editor Settings" />
+    <option name="settings" hit="Editor Settings" />
+    <option name="from" hit="From:" />
+    <option name="attributes" hit="Full highlighter attributes" />
+    <option name="full" hit="Full highlighter attributes" />
+    <option name="highlighter" hit="Full highlighter attributes" />
+    <option name="buttons" hit="Hide disabled toolbar buttons" />
+    <option name="disabled" hit="Hide disabled toolbar buttons" />
+    <option name="hide" hit="Hide disabled toolbar buttons" />
+    <option name="toolbar" hit="Hide disabled toolbar buttons" />
+    <option name="hide" hit="Hide toolbar" />
+    <option name="toolbar" hit="Hide toolbar" />
+    <option name="casing" hit="Ignore casing of simple list item text" />
+    <option name="ignore" hit="Ignore casing of simple list item text" />
+    <option name="item" hit="Ignore casing of simple list item text" />
+    <option name="list" hit="Ignore casing of simple list item text" />
+    <option name="of" hit="Ignore casing of simple list item text" />
+    <option name="simple" hit="Ignore casing of simple list item text" />
+    <option name="text" hit="Ignore casing of simple list item text" />
+    <option name="code" hit="In Fenced Code" />
+    <option name="fenced" hit="In Fenced Code" />
+    <option name="in" hit="In Fenced Code" />
+    <option name="blocks" hit="In HTML Blocks" />
+    <option name="html" hit="In HTML Blocks" />
+    <option name="in" hit="In HTML Blocks" />
+    <option name="label" hit="Label" />
+    <option name="injections" hit="Language Injections" />
+    <option name="language" hit="Language Injections" />
+    <option name="lexer" hit="Lexer" />
+    <option name="languages" hit="Load Languages" />
+    <option name="load" hit="Load Languages" />
+    <option name="none" hit="None" />
+    <option name="chars" hit="Punctuation Chars:" />
+    <option name="punctuation" hit="Punctuation Chars:" />
+    <option name="joining" hit="Remove prefix when joining lines" />
+    <option name="lines" hit="Remove prefix when joining lines" />
+    <option name="prefix" hit="Remove prefix when joining lines" />
+    <option name="remove" hit="Remove prefix when joining lines" />
+    <option name="when" hit="Remove prefix when joining lines" />
+    <option name="key" hit="Set Key" />
+    <option name="set" hit="Set Key" />
+    <option name="breadcrumbs" hit="Show Breadcrumbs, max chars:" />
+    <option name="chars" hit="Show Breadcrumbs, max chars:" />
+    <option name="max" hit="Show Breadcrumbs, max chars:" />
+    <option name="show" hit="Show Breadcrumbs, max chars:" />
+    <option name="area" hit="Show Icon gutter area" />
+    <option name="gutter" hit="Show Icon gutter area" />
+    <option name="icon" hit="Show Icon gutter area" />
+    <option name="show" hit="Show Icon gutter area" />
+    <option name="gutter" hit="Show markdown references in gutter" />
+    <option name="in" hit="Show markdown references in gutter" />
+    <option name="markdown" hit="Show markdown references in gutter" />
+    <option name="references" hit="Show markdown references in gutter" />
+    <option name="show" hit="Show markdown references in gutter" />
+    <option name="edit" hit="Smart Edit" />
+    <option name="smart" hit="Smart Edit" />
+    <option name="keys" hit="Smart Keys" />
+    <option name="smart" hit="Smart Keys" />
+    <option name="highlighting" hit="Syntax Highlighting:" />
+    <option name="syntax" hit="Syntax Highlighting:" />
+    <option name="layout" hit="Text/Preview Layout" />
+    <option name="preview" hit="Text/Preview Layout" />
+    <option name="text" hit="Text/Preview Layout" />
+    <option name="layout" hit="Text/Split Layout" />
+    <option name="split" hit="Text/Split Layout" />
+    <option name="text" hit="Text/Split Layout" />
+    <option name="strikeout" hit="Tilde (Strikeout/Subscript)" />
+    <option name="subscript" hit="Tilde (Strikeout/Subscript)" />
+    <option name="tilde" hit="Tilde (Strikeout/Subscript)" />
+    <option name="to" hit="To:" />
+    <option name="editor" hit="Toggle Editor Layout:" />
+    <option name="layout" hit="Toggle Editor Layout:" />
+    <option name="toggle" hit="Toggle Editor Layout:" />
+    <option name="code" hit="Toggle inline code like text style" />
+    <option name="inline" hit="Toggle inline code like text style" />
+    <option name="like" hit="Toggle inline code like text style" />
+    <option name="style" hit="Toggle inline code like text style" />
+    <option name="text" hit="Toggle inline code like text style" />
+    <option name="toggle" hit="Toggle inline code like text style" />
+    <option name="action" hit="Translate Document Action" />
+    <option name="document" hit="Translate Document Action" />
+    <option name="translate" hit="Translate Document Action" />
+    <option name="delay" hit="Typing update delay (ms):" />
+    <option name="ms" hit="Typing update delay (ms):" />
+    <option name="typing" hit="Typing update delay (ms):" />
+    <option name="update" hit="Typing update delay (ms):" />
+    <option name="bold" hit="Underscore (Bold/Italic)" />
+    <option name="italic" hit="Underscore (Bold/Italic)" />
+    <option name="underscore" hit="Underscore (Bold/Italic)" />
+    <option name="asterisks" hit="Use asterisks (*) for Italic text" />
+    <option name="for" hit="Use asterisks (*) for Italic text" />
+    <option name="italic" hit="Use asterisks (*) for Italic text" />
+    <option name="text" hit="Use asterisks (*) for Italic text" />
+    <option name="use" hit="Use asterisks (*) for Italic text" />
+    <option name="preview" hit="Vertical Text/Preview Split" />
+    <option name="split" hit="Vertical Text/Preview Split" />
+    <option name="text" hit="Vertical Text/Preview Split" />
+    <option name="vertical" hit="Vertical Text/Preview Split" />
+    <option name="after" hit="Wrap on typing only after space is typed" />
+    <option name="is" hit="Wrap on typing only after space is typed" />
+    <option name="on" hit="Wrap on typing only after space is typed" />
+    <option name="only" hit="Wrap on typing only after space is typed" />
+    <option name="space" hit="Wrap on typing only after space is typed" />
+    <option name="typed" hit="Wrap on typing only after space is typed" />
+    <option name="typing" hit="Wrap on typing only after space is typed" />
+    <option name="wrap" hit="Wrap on typing only after space is typed" />
+    <option name="af" hit="af" />
+    <option name="am" hit="am" />
+    <option name="ar" hit="ar" />
+    <option name="az" hit="az" />
+    <option name="ba" hit="ba" />
+    <option name="be" hit="be" />
+    <option name="bg" hit="bg" />
+    <option name="bn" hit="bn" />
+    <option name="bs" hit="bs" />
+    <option name="ca" hit="ca" />
+    <option name="ceb" hit="ceb" />
+    <option name="cs" hit="cs" />
+    <option name="cy" hit="cy" />
+    <option name="da" hit="da" />
+    <option name="de" hit="de" />
+    <option name="el" hit="el" />
+    <option name="en" hit="en" />
+    <option name="eo" hit="eo" />
+    <option name="es" hit="es" />
+    <option name="et" hit="et" />
+    <option name="eu" hit="eu" />
+    <option name="fa" hit="fa" />
+    <option name="fi" hit="fi" />
+    <option name="fr" hit="fr" />
+    <option name="ga" hit="ga" />
+    <option name="gd" hit="gd" />
+    <option name="gl" hit="gl" />
+    <option name="gu" hit="gu" />
+    <option name="he" hit="he" />
+    <option name="hi" hit="hi" />
+    <option name="hr" hit="hr" />
+    <option name="ht" hit="ht" />
+    <option name="hu" hit="hu" />
+    <option name="hy" hit="hy" />
+    <option name="id" hit="id" />
+    <option name="image" hit="in Multi-Line Image URLs" />
+    <option name="in" hit="in Multi-Line Image URLs" />
+    <option name="multi-line" hit="in Multi-Line Image URLs" />
+    <option name="urls" hit="in Multi-Line Image URLs" />
+    <option name="is" hit="is" />
+    <option name="it" hit="it" />
+    <option name="ja" hit="ja" />
+    <option name="jv" hit="jv" />
+    <option name="ka" hit="ka" />
+    <option name="kk" hit="kk" />
+    <option name="km" hit="km" />
+    <option name="kn" hit="kn" />
+    <option name="ko" hit="ko" />
+    <option name="ky" hit="ky" />
+    <option name="la" hit="la" />
+    <option name="lb" hit="lb" />
+    <option name="lo" hit="lo" />
+    <option name="lt" hit="lt" />
+    <option name="lv" hit="lv" />
+    <option name="mg" hit="mg" />
+    <option name="mhr" hit="mhr" />
+    <option name="mi" hit="mi" />
+    <option name="mk" hit="mk" />
+    <option name="ml" hit="ml" />
+    <option name="mn" hit="mn" />
+    <option name="mr" hit="mr" />
+    <option name="mrj" hit="mrj" />
+    <option name="ms" hit="ms" />
+    <option name="mt" hit="mt" />
+    <option name="my" hit="my" />
+    <option name="ne" hit="ne" />
+    <option name="nl" hit="nl" />
+    <option name="no" hit="no" />
+    <option name="pa" hit="pa" />
+    <option name="pap" hit="pap" />
+    <option name="pl" hit="pl" />
+    <option name="pt" hit="pt" />
+    <option name="ro" hit="ro" />
+    <option name="ru" hit="ru" />
+    <option name="si" hit="si" />
+    <option name="sk" hit="sk" />
+    <option name="sl" hit="sl" />
+    <option name="sq" hit="sq" />
+    <option name="sr" hit="sr" />
+    <option name="su" hit="su" />
+    <option name="sv" hit="sv" />
+    <option name="sw" hit="sw" />
+    <option name="ta" hit="ta" />
+    <option name="te" hit="te" />
+    <option name="tg" hit="tg" />
+    <option name="th" hit="th" />
+    <option name="tl" hit="tl" />
+    <option name="tr" hit="tr" />
+    <option name="tt" hit="tt" />
+    <option name="udm" hit="udm" />
+    <option name="uk" hit="uk" />
+    <option name="ur" hit="ur" />
+    <option name="uz" hit="uz" />
+    <option name="vi" hit="vi" />
+    <option name="xh" hit="xh" />
+    <option name="yi" hit="yi" />
+    <option name="zh" hit="zh" />
+  </configurable>
+  <configurable id="MarkdownNavigator.Settings.Notifications" configurable_name="Notifications">
+    <option name="auto" hit="Auto links extension performance warning" />
+    <option name="extension" hit="Auto links extension performance warning" />
+    <option name="links" hit="Auto links extension performance warning" />
+    <option name="performance" hit="Auto links extension performance warning" />
+    <option name="warning" hit="Auto links extension performance warning" />
+    <option name="basic" hit="Basic Plugin" />
+    <option name="plugin" hit="Basic Plugin" />
+    <option name="again" hit="Do not show again" />
+    <option name="do" hit="Do not show again" />
+    <option name="not" hit="Do not show again" />
+    <option name="show" hit="Do not show again" />
+    <option name="enable" hit="Enable PlantUML extension notification" />
+    <option name="extension" hit="Enable PlantUML extension notification" />
+    <option name="notification" hit="Enable PlantUML extension notification" />
+    <option name="plantuml" hit="Enable PlantUML extension notification" />
+    <option name="available" hit="Enhanced version available" />
+    <option name="enhanced" hit="Enhanced version available" />
+    <option name="version" hit="Enhanced version available" />
+    <option name="change" hit="GitHub syntax change" />
+    <option name="github" hit="GitHub syntax change" />
+    <option name="syntax" hit="GitHub syntax change" />
+    <option name="available" hit="Java Chromium Embedded preview available" />
+    <option name="chromium" hit="Java Chromium Embedded preview available" />
+    <option name="embedded" hit="Java Chromium Embedded preview available" />
+    <option name="java" hit="Java Chromium Embedded preview available" />
+    <option name="preview" hit="Java Chromium Embedded preview available" />
+    <option name="available" hit="JavaFX preview available" />
+    <option name="javafx" hit="JavaFX preview available" />
+    <option name="preview" hit="JavaFX preview available" />
+    <option name="front" hit="Jekyll front matter" />
+    <option name="jekyll" hit="Jekyll front matter" />
+    <option name="matter" hit="Jekyll front matter" />
+    <option name="channel" hit="Need legacy update channel dialog" />
+    <option name="dialog" hit="Need legacy update channel dialog" />
+    <option name="legacy" hit="Need legacy update channel dialog" />
+    <option name="need" hit="Need legacy update channel dialog" />
+    <option name="update" hit="Need legacy update channel dialog" />
+    <option name="channel" hit="Need non-legacy update channel dialog" />
+    <option name="dialog" hit="Need non-legacy update channel dialog" />
+    <option name="need" hit="Need non-legacy update channel dialog" />
+    <option name="non-legacy" hit="Need non-legacy update channel dialog" />
+    <option name="update" hit="Need non-legacy update channel dialog" />
+    <option name="notifications" hit="Notifications" />
+    <option name="characters" hit="Unicode line separator characters in file" />
+    <option name="file" hit="Unicode line separator characters in file" />
+    <option name="in" hit="Unicode line separator characters in file" />
+    <option name="line" hit="Unicode line separator characters in file" />
+    <option name="separator" hit="Unicode line separator characters in file" />
+    <option name="unicode" hit="Unicode line separator characters in file" />
+  </configurable>
+  <configurable id="MarkdownNavigator.Settings.Debug" configurable_name="Debug">
+    <option name="browser" hit="Cache converted SVG images for Swing browser" />
+    <option name="cache" hit="Cache converted SVG images for Swing browser" />
+    <option name="converted" hit="Cache converted SVG images for Swing browser" />
+    <option name="for" hit="Cache converted SVG images for Swing browser" />
+    <option name="images" hit="Cache converted SVG images for Swing browser" />
+    <option name="svg" hit="Cache converted SVG images for Swing browser" />
+    <option name="swing" hit="Cache converted SVG images for Swing browser" />
+    <option name="debug" hit="Debug" />
+    <option name="action" hit="Enable &quot;Show Hex for Selection&quot; Action" />
+    <option name="enable" hit="Enable &quot;Show Hex for Selection&quot; Action" />
+    <option name="for" hit="Enable &quot;Show Hex for Selection&quot; Action" />
+    <option name="hex" hit="Enable &quot;Show Hex for Selection&quot; Action" />
+    <option name="selection" hit="Enable &quot;Show Hex for Selection&quot; Action" />
+    <option name="show" hit="Enable &quot;Show Hex for Selection&quot; Action" />
+    <option name="developer" hit="Enable flexmark-java developer features" />
+    <option name="enable" hit="Enable flexmark-java developer features" />
+    <option name="features" hit="Enable flexmark-java developer features" />
+    <option name="flexmark-java" hit="Enable flexmark-java developer features" />
+    <option name="cache" hit="Enable per file link cache" />
+    <option name="enable" hit="Enable per file link cache" />
+    <option name="file" hit="Enable per file link cache" />
+    <option name="link" hit="Enable per file link cache" />
+    <option name="per" hit="Enable per file link cache" />
+    <option name="content" hit="Error highlight remote URL elements until content is fetched" />
+    <option name="elements" hit="Error highlight remote URL elements until content is fetched" />
+    <option name="error" hit="Error highlight remote URL elements until content is fetched" />
+    <option name="fetched" hit="Error highlight remote URL elements until content is fetched" />
+    <option name="highlight" hit="Error highlight remote URL elements until content is fetched" />
+    <option name="is" hit="Error highlight remote URL elements until content is fetched" />
+    <option name="remote" hit="Error highlight remote URL elements until content is fetched" />
+    <option name="until" hit="Error highlight remote URL elements until content is fetched" />
+    <option name="url" hit="Error highlight remote URL elements until content is fetched" />
+    <option name="flexmark-java" hit="Flexmark-Java" />
+    <option name="height" hit="Height:" />
+    <option name="menu" hit="Menu Split:" />
+    <option name="split" hit="Menu Split:" />
+    <option name="console" hit="Output remote URL fetch exceptions to console" />
+    <option name="exceptions" hit="Output remote URL fetch exceptions to console" />
+    <option name="fetch" hit="Output remote URL fetch exceptions to console" />
+    <option name="output" hit="Output remote URL fetch exceptions to console" />
+    <option name="remote" hit="Output remote URL fetch exceptions to console" />
+    <option name="to" hit="Output remote URL fetch exceptions to console" />
+    <option name="url" hit="Output remote URL fetch exceptions to console" />
+    <option name="change" hit="Reinitialize editors on settings change" />
+    <option name="editors" hit="Reinitialize editors on settings change" />
+    <option name="on" hit="Reinitialize editors on settings change" />
+    <option name="reinitialize" hit="Reinitialize editors on settings change" />
+    <option name="settings" hit="Reinitialize editors on settings change" />
+    <option name="changes" hit="Reload open editors when the underlying file type changes" />
+    <option name="editors" hit="Reload open editors when the underlying file type changes" />
+    <option name="file" hit="Reload open editors when the underlying file type changes" />
+    <option name="open" hit="Reload open editors when the underlying file type changes" />
+    <option name="reload" hit="Reload open editors when the underlying file type changes" />
+    <option name="the" hit="Reload open editors when the underlying file type changes" />
+    <option name="type" hit="Reload open editors when the underlying file type changes" />
+    <option name="underlying" hit="Reload open editors when the underlying file type changes" />
+    <option name="when" hit="Reload open editors when the underlying file type changes" />
+    <option name="colors" hit="Show combination colors" />
+    <option name="combination" hit="Show combination colors" />
+    <option name="show" hit="Show combination colors" />
+    <option name="bounds" hit="Show text formatting bounds" />
+    <option name="formatting" hit="Show text formatting bounds" />
+    <option name="show" hit="Show text formatting bounds" />
+    <option name="text" hit="Show text formatting bounds" />
+    <option name="action" hit="Size Preferences Dialog Action" />
+    <option name="dialog" hit="Size Preferences Dialog Action" />
+    <option name="preferences" hit="Size Preferences Dialog Action" />
+    <option name="size" hit="Size Preferences Dialog Action" />
+    <option name="exceptions" hit="Throw Parser Exceptions" />
+    <option name="parser" hit="Throw Parser Exceptions" />
+    <option name="throw" hit="Throw Parser Exceptions" />
+    <option name="browser" hit="Use images for task list items in Swing browser" />
+    <option name="for" hit="Use images for task list items in Swing browser" />
+    <option name="images" hit="Use images for task list items in Swing browser" />
+    <option name="in" hit="Use images for task list items in Swing browser" />
+    <option name="items" hit="Use images for task list items in Swing browser" />
+    <option name="list" hit="Use images for task list items in Swing browser" />
+    <option name="swing" hit="Use images for task list items in Swing browser" />
+    <option name="task" hit="Use images for task list items in Swing browser" />
+    <option name="use" hit="Use images for task list items in Swing browser" />
+    <option name="width" hit="Width:" />
+  </configurable>
+  <configurable id="MarkdownNavigator.Settings.Notices" configurable_name="Notice">
+    <option name="notice" hit="Notice" />
+  </configurable>
   <configurable id="preferences.sourceCode.Markdown" configurable_name="Markdown">
     <option name="continuation" path="Tabs and Indents" hit="Continuation indent:" />
     <option name="indent" path="Tabs and Indents" hit="Continuation indent:" />
@@ -1140,313 +1583,6 @@
     <option name="typing" path="Wrapping and Braces" hit="Wrap on typing" />
     <option name="wrap" path="Wrapping and Braces" hit="Wrap on typing" />
   </configurable>
-  <configurable id="MarkdownNavigator.Settings.Application" configurable_name="Markdown">
-    <option name="0" hit="0: 0 B" />
-    <option name="b" hit="0: 0 B" />
-    <option name="0" hit="3.0.201.92.Legacy" />
-    <option name="201" hit="3.0.201.92.Legacy" />
-    <option name="3" hit="3.0.201.92.Legacy" />
-    <option name="92" hit="3.0.201.92.Legacy" />
-    <option name="legacy" hit="3.0.201.92.Legacy" />
-    <option name="add" hit="Add Copy Path" />
-    <option name="copy" hit="Add Copy Path" />
-    <option name="path" hit="Add Copy Path" />
-    <option name="add" hit="Add Copy Reference" />
-    <option name="copy" hit="Add Copy Reference" />
-    <option name="reference" hit="Add Copy Reference" />
-    <option name="application" hit="Application Settings" />
-    <option name="settings" hit="Application Settings" />
-    <option name="as" hit="As URL" />
-    <option name="url" hit="As URL" />
-    <option name="bare" hit="Bare File Name (filename, dir.ext)" />
-    <option name="dir" hit="Bare File Name (filename, dir.ext)" />
-    <option name="ext" hit="Bare File Name (filename, dir.ext)" />
-    <option name="file" hit="Bare File Name (filename, dir.ext)" />
-    <option name="filename" hit="Bare File Name (filename, dir.ext)" />
-    <option name="name" hit="Bare File Name (filename, dir.ext)" />
-    <option name="check" hit="Check updates for:" />
-    <option name="for" hit="Check updates for:" />
-    <option name="updates" hit="Check updates for:" />
-    <option name="cache" hit="Clear Image Cache" />
-    <option name="clear" hit="Clear Image Cache" />
-    <option name="image" hit="Clear Image Cache" />
-    <option name="copy" hit="Copy Selection Reference" />
-    <option name="reference" hit="Copy Selection Reference" />
-    <option name="selection" hit="Copy Selection Reference" />
-    <option name="copy" hit="Copy Upsource Reference" />
-    <option name="reference" hit="Copy Upsource Reference" />
-    <option name="upsource" hit="Copy Upsource Reference" />
-    <option name="display" hit="Do not display GIF images" />
-    <option name="do" hit="Do not display GIF images" />
-    <option name="gif" hit="Do not display GIF images" />
-    <option name="images" hit="Do not display GIF images" />
-    <option name="not" hit="Do not display GIF images" />
-    <option name="document" hit="Document Icon:" />
-    <option name="icon" hit="Document Icon:" />
-    <option name="access" hit="Early Access Program" />
-    <option name="early" hit="Early Access Program" />
-    <option name="program" hit="Early Access Program" />
-    <option name="dir" hit="File Name (filename.ext, dir.ext/)" />
-    <option name="ext" hit="File Name (filename.ext, dir.ext/)" />
-    <option name="file" hit="File Name (filename.ext, dir.ext/)" />
-    <option name="filename" hit="File Name (filename.ext, dir.ext/)" />
-    <option name="name" hit="File Name (filename.ext, dir.ext/)" />
-    <option name="0" hit="Global Page Zoom (0.1-10):" />
-    <option name="1-10" hit="Global Page Zoom (0.1-10):" />
-    <option name="global" hit="Global Page Zoom (0.1-10):" />
-    <option name="page" hit="Global Page Zoom (0.1-10):" />
-    <option name="zoom" hit="Global Page Zoom (0.1-10):" />
-    <option name="installed" hit="Installed Version:" />
-    <option name="version" hit="Installed Version:" />
-    <option name="-" hit="Legacy License - Early Access Program" />
-    <option name="access" hit="Legacy License - Early Access Program" />
-    <option name="early" hit="Legacy License - Early Access Program" />
-    <option name="legacy" hit="Legacy License - Early Access Program" />
-    <option name="license" hit="Legacy License - Early Access Program" />
-    <option name="program" hit="Legacy License - Early Access Program" />
-    <option name="-" hit="Legacy License - Official Plugin Releases" />
-    <option name="legacy" hit="Legacy License - Official Plugin Releases" />
-    <option name="license" hit="Legacy License - Official Plugin Releases" />
-    <option name="official" hit="Legacy License - Official Plugin Releases" />
-    <option name="plugin" hit="Legacy License - Official Plugin Releases" />
-    <option name="releases" hit="Legacy License - Official Plugin Releases" />
-    <option name="manage" hit="Manage ..." />
-    <option name="markdown" hit="Markdown" />
-    <option name="markdown" hit="Markdown Navigator" />
-    <option name="navigator" hit="Markdown Navigator" />
-    <option name="markdown" hit="Markdown Navigator Wiki" />
-    <option name="navigator" hit="Markdown Navigator Wiki" />
-    <option name="wiki" hit="Markdown Navigator Wiki" />
-    <option name="markdown" hit="Markdown Wiki" />
-    <option name="wiki" hit="Markdown Wiki" />
-    <option name="official" hit="Official Plugin Releases" />
-    <option name="plugin" hit="Official Plugin Releases" />
-    <option name="releases" hit="Official Plugin Releases" />
-    <option name="preview" hit="Preview Settings" />
-    <option name="settings" hit="Preview Settings" />
-    <option name="project" hit="Project View" />
-    <option name="view" hit="Project View" />
-    <option name="icon" hit="Wiki page Icon:" />
-    <option name="page" hit="Wiki page Icon:" />
-    <option name="wiki" hit="Wiki page Icon:" />
-  </configurable>
-  <configurable id="MarkdownNavigator.Settings.Editor" configurable_name="Editor">
-    <option name="annotator" hit="Annotator" />
-    <option name="asterisk" hit="Asterisk (Bold/Italic)" />
-    <option name="bold" hit="Asterisk (Bold/Italic)" />
-    <option name="italic" hit="Asterisk (Bold/Italic)" />
-    <option name="attrs" hit="Attrs:" />
-    <option name="back" hit="Back tick (Inline Code)" />
-    <option name="code" hit="Back tick (Inline Code)" />
-    <option name="inline" hit="Back tick (Inline Code)" />
-    <option name="tick" hit="Back tick (Inline Code)" />
-    <option name="detect" hit="Detect language" />
-    <option name="language" hit="Detect language" />
-    <option name="editor" hit="Editor" />
-    <option name="editor" hit="Editor Settings" />
-    <option name="settings" hit="Editor Settings" />
-    <option name="from" hit="From:" />
-    <option name="attributes" hit="Full highlighter attributes" />
-    <option name="full" hit="Full highlighter attributes" />
-    <option name="highlighter" hit="Full highlighter attributes" />
-    <option name="buttons" hit="Hide disabled toolbar buttons" />
-    <option name="disabled" hit="Hide disabled toolbar buttons" />
-    <option name="hide" hit="Hide disabled toolbar buttons" />
-    <option name="toolbar" hit="Hide disabled toolbar buttons" />
-    <option name="hide" hit="Hide toolbar" />
-    <option name="toolbar" hit="Hide toolbar" />
-    <option name="casing" hit="Ignore casing of simple list item text" />
-    <option name="ignore" hit="Ignore casing of simple list item text" />
-    <option name="item" hit="Ignore casing of simple list item text" />
-    <option name="list" hit="Ignore casing of simple list item text" />
-    <option name="of" hit="Ignore casing of simple list item text" />
-    <option name="simple" hit="Ignore casing of simple list item text" />
-    <option name="text" hit="Ignore casing of simple list item text" />
-    <option name="code" hit="In Fenced Code" />
-    <option name="fenced" hit="In Fenced Code" />
-    <option name="in" hit="In Fenced Code" />
-    <option name="blocks" hit="In HTML Blocks" />
-    <option name="html" hit="In HTML Blocks" />
-    <option name="in" hit="In HTML Blocks" />
-    <option name="label" hit="Label" />
-    <option name="injections" hit="Language Injections" />
-    <option name="language" hit="Language Injections" />
-    <option name="lexer" hit="Lexer" />
-    <option name="languages" hit="Load Languages" />
-    <option name="load" hit="Load Languages" />
-    <option name="none" hit="None" />
-    <option name="chars" hit="Punctuation Chars:" />
-    <option name="punctuation" hit="Punctuation Chars:" />
-    <option name="joining" hit="Remove prefix when joining lines" />
-    <option name="lines" hit="Remove prefix when joining lines" />
-    <option name="prefix" hit="Remove prefix when joining lines" />
-    <option name="remove" hit="Remove prefix when joining lines" />
-    <option name="when" hit="Remove prefix when joining lines" />
-    <option name="key" hit="Set Key" />
-    <option name="set" hit="Set Key" />
-    <option name="breadcrumbs" hit="Show Breadcrumbs, max chars:" />
-    <option name="chars" hit="Show Breadcrumbs, max chars:" />
-    <option name="max" hit="Show Breadcrumbs, max chars:" />
-    <option name="show" hit="Show Breadcrumbs, max chars:" />
-    <option name="area" hit="Show Icon gutter area" />
-    <option name="gutter" hit="Show Icon gutter area" />
-    <option name="icon" hit="Show Icon gutter area" />
-    <option name="show" hit="Show Icon gutter area" />
-    <option name="gutter" hit="Show markdown references in gutter" />
-    <option name="in" hit="Show markdown references in gutter" />
-    <option name="markdown" hit="Show markdown references in gutter" />
-    <option name="references" hit="Show markdown references in gutter" />
-    <option name="show" hit="Show markdown references in gutter" />
-    <option name="edit" hit="Smart Edit" />
-    <option name="smart" hit="Smart Edit" />
-    <option name="keys" hit="Smart Keys" />
-    <option name="smart" hit="Smart Keys" />
-    <option name="highlighting" hit="Syntax Highlighting:" />
-    <option name="syntax" hit="Syntax Highlighting:" />
-    <option name="layout" hit="Text/Preview Layout" />
-    <option name="preview" hit="Text/Preview Layout" />
-    <option name="text" hit="Text/Preview Layout" />
-    <option name="layout" hit="Text/Split Layout" />
-    <option name="split" hit="Text/Split Layout" />
-    <option name="text" hit="Text/Split Layout" />
-    <option name="strikeout" hit="Tilde (Strikeout/Subscript)" />
-    <option name="subscript" hit="Tilde (Strikeout/Subscript)" />
-    <option name="tilde" hit="Tilde (Strikeout/Subscript)" />
-    <option name="to" hit="To:" />
-    <option name="editor" hit="Toggle Editor Layout:" />
-    <option name="layout" hit="Toggle Editor Layout:" />
-    <option name="toggle" hit="Toggle Editor Layout:" />
-    <option name="code" hit="Toggle inline code like text style" />
-    <option name="inline" hit="Toggle inline code like text style" />
-    <option name="like" hit="Toggle inline code like text style" />
-    <option name="style" hit="Toggle inline code like text style" />
-    <option name="text" hit="Toggle inline code like text style" />
-    <option name="toggle" hit="Toggle inline code like text style" />
-    <option name="action" hit="Translate Document Action" />
-    <option name="document" hit="Translate Document Action" />
-    <option name="translate" hit="Translate Document Action" />
-    <option name="delay" hit="Typing update delay (ms):" />
-    <option name="ms" hit="Typing update delay (ms):" />
-    <option name="typing" hit="Typing update delay (ms):" />
-    <option name="update" hit="Typing update delay (ms):" />
-    <option name="bold" hit="Underscore (Bold/Italic)" />
-    <option name="italic" hit="Underscore (Bold/Italic)" />
-    <option name="underscore" hit="Underscore (Bold/Italic)" />
-    <option name="asterisks" hit="Use asterisks (*) for Italic text" />
-    <option name="for" hit="Use asterisks (*) for Italic text" />
-    <option name="italic" hit="Use asterisks (*) for Italic text" />
-    <option name="text" hit="Use asterisks (*) for Italic text" />
-    <option name="use" hit="Use asterisks (*) for Italic text" />
-    <option name="preview" hit="Vertical Text/Preview Split" />
-    <option name="split" hit="Vertical Text/Preview Split" />
-    <option name="text" hit="Vertical Text/Preview Split" />
-    <option name="vertical" hit="Vertical Text/Preview Split" />
-    <option name="after" hit="Wrap on typing only after space is typed" />
-    <option name="is" hit="Wrap on typing only after space is typed" />
-    <option name="on" hit="Wrap on typing only after space is typed" />
-    <option name="only" hit="Wrap on typing only after space is typed" />
-    <option name="space" hit="Wrap on typing only after space is typed" />
-    <option name="typed" hit="Wrap on typing only after space is typed" />
-    <option name="typing" hit="Wrap on typing only after space is typed" />
-    <option name="wrap" hit="Wrap on typing only after space is typed" />
-    <option name="af" hit="af" />
-    <option name="am" hit="am" />
-    <option name="ar" hit="ar" />
-    <option name="az" hit="az" />
-    <option name="ba" hit="ba" />
-    <option name="be" hit="be" />
-    <option name="bg" hit="bg" />
-    <option name="bn" hit="bn" />
-    <option name="bs" hit="bs" />
-    <option name="ca" hit="ca" />
-    <option name="ceb" hit="ceb" />
-    <option name="cs" hit="cs" />
-    <option name="cy" hit="cy" />
-    <option name="da" hit="da" />
-    <option name="de" hit="de" />
-    <option name="el" hit="el" />
-    <option name="en" hit="en" />
-    <option name="eo" hit="eo" />
-    <option name="es" hit="es" />
-    <option name="et" hit="et" />
-    <option name="eu" hit="eu" />
-    <option name="fa" hit="fa" />
-    <option name="fi" hit="fi" />
-    <option name="fr" hit="fr" />
-    <option name="ga" hit="ga" />
-    <option name="gd" hit="gd" />
-    <option name="gl" hit="gl" />
-    <option name="gu" hit="gu" />
-    <option name="he" hit="he" />
-    <option name="hi" hit="hi" />
-    <option name="hr" hit="hr" />
-    <option name="ht" hit="ht" />
-    <option name="hu" hit="hu" />
-    <option name="hy" hit="hy" />
-    <option name="id" hit="id" />
-    <option name="image" hit="in Multi-Line Image URLs" />
-    <option name="in" hit="in Multi-Line Image URLs" />
-    <option name="multi-line" hit="in Multi-Line Image URLs" />
-    <option name="urls" hit="in Multi-Line Image URLs" />
-    <option name="is" hit="is" />
-    <option name="it" hit="it" />
-    <option name="ja" hit="ja" />
-    <option name="jv" hit="jv" />
-    <option name="ka" hit="ka" />
-    <option name="kk" hit="kk" />
-    <option name="km" hit="km" />
-    <option name="kn" hit="kn" />
-    <option name="ko" hit="ko" />
-    <option name="ky" hit="ky" />
-    <option name="la" hit="la" />
-    <option name="lb" hit="lb" />
-    <option name="lo" hit="lo" />
-    <option name="lt" hit="lt" />
-    <option name="lv" hit="lv" />
-    <option name="mg" hit="mg" />
-    <option name="mhr" hit="mhr" />
-    <option name="mi" hit="mi" />
-    <option name="mk" hit="mk" />
-    <option name="ml" hit="ml" />
-    <option name="mn" hit="mn" />
-    <option name="mr" hit="mr" />
-    <option name="mrj" hit="mrj" />
-    <option name="ms" hit="ms" />
-    <option name="mt" hit="mt" />
-    <option name="my" hit="my" />
-    <option name="ne" hit="ne" />
-    <option name="nl" hit="nl" />
-    <option name="no" hit="no" />
-    <option name="pa" hit="pa" />
-    <option name="pap" hit="pap" />
-    <option name="pl" hit="pl" />
-    <option name="pt" hit="pt" />
-    <option name="ro" hit="ro" />
-    <option name="ru" hit="ru" />
-    <option name="si" hit="si" />
-    <option name="sk" hit="sk" />
-    <option name="sl" hit="sl" />
-    <option name="sq" hit="sq" />
-    <option name="sr" hit="sr" />
-    <option name="su" hit="su" />
-    <option name="sv" hit="sv" />
-    <option name="sw" hit="sw" />
-    <option name="ta" hit="ta" />
-    <option name="te" hit="te" />
-    <option name="tg" hit="tg" />
-    <option name="th" hit="th" />
-    <option name="tl" hit="tl" />
-    <option name="tr" hit="tr" />
-    <option name="tt" hit="tt" />
-    <option name="udm" hit="udm" />
-    <option name="uk" hit="uk" />
-    <option name="ur" hit="ur" />
-    <option name="uz" hit="uz" />
-    <option name="vi" hit="vi" />
-    <option name="xh" hit="xh" />
-    <option name="yi" hit="yi" />
-    <option name="zh" hit="zh" />
-  </configurable>
   <configurable id="MarkdownNavigator.Settings.Preview" configurable_name="Preview">
     <option name="block" hit="Block" />
     <option name="-" hit="Default - Swing" />
@@ -1557,8 +1693,6 @@
     <option name="link" hit="Allow spaces in link URLs" />
     <option name="spaces" hit="Allow spaces in link URLs" />
     <option name="urls" hit="Allow spaces in link URLs" />
-    <option name="anchor" hit="Anchor links" />
-    <option name="links" hit="Anchor links" />
     <option name="auto" hit="Auto links" />
     <option name="links" hit="Auto links" />
     <option name="blank" hit="Break list on two blank lines" />
@@ -1728,18 +1862,24 @@
     <option name="ast" hit="AST" />
     <option name="ast" hit="AST:" />
     <option name="add" hit="Add  " />
+    <option name="add" hit="Add anchor links" />
+    <option name="anchor" hit="Add anchor links" />
+    <option name="links" hit="Add anchor links" />
+    <option name="add" hit="Add file modification timestamp as query suffix" />
+    <option name="as" hit="Add file modification timestamp as query suffix" />
+    <option name="file" hit="Add file modification timestamp as query suffix" />
+    <option name="modification" hit="Add file modification timestamp as query suffix" />
+    <option name="query" hit="Add file modification timestamp as query suffix" />
+    <option name="suffix" hit="Add file modification timestamp as query suffix" />
+    <option name="timestamp" hit="Add file modification timestamp as query suffix" />
     <option name="add" hit="Add page header" />
     <option name="header" hit="Add page header" />
     <option name="page" hit="Add page header" />
-    <option name="add" hit="Add query suffix to URI, incremented when image changes" />
-    <option name="changes" hit="Add query suffix to URI, incremented when image changes" />
-    <option name="image" hit="Add query suffix to URI, incremented when image changes" />
-    <option name="incremented" hit="Add query suffix to URI, incremented when image changes" />
-    <option name="query" hit="Add query suffix to URI, incremented when image changes" />
-    <option name="suffix" hit="Add query suffix to URI, incremented when image changes" />
-    <option name="to" hit="Add query suffix to URI, incremented when image changes" />
-    <option name="uri" hit="Add query suffix to URI, incremented when image changes" />
-    <option name="when" hit="Add query suffix to URI, incremented when image changes" />
+    <option name="anchor" hit="Anchor links wrap heading text" />
+    <option name="heading" hit="Anchor links wrap heading text" />
+    <option name="links" hit="Anchor links wrap heading text" />
+    <option name="text" hit="Anchor links wrap heading text" />
+    <option name="wrap" hit="Anchor links wrap heading text" />
     <option name="body" hit="Body Bottom" />
     <option name="bottom" hit="Body Bottom" />
     <option name="body" hit="Body Top" />
@@ -1771,16 +1911,17 @@
     <option name="head" hit="Head Bottom" />
     <option name="head" hit="Head Top" />
     <option name="top" hit="Head Top" />
-    <option name="handling" hit="Image Handling" />
-    <option name="image" hit="Image Handling" />
+    <option name="headings" hit="Headings" />
+    <option name="images" hit="Images" />
+    <option name="link" hit="Link Title" />
+    <option name="title" hit="Link Title" />
     <option name="no" hit="No   tags, use   to separate paragraphs" />
     <option name="paragraphs" hit="No   tags, use   to separate paragraphs" />
     <option name="separate" hit="No   tags, use   to separate paragraphs" />
     <option name="tags" hit="No   tags, use   to separate paragraphs" />
     <option name="to" hit="No   tags, use   to separate paragraphs" />
     <option name="use" hit="No   tags, use   to separate paragraphs" />
-    <option name="handling" hit="Page Handling" />
-    <option name="page" hit="Page Handling" />
+    <option name="page" hit="Page" />
     <option name="html" hit="Render HTML Section" />
     <option name="render" hit="Render HTML Section" />
     <option name="section" hit="Render HTML Section" />
@@ -1800,6 +1941,11 @@
     <option name="stylesheet" hit="Stylesheet Script Initialization" />
     <option name="stylesheet" hit="Stylesheet URL" />
     <option name="url" hit="Stylesheet URL" />
+    <option name="as" hit="Use URL as default title" />
+    <option name="default" hit="Use URL as default title" />
+    <option name="title" hit="Use URL as default title" />
+    <option name="url" hit="Use URL as default title" />
+    <option name="use" hit="Use URL as default title" />
   </configurable>
   <configurable id="MarkdownNavigator.Settings.Html.FencedCode" configurable_name="Fenced Code">
     <option name="code" hit="Fenced Code" />
@@ -1807,138 +1953,6 @@
     <option name="defaults" hit="Reset to Defaults" />
     <option name="reset" hit="Reset to Defaults" />
     <option name="to" hit="Reset to Defaults" />
-  </configurable>
-  <configurable id="MarkdownNavigator.Settings.Notifications" configurable_name="Notifications">
-    <option name="auto" hit="Auto links extension performance warning" />
-    <option name="extension" hit="Auto links extension performance warning" />
-    <option name="links" hit="Auto links extension performance warning" />
-    <option name="performance" hit="Auto links extension performance warning" />
-    <option name="warning" hit="Auto links extension performance warning" />
-    <option name="basic" hit="Basic Plugin" />
-    <option name="plugin" hit="Basic Plugin" />
-    <option name="again" hit="Do not show again" />
-    <option name="do" hit="Do not show again" />
-    <option name="not" hit="Do not show again" />
-    <option name="show" hit="Do not show again" />
-    <option name="enable" hit="Enable PlantUML extension notification" />
-    <option name="extension" hit="Enable PlantUML extension notification" />
-    <option name="notification" hit="Enable PlantUML extension notification" />
-    <option name="plantuml" hit="Enable PlantUML extension notification" />
-    <option name="available" hit="Enhanced version available" />
-    <option name="enhanced" hit="Enhanced version available" />
-    <option name="version" hit="Enhanced version available" />
-    <option name="change" hit="GitHub syntax change" />
-    <option name="github" hit="GitHub syntax change" />
-    <option name="syntax" hit="GitHub syntax change" />
-    <option name="available" hit="JavaFX preview available" />
-    <option name="javafx" hit="JavaFX preview available" />
-    <option name="preview" hit="JavaFX preview available" />
-    <option name="front" hit="Jekyll front matter" />
-    <option name="jekyll" hit="Jekyll front matter" />
-    <option name="matter" hit="Jekyll front matter" />
-    <option name="channel" hit="Need legacy update channel dialog" />
-    <option name="dialog" hit="Need legacy update channel dialog" />
-    <option name="legacy" hit="Need legacy update channel dialog" />
-    <option name="need" hit="Need legacy update channel dialog" />
-    <option name="update" hit="Need legacy update channel dialog" />
-    <option name="channel" hit="Need non-legacy update channel dialog" />
-    <option name="dialog" hit="Need non-legacy update channel dialog" />
-    <option name="need" hit="Need non-legacy update channel dialog" />
-    <option name="non-legacy" hit="Need non-legacy update channel dialog" />
-    <option name="update" hit="Need non-legacy update channel dialog" />
-    <option name="notifications" hit="Notifications" />
-    <option name="characters" hit="Unicode line separator characters in file" />
-    <option name="file" hit="Unicode line separator characters in file" />
-    <option name="in" hit="Unicode line separator characters in file" />
-    <option name="line" hit="Unicode line separator characters in file" />
-    <option name="separator" hit="Unicode line separator characters in file" />
-    <option name="unicode" hit="Unicode line separator characters in file" />
-  </configurable>
-  <configurable id="MarkdownNavigator.Settings.Debug" configurable_name="Debug">
-    <option name="browser" hit="Cache converted SVG images for Swing browser" />
-    <option name="cache" hit="Cache converted SVG images for Swing browser" />
-    <option name="converted" hit="Cache converted SVG images for Swing browser" />
-    <option name="for" hit="Cache converted SVG images for Swing browser" />
-    <option name="images" hit="Cache converted SVG images for Swing browser" />
-    <option name="svg" hit="Cache converted SVG images for Swing browser" />
-    <option name="swing" hit="Cache converted SVG images for Swing browser" />
-    <option name="debug" hit="Debug" />
-    <option name="action" hit="Enable &quot;Show Hex for Selection&quot; Action" />
-    <option name="enable" hit="Enable &quot;Show Hex for Selection&quot; Action" />
-    <option name="for" hit="Enable &quot;Show Hex for Selection&quot; Action" />
-    <option name="hex" hit="Enable &quot;Show Hex for Selection&quot; Action" />
-    <option name="selection" hit="Enable &quot;Show Hex for Selection&quot; Action" />
-    <option name="show" hit="Enable &quot;Show Hex for Selection&quot; Action" />
-    <option name="developer" hit="Enable flexmark-java developer features" />
-    <option name="enable" hit="Enable flexmark-java developer features" />
-    <option name="features" hit="Enable flexmark-java developer features" />
-    <option name="flexmark-java" hit="Enable flexmark-java developer features" />
-    <option name="cache" hit="Enable per file link cache" />
-    <option name="enable" hit="Enable per file link cache" />
-    <option name="file" hit="Enable per file link cache" />
-    <option name="link" hit="Enable per file link cache" />
-    <option name="per" hit="Enable per file link cache" />
-    <option name="content" hit="Error highlight remote URL elements until content is fetched" />
-    <option name="elements" hit="Error highlight remote URL elements until content is fetched" />
-    <option name="error" hit="Error highlight remote URL elements until content is fetched" />
-    <option name="fetched" hit="Error highlight remote URL elements until content is fetched" />
-    <option name="highlight" hit="Error highlight remote URL elements until content is fetched" />
-    <option name="is" hit="Error highlight remote URL elements until content is fetched" />
-    <option name="remote" hit="Error highlight remote URL elements until content is fetched" />
-    <option name="until" hit="Error highlight remote URL elements until content is fetched" />
-    <option name="url" hit="Error highlight remote URL elements until content is fetched" />
-    <option name="flexmark-java" hit="Flexmark-Java" />
-    <option name="height" hit="Height:" />
-    <option name="menu" hit="Menu Split:" />
-    <option name="split" hit="Menu Split:" />
-    <option name="console" hit="Output remote URL fetch exceptions to console" />
-    <option name="exceptions" hit="Output remote URL fetch exceptions to console" />
-    <option name="fetch" hit="Output remote URL fetch exceptions to console" />
-    <option name="output" hit="Output remote URL fetch exceptions to console" />
-    <option name="remote" hit="Output remote URL fetch exceptions to console" />
-    <option name="to" hit="Output remote URL fetch exceptions to console" />
-    <option name="url" hit="Output remote URL fetch exceptions to console" />
-    <option name="change" hit="Reinitialize editors on settings change" />
-    <option name="editors" hit="Reinitialize editors on settings change" />
-    <option name="on" hit="Reinitialize editors on settings change" />
-    <option name="reinitialize" hit="Reinitialize editors on settings change" />
-    <option name="settings" hit="Reinitialize editors on settings change" />
-    <option name="changes" hit="Reload open editors when the underlying file type changes" />
-    <option name="editors" hit="Reload open editors when the underlying file type changes" />
-    <option name="file" hit="Reload open editors when the underlying file type changes" />
-    <option name="open" hit="Reload open editors when the underlying file type changes" />
-    <option name="reload" hit="Reload open editors when the underlying file type changes" />
-    <option name="the" hit="Reload open editors when the underlying file type changes" />
-    <option name="type" hit="Reload open editors when the underlying file type changes" />
-    <option name="underlying" hit="Reload open editors when the underlying file type changes" />
-    <option name="when" hit="Reload open editors when the underlying file type changes" />
-    <option name="colors" hit="Show combination colors" />
-    <option name="combination" hit="Show combination colors" />
-    <option name="show" hit="Show combination colors" />
-    <option name="bounds" hit="Show text formatting bounds" />
-    <option name="formatting" hit="Show text formatting bounds" />
-    <option name="show" hit="Show text formatting bounds" />
-    <option name="text" hit="Show text formatting bounds" />
-    <option name="action" hit="Size Preferences Dialog Action" />
-    <option name="dialog" hit="Size Preferences Dialog Action" />
-    <option name="preferences" hit="Size Preferences Dialog Action" />
-    <option name="size" hit="Size Preferences Dialog Action" />
-    <option name="exceptions" hit="Throw Parser Exceptions" />
-    <option name="parser" hit="Throw Parser Exceptions" />
-    <option name="throw" hit="Throw Parser Exceptions" />
-    <option name="browser" hit="Use images for task list items in Swing browser" />
-    <option name="for" hit="Use images for task list items in Swing browser" />
-    <option name="images" hit="Use images for task list items in Swing browser" />
-    <option name="in" hit="Use images for task list items in Swing browser" />
-    <option name="items" hit="Use images for task list items in Swing browser" />
-    <option name="list" hit="Use images for task list items in Swing browser" />
-    <option name="swing" hit="Use images for task list items in Swing browser" />
-    <option name="task" hit="Use images for task list items in Swing browser" />
-    <option name="use" hit="Use images for task list items in Swing browser" />
-    <option name="width" hit="Width:" />
-  </configurable>
-  <configurable id="MarkdownNavigator.Settings.Notices" configurable_name="Notice">
-    <option name="notice" hit="Notice" />
   </configurable>
 </options>
 

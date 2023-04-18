@@ -22,7 +22,6 @@ import java.util.StringJoiner;
 public class YandexClient {
     public static final String HOST = "translate.yandex.net";
     public static final String PATH = "/api/v1.5/tr.json/";
-    //private static final String APIKEY = "trnsl.1.1.20150828T222514Z.96c635fa0967005b.781eebb21e0a7b0e9b3b4f2fb62a21a74400189f";
 
     final private String myApiKey;
     private String myLastError;

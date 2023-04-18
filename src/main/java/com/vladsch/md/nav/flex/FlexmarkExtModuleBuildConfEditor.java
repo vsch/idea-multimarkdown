@@ -19,7 +19,7 @@ public class FlexmarkExtModuleBuildConfEditor implements ModuleConfigurationEdit
     public FlexmarkExtModuleBuildConfEditor(ModuleConfigurationState state) {
         myModule = state.getRootModel().getModule();
         FlexmarkExtModuleBuildConfiguration buildProperties = FlexmarkExtModuleBuildConfiguration.getInstance(myModule);
-        if (buildProperties == null) buildProperties = new FlexmarkExtModuleBuildConfiguration(myModule);
+        if (buildProperties == null) buildProperties = new FlexmarkExtModuleBuildConfiguration();
         myBuildProperties = buildProperties;
     }
 

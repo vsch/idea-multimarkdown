@@ -92,7 +92,7 @@ class SwingHtmlGenerator(linkResolver: MdLinkResolver, renderingProfile: MdRende
 
     override fun makeHtmlPage(html: String, forHtmlExport: Boolean, dataContext: DataContext?, exportMap: MutableMap<String, String>?): String {
         @Suppress("NAME_SHADOWING")
-        val dataContext = dataContext ?: SimpleDataContext.getProjectContext(linkResolver.project)
+        val dataContext = dataContext ?: SimpleDataContext.getProjectContext(linkResolver.project!!)
         val file = linkResolver.containingFile
         val regex = "<hr(\\s+md-pos=\"[^\"]+\")?\\s*/?>|<del>|</del>|</p>|<kbd>|</kbd>|<var>|</var>"
         val result = StringBuilder(html.length + 1000)

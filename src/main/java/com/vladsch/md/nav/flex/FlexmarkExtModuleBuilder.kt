@@ -253,7 +253,7 @@ class FlexmarkExtModuleBuilder : JavaModuleBuilder(), FlexmarkModuleOptions.Hold
 
             // save module options, just in case we decide to add configuration based addition of new module files
             val buildConfiguration = FlexmarkExtModuleBuildConfiguration.getInstance(model.module)
-                ?: FlexmarkExtModuleBuildConfiguration(model.module)
+                ?: FlexmarkExtModuleBuildConfiguration()
             buildConfiguration.setOptions(options)
         }
     }

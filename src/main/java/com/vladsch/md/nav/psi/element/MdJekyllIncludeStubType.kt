@@ -19,10 +19,10 @@ class MdJekyllIncludeStubType(debugName: String) :
 
     override fun createPsi(stub: MdJekyllIncludeStub): MdJekyllInclude = MdJekyllIncludeImpl(stub, this, null)
     override fun getExternalId(): String = "markdown.jekyll-include-tag"
-    fun createStub(parentStub: StubElement<PsiElement>, linkRefWithAnchorText: String): MdJekyllIncludeStub = MdJekyllIncludeStubImpl(parentStub, this, linkRefWithAnchorText)
+    fun createStub(parentStub: StubElement<*>, linkRefWithAnchorText: String): MdJekyllIncludeStub = MdJekyllIncludeStubImpl(parentStub, this, linkRefWithAnchorText)
     fun getLinkRefTextType(): IElementType = MdTypes.JEKYLL_TAG_PARAMETERS
 
-    override fun createStub(psi: MdJekyllInclude, parentStub: StubElement<PsiElement>): MdJekyllIncludeStub {
+    override fun createStub(psi: MdJekyllInclude, parentStub: StubElement<*>): MdJekyllIncludeStub {
         return createStub(parentStub, psi.linkRefText)
     }
 
@@ -42,7 +42,7 @@ class MdJekyllIncludeStubType(debugName: String) :
         sink.occurrence(MdLinkElementIndex.KEY, stub.linkRefWithAnchorText)
     }
 
-    override fun createStub(tree: LighterAST, node: LighterASTNode, parentStub: StubElement<PsiElement>): MdJekyllIncludeStub {
+    override fun createStub(tree: LighterAST, node: LighterASTNode, parentStub: StubElement<*>): MdJekyllIncludeStub {
         val children = tree.getChildren(node)
         var linkRefText: String = ""
         var count = 1

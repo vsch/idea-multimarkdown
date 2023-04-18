@@ -22,7 +22,6 @@ import com.vladsch.plugin.util.ifElse
 import com.vladsch.plugin.util.minLimit
 import com.vladsch.plugin.util.splice
 import javax.swing.Icon
-import kotlin.text.trim
 
 class FlexmarkExampleImpl(stub: FlexmarkExampleStub?, nodeType: IStubElementType<FlexmarkExampleStub, FlexmarkExample>?, node: ASTNode?) : FlexmarkStubElementImpl<FlexmarkExampleStub>(stub, nodeType, node), FlexmarkExample, MdStructureViewPresentableItem {
 
@@ -138,7 +137,7 @@ class FlexmarkExampleImpl(stub: FlexmarkExampleStub?, nodeType: IStubElementType
                 flexmarkOptionInfo = optionsInfo.map {
                     if (it.isBuiltIn || definitions.contains(it.optionName)) it
                     else FlexmarkPsi.FLEXMARK_ERROR_OPTION_INFO
-                }.minBy { it.index }
+                }.minByOrNull { it.index }
             }
         }
         return flexmarkOptionInfo.getIcon()
@@ -157,6 +156,7 @@ class FlexmarkExampleImpl(stub: FlexmarkExampleStub?, nodeType: IStubElementType
     }
 
     companion object {
+
         @Suppress("UNUSED_PARAMETER")
         @JvmStatic
         fun getElementText(factoryContext: MdFactoryContext, addFrontMatter: Boolean, params: FlexmarkExampleParams): String {

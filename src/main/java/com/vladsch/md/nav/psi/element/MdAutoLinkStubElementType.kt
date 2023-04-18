@@ -10,7 +10,7 @@ import com.vladsch.md.nav.psi.util.MdTypes
 class MdAutoLinkStubElementType(debugName: String) : MdLinkElementStubElementType<MdAutoLink, MdAutoLinkStub>(debugName) {
     override fun createPsi(stub: MdAutoLinkStub) = MdAutoLinkImpl(stub, this)
     override fun getExternalId(): String = "markdown.link-element.auto-link"
-    override fun createStub(parentStub: StubElement<PsiElement>, linkRefWithAnchorText: String): MdAutoLinkStub = MdAutoLinkStubImpl(parentStub, linkRefWithAnchorText)
+    override fun createStub(parentStub: StubElement<*>, linkRefWithAnchorText: String): MdAutoLinkStub = MdAutoLinkStubImpl(parentStub, linkRefWithAnchorText)
     override fun getLinkRefTextType(): IElementType? = null
     override fun getLinkRefAnchorMarkerType(): IElementType? = MdTypes.AUTO_LINK_ANCHOR_MARKER
     override fun getLinkRefAnchorType(): IElementType? = MdTypes.AUTO_LINK_ANCHOR

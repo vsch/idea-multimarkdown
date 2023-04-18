@@ -10,7 +10,7 @@ import com.vladsch.md.nav.psi.util.MdTypes
 class MdImageLinkStubElementType(debugName: String) : MdLinkElementStubElementType<MdImageLink, MdImageLinkStub>(debugName) {
     override fun createPsi(stub: MdImageLinkStub) = MdImageLinkImpl(stub, this)
     override fun getExternalId(): String = "markdown.link-element.image-link"
-    override fun createStub(parentStub: StubElement<PsiElement>, linkRefWithAnchorText: String): MdImageLinkStub = MdImageLinkStubImpl(parentStub, linkRefWithAnchorText)
+    override fun createStub(parentStub: StubElement<*>, linkRefWithAnchorText: String): MdImageLinkStub = MdImageLinkStubImpl(parentStub, linkRefWithAnchorText)
     override fun getLinkRefTextType(): IElementType = MdTypes.IMAGE_LINK_REF
     override fun getLinkRefAnchorMarkerType(): IElementType? = null
     override fun getLinkRefAnchorType(): IElementType? = null

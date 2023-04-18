@@ -270,6 +270,14 @@ public class MdCodeStyleSettings extends CustomCodeStyleSettings {
     public int TAB_SIZE = CodeStyleDefaults.DEFAULT_TAB_SIZE;
     public boolean USE_TAB_CHARACTER = false;
     public boolean SMART_TABS = false;
+    
+    public int getWrapOnTypingValue() {
+        return WRAP_ON_TYPING;
+    }
+
+    public void setWrapOnTypingValue(int value) {
+        WRAP_ON_TYPING = value;
+    }
 
     // Attributes
     public int ATTRIBUTES_SPACES = DiscretionaryText.AS_IS.intValue;

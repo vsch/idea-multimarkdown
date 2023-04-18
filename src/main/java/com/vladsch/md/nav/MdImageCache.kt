@@ -17,6 +17,7 @@ package com.vladsch.md.nav
 
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.diagnostic.Logger
 import com.vladsch.plugin.util.plus
 import com.vladsch.plugin.util.suffixWith
 import java.io.File
@@ -25,7 +26,7 @@ import java.util.function.Consumer
 
 class MdImageCache : Disposable {
     companion object {
-        val LOG = com.intellij.openapi.diagnostic.Logger.getInstance("com.vladsch.md.nav.ImageCache")
+        val LOG: Logger = Logger.getInstance("com.vladsch.md.nav.ImageCache")
 
         var testInstance: MdImageCache? = null
 
@@ -44,12 +45,12 @@ class MdImageCache : Disposable {
             }
     }
 
-    val imageMD5PathMap = ConcurrentHashMap<String, String>()
-    val cachedImagesMap = ConcurrentHashMap<String, String>()
+    val imageMD5PathMap: ConcurrentHashMap<String, String> = ConcurrentHashMap<String, String>()
+    val cachedImagesMap: ConcurrentHashMap<String, String> = ConcurrentHashMap<String, String>()
     var tempDirPath: String = ""
         private set
 
-    val fileWriterLock: Any = Object();
+    val fileWriterLock: Any = Object()
 
     init {
         initComponent()

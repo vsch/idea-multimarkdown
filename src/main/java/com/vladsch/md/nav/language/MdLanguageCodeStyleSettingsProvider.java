@@ -10,6 +10,7 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.codeStyle.CodeStyleSettingsCustomizable;
+import com.intellij.psi.codeStyle.CodeStyleSettingsCustomizableOptions;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.codeStyle.LanguageCodeStyleSettingsProvider;
 import com.intellij.util.LocalTimeCounter;
@@ -76,7 +77,7 @@ public class MdLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSettin
                     "WRAP_ON_TYPING",
                     "Wrap on typing",
                     null,
-                    CodeStyleSettingsCustomizable.WRAP_ON_TYPING_OPTIONS,
+                    CodeStyleSettingsCustomizableOptions.getInstance().WRAP_ON_TYPING_OPTIONS,
                     CodeStyleSettingsCustomizable.WRAP_ON_TYPING_VALUES);
             consumer.showCustomOption(MdCodeStyleSettings.class,
                     "FORMAT_WITH_SOFT_WRAP",

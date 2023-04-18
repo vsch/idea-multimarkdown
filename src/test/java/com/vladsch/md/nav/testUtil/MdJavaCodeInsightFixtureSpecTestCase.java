@@ -43,11 +43,6 @@ public abstract class MdJavaCodeInsightFixtureSpecTestCase extends JavaCodeInsig
     }
 
     @Override
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-    @Override
     @Nullable
     public StringBuilder getCacheLogs() {
         return myCacheLogs;

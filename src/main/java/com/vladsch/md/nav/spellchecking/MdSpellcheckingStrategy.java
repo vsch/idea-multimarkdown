@@ -1,6 +1,7 @@
 // Copyright (c) 2015-2020 Vladimir Schneider <vladimir.schneider@gmail.com> Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.vladsch.md.nav.spellchecking;
 
+import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -325,18 +326,19 @@ public class MdSpellcheckingStrategy extends SpellcheckingStrategy {
     }
 
     @Override
-    public SpellCheckerQuickFix[] getRegularFixes(PsiElement element, int offset, @NotNull TextRange textRange, boolean useRename, String wordWithTypo) {
-        SpellCheckerQuickFix[] fixes = new SpellCheckerQuickFix[0];
+    // FIX: remove old api references, now they are all the same for a given version
+    public LocalQuickFix[] getRegularFixes(PsiElement element, @NotNull TextRange textRange, boolean useRename, String wordWithTypo) {
+        LocalQuickFix[] fixes = new SpellCheckerQuickFix[0];
         if (useOldApi == null) {
             try {
                 //fixes = getDefaultRegularFixes(useRename, wordWithTypo, element);
                 Class<?> superClass = Class.forName("com.intellij.spellchecker.tokenizer.SpellcheckingStrategy");
                 Method getDefaultRegularFixesMethod = superClass.getMethod("getDefaultRegularFixes", Boolean.TYPE, String.class, PsiElement.class);
-                fixes = (SpellCheckerQuickFix[]) getDefaultRegularFixesMethod.invoke(null, useRename, wordWithTypo, element);
+                fixes = (LocalQuickFix[]) getDefaultRegularFixesMethod.invoke(null, useRename, wordWithTypo, element);
                 useOldApi = false;
             } catch (Exception ignored) {
                 try {
-                    fixes = getDefaultRegularFixes(useRename, wordWithTypo, element);
+                    fixes = getDefaultRegularFixes(useRename, wordWithTypo, element, textRange);
                     useRename = true;
                     useOldApi = true;
                 } catch (NoSuchMethodError e) {
@@ -347,17 +349,19 @@ public class MdSpellcheckingStrategy extends SpellcheckingStrategy {
         }
 
         if (useOldApi) {
-            fixes = getDefaultRegularFixes(useRename, wordWithTypo, element);
+            fixes = getDefaultRegularFixes(useRename, wordWithTypo, element, textRange);
         } else {
             try {
                 Class<?> superClass = Class.forName("com.intellij.spellchecker.tokenizer.SpellcheckingStrategy");
                 Method getDefaultRegularFixesMethod = superClass.getMethod("getDefaultRegularFixes", Boolean.TYPE, String.class, PsiElement.class);
-                fixes = (SpellCheckerQuickFix[]) getDefaultRegularFixesMethod.invoke(null, useRename, wordWithTypo, element);
+                fixes = (LocalQuickFix[]) getDefaultRegularFixesMethod.invoke(null, useRename, wordWithTypo, element);
             } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {
+                useRename = false;
+                useOldApi = false;
             }
         }
 
-        SpellCheckerQuickFix[] finalFixes = fixes;
+        LocalQuickFix[] finalFixes = fixes;
         if (useRename && finalFixes.length > 0) {
             MiscUtils.firstNonNullResult(EXTENSIONS,
                     (Function<MdSpellcheckingIdentifierTokenizer, SpellCheckerQuickFix>) tokenizer -> tokenizer.getRenameQuickFix(wordWithTypo),

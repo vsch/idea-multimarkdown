@@ -206,22 +206,23 @@ public class FlexmarkExtModuleSettingsForm extends FlexmarkExtModuleWizardStep i
             //myContext.setProjectName(dirName);
             myContext.setProjectFileDirectory(myProjectFileDirectory + "/flexmark-ext-" + dirName);
 
-            try {
-                if (myContext.getWizard() instanceof NewProjectWizard) {
-                    NewProjectWizard wizard = (NewProjectWizard) myContext.getWizard();
-                    StepSequence sequence = wizard.getSequence();
-                    // need to find NamePathComponent
-                    for (ModuleWizardStep step : sequence.getSelectedSteps()) {
-                        if (step instanceof ProjectSettingsStep) {
-                            ProjectSettingsStep projectSettingsStep = (ProjectSettingsStep) step;
-                            projectSettingsStep.setModuleName(dirName);
-                            break;
-                        }
-                    }
-                }
-            } catch (NoSuchMethodError ignored) {
-
-            }
+            // IMPORTANT: rework for changed new project wizzard and wizzard context 
+            //try {
+            //    if (myContext.getWizard() instanceof NewProjectWizard) {
+            //        NewProjectWizard wizard = (NewProjectWizard) myContext.getWizard();
+            //        StepSequence sequence = wizard.getSequence();
+            //        // need to find NamePathComponent
+            //        for (ModuleWizardStep step : sequence.getSelectedSteps()) {
+            //            if (step instanceof ProjectSettingsStep) {
+            //                ProjectSettingsStep projectSettingsStep = (ProjectSettingsStep) step;
+            //                projectSettingsStep.setModuleName(dirName);
+            //                break;
+            //            }
+            //        }
+            //    }
+            //} catch (NoSuchMethodError ignored) {
+            //
+            //}
         }
     }
 

@@ -13,8 +13,7 @@ import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.colors.EditorColors;
-import com.intellij.openapi.editor.colors.EditorColorsManager;
-import com.intellij.openapi.editor.markup.TextAttributes;
+import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
@@ -46,10 +45,9 @@ import static com.vladsch.md.nav.settings.MdApplicationSettings.getInstance;
 
 public class CopyReferenceUtils {
     static void highlight(Editor editor, Project project, List<? extends PsiElement> elements) {
-        HighlightManager highlightManager = HighlightManager.getInstance(project);
-        EditorColorsManager manager = EditorColorsManager.getInstance();
-        TextAttributes attributes = manager.getGlobalScheme().getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
         if (elements.size() == 1 && editor != null && project != null) {
+            HighlightManager highlightManager = HighlightManager.getInstance(project);
+            TextAttributesKey attributes = EditorColors.SEARCH_RESULT_ATTRIBUTES;
             PsiElement element = elements.get(0);
             PsiElement nameIdentifier = IdentifierUtil.getNameIdentifier(element);
             if (nameIdentifier != null) {

@@ -2,7 +2,6 @@
 
 package com.vladsch.md.nav.psi.element
 
-import com.intellij.psi.PsiElement
 import com.intellij.psi.stubs.StubElement
 import com.intellij.psi.tree.IElementType
 import com.vladsch.md.nav.psi.util.BasicTextMapElementTypeProvider
@@ -11,9 +10,10 @@ import com.vladsch.md.nav.psi.util.TextMapElementType
 import com.vladsch.md.nav.psi.util.TextMapMatch
 
 class MdJekyllFrontMatterBlockStubElementType(debugName: String) : MdPlainTextStubElementType<MdJekyllFrontMatterBlock, MdJekyllFrontMatterBlockStub>(debugName) {
-    override fun createPsi(stub: MdJekyllFrontMatterBlockStub) = MdJekyllFrontMatterBlockImpl(stub, this)
+
+    override fun createPsi(stub: MdJekyllFrontMatterBlockStub): MdJekyllFrontMatterBlock = MdJekyllFrontMatterBlockImpl(stub, this)
     override fun getExternalId(): String = "markdown.plain-text-referenceable.jekyll-front-matter"
-    override fun createStub(parentStub: StubElement<PsiElement>, textMapType: TextMapElementType, textMapMatches: Array<TextMapMatch>, referenceableOffsetInParent: Int): MdJekyllFrontMatterBlockStub = MdJekyllFrontMatterBlockStubImpl(parentStub, textMapType, textMapMatches, referenceableOffsetInParent)
+    override fun createStub(parentStub: StubElement<*>, textMapType: TextMapElementType, textMapMatches: Array<TextMapMatch>, referenceableOffsetInParent: Int): MdJekyllFrontMatterBlockStub = MdJekyllFrontMatterBlockStubImpl(parentStub, textMapType, textMapMatches, referenceableOffsetInParent)
     override fun getReferenceableTextType(): IElementType = MdTypes.JEKYLL_FRONT_MATTER_BLOCK
     override fun getTextMapType(): TextMapElementType = BasicTextMapElementTypeProvider.JEKYLL_FRONT_MATTER
 }

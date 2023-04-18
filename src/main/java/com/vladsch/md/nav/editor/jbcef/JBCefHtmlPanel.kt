@@ -67,6 +67,8 @@ class JBCefHtmlPanel(project: Project, htmlPanelHost: HtmlPanelHost) : HtmlPanel
                 }
             }
         }
+        
+        Disposer.register(this, myPanel)
     }
 
     private val myWebView: CefBrowser get() = myPanel.cefBrowser
@@ -115,8 +117,6 @@ class JBCefHtmlPanel(project: Project, htmlPanelHost: HtmlPanelHost) : HtmlPanel
     }
 
     init {
-        //        myPanelWrapper.background = JBColor.background()
-
         updateViewOptions(myWebView, MdProjectSettings.getInstance(myProject).previewSettings)
 
         myJSBridge = JSBridge(this, object : JfxScriptStateProvider {
@@ -126,7 +126,6 @@ class JBCefHtmlPanel(project: Project, htmlPanelHost: HtmlPanelHost) : HtmlPanel
 
             override fun setState(state: BoxedJsObject) {
                 // nothing to do, state already mutable
-                //return myScriptState
             }
         })
 
@@ -135,7 +134,6 @@ class JBCefHtmlPanel(project: Project, htmlPanelHost: HtmlPanelHost) : HtmlPanel
                 myJSBridge.onLoadingStateChange(browser, isLoading, canGoBack, canGoForward)
             }
         }.also { myCefLoadHandler = it }, myWebView)
-        //        myCefLoadHandler = null
 
         subscribeSettingChanges(myWebView)
         myWebViewFxRunner.panelInitialized()
@@ -144,9 +142,6 @@ class JBCefHtmlPanel(project: Project, htmlPanelHost: HtmlPanelHost) : HtmlPanel
             setHtml(myInitialHtml)
             myInitialHtml = ""
         }
-
-        //        myPanelWrapper.add(myPanel.component, BorderLayout.CENTER)
-        //        myPanelWrapper.repaint()
     }
 
     private fun subscribeSettingChanges(webView: CefBrowser) {
@@ -172,20 +167,6 @@ class JBCefHtmlPanel(project: Project, htmlPanelHost: HtmlPanelHost) : HtmlPanel
     private fun updateViewOptions(view: CefBrowser, previewSettings: MdPreviewSettings) {
         if (myProject.isDisposed) return
 
-        //        val typeToSet: FontSmoothingType =
-        //            if (previewSettings.useGrayscaleRendering) {
-        //                FontSmoothingType.GRAY
-        //            } else {
-        //                FontSmoothingType.LCD
-        //            }
-        //
-        //        val fontSmoothingTypeProperty = view.fontSmoothingTypeProperty()
-        //        if (fontSmoothingTypeProperty.value != typeToSet) {
-        //            fontSmoothingTypeProperty.value = typeToSet
-        //        }
-        //
-        // See: https://magpcss.org/ceforum/viewtopic.php?t=11491 for calculation of zoomLevel from scale
-        //        val displayScale = JBUIScale.sysScale()
         val scale: Double = previewSettings.zoomFactor * MdApplicationSettings.instance.documentSettings.zoomFactor /** displayScale*/
         val zoomLevel = Math.log(scale) / Math.log(1.2)
         view.zoomLevel = zoomLevel
@@ -609,7 +590,7 @@ class JBCefHtmlPanel(project: Project, htmlPanelHost: HtmlPanelHost) : HtmlPanel
                 // scroll to source it will set initialized
                 panel.scrollToReference(true)
 
-                (ApplicationManager.getApplication().messageBus.syncPublisher(WebViewDocumentLoaded.TOPIC) as WebViewDocumentLoaded).onDocumentLoaded(panel.myHtmlPanelHost.getVirtualFile())
+                ApplicationManager.getApplication().messageBus.syncPublisher(WebViewDocumentLoaded.TOPIC).onDocumentLoaded(panel.myHtmlPanelHost.getVirtualFile())
             }
         }
 

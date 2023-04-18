@@ -94,7 +94,7 @@ class JavaFxHtmlGenerator(linkResolver: MdLinkResolver, renderingProfile: MdRend
 
     override fun makeHtmlPage(html: String, forHtmlExport: Boolean, dataContext: DataContext?, exportMap: MutableMap<String, String>?): String {
         @Suppress("NAME_SHADOWING")
-        val dataContext = dataContext ?: SimpleDataContext.getProjectContext(linkResolver.project)
+        val dataContext = dataContext ?: SimpleDataContext.getProjectContext(linkResolver.project!!)
         val fileRef = linkResolver.containingFile
         val result = StringBuilder(html.length + 1000)
 

@@ -10,7 +10,7 @@ import com.vladsch.md.nav.psi.util.MdTypes
 class MdExplicitLinkStubElementType(debugName: String) : MdLinkElementStubElementType<MdExplicitLink, MdExplicitLinkStub>(debugName) {
     override fun createPsi(stub: MdExplicitLinkStub) = MdExplicitLinkImpl(stub, this)
     override fun getExternalId(): String = "markdown.link-element.explicit-link"
-    override fun createStub(parentStub: StubElement<PsiElement>, linkRefWithAnchorText: String): MdExplicitLinkStub = MdExplicitLinkStubImpl(parentStub, linkRefWithAnchorText)
+    override fun createStub(parentStub: StubElement<*>, linkRefWithAnchorText: String): MdExplicitLinkStub = MdExplicitLinkStubImpl(parentStub, linkRefWithAnchorText)
     override fun getLinkRefTextType(): IElementType = MdTypes.LINK_REF
     override fun getLinkRefAnchorMarkerType(): IElementType? = MdTypes.LINK_REF_ANCHOR_MARKER
     override fun getLinkRefAnchorType(): IElementType? = MdTypes.LINK_REF_ANCHOR

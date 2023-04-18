@@ -17,7 +17,9 @@ package com.vladsch.md.nav
 
 import com.intellij.ProjectTopics
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer
+import com.intellij.codeInsight.lookup.Lookup
 import com.intellij.codeInsight.lookup.LookupManager
+import com.intellij.codeInsight.lookup.LookupManagerListener
 import com.intellij.codeInsight.lookup.impl.LookupImpl
 import com.intellij.ide.startup.StartupManagerEx
 import com.intellij.openapi.Disposable
@@ -34,15 +36,14 @@ import com.intellij.openapi.editor.ex.util.EmptyEditorHighlighter
 import com.intellij.openapi.editor.ex.util.LexerEditorHighlighter
 import com.intellij.openapi.fileEditor.*
 import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx
-import com.intellij.openapi.project.DumbService
-import com.intellij.openapi.project.Project
-import com.intellij.openapi.project.impl.ProjectLifecycleListener
+import com.intellij.openapi.project.*
 import com.intellij.openapi.roots.ModuleRootEvent
 import com.intellij.openapi.roots.ModuleRootListener
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.util.Pair
-import com.intellij.openapi.vfs.*
+import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.openapi.vfs.VirtualFileManager
 import com.intellij.openapi.vfs.newvfs.BulkFileListener
 import com.intellij.openapi.vfs.newvfs.events.*
 import com.intellij.psi.PsiFile
@@ -67,10 +68,7 @@ import com.vladsch.plugin.util.LazyFunction
 import com.vladsch.plugin.util.removeIf
 import org.jetbrains.annotations.NonNls
 import java.beans.PropertyChangeEvent
-import java.beans.PropertyChangeListener
-import java.util.*
 import java.util.function.Function
-import kotlin.collections.ArrayList
 
 // FIX: make this a service
 class MdProjectComponent(val project: Project) : ProjectComponent, Disposable {
@@ -113,7 +111,6 @@ class MdProjectComponent(val project: Project) : ProjectComponent, Disposable {
      * Usually not invoked directly, see class javadoc.
      */
     override fun dispose() {
-
     }
 
     @Messages.YesNoResult
@@ -372,6 +369,15 @@ class MdProjectComponent(val project: Project) : ProjectComponent, Disposable {
         }
     }
 
+    private fun lookupChange(oldValue: Lookup?, newValue: Lookup?) {
+        var newEditor: Editor? = null
+        if (newValue is LookupImpl) {
+            newEditor = newValue.editor
+        }
+
+        isLookupActive = newEditor != null
+    }
+
     private fun fileContentChanged(file: VirtualFile) {
         val changedFile = file.path
         if (PathInfo(changedFile).isImageExt) {
@@ -421,7 +427,7 @@ class MdProjectComponent(val project: Project) : ProjectComponent, Disposable {
             is VFilePropertyChangeEvent -> {
                 // NOTE: this also one fires often when document is modified with writeable property changing
                 if (!event.file.isDirectory) {
-//                    System.out.println("PropertyChanged: ${event.propertyName}: old: ${event.oldValue} new: ${event.newValue}")
+                    //                    System.out.println("PropertyChanged: ${event.propertyName}: old: ${event.oldValue} new: ${event.newValue}")
                     if (event.propertyName == "name" && (event.oldValue == event.newValue || PathInfo(event.oldValue as String).ext != PathInfo(event.newValue as String).ext)) {
                         // this is file type change when no name changes or PSI is re-parsed
                         reloadMarkdownEditors(reInitMarkdownEditors = false, swapHighlighter = true)
@@ -435,6 +441,8 @@ class MdProjectComponent(val project: Project) : ProjectComponent, Disposable {
         }
     }
 
+    interface RunnableDumbAware : Runnable, DumbAware
+
     override fun projectOpened() {
         println("projectOpened $time")
 
@@ -447,10 +455,12 @@ class MdProjectComponent(val project: Project) : ProjectComponent, Disposable {
             }
         })
 
-        // add lookup manager listener
-        LookupManager.getInstance(project).addPropertyChangeListener(PropertyChangeListener { evt -> this@MdProjectComponent.propertyChange(evt) }, this)
-
         val messageBusConnection = project.messageBus.connect(this)
+
+        // add lookup manager listener
+        messageBusConnection.subscribe(LookupManagerListener.TOPIC, LookupManagerListener { oldLookup, newLookup ->
+            this@MdProjectComponent.lookupChange(oldLookup, newLookup)
+        })
 
         messageBusConnection.subscribe(ProjectTopics.PROJECT_ROOTS, object : ModuleRootListener {
             override fun rootsChanged(event: ModuleRootEvent) {
@@ -489,7 +499,9 @@ class MdProjectComponent(val project: Project) : ProjectComponent, Disposable {
 
                 if (MdApplicationSettings.instance.debugSettings.reinitializeEditorsOnSettingsChange) {
                     AwtRunnable.schedule(MdCancelableJobScheduler.getInstance(), "gutter change", GUTTER_CHANGE_DELAY) {
-                        reinitializeEditorSettings()
+                        if (!project.isDisposed) {
+                            reinitializeEditorSettings()
+                        }
                     }
                 } else {
                     reinitializeEditorSettings.clear()
@@ -497,44 +509,60 @@ class MdProjectComponent(val project: Project) : ProjectComponent, Disposable {
             }
         })
 
-        StartupManagerEx.getInstance(project).registerPostStartupActivity {
-            if (project.isDisposed) return@registerPostStartupActivity
+        StartupManagerEx.getInstance(project).registerPostStartupActivity(object : RunnableDumbAware {
+            override fun run() {
+                if (project.isDisposed) return
 
-            // FIX: have this registered in plugin.xml instead
-            // NOTE: line below fires before vcs roots are initialized.
-//        (ProjectLevelVcsManagerImpl.getInstance(project) as ProjectLevelVcsManagerImpl).addInitializationRequest(VcsInitObject.AFTER_COMMON) { projectInitialized() }
-//        StartupManager.getInstance(project).registerPostStartupActivity { projectInitialized() }
-            MdLinkResolverManager.getInstance(project).projectInitialized()
+                // KLUDGE: try to address a complaint that this code must be dumb aware
+                val runnable = object : Runnable {
+                    override fun run() {
+                        // FIX: have this registered in plugin.xml instead
+                        // NOTE: line below fires before vcs roots are initialized.
+                        //        (ProjectLevelVcsManagerImpl.getInstance(project) as ProjectLevelVcsManagerImpl).addInitializationRequest(VcsInitObject.AFTER_COMMON) { projectInitialized() }
+                        //        StartupManager.getInstance(project).registerPostStartupActivity { projectInitialized() }
+                        MdLinkResolverManager.getInstance(project).projectInitialized()
 
-            isPostStartup = true
-            settingsChangeReloadReparseHandler.onSettingsChange(MdApplicationSettings.instance)
-//            reloadMarkdownEditors(reInitMarkdownEditors = false, swapHighlighter = true)
+                        isPostStartup = true
+                        settingsChangeReloadReparseHandler.onSettingsChange(MdApplicationSettings.instance)
+                        //            reloadMarkdownEditors(reInitMarkdownEditors = false, swapHighlighter = true)
 
-            EditorFactory.getInstance().addEditorFactoryListener(object : EditorFactoryListener {
-                override fun editorReleased(event: EditorFactoryEvent) {
-                    if (project.isDisposed) return
-                    reinitializeEditorSettings.removeIf { it -> it.isDisposed || it === event.editor }
-                }
+                        EditorFactory.getInstance().addEditorFactoryListener(object : EditorFactoryListener {
+                            override fun editorReleased(event: EditorFactoryEvent) {
+                                if (project.isDisposed) return
+                                reinitializeEditorSettings.removeIf { it -> it.isDisposed || it === event.editor || it.project !== project }
+                            }
 
-                // NOTE: now editors are created with the correct highlighter. Swapping is only needed for diff view because it requests editor highlighter for the project file for both repository and project file
-                override fun editorCreated(event: EditorFactoryEvent) {
-                    if (project.isDisposed) return
+                            // NOTE: now editors are created with the correct highlighter. Swapping is only needed for diff view because it requests editor highlighter for the project file for both repository and project file
+                            override fun editorCreated(event: EditorFactoryEvent) {
+                                if (project.isDisposed) return
 
-                    val editor = event.editor
-                    if (editor is EditorEx) {
-                        if (LOG_EDITOR.isDebugEnabled) LOG_EDITOR.debug("editorEx created $editor ${editor.virtualFile} isWritable: ${editor.document.isWritable}")
-                        AwtRunnable.schedule(MdCancelableJobScheduler.getInstance(), "$editor", 100, ModalityState.any()) {
-                            swapEditorHighlighter(editor)
-                        }
-                    } else {
-                        if (LOG_EDITOR.isDebugEnabled) LOG_EDITOR.debug("editor created ${event.editor}, skipping not editorEx")
+                                val editor = event.editor
+                                if (editor is EditorEx && editor.project === project) {
+                                    if (LOG_EDITOR.isDebugEnabled) LOG_EDITOR.debug("editorEx created $editor ${editor.virtualFile} isWritable: ${editor.document.isWritable}")
+                                    AwtRunnable.schedule(MdCancelableJobScheduler.getInstance(), "$editor", 100, ModalityState.any()) {
+                                        if (!project.isDisposed) {
+                                            swapEditorHighlighter(editor)
+                                        }
+                                    }
+                                } else {
+                                    if (LOG_EDITOR.isDebugEnabled) LOG_EDITOR.debug("editor created ${event.editor}, skipping not editorEx")
+                                }
+                            }
+                        }, project)
                     }
                 }
-            }, this)
-        }
+
+                if (DumbService.getInstance(project).isDumb) {
+                    DumbService.getInstance(project).runWhenSmart { runnable.run() }
+                } else {
+                    runnable.run()
+                }
+            }
+        })
     }
 
     inner class SettingsChangeReloadReparseHandler : SettingsChangedListener {
+
         private var documentSettings: MdDocumentSettings = MdDocumentSettings(MdPlugin.instance.startupDocumentSettings)
 
         //        private var debugSettings: MdDebugSettings = MdPlugin.instance.startupDebugSettings
@@ -601,7 +629,7 @@ class MdProjectComponent(val project: Project) : ProjectComponent, Disposable {
                     }
 
                     documentSettings = MdDocumentSettings(settings.documentSettings)
-//                    debugSettings = settings.debugSettings
+                    //                    debugSettings = settings.debugSettings
                 } finally {
                     inReopenEditors = false
                 }
@@ -634,7 +662,7 @@ class MdProjectComponent(val project: Project) : ProjectComponent, Disposable {
                 }
             }
 
-            if (editor is EditorEx && reinitializeEditorSettings.contains(editor)) {
+            if (editor is EditorEx && editor.project === project && reinitializeEditorSettings.contains(editor)) {
                 val reInitType = reinitializeEditorSettings.remove(editor) ?: ReInitType.RE_INIT
 
                 if (LOG_EDITOR.isDebugEnabled) LOG_EDITOR.debug("reinitializeType $reInitType for $editor")
@@ -648,7 +676,7 @@ class MdProjectComponent(val project: Project) : ProjectComponent, Disposable {
                 }
             }
 
-            reinitializeEditorSettings.removeIf { it -> it.isDisposed }
+            reinitializeEditorSettings.removeIf { it -> it.isDisposed || it.project !== project }
         }
     }
 
@@ -723,17 +751,33 @@ class MdProjectComponent(val project: Project) : ProjectComponent, Disposable {
         println("initComponent $time")
         val messageBusConnection = project.messageBus.connect(this)
 
-        messageBusConnection.subscribe(ProjectLifecycleListener.TOPIC, object : ProjectLifecycleListener {
-            override fun afterProjectClosed(project: Project) {
-                println("afterProjectClosed $time")
+        messageBusConnection.subscribe(ProjectManager.TOPIC, object : ProjectManagerListener {
+            /**
+             * Invoked on project close.
+             *
+             * @param project closing project
+             */
+            override fun projectClosed(project: Project) {
+                super.projectClosed(project)
+                println("projectClosed $time")
             }
 
-            override fun projectComponentsInitialized(project: Project) {
-                println("projectComponentsInitialized $time")
+            /**
+             * Invoked on project open. Executed in EDT.
+             *
+             * @param project opening project
+             */
+            override fun projectOpened(project: Project) {
+                println("projectOpened $time")
+                super.projectOpened(project)
             }
 
-            override fun beforeProjectLoaded(project: Project) {
-                println("beforeProjectLoaded $time")
+            /**
+             * Invoked on project close before any closing activities
+             */
+            override fun projectClosing(project: Project) {
+                super.projectClosing(project)
+                println("projectClosing $time")
             }
         })
     }
@@ -758,14 +802,17 @@ class MdProjectComponent(val project: Project) : ProjectComponent, Disposable {
     }
 
     interface FileChangedListener {
+
         fun onFilesChanged()
 
         companion object {
+
             val TOPIC = Topic.create("ImageFileChanged", FileChangedListener::class.java, Topic.BroadcastDirection.NONE)
         }
     }
 
     companion object {
+
         internal val LOG = Logger.getInstance("com.vladsch.md.nav.project")
         internal val LOG_EDITOR = Logger.getInstance("com.vladsch.md.nav.project.editors")
         var brokenReparseFiles = false

@@ -23,6 +23,7 @@ public class ProblemDescriptors {
      *
      * @deprecated (works but only if an editor is open for the file)
      */
+    @Deprecated
     public void add(BaseIntentionAction intentionAction) {
         fixes.add(LocalQuickFixIntentionActionAdapter.of(intentionAction));
     }

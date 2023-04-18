@@ -6,7 +6,7 @@ import com.intellij.psi.stubs.StubBase
 import com.intellij.psi.stubs.StubElement
 import com.vladsch.md.nav.psi.util.MdTypes
 
-class FlexmarkExampleStubImpl(parent: StubElement<*>, private val mySection: String, private val myNumber: String) : StubBase<FlexmarkExample>(parent, MdTypes.FLEXMARK_EXAMPLE), FlexmarkExampleStub {
+class FlexmarkExampleStubImpl(parent: StubElement<*>?, private val mySection: String, private val myNumber: String) : StubBase<FlexmarkExample>(parent, MdTypes.FLEXMARK_EXAMPLE), FlexmarkExampleStub {
     override fun isWithErrors(): Boolean {
         return optionsList?.isWithErrors ?: false
     }
@@ -20,7 +20,7 @@ class FlexmarkExampleStubImpl(parent: StubElement<*>, private val mySection: Str
     }
 
     override fun getOptionsList(): FlexmarkExampleOptions? {
-        val optionsList = Array<FlexmarkExampleOptionsImpl?>(1, { null })
+        val optionsList = Array<FlexmarkExampleOptionsImpl?>(1) { null }
         getChildrenByType<FlexmarkExampleOptionsImpl>(MdTypes.FLEXMARK_EXAMPLE_OPTIONS, optionsList)
         return optionsList[0]
     }

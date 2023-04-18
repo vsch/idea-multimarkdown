@@ -91,6 +91,16 @@ public class MdSplitEditor extends SplitFileEditor<TextEditor, MdPreviewFileEdit
         }
     }
 
+    /**
+     * Returns the file for which {@link com.intellij.openapi.fileEditor.FileEditorProvider#createEditor)} was called.
+     * The default implementation is temporary, and shall be dropped in the future.
+     */
+    @Override
+    @NotNull
+    public VirtualFile getFile() {
+        return mySecondEditor.getFile();
+    }
+
     @Override
     public void dispose() {
         for (MdEditorRangeHighlighter rangeHighlighter : myRangeHighlighters) {
@@ -157,7 +167,6 @@ public class MdSplitEditor extends SplitFileEditor<TextEditor, MdPreviewFileEdit
                 for (MdEditorRangeHighlighter rangeHighlighter : myRangeHighlighters) {
                     rangeHighlighter.removeRangeHighlighters();
                     if (file != null) rangeHighlighter.updateRangeHighlighters(file);
-//                    else rangeHighlighter.removeRangeHighlighters();
                 }
             });
         }

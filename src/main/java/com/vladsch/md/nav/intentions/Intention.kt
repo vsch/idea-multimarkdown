@@ -173,7 +173,7 @@ abstract class Intention protected constructor() : IntentionAction, Iconable {
         @JvmStatic
         fun isIntentionEnabled(intentionClass: Class<out Intention>): Boolean {
             val intentionActionFamilyName = computePrefix(intentionClass)
-            for (availableIntention in IntentionManager.getInstance().availableIntentionActions) {
+            for (availableIntention in IntentionManager.getInstance().availableIntentions) {
                 if (availableIntention.familyName == intentionActionFamilyName) return true
             }
             return false

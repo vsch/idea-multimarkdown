@@ -28,11 +28,11 @@ abstract class MdPlainTextStubElementType<Elem : MdPlainText<*>, Stub : MdPlainT
 
     abstract override fun createPsi(stub: Stub): Elem // = MultiMarkdownWikiLinkImpl(stub, this)
     abstract override fun getExternalId(): String //= "markdown.link-element"
-    abstract fun createStub(parentStub: StubElement<PsiElement>, textMapType: TextMapElementType, textMapMatches: Array<TextMapMatch>, referenceableOffsetInParent: Int): Stub
+    abstract fun createStub(parentStub: StubElement<*>, textMapType: TextMapElementType, textMapMatches: Array<TextMapMatch>, referenceableOffsetInParent: Int): Stub
     abstract fun getReferenceableTextType(): IElementType
     abstract fun getTextMapType(): TextMapElementType
 
-    override fun createStub(psi: Elem, parentStub: StubElement<PsiElement>): Stub {
+    override fun createStub(psi: Elem, parentStub: StubElement<*>): Stub {
         val psiFile = psi.containingFile
         val textMapMatches = getTextMapMatches(psiFile, getTextMapType(), psi.referenceableText)
         return createStub(parentStub, getTextMapType(), textMapMatches, getReferenceableOffsetInParent(psi.node, getReferenceableTextType()))
@@ -84,7 +84,7 @@ abstract class MdPlainTextStubElementType<Elem : MdPlainText<*>, Stub : MdPlainT
         }
     }
 
-    override fun createStub(tree: LighterAST, node: LighterASTNode, parentStub: StubElement<PsiElement>): Stub {
+    override fun createStub(tree: LighterAST, node: LighterASTNode, parentStub: StubElement<*>): Stub {
         parentStub.getParentStubOfType(PsiFile::class.java)
         var referenceableText: String = ""
 

@@ -69,6 +69,7 @@
       </StylesheetProvider>
       <ScriptProviders>
         <provider providerId="com.vladsch.md.nav.editor.hljs.html.script" providerName="HighlightJS Script" />
+        <provider providerId="com.vladsch.md.nav.editor.katex.html.script" providerName="Katex Script" />
       </ScriptProviders>
       <cssText>.markdown-body,
 .wiki-body {

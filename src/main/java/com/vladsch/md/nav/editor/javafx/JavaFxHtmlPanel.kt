@@ -105,6 +105,24 @@ class JavaFxHtmlPanel(project: Project, htmlPanelHost: HtmlPanelHost) : HtmlPane
     private val isWebViewInitialized: Boolean
         get() = _myPanel != null && _myWebView != null
 
+    override fun dispose() {
+        if (_myJSBridge != null) {
+            if (myJSBridge.isDebuggerEnabled) {
+                myJSBridge.stopDebugServer { }
+            }
+        }
+
+        Disposer.dispose(myWebViewFxRunner)
+
+        if (myHtmlFile.isNotEmpty()) {
+            val file = File(myHtmlFile)
+            if (file.exists()) {
+                file.delete()
+            }
+            myHtmlFile = ""
+        }
+    }
+
     init {
         if (useNewAPI == null) {
             val schemeManagerClass = Class.forName("com.intellij.ide.IdeEventQueue")
@@ -252,6 +270,7 @@ class JavaFxHtmlPanel(project: Project, htmlPanelHost: HtmlPanelHost) : HtmlPane
                         myPanelWrapper.repaint()
                     }
                 }
+                
             }
         }
     }
@@ -374,25 +393,6 @@ class JavaFxHtmlPanel(project: Project, htmlPanelHost: HtmlPanelHost) : HtmlPane
                 matchResult.value
             }
         }
-
-        /*
-                // now that links are not resolved before rendering, need to leave them unmodified for
-                // resolving when clicked
-                html = LINK_REPLACE_PATTERN.replace(html) { matchResult ->
-                    val values = matchResult.groupValues
-                    if (!PathInfo.isURI(values[2]) && PathInfo.isRelative(values[2])) {
-                        // change it to absolute
-                        if (values[2].startsWith('#')) {
-                            // local, no change
-                            values[1] + values[2] + values[3]
-                        } else {
-                            values[1] + fileUriPrefix + systemPath + values[2] + values[3]
-                        }
-                    } else {
-                        matchResult.value
-                    }
-                }
-        */
 
         val previewSettings = myHtmlPanelHost.getRenderingProfile().previewSettings
         val synchronizePreview = previewSettings.synchronizePreviewPosition
@@ -560,48 +560,6 @@ class JavaFxHtmlPanel(project: Project, htmlPanelHost: HtmlPanelHost) : HtmlPane
             scrollToReference(onTypingUpdate)
         }
     }
-
-    override fun dispose() {
-        if (_myJSBridge != null) {
-            if (myJSBridge.isDebuggerEnabled) {
-                myJSBridge.stopDebugServer { }
-            }
-        }
-
-        Disposer.dispose(myWebViewFxRunner)
-
-        if (myHtmlFile.isNotEmpty()) {
-            val file = File(myHtmlFile)
-            if (file.exists()) {
-                file.delete()
-            }
-            myHtmlFile = ""
-        }
-    }
-
-    /*
-        // from: https://stackoverflow.com/questions/38391522/javafx-webview-context-menu/38413661
-        private fun createContextMenu(webView: WebView) {
-
-            val reload = MenuItem("reload")
-            reload.setOnAction({ e -> webView.engine.reload() }
-            )
-            val contextMenu = ContextMenu(reload)
-            webView.setOnMousePressed { e ->
-                if (e.button == MouseButton.SECONDARY) {
-                    println(webView.engine.executeScript("document.elementFromPoint("
-                            + e.x
-                            + "," + e.y + ").tagName;"))
-                    val `object` = webView.engine.executeScript("document.elementFromPoint("
-                            + e.x
-                            + "," + e.y + ");") as JSObject
-                    contextMenu.show(webView, e.screenX, e.screenY)
-                } else {
-                    contextMenu.hide()
-                }
-            }
-        }
-    */
 
     private fun preparePage() {
         if (myProject.isDisposed) return

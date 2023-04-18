@@ -99,6 +99,8 @@ abstract class PreviewFileEditorBase constructor(protected val myProject: Projec
     private var myShowingSearch = false
     protected var myHighlightEnabled: Boolean = true
     private var myEditorListenerRemoved = false
+    
+    override fun getFile(): VirtualFile = myFile;
 
     init {
         renderingLogger.debug { "initialized rendering profile: '${myRenderingProfile.profileName}' panel info: ${myRenderingProfile.previewSettings.htmlPanelProviderInfo.providerId}, css: ${myRenderingProfile.cssSettings.cssProviderInfo.providerId}" }
@@ -461,6 +463,8 @@ abstract class PreviewFileEditorBase constructor(protected val myProject: Projec
                 Disposer.dispose(oldPanel)
             }
             myPanel = newPanel
+            Disposer.register(this, newPanel)
+            
             myHtmlPanelWrapper.add(newPanel.component, BorderLayout.CENTER)
             //newPanel.setHtmlPanelHost(this)
             newPanel.setState(myPreviewEditorState)
@@ -487,12 +491,10 @@ abstract class PreviewFileEditorBase constructor(protected val myProject: Projec
         if (provider.isAvailable !== AvailabilityInfo.AVAILABLE && provider.isAvailable !== AvailabilityInfo.AVAILABLE_NOTUSED) {
             val unavailableProviderInfo = providerInfo
 
-            if (providerInfo === unavailableProviderInfo) {
-                // change to available provider
-                val jbCefProvider = HtmlPanelProvider.getFromInfoOrDefault(JBCefHtmlPanelProvider.INFO)
-                providerInfo = if (jbCefProvider.isAvailable !== AvailabilityInfo.UNAVAILABLE) jbCefProvider.INFO
-                else MdPreviewSettings.DEFAULT.htmlPanelProviderInfo
-            }
+            // change to available provider
+            val jbCefProvider = HtmlPanelProvider.getFromInfoOrDefault(JBCefHtmlPanelProvider.INFO)
+            providerInfo = if (jbCefProvider.isAvailable !== AvailabilityInfo.UNAVAILABLE) jbCefProvider.INFO
+            else MdPreviewSettings.DEFAULT.htmlPanelProviderInfo
 
             val newSettings = myRenderingProfile.changeToProvider(null, providerInfo)
             providerInfo = newSettings.previewSettings.htmlPanelProviderInfo

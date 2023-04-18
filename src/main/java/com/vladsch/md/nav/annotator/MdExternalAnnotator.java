@@ -76,12 +76,9 @@ public class MdExternalAnnotator extends ExternalAnnotator<MdExternalAnnotator.P
         LOG.debug("doAnnotate editor, hasErrors for " + source.mySource);
         if (MdApplicationSettings.getInstance().getDocumentSettings().getSyntaxHighlighting() == SyntaxHighlightingType.ANNOTATOR.getIntValue()) {
             final MdRenderingProfile renderingProfile = source.myRenderingProfile;
-            MdParserSettings parserSettings = renderingProfile.getParserSettings();
 
             LexerData[] lexerData = new LexerData[] { null };
             ApplicationManager.getApplication().runReadAction(() -> {
-                int pegdownExtensionFlags = parserSettings.getPegdownFlags();
-                long parserOptionsFlags = parserSettings.getOptionsFlags();
                 lexerData[0] = MdLexParserManager.parseMarkdown(renderingProfile, source.myCharSequence);
             });
             if (lexerData[0] != null) {
@@ -108,6 +105,7 @@ public class MdExternalAnnotator extends ExternalAnnotator<MdExternalAnnotator.P
         for (final LexerToken token : annotationResult) {
             final TextAttributesKey[] attrs = SYNTAX_HIGHLIGHTER.getTokenHighlights(token.getElementType());
             TextRange range = token.getTextRange();
+            // FIX: use new API
             if (attrs.length > 0) holder.createInfoAnnotation(range, null).setTextAttributes(attrs[0]);
         }
     }

@@ -31,12 +31,14 @@
     <depends optional="true" config-file="plugin-java.xml">com.intellij.java</depends>
     <depends optional="true" config-file="plugin-grazie.xml">tanvd.grazi</depends>
     <depends optional="true" config-file="plugin-images.xml">com.intellij.platform.images</depends>
-
+    <depends optional="true" config-file="plugin-javafx.xml">com.intellij.javafx</depends>
+    <depends optional="true" config-file="plugin-markdown.xml">org.intellij.plugins.markdown</depends>
+    
     <resource-bundle>com.vladsch.md.nav.localization.strings</resource-bundle>
 
     <!-- Included from: version.xml -->
-    <version>3.0.201.105.Legacy</version>
-    <idea-version since-build="201"/>
+    <version>3.0.203.114.Legacy</version>
+    <idea-version since-build="203.*"/>
 
     <!-- Included from: description.xml -->
     <description><![CDATA[
@@ -95,6 +97,22 @@
     <!-- Included from: change-notes.xml -->
     <change-notes><![CDATA[
         <div xmlns="http://www.w3.org/1999/html">
+            <h3>3.0.202.112 - Bug Fix Release</h3>
+            <ul>
+                <li>Fix: diagnostic/4949, NoClassDefFoundError: Could not initialize MdCodeStyleSettings.</li>
+                <li>Fix: add test for bundled Markdown being enabled. Disable it and restart IDE if needed.</li>
+                <li>Fix: code style settings intermittent class init failure</li>
+                <li>Add: Attributes element to sample document</li>
+                <li>Fix: intermittent double registration of color highlight attributes in color settings</li>
+            </ul>
+            <h3>3.0.202.108 - Bug Fix Release</h3>
+            <ul>
+                <li>Fix: update tests for 2020.2</li>
+                <li>Fix: update mermaid script to version <code>8.5.2</code>, from <code>7.0.5</code></li>
+                <li>Fix: update <code>flexmark-java</code> to version <code>0.62.2</code></li>
+                <li>Fix: add javaFX plugin dependency for 2020.2 compatibility</li>
+                <li>Add: Support for JCEF Browser</li>
+            </ul>
             <h3>3.0.201.105 - Bug Fix Release</h3>
             <ul>
                 <li>Fix: HTML to Md converter to convert empty <code>a</code> tags to empty link text links.</li>
@@ -480,6 +498,8 @@
         <editorNotificationProvider implementation="com.vladsch.md.nav.inspections.LineSeparatorFoundNotificationProvider"/>
         <editorNotificationProvider implementation="com.vladsch.md.nav.inspections.AutoLinksEnabledInLargeFileNotificationProvider"/>
         <editorNotificationProvider implementation="com.vladsch.md.nav.inspections.PlantUmlParserExtensionNotificationProvider"/>
+        <editorNotificationProvider implementation="com.vladsch.md.nav.inspections.JavaFxCouldBeEnabledNotificationProvider"/>
+        <editorNotificationProvider implementation="com.vladsch.md.nav.inspections.JbCefCouldBeEnabledNotificationProvider"/>
 
         <editorHighlighterProvider filetype="Markdown" implementationClass="com.vladsch.md.nav.highlighter.MdEditorHighlighterProvider"/>
 
@@ -560,6 +580,7 @@
         <editorCustomizationProvider implementation="com.vladsch.md.nav.actions.handlers.util.SmartInsertEditorRangeHighlighterProvider"/>
 
         <html.panel.provider implementation="com.vladsch.md.nav.editor.swing.SwingHtmlPanelProvider"/>
+        <html.panel.provider implementation="com.vladsch.md.nav.editor.jbcef.JBCefHtmlPanelProvider"/>
         <html.panel.provider implementation="com.vladsch.md.nav.editor.javafx.JavaFxHtmlPanelProvider"/>
         <html.panel.provider implementation="com.vladsch.md.nav.editor.text.TextHtmlPanelProvider"/>
 

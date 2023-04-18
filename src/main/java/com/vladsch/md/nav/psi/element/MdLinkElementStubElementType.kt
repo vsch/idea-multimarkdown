@@ -18,12 +18,12 @@ abstract class MdLinkElementStubElementType<Elem : MdLinkElement<*>, Stub : MdLi
 
     abstract override fun createPsi(stub: Stub): Elem // = MultiMarkdownWikiLinkImpl(stub, this)
     abstract override fun getExternalId(): String //= "markdown.link-element"
-    abstract fun createStub(parentStub: StubElement<PsiElement>, linkRefWithAnchorText: String): Stub //= MultiMarkdownWikiLinkStubImpl(parentStub, linkRefWithAnchorText)
+    abstract fun createStub(parentStub: StubElement<*>, linkRefWithAnchorText: String): Stub //= MultiMarkdownWikiLinkStubImpl(parentStub, linkRefWithAnchorText)
     abstract fun getLinkRefTextType(): IElementType? //= MultiMarkdownTypes.WIKI_LINK_REF_TEXT
     abstract fun getLinkRefAnchorMarkerType(): IElementType? //= MultiMarkdownTypes.WIKI_LINK_REF_ANCHOR_MARKER
     abstract fun getLinkRefAnchorType(): IElementType? //= MultiMarkdownTypes.WIKI_LINK_REF_ANCHOR
 
-    override fun createStub(psi: Elem, parentStub: StubElement<PsiElement>): Stub {
+    override fun createStub(psi: Elem, parentStub: StubElement<*>): Stub {
         return createStub(parentStub, psi.linkRefWithAnchorText)
     }
 
@@ -43,7 +43,7 @@ abstract class MdLinkElementStubElementType<Elem : MdLinkElement<*>, Stub : MdLi
         sink.occurrence(MdLinkElementIndex.KEY, stub.linkRefWithAnchorText)
     }
 
-    override fun createStub(tree: LighterAST, node: LighterASTNode, parentStub: StubElement<PsiElement>): Stub {
+    override fun createStub(tree: LighterAST, node: LighterASTNode, parentStub: StubElement<*>): Stub {
         val children = tree.getChildren(node)
         var linkRefWithAnchorText: String = ""
 

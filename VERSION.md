@@ -3,6 +3,7 @@ Contents**</summary>
 
 [TOC]: # ""
 
+- [3.0.xxx.115 - Bug Fix Release](#30xxx115---bug-fix-release)
 - [3.0.xxx.112 - Bug Fix Release](#30xxx112---bug-fix-release)
 - [3.0.xxx.108 - Bug Fix Release](#30xxx108---bug-fix-release)
 - [3.0.xxx.105 - Bug Fix Release](#30xxx105---bug-fix-release)
@@ -31,6 +32,12 @@ Contents**</summary>
 - [2.9.8 - 2019.3 Compatibility Release](#298---20193-compatibility-release)
 
 &nbsp;</details>
+
+### 3.0.xxx.115 - Bug Fix Release
+
+* Fix: JBCef panel not disposed on editor closing
+* Fix: deprecated EditorProvider api 
+* Change: migrate to gradle 8.1 build
 
 ### 3.0.xxx.112 - Bug Fix Release
 

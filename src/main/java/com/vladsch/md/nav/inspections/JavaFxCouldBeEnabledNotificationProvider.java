@@ -24,7 +24,7 @@ import com.vladsch.md.nav.settings.MdPreviewSettings;
 import com.vladsch.md.nav.settings.MdProjectSettings;
 import com.vladsch.md.nav.settings.MdRenderingProfile;
 import com.vladsch.md.nav.settings.MdRenderingProfileManager;
-import com.vladsch.md.nav.settings.RenderingProfileManagerEx;
+import com.vladsch.md.nav.settings.RenderingProfileManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,7 +52,7 @@ public class JavaFxCouldBeEnabledNotificationProvider extends EditorNotification
             return null;
         }
 
-        RenderingProfileManagerEx profileManager = RenderingProfileManagerEx.getInstance(project);
+        RenderingProfileManager profileManager = MdRenderingProfileManager.getInstance(project);
         MdRenderingProfile renderingProfile = profileManager.getRenderingProfile(file);
 
         if (!renderingProfile.isProjectProfile()) {
